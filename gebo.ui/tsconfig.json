@@ -1,0 +1,57 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "paths": {
+
+      "gebo-ai-admin-ui": [
+        "./dist/gebo-ai-admin-ui"
+      ],
+      "gebo-ai-rest-api": [
+        "./dist/gebo-ai-rest-api"
+      ],
+      "gebo-ai-chat-ui": [
+        "./dist/gebo-ai-chat-ui"
+      ],
+      "gebo-ai-reusable-ui": [
+        "./dist/gebo-ai-reusable-ui"
+      ],
+      "@Gebo.ai/gebo-ai-rest-api": ["./projects/gebo-ai-rest-api/src/public-api"],
+
+      "@Gebo.ai/gebo-ai-chat-ui": ["./projects/gebo-ai-chat-ui/src/public-api"],
+
+      "@Gebo.ai/gebo-ai-admin-ui": [
+        "./projects/gebo-ai-admin-ui/src/public-api"
+      ],
+      "@Gebo.ai/reusable-ui": [
+        "./projects/gebo-ai-reusable-ui/src/public-api"
+      ]
+    },
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": false,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "useDefineForClassFields": false,
+    "lib": [
+      "ES2022",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

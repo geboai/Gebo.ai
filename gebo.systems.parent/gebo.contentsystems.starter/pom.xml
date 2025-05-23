@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.systems</groupId>
+		<artifactId>gebo.systems.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.contentsystems.starter</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.git.content.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.filesystem.content.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.uploads.content.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.userspace.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.googlesearch.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.atlassian.confluence.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.atlassian.jira.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.sharepoint.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.googleworkspace.handlers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

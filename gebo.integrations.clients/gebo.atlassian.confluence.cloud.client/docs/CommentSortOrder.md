@@ -1,0 +1,8 @@
+# CommentSortOrder
+
+## Enum
+
+* `CREATED_DATE` (value: `"created-date"`)
+* `_CREATED_DATE` (value: `"-created-date"`)
+* `MODIFIED_DATE` (value: `"modified-date"`)
+* `_MODIFIED_DATE` (value: `"-modified-date"`)

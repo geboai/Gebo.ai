@@ -1,0 +1,79 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="groupUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #groupUI header="Editing user group" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+
+
+
+        <div class="grid">
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="description">Description</label>
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                        aria-describedby="description-help" />
+                    <small id="description-help">
+                        Enter the description of the user group
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="code">Unique Code</label>
+                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" [required]="true" />
+                    <small id="code-help">
+                        Enter the code of the user group
+                    </small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="userIds">Users list</label>
+                    <p-multiSelect  styleClass="w-full"  id="userIds" formControlName="userIds" aria-describedby="userIds-help"
+                        [required]="true" dataKey="username" optionLabel="username" optionValue="username" [options]="users"
+                        placeholder="Select users" display="chip" [showClear]="true"></p-multiSelect>
+                    <small id="userIds-help">
+                        Select users partecipating the group
+                    </small>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="grid geboButtonsBar" *ngIf="!isWizardMode">
+        <div class="col-3">
+            <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+        </div>
+        <div class="col-3">
+            <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+        </div>
+        <div class="col-3">
+            <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                [disabled]="canDelete===false" />
+        </div>
+
+    </div>
+
+</p-panel>

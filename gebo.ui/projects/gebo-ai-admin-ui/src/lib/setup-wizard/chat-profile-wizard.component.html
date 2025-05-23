@@ -1,0 +1,69 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="instModeUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #instModeUI header="Retrieve augmented generation (r.a.g.) chat profiles settings">
+    <div class="grid geboFullHeight">
+        <div class="col-12">
+            <p-fieldset legend="Existing R.A.G. chat profiles" *ngIf="rows.length">
+                <p-table [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template #header pTemplate="header">
+                        <tr>
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Knowledge base codes</th>
+
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-item pTemplate="body">
+                        <tr>
+                            <td>{{ item.code}}</td>
+                            <td>{{ item.description}}</td>
+                            <td>{{item.knowledgeBaseCodes}}</td>
+                            <td>
+                                <p-button label="Edit R.A.G. chat profile" icon="pi pi-pencil" [outlined]="true"
+                                    (onClick)="editChatProfile(item)"></p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
+                [totalRecords]="chatProfiles?.totalElements" />
+            </p-fieldset>
+            <p-fieldset legend="Add new R.A.G. chat profile">
+                <form [formGroup]="formGroup">
+                    <div class="grid">
+                        <div class="col-8">
+                            <geboai-editable-listbox-component formControlName="knowledgeBaseCode" [data]="knowledgeBases"
+                                [required]="true"></geboai-editable-listbox-component>
+                        </div>
+                        <div class="col-4">
+                            <p-button icon="pi pi-plus" label="Add R.A.G. chat profile" [outlined]="true" (onClick)="newChatProfile()"
+                                [disabled]="formGroup.invalid"></p-button>
+                        </div>
+                    </div>
+
+                </form>
+            </p-fieldset>
+        </div>
+        <div class="col-12">
+            
+        </div>
+    </div>
+
+    
+</p-panel>

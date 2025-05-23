@@ -1,0 +1,236 @@
+ai.gebo.models.bundle.library:
+  modelsInfo:
+    - providerId: chatgpt-OpenAI
+      modelId: o1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 100000
+      tokenizingThreashold:
+      description: O1 openai flagship reasoning model
+      informativeUrl: https://platform.openai.com/docs/models/o1
+    - providerId: chatgpt-OpenAI
+      modelId: o1-mini
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: O1-mini reasoning model
+      informativeUrl: https://platform.openai.com/docs/models/o1-mini
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4o
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4o-2024-05-13
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o 2024-05-13 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4o-2024-08-06
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o 2024-08-06 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4.1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1047576
+      maxOutputToken: 32768
+      tokenizingThreashold:
+      description: GPT-4.1 model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
+    - providerId: chatgpt-OpenAI
+      modelId: chatgpt-4o-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o latest update openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4o-mini
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o-mini openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4o-mini-2024-07-18
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o mini 2024-07-18 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-4-turbo
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o-turbo openai  model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4-turbo
+    - providerId: chatgpt-OpenAI
+      modelId: gpt-3.5-turbo
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: gpt-3.5-turbo openai  model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4-turbo
+    - providerId: chatgpt-OpenAI
+      modelId: text-embedding-3-large
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8191
+      maxOutputToken:
+      tokenizingThreashold: 8191
+      description: text-embedding-3-large openai embedding model
+      informativeUrl:
+    - providerId: chatgpt-OpenAI
+      modelId: text-embedding-3-small
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8191
+      maxOutputToken:
+      tokenizingThreashold: 8191
+      description: text-embedding-3-small openai embedding model
+      informativeUrl:
+    - providerId: chatgpt-OpenAI
+      modelId: text-embedding-ada-002
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8191
+      maxOutputToken:
+      tokenizingThreashold: 8191
+      description: text-embedding-ada-002 openai embedding model
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: meta/llama-3.1-405b-instruct
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: meta/llama-3.1-405b-instruct meta flagship model
+      informativeUrl: https://build.nvidia.com/meta/llama-3_1-405b-instruct/modelcard
+    - providerId: chatmodel-nvidia
+      modelId: 01-ai/yi-large
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: adept/fuyu-8b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: ai21labs/jamba-1.5-large-instruct
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: ai21labs/jamba-1.5-mini-instruct
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: baai/bge-m3
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: baichuan-inc/baichuan2-13b-chat
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: bigcode/starcoder2-15b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: bigcode/starcoder2-7b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chatmodel-nvidia
+      modelId: bigcode/starcoder2-7b
+      chatModel: true
+      embeddingModel: false
+      contextLength:
+      maxOutputToken:
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chat-deepseek
+      modelId: deepseek-chat
+      chatModel: true
+      embeddingModel: false
+      contextLength: 64000
+      maxOutputToken: 8000
+      tokenizingThreashold:
+      description:
+      informativeUrl:
+    - providerId: chat-deepseek
+      modelId: deepseek-reasoner
+      chatModel: true
+      embeddingModel: false
+      contextLength: 64000
+      maxOutputToken: 8000
+      tokenizingThreashold:
+      description:
+      informativeUrl:

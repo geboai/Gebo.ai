@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>ai.gebo.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<groupId>ai.gebo.systems</groupId>
+	<artifactId>gebo.systems.parent</artifactId>
+	<packaging>pom</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.contentsystems.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<modules>
+		<module>gebo.git.content.handler</module>
+		<module>gebo.contentsystems.starter</module>
+		<module>gebo.filesystem.content.handler</module>
+		<module>gebo.uploads.content.handler</module>
+		<module>gebo.googlesearch.handler</module>
+		<module>gebo.sharepoint.handler</module>
+		<module>gebo.atlassian.confluence.handler</module>
+		<module>gebo.googleworkspace.handlers</module>
+		<module>gebo.contentsystem.tests.services</module>
+		<module>gebo.userspace.handler</module>
+
+
+		<module>gebo.atlassian.jira.handler</module>
+	</modules>
+</project>

@@ -1,0 +1,23 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<span >
+  <p-multiSelect  styleClass="w-full"   *ngIf="readonly?false:true" [options]="options" styleClass="w-full" 
+        optionLabel="description" optionValue="code" [placeholder]="placeholder" [(ngModel)]="value"  [loading]="loading" (onChange)="changedValue($event)" />
+</span>
+<span class="col-12" *ngIf="readonly?true:false">
+    <span *ngFor="let opt of selectedOption">
+      {{opt?.description}}
+    </span>
+</span>

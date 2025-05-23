@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.integration.tests</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.core</groupId>
+			<artifactId>gebo.knowledgebase.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo</groupId>
+			<artifactId>gebo.jobs.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-test-autoconfigure</artifactId>
+			
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.tests.services</artifactId>
+			<version>${project.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.vectorstores.test.services</artifactId>
+			<version>${project.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.contentsystem.tests.services</artifactId>
+			<version>${project.version}</version>
+
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+
+
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+
+
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mongodb</artifactId>
+
+
+		</dependency>
+	</dependencies>
+</project>

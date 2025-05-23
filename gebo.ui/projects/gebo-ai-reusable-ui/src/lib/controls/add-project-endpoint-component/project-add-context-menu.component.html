@@ -1,0 +1,27 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<span *ngIf="showAsPage!==true">
+    <span #item>
+        <a class="anchorButton" *ngIf="showAsButtons!==true" (click)="refreshUI();thisMenu.toggle($event)" #item>+Add data
+            source</a>
+        <p-button icon="pi pi-plus" [outlined]="true" *ngIf="showAsButtons===true" (onClick)="thisMenu.toggle($event)"
+            label="Data source" id="item"></p-button></span>
+    <p-contextMenu #thisMenu [model]='items' [target]="item" appendTo="body" />
+</span>
+<div class="grid" *ngIf="showAsPage===true">
+    <div *ngFor="let item of items;" class="col-12">
+        <p-button [icon]="item.icon" [label]="item.label" (onClick)="execute(item)"></p-button>
+    </div>
+</div>

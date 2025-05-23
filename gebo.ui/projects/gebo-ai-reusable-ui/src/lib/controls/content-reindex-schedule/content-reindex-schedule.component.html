@@ -1,0 +1,75 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-dialog  [maximizable]="true" [visible]="mode==='EDITING'" [modal]="true" header="Content updates scheduling" [style]="{width:'60%'}"
+    (visibleChange)="abandonEdit()">
+    <p-panel *ngIf="mode==='EDITING'" [formGroup]="formGroup" [showHeader]="false">
+        <div class="grid" style="width:100%">
+            <div class="col-4" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
+                <p-select styleClass="w-full"  [options]="unscheduledPeriods" optionLabel="description" optionValue="code"
+                    formControlName="newFrequency"  class="col-12"
+                    [style]="{width:'100%'}"></p-select>
+            </div>
+            <div class="col-2" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
+                <p-button label="+Add" icon="pi pi-calendar" [outlined]="true"
+                    [disabled]="(!formGroup.controls['newFrequency'].value)"
+                    (onClick)="addScheduling()" styleClass="w-full"></p-button>
+            </div>
+            <div class="col-6" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
+
+            </div>
+
+            <div class="col-12 grid" >
+                <div class="col-12" *ngFor="let table of editedValue">
+                    <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
+                        class="col-12 w-full" *ngIf="table.frequency==='DAILY'"
+                        formControlName="daily"></gebo-ai-periods-component>
+                    <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
+                        class="col-12 w-full" *ngIf="table.frequency==='WEEKLY'"
+                        formControlName="weekly"></gebo-ai-periods-component>
+                    <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
+                        class="col-12 w-full" *ngIf="table.frequency==='HOURLY'"
+                        formControlName="hours"></gebo-ai-periods-component>
+                    <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
+                        class="col-12 w-full" *ngIf="table.frequency==='MONTHLY'"
+                        formControlName="monthly"></gebo-ai-periods-component>
+                    <gebo-ai-periods-component [frequency]="table.frequency" [timeMetaInfos]="timeMetaInfos"
+                        class="col-12 w-full" *ngIf="table.frequency==='DATES'"
+                        formControlName="dates"></gebo-ai-periods-component>
+                </div>
+                <div class="col-12" style="height: 100%;"></div>
+            </div>
+
+            <div class="col-12" style="min-height: 50px;">
+                <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
+                    <div class="grid">
+                        <div class="col-3">
+                            <p-button label="Confirm" icon="pi pi-check" [outlined]="true" (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid"
+                                styleClass="w-full" severity="success"></p-button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</p-dialog>
+<div style="width: 100%; border: solid #C0C0C0 1px;">
+    <p-blockUI [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <p-button title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true" icon="pi pi-pen-to-square"></p-button>
+
+    <p-chip icon="pi pi-calendar" *ngFor="let t of displayTimes" [label]="t"></p-chip>
+</div>

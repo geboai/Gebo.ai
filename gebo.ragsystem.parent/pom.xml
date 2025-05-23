@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>ai.gebo.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<groupId>ai.gebo.ragsystem</groupId>
+	<artifactId>gebo.ragsystem.parent</artifactId>
+	<packaging>pom</packaging>
+	<modules>
+		
+		<module>gebo.ragsystem.content.vectorizator</module>
+		<module>gebo.ragsystem.client.rest</module>
+		<module>gebo.ragsystem.vectorstores</module>
+		<module>gebo.ragsystem.starter</module>
+
+		<module>gebo.ragsystem.vectorstores.test.services</module>
+	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-transformers</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.secrets.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+	</dependencies>
+
+</project>

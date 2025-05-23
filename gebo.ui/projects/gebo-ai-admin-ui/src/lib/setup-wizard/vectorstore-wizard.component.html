@@ -1,0 +1,131 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<form [formGroup]="formGroup">
+    <p-blockUI [target]="vectorStoreUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    
+    <p-panel #vectorStoreUI header="Vector database configuration">
+        <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
+            search, please choose wich of the supported products you'ld like to use</p>
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <div style="height: 500px;">
+            <p *ngFor="let item of vectorStoreProducts;">
+                <p-radioButton formControlName="product" [value]="item.code" [required]="true"
+                    (ngModelChange)="productChange($event)" [inputId]="item.code"></p-radioButton>
+                <b>{{item.label}}:</b>
+                {{item.description}}
+            </p>
+            <p-fieldset legend="Qdrant connection settings" *ngIf="product==='QDRANT'">
+                <div class="grid" formGroupName="qdrantConfig">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="host">Qdrant host</label>
+                            <input pInputText id="host" formControlName="host" class="col-12" [required]="true"
+                                aria-describedby="host-help">
+                            <small id="host-help">
+                                Qdrant host name or ip address
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="port">Qdrant port</label>
+                            <input pInputText id="port" formControlName="port" class="col-12" [required]="true"
+                                aria-describedby="port-help">
+                            <small id="port-help">
+                                Qdrant comunication port (6334 is the standard)
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="tls">Qdrant TLS parameter</label>
+                            <p-checkbox id="tls" formControlName="tls" class="col-12" [required]="true"
+                                aria-describedby="tls-help" [binary]="true" [trueValue]="true"
+                                [falseValue]="false"></p-checkbox>
+
+                            <small id="tls-help">
+                                TLS
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="apiKey">Qdrant api key</label>
+                            <input pInputText id="apiKey" formControlName="apiKey" class="col-12"
+                                aria-describedby="apiKey-help">
+                            <small id="apiKey-help">
+                                Api key for Qdrant authentication
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </p-fieldset>
+            <p-fieldset legend="Redis connection settings" *ngIf="product==='REDIS'">
+                <div class="grid" formGroupName="redisConfig">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="host">Redis host</label>
+                            <input pInputText id="host" formControlName="host" class="col-12" [required]="true"
+                                aria-describedby="host-help">
+                            <small id="host-help">
+                                Redis host name or ip address
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="port">Redis port</label>
+                            <input pInputText id="port" formControlName="port" class="col-12" [required]="true"
+                                aria-describedby="port-help">
+                            <small id="port-help">
+                                Redis comunication port (6334 is the standard)
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="username">Redis username</label>
+                            <input pInputText id="username" formControlName="username" class="col-12"
+                                aria-describedby="username-help">
+                            <small id="username-help">
+                                Redis username
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="password">Redis password</label>
+                            <input pInputText id="password" formControlName="password" class="col-12"
+                                aria-describedby="password-help">
+                            <small id="password-help">
+                                Redis password
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="grid geboLargeButtonsBar">
+           
+
+            <div class="col-6">
+                <p-button [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
+                    severity="success" [disabled]="this.formGroup.invalid" styleClass="w-full"></p-button>
+            </div>
+        </div>
+    </p-panel>
+</form>

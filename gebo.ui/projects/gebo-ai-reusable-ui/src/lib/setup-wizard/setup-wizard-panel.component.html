@@ -1,0 +1,53 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-breadcrumb class="max-w-full" [model]="bcItems" [home]="home" />
+<p-panel #wizardUI [header]="title" *ngIf="!wizardComponent">
+    <p-blockUI [target]="wizardUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <p-messages [value]="userMessages" [enableService]="false"></p-messages>
+    <div class="grid" >
+        <div *ngFor="let entry of wizardsEntries" class="col-12">
+            <div class="grid">
+                <div style="with:20px;" style="vertical-align: text-top;"><p-button [text]="true"
+                        *ngIf="entry.alreadyCompleted===true" [disabled]="entry.enabled===false" icon="pi pi-check"
+                        [style]="{color: 'green'}" (onClick)="openWizard(entry)"></p-button>
+                    <p-button [text]="true" *ngIf="entry.alreadyCompleted===false && entry.mandatory===true"
+                        [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'red'}"
+                        (onClick)="openWizard(entry)"></p-button>
+                    <p-button [text]="true" *ngIf="entry.alreadyCompleted===false && entry.mandatory!==true"
+                        [disabled]="entry.enabled===false" icon="pi pi-pen-to-square" [style]="{color: 'orange'}"
+                        (onClick)="openWizard(entry)"></p-button>
+
+                </div>
+                <div class="col-2"><b>{{entry.label}}</b></div>
+                <div class="col-9">{{entry.description}}</div>
+            </div>
+
+
+        </div>
+    </div>
+
+</p-panel>
+<div class="grid" *ngIf="wizardComponent">
+    <div class="col-12">
+        <p-button [text]="true" icon="pi pi-arrow-left" (onClick)="closeWizard();" label="Back to setup home page"></p-button>
+
+    </div>
+    <div class="col-12">
+        <ng-container   #ngOutletItem *ngComponentOutlet="wizardComponent;inputs: {}"  />
+    </div>
+    
+</div>

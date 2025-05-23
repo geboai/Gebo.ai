@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>gebo.modules.pocs</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.poc.googledriveaccess</artifactId>
+	<dependencies><!--
+		https://mvnrepository.com/artifact/com.google.api-client/google-api-client -->
+		<!--
+		https://mvnrepository.com/artifact/com.google.apis/google-api-services-sheets -->
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-sheets</artifactId>
+			<version>v4-rev612-1.25.0</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/com.google.apis/google-api-services-docs -->
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-docs</artifactId>
+			<version>v1-rev61-1.25.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.google.apis/google-api-services-drive -->
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-drive</artifactId>
+			<version>v3-rev197-1.25.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+			<version>1.34.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.35.2</version>
+		</dependency>
+		
+		
+	</dependencies>
+</project>

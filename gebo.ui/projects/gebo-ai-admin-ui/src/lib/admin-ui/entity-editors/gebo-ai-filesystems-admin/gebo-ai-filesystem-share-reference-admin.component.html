@@ -1,0 +1,87 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="endPointUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #endPointUI header="Editing server shared file folder" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-toast />
+        <div class="grid">
+
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="description">Description</label>
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                        aria-describedby="description-help" />
+                    <small id="description-help">
+                        Enter the description of the shared filesystem area of your organization
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="code">Unique Code</label>
+                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
+                    <small id="code-help">
+                        Automatically generated unique code of the contents.
+                    </small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="reference">Choosed shared filesystem folder</label>
+                    <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
+                        [readonly]="mode!=='NEW'" formControlName="reference" selectionMode="single" id="path"
+                        aria-describedby="reference-help" [browsePathObservable]="browsePathObservable" [reconstructNavigationCallback]="reconstructNavigationObservableCallback"
+                        [required]="true" class="col-12"></gebo-ai-vfilesystem-selector-component>
+                    <small id="reference-help">
+                        Choose a server folder that is a root path for the shared filesystem used in your
+                        organization as a document repository
+                    </small>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Insert" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || mode==='EDIT'"
+                    styleClass="w-full"></p-button>
+            </div>
+
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    styleClass="w-full" [disabled]="canDelete===false" />
+            </div>
+
+        </div>
+    </div>
+</p-panel>

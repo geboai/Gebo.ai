@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>ai.gebo.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.llms.parent</artifactId>
+	<groupId>ai.gebo.llms</groupId>
+	<packaging>pom</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.restintegration.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+	<modules>
+		<module>gebo.llms.openai</module>
+		<module>gebo.llms.mistral</module>
+		<module>gebo.llms.generic-openai-compatible</module>
+		<module>gebo.llms.ollama</module>
+		<module>gebo.llms.huggingface</module>
+
+		<module>gebo.llms.onxx-embeddings</module>
+		<module>gebo.llms.anthropic3</module>
+		<module>gebo.llms.openai.api.utils</module>
+		<module>gebo.llms.google_vertex</module>
+		<module>gebo.llms.standard.functions</module>
+		<module>gebo.llms.starter</module>
+		<module>gebo.llms.tests.services</module>
+		<module>gebo.llms.deepseek</module>
+	</modules>
+</project>

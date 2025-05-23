@@ -1,0 +1,81 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.ragsystem</groupId>
+		<artifactId>gebo.ragsystem.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.ragsystem.vectorstores</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.application.messaging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.ai</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.lucene</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-redis-store</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-qdrant-store</artifactId>
+			<version>${spring.ai.version}</version>
+			<!-- Trying to deal with a conflict between grpc version used in io.qdrant.client 
+				and latest used by google vertex ai interfaces -->
+			<exclusions>
+				<exclusion>
+					<groupId>io.qdrant</groupId>
+					<artifactId>client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.protobuf</groupId>
+					<artifactId>protobuf-java-util</artifactId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.qdrant/client -->
+		<!-- https://mvnrepository.com/artifact/io.qdrant/client -->
+		<dependency>
+			<groupId>io.qdrant</groupId>
+			<artifactId>client</artifactId>
+			<version>1.13.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.grpc/grpc-api -->
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-api</artifactId>
+			<version>1.71.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java-util -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java-util</artifactId>
+			<version>3.25.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-mongodb-atlas-store</artifactId>
+			<version>${spring.ai.version}</version>
+		</dependency>
+
+	</dependencies>
+</project>

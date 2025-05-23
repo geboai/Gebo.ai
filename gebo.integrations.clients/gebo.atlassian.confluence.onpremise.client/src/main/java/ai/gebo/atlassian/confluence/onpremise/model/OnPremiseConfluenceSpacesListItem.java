@@ -1,0 +1,37 @@
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ 
+ 
+ 
+
+package ai.gebo.atlassian.confluence.onpremise.model;
+
+import lombok.Data;
+
+/**
+ * Represents an item in a list of Confluence spaces for an on-premise installation.
+ * Extends the {@link OnPremiseConfluenceListItem} to include specific attributes for a space.
+ * 
+ * AI generated comments
+ */
+@Data
+public class OnPremiseConfluenceSpacesListItem extends OnPremiseConfluenceListItem {
+
+    /** The unique key for the Confluence space. */
+    String key = null;
+    
+    /** The name of the Confluence space. */
+    String name = null;
+
+    /** The homepage content associated with the Confluence space. */
+    OnPremiseConfluenceContent homepage = null;	
+
+    /** Represents expandable properties related to the Confluence space. */
+    OnPremiseConfluenceSpacesListItemExpandable _expandable = null;
+}

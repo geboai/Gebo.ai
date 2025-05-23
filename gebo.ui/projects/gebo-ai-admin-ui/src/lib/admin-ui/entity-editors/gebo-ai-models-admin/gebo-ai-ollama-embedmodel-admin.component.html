@@ -1,0 +1,112 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="OllamaUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #OllamaUI header="Editing Ollama local (or lan) embedding model configuration" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />       
+
+
+        <div class="grid standardTabDialogueHeight">
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="description">Description</label>
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                        aria-describedby="description-help" />
+                    <small id="description-help">
+                        Enter the description of the embedding model configuration
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="code">Unique Code</label>
+                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
+                    <small id="code-help">
+                        Automatically generated unique code of the embedding model configuration
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="baseUrl">Base ollama server address</label>
+                    <input pInputText id="baseUrl" formControlName="baseUrl" aria-describedby="baseUrl-help"
+                        [required]="true" />
+                    <small id="baseUrl-help">
+                        Base address (like http://servername:234/) the ollama local or lan server responds.
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="apiSecretCode">Ollama token</label>
+                    <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
+                        [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
+                        aria-describedby="modelCode-help">
+                    </geboai-editable-listbox-component>
+                    <small id="apiSecretCode-help">
+                        Choose the Ollama token to be used for this model
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="choosedModel">Ollama embedding model choice</label>
+                    <p-select styleClass="w-full"  formControlName="choosedModel" id="choosedModel" placeholder="Select a model"
+                        [required]="true" [options]="modelChoicesData" optionLabel="description"
+                        aria-describedby="choosedModel-help" class="col-12"></p-select>
+
+
+                    <small id="modelCode-help">
+                        Choose the Ollama embedding model to work with.
+                    </small>
+                </div>
+            </div>
+            
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="defaultModel">set this as default embedding model</label>
+                    <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true"
+                        [falseValue]="false" aria-describedby="defaultModel-help"></p-checkbox>
+                    <small id="defaultModel-help">
+                        If true this will be used as default embedding model where embedding model is not indicated
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="grid geboLargeButtonsBar" *ngIf="!isWizardMode">
+        <div class="col-4">
+            <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+        </div>
+        <div class="col-4">
+            <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+        </div>
+        <div class="col-4">
+            <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
+                [disabled]="canDelete===false" />
+        </div>
+
+    </div>
+
+</p-panel>

@@ -1,0 +1,713 @@
+{
+	"results": [
+		{
+			"id": "204244022",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Anagrafica articoli semplificata",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Anagrafica+articoli+semplificata",
+				"edit": "/pages/resumedraft.action?draftId=204244022&draftShareId=3246c2bf-05ce-446d-bbaf-70c65e28209e",
+				"tinyui": "/x/NoQsD",
+				"self": "https://docs.ditechonline.it/rest/api/content/204244022"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/204244022/child",
+				"restrictions": "/rest/api/content/204244022/restriction/byOperation",
+				"history": "/rest/api/content/204244022/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/204244022/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "427294877",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Anagrafica articoli sintetica",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Anagrafica+articoli+sintetica",
+				"edit": "/pages/resumedraft.action?draftId=427294877&draftShareId=d3fcbad8-656c-4e47-8d44-425b0d400f12",
+				"tinyui": "/x/nQB4GQ",
+				"self": "https://docs.ditechonline.it/rest/api/content/427294877"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/427294877/child",
+				"restrictions": "/rest/api/content/427294877/restriction/byOperation",
+				"history": "/rest/api/content/427294877/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/427294877/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "133267523",
+			"type": "page",
+			"status": "current",
+			"title": "COMM- Anagrafica Cliente Semplificata",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM-+Anagrafica+Cliente+Semplificata",
+				"edit": "/pages/resumedraft.action?draftId=133267523&draftShareId=022cb259-3989-4f93-825a-6f482fcae5ae",
+				"tinyui": "/x/Q4DxBw",
+				"self": "https://docs.ditechonline.it/rest/api/content/133267523"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/133267523/child",
+				"restrictions": "/rest/api/content/133267523/restriction/byOperation",
+				"history": "/rest/api/content/133267523/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/133267523/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "419266745",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Anagrafiche/Anagrafiche Amministrative //Rapporto amministrativo acquisti (SMARTSHOP)",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=419266745",
+				"edit": "/pages/resumedraft.action?draftId=419266745&draftShareId=87c84c53-a8d2-4cfd-8ff2-aedd1384f0b6",
+				"tinyui": "/x/uYD9G",
+				"self": "https://docs.ditechonline.it/rest/api/content/419266745"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/419266745/child",
+				"restrictions": "/rest/api/content/419266745/restriction/byOperation",
+				"history": "/rest/api/content/419266745/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/419266745/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "182779979",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Articoli",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Articoli",
+				"edit": "/pages/resumedraft.action?draftId=182779979&draftShareId=a6ff8cf0-4e20-44cf-b9d2-5d5dde55d1f8",
+				"tinyui": "/x/SwDlCg",
+				"self": "https://docs.ditechonline.it/rest/api/content/182779979"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/182779979/child",
+				"restrictions": "/rest/api/content/182779979/restriction/byOperation",
+				"history": "/rest/api/content/182779979/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/182779979/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "177111188",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Articoli Divisioni/Pdd",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=177111188",
+				"edit": "/pages/resumedraft.action?draftId=177111188&draftShareId=a4e0a1a3-58e1-4a48-9d1f-51e638f0a116",
+				"tinyui": "/x/lICOCg",
+				"self": "https://docs.ditechonline.it/rest/api/content/177111188"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/177111188/child",
+				"restrictions": "/rest/api/content/177111188/restriction/byOperation",
+				"history": "/rest/api/content/177111188/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/177111188/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "453378178",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Articolo sostitutivo",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Articolo+sostitutivo",
+				"edit": "/pages/resumedraft.action?draftId=453378178&draftShareId=ecf90b16-f29a-45eb-b4a1-54386dc87d78",
+				"tinyui": "/x/ggAGGw",
+				"self": "https://docs.ditechonline.it/rest/api/content/453378178"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/453378178/child",
+				"restrictions": "/rest/api/content/453378178/restriction/byOperation",
+				"history": "/rest/api/content/453378178/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/453378178/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "471334961",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Assegnazione listini",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Assegnazione+listini",
+				"edit": "/pages/resumedraft.action?draftId=471334961&draftShareId=55860cde-4818-4831-9f1f-a609bc144954",
+				"tinyui": "/x/MQAYH",
+				"self": "https://docs.ditechonline.it/rest/api/content/471334961"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/471334961/child",
+				"restrictions": "/rest/api/content/471334961/restriction/byOperation",
+				"history": "/rest/api/content/471334961/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/471334961/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "468975638",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Assegnazione listini per PDD",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Assegnazione+listini+per+PDD",
+				"edit": "/pages/resumedraft.action?draftId=468975638&draftShareId=9d08dc7f-21b6-4e73-9299-a88a74cc2e5b",
+				"tinyui": "/x/FgD0Gw",
+				"self": "https://docs.ditechonline.it/rest/api/content/468975638"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/468975638/child",
+				"restrictions": "/rest/api/content/468975638/restriction/byOperation",
+				"history": "/rest/api/content/468975638/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/468975638/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "524517379",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Associazione listini",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Associazione+listini",
+				"edit": "/pages/resumedraft.action?draftId=524517379&draftShareId=97e77aa8-68cb-49cd-bb97-5e370732dde5",
+				"tinyui": "/x/A4BDHw",
+				"self": "https://docs.ditechonline.it/rest/api/content/524517379"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/524517379/child",
+				"restrictions": "/rest/api/content/524517379/restriction/byOperation",
+				"history": "/rest/api/content/524517379/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/524517379/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "176325167",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Assortimento fornitore",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Assortimento+fornitore",
+				"edit": "/pages/resumedraft.action?draftId=176325167&draftShareId=187c3d62-67c7-4d5d-9662-24b2ea94ed01",
+				"tinyui": "/x/L4KCCg",
+				"self": "https://docs.ditechonline.it/rest/api/content/176325167"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/176325167/child",
+				"restrictions": "/rest/api/content/176325167/restriction/byOperation",
+				"history": "/rest/api/content/176325167/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/176325167/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "341508103",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Attese fatture sospese",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Attese+fatture+sospese",
+				"edit": "/pages/resumedraft.action?draftId=341508103&draftShareId=4c1f0533-64b7-4e16-97e3-0843badbf212",
+				"tinyui": "/x/BwBbF",
+				"self": "https://docs.ditechonline.it/rest/api/content/341508103"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/341508103/child",
+				"restrictions": "/rest/api/content/341508103/restriction/byOperation",
+				"history": "/rest/api/content/341508103/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/341508103/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "483950710",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Attributi Pdd",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Attributi+Pdd",
+				"edit": "/pages/resumedraft.action?draftId=483950710&draftShareId=59889a9e-5519-4168-8ac0-dac3cd39050a",
+				"tinyui": "/x/doDYH",
+				"self": "https://docs.ditechonline.it/rest/api/content/483950710"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/483950710/child",
+				"restrictions": "/rest/api/content/483950710/restriction/byOperation",
+				"history": "/rest/api/content/483950710/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/483950710/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "449871880",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Azienda",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Azienda",
+				"edit": "/pages/resumedraft.action?draftId=449871880&draftShareId=0cff3dfc-5b75-48fd-a40b-ba3c152c7351",
+				"tinyui": "/x/CIDQGg",
+				"self": "https://docs.ditechonline.it/rest/api/content/449871880"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/449871880/child",
+				"restrictions": "/rest/api/content/449871880/restriction/byOperation",
+				"history": "/rest/api/content/449871880/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/449871880/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "158302565",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Barcode",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Barcode",
+				"edit": "/pages/resumedraft.action?draftId=158302565&draftShareId=2a308f77-3faf-40f2-bf25-04aa21158c52",
+				"tinyui": "/x/ZYFvCQ",
+				"self": "https://docs.ditechonline.it/rest/api/content/158302565"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/158302565/child",
+				"restrictions": "/rest/api/content/158302565/restriction/byOperation",
+				"history": "/rest/api/content/158302565/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/158302565/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "529694794",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Carico rilevazioni",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Carico+rilevazioni",
+				"edit": "/pages/resumedraft.action?draftId=529694794&draftShareId=8281cc5a-c93c-4150-8f4f-92138c203c82",
+				"tinyui": "/x/SoCSHw",
+				"self": "https://docs.ditechonline.it/rest/api/content/529694794"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/529694794/child",
+				"restrictions": "/rest/api/content/529694794/restriction/byOperation",
+				"history": "/rest/api/content/529694794/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/529694794/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "449118253",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Causali commerciale",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Causali+commerciale",
+				"edit": "/pages/resumedraft.action?draftId=449118253&draftShareId=c509e31c-c4e6-40ab-8245-ebda6bea2f73",
+				"tinyui": "/x/LQDFGg",
+				"self": "https://docs.ditechonline.it/rest/api/content/449118253"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/449118253/child",
+				"restrictions": "/rest/api/content/449118253/restriction/byOperation",
+				"history": "/rest/api/content/449118253/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/449118253/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "471760897",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Causali commerciale- Default ciclo attivo",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Causali+commerciale-+Default+ciclo+attivo",
+				"edit": "/pages/resumedraft.action?draftId=471760897&draftShareId=6b948332-896c-4b4a-8465-a940128d0d57",
+				"tinyui": "/x/AYAeH",
+				"self": "https://docs.ditechonline.it/rest/api/content/471760897"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/471760897/child",
+				"restrictions": "/rest/api/content/471760897/restriction/byOperation",
+				"history": "/rest/api/content/471760897/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/471760897/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "459440240",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Causali di S/M",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=459440240",
+				"edit": "/pages/resumedraft.action?draftId=459440240&draftShareId=df9b7491-da1c-424d-baeb-c1f2c214f5c3",
+				"tinyui": "/x/cIBiGw",
+				"self": "https://docs.ditechonline.it/rest/api/content/459440240"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/459440240/child",
+				"restrictions": "/rest/api/content/459440240/restriction/byOperation",
+				"history": "/rest/api/content/459440240/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/459440240/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "358285368",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Causali Movimentazione",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Causali+Movimentazione",
+				"edit": "/pages/resumedraft.action?draftId=358285368&draftShareId=a6ce99cc-f5b3-40cb-9aa8-55f8e4b02780",
+				"tinyui": "/x/OABbFQ",
+				"self": "https://docs.ditechonline.it/rest/api/content/358285368"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/358285368/child",
+				"restrictions": "/rest/api/content/358285368/restriction/byOperation",
+				"history": "/rest/api/content/358285368/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/358285368/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "506560570",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Classi causali",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Classi+causali",
+				"edit": "/pages/resumedraft.action?draftId=506560570&draftShareId=d38d5f67-e718-4d19-8e15-bcbc61e9f1bb",
+				"tinyui": "/x/OoAxHg",
+				"self": "https://docs.ditechonline.it/rest/api/content/506560570"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/506560570/child",
+				"restrictions": "/rest/api/content/506560570/restriction/byOperation",
+				"history": "/rest/api/content/506560570/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/506560570/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "443547760",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Cliente",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Cliente",
+				"edit": "/pages/resumedraft.action?draftId=443547760&draftShareId=0426e3a9-098c-4f35-92cd-27343ae84681",
+				"tinyui": "/x/cABwGg",
+				"self": "https://docs.ditechonline.it/rest/api/content/443547760"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/443547760/child",
+				"restrictions": "/rest/api/content/443547760/restriction/byOperation",
+				"history": "/rest/api/content/443547760/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/443547760/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "517800058",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Condizioni di acquisto/Verifica condizioni //Intercettazione",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=517800058",
+				"edit": "/pages/resumedraft.action?draftId=517800058&draftShareId=53ed832c-731a-48fb-9600-638410da555c",
+				"tinyui": "/x/egDdHg",
+				"self": "https://docs.ditechonline.it/rest/api/content/517800058"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/517800058/child",
+				"restrictions": "/rest/api/content/517800058/restriction/byOperation",
+				"history": "/rest/api/content/517800058/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/517800058/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "428802105",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - configurazione persona fiscale x rifatturazione",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+configurazione+persona+fiscale+x+rifatturazione",
+				"edit": "/pages/resumedraft.action?draftId=428802105&draftShareId=bb790b61-2e3d-4f77-86e7-42350ab6c72f",
+				"tinyui": "/x/OQCPGQ",
+				"self": "https://docs.ditechonline.it/rest/api/content/428802105"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/428802105/child",
+				"restrictions": "/rest/api/content/428802105/restriction/byOperation",
+				"history": "/rest/api/content/428802105/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/428802105/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "514818082",
+			"type": "page",
+			"status": "current",
+			"title": "COMM - Configurazioni di costo",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM+-+Configurazioni+di+costo",
+				"edit": "/pages/resumedraft.action?draftId=514818082&draftShareId=a3597cb1-1303-43a6-ae7d-0b6abefd1a8c",
+				"tinyui": "/x/IoCvHg",
+				"self": "https://docs.ditechonline.it/rest/api/content/514818082"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/M4SN",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/514818082/child",
+				"restrictions": "/rest/api/content/514818082/restriction/byOperation",
+				"history": "/rest/api/content/514818082/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/514818082/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		}
+	],
+	"start": 0,
+	"limit": 25,
+	"size": 25,
+	"_links": {
+		"self": "https://docs.ditechonline.it/rest/api/content/98238529/child/page",
+		"next": "/rest/api/content/98238529/child/page?limit=25&start=25",
+		"base": "https://docs.ditechonline.it",
+		"context": ""
+	}
+}

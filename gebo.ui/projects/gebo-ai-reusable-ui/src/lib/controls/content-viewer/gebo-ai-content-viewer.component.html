@@ -1,0 +1,35 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-dialog  [maximizable]="true" [visible]="visible" [modal]="true" [style]="{width:'95%',height:'800px'}" [closable]="true"
+  [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
+  [header]="'Showing content '+contentMetaInfo?.fileName">
+  <p-blockUI [target]="contentUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <p-panel #contentUI [showHeader]="false">
+    <div class="geboDialogContent">
+
+      <gebo-ai-code-editor *ngIf="visible && sourceCodeContent===true || plainTextContent===true" [language]="sourceCodeLanguage"
+        [contentObject]="contentObject" componentHeight="650px"></gebo-ai-code-editor>
+      <gebo-ai-browse-content-component *ngIf="visible && browsableContent===true "
+        [url]="externalContentUrl"></gebo-ai-browse-content-component>
+      <gebo-ai-pdf-viewer-wrapper2 *ngIf="visible && pdfContent" [pdfSrc]="externalContentUrl"></gebo-ai-pdf-viewer-wrapper2>
+
+      <gebo-ai-download-link-viewer-wrapper *ngIf="visible && downloadableContent" [externalContentUrl]="externalContentUrl"
+        [contentMetaInfo]="contentMetaInfo"></gebo-ai-download-link-viewer-wrapper>
+
+    </div>
+  </p-panel>
+</p-dialog>

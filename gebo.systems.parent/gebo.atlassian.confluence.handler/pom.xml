@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.systems</groupId>
+		<artifactId>gebo.systems.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.atlassian.confluence.handler</artifactId>
+	<!-- 
+		API Jira Cloud platform
+
+https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/ 
+https://developer.atlassian.com/cloud/jira/platform/swagger.json
+https://developer.atlassian.com/cloud/jira/platform/swagger.v3.json
+https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
+
+
+API Jira Software Cloud
+
+https://developer.atlassian.com/cloud/jira/software/rest/intro/  
+https://developer.atlassian.com/cloud/jira/software/swagger.json
+https://developer.atlassian.com/cloud/jira/software/swagger.v3.json
+
+
+API Confluence Cloud
+
+https://developer.atlassian.com/cloud/confluence/rest/v1/intro/
+https://developer.atlassian.com/cloud/confluence/swagger.json 
+https://developer.atlassian.com/cloud/confluence/swagger.v3.json 
+
+
+Jira Service Management Cloud
+
+https://developer.atlassian.com/cloud/jira/service-desk/rest/intro/ 
+https://developer.atlassian.com/cloud/jira/service-desk/swagger.json 
+https://developer.atlassian.com/cloud/jira/service-desk/swagger.v3.json
+	-->
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.integrations.clients</groupId>
+			<artifactId>gebo.atlassian.confluence.cloud.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.integrations.clients</groupId>
+			<artifactId>gebo.atlassian.confluence.onpremise.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+	</dependencies>
+</project>

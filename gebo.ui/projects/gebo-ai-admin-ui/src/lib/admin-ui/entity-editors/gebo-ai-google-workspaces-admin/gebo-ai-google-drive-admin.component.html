@@ -1,0 +1,90 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="driveSystemCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #driveSystemCtrl header="Editing google drive integration" [formGroup]="formGroup">
+  <div class="geboDialogContent">
+      <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+      <p-tabView>
+          <p-tabPanel header="General settings">
+              <div class="grid">
+
+
+
+                  <div class="col-6">
+                      <div class="flex flex-column gap-2">
+                          <label for="description">Description</label>
+                          <input pInputText id="description" formControlName="description" maxlength="120"
+                              [required]="true" aria-describedby="description-help" />
+                          <small id="description-help">
+                              Enter the description of the google drive system.
+                          </small>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="flex flex-column gap-2 ">
+                          <label for="code">Unique Code</label>
+                          <input pInputText id="code" formControlName="code" aria-describedby="code-help"
+                              readonly="true" />
+                          <small id="description-help">
+                              Automatically generated unique code of the google drive system.
+                          </small>
+                      </div>
+                  </div>
+                  <div class="col-6">
+                      <div class="flex flex-column gap-2 ">
+                          <label for="driveAccessSecret">Identity used</label>
+                          <geboai-editable-listbox-component formControlName="driveAccessSecret" id="driveAccessSecret"
+                              placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                              [required]="true" aria-describedby="driveAccessSecret-help" [createNewRecordRequest]="newSecretAction">
+
+                          </geboai-editable-listbox-component>
+                          <small id="driveAccessSecret-help">
+                              Select or create the identity to access the google drive system
+                          </small>
+                      </div>
+                  </div>
+              </div>
+          </p-tabPanel>
+          <!--
+          <p-tabPanel header="Security settings" [disabled]="mode!=='EDIT'">
+              <div class="grid">
+
+
+              </div>
+
+          </p-tabPanel>
+          -->
+      </p-tabView>
+  </div>
+
+
+  <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+      <div class="grid">
+          <div class="col-4">
+              <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                  [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+          </div>
+          <div class="col-4">
+              <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+          </div>
+          <div class="col-4">
+              <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
+                  [disabled]="canDelete===false" />
+          </div>
+      </div>
+  </div>
+</p-panel>

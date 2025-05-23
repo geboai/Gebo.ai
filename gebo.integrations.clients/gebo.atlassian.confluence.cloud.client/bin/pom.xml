@@ -1,0 +1,124 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.integrations.clients</groupId>
+		<artifactId>gebo.integrations.clients.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version> 
+	</parent>
+	<artifactId>gebo.atlassian.confluence.client</artifactId>
+	<properties>
+
+		<swagger.file>
+			https://developer.atlassian.com/cloud/confluence/swagger.v3.json</swagger.file>
+
+		<backoffice.swagger.file>
+			${project.basedir}/Backoffice.Swagger/swagger.json</backoffice.swagger.file>
+		<generated-sources-path>${project.basedir}</generated-sources-path>
+		<generated-sources-java-path>src/main/java</generated-sources-java-path>
+
+		<version.swagger.codegen>2.4.41</version.swagger.codegen>
+	</properties>
+	<packaging>jar</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.threeten/threetenbp -->
+		<dependency>
+			<groupId>org.threeten</groupId>
+			<artifactId>threetenbp</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.github.joschi.jackson/jackson-datatype-threetenbp -->
+		<dependency>
+			<groupId>com.github.joschi.jackson</groupId>
+			<artifactId>jackson-datatype-threetenbp</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/junit/junit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+		<plugins>
+
+
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>generate-confluence-api</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.swagger.codegen.v3</groupId>
+						<artifactId>swagger-codegen-maven-plugin</artifactId>
+						<version>3.0.59</version>
+						<configuration>
+							<inputSpec>${swagger.file}</inputSpec>
+							<configOptions>
+								<sourceFolder>${generated-sources-java-path}</sourceFolder>
+							</configOptions>
+							<output>${generated-sources-path}</output>
+						</configuration>
+						<executions>
+							<execution>
+								<id>generate-swagger-angular</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<language>java</language>
+									<library>resttemplate</library>
+									<modelPackage>
+										ai.gebo.atlassian.confluence.api.model</modelPackage>
+									<apiPackage>ai.gebo.atlassian.confluence.api</apiPackage>
+									<invokerPackage>
+										ai.gebo.atlassian.confluence.api.invoker</invokerPackage>
+									<configOptions>
+										<dateLibrary>java8</dateLibrary>
+										<java8>true</java8>
+									</configOptions>
+									<additionalProperties>
+										<dateLibrary>java8</dateLibrary>
+										<java8>true</java8>
+									</additionalProperties>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+</project>

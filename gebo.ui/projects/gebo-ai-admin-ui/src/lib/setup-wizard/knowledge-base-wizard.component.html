@@ -1,0 +1,78 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="kbUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel #kbUI header="Knowledge bases & contents configurations">
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class=" grid">
+
+        <div class="col-12"><p-table [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header pTemplate="header">
+                    <tr>
+                        <th>Knowledge base</th>
+                        <th>Project</th>
+                        <th>Contents source</th>
+                        <th>Published</th>
+                        <th>Nr of documents</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item pTemplate="body">
+                    <tr>
+                        <td>
+                            <p-button [label]="item.knowledgeBase?.description" (onClick)="editKnowledgeBase(item)" [outlined]="true" title="open knowledge base"></p-button>
+                            </td>
+                        <td *ngIf="item.project">
+                            <p-button icon="pi pi-list-check" [label]="item.project?.description" [outlined]="true" (onClick)="editProject(item)" title="open project form"></p-button>
+                            
+
+                        </td>
+                        <td *ngIf="!item.project">
+                            
+                            <p-button icon="pi pi-plus" label="Add a project/item" [outlined]="true" title="create new project"
+                                (onClick)="newProject(item)"></p-button>
+                        </td>
+                        <td *ngIf="item.endpoint">
+                            <p-button icon="pi pi-modify-pen" [label]="item.endpoint?.description" [outlined]="true" (onClick)="editDataSource(item)" title="open data source"></p-button>
+                            
+                        </td>
+                        <td *ngIf="!item.endpoint "> 
+                            
+                            <p-button *ngIf="item.project" icon="pi pi-plus" [outlined]="true" (onClick)="newDataSource(item)"
+                                label="Data source" id="item" title="create new data source"></p-button>
+                        </td>
+                        <td>
+                            <i class="pi pi-check" *ngIf="item.endpoint && item.endpoint.published===true"></i>
+                            <p-button icon="pi pi-microchip-ai" *ngIf="item.endpoint && item.endpoint.published!==true"
+                                label="Publish" [outlined]="true" (onClick)="publish(item)"></p-button>
+                        </td>
+                        <td>{{ item.contentsCount}}</td>
+                    </tr>
+                </ng-template>
+            </p-table></div>
+
+    </div>
+
+
+
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button icon="pi pi-plus" label="Add a Knowledge base" [outlined]="true"
+                (onClick)="newKnowledgeBase()"></p-button>
+        </div>
+    </div>
+</p-panel>

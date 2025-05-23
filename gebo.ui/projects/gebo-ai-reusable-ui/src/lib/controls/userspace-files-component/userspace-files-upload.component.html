@@ -1,0 +1,48 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-panel #folderEditing header="Files upload">
+    <p-blockUI [target]="folderEditing" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+
+    <div class="grid">
+        <div class="col-12" [formGroup]="deleteFormGroup">
+            <ul style="list-style: none;">
+                <i class="pi pi-folder-open"></i> {{entity?.description}}
+                <li *ngFor="let file of entity?.userspaceFiles;" style="list-style: none;">
+                    <p-checkbox name="choosed" id="choosed" [required]="true" formControlName="choosed"
+                        [disabled]="!file.owner" [value]="file"></p-checkbox><label>{{file.name}}</label>
+                </li>
+            </ul>
+        </div>
+        <div class="col-12" [formGroup]="formGroup">
+            <div class="flex flex-column gap-2 ">
+                <label for="upload">Upload contents</label>
+                <p-fileUpload mode="basic" name="files[]" chooseIcon="pi pi-upload"
+                    [url]="baseUrl+'/api/user/UserspaceUploadController/upload/'+entity?.userspaceFolder?.uploadCode"
+                    [accept]="filesExtensionsFlatList" maxFileSize="20000000" [multiple]="true" method="post"
+                    (onBeforeUpload)="onBeforeUpload($event)" (onProgress)="onProgress($event)"
+                    (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" id="upload"
+                    aria-describedby="upload-help"></p-fileUpload>
+                <div id="upload" aria-describedby="upload-help">
+
+                </div>
+                <small id="upload-help">
+                    Upload contents control
+                </small>
+            </div>
+        </div>
+    </div>
+</p-panel>

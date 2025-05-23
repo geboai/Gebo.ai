@@ -1,0 +1,79 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="chatProfileUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #chatProfileUI header="Editing prompt">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <div class="grid" [formGroup]="formGroup">
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="description">Description</label>
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                        aria-describedby="description-help" />
+                    <small id="description-help">
+                        Enter prompt description.
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="code">Unique Code</label>
+                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
+                    <small id="code-help">
+                        Automatically generated unique code of the prompt.
+                    </small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="prompt">Prompt category</label>
+                    <p-select styleClass="w-full"  formControlName="promptCategory" placeholder="Enter or insert the prompt category"
+                        [options]="promptCategories" [editable]="true" [required]="true" class="col-12"></p-select>
+                    <small id="code-help">
+                        Select or insert the prompt category.
+                    </small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="prompt">Prompt</label>
+                    <textarea rows="10" cols="250" [required]="true" pTextarea formControlName="prompt"></textarea>
+                    <small id="code-help">
+                        Edit the prompt for the chat, use &lbrace;query&rbrace; to indicate user question and
+                        &lbrace;context&rbrace; to indicate the
+                        documents/history context sent to the LLM.
+                    </small>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
+                    [disabled]="true" />
+            </div>
+        </div>
+    </div>

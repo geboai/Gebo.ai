@@ -1,0 +1,40 @@
+h1,
+h2,
+h3 {
+    margin-top: 1.5rem;
+}
+
+p {
+    margin: 0.5rem 0;
+}
+
+ul {
+    margin: 0.5rem 0 0.5rem 2rem;
+}
+
+.signature-block {
+    margin-top: 2rem;
+}
+
+.signature {
+    margin-bottom: 2rem;
+}
+
+.signature-line {
+    display: block;
+    margin: 2rem 0 0.5rem 0;
+    border-bottom: 1px solid #000;
+    width: 300px;
+}
+
+.licenceBody {
+    border: 2px solid black;
+    background-color: white;
+    font-family: Arial, sans-serif;
+    margin: 0px;
+    line-height: 1.5;
+
+}
+.blueArea {
+    background-color: #C0C0C0;
+}

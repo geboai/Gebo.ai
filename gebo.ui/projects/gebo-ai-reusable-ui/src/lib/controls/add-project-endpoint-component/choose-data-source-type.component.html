@@ -1,0 +1,40 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-panel header="Choose data source type">
+    <div class="grid standardTabDialogueHeight">
+        <div class="col-12"><b>Choose wich data source create in the project: {{project?.description}}</b></div>
+        <div class="col-4"></div>
+        <div class="col-4" >
+            <!-- 
+            <ul>
+                <li *ngFor="let item of items;">
+                    <p-radioButton [label]="item.title" [value]="item.id" formControlName="entityType" [required]="true" [className]="item.icon"></p-radioButton>
+                </li>
+            </ul>-->
+            
+            
+            <div class="grid">
+                <div class="col-12" *ngFor="let item of items;">
+                    <p-button [label]="item.title" [icon]="item.icon"
+                        (onClick)="toggle(item)" styleClass="w-full"
+                        [outlined]="this.formGroup.controls['entityType'].value!==item.id"></p-button>
+                </div>
+
+            </div>
+          <!--  -->
+        </div>
+        <div class="col-4"></div>
+    </div>
+</p-panel>

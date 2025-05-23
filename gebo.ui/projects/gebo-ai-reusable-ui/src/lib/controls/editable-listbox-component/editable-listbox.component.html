@@ -1,0 +1,31 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-select styleClass="w-full"  *ngIf="readonly?false:true" [options]="options" optionLabel="description" optionValue="code"
+    [placeholder]="placeholder" [(ngModel)]="value"  [loading]="loading" [disabled]="disabled"
+    (onChange)="changedValue($event)" >
+    <ng-template let-item pTemplate="item">
+        <div class="flex align-items-left gap-2" *ngIf="item.code!==createNewValueCodeConstant" style="width: 100%;" >
+            {{item.description}}
+        </div>
+        <div class="flex align-items-left gap-2" *ngIf="item.code===createNewValueCodeConstant" style="width: 100%;">
+            <p-button [label]="item.description" icon="pi pi-plus" [outlined]="true" styleClass="w-full" ></p-button>
+            
+        </div>
+    </ng-template>
+</p-select>
+
+<span class="col-12" *ngIf="readonly?true:false">
+    {{selectedOption?.description}}
+</span>

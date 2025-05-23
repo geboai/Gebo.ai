@@ -1,0 +1,25 @@
+ai.gebo.security.cors.allowedOrigins: no
+ai.gebo.mongodb:
+    enabled: false
+    databaseName: gebo-ai-tests
+    connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+ai.gebo.llms.config.openAIEnabled: true		
+ai.gebo.vectorstore:
+    use: TEST
+ai.gebo.vectorizator.config:
+    disposerConfig:
+        poolCardinality: 1
+        useSenderThread: true
+    vectorizatorReceiverConfig:
+        poolCardinality: 1
+        useSenderThread: true
+        timeout: 2000
+ai.gebo.core.config:
+    mongoDisposerConfig:
+        poolCardinality: 1
+        useSenderThread: true
+        timeout: 2000
+    userMessagesReceiverConfig:
+        poolCardinality: 1
+        useSenderThread: true
+        timeout: 2000

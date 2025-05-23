@@ -1,0 +1,40 @@
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ 
+ 
+ 
+
+package ai.gebo.security.model;
+
+/**
+ * Gebo.ai comment agent
+ *
+ * Enum representing different authentication providers supported by the system.
+ * These providers are used to identify the source of authentication 
+ * such as local database or third-party services.
+ */
+public enum AuthProvider {
+    // Local database authentication
+    local,
+    
+    // Authentication using Facebook account
+    facebook,
+    
+    // Authentication using Google account
+    google,
+    
+    // Authentication using GitHub account
+    github,
+    
+    // Authentication using Microsoft account
+    microsoft,
+    
+    // Authentication using LDAP (Lightweight Directory Access Protocol)
+    ldap
+}

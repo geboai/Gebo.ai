@@ -1,0 +1,713 @@
+{
+	"results": [
+		{
+			"id": "7343207",
+			"type": "page",
+			"status": "current",
+			"title": "Pricing IBM - Progetto GPS - Gestione Price Selex Pre Kick Off",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Pricing+IBM+-+Progetto+GPS+-+Gestione+Price+Selex+Pre+Kick+Off",
+				"edit": "/pages/resumedraft.action?draftId=7343207&draftShareId=ddd69357-0820-48be-8be9-2e8d59f96bbe",
+				"tinyui": "/x/Zwxw",
+				"self": "https://docs.ditechonline.it/rest/api/content/7343207"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/7343207/child",
+				"restrictions": "/rest/api/content/7343207/restriction/byOperation",
+				"history": "/rest/api/content/7343207/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/7343207/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "8524200",
+			"type": "page",
+			"status": "current",
+			"title": "AN01 - Cumulo - versione sintetica (fase 1)",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=8524200",
+				"edit": "/pages/resumedraft.action?draftId=8524200",
+				"tinyui": "/x/qBGC",
+				"self": "https://docs.ditechonline.it/rest/api/content/8524200"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/8524200/child",
+				"restrictions": "/rest/api/content/8524200/restriction/byOperation",
+				"history": "/rest/api/content/8524200/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/8524200/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "8524212",
+			"type": "page",
+			"status": "current",
+			"title": "AN02 - Cumulo - Integrazione - versione Completa (fase 2)",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=8524212",
+				"edit": "/pages/resumedraft.action?draftId=8524212",
+				"tinyui": "/x/tBGC",
+				"self": "https://docs.ditechonline.it/rest/api/content/8524212"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/8524212/child",
+				"restrictions": "/rest/api/content/8524212/restriction/byOperation",
+				"history": "/rest/api/content/8524212/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/8524212/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "8524234",
+			"type": "page",
+			"status": "current",
+			"title": "Cumulo",
+			"extensions": {
+				"position": 4
+			},
+			"_links": {
+				"webui": "/display/CMCED/Cumulo",
+				"edit": "/pages/resumedraft.action?draftId=8524234&draftShareId=6bd9624a-13d8-4069-87d0-df0d215d4046",
+				"tinyui": "/x/yhGC",
+				"self": "https://docs.ditechonline.it/rest/api/content/8524234"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/8524234/child",
+				"restrictions": "/rest/api/content/8524234/restriction/byOperation",
+				"history": "/rest/api/content/8524234/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/8524234/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "8525535",
+			"type": "page",
+			"status": "current",
+			"title": "Architettura Carichi",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Architettura+Carichi",
+				"edit": "/pages/resumedraft.action?draftId=8525535&draftShareId=03d4bf01-881a-48ad-aef6-226c63b4b250",
+				"tinyui": "/x/3xaC",
+				"self": "https://docs.ditechonline.it/rest/api/content/8525535"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/8525535/child",
+				"restrictions": "/rest/api/content/8525535/restriction/byOperation",
+				"history": "/rest/api/content/8525535/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/8525535/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "10388022",
+			"type": "page",
+			"status": "current",
+			"title": "Importazione carichi",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Importazione+carichi",
+				"edit": "/pages/resumedraft.action?draftId=10388022&draftShareId=5c64d626-7b15-421e-8916-c2bb2aa0b2b7",
+				"tinyui": "/x/NoKe",
+				"self": "https://docs.ditechonline.it/rest/api/content/10388022"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/10388022/child",
+				"restrictions": "/rest/api/content/10388022/restriction/byOperation",
+				"history": "/rest/api/content/10388022/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/10388022/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "10388050",
+			"type": "page",
+			"status": "current",
+			"title": "WF01 - Flusso acquisizione ordini clienti",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/WF01+-+Flusso+acquisizione+ordini+clienti",
+				"edit": "/pages/resumedraft.action?draftId=10388050&draftShareId=143ed9ab-8b17-4eaf-a35e-b92f59d3f295",
+				"tinyui": "/x/UoKe",
+				"self": "https://docs.ditechonline.it/rest/api/content/10388050"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/10388050/child",
+				"restrictions": "/rest/api/content/10388050/restriction/byOperation",
+				"history": "/rest/api/content/10388050/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/10388050/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "10388093",
+			"type": "page",
+			"status": "current",
+			"title": "Apex - Riferimenti",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Apex+-+Riferimenti",
+				"edit": "/pages/resumedraft.action?draftId=10388093&draftShareId=00b4a71f-7110-4f92-9db8-933b67e20138",
+				"tinyui": "/x/fYKe",
+				"self": "https://docs.ditechonline.it/rest/api/content/10388093"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/10388093/child",
+				"restrictions": "/rest/api/content/10388093/restriction/byOperation",
+				"history": "/rest/api/content/10388093/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/10388093/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "11862137",
+			"type": "page",
+			"status": "current",
+			"title": "Importdellecarni",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Importdellecarni",
+				"edit": "/pages/resumedraft.action?draftId=11862137",
+				"tinyui": "/x/eQC1",
+				"self": "https://docs.ditechonline.it/rest/api/content/11862137"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/11862137/child",
+				"restrictions": "/rest/api/content/11862137/restriction/byOperation",
+				"history": "/rest/api/content/11862137/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/11862137/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12713994",
+			"type": "page",
+			"status": "current",
+			"title": "Forms gestione rapporti commerciali",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Forms+gestione+rapporti+commerciali",
+				"edit": "/pages/resumedraft.action?draftId=12713994&draftShareId=d01858c8-1d27-45f2-a21a-df4c1d8d1361",
+				"tinyui": "/x/CgDC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12713994"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12713994/child",
+				"restrictions": "/rest/api/content/12713994/restriction/byOperation",
+				"history": "/rest/api/content/12713994/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12713994/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714107",
+			"type": "page",
+			"status": "current",
+			"title": "Rapporti commerciali",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Rapporti+commerciali",
+				"edit": "/pages/resumedraft.action?draftId=12714107&draftShareId=6490a253-b2f1-4670-861d-5683b858674e",
+				"tinyui": "/x/ewDC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714107"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714107/child",
+				"restrictions": "/rest/api/content/12714107/restriction/byOperation",
+				"history": "/rest/api/content/12714107/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714107/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714111",
+			"type": "page",
+			"status": "current",
+			"title": "Diagramma E/R",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=12714111",
+				"edit": "/pages/resumedraft.action?draftId=12714111&draftShareId=d11af711-bac9-464a-8f37-cbcb15285880",
+				"tinyui": "/x/fwDC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714111"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714111/child",
+				"restrictions": "/rest/api/content/12714111/restriction/byOperation",
+				"history": "/rest/api/content/12714111/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714111/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714201",
+			"type": "page",
+			"status": "current",
+			"title": "CENTRALE-MORE CEDI",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/CENTRALE-MORE+CEDI",
+				"edit": "/pages/resumedraft.action?draftId=12714201",
+				"tinyui": "/x/2QDC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714201"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714201/child",
+				"restrictions": "/rest/api/content/12714201/restriction/byOperation",
+				"history": "/rest/api/content/12714201/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714201/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714316",
+			"type": "page",
+			"status": "current",
+			"title": "Analisi",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Analisi",
+				"edit": "/pages/resumedraft.action?draftId=12714316&draftShareId=517b73b0-f022-4b61-abd8-50b8501cbcd3",
+				"tinyui": "/x/TAHC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714316"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714316/child",
+				"restrictions": "/rest/api/content/12714316/restriction/byOperation",
+				"history": "/rest/api/content/12714316/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714316/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714320",
+			"type": "page",
+			"status": "current",
+			"title": "AN03 - Crud Ordini Cliente",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/AN03+-+Crud+Ordini+Cliente",
+				"edit": "/pages/resumedraft.action?draftId=12714320&draftShareId=bf08467b-e869-4926-a965-6fa232785761",
+				"tinyui": "/x/UAHC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714320"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714320/child",
+				"restrictions": "/rest/api/content/12714320/restriction/byOperation",
+				"history": "/rest/api/content/12714320/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714320/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714322",
+			"type": "page",
+			"status": "current",
+			"title": "Ordini Cliente",
+			"extensions": {
+				"position": 9
+			},
+			"_links": {
+				"webui": "/display/CMCED/Ordini+Cliente",
+				"edit": "/pages/resumedraft.action?draftId=12714322&draftShareId=f1b90ee7-6f13-414f-b84a-12f938f460c6",
+				"tinyui": "/x/UgHC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714322"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714322/child",
+				"restrictions": "/rest/api/content/12714322/restriction/byOperation",
+				"history": "/rest/api/content/12714322/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714322/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714364",
+			"type": "page",
+			"status": "current",
+			"title": "AN01 - Riepilogo interattivi Ordini Cliente",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/AN01+-+Riepilogo+interattivi+Ordini+Cliente",
+				"edit": "/pages/resumedraft.action?draftId=12714364&draftShareId=1e0e64c4-3276-4cd7-9183-43acaed52fb4",
+				"tinyui": "/x/fAHC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714364"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714364/child",
+				"restrictions": "/rest/api/content/12714364/restriction/byOperation",
+				"history": "/rest/api/content/12714364/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714364/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714377",
+			"type": "page",
+			"status": "current",
+			"title": "Carichi",
+			"extensions": {
+				"position": 3
+			},
+			"_links": {
+				"webui": "/display/CMCED/Carichi",
+				"edit": "/pages/resumedraft.action?draftId=12714377&draftShareId=c59e04e7-bbac-4d24-a8bc-b34753e9cc37",
+				"tinyui": "/x/iQHC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714377"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714377/child",
+				"restrictions": "/rest/api/content/12714377/restriction/byOperation",
+				"history": "/rest/api/content/12714377/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714377/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714680",
+			"type": "page",
+			"status": "current",
+			"title": "Manutenzione carichi",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Manutenzione+carichi",
+				"edit": "/pages/resumedraft.action?draftId=12714680&draftShareId=5ddb9ed1-0e4e-4c2d-8725-cb76d1cd1898",
+				"tinyui": "/x/uALC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714680"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714680/child",
+				"restrictions": "/rest/api/content/12714680/restriction/byOperation",
+				"history": "/rest/api/content/12714680/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714680/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714704",
+			"type": "page",
+			"status": "current",
+			"title": "Sviluppo",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Sviluppo",
+				"edit": "/pages/resumedraft.action?draftId=12714704&draftShareId=f4fc39ec-371b-4a44-9f2d-b8b1b4a35bb5",
+				"tinyui": "/x/0ALC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714704"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714704/child",
+				"restrictions": "/rest/api/content/12714704/restriction/byOperation",
+				"history": "/rest/api/content/12714704/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714704/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "12714706",
+			"type": "page",
+			"status": "current",
+			"title": "Sviluppo Carichi",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/Sviluppo+Carichi",
+				"edit": "/pages/resumedraft.action?draftId=12714706&draftShareId=0bce76d3-77e3-4c69-a714-9aa9d4dc161e",
+				"tinyui": "/x/0gLC",
+				"self": "https://docs.ditechonline.it/rest/api/content/12714706"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/12714706/child",
+				"restrictions": "/rest/api/content/12714706/restriction/byOperation",
+				"history": "/rest/api/content/12714706/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/12714706/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "13959706",
+			"type": "page",
+			"status": "current",
+			"title": "ER01 - Cumulo",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/ER01+-+Cumulo",
+				"edit": "/pages/resumedraft.action?draftId=13959706&draftShareId=61627ae6-5ff1-495b-bc4b-a4a93334e61c",
+				"tinyui": "/x/GgLV",
+				"self": "https://docs.ditechonline.it/rest/api/content/13959706"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/13959706/child",
+				"restrictions": "/rest/api/content/13959706/restriction/byOperation",
+				"history": "/rest/api/content/13959706/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/13959706/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "13959780",
+			"type": "page",
+			"status": "current",
+			"title": "Schedulazioni stampe 'Supporto acquisti', 'Promozioni Sell In - Sell Out' e 'Sottoscorta'",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/pages/viewpage.action?pageId=13959780",
+				"edit": "/pages/resumedraft.action?draftId=13959780&draftShareId=6f43cef7-7621-49f2-8e81-05a791be13e5",
+				"tinyui": "/x/ZALV",
+				"self": "https://docs.ditechonline.it/rest/api/content/13959780"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/13959780/child",
+				"restrictions": "/rest/api/content/13959780/restriction/byOperation",
+				"history": "/rest/api/content/13959780/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/13959780/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "13959826",
+			"type": "page",
+			"status": "current",
+			"title": "WF01 - Cumulo NO_FOOD",
+			"extensions": {
+				"position": "none"
+			},
+			"_links": {
+				"webui": "/display/CMCED/WF01+-+Cumulo+NO_FOOD",
+				"edit": "/pages/resumedraft.action?draftId=13959826&draftShareId=312a0448-f102-44a3-aa7e-9e26ec81cd04",
+				"tinyui": "/x/kgLV",
+				"self": "https://docs.ditechonline.it/rest/api/content/13959826"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/13959826/child",
+				"restrictions": "/rest/api/content/13959826/restriction/byOperation",
+				"history": "/rest/api/content/13959826/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/13959826/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		},
+		{
+			"id": "13959924",
+			"type": "page",
+			"status": "current",
+			"title": "Anagrafiche",
+			"extensions": {
+				"position": 1
+			},
+			"_links": {
+				"webui": "/display/CMCED/Anagrafiche",
+				"edit": "/pages/resumedraft.action?draftId=13959924&draftShareId=8367e21d-9772-4b0e-81f3-dff1f1f18f9d",
+				"tinyui": "/x/9ALV",
+				"self": "https://docs.ditechonline.it/rest/api/content/13959924"
+			},
+			"_expandable": {
+				"container": "/rest/api/space/CMCED",
+				"metadata": "",
+				"operations": "",
+				"children": "/rest/api/content/13959924/child",
+				"restrictions": "/rest/api/content/13959924/restriction/byOperation",
+				"history": "/rest/api/content/13959924/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/13959924/descendant",
+				"space": "/rest/api/space/CMCED"
+			}
+		}
+	],
+	"start": 0,
+	"limit": 25,
+	"size": 25,
+	"_links": {
+		"self": "https://docs.ditechonline.it/rest/api/content?spaceKey=CMCED",
+		"next": "/rest/api/content?spaceKey=CMCED&limit=25&start=25",
+		"base": "https://docs.ditechonline.it",
+		"context": ""
+	}
+}

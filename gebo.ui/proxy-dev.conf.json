@@ -1,0 +1,6 @@
+{ "/api/*": {
+    "target": "http://localhost:12999",
+    "secure": false,    
+    "logLevel":"debug",
+    "changeOrigin":"true"
+} }

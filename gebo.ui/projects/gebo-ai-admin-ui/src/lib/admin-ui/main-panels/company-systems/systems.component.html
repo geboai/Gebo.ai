@@ -1,0 +1,73 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<div class="grid">
+
+    <div class="col-12">
+        <p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Code</th>
+                    <th>Description</th>
+                    <th></th>
+                   <!--  <th>Base uri</th> -->
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-config>
+                <tr>
+                    <td>{{ config.code }}</td>
+                    <td>{{ config.description }}</td>
+                    <td>
+                        <p-button *ngIf="config.contentManagementSystemType==='DEFAULT.FILESYSTEM.CONTENT.HANDLER' && filesystemUIConfig?.uiSettingsEnabled===true" icon="pi pi-wrench" [outlined]="true" label="Configure" (onClick)="openFilesystemsConfiguration()"></p-button>
+                        <p-button *ngIf="config.contentManagementSystemType==='GOOGLE-SEARCH-MODULE'" icon="pi pi-wrench" [outlined]="true" label="Configure" (onClick)="openGoogleSearchConfiguration()"></p-button>
+                        
+                    </td>
+                    <!-- <td>{{ config.baseUri }}</td>
+                    <td>
+                        <span *ngIf="config.contentManagementSystemType==='DEFAULT.GIT.CONTENT.HANDLER'">
+                            <p-button [outlined]="true" label="Edit" (onClick)="editGitServer(config)" icon="pi pi-github"></p-button>
+                        </span>
+                    </td> -->
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </div>
+    <div class="col-4">
+        <!-- 
+        <p-button [outlined]="true" label="New Git server" (onClick)="newGitServer()" icon="pi pi-github"></p-button>
+        
+        <p-button [outlined]="true" label="New Git endpoint" (onClick)="newGitEndpoint()" icon="pi pi-github"></p-button>
+        -->
+    </div>
+    <div class="col-4">
+        <!-- <p-button [outlined]="true" label="New filesystem area" (onClick)="newFileSystemReference()" icon="pi pi-folder">
+        
+        </p-button> -->
+    </div>
+    <div class="col-4"></div>
+</div>
+<!-- 
+<span>
+    <p-dialog  [maximizable]="true" [visible]="editedGitServer?true:false" [modal]="true" [style]="{ width: '90%',height:'90%' }"  [closable]="false" [showHeader]="false"
+        (onHide)="resetSystems()">
+        <gebo-ai-git-system-admin-component [entity]="editedGitServer" (createdNew)="resetSystems()"
+            (updated)="resetSystems()" (deleted)="resetSystems()" (cancelAction)="resetSystems()"
+            [mode]="editGitServerMode"></gebo-ai-git-system-admin-component>
+
+    </p-dialog>
+</span>
+-->
+<gebo-ai-shared-filesystem-component [visible]="showFilesystemConfigurationWindow" (closed)="showFilesystemConfigurationWindow=false"></gebo-ai-shared-filesystem-component>

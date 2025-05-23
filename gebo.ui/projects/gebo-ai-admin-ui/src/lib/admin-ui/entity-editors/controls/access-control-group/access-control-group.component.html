@@ -1,0 +1,47 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+
+<div class="grid" *ngIf="formGroup" [formGroup]="formGroup">
+    <div class="col-2">
+        <div class="flex flex-column gap-2 ">
+            <label for="accessibleToAll">Everyone uses</label>
+            <p-checkbox formControlName="accessibleToAll" id="accessibleToAll" aria-describedby="accessibleToAll-help" [binary]="true" [trueValue]="true" [falseValue]="false"></p-checkbox>
+            <small id="accessibleToAll-help">
+                Everyone can use
+            </small>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="flex flex-column gap-2 ">
+            <label for="accessibleGroups">Groups list</label>
+            <p-multiSelect  id="accessibleGroups" formControlName="accessibleGroups" aria-describedby="accessibleGroups-help"  dataKey="code" optionLabel="description"  optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" 
+            [showClear]="true" ></p-multiSelect>
+            <small id="accessibleGroups-help">
+                Select allowed groups
+            </small>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="flex flex-column gap-2 ">
+            <label for="accessibleUsers">Users list</label>
+            <p-multiSelect  id="accessibleUsers" formControlName="accessibleUsers" aria-describedby="accessibleUsers-help"  dataKey="username" optionLabel="username"  optionValue="username" [options]="users" [disabled]="accessibleToAll"  placeholder="Select users" display="chip" 
+            [showClear]="true" ></p-multiSelect>
+            <small id="accessibleUsers-help">
+                Select allowed  users 
+            </small>
+        </div>
+    </div>
+
+</div>

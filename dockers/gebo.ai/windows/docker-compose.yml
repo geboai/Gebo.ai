@@ -1,0 +1,73 @@
+version: '3.1'
+#================================================================
+# This compose file creates a service for gebo.ai enterprise retrive augmented generation system
+# and its required mongodb (database) and qdrant (vector database) services
+# once runned simply open the address http://<your host address:12999/ with your browser
+# it will be required to create the administrative account and you'll be ready to setup and
+# start immediately to share the application with your company or team.
+services:
+  # =======================
+  # MongoDB
+  # =======================
+  # Bound only on loopback interface for security reasons
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "127.0.0.1:27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoroot
+      MONGO_INITDB_ROOT_PASSWORD: mongopwd
+    command: ["mongod", "--wiredTigerCacheSizeGB=1"]
+    
+
+  # =======================
+  # Qdrant
+  # =======================
+  # Bound only on loopback interface for security reasons
+  qdrant:
+    image: qdrant/qdrant
+    restart: always
+    ports:
+      - "127.0.0.1:6333:6333"
+      - "127.0.0.1:6334:6334"
+    environment:
+      QDRANT__SERVICE__API_KEY: ce7c85bc-f037-4c64-91d8-70335638329d
+      QDRANT__STORAGE__OPTIMIZE_INDEXING: "true"
+      QDRANT__STORAGE__RAM_DISK_SIZE: "256MB"
+      QDRANT__STORAGE__MAX_SEGMENT_SIZE: "1000000"
+    
+
+  # =======================
+  # gebo.ai 
+  # =======================
+  # Bound to all host interface
+  gebo.ai:
+    image: geboai/gebo.ai
+    restart: always
+    ports:
+      - "12999:12999"
+    depends_on:
+      - mongo
+      - qdrant
+    
+    deploy:
+      resources:
+        limits:
+          # Limit memory usage to 4GB
+          memory: 4G
+          
+    environment:
+      SPRING_PROFILES_ACTIVE: "prod"
+      #Jvm settings
+      JAVA_TOOL_OPTIONS:
+        --enable-native-access=ALL-UNNAMED 
+        -Dsun.jnu.encoding=UTF-8 
+        -Dfile.encoding=UTF-8       
+        -XX:+AggressiveHeap         
+        -XX:+PrintGCDetails        
+        -Xlog:gc:/opt/gebo.ai/logs/gc.log 
+        -Xms2g
+        -Xmx4g
+        -XX:MaxMetaspaceSize=512m
+        --add-opens=java.base/java.nio.charset=ALL-UNNAMED         

@@ -1,0 +1,106 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="confluenceSystemCtrl" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #confluenceSystemCtrl header="Create confluence system configuration" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+
+        <div class="grid">
+
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="description">Description</label>
+                    <input pInputText id="description" formControlName="description" maxlength="120" 
+                        aria-describedby="description-help" />
+                    <small id="description-help">
+                        Enter the description of the confluence system.
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="confluenceVersion">Confluence version</label>
+                    <geboai-editable-listbox-component id="confluenceVersion" formControlName="confluenceVersion"
+                         placeholder="Select a confluence version" class="col-12 required"
+                        aria-describedby="confluenceVersion-help" [data]="confluenceVersions">
+
+                    </geboai-editable-listbox-component>
+                    <small id="confluenceVersion-help">
+                        Confluence version
+                    </small>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="baseUri">Base internet address</label>
+                    <input type="text" id="baseUri" pInputText formControlName="baseUri" 
+                        class="col-12 required" aria-describedby="baseUri-help" />
+                    <small id="baseUri-help">
+                        Url of the base confluence system address for onpremise installation or your organization base url for confluence cloud system 
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="username">Confluence username</label>
+                    <input pInputText id="username" formControlName="username" 
+                        aria-describedby="username-help" type="text" />
+                    <small id="username-help">
+                        Confluence user name
+                    </small>
+                </div>
+            </div>
+            <div class="col-6" *ngIf="currentConfluenceVersion==='ONPREMISE7X'">
+                <div class="flex flex-column gap-2 ">
+                    <label for="password">Confluence password</label>
+                    <input pInputText id="password" formControlName="password" type="password" 
+                        aria-describedby="password-help" />
+                    <small id="password-help">
+                        Confluence password
+                    </small>
+                </div>
+            </div>
+            <div class="col-6" *ngIf="currentConfluenceVersion==='CLOUD'">
+                <div class="flex flex-column gap-2 ">
+                    <label for="token">Confluence cloud api key</label>
+                    <input pInputText id="token" formControlName="token" type="text" size="120" maxlength="1800000"
+                        aria-describedby="token-help" />
+                    <small id="token-help">
+                        Confluence CLOUD apikey acquired in the confluence backoffic, here "API Token for your Atlassian Account" have to be inserted.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"   styleClass="w-full"
+                    [disabled]="this.formGroup.invalid"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full" />
+            </div>
+
+        </div>
+    </div>
+</p-panel>

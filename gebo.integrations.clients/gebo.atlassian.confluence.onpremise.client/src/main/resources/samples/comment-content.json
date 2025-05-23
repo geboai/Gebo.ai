@@ -1,0 +1,120 @@
+{
+	"id": "487981103",
+	"type": "comment",
+	"status": "current",
+	"title": "Re: COMM- Fatturazione Cedi",
+	"space": {
+		"id": 64159746,
+		"key": "M4SN",
+		"name": "MORE 4 SAIT (NEW)",
+		"type": "global",
+		"_links": {
+			"webui": "/display/M4SN",
+			"self": "https://docs.ditechonline.it/rest/api/space/M4SN"
+		},
+		"_expandable": {
+			"metadata": "",
+			"icon": "",
+			"description": "",
+			"homepage": "/rest/api/content/63800349"
+		}
+	},
+	"version": {
+		"by": {
+			"type": "known",
+			"username": "ro_aantili",
+			"userKey": "2c9a488a82131efe018215b32a2c0002",
+			"profilePicture": {
+				"path": "/download/attachments/243826723/user-avatar",
+				"width": 48,
+				"height": 48,
+				"isDefault": false
+			},
+			"displayName": "Andreea Antili",
+			"_links": {
+				"self": "https://docs.ditechonline.it/rest/api/user?key=2c9a488a82131efe018215b32a2c0002"
+			},
+			"_expandable": {
+				"status": ""
+			}
+		},
+		"when": "2024-03-06T10:54:13.802+01:00",
+		"message": "",
+		"number": 1,
+		"minorEdit": false,
+		"hidden": false,
+		"_links": {
+			"self": "https://docs.ditechonline.it/rest/experimental/content/487981103/version/1"
+		},
+		"_expandable": {
+			"content": "/rest/api/content/487981103"
+		}
+	},
+	"container": {
+		"id": "487981100",
+		"type": "page",
+		"status": "current",
+		"title": "COMM- Fatturazione Cedi",
+		"extensions": {
+			"position": "none"
+		},
+		"_links": {
+			"webui": "/display/M4SN/COMM-+Fatturazione+Cedi",
+			"edit": "/pages/resumedraft.action?draftId=487981100&draftShareId=d2076774-d50f-4888-a3dc-d65088668efb",
+			"tinyui": "/x/LAAWHQ",
+			"self": "https://docs.ditechonline.it/rest/api/content/487981100"
+		},
+		"_expandable": {
+			"container": "/rest/api/space/M4SN",
+			"metadata": "",
+			"operations": "",
+			"children": "/rest/api/content/487981100/child",
+			"restrictions": "/rest/api/content/487981100/restriction/byOperation",
+			"history": "/rest/api/content/487981100/history",
+			"ancestors": "",
+			"body": "",
+			"version": "",
+			"descendants": "/rest/api/content/487981100/descendant",
+			"space": "/rest/api/space/M4SN"
+		}
+	},
+	"body": {
+		"view": {
+			"value": "<p><a href=\"/download/attachments/487981100/Fatturazione%20cedi%20v1.docx?version=1&amp;modificationDate=1709718848604&amp;api=v2\" data-linked-resource-id=\"487981102\" data-linked-resource-version=\"1\" data-linked-resource-type=\"attachment\" data-linked-resource-default-alias=\"Fatturazione cedi v1.docx\" data-nice-type=\"Word Document\" data-linked-resource-content-type=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document\" data-linked-resource-container-id=\"487981100\" data-linked-resource-container-version=\"2\">Fatturazione cedi v1.docx</a></p>",
+			"representation": "storage",
+			"_expandable": {
+				"webresource": "",
+				"content": "/rest/api/content/487981103"
+			}
+		},
+		"_expandable": {
+			"editor": "",
+			"export_view": "",
+			"styled_view": "",
+			"storage": "",
+			"anonymous_export_view": ""
+		}
+	},
+	"extensions": {
+		"location": "footer",
+		"_expandable": {
+			"resolution": ""
+		}
+	},
+	"_links": {
+		"webui": "/display/M4SN/COMM-+Fatturazione+Cedi?focusedCommentId=487981103#comment-487981103",
+		"collection": "/rest/api/content",
+		"base": "https://docs.ditechonline.it",
+		"context": "",
+		"self": "https://docs.ditechonline.it/rest/api/content/487981103"
+	},
+	"_expandable": {
+		"metadata": "",
+		"operations": "",
+		"children": "/rest/api/content/487981103/child",
+		"restrictions": "/rest/api/content/487981103/restriction/byOperation",
+		"history": "/rest/api/content/487981103/history",
+		"ancestors": "",
+		"descendants": "/rest/api/content/487981103/descendant"
+	}
+}

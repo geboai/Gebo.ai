@@ -1,0 +1,22 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-button [disabled]="chatModelCode?false:true" [outlined]="true" (onClick)="openWindow=true" label="Test chat"
+    icon="pi  pi-microchip-ai"></p-button>
+<p-dialog  [maximizable]="true" [visible]="openWindow" [modal]="true" [style]="{width:'95%',height:'95%'}" header="Testing model"
+    (onHide)="openWindow=false" [closable]="true" [showHeader]="true" (visibleChange)="openWindow=$event">
+    <gebo-ai-reusable-chat-component [chatInfo]="{chatModelCode:chatModelCode}"
+        [title]="'Chat model configuration:' + chatModelCode" [modelName]="chatModelCode?chatModelCode:''"
+        ></gebo-ai-reusable-chat-component>
+</p-dialog>

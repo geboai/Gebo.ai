@@ -1,0 +1,93 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="instModeUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+
+<p-panel #instModeUI header="Setup Gebo.ai llms providers access with your own api key">
+
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <form [formGroup]="formGroup">
+        <div class="grid " *ngIf="isSetupCompleted!==true">
+            <div class="col-12">
+                <p>Provide an api-key with proper available credit. If OpenAI is choosen you must add some specific credit (10-30$ can be enough) to your usual plan for api use, otherwise no available llms traffic will be available in this application.   </p>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="provider">Large language model supplier</label>
+                    <geboai-editable-listbox-component id="provider" formControlName="provider"
+                        aria-describedby="provider-help" [data]="providersList"
+                        [required]="true"></geboai-editable-listbox-component>
+                    <small id="provider-help">
+                        Choose one supplier between OpenAI (chatgpt), Google (Gemini),Anthropic
+                        (Claude)
+                    </small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2">
+                    <label for="user">User</label>
+                    <input pInputText id="user" formControlName="user" [required]="true" aria-describedby="user-help" />
+                    <small id="username-help">
+                        Enter the user associated to the apiKey
+                    </small>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="apiKey">Api key</label>
+                    <input pInputText id="apiKey" formControlName="apiKey" class="col-12" [required]="true"
+                        aria-describedby="apiKey-help">
+
+                    <small id="apiKey-help">
+                        Your api key of the LLMS providers to be used
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="grid " *ngIf="isSetupCompleted===true">
+
+            <p-table [value]="modelsList" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header pTemplate="header">
+                    <tr>
+                        <th>Configuration code</th>
+                        <th>Provider</th>
+                        <th>Model type</th>
+                        <th>Model</th>
+                        <th>Default model</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-model pTemplate="body">
+                    <tr>
+                        <td>{{ model.configurationCode }}</td>
+                        <td>{{ model.provider }}</td>
+                        <td>{{ model.modelType }}</td>
+                        <td>{{ model.modelCode }}</td>
+                        <td>{{ model.defaultModel===true?'Yes':'No'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </form>
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button [outlined]="true" label="Configure" (onClick)="setupLLMS()" icon="pi pi-save" severity="success"
+                [disabled]="this.formGroup.invalid " styleClass="w-full" *ngIf="isSetupCompleted!==true"></p-button>
+
+        </div>
+    </div>
+</p-panel>

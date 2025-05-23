@@ -1,0 +1,40 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="gwHandshakeView" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #gwHandshakeView header="Access to google workspaces informations">
+    <p-messages [value]="userMessages" [enableService]="false"></p-messages>
+    
+    <div class="grid" *ngIf="!handshakeData" [formGroup]="formGroup"> 
+        <div class="col-12">
+            <div class="flex flex-column gap-2">
+                <label for="user">Username for google workspaces integration</label>
+                <input pInputText id="user" formControlName="user" maxlength="120" [required]="true"
+                    aria-describedby="user-help" [readonly]="accessStarted" />
+                <small id="user-help">
+                    Enter the username to be used to access grant to read data from google workspaces (google drive and
+                    google documents)
+                </small>
+            </div>
+        </div>
+        <div class="col-3">
+                
+                <p-button [outlined]="true" *ngIf="accessStarted===false" (onClick)="doTryAccess()" [disabled]="formGroup.invalid" label="Confirm username" icon="pi pi-google"></p-button>
+
+        </div>
+    </div>
+   
+</p-panel>

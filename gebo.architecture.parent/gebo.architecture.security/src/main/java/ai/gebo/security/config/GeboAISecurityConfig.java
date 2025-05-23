@@ -1,0 +1,228 @@
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ 
+ 
+ 
+
+package ai.gebo.security.config;
+
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import ai.gebo.config.GeboConfig;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.security.TokenAuthenticationFilter;
+import ai.gebo.security.services.JwtAuthenticationEntryPoint;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ * Configuration class for setting up security in the Gebo AI application.
+ * It configures authentication and authorization mechanisms. AI generated comments
+ */
+@Configuration
+@EnableWebSecurity
+public class GeboAISecurityConfig {
+	static Logger LOGGER = LoggerFactory.getLogger(GeboAISecurityConfig.class);
+
+	@Autowired
+	private JwtAuthenticationEntryPoint point;
+
+	@Autowired
+	private GeboConfig geboConfig;
+
+	@Autowired
+	private IGeboCryptingService cryptService = null;
+
+	// URLs that are allowed to be accessed without authentication
+	private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
+			"/v3/**", "/media/**", "**.js", "**.ico", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
+			"/auth/**", "/error", "/error/**", "/ui/**" };
+
+	// URLs that forward to index.html
+	private static final String forwardToIndexHtmlUrls[] = new String[] { "/", "/ui/*", "/index.html" };
+
+	// Admin-specific URLs
+	private static final String[] adminUrls = new String[] { "/api/admin/**" };
+
+	// User-specific URLs
+	private static final String[] usersUrls = new String[] { "/api/users/**" };
+
+	public static final String ADMIN_ROLE = "ADMIN";
+	public static final String USER_ROLE = "USER";
+
+	/**
+	 * A filter implementation to handle CORS (Cross-Origin Resource Sharing) settings.
+	 */
+	public static class GeboAICorsFilter extends OncePerRequestFilter {
+
+		@Override
+		protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+				FilterChain filterChain) throws ServletException, IOException {
+			// Set CORS headers
+			httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
+			httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
+			httpServletResponse.addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST, DELETE");
+			httpServletResponse.addHeader("Access-Control-Allow-Headers",
+					"Access-Control-Allow-Headers, Origin , Accept , Authorization , X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+			if (httpServletRequest.getMethod().equals("OPTIONS")) {
+				httpServletResponse.setStatus(HttpServletResponse.SC_ACCEPTED);
+			}
+			filterChain.doFilter(httpServletRequest, httpServletResponse);
+		}
+	}
+
+	private GeboAICorsFilter corsFilter = new GeboAICorsFilter();
+
+	// Default constructor
+	public GeboAISecurityConfig() {
+
+	}
+
+	/**
+	 * Bean definition for GeboAICorsFilter.
+	 * This filter is responsible for handling CORS.
+	 *
+	 * @return An instance of GeboAICorsFilter.
+	 */
+	@Bean
+	public GeboAICorsFilter geboAICorsFilter() {
+		return corsFilter;
+	}
+
+	@Autowired
+	TokenAuthenticationFilter filter;
+
+	/**
+	 * Bean definition for PasswordEncoder to handle password encoding and decoding.
+	 *
+	 * @return An instance of PasswordEncoder.
+	 */
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new PasswordEncoder() {
+
+			@Override
+			public boolean matches(CharSequence rawPassword, String encodedPassword) {
+				try {
+					// Decrypt the encoded password and compare with the raw password
+					String decoded = cryptService.decrypt(encodedPassword);
+					return rawPassword.toString().equals(decoded);
+				} catch (GeboCryptSecretException e) {
+					throw new RuntimeException("Problems in the underlying crypting system", e);
+				}
+			}
+
+			@Override
+			public String encode(CharSequence rawPassword) {
+				try {
+					// Encrypt the raw password
+					return cryptService.crypt(rawPassword.toString());
+				} catch (GeboCryptSecretException e) {
+					throw new RuntimeException("Problems in the underlying crypting system", e);
+				}
+			}
+		};
+	}
+
+	@Autowired
+	UserDetailsService userDetailsService;
+
+	/**
+	 * Bean definition for AuthenticationProvider based on the configuration.
+	 *
+	 * @return An instance of AuthenticationProvider.
+	 */
+	@Bean
+	public AuthenticationProvider authenticationProvider() {
+		if (geboConfig.getUseLdap() == null || !geboConfig.getUseLdap()) {
+			// If LDAP is not used, configure a DaoAuthenticationProvider
+			DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+			authProvider.setUserDetailsService(userDetailsService);
+			authProvider.setPasswordEncoder(passwordEncoder());
+			return authProvider;
+		} else if (geboConfig.getLdapConfig() != null && geboConfig.getLdapConfig().getDomain() != null
+				&& geboConfig.getLdapConfig().getUrl() != null) {
+			// If LDAP is used, configure an ActiveDirectoryLdapAuthenticationProvider
+			ActiveDirectoryLdapAuthenticationProvider adProvider = new ActiveDirectoryLdapAuthenticationProvider(
+					geboConfig.getLdapConfig().getDomain(), geboConfig.getLdapConfig().getUrl(),
+					geboConfig.getLdapConfig().getRootDn());
+			adProvider.setConvertSubErrorCodesToExceptions(true);
+			adProvider.setUseAuthenticationRequestCredentials(true);
+			return adProvider;
+		} else {
+			LOGGER.error("No ldap complete configuration but ldap enabled");
+			throw new RuntimeException("No ldap complete configuration but ldap enabled");
+		}
+	}
+
+	@Autowired
+	AuthenticationConfiguration config;
+
+	/**
+	 * Bean definition for AuthenticationManager.
+	 *
+	 * @param provider The AuthenticationProvider to be used by the AuthenticationManager.
+	 * @return An instance of AuthenticationManager.
+	 * @throws Exception If an error occurs while creating the AuthenticationManager.
+	 */
+	@Bean
+	public AuthenticationManager authenticationManager(@Autowired AuthenticationProvider provider) throws Exception {
+		return new AuthenticationManager() {
+
+			@Override
+			public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+				// Delegate authentication to the provider
+				return provider.authenticate(authentication);
+			}
+		};
+	}
+
+	/**
+	 * Bean definition for SecurityFilterChain to configure HTTP security.
+	 *
+	 * @param http The HttpSecurity object to be configured.
+	 * @return A configured instance of SecurityFilterChain.
+	 * @throws Exception If an error occurs while configuring HTTP security.
+	 */
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		// Configure security filter chain
+		return http.addFilterBefore(filter, CorsFilter.class).cors(c -> c.disable()).csrf(csrf -> csrf.disable())
+				.addFilterAfter(corsFilter, CsrfFilter.class)
+				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
+						.anyRequest().authenticated())
+				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
+				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+	}
+}

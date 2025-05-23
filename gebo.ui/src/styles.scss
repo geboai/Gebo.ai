@@ -1,0 +1,120 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+@import 'primeflex/primeflex.scss';
+//@import "primeng/resources/themes/lara-light-blue/theme.css";
+//@import "primeng/resources/themes/bootstrap4-light-blue/theme.css";
+//@import "primeng/resources/primeng.css";
+
+.geboButtonsBar {
+    width: 360px;
+}
+.geboLargeButtonsBar {
+    width: 480px;
+}
+.geboVeryLargeButtonsBar {
+    width: 600px;
+}
+label {
+    font-weight: bold;
+}
+.geboDialogContent {
+    min-height: 600px;
+    height: 90%;
+}
+.geboMinHeight{
+    min-height: 900px;
+    height: 100%;
+}
+.geboFullHeight{
+    min-height: 600px;
+    height: 100%;
+}
+.geboHalfHeight{
+    height: 50%;
+}
+.geboThirdHeight{
+    height: 33%;
+}
+
+.anchorButton {
+    border: 0px solid #146084;border-radius: 20%;   
+    padding: 10px; 
+    height: 100%;
+    width: 100%;
+}
+.anchorButton:hover {
+    border: 0px solid#146084;border-radius: 20%;   
+    color: #146084;
+    padding: 10px; 
+    height: 100%;
+    width: 100%;
+}
+
+.p-panel .p-panel-header {
+    color: #146084;
+    //background-color: #FAFAFA;
+    //padding: 0px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+.p-panel .p-panel-header .p-panel-title {
+    font-size: 1.25rem;     /* Aumenta la dimensione del testo */
+    padding: 0.25rem 0;     /* Padding verticale se serve */
+  }
+  
+.p-megamenu-item-label {
+    color: #146084;
+    background-color: transparent;;
+}
+
+.p-fieldset .p-fieldset-legend {
+    color:#146084;
+    text-align: left;
+    border: 0px;
+    background: transparent;
+    padding: 0.1em;
+}
+.p-dialog .p-dialog-header {
+    padding: 0.1rem 0.1rem !important;
+  }
+.pi.pi-git,
+.pi.pi-sharepoint,
+.pi.pi-onedrive,
+.pi.pi-google-workspace,
+.pi.pi-confluence,
+.pi.pi-jira {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  filter: grayscale(100%) 
+}
+
+/* Specific icons */
+.pi.pi-sharepoint {
+  background-image: url("assets/3rdparty/ms-sharepoint-svgrepo-com.svg");
+}
+
+.pi.pi-onedrive {
+  background-image: url("assets/3rdparty/ms-onedrive-svgrepo-com.svg");
+}
+
+.pi.pi-google-workspace {
+  background-image: url("assets/3rdparty/google-workspace-logo.svg");
+}
+
+.pi.pi-confluence {
+  background-image: url("assets/3rdparty/confluence-svgrepo-com.svg");
+}
+
+.pi.pi-jira {
+  background-image: url("assets/3rdparty/atlassian-jira-svgrepo-com.svg");
+}
+
+.pi.pi-git {
+  background-image: url("assets/3rdparty/git-svgrepo-com.svg");
+}

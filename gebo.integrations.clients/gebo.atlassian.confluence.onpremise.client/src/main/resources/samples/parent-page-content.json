@@ -1,0 +1,107 @@
+{
+	"id": "98238529",
+	"type": "page",
+	"status": "current",
+	"title": ".NET client  to Angular specification documents",
+	"space": {
+		"id": 64159746,
+		"key": "M4SN",
+		"name": "MORE 4 SAIT (NEW)",
+		"type": "global",
+		"_links": {
+			"webui": "/display/M4SN",
+			"self": "https://docs.ditechonline.it/rest/api/space/M4SN"
+		},
+		"_expandable": {
+			"metadata": "",
+			"icon": "",
+			"description": "",
+			"homepage": "/rest/api/content/63800349"
+		}
+	},
+	"version": {
+		"by": {
+			"type": "known",
+			"username": "PZavalloni",
+			"userKey": "402887f47219f9ef0172315f0fdc001b",
+			"profilePicture": {
+				"path": "/download/attachments/80052424/user-avatar",
+				"width": 48,
+				"height": 48,
+				"isDefault": false
+			},
+			"displayName": "Paolo Zavalloni",
+			"_links": {
+				"self": "https://docs.ditechonline.it/rest/api/user?key=402887f47219f9ef0172315f0fdc001b"
+			},
+			"_expandable": {
+				"status": ""
+			}
+		},
+		"when": "2023-06-28T09:39:52.384+02:00",
+		"message": "",
+		"number": 4,
+		"minorEdit": false,
+		"hidden": false,
+		"_links": {
+			"self": "https://docs.ditechonline.it/rest/experimental/content/98238529/version/4"
+		},
+		"_expandable": {
+			"content": "/rest/api/content/98238529"
+		}
+	},
+	"container": {
+		"id": 64159746,
+		"key": "M4SN",
+		"name": "MORE 4 SAIT (NEW)",
+		"type": "global",
+		"_links": {
+			"webui": "/display/M4SN",
+			"self": "https://docs.ditechonline.it/rest/api/space/M4SN"
+		},
+		"_expandable": {
+			"metadata": "",
+			"icon": "",
+			"description": "",
+			"homepage": "/rest/api/content/63800349"
+		}
+	},
+	"body": {
+		"view": {
+			"value": "<p>in this section there are documents regarding how the .Net C# is implemented to be used as references for the angular porting</p><p><ul class=\"childpages-macro conf-macro output-block\" data-hasbody=\"false\" data-macro-name=\"children\"><li><a href=\"/display/M4SN/%28NOTA%29+Retrieve+del+PDD+di+default+per+l%27utente+Attuale+in+store+operation\">(NOTA) Retrieve del PDD di default per l'utente Attuale in store operation</a></li><li><a href=\"/display/M4SN/COMM+-+Anagrafica+articoli+semplificata\">COMM - Anagrafica articoli semplificata</a></li><li><a href=\"/display/M4SN/COMM+-+Anagrafica+articoli+sintetica\">COMM - Anagrafica articoli sintetica</a></li><li><a href=\"/display/M4SN/COMM-+Anagrafica+Cliente+Semplificata\">COMM- Anagrafica Cliente Semplificata</a></li><li><a href=\"/pages/viewpage.action?pageId=419266745\">COMM - Anagrafiche/Anagrafiche Amministrative //Rapporto amministrativo acquisti (SMARTSHOP)</a></li><li><a href=\"/display/M4SN/COMM+-+Articoli\">COMM - Articoli</a></li><li><a href=\"/pages/viewpage.action?pageId=177111188\">COMM - Articoli Divisioni/Pdd</a></li><li><a href=\"/display/M4SN/COMM+-+Articolo+sostitutivo\">COMM - Articolo sostitutivo</a></li><li><a href=\"/display/M4SN/COMM+-+Assegnazione+listini\">COMM - Assegnazione listini</a></li><li><a href=\"/display/M4SN/COMM+-+Assegnazione+listini+per+PDD\">COMM - Assegnazione listini per PDD</a></li><li><a href=\"/display/M4SN/COMM+-+Associazione+listini\">COMM - Associazione listini</a></li><li><a href=\"/display/M4SN/COMM+-+Assortimento+fornitore\">COMM - Assortimento fornitore</a></li><li><a href=\"/display/M4SN/COMM+-+Attese+fatture+sospese\">COMM - Attese fatture sospese</a></li><li><a href=\"/display/M4SN/COMM+-+Attributi+Pdd\">COMM - Attributi Pdd</a></li><li><a href=\"/display/M4SN/COMM+-+Azienda\">COMM - Azienda</a></li><li><a href=\"/display/M4SN/COMM+-+Barcode\">COMM - Barcode</a></li><li><a href=\"/display/M4SN/COMM+-+Carico+rilevazioni\">COMM - Carico rilevazioni</a></li><li><a href=\"/display/M4SN/COMM+-+Causali+commerciale\">COMM - Causali commerciale</a></li><li><a href=\"/display/M4SN/COMM+-+Causali+commerciale-+Default+ciclo+attivo\">COMM - Causali commerciale- Default ciclo attivo</a></li><li><a href=\"/pages/viewpage.action?pageId=459440240\">COMM - Causali di S/M</a></li><li><a href=\"/display/M4SN/COMM+-+Causali+Movimentazione\">COMM - Causali Movimentazione</a></li><li><a href=\"/display/M4SN/COMM+-+Classi+causali\">COMM - Classi causali</a></li><li><a href=\"/display/M4SN/COMM+-+Cliente\">COMM - Cliente</a></li><li><a href=\"/pages/viewpage.action?pageId=517800058\">COMM - Condizioni di acquisto/Verifica condizioni //Intercettazione</a></li><li><a href=\"/display/M4SN/COMM+-+configurazione+persona+fiscale+x+rifatturazione\">COMM - configurazione persona fiscale x rifatturazione</a></li><li><a href=\"/display/M4SN/COMM+-+Configurazioni+di+costo\">COMM - Configurazioni di costo</a></li><li><a href=\"/display/M4SN/COMM+-+Contenziosi\">COMM - Contenziosi</a></li><li><a href=\"/display/M4SN/COMM+-+Da+Contratti\">COMM - Da Contratti</a></li><li><a href=\"/pages/viewpage.action?pageId=332169252\">COMM - Da resi fornitore (Controllo fatture)</a></li><li><a href=\"/display/M4SN/COMM+-+Distinta+base\">COMM - Distinta base</a></li><li><a href=\"/display/M4SN/COMM+-+Documento+gestionale\">COMM - Documento gestionale</a></li><li><a href=\"/display/M4SN/COMM+-+Esporta+fattura+in+cassa\">COMM - Esporta fattura in cassa</a></li><li><a href=\"/display/M4SN/COMM+-+Esporta+paniere+concorrenza\">COMM - Esporta paniere concorrenza</a></li><li><a href=\"/display/M4SN/COMM+-+Fatturazione\">COMM - Fatturazione</a></li><li><a href=\"/display/M4SN/COMM-+Fatturazione+Cedi\">COMM- Fatturazione Cedi</a></li><li><a href=\"/display/M4SN/COMM+-+Fatturazione+da+scontrino\">COMM - Fatturazione da scontrino</a></li><li><a href=\"/display/M4SN/COMM+-+Figure+aziendale\">COMM - Figure aziendale</a></li><li><a href=\"/display/M4SN/COMM+-+Formati+regole\">COMM - Formati regole</a></li><li><a href=\"/display/M4SN/COMM+-+Formulazione+ordini\">COMM - Formulazione ordini</a></li><li><a href=\"/display/M4SN/COMM+-+Formulazione+prezzi\">COMM - Formulazione prezzi</a></li><li><a href=\"/pages/viewpage.action?pageId=248119380\">COMM - Formulazione Prezzi (New)</a></li><li><a href=\"/display/M4SN/COMM+-+Formulazione+prezzi+massiva\">COMM - Formulazione prezzi massiva</a></li><li><a href=\"/display/M4SN/COMM+-+Fornitore\">COMM - Fornitore</a></li><li><a href=\"/pages/viewpage.action?pageId=398885045\">COMM - Fornitori (Immisione ordini rapida e rapida avanzata)</a></li><li><a href=\"/display/M4SN/COMM+-+Funzione+Aziendali\">COMM - Funzione Aziendali</a></li><li><a href=\"/display/M4SN/COMM+-+Generazione+documenti+fiscali\">COMM - Generazione documenti fiscali</a></li><li><a href=\"/display/M4SN/COMM+-+Gestione+functioni+e+moduli\">COMM - Gestione functioni e moduli</a></li><li><a href=\"/display/M4SN/COMM+-+Gestione+IVA\">COMM - Gestione IVA</a></li><li><a href=\"/display/M4SN/COMM+-+Gestione+Merceologia\">COMM - Gestione Merceologia</a></li><li><a href=\"/display/M4SN/COMM+-+Gruppi+pdd\">COMM - Gruppi pdd</a></li><li><a href=\"/display/M4SN/COMM+-+Informazioni+audit\">COMM - Informazioni audit</a></li><li><a href=\"/pages/viewpage.action?pageId=246480922\">COMM - Intercettazione prezzi al publico / cessione</a></li><li><a href=\"/display/M4SN/COMM+-+Inventari+v2.0\">COMM - Inventari v2.0</a></li><li><a href=\"/pages/viewpage.action?pageId=518455308\">COMM - Linee al pubblico/cessione</a></li><li><a href=\"/display/M4SN/COMM+-+Linee+sconto\">COMM - Linee sconto</a></li><li><a href=\"/display/M4SN/COMM+-+Lista+Ingredienti\">COMM - Lista Ingredienti</a></li><li><a href=\"/pages/viewpage.action?pageId=232685574\">COMM - Listini al pubblico / cessione (ingrosso)</a></li><li><a href=\"/pages/viewpage.action?pageId=139722886\">COMM - Manutenzione / Gestione carichi</a></li><li><a href=\"/display/M4SN/Comm+-+Manutenzioni+ordini\">Comm - Manutenzioni ordini</a></li><li><a href=\"/pages/viewpage.action?pageId=321028197\">COMM - Maschera gestione gruppi</a></li><li><a href=\"/display/M4SN/COMM+-+Maschera+legami+fra+articoli\">COMM - Maschera legami fra articoli</a></li><li><a href=\"/display/M4SN/COMM+-+Modifiche+di+massa\">COMM - Modifiche di massa</a></li><li><a href=\"/display/M4SN/COMM+-+Numeratori\">COMM - Numeratori</a></li><li><a href=\"/display/M4SN/COMM+-+Panieri+di+rilevazione\">COMM - Panieri di rilevazione</a></li><li><a href=\"/display/M4SN/COMM+-+Pdv+Concorrenti\">COMM - Pdv Concorrenti</a></li><li><a href=\"/display/M4SN/COMM+-+Per+Documento+Accompagnatorio\">COMM - Per Documento Accompagnatorio</a></li><li><a href=\"/display/M4SN/COMM+-+Per+Numero+ordine\">COMM - Per Numero ordine</a></li><li><a href=\"/display/M4SN/COMM+-+Persona+fiscale\">COMM - Persona fiscale</a></li><li><a href=\"/pages/viewpage.action?pageId=232685571\">COMM - Prezzi al pubblico / cessione (ingrosso)</a></li><li><a href=\"/display/M4SN/COMM+-+Priorita+classe+causale\">COMM - Priorita classe causale</a></li><li><a href=\"/display/M4SN/COMM+-+Punto+di+deposito\">COMM - Punto di deposito</a></li><li><a href=\"/display/M4SN/COMM+-+Regole+Prezzi+al+pubblico\">COMM - Regole Prezzi al pubblico</a></li><li><a href=\"/display/M4SN/COMM+-+Regole+voci+a+valore+vendite\">COMM - Regole voci a valore vendite</a></li><li><a href=\"/display/M4SN/COMM+-+Resi+fornitore\">COMM - Resi fornitore</a></li><li><a href=\"/display/M4SN/COMM+-+Ricerca+Baricentro\">COMM - Ricerca Baricentro</a></li><li><a href=\"/display/M4SN/COMM+-+Ricerca+bolle\">COMM - Ricerca bolle</a></li><li><a href=\"/display/M4SN/COMM+-+Ricerca+elaborazioni+da+Formulazione+prezzi+massiva\">COMM - Ricerca elaborazioni da Formulazione prezzi massiva</a></li><li><a href=\"/pages/viewpage.action?pageId=533004325\">COMM - Ricerca listini per cliente/Pdd</a></li><li><a href=\"/display/M4SN/COMM+-+Ricerca+prezzi+concorrenti\">COMM - Ricerca prezzi concorrenti</a></li><li><a href=\"/display/M4SN/COMM+-+Rilevazioni\">COMM - Rilevazioni</a></li><li><a href=\"/display/M4SN/COMM+-+Sconti+di+riga\">COMM - Sconti di riga</a></li><li><a href=\"/pages/viewpage.action?pageId=503775313\">COMM - Sconti di riga (Condizioni di acquisto/Listini/Sconti di rga)</a></li><li><a href=\"/display/M4SN/COMM+-+Sconti+di+testata\">COMM - Sconti di testata</a></li><li><a href=\"/display/M4SN/COMM+-+Sconti+opportunita\">COMM - Sconti opportunita</a></li><li><a href=\"/pages/viewpage.action?pageId=435585035\">COMM - Simulatore/Intercettazione acquisti</a></li><li><a href=\"/display/M4SN/COMM+-+Simulazione+prezzi\">COMM - Simulazione prezzi</a></li><li><a href=\"/display/M4SN/COMM+-+Template+1\">COMM - Template 1</a></li><li><a href=\"/display/M4SN/COMM+-+Tipo+formulazione\">COMM - Tipo formulazione</a></li><li><a href=\"/display/M4SN/COMM+-+Variazione+massiva+dei+costi\">COMM - Variazione massiva dei costi</a></li><li><a href=\"/display/M4SN/COMM+-+Voci+a+valore\">COMM - Voci a valore</a></li><li><a href=\"/display/M4SN/Home+Dashboard\">Home Dashboard</a></li><li><a href=\"/display/M4SN/Lib+-+Divisa\">Lib - Divisa</a></li><li><a href=\"/display/M4SN/Lib+-+Note\">Lib - Note</a></li><li><a href=\"/display/M4SN/Lib+-+Profilazione+Dati\">Lib - Profilazione Dati</a></li><li><a href=\"/display/M4SN/Lista+aggiornata+schermate+da+documentare\">Lista aggiornata schermate da documentare</a></li><li><a href=\"/pages/viewpage.action?pageId=168001622\">Lista chiave/valore More</a></li><li><a href=\"/pages/viewpage.action?pageId=98238532\">Nordi conad 9.0 MORE .Net client code implementation report/screen Anagrafiche--&gt;Articoli--&gt;Articoli (search function).</a></li><li><a href=\"/display/M4SN/Prof+-+Gestione+profili+dati\">Prof - Gestione profili dati</a></li><li><a href=\"/display/M4SN/Prof+-+Gestione+Ruoli\">Prof - Gestione Ruoli</a></li><li><a href=\"/display/M4SN/Ricerca+articoli+in+bolle\">Ricerca articoli in bolle</a></li><li><a href=\"/display/M4SN/Schedulatore+per+Recupero+variazioni\">Schedulatore per Recupero variazioni</a></li><li><a href=\"/display/M4SN/SO+-+Acquisizioni+file+esterni\">SO - Acquisizioni file esterni</a></li><li><a href=\"/display/M4SN/SO+-+Consultazione+Articoli\">SO - Consultazione Articoli</a></li><li><a href=\"/display/M4SN/SO+-+Controllo+invio+dati\">SO - Controllo invio dati</a></li><li><a href=\"/display/M4SN/SO+-+Datum+Component\">SO - Datum Component</a></li><li><a href=\"/pages/viewpage.action?pageId=437125196\">SO - Gestione Carichi (da terminalino)</a></li><li><a href=\"/display/M4SN/SO+-+Gestione+Variazioni\">SO - Gestione Variazioni</a></li><li><a href=\"/pages/viewpage.action?pageId=409731136\">SO Inventari/Gestione carichi (da terminalino)</a></li><li><a href=\"/pages/viewpage.action?pageId=409731133\">SO - Movimenti/Gestione errori extra cassa (sait !?)</a></li><li><a href=\"/display/M4SN/SO+-+Recupero+variazioni+estemporaneo\">SO - Recupero variazioni estemporaneo</a></li><li><a href=\"/display/M4SN/SO+-+Recupero+Variazioni+per+PDD\">SO - Recupero Variazioni per PDD</a></li><li><a href=\"/display/M4SN/SO+-+Scarichi+Terminalino\">SO - Scarichi Terminalino</a></li><li><a href=\"/pages/viewpage.action?pageId=125994224\">SO - Schedulatore per Rec. Var.</a></li><li><a href=\"/display/M4SN/SO+-+Stampa+cursori+NEW\">SO - Stampa cursori NEW</a></li><li><a href=\"/display/M4SN/SO+-+Stampa+Cursori+Offerta\">SO - Stampa Cursori Offerta</a></li><li><a href=\"/display/M4SN/SO+-+Stampa+e+invio+variazioni\">SO - Stampa e invio variazioni</a></li><li><a href=\"/display/M4SN/SO+-+Stampa+Immediata\">SO - Stampa Immediata</a></li><li><a href=\"/display/M4SN/SO+-+Stampa+Offerte+Anticipate\">SO - Stampa Offerte Anticipate</a></li><li><a href=\"/display/M4SN/SO+-+Variazioni+per+bilancia\">SO - Variazioni per bilancia</a></li><li><a href=\"/display/M4SN/SO+-+Variazioni+per+casse\">SO - Variazioni per casse</a></li><li><a href=\"/pages/viewpage.action?pageId=409731131\">SO - Vendite/Fatturazione/Esporta fattura in cassa (sait)</a></li><li><a href=\"/display/M4SN/Store+operation+-+client+config+variables\">Store operation - client config variables</a></li><li><a href=\"/display/M4SN/System+TablesHelp\">System TablesHelp</a></li></ul></p>",
+			"representation": "storage",
+			"_expandable": {
+				"webresource": "",
+				"content": "/rest/api/content/98238529"
+			}
+		},
+		"_expandable": {
+			"editor": "",
+			"export_view": "",
+			"styled_view": "",
+			"storage": "",
+			"anonymous_export_view": ""
+		}
+	},
+	"extensions": {
+		"position": 5
+	},
+	"_links": {
+		"webui": "/display/M4SN/.NET+client++to+Angular+specification+documents",
+		"edit": "/pages/resumedraft.action?draftId=98238529&draftShareId=57b07414-c9d3-42a2-a064-2f8fd61e8293",
+		"tinyui": "/x/QQDbBQ",
+		"collection": "/rest/api/content",
+		"base": "https://docs.ditechonline.it",
+		"context": "",
+		"self": "https://docs.ditechonline.it/rest/api/content/98238529"
+	},
+	"_expandable": {
+		"metadata": "",
+		"operations": "",
+		"children": "/rest/api/content/98238529/child",
+		"restrictions": "/rest/api/content/98238529/restriction/byOperation",
+		"history": "/rest/api/content/98238529/history",
+		"ancestors": "",
+		"descendants": "/rest/api/content/98238529/descendant"
+	}
+}

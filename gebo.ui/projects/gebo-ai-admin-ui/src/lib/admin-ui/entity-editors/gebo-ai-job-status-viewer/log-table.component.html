@@ -1,0 +1,87 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-panel #logList [showHeader]="false">
+    <p-blockUI [target]="logList" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+<div class="grid">
+    <div class="col-12" >
+        <table class="grid geboLargeButtonsBar">
+            <div class="col-4"><p-button icon="pi pi-history" [outlined]="true" [disabled]="(!jobType && !className)" (onClick)="reloadData()" label="reload data"></p-button></div>
+            <div class="col-4"><p-button icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true" (onClick)="deleteSelected()"></p-button></div>
+            <div class="col-4"></div>
+        </table>
+
+
+    </div>
+    <div class="col-12">
+        <p-table  [value]="actualData" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Select</th>
+                    <th>Code</th>
+                    <th>Description</th>
+
+                    <th>start date/time</th>
+                    <th>end date/time</th>
+                    <th>processing</th>
+                    <th>finished</th>
+                    <th>with error</th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td><p-checkbox [(ngModel)]="data.selected" [binary]="true" [trueValue]="true" [falseValue]="false"></p-checkbox></td>
+                    <td><a (click)="showItem(data)"> {{ data.code }}</a></td>
+                    <td><a (click)="showItem(data)">{{ data.description }}</a></td>
+                    <td>
+                        {{ data.startDateTime | date:'short' }}
+                    </td>
+                    <td>
+                        {{ data.endDateTime | date:'short' }}
+                    </td>
+                    <td>
+                        {{ data.processing===true?'YES':'NO' }}
+                    </td>
+                    <td>
+                        {{ data.finished===true?'YES':'NO' }}
+                    </td>
+                    <td>
+                        {{ data.error===true?'YES':'NO' }}
+                    </td>
+                    <td>
+                        <p-button (onClick)="showItem(data)" [outlined]="true" icon="pi pi-eye"></p-button>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+        <table class="grid">
+            <div class="col-4">
+
+            </div>
+            <div class="col-4">
+                <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
+            [totalRecords]="data?.totalElements"  [rowsPerPageOptions]="[10, 20, 30]" />
+            </div>
+            <div class="col-4">
+
+            </div>
+        </table>
+
+    </div>
+</div>
+</p-panel>

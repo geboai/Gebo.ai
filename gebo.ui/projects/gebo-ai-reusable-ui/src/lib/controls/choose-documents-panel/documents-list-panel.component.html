@@ -1,0 +1,33 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-panel [header]="title" [formGroup]="formGroup">
+    <p-blockUI [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <div class="grid">
+        <div class="col-12">
+            <ul style="list-style: none;">
+                <li *ngFor="let doc of documentsList;" style="list-style: none;">
+                    <p-checkbox name="choosen" id="choosen" [value]="doc"
+                        formControlName="choosenDocuments"></p-checkbox> {{doc.name}}
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-2">
+            <p-button label="Confirm" (onClick)="onOkFiles()" [outlined]="true" styleClass="w-full"  icon="pi  pi-check" [disabled]="formGroup.invalid" *ngIf="documentsList && documentsList.length" ></p-button>
+        </div>
+    </div>
+</p-panel>

@@ -1,0 +1,124 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="gitSystemCtrl" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #gitSystemCtrl header="Editing git compatible system (bitbucket/github/gitlab)" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-tabView>
+            <p-tabPanel header="General settings">
+                <div class="grid">
+                    
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="description">Description</label>
+                            <input pInputText id="description" formControlName="description" maxlength="120"
+                                [required]="true" aria-describedby="description-help" />
+                            <small id="description-help">
+                                Enter the description of the git compatible system.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="code">Unique Code</label>
+                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
+                                readonly="true" />
+                            <small id="description-help">
+                                Automatically generated unique code of the git compatible system.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="contentManagementSystemType">Git driver</label>
+                            <geboai-editable-listbox-component id="contentManagementSystemType"
+                                formControlName="contentManagementSystemType" [required]="true"
+                                [readonly]="cantModifyGitSystemReference" placeholder="Select a Git driver"
+                                class="col-12 required" aria-describedby="contentManagementSystemType-help"
+                                [optionsObservable]="contentManagementSystemTypeObservable">
+
+                            </geboai-editable-listbox-component>
+                            <small id="contentManagementSystemType-help">
+                                Git driver for cloning/pull of repos
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="baseUri">Base internet address</label>
+                            <input type="text" id="baseUri" pInputText formControlName="baseUri" [required]="true"
+                                class="col-12 required" aria-describedby="baseUri-help" />
+                            <small id="baseUri-help">
+                                Complete url of the repository
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Security settings" [disabled]="mode!=='EDIT'">
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="publicAccess">Public access</label>
+                            <p-checkbox id="publicAccess" formControlName="publicAccess" [binary]="true"
+                                inputId="binary" aria-describedby="publicAccess-help" />
+                            <small id="publicAccess-help">
+                                If true the system gives public access to everyone
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6" *ngIf="publicAccess===false && mode==='EDIT'">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="defaultIdentityCode">Default identity used</label>
+                            <geboai-editable-listbox-component formControlName="defaultIdentityCode"
+                                id="defaultIdentityCode" placeholder="Select an identity"
+                                [optionsObservable]="identitiesObservable"
+                                [required]="publicAccess===false  && mode==='EDIT'"
+                                aria-describedby="defaultIdentityCode-help">
+
+                            </geboai-editable-listbox-component>
+                            <small id="defaultIdentityCode-help">
+                                Select the default identity to do clone/checkout on the system
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <gebo-ai-secrets-admin-list-component *ngIf="publicAccess===false && mode==='EDIT'"
+                    [contextCode]="secretContextCode"
+                    (secretsListChange)="refreshIdentitiesObservable();"></gebo-ai-secrets-admin-list-component>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+
+
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    [disabled]="canDelete===false" />
+            </div>
+        </div>
+    </div>
+</p-panel>

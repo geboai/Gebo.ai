@@ -1,0 +1,2407 @@
+{
+	"results": [
+		{
+			"id": 6815746,
+			"key": "AGRO",
+			"name": "Agrolink-Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/AGRO",
+				"self": "https://docs.ditechonline.it/rest/api/space/AGRO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/6717448"
+			}
+		},
+		{
+			"id": 536707073,
+			"key": "AW",
+			"name": "Analisi Workflow",
+			"type": "global",
+			"_links": {
+				"webui": "/display/AW",
+				"self": "https://docs.ditechonline.it/rest/api/space/AW"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/536379419"
+			}
+		},
+		{
+			"id": 106856450,
+			"key": "AS",
+			"name": "Appunti Smart",
+			"type": "global",
+			"_links": {
+				"webui": "/display/AS",
+				"self": "https://docs.ditechonline.it/rest/api/space/AS"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/106528846"
+			}
+		},
+		{
+			"id": 83165185,
+			"key": "APM",
+			"name": "Area Project Manager",
+			"type": "global",
+			"_links": {
+				"webui": "/display/APM",
+				"self": "https://docs.ditechonline.it/rest/api/space/APM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/82051645"
+			}
+		},
+		{
+			"id": 56459265,
+			"key": "ASB2C",
+			"name": "Assistenza B2C",
+			"type": "global",
+			"_links": {
+				"webui": "/display/ASB2C",
+				"self": "https://docs.ditechonline.it/rest/api/space/ASB2C"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/56066159"
+			}
+		},
+		{
+			"id": 191004673,
+			"key": "AT",
+			"name": "Atlassian",
+			"type": "global",
+			"_links": {
+				"webui": "/display/AT",
+				"self": "https://docs.ditechonline.it/rest/api/space/AT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/190677067"
+			}
+		},
+		{
+			"id": 194740225,
+			"key": "BFA",
+			"name": "Board Funzionale Angular",
+			"type": "global",
+			"_links": {
+				"webui": "/display/BFA",
+				"self": "https://docs.ditechonline.it/rest/api/space/BFA"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/194347675"
+			}
+		},
+		{
+			"id": 85753857,
+			"key": "AFC",
+			"name": "BU AFC",
+			"type": "global",
+			"_links": {
+				"webui": "/display/AFC",
+				"self": "https://docs.ditechonline.it/rest/api/space/AFC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/85262428"
+			}
+		},
+		{
+			"id": 15630342,
+			"key": "BUC",
+			"name": "BU_CORAZZA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/BUC",
+				"self": "https://docs.ditechonline.it/rest/api/space/BUC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15173323"
+			}
+		},
+		{
+			"id": 209813505,
+			"key": "C3PO",
+			"name": "C3PO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/C3PO",
+				"self": "https://docs.ditechonline.it/rest/api/space/C3PO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": ""
+			}
+		},
+		{
+			"id": 15630346,
+			"key": "CAT",
+			"name": "CATALOGO ELETTRONICO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CAT",
+				"self": "https://docs.ditechonline.it/rest/api/space/CAT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15173537"
+			}
+		},
+		{
+			"id": 127467521,
+			"key": "CDBSQL",
+			"name": "C-DBSQL",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CDBSQL",
+				"self": "https://docs.ditechonline.it/rest/api/space/CDBSQL"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/125994975"
+			}
+		},
+		{
+			"id": 9142275,
+			"key": "CDVIC",
+			"name": "C#-DVICE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CDVIC",
+				"self": "https://docs.ditechonline.it/rest/api/space/CDVIC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8519944"
+			}
+		},
+		{
+			"id": 13369351,
+			"key": "CAGRO",
+			"name": "CENTRALE-Agrolink",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CAGRO",
+				"self": "https://docs.ditechonline.it/rest/api/space/CAGRO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/12714570"
+			}
+		},
+		{
+			"id": 13369352,
+			"key": "CGEOW",
+			"name": "CENTRALE-Gerfis On Web",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CGEOW",
+				"self": "https://docs.ditechonline.it/rest/api/space/CGEOW"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/12714576"
+			}
+		},
+		{
+			"id": 4816897,
+			"key": "MORE",
+			"name": "CENTRALE-Infrastruttura",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MORE",
+				"self": "https://docs.ditechonline.it/rest/api/space/MORE"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/4292646"
+			}
+		},
+		{
+			"id": 106856449,
+			"key": "APSM",
+			"name": "CENTRALE-MORE CEDI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/APSM",
+				"self": "https://docs.ditechonline.it/rest/api/space/APSM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": ""
+			}
+		},
+		{
+			"id": 13369348,
+			"key": "CMCED",
+			"name": "CENTRALE-MORE CEDI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CMCED",
+				"self": "https://docs.ditechonline.it/rest/api/space/CMCED"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/12714201"
+			}
+		},
+		{
+			"id": 13369350,
+			"key": "CMOV",
+			"name": "CENTRALE-Mover",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CMOV",
+				"self": "https://docs.ditechonline.it/rest/api/space/CMOV"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/12714564"
+			}
+		},
+		{
+			"id": 96698369,
+			"key": "COW",
+			"name": "CENTRALE-Premia",
+			"type": "global",
+			"_links": {
+				"webui": "/display/COW",
+				"self": "https://docs.ditechonline.it/rest/api/space/COW"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/96272571"
+			}
+		},
+		{
+			"id": 136970241,
+			"key": "CGDO",
+			"name": "C- GECOB Documentale OB",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CGDO",
+				"self": "https://docs.ditechonline.it/rest/api/space/CGDO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/136839178"
+			}
+		},
+		{
+			"id": 131399681,
+			"key": "IBIS",
+			"name": "C-IBIS",
+			"type": "global",
+			"_links": {
+				"webui": "/display/IBIS",
+				"self": "https://docs.ditechonline.it/rest/api/space/IBIS"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/131006595"
+			}
+		},
+		{
+			"id": 31391745,
+			"key": "CARREFOUR",
+			"name": "CLIENTE-CARREFOUR",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CARREFOUR",
+				"self": "https://docs.ditechonline.it/rest/api/space/CARREFOUR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/30769454"
+			}
+		},
+		{
+			"id": 21233667,
+			"key": "CONAD",
+			"name": "CLIENTE-CONAD",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CONAD",
+				"self": "https://docs.ditechonline.it/rest/api/space/CONAD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/20218954"
+			}
+		},
+		{
+			"id": 36405251,
+			"key": "CA",
+			"name": "CLIENTE-CONAD ADRIATICO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CA",
+				"self": "https://docs.ditechonline.it/rest/api/space/CA"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/34966267"
+			}
+		},
+		{
+			"id": 21233665,
+			"key": "DAO",
+			"name": "CLIENTE-DAO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DAO",
+				"self": "https://docs.ditechonline.it/rest/api/space/DAO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/20218781"
+			}
+		},
+		{
+			"id": 18841601,
+			"key": "EUROSPIN",
+			"name": "CLIENTE-EUROSPIN",
+			"type": "global",
+			"_links": {
+				"webui": "/display/EUROSPIN",
+				"self": "https://docs.ditechonline.it/rest/api/space/EUROSPIN"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": ""
+			}
+		},
+		{
+			"id": 143949825,
+			"key": "MAX",
+			"name": "CLIENTE-MAXIDI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MAX",
+				"self": "https://docs.ditechonline.it/rest/api/space/MAX"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/143622340"
+			}
+		},
+		{
+			"id": 148963329,
+			"key": "MCEDI",
+			"name": "CLIENTE-MULTICEDI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MCEDI",
+				"self": "https://docs.ditechonline.it/rest/api/space/MCEDI"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/148472142"
+			}
+		},
+		{
+			"id": 18841603,
+			"key": "SAIT",
+			"name": "CLIENTE-SAIT",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SAIT",
+				"self": "https://docs.ditechonline.it/rest/api/space/SAIT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/17598265"
+			}
+		},
+		{
+			"id": 318373889,
+			"key": "CIDC",
+			"name": "CLIENTE-SAIT INNOVAZIONE DI CENTRALE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CIDC",
+				"self": "https://docs.ditechonline.it/rest/api/space/CIDC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/318242830"
+			}
+		},
+		{
+			"id": 167575554,
+			"key": "VARHUB",
+			"name": "CLIENTE-VARHUB",
+			"type": "global",
+			"_links": {
+				"webui": "/display/VARHUB",
+				"self": "https://docs.ditechonline.it/rest/api/space/VARHUB"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/167117384"
+			}
+		},
+		{
+			"id": 145981441,
+			"key": "CR",
+			"name": "Clienti restock",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CR",
+				"self": "https://docs.ditechonline.it/rest/api/space/CR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/145621604"
+			}
+		},
+		{
+			"id": 68976642,
+			"key": "CNO",
+			"name": "CNO - Integrazione prodotti DITECH",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CNO",
+				"self": "https://docs.ditechonline.it/rest/api/space/CNO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/68386979"
+			}
+		},
+		{
+			"id": 134742017,
+			"key": "CF",
+			"name": "COLLEGAMENTI FORNITORI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CF",
+				"self": "https://docs.ditechonline.it/rest/api/space/CF"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/134217879"
+			}
+		},
+		{
+			"id": 9142303,
+			"key": "COMARKETING",
+			"name": "COMARKETING",
+			"type": "global",
+			"_links": {
+				"webui": "/display/COMARKETING",
+				"self": "https://docs.ditechonline.it/rest/api/space/COMARKETING"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8525707"
+			}
+		},
+		{
+			"id": 14417938,
+			"key": "SALES",
+			"name": "COMMERCIALE&MARKETING",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SALES",
+				"self": "https://docs.ditechonline.it/rest/api/space/SALES"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/13960160"
+			}
+		},
+		{
+			"id": 64159745,
+			"key": "CSET",
+			"name": "Commissione Strumenti e Metodologie",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CSET",
+				"self": "https://docs.ditechonline.it/rest/api/space/CSET"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/63799362"
+			}
+		},
+		{
+			"id": 8028161,
+			"key": "CC",
+			"name": "CONAD CARD",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CC",
+				"self": "https://docs.ditechonline.it/rest/api/space/CC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7340162"
+			}
+		},
+		{
+			"id": 8028162,
+			"key": "CCPUB",
+			"name": "CONAD CARD-Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CCPUB",
+				"self": "https://docs.ditechonline.it/rest/api/space/CCPUB"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7340184"
+			}
+		},
+		{
+			"id": 15630338,
+			"key": "C5",
+			"name": "CONSINCO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/C5",
+				"self": "https://docs.ditechonline.it/rest/api/space/C5"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15171970"
+			}
+		},
+		{
+			"id": 95879169,
+			"key": "CFX",
+			"name": "Controllo fatture XML",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CFX",
+				"self": "https://docs.ditechonline.it/rest/api/space/CFX"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/95224384"
+			}
+		},
+		{
+			"id": 11108362,
+			"key": "COR",
+			"name": "CORSI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/COR",
+				"self": "https://docs.ditechonline.it/rest/api/space/COR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387885"
+			}
+		},
+		{
+			"id": 15630350,
+			"key": "CRM",
+			"name": "CRM",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CRM",
+				"self": "https://docs.ditechonline.it/rest/api/space/CRM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15174271"
+			}
+		},
+		{
+			"id": 8028165,
+			"key": "CRMSD",
+			"name": "CRM - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CRMSD",
+				"self": "https://docs.ditechonline.it/rest/api/space/CRMSD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7343468"
+			}
+		},
+		{
+			"id": 9142289,
+			"key": "CSHAR",
+			"name": "C#-Sharepoint",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CSHAR",
+				"self": "https://docs.ditechonline.it/rest/api/space/CSHAR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8520439"
+			}
+		},
+		{
+			"id": 303202305,
+			"key": "CTOW",
+			"name": "C-TOWER",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CTOW",
+				"self": "https://docs.ditechonline.it/rest/api/space/CTOW"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/302907515"
+			}
+		},
+		{
+			"id": 9142293,
+			"key": "DBCOM",
+			"name": "DB_COMMERCIALE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DBCOM",
+				"self": "https://docs.ditechonline.it/rest/api/space/DBCOM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8520938"
+			}
+		},
+		{
+			"id": 9142299,
+			"key": "DBSC",
+			"name": "DB_STRUMENTI_DI_CONTROLLO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DBSC",
+				"self": "https://docs.ditechonline.it/rest/api/space/DBSC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8523743"
+			}
+		},
+		{
+			"id": 247824385,
+			"key": "DGEC",
+			"name": "D-GECOB",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DGEC",
+				"self": "https://docs.ditechonline.it/rest/api/space/DGEC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/247529549"
+			}
+		},
+		{
+			"id": 128253953,
+			"key": "DIRSW",
+			"name": "Direzione Software",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DIRSW",
+				"self": "https://docs.ditechonline.it/rest/api/space/DIRSW"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/127697261"
+			}
+		},
+		{
+			"id": 15630343,
+			"key": "DOI",
+			"name": "DITECH - ORGANIZZAZIONE INTERNA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DOI",
+				"self": "https://docs.ditechonline.it/rest/api/space/DOI"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15173422"
+			}
+		},
+		{
+			"id": 40566789,
+			"key": "DOCSD",
+			"name": "DOCUMENTALE SERVICE DESK",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DOCSD",
+				"self": "https://docs.ditechonline.it/rest/api/space/DOCSD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/39458820"
+			}
+		},
+		{
+			"id": 97976321,
+			"key": "DBOT",
+			"name": "eCommerce DBOT",
+			"type": "global",
+			"_links": {
+				"webui": "/display/DBOT",
+				"self": "https://docs.ditechonline.it/rest/api/space/DBOT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/97550389"
+			}
+		},
+		{
+			"id": 56459266,
+			"key": "EEFC",
+			"name": "EDI e FE CNO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/EEFC",
+				"self": "https://docs.ditechonline.it/rest/api/space/EEFC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/56066642"
+			}
+		},
+		{
+			"id": 14417934,
+			"key": "E2",
+			"name": "ESEMPIO 2",
+			"type": "global",
+			"_links": {
+				"webui": "/display/E2",
+				"self": "https://docs.ditechonline.it/rest/api/space/E2"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/13960103"
+			}
+		},
+		{
+			"id": 25755649,
+			"key": "ESEMPIO",
+			"name": "ESEMPIO SPACE PRODOTTO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/ESEMPIO",
+				"self": "https://docs.ditechonline.it/rest/api/space/ESEMPIO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/24544545"
+			}
+		},
+		{
+			"id": 361824257,
+			"key": "EX",
+			"name": "Explora",
+			"type": "global",
+			"_links": {
+				"webui": "/display/EX",
+				"self": "https://docs.ditechonline.it/rest/api/space/EX"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/361463997"
+			}
+		},
+		{
+			"id": 28475394,
+			"key": "FE",
+			"name": "FATTURAZIONE ELETTRONICA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FE",
+				"self": "https://docs.ditechonline.it/rest/api/space/FE"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/27852974"
+			}
+		},
+		{
+			"id": 106856451,
+			"key": "FET",
+			"name": "Fatturazione Elettronica Tech",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FET",
+				"self": "https://docs.ditechonline.it/rest/api/space/FET"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/106528856"
+			}
+		},
+		{
+			"id": 519274497,
+			"key": "FPF",
+			"name": "FE Persone Fiscali",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FPF",
+				"self": "https://docs.ditechonline.it/rest/api/space/FPF"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/518946889"
+			}
+		},
+		{
+			"id": 68976641,
+			"key": "FININT",
+			"name": "FINANCE - Interno",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FININT",
+				"self": "https://docs.ditechonline.it/rest/api/space/FININT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": ""
+			}
+		},
+		{
+			"id": 9142295,
+			"key": "FINP",
+			"name": "FINANCE - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FINP",
+				"self": "https://docs.ditechonline.it/rest/api/space/FINP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8521084"
+			}
+		},
+		{
+			"id": 25755651,
+			"key": "FI",
+			"name": "FORMAZIONE INTERNA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FI",
+				"self": "https://docs.ditechonline.it/rest/api/space/FI"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/24544638"
+			}
+		},
+		{
+			"id": 14417939,
+			"key": "FPP",
+			"name": "FORNITORI - PROVIDER - PARTNER",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FPP",
+				"self": "https://docs.ditechonline.it/rest/api/space/FPP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/13960164"
+			}
+		},
+		{
+			"id": 176848897,
+			"key": "FG",
+			"name": "Front-end Guild",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FG",
+				"self": "https://docs.ditechonline.it/rest/api/space/FG"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/176324868"
+			}
+		},
+		{
+			"id": 198770689,
+			"key": "FTS21",
+			"name": "FTS-21",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FTS21",
+				"self": "https://docs.ditechonline.it/rest/api/space/FTS21"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/198345378"
+			}
+		},
+		{
+			"id": 8028163,
+			"key": "GRFP",
+			"name": "GERFIS-Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/GRFP",
+				"self": "https://docs.ditechonline.it/rest/api/space/GRFP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7340191"
+			}
+		},
+		{
+			"id": 11108363,
+			"key": "GD",
+			"name": "Gestione documentale",
+			"type": "global",
+			"_links": {
+				"webui": "/display/GD",
+				"self": "https://docs.ditechonline.it/rest/api/space/GD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387910"
+			}
+		},
+		{
+			"id": 585596929,
+			"key": "GIT",
+			"name": "Git",
+			"type": "global",
+			"_links": {
+				"webui": "/display/GIT",
+				"self": "https://docs.ditechonline.it/rest/api/space/GIT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": ""
+			}
+		},
+		{
+			"id": 84934658,
+			"key": "HD2",
+			"name": "HD2",
+			"type": "global",
+			"_links": {
+				"webui": "/display/HD2",
+				"self": "https://docs.ditechonline.it/rest/api/space/HD2"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/84770896"
+			}
+		},
+		{
+			"id": 40566788,
+			"key": "HMMAXI",
+			"name": "HELPDESK MORE MAXIDI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/HMMAXI",
+				"self": "https://docs.ditechonline.it/rest/api/space/HMMAXI"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/39458549"
+			}
+		},
+		{
+			"id": 245694465,
+			"key": "CLI",
+			"name": "INFO CLIENTI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/CLI",
+				"self": "https://docs.ditechonline.it/rest/api/space/CLI"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/245497888"
+			}
+		},
+		{
+			"id": 113541121,
+			"key": "IN",
+			"name": "Innovation",
+			"type": "global",
+			"_links": {
+				"webui": "/display/IN",
+				"self": "https://docs.ditechonline.it/rest/api/space/IN"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/113148015"
+			}
+		},
+		{
+			"id": 100466689,
+			"key": "IG",
+			"name": "Innovation Groups",
+			"type": "global",
+			"_links": {
+				"webui": "/display/IG",
+				"self": "https://docs.ditechonline.it/rest/api/space/IG"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/100270130"
+			}
+		},
+		{
+			"id": 332300289,
+			"key": "INLOG",
+			"name": "INNOVAZIONE LOGISTICA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/INLOG",
+				"self": "https://docs.ditechonline.it/rest/api/space/INLOG"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/332169226"
+			}
+		},
+		{
+			"id": 318373890,
+			"key": "INTER",
+			"name": "INTERFACCE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/INTER",
+				"self": "https://docs.ditechonline.it/rest/api/space/INTER"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/318242912"
+			}
+		},
+		{
+			"id": 11108359,
+			"key": "IR",
+			"name": "Invoice Reader",
+			"type": "global",
+			"_links": {
+				"webui": "/display/IR",
+				"self": "https://docs.ditechonline.it/rest/api/space/IR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387782"
+			}
+		},
+		{
+			"id": 18841610,
+			"key": "IPER2",
+			"name": "IPER",
+			"type": "global",
+			"_links": {
+				"webui": "/display/IPER2",
+				"self": "https://docs.ditechonline.it/rest/api/space/IPER2"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/17599575"
+			}
+		},
+		{
+			"id": 18841608,
+			"key": "IP",
+			"name": "IPERAL",
+			"type": "global",
+			"_links": {
+				"webui": "/display/IP",
+				"self": "https://docs.ditechonline.it/rest/api/space/IP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/17598850"
+			}
+		},
+		{
+			"id": 480411649,
+			"key": "ITRADE",
+			"name": "ITrade",
+			"type": "global",
+			"_links": {
+				"webui": "/display/ITRADE",
+				"self": "https://docs.ditechonline.it/rest/api/space/ITRADE"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/480051258"
+			}
+		},
+		{
+			"id": 183304194,
+			"key": "1",
+			"name": "John",
+			"type": "global",
+			"_links": {
+				"webui": "/display/1",
+				"self": "https://docs.ditechonline.it/rest/api/space/1"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/182779971"
+			}
+		},
+		{
+			"id": 14417932,
+			"key": "LPP",
+			"name": "LETTORE PDF - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/LPP",
+				"self": "https://docs.ditechonline.it/rest/api/space/LPP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/13960029"
+			}
+		},
+		{
+			"id": 25755652,
+			"key": "LOGAM",
+			"name": "LOGAM",
+			"type": "global",
+			"_links": {
+				"webui": "/display/LOGAM",
+				"self": "https://docs.ditechonline.it/rest/api/space/LOGAM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/24544799"
+			}
+		},
+		{
+			"id": 77168641,
+			"key": "LOG2",
+			"name": "LOGAM2",
+			"type": "global",
+			"_links": {
+				"webui": "/display/LOG2",
+				"self": "https://docs.ditechonline.it/rest/api/space/LOG2"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/77004820"
+			}
+		},
+		{
+			"id": 15630347,
+			"key": "LOG",
+			"name": "LOGISTICA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/LOG",
+				"self": "https://docs.ditechonline.it/rest/api/space/LOG"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15173588"
+			}
+		},
+		{
+			"id": 11108354,
+			"key": "LSD",
+			"name": "LOGISTICA - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/LSD",
+				"self": "https://docs.ditechonline.it/rest/api/space/LSD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387673"
+			}
+		},
+		{
+			"id": 326893569,
+			"key": "LOOK",
+			"name": "Lookat",
+			"type": "global",
+			"_links": {
+				"webui": "/display/LOOK",
+				"self": "https://docs.ditechonline.it/rest/api/space/LOOK"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/326402225"
+			}
+		},
+		{
+			"id": 481034241,
+			"key": "FACLVR",
+			"name": "Luisa Via Roma",
+			"type": "global",
+			"_links": {
+				"webui": "/display/FACLVR",
+				"self": "https://docs.ditechonline.it/rest/api/space/FACLVR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/480641165"
+			}
+		},
+		{
+			"id": 1441796,
+			"key": "TMC",
+			"name": "Meeting Reports",
+			"type": "global",
+			"_links": {
+				"webui": "/display/TMC",
+				"self": "https://docs.ditechonline.it/rest/api/space/TMC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/950699"
+			}
+		},
+		{
+			"id": 9142294,
+			"key": "MEGP",
+			"name": "MEGASTORE - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MEGP",
+				"self": "https://docs.ditechonline.it/rest/api/space/MEGP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8520968"
+			}
+		},
+		{
+			"id": 8028170,
+			"key": "MOB",
+			"name": "MOBILE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MOB",
+				"self": "https://docs.ditechonline.it/rest/api/space/MOB"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7343520"
+			}
+		},
+		{
+			"id": 85753858,
+			"key": "MOD",
+			"name": "Moderna2020",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MOD",
+				"self": "https://docs.ditechonline.it/rest/api/space/MOD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": ""
+			}
+		},
+		{
+			"id": 9142291,
+			"key": "MID",
+			"name": "Modulo Importazione Divisione",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MID",
+				"self": "https://docs.ditechonline.it/rest/api/space/MID"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8520570"
+			}
+		},
+		{
+			"id": 64159746,
+			"key": "M4SN",
+			"name": "MORE 4 SAIT (NEW)",
+			"type": "global",
+			"_links": {
+				"webui": "/display/M4SN",
+				"self": "https://docs.ditechonline.it/rest/api/space/M4SN"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/63800349"
+			}
+		},
+		{
+			"id": 321945601,
+			"key": "MOV",
+			"name": "MOVER",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MOV",
+				"self": "https://docs.ditechonline.it/rest/api/space/MOV"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/321519659"
+			}
+		},
+		{
+			"id": 8028164,
+			"key": "NFDOC",
+			"name": "nfrignani-DOC",
+			"type": "global",
+			"_links": {
+				"webui": "/display/NFDOC",
+				"self": "https://docs.ditechonline.it/rest/api/space/NFDOC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7340206"
+			}
+		},
+		{
+			"id": 15630349,
+			"key": "OCDB",
+			"name": "OCDB",
+			"type": "global",
+			"_links": {
+				"webui": "/display/OCDB",
+				"self": "https://docs.ditechonline.it/rest/api/space/OCDB"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15174213"
+			}
+		},
+		{
+			"id": 11108356,
+			"key": "OCP",
+			"name": "OCDB Conad - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/OCP",
+				"self": "https://docs.ditechonline.it/rest/api/space/OCP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387710"
+			}
+		},
+		{
+			"id": 21233668,
+			"key": "OFF",
+			"name": "OFFERING",
+			"type": "global",
+			"_links": {
+				"webui": "/display/OFF",
+				"self": "https://docs.ditechonline.it/rest/api/space/OFF"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/20219215"
+			}
+		},
+		{
+			"id": 9142301,
+			"key": "OApex",
+			"name": "Oracle Apex",
+			"type": "global",
+			"_links": {
+				"webui": "/display/OApex",
+				"self": "https://docs.ditechonline.it/rest/api/space/OApex"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8524051"
+			}
+		},
+		{
+			"id": 86507522,
+			"key": "PIP",
+			"name": "pippo",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PIP",
+				"self": "https://docs.ditechonline.it/rest/api/space/PIP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/86081779"
+			}
+		},
+		{
+			"id": 40566785,
+			"key": "PREM",
+			"name": "PREMIA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PREM",
+				"self": "https://docs.ditechonline.it/rest/api/space/PREM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/39453977"
+			}
+		},
+		{
+			"id": 15630337,
+			"key": "PO",
+			"name": "PRICE OPTIMIZATION",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PO",
+				"self": "https://docs.ditechonline.it/rest/api/space/PO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15171620"
+			}
+		},
+		{
+			"id": 572882945,
+			"key": "PT",
+			"name": "Primo Tilli",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PT",
+				"self": "https://docs.ditechonline.it/rest/api/space/PT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/572686377"
+			}
+		},
+		{
+			"id": 128253954,
+			"key": "PCM",
+			"name": "Progetti Cliente-Project Manager",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PCM",
+				"self": "https://docs.ditechonline.it/rest/api/space/PCM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/127697405"
+			}
+		},
+		{
+			"id": 86507521,
+			"key": "M20",
+			"name": "Progetto Moderna 2020",
+			"type": "global",
+			"_links": {
+				"webui": "/display/M20",
+				"self": "https://docs.ditechonline.it/rest/api/space/M20"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/86081636"
+			}
+		},
+		{
+			"id": 15630345,
+			"key": "PVY",
+			"name": "PROGETTO PRIVACY - GDPR",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PVY",
+				"self": "https://docs.ditechonline.it/rest/api/space/PVY"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15173499"
+			}
+		},
+		{
+			"id": 8028166,
+			"key": "PCD",
+			"name": "Promo Collaboration Development",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PCD",
+				"self": "https://docs.ditechonline.it/rest/api/space/PCD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7343475"
+			}
+		},
+		{
+			"id": 31391746,
+			"key": "PE",
+			"name": "PROMO ENGINE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PE",
+				"self": "https://docs.ditechonline.it/rest/api/space/PE"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/30769540"
+			}
+		},
+		{
+			"id": 14417931,
+			"key": "PCSD",
+			"name": "PROMOJECT-PRICE - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PCSD",
+				"self": "https://docs.ditechonline.it/rest/api/space/PCSD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/13959965"
+			}
+		},
+		{
+			"id": 18841602,
+			"key": "PM",
+			"name": "PROMO MANAGER",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PM",
+				"self": "https://docs.ditechonline.it/rest/api/space/PM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/17597867"
+			}
+		},
+		{
+			"id": 18841607,
+			"key": "PROV1",
+			"name": "provaCollabspace",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PROV1",
+				"self": "https://docs.ditechonline.it/rest/api/space/PROV1"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/17598846"
+			}
+		},
+		{
+			"id": 18841606,
+			"key": "PROV",
+			"name": "provakb",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PROV",
+				"self": "https://docs.ditechonline.it/rest/api/space/PROV"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/17598841"
+			}
+		},
+		{
+			"id": 159973377,
+			"key": "PX",
+			"name": "Prova XRay",
+			"type": "global",
+			"_links": {
+				"webui": "/display/PX",
+				"self": "https://docs.ditechonline.it/rest/api/space/PX"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/159547687"
+			}
+		},
+		{
+			"id": 326205441,
+			"key": "QQA",
+			"name": "QA - Quality Assurance",
+			"type": "global",
+			"_links": {
+				"webui": "/display/QQA",
+				"self": "https://docs.ditechonline.it/rest/api/space/QQA"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/325812302"
+			}
+		},
+		{
+			"id": 104726529,
+			"key": "RG",
+			"name": "Recuperi GD",
+			"type": "global",
+			"_links": {
+				"webui": "/display/RG",
+				"self": "https://docs.ditechonline.it/rest/api/space/RG"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/104333441"
+			}
+		},
+		{
+			"id": 215187457,
+			"key": "RES",
+			"name": "Restock",
+			"type": "global",
+			"_links": {
+				"webui": "/display/RES",
+				"self": "https://docs.ditechonline.it/rest/api/space/RES"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/214794298"
+			}
+		},
+		{
+			"id": 443809793,
+			"key": "SM",
+			"name": "SERVICE MANAGEMENT DGDO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SM",
+				"self": "https://docs.ditechonline.it/rest/api/space/SM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/443547783"
+			}
+		},
+		{
+			"id": 13369349,
+			"key": "SDF",
+			"name": "SERVIZI DI FILIERA",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SDF",
+				"self": "https://docs.ditechonline.it/rest/api/space/SDF"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/12714446"
+			}
+		},
+		{
+			"id": 21233669,
+			"key": "SDFT",
+			"name": "SERVIZI DI FILIERA TECH",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SDFT",
+				"self": "https://docs.ditechonline.it/rest/api/space/SDFT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/20219609"
+			}
+		},
+		{
+			"id": 15630341,
+			"key": "SECP",
+			"name": "SERVIZIO EDI CONAD - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SECP",
+				"self": "https://docs.ditechonline.it/rest/api/space/SECP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15172935"
+			}
+		},
+		{
+			"id": 4816903,
+			"key": "EDI",
+			"name": "SERVIZIO EDI DITECH e DI FILIERA - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/EDI",
+				"self": "https://docs.ditechonline.it/rest/api/space/EDI"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/4292910"
+			}
+		},
+		{
+			"id": 36405250,
+			"key": "INT",
+			"name": "SERVIZIO INTERMEDIARIO DITECH",
+			"type": "global",
+			"_links": {
+				"webui": "/display/INT",
+				"self": "https://docs.ditechonline.it/rest/api/space/INT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/34966212"
+			}
+		},
+		{
+			"id": 122945537,
+			"key": "MKT",
+			"name": "Settore Marketing",
+			"type": "global",
+			"_links": {
+				"webui": "/display/MKT",
+				"self": "https://docs.ditechonline.it/rest/api/space/MKT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/122061292"
+			}
+		},
+		{
+			"id": 106037249,
+			"key": "SIC",
+			"name": "SIC",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SIC",
+				"self": "https://docs.ditechonline.it/rest/api/space/SIC"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/105807892"
+			}
+		},
+		{
+			"id": 25755650,
+			"key": "SICCOM",
+			"name": "SIC COMMERCIALE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SICCOM",
+				"self": "https://docs.ditechonline.it/rest/api/space/SICCOM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/24544611"
+			}
+		},
+		{
+			"id": 9142273,
+			"key": "SICSD",
+			"name": "SIC SERVICE DESK - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SICSD",
+				"self": "https://docs.ditechonline.it/rest/api/space/SICSD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8519780"
+			}
+		},
+		{
+			"id": 9142304,
+			"key": "SFR",
+			"name": "SISTEMI FILIERA RESTRICTED",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SFR",
+				"self": "https://docs.ditechonline.it/rest/api/space/SFR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8525795"
+			}
+		},
+		{
+			"id": 23822337,
+			"key": "SYSTIM",
+			"name": "SISTEMI-Migrazione TIM Nordiconad",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SYSTIM",
+				"self": "https://docs.ditechonline.it/rest/api/space/SYSTIM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/22872669"
+			}
+		},
+		{
+			"id": 6488066,
+			"key": "SISPUB",
+			"name": "SISTEMI - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SISPUB",
+				"self": "https://docs.ditechonline.it/rest/api/space/SISPUB"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/6127644"
+			}
+		},
+		{
+			"id": 313393153,
+			"key": "SBAY",
+			"name": "SMARTBAY",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SBAY",
+				"self": "https://docs.ditechonline.it/rest/api/space/SBAY"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/313000049"
+			}
+		},
+		{
+			"id": 6815747,
+			"key": "SMAR",
+			"name": "Smartbay-Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SMAR",
+				"self": "https://docs.ditechonline.it/rest/api/space/SMAR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/6717452"
+			}
+		},
+		{
+			"id": 31391749,
+			"key": "SBILL",
+			"name": "SMART-BILL PUBLIC",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SBILL",
+				"self": "https://docs.ditechonline.it/rest/api/space/SBILL"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/30773345"
+			}
+		},
+		{
+			"id": 9142292,
+			"key": "SmartShop",
+			"name": "SmartShop",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SmartShop",
+				"self": "https://docs.ditechonline.it/rest/api/space/SmartShop"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/8520665"
+			}
+		},
+		{
+			"id": 346652673,
+			"key": "STD",
+			"name": "STANDARD AZIENDALI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/STD",
+				"self": "https://docs.ditechonline.it/rest/api/space/STD"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/346357810"
+			}
+		},
+		{
+			"id": 585596930,
+			"key": "STAR",
+			"name": "start_courses",
+			"type": "global",
+			"_links": {
+				"webui": "/display/STAR",
+				"self": "https://docs.ditechonline.it/rest/api/space/STAR"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/585400433"
+			}
+		},
+		{
+			"id": 11108360,
+			"key": "STOPRO",
+			"name": "Store Productivity",
+			"type": "global",
+			"_links": {
+				"webui": "/display/STOPRO",
+				"self": "https://docs.ditechonline.it/rest/api/space/STOPRO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387817"
+			}
+		},
+		{
+			"id": 8028167,
+			"key": "STSO",
+			"name": "Store Solution - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/STSO",
+				"self": "https://docs.ditechonline.it/rest/api/space/STSO"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7343487"
+			}
+		},
+		{
+			"id": 1441794,
+			"key": "TSM",
+			"name": "Strumenti Di Controllo",
+			"type": "global",
+			"_links": {
+				"webui": "/display/TSM",
+				"self": "https://docs.ditechonline.it/rest/api/space/TSM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/950648"
+			}
+		},
+		{
+			"id": 331644929,
+			"key": "JIRA",
+			"name": "SUITE ATLASSIAN (JIRA, CONFLUENCE)",
+			"type": "global",
+			"_links": {
+				"webui": "/display/JIRA",
+				"self": "https://docs.ditechonline.it/rest/api/space/JIRA"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/331251986"
+			}
+		},
+		{
+			"id": 83165186,
+			"key": "SASSM",
+			"name": "Supporto allo sviluppo su MORE",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SASSM",
+				"self": "https://docs.ditechonline.it/rest/api/space/SASSM"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/82051960"
+			}
+		},
+		{
+			"id": 201424897,
+			"key": "SF",
+			"name": "Supporto Framework",
+			"type": "global",
+			"_links": {
+				"webui": "/display/SF",
+				"self": "https://docs.ditechonline.it/rest/api/space/SF"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/200934625"
+			}
+		},
+		{
+			"id": 28475395,
+			"key": "TUT",
+			"name": "TUTORIAL",
+			"type": "global",
+			"_links": {
+				"webui": "/display/TUT",
+				"self": "https://docs.ditechonline.it/rest/api/space/TUT"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/27853047"
+			}
+		},
+		{
+			"id": 15630351,
+			"key": "UAK",
+			"name": "UAKARI",
+			"type": "global",
+			"_links": {
+				"webui": "/display/UAK",
+				"self": "https://docs.ditechonline.it/rest/api/space/UAK"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15174308"
+			}
+		},
+		{
+			"id": 11108355,
+			"key": "UAP",
+			"name": "UAKARI - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/UAP",
+				"self": "https://docs.ditechonline.it/rest/api/space/UAP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/10387706"
+			}
+		},
+		{
+			"id": 15630344,
+			"key": "WRS",
+			"name": "WRS",
+			"type": "global",
+			"_links": {
+				"webui": "/display/WRS",
+				"self": "https://docs.ditechonline.it/rest/api/space/WRS"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/15173432"
+			}
+		},
+		{
+			"id": 8028169,
+			"key": "WRSMP",
+			"name": "WRS Mobile - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/WRSMP",
+				"self": "https://docs.ditechonline.it/rest/api/space/WRSMP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7343497"
+			}
+		},
+		{
+			"id": 8028168,
+			"key": "WRSP",
+			"name": "WRS - Pubblico",
+			"type": "global",
+			"_links": {
+				"webui": "/display/WRSP",
+				"self": "https://docs.ditechonline.it/rest/api/space/WRSP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/7343493"
+			}
+		},
+		{
+			"id": 21233666,
+			"key": "XMARTP",
+			"name": "XMART-PUBBLICO",
+			"type": "global",
+			"_links": {
+				"webui": "/display/XMARTP",
+				"self": "https://docs.ditechonline.it/rest/api/space/XMARTP"
+			},
+			"_expandable": {
+				"metadata": "",
+				"icon": "",
+				"description": "",
+				"homepage": "/rest/api/content/20218900"
+			}
+		}
+	],
+	"start": 1,
+	"limit": 500,
+	"size": 150,
+	"_links": {
+		"self": "https://docs.ditechonline.it/rest/api/space?type=global",
+		"prev": "/rest/api/space?limit=1&start=0&type=global",
+		"base": "https://docs.ditechonline.it",
+		"context": ""
+	}
+}

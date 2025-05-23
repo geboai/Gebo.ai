@@ -1,0 +1,22 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<div *ngFor="let entry of rootValue" class="grid">
+    <div class="col-6" *ngFor="let item of entry.embeddingData">
+        <gebo-ai-embedded-documents-piechart #thisEntry [item]="item" (drillDown)="drillDown(entry)"></gebo-ai-embedded-documents-piechart>
+        <p-dialog  [maximizable]="true" [visible]="(drilldownShowed && entry.drillDowns!==undefined)?true:false" [style]="{width:'95%'}" (visibleChange)="drilldownShowed=false">
+            <gebo-ai-embedding-stats-panel *ngIf="drilldownShowed===true && entry.drillDowns" [rootValue]="entry.drillDowns" [isRoot]="false" ></gebo-ai-embedding-stats-panel>
+        </p-dialog>
+    </div>
+</div>

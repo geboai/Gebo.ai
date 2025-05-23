@@ -1,0 +1,104 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="kbCompo" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #kbCompo header="Editing a Knowledge base" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-tabView>
+            <p-tabPanel header="General infos">
+                <div class="grid">
+                    <!-- 
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="knowledgeBaseReferences">Knowledge base references</label>
+                    <div id="knowledgeBaseReferences" class="col-12" *ngIf="mode==='EDIT'">
+                        <b>{{kbDescriptions}}</b>
+                    </div>
+                    <p-multiSelect  styleClass="w-full"  id="knowledgeBaseReferences" formControlName="knowledgeBaseReferences"
+                        aria-describedby="knowledgeBaseReferences-help" optionLabel="description" optionValue="code"
+                        dataKey="code" [options]="allKnowledgeBaseData" showClear="true" *ngIf="mode==='NEW'"
+                        display="chip"></p-multiSelect>
+                    <small id="knowledgeBaseReferences-help">
+                        References to other knowledge bases.
+                    </small>
+                </div>
+            </div>
+           -->
+
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="description">Description</label>
+                            <input pInputText id="description" formControlName="description" maxlength="120"
+                                [required]="true" aria-describedby="description-help" />
+                            <small id="description-help">
+                                Enter the description of the knowledge base.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="code">Unique Code</label>
+                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
+                                readonly="true" />
+                            <small id="description-help">
+                                Automatically generated unique code of the knowledge base.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="embeddingModelReferences">Used embedding models (leave empty to use system
+                                default)</label>
+                            <p-multiSelect  styleClass="w-full"  [options]="modelsChoicesSource" 
+                                formControlName="embeddingModelReferences" id="embeddingModelReferences"
+                                placeholder="Select embedding models" optionLabel="description" display="chip"
+                                [showClear]="true" aria-describedby="embeddingModelReferences-help" />
+                            <small id="embeddingModelReferences-help">
+                                Embedding models for the knowledge base, leave empty will use the default one.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Knowledge base access settings">
+                <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+
+    <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-3">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
+            </div>
+
+            <div class="col-3">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
+            </div>
+            <div class="col-3">
+                <p-button [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"
+                    title="Reindex contents" [disabled]="mode==='NEW'" styleClass="w-full"></p-button>
+            </div>
+            <div class="col-3">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    [disabled]="canDelete===false" styleClass="w-full" />
+            </div>
+        </div>
+    </div>
+</p-panel>

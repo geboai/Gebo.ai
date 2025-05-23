@@ -1,0 +1,92 @@
+{
+	"id": "XXXXX0001",
+	"resource": false,
+	"folder": true,
+	"name": "rootNode",
+	"url": "http://www.mysite.com/mysection/",
+	"content": null,
+	"childs": [
+		{
+			"id": "XXXXX0001-INDEX",
+			"resource": true,
+			"folder": false,
+			"name": "index file",
+			"url": "http://www.mysite.com/mysection/index.html",
+			"content": "This is and index page with its own content...",
+			"childs": []
+		},
+		{
+			"id": "XXXXX0001-README",
+			"resource": true,
+			"folder": false,
+			"name": "readme file",
+			"url": "http://www.mysite.com/mysection/readme.html",
+			"content": "This is and readme page with its own content...",
+			"childs": []
+		},
+		{
+			"id": "XXXXX0001-FOLDER",
+			"resource": true,
+			"folder": true,
+			"name": "filder item",
+			"url": "http://www.mysite.com/mysection/subfolder.html",
+			"content": "This is a main page with its own content and childs...",
+			"childs": [
+				{
+					"id": "XXXXX0001-INDEX-001",
+					"resource": true,
+					"folder": false,
+					"name": "index 001",
+					"url": "http://www.mysite.com/mysection/001/index.html",
+					"content": "This is and index page with its own content...",
+					"childs": []
+				},
+				{
+					"id": "XXXXX0001-README-001",
+					"resource": true,
+					"folder": false,
+					"name": "readme file 001",
+					"url": "http://www.mysite.com/mysection/001/readme.html",
+					"content": "This is and readme page with its own content...",
+					"childs": []
+				},
+				{
+					"id": "XXXXX0001-FOLDER-001",
+					"resource": true,
+					"folder": true,
+					"name": "subfolder II level",
+					"url": "http://www.mysite.com/mysection/001/subfolder.html",
+					"content": "This is a main page with its own content and childs...",
+					"childs": [
+						{
+							"id": "XXXXX0001-INDEX-001-2",
+							"resource": true,
+							"folder": false,
+							"name": "index 001-2",
+							"url": "http://www.mysite.com/mysection/001/2/index.html",
+							"content": "This is and index page with its own content...",
+							"childs": []
+						},
+						{
+							"id": "XXXXX0001-README-001-2",
+							"resource": true,
+							"folder": false,
+							"name": "readme file 001-2",
+							"url": "http://www.mysite.com/mysection/001/2/readme.html",
+							"content": "This is and readme page with its own content...",
+							"childs": []
+						},
+						{
+							"id": "XXXXX0001-CONTENT-001-2",
+							"resource": true,
+							"folder": false,
+							"name": "content III level",
+							"url": "http://www.mysite.com/mysection/001/2/subfolder.html",
+							"content": "This is a main page with its own content..."
+						}
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,153 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+
+<p-panel #endPointUI header="Sharing google drive contents" [formGroup]="formGroup"  >
+  <p-blockUI [target]="endPointUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <div class="geboDialogContent">
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <p-toast />
+    <p-tabView class="standardTabDialogueHeight">
+      <p-tabPanel header="Settings">
+        <div class="grid">
+
+          <div class="col-6">
+            <div class="flex flex-column gap-2">
+              <label for="description">Description</label>
+              <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                aria-describedby="description-help" />
+              <small id="description-help">
+                Enter the description of the uploaded content of google drive entries.
+              </small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="flex flex-column gap-2 ">
+              <label for="code">Unique Code</label>
+              <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
+              <small id="code-help">
+                Automatically generated unique code of the contents.
+              </small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="flex flex-column gap-2 ">
+              <label for="parentProjectCode">Project</label>
+              <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
+                [required]="true" [optionsObservable]="projectsObservable" [readonly]="true"
+                aria-describedby="parentProjectCode-help">
+
+              </geboai-editable-listbox-component>
+              <small id="parentProjectCode-help">
+                Parent project reference.
+              </small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="flex flex-column gap-2 ">
+              <label for="driveSystemCode">Google drive configuration</label>
+              <geboai-editable-listbox-component formControlName="driveSystemCode" [required]="true"
+                placeholder="Select a google drive configuration" [optionsObservable]="drivesObservable"
+                aria-describedby="driveSystemCode-help" [readonly]="mode==='EDIT'"
+                [createNewRecordRequest]="newGoogleDriveRequest">
+
+              </geboai-editable-listbox-component>
+
+              <small id="driveSystemCode-help">
+                Already configured google drive system reference.
+              </small>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="flex flex-column gap-2 ">
+              <label for="tree">Choosed file or folder</label>
+              <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
+                [readonly]="mode==='EDIT'" [required]="true" formControlName="paths" selectionMode="multiple"
+                [browsePathObservable]="browsePathObservable" class="col-12"></gebo-ai-vfilesystem-selector-component>
+              <small id="tree-help">
+                Shared google drive spaces and pages contents
+              </small>
+            </div>
+          </div>
+          <div class="col-2">
+            <div class="flex flex-column gap-2 ">
+              <label for="openZips">Open zip files</label>
+              <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true"
+                [falseValue]="false" aria-describedby="openZips-help"></p-checkbox>
+              <small id="openZips-help">
+                Enable zip files opening and content extraction
+              </small>
+            </div>
+          </div>
+          <div class="col-10">
+            <div class="flex flex-column gap-2 ">
+              <label for="catalogingCriteria">Folders and subfolders organization criteria</label>
+              <textarea formControlName="catalogingCriteria" id="catalogingCriteria"
+                aria-describedby="catalogingCriteria-help" cols="200" rows="2"></textarea>
+              <small id="catalogingCriteria-help">
+                Please explain here how the files and folders organization criteria has been done in the
+                google drive contents shared with Gebo.ai
+              </small>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="flex flex-column gap-2 ">
+              <label for="programmedTables">Contents updates checks schedule</label>
+              <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
+                aria-describedby="programmedTables-help"></gebo-ai-content-reindex-scheduler-component>
+              <small id="programmedTables-help">
+                Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated
+              </small>
+            </div>
+          </div>
+        </div>
+      </p-tabPanel><p-tabPanel header="Logs" [disabled]="!objectReference">
+        <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference"
+          title="This shared filesystem area ingestion log"></gebo-ai-log-table-component>
+      </p-tabPanel></p-tabView>
+  </div>
+
+
+
+
+
+  <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+    <div class="grid">
+      <div class="col-3">
+        <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+          [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
+          styleClass="w-full"></p-button>
+      </div>
+      <div class="col-3">
+        <p-button [outlined]="true" label="Publish!"
+          title="Saves and let these contents being available in knowledge base to LLm's" severity="success"
+          icon="pi pi-microchip-ai" (onClick)="doPublish()"
+          [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
+          styleClass="w-full" />
+
+      </div>
+      <div class="col-3">
+        <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+          styleClass="w-full" />
+      </div>
+      <div class="col-3">
+        <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+          styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
+      </div>
+
+    </div>
+  </div>
+</p-panel>

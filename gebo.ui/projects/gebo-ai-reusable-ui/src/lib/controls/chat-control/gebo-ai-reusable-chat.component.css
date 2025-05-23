@@ -1,0 +1,24 @@
+ul {
+  list-style-type: none;
+  margin: 3px;
+  padding: 3px;
+}
+
+li {
+  list-style-type: none;
+  margin: 3px;
+  padding: 3px;
+}
+pre {
+  margin: 0.3em;
+}
+
+blockquote {
+  border-left: 3px solid rgba(0, 0, 0, 0.21);
+  padding-left: 12px;
+  color: rgba(0, 0, 0, 0.54);
+}
+.p-messages {
+  padding: 0px;
+  padding-left: 0px;
+}

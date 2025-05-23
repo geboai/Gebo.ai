@@ -1,0 +1,47 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<div class="col-12 grid" *ngIf="formGroup" [formGroup]="formGroup">
+    <div class="col-4">
+        <div class="flex flex-column gap-2 ">
+            <label for="temperature">Temperature</label>
+            <p-inputNumber formControlName="temperature" [min]="minTemperature" [max]="maxTemperature"
+                [maxFractionDigits]="maxTemperatureDigits"  styleClass="w-full"></p-inputNumber>
+            <small id="temperature-help">
+                Temperature the model will respond, from {{minTemperature}} to {{maxTemperature}} <b>(if unsure leave empty)</b>
+            </small>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="flex flex-column gap-2 ">
+            <label for="topP">TopP</label>
+            <p-inputNumber formControlName="topP" [min]="minTopP" [max]="maxTopP"
+                [maxFractionDigits]="maxTopPDigits"  styleClass="w-full"></p-inputNumber>
+            <small id="topP-help">
+                TopP parameter, from {{minTopP}} to {{maxTopP}} <b>(if unsure leave empty)</b>
+            </small>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="flex flex-column gap-2 ">
+            <label for="contextLength">Context length (tokens)</label>
+            <p-inputNumber formControlName="contextLength" [min]="minContextLength" [max]="maxContextLength"
+                [maxFractionDigits]="0"  styleClass="w-full"></p-inputNumber>
+            <small id="contextLength-help">
+                Amount of text an AI model can consider when processing <b>(if not set {{defaultContextLength}} will be
+                    used)</b>
+            </small>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,263 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="chatProfileUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #chatProfileUI header="Editing retrieve augmented generation chat profile" [formGroup]="formGroup">
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+   
+    <div class="grid geboDialogContent standardTabDialogueHeight">
+        <div class="col-12 standardTabDialogueHeight">
+            <p-tabView>
+                <p-tabPanel header="General infos">
+                    <div class="grid standardTabDialogueHeight">
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2">
+                                <label for="description">Description</label>
+                                <input pInputText id="description" formControlName="description" maxlength="120"
+                                    [required]="true" aria-describedby="description-help" />
+                                <small id="description-help">
+                                    Enter chat profile description.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="code">Unique Code</label>
+                                <input pInputText id="code" formControlName="code" aria-describedby="code-help"
+                                    readonly="true" />
+                                <small id="code-help">
+                                    Automatically generated unique code of the chat profile.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="userChoosesKnowledgeBases">User chooses knowledge bases</label>
+                                <p-checkbox id="userChoosesKnowledgeBases" formControlName="userChoosesKnowledgeBases"
+                                    aria-describedby="userChoosesKnowledgeBases-help" [trueValue]="true"
+                                    [falseValue]="false" [binary]="true"></p-checkbox>
+                                <small id="userChoosesKnowledgeBases-help">
+                                    User can choose from accessible knowledge bases and/or upload its own files.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="knowledgeBaseCodes">Knowledge bases</label>
+                                <p-multiSelect styleClass="w-full" id="knowledgeBaseCodes"
+                                    formControlName="knowledgeBaseCodes" aria-describedby="knowledgeBaseCodes-help"
+                                    optionLabel="description" optionValue="code" dataKey="code"
+                                    [options]="allKnowledgeBaseData" showClear="true" styleClass="w-full"
+                                    display="chip"></p-multiSelect>
+
+
+                                <small id="knowledgeBaseCodes-help">
+                                    Knowledge bases to use for document retrivial.
+                                </small>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </p-tabPanel>
+                <p-tabPanel header="Large language model & usable tools settings">
+                    <div class="grid standardTabDialogueHeight">
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2">
+                                <label for="defaultChatModel">Use chat model</label>
+                                <div class="col-12 grid">
+                                    <div class="col-12">
+                                        <div class="flex items-center">
+                                            <p-radioButton formControlName="useDefaultChatModel"
+                                                name="useDefaultChatModel" id="useDefaultChatModel" value="DEFAULT"
+                                                [required]="true"></p-radioButton>
+                                            <label for="useDefaultChatModel"
+                                                class="ml-2">{{defaultChatModel?.description}}
+                                                (default)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-2"><p-radioButton formControlName="useDefaultChatModel"
+                                            name="useDefaultChatModel" id="useDefaultChatModel" label="choose"
+                                            value="CHOOSEMODEL" [required]="true"></p-radioButton></div>
+                                    <div class="col-8">
+                                        <p-select styleClass="w-full" formControlName="chatModelReference"
+                                            styleClass="w-full" [options]="chatModelsData" optionLabel="description"
+                                            placeholder="Select a chat model configuration"></p-select>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <small id="defaultChatModel-help">
+                                Use system default chat model or specify one.
+                            </small>
+                        </div>
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2">
+                                <label for="defaultEmbeddingModel">Use embedding model</label>
+                                <div class="col-12 grid">
+                                    <div class="col-12">
+                                        <div class="flex items-center">
+                                            <p-radioButton formControlName="useDefaultEmbeddingModel"
+                                                name="useDefaultEmbeddingModel" value="DEFAULT"
+                                                [required]="true"></p-radioButton>
+                                            <label for="ingredient1" class="ml-2">{{defaultEmbeddingModel?.description}}
+                                                (default)</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-2"><p-radioButton formControlName="useDefaultEmbeddingModel"
+                                            name="useDefaultEmbeddingModel" label="choose" value="CHOOSEMODEL"
+                                            [required]="true"></p-radioButton>
+                                    </div>
+                                    <div class="col-8">
+                                        <p-select styleClass="w-full" formControlName="embeddingModelReference"
+                                            class="col-12" [options]="embeddingModelsData" optionLabel="description"
+                                            styleClass="w-full"
+                                            placeholder="Select an embedding model configuration"></p-select>
+                                    </div>
+
+                                </div>
+                                <small id="defaultEmbeddingModel-help">
+                                    Use system default embedding model or specify one.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="enabledFunctions">Enabled functions call for this RAG chat</label>
+                                <gebo-ai-choose-llm-functions-component id="enabledFunctions"
+                                    formControlName="enabledFunctions" aria-describedby="enabledFunctions-help"
+                                    [knowledgeBaseContext]="true" dataKey="code" optionLabel="description"
+                                    optionValue="code" display="chip"
+                                    class="col-12"></gebo-ai-choose-llm-functions-component>
+
+                                <small id="enabledFunctions-help">
+                                    Functionalities that could be used by the llm model during the chat with the user
+                                    interacting also with the selected knowledge base
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="RAG settings">
+                    <div class="grid standardTabDialogueHeight">
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="topK">Considered document fragments (TopK)</label>
+
+                                <p-inputNumber id="topK" formControlName="topK" aria-describedby="topK-help"
+                                    class="col-6" inputId="integeronly" [min]="4" [max]="100" />
+                                <small id="topK-help">
+                                    In the retrieve augmented generation, Top N found considered document fragments in semantic
+                                    search
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="similaritySearchThreshold">Similarity threshold </label>
+
+                                <p-inputNumber id="similaritySearchThreshold"
+                                    formControlName="similaritySearchThreshold"
+                                    aria-describedby="similaritySearchThreshold-help" class="col-6"
+                                    inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
+                                    maxFractionDigits="2" minFractionDigits="2" />
+                                <small id="similaritySearchThreshold-help">
+                                    Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75
+                                    Medium
+                                    filtering, 0.80–0.85 Accurate
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="disableMultiHopRag">Disable "Multi Hop" rag</label>
+                                <p-checkbox id="disableMultiHopRag" formControlName="disableMultiHopRag"
+                                    [trueValue]="true" [falseValue]="false" [binary]="true"></p-checkbox>
+
+                                <small id="disableMultiHopRag-help">
+                                    Disable the "multi hop rag" functionality. Multi hop search does a first semantic
+                                    search and
+                                    uses found documents as a context for the semantic search itself providing a larger
+                                    context.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="otherSearchSimilarityThreshold">2nd "hop" similarity threshold </label>
+
+                                <p-inputNumber id="otherSearchSimilarityThreshold"
+                                    formControlName="otherSearchSimilarityThreshold"
+                                    aria-describedby="otherSearchSimilarityThreshold-help" class="col-6"
+                                    inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
+                                    maxFractionDigits="2" minFractionDigits="2" />
+                                <small id="otherSearchSimilarityThreshold-help">
+                                    Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75
+                                    Medium
+                                    filtering, 0.80–0.85 Accurate used from the 2nd search of multi-hop rag
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="flex flex-column gap-2 ">
+                                <label for="prompt">Prompt</label>
+                                <textarea rows="6" cols="250" [required]="true" pTextarea
+                                    formControlName="prompt"></textarea>
+                                <small id="prompt-help">
+                                    Edit the prompt for the retrieve augmented generation sessions.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup"
+                                deliveryPromptControlName="prompt"
+                                [ragWizardMode]="true"></gebo-ai-prompt-wizard-component>
+                        </div>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Security access settings">
+                    <div class="standardTabDialogueHeight">
+                        <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+
+
+    <div class="geboButtonsBar" style="vertical-align: bottom" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    styleClass="w-full" />
+            </div>
+        </div>
+    </div>
+
+
+</p-panel>

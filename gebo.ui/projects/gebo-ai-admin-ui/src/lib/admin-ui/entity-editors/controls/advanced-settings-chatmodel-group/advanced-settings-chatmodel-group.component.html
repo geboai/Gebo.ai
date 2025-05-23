@@ -1,0 +1,46 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-panel #chatModelAdvancedUI *ngIf="formGroup" [formGroup]="formGroup">
+    <p-blockUI [target]="chatModelAdvancedUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <div class="col-12">
+        <div class="flex flex-column gap-2 ">
+            <label for="enabledFunctions">Enabled functions call for this model</label>
+            <gebo-ai-choose-llm-functions-component id="enabledFunctions" formControlName="enabledFunctions"
+            aria-describedby="enabledFunctions-help" [knowledgeBaseContext]="false" dataKey="code"
+            optionLabel="description" optionValue="code" display="chip" 
+            class="col-12"></gebo-ai-choose-llm-functions-component>
+             
+            <small id="enabledFunctions-help">
+                Functionalities that could be used by the model during the chat
+            </small>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="flex flex-column gap-2 ">
+            <label for="defaultModelPrompt">Default model prompt</label>
+            <textarea rows="3" cols="250" pTextarea formControlName="defaultModelPrompt"
+                aria-describedby="defaultModelPrompt-help"></textarea>
+            <small id="defaultModelPrompt-help">
+                Edit the default prompt for the chat model.
+            </small>
+        </div>
+    </div>
+    <div class="col-3">
+        <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup" deliveryPromptControlName="defaultModelPrompt"
+            [ragWizardMode]="false"></gebo-ai-prompt-wizard-component>
+    </div>
+</p-panel>

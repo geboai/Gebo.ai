@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+   <groupId>ai.gebo</groupId>
+	<artifactId>ai.gebo.parent</artifactId>
+    <version>0.9.9.7-SNAPSHOT</version>
+  </parent>
+  <groupId>ai.gebo.architecture</groupId>
+  <artifactId>gebo.architecture.parent</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+  	<module>gebo.architecture.patterns</module>
+  	<module>gebo.architecture.persistence</module>
+  	<module>gebo.architecture.utils</module>
+  	<module>gebo.webconfig</module>
+  	<module>gebo.architecture.angular.persistence.support</module>
+  	<module>gebo.async.config</module>
+  	<module>gebo.architecture.security</module>
+  	<module>gebo.architecture.ai</module>
+  	<module>gebo.application.messaging</module>
+  	<module>gebo.secrets.services</module>
+  	<module>gebo.architecture.security.controllers</module>
+  	<module>gebo.architecture.oauth2.client</module>
+  	<module>gebo.architecture.lucene</module>
+  	<module>gebo.architecture.multithreading</module>
+  	<module>gebo.architecture.scheduling</module>
+  	<module>gebo.multilanguage.support</module>
+  	<module>gebo.architecture.llms.abstraction.layer</module>
+  	<module>gebo.architecture.chat.abstraction.layer</module>
+  	<module>gebo.architecture.contenthandling.interfaces</module>
+  	<module>gebo.architecture.contentsystems.abstraction.layer</module>
+  	<module>gebo.architecture.buildsystems.abstraction.layer</module>
+  	<module>gebo.restintegration.abstraction.layer</module>
+  	<module>gebo.architecture.crypting</module>
+  	<module>gebo.architecture.environment</module>
+  	<module>gebo.architecture.testing</module>
+  	<module>gebo.architecture.integration.tests</module>
+  	
+  </modules>
+</project>

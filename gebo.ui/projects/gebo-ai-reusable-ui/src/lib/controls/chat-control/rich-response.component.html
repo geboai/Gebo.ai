@@ -1,0 +1,33 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<div class="grid" *ngIf="richResponse">
+  <div class="col-12" *ngFor="let item of richResponse.fragments;">
+    <pre *ngIf="item.fragmentType==='PreformattedTextType'">{{item.preformattedText?.text}}</pre>
+    <div class="grid" *ngIf="item.fragmentType==='ProgrammingLanguageContentType'">
+      <div class="col-12">
+        <b>Source code,language is {{item?.programmingLanguageContent?.language}}, suggested file name:{{item?.programmingLanguageContent?.fileName}}</b>
+      </div>
+      <div class="col-12">
+        <gebo-ai-code-editor componentHeight="200px" [language]="item?.programmingLanguageContent?.language"
+          [contentObject]="{content: item?.programmingLanguageContent?.softwareCode}"></gebo-ai-code-editor>
+      </div>
+    </div>
+
+    <gebo-ai-html-viewer-component *ngIf="item.fragmentType==='RichHtmlTextType'"
+      [htmlCode]="item?.richHtmlText?.htmlCode"></gebo-ai-html-viewer-component>
+    <gebo-ai-view-table-component *ngIf="item.fragmentType==='TableContentType'"
+      [table]="item.tableContent"></gebo-ai-view-table-component>
+  </div>
+</div>

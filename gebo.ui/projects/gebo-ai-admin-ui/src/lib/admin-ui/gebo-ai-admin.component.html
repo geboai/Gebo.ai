@@ -1,0 +1,53 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-tabView (activeIndexChange)="activatedIndex($event)" class="geboFullHeight">
+    
+    <p-tabPanel header="Dashboard" >
+        <gebo-ai-main-dashboard-component></gebo-ai-main-dashboard-component>
+    </p-tabPanel> 
+    <p-tabPanel header="LLMs for chat & embedding" >
+        <llms-systems-component id="childs" #child1></llms-systems-component>
+    </p-tabPanel>
+    <p-tabPanel header="Users and groups">
+        <users-management-component id="childs" #child2></users-management-component>
+    </p-tabPanel>
+    <p-tabPanel header="Gebo.ai modules config">
+        <systems-component id="childs" #child3></systems-component>
+    </p-tabPanel>
+    <p-tabPanel header="Build/packaging systems">
+        <build-packaging-systems-component id="childs" #child4></build-packaging-systems-component>
+    </p-tabPanel>
+    <p-tabPanel header="Knowledge bases & projects">
+        <knowledge-bases-component id="childs" #child5></knowledge-bases-component>
+    </p-tabPanel>
+    <!-- 
+    <p-tabPanel header="Content automations/agents" *ngIf="geboConfig?.configMap?['agentsModuleEnabled']===true">
+        <gebo-ai-content-robots-gprojectendpoint-component [viewAllContentRobots]="true"></gebo-ai-content-robots-gprojectendpoint-component>
+    </p-tabPanel>
+    -->
+    <p-tabPanel header="Rag chat profiles/Model prompts">
+        <chat-profiles-component id="childs" #child6></chat-profiles-component>
+    </p-tabPanel>
+    
+    <p-tabPanel header="Logs">
+        <gebo-ai-logs-view-component id="childs" #child7></gebo-ai-logs-view-component>
+    </p-tabPanel>
+</p-tabView>
+<gebo-ai-entity-editing-launcher></gebo-ai-entity-editing-launcher>
+
+<!-- 
+<gebo-setup-wizards [visible]="setupWindowVisible" (setupStatusRefresh)="onSetupStatus($event)" (closeSetup)="hideSetup()"></gebo-setup-wizards>
+<p-button label="Gebo.ai setup" icon="pi pi-wrench" [outlined]="true" (onClick)="openSetupWindow()" [severity]="setupButtonSeverity"></p-button>
+-->

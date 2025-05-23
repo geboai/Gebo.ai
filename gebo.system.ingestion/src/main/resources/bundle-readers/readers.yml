@@ -1,0 +1,208 @@
+ai.gebo.contents.reading.library:
+  handlers:
+    - id: HtmlIngestionHandler
+      fileTypeId: html
+      fileTypes:
+        - treatAs: html
+          description: Web document
+          contentTypes: text/html
+          extensions:
+            - .htm
+            - .html
+          uiViewable: true
+          commentEscapeBegin: <!--
+          commentEscapeEnd: -->  
+
+    - id: MSDocumentsIngestionHandler
+      fileTypeId: word
+      fileTypes:
+        - treatAs: word
+          description: MS Word 97/2002 .doc document
+          contentTypes: application/msword
+          extensions:
+            - .doc
+          uiViewable: false
+        - treatAs: word
+          description: MS Word 2002 .docx document
+          contentTypes: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+          uiViewable: false
+          extensions:
+            - .docx
+
+    - id: MsExcellIngestionHandler
+      fileTypeId: excel
+      fileTypes:
+        - treatAs: excel
+          description: excel xlsx file
+          contentTypes: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+          extensions:
+            - .xlsx
+          uiViewable: false
+        - treatAs: excel
+          description: excel xls file
+          contentTypes: application/vnd.ms-excel
+          extensions:
+            - .xls
+          uiViewable: false
+    - id: OdtIngestionHandler
+      fileTypeId: odt
+      fileTypes:
+        - treatAs: word
+          description: Open document format .odt word processor file
+          contentTypes: application/vnd.oasis.opendocument.text
+          extensions:
+            - .odt
+          uiViewable: false
+    - id: OdpIngestionHandler
+      fileTypeId: odp
+      fileTypes:
+        - treatAs: word
+          description: Open document format .odt word processor file
+          contentTypes: application/vnd.oasis.opendocument.presentation
+          extensions:
+            - .odp
+          uiViewable: false
+    - id: OdsIngestionHandler
+      fileTypeId: odt
+      fileTypes:
+        - treatAs: excel
+          description: Open document format .ods spreadsheet
+          contentTypes: application/vnd.oasis.opendocument.spreadsheet
+          extensions:
+            - .ods
+          uiViewable: false
+
+    - id: PdfIngestionHandler
+      fileTypeId: pdf
+      fileTypes:
+        - treatAs: pdf
+          uiViewable: true
+          description: Pdf file
+          contentTypes: application/pdf
+          extensions:
+            - .pdf
+    - id: XmlIngestionHandler
+      fileTypeId: xml
+      fileTypes:
+        - treatAs: sourceCode
+          uiViewable: true
+          programmingLanguage: xml
+          description: Xml data file
+          contentTypes: application/xml
+          commentEscapeBegin: <!--
+          commentEscapeEnd: -->  
+          extensions:
+            - .xml
+          specialfiles:
+            - fileName: pom.xml
+              description: Maven pom file
+
+    - id: JsonIntestionHandler
+      fileTypeId: json
+      fileTypes:
+        - treatAs: sourceCode
+          uiViewable: true
+          enrichWithCatalogInfos: false
+          programmingLanguage: json
+          description: Json data file
+          contentTypes: application/json
+          extensions:
+            - .json
+    - id: TextPlainIngestionHandler
+      fileTypes:
+        - fileTypeId: plainText
+          uiViewable: true
+          treatAs: plainText
+          description: Plain text file
+          contentTypes: text/plain
+          extensions:
+            - .txt
+            - .text
+            - .md
+          specialfiles:
+            - fileName: Dockerfile
+              description: Docker descriptor file
+        - fileTypeId: javaSources
+          treatAs: sourceCode
+          programmingLanguage: java
+          uiViewable: true
+          contentTypes: text/plain
+          description: java source code
+          commentRowEscape: //
+          extensions:
+            - .java
+        - fileTypeId: sqlSources
+          treatAs: sourceCode
+          programmingLanguage: sql
+          uiViewable: true
+          contentTypes: text/plain
+          description: sql source code
+          commentRowEscape: -- 
+          extensions:
+            - .sql
+        - fileTypeId: ymlSources
+          treatAs: sourceCode
+          programmingLanguage: yml
+          uiViewable: true
+          contentTypes: text/plain
+          description: yml source code
+          commentRowEscape: # 
+          extensions:
+            - .yml
+        - fileTypeId: shSources
+          treatAs: sourceCode
+          programmingLanguage: bash
+          uiViewable: true
+          contentTypes: text/plain
+          description: unix shell source code
+          commentRowEscape: #
+          extensions: .sh
+        - fileTypeId: c-source
+          programmingLanguage: c
+          treatAs: sourceCode
+          contentTypes: text/plain
+          description: c source code
+          commentRowEscape: //
+          uiViewable: true
+          extensions:
+            - .c
+            - .h
+        - fileTypeId: typescript-source
+          programmingLanguage: typescript
+          commentRowEscape: //
+          treatAs: sourceCode
+          contentTypes: text/plain
+          description: typescript source code
+          uiViewable: true
+          extensions:
+            - .ts
+        - fileTypeId: c++-source
+          treatAs: sourceCode
+          commentRowEscape: //
+          programmingLanguage: c++
+          contentTypes: text/plain
+          uiViewable: true
+          description: c++ source code
+          extensions:
+            - .c++
+            - .cpp
+            - .hpp
+            - .h++
+        - fileTypeId: c#-source
+          programmingLanguage: c#
+          commentRowEscape: //
+          uiViewable: true
+          treatAs: sourceCode
+          contentTypes: text/plain
+          description: c# source code
+          extensions:
+            - .cs
+        - fileTypeId: python-source
+          programmingLanguage: python
+          commentRowEscape: #
+          uiViewable: true
+          treatAs: sourceCode
+          contentTypes: text/plain
+          description: python source code
+          extensions:
+            - .py

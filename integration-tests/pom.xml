@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo</groupId>
+		<artifactId>ai.gebo.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<groupId>ai.gebo.integration-tests</groupId>
+	<artifactId>gebo.integration-tests.parent</artifactId>
+	
+	<packaging>pom</packaging>
+	
+	<modules>
+		<module>atlassian-confluence-integration-tests</module>
+		<module>ollama-integration-tests</module>
+		<module>vectorstores-integration-tests</module>
+		<module>heavy-workload-integration-tests</module>
+		<module>sharepoint-integration-tests</module>
+
+		<module>atlassian-jira-integration-tests</module>
+	</modules>
+</project>

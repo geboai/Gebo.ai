@@ -1,0 +1,150 @@
+{
+	"results": [
+		{
+			"id": "554762249",
+			"type": "attachment",
+			"status": "current",
+			"title": "Fatturazione cedi v3.docx",
+			"metadata": {
+				"mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"labels": {
+					"results": [],
+					"start": 0,
+					"limit": 200,
+					"size": 0,
+					"_links": {
+						"self": "https://docs.ditechonline.it/rest/api/content/554762249/label"
+					}
+				},
+				"_expandable": {
+					"currentuser": "",
+					"properties": "",
+					"frontend": "",
+					"editorHtml": ""
+				}
+			},
+			"extensions": {
+				"mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"fileSize": 1648855,
+				"comment": ""
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM-+Fatturazione+Cedi?preview=%2F487981100%2F554762249%2FFatturazione+cedi+v3.docx",
+				"download": "/download/attachments/487981100/Fatturazione%20cedi%20v3.docx?version=1&modificationDate=1722928462399&api=v2",
+				"self": "https://docs.ditechonline.it/rest/api/content/554762249"
+			},
+			"_expandable": {
+				"container": "/rest/api/content/487981100",
+				"operations": "",
+				"children": "/rest/api/content/554762249/child",
+				"restrictions": "/rest/api/content/554762249/restriction/byOperation",
+				"history": "/rest/api/content/554762249/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/554762249/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "551813154",
+			"type": "attachment",
+			"status": "current",
+			"title": "Fatturazione cedi v2.docx",
+			"metadata": {
+				"mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"labels": {
+					"results": [],
+					"start": 0,
+					"limit": 200,
+					"size": 0,
+					"_links": {
+						"self": "https://docs.ditechonline.it/rest/api/content/551813154/label"
+					}
+				},
+				"_expandable": {
+					"currentuser": "",
+					"properties": "",
+					"frontend": "",
+					"editorHtml": ""
+				}
+			},
+			"extensions": {
+				"mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"fileSize": 1648677,
+				"comment": ""
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM-+Fatturazione+Cedi?preview=%2F487981100%2F551813154%2FFatturazione+cedi+v2.docx",
+				"download": "/download/attachments/487981100/Fatturazione%20cedi%20v2.docx?version=1&modificationDate=1722334227353&api=v2",
+				"self": "https://docs.ditechonline.it/rest/api/content/551813154"
+			},
+			"_expandable": {
+				"container": "/rest/api/content/487981100",
+				"operations": "",
+				"children": "/rest/api/content/551813154/child",
+				"restrictions": "/rest/api/content/551813154/restriction/byOperation",
+				"history": "/rest/api/content/551813154/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/551813154/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		},
+		{
+			"id": "487981102",
+			"type": "attachment",
+			"status": "current",
+			"title": "Fatturazione cedi v1.docx",
+			"metadata": {
+				"mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"labels": {
+					"results": [],
+					"start": 0,
+					"limit": 200,
+					"size": 0,
+					"_links": {
+						"self": "https://docs.ditechonline.it/rest/api/content/487981102/label"
+					}
+				},
+				"_expandable": {
+					"currentuser": "",
+					"properties": "",
+					"frontend": "",
+					"editorHtml": ""
+				}
+			},
+			"extensions": {
+				"mediaType": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+				"fileSize": 1648934,
+				"comment": ""
+			},
+			"_links": {
+				"webui": "/display/M4SN/COMM-+Fatturazione+Cedi?preview=%2F487981100%2F487981102%2FFatturazione+cedi+v1.docx",
+				"download": "/download/attachments/487981100/Fatturazione%20cedi%20v1.docx?version=1&modificationDate=1709718848604&api=v2",
+				"self": "https://docs.ditechonline.it/rest/api/content/487981102"
+			},
+			"_expandable": {
+				"container": "/rest/api/content/487981100",
+				"operations": "",
+				"children": "/rest/api/content/487981102/child",
+				"restrictions": "/rest/api/content/487981102/restriction/byOperation",
+				"history": "/rest/api/content/487981102/history",
+				"ancestors": "",
+				"body": "",
+				"version": "",
+				"descendants": "/rest/api/content/487981102/descendant",
+				"space": "/rest/api/space/M4SN"
+			}
+		}
+	],
+	"start": 0,
+	"limit": 50,
+	"size": 3,
+	"_links": {
+		"self": "https://docs.ditechonline.it/rest/api/content/487981100/child/attachment",
+		"base": "https://docs.ditechonline.it",
+		"context": ""
+	}
+}

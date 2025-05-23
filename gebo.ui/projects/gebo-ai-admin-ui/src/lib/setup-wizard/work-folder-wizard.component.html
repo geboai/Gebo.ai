@@ -1,0 +1,48 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<form [formGroup]="formGroup">
+    
+    <p-blockUI [target]="workFolderUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <p-panel #workFolderUI header="Gebo.ai work folder configuration">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <div class="grid">
+            <div class="col-12">
+                <div class="flex flex-column gap-2 ">
+                    <label for="workDirectory">Choose a folder as Gebo.ai work directory</label>
+                    <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
+                        [readonly]="isSetupCompleted" formControlName="workDirectory" selectionMode="single"
+                        id="workDirectory" aria-describedby="workDirectory-help"
+                        [browsePathObservable]="browsePathObservable" [required]="true"
+                        class="col-12"></gebo-ai-vfilesystem-selector-component>
+                    <small id="workDirectory-help">
+                        Choose a server folder that this installation will use as work folder for its configurations and
+                        contents storage.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid geboLargeButtonsBar">
+            
+
+            <div class="col-6">
+                <p-button [outlined]="true" label="Configure" (onClick)="saveWorkFolder()" icon="pi pi-save"
+                    severity="success" [disabled]="this.formGroup.invalid || isSetupCompleted" styleClass="w-full"></p-button>
+            </div>
+        </div>
+    </p-panel>
+</form>

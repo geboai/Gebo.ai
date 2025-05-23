@@ -1,0 +1,34 @@
+ai.gebo.security.cors.allowedOrigins: no
+ai.gebo.mongodb:
+    enabled: false
+    databaseName: gebo-ai-tests
+    connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+ai.gebo.vectorstore:
+    use: TEST
+ai.gebo.vectorizator.config:
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  disposerConfig:
+    poolCardinality: 1
+    flushThreshold: 10
+    useSenderThread: true
+  vectorizatorReceiverConfig:
+    poolCardinality: 2
+    flushThreshold: 10
+    useSenderThread: true
+    timeout: 20000
+ai.gebo.core.config:
+  mongoDisposerConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 10
+    timeout: 20000
+  userMessagesReceiverConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 10		
+    timeout: 20000
+#Google search api for LLM search web function
+#ai.gebo.googlesearch:
+#                  enabled: true
+#                  apiKey: <put here your api key>
+#                  customSearchEngineId: <put here your search engine id>

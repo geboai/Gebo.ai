@@ -1,0 +1,107 @@
+{
+	"id": "106528850",
+	"type": "page",
+	"status": "current",
+	"title": "Workflow di processo sulle righe di un carico (ad esempio i RESPINTI)",
+	"space": {
+		"id": 106856450,
+		"key": "AS",
+		"name": "Appunti Smart",
+		"type": "global",
+		"_links": {
+			"webui": "/display/AS",
+			"self": "https://docs.ditechonline.it/rest/api/space/AS"
+		},
+		"_expandable": {
+			"metadata": "",
+			"icon": "",
+			"description": "",
+			"homepage": "/rest/api/content/106528846"
+		}
+	},
+	"version": {
+		"by": {
+			"type": "known",
+			"username": "amodica",
+			"userKey": "402887f46da4f9b9016df3bbff860044",
+			"profilePicture": {
+				"path": "/images/icons/profilepics/default.svg",
+				"width": 48,
+				"height": 48,
+				"isDefault": true
+			},
+			"displayName": "Alessandro Modica [X]",
+			"_links": {
+				"self": "https://docs.ditechonline.it/rest/api/user?key=402887f46da4f9b9016df3bbff860044"
+			},
+			"_expandable": {
+				"status": ""
+			}
+		},
+		"when": "2020-10-22T17:42:35.279+02:00",
+		"message": "",
+		"number": 17,
+		"minorEdit": false,
+		"hidden": false,
+		"_links": {
+			"self": "https://docs.ditechonline.it/rest/experimental/content/106528850/version/17"
+		},
+		"_expandable": {
+			"content": "/rest/api/content/106528850"
+		}
+	},
+	"container": {
+		"id": 106856450,
+		"key": "AS",
+		"name": "Appunti Smart",
+		"type": "global",
+		"_links": {
+			"webui": "/display/AS",
+			"self": "https://docs.ditechonline.it/rest/api/space/AS"
+		},
+		"_expandable": {
+			"metadata": "",
+			"icon": "",
+			"description": "",
+			"homepage": "/rest/api/content/106528846"
+		}
+	},
+	"body": {
+		"view": {
+			"value": "<p>Questo documento vuole essere un raccoglitore di tutti gli elementi minimi necessari per  risolvere il ticket \n<span class=\"jira-issue conf-macro output-block\" data-jira-key=\"CMCED-3654\" data-client-id=\"SINGLE_adb42f6b-8c96-3bb4-a6a6-7024b5eff5c0_106528850_402887f47219f9ef0172315f0fdc001b\" data-hasbody=\"false\" data-macro-name=\"jira\">\n                    <a href=\"https://support.ditechonline.it/browse/CMCED-3654\" class=\"jira-issue-key\"><span class=\"aui-icon aui-icon-wait issue-placeholder\"> </span>CMCED-3654</a>\n                            -\n            <span class=\"summary\">Ottenimento dei dettagli del problema...</span>\n                                                <span class=\"aui-lozenge aui-lozenge-subtle aui-lozenge-default issue-placeholder\">STATO</span>\n                </span>\n</p><p>Il ticket chiede di introdurre la gestione di articoli respinti da una fonte dati del ciclo passivo nel workflow dei carichi.</p><p>Piu precisamente si chiede di gestire i carichi che contengono articoli con quantita contrassegnate dallo stato respinto di MOVER.</p><p><br/></p><p>Questo significa che i carichi, oltre a gestire i canonici articoli di tipo ACQ e Omaggio, rispettativamente rappresentanti da quantità pagate e non pagate, si vuole censire in modo consistente anche la situazione in cui la quantita di un articolo, arrivato tramite un camion, è stato respinto al ricevimento merci per un qualunque motivo.</p><p>Il delta significativo da acquisire da MOVER sono due valori rappresentati da due campi presenti nelle duali tabelle d2m/carico_d . In cui sono identificati lo stato della riga (respinto) e la sua motivazione (un arbitrario valore stringa che MOVER contrassegna con un codice di lookup).</p><p>Tale delta e' acquisito nella fase di importazione di carichi provenienti da MOVER e, parallelamente, anche tramite interazione UI utente.</p><p><em>In generale l'acquisizione deve poter avvenire da quasiasi fonte dati.</em></p><p><br/></p><p>L'articolo con la specifica quantita' respinta e' rappresentata da una istanza caricoD dedicata. Questo significa che una lista caricoD puo' avere occorrenze multiple ad un medesimo articolo in base allo stato delle sue parziali quantità.</p><p><em>Si sta delineando quindi un workflow di processo sulle righe carico dove il primo stato significativo trattato (escluso il default ACQUISITO) è il RESPINTO.</em></p><p><br/></p><p>L'obiettivo principale e' impedire la creazione di uno stralcio a fronte di una quantita di articoli respinta, quindi normalizzare la sommatoria delle quantita totali di un articolo, a prescindere dal suo stato, e eseguire il check del consegnato in modo consistente.</p><p>Il suo raggiungimento comporta la soluzione di tre problemi:</p><p>a) L'istanza caricoD respinta <em>deve (dovrebbe)</em> essere censita opportunamente nei movimenti. </p><p><em>b) </em>I movimenti, senza alcun intervento, censirebbero l'istanza caricoD respinta in modo anonimo con difficoltà di recupero dati in futuro. </p><p style=\"margin-left: 30.0px;\">L'unico discriminante significativo che ne fornisce la sua natura e' il campo della <em>causale commerciale</em>, in cui si potrebbe impostare un set di nuove causali (per iniziare una) che etichetterebbe articoli respinti in modo opportuno. </p><p>c) Infine l'istanza , divenendo una occorrenza di un articolo, risulterebbe <em>duplicata</em> nelle fasi di generazione delle attesa fattura e proposta fattura.</p><p style=\"margin-left: 30.0px;\">E' necessario capire fino a che punto una istanza caricoD in stato respinto debba essere elaborata e, eventualmente rimossa, nelle fasi successive, in modo da rendere consistente ogni contesto, descrivendo facilmente la tracciabilità di tutte le quantita degli articoli respinti</p><p><br/></p><p><br/></p><p><br/></p>",
+			"representation": "storage",
+			"_expandable": {
+				"webresource": "",
+				"content": "/rest/api/content/106528850"
+			}
+		},
+		"_expandable": {
+			"editor": "",
+			"export_view": "",
+			"styled_view": "",
+			"storage": "",
+			"anonymous_export_view": ""
+		}
+	},
+	"extensions": {
+		"position": "none"
+	},
+	"_links": {
+		"webui": "/pages/viewpage.action?pageId=106528850",
+		"edit": "/pages/resumedraft.action?draftId=106528850&draftShareId=a109e363-5049-44e5-8c2b-80e0b2856b24",
+		"tinyui": "/x/UoBZBg",
+		"collection": "/rest/api/content",
+		"base": "https://docs.ditechonline.it",
+		"context": "",
+		"self": "https://docs.ditechonline.it/rest/api/content/106528850"
+	},
+	"_expandable": {
+		"metadata": "",
+		"operations": "",
+		"children": "/rest/api/content/106528850/child",
+		"restrictions": "/rest/api/content/106528850/restriction/byOperation",
+		"history": "/rest/api/content/106528850/history",
+		"ancestors": "",
+		"descendants": "/rest/api/content/106528850/descendant"
+	}
+}

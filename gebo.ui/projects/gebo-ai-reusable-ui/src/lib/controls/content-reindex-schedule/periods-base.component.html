@@ -1,0 +1,31 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+
+<p-fieldset [legend]="controlTimeMetaInfos?.frequency" styleClass="w-full" [style]="{width:'550px'}" >
+    <div class="grid" >
+        <div class="col-11 grid">
+
+            <div [class]="controlTimeMetaInfos?.frequency==='DAILY'?'col-3':'col-6'" *ngFor="let fg of formArray.controls; let i=index" [formGroup]="get(i)">
+                <time-set-component formControlName="timeComponent" [metaInfo]="controlTimeMetaInfos?.periodComponents"
+                    (remove)="remove(i)"></time-set-component>
+            </div>
+        </div>
+        <div class="col-1"><p-button icon="pi pi-stopwatch" [outlined]="true" label="+Add"
+                [title]="'Add '+  controlTimeMetaInfos?.frequency+ ' scheduling'" (onClick)="addPeriod()"></p-button>
+        </div>
+    </div>
+
+
+</p-fieldset>

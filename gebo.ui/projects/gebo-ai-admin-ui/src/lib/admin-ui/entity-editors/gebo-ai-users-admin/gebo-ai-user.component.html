@@ -1,0 +1,111 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-dialog  [maximizable]="true" [visible]="true" [modal]="true" [style]="{width:'95%',height:'95%'}" (onHide)="changedData.emit(undefined)"
+    [closable]="false" [showHeader]="false">
+
+    <p-blockUI [target]="userUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+
+    <p-panel #userUI header="Editing user">
+        <div class="geboDialogContent">
+            <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+            <div class="grid" [formGroup]="formGroup">
+                <div class="col-6">
+                    <div class="flex flex-column gap-2">
+                        <label for="username">Username</label>
+                        <input pInputText id="username" formControlName="username" [required]="true"
+                            [readonly]="mode==='EDIT'" aria-describedby="username-help" />
+                        <small id="username-help">
+                            User username will be used also as user name
+                        </small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="flex flex-column gap-2 ">
+                        <label for="disabled">User disabled</label>
+                        <p-checkbox id="disabled" formControlName="disabled" aria-describedby="disabled-help"
+                            [binary]="true" [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        <small id="disabled-help">
+                            If checked this user is disabled
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="flex flex-column gap-2 ">
+                        <label for="name">First name</label>
+                        <input pInputText id="name" formControlName="name" [required]="true"
+                            aria-describedby="name-help" />
+                        <small id="name-help">
+                            User first name
+                        </small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="flex flex-column gap-2 ">
+                        <label for="sourname">Sourname</label>
+                        <input pInputText id="sourname" formControlName="sourname" [required]="true"
+                            aria-describedby="sourname-help" />
+                        <small id="sourname-help">
+                            User sourname
+                        </small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="flex flex-column gap-2 ">
+                        <label for="roles">User roles</label>
+                        <p-multiSelect  styleClass="w-full"  formControlName="roles" id="roles" aria-describedby="roles-help"
+                            [required]="true" [options]="rolesList"></p-multiSelect>
+                        <small id="roles-help">
+                            Roles list (At least USER role is mandatory), ADMIN has administrative rights, USER can only
+                            chat
+                            and use LLMS chat services, APPLICATION is for external applications
+                        </small>
+                    </div>
+                </div>
+                <div class="col-6" *ngIf="mode==='NEW'" [formGroup]="pwdFormGroup">
+                    <div class="flex flex-column gap-2 ">
+                        <label for="password">Password</label>
+                        <p-password id="password" formControlName="password" aria-describedby="password-help"
+                            [required]="true"></p-password>
+                        <small id="password-help">
+                            Insert password
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="geboButtonsBar" style="vertical-align: baseline;" >
+            <div class="grid">
+                <div class="col-4">
+                    <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                        *ngIf="mode==='EDIT'" [disabled]="this.formGroup.invalid"></p-button>
+                    <p-button [outlined]="true" label="Insert" (onClick)="doInsert()" icon="pi pi-save"
+                        severity="success" *ngIf="mode==='NEW'"
+                        [disabled]="this.formGroup.invalid || this.pwdFormGroup.invalid"></p-button>
+                </div>
+                <div class="col-4">
+                    <p-button [outlined]="true" label="Cancel" severity="contrast"
+                        (onClick)="changedData.emit(undefined)" />
+                </div>
+                <div class="col-4">
+                    <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash"
+                        (onClick)="doDelete()" />
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</p-dialog>

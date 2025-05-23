@@ -1,0 +1,23 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-tabView>
+    <!-- 
+    <p-tabPanel header="All logs">
+        <gebo-ai-log-table-component  [jobType]="'CONTENTS_READING_VECTORIZING'"></gebo-ai-log-table-component>
+    </p-tabPanel> -->
+    <p-tabPanel *ngFor="let tab of endpointTabs;" [header]="tab.label + ' logs'">
+        <gebo-ai-log-table-component [className]="tab.className" [jobType]="'CONTENTS_READING_VECTORIZING'"></gebo-ai-log-table-component>
+    </p-tabPanel>
+</p-tabView>

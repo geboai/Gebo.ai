@@ -1,0 +1,33 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+
+
+<div class="grid " >
+    <div class="col-3">
+        
+            <img src="assets/Gebo.png" width="240" height="60">
+        
+    </div>
+    <div class="col-9">
+
+    </div>
+    <div class="col-12" *ngIf="userLogged">
+        <p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal" class="megaMenuWhite" />
+    </div>
+    <div class="col-12 geboMinHeight">
+        <router-outlet />
+    </div>
+
+</div><p-confirmDialog header="Confirmation" width="425"></p-confirmDialog>

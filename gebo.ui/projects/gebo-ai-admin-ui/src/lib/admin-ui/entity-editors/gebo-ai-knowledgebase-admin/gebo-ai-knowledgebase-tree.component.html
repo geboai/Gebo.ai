@@ -1,0 +1,50 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="mainTree" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-tree #mainTree [value]="roots" class=" col-12" selectionMode="single" [(selection)]="selectedNodes"
+    (onNodeExpand)="nodeExpand($event)" (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
+    (onNodeUnselect)="nodeUnselect($event)">
+    <ng-template let-node pTemplate="default">
+
+        <span *ngIf="node.data.isKnowledgeBase===true">
+            <a (click)="openEditKnowledgeBase(node)">
+                {{ node.label }}
+            </a>
+
+            <a title="add new..." class="anchorButton"  (click)="createRootProject(node)">+ Add item/project</a>
+        </span>
+        <span *ngIf="node.data.isProject===true">
+
+            <a (click)="openEditProject(node)" >
+                {{ node.label }}
+            </a>
+            <project-add-context-menu [data]="node.data.info"
+                (refreshUIEvent)="onDataUpdate(node)"></project-add-context-menu>
+
+
+
+        </span>
+        <span *ngIf="!(node.data.isKnowledgeBase===true || node.data.isProject===true)">
+            <a (click)="openGenericalNode(node)">
+                {{ node.label }}
+            </a>
+        </span>
+
+    </ng-template>
+</p-tree>
+<gebo-ai-content-viewer [activate]="openContentViewing" [code]="openContentViewingCode"
+    (close)="openContentViewing=false"></gebo-ai-content-viewer>

@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.llms</groupId>
+		<artifactId>gebo.llms.parent</artifactId>
+		<version>0.9.9.7-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.llms.starter</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.openai</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.ollama</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.anthropic3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.standard.functions</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.generic-openai-compatible</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.mistral</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.onxx-embeddings</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.google_vertex</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.huggingface</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.llms</groupId>
+			<artifactId>gebo.llms.deepseek</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>under-development</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+
+			</dependencies>
+
+		</profile>
+
+	</profiles>
+</project>

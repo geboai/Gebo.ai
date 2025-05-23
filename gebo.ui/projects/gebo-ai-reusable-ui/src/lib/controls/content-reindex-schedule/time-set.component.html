@@ -1,0 +1,30 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<table>
+    <tr>
+        <th *ngFor="let p of metaInfo">{{p.label}}</th>
+        <td></td>
+    </tr>
+    <tr>
+        <td *ngFor="let p of metaInfo;index as i;">
+            <p-inputNumber  *ngIf="!choices[i].choices && !dateComponent" [formControl]="formControl[i]" [max]="choices[i].maxValue" [min]="choices[i].minValue" [required]="true" size="large"></p-inputNumber>
+            <p-select styleClass="w-full"  *ngIf="choices[i].choices  && !dateComponent" [formControl]="formControl[i]" [options]="choices[i].choices" optionLabel="label" [required]="true" optionValue="id"></p-select>
+            <p-calendar *ngIf="dateComponent===true" [formControl]="formControl[i]" [showTime]="true" [required]="true"   ></p-calendar>
+        </td>
+        <td>
+            <p-button icon="pi pi-times-circle" [rounded]="true" [text]="true" severity="danger" (onClick)="removeThis()" ></p-button>
+        </td>
+    </tr>
+</table>

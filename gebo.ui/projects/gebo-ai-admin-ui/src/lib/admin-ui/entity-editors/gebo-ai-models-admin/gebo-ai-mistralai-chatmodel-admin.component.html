@@ -1,0 +1,117 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="MistralAIUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #MistralAIUI header="Editing MistralAI chat model configuration" [formGroup]="formGroup">
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-tabView class="standardTabDialogueHeight">
+            <p-tabPanel header="General infos">
+
+                <div class="grid">
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2">
+                            <label for="description">Description</label>
+                            <input pInputText id="description" formControlName="description" maxlength="120"
+                                [required]="true" aria-describedby="description-help" />
+                            <small id="description-help">
+                                Enter the description of the model configuration
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="code">Unique Code</label>
+                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
+                                readonly="true" />
+                            <small id="code-help">
+                                Automatically generated unique code of the model configuration
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="apiSecretCode">MistralAI token</label>
+                            <geboai-editable-listbox-component formControlName="apiSecretCode"
+                                placeholder="Select a token" [required]="true"
+                                [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
+                                aria-describedby="apiSecretCode-help">
+                            </geboai-editable-listbox-component>
+                            <small id="apiSecretCode-help">
+                                Choose the MistralAI token to be used for this model
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="choosedModel">MistralAI chat model choice</label>
+                            <p-select styleClass="w-full"  formControlName="choosedModel" id="choosedModel" placeholder="Select a model"
+                                [required]="true" [options]="modelChoicesData" optionLabel="description"
+                                aria-describedby="choosedModel-help"></p-select>
+
+
+                            <small id="modelCode-help">
+                                Choose the MistralAI chat model to work with.
+                            </small>
+                        </div>
+                    </div>
+                   
+                    <div class="col-6">
+                        <div class="flex flex-column gap-2 ">
+                            <label for="defaultModel">set this as default chat model</label>
+                            <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true"
+                                [trueValue]="true" [falseValue]="false"
+                                aria-describedby="defaultModel-help"></p-checkbox>
+                            <small id="defaultModel-help">
+                                If true this will be used as default chat model where chat model is not indicated
+                            </small>
+                        </div>
+                    </div>
+
+                </div>
+                <gebo-ai-standard-chat-model-settings-component [formGroup]="formGroup"></gebo-ai-standard-chat-model-settings-component>
+            </p-tabPanel>
+            <p-tabPanel header="Advanced settings">
+                <gebo-advanced-chatmodel-group-component  [mode]="mode"  [entityDataLoaded]="entityDataLoaded"  
+                    [formGroup]="formGroup"></gebo-advanced-chatmodel-group-component>
+            </p-tabPanel>
+            <p-tabPanel header="Model access settings">
+                <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
+            </p-tabPanel>
+        </p-tabView>
+
+    </div>
+
+
+    
+        <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
+            <div class="col-3">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+                    severity="success" [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+            </div>
+            <div class="col-3">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+            </div>
+            <div class="col-3">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
+                    [disabled]="canDelete===false" />
+            </div>
+            <div class="col-3">
+                <gebo-ai-test-chat-component [chatModelCode]="entity?.code"></gebo-ai-test-chat-component>
+            </div>
+        </div>
+    
+</p-panel>

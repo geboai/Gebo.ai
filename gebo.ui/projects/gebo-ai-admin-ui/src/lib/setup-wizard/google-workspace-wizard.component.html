@@ -1,0 +1,54 @@
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+ 
+ 
+
+<p-blockUI [target]="instModeUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #instModeUI header="Setup company Google Drive/Workspaces systems">
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class=" grid">
+
+        <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header pTemplate="header">
+                    <tr>
+                        <th>Config code</th>
+                        <th>Description</th>
+                        <th></th>
+
+                    </tr>
+                </ng-template>
+                <ng-template #body let-item pTemplate="body">
+                    <tr>
+                        <td>{{ item.code }}</td>
+                        <td>{{ item.description }}</td>
+                        <td><p-button label="Edit system" icon="pi pi-pencil" [outlined]="true"
+                                (onClick)="editSystem(item)"></p-button></td>
+                    </tr>
+                </ng-template>
+            </p-table></div>
+
+    </div>
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button icon="pi pi-plus" label="Google Drive" styleClass="w-full" [outlined]="true"
+                (onClick)="createSystem()"></p-button>
+        </div>
+    </div>
+</p-panel>
+<p-dialog  [maximizable]="true" [visible]="createGoogleDriveWorkspacesWindowOpen" [modal]="true"
+     (visibleChange)="closeDialog()">
+    <gebo-ai-google-drive-fast-component (cancelAction)="closeDialog()"
+        (insertedGoogleDriveSystemEvent)="closeWizard()"></gebo-ai-google-drive-fast-component>
+</p-dialog>
