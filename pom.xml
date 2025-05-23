@@ -17,10 +17,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<org.eclipse.jgit.version>6.10.0.202406032230-r</org.eclipse.jgit.version>
-	<!-- 
-		<spring.ai.version>1.0.0-SNAPSHOT</spring.ai.version>
-		<spring.ai.version>1.0.0-RC1</spring.ai.version> 
-		-->
+	
 		<spring.ai.version>1.0.0</spring.ai.version> 
 		
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
@@ -89,7 +86,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub Gebo.ai Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/openi40/Gebo.ai</url>
+			<url>https://maven.pkg.github.com/geboai/Gebo.ai</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
