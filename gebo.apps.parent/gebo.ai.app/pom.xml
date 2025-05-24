@@ -141,15 +141,30 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 			<dependencies>
 				<dependency>
-					<groupId>org.springdoc</groupId>
-					<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-					<version>2.0.2</version>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>
-
 		<profile>
 			<id>angular-ui</id>
 			<activation>
@@ -162,6 +177,7 @@
 					<version>${project.version}</version>
 				</dependency>
 			</dependencies>
+
 		</profile>
 		<profile>
 			<id>bootables</id>
@@ -186,6 +202,7 @@
 							</archive>
 						</configuration>
 					</plugin>
+
 				</plugins>
 			</build>
 		</profile>
@@ -212,9 +229,7 @@
 					<mainClass>ai.gebo.monolithic.app.Main</mainClass>
 					<excludeDevtools>false</excludeDevtools>
 					<layout>JAR</layout>
-					<!-- 
-							<finalName>gebo.ai.app-bootable-${project.version}</finalName>
-							-->
+
 					<classifier>bootable</classifier>
 				</configuration>
 			</plugin>
