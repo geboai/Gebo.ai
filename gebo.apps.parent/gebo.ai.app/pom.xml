@@ -82,7 +82,7 @@
 			<artifactId>gebo.architecture.security.controllers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.lucene</artifactId>
@@ -120,7 +120,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- -->
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<!--
+		https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
@@ -132,7 +133,7 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 	<profiles>
 		<profile>
@@ -165,9 +166,7 @@
 		<profile>
 			<id>bootables</id>
 			<build>
-
 				<plugins>
-
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -176,15 +175,6 @@
 							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
 						</configuration>
 					</plugin>
-
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<source>1.8</source>
-							<target>1.8</target>
-						</configuration>
-					</plugin>
-
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-jar-plugin</artifactId>
@@ -196,21 +186,6 @@
 							</archive>
 						</configuration>
 					</plugin>
-
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-
-						<configuration>
-							<jvmArguments>
-								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
-							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
-							<excludeDevtools>false</excludeDevtools>
-							<layout>JAR</layout>
-							<finalName>gebo.ai.app-bootable-${project.version}</finalName>
-						</configuration>
-					</plugin>
-
 				</plugins>
 			</build>
 		</profile>
@@ -225,6 +200,22 @@
 					<forkCount>1</forkCount>
 					<reuseForks>false</reuseForks>
 					<forkMode>never</forkMode>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+
+				<configuration>
+					<jvmArguments>
+						--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+					<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+					<excludeDevtools>false</excludeDevtools>
+					<layout>JAR</layout>
+					<!-- 
+							<finalName>gebo.ai.app-bootable-${project.version}</finalName>
+							-->
+					<classifier>bootable</classifier>
 				</configuration>
 			</plugin>
 		</plugins>
