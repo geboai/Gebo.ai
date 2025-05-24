@@ -13,6 +13,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>gebo.ai.app</module>
-		
+
+		<module>gebo.apps.monolithic.starter</module>
 	</modules>
 </project>

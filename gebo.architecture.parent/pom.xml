@@ -35,6 +35,7 @@
   	<module>gebo.architecture.environment</module>
   	<module>gebo.architecture.testing</module>
   	<module>gebo.architecture.integration.tests</module>
-  	
+
+  	<module>gebo.architecture.swagger</module>
   </modules>
 </project>

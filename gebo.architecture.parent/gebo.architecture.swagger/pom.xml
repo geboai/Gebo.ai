@@ -7,18 +7,17 @@
 		<artifactId>gebo.architecture.parent</artifactId>
 		<version>0.9.9.7-SNAPSHOT</version>
 	</parent>
-	<artifactId>gebo.webconfig</artifactId>
+	<artifactId>gebo.architecture.swagger</artifactId>
 	<dependencies>
-
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.webconfig</artifactId>
+			<version>${project.version}</version>
 		</dependency>
-		<!--
-		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.0.2</version>
 		</dependency>
-	</dependencies>	
+	</dependencies>
 </project>

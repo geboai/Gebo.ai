@@ -7,7 +7,7 @@ RUN mkdir -p /opt/gebo.ai/home
 RUN mkdir -p /opt/gebo.ai/config
 RUN mkdir -p /opt/gebo.ai/work
 RUN mkdir -p /opt/gebo.ai/shares
-COPY gebo.ai.app-bootable-0.9.9.7-SNAPSHOT.jar /opt/gebo.ai
+COPY gebo.ai.app-0.9.9.7-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY config/application.yml /opt/gebo.ai/config
 VOLUME /opt/gebo.ai/home 
 VOLUME /opt/gebo.ai/work
@@ -22,4 +22,4 @@ ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 EXPOSE 12999
 WORKDIR /opt/gebo.ai
-ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-bootable-0.9.9.7-SNAPSHOT.jar
+ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-0.9.9.7-SNAPSHOT-bootable.jar
