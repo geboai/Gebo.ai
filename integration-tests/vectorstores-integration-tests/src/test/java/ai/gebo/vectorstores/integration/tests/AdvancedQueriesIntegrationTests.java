@@ -142,7 +142,7 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results.getNBytes() == 0);
 		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getNTokens() == 0);
 		RagQueryOptions options = new RagQueryOptions(0, CompletenessLevel.STRICT_QUERY_RELATED, 12, -1);
-		RagDocumentsCachedDaoResult results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options, knowledgeBases, openaiDefaultEmbeddingModel);
+		RagDocumentsCachedDaoResult results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options, knowledgeBases, openaiDefaultEmbeddingModel, user);
 		assertFalse("I risultati della ricerca di test non possono essere vuoti", results1.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results1.getNBytes() == 0);
 		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results1.getNTokens() == 0);

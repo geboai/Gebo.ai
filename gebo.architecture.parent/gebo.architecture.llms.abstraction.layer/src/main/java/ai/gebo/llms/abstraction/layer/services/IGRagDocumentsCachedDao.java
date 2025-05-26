@@ -16,6 +16,7 @@ import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 
 /**
  * This interface defines the contract for interacting with cached RAG (Retrieval-Augmented Generation) documents.
@@ -33,10 +34,11 @@ public interface IGRagDocumentsCachedDao {
      * @param codes A list of document codes to include in the search.
      * @param knowledgeBases A list of knowledge bases to search within.
      * @param embeddingModel The model used for embeddings in the search.
+     * @param user TODO
      * @return The result of the documents search.
      */
     public RagDocumentsCachedDaoResult chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
-            List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel);
+            List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
     /**
      * Performs a semantic search on a list of documents using the specified query and options.
@@ -46,10 +48,11 @@ public interface IGRagDocumentsCachedDao {
      * @param codes A list of document codes to include in the search.
      * @param knowledgeBases A list of knowledge bases to search within.
      * @param embeddingModel The model used for embeddings in the search.
+     * @param user TODO
      * @return The result of the semantic search.
      */
     public RagDocumentsCachedDaoResult semanticSearchOnDocumentsList(String query, RagQueryOptions options,
-            List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel);
+            List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
     /**
      * Performs a semantic search on a list of documents using default query options.
@@ -58,12 +61,13 @@ public interface IGRagDocumentsCachedDao {
      * @param codes A list of document codes to include in the search.
      * @param knowledgeBases A list of knowledge bases to search within.
      * @param embeddingModel The model used for embeddings in the search.
+     * @param user TODO
      * @return The result of the semantic search.
      */
     public default RagDocumentsCachedDaoResult semanticSearchOnDocumentsList(String query, List<String> codes,
-            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel) {
+            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
         return this.semanticSearchOnDocumentsList(query, RagQueryOptions.defaultOptions, codes, knowledgeBases,
-                embeddingModel);
+                embeddingModel, user);
     };
 
     /**
@@ -75,10 +79,11 @@ public interface IGRagDocumentsCachedDao {
      * @param embeddingModel The model used for embeddings in the search.
      * @param firstSearchThreshold Threshold for the first search.
      * @param otherSearchThreshold Threshold for subsequent searches.
+     * @param user TODO
      * @return The result of the multi-hop semantic search.
      */
     public RagDocumentsCachedDaoResult multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
-            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold, Double otherSearchThreshold);
+            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold, Double otherSearchThreshold, UserInfos user);
 
     /**
      * Performs a semantic search using the specified query and options.
@@ -87,10 +92,11 @@ public interface IGRagDocumentsCachedDao {
      * @param options Options to customize the search process.
      * @param knowledgeBases A list of knowledge bases to search within.
      * @param embeddingModel The model used for embeddings in the search.
+     * @param user TODO
      * @return The result of the semantic search.
      */
     public RagDocumentsCachedDaoResult semanticSearch(String query, RagQueryOptions options,
-            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel);
+            List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user);
 
     /**
      * Performs a semantic search using the specified query with default options.
@@ -98,11 +104,12 @@ public interface IGRagDocumentsCachedDao {
      * @param query The search query to be executed.
      * @param knowledgeBases A list of knowledge bases to search within.
      * @param embeddingModel The model used for embeddings in the search.
+     * @param user 
      * @return The result of the semantic search.
      */
     public default RagDocumentsCachedDaoResult semanticSearch(String query, List<String> knowledgeBases,
-            IGConfigurableEmbeddingModel<?> embeddingModel) {
-        return this.semanticSearch(query, RagQueryOptions.defaultOptions, knowledgeBases, embeddingModel);
+            IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
+        return this.semanticSearch(query, RagQueryOptions.defaultOptions, knowledgeBases, embeddingModel, user);
     }
 
 }

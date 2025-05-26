@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services.impl;
 
@@ -38,9 +35,11 @@ import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
 import ai.gebo.llms.abstraction.layer.repositories.RagDocumentCacheItemRepository;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
+import ai.gebo.llms.abstraction.layer.services.IGVectorSearchRestrictingFilterExpressionFactory;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 import jakarta.el.MethodNotFoundException;
@@ -83,6 +82,9 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 
 	@Autowired
 	SimilaritySearchService searchService;
+
+	@Autowired(required = false)
+	List<IGVectorSearchRestrictingFilterExpressionFactory> vectorSearchRestrictingFactories;
 
 	public GRagDocumentsCachedDaoImpl() {
 
@@ -148,25 +150,28 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 
 	@Override
 	public RagDocumentsCachedDaoResult chatWithDocumentsSearch(String query, RagQueryOptions ragQueryOptions,
-			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel) {
+			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
+			UserInfos user) {
 		if (codes == null || codes.isEmpty() || knowledgeBases == null || knowledgeBases.isEmpty())
 			return new RagDocumentsCachedDaoResult();
 		if (ragQueryOptions.getMaxTokens() > 0) {
 
-			return loadDocumentsWithTokenBudget(query, ragQueryOptions, codes, knowledgeBases, embeddingModel);
+			return loadDocumentsWithTokenBudget(query, ragQueryOptions, codes, knowledgeBases, embeddingModel, user);
 
 		} else
-			return loadDocumentsFullContents(codes, knowledgeBases);
+			return loadDocumentsFullContents(codes, knowledgeBases, user);
 	}
 
 	/**
 	 * Loads full document contents without considering the token count.
 	 * 
-	 * @param codes         List of document codes.
+	 * @param codes          List of document codes.
 	 * @param knowledgeBases List of knowledge bases.
+	 * @param user
 	 * @return The result containing full document contents.
 	 */
-	private RagDocumentsCachedDaoResult loadDocumentsFullContents(List<String> codes, List<String> knowledgeBases) {
+	private RagDocumentsCachedDaoResult loadDocumentsFullContents(List<String> codes, List<String> knowledgeBases,
+			UserInfos user) {
 		try {
 			RagDocumentsCachedDaoResult result = new RagDocumentsCachedDaoResult();
 			final Map<String, GObjectRef<GProjectEndpoint>> endpointsCache = new HashMap<String, GObjectRef<GProjectEndpoint>>();
@@ -208,18 +213,18 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 
 	@Override
 	public RagDocumentsCachedDaoResult semanticSearchOnDocumentsList(String query, RagQueryOptions options,
-			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel) {
+			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
+			UserInfos user) {
 		if (codes == null || codes.isEmpty() || knowledgeBases == null || knowledgeBases.isEmpty())
 			return new RagDocumentsCachedDaoResult();
-		String condition = inExpression(DocumentMetaInfos.CONTENT_CODE, codes) + " AND "
-				+ inExpression(DocumentMetaInfos.KNOWLEDGEBASE_CODE, knowledgeBases);
+		String condition = filteringConditions(query, user, knowledgeBases, codes);
 		SearchRequest searchRequest = null;
 		switch (options.getCompleteness()) {
 		case FULL_DOCUMENTS: {
 			if (options.getMaxTokens() <= 0)
-				return loadDocumentsFullContents(codes, knowledgeBases);
+				return loadDocumentsFullContents(codes, knowledgeBases, user);
 			else
-				return loadDocumentsWithTokenBudget(query, options, codes, knowledgeBases, embeddingModel);
+				return loadDocumentsWithTokenBudget(query, options, codes, knowledgeBases, embeddingModel, user);
 		}
 		default: {
 			searchRequest = createSimilarityQuery(options, query, condition);
@@ -234,16 +239,46 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 		return result;
 	}
 
+	private String filteringConditions(String query, UserInfos user, List<String> knowledgeBases,
+			List<String> docsList) {
+		String condition = null;
+		if (knowledgeBases != null) {
+			condition = inExpression(DocumentMetaInfos.KNOWLEDGEBASE_CODE, knowledgeBases);
+		}
+		if (docsList != null) {
+			if (condition != null)
+				condition += " AND ";
+			else
+				condition = "";
+			condition += inExpression(DocumentMetaInfos.CONTENT_CODE, docsList);
+		}
+		if (vectorSearchRestrictingFactories != null && !vectorSearchRestrictingFactories.isEmpty()) {
+			for (IGVectorSearchRestrictingFilterExpressionFactory vectorSearchRestrictingFactory : vectorSearchRestrictingFactories) {
+				String restrictingFilter = vectorSearchRestrictingFactory.createAdditionalFilterExpression(query, user,
+						knowledgeBases, docsList);
+				if (restrictingFilter != null) {
+					if (condition != null) {
+						condition += " AND ";
+					} else {
+						condition = "";
+					}
+					condition += restrictingFilter;
+				}
+			}
+		}
+		return condition;
+	}
+
 	@Override
 	public RagDocumentsCachedDaoResult semanticSearch(String query, RagQueryOptions options,
-			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel) {
+			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, UserInfos user) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin semanticSearch({" + query.length() + " chars}, " + options + ", " + knowledgeBases
 					+ ",...)");
 		}
 		if (knowledgeBases == null || knowledgeBases.isEmpty())
 			return new RagDocumentsCachedDaoResult();
-		String condition = inExpression(DocumentMetaInfos.KNOWLEDGEBASE_CODE, knowledgeBases);
+		String condition = filteringConditions(query, user, knowledgeBases, null);
 		SearchRequest searchRequest = null;
 		searchRequest = createSimilarityQuery(options, query, condition);
 		CompletenessLevel completeness = options.getCompleteness();
@@ -260,7 +295,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 
 			result = chatWithDocumentsSearch(query, options,
 					new ArrayList<String>(result.getDocumentItems().stream().map(x -> x.getCode()).toList()),
-					knowledgeBases, embeddingModel);
+					knowledgeBases, embeddingModel, user);
 		}
 			break;
 		case MAX_TOKENS: {
@@ -290,9 +325,9 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	/**
 	 * Removes contents to stay within the token budget.
 	 * 
-	 * @param query         The search query.
-	 * @param result        The search result.
-	 * @param options       The query options.
+	 * @param query          The search query.
+	 * @param result         The search result.
+	 * @param options        The query options.
 	 * @param knowledgeBases The list of knowledge bases.
 	 * @param embeddingModel The embedding model to use.
 	 * @return The adjusted result that fits within the token budget.
@@ -319,16 +354,18 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	/**
 	 * Fills context window with available tokens that are coherent with the query.
 	 * 
-	 * @param query          The search query.
+	 * @param query           The search query.
 	 * @param ragQueryOptions The query options.
-	 * @param codes          The list of document codes.
-	 * @param knowledgeBases The list of knowledge bases.
-	 * @param embeddingModel The embedding model used.
+	 * @param codes           The list of document codes.
+	 * @param knowledgeBases  The list of knowledge bases.
+	 * @param embeddingModel  The embedding model used.
+	 * @param user
 	 * @return The result containing tokens that fit within the budget.
 	 */
 	private RagDocumentsCachedDaoResult loadDocumentsWithTokenBudget(String query, RagQueryOptions options,
-			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel) {
-		RagDocumentsCachedDaoResult result = loadDocumentsFullContents(codes, knowledgeBases);
+			List<String> codes, List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel,
+			UserInfos user) {
+		RagDocumentsCachedDaoResult result = loadDocumentsFullContents(codes, knowledgeBases, user);
 
 		// if token budget is set and loaded documents are too heavy
 		if (options.getMaxTokens() > 0 && result.getNTokens() > options.getMaxTokens()) {
@@ -336,8 +373,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			result.getDocumentItems().forEach(x -> {
 				perCodeFullContents.put(x.getCode(), x);
 			});
-			String condition = inExpression(DocumentMetaInfos.KNOWLEDGEBASE_CODE, knowledgeBases) + " AND "
-					+ inExpression(DocumentMetaInfos.CONTENT_CODE, codes);
+			String condition = filteringConditions(query, user, knowledgeBases, codes);
 			SearchRequest searchRequest = null;
 			RagQueryOptions restrictOptions = new RagQueryOptions(options);
 			restrictOptions.setSimilarityThreashold(0.5);
@@ -381,17 +417,17 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 	 * Performs a multi-hop semantic search using the initial query to refine the
 	 * subsequent queries.
 	 * 
-	 * @param initialQuery   The initial query string.
-	 * @param options        The query options.
-	 * @param knowledgeBases The list of knowledge bases.
-	 * @param embeddingModel The embedding model used.
+	 * @param initialQuery         The initial query string.
+	 * @param options              The query options.
+	 * @param knowledgeBases       The list of knowledge bases.
+	 * @param embeddingModel       The embedding model used.
 	 * @param firstSearchThreshold The threshold for the first hop.
 	 * @param otherSearchThreshold The threshold for subsequent hops.
 	 * @return The final search result after multiple hops.
 	 */
 	public RagDocumentsCachedDaoResult multiHopSemanticSearch(String initialQuery, RagQueryOptions options,
 			List<String> knowledgeBases, IGConfigurableEmbeddingModel<?> embeddingModel, Double firstSearchThreshold,
-			Double otherSearchThreshold) {
+			Double otherSearchThreshold, UserInfos user) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin multiHopSemanticSearch({" + initialQuery.length() + " chars}, " + options + ", "
 					+ knowledgeBases + ", " + "..." + ", " + firstSearchThreshold + ", " + otherSearchThreshold + ")");
@@ -403,7 +439,8 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			options.setSimilarityThreashold(firstSearchThreshold);
 		}
 		// First hop: retrieve fragments most similar to the initial query
-		RagDocumentsCachedDaoResult result = semanticSearch(initialQuery, options, knowledgeBases, embeddingModel);
+		RagDocumentsCachedDaoResult result = semanticSearch(initialQuery, options, knowledgeBases, embeddingModel,
+				user);
 
 		// If there are tokens remaining, use the retrieved content as a basis for a
 		// second query
@@ -422,7 +459,7 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 						}
 						secondHopOptions.setMaxTokens(remainingTokens);
 						RagDocumentsCachedDaoResult secondHop = semanticSearch(refinedQuery, secondHopOptions,
-								knowledgeBases, embeddingModel);
+								knowledgeBases, embeddingModel, user);
 						result = mergeResults(result, secondHop, options.getMaxTokens());
 						long tokensTotal = result.getNTokens();
 						remainingTokens = options.getMaxTokens() - tokensTotal;
