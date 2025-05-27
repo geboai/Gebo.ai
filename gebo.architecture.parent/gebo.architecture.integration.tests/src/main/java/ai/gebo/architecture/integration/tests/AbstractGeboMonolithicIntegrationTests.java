@@ -180,6 +180,7 @@ public class AbstractGeboMonolithicIntegrationTests {
 			LOGGER.info("Resetting content of:" + repo.getManagedType().getName() + " (nr:" + repo.count() + ")");
 			repo.deleteAll();
 		}
+		this.userRepository.deleteAll();
 	}
 
 	/**
