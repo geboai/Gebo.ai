@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.vectorstores.integration.tests;
 
@@ -51,6 +48,7 @@ import ai.gebo.monolithic.app.Main;
 import ai.gebo.ragsystem.vectorstores.model.GeboMongoVectorStoreConfig;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 
 @SpringBootTest(classes = Main.class)
 public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicIntegrationTestsWithFakeLLMS {
@@ -136,14 +134,16 @@ public class AdvancedQueriesIntegrationTests extends AbstractGeboMonolithicInteg
 		List<GVectorizedContent> vectorizated = vectorizatedStream.toList();
 		assertFalse("Vectorizated list cannot be empty", vectorizated.isEmpty());
 		LOGGER.info("Vectorized infos " + mapper.writeValueAsString(vectorizated));
-		RagDocumentsCachedDaoResult results = ragDocumentsCachedDao.semanticSearch(
-				SEMANTIC_REQUEST, knowledgeBases, openaiDefaultEmbeddingModel);
+		RagDocumentsCachedDaoResult results = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, knowledgeBases,
+				openaiDefaultEmbeddingModel, getDefaultUserInfos());
 		assertFalse("I risultati della ricerca di test non possono essere vuoti", results.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results.getNBytes() == 0);
 		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results.getNTokens() == 0);
 		RagQueryOptions options = new RagQueryOptions(0, CompletenessLevel.STRICT_QUERY_RELATED, 12, -1);
-		RagDocumentsCachedDaoResult results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options, knowledgeBases, openaiDefaultEmbeddingModel);
-		assertFalse("I risultati della ricerca di test non possono essere vuoti", results1.getDocumentItems().isEmpty());
+		RagDocumentsCachedDaoResult results1 = ragDocumentsCachedDao.semanticSearch(SEMANTIC_REQUEST, options,
+				knowledgeBases, openaiDefaultEmbeddingModel, getDefaultUserInfos());
+		assertFalse("I risultati della ricerca di test non possono essere vuoti",
+				results1.getDocumentItems().isEmpty());
 		assertFalse("Non puo essere 0 byte la ricerca di prova ", results1.getNBytes() == 0);
 		assertFalse("Non puo essere 0 tokens la ricerca di prova ", results1.getNTokens() == 0);
 

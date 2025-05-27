@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.system.ingestion.impl;
 
@@ -34,6 +31,8 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
+import ai.gebo.system.ingestion.IGCustomDocumentMetaDataEnricher;
+import ai.gebo.system.ingestion.IGCustomDocumentMetaDataEnricher.EnrichingMetaData;
 import ai.gebo.system.ingestion.config.GeboContentReadingConfig;
 import ai.gebo.system.ingestion.model.IngestionFileType;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
@@ -41,9 +40,10 @@ import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 /**
  * AI generated comments
  * 
- * GAIDocumentCatalogingEnricherImpl is responsible for enriching documents with metadata
- * such as knowledge base, project, and category information. This class implements 
- * the IGAIDocumentMetaDataEnricher interface to provide document enrichment capabilities.
+ * GAIDocumentCatalogingEnricherImpl is responsible for enriching documents with
+ * metadata such as knowledge base, project, and category information. This
+ * class implements the IGAIDocumentMetaDataEnricher interface to provide
+ * document enrichment capabilities.
  */
 @Component
 @Scope("singleton")
@@ -58,6 +58,8 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	@Autowired
 	protected IGPersistentObjectManager persistentObjectManager;
 
+	@Autowired(required = false)
+	protected List<IGCustomDocumentMetaDataEnricher> customEnrichers;// custom meta-data enrichers
 	/** Maps file extensions to their corresponding IngestionFileType */
 	final Map<String, IngestionFileType> fileTypeRetrieve = new HashMap<String, IngestionFileType>();
 	/** Maps content types to their corresponding IngestionFileType */
@@ -89,7 +91,8 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Retrieves the IngestionFileType for a given document reference based on its extension.
+	 * Retrieves the IngestionFileType for a given document reference based on its
+	 * extension.
 	 * 
 	 * @param reference The document reference to find the file type for
 	 * @return The corresponding IngestionFileType for the document
@@ -102,8 +105,8 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Inner class that holds the document and its related objects like knowledge base,
-	 * project, and endpoint.
+	 * Inner class that holds the document and its related objects like knowledge
+	 * base, project, and endpoint.
 	 */
 	static class DocumentEnvironment {
 		GDocumentReference document = null;
@@ -124,8 +127,9 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Inner class that holds the results of checking which documents need to be enriched.
-	 * Categorizes documents as uncatalogued, already enriched, or to be enriched.
+	 * Inner class that holds the results of checking which documents need to be
+	 * enriched. Categorizes documents as uncatalogued, already enriched, or to be
+	 * enriched.
 	 */
 	static class EnrichedCheckResult {
 		List<Document> uncataloghed = new ArrayList<Document>();
@@ -134,12 +138,13 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Checks the enriching status of a list of documents and categorizes them based on
-	 * whether they need enrichment or are already processed.
+	 * Checks the enriching status of a list of documents and categorizes them based
+	 * on whether they need enrichment or are already processed.
 	 * 
 	 * @param documents The list of documents to check
 	 * @return An EnrichedCheckResult containing the categorized documents
-	 * @throws GeboPersistenceException If there is an error retrieving data from persistence
+	 * @throws GeboPersistenceException If there is an error retrieving data from
+	 *                                  persistence
 	 */
 	private EnrichedCheckResult checkEnrichingStatus(List<Document> documents) throws GeboPersistenceException {
 		final EnrichedCheckResult data = new EnrichedCheckResult();
@@ -199,8 +204,8 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Enriches a list of documents with cataloging information by fetching related metadata
-	 * from the persistence layer and applying it to the documents.
+	 * Enriches a list of documents with cataloging information by fetching related
+	 * metadata from the persistence layer and applying it to the documents.
 	 * 
 	 * @param documents The list of documents to enrich
 	 * @return A list of enriched documents
@@ -220,7 +225,7 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 							&& firstDocument.environment.endpoint != null
 							&& firstDocument.environment.knowledgeBase != null
 							&& firstDocument.environment.project != null) {
-						MetaDataHeaderInfos header = createMetaDataHeader(firstDocument.environment.document,
+						MetaDataHeaderInfos header = createMetaDataHeader(documents, firstDocument.environment.document,
 								firstDocument.environment.knowledgeBase, firstDocument.environment.project,
 								firstDocument.environment.endpoint);
 						for (EnrichedProcessAIDocument toEnrich : toBeEnriched) {
@@ -250,11 +255,11 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Enriches a document with metadata information by incorporating the provided metadata
-	 * header information into the document's content and metadata.
+	 * Enriches a document with metadata information by incorporating the provided
+	 * metadata header information into the document's content and metadata.
 	 * 
 	 * @param document The document to enrich
-	 * @param infos The metadata header information to add
+	 * @param infos    The metadata header information to add
 	 * @return The enriched document
 	 */
 	public Document enrich(Document document, MetaDataHeaderInfos infos) {
@@ -283,6 +288,8 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 		// newContent.append(infos.endBlock);
 		// newContent.append("\n");
 		HashMap<String, Object> newMetadata = new HashMap<String, Object>();
+		if (infos.customMetaInfos != null)
+			newMetadata.putAll(infos.customMetaInfos);
 		if (document.getMetadata() != null) {
 			newMetadata.putAll(document.getMetadata());
 		}
@@ -296,19 +303,42 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Creates a metadata header for enriching documents based on the provided document reference,
-	 * knowledge base, project, and endpoint information.
+	 * Creates a metadata header for enriching documents based on the provided
+	 * document reference, knowledge base, project, and endpoint information.
 	 * 
-	 * @param reference The document reference
+	 * @param reference     The document reference
 	 * @param knowledgeBase The knowledge base the document belongs to
-	 * @param project The project the document belongs to
-	 * @param endpoint The project endpoint
+	 * @param project       The project the document belongs to
+	 * @param endpoint      The project endpoint
+	 * 
 	 * @return A MetaDataHeaderInfos object containing the formatted metadata header
 	 */
 	@Override
-	public MetaDataHeaderInfos createMetaDataHeader(GDocumentReference reference, GKnowledgeBase knowledgeBase,
-			GProject project, GProjectEndpoint endpoint) {
+	public MetaDataHeaderInfos createMetaDataHeader(List<Document> documents, GDocumentReference reference,
+			GKnowledgeBase knowledgeBase, GProject project, GProjectEndpoint endpoint) {
 		MetaDataHeaderInfos infos = new MetaDataHeaderInfos();
+		StringBuffer customAdditionalEmbeddingText = new StringBuffer();
+		Map<String, Object> customMetaData = new HashMap<>();
+		if (this.customEnrichers != null && !this.customEnrichers.isEmpty()) {
+			for (IGCustomDocumentMetaDataEnricher enricher : customEnrichers) {
+
+				EnrichingMetaData data = enricher.generateAdditionalMetaData(documents, reference, knowledgeBase,
+						project, endpoint);
+				if (data != null) {
+					String embeddingAdditional = data.getAdditionalEmbeddingSection();
+					if (embeddingAdditional != null) {
+						customAdditionalEmbeddingText.append(embeddingAdditional);
+						customAdditionalEmbeddingText.append("\n");
+					}
+					Map<String, Object> meta = data.getMetaData();
+					if (meta != null && !meta.isEmpty()) {
+						customMetaData.putAll(meta);
+					}
+				}
+			}
+
+		}
+
 		infos.metaDataHeader = "";
 		infos.fileType = getFileType(reference);
 		infos.startBlock = infos.fileType != null && infos.fileType.getCommentEscapeBegin() != null
@@ -349,29 +379,33 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 		metaData.append("\n");
 		metaData.append(catalogInfos.toString());
 		metaData.append("\n");
+		if (!customAdditionalEmbeddingText.isEmpty()) {
+			metaData.append(customAdditionalEmbeddingText.toString());
+		}
 		metaData.append(METADATA_BLOCK_END);
 		metaData.append("\n");
 		metaData.append(infos.endBlock);
 		metaData.append("\n");
 		infos.metaDataHeader = metaData.toString();
+		infos.customMetaInfos.putAll(customMetaData);
 		return infos;
 	}
 
 	/**
-	 * Enriches a list of documents with cataloging information using the explicitly provided
-	 * reference, knowledge base, project, and endpoint information.
+	 * Enriches a list of documents with cataloging information using the explicitly
+	 * provided reference, knowledge base, project, and endpoint information.
 	 * 
-	 * @param documents The list of documents to enrich
-	 * @param reference The document reference
+	 * @param documents     The list of documents to enrich
+	 * @param reference     The document reference
 	 * @param knowledgeBase The knowledge base
-	 * @param project The project
-	 * @param endpoint The project endpoint
+	 * @param project       The project
+	 * @param endpoint      The project endpoint
 	 * @return A list of enriched documents
 	 */
 	@Override
 	public List<Document> enrichCatalogingInformations(List<Document> documents, GDocumentReference reference,
 			GKnowledgeBase knowledgeBase, GProject project, GProjectEndpoint endpoint) {
-		MetaDataHeaderInfos metaHeader = createMetaDataHeader(reference, knowledgeBase, project, endpoint);
+		MetaDataHeaderInfos metaHeader = createMetaDataHeader(documents, reference, knowledgeBase, project, endpoint);
 		List<Document> enriched = new ArrayList<Document>();
 		for (Document document : documents) {
 
