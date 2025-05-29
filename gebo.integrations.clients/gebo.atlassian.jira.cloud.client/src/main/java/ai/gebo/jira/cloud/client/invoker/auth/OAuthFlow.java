@@ -16,14 +16,14 @@ package ai.gebo.jira.cloud.client.invoker.auth;
  * Enumeration of OAuth flow types supported by the authentication mechanism.
  * AI generated comments
  * 
- * <p>This enum defines the different OAuth flow types that can be used for authentication:
- * <ul>
- *   <li>accessCode - Authorization code flow, where server exchanges auth code for access token</li>
- *   <li>implicit - Client-side flow without secret key exchange</li>
- *   <li>password - Resource owner password credentials flow</li>
- *   <li>application - Client credentials flow for server-to-server authentication</li>
- * </ul>
- * </p>
+ * This enum defines the different OAuth flow types that can be used for authentication:
+ * 
+ *  accessCode - Authorization code flow, where server exchanges auth code for access token
+ *   implicit - Client-side flow without secret key exchange
+ *   password - Resource owner password credentials flow
+ *   application - Client credentials flow for server-to-server authentication
+ * 
+ * 
  */
 public enum OAuthFlow {
     accessCode, implicit, password, application

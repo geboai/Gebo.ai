@@ -187,8 +187,6 @@ public class CloudSharePointBrowserService {
 	 *         InputStream, content type, and whether the document is a recognized
 	 *         Office file.
 	 * @throws GeboRestIntegrationException on REST-related errors.
-	 * @throws GeboCryptSecretException     if there's an issue retrieving the
-	 *                                      token.
 	 * @throws URISyntaxException
 	 */
 	public CloudSharepointDownloadedAttachment downloadAttachmentBinary(CloudSharepointApi system, String listId,

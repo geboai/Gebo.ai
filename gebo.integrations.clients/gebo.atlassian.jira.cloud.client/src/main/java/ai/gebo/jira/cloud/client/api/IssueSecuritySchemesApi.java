@@ -73,11 +73,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Add issue security levels
      * Adds levels and levels&#x27; members to the issue security scheme. You can add up to 100 levels per request.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
      * @param body  (required)
      * @param schemeId The ID of the issue security scheme. (required)
      * @return Object
@@ -90,10 +90,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Add issue security levels
      * Adds levels and levels&#x27; members to the issue security scheme. You can add up to 100 levels per request.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
      * @param body  (required)
      * @param schemeId The ID of the issue security scheme. (required)
@@ -136,11 +136,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Add issue security level members
      * Adds members to the issue security level. You can add up to 100 members per request.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
      * @param body  (required)
      * @param schemeId The ID of the issue security scheme. (required)
      * @param levelId The ID of the issue security level. (required)
@@ -154,11 +154,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Add issue security level members
      * Adds members to the issue security level. You can add up to 100 members per request.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
      * @param body  (required)
      * @param schemeId The ID of the issue security scheme. (required)
      * @param levelId The ID of the issue security level. (required)
@@ -206,12 +206,12 @@ public class IssueSecuritySchemesApi {
     /**
      * Associate security scheme to project
      * Associates an issue security scheme with a project and remaps security levels of issues to the new levels, if provided.  This operation is [asynchronous](#async). Follow the &#x60;location&#x60; link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>303</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
-     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.
+     * <p><b>303</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
+     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.</p>
      * @param body  (required)
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
@@ -222,12 +222,12 @@ public class IssueSecuritySchemesApi {
     /**
      * Associate security scheme to project
      * Associates an issue security scheme with a project and remaps security levels of issues to the new levels, if provided.  This operation is [asynchronous](#async). Follow the &#x60;location&#x60; link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>303</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
-     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.
+     * <p><b>303</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
+     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.</p>
      * @param body  (required)
      * @return ResponseEntity&lt;Void&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -261,10 +261,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Create issue security scheme
      * Creates a security scheme with security scheme levels and levels&#x27; members. You can create up to 100 security scheme levels and security scheme levels&#x27; members per request.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>201</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>201</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param body  (required)
      * @return SecuritySchemeId
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -276,10 +276,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Create issue security scheme
      * Creates a security scheme with security scheme levels and levels&#x27; members. You can create up to 100 security scheme levels and security scheme levels&#x27; members per request.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>201</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>201</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param body  (required)
      * @return ResponseEntity&lt;SecuritySchemeId&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -313,11 +313,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Delete issue security scheme
      * Deletes an issue security scheme.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the issue security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the issue security scheme isn&#x27;t found.</p>
      * @param schemeId The ID of the issue security scheme. (required)
      * @return Object
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -329,11 +329,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Delete issue security scheme
      * Deletes an issue security scheme.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the issue security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the issue security scheme isn&#x27;t found.</p>
      * @param schemeId The ID of the issue security scheme. (required)
      * @return ResponseEntity&lt;Object&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -368,9 +368,9 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security scheme
      * Returns an issue security scheme along with its security levels.  **[Permissions](#permissions) required:**   *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project that uses the requested issue security scheme.
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.</p>
      * @param id The ID of the issue security scheme. Use the [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get) operation to get a list of issue security scheme IDs. (required)
      * @return SecurityScheme
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -382,9 +382,9 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security scheme
      * Returns an issue security scheme along with its security levels.  **[Permissions](#permissions) required:**   *  *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).  *  *Administer Projects* [project permission](https://confluence.atlassian.com/x/yodKLg) for a project that uses the requested issue security scheme.
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user does not have the administrator permission and the scheme is not used in any project where the user has administrative permission.</p>
      * @param id The ID of the issue security scheme. Use the [Get issue security schemes](#api-rest-api-3-issuesecurityschemes-get) operation to get a list of issue security scheme IDs. (required)
      * @return ResponseEntity&lt;SecurityScheme&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -419,9 +419,9 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security schemes
      * Returns all [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect.
-     * <p><b>403</b> - Returned if the user does not have permission to administer issue security schemes.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect.</p>
+     * <p><b>403</b> - Returned if the user does not have permission to administer issue security schemes.</p>
      * @return SecuritySchemes
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
@@ -432,9 +432,9 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security schemes
      * Returns all [issue security schemes](https://confluence.atlassian.com/x/J4lKLg).  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect.
-     * <p><b>403</b> - Returned if the user does not have permission to administer issue security schemes.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect.</p>
+     * <p><b>403</b> - Returned if the user does not have permission to administer issue security schemes.</p>
      * @return ResponseEntity&lt;SecuritySchemes&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
@@ -461,10 +461,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security level members
      * Returns a [paginated](#pagination) list of issue security level members.  Only issue security level members in the context of classic projects are returned.  Filtering using parameters is inclusive: if you specify both security scheme IDs and level IDs, the result will include all issue security level members from the specified schemes and levels.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param id The list of issue security level member IDs. To include multiple issue security level members separate IDs with an ampersand: &#x60;id&#x3D;10000&amp;id&#x3D;10001&#x60;. (optional)
@@ -481,10 +481,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security level members
      * Returns a [paginated](#pagination) list of issue security level members.  Only issue security level members in the context of classic projects are returned.  Filtering using parameters is inclusive: if you specify both security scheme IDs and level IDs, the result will include all issue security level members from the specified schemes and levels.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param id The list of issue security level member IDs. To include multiple issue security level members separate IDs with an ampersand: &#x60;id&#x3D;10000&amp;id&#x3D;10001&#x60;. (optional)
@@ -523,10 +523,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security levels
      * Returns a [paginated](#pagination) list of issue security levels.  Only issue security levels in the context of classic projects are returned.  Filtering using IDs is inclusive: if you specify both security scheme IDs and level IDs, the result will include both specified issue security levels and all issue security levels from the specified schemes.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param id The list of issue security scheme level IDs. To include multiple issue security levels, separate IDs with an ampersand: &#x60;id&#x3D;10000&amp;id&#x3D;10001&#x60;. (optional)
@@ -542,10 +542,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Get issue security levels
      * Returns a [paginated](#pagination) list of issue security levels.  Only issue security levels in the context of classic projects are returned.  Filtering using IDs is inclusive: if you specify both security scheme IDs and level IDs, the result will include both specified issue security levels and all issue security levels from the specified schemes.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param id The list of issue security scheme level IDs. To include multiple issue security levels, separate IDs with an ampersand: &#x60;id&#x3D;10000&amp;id&#x3D;10001&#x60;. (optional)
@@ -582,12 +582,12 @@ public class IssueSecuritySchemesApi {
     /**
      * Remove issue security level
      * Deletes an issue security level.  This operation is [asynchronous](#async). Follow the &#x60;location&#x60; link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>303</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request isn&#x27;t valid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the issue security level isn&#x27;t found.
-     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.
+     * <p><b>303</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request isn&#x27;t valid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the issue security level isn&#x27;t found.</p>
+     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.</p>
      * @param schemeId The ID of the issue security scheme. (required)
      * @param levelId The ID of the issue security level to remove. (required)
      * @param replaceWith The ID of the issue security level that will replace the currently selected level. (optional)
@@ -600,12 +600,12 @@ public class IssueSecuritySchemesApi {
     /**
      * Remove issue security level
      * Deletes an issue security level.  This operation is [asynchronous](#async). Follow the &#x60;location&#x60; link in the response to determine the status of the task and use [Get task](#api-rest-api-3-task-taskId-get) to obtain subsequent updates.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>303</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request isn&#x27;t valid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the issue security level isn&#x27;t found.
-     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.
+     * <p><b>303</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request isn&#x27;t valid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the issue security level isn&#x27;t found.</p>
+     * <p><b>409</b> - Returned if a task to remove the issue security level is already running.</p>
      * @param schemeId The ID of the issue security scheme. (required)
      * @param levelId The ID of the issue security level to remove. (required)
      * @param replaceWith The ID of the issue security level that will replace the currently selected level. (optional)
@@ -648,11 +648,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Remove member from issue security level
      * Removes an issue security level member from an issue security scheme.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
      * @param schemeId The ID of the issue security scheme. (required)
      * @param levelId The ID of the issue security level. (required)
      * @param memberId The ID of the issue security level member to be removed. (required)
@@ -666,11 +666,11 @@ public class IssueSecuritySchemesApi {
     /**
      * Remove member from issue security level
      * Removes an issue security level member from an issue security scheme.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
-     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
+     * <p><b>404</b> - Returned if the security scheme isn&#x27;t found.</p>
      * @param schemeId The ID of the issue security scheme. (required)
      * @param levelId The ID of the issue security level. (required)
      * @param memberId The ID of the issue security level member to be removed. (required)
@@ -717,10 +717,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Get projects using issue security schemes
      * Returns a [paginated](#pagination) mapping of projects that are using security schemes. You can provide either one or multiple security scheme IDs or project IDs to filter by. If you don&#x27;t provide any, this will return a list of all mappings. Only issue security schemes in the context of classic projects are supported. **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the search criteria is invalid.If you specify the project ID parameter
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the search criteria is invalid.If you specify the project ID parameter</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param issueSecuritySchemeId The list of security scheme IDs to be filtered out. (optional)
@@ -735,10 +735,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Get projects using issue security schemes
      * Returns a [paginated](#pagination) mapping of projects that are using security schemes. You can provide either one or multiple security scheme IDs or project IDs to filter by. If you don&#x27;t provide any, this will return a list of all mappings. Only issue security schemes in the context of classic projects are supported. **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the search criteria is invalid.If you specify the project ID parameter
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the search criteria is invalid.If you specify the project ID parameter</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param issueSecuritySchemeId The list of security scheme IDs to be filtered out. (optional)
@@ -772,11 +772,11 @@ public class IssueSecuritySchemesApi {
     }
     /**
      * Search issue security schemes
-     * Returns a [paginated](#pagination) list of issue security schemes.   If you specify the project ID parameter, the result will contain issue security schemes and related project IDs you filter by. Use \\{@link IssueSecuritySchemeResource\\#searchProjectsUsingSecuritySchemes(String, String, Set, Set)\\} to obtain all projects related to scheme.  Only issue security schemes in the context of classic projects are returned.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * Returns a [paginated](#pagination) list of issue security schemes.   If you specify the project ID parameter, the result will contain issue security schemes and related project IDs you filter by. Use \\{link IssueSecuritySchemeResource\\#searchProjectsUsingSecuritySchemes(String, String, Set, Set)\\} to obtain all projects related to scheme.  Only issue security schemes in the context of classic projects are returned.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param id The list of issue security scheme IDs. To include multiple issue security scheme IDs, separate IDs with an ampersand: &#x60;id&#x3D;10000&amp;id&#x3D;10001&#x60;. (optional)
@@ -790,11 +790,12 @@ public class IssueSecuritySchemesApi {
 
     /**
      * Search issue security schemes
-     * Returns a [paginated](#pagination) list of issue security schemes.   If you specify the project ID parameter, the result will contain issue security schemes and related project IDs you filter by. Use \\{@link IssueSecuritySchemeResource\\#searchProjectsUsingSecuritySchemes(String, String, Set, Set)\\} to obtain all projects related to scheme.  Only issue security schemes in the context of classic projects are returned.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>200</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * Returns a [paginated](#pagination) list of issue security schemes.   If you specify the project ID parameter, the result will contain issue security schemes and related project IDs you filter by. Use 
+     * {link IssueSecuritySchemeResource\\#searchProjectsUsingSecuritySchemes(String, String, Set, Set)\\} to obtain all projects related to scheme.  Only issue security schemes in the context of classic projects are returned.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
+     * <p><b>200</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * @param startAt The index of the first item to return in a page of results (page offset). (optional, default to 0)
      * @param maxResults The maximum number of items to return per page. (optional, default to 50)
      * @param id The list of issue security scheme IDs. To include multiple issue security scheme IDs, separate IDs with an ampersand: &#x60;id&#x3D;10000&amp;id&#x3D;10001&#x60;. (optional)
@@ -829,10 +830,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Set default issue security levels
      * Sets default issue security levels for schemes.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the issue resolution isn&#x27;t found.
      * @param body  (required)
      * @return Object
@@ -845,10 +846,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Set default issue security levels
      * Sets default issue security levels for schemes.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the issue resolution isn&#x27;t found.
      * @param body  (required)
      * @return ResponseEntity&lt;Object&gt;
@@ -883,10 +884,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Update issue security scheme
      * Updates the issue security scheme.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the issue security scheme isn&#x27;t found.
      * @param body  (required)
      * @param id The ID of the issue security scheme. (required)
@@ -900,10 +901,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Update issue security scheme
      * Updates the issue security scheme.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request is invalid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request is invalid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the issue security scheme isn&#x27;t found.
      * @param body  (required)
      * @param id The ID of the issue security scheme. (required)
@@ -946,10 +947,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Update issue security level
      * Updates the issue security level.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request isn&#x27;t valid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request isn&#x27;t valid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the issue security level isn&#x27;t found.
      * @param body  (required)
      * @param schemeId The ID of the issue security scheme level belongs to. (required)
@@ -964,10 +965,10 @@ public class IssueSecuritySchemesApi {
     /**
      * Update issue security level
      * Updates the issue security level.  **[Permissions](#permissions) required:** *Administer Jira* [global permission](https://confluence.atlassian.com/x/x4dKLg).
-     * <p><b>204</b> - Returned if the request is successful.
-     * <p><b>400</b> - Returned if the request isn&#x27;t valid.
-     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.
-     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.
+     * <p><b>204</b> - Returned if the request is successful.</p>
+     * <p><b>400</b> - Returned if the request isn&#x27;t valid.</p>
+     * <p><b>401</b> - Returned if the authentication credentials are incorrect or missing.</p>
+     * <p><b>403</b> - Returned if the user doesn&#x27;t have the necessary permission.</p>
      * <p><b>404</b> - Returned if the issue security level isn&#x27;t found.
      * @param body  (required)
      * @param schemeId The ID of the issue security scheme level belongs to. (required)

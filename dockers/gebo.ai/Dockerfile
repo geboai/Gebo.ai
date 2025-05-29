@@ -1,4 +1,4 @@
-FROM geboai/platform:2.1
+FROM geboai/platform:2.2xs
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 RUN mkdir -p /opt

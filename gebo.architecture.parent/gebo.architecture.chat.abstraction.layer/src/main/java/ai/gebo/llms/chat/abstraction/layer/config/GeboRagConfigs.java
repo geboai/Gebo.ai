@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
  * Configuration class for GeboRag settings. This class is used to
  * configure ranges, top K elements, and similarity threshold for
  * the AI chat system. It uses Spring's @Configuration and
- * @ConfigurationProperties annotations to map the properties.
+ * ConfigurationProperties annotations to map the properties.
  */
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.ragchat")

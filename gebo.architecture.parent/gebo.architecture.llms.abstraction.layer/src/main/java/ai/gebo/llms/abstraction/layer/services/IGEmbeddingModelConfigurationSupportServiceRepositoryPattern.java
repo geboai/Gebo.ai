@@ -20,7 +20,6 @@ import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
  * This interface represents a repository pattern specifically for configuring and supporting
  * embedding model services. It extends the generic repository pattern interface.
  *
- * @param <IGEmbeddingModelConfigurationSupportService> the type of the service that this repository pattern will handle.
  */
 public interface IGEmbeddingModelConfigurationSupportServiceRepositoryPattern
         extends IGImplementationsRepositoryPattern<IGEmbeddingModelConfigurationSupportService> {

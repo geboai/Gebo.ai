@@ -149,7 +149,7 @@ ai.gebo.mongodb:
   databaseName: gebo-ai
   connectionString: mongodb://mongoroot:mongopwd@mongo:27017/gebo-ai?authSource=admin
 ai.gebo.filesystem:
-  allowFilesystemSharesUI: true
+  allowFilesystemSharesUI: false
   shares:
     - code: STDSHARE
       absolutePath: /opt/gebo.ai/shares

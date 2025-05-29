@@ -16,7 +16,7 @@ package ai.gebo.architecture.multithreading;
  * Abstract class that represents a service capable of being run in its own thread.
  * Provides a template for resource management and execution control.
  * 
- * @Gebo.ai Commentor: AI generated comments
+ * Gebo.ai Commentor: AI generated comments
  */
 public abstract class GRunnableService implements IGRunnable {
 

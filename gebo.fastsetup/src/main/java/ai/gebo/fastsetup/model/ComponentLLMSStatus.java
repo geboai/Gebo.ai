@@ -16,7 +16,7 @@ package ai.gebo.fastsetup.model;
  * The ComponentLLMSStatus class extends ComponentSetupStatus and is used to track
  * the setup status of language learning models (LLMs) within a component.
  *
- * @Gebo.ai Commentor AI generated comments
+ * Gebo.ai Commentor AI generated comments
  */
 public class ComponentLLMSStatus extends ComponentSetupStatus {
 

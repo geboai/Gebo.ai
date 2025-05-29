@@ -21,7 +21,7 @@ import ai.gebo.model.virtualfs.VFilesystemReference;
  * Represents a MongoDB document for storing Gebo installation details.
  * This includes paths and setup status for a Gebo instance.
  * 
- * @Document annotation marks this class as a MongoDB document.
+ * Document annotation marks this class as a MongoDB document.
  * AI generated comments
  */
 @Document

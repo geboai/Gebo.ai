@@ -50,7 +50,7 @@ import ai.gebo.security.repository.UserRepository.UserInfos;
  * class is responsible for managing and optimizing chat requests, including
  * token estimation and history management.
  * 
- * @implNote AI generated comments
+ * AI generated comments
  */
 @Service
 public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResourcesUsePolicy {

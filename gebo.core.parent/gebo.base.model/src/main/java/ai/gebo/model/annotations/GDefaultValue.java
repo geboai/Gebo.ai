@@ -19,7 +19,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * @annotation GDefaultValue
+ * annotation GDefaultValue
  * AI generated comments
  * 
  * This annotation is used to specify a default value for a field in a class.

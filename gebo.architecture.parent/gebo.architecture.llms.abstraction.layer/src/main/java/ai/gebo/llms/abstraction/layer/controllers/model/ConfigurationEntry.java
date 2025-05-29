@@ -21,7 +21,7 @@ import ai.gebo.model.base.GObjectRef;
  * Represents a configuration entry which holds a configuration object of type T.
  * It also maintains a reference to the object using GObjectRef for reference management.
  * 
- * @param <T> the type of the configuration, which extends GBaseModelConfig
+ * T the type of the configuration, which extends GBaseModelConfig
  */
 public class ConfigurationEntry<T extends GBaseModelConfig> {
 
@@ -63,7 +63,7 @@ public class ConfigurationEntry<T extends GBaseModelConfig> {
     /**
      * Returns the object reference of the configuration.
      * 
-     * @return the object reference of type GObjectRef<T>
+     * @return the object reference of type GObjectRef of T type
      */
     public GObjectRef<T> getObjectReference() {
         return objectReference;
@@ -72,7 +72,7 @@ public class ConfigurationEntry<T extends GBaseModelConfig> {
     /**
      * Sets the object reference to the specified value.
      * 
-     * @param objectReference the new object reference of type GObjectRef<T>
+     * @param objectReference the new object reference of type GObjectRef of T type
      */
     public void setObjectReference(GObjectRef<T> objectReference) {
         this.objectReference = objectReference;

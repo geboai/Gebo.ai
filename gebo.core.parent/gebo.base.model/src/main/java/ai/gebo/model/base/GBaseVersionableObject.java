@@ -80,8 +80,8 @@ public abstract class GBaseVersionableObject extends GBaseObject {
 	 * Sets the modification date of the object.
 	 * @param modificationDate the date when the object was last modified
 	 */
-	public void setModificationDate(Date modificatoinDate) {
-		this.modificationDate = modificatoinDate;
+	public void setModificationDate(Date modificationDate) {
+		this.modificationDate = modificationDate;
 	}
 	
 }

@@ -16,11 +16,11 @@ import lombok.Data;
 
 /**
  * Represents a Confluence user in the cloud environment.
- * <p>
+ * 
  * This class holds information about a user including their type, username, and display name.
  * It uses Lombok's @Data annotation for automatic generation of boilerplate code like getters, setters, and more.
- * </p>
- * @auther AI generated comments
+ * 
+ * AI generated comments
  */
 @Data
 public class CloudConfluenceByUser {

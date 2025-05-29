@@ -20,7 +20,7 @@ import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
  * This interface extends IGImplementationsRepositoryPattern for IGEntityProcessingRunnableFactory.
  * It provides a method to retrieve a specific IGEntityProcessingRunnableFactory based on the entity type.
  *
- * @param <EntityType> the type of entity to be processed
+ * 
  */
 public interface IGEntityProcessingRunnableFactoryRepositoryPattern
         extends IGImplementationsRepositoryPattern<IGEntityProcessingRunnableFactory> {

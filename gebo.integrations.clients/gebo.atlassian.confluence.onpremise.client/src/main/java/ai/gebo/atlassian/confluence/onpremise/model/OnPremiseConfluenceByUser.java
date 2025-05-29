@@ -19,7 +19,7 @@ import lombok.Data;
  * This class holds details about the user such as their type,
  * username, and display name.
  * 
- * @Data annotation provided by Lombok to generate 
+ * Data annotation provided by Lombok to generate 
  * boilerplate code such as getters, setters, toString, etc.
  * 
  * AI generated comments

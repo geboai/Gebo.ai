@@ -218,7 +218,7 @@ public class GeboFastLLMSSetupService {
 	 * Configures LLMS based on the provided setup data.
 	 *
 	 * @param data The FastLLMSSetupData containing the configuration details.
-	 * @return OperationStatus<Boolean> indicating the result of configuration.
+	 * @return OperationStatus of Boolean indicating the result of configuration.
 	 */
 	public OperationStatus<Boolean> configureLLMS(FastLLMSSetupData data) {
 		OperationStatus<Boolean> status = OperationStatus.of(false);
