@@ -1,4 +1,0 @@
-ai.gebo.oauth2.clients.library.cryptedClientRegistrations:
-    - clientRegistrationId: google-workspace-client
-      crypted: false
-      jsonContent: '{"clientRegistration":{"registrationId": "Gebo.AiOauthOK", "clientId": "249564537215-32kd786pmkl9kp5mmq60j0sb2fvkb38p.apps.googleusercontent.com", "clientSecret": "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", "authorizationGrantType":"AUTHORIZATION_CODE", "clientAuthenticationMethod": "CLIENT_SECRET_BASIC",  "redirectUri": "http://localhost", "scopes": ["https://www.googleapis.com/auth/drive.readonly","https://www.googleapis.com/auth/drive.metadata.readonly"],  "providerDetails": { "authorizationUri": "https://accounts.google.com/o/oauth2/auth", "tokenUri": "https://oauth2.googleapis.com/token" },"clientName": "gebo-ai"}}'

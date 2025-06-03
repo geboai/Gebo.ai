@@ -30,8 +30,7 @@ public class GeboAppSecurityProperties {
     // Nested Auth class instance for authentication properties.
     private final Auth auth = new Auth();
 
-    // Nested OAuth2 class instance for OAuth2 properties.
-    private final OAuth2 oauth2 = new OAuth2();
+   
 
     /**
      * Represents configuration properties related to authentication.
@@ -78,34 +77,7 @@ public class GeboAppSecurityProperties {
         }
     }
 
-    /**
-     * Represents configuration properties related to OAuth2.
-     * Includes authorized redirect URIs settings.
-     */
-    public static final class OAuth2 {
-        private List<String> authorizedRedirectUris = new ArrayList<>();
-
-        /**
-         * Retrieves the list of authorized redirect URIs for OAuth2 authentication.
-         * 
-         * @return the list of authorized redirect URIs.
-         */
-        public List<String> getAuthorizedRedirectUris() {
-            return authorizedRedirectUris;
-        }
-
-        /**
-         * Sets the list of authorized redirect URIs for OAuth2 authentication.
-         * Allows method chaining by returning the current OAuth2 instance.
-         * 
-         * @param authorizedRedirectUris the list of authorized redirect URIs.
-         * @return the current OAuth2 instance.
-         */
-        public OAuth2 authorizedRedirectUris(List<String> authorizedRedirectUris) {
-            this.authorizedRedirectUris = authorizedRedirectUris;
-            return this;
-        }
-    }
+    
 
     /**
      * Retrieves the Auth instance for authentication configuration.
@@ -116,12 +88,5 @@ public class GeboAppSecurityProperties {
         return auth;
     }
 
-    /**
-     * Retrieves the OAuth2 instance for OAuth2 configuration.
-     * 
-     * @return the OAuth2 instance.
-     */
-    public OAuth2 getOauth2() {
-        return oauth2;
-    }
+    
 }

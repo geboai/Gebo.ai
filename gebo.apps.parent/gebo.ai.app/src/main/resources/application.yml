@@ -16,61 +16,7 @@ security.provider.1: org.bouncycastle.jce.provider.BouncyCastleProvider
 ai.gebo.multilanguage.config.classPathMode: false
 ai.gebo.multilanguage.config.folderPrefix: C:\Users\Paolo\GitHub\Gebo.ai\gebo.architecture.parent\gebo.multilanguage.support\src\main\resources\mlanguage
 ai.gebo.lucene.config.enabled: false
-spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: 249564537215-nompp2m3982tucbjs8csp7fgkljte0eq.apps.googleusercontent.com
-            clientSecret: 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
-            redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
-            scope: profile, email
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
-            authorization-grant-type: authorization_code
-            client-name: Google
-          facebook:
-            client-id: your-facebook-client-id
-            client-secret: your-facebook-client-secret
-            scope: public_profile, email
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
-            authorization-grant-type: authorization_code
-            client-name: Facebook
-          github:
-            client-id: your-github-client-id
-            client-secret: your-github-client-secret
-            scope: read:user, user:email
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
-            authorization-grant-type: authorization_code
-            client-name: GitHub
-          microsoft:
-            client-id: your-microsoft-client-id
-            client-secret: your-microsoft-client-secret
-            scope: User.Read
-            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
-            authorization-grant-type: authorization_code
-            client-name: Microsoft
-        provider:
-          google:
-            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-            token-uri: https://oauth2.googleapis.com/token
-            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
-            user-name-attribute: sub
-          facebook:
-            authorization-uri: https://www.facebook.com/v10.0/dialog/oauth
-            token-uri: https://graph.facebook.com/v10.0/oauth/access_token
-            user-info-uri: https://graph.facebook.com/me?fields=id,name,email
-            user-name-attribute: id
-          github:
-            authorization-uri: https://github.com/login/oauth/authorize
-            token-uri: https://github.com/login/oauth/access_token
-            user-info-uri: https://api.github.com/user
-            user-name-attribute: id
-          microsoft:
-            authorization-uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
-            token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
-            user-info-uri: https://graph.microsoft.com/v1.0/me
-            user-name-attribute: id
+
 ai.gebo.security:
   auth:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1

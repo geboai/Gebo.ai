@@ -1,0 +1,54 @@
+ai.gebo.oauth2.library.providers:
+  - provider: google
+    authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+    token-uri: https://oauth2.googleapis.com/token
+    user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+    user-name-attribute: sub
+
+  - provider: facebook
+    authorization-uri: https://www.facebook.com/v10.0/dialog/oauth
+    token-uri: https://graph.facebook.com/v10.0/oauth/access_token
+    user-info-uri: https://graph.facebook.com/me?fields=id,name,email
+    user-name-attribute: id
+
+  - provider: github
+    authorization-uri: https://github.com/login/oauth/authorize
+    token-uri: https://github.com/login/oauth/access_token
+    user-info-uri: https://api.github.com/user
+    user-name-attribute: id
+
+  - provider: microsoft
+    authorization-uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+    token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+    user-info-uri: https://graph.microsoft.com/v1.0/me
+    user-name-attribute: id
+
+  - provider: linkedin
+    authorization-uri: https://www.linkedin.com/oauth/v2/authorization
+    token-uri: https://www.linkedin.com/oauth/v2/accessToken
+    user-info-uri: https://api.linkedin.com/v2/me
+    user-name-attribute: id
+
+  - provider: apple
+    authorization-uri: https://appleid.apple.com/auth/authorize
+    token-uri: https://appleid.apple.com/auth/token
+    user-info-uri: https://appleid.apple.com/auth/token # Apple returns user info in ID token; no separate endpoint
+    user-name-attribute: sub
+
+  - provider: twitter
+    authorization-uri: https://twitter.com/i/oauth2/authorize
+    token-uri: https://api.twitter.com/2/oauth2/token
+    user-info-uri: https://api.twitter.com/2/users/me
+    user-name-attribute: id
+
+  - provider: amazon
+    authorization-uri: https://www.amazon.com/ap/oa
+    token-uri: https://api.amazon.com/auth/o2/token
+    user-info-uri: https://api.amazon.com/user/profile
+    user-name-attribute: user_id
+
+  - provider: slack
+    authorization-uri: https://slack.com/oauth/v2/authorize
+    token-uri: https://slack.com/api/oauth.v2.access
+    user-info-uri: https://slack.com/api/users.identity
+    user-name-attribute: user.id
