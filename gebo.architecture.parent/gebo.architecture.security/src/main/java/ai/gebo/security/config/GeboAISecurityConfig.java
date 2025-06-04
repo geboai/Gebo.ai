@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.config;
 
@@ -31,6 +28,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CorsFilter;
@@ -39,20 +40,29 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import ai.gebo.config.GeboConfig;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.TokenAuthenticationFilter;
+import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
+import ai.gebo.security.repository.Oauth2DynamicReactiveRegistrationRepository;
+import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
+import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
+import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
+import ai.gebo.security.services.impl.GReactiveOauth2AuthorizedClientService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Configuration class for setting up security in the Gebo AI application.
- * It configures authentication and authorization mechanisms. AI generated comments
+ * Configuration class for setting up security in the Gebo AI application. It
+ * configures authentication and authorization mechanisms. AI generated comments
  */
 @Configuration
 @EnableWebSecurity
 public class GeboAISecurityConfig {
+
+	private final Oauth2RuntimeConfigurationRepository oauth2RuntimeConfigurationRepository;
 	static Logger LOGGER = LoggerFactory.getLogger(GeboAISecurityConfig.class);
 
 	@Autowired
@@ -82,7 +92,8 @@ public class GeboAISecurityConfig {
 	public static final String USER_ROLE = "USER";
 
 	/**
-	 * A filter implementation to handle CORS (Cross-Origin Resource Sharing) settings.
+	 * A filter implementation to handle CORS (Cross-Origin Resource Sharing)
+	 * settings.
 	 */
 	public static class GeboAICorsFilter extends OncePerRequestFilter {
 
@@ -103,15 +114,37 @@ public class GeboAISecurityConfig {
 	}
 
 	private GeboAICorsFilter corsFilter = new GeboAICorsFilter();
+	private final IGOauth2ConfigurationService oauth2ConfigurationService;
+	private final ClientRegistrationRepository clientRegistrationRepository;
+	private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
+	private final IGeboSecretsAccessService secretsService;
+	private final OAuth2AuthorizedClientService oauth2AuthorizedClientService;
+	private final ReactiveOAuth2AuthorizedClientService reactiveOAuth2AuthorizedClientService;
 
-	// Default constructor
-	public GeboAISecurityConfig() {
-
+	/**************************************************************************************************
+	 * Building the dynamic oauth2 management in the constructor
+	 * 
+	 * @param oauth2ConfigurationService
+	 * @param oauth2RuntimeConfigurationRepository
+	 */
+	public GeboAISecurityConfig(IGOauth2ConfigurationService oauth2ConfigurationService,
+			Oauth2RuntimeConfigurationRepository oauth2RuntimeConfigurationRepository,
+			IGeboSecretsAccessService secretsService) {
+		this.oauth2ConfigurationService = oauth2ConfigurationService;
+		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
+				oauth2ConfigurationService);
+		this.clientRegistrationRepository = dynamicClient;
+		this.reactiveClientRegistrationRepository = new Oauth2DynamicReactiveRegistrationRepository(dynamicClient);
+		this.oauth2RuntimeConfigurationRepository = oauth2RuntimeConfigurationRepository;
+		this.secretsService = secretsService;
+		this.oauth2AuthorizedClientService = new GOauth2AuthorizedClientService(dynamicClient, secretsService);
+		this.reactiveOAuth2AuthorizedClientService = new GReactiveOauth2AuthorizedClientService(
+				reactiveClientRegistrationRepository, secretsService);
 	}
 
 	/**
-	 * Bean definition for GeboAICorsFilter.
-	 * This filter is responsible for handling CORS.
+	 * Bean definition for GeboAICorsFilter. This filter is responsible for handling
+	 * CORS.
 	 *
 	 * @return An instance of GeboAICorsFilter.
 	 */
@@ -192,9 +225,11 @@ public class GeboAISecurityConfig {
 	/**
 	 * Bean definition for AuthenticationManager.
 	 *
-	 * @param provider The AuthenticationProvider to be used by the AuthenticationManager.
+	 * @param provider The AuthenticationProvider to be used by the
+	 *                 AuthenticationManager.
 	 * @return An instance of AuthenticationManager.
-	 * @throws Exception If an error occurs while creating the AuthenticationManager.
+	 * @throws Exception If an error occurs while creating the
+	 *                   AuthenticationManager.
 	 */
 	@Bean
 	public AuthenticationManager authenticationManager(@Autowired AuthenticationProvider provider) throws Exception {
@@ -209,6 +244,44 @@ public class GeboAISecurityConfig {
 	}
 
 	/**
+	 * Register ReactiveClientRegistrationRepository bean
+	 * 
+	 * @return
+	 */
+	@Bean
+	public ReactiveClientRegistrationRepository reactiveClientRegistrationRepository() {
+		return this.reactiveClientRegistrationRepository;
+	}
+
+	/**
+	 * Register ClientRegistrationRepository bean
+	 * 
+	 * @return
+	 */
+	@Bean
+	public ClientRegistrationRepository clientRegistrationRepository() {
+		return this.clientRegistrationRepository;
+	}
+
+	/**
+	 * Register OAuth2AuthorizedClientService bean
+	 * 
+	 * @return
+	 */
+	@Bean
+	public OAuth2AuthorizedClientService oauth2AuthorizedClientService() {
+		return this.oauth2AuthorizedClientService;
+	}
+	/**
+	 * Register ReactiveOAuth2AuthorizedClientService bean
+	 * 
+	 * @return
+	 */
+	@Bean
+	public ReactiveOAuth2AuthorizedClientService reactiveOauth2AuthorizedClientService() {
+		return this.reactiveOAuth2AuthorizedClientService;
+	}
+	/**
 	 * Bean definition for SecurityFilterChain to configure HTTP security.
 	 *
 	 * @param http The HttpSecurity object to be configured.
@@ -222,7 +295,10 @@ public class GeboAISecurityConfig {
 				.addFilterAfter(corsFilter, CsrfFilter.class)
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
 						.anyRequest().authenticated())
-				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
+				.oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(clientRegistrationRepository)
+						.authorizedClientService(oauth2AuthorizedClientService)
+				// Optional: use a custom success handler to issue JWT
+				).exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 	}
 }
