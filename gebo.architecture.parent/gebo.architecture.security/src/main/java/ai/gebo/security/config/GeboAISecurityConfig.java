@@ -32,6 +32,10 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CorsFilter;
@@ -46,9 +50,13 @@ import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DynamicReactiveRegistrationRepository;
 import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
+import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
+import ai.gebo.security.services.impl.GOAuth2UserService;
 import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
+import ai.gebo.security.services.impl.GPasswordEncoder;
 import ai.gebo.security.services.impl.GReactiveOauth2AuthorizedClientService;
+import ai.gebo.security.services.impl.ReactiveGOAuth2UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -120,6 +128,11 @@ public class GeboAISecurityConfig {
 	private final IGeboSecretsAccessService secretsService;
 	private final OAuth2AuthorizedClientService oauth2AuthorizedClientService;
 	private final ReactiveOAuth2AuthorizedClientService reactiveOAuth2AuthorizedClientService;
+	private final OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService;
+	private final IGUsersAdminService userAdminService;
+	private final GeboAppSecurityProperties securityProperties;
+	private final ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> reactiveOAuth2UserService;
+	private final GPasswordEncoder passwordEncoder;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -129,7 +142,8 @@ public class GeboAISecurityConfig {
 	 */
 	public GeboAISecurityConfig(IGOauth2ConfigurationService oauth2ConfigurationService,
 			Oauth2RuntimeConfigurationRepository oauth2RuntimeConfigurationRepository,
-			IGeboSecretsAccessService secretsService) {
+			IGeboSecretsAccessService secretsService, IGUsersAdminService userAdminService,
+			GeboAppSecurityProperties securityProperties, GPasswordEncoder passwordEncoder) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
 				oauth2ConfigurationService);
@@ -137,9 +151,16 @@ public class GeboAISecurityConfig {
 		this.reactiveClientRegistrationRepository = new Oauth2DynamicReactiveRegistrationRepository(dynamicClient);
 		this.oauth2RuntimeConfigurationRepository = oauth2RuntimeConfigurationRepository;
 		this.secretsService = secretsService;
+		this.userAdminService = userAdminService;
+		this.securityProperties = securityProperties;
 		this.oauth2AuthorizedClientService = new GOauth2AuthorizedClientService(dynamicClient, secretsService);
 		this.reactiveOAuth2AuthorizedClientService = new GReactiveOauth2AuthorizedClientService(
 				reactiveClientRegistrationRepository, secretsService);
+		this.oauth2UserService = new GOAuth2UserService(oauth2ConfigurationService, userAdminService,
+				securityProperties);
+		this.reactiveOAuth2UserService = new ReactiveGOAuth2UserService(oauth2ConfigurationService, userAdminService,
+				securityProperties);
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	/**
@@ -156,38 +177,6 @@ public class GeboAISecurityConfig {
 	@Autowired
 	TokenAuthenticationFilter filter;
 
-	/**
-	 * Bean definition for PasswordEncoder to handle password encoding and decoding.
-	 *
-	 * @return An instance of PasswordEncoder.
-	 */
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new PasswordEncoder() {
-
-			@Override
-			public boolean matches(CharSequence rawPassword, String encodedPassword) {
-				try {
-					// Decrypt the encoded password and compare with the raw password
-					String decoded = cryptService.decrypt(encodedPassword);
-					return rawPassword.toString().equals(decoded);
-				} catch (GeboCryptSecretException e) {
-					throw new RuntimeException("Problems in the underlying crypting system", e);
-				}
-			}
-
-			@Override
-			public String encode(CharSequence rawPassword) {
-				try {
-					// Encrypt the raw password
-					return cryptService.crypt(rawPassword.toString());
-				} catch (GeboCryptSecretException e) {
-					throw new RuntimeException("Problems in the underlying crypting system", e);
-				}
-			}
-		};
-	}
-
 	@Autowired
 	UserDetailsService userDetailsService;
 
@@ -202,7 +191,7 @@ public class GeboAISecurityConfig {
 			// If LDAP is not used, configure a DaoAuthenticationProvider
 			DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 			authProvider.setUserDetailsService(userDetailsService);
-			authProvider.setPasswordEncoder(passwordEncoder());
+			authProvider.setPasswordEncoder(passwordEncoder);
 			return authProvider;
 		} else if (geboConfig.getLdapConfig() != null && geboConfig.getLdapConfig().getDomain() != null
 				&& geboConfig.getLdapConfig().getUrl() != null) {
@@ -272,6 +261,7 @@ public class GeboAISecurityConfig {
 	public OAuth2AuthorizedClientService oauth2AuthorizedClientService() {
 		return this.oauth2AuthorizedClientService;
 	}
+
 	/**
 	 * Register ReactiveOAuth2AuthorizedClientService bean
 	 * 
@@ -281,6 +271,17 @@ public class GeboAISecurityConfig {
 	public ReactiveOAuth2AuthorizedClientService reactiveOauth2AuthorizedClientService() {
 		return this.reactiveOAuth2AuthorizedClientService;
 	}
+
+	@Bean
+	public ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> reactiveOAuth2UserService() {
+		return this.reactiveOAuth2UserService;
+	}
+
+	@Bean
+	public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+		return this.oauth2UserService;
+	}
+
 	/**
 	 * Bean definition for SecurityFilterChain to configure HTTP security.
 	 *
@@ -297,6 +298,7 @@ public class GeboAISecurityConfig {
 						.anyRequest().authenticated())
 				.oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(clientRegistrationRepository)
 						.authorizedClientService(oauth2AuthorizedClientService)
+						.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
 				// Optional: use a custom success handler to issue JWT
 				).exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
