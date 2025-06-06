@@ -67,10 +67,11 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 * @throws GeboOauth2Exception If an error occurs during the storage process.
 	 */
 	@Override
-	public String storeOauth2Configuration(@NotNull AuthProvider authProvider,
+	public String insertOauth2Configuration(@NotNull AuthProvider authProvider,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod clientAuthMethod,
 			Oauth2AuthorizationGrantType authGrantType,
-			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes) throws GeboOauth2Exception {
+			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description)
+			throws GeboOauth2Exception {
 		Oauth2ProviderConfig providerConfig = providersLibraryDao.findByCode(authProvider.name());
 		if (providerConfig == null)
 			throw new GeboOauth2Exception("No provider " + authProvider + " in the static library");
@@ -106,10 +107,11 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 * @throws GeboOauth2Exception If an error occurs during the storage process.
 	 */
 	@Override
-	public String storeOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
+	public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType,
-			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes) throws GeboOauth2Exception {
+			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description)
+			throws GeboOauth2Exception {
 		AuthProvider authProvider = AuthProvider.oauth2_generic;
 		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
 		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
@@ -258,7 +260,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 				.findByConfigurationTypesContains(Oauth2ConfigurationType.AUTHENTICATION);
 		return list.stream().map(x -> {
 			Oauth2ClientAuthorizativeInfo data = new Oauth2ClientAuthorizativeInfo(x.getRegistrationId(),
-					x.getProvider().name());
+					x.getProvider().name(), x.getDescription());
 			return data;
 		}).toList();
 

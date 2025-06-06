@@ -12,8 +12,6 @@
 
 package ai.gebo.security.payload;
 
-import ai.gebo.security.controller.UserController.UserInfo;
-
 /**
  * Gebo.ai comment agent
  *

@@ -1,16 +1,17 @@
 package ai.gebo.security.services.impl;
 
+import org.springframework.security.oauth2.client.userinfo.DefaultReactiveOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
 import ai.gebo.security.config.GeboAppSecurityProperties;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGUsersAdminService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.client.userinfo.DefaultReactiveOAuth2UserService;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor

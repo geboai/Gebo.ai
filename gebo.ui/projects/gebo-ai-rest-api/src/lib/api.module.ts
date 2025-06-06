@@ -1,15 +1,3 @@
-/**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- 
- 
- 
-
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
@@ -71,6 +59,8 @@ import { LanguageResourcesControllerService } from './api/languageResourcesContr
 import { LogViewControllerService } from './api/logViewController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
+import { OAuth2LoginInitiationControllerService } from './api/oAuth2LoginInitiationController.service';
+import { OAuth2ProvidersControllerService } from './api/oAuth2ProvidersController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
@@ -150,6 +140,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     LogViewControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
+    OAuth2LoginInitiationControllerService,
+    OAuth2ProvidersControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,

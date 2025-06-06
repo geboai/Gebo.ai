@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.TokenProvider;
-import ai.gebo.security.controller.UserController.UserInfo;
 import ai.gebo.security.model.User;
 import ai.gebo.security.payload.AuthResponse;
 import ai.gebo.security.payload.LoginRequest;
+import ai.gebo.security.payload.UserInfo;
 import ai.gebo.security.repository.UserRepository;
 import jakarta.validation.Valid;
 

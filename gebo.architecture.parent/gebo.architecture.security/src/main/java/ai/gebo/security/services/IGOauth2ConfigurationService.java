@@ -27,20 +27,21 @@ import jakarta.validation.constraints.NotNull;
  * AI generated comments
  */
 public interface IGOauth2ConfigurationService {
-
+ 
     /**
      * Store OAuth2 configuration with default authentication method and grant type.
      *
      * @param authProvider          the authentication provider
      * @param oauth2ClientContent   the OAuth2 client content
      * @param configurationTypes    the list of configuration types
+     * @param description TODO
      * @return                      the ID of the stored configuration
      * @throws GeboOauth2Exception  if storage fails
      */
-    public default String storeOauth2Configuration(@NotNull AuthProvider authProvider,
+    public default String insertOauth2Configuration(@NotNull AuthProvider authProvider,
             @NotNull @Valid GeboOauth2SecretContent oauth2ClientContent,
-            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes) throws GeboOauth2Exception {
-        return storeOauth2Configuration(authProvider, oauth2ClientContent, null, null, configurationTypes);
+            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception {
+        return insertOauth2Configuration(authProvider, oauth2ClientContent, null, null, configurationTypes, description);
     }
 
     /**
@@ -50,13 +51,14 @@ public interface IGOauth2ConfigurationService {
      * @param providerConfiguration the provider configuration
      * @param oauth2ClientContent   the OAuth2 client content
      * @param configurationTypes    the list of configuration types
+     * @param description TODO
      * @return                      the ID of the stored configuration
      * @throws GeboOauth2Exception  if storage fails
      */
-    public default String storeOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
+    public default String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
             @NotNull @Valid GeboOauth2SecretContent oauth2ClientContent,
-            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes) throws GeboOauth2Exception {
-        return storeOauth2Configuration(providerConfiguration, oauth2ClientContent, null, null, configurationTypes);
+            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception {
+        return insertOauth2Configuration(providerConfiguration, oauth2ClientContent, null, null, configurationTypes, description);
     }
 
     /**
@@ -67,13 +69,14 @@ public interface IGOauth2ConfigurationService {
      * @param clientAuthMethod      the client authentication method
      * @param authGrantType         the authorization grant type
      * @param configurationTypes    the list of configuration types
+     * @param description TODO
      * @return                      the ID of the stored configuration
      * @throws GeboOauth2Exception  if storage fails
      */
-    public String storeOauth2Configuration(@NotNull AuthProvider authProvider,
+    public String insertOauth2Configuration(@NotNull AuthProvider authProvider,
             @NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod clientAuthMethod,
             Oauth2AuthorizationGrantType authGrantType,
-            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes) throws GeboOauth2Exception;
+            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception;
 
     /**
      * Store OAuth2 configuration with specified parameters, using a specific 
@@ -84,13 +87,14 @@ public interface IGOauth2ConfigurationService {
      * @param authClientMethod      the client authentication method
      * @param authGrantType         the authorization grant type
      * @param configurationTypes    the list of configuration types
+     * @param description TODO
      * @return                      the ID of the stored configuration
      * @throws GeboOauth2Exception  if storage fails
      */
-    public String storeOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
+    public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
             @NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
             Oauth2AuthorizationGrantType authGrantType,
-            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes) throws GeboOauth2Exception;
+            @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception;
 
     /**
      * Delete the OAuth2 configuration by its ID.

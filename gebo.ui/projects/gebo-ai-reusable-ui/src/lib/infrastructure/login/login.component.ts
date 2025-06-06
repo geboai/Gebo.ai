@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -23,14 +23,15 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboFastInstallationSetupControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
-    selector: "gebo-ai-login-component", templateUrl: "login.component.html",
-    standalone: false
+  selector: "gebo-ai-login-component", templateUrl: "login.component.html",
+  standalone: false
 })
 export class LoginComponent implements OnInit {
+
   /**
    * Form group containing login credentials input controls
    */
@@ -38,22 +39,23 @@ export class LoginComponent implements OnInit {
     username: new FormControl(),
     password: new FormControl()
   });
-  
+
   /**
    * Flag indicating whether a login request is in progress
    */
   loading: boolean = false;
-  
+
   /**
    * Stores user profile information after successful authentication
    */
   profile?: any;
-  
+
   /**
    * Collection of toast messages to display to the user
    */
   userMessages: ToastMessageOptions[] = [{ summary: "Welcome to gebo.ai", detail: "Enter your username and password to login", severity: "success" }];
-  
+  providers: Oauth2ClientAuthorizativeInfo[] = [];
+
   /**
    * Component constructor initializing necessary services for authentication and navigation
    * 
@@ -62,7 +64,11 @@ export class LoginComponent implements OnInit {
    * @param router Angular router for navigation
    * @param activatedRoute Current activated route
    */
-  public constructor(public loginService: LoginService, private geboFastSetupControllerService: GeboFastInstallationSetupControllerService, private router: Router, private activatedRoute: ActivatedRoute) {
+  public constructor(public loginService: LoginService,
+    private geboFastSetupControllerService: GeboFastInstallationSetupControllerService,
+    private oauth2ProvidersService: OAuth2ProvidersControllerService,
+    private oauth2AuthenticationService: OAuth2LoginInitiationControllerService,
+    private router: Router, private activatedRoute: ActivatedRoute) {
 
   }
 
@@ -74,18 +80,29 @@ export class LoginComponent implements OnInit {
     this.geboFastSetupControllerService.getInstallationStatus().subscribe(status => {
       if (status.result === false) {
         this.router.navigate(["..", "setup"], { relativeTo: this.activatedRoute });
+      } else {
+        this.loading = true;
+        this.oauth2ProvidersService.listAvailableProviders().subscribe({
+          next: (providers) => {
+            this.providers = providers;
+          },
+          complete: () => {
+            this.loading = false;
+          }
+        });
       }
     });
   }
-  
+
   /**
    * Lifecycle hook that runs when the component initializes
    * Checks if the system is properly set up before allowing login
    */
   ngOnInit(): void {
     this.checkSystemSetup();
+
   }
-  
+
   /**
    * Handles user login form submission
    * Attempts to authenticate the user with provided credentials
@@ -99,5 +116,19 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["..", "reloader"], { relativeTo: this.activatedRoute, state: { forceReload: true } });
       }
     });
+  }
+  public onOauth2Click(clicked: Oauth2ClientAuthorizativeInfo) {
+      if (clicked.registrationId) {
+        this.loading=true;
+        this.oauth2AuthenticationService.startOauthLogin(clicked.registrationId).subscribe({
+          next:(oauth2Info)=>{
+            console.log(oauth2Info);
+            document.location=oauth2Info.loginRelativeUrl;
+          },
+          complete:()=>{
+            this.loading=false;
+          }
+        });
+      }
   }
 }
