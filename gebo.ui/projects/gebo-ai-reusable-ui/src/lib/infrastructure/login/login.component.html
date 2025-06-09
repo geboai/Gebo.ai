@@ -46,7 +46,7 @@
             <p-fieldset legend="Login using">
                 <ul>
                     <li *ngFor="let provider of providers" >
-                        <a href="#" (click)="onOauth2Click(provider)"><i [className]="provider.providerName"></i></a>
+                        <a href="#" (click)="onOauth2Click(provider)"><i [className]="'pi pi-'+provider.providerName" [title]="provider.description"></i></a>
                     </li>
                 </ul>
             </p-fieldset>

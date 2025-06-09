@@ -36,9 +36,11 @@ public enum AuthProvider {
 	// Authentication using Amazon account
 	amazon(AuthProviderType.OAUTH2, "Amazon auth provider"),
 	// Authentication using Twitter account
-	twitter(AuthProviderType.OAUTH2, "Amazon auth provider"),
+	twitter(AuthProviderType.OAUTH2, "Twitter auth provider"),
 	// Authentication using Slack account
-	slack(AuthProviderType.OAUTH2, "Amazon auth provider"),
+	slack(AuthProviderType.OAUTH2, "Slack auth provider"),
+	// Authentication using X account
+	x(AuthProviderType.OAUTH2, "X auth provider"),
 	// Authentication using Apple account
 	apple(AuthProviderType.OAUTH2, "Apple auth provider"),
 	// generic oauth2
