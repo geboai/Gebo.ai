@@ -10,18 +10,12 @@
  * Do not edit the class manually.
  */
 
-export interface User { 
-    name?: string;
-    sourname?: string;
-    username?: string;
-    imageUrl?: string;
-    emailVerified?: boolean;
-    disabled?: boolean;
-    provider: User.ProviderEnum;
-    providerId?: string;
-    roles?: Array<string>;
+export interface AuthProviderDto { 
+    provider?: AuthProviderDto.ProviderEnum;
+    type?: AuthProviderDto.TypeEnum;
+    description?: string;
 }
-export namespace User {
+export namespace AuthProviderDto {
     export type ProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
     export const ProviderEnum = {
         Local: 'local' as ProviderEnum,
@@ -36,5 +30,11 @@ export namespace User {
         Apple: 'apple' as ProviderEnum,
         Oauth2Generic: 'oauth2_generic' as ProviderEnum,
         Ldap: 'ldap' as ProviderEnum
+    };
+    export type TypeEnum = 'LOCAL_JWT' | 'OAUTH2' | 'LDAP';
+    export const TypeEnum = {
+        LOCALJWT: 'LOCAL_JWT' as TypeEnum,
+        OAUTH2: 'OAUTH2' as TypeEnum,
+        LDAP: 'LDAP' as TypeEnum
     };
 }

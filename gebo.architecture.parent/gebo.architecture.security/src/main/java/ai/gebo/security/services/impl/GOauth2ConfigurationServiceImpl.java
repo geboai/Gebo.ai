@@ -266,4 +266,12 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 
 	}
 
+	@Override
+	public void updateOauth2Configuration(String registrationId, List<String> scopes,
+			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
+			List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

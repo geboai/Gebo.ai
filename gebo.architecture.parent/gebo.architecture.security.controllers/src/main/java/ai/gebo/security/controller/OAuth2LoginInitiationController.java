@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import ai.gebo.security.model.UserInfo;
 import ai.gebo.security.model.oauth2.Oauth2InitializationInfo;
-import ai.gebo.security.payload.UserInfo;
 import ai.gebo.security.repository.Oauth2InitializationInfoRepository;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGOauth2InitializationService;

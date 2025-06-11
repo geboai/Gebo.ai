@@ -10,18 +10,14 @@
  * Do not edit the class manually.
  */
 
-export interface User { 
-    name?: string;
-    sourname?: string;
-    username?: string;
-    imageUrl?: string;
-    emailVerified?: boolean;
-    disabled?: boolean;
-    provider: User.ProviderEnum;
-    providerId?: string;
-    roles?: Array<string>;
+export interface Oauth2ProviderConfig { 
+    provider: Oauth2ProviderConfig.ProviderEnum;
+    authorizationUri: string;
+    tokenUri: string;
+    userInfoUri: string;
+    userNameAttribute: string;
 }
-export namespace User {
+export namespace Oauth2ProviderConfig {
     export type ProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
     export const ProviderEnum = {
         Local: 'local' as ProviderEnum,

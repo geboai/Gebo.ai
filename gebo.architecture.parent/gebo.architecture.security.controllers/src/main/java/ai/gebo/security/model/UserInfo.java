@@ -1,4 +1,4 @@
-package ai.gebo.security.payload;
+package ai.gebo.security.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -35,12 +35,6 @@ ai.gebo.oauth2.library.providers:
     user-info-uri: https://appleid.apple.com/auth/token # Apple returns user info in ID token; no separate endpoint
     user-name-attribute: sub
 
-  - provider: twitter
-    authorization-uri: https://twitter.com/i/oauth2/authorize
-    token-uri: https://api.twitter.com/2/oauth2/token
-    user-info-uri: https://api.twitter.com/2/users/me
-    user-name-attribute: id
-
   - provider: amazon
     authorization-uri: https://www.amazon.com/ap/oa
     token-uri: https://api.amazon.com/auth/o2/token

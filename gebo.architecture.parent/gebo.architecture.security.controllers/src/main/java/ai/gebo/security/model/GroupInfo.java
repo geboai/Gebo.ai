@@ -1,4 +1,4 @@
-package ai.gebo.security.payload;
+package ai.gebo.security.model;
 
 import ai.gebo.security.model.UsersGroup;
 import jakarta.validation.constraints.NotNull;

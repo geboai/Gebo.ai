@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.security.payload;
+package ai.gebo.security.model;
 
 /**
  * Gebo.ai comment agent
