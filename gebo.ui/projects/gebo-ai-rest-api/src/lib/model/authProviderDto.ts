@@ -11,9 +11,9 @@
  */
 
 export interface AuthProviderDto { 
-    provider?: AuthProviderDto.ProviderEnum;
-    type?: AuthProviderDto.TypeEnum;
-    description?: string;
+    provider: AuthProviderDto.ProviderEnum;
+    type: AuthProviderDto.TypeEnum;
+    description: string;
 }
 export namespace AuthProviderDto {
     export type ProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';

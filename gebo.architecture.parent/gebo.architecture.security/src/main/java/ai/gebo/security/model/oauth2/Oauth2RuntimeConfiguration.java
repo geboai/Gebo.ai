@@ -20,8 +20,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * AI generated comments
- * Represents an OAuth2 Runtime Configuration.
+ * AI generated comments Represents an OAuth2 Runtime Configuration.
  */
 @Document
 @Data
@@ -32,32 +31,31 @@ public class Oauth2RuntimeConfiguration {
 	 * The unique identifier of the configuration.
 	 */
 	private String registrationId = null;
-	
+
 	/**
 	 * The description of the configuration.
 	 */
 	@NotNull
 	private String description = null;
-	
+
 	/**
 	 * The authentication provider.
 	 */
 	@NotNull
 	@HashIndexed
 	private AuthProvider provider = null;
-	
+
 	/**
-	 * The provider configuration.
-	 * Used only if provider is OAUTH2_GENERIC.
+	 * The provider configuration. Used only if provider is OAUTH2_GENERIC.
 	 */
 	private Oauth2ProviderConfig providerConfig = null;
-	
+
 	/**
 	 * The client secret ID.
 	 */
 	@NotNull
 	private String clientSecretId = null;
-	
+
 	/**
 	 * The list of configuration types.
 	 */
@@ -75,4 +73,7 @@ public class Oauth2RuntimeConfiguration {
 	 * The OAuth2 authorization grant type.
 	 */
 	private Oauth2AuthorizationGrantType authGrantType = null;
+
+	private Boolean readOnly = null;
+
 }

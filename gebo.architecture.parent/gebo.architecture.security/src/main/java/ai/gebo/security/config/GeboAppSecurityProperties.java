@@ -9,10 +9,14 @@
 
 package ai.gebo.security.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.security.model.GeboLoginPolicy;
+import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -28,6 +32,7 @@ public class GeboAppSecurityProperties {
 	private final Auth auth = new Auth();
 	@NotNull
 	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_REGISTERED_USER;
+	private List<Oauth2RuntimeConfiguration> oauth2configs=new ArrayList<Oauth2RuntimeConfiguration>();
 
 	/**
 	 * Represents configuration properties related to authentication. Includes token
@@ -89,6 +94,14 @@ public class GeboAppSecurityProperties {
 
 	public void setLoginPolicy(GeboLoginPolicy loginPolicy) {
 		this.loginPolicy = loginPolicy;
+	}
+
+	public List<Oauth2RuntimeConfiguration> getOauth2configs() {
+		return oauth2configs;
+	}
+
+	public void setOauth2configs(List<Oauth2RuntimeConfiguration> oauth2configs) {
+		this.oauth2configs = oauth2configs;
 	}
 
 }

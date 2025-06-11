@@ -20,7 +20,10 @@
                 <td>{{ item.registrationId }}</td>
                 <td>{{ item.providerName }}</td>
                 <td>{{ item.description }}</td>
-                <td></td>
+                <td>
+                    <p-button [outlined]="true" label="Modify" [disabled]="item.readOnly===true"
+                        (onClick)="editOauth2(item)" icon="pi pi-pen-to-square"></p-button>
+                </td>
             </tr>
         </ng-template>
     </p-table>

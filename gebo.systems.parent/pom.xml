@@ -31,5 +31,6 @@
 
 
 		<module>gebo.atlassian.jira.handler</module>
+		<module>gebo.integration.content.handler</module>
 	</modules>
 </project>

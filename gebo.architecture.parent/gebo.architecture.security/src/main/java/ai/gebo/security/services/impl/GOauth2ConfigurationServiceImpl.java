@@ -21,6 +21,7 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.secrets.services.IGeboSecretsAccessService.SecretInfo;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2AuthorizationGrantType;
@@ -33,6 +34,7 @@ import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2ProvidersLibraryDao;
+import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -44,7 +46,8 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	@Autowired
 	IGeboSecretsAccessService secretService;
 	@Autowired
-	Oauth2RuntimeConfigurationRepository repository;
+	IGOauth2RuntimeConfigurationDao repository;
+
 	@Autowired
 	IGOauth2ProvidersLibraryDao providersLibraryDao;
 
@@ -142,16 +145,18 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 */
 	@Override
 	public void deleteOauth2Configuration(String id) throws GeboOauth2Exception {
-		Optional<Oauth2RuntimeConfiguration> data = repository.findById(id);
-		if (data.isPresent()) {
+		Oauth2RuntimeConfiguration data = repository.findByCode(id);
+		if (data != null) {
+			if (data.getReadOnly() != null && data.getReadOnly())
+				throw new GeboOauth2Exception("Trying to delete a readOnly oauth2 configuration " + id);
 			try {
 				// Attempt to delete the associated secret
-				secretService.deleteSecret(data.get().getClientSecretId());
+				secretService.deleteSecret(data.getClientSecretId());
 			} catch (GeboCryptSecretException e) {
 				// Handle any exceptions raised during the deletion of secrets
 				throw new GeboOauth2Exception("Secret layer raising an error in deletion", e);
 			}
-			repository.delete(data.get());
+			repository.delete(data);
 		}
 	}
 
@@ -164,10 +169,10 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 */
 	@Override
 	public Oauth2ClientRegistration findOauth2ClientRegistrationByRegistrationId(String id) throws GeboOauth2Exception {
-		Optional<Oauth2RuntimeConfiguration> data = repository.findById(id);
-		if (data.isEmpty())
+		Oauth2RuntimeConfiguration data = repository.findByCode(id);
+		if (data == null)
 			return null;
-		Oauth2RuntimeConfiguration config = data.get();
+		Oauth2RuntimeConfiguration config = data;
 
 		return complete(config);
 	}
@@ -260,7 +265,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 				.findByConfigurationTypesContains(Oauth2ConfigurationType.AUTHENTICATION);
 		return list.stream().map(x -> {
 			Oauth2ClientAuthorizativeInfo data = new Oauth2ClientAuthorizativeInfo(x.getRegistrationId(),
-					x.getProvider().name(), x.getDescription());
+					x.getProvider().name(), x.getDescription(), x.getReadOnly() != null && x.getReadOnly());
 			return data;
 		}).toList();
 
@@ -270,8 +275,29 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	public void updateOauth2Configuration(String registrationId, List<String> scopes,
 			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
 			List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception {
-		// TODO Auto-generated method stub
-		
+		Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
+		if (data == null)
+			throw new GeboOauth2Exception("Unkown registrationid:" + registrationId);
+		if (data != null && data.getReadOnly() != null && data.getReadOnly()) {
+			throw new GeboOauth2Exception("registrationid:" + registrationId + " is not modifiable");
+		}
+
+		data.setDescription(description);
+		data.setConfigurationTypes(configurationTypes);
+		data.setClientAuthMethod(authClientMethod);
+		data.setAuthGrantType(authGrantType);
+		repository.save(data);
+		try {
+			AbstractGeboSecretContent dataSecret = secretService.getSecretContentById(data.getClientSecretId());
+			SecretInfo info = secretService.getSecretInfoById(data.getClientSecretId());
+			if (dataSecret instanceof GeboOauth2SecretContent secret) {
+				secret.setScopes(scopes);
+				secretService.updateSecret(secret, info.getDescription(), registrationId, info.getCode());
+			}
+		} catch (GeboCryptSecretException e) {
+			throw new GeboOauth2Exception("Cannot modify secret on registrationId:" + registrationId, e);
+		}
+
 	}
 
 }
