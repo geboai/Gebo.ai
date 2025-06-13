@@ -14,6 +14,7 @@ import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.integration.content.handler.GIntegrationContentSystem;
 import ai.gebo.integration.content.handler.GIntegrationProjectEndpoint;
+import ai.gebo.integration.content.handler.IGIntegrationSystemContentHandler;
 import ai.gebo.integration.content.handler.repositories.IntegrationProjectEndpointRepository;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knlowledgebase.model.systems.GBuildSystem;
@@ -27,7 +28,7 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
 
 @Service
 public class GIntegrationSystemContentHandlerImpl
-		extends GAbstractContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint> {
+		extends GAbstractContentManagementSystemHandler<GIntegrationContentSystem, GIntegrationProjectEndpoint> implements IGIntegrationSystemContentHandler {
 	public final static GContentManagementSystemType type = new GContentManagementSystemType();
 	static final GIntegrationContentSystem system = new GIntegrationContentSystem();
 	static {
@@ -85,8 +86,7 @@ public class GIntegrationSystemContentHandlerImpl
 	protected void consumeImplementation(GIntegrationContentSystem contentManagementConfig,
 			List<GBuildSystem> buildSystems, GIntegrationProjectEndpoint endpoint, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
-			throws GeboContentHandlerSystemException {
-		
+			throws GeboContentHandlerSystemException {		
 
 	}
 

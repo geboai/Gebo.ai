@@ -5,5 +5,9 @@ import ai.gebo.knowledgebase.repositories.IGBaseMongoDBProjectEndpointRepository
 
 public interface IntegrationProjectEndpointRepository
 		extends IGBaseMongoDBProjectEndpointRepository<GIntegrationProjectEndpoint> {
+	@Override
+	default Class<GIntegrationProjectEndpoint> getManagedType() {
 
+		return GIntegrationProjectEndpoint.class;
+	}
 }

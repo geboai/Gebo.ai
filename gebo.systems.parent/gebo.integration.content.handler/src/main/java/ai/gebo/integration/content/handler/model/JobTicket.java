@@ -5,6 +5,12 @@ import lombok.Data;
 
 @Data
 public class JobTicket {
+	public static enum JobTicketType {
+		CONTENT, JOB
+	}
+
+	@NotNull
+	JobTicketType ticketType = null;
 	@NotNull
 	String ticketId = null;
 	@NotNull
