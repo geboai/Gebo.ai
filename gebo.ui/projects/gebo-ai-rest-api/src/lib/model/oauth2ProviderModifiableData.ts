@@ -12,6 +12,7 @@
 
 export interface Oauth2ProviderModifiableData { 
     registrationId: string;
+    authProvider: Oauth2ProviderModifiableData.AuthProviderEnum;
     authClientMethod?: Oauth2ProviderModifiableData.AuthClientMethodEnum;
     authGrantType?: Oauth2ProviderModifiableData.AuthGrantTypeEnum;
     description?: string;
@@ -19,6 +20,21 @@ export interface Oauth2ProviderModifiableData {
     scopes?: Array<string>;
 }
 export namespace Oauth2ProviderModifiableData {
+    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
+    export const AuthProviderEnum = {
+        Local: 'local' as AuthProviderEnum,
+        Facebook: 'facebook' as AuthProviderEnum,
+        Google: 'google' as AuthProviderEnum,
+        Github: 'github' as AuthProviderEnum,
+        Microsoft: 'microsoft' as AuthProviderEnum,
+        Linkedin: 'linkedin' as AuthProviderEnum,
+        Amazon: 'amazon' as AuthProviderEnum,
+        Slack: 'slack' as AuthProviderEnum,
+        X: 'x' as AuthProviderEnum,
+        Apple: 'apple' as AuthProviderEnum,
+        Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
+        Ldap: 'ldap' as AuthProviderEnum
+    };
     export type AuthClientMethodEnum = 'CLIENT_SECRET_BASIC' | 'CLIENT_SECRET_POST' | 'CLIENT_SECRET_JWT' | 'PRIVATE_KEY_JWT' | 'NONE' | 'TLS_CLIENT_AUTH' | 'SELF_SIGNED_TLS_CLIENT_AUTH';
     export const AuthClientMethodEnum = {
         CLIENTSECRETBASIC: 'CLIENT_SECRET_BASIC' as AuthClientMethodEnum,

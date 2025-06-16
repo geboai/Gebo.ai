@@ -3,7 +3,7 @@
   "version": "0.9.9.7-SNAPSHOT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy-dev.conf.json",
+    "start": "ng serve --no-hmr",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "build-prod": "ng build  --configuration production  --base-href / --aot  --output-hashing=all --delete-output-path ",

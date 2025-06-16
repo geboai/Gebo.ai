@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageGChatProfileConfiguration { 
     totalPages?: number;
     totalElements?: number;
+    first?: boolean;
+    last?: boolean;
     size?: number;
     content?: Array<GChatProfileConfiguration>;
     number?: number;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     empty?: boolean;
 }

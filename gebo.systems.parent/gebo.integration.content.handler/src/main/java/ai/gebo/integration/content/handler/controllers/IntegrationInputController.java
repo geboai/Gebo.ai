@@ -34,30 +34,30 @@ public class IntegrationInputController {
 
 	}
 
-	@PostMapping(value = "spoolDocument/{endpointCode}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public JobTicket spoolDocument(@NotNull @Valid @PathParam("endpointCode") String endpointCode,
+	@PostMapping(value = "spoolDocument", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public JobTicket spoolDocument(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
 			@NotNull @Valid @RequestParam("relativePath") String relativePath,
 			@NotNull @Valid @RequestBody IntegrationDocumentEnvelop envelop) throws GeboContentHandlerSystemException {
 
 		return this.integrationService.spoolDocument(endpointCode, relativePath, envelop);
 	}
 
-	@PutMapping(value = "spoolDocument/{endpointCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public JobTicket spoolDocument(@NotNull @Valid @PathParam("endpointCode") String endpointCode,
+	@PutMapping(value = "spoolDocument", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public JobTicket spoolDocument(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
 			@NotNull @Valid @RequestParam("relativePath") String relativePath,
 			@NotNull @Valid @RequestParam("file") MultipartFile file) throws GeboContentHandlerSystemException {
 
 		return this.integrationService.spoolDocument(endpointCode, relativePath, file);
 	}
 
-	@PutMapping(value = "publishContents/{endpointCode}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public JobTicket publishContents(@NotNull @Valid @PathParam("endpointCode") String endpointCode,
+	@PutMapping(value = "publishContents", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public JobTicket publishContents(@NotNull @Valid @RequestParam("endpointCode") String endpointCode,
 			@NotNull @Valid @RequestBody List<JobTicket> ingestTickets) {
 		return this.integrationService.publishContents(endpointCode, ingestTickets);
 	}
 
-	@GetMapping(value = "publishSync/{endpointCode}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public JobTicket publishSync(@NotNull @Valid @PathParam("endpointCode") String endpointCode) {
+	@GetMapping(value = "publishSync", produces = MediaType.APPLICATION_JSON_VALUE)
+	public JobTicket publishSync(@NotNull @Valid @RequestParam("endpointCode") String endpointCode) {
 		return this.integrationService.publishSync(endpointCode);
 	}
 

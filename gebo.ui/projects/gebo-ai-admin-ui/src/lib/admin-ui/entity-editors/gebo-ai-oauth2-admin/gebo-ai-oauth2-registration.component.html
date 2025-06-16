@@ -1,5 +1,6 @@
 <p-panel header="Insert new OAUTH2 Authentication/Integration infos" *ngIf="mode==='NEW'" [formGroup]="formGroup">
-    <div class="grid">
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class="grid geboDialogContent">
         <div class="col-6">
             <div class="flex flex-column gap-2 ">
                 <label for="authProvider">Provider</label>
@@ -107,7 +108,7 @@
                             </small>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12" *ngIf="oauth2ChoosableScopes && oauth2ChoosableScopes.length">
                         <div class="flex flex-column gap-2">
                             <label for="scopes">Oauth2 scopes</label>
                             <p-multiselect [options]="oauth2ChoosableScopes" formControlName="scopes"
@@ -123,7 +124,165 @@
             </p-fieldset>
         </div>
     </div>
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false"></p-button>
+            </div>
+
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    [disabled]="true" />
+            </div>
+
+        </div>
+    </div>
 </p-panel>
 <p-panel header="Modify OAUTH2 Authentication/Integration infos" *ngIf="mode==='EDIT'">
-    <div class="grid"></div>
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class="grid geboDialogContent">
+        <div class="col-6">
+            <div class="flex flex-column gap-2 ">
+                <label for="authProvider">Provider</label>
+                <input pInputText formControlName="authProvider" placeholder="Select a OAUTH2 provider" readonly="true"
+                    aria-describedby="authProvider-help">
+
+                <small id="authProvider-help">
+                    Enter the provider of OAUTH2 Authentication
+                </small>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="flex flex-column gap-2">
+                <label for="description">Description</label>
+                <input pInputText id="description" formControlName="description" maxlength="120" [readonly]="readonly"
+                    aria-describedby="description-help" />
+                <small id="description-help">
+                    Enter the description of OAUTH2 Authentication/Integration infos.
+                </small>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="flex flex-column gap-2">
+                <label for="configurationTypes">Use this configuration purpose</label>
+                <p-multiselect [options]="configurationTypesData" formControlName="configurationTypes"
+                    optionLabel="description" optionValue="code" placeholder="Select configuration purpose"
+                    styleClass="w-full md:w-80" aria-describedby="configurationTypes-help" [readonly]="readonly" />
+                <small id="configurationTypes-help">
+                    You must choose at least an use that this configuration will be used for, this can be to let users
+                    Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.
+                </small>
+            </div>
+        </div>
+        <div class="col-12" *ngIf="currentProvider==='oauth2_generic'" formGroupName="providerConfiguration">
+            <p-fieldset legend="OAUTH2 provider URLS">
+                <div class="grid">
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="authorizationUri">Authorization URL</label>
+                            <input pInputText id="authorizationUri" formControlName="authorizationUri"
+                                aria-describedby="authorizationUri-help" />
+                            <small id="authorizationUri-help">
+                                Enter the OAUTH2 Authorization URL of the provider
+                            </small>
+                        </div>
+
+                    </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="tokenUri">Token URL</label>
+                            <input pInputText id="tokenUri" formControlName="tokenUri"
+                                aria-describedby="tokenUri-help" />
+                            <small id="tokenUri-help">
+                                Enter the OAUTH2 Token URL of the provider
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="userInfoUri">User info URL</label>
+                            <input pInputText id="userInfoUri" formControlName="userInfoUri"
+                                aria-describedby="userInfoUri-help" />
+                            <small id="userInfoUri-help">
+                                Enter the OAUTH2 User info Url URL of the provider
+                            </small>
+                        </div>
+                    </div>
+                    <!-- userNameAttribute !?-->
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="col-12" formGroupName="oauth2ClientContent">
+            <p-fieldset legend="OAUTH2 client registration">
+
+                <div class="grid">
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="tenantId">Tenant ID</label>
+                            <input pInputText id="tenantId" formControlName="tenantId"
+                                aria-describedby="tenantId-help" [readonly]="true" />
+                            <small id="tenantId-help">
+                                Enter the OAUTH2 client registration Tenant Id
+                            </small>
+                        </div>
+
+                    </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="clientId">Client ID</label>
+                            <input pInputText id="clientId" formControlName="clientId"
+                                aria-describedby="clientId-help" [readonly]="true" />
+                            <small id="clientId-help">
+                                Enter the OAUTH2 client Id
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="secret">Secret client key</label>
+                            <textarea rows="5" cols="120" pTextarea id="secret" formControlName="secret"
+                                aria-describedby="secret-help" [readonly]="true">  </textarea>
+                            <small id="secret-help">
+                                Client secret for the oauth2 protocol (to be retrieved in the oauth2 authenticated 3rd
+                                party software admin area)
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-12" *ngIf="oauth2ChoosableScopes && oauth2ChoosableScopes.length">
+                        <div class="flex flex-column gap-2">
+                            <label for="scopes">Oauth2 scopes</label>
+                            <p-multiselect [options]="oauth2ChoosableScopes" formControlName="scopes"
+                                optionLabel="description" optionValue="code" placeholder="Select Oauth2 scopes"
+                                styleClass="w-full md:w-80" />
+                            <small id="scopes-help">
+                                Scopes for the oauth2 registered client
+                            </small>
+                        </div>
+                    </div>
+                    <!-- userNameAttribute !?-->
+                </div>
+            </p-fieldset>
+        </div>
+    </div>
+    <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || readonly===true"></p-button>
+            </div>
+
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    [disabled]="canDelete===true && readonly!==true" />
+            </div>
+
+        </div>
+    </div>
 </p-panel>

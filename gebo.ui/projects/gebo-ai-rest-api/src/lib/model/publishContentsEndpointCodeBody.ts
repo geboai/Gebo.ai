@@ -9,11 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { JobTicket } from './jobTicket';
 
-export interface UserInfos { 
-    name?: string;
-    sourname?: string;
-    disabled?: boolean;
-    roles?: Array<string>;
-    username?: string;
+export interface PublishContentsEndpointCodeBody { 
+    endpointCode?: string;
+    ingestTickets?: Array<JobTicket>;
 }

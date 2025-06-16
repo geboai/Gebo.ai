@@ -10,10 +10,15 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    sourname?: string;
-    disabled?: boolean;
-    roles?: Array<string>;
-    username?: string;
+export interface JobTicket { 
+    ticketType: JobTicket.TicketTypeEnum;
+    ticketId: string;
+    contentCode: string;
+}
+export namespace JobTicket {
+    export type TicketTypeEnum = 'CONTENT' | 'JOB';
+    export const TicketTypeEnum = {
+        CONTENT: 'CONTENT' as TicketTypeEnum,
+        JOB: 'JOB' as TicketTypeEnum
+    };
 }

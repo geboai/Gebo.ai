@@ -33,7 +33,8 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         authClientMethod: new FormControl(),
         authGrantType: new FormControl(),
         configurationTypes: new FormControl(),
-        description: new FormControl()
+        description: new FormControl(),
+        readOnly: new FormControl()
     });
     public currentProvider?: AuthProviderDto.ProviderEnum;
     @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
@@ -45,6 +46,7 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
     public authClientMethodData: { code: Oauth2ProviderRegistrationInsertData.AuthClientMethodEnum, description: string }[] = [];
     public authGrantTypeData: { code: Oauth2ProviderRegistrationInsertData.AuthGrantTypeEnum, description: string }[] = [];
     public configurationTypesData: { code: Oauth2ProviderRegistrationInsertData.ConfigurationTypesEnum, description: string }[] = [{ code: "AUTHENTICATION", description: "Authentication" }, { code: "INTEGRATION", description: "Integration client" }];
+    public readonly: boolean = false;
     // 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'twitter' | 'slack' | 'x' | 'apple' | 'oauth2_generic' 
 
     public constructor(injector: Injector,
@@ -55,14 +57,25 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         private oauth2ControllerService: OAuth2AdminControllerService) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.valueChanges.subscribe((value: ExtendedOauth2ProviderRegistrationInsertData) => {
+            this.readonly = (value as any)["readOnly"] === true;
             if (this.currentProvider !== value.authProvider) {
                 this.currentProvider = value.authProvider;
                 this.modifyValidation(value, this.mode);
 
+
             }
         });
     }
+    protected override onNewData(actualValue: ExtendedOauth2ProviderRegistrationInsertData): void {
+        this.userMessages = [{
+            summary: "Security warning",
+            detail: "Oauth2 client registration data will be not readable using the application after insertion for security reason, you can only delete them in the future",
+            severity: "warning"
+        }];
+    }
+    protected override onLoadedPersistentData(actualValue: ExtendedOauth2ProviderRegistrationInsertData): void {
 
+    }
     private modifyValidation(value: ExtendedOauth2ProviderRegistrationInsertData, mode: "NEW" | "EDIT" | "EDIT_OR_NEW") {
         if (mode === "NEW") {
             if ((value.authProvider === 'oauth2_generic')) {
@@ -122,9 +135,32 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
 }
 
 function convertReadable(value: Oauth2ProviderModifiableData): ExtendedOauth2ProviderRegistrationInsertData {
-    throw new Error("Function not implemented.");
+    const data: ExtendedOauth2ProviderRegistrationInsertData = {
+        code: value.registrationId,
+        description: value.description ? value.description : "",
+        authProvider: value.authProvider,
+        configurationTypes: value.configurationTypes,
+        authClientMethod: value.authClientMethod,
+        authGrantType: value.authGrantType,
+        oauth2ClientContent: {
+            clientId: "XXXXXXXXXXXXXX",
+            secret: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            tenantId: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            scopes: value.scopes
+        }
+    };
+    return data;
 }
 function convertUpdatable(value: ExtendedOauth2ProviderRegistrationInsertData): Oauth2ProviderModifiableData {
-    throw new Error("Function not implemented.");
+    const data:Oauth2ProviderModifiableData= {
+        authProvider:value.authProvider,
+        authClientMethod:value.authClientMethod,
+        authGrantType:value.authGrantType,
+        configurationTypes:value.configurationTypes,
+        description:value.description,
+        registrationId: value.code?value.code:"NOCODE",
+        scopes: value.oauth2ClientContent.scopes        
+    };
+    return data;
 }
 

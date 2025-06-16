@@ -51,6 +51,8 @@ import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
 import { HuggingfaceChatModelsConfigurationControllerService } from './api/huggingfaceChatModelsConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { IntegrationInputControllerService } from './api/integrationInputController.service';
+import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
 import { JiraBrowsingControllerService } from './api/jiraBrowsingController.service';
 import { JiraSystemsControllerService } from './api/jiraSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
@@ -133,6 +135,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GoogleWorkspaceAccessHandshakeControllerService,
     HuggingfaceChatModelsConfigurationControllerService,
     IngestionFileTypesLibraryControllerService,
+    IntegrationInputControllerService,
+    IntegrationSystemsControllerService,
     JiraBrowsingControllerService,
     JiraSystemsControllerService,
     JobLauncherControllerService,

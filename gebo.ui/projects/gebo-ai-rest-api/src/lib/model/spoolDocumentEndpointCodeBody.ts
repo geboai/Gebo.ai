@@ -10,10 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    sourname?: string;
-    disabled?: boolean;
-    roles?: Array<string>;
-    username?: string;
+export interface SpoolDocumentEndpointCodeBody { 
+    endpointCode?: string;
+    file: Blob;
 }

@@ -13,6 +13,7 @@ import lombok.Data;
 public class Oauth2ProviderModifiableData {
 	@NotNull
 	private String registrationId = null;
+	private @NotNull AuthProvider authProvider;
 	private Oauth2ClientAuthMethod authClientMethod;
 	private Oauth2AuthorizationGrantType authGrantType;
 	@NotNull
