@@ -54,6 +54,7 @@ import { GeboAISharepointAdminComponent } from "../gebo-ai-sharepoint-admin/gebo
 import { GeboAIJiraAdminComponent } from "../gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 import { GeboAIJiraEndpointComponent } from "../gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 import { GeboAIDeepseekChatModelAdminComponent } from "../gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";
+import { GeboAIOauth2RegistrationComponent } from "../gebo-ai-oauth2-admin/gebo-ai-oauth2-registration.component";
 
 /**
  * @Component GeboAiEntityEditingLauncherComponent
@@ -247,7 +248,7 @@ export class GeboAiEntityEditingLauncherComponent {
      * Reference to the Jira Endpoint System admin component type
      */
     jiraEndpointSystemType=GeboAIJiraEndpointComponent;
-
+    //geboAIOauth2RegistrationComponent=GeboAIOauth2RegistrationComponent;
     /**
      * Constructor for the GeboAiEntityEditingLauncherComponent
      * 

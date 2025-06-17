@@ -337,7 +337,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				GBaseChatModelConfig c = (GBaseChatModelConfig) model.getConfig();
 				List<String> functions = c.getEnabledFunctions();
 				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(),
-						model.isSupportsTranscript(), model.isSupportsSpeecht(), model.isSupportsStructuredOutput(),
+						model.isSupportsTranscript(), model.isSupportsSpeech(), model.isSupportsStructuredOutput(),
 						model.isSupportsFunctionsCall(), callbacksRepoPattern.getEnabledToolsTree(functions));
 				return cap;
 			}

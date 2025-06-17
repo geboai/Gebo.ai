@@ -19,8 +19,7 @@
   	<module>gebo.architecture.ai</module>
   	<module>gebo.application.messaging</module>
   	<module>gebo.secrets.services</module>
-  	<module>gebo.architecture.security.controllers</module>
-  	<module>gebo.architecture.oauth2.client</module>
+  	<module>gebo.architecture.security.controllers</module>  	
   	<module>gebo.architecture.lucene</module>
   	<module>gebo.architecture.multithreading</module>
   	<module>gebo.architecture.scheduling</module>

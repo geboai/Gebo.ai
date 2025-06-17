@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -51,6 +51,7 @@ import { ConfluenceInstalledModuleService, ConfluenceWizardComponent, ConfuenceS
 import { SharepointInstalledModuleService, SharepointStatusService, SharepointWizardComponent } from "./sharepoint-wizard.component";
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
+import { Oauth2SetupWizardService, Oauth2WizardComponent } from "./oauth2-wizard.component";
 
 /**
  * Setup section for administrator user account configuration.
@@ -104,6 +105,16 @@ const VectorStoreSetupSection: SetupWizardsSection = {
     mandatory: true
 };
 
+
+const oauth2SetupSection: SetupWizardsSection = {
+    orderEntry: 5,
+    label: "Oauth2 authentication",
+    description: "Oauth2 enterprise authentication configuration and oauth2 clients configuration",
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: Oauth2SetupWizardService,
+    wizardComponent: Oauth2WizardComponent,
+    wizardSectionId: "oauth2SetupSection"
+}
 /**
  * Setup section for configuring Large Language Models.
  * This mandatory section requires the vector store setup to be completed first.
@@ -111,7 +122,7 @@ const VectorStoreSetupSection: SetupWizardsSection = {
  * At least one chat model and one embedding model must be configured.
  */
 const adminLLMSSetupSection: SetupWizardsSection = {
-    orderEntry: 5,
+    orderEntry: 6,
     requredStepsIds: ["VectorStoreSetupSection"],
     label: "Large language models setup",
     description: "Gebo.ai enables you to configure different large language models with different cloud or local/lan infrastructure backend services, at least one chat model and one embedding models are to be configured to let the software work properly.",
@@ -121,14 +132,13 @@ const adminLLMSSetupSection: SetupWizardsSection = {
     wizardSectionId: "adminLLMSSetupSection",
     mandatory: true
 };
-
 /**
  * Setup section for shared filesystem paths.
  * This optional section allows configuring company shared filesystems paths
  * that can be used as sources for RAG document retrieval in knowledge bases.
  */
 const sharedFileSystemSetupSection: SetupWizardsSection = {
-    orderEntry: 6,
+    orderEntry: 7,
     label: "Shared filesystems paths setup",
     description: "Configure the company shared filesystems paths to be used as retrieve augmented generation documents area in various knowledge bases",
     enabledService: SharedFilesystemEnabledService,
@@ -144,7 +154,7 @@ const sharedFileSystemSetupSection: SetupWizardsSection = {
  * or on-premise installations to access their content for RAG.
  */
 const atlassianConfluenceSystemSetupSection: SetupWizardsSection = {
-    orderEntry: 7,
+    orderEntry: 8,
     label: "Atlassian confluence integration",
     description: "Configure Gebo.ai to access your Atlassian Confluence cloud or on premise installations",
     installedModule: ConfluenceInstalledModuleService,
@@ -160,7 +170,7 @@ const atlassianConfluenceSystemSetupSection: SetupWizardsSection = {
  * This optional section configures Gebo.ai's connection to Atlassian Jira cloud installations.
  */
 const jiraConfluenceSystemSetupSection: SetupWizardsSection = {
-    orderEntry: 8,
+    orderEntry: 9,
     label: "Atlassian jira integration",
     description: "Configure Gebo.ai to access your Atlassian jira cloud installations",
     installedModule: JiraInstalledModuleService,
@@ -177,7 +187,7 @@ const jiraConfluenceSystemSetupSection: SetupWizardsSection = {
  * cloud or on-premise installations.
  */
 const microsoftSharepointSystemSetupSection: SetupWizardsSection = {
-    orderEntry: 9,
+    orderEntry: 10,
     label: "Microsoft Sharepoint integration",
     description: "Configure Gebo.ai to access your Microsoft Sharepoint cloud or on premise installations",
     installedModule: SharepointInstalledModuleService,
@@ -194,7 +204,7 @@ const microsoftSharepointSystemSetupSection: SetupWizardsSection = {
  * to access team data.
  */
 const googleDriveWorkspacesSystemSetupSection: SetupWizardsSection = {
-    orderEntry: 10,
+    orderEntry: 11,
     label: "Google Drive/Workspaces integration",
     description: "Configure Gebo.ai to access your Google cloud Drive/Workspaces team data",
     installedModule: GoogleWorkspacesInstalledModuleService,
@@ -211,7 +221,7 @@ const googleDriveWorkspacesSystemSetupSection: SetupWizardsSection = {
  * It guides users to create at least one knowledge base for RAG services.
  */
 const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
-    orderEntry: 9,
+    orderEntry: 12,
     requredStepsIds: ["geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a knowledge base",
     description: "Configure at least a knowledge base to let your users enjoy the retrieve augmented generations services of Gebo.ai",
@@ -228,7 +238,7 @@ const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
  * It guides users to create at least one retrieve-augmented-generation (RAG) chat profile.
  */
 const firstChatProfileBaseSetupSection: SetupWizardsSection = {
-    orderEntry: 10,
+    orderEntry: 13,
     requredStepsIds: ["firstKnowledgeBaseSetupSection", "geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a \"R.A.G.\" chat profile",
     description: "Configure at least a retrieve augmented chat profile for your users based on one of your configured knowledge bases",
@@ -248,10 +258,10 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule],
-    declarations: [ LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent,Oauth2WizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
-        
+        Oauth2SetupWizardService,
         LLMSetupWizardService,
         VectorStoreWizardService,
         WorkFolderWizardEnabledService,
@@ -270,8 +280,8 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
         JiraInstalledModuleService,
         JiraStatusService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
-        
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: VectorStoreSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: adminLLMSSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: sharedFileSystemSetupSection, multi: true },

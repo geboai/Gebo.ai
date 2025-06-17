@@ -84,7 +84,7 @@ export class LoginService {
       };
     }));
   }
-
+  
   /**
    * Retrieves the current user's profile information
    * @returns Observable of UserInfo containing the user's profile data

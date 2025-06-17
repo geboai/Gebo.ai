@@ -1,19 +1,9 @@
-/**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- 
- 
- 
-
+export * from './authProviderDto';
 export * from './authResponse';
 export * from './browseParam';
 export * from './buildSystemRef';
 export * from './calledFunction';
+export * from './catalogingLabel';
 export * from './changePasswordParam';
 export * from './changePasswordResponse';
 export * from './chatInfosByQbeParam';
@@ -82,6 +72,7 @@ export * from './gGoogleVertexEmbeddingModelChoice';
 export * from './gGoogleVertexEmbeddingModelConfig';
 export * from './gHuggingfaceChatModelChoice';
 export * from './gHuggingfaceChatModelConfig';
+export * from './gIntegrationProjectEndpoint';
 export * from './gJiraProjectEndpoint';
 export * from './gJiraSystem';
 export * from './gJobStatus';
@@ -125,14 +116,18 @@ export * from './gUserChatContext';
 export * from './gUserChatInfo';
 export * from './gUserMessage';
 export * from './gVirtualFilesystemRoot';
+export * from './geboAudioDocumentFragment';
 export * from './geboChatRequest';
 export * from './geboChatResponse';
 export * from './geboChatUserInfo';
 export * from './geboContentProcessRow';
 export * from './geboCustomSecretContent';
+export * from './geboDocument';
 export * from './geboGoogleJsonSecretContent';
 export * from './geboGoogleOauth2SecretContent';
+export * from './geboImageDocumentFragment';
 export * from './geboKnowledgeBaseSetupStatus';
+export * from './geboMediaDocumentFragment';
 export * from './geboModuleInfo';
 export * from './geboMongoVectorStoreConfig';
 export * from './geboOauth2SecretContent';
@@ -140,8 +135,10 @@ export * from './geboRagRequestCustomConfig';
 export * from './geboSshKeySecretContent';
 export * from './geboTemplatedChatResponse';
 export * from './geboTemplatedChatResponseRichResponse';
+export * from './geboTextDocumentFragment';
 export * from './geboTokenContent';
 export * from './geboUsernamePasswordContent';
+export * from './geboVideoDocumentFragment';
 export * from './geboWorkingMemoryWindowOccupation';
 export * from './genericOpenAIAPIChatModelChoice';
 export * from './genericOpenAIAPIChatModelConfig';
@@ -159,7 +156,10 @@ export * from './hasRunningJobs';
 export * from './ingestionFileType';
 export * from './ingestionHandlerConfig';
 export * from './insertUserParam';
+export * from './integrationDocumentEnvelop';
+export * from './integrationInputControllerSpoolDocumentBody';
 export * from './jobSummary';
+export * from './jobTicket';
 export * from './jobsEntriesForClassNameFilter';
 export * from './jobsEntriesForJobType';
 export * from './jobsEntriesForProjectEndpointFilter';
@@ -169,6 +169,12 @@ export * from './modelMetaInfo';
 export * from './modelProviderCapabilities';
 export * from './moduleIntegrationAddress';
 export * from './mongoConfig';
+export * from './oauth2ClientAuthorizativeInfo';
+export * from './oauth2InitializationInfo';
+export * from './oauth2LoginInfo';
+export * from './oauth2ProviderConfig';
+export * from './oauth2ProviderModifiableData';
+export * from './oauth2ProviderRegistrationInsertData';
 export * from './operationStatusAuthResponse';
 export * from './operationStatusBoolean';
 export * from './operationStatusComponentVectorStoreStatus';

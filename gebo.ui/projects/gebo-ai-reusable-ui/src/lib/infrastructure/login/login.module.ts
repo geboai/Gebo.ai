@@ -34,6 +34,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { InputTextModule } from "primeng/inputtext";
 import { ButtonModule } from "primeng/button";
 import { LoginService } from "./login.service";
+import { FieldsetModule } from "primeng/fieldset";
 
 /**
  * Defines the route configuration for the login module.
@@ -45,7 +46,7 @@ const routes:Routes=[{ path:'ui/login',component:LoginComponent}];
     imports:[CommonModule,PasswordModule,InputTextModule,ButtonModule,
         BlockUIModule,
         PanelModule,
-        MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes)],
+        MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes),FieldsetModule],
     declarations:[LoginComponent],
     exports:[LoginComponent],
     providers:[LoginService]

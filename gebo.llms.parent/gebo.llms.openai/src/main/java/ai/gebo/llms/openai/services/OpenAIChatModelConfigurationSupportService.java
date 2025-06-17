@@ -207,7 +207,7 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @return true as OpenAI models support text-to-speech
 		 */
 		@Override
-		public boolean isSupportsSpeecht() {
+		public boolean isSupportsSpeech() {
 			return true;
 		}
 

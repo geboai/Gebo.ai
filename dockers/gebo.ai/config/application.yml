@@ -102,6 +102,7 @@ ai.gebo.llms.config:
   anthropicEnabled: true
   huggingfaceEnabled: false
   deepseekEnabled: true
+  azureOpenAIEnabled: true
 
 ai.gebo.vectorstore:
   use: QDRANT

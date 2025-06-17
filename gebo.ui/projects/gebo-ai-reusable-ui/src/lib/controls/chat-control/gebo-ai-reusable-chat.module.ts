@@ -40,8 +40,33 @@ import { ReactiveRagChatService } from "./reactive-chat.service";
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from "primeng/toast";
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, ButtonModule, PanelModule, BlockUIModule, TextareaModule, MessagesModule, GeboAIContentViewerModule, GeboAIContentViewerModule, BrowseContentModule, GeboAIViewTableModule, MarkdownModule.forChild(), SkeletonModule, ScrollPanelModule, OverlayModule, TableModule, FieldsetModule, GeboAIAudioRecorderModule, ScrollTopModule,GeboAIChooseDocumentsPanelModule,InputTextModule,ProgressSpinnerModule,ToastModule],
-  providers: [provideMarkdown({
+  imports: [CommonModule, 
+            ReactiveFormsModule, 
+            FormsModule,
+            SkeletonModule, 
+            ScrollPanelModule, 
+            OverlayModule, 
+            TableModule, 
+            FieldsetModule, 
+            GeboAIAudioRecorderModule, 
+            ScrollTopModule, 
+            GeboAIChooseDocumentsPanelModule,
+            InputTextModule,
+            ProgressSpinnerModule, 
+            ToastModule, 
+            DialogModule, 
+            ButtonModule, 
+            PanelModule, 
+            BlockUIModule, 
+            TextareaModule, 
+            MessagesModule, 
+            GeboAIContentViewerModule,  
+            BrowseContentModule, 
+            GeboAIViewTableModule, 
+            MarkdownModule.forChild()],
+  providers: [
+    ReactiveRagChatService,
+    provideMarkdown({
     sanitize: SecurityContext.NONE,
     clipboardOptions: {
       provide: CLIPBOARD_OPTIONS,
@@ -49,7 +74,7 @@ import { ToastModule } from "primeng/toast";
         buttonComponent: ClipboardButtonComponent,
       }
     }
-  }),ReactiveRagChatService],
+  })],
   declarations: [GeboAIReusableChatComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent],
 
   exports: [GeboAIReusableChatComponent]

@@ -12,6 +12,8 @@
 
 package ai.gebo.secrets.model;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -34,6 +36,10 @@ public class GeboOauth2SecretContent extends AbstractGeboSecretContent {
     // Secret key associated with OAuth2 credentials, must not be null.
     @NotNull
     private String secret = null;
+
+    // scopes list
+    private List<String> scopes = null;
+    
 
     /**
      * Default constructor.
@@ -104,5 +110,22 @@ public class GeboOauth2SecretContent extends AbstractGeboSecretContent {
      */
     public void setSecret(String secretId) {
         this.secret = secretId;
+    }
+    /*
+     * Retrieves the list of scopes associated with the OAuth2 token.
+     * 
+     * @return the list of scopes.
+     */
+    public List<String> getScopes() {
+        return scopes;
+    }
+    
+    /**
+     * Sets the list of scopes associated with the OAuth2 token.
+     * 
+     * @param scopes the list of scopes to set.
+     */
+    public void setScopes(List<String> scopes) {
+        this.scopes = scopes;
     }
 }

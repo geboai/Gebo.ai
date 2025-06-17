@@ -32,10 +32,12 @@
 		<module>gebo.llms.onxx-embeddings</module>
 		<module>gebo.llms.anthropic3</module>
 		<module>gebo.llms.openai.api.utils</module>
+		<module>gebo.llms.openai-azure</module>
 		<module>gebo.llms.google_vertex</module>
 		<module>gebo.llms.standard.functions</module>
 		<module>gebo.llms.starter</module>
 		<module>gebo.llms.tests.services</module>
 		<module>gebo.llms.deepseek</module>
+		
 	</modules>
 </project>

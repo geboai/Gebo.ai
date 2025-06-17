@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
@@ -54,68 +54,71 @@ export const routes: Routes = [
   { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
+  { path: 'ui/oauth2-land', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIOauth2LandingModule), pathMatch: 'full' },
   { path: 'ui/reloader', component: GeboAIReloadForwardComponent }
 ];
 const GeboAIPreset = definePreset(Aura, {
   semantic: {
-      primary: {
-          
-          50: '{blue.50}',
-          100: '{blue.100}',
-          200: '{blue.200}',
-          300: '{blue.300}',
-          400: '{blue.400}',
-          500: '{blue.500}',
-          600: '{blue.600}',
-          700: '{blue.700}',
-          800: '{blue.800}',
-          900: '{blue.900}',
-          950: '{blue.950}'
-      },
-      success: {
-          
-        50: '{teal.50}',
-        100: '{teal.100}',
-        200: '{teal.200}',
-        300: '{teal.300}',
-        400: '{teal.400}',
-        500: '{teal.500}',
-        600: '{teal.600}',
-        700: '{teal.700}',
-        800: '{teal.800}',
-        900: '{teal.900}',
-        950: '{teal.950}'
+    primary: {
+
+      50: '{blue.50}',
+      100: '{blue.100}',
+      200: '{blue.200}',
+      300: '{blue.300}',
+      400: '{blue.400}',
+      500: '{blue.500}',
+      600: '{blue.600}',
+      700: '{blue.700}',
+      800: '{blue.800}',
+      900: '{blue.900}',
+      950: '{blue.950}'
+    },
+    success: {
+
+      50: '{teal.50}',
+      100: '{teal.100}',
+      200: '{teal.200}',
+      300: '{teal.300}',
+      400: '{teal.400}',
+      500: '{teal.500}',
+      600: '{teal.600}',
+      700: '{teal.700}',
+      800: '{teal.800}',
+      900: '{teal.900}',
+      950: '{teal.950}'
     }
   }
 });
-@NgModule({ declarations: [AppComponent, LoggedComponent, LogoutComponent, GeboAIReloadForwardComponent],
-  exports:[AppComponent],
-     bootstrap: [AppComponent] ,
-     imports: [CommonModule,
-        BrowserModule,
-        GeboAiChatApiModule,
-        MegaMenuModule,
-        LoginModule,
-        FastSetupModule,
-        BrowserAnimationsModule,
-        GeboAIUserProfileModule,
-        ConfirmDialogModule,
-        MonacoEditorModule.forRoot(),
-        GeboSetupWizardsModule,
-        RouterModule.forRoot(routes)], providers: [
-          provideAnimationsAsync(),
-          providePrimeNG({
-              theme: {
-                  preset: GeboAIPreset,
-                  options: {
-                    darkModeSelector: false || 'none',
-                    
-                }
-              }
-          }),
-          { provide: BASE_PATH, useFactory: getBaseUrl },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-        ConfirmationService, provideHttpClient(withInterceptorsFromDi())] })
+@NgModule({
+  declarations: [AppComponent, LoggedComponent, LogoutComponent, GeboAIReloadForwardComponent],
+  exports: [AppComponent],
+  bootstrap: [AppComponent],
+  imports: [CommonModule,
+    BrowserModule,
+    GeboAiChatApiModule,
+    MegaMenuModule,
+    LoginModule,
+    FastSetupModule,
+    BrowserAnimationsModule,
+    GeboAIUserProfileModule,
+    ConfirmDialogModule,
+    MonacoEditorModule.forRoot(),
+    GeboSetupWizardsModule,
+    RouterModule.forRoot(routes)], providers: [
+      provideAnimationsAsync(),
+      providePrimeNG({
+        theme: {
+          preset: GeboAIPreset,
+          options: {
+            darkModeSelector: false || 'none',
+
+          }
+        }
+      }),
+      { provide: BASE_PATH, useFactory: getBaseUrl },
+      { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+      ConfirmationService, provideHttpClient(withInterceptorsFromDi())]
+})
 export class AppModule {
 
 }

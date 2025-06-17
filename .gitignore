@@ -4,6 +4,7 @@ Gebo.ai.Config/
 *.class
 *.jar
 ***/*.jar
+.vscode/
 .project
 .classpath
 .settings/

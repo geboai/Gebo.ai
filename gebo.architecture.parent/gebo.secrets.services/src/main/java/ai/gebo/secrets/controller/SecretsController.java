@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.secrets.controller;
 
@@ -39,10 +36,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Controller for managing secret operations for administrators.
- * This class provides endpoints for creating and retrieving secrets.
- * Gebo.ai Commentor signature
- * AI generated comments
+ * Controller for managing secret operations for administrators. This class
+ * provides endpoints for creating and retrieving secrets. Gebo.ai Commentor
+ * signature AI generated comments
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -54,8 +50,8 @@ public class SecretsController {
 	IGeboSecretsAccessService secretsService;
 
 	/**
-	 * Wrapper class to encapsulate secret content along with its metadata such
-	 * as context code and description.
+	 * Wrapper class to encapsulate secret content along with its metadata such as
+	 * context code and description.
 	 *
 	 * @param <SecretContentType> the type of the secret content
 	 */
@@ -229,6 +225,8 @@ public class SecretsController {
 				content.getContextCode());
 		return secretsService.getSecretInfoById(id);
 	}
+
+	
 
 	/**
 	 * Creates a new Google JSON credentials secret.
