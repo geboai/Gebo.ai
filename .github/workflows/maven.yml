@@ -11,8 +11,7 @@ name: Maven Compile & Test
 on:
   push:
     branches-ignore:
-        - master
-        - develop
+        - master        
   pull_request:
     branches: [ "*" ]
 

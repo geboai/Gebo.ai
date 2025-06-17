@@ -6,7 +6,7 @@ name: Maven Compile, Test & Repository publishing
 
 on:
   push:
-   branches: [ "develop","master" ]
+   branches: [ "master" ]
   release:
     types: [created]
 
