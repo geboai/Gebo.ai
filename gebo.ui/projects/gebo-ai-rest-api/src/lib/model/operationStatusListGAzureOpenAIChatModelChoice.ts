@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GAzureOpenAIChatModelChoice } from './gAzureOpenAIChatModelChoice';
+import { GUserMessage } from './gUserMessage';
 
-export interface UserInfos { 
-    sourname?: string;
-    name?: string;
-    disabled?: boolean;
-    roles?: Array<string>;
-    username?: string;
+export interface OperationStatusListGAzureOpenAIChatModelChoice { 
+    result?: Array<GAzureOpenAIChatModelChoice>;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

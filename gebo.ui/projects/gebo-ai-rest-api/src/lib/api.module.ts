@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
+import { AzureOpenAiChatModelsConfigurationControllerService } from './api/azureOpenAiChatModelsConfigurationController.service';
+import { AzureOpenAiEmbeddingModelsConfigurationControllerService } from './api/azureOpenAiEmbeddingModelsConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
@@ -89,6 +91,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
   providers: [
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
+    AzureOpenAiChatModelsConfigurationControllerService,
+    AzureOpenAiEmbeddingModelsConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
