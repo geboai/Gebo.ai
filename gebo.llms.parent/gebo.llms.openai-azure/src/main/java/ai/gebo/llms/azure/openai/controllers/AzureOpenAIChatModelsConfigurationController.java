@@ -60,8 +60,8 @@ public class AzureOpenAIChatModelsConfigurationController extends
 	 * @param config The OpenAI chat model configuration to insert
 	 * @return Operation status containing the inserted configuration
 	 */
-	@PostMapping(value = "insertOpenAIChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<GAzureOpenAIChatModelConfig> insertOpenAIChatModelConfig(
+	@PostMapping(value = "insertAzureOpenAIChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAzureOpenAIChatModelConfig> insertAzureOpenAIChatModelConfig(
 			@RequestBody GAzureOpenAIChatModelConfig config) {
 		return super.insert(config);
 
@@ -73,8 +73,8 @@ public class AzureOpenAIChatModelsConfigurationController extends
 	 * @param config The OpenAI chat model configuration to update
 	 * @return Operation status containing the updated configuration
 	 */
-	@PostMapping(value = "updateOpenAIChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<GAzureOpenAIChatModelConfig> updateOpenAIChatModelConfig(
+	@PostMapping(value = "updateAzureOpenAIChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAzureOpenAIChatModelConfig> updateAzureOpenAIChatModelConfig(
 			@RequestBody GAzureOpenAIChatModelConfig config) {
 
 		return super.update(config);
@@ -86,8 +86,8 @@ public class AzureOpenAIChatModelsConfigurationController extends
 	 * @param config The OpenAI chat model configuration to delete
 	 * @return Operation status indicating success or failure
 	 */
-	@PostMapping(value = "deleteOpenAIChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> deleteOpenAIChatModelConfig(@RequestBody GAzureOpenAIChatModelConfig config) {
+	@PostMapping(value = "deleteAzureOpenAIChatModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<Boolean> deleteAzureOpenAIChatModelConfig(@RequestBody GAzureOpenAIChatModelConfig config) {
 
 		return super.delete(config);
 	}
@@ -99,8 +99,8 @@ public class AzureOpenAIChatModelsConfigurationController extends
 	 * @return The found OpenAI chat model configuration
 	 * @throws GeboPersistenceException If there is an error retrieving the configuration
 	 */
-	@GetMapping(value = "findOpenAIChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GAzureOpenAIChatModelConfig findOpenAIChatModelConfigByCode(@RequestParam("code") String code)
+	@GetMapping(value = "findAzureOpenAIChatModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GAzureOpenAIChatModelConfig findAzureOpenAIChatModelConfigByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
@@ -111,8 +111,8 @@ public class AzureOpenAIChatModelsConfigurationController extends
 	 * @param config The configuration to use for retrieving models
 	 * @return Operation status containing the list of available model choices
 	 */
-	@PostMapping(value = "getOpenAIChatModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GAzureOpenAIChatModelChoice>> getOpenAIChatModels(@RequestBody GAzureOpenAIChatModelConfig config) {
+	@PostMapping(value = "getAzureOpenAIChatModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GAzureOpenAIChatModelChoice>> getAzureOpenAIChatModels(@RequestBody GAzureOpenAIChatModelConfig config) {
 		return super.getModelChoices(config);
 	}
 }

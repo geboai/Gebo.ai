@@ -61,8 +61,8 @@ public class AzureOpenAIEmbeddingModelsConfigurationController extends
 	 * @param config The OpenAI embedding model configuration to insert
 	 * @return Operation status containing the inserted configuration or error details
 	 */
-	@PostMapping(value = "insertOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<GAzureOpenAIEmbeddingModelConfig> insertOpenAIEmbeddingModelConfig(
+	@PostMapping(value = "insertAzureOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAzureOpenAIEmbeddingModelConfig> insertAzureOpenAIEmbeddingModelConfig(
 			@RequestBody GAzureOpenAIEmbeddingModelConfig config) {
 		return super.insert(config);
 
@@ -74,8 +74,8 @@ public class AzureOpenAIEmbeddingModelsConfigurationController extends
 	 * @param config The OpenAI embedding model configuration to update
 	 * @return Operation status containing the updated configuration or error details
 	 */
-	@PostMapping(value = "updateOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<GAzureOpenAIEmbeddingModelConfig> updateOpenAIEmbeddingModelConfig(
+	@PostMapping(value = "updateAzureOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAzureOpenAIEmbeddingModelConfig> updateAzureOpenAIEmbeddingModelConfig(
 			@RequestBody GAzureOpenAIEmbeddingModelConfig config) {
 
 		return super.update(config);
@@ -87,8 +87,8 @@ public class AzureOpenAIEmbeddingModelsConfigurationController extends
 	 * @param config The OpenAI embedding model configuration to delete
 	 * @return Operation status indicating success or failure of the deletion
 	 */
-	@PostMapping(value = "deleteOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> deleteOpenAIEmbeddingModelConfig(@RequestBody GAzureOpenAIEmbeddingModelConfig config) {
+	@PostMapping(value = "deleteAzureOpenAIEmbeddingModelConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<Boolean> deleteAzureOpenAIEmbeddingModelConfig(@RequestBody GAzureOpenAIEmbeddingModelConfig config) {
 
 		return super.delete(config);
 	}
@@ -100,8 +100,8 @@ public class AzureOpenAIEmbeddingModelsConfigurationController extends
 	 * @return The matching OpenAI embedding model configuration
 	 * @throws GeboPersistenceException If the configuration cannot be found or retrieved
 	 */
-	@GetMapping(value = "findOpenAIEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GAzureOpenAIEmbeddingModelConfig findOpenAIEmbeddingModelConfigByCode(@RequestParam("code") String code)
+	@GetMapping(value = "findAzureOpenAIEmbeddingModelConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GAzureOpenAIEmbeddingModelConfig findAzureOpenAIEmbeddingModelConfigByCode(@RequestParam("code") String code)
 			throws GeboPersistenceException {
 		return super.findByCode(code);
 	}
@@ -112,8 +112,8 @@ public class AzureOpenAIEmbeddingModelsConfigurationController extends
 	 * @param config The configuration containing necessary information to retrieve models
 	 * @return Operation status containing the list of available embedding model choices
 	 */
-	@PostMapping(value = "getOpenAIEmbeddingModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<List<GAzureOpenAIEmbeddingModelChoice>> getOpenAIEmbeddingModels(
+	@PostMapping(value = "getAzureOpenAIEmbeddingModels", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GAzureOpenAIEmbeddingModelChoice>> getAzureOpenAIEmbeddingModels(
 			@RequestBody GAzureOpenAIEmbeddingModelConfig config) {
 		return super.getModelChoices(config);
 	}

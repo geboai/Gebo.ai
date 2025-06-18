@@ -65,13 +65,13 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public deleteOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public deleteOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public deleteOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public deleteAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public deleteAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public deleteAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling deleteOpenAIChatModelConfig1.');
+            throw new Error('Required parameter body was null or undefined when calling deleteAzureOpenAIChatModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -94,7 +94,7 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusBoolean>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/deleteOpenAIChatModelConfig`,
+        return this.httpClient.request<OperationStatusBoolean>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/deleteAzureOpenAIChatModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -112,13 +112,13 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findOpenAIChatModelConfigByCode1(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAzureOpenAIChatModelConfig>;
-    public findOpenAIChatModelConfigByCode1(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAzureOpenAIChatModelConfig>>;
-    public findOpenAIChatModelConfigByCode1(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAzureOpenAIChatModelConfig>>;
-    public findOpenAIChatModelConfigByCode1(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAzureOpenAIChatModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAzureOpenAIChatModelConfig>;
+    public findAzureOpenAIChatModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAzureOpenAIChatModelConfig>>;
+    public findAzureOpenAIChatModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAzureOpenAIChatModelConfig>>;
+    public findAzureOpenAIChatModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findOpenAIChatModelConfigByCode1.');
+            throw new Error('Required parameter code was null or undefined when calling findAzureOpenAIChatModelConfigByCode.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -141,7 +141,7 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GAzureOpenAIChatModelConfig>('get',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/findOpenAIChatModelConfigByCode`,
+        return this.httpClient.request<GAzureOpenAIChatModelConfig>('get',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/findAzureOpenAIChatModelConfigByCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -159,13 +159,13 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOpenAIChatModels1(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGAzureOpenAIChatModelChoice>;
-    public getOpenAIChatModels1(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGAzureOpenAIChatModelChoice>>;
-    public getOpenAIChatModels1(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGAzureOpenAIChatModelChoice>>;
-    public getOpenAIChatModels1(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAzureOpenAIChatModels(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGAzureOpenAIChatModelChoice>;
+    public getAzureOpenAIChatModels(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGAzureOpenAIChatModelChoice>>;
+    public getAzureOpenAIChatModels(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGAzureOpenAIChatModelChoice>>;
+    public getAzureOpenAIChatModels(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getOpenAIChatModels1.');
+            throw new Error('Required parameter body was null or undefined when calling getAzureOpenAIChatModels.');
         }
 
         let headers = this.defaultHeaders;
@@ -188,7 +188,7 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusListGAzureOpenAIChatModelChoice>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/getOpenAIChatModels`,
+        return this.httpClient.request<OperationStatusListGAzureOpenAIChatModelChoice>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/getAzureOpenAIChatModels`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -206,13 +206,13 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIChatModelConfig>;
-    public insertOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIChatModelConfig>>;
-    public insertOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIChatModelConfig>>;
-    public insertOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIChatModelConfig>;
+    public insertAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIChatModelConfig>>;
+    public insertAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIChatModelConfig>>;
+    public insertAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insertOpenAIChatModelConfig1.');
+            throw new Error('Required parameter body was null or undefined when calling insertAzureOpenAIChatModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -235,7 +235,7 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusGAzureOpenAIChatModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/insertOpenAIChatModelConfig`,
+        return this.httpClient.request<OperationStatusGAzureOpenAIChatModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/insertAzureOpenAIChatModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -253,13 +253,13 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIChatModelConfig>;
-    public updateOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIChatModelConfig>>;
-    public updateOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIChatModelConfig>>;
-    public updateOpenAIChatModelConfig1(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIChatModelConfig>;
+    public updateAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIChatModelConfig>>;
+    public updateAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIChatModelConfig>>;
+    public updateAzureOpenAIChatModelConfig(body: GAzureOpenAIChatModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateOpenAIChatModelConfig1.');
+            throw new Error('Required parameter body was null or undefined when calling updateAzureOpenAIChatModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -282,7 +282,7 @@ export class AzureOpenAiChatModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusGAzureOpenAIChatModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/updateOpenAIChatModelConfig`,
+        return this.httpClient.request<OperationStatusGAzureOpenAIChatModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIModelsConfigurationController/updateAzureOpenAIChatModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

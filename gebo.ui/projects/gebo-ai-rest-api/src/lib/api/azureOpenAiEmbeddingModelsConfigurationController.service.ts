@@ -65,13 +65,13 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public deleteOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public deleteOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public deleteOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
+    public deleteAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
+    public deleteAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
+    public deleteAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling deleteOpenAIEmbeddingModelConfig1.');
+            throw new Error('Required parameter body was null or undefined when calling deleteAzureOpenAIEmbeddingModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -94,7 +94,7 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusBoolean>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/deleteOpenAIEmbeddingModelConfig`,
+        return this.httpClient.request<OperationStatusBoolean>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/deleteAzureOpenAIEmbeddingModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -112,13 +112,13 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findOpenAIEmbeddingModelConfigByCode1(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAzureOpenAIEmbeddingModelConfig>;
-    public findOpenAIEmbeddingModelConfigByCode1(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAzureOpenAIEmbeddingModelConfig>>;
-    public findOpenAIEmbeddingModelConfigByCode1(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAzureOpenAIEmbeddingModelConfig>>;
-    public findOpenAIEmbeddingModelConfigByCode1(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAzureOpenAIEmbeddingModelConfigByCode(code: string, observe?: 'body', reportProgress?: boolean): Observable<GAzureOpenAIEmbeddingModelConfig>;
+    public findAzureOpenAIEmbeddingModelConfigByCode(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GAzureOpenAIEmbeddingModelConfig>>;
+    public findAzureOpenAIEmbeddingModelConfigByCode(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GAzureOpenAIEmbeddingModelConfig>>;
+    public findAzureOpenAIEmbeddingModelConfigByCode(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (code === null || code === undefined) {
-            throw new Error('Required parameter code was null or undefined when calling findOpenAIEmbeddingModelConfigByCode1.');
+            throw new Error('Required parameter code was null or undefined when calling findAzureOpenAIEmbeddingModelConfigByCode.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -141,7 +141,7 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GAzureOpenAIEmbeddingModelConfig>('get',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/findOpenAIEmbeddingModelConfigByCode`,
+        return this.httpClient.request<GAzureOpenAIEmbeddingModelConfig>('get',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/findAzureOpenAIEmbeddingModelConfigByCode`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -159,13 +159,13 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getOpenAIEmbeddingModels1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGAzureOpenAIEmbeddingModelChoice>;
-    public getOpenAIEmbeddingModels1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGAzureOpenAIEmbeddingModelChoice>>;
-    public getOpenAIEmbeddingModels1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGAzureOpenAIEmbeddingModelChoice>>;
-    public getOpenAIEmbeddingModels1(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getAzureOpenAIEmbeddingModels(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGAzureOpenAIEmbeddingModelChoice>;
+    public getAzureOpenAIEmbeddingModels(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGAzureOpenAIEmbeddingModelChoice>>;
+    public getAzureOpenAIEmbeddingModels(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGAzureOpenAIEmbeddingModelChoice>>;
+    public getAzureOpenAIEmbeddingModels(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling getOpenAIEmbeddingModels1.');
+            throw new Error('Required parameter body was null or undefined when calling getAzureOpenAIEmbeddingModels.');
         }
 
         let headers = this.defaultHeaders;
@@ -188,7 +188,7 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusListGAzureOpenAIEmbeddingModelChoice>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/getOpenAIEmbeddingModels`,
+        return this.httpClient.request<OperationStatusListGAzureOpenAIEmbeddingModelChoice>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/getAzureOpenAIEmbeddingModels`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -206,13 +206,13 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIEmbeddingModelConfig>;
-    public insertOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
-    public insertOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
-    public insertOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIEmbeddingModelConfig>;
+    public insertAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
+    public insertAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
+    public insertAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling insertOpenAIEmbeddingModelConfig1.');
+            throw new Error('Required parameter body was null or undefined when calling insertAzureOpenAIEmbeddingModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -235,7 +235,7 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusGAzureOpenAIEmbeddingModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/insertOpenAIEmbeddingModelConfig`,
+        return this.httpClient.request<OperationStatusGAzureOpenAIEmbeddingModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/insertAzureOpenAIEmbeddingModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -253,13 +253,13 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIEmbeddingModelConfig>;
-    public updateOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
-    public updateOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
-    public updateOpenAIEmbeddingModelConfig1(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAzureOpenAIEmbeddingModelConfig>;
+    public updateAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
+    public updateAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAzureOpenAIEmbeddingModelConfig>>;
+    public updateAzureOpenAIEmbeddingModelConfig(body: GAzureOpenAIEmbeddingModelConfig, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateOpenAIEmbeddingModelConfig1.');
+            throw new Error('Required parameter body was null or undefined when calling updateAzureOpenAIEmbeddingModelConfig.');
         }
 
         let headers = this.defaultHeaders;
@@ -282,7 +282,7 @@ export class AzureOpenAiEmbeddingModelsConfigurationControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<OperationStatusGAzureOpenAIEmbeddingModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/updateOpenAIEmbeddingModelConfig`,
+        return this.httpClient.request<OperationStatusGAzureOpenAIEmbeddingModelConfig>('post',`${this.basePath}/api/admin/AzureOpenAIEmbeddingModelsConfigurationController/updateAzureOpenAIEmbeddingModelConfig`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -22,7 +22,7 @@ export interface PageGJobStatusItem {
     content?: Array<GJobStatusItem>;
     number?: number;
     numberOfElements?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     empty?: boolean;
 }
