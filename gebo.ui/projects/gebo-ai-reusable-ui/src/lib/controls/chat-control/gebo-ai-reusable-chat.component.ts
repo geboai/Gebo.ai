@@ -607,6 +607,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges {
                         }
                         interaction.response.queryResponse += recvd.content;
                     }
+                } else if (recvd.contentObjectType==="GUserMessage") {
+                    const message=recvd.content as ToastMessageOptions;
+                    this.lastInteractionMessages=[message];
                 }
                 if (recvd.lastMessage === true) {
                     interaction.loading = false;
