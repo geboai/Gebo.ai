@@ -13,6 +13,7 @@
 			<groupId>ai.gebo.apps</groupId>
 			<artifactId>gebo.apps.monolithic.starter</artifactId>
 			<version>${project.version}</version>
+			
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
