@@ -1,0 +1,23 @@
+issuer: http://localhost:5556
+enablePasswordDB: true
+storage:
+  type: memory
+
+web:
+  http: 0.0.0.0:5556
+
+staticClients:
+  - id: spring-boot-client
+    redirectURIs:
+      - 'http://localhost:8080/login/oauth2/code/spring-boot-client'
+    name: 'Spring Boot Test Client'
+    secret: secret123
+
+staticPasswords:
+  - email: "test@example.com"
+    hash: "$2a$10$EIX/bS5yoZLZ2F5oZP1i5uLkEvEoA56E6ykAxz7jVwOGKJ8VvhZym" # bcrypt hash for "password"
+    username: "testuser"
+    userID: "1234"
+
+oauth2:
+  skipApprovalScreen: true

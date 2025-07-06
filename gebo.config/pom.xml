@@ -33,15 +33,7 @@
 			<artifactId>gebo.application.messaging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.derby/derbytools -->
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbytools</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.environment</artifactId>
