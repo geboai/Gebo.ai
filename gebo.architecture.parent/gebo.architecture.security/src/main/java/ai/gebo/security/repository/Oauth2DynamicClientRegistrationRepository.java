@@ -14,23 +14,26 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
+import ai.gebo.security.model.oauth2.Oauth2ClientConfig;
+import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import lombok.AllArgsConstructor;
 
 /**
- * AI generated comments
- * This class acts as a dynamic client registration repository for OAuth2 clients.
- * It implements the ClientRegistrationRepository interface provided by Spring Security.
- * It is annotated with @Service to indicate that it's a service component in the Spring context.
+ * AI generated comments This class acts as a dynamic client registration
+ * repository for OAuth2 clients. It implements the ClientRegistrationRepository
+ * interface provided by Spring Security. It is annotated with @Service to
+ * indicate that it's a service component in the Spring context.
  */
 @AllArgsConstructor
-public class Oauth2DynamicClientRegistrationRepository implements ClientRegistrationRepository {
-	
+public class Oauth2DynamicClientRegistrationRepository implements IOauth2DynamicClientRegistrationRepository {
+
 	// Logger instance to log actions or events pertaining to this class.
 	private final static Logger LOGGER = LoggerFactory.getLogger(Oauth2DynamicClientRegistrationRepository.class);
-	
-	// Injects an implementation of the IGOauth2ConfigurationService to manage OAuth2 client configuration.
-	
+
+	// Injects an implementation of the IGOauth2ConfigurationService to manage
+	// OAuth2 client configuration.
+
 	final IGOauth2ConfigurationService oauth2ConfigurationService;
 
 	/**
@@ -52,6 +55,17 @@ public class Oauth2DynamicClientRegistrationRepository implements ClientRegistra
 			LOGGER.error(message, e);
 			throw new RuntimeException(message, e);
 		}
+	}
+
+	@Override
+	public Oauth2ClientConfig findOauth2ClientConfigById(String registrationId) {
+		ClientRegistration data = this.findByRegistrationId(registrationId);
+		Oauth2ClientConfig outData = new Oauth2ClientConfig();
+		outData.setClientId(data.getClientId());
+		outData.setIssuer(data.getProviderDetails().getIssuerUri());
+		outData.setRegistrationId(registrationId);
+		outData.setDescription(data.getClientName());
+		return outData;
 	}
 
 }

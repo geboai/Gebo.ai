@@ -30,7 +30,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -47,6 +46,7 @@ import ai.gebo.config.GeboConfig;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.TokenAuthenticationFilter;
+import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DynamicReactiveRegistrationRepository;
 import ai.gebo.security.repository.Oauth2InitializationInfoRepository;
@@ -91,7 +91,7 @@ public class GeboAISecurityConfig {
 	// URLs that are allowed to be accessed without authentication
 	private static final String[] allowedUrls = new String[] { "/", "/index.html", "/assets/**", "/swagger-ui/**",
 			"/v3/**", "/media/**", "**.js", "**.ico", "**.css", "**.ts", "/login", "/oauth2/**", "/public/**",
-			"/auth/**", "/error", "/error/**", "/ui/**","/login/**" };
+			"/auth/**", "/error", "/error/**", "/ui/**", "/login/**" };
 
 	// URLs that forward to index.html
 	private static final String forwardToIndexHtmlUrls[] = new String[] { "/", "/ui/*", "/index.html" };
@@ -129,7 +129,7 @@ public class GeboAISecurityConfig {
 
 	private GeboAICorsFilter corsFilter = new GeboAICorsFilter();
 	private final IGOauth2ConfigurationService oauth2ConfigurationService;
-	private final ClientRegistrationRepository clientRegistrationRepository;
+	private final IOauth2DynamicClientRegistrationRepository clientRegistrationRepository;
 	private final ReactiveClientRegistrationRepository reactiveClientRegistrationRepository;
 	private final IGeboSecretsAccessService secretsService;
 	private final OAuth2AuthorizedClientService oauth2AuthorizedClientService;
@@ -239,7 +239,7 @@ public class GeboAISecurityConfig {
 	 *                   AuthenticationManager.
 	 */
 	@Bean
-	
+
 	public AuthenticationManager authenticationManager(@Autowired AuthenticationProvider provider) throws Exception {
 		return new AuthenticationManager() {
 
@@ -269,7 +269,7 @@ public class GeboAISecurityConfig {
 	 */
 	@Bean
 	@Scope("singleton")
-	public ClientRegistrationRepository clientRegistrationRepository() {
+	public IOauth2DynamicClientRegistrationRepository clientRegistrationRepository() {
 		return this.clientRegistrationRepository;
 	}
 
@@ -322,6 +322,7 @@ public class GeboAISecurityConfig {
 	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		
 		// Configure security filter chain
 		return http.addFilterBefore(filter, CorsFilter.class).cors(c -> c.disable()).csrf(csrf -> csrf.disable())
 				.addFilterAfter(corsFilter, CsrfFilter.class)
@@ -334,7 +335,9 @@ public class GeboAISecurityConfig {
 								auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
 						.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
 				// Optional: use a custom success handler to issue JWT
-				).exceptionHandling(ex -> ex.authenticationEntryPoint(point))
+				)
+				
+				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 	}
 }

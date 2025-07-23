@@ -16,13 +16,13 @@
  * user profile management, and session control in the application.
  */
 
-import { Inject, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthControllerService, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject } from "rxjs";
 import { geboCredenditalString } from "../gebo-credentials";
-
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
 /**
  * Interface representing the result of a login operation
  * Contains optional user information and an array of toast messages to display
@@ -47,7 +47,7 @@ export class LoginService {
    * @param userController Service for user profile operations
    */
   public constructor(
-    @Inject(BASE_PATH) private basePath: string,
+    private oauth2Service: OAuthService,
     private activatedRouter: ActivatedRoute,
     private router: Router,
     private authControllerService: AuthControllerService,
@@ -119,6 +119,28 @@ export class LoginService {
 
   public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
     return this.oauth2ProvidersService.listAvailableProviders();
+  }
+  private runOauth2Login(authConfig: AuthConfig) {
+    this.oauth2Service.configure(authConfig);
+    this.oauth2Service.loadDiscoveryDocumentAndLogin();
+  }
+  public loginWithOauth2(clicked: Oauth2ClientAuthorizativeInfo): Observable<boolean> {
+    if (clicked.registrationId) {
+      return this.oauth2ProvidersService.getProviderClientConfig(clicked.registrationId).pipe(map((value: Oauth2ClientConfig) => {
+        const authConfig: AuthConfig = {
+          issuer: value.issuer, // OAuth2 provider URL
+          redirectUri: window.location.origin + '/ui/oauth2-land',
+          clientId: value.clientId,  
+          responseType: 'code',
+          scope: 'openid profile email', 
+          showDebugInformation: true,
+          useSilentRefresh: true,
+        };
+        this.runOauth2Login(authConfig);
+        return true;
+      }));
+    } else return of(false);
+
   }
   public startOauth2Login(clicked: Oauth2ClientAuthorizativeInfo): Observable<{ absoluteLoginUrl: string, ok: boolean }> {
     if (clicked.registrationId) {

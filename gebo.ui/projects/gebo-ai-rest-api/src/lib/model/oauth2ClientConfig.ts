@@ -10,8 +10,9 @@
  * Do not edit the class manually.
  */
 
-export interface SortObject { 
-    empty?: boolean;
-    unsorted?: boolean;
-    sorted?: boolean;
+export interface Oauth2ClientConfig { 
+    registrationId: string;
+    clientId: string;
+    issuer: string;
+    description: string;
 }

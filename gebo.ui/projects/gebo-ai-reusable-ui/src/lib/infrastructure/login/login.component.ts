@@ -119,16 +119,13 @@ export class LoginComponent implements OnInit {
   }
   public onOauth2Click(clicked: Oauth2ClientAuthorizativeInfo) {
     if (clicked.registrationId) {
-      this.loading = true;
-      this.loginService.startOauth2Login(clicked).subscribe({
-        next: (oauth2Info) => {
-          console.log(oauth2Info);
-          if (oauth2Info.ok === true) {
-            document.location = oauth2Info.absoluteLoginUrl;
-          }
+      
+      this.loginService.loginWithOauth2(clicked).subscribe({
+        next:(value)=>{
+
         },
-        complete: () => {
-          this.loading = false;
+        complete:()=>{
+          
         }
       });
     }

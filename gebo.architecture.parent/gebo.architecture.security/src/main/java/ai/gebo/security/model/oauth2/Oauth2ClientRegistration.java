@@ -8,8 +8,12 @@
  */
 package ai.gebo.security.model.oauth2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration.Builder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration.ClientSettings;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
@@ -63,6 +67,12 @@ public class Oauth2ClientRegistration {
 		builder.authorizationUri(registration.getRuntimeConfiguration().getProviderConfig().getAuthorizationUri());
 		builder.tokenUri(registration.getRuntimeConfiguration().getProviderConfig().getTokenUri());
 		builder.userInfoUri(registration.getRuntimeConfiguration().getProviderConfig().getUserInfoUri());
+		builder.issuerUri(registration.getRuntimeConfiguration().getProviderConfig().getIssuerUri());
+		Map<String, Object> configurationMetaData = new HashMap<String, Object>();
+		if (registration.getClientRegistration().getTenantId() != null) {
+			configurationMetaData.put("tenant", registration.getClientRegistration().getTenantId());
+		}
+		builder.providerConfigurationMetadata(configurationMetaData);
 		builder.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}");
 		// Build and return the ClientRegistration.
 		return builder.build();

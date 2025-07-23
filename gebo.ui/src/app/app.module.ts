@@ -35,6 +35,7 @@ import { providePrimeNG } from "primeng/config";
 import Aura from '@primeng/themes/aura';
 import { definePreset } from "@primeng/themes";
 
+import { OAuthModule } from 'angular-oauth2-oidc';
 export function getBaseUrl() {
   let host = document.location.hostname;
   let port = document.location.port;
@@ -104,7 +105,9 @@ const GeboAIPreset = definePreset(Aura, {
     ConfirmDialogModule,
     MonacoEditorModule.forRoot(),
     GeboSetupWizardsModule,
+    OAuthModule.forRoot(),
     RouterModule.forRoot(routes)], providers: [
+      
       provideAnimationsAsync(),
       providePrimeNG({
         theme: {
