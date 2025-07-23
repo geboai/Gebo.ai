@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -16,11 +16,11 @@
  * user profile management, and session control in the application.
  */
 
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, ChangePasswordParam, ChangePasswordResponse, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
-import { map, Observable, Subject } from "rxjs";
+import { map, Observable, of, Subject } from "rxjs";
 import { geboCredenditalString } from "../gebo-credentials";
 
 /**
@@ -46,8 +46,13 @@ export class LoginService {
    * @param authControllerService Service for authentication operations
    * @param userController Service for user profile operations
    */
-  public constructor(private activatedRouter: ActivatedRoute, private router: Router,
+  public constructor(
+    @Inject(BASE_PATH) private basePath: string,
+    private activatedRouter: ActivatedRoute,
+    private router: Router,
     private authControllerService: AuthControllerService,
+    private oauth2ProvidersService: OAuth2ProvidersControllerService,
+    private oauth2AuthenticationService: OAuth2LoginInitiationControllerService,
     private userController: UserControllerService) {
 
   }
@@ -84,7 +89,7 @@ export class LoginService {
       };
     }));
   }
-  
+
   /**
    * Retrieves the current user's profile information
    * @returns Observable of UserInfo containing the user's profile data
@@ -110,5 +115,23 @@ export class LoginService {
     localStorage.removeItem(geboCredenditalString);
     this.logged.next(undefined);
     this.router.navigate(["/", "ui", "chat"], { relativeTo: this.activatedRouter });
+  }
+
+  public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
+    return this.oauth2ProvidersService.listAvailableProviders();
+  }
+  public startOauth2Login(clicked: Oauth2ClientAuthorizativeInfo): Observable<{ absoluteLoginUrl: string, ok: boolean }> {
+    if (clicked.registrationId) {
+
+      return this.oauth2AuthenticationService.startOauthLogin(clicked.registrationId).pipe(map(data => {
+        const outValue: { absoluteLoginUrl: string, ok: boolean } = {
+          ok: true,
+          absoluteLoginUrl: data.loginAbsoluteUrl
+        };
+        return outValue;
+      }));
+    } else {
+      return of({ absoluteLoginUrl: "", ok: false });
+    }
   }
 }

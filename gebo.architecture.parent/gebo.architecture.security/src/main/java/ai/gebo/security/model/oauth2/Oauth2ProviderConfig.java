@@ -54,4 +54,5 @@ public class Oauth2ProviderConfig {
 	 */
 	@NotNull
 	private String userNameAttribute;
+	private String issuerUri;
 }

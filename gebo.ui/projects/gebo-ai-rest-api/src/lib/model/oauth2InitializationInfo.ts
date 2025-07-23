@@ -12,7 +12,7 @@
 
 export interface Oauth2InitializationInfo { 
     loginId: string;
-    loginRelativeUrl: string;
+    loginAbsoluteUrl: string;
     registrationId: string;
     remoteHost: string;
     principalName?: string;

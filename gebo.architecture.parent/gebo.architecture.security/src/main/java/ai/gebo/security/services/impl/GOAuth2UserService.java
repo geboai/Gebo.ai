@@ -1,5 +1,7 @@
 package ai.gebo.security.services.impl;
 
+import java.util.Map;
+
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -22,8 +24,9 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+		Map<String, Object> params = userRequest.getAdditionalParameters();
 		OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser(userRequest);
-
+		
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		Oauth2ClientRegistration config = null;
 		try {

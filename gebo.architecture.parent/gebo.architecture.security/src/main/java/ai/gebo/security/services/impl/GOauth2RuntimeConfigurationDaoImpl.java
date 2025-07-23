@@ -3,6 +3,8 @@ package ai.gebo.security.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigurationDao<Oauth2RuntimeConfiguration>
 		implements IGOauth2RuntimeConfigurationDao {
 	private final Oauth2RuntimeConfigurationRepository repo;
+	private static final Logger LOGGER = LoggerFactory.getLogger(GOauth2RuntimeConfigurationDaoImpl.class);
 
 	@AllArgsConstructor
 	static class Oauth2RuntimeConfigurationSource implements IGDynamicConfigurationSource<Oauth2RuntimeConfiguration> {
@@ -40,15 +43,23 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 
 	public GOauth2RuntimeConfigurationDaoImpl(GeboAppSecurityProperties staticConfigs,
 			Oauth2RuntimeConfigurationRepository repo) {
-		super(makeReadOnly(staticConfigs.getOauth2configs()), new Oauth2RuntimeConfigurationSource(repo));
+		super(makeReadOnlyAndValidate(staticConfigs.getOauth2configs()), new Oauth2RuntimeConfigurationSource(repo));
 		this.repo = repo;
 
 	}
 
-	private static List<Oauth2RuntimeConfiguration> makeReadOnly(List<Oauth2RuntimeConfiguration> oauth2configs) {
+	private static List<Oauth2RuntimeConfiguration> makeReadOnlyAndValidate(
+			List<Oauth2RuntimeConfiguration> oauth2configs) {
 		if (oauth2configs != null) {
 			for (Oauth2RuntimeConfiguration config : oauth2configs) {
 				config.setReadOnly(true);
+				if (config.getClient() == null || config.getClient().getClientId() == null
+						|| config.getClient().getSecret() == null || config.getClient().getTenantId() == null) {
+					final String msg = "The Oauth2 configuration for registrationId:" + config.getRegistrationId()
+							+ " does not have a full oauth2 client plain configuration, shutting down, please correct yaml ";
+					LOGGER.error(msg);
+					throw new IllegalStateException(msg);
+				}
 			}
 		}
 		return oauth2configs;

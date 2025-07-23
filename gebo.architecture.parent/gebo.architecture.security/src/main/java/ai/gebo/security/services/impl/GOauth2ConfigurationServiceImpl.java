@@ -189,22 +189,32 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		GeboOauth2SecretContent secretClient = null;
 		Oauth2ProviderConfig providerConfig = config.getProviderConfig();
 		if (providerConfig == null) {
+			//for standard providers take references from static YML
 			providerConfig = providersLibraryDao.findByCode(config.getProvider().name());
+			config.setProviderConfig(providerConfig);
 		}
-		String secretId = config.getClientSecretId();
-		try {
-			// Retrieve secret content using the secret ID
-			AbstractGeboSecretContent secretContent = secretService.getSecretContentById(secretId);
-			if (secretContent != null && secretContent instanceof GeboOauth2SecretContent) {
-				secretClient = (GeboOauth2SecretContent) secretContent;
-			} else {
-				// Throw exception if there's an issue with the secret storage layer
-				throw new GeboOauth2Exception("Problems in the underlying secret storage layer for " + secretId + " is "
-						+ secretContent != null && secretContent.type() != null ? secretContent.type().name() : "NULL");
+		if (config.getReadOnly() == null || !config.getReadOnly()) {
+			String secretId = config.getClientSecretId();
+			try {
+				// Retrieve secret content using the secret ID
+				AbstractGeboSecretContent secretContent = secretService.getSecretContentById(secretId);
+				if (secretContent != null && secretContent instanceof GeboOauth2SecretContent) {
+					secretClient = (GeboOauth2SecretContent) secretContent;
+				} else {
+					// Throw exception if there's an issue with the secret storage layer
+					throw new GeboOauth2Exception("Problems in the underlying secret storage layer for " + secretId
+							+ " is " + secretContent != null && secretContent.type() != null
+									? secretContent.type().name()
+									: "NULL");
+				}
+			} catch (GeboCryptSecretException e) {
+				// Handle any exceptions raised during the retrieval of secrets
+				throw new GeboOauth2Exception("Problems in the underlying secret storage layer for " + secretId, e);
 			}
-		} catch (GeboCryptSecretException e) {
-			// Handle any exceptions raised during the retrieval of secrets
-			throw new GeboOauth2Exception("Problems in the underlying secret storage layer for " + secretId, e);
+		} else {
+			// Build a mocked up GeboOauth2SecretContent for plain text secret received from
+			// YML
+			secretClient = config.getClient();
 		}
 		return new Oauth2ClientRegistration(secretClient, config);
 	}

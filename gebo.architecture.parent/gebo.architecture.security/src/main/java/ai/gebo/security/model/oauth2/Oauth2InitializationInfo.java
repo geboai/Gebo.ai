@@ -15,7 +15,7 @@ public class Oauth2InitializationInfo {
 	@NotNull
 	String loginId = null;
 	@NotNull
-	String loginRelativeUrl = null;
+	String loginAbsoluteUrl = null;
 	@NotNull
 	String registrationId = null;
 	@NotNull

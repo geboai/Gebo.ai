@@ -23,16 +23,24 @@ ai.gebo.security:
     tokenExpirationMsec: 864000000
   cors:
     allowedOrigins: http://localhost:12999,http://localhost:4200
-  oauth2:
-    # After successfully authenticating with the OAuth2 Provider,
-    # we'll be generating an auth token for the user and sending the token to the
-    # redirectUri mentioned by the client in the /oauth2/authorize request.
-    # We're not using cookies because they won't work well in mobile clients.
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth2/redirect
-      - myandroidapp://oauth2/redirect
-      - myiosapp://oauth2/redirect
-
+  oauth2configs:
+    # KeyCloak oauth2 test configuration
+    - registrationId: keycloakClient
+      description: Keycloak Oauth2 test configuration
+      provider: oauth2_generic
+      client: 
+        secret: ltxhyiESLC4FCKnPww6Ylc50HYEIf7Pg
+        clientId: keycloakClient
+        tenantId: default
+        scopes: 
+      configurationTypes: AUTHENTICATION
+      providerConfig:
+        provider: oauth2_generic
+        authorizationUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/auth
+        tokenUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/token
+        userInfoUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/userinfo
+        issuerUri: http://localhost:8083/realms/MainRealm
+        userNameAttribute: email
 reactor.schedulers.defaultPoolSize: 16
 spring.task:
   execution:
@@ -143,7 +151,7 @@ ai.gebo.core.config:
   userMessagesReceiverConfig:
     poolCardinality: 1
     useSenderThread: true
-    flushThreshold: 10		
+    flushThreshold: 10
     timeout: 20000
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:

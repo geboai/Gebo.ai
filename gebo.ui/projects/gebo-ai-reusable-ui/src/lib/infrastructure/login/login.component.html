@@ -43,12 +43,15 @@
             <p-button [outlined]="true" icon="pi pi-sign-in" label="Login" (onClick)="login()" [disabled]="formGroup.invalid"></p-button>
         </div>
         <div class="col-12" *ngIf="providers.length">
-            <p-fieldset legend="Login using">
-                <ul>
-                    <li *ngFor="let provider of providers" >
-                        <a href="#" (click)="onOauth2Click(provider)"><i [className]="'pi pi-'+provider.providerName" [title]="provider.description"></i></a>
-                    </li>
-                </ul>
+            <p-fieldset legend="Login using provider">
+                <div class="grid">
+                    <div *ngFor="let provider of providers" class="col-12">
+                        <p-button [icon]="'pi pi-'+provider.providerName" (onClick)="onOauth2Click(provider)" [label]="provider.description" [outlined]="true" ></p-button>
+                        <!-- 
+                        <i [className]="'pi pi-'+provider.providerName" (click)="onOauth2Click(provider)" [title]="provider.description"></i>
+                        -->
+                    </div>
+                </div>
             </p-fieldset>
         </div>
     </div>

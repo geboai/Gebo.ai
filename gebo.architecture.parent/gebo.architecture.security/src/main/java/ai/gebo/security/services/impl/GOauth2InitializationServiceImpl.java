@@ -1,5 +1,7 @@
 package ai.gebo.security.services.impl;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +23,8 @@ public class GOauth2InitializationServiceImpl implements IGOauth2InitializationS
 	private Oauth2InitializationInfoRepository initializationRepo;
 
 	@Override
-	public Oauth2InitializationInfo startOauthLogin(String registrationId, String remoteAddr) {
+	public Oauth2InitializationInfo startOauthLogin(String registrationId, String remoteAddr, String currentUri)
+			throws MalformedURLException {
 		ClientRegistration registration = ((ClientRegistrationRepository) clientRegistrationRepository)
 				.findByRegistrationId(registrationId);
 
@@ -32,11 +35,14 @@ public class GOauth2InitializationServiceImpl implements IGOauth2InitializationS
 		String loginId = UUID.randomUUID().toString();
 		Oauth2InitializationInfo infos = new Oauth2InitializationInfo();
 		infos.setLoginId(loginId);
+		URL url = new URL(currentUri);
+		String baseUrl = url.getProtocol() + "://" + url.getHost() + (url.getPort() > 0 ? ":" + url.getPort() : "");
 		String redirectUri = UriComponentsBuilder
 				.fromPath(IGOauth2InitializationService.OAUTH2_AUTHORIZATION_REGISTRATION_ID)
 				.queryParam(IGOauth2InitializationService.LOGIN_ID, loginId).buildAndExpand(registrationId)
 				.toUriString();
-		infos.setLoginRelativeUrl(redirectUri);
+		String loginAbsoluteUrl = baseUrl + redirectUri;
+		infos.setLoginAbsoluteUrl(loginAbsoluteUrl);
 		infos.setRegistrationId(registrationId);
 		infos.setCreationTimestamp(new Date());
 		infos.setRemoteHost(remoteAddr);

@@ -1,5 +1,6 @@
 package ai.gebo.security.controller;
 
+import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,8 +35,8 @@ public class OAuth2LoginInitiationController {
 
 	@GetMapping(value = "start/{registrationId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Oauth2InitializationInfo startOauthLogin(@PathVariable("registrationId") String registrationId,
-			HttpServletRequest request) {
-		return initializationService.startOauthLogin(registrationId, request.getRemoteAddr());
+			HttpServletRequest request) throws MalformedURLException {
+		return initializationService.startOauthLogin(registrationId, request.getRemoteAddr(),request.getRequestURL().toString());
 	}
 
 	@AllArgsConstructor
