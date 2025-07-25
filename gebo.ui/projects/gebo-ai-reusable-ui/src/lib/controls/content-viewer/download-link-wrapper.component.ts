@@ -18,7 +18,7 @@
 
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
-import { getAuth } from "../../infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH, ContentMetaInfo, IngestionFileType } from "@Gebo.ai/gebo-ai-rest-api";
 
 /**
@@ -88,7 +88,7 @@ export class DownloadLinkViewerWrapperComponent implements OnInit, OnChanges {
     async downloadURL(externalContentUrl: string) {
         const url: string = externalContentUrl + "&asDownload=true";
         const object=await fetch(url, {
-          headers: {Authorization: 'Bearer ' +getAuth()?.accessToken}
+          headers: getAuthHeader()
         });
        
         this.downloadableContentUrl=URL.createObjectURL(await object.blob());

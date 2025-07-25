@@ -16,6 +16,7 @@ export interface Oauth2ProviderConfig {
     tokenUri: string;
     userInfoUri: string;
     userNameAttribute: string;
+    introspectionUri: string;
     issuerUri?: string;
 }
 export namespace Oauth2ProviderConfig {

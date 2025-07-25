@@ -18,7 +18,7 @@
 
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { getAuth } from "../../infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 
@@ -66,7 +66,7 @@ export class PDFViewerWrapper2Component implements OnInit, OnChanges {
      */
     constructor(@Inject(BASE_PATH) private path: string, private httpClient: HttpClient) {
         pdfDefaultOptions.assetsFolder = 'assets/bleeding-edge';
-        this.httpHeaders={Authorization:"Bearer "+ getAuth()?.accessToken};
+        this.httpHeaders=getAuthHeader();
         
     }
     

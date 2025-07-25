@@ -271,6 +271,7 @@ export * from './secretWrapperGeboOauth2SecretContent';
 export * from './secretWrapperGeboSshKeySecretContent';
 export * from './secretWrapperGeboTokenContent';
 export * from './secretWrapperGeboUsernamePasswordContent';
+export * from './securityHeaderData';
 export * from './semanticQueryParam';
 export * from './serverSentEventString';
 export * from './sharedFilesystemUIConfig';

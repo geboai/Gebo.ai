@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthResponse, OAuth2LoginInitiationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { geboCredenditalString } from "../gebo-credentials";
+import { LoginService } from "../login/login.service";
+import { OAuthService } from "angular-oauth2-oidc";
 @Component({
     selector: "gebo-oauth2-landing-component",
     templateUrl: "oauth2-landing.component.html",
@@ -11,10 +13,14 @@ export class GeboAIOauth2LandingComponent implements OnInit {
     public loading: boolean = false;
     constructor(private activeRoute: ActivatedRoute,
         private router: Router,
-        private oauth2AuthenticationService: OAuth2LoginInitiationControllerService) {
+        private oauth2AuthenticationService: OAuth2LoginInitiationControllerService,
+        private oauth2Service:OAuthService) {
 
     }
     ngOnInit(): void {
+        const token=this.oauth2Service.getAccessToken();
+        console.log(token);
+        /*
         if (this.activeRoute.snapshot.queryParamMap.has("login_id")) {
             const loginId = this.activeRoute.snapshot.queryParamMap.get("login_id");
             if (loginId) {
@@ -34,7 +40,7 @@ export class GeboAIOauth2LandingComponent implements OnInit {
                     }
                 });
             }
-        }
+        }*/
     }
 
 }

@@ -25,7 +25,24 @@ import lombok.Data;
  */
 @Document
 @Data
+
 public class Oauth2RuntimeConfiguration {
+	public Oauth2RuntimeConfiguration() {
+	}
+
+	public Oauth2RuntimeConfiguration(Oauth2RuntimeConfiguration copyFrom) {
+		this.authGrantType = copyFrom.authGrantType;
+		this.client = copyFrom.client;
+		this.provider = copyFrom.provider;
+		this.clientAuthMethod = copyFrom.clientAuthMethod;
+		this.clientSecretId = copyFrom.clientSecretId;
+		this.description = copyFrom.description;
+		this.readOnly = copyFrom.readOnly;
+		this.registrationId = copyFrom.registrationId;
+		this.configurationTypes = copyFrom.configurationTypes;
+		this.providerConfig = copyFrom.providerConfig;
+	}
+
 	@Id
 	@NotNull
 	/**

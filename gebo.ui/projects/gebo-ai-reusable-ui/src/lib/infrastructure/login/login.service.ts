@@ -18,11 +18,11 @@
 
 import { Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthControllerService, AuthResponse, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject } from "rxjs";
-import { geboCredenditalString } from "../gebo-credentials";
-import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+import { resetAuth, saveAuth } from "../gebo-credentials";
+import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
 /**
  * Interface representing the result of a login operation
  * Contains optional user information and an array of toast messages to display
@@ -54,7 +54,16 @@ export class LoginService {
     private oauth2ProvidersService: OAuth2ProvidersControllerService,
     private oauth2AuthenticationService: OAuth2LoginInitiationControllerService,
     private userController: UserControllerService) {
+    this.oauth2Service.events.subscribe({
+      next: (event: OAuthEvent) => {
+        console.debug(event);
+        if (event.type === "token_received" || event.type === "silently_refreshed") {
 
+        } else if (event.type === "logout") {
+          resetAuth();
+        }
+      }
+    });
   }
 
   /**
@@ -69,15 +78,15 @@ export class LoginService {
    */
   public login(credentials: { username: string, password: string }): Observable<LoginOperationResult> {
     //I reset actual credentials
-    try { localStorage.removeItem(geboCredenditalString); } catch (e) { }
+    try { resetAuth(); } catch (e) { }
     return this.authControllerService.authenticateUser({
       username: credentials.username,
       password: credentials.password
     }).pipe(map(result => {
       if (result?.result) {
-        localStorage.setItem(geboCredenditalString, JSON.stringify(result?.result));
+        saveAuth(result.result);
       }
-      const logged: boolean = result?.result?.accessToken ? true : false;
+      const logged: boolean = result?.result?.securityHeaderData?.token ? true : false;
       if (logged && result?.result && result?.result?.userInfo) {
         this.logged.next(result?.result?.userInfo);
       } else {
@@ -112,7 +121,7 @@ export class LoginService {
    * notifying subscribers that user is logged out, and redirecting to the chat page
    */
   public logout(): void {
-    localStorage.removeItem(geboCredenditalString);
+    resetAuth();
     this.logged.next(undefined);
     this.router.navigate(["/", "ui", "chat"], { relativeTo: this.activatedRouter });
   }
@@ -120,9 +129,13 @@ export class LoginService {
   public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
     return this.oauth2ProvidersService.listAvailableProviders();
   }
-  private runOauth2Login(authConfig: AuthConfig) {
+  private runOauth2Login(authConfig: AuthConfig, authProviderId?: string) {
+    resetAuth();
     this.oauth2Service.configure(authConfig);
+
     this.oauth2Service.loadDiscoveryDocumentAndLogin();
+
+
   }
   public loginWithOauth2(clicked: Oauth2ClientAuthorizativeInfo): Observable<boolean> {
     if (clicked.registrationId) {
@@ -130,13 +143,14 @@ export class LoginService {
         const authConfig: AuthConfig = {
           issuer: value.issuer, // OAuth2 provider URL
           redirectUri: window.location.origin + '/ui/oauth2-land',
-          clientId: value.clientId,  
+          clientId: value.clientId,
           responseType: 'code',
-          scope: 'openid profile email', 
+          scope: 'openid profile email',
           showDebugInformation: true,
-          useSilentRefresh: true,
+          useSilentRefresh: true
+
         };
-        this.runOauth2Login(authConfig);
+        this.runOauth2Login(authConfig, clicked.registrationId);
         return true;
       }));
     } else return of(false);

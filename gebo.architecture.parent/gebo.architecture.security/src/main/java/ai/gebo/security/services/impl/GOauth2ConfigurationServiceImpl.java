@@ -10,7 +10,6 @@ package ai.gebo.security.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,6 @@ import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
-import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2ProvidersLibraryDao;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
@@ -187,12 +185,12 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 */
 	private Oauth2ClientRegistration complete(Oauth2RuntimeConfiguration config) throws GeboOauth2Exception {
 		GeboOauth2SecretContent secretClient = null;
-		Oauth2ProviderConfig providerConfig = config.getProviderConfig();
+		/*Oauth2ProviderConfig providerConfig = config.getProviderConfig();
 		if (providerConfig == null) {
 			//for standard providers take references from static YML
 			providerConfig = providersLibraryDao.findByCode(config.getProvider().name());
 			config.setProviderConfig(providerConfig);
-		}
+		}*/
 		if (config.getReadOnly() == null || !config.getReadOnly()) {
 			String secretId = config.getClientSecretId();
 			try {

@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * @file Authentication utility for Gebo.ai
@@ -18,6 +18,10 @@
  */
 
 import { AuthResponse } from "@Gebo.ai/gebo-ai-rest-api";
+export const AUTHORIZATION_HEADER: string = "Authorization";
+export const AUTHORIZATION_TYPE_HEADER: string = "X-AuthType";
+export const AUTHORIZATION_PROVIDER_ID_HEADER: string = "X-Authprovider-id";
+export const AUTHORIZATION_TENANT_ID_HEADER: string = "X-tenant-id";
 
 /**
  * Constant used as the key for storing Gebo.ai credentials in local storage
@@ -40,4 +44,24 @@ export function getAuth(): AuthResponse | undefined {
     return r;
   }
   return undefined;
+}
+/*************************
+ * Returns the http standard UI auth httpheader object
+ */
+export function getAuthHeader(): any {
+  const auth = getAuth();
+  if (auth && auth.securityHeaderData?.token) {
+    const outValue: any = {};
+    outValue[AUTHORIZATION_HEADER] = "Bearer " + auth.securityHeaderData?.token;
+    outValue[AUTHORIZATION_TYPE_HEADER] = auth.securityHeaderData?.authType;
+    outValue[AUTHORIZATION_TENANT_ID_HEADER] = auth.securityHeaderData?.authTenantId;
+    outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = auth.securityHeaderData?.authProviderId;
+    return outValue;
+  } else return undefined;
+}
+export function resetAuth() {
+  localStorage.removeItem(geboCredenditalString);
+}
+export function saveAuth(value:AuthResponse) {
+  localStorage.setItem(geboCredenditalString,JSON.stringify(value));
 }

@@ -20,7 +20,7 @@
 import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { BASE_PATH, GeboChatRequest, GeboRagChatControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { getAuth } from "../../infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { concat, concatMap, map, Observable, of, Subject } from "rxjs";
 
 /**
@@ -89,14 +89,13 @@ export class ReactiveRagChatService {
      * @param onError - Optional callback function for handling errors
      */
     private internalStreamChat(apiUrl: string, request: GeboChatRequest, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void): void {
-        const auth = getAuth();
-
+        let auth = getAuthHeader();
+        if (!auth) auth={};
         let headers: HeadersInit = {
+            ...auth,
             'Content-Type': 'application/json'
         };
-        if (auth?.accessToken) {
-            headers["Authorization"] = "Bearer " + auth?.accessToken;
-        }
+        
         let lastMessageReceived: boolean = false;
         fetch(apiUrl, {
             method: 'POST',

@@ -6,89 +6,25 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Gebo.ai comment agent
  *
- * Represents an authentication response that includes an access token,
- * token type, and user information.
+ * Represents an authentication response that includes an access token, token
+ * type, and user information.
  */
+@AllArgsConstructor
+@Getter
 public class AuthResponse {
-    // The access token issued for the authenticated session
-    private String accessToken;
-    
-    // User information associated with the authenticated session
-    private UserInfo userInfo = null;
-    
-    // The type of token issued, default is "Bearer"
-    private String tokenType = "Bearer";
+	// The access token issued for the authenticated session
+	private SecurityHeaderData securityHeaderData;
 
-    /**
-     * Constructs an AuthResponse with the specified access token.
-     * The token type is defaulted to "Bearer".
-     * 
-     * @param accessToken the access token issued for the authenticated session
-     */
-    public AuthResponse(String accessToken) {
-        this.accessToken = accessToken;
-    }
+	// User information associated with the authenticated session
+	private UserInfo userInfo = null;
 
-    /**
-     * Returns the access token for this authentication response.
-     *
-     * @return the access token
-     */
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    /**
-     * Sets the access token for this authentication response.
-     *
-     * @param accessToken the new access token
-     */
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    /**
-     * Returns the token type for this authentication response.
-     *
-     * @return the token type
-     */
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    /**
-     * Sets the token type for this authentication response.
-     *
-     * @param tokenType the new token type
-     */
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
-    }
-
-    /**
-     * Returns the user information for this authentication response.
-     *
-     * @return the user information
-     */
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    /**
-     * Sets the user information for this authentication response.
-     *
-     * @param userInfo the new user information
-     */
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
 }

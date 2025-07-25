@@ -15,7 +15,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getAuth } from "../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader } from "../infrastructure/gebo-credentials";
 import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
 import { ConfirmationService } from 'primeng/api';
 
@@ -27,13 +27,11 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router, private actualRoute: ActivatedRoute,private confirmService:ConfirmationService, @Optional() @Inject(BASE_PATH) private basePath: string) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const currentUser = getAuth();
-    if (currentUser && currentUser.accessToken) {
-      const newHeader: any = {};
-
-      newHeader.Authorization = `Bearer ${currentUser.accessToken}`;
+    const currentHeader = getAuthHeader();
+    if (currentHeader) {
+     
       request = request.clone({
-        setHeaders: newHeader
+        setHeaders: currentHeader
       });
 
     }
