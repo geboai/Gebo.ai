@@ -4,20 +4,17 @@ import java.util.Base64;
 import java.util.List;
 
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.gebo.security.CustomUserDetailsService;
-import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.LocalJwtTokenProvider;
+import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
@@ -42,6 +39,8 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 	private final IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao;
 	private final LocalJwtTokenProvider tokenProvider;
 	private final UserDetailsService customUserDetailsService;
+	private final GJwtAuthenticationConverter jwtAuthenticationConverter;
+	private final GOpaqueTokenAuthenticationConverter tokenAuthenticationConverter;
 
 	public GHttpRequestAuthenticationManagerResolverImpl(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder, IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao,
@@ -52,6 +51,8 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		this.oauth2RuntimeConfigurationDao = oauth2RuntimeConfigurationDao;
 		this.tokenProvider = tokenProvider;
 		this.customUserDetailsService = customUserDetailsService;
+		this.jwtAuthenticationConverter = new GJwtAuthenticationConverter(customUserDetailsService);
+		this.tokenAuthenticationConverter = new GOpaqueTokenAuthenticationConverter(customUserDetailsService);
 		final DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
 		authProvider.setPasswordEncoder(passwordEncoder);
 
@@ -82,9 +83,11 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 				Oauth2RuntimeConfiguration oauth2Configuration = oauth2RuntimeConfigurationDao
 						.findByCode(header.getAuthProviderId());
 				if (isJwtFormatStrict(header.getToken())) {
-					manager = new SingleOauth2ConfigJwtAuthenticationManager(header, oauth2Configuration);
+					manager = new SingleOauth2ConfigJwtAuthenticationManager(header, oauth2Configuration,
+							jwtAuthenticationConverter);
 				} else {
-					manager = new SingleOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2Configuration);
+					manager = new SingleOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2Configuration,
+							tokenAuthenticationConverter);
 				}
 			} else {
 				List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
@@ -93,10 +96,11 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 					throw new RuntimeException(
 							"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
 				if (isJwtFormatStrict(header.getToken())) {
-					manager = new MultiOauth2ConfigJwtAuthenticationManager(header, oauth2AuthenticationConfigs);
+					manager = new MultiOauth2ConfigJwtAuthenticationManager(header, oauth2AuthenticationConfigs,
+							jwtAuthenticationConverter);
 				} else {
-					manager = new MultiOauth2ConfigOpaqueTokenAuthenticationManager(header,
-							oauth2AuthenticationConfigs);
+					manager = new MultiOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2AuthenticationConfigs,
+							tokenAuthenticationConverter);
 				}
 			}
 		}

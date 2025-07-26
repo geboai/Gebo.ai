@@ -4,6 +4,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.introspection.SpringOpaqueTokenIntrospector;
 
 import ai.gebo.security.model.SecurityHeaderData;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements AuthenticationManager {
 	final SecurityHeaderData header;
 	final Oauth2RuntimeConfiguration oauth2Configuration;
+	final OpaqueTokenAuthenticationConverter converter;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -23,6 +25,8 @@ public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements Authe
 
 		OpaqueTokenAuthenticationProvider opaqueProvider = new OpaqueTokenAuthenticationProvider(
 				opaqueTokenIntrospector);
+
+		opaqueProvider.setAuthenticationConverter(converter);
 		return opaqueProvider.authenticate(authentication);
 
 	}
