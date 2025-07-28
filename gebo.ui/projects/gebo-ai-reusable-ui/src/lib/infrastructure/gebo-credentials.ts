@@ -17,7 +17,7 @@
  * stored in local storage.
  */
 
-import { AuthResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthResponse, SecurityHeaderData } from "@Gebo.ai/gebo-ai-rest-api";
 export const AUTHORIZATION_HEADER: string = "Authorization";
 export const AUTHORIZATION_TYPE_HEADER: string = "X-AuthType";
 export const AUTHORIZATION_PROVIDER_ID_HEADER: string = "X-Authprovider-id";
@@ -37,10 +37,10 @@ export const geboCredenditalString: string = "gebo.ai.credentials";
  * 
  * @returns {AuthResponse | undefined} The parsed authentication response or undefined if not found
  */
-export function getAuth(): AuthResponse | undefined {
+export function getAuth(): SecurityHeaderData | undefined {
   const value = localStorage.getItem(geboCredenditalString);
   if (value) {
-    const r: AuthResponse = JSON.parse(value);
+    const r: SecurityHeaderData = JSON.parse(value);
     return r;
   }
   return undefined;
@@ -50,18 +50,21 @@ export function getAuth(): AuthResponse | undefined {
  */
 export function getAuthHeader(): any {
   const auth = getAuth();
-  if (auth && auth.securityHeaderData?.token) {
+  if (auth && auth?.token) {
     const outValue: any = {};
-    outValue[AUTHORIZATION_HEADER] = "Bearer " + auth.securityHeaderData?.token;
-    outValue[AUTHORIZATION_TYPE_HEADER] = auth.securityHeaderData?.authType;
-    outValue[AUTHORIZATION_TENANT_ID_HEADER] = auth.securityHeaderData?.authTenantId;
-    outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = auth.securityHeaderData?.authProviderId;
+    outValue[AUTHORIZATION_HEADER] = "Bearer " + auth.token;
+    if (auth.authType)
+      outValue[AUTHORIZATION_TYPE_HEADER] = auth.authType;
+    if (auth.authTenantId)
+      outValue[AUTHORIZATION_TENANT_ID_HEADER] = auth.authTenantId;
+    if (auth.authTenantId)
+      outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = auth.authProviderId;
     return outValue;
   } else return undefined;
 }
 export function resetAuth() {
   localStorage.removeItem(geboCredenditalString);
 }
-export function saveAuth(value:AuthResponse) {
-  localStorage.setItem(geboCredenditalString,JSON.stringify(value));
+export function saveAuth(value: SecurityHeaderData) {
+  localStorage.setItem(geboCredenditalString, JSON.stringify(value));
 }

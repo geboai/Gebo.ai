@@ -3,6 +3,8 @@ package ai.gebo.security.services.impl;
 import java.util.Base64;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -32,7 +34,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * Oauth2 providers dynamic configurations
  */
 public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequestAuthenticationManagerResolver {
-
+	static private final Logger LOGGER = LoggerFactory.getLogger(GHttpRequestAuthenticationManagerResolverImpl.class);
 	private final UserDetailsService userDetailsService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager localLoginAuthenticationManager;
@@ -68,6 +70,9 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 
 	@Override
 	public AuthenticationManager resolve(HttpServletRequest request) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin resolve(...)");
+		}
 		SecurityHeaderData header = SecurityHeaderUtil.getSecurityHeaderData(request);
 		if (header.isEmpty())
 			return null;
@@ -105,6 +110,10 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 			}
 		}
 			break;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End resolve(...) returning manager of class "
+					+ (manager != null ? manager.getClass().getName() : "NULL"));
 		}
 		return manager;
 	}

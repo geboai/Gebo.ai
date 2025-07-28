@@ -61,6 +61,7 @@ public class Oauth2DynamicClientRegistrationRepository implements IOauth2Dynamic
 		Oauth2ClientConfig outData = new Oauth2ClientConfig();
 		outData.setClientId(data.getClientId());
 		outData.setIssuer(data.getProviderDetails().getIssuerUri());
+		outData.setTokenUri(data.getProviderDetails().getTokenUri());
 		outData.setRegistrationId(registrationId);
 		outData.setDescription(data.getClientName());
 		return outData;

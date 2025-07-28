@@ -6,16 +6,16 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, OnInit } from '@angular/core';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
 import { LoginService } from '../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/login/login.service';
 import { GeboSetupWizardService } from '@Gebo.ai/gebo-ai-admin-ui';
-import { SetupStatus } from '@Gebo.ai/reusable-ui';
+import { resetAuth, saveAuth, SetupStatus } from '@Gebo.ai/reusable-ui';
 import { PrimeNG } from 'primeng/config';
 const menuItemsProtos: MegaMenuItem[] = [
   { icon: "pi pi-comments", label: "Gebo.ai Chat", routerLink: 'ui/chat', id: "chat" },
@@ -25,10 +25,10 @@ const menuItemsProtos: MegaMenuItem[] = [
   { icon: "pi pi-user", label: "my profile", routerLink: 'ui/currentProfile', id: "currentProfile" },
   { icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logout" }];
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
+  standalone: false
 })
 export class AppComponent implements OnInit {
   public loading: boolean = false;
@@ -42,7 +42,16 @@ export class AppComponent implements OnInit {
     private primengConfig: PrimeNG,
     private loginService: LoginService,
     private geboWizardSetupService: GeboSetupWizardService) {
-
+    this.loginService.authDataSubject.subscribe({
+      next:(securityHedaerData)=>{
+        console.log("Auth refresh");
+        if (!securityHedaerData) {
+          resetAuth();
+        }else {
+          saveAuth(securityHedaerData);
+        }
+      }
+    });  
   }
   private startBlinkSetupState(): void {
     const setupItem = this.menuItems.find(x => x.id === "setup");
@@ -88,34 +97,36 @@ export class AppComponent implements OnInit {
   }
   ngOnInit() {
     this.primengConfig.ripple.set(true);
-    this.loginService.logged.subscribe(user => {
-      this.userLogged = user ? true : false;
-    });
-    this.loginService.loadUserProfile().subscribe(x => {
-      this.userLogged = x ? true : false;
-      const items: MegaMenuItem[] = [];
-      if (this.userLogged) {
-        const isAdmin: boolean = x.roles && x.roles.find(c => c === 'ADMIN') ? true : false;
-        if (isAdmin === true) {
-          menuItemsProtos.forEach(entry => {
-            items.push(entry);
-          });
-
-        } else {
-          menuItemsProtos.forEach(entry => {
-            if (entry.id !== 'admin' && entry.id !== "setup") {
+    if (!this.loginService.isOauth2LandingPage()) {
+      this.loginService.logged.subscribe(user => {
+        this.userLogged = user ? true : false;
+      });
+      this.loginService.loadUserProfile().subscribe(x => {
+        this.userLogged = x ? true : false;
+        const items: MegaMenuItem[] = [];
+        if (this.userLogged) {
+          const isAdmin: boolean = x.roles && x.roles.find(c => c === 'ADMIN') ? true : false;
+          if (isAdmin === true) {
+            menuItemsProtos.forEach(entry => {
               items.push(entry);
-            }
-          });
-        }
+            });
 
-        this.menuItems = items;
-        if (isAdmin === true) {
-          this.pollSetupState();
+          } else {
+            menuItemsProtos.forEach(entry => {
+              if (entry.id !== 'admin' && entry.id !== "setup") {
+                items.push(entry);
+              }
+            });
+          }
+
+          this.menuItems = items;
+          if (isAdmin === true) {
+            this.pollSetupState();
+          }
         }
-      }
-      this.userInfo = x;
-    });
+        this.userInfo = x;
+      });
+    }
   }
   title = 'Gebo.ai, the RAG system for software developers';
 }

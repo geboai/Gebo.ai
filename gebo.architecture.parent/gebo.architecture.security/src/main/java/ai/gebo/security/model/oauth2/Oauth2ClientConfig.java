@@ -6,12 +6,14 @@ import lombok.Data;
 @Data
 public class Oauth2ClientConfig {
 	@NotNull
-	String registrationId = null;
+	private String registrationId = null;
 	@NotNull
-	String clientId = null;
+	private String clientId = null;
 	@NotNull
-	String issuer = null;
+	private String issuer = null;
 	@NotNull
-	String description = null;
+	private String description = null;
+	@NotNull
+	private String tokenUri;
 
 }

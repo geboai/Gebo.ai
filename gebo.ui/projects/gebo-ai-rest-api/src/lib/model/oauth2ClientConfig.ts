@@ -15,4 +15,5 @@ export interface Oauth2ClientConfig {
     clientId: string;
     issuer: string;
     description: string;
+    tokenUri: string;
 }

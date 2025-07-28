@@ -47,9 +47,7 @@
                 <div class="grid">
                     <div *ngFor="let provider of providers" class="col-12">
                         <p-button [icon]="'pi pi-'+provider.providerName" (onClick)="onOauth2Click(provider)" [label]="provider.description" [outlined]="true" ></p-button>
-                        <!-- 
-                        <i [className]="'pi pi-'+provider.providerName" (click)="onOauth2Click(provider)" [title]="provider.description"></i>
-                        -->
+                      
                     </div>
                 </div>
             </p-fieldset>

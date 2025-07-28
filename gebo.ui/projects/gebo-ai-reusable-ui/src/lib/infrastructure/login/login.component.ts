@@ -23,7 +23,7 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
