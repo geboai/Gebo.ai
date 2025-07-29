@@ -43,15 +43,15 @@ export class AppComponent implements OnInit {
     private loginService: LoginService,
     private geboWizardSetupService: GeboSetupWizardService) {
     this.loginService.authDataSubject.subscribe({
-      next:(securityHedaerData)=>{
+      next: (securityHedaerData) => {
         console.log("Auth refresh");
         if (!securityHedaerData) {
           resetAuth();
-        }else {
+        } else {
           saveAuth(securityHedaerData);
         }
       }
-    });  
+    });
   }
   private startBlinkSetupState(): void {
     const setupItem = this.menuItems.find(x => x.id === "setup");
@@ -95,8 +95,9 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  ngOnInit() {
+  async ngOnInit() {
     this.primengConfig.ripple.set(true);
+    await this.loginService.initializeOauth2Refresh();
     if (!this.loginService.isOauth2LandingPage()) {
       this.loginService.logged.subscribe(user => {
         this.userLogged = user ? true : false;

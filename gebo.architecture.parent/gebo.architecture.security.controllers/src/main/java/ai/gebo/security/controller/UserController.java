@@ -9,12 +9,15 @@
 
 package ai.gebo.security.controller;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,18 +62,22 @@ public class UserController {
 	 * @throws ResourceNotFoundException if the user is not found
 	 */
 	@GetMapping(value = "me", produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserInfo getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-		Optional<User> usr = userRepository.findById(userPrincipal.getUsername());
-		if (usr.isPresent()) {
-			User u = usr.get();
-			UserInfo userInfo = new UserInfo();
-			userInfo.setUsername(u.getUsername());
-			userInfo.setRoles(u.getRoles());
-			return userInfo;
-		} else {
-			throw new ResourceNotFoundException("User", "id",
-					userPrincipal != null ? userPrincipal.getUsername() : null);
-		}
+	public UserInfo getCurrentUser() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		if (context != null && context.getAuthentication() != null && context.getAuthentication().getName() != null) {
+			String userName = context.getAuthentication().getName();
+			Optional<User> usr = userRepository.findById(userName);
+			if (usr.isPresent()) {
+				User u = usr.get();
+				UserInfo userInfo = new UserInfo();
+				userInfo.setUsername(u.getUsername());
+				userInfo.setRoles(u.getRoles());
+				return userInfo;
+			} else {
+				throw new ResourceNotFoundException("User", "id", userName);
+			}
+		} else
+			throw new ResourceNotFoundException("User", "id", "unknown user");
 	}
 
 	/**

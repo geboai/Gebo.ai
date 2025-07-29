@@ -74,7 +74,7 @@ public class GeboAISecurityConfig {
 
 	public static final String ADMIN_ROLE = "ADMIN";
 	public static final String USER_ROLE = "USER";
-	
+
 	private final LocalJwtTokenProvider tokenProvider;
 	private final Oauth2RuntimeConfigurationRepository oauth2RuntimeConfigurationRepository;
 	private final JwtAuthenticationEntryPoint point;
@@ -106,7 +106,7 @@ public class GeboAISecurityConfig {
 	public GeboAISecurityConfig(IGOauth2ConfigurationService oauth2ConfigurationService,
 			Oauth2RuntimeConfigurationRepository oauth2RuntimeConfigurationRepository,
 			IGeboSecretsAccessService secretsService, IGUsersAdminService userAdminService,
-			GeboAppSecurityProperties securityProperties, GPasswordEncoder passwordEncoder,			
+			GeboAppSecurityProperties securityProperties, GPasswordEncoder passwordEncoder,
 			IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao, LocalJwtTokenProvider tokenProvider,
 			JwtAuthenticationEntryPoint point, GeboConfig geboConfig, IGeboCryptingService cryptService,
 			UserDetailsService userDetailsService) {
@@ -120,7 +120,7 @@ public class GeboAISecurityConfig {
 		this.secretsService = secretsService;
 		this.userAdminService = userAdminService;
 		this.securityProperties = securityProperties;
-		
+
 		this.oauth2AuthorizedClientService = new GOauth2AuthorizedClientService(dynamicClient, secretsService);
 		this.reactiveOAuth2AuthorizedClientService = new GReactiveOauth2AuthorizedClientService(
 				reactiveClientRegistrationRepository, secretsService);
@@ -129,8 +129,7 @@ public class GeboAISecurityConfig {
 		this.reactiveOAuth2UserService = new ReactiveGOAuth2UserService(oauth2ConfigurationService, userAdminService,
 				securityProperties);
 		this.passwordEncoder = passwordEncoder;
-		
-		
+
 		this.oAuth2AuthorizationRequestResolver = new GOauth2CustomAuthorizationRequestResolver(dynamicClient);
 		this.oauth2RuntimeConfigurationDao = oauth2RuntimeConfigurationDao;
 		this.tokenProvider = tokenProvider;
@@ -187,7 +186,6 @@ public class GeboAISecurityConfig {
 		return this.oauth2AuthorizedClientService;
 	}
 
-	
 	/**
 	 * Register ReactiveOAuth2AuthorizedClientService bean
 	 * 
@@ -227,13 +225,13 @@ public class GeboAISecurityConfig {
 						.anyRequest().authenticated())
 				.oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(clientRegistrationRepository)
 						.authorizedClientService(oauth2AuthorizedClientService)
-						//.successHandler(authenticationSuccessHandler)
+						// .successHandler(authenticationSuccessHandler)
 						.authorizationEndpoint(
 								auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
 						.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
 				// Optional: use a custom success handler to issue JWT
 				).oauth2ResourceServer(oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()))
-
+				.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 	}

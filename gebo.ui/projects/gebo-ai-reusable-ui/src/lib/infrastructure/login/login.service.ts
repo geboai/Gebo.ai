@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2ProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject } from "rxjs";
-import { getAuth, resetAuth } from "../gebo-credentials";
+import { DEFAULT_PROVIDER_ID, getAuth, resetAuth } from "../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
 /**
  * Interface representing the result of a login operation
@@ -31,7 +31,6 @@ export interface LoginOperationResult {
   userInfo?: UserInfo;
   messages: ToastMessageOptions[];
 };
-
 /**
  * Service responsible for handling user authentication and related functionality.
  * Manages user sessions, login/logout operations, and password changes.
@@ -66,7 +65,7 @@ export class LoginService {
           let actualAuth = getAuth();
           const accessToken = this.oauth2Service.getAccessToken();
           const authProviderId = sessionStorage.getItem("authProviderId");
-          const tenantId=sessionStorage.getItem("tenantId");
+          const tenantId = sessionStorage.getItem("tenantId");
           if (!actualAuth) {
             actualAuth = {
               token: accessToken,
@@ -77,9 +76,9 @@ export class LoginService {
               actualAuth.authProviderId = authProviderId;
             }
             if (tenantId) {
-              actualAuth.authTenantId=tenantId;
-            }else {
-              actualAuth.authTenantId="default-tenant";
+              actualAuth.authTenantId = tenantId;
+            } else {
+              actualAuth.authTenantId = "default-tenant";
             }
 
           } else {
@@ -185,7 +184,7 @@ export class LoginService {
     return this.oauth2ProvidersService.getProviderClientConfig(authProviderId).pipe(map((value: Oauth2ClientConfig) => {
       const authConfig: AuthConfig = {
         issuer: value.issuer, // OAuth2 provider URL
-        redirectUri: window.location.origin + '/ui/oauth2-land',        
+        redirectUri: window.location.origin + '/ui/oauth2-land',
         clientId: value.clientId,
         responseType: 'code',
         scope: 'openid profile email',
@@ -207,6 +206,22 @@ export class LoginService {
       }));
     } else return of(false);
   }
+
+  public async initializeOauth2Refresh() {
+    const auth = getAuth();
+    if (auth && auth.authProviderId && auth.authProviderId !== DEFAULT_PROVIDER_ID) {
+      try {
+        const authConfig = await this.loadProviderConfig(auth.authProviderId).toPromise();
+        if (authConfig) {
+          this.oauth2Service.configure(authConfig);
+          this.oauth2Service.setStorage(localStorage);
+          const token = await this.oauth2Service.refreshToken();
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
   /****************************
    * Called from the reloaded SPA application redirected URL component to get accessToken
    */
@@ -214,16 +229,17 @@ export class LoginService {
     const authProviderId = sessionStorage.getItem("authProviderId");
     if (authProviderId) {
       this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
-       this.oauth2Service.configure(authConfig);
+        this.oauth2Service.configure(authConfig);
         this.oauth2Service.setStorage(localStorage);
 
-        this.oauth2Service.loadDiscoveryDocument().then(() => {
-          const customRedirectUri=document.location.origin+"/ui/chat";
+        this.oauth2Service.loadDiscoveryDocument().then(() => {          
           this.oauth2Service.tryLoginCodeFlow().then(() => {
-            if (!this.oauth2Service.hasValidAccessToken()) {
+            if (this.oauth2Service.hasValidAccessToken()) {              
+              this.router.navigate(['ui', 'chat'], { relativeTo: this.activatedRouter });
+            } else {
               console.error("Access token non ottenuto. Logout forzato.");
               resetAuth();
-              this.router.navigate(['/login']);
+              this.router.navigate(['ui', 'login'], { relativeTo: this.activatedRouter });
             }
           });
         });

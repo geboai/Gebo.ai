@@ -22,6 +22,8 @@ export const AUTHORIZATION_HEADER: string = "Authorization";
 export const AUTHORIZATION_TYPE_HEADER: string = "X-AuthType";
 export const AUTHORIZATION_PROVIDER_ID_HEADER: string = "X-Authprovider-id";
 export const AUTHORIZATION_TENANT_ID_HEADER: string = "X-tenant-id";
+export const DEFAULT_TENANT: string = "default-tenant";
+export const DEFAULT_PROVIDER_ID: string = "default-internal-jwt-provider";
 
 /**
  * Constant used as the key for storing Gebo.ai credentials in local storage
@@ -57,8 +59,12 @@ export function getAuthHeader(): any {
       outValue[AUTHORIZATION_TYPE_HEADER] = auth.authType;
     if (auth.authTenantId)
       outValue[AUTHORIZATION_TENANT_ID_HEADER] = auth.authTenantId;
+    else
+      outValue[AUTHORIZATION_TENANT_ID_HEADER] = DEFAULT_TENANT;
     if (auth.authTenantId)
       outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = auth.authProviderId;
+    else
+      outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = DEFAULT_PROVIDER_ID;
     return outValue;
   } else return undefined;
 }
