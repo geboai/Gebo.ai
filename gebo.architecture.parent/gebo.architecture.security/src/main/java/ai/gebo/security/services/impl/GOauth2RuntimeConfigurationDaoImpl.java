@@ -13,6 +13,7 @@ import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
 import ai.gebo.security.config.GeboAppSecurityProperties;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
+import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
 import ai.gebo.security.services.IGOauth2ProvidersLibraryDao;
@@ -76,7 +77,7 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 			return data;
 		Optional<Oauth2RuntimeConfiguration> entry = staticConfigs.stream()
 				.filter(x -> x.getRegistrationId() != null && x.getRegistrationId().equals(code)).findFirst();
-		return entry.isPresent() ? entry.get() : null;
+		return entry.isPresent() ? completeProvider(entry.get()) : null;
 	}
 
 	@Override
@@ -144,9 +145,10 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 		Oauth2RuntimeConfiguration runtimeConfiguration = byPredicate;
 		if (byPredicate.getProviderConfig() == null
 				&& runtimeConfiguration.getProvider() != AuthProvider.oauth2_generic) {
+			Oauth2ProviderConfig providerConfig = this.providersLibraryDao
+					.findByCode(runtimeConfiguration.getProvider().name());
 			runtimeConfiguration = new Oauth2RuntimeConfiguration(byPredicate);
-			runtimeConfiguration
-					.setProviderConfig(this.providersLibraryDao.findByCode(runtimeConfiguration.getProvider().name()));
+			runtimeConfiguration.setProviderConfig(providerConfig);
 
 		}
 		return runtimeConfiguration;

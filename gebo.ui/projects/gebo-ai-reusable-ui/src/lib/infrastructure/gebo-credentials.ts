@@ -17,7 +17,7 @@
  * stored in local storage.
  */
 
-import { AuthResponse, SecurityHeaderData } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecurityHeaderData } from "@Gebo.ai/gebo-ai-rest-api";
 export const AUTHORIZATION_HEADER: string = "Authorization";
 export const AUTHORIZATION_TYPE_HEADER: string = "X-AuthType";
 export const AUTHORIZATION_PROVIDER_ID_HEADER: string = "X-Authprovider-id";
@@ -37,7 +37,7 @@ export const geboCredenditalString: string = "gebo.ai.credentials";
  * from JSON into an AuthResponse object, and return them. If no credentials
  * are found in local storage, it returns undefined.
  * 
- * @returns {AuthResponse | undefined} The parsed authentication response or undefined if not found
+ * @returns {SecurityHeaderData | undefined} The parsed authentication response or undefined if not found
  */
 export function getAuth(): SecurityHeaderData | undefined {
   const value = localStorage.getItem(geboCredenditalString);

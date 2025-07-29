@@ -189,7 +189,8 @@ export class LoginService {
         responseType: 'code',
         scope: 'openid profile email',
         showDebugInformation: true,
-        useSilentRefresh: true
+        useSilentRefresh: true,
+        strictDiscoveryDocumentValidation:false
       };
       //tokenEndpoint: value.tokenUri,
       return authConfig;
