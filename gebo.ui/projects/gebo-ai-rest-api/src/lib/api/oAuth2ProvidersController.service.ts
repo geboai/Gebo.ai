@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Oauth2ClientAuthorizativeInfo } from '../model/oauth2ClientAuthorizativeInfo';
+import { Oauth2ClientConfig } from '../model/oauth2ClientConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -54,6 +55,53 @@ export class OAuth2ProvidersControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param registrationId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getProviderClientConfig(registrationId: string, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ClientConfig>;
+    public getProviderClientConfig(registrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ClientConfig>>;
+    public getProviderClientConfig(registrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ClientConfig>>;
+    public getProviderClientConfig(registrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (registrationId === null || registrationId === undefined) {
+            throw new Error('Required parameter registrationId was null or undefined when calling getProviderClientConfig.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (registrationId !== undefined && registrationId !== null) {
+            queryParameters = queryParameters.set('registrationId', <any>registrationId);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Oauth2ClientConfig>('get',`${this.basePath}/public/oauth2/getProviderClientConfig`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 

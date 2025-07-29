@@ -36,10 +36,10 @@ import io.jsonwebtoken.UnsupportedJwtException;
  * AI generated comments
  */
 @Service
-public class TokenProvider {
+public class LocalJwtTokenProvider {
 
 	// Logger instance for logging events
-	private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(LocalJwtTokenProvider.class);
 
 	// Configuration properties for security settings
 	private GeboAppSecurityProperties appProperties;
@@ -49,7 +49,7 @@ public class TokenProvider {
 	 *
 	 * @param appProperties the Gebo application security properties
 	 */
-	public TokenProvider(GeboAppSecurityProperties appProperties) {
+	public LocalJwtTokenProvider(GeboAppSecurityProperties appProperties) {
 		this.appProperties = appProperties;
 	}
 

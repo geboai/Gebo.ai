@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { SecurityHeaderData } from './securityHeaderData';
 import { UserInfo } from './userInfo';
 
 export interface AuthResponse { 
-    accessToken?: string;
+    securityHeaderData?: SecurityHeaderData;
     userInfo?: UserInfo;
-    tokenType?: string;
 }

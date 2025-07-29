@@ -14,6 +14,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.security.model.AuthProvider;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,24 @@ import lombok.Data;
  */
 @Document
 @Data
+
 public class Oauth2RuntimeConfiguration {
+	public Oauth2RuntimeConfiguration() {
+	}
+
+	public Oauth2RuntimeConfiguration(Oauth2RuntimeConfiguration copyFrom) {
+		this.authGrantType = copyFrom.authGrantType;
+		this.client = copyFrom.client;
+		this.provider = copyFrom.provider;
+		this.clientAuthMethod = copyFrom.clientAuthMethod;
+		this.clientSecretId = copyFrom.clientSecretId;
+		this.description = copyFrom.description;
+		this.readOnly = copyFrom.readOnly;
+		this.registrationId = copyFrom.registrationId;
+		this.configurationTypes = copyFrom.configurationTypes;
+		this.providerConfig = copyFrom.providerConfig;
+	}
+
 	@Id
 	@NotNull
 	/**
@@ -53,9 +71,14 @@ public class Oauth2RuntimeConfiguration {
 	/**
 	 * The client secret ID.
 	 */
-	@NotNull
+
 	private String clientSecretId = null;
 
+	/***
+	 * Client secret plain text for YML configurations
+	 * 
+	 */
+	private GeboOauth2SecretContent client = null;
 	/**
 	 * The list of configuration types.
 	 */
@@ -70,9 +93,9 @@ public class Oauth2RuntimeConfiguration {
 	private Oauth2ClientAuthMethod clientAuthMethod = null;
 
 	/**
-	 * The OAuth2 authorization grant type.
+	 * The OAuth2 authorization grant type. (default for oauth2 client login)
 	 */
-	private Oauth2AuthorizationGrantType authGrantType = null;
+	private Oauth2AuthorizationGrantType authGrantType = Oauth2AuthorizationGrantType.AUTHORIZATION_CODE;
 
 	private Boolean readOnly = null;
 

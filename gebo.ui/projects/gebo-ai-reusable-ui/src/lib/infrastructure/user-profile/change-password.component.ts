@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -23,15 +23,13 @@ import { ToastMessageOptions } from "primeng/api";
 import { LoginService } from "../login/login.service";
 
 @Component({
-    selector: "gebo-ai-change-password-component",
-    templateUrl: "change-password.component.html",
-    standalone: false
+  selector: "gebo-ai-change-password-component",
+  templateUrl: "change-password.component.html",
+  standalone: false
 })
 export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
   /** The user information object */
   @Input() user?: UserInfo;
-  /** The authentication response containing user credentials */
-  @Input() auth?: AuthResponse;
   /** Controls the visibility of the change password dialog */
   @Input() visible: boolean = false;
   /** Event emitter that fires when the modal is closed */
@@ -47,7 +45,7 @@ export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
   }];
   /** Event emitter that fires when the password is successfully changed */
   @Output() changedPasswordCorrectly: EventEmitter<boolean> = new EventEmitter();
-  
+
   /**
    * Constructor for the change password component
    * @param loginService Service for handling authentication and password operations
@@ -55,7 +53,7 @@ export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
   constructor(private loginService: LoginService) {
 
   }
-  
+
   /**
    * Form group containing the password change form fields
    */
@@ -65,7 +63,7 @@ export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
     newPassword: new FormControl(),
     newPassword1: new FormControl()
   });
-  
+
   /**
    * Handles the closing of the modal dialog
    * @param e Event object from the UI
@@ -73,7 +71,7 @@ export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
   closeModal(e: any) {
     this.close.emit(true);
   }
-  
+
   /**
    * Initializes the component and sets up form validators
    * Adds a custom validator to check if the new password entries match
@@ -114,22 +112,22 @@ export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
     };
     this.formGroup.addValidators(equalPasswordsValidator);
   }
-  
+
   /**
    * Responds to changes in the component's input properties
    * Updates the form values when user or auth information changes
    * @param changes SimpleChanges object containing the changed properties
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.user && this.auth) {
-      if (this.user.username === this.auth.userInfo?.username) {
-        this.formGroup.patchValue({ username: this.user.username });
-      } else {
-        this.formGroup.patchValue({});
-      }
+    if (this.user) {
+
+      this.formGroup.patchValue({ username: this.user.username });
+    } else {
+      this.formGroup.patchValue({});
+
     }
   }
-  
+
   /**
    * Handles the password change operation
    * Calls the login service's changePassword method and processes the response
@@ -173,7 +171,7 @@ export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
       }
     );
   }
-  
+
   /**
    * Allows the user to skip the password change process
    * Emits an event indicating the user chose not to change their password

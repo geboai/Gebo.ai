@@ -23,7 +23,7 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo, OAuth2LoginInitiationControllerService, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -66,9 +66,9 @@ export class LoginComponent implements OnInit {
    */
   public constructor(public loginService: LoginService,
     private geboFastSetupControllerService: GeboFastInstallationSetupControllerService,
-    private oauth2ProvidersService: OAuth2ProvidersControllerService,
-    private oauth2AuthenticationService: OAuth2LoginInitiationControllerService,
-    private router: Router, private activatedRoute: ActivatedRoute) {
+
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
 
   }
 
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["..", "setup"], { relativeTo: this.activatedRoute });
       } else {
         this.loading = true;
-        this.oauth2ProvidersService.listAvailableProviders().subscribe({
+        this.loginService.getOauth2LoginOptions().subscribe({
           next: (providers) => {
             this.providers = providers;
           },
@@ -118,17 +118,16 @@ export class LoginComponent implements OnInit {
     });
   }
   public onOauth2Click(clicked: Oauth2ClientAuthorizativeInfo) {
-      if (clicked.registrationId) {
-        this.loading=true;
-        this.oauth2AuthenticationService.startOauthLogin(clicked.registrationId).subscribe({
-          next:(oauth2Info)=>{
-            console.log(oauth2Info);
-            document.location=oauth2Info.loginRelativeUrl;
-          },
-          complete:()=>{
-            this.loading=false;
-          }
-        });
-      }
+    if (clicked.registrationId) {
+      
+      this.loginService.loginWithOauth2(clicked).subscribe({
+        next:(value)=>{
+
+        },
+        complete:()=>{
+          
+        }
+      });
+    }
   }
 }

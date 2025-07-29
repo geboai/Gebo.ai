@@ -15,7 +15,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getAuth } from "../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader, resetAuth } from "../infrastructure/gebo-credentials";
 import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
 import { ConfirmationService } from 'primeng/api';
 
@@ -27,13 +27,11 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router, private actualRoute: ActivatedRoute,private confirmService:ConfirmationService, @Optional() @Inject(BASE_PATH) private basePath: string) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const currentUser = getAuth();
-    if (currentUser && currentUser.accessToken) {
-      const newHeader: any = {};
-
-      newHeader.Authorization = `Bearer ${currentUser.accessToken}`;
+    const currentHeader = getAuthHeader();
+    if (currentHeader) {
+     
       request = request.clone({
-        setHeaders: newHeader
+        setHeaders: currentHeader
       });
 
     }
@@ -41,6 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: any, caught: Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>>) => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
+            resetAuth();
             this.router.navigate(["/","ui","login"], { relativeTo: this.actualRoute });
 
           } else if (error.status===500){
