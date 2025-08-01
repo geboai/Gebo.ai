@@ -188,9 +188,12 @@ export class LoginService {
         clientId: value.clientId,
         responseType: 'code',
         scope: 'openid profile email',
+        disablePKCE: false,
         showDebugInformation: true,
         useSilentRefresh: true,
-        strictDiscoveryDocumentValidation:false
+        strictDiscoveryDocumentValidation: false,
+        useHttpBasicAuth: false // impedisce l’invio del client_secret
+
       };
       //tokenEndpoint: value.tokenUri,
       return authConfig;
@@ -207,7 +210,9 @@ export class LoginService {
       }));
     } else return of(false);
   }
-
+  /********************************************************************
+   * This has to be called in ngOninit() of app.component.ts 
+   */
   public async initializeOauth2Refresh() {
     const auth = getAuth();
     if (auth && auth.authProviderId && auth.authProviderId !== DEFAULT_PROVIDER_ID) {
@@ -216,7 +221,13 @@ export class LoginService {
         if (authConfig) {
           this.oauth2Service.configure(authConfig);
           this.oauth2Service.setStorage(localStorage);
-          const token = await this.oauth2Service.refreshToken();
+          const ok = await this.oauth2Service.loadDiscoveryDocumentAndTryLogin()
+          if (this.oauth2Service.hasValidAccessToken()) {
+            this.oauth2Service.setupAutomaticSilentRefresh();
+            const token = await this.oauth2Service.refreshToken();
+          }
+
+
         }
       } catch (e) {
         console.error(e);
@@ -233,9 +244,10 @@ export class LoginService {
         this.oauth2Service.configure(authConfig);
         this.oauth2Service.setStorage(localStorage);
 
-        this.oauth2Service.loadDiscoveryDocument().then(() => {          
+        this.oauth2Service.loadDiscoveryDocument().then(() => {
           this.oauth2Service.tryLoginCodeFlow().then(() => {
-            if (this.oauth2Service.hasValidAccessToken()) {              
+            if (this.oauth2Service.hasValidAccessToken()) {
+              this.oauth2Service.setupAutomaticSilentRefresh();
               this.router.navigate(['ui', 'chat'], { relativeTo: this.activatedRouter });
             } else {
               console.error("Access token non ottenuto. Logout forzato.");
