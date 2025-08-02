@@ -31,6 +31,13 @@ ai.gebo.oauth2.library.providers:
     introspection-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token/introspect
     user-name-attribute: id
 
+  - provider: microsoft_multitenant
+    authorization-uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+    token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+    user-info-uri: https://graph.microsoft.com/oidc/userinfo
+    issuer-uri: https://login.microsoftonline.com/{tenant-id}/v2.0  # ← tenant-specific for JWT validation
+    user-name-attribute: id
+
   - provider: linkedin
     authorization-uri: https://www.linkedin.com/oauth/v2/authorization
     token-uri: https://www.linkedin.com/oauth/v2/accessToken

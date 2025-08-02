@@ -26,41 +26,45 @@ import lombok.Getter;
 @Getter
 public enum AuthProvider {
 	// Local database authentication
-	local(AuthProviderType.LOCAL_JWT, "Jwt local auth"),
+	local(AuthProviderType.LOCAL_JWT, "Jwt local auth", false),
 
 	// Authentication using Facebook account
-	facebook(AuthProviderType.OAUTH2, "Facebook auth provider"),
+	facebook(AuthProviderType.OAUTH2, "Facebook auth provider", false),
 
 	// Authentication using Google account
-	google(AuthProviderType.OAUTH2, "Google auth provider"),
+	google(AuthProviderType.OAUTH2, "Google auth provider", false),
 
 	// Authentication using GitHub account
-	github(AuthProviderType.OAUTH2, "GitHub auth provider"),
+	github(AuthProviderType.OAUTH2, "GitHub auth provider", false),
 
-	// Authentication using Microsoft account
-	microsoft(AuthProviderType.OAUTH2, "Microsoft auth provider"),
+	// Authentication using Microsoft account "common" endpoints
+	microsoft(AuthProviderType.OAUTH2, "Microsoft auth provider", false),
+	// Authentication using Microsoft account "multitenant" endpoints
+	microsoft_multitenant(AuthProviderType.OAUTH2, "Microsoft multitenant auth provider", true),
 	// Authentication using Linkedin account
-	linkedin(AuthProviderType.OAUTH2, "Linkedin auth provider"),
+	linkedin(AuthProviderType.OAUTH2, "Linkedin auth provider", false),
 	// Authentication using Amazon account
-	amazon(AuthProviderType.OAUTH2, "Amazon auth provider"),
+	amazon(AuthProviderType.OAUTH2, "Amazon auth provider", false),
 
 	// Authentication using Slack account
-	slack(AuthProviderType.OAUTH2, "Slack auth provider"),
+	slack(AuthProviderType.OAUTH2, "Slack auth provider", false),
 	// Authentication using X account
-	x(AuthProviderType.OAUTH2, "X auth provider"),
+	x(AuthProviderType.OAUTH2, "X auth provider", false),
 	// Authentication using Apple account
-	apple(AuthProviderType.OAUTH2, "Apple auth provider"),
+	apple(AuthProviderType.OAUTH2, "Apple auth provider", false),
 	// generic oauth2
-	oauth2_generic(AuthProviderType.OAUTH2, "Generic custom OAUTH2 provider"),
+	oauth2_generic(AuthProviderType.OAUTH2, "Generic custom OAUTH2 provider", false),
 	// Authentication using LDAP (Lightweight Directory Access Protocol)
-	ldap(AuthProviderType.LDAP, "Wan/Lan LDAP auth provider");
+	ldap(AuthProviderType.LDAP, "Wan/Lan LDAP auth provider", false);
 
 	final AuthProviderType type;
 	final String description;
+	final boolean multitenant;
 
-	AuthProvider(AuthProviderType type, String description) {
+	AuthProvider(AuthProviderType type, String description, boolean multitenant) {
 		this.type = type;
 		this.description = description;
+		this.multitenant = multitenant;
 	}
 
 	@AllArgsConstructor
@@ -72,6 +76,8 @@ public enum AuthProvider {
 		final AuthProviderType type;
 		@NotNull
 		final String description;
+		@NotNull
+		final boolean multitenant;
 	}
 
 	public static List<AuthProviderDto> getOauth2Providers() {
@@ -85,7 +91,7 @@ public enum AuthProvider {
 			}
 			default: {
 				AuthProviderDto dto = new AuthProviderDto(authProvider, authProvider.getType(),
-						authProvider.getDescription());
+						authProvider.getDescription(), authProvider.multitenant);
 				providers.add(dto);
 			}
 

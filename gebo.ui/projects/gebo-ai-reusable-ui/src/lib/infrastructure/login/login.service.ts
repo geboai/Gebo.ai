@@ -23,6 +23,7 @@ import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject } from "rxjs";
 import { DEFAULT_PROVIDER_ID, getAuth, resetAuth } from "../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
+declare const google: any;
 /**
  * Interface representing the result of a login operation
  * Contains optional user information and an array of toast messages to display
@@ -37,7 +38,8 @@ export interface LoginOperationResult {
  */
 @Injectable({ providedIn: "root" })
 export class LoginService {
-
+  private actualAuthConfig?: AuthConfig;
+  private actualAuthProviderId?: string;
 
   /**
    * Constructor for the LoginService
@@ -173,8 +175,41 @@ export class LoginService {
     this.oauth2Service.setStorage(localStorage);
     this.oauth2Service.configure(authConfig);
     this.oauth2Service.loadDiscoveryDocument().then(() => {
+      //this.oauth2Service.initImplicitFlow();
       this.oauth2Service.initCodeFlow();
     });
+  }
+  private isGoogleLibraryDefined(): boolean {
+    try {
+      return google && google.accounts ? true : false;
+    } catch (e) {
+      return false;
+    }
+  }
+  private runGoogleOauth2Login(authConfig: AuthConfig, authProviderId?: string) {
+    if (this.isGoogleLibraryDefined()) {
+      this.initGoogleOauthLogin(authConfig, authProviderId);
+    } else {
+      this.actualAuthConfig = authConfig;
+      this.actualAuthProviderId = authProviderId;
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        this.initGoogleOauthLogin(authConfig, authProviderId);
+      }
+      document.head.appendChild(script);
+    }
+  }
+  private initGoogleOauthLogin(authConfig: AuthConfig, authProviderId?: string): void {
+    google.accounts.id.initialize({
+      client_id: authConfig.clientId,
+      callback: (res: any) => {
+
+      }
+    });
+    google.accounts.id.prompt();
   }
   /*****************************************************************************
    * Loads the angular-oauth2-oidc AuthConfig configurations using backend specific 
@@ -204,12 +239,19 @@ export class LoginService {
    */
   public loginWithOauth2(clicked: Oauth2ClientAuthorizativeInfo): Observable<boolean> {
     if (clicked.registrationId) {
+
       return this.loadProviderConfig(clicked.registrationId).pipe(map(authConfig => {
+        //if (clicked.providerName !== "google") {
         this.runOauth2Login(authConfig, clicked.registrationId);
+        //} else {
+        //  this.runGoogleOauth2Login(authConfig, clicked.registrationId);
+        //}
         return true;
       }));
+
     } else return of(false);
   }
+
   /********************************************************************
    * This has to be called in ngOninit() of app.component.ts 
    */

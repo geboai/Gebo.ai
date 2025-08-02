@@ -23,6 +23,8 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
             tokenUri: new FormControl(),
             userInfoUri: new FormControl(),
             userNameAttribute: new FormControl(),
+            introspectionUri: new FormControl(),
+            issuerUri: new FormControl()
         }),
         oauth2ClientContent: new FormGroup({
             tenantId: new FormControl(),

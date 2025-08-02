@@ -85,6 +85,7 @@ export class LoginComponent implements OnInit {
         this.loginService.getOauth2LoginOptions().subscribe({
           next: (providers) => {
             this.providers = providers;
+            
           },
           complete: () => {
             this.loading = false;

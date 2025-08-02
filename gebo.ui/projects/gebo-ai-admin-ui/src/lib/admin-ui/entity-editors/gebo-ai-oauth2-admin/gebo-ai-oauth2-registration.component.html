@@ -68,6 +68,27 @@
                             </small>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="introspectionUri">Introspection Uri</label>
+                            <input pInputText id="introspectionUri" formControlName="introspectionUri"
+                                aria-describedby="introspectionUri-help" />
+                            <small id="introspectionUri-help">
+                                Enter the OAUTH2 introspection URL of the provider
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="issuerUri">Issuer Uri</label>
+                            <input pInputText id="issuerUri" formControlName="issuerUri"
+                                aria-describedby="issuerUri-help" />
+                            <small id="issuerUri-help">
+                                Enter the OAUTH2 issuer URL of the provider
+                            </small>
+                        </div>
+                    </div>
+                    
                     <!-- userNameAttribute !?-->
                 </div>
             </p-fieldset>
