@@ -42,17 +42,17 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
     });
     protected redirectUrls:string[]=[];
     protected refererUrls:string[]=[];
-    public currentProvider?: AuthProviderDto.ProviderEnum;
+    protected currentProvider?: AuthProviderDto.ProviderEnum;
     @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
     @Input() oauth2MandatoryScopes: { code: string, description: string }[] = [];
-    public providers: {
+    protected providers: {
         code?: AuthProviderDto.ProviderEnum,
         description?: string
     }[] = [];
-    public authClientMethodData: { code: Oauth2ProviderModifiableData.AuthClientMethodEnum, description: string }[] = [];
-    public authGrantTypeData: { code: Oauth2ProviderModifiableData.AuthGrantTypeEnum, description: string }[] = [];
-    public configurationTypesData: { code: Oauth2ProviderModifiableData.ConfigurationTypesEnum, description: string }[] = [{ code: "AUTHENTICATION", description: "Authentication" }, { code: "INTEGRATION", description: "Integration client" }];
-    public readonly: boolean = false;
+    protected authClientMethodData: { code: Oauth2ProviderModifiableData.AuthClientMethodEnum, description: string }[] = [];
+    protected authGrantTypeData: { code: Oauth2ProviderModifiableData.AuthGrantTypeEnum, description: string }[] = [];
+    protected configurationTypesData: { code: Oauth2ProviderModifiableData.ConfigurationTypesEnum, description: string }[] = [{ code: "AUTHENTICATION", description: "Authentication" }, { code: "INTEGRATION", description: "Integration client" }];
+    protected readonly: boolean = false;
     // 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'twitter' | 'slack' | 'x' | 'apple' | 'oauth2_generic' 
 
     public constructor(
@@ -80,6 +80,8 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
             detail: "Oauth2 client registration data will be not readable using the application after insertion for security reason, you can only delete them in the future",
             severity: "warning"
         }];
+        actualValue.readOnly=false;
+        this.formGroup.controls["readOnly"].setValue(false);
     }
     protected cat(base:string,relative:string,id?:string):string {
         return base+(id?relative.replaceAll("{registrationId}",id):relative);
@@ -88,7 +90,8 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         const registrationId=actualValue.code;
         const baseUIPath=window.document.location.origin;
         this.redirectUrls=[...frontendRedirectRelativeUris.map(x=>this.cat(baseUIPath,x,registrationId)),...backendRedirectRelativeUris.map(x=>this.cat(this.basePath,x,registrationId))];
-        this.refererUrls=[...frontendRefererUris.map(x=>this.cat(baseUIPath,x,registrationId)),...backendRefererUris.map(x=>this.cat(this.basePath,x,registrationId))]
+        this.refererUrls=[...frontendRefererUris.map(x=>this.cat(baseUIPath,x,registrationId)),...backendRefererUris.map(x=>this.cat(this.basePath,x,registrationId))];
+        this.readonly=actualValue?.readOnly===true;
 
     }
     private modifyValidation(value: Oauth2ProviderModifiableData, mode: "NEW" | "EDIT" | "EDIT_OR_NEW") {
@@ -136,12 +139,27 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         return this.oauth2ControllerService.findOauth2ProviderRegistrationByRegistrationId(code);
     }
     override save(value: Oauth2ProviderModifiableData): Observable<Oauth2ProviderModifiableData> {
+        if (value?.authProvider!=="oauth2_generic") {
+            value.providerConfiguration=undefined;
+        }
+        if (!value.readOnly) {
+            value.readOnly=false;
+        }
         return this.oauth2ControllerService.updateOauth2ProviderRegistration(value);
     }
     override insert(value: Oauth2ProviderModifiableData): Observable<Oauth2ProviderModifiableData> {
+        if (value?.authProvider!=="oauth2_generic") {
+            value.providerConfiguration=undefined;
+        }
+        if (!value.readOnly) {
+            value.readOnly=false;
+        }
         return this.oauth2ControllerService.insertOauth2ProviderRegistration(value);
     }
     override delete(value: Oauth2ProviderModifiableData): Observable<boolean> {
+        if (value?.authProvider!=="oauth2_generic") {
+            value.providerConfiguration=undefined;
+        }
         return this.oauth2ControllerService.deleteOauth2ProviderRegistration(value).pipe(map(x => true));
     }
     override canBeDeleted(value: Oauth2ProviderModifiableData): Observable<{ canBeDeleted: boolean; message: string; }> {

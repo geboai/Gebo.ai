@@ -152,9 +152,9 @@ public interface IGOauth2ConfigurationService {
 
 	public List<Oauth2ClientAuthorizativeInfo> findAllAauthorizativeRegistrations();
 
-	public void updateOauth2Configuration(String registrationId,@Nullable @Valid Oauth2ProviderConfig providerConfiguration,
-			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, List<String> scopes,
-			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
-			List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception;
+	public void updateOauth2Configuration(String registrationId, Oauth2ProviderConfig providerConfiguration,
+			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
+			Oauth2AuthorizationGrantType authGrantType, List<Oauth2ConfigurationType> configurationTypes,
+			String description) throws GeboOauth2Exception;
 
 }

@@ -74,7 +74,7 @@ public class OAuth2AdminController {
 	public Oauth2ProviderModifiableData updateOauth2ProviderRegistration(
 			@NotNull @Valid @RequestBody Oauth2ProviderModifiableData data) throws GeboOauth2Exception {
 		oauth2ConfiguratoinService.updateOauth2Configuration(data.getCode(), data.getProviderConfiguration(),
-				data.getOauth2ClientContent(), data.getScopes(), data.getAuthClientMethod(), data.getAuthGrantType(),
+				data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
 				data.getConfigurationTypes(), data.getDescription());
 		Oauth2ClientRegistration registration = oauth2ConfiguratoinService
 				.findOauth2ClientRegistrationByRegistrationId(data.getCode());
@@ -93,13 +93,12 @@ public class OAuth2AdminController {
 		Oauth2ProviderModifiableData data = new Oauth2ProviderModifiableData();
 		data.setConfigurationTypes(registration.getRuntimeConfiguration().getConfigurationTypes());
 		data.setOauth2ClientContent(registration.getClientRegistration());
-
+		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
 		data.setAuthClientMethod(registration.getRuntimeConfiguration().getClientAuthMethod());
 		data.setAuthGrantType(registration.getRuntimeConfiguration().getAuthGrantType());
 		data.setDescription(registration.getRuntimeConfiguration().getDescription());
 		data.setAuthProvider(registration.getRuntimeConfiguration().getProvider());
-		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());
-		data.setScopes(registration.getClientRegistration().getScopes());
+		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());		
 		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
 		if (data.getAuthProvider() != null && data.getAuthProvider() == AuthProvider.oauth2_generic) {
 			data.setProviderConfiguration(registration.getRuntimeConfiguration().getProviderConfig());

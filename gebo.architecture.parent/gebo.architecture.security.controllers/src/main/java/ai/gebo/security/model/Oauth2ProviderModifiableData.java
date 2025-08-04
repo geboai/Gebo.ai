@@ -23,7 +23,7 @@ public class Oauth2ProviderModifiableData {
 	private Oauth2AuthorizationGrantType authGrantType;
 	private @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes;
 	private @NotNull String description;
-	private List<String> scopes=null;
+	
 	@NotNull
 	private Boolean readOnly=false;
 }

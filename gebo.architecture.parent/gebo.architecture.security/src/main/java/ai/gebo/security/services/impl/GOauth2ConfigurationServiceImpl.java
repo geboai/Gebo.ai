@@ -281,10 +281,10 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	}
 
 	@Override
-	public void updateOauth2Configuration(String registrationId, @Valid Oauth2ProviderConfig providerConfiguration,
-			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, List<String> scopes,
-			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
-			List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception {
+	public void updateOauth2Configuration(String registrationId, Oauth2ProviderConfig providerConfiguration,
+			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
+			Oauth2AuthorizationGrantType authGrantType, List<Oauth2ConfigurationType> configurationTypes,
+			String description) throws GeboOauth2Exception {
 		Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
 		if (data == null)
 			throw new GeboOauth2Exception("Unkown registrationid:" + registrationId);
