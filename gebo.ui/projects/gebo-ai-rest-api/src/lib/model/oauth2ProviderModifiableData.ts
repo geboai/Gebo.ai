@@ -9,24 +9,30 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GeboOauth2SecretContent } from './geboOauth2SecretContent';
+import { Oauth2ProviderConfig } from './oauth2ProviderConfig';
 
 export interface Oauth2ProviderModifiableData { 
-    registrationId: string;
+    code?: string;
     authProvider: Oauth2ProviderModifiableData.AuthProviderEnum;
+    providerConfiguration?: Oauth2ProviderConfig;
+    oauth2ClientContent: GeboOauth2SecretContent;
     authClientMethod?: Oauth2ProviderModifiableData.AuthClientMethodEnum;
     authGrantType?: Oauth2ProviderModifiableData.AuthGrantTypeEnum;
-    description?: string;
     configurationTypes: Array<Oauth2ProviderModifiableData.ConfigurationTypesEnum>;
+    description: string;
     scopes?: Array<string>;
+    readOnly: boolean;
 }
 export namespace Oauth2ProviderModifiableData {
-    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
+    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
     export const AuthProviderEnum = {
         Local: 'local' as AuthProviderEnum,
         Facebook: 'facebook' as AuthProviderEnum,
         Google: 'google' as AuthProviderEnum,
         Github: 'github' as AuthProviderEnum,
         Microsoft: 'microsoft' as AuthProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
         Linkedin: 'linkedin' as AuthProviderEnum,
         Amazon: 'amazon' as AuthProviderEnum,
         Slack: 'slack' as AuthProviderEnum,

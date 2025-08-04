@@ -14,7 +14,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.LocalJwtTokenProvider;
+import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.model.AuthResponse;
 import ai.gebo.security.model.LoginRequest;
 import ai.gebo.security.model.User;

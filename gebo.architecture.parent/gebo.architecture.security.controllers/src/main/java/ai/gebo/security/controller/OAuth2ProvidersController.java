@@ -1,7 +1,6 @@
 package ai.gebo.security.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,10 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.security.model.oauth2.Oauth2ClientAuthorizativeInfo;
 import ai.gebo.security.model.oauth2.Oauth2ClientConfig;
-import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
-import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 
 @RestController
 @RequestMapping("/public/oauth2")

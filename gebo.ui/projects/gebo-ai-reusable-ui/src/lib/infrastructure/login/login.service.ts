@@ -23,6 +23,7 @@ import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject } from "rxjs";
 import { DEFAULT_PROVIDER_ID, getAuth, resetAuth } from "../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
+
 declare const google: any;
 /**
  * Interface representing the result of a login operation
@@ -168,15 +169,19 @@ export class LoginService {
   public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
     return this.oauth2ProvidersService.listAvailableProviders();
   }
-  private runOauth2Login(authConfig: AuthConfig, authProviderId?: string) {
+  private runOauth2Login(authConfig: AuthConfig, authProviderId?: string, providerName?: string) {
     resetAuth();
     if (authProviderId)
       sessionStorage.setItem("authProviderId", authProviderId);
     this.oauth2Service.setStorage(localStorage);
     this.oauth2Service.configure(authConfig);
+    this.oauth2Service.setupAutomaticSilentRefresh();
     this.oauth2Service.loadDiscoveryDocument().then(() => {
-      //this.oauth2Service.initImplicitFlow();
-      this.oauth2Service.initCodeFlow();
+      if (providerName === "google") {
+        this.oauth2Service.initImplicitFlow();
+      } else {
+        this.oauth2Service.initCodeFlow();
+      }
     });
   }
   private isGoogleLibraryDefined(): boolean {
@@ -242,7 +247,7 @@ export class LoginService {
 
       return this.loadProviderConfig(clicked.registrationId).pipe(map(authConfig => {
         //if (clicked.providerName !== "google") {
-        this.runOauth2Login(authConfig, clicked.registrationId);
+        this.runOauth2Login(authConfig, clicked.registrationId, clicked.providerName);
         //} else {
         //  this.runGoogleOauth2Login(authConfig, clicked.registrationId);
         //}
@@ -257,15 +262,17 @@ export class LoginService {
    */
   public async initializeOauth2Refresh() {
     const auth = getAuth();
-    if (auth && auth.authProviderId && auth.authProviderId !== DEFAULT_PROVIDER_ID) {
+    const authProviderId = auth && auth.authProviderId && auth.authProviderId !== DEFAULT_PROVIDER_ID ? auth.authProviderId : sessionStorage.getItem("authProviderId");
+    if (authProviderId) {
       try {
-        const authConfig = await this.loadProviderConfig(auth.authProviderId).toPromise();
+        const authConfig = await this.loadProviderConfig(authProviderId).toPromise();
         if (authConfig) {
           this.oauth2Service.configure(authConfig);
           this.oauth2Service.setStorage(localStorage);
+          this.oauth2Service.setupAutomaticSilentRefresh();
           const ok = await this.oauth2Service.loadDiscoveryDocumentAndTryLogin()
           if (this.oauth2Service.hasValidAccessToken()) {
-            this.oauth2Service.setupAutomaticSilentRefresh();
+
             const token = await this.oauth2Service.refreshToken();
           }
 
@@ -281,25 +288,25 @@ export class LoginService {
    */
   public successfullLanding(): void {
     const authProviderId = sessionStorage.getItem("authProviderId");
-    if (authProviderId) {
-      this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
-        this.oauth2Service.configure(authConfig);
-        this.oauth2Service.setStorage(localStorage);
-
-        this.oauth2Service.loadDiscoveryDocument().then(() => {
-          this.oauth2Service.tryLoginCodeFlow().then(() => {
-            if (this.oauth2Service.hasValidAccessToken()) {
-              this.oauth2Service.setupAutomaticSilentRefresh();
-              this.router.navigate(['ui', 'chat'], { relativeTo: this.activatedRouter });
-            } else {
-              console.error("Access token non ottenuto. Logout forzato.");
-              resetAuth();
-              this.router.navigate(['ui', 'login'], { relativeTo: this.activatedRouter });
-            }
-          });
-        });
-      });
-    }
+    /* if (authProviderId) {
+       this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
+         this.oauth2Service.configure(authConfig);
+         this.oauth2Service.setStorage(localStorage);
+ 
+         this.oauth2Service.loadDiscoveryDocument().then(() => {
+           this.oauth2Service.tryLoginCodeFlow().then(() => {
+             if (this.oauth2Service.hasValidAccessToken()) {
+               this.oauth2Service.setupAutomaticSilentRefresh();
+               this.router.navigate(['ui', 'chat'], { relativeTo: this.activatedRouter });
+             } else {
+               console.error("Access token non ottenuto. Logout forzato.");
+               resetAuth();
+               this.router.navigate(['ui', 'login'], { relativeTo: this.activatedRouter });
+             }
+           });
+         });
+       });
+     }*/
   }
 
 }

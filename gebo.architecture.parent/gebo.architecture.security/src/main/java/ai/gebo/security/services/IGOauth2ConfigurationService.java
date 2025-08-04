@@ -13,6 +13,7 @@ import ai.gebo.security.model.oauth2.Oauth2ClientAuthorizativeInfo;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -96,7 +97,7 @@ public interface IGOauth2ConfigurationService {
 	 * @return the ID of the stored configuration
 	 * @throws GeboOauth2Exception if storage fails
 	 */
-	public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
+	public String insertOauth2Configuration(@Nullable @Valid Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType,
 			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description)
@@ -151,7 +152,8 @@ public interface IGOauth2ConfigurationService {
 
 	public List<Oauth2ClientAuthorizativeInfo> findAllAauthorizativeRegistrations();
 
-	public void updateOauth2Configuration(String registrationId, List<String> scopes,
+	public void updateOauth2Configuration(String registrationId,@Nullable @Valid Oauth2ProviderConfig providerConfiguration,
+			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, List<String> scopes,
 			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
 			List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception;
 

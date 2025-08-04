@@ -177,7 +177,6 @@ export * from './oauth2ClientAuthorizativeInfo';
 export * from './oauth2ClientConfig';
 export * from './oauth2ProviderConfig';
 export * from './oauth2ProviderModifiableData';
-export * from './oauth2ProviderRegistrationInsertData';
 export * from './operationStatusAuthResponse';
 export * from './operationStatusBoolean';
 export * from './operationStatusComponentVectorStoreStatus';

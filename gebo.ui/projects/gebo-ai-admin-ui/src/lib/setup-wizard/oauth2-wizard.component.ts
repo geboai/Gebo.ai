@@ -1,5 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { Oauth2ClientAuthorizativeInfo, Oauth2ProviderRegistrationInsertData, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { Oauth2ClientAuthorizativeInfo, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 @Injectable({ providedIn: "root" })

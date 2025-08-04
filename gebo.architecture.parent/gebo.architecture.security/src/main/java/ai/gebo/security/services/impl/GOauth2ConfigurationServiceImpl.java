@@ -185,12 +185,13 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 */
 	private Oauth2ClientRegistration complete(Oauth2RuntimeConfiguration config) throws GeboOauth2Exception {
 		GeboOauth2SecretContent secretClient = null;
-		/*Oauth2ProviderConfig providerConfig = config.getProviderConfig();
-		if (providerConfig == null) {
-			//for standard providers take references from static YML
-			providerConfig = providersLibraryDao.findByCode(config.getProvider().name());
-			config.setProviderConfig(providerConfig);
-		}*/
+		/*
+		 * Oauth2ProviderConfig providerConfig = config.getProviderConfig(); if
+		 * (providerConfig == null) { //for standard providers take references from
+		 * static YML providerConfig =
+		 * providersLibraryDao.findByCode(config.getProvider().name());
+		 * config.setProviderConfig(providerConfig); }
+		 */
 		if (config.getReadOnly() == null || !config.getReadOnly()) {
 			String secretId = config.getClientSecretId();
 			try {
@@ -280,7 +281,8 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	}
 
 	@Override
-	public void updateOauth2Configuration(String registrationId, List<String> scopes,
+	public void updateOauth2Configuration(String registrationId, @Valid Oauth2ProviderConfig providerConfiguration,
+			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, List<String> scopes,
 			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
 			List<Oauth2ConfigurationType> configurationTypes, String description) throws GeboOauth2Exception {
 		Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
@@ -291,17 +293,15 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		}
 
 		data.setDescription(description);
+		data.setProviderConfig(providerConfiguration);
 		data.setConfigurationTypes(configurationTypes);
 		data.setClientAuthMethod(authClientMethod);
 		data.setAuthGrantType(authGrantType);
 		repository.save(data);
 		try {
-			AbstractGeboSecretContent dataSecret = secretService.getSecretContentById(data.getClientSecretId());
 			SecretInfo info = secretService.getSecretInfoById(data.getClientSecretId());
-			if (dataSecret instanceof GeboOauth2SecretContent secret) {
-				secret.setScopes(scopes);
-				secretService.updateSecret(secret, info.getDescription(), registrationId, info.getCode());
-			}
+			secretService.updateSecret(oauth2ClientContent, info.getDescription(), registrationId,
+					data.getClientSecretId());
 		} catch (GeboCryptSecretException e) {
 			throw new GeboOauth2Exception("Cannot modify secret on registrationId:" + registrationId, e);
 		}

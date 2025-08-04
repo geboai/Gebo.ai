@@ -1,6 +1,5 @@
 package ai.gebo.security.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.security.model.AuthProvider;
-import ai.gebo.security.model.Oauth2ProviderModifiableData;
-import ai.gebo.security.model.Oauth2ProviderRegistrationInsertData;
 import ai.gebo.security.model.AuthProvider.AuthProviderDto;
+import ai.gebo.security.model.Oauth2ProviderModifiableData;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
@@ -44,7 +42,7 @@ public class OAuth2AdminController {
 
 	@PostMapping(value = "insertOauth2ProviderRegistration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Oauth2ProviderModifiableData insertOauth2ProviderRegistration(
-			@NotNull @Valid @RequestBody Oauth2ProviderRegistrationInsertData data) throws GeboOauth2Exception {
+			@NotNull @Valid @RequestBody Oauth2ProviderModifiableData data) throws GeboOauth2Exception {
 		String registrationId = null;
 		if (data.getAuthProvider() == AuthProvider.oauth2_generic) {
 			if (data.getOauth2ClientContent() == null) {
@@ -75,24 +73,37 @@ public class OAuth2AdminController {
 	@PostMapping(value = "updateOauth2ProviderRegistration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Oauth2ProviderModifiableData updateOauth2ProviderRegistration(
 			@NotNull @Valid @RequestBody Oauth2ProviderModifiableData data) throws GeboOauth2Exception {
-		oauth2ConfiguratoinService.updateOauth2Configuration(data.getRegistrationId(), data.getScopes(),
-				data.getAuthClientMethod(), data.getAuthGrantType(), data.getConfigurationTypes(),
-				data.getDescription());
+		oauth2ConfiguratoinService.updateOauth2Configuration(data.getCode(), data.getProviderConfiguration(),
+				data.getOauth2ClientContent(), data.getScopes(), data.getAuthClientMethod(), data.getAuthGrantType(),
+				data.getConfigurationTypes(), data.getDescription());
 		Oauth2ClientRegistration registration = oauth2ConfiguratoinService
-				.findOauth2ClientRegistrationByRegistrationId(data.getRegistrationId());
+				.findOauth2ClientRegistrationByRegistrationId(data.getCode());
 		return toModifiableData(registration);
 	}
 
 	@DeleteMapping(value = "deleteOauth2ProviderRegistration", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteOauth2ProviderRegistration(@NotNull @Valid @RequestBody Oauth2ProviderModifiableData data)
 			throws GeboOauth2Exception {
-		this.oauth2ConfiguratoinService.deleteOauth2Configuration(data.getRegistrationId());
+		this.oauth2ConfiguratoinService.deleteOauth2Configuration(data.getCode());
 	}
 
 	private Oauth2ProviderModifiableData toModifiableData(Oauth2ClientRegistration registration) {
 		if (registration == null)
 			return null;
+		Oauth2ProviderModifiableData data = new Oauth2ProviderModifiableData();
+		data.setConfigurationTypes(registration.getRuntimeConfiguration().getConfigurationTypes());
+		data.setOauth2ClientContent(registration.getClientRegistration());
 
-		return null;
+		data.setAuthClientMethod(registration.getRuntimeConfiguration().getClientAuthMethod());
+		data.setAuthGrantType(registration.getRuntimeConfiguration().getAuthGrantType());
+		data.setDescription(registration.getRuntimeConfiguration().getDescription());
+		data.setAuthProvider(registration.getRuntimeConfiguration().getProvider());
+		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());
+		data.setScopes(registration.getClientRegistration().getScopes());
+		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
+		if (data.getAuthProvider() != null && data.getAuthProvider() == AuthProvider.oauth2_generic) {
+			data.setProviderConfiguration(registration.getRuntimeConfiguration().getProviderConfig());
+		}
+		return data;
 	}
 }

@@ -20,15 +20,17 @@ export interface Oauth2ProviderRegistrationInsertData {
     authGrantType?: Oauth2ProviderRegistrationInsertData.AuthGrantTypeEnum;
     configurationTypes: Array<Oauth2ProviderRegistrationInsertData.ConfigurationTypesEnum>;
     description: string;
+    scopes?: Array<string>;
 }
 export namespace Oauth2ProviderRegistrationInsertData {
-    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
+    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
     export const AuthProviderEnum = {
         Local: 'local' as AuthProviderEnum,
         Facebook: 'facebook' as AuthProviderEnum,
         Google: 'google' as AuthProviderEnum,
         Github: 'github' as AuthProviderEnum,
         Microsoft: 'microsoft' as AuthProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
         Linkedin: 'linkedin' as AuthProviderEnum,
         Amazon: 'amazon' as AuthProviderEnum,
         Slack: 'slack' as AuthProviderEnum,

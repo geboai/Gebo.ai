@@ -19,7 +19,6 @@ import { Observable }                                        from 'rxjs';
 
 import { AuthProviderDto } from '../model/authProviderDto';
 import { Oauth2ProviderModifiableData } from '../model/oauth2ProviderModifiableData';
-import { Oauth2ProviderRegistrationInsertData } from '../model/oauth2ProviderRegistrationInsertData';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -193,10 +192,10 @@ export class OAuth2AdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public insertOauth2ProviderRegistration(body: Oauth2ProviderRegistrationInsertData, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ProviderModifiableData>;
-    public insertOauth2ProviderRegistration(body: Oauth2ProviderRegistrationInsertData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ProviderModifiableData>>;
-    public insertOauth2ProviderRegistration(body: Oauth2ProviderRegistrationInsertData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ProviderModifiableData>>;
-    public insertOauth2ProviderRegistration(body: Oauth2ProviderRegistrationInsertData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public insertOauth2ProviderRegistration(body: Oauth2ProviderModifiableData, observe?: 'body', reportProgress?: boolean): Observable<Oauth2ProviderModifiableData>;
+    public insertOauth2ProviderRegistration(body: Oauth2ProviderModifiableData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Oauth2ProviderModifiableData>>;
+    public insertOauth2ProviderRegistration(body: Oauth2ProviderModifiableData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Oauth2ProviderModifiableData>>;
+    public insertOauth2ProviderRegistration(body: Oauth2ProviderModifiableData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling insertOauth2ProviderRegistration.');
