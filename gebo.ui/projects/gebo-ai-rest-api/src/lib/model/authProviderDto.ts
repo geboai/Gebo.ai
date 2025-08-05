@@ -15,6 +15,7 @@ export interface AuthProviderDto {
     type: AuthProviderDto.TypeEnum;
     description: string;
     multitenant: boolean;
+    loginModel: AuthProviderDto.LoginModelEnum;
 }
 export namespace AuthProviderDto {
     export type ProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
@@ -38,5 +39,10 @@ export namespace AuthProviderDto {
         LOCALJWT: 'LOCAL_JWT' as TypeEnum,
         OAUTH2: 'OAUTH2' as TypeEnum,
         LDAP: 'LDAP' as TypeEnum
+    };
+    export type LoginModelEnum = 'SPA' | 'BACKEND';
+    export const LoginModelEnum = {
+        SPA: 'SPA' as LoginModelEnum,
+        BACKEND: 'BACKEND' as LoginModelEnum
     };
 }

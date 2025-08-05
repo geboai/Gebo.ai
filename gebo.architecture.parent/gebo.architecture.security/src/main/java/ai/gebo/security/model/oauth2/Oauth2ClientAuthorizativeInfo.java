@@ -17,8 +17,7 @@ public class Oauth2ClientAuthorizativeInfo {
 	private final String providerName;
 	// The description of the provider registration
 	private final String description;
-	//when readOnly is true the entry is not modifiable
-	private final boolean readOnly;
+	
 	
 
 }

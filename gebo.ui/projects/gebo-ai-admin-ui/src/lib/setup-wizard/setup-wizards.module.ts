@@ -51,7 +51,7 @@ import { ConfluenceInstalledModuleService, ConfluenceWizardComponent, ConfuenceS
 import { SharepointInstalledModuleService, SharepointStatusService, SharepointWizardComponent } from "./sharepoint-wizard.component";
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
-import { Oauth2SetupWizardService, Oauth2WizardComponent } from "./oauth2-wizard.component";
+import { Oauth2SetupEnabledService, Oauth2SetupWizardService, Oauth2WizardComponent } from "./oauth2-wizard.component";
 
 /**
  * Setup section for administrator user account configuration.
@@ -110,7 +110,7 @@ const oauth2SetupSection: SetupWizardsSection = {
     orderEntry: 5,
     label: "Oauth2 authentication",
     description: "Oauth2 enterprise authentication configuration and oauth2 clients configuration",
-    enabledService: AlwaysTrueStatusService,
+    enabledService: Oauth2SetupEnabledService,
     setupCompletedService: Oauth2SetupWizardService,
     wizardComponent: Oauth2WizardComponent,
     wizardSectionId: "oauth2SetupSection"
@@ -262,6 +262,7 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
+        Oauth2SetupEnabledService,
         LLMSetupWizardService,
         VectorStoreWizardService,
         WorkFolderWizardEnabledService,

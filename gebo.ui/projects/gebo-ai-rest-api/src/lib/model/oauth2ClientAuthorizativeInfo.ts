@@ -14,5 +14,4 @@ export interface Oauth2ClientAuthorizativeInfo {
     registrationId?: string;
     providerName?: string;
     description?: string;
-    readOnly?: boolean;
 }

@@ -10,7 +10,16 @@ export class Oauth2SetupWizardService extends AbstractStatusService {
     public override getBooleanStatus(): Observable<boolean> {
         return this.oauth2ProvidersService.listAvailableProviders().pipe(map(data => data && data.length > 0));
     }
-
+}
+@Injectable({ providedIn: "root" })
+export class Oauth2SetupEnabledService extends AbstractStatusService {
+    constructor(private geboOauth2ClientService:OAuth2ProvidersControllerService) {
+        super();
+    }
+    public override getBooleanStatus(): Observable<boolean> {
+        return this.geboOauth2ClientService.isOauth2Enabled();
+    }
+    
 }
 @Component({
     selector: "oauth2-wizard-component",

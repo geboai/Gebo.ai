@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.config.GeboConfig;
 import ai.gebo.security.model.oauth2.Oauth2ClientAuthorizativeInfo;
 import ai.gebo.security.model.oauth2.Oauth2ClientConfig;
 import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
@@ -19,22 +20,34 @@ public class OAuth2ProvidersController {
 
 	private final IGOauth2ConfigurationService oauth2Service;
 	private final IOauth2DynamicClientRegistrationRepository dynamicClientRegistrationRepository;
+	private final GeboConfig geboConfig;
 
 	public OAuth2ProvidersController(IGOauth2ConfigurationService oauth2Service,
-			IOauth2DynamicClientRegistrationRepository dynamicClientRegistrationRepository) {
+			IOauth2DynamicClientRegistrationRepository dynamicClientRegistrationRepository, GeboConfig geboConfig) {
 		this.oauth2Service = oauth2Service;
 		this.dynamicClientRegistrationRepository = dynamicClientRegistrationRepository;
+		this.geboConfig = geboConfig;
 	}
 
 	@GetMapping(value = "listAvailableProviders", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Oauth2ClientAuthorizativeInfo> listAvailableProviders() {
-		return oauth2Service.findAllAauthorizativeRegistrations();
+		if (geboConfig.getOauth2Enabled() != null && geboConfig.getOauth2Enabled())
+			return oauth2Service.findAllAauthorizativeRegistrations();
+		else
+			return List.of();
 	}
 
 	@GetMapping(value = "getProviderClientConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Oauth2ClientConfig getProviderClientConfig(@RequestParam("registrationId") String registrationId) {
+		if (geboConfig.getOauth2Enabled() != null && geboConfig.getOauth2Enabled())
+			return this.dynamicClientRegistrationRepository.findOauth2ClientConfigById(registrationId);
+		else
+			return null;
 
-		return this.dynamicClientRegistrationRepository.findOauth2ClientConfigById(registrationId);
+	}
 
+	@GetMapping(value = "isOauth2Enabled", produces = MediaType.APPLICATION_JSON_VALUE)
+	public boolean isOauth2Enabled() {
+		return geboConfig.getOauth2Enabled() != null && geboConfig.getOauth2Enabled();
 	}
 }

@@ -218,7 +218,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 			_user.setUsername(email);
 			_user.setRoles(List.of("USER"));
 			_user.setDisabled(false);
-			_user.setEmailVerified(true);
+			_user.setEmailVerified(false);
 			userRepo.insert(_user);
 
 		}

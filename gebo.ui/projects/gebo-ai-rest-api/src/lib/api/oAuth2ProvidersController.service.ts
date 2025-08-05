@@ -109,6 +109,42 @@ export class OAuth2ProvidersControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public isOauth2Enabled(observe?: 'body', reportProgress?: boolean): Observable<boolean>;
+    public isOauth2Enabled(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<boolean>>;
+    public isOauth2Enabled(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<boolean>>;
+    public isOauth2Enabled(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<boolean>('get',`${this.basePath}/public/oauth2/isOauth2Enabled`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public listAvailableProviders(observe?: 'body', reportProgress?: boolean): Observable<Array<Oauth2ClientAuthorizativeInfo>>;
     public listAvailableProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Oauth2ClientAuthorizativeInfo>>>;
     public listAvailableProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Oauth2ClientAuthorizativeInfo>>>;

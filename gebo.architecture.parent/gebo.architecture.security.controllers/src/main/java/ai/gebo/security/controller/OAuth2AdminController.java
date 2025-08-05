@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.config.GeboConfig;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.AuthProvider.AuthProviderDto;
 import ai.gebo.security.model.Oauth2ProviderModifiableData;
@@ -36,6 +37,7 @@ public class OAuth2AdminController {
 
 	@GetMapping(value = "getProviders", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AuthProviderDto> getProviders() {
+
 		return AuthProvider.getOauth2Providers();
 
 	}
@@ -98,7 +100,7 @@ public class OAuth2AdminController {
 		data.setAuthGrantType(registration.getRuntimeConfiguration().getAuthGrantType());
 		data.setDescription(registration.getRuntimeConfiguration().getDescription());
 		data.setAuthProvider(registration.getRuntimeConfiguration().getProvider());
-		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());		
+		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());
 		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
 		if (data.getAuthProvider() != null && data.getAuthProvider() == AuthProvider.oauth2_generic) {
 			data.setProviderConfiguration(registration.getRuntimeConfiguration().getProviderConfig());

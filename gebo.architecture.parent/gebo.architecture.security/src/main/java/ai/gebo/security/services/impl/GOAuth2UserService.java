@@ -26,7 +26,7 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		Map<String, Object> params = userRequest.getAdditionalParameters();
 		OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser(userRequest);
-		
+
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		Oauth2ClientRegistration config = null;
 		try {
@@ -42,15 +42,12 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 			throw new OAuth2AuthenticationException("Missing email attribute");
 
 		switch (securityProperties.getLoginPolicy()) {
-		case TRUST_ANY_IDENTITY -> {
+		case TRUST_EVERY_OAUTH_IDENTITY: {
 			userService.createUserIfNotExists(email, oauth2User.getAttributes());
 		}
-		case REQUIRE_REGISTERED_USER -> {
-			if (userService.findUserByUsername(email) == null) {
-				throw new OAuth2AuthenticationException("User not authorized");
-			}
-		}
-		case REQUIRE_INVITATION -> {
+			break;
+		case USER_SELF_REGISTERS:
+		case REQUIRE_INVITATION: {
 			if (userService.findUserByUsername(email) == null) {
 				throw new OAuth2AuthenticationException("User not authorized");
 			}

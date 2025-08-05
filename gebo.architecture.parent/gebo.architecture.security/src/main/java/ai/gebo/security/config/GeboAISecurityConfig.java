@@ -218,8 +218,25 @@ public class GeboAISecurityConfig {
 	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+		boolean oauth2Enabled=geboConfig.getOauth2Enabled()!=null && geboConfig.getOauth2Enabled();
+		HttpSecurity configBuilder = http.cors(c -> c.disable()).csrf(csrf -> csrf.disable()).addFilterAfter(corsFilter, CsrfFilter.class)
+				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
+						.anyRequest().authenticated());
+		if (oauth2Enabled) {
+			configBuilder=configBuilder.oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(clientRegistrationRepository)
+					.authorizedClientService(oauth2AuthorizedClientService)
+					// .successHandler(authenticationSuccessHandler)
+					.authorizationEndpoint(
+							auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
+					.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
+			// Optional: use a custom success handler to issue JWT
+			).oauth2ResourceServer(oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
+		}
+		return configBuilder.userDetailsService(userDetailsService)
+				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
+				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
 		// Configure security filter chain
+		/*
 		return http.cors(c -> c.disable()).csrf(csrf -> csrf.disable()).addFilterAfter(corsFilter, CsrfFilter.class)
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
 						.anyRequest().authenticated())
@@ -233,7 +250,7 @@ public class GeboAISecurityConfig {
 				).oauth2ResourceServer(oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()))
 				.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
-				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();*/
 	}
 
 	@Bean

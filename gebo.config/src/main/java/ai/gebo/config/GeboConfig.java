@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.config;
 
@@ -20,187 +17,215 @@ import org.springframework.context.annotation.Configuration;
 import ai.gebo.config.model.GeboModuleInfo;
 
 /**
- * AI generated comments
- * GeboConfig is a configuration class that holds various configuration properties for the Gebo application.
+ * AI generated comments GeboConfig is a configuration class that holds various
+ * configuration properties for the Gebo application.
  */
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.config")
 public class GeboConfig {
 
-    // Indicates whether a custom keystore is used
+	// Indicates whether a custom keystore is used
 	private Boolean customKeyStore = false;
-	
-    // Indicates if the application setup is complete
+
+	// Indicates if the application setup is complete
 	private Boolean setup = false;
-	
-    // Indicates if the setup configures the working directory
+
+	// Indicates if the setup configures the working directory
 	private Boolean setupConfiguresWorkdir = false;
-	
-    // Indicates if LDAP is used for authentication
+
+	// Indicates if LDAP is used for authentication
 	private Boolean useLdap = false;
-	
-    // Configuration details for LDAP
+
+	private Boolean oauth2Enabled = true;
+
+	// Configuration details for LDAP
 	private LdapConfiguration ldapConfig = null;
-	
-    // Configuration for various Gebo modules
+
+	// Configuration for various Gebo modules
 	private HashMap<String, GeboModuleInfo> modulesConfig = GeboModuleInfo.buildStandardModulesEntries();
-	
-    // Indicates whether community modules are enabled
+
+	// Indicates whether community modules are enabled
 	private Boolean enableCommunityModules = false;
-	
-    // Indicates if the application is running in a clustered environment
+
+	// Indicates if the application is running in a clustered environment
 	private Boolean clustered = false;
-	
-    // Specifies the location of config resources
+
+	// Specifies the location of config resources
 	private String location = "default";
 
-    /**
-     * Constructor for GeboConfig.
-     */
+	/**
+	 * Constructor for GeboConfig.
+	 */
 	public GeboConfig() {
 	}
 
-    /**
-     * Gets the setup status.
-     * @return the setup status
-     */
+	/**
+	 * Gets the setup status.
+	 * 
+	 * @return the setup status
+	 */
 	public Boolean getSetup() {
 		return setup;
 	}
 
-    /**
-     * Sets the setup status.
-     * @param setup the setup status to set
-     */
+	/**
+	 * Sets the setup status.
+	 * 
+	 * @param setup the setup status to set
+	 */
 	public void setSetup(Boolean setup) {
 		this.setup = setup;
 	}
 
-    /**
-     * Gets the LDAP usage status.
-     * @return the LDAP usage status
-     */
+	/**
+	 * Gets the LDAP usage status.
+	 * 
+	 * @return the LDAP usage status
+	 */
 	public Boolean getUseLdap() {
 		return useLdap;
 	}
 
-    /**
-     * Sets the LDAP usage status.
-     * @param useLdap the LDAP usage status to set
-     */
+	/**
+	 * Sets the LDAP usage status.
+	 * 
+	 * @param useLdap the LDAP usage status to set
+	 */
 	public void setUseLdap(Boolean useLdap) {
 		this.useLdap = useLdap;
 	}
 
-    /**
-     * Gets the LDAP configuration.
-     * @return the LDAP configuration
-     */
+	/**
+	 * Gets the LDAP configuration.
+	 * 
+	 * @return the LDAP configuration
+	 */
 	public LdapConfiguration getLdapConfig() {
 		return ldapConfig;
 	}
 
-    /**
-     * Sets the LDAP configuration.
-     * @param ldapConfig the LDAP configuration to set
-     */
+	/**
+	 * Sets the LDAP configuration.
+	 * 
+	 * @param ldapConfig the LDAP configuration to set
+	 */
 	public void setLdapConfig(LdapConfiguration ldapConfig) {
 		this.ldapConfig = ldapConfig;
 	}
 
-    /**
-     * Gets the modules configuration.
-     * @return the modules configuration
-     */
+	/**
+	 * Gets the modules configuration.
+	 * 
+	 * @return the modules configuration
+	 */
 	public HashMap<String, GeboModuleInfo> getModulesConfig() {
 		return modulesConfig;
 	}
 
-    /**
-     * Sets the modules configuration.
-     * @param modulesConfig the modules configuration to set
-     */
+	/**
+	 * Sets the modules configuration.
+	 * 
+	 * @param modulesConfig the modules configuration to set
+	 */
 	public void setModulesConfig(HashMap<String, GeboModuleInfo> modulesConfig) {
 		this.modulesConfig = modulesConfig;
 	}
 
-    /**
-     * Gets the status of community modules enablement.
-     * @return the status of community modules enablement
-     */
+	/**
+	 * Gets the status of community modules enablement.
+	 * 
+	 * @return the status of community modules enablement
+	 */
 	public Boolean getEnableCommunityModules() {
 		return enableCommunityModules;
 	}
 
-    /**
-     * Sets the status of community modules enablement.
-     * @param enableCommunityModules the status to set
-     */
+	/**
+	 * Sets the status of community modules enablement.
+	 * 
+	 * @param enableCommunityModules the status to set
+	 */
 	public void setEnableCommunityModules(Boolean enableCommunityModules) {
 		this.enableCommunityModules = enableCommunityModules;
 	}
 
-    /**
-     * Gets the clustered environment status.
-     * @return the clustered environment status
-     */
+	/**
+	 * Gets the clustered environment status.
+	 * 
+	 * @return the clustered environment status
+	 */
 	public Boolean getClustered() {
 		return clustered;
 	}
 
-    /**
-     * Sets the clustered environment status.
-     * @param clustered the status to set
-     */
+	/**
+	 * Sets the clustered environment status.
+	 * 
+	 * @param clustered the status to set
+	 */
 	public void setClustered(Boolean clustered) {
 		this.clustered = clustered;
 	}
 
-    /**
-     * Gets the custom keystore usage status.
-     * @return the custom keystore usage status
-     */
+	/**
+	 * Gets the custom keystore usage status.
+	 * 
+	 * @return the custom keystore usage status
+	 */
 	public Boolean getCustomKeyStore() {
 		return customKeyStore;
 	}
 
-    /**
-     * Sets the custom keystore usage status.
-     * @param customKeyStore the status to set
-     */
+	/**
+	 * Sets the custom keystore usage status.
+	 * 
+	 * @param customKeyStore the status to set
+	 */
 	public void setCustomKeyStore(Boolean customKeyStore) {
 		this.customKeyStore = customKeyStore;
 	}
 
-    /**
-     * Gets the location of the configuration.
-     * @return the location of the configuration
-     */
+	/**
+	 * Gets the location of the configuration.
+	 * 
+	 * @return the location of the configuration
+	 */
 	public String getLocation() {
 		return location;
 	}
 
-    /**
-     * Sets the location of the configuration.
-     * @param location the location to set
-     */
+	/**
+	 * Sets the location of the configuration.
+	 * 
+	 * @param location the location to set
+	 */
 	public void setLocation(String location) {
 		this.location = location;
 	}
 
-    /**
-     * Gets the setup configuration workdir status.
-     * @return the setup configuration workdir status
-     */
+	/**
+	 * Gets the setup configuration workdir status.
+	 * 
+	 * @return the setup configuration workdir status
+	 */
 	public Boolean getSetupConfiguresWorkdir() {
 		return setupConfiguresWorkdir;
 	}
 
-    /**
-     * Sets the setup configuration workdir status.
-     * @param setupConfiguresWorkdir the status to set
-     */
+	/**
+	 * Sets the setup configuration workdir status.
+	 * 
+	 * @param setupConfiguresWorkdir the status to set
+	 */
 	public void setSetupConfiguresWorkdir(Boolean setupConfiguresWorkdir) {
 		this.setupConfiguresWorkdir = setupConfiguresWorkdir;
+	}
+
+	public Boolean getOauth2Enabled() {
+		return oauth2Enabled;
+	}
+
+	public void setOauth2Enabled(Boolean oauth2Enabled) {
+		this.oauth2Enabled = oauth2Enabled;
 	}
 }

@@ -274,7 +274,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 				.findByConfigurationTypesContains(Oauth2ConfigurationType.AUTHENTICATION);
 		return list.stream().map(x -> {
 			Oauth2ClientAuthorizativeInfo data = new Oauth2ClientAuthorizativeInfo(x.getRegistrationId(),
-					x.getProvider().name(), x.getDescription(), x.getReadOnly() != null && x.getReadOnly());
+					x.getProvider().name(), x.getDescription());
 			return data;
 		}).toList();
 

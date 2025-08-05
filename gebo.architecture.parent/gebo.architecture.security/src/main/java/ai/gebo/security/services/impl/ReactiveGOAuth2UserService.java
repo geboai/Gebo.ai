@@ -43,11 +43,13 @@ public class ReactiveGOAuth2UserService implements ReactiveOAuth2UserService<OAu
 			}
 
 			switch (securityProperties.getLoginPolicy()) {
-			case TRUST_ANY_IDENTITY -> {
+			case TRUST_EVERY_OAUTH_IDENTITY: {
 				// Create user if not exists (can be async if needed)
 				userService.createUserIfNotExists(email, oauth2User.getAttributes());
 			}
-			case REQUIRE_REGISTERED_USER, REQUIRE_INVITATION -> {
+				break;
+			case USER_SELF_REGISTERS:
+			case REQUIRE_INVITATION: {
 				if (userService.findUserByUsername(email) == null) {
 					return Mono.error(new OAuth2AuthenticationException("User not authorized"));
 				}

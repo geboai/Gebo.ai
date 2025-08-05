@@ -5,10 +5,8 @@ package ai.gebo.security.model;
 public enum GeboLoginPolicy {
 	// Every users coming from an OAUTH2 provider signed as AUTHENTICATION can use
 	// the system
-	TRUST_ANY_IDENTITY,
-	// Every user registered as user inside the platform if OAUTH2 or inserted as
-	// JWT can enter the system
-	REQUIRE_REGISTERED_USER,
+	TRUST_EVERY_OAUTH_IDENTITY,
+	
 	// Every user must be invited from an admin and must register himself following
 	// the registration ticket
 	REQUIRE_INVITATION,

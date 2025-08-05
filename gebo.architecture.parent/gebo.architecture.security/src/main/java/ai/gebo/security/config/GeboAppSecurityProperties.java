@@ -31,7 +31,7 @@ public class GeboAppSecurityProperties {
 	// Nested Auth class instance for authentication properties.
 	private final Auth auth = new Auth();
 	@NotNull
-	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_REGISTERED_USER;
+	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_INVITATION;
 	private List<Oauth2RuntimeConfiguration> oauth2configs=new ArrayList<Oauth2RuntimeConfiguration>();
 
 	/**

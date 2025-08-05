@@ -40,8 +40,8 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         description: new FormControl(),
         readOnly: new FormControl()
     });
-    protected redirectUrls:string[]=[];
-    protected refererUrls:string[]=[];
+    protected redirectUrls: string[] = [];
+    protected refererUrls: string[] = [];
     protected currentProvider?: AuthProviderDto.ProviderEnum;
     @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
     @Input() oauth2MandatoryScopes: { code: string, description: string }[] = [];
@@ -56,7 +56,7 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
     // 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'twitter' | 'slack' | 'x' | 'apple' | 'oauth2_generic' 
 
     public constructor(
-        @Inject(BASE_PATH) private  basePath:string,
+        @Inject(BASE_PATH) private basePath: string,
         injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
@@ -77,22 +77,33 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
     protected override onNewData(actualValue: Oauth2ProviderModifiableData): void {
         this.userMessages = [{
             summary: "Security warning",
-            detail: "Oauth2 client registration data will be not readable using the application after insertion for security reason, you can only delete them in the future",
+            detail: "Oauth2 client registration data will be crypted inside the database, pay attention on handling it, a misconfiguration can leave your system on being unusable from some users",
             severity: "warning"
         }];
-        actualValue.readOnly=false;
+        actualValue.readOnly = false;
         this.formGroup.controls["readOnly"].setValue(false);
     }
-    protected cat(base:string,relative:string,id?:string):string {
-        return base+(id?relative.replaceAll("{registrationId}",id):relative);
+    protected cat(base: string, relative: string, id?: string): string {
+        return base + (id ? relative.replaceAll("{registrationId}", id) : relative);
     }
     protected override onLoadedPersistentData(actualValue: Oauth2ProviderModifiableData): void {
-        const registrationId=actualValue.code;
-        const baseUIPath=window.document.location.origin;
-        this.redirectUrls=[...frontendRedirectRelativeUris.map(x=>this.cat(baseUIPath,x,registrationId)),...backendRedirectRelativeUris.map(x=>this.cat(this.basePath,x,registrationId))];
-        this.refererUrls=[...frontendRefererUris.map(x=>this.cat(baseUIPath,x,registrationId)),...backendRefererUris.map(x=>this.cat(this.basePath,x,registrationId))];
-        this.readonly=actualValue?.readOnly===true;
-
+        const registrationId = actualValue.code;
+        const baseUIPath = window.document.location.origin;
+        this.redirectUrls = [...frontendRedirectRelativeUris.map(x => this.cat(baseUIPath, x, registrationId)), ...backendRedirectRelativeUris.map(x => this.cat(this.basePath, x, registrationId))];
+        this.refererUrls = [...frontendRefererUris.map(x => this.cat(baseUIPath, x, registrationId)), ...backendRefererUris.map(x => this.cat(this.basePath, x, registrationId))];
+        this.readonly = actualValue?.readOnly === true;
+        this.userMessages = [{
+            summary: "Security warning",
+            detail: "Oauth2 client registration data will be crypted inside the database, pay attention on handling it, a misconfiguration can leave your system on being unusable from some users",
+            severity: "warning"
+        }];
+        if (this.readonly === true) {
+            this.userMessages = [{
+                summary: "Security warning",
+                detail: "These oauth2 configurations are inserted in the configuration files of this software and not completely visible and manageable here for security reasons",
+                severity: "warning"
+            }];
+        }
     }
     private modifyValidation(value: Oauth2ProviderModifiableData, mode: "NEW" | "EDIT" | "EDIT_OR_NEW") {
         if (mode === "NEW") {
@@ -139,26 +150,29 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         return this.oauth2ControllerService.findOauth2ProviderRegistrationByRegistrationId(code);
     }
     override save(value: Oauth2ProviderModifiableData): Observable<Oauth2ProviderModifiableData> {
-        if (value?.authProvider!=="oauth2_generic") {
-            value.providerConfiguration=undefined;
+        if (value?.authProvider !== "oauth2_generic") {
+            value.providerConfiguration = undefined;
         }
         if (!value.readOnly) {
-            value.readOnly=false;
+            value.readOnly = false;
         }
         return this.oauth2ControllerService.updateOauth2ProviderRegistration(value);
     }
     override insert(value: Oauth2ProviderModifiableData): Observable<Oauth2ProviderModifiableData> {
-        if (value?.authProvider!=="oauth2_generic") {
-            value.providerConfiguration=undefined;
+        if (value?.authProvider !== "oauth2_generic") {
+            value.providerConfiguration = undefined;
         }
         if (!value.readOnly) {
-            value.readOnly=false;
+            value.readOnly = false;
         }
         return this.oauth2ControllerService.insertOauth2ProviderRegistration(value);
     }
     override delete(value: Oauth2ProviderModifiableData): Observable<boolean> {
-        if (value?.authProvider!=="oauth2_generic") {
-            value.providerConfiguration=undefined;
+        if (value?.authProvider !== "oauth2_generic") {
+            value.providerConfiguration = undefined;
+        }
+        if (!value.readOnly) {
+            value.readOnly = false;
         }
         return this.oauth2ControllerService.deleteOauth2ProviderRegistration(value).pipe(map(x => true));
     }
