@@ -36,5 +36,7 @@
   	<module>gebo.architecture.integration.tests</module>
 
   	<module>gebo.architecture.swagger</module>
+  	<module>gebo.architecture.mcp-clients</module>
+  	<module>gebo.architecture.mcp-server</module>
   </modules>
 </project>

@@ -65,6 +65,7 @@ import { MistralAiChatModelsConfigurationControllerService } from './api/mistral
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { OAuth2ProvidersControllerService } from './api/oAuth2ProvidersController.service';
+import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
@@ -150,6 +151,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     MistralAiEmbeddingModelsConfigurationControllerService,
     OAuth2AdminControllerService,
     OAuth2ProvidersControllerService,
+    Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,

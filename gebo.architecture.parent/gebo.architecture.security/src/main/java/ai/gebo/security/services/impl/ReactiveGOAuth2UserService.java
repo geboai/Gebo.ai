@@ -6,7 +6,7 @@ import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserSer
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import ai.gebo.security.config.GeboAppSecurityProperties;
+import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
@@ -19,7 +19,7 @@ public class ReactiveGOAuth2UserService implements ReactiveOAuth2UserService<OAu
 
 	private final IGOauth2ConfigurationService oauth2ConfigService;
 	private final IGUsersAdminService userService;
-	private final GeboAppSecurityProperties securityProperties;
+	private final GeboSecurityConfig securityProperties;
 
 	@Override
 	public Mono<OAuth2User> loadUser(final OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

@@ -175,6 +175,7 @@ export * from './moduleIntegrationAddress';
 export * from './mongoConfig';
 export * from './oauth2ClientAuthorizativeInfo';
 export * from './oauth2ClientConfig';
+export * from './oauth2ModuleStatus';
 export * from './oauth2ProviderConfig';
 export * from './oauth2ProviderModifiableData';
 export * from './operationStatusAuthResponse';

@@ -26,13 +26,16 @@ import jakarta.validation.constraints.NotNull;
  */
 @Configuration
 @ConfigurationProperties(prefix = "ai.gebo.security")
-public class GeboAppSecurityProperties {
+public class GeboSecurityConfig {
 
 	// Nested Auth class instance for authentication properties.
 	private final Auth auth = new Auth();
 	@NotNull
 	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_INVITATION;
 	private List<Oauth2RuntimeConfiguration> oauth2configs=new ArrayList<Oauth2RuntimeConfiguration>();
+	private Boolean oauth2UISetupEnabled=true;
+	private Boolean oauth2Enabled = true;
+
 
 	/**
 	 * Represents configuration properties related to authentication. Includes token
@@ -102,6 +105,22 @@ public class GeboAppSecurityProperties {
 
 	public void setOauth2configs(List<Oauth2RuntimeConfiguration> oauth2configs) {
 		this.oauth2configs = oauth2configs;
+	}
+
+	public Boolean getOauth2UISetupEnabled() {
+		return oauth2UISetupEnabled;
+	}
+
+	public void setOauth2UISetupEnabled(Boolean oauth2uiSetupEnabled) {
+		oauth2UISetupEnabled = oauth2uiSetupEnabled;
+	}
+
+	public Boolean getOauth2Enabled() {
+		return oauth2Enabled;
+	}
+
+	public void setOauth2Enabled(Boolean oauth2Enabled) {
+		this.oauth2Enabled = oauth2Enabled;
 	}
 
 }

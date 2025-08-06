@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import ai.gebo.security.config.GeboAppSecurityProperties;
+import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
@@ -20,7 +20,7 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 
 	private final IGOauth2ConfigurationService oauth2ConfigService;
 	private final IGUsersAdminService userService; // servizio che gestisce la tua logica utenti
-	private final GeboAppSecurityProperties securityProperties;
+	private final GeboSecurityConfig securityProperties;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

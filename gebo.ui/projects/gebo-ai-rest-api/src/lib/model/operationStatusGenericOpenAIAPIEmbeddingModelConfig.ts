@@ -15,6 +15,6 @@ import { GenericOpenAIAPIEmbeddingModelConfig } from './genericOpenAIAPIEmbeddin
 export interface OperationStatusGenericOpenAIAPIEmbeddingModelConfig { 
     result?: GenericOpenAIAPIEmbeddingModelConfig;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

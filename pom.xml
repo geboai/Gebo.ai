@@ -19,7 +19,7 @@
 		<!-- TODO: Test if works ok <org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
 		<apache-poi.version>5.4.1</apache-poi.version>
-		<spring.ai.version>1.0.0</spring.ai.version>
+		<spring.ai.version>1.0.1</spring.ai.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>

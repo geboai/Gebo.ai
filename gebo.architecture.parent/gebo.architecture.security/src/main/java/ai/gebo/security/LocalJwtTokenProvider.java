@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import ai.gebo.security.config.GeboAppSecurityProperties;
+import ai.gebo.security.config.GeboSecurityConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -42,14 +42,14 @@ public class LocalJwtTokenProvider {
 	private static final Logger logger = LoggerFactory.getLogger(LocalJwtTokenProvider.class);
 
 	// Configuration properties for security settings
-	private GeboAppSecurityProperties appProperties;
+	private GeboSecurityConfig appProperties;
 
 	/**
 	 * Constructs a TokenProvider with specified application security properties.
 	 *
 	 * @param appProperties the Gebo application security properties
 	 */
-	public LocalJwtTokenProvider(GeboAppSecurityProperties appProperties) {
+	public LocalJwtTokenProvider(GeboSecurityConfig appProperties) {
 		this.appProperties = appProperties;
 	}
 

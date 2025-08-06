@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 import ai.gebo.architecture.patterns.IGDynamicConfigurationSource;
-import ai.gebo.security.config.GeboAppSecurityProperties;
+import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
@@ -45,7 +45,7 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 
 	}
 
-	public GOauth2RuntimeConfigurationDaoImpl(GeboAppSecurityProperties staticConfigs,
+	public GOauth2RuntimeConfigurationDaoImpl(GeboSecurityConfig staticConfigs,
 			Oauth2RuntimeConfigurationRepository repo, IGOauth2ProvidersLibraryDao providersLibraryDao) {
 		super(makeReadOnlyAndValidate(staticConfigs.getOauth2configs()), new Oauth2RuntimeConfigurationSource(repo));
 		this.repo = repo;

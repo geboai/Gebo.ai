@@ -1,5 +1,5 @@
 import { Component, Injectable } from "@angular/core";
-import { Oauth2ClientAuthorizativeInfo, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { Oauth2ClientAuthorizativeInfo, Oauth2ModuleStatusControllerService, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 @Injectable({ providedIn: "root" })
@@ -13,11 +13,11 @@ export class Oauth2SetupWizardService extends AbstractStatusService {
 }
 @Injectable({ providedIn: "root" })
 export class Oauth2SetupEnabledService extends AbstractStatusService {
-    constructor(private geboOauth2ClientService:OAuth2ProvidersControllerService) {
+    constructor(private geboOauth2ClientService:Oauth2ModuleStatusControllerService) {
         super();
     }
     public override getBooleanStatus(): Observable<boolean> {
-        return this.geboOauth2ClientService.isOauth2Enabled();
+        return this.geboOauth2ClientService.getStatus().pipe(map(status=>status.oauth2Enabled===true && status.oauth2UISetupEnabled===true));
     }
     
 }

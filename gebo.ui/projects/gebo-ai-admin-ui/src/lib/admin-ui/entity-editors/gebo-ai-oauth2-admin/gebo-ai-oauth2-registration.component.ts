@@ -62,7 +62,7 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         confirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
-        private oauth2ControllerService: OAuth2AdminControllerService) {
+        private oauth2ControllerService: OAuth2AdminControllerService) { 
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.valueChanges.subscribe((value: Oauth2ProviderModifiableData) => {
             this.readonly = (value as any)["readOnly"] === true;

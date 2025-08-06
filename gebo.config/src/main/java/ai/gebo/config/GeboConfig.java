@@ -33,13 +33,7 @@ public class GeboConfig {
 	// Indicates if the setup configures the working directory
 	private Boolean setupConfiguresWorkdir = false;
 
-	// Indicates if LDAP is used for authentication
-	private Boolean useLdap = false;
-
-	private Boolean oauth2Enabled = true;
-
-	// Configuration details for LDAP
-	private LdapConfiguration ldapConfig = null;
+	
 
 	// Configuration for various Gebo modules
 	private HashMap<String, GeboModuleInfo> modulesConfig = GeboModuleInfo.buildStandardModulesEntries();
@@ -77,41 +71,7 @@ public class GeboConfig {
 		this.setup = setup;
 	}
 
-	/**
-	 * Gets the LDAP usage status.
-	 * 
-	 * @return the LDAP usage status
-	 */
-	public Boolean getUseLdap() {
-		return useLdap;
-	}
-
-	/**
-	 * Sets the LDAP usage status.
-	 * 
-	 * @param useLdap the LDAP usage status to set
-	 */
-	public void setUseLdap(Boolean useLdap) {
-		this.useLdap = useLdap;
-	}
-
-	/**
-	 * Gets the LDAP configuration.
-	 * 
-	 * @return the LDAP configuration
-	 */
-	public LdapConfiguration getLdapConfig() {
-		return ldapConfig;
-	}
-
-	/**
-	 * Sets the LDAP configuration.
-	 * 
-	 * @param ldapConfig the LDAP configuration to set
-	 */
-	public void setLdapConfig(LdapConfiguration ldapConfig) {
-		this.ldapConfig = ldapConfig;
-	}
+	
 
 	/**
 	 * Gets the modules configuration.
@@ -221,11 +181,5 @@ public class GeboConfig {
 		this.setupConfiguresWorkdir = setupConfiguresWorkdir;
 	}
 
-	public Boolean getOauth2Enabled() {
-		return oauth2Enabled;
-	}
-
-	public void setOauth2Enabled(Boolean oauth2Enabled) {
-		this.oauth2Enabled = oauth2Enabled;
-	}
+	
 }

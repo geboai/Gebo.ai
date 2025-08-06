@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.config;
+package ai.gebo.security.config;
 
 /**
  * AI generated comments

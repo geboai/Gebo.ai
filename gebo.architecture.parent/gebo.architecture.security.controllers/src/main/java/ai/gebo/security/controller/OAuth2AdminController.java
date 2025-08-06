@@ -3,6 +3,7 @@ package ai.gebo.security.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.config.GeboConfig;
 import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.AuthProvider.AuthProviderDto;
 import ai.gebo.security.model.Oauth2ProviderModifiableData;
@@ -26,13 +26,12 @@ import jakarta.validation.constraints.NotNull;
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/OAuth2AdminController")
-
 public class OAuth2AdminController {
-	@Autowired
-	IGOauth2ConfigurationService oauth2ConfiguratoinService;
 
-	public OAuth2AdminController() {
+	final IGOauth2ConfigurationService oauth2ConfiguratoinService;
 
+	public OAuth2AdminController(IGOauth2ConfigurationService oauth2ConfiguratoinService) {
+		this.oauth2ConfiguratoinService = oauth2ConfiguratoinService;
 	}
 
 	@GetMapping(value = "getProviders", produces = MediaType.APPLICATION_JSON_VALUE)
