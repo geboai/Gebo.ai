@@ -288,6 +288,13 @@ export class LoginService {
    */
   public successfullLanding(): void {
     const authProviderId = sessionStorage.getItem("authProviderId");
+    if (this.oauth2Service.hasValidAccessToken()) {
+
+      const token = this.oauth2Service.getAccessToken();
+      if (token) {
+        this.router.navigate(["ui", "reloader"], { relativeTo: this.activatedRouter });
+      }
+    }
     /* if (authProviderId) {
        this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
          this.oauth2Service.configure(authConfig);

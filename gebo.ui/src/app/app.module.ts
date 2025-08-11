@@ -21,14 +21,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
 import { LoggedComponent } from "./logged.component";
-import { AuthInterceptor } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, ReloadForwardModule } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
 import { LogoutComponent } from "./logout.component";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { GeboAIReloadForwardComponent } from "./reload-forward/reload-forward.component";
 import { GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { providePrimeNG } from "primeng/config";
@@ -36,6 +35,7 @@ import Aura from '@primeng/themes/aura';
 import { definePreset } from "@primeng/themes";
 
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { GeboBackendListService } from "../../projects/gebo-ai-reusable-ui/src/lib/services/gebo-backends-list.service";
 export function getBaseUrl() {
   let host = document.location.hostname;
   let port = document.location.port;
@@ -55,8 +55,8 @@ export const routes: Routes = [
   { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
-  { path: 'ui/oauth2-land', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIOauth2LandingModule), pathMatch: 'full' },
-  { path: 'ui/reloader', component: GeboAIReloadForwardComponent }
+  { path: 'ui/oauth2-land', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIOauth2LandingModule), pathMatch: 'full' }
+
 ];
 const GeboAIPreset = definePreset(Aura, {
   semantic: {
@@ -91,7 +91,7 @@ const GeboAIPreset = definePreset(Aura, {
   }
 });
 @NgModule({
-  declarations: [AppComponent, LoggedComponent, LogoutComponent, GeboAIReloadForwardComponent],
+  declarations: [AppComponent, LoggedComponent, LogoutComponent],
   exports: [AppComponent],
   bootstrap: [AppComponent],
   imports: [CommonModule,
@@ -100,6 +100,7 @@ const GeboAIPreset = definePreset(Aura, {
     MegaMenuModule,
     LoginModule,
     FastSetupModule,
+    ReloadForwardModule,
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
     ConfirmDialogModule,
@@ -107,7 +108,8 @@ const GeboAIPreset = definePreset(Aura, {
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes)], providers: [
-      
+      GeboBackendListService,
+
       provideAnimationsAsync(),
       providePrimeNG({
         theme: {
