@@ -35,7 +35,7 @@ import Aura from '@primeng/themes/aura';
 import { definePreset } from "@primeng/themes";
 
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { GeboBackendListService } from "../../projects/gebo-ai-reusable-ui/src/lib/services/gebo-backends-list.service";
+import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 export function getBaseUrl() {
   let host = document.location.hostname;
   let port = document.location.port;

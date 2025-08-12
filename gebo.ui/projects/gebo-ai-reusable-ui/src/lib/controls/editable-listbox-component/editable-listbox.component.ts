@@ -23,7 +23,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Observable } from "rxjs";
 import { GeboActionPerformedEvent, GeboActionPerformedType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
-import { DropdownChangeEvent } from "primeng/dropdown";
 import { SelectChangeEvent } from "primeng/select";
 
 /**

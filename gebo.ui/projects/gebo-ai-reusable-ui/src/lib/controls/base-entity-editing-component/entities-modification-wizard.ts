@@ -11,8 +11,10 @@
  
 
 import { Injector } from "@angular/core";
-import { BaseEntityEditingComponent, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
+
 import { Observable } from "rxjs";
+import { BaseEntityEditingComponent } from "./base-entity-editing.component";
+import { GeboUIActionRequest } from "../../architecture/actions.model";
 /**
  * AI generated comments
  * This file defines interfaces and utilities for managing and navigating through wizard-style interfaces

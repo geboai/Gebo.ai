@@ -11,7 +11,7 @@
  
 
 import { CommonModule } from "@angular/common";
-import { Injectable, NgModule } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GeboUIActionRoutingService } from "./gebo-ui-action-routing.service";
 import { GeboUIModalOpenerComponent } from "./gebo-ui-modal-opener.component";
@@ -21,8 +21,6 @@ import { GeboFormGroupsService } from "./gebo-form-groups.service";
 import { ButtonModule } from "primeng/button";
 import { StepsModule } from 'primeng/steps';
 import { GeboUIEntityFormsLauncherComponent } from "./gebo-ui-entity-forms-launcher.component";
-import { GeboUIEntityFormsLauncherService } from "./gebo-ui-entity-forms-launcher.service";
-import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
 import { GeboUIModalComponent } from "./gebo-ui-modal.component";
 
 /**

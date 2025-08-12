@@ -179,7 +179,7 @@ export class LoginService {
     this.oauth2Service.loadDiscoveryDocument().then(() => {
       if (providerName === "google") {
         this.oauth2Service.initImplicitFlow();
-      } else {
+      } else { 
         this.oauth2Service.initCodeFlow();
       }
     });

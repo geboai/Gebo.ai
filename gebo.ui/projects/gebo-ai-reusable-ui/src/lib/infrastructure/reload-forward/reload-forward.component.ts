@@ -12,7 +12,6 @@
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { GeboSetupWizardService } from "@Gebo.ai/gebo-ai-admin-ui";
 import { LoginService } from "../login/login.service";
 
 @Component({

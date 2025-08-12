@@ -28,7 +28,7 @@ import { TreeModule } from "primeng/tree";
 import { GeboAIUserpaceFilesComponent } from "./userspace-files.component";
 import { GeboAIUserspaceFolderComponent } from "./userspace-folder.component";
 import { GeboAIUserspaceBrowseComponent } from "./userspace-browse.component";
-import { GeboAIContentViewerModule, GeboUIArchitectureModule, GeboUIEntityFormConfig } from "@Gebo.ai/reusable-ui";
+
 import { CheckboxModule } from "primeng/checkbox";
 import { FileUploadModule } from "primeng/fileupload";
 import { GeboAIUserspaceKnowledgebaseComponent } from "./user-knowledgebase.component";
@@ -38,6 +38,9 @@ import { InputTextModule } from "primeng/inputtext";
 import { MultiSelectModule } from "primeng/multiselect";
 import { ChipModule } from "primeng/chip";
 import { FieldsetModule } from "primeng/fieldset";
+import { GeboUIEntityFormConfig } from "../../architecture/gebo-ui-entity-form-config";
+import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
+import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
 
 /**
  * Configuration object for the UserspaceFolderDto entity.

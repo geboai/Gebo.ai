@@ -10,7 +10,6 @@
  
  
 
-import { Type } from "@angular/core";
 /**
  * @fileoverview Gebo UI Actions Framework - Provides types and interfaces for handling UI actions in Gebo applications.
  * AI generated comments

@@ -19,11 +19,18 @@
  */
 import { Component, Injector } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "@Gebo.ai/reusable-ui";
+
 import { Observable, of } from "rxjs";
 import { ChooseDataSourceType } from "./choose-data-source-type";
 import { ConfirmationService, MenuItem } from "primeng/api";
 import { GProject, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";
+import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
+import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
+import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
+import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architecture/actions.model";
+
 
 /**
  * Component responsible for selecting a data source type for a project.

@@ -30,12 +30,13 @@ import { ButtonModule } from "primeng/button";
 import { FastSetupComponent } from "./fast-setup.component";
 import { DropdownModule } from "primeng/dropdown";
 import { CheckboxModule } from "primeng/checkbox";
-import { EditableListboxModule } from "@Gebo.ai/reusable-ui";
+
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GeboAILicenceComponent } from "./licence.component";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FieldsetModule } from "primeng/fieldset";
+import { EditableListboxModule } from "../../controls/editable-listbox-component/editable-listbox.module";
 
 // Routes configuration for the fast setup feature
 const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];

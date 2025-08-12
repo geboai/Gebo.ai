@@ -16,10 +16,11 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ProjectAddContextMenuComponent } from "./project-add-context-menu.component";
 import { ButtonModule } from "primeng/button";
 import { ContextMenuModule } from 'primeng/contextmenu';
-import { GeboUIArchitectureModule } from "@Gebo.ai/reusable-ui";
+
 import { GeboAIChooseDataSourceTypeComponent } from "./choose-data-source-type.component";
 import { PanelModule } from "primeng/panel";
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
 /**
  * @fileoverview This module provides components for project data source management in a Gebo.ai application.
  * AI generated comments

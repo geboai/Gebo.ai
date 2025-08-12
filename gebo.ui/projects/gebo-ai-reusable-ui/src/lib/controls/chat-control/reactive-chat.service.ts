@@ -17,11 +17,10 @@
  * It provides functionality for streaming chat responses from both regular and RAG (Retrieval Augmented Generation) endpoints.
  */
 
-import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { BASE_PATH, GeboChatRequest, GeboRagChatControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
-import { concat, concatMap, map, Observable, of, Subject } from "rxjs";
+import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 
 /**
  * Interface representing a message received from the Gebo Chat API.

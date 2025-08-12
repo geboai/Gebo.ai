@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { AuthResponse, ChangePasswordResponse, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChangePasswordResponse, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { LoginService } from "../login/login.service";
 

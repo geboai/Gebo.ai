@@ -20,10 +20,13 @@
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { UserspaceControllerService, UserspaceFileDto, UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, sliceWizard } from "@Gebo.ai/reusable-ui";
+
 import { TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent } from "primeng/tree";
 import { USERSPACE_UPLOADS_WIZARD } from "./userspace-wizard";
+import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
+import { sliceWizard } from "../base-entity-editing-component/entities-modification-wizard";
 
 /**
  * Interface representing an item in the userspace tree structure.

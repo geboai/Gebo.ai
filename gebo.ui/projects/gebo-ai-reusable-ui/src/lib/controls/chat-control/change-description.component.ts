@@ -17,7 +17,7 @@
  * It communicates with parent components through input bindings and event emitters.
  */
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 
 @Component({
     selector: "gebo-ai-chat-change-description",

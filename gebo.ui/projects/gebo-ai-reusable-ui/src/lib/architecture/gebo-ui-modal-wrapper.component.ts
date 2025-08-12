@@ -22,8 +22,9 @@ import { GeboUIActionRoutingService } from "./gebo-ui-action-routing.service";
 import { BaseEntityEditingComponent } from "../controls/base-entity-editing-component/base-entity-editing.component";
 import { OpenedModals } from "./opened-modals";
 import { GeboUIOutputForwardingService } from "./gebo-ui-output-forwarding.service";
-import { WizardButtonsBarData } from "@Gebo.ai/reusable-ui";
+
 import { MenuItem } from "primeng/api";
+import { WizardButtonsBarData } from "../controls/base-entity-editing-component/entities-modification-wizard";
 
 @Component({
     selector: "gebo-ui-modal-wrapper",

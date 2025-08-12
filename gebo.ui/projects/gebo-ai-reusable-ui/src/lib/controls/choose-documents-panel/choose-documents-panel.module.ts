@@ -13,7 +13,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { GeboAIContentViewerModule, VFilesystemSelectorModule } from "@Gebo.ai/reusable-ui";
+
 import { PanelModule } from "primeng/panel";
 import { GeboAIChooseDocumentsPanelComponent } from "./choose-documents-panel.component";
 import { TabsModule } from 'primeng/tabs';
@@ -27,6 +27,8 @@ import { CheckboxModule } from "primeng/checkbox";
 import { PickListModule } from 'primeng/picklist';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { GeboAIUserspaceFilesModule } from "../userspace-files-component/userspace-files.module";
+import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-selector.module";
+import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 
 /**
  * AI generated comments

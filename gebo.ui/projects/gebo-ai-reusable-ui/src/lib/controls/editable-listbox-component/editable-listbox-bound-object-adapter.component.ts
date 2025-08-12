@@ -20,8 +20,9 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
+
 import { Observable } from "rxjs";
+import { GeboUIActionRequest } from "../../architecture/actions.model";
 
 /**
  * A component that wraps an editable listbox component for binding to objects with code/description properties.

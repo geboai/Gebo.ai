@@ -12,7 +12,6 @@
 
 import { Injectable } from "@angular/core";
 import { IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import TypedRegistry from "chart.js/dist/core/core.typedRegistry";
 import { map, Observable, of } from "rxjs";
 
 /**

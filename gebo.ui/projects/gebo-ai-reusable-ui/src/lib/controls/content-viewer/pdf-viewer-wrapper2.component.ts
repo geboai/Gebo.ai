@@ -16,9 +16,9 @@
  * It handles authentication and PDF rendering with proper headers.
  */
 
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
+import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 

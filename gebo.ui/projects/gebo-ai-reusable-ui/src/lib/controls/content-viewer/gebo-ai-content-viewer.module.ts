@@ -16,7 +16,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { GeboAIContentViewerComponent } from "./gebo-ai-content-viewer.component";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
-import { BrowseContentModule, EnrichedDocumentReferenceViewRetrieveService } from "@Gebo.ai/reusable-ui";
+
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { DialogModule } from "primeng/dialog";
 import { CodeEditorWrapperComponent } from "./code-editor-wrapper.component";
@@ -26,6 +26,8 @@ import { PDFViewerWrapper2Component } from "./pdf-viewer-wrapper2.component";
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { GeboUIDocumentOpenerButton } from "./document-opener-button.component";
 import { ButtonModule } from "primeng/button";
+import { BrowseContentModule } from "../browse-content-component/browse-content.module";
+import { EnrichedDocumentReferenceViewRetrieveService } from "./enriched-document-reference-view.service";
 @NgModule({
     imports:[CommonModule,ReactiveFormsModule,PanelModule,BlockUIModule,BrowseContentModule,MonacoEditorModule,DialogModule,NgxExtendedPdfViewerModule,ButtonModule],
     declarations:[GeboAIContentViewerComponent,CodeEditorWrapperComponent,DownloadLinkViewerWrapperComponent,PDFViewerWrapper2Component,GeboUIDocumentOpenerButton],

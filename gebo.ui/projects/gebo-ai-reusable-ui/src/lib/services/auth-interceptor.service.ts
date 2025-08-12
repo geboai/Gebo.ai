@@ -12,10 +12,10 @@
 
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HttpSentEvent, HttpHeaderResponse, HttpProgressEvent, HttpResponse, HttpUserEvent } from '@angular/common/http';
-import { Observable, of, Subject } from 'rxjs';
-import { catchError, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { getAuth, getAuthHeader, resetAuth } from "../infrastructure/gebo-credentials";
+import { getAuthHeader, resetAuth } from "../infrastructure/gebo-credentials";
 import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
 import { ConfirmationService } from 'primeng/api';
 import { GeboBackendListService } from './gebo-backends-list.service';

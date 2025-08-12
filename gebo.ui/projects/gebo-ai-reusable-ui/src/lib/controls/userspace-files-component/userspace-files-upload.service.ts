@@ -12,8 +12,9 @@
 
 import { Injectable } from "@angular/core";
 import { UserspaceFolderDto, UserspaceFileDto, UserspaceControllerService, PublishingStatus } from "@Gebo.ai/gebo-ai-rest-api";
-import { IOperationStatus } from "@Gebo.ai/reusable-ui";
-import { Observable, concat, concatMap, forkJoin, map, of } from "rxjs";
+
+import { Observable, concatMap, map, of } from "rxjs";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 /**
  * AI generated comments
  * Module for managing userspace files and folders, providing functionality for uploading,

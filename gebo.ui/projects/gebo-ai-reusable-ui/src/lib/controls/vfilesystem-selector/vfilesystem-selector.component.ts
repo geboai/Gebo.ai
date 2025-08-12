@@ -24,7 +24,8 @@ import { ToastMessageOptions, TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "primeng/tree";
 import { of } from "rxjs";
 import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemReference, reconstructNavigationObservableCallback } from "./vfilesystem-types";
-import { IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
+
 
 /**
  * Extended interface for VFilesystemReference that includes UI selection state information

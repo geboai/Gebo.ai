@@ -79,7 +79,7 @@ export * from "./lib/services/gebo-ai-modules.module";
 export * from "./lib/services/gebo-ai-modules.service";
 export * from "./lib/services/pluggable-project-endpoint";
 export * from "./lib/services/auth-interceptor.service";
-
+export * from "./lib/services/gebo-backends-list.service";
 export * from "./lib/infrastructure/reload-forward/reload-forward.module";
 
 

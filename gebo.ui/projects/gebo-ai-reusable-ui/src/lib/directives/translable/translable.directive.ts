@@ -16,8 +16,7 @@
  * It includes a directive that can be applied to elements to make them translatable.
  */
 
-import { Component, Directive, ElementRef, Host, Injector, OnChanges, OnInit, SimpleChanges, TemplateRef } from "@angular/core";
-import { BaseEntityEditingComponent } from "@Gebo.ai/reusable-ui";
+import { Directive, ElementRef, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 
 /**
  * Directive that marks HTML elements as translatable.

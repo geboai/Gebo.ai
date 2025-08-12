@@ -10,7 +10,8 @@ import { MessagesModule } from "primeng/messages";
 import { PanelModule } from "primeng/panel";
 import { PasswordModule } from "primeng/password";
 import { GeboAIReloadForwardComponent } from "./reload-forward.component";
-import { LoginModule } from "@Gebo.ai/reusable-ui";
+import { LoginModule } from "../login/login.module";
+
 const routes: Routes = [{ path: 'ui/reloader', component: GeboAIReloadForwardComponent }];
 
 @NgModule({
