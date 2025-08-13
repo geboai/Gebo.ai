@@ -1,5 +1,6 @@
 package ai.gebo.security.model.oauth2;
 
+import ai.gebo.security.model.AuthProvider;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -15,5 +16,7 @@ public class Oauth2ClientConfig {
 	private String description = null;
 	@NotNull
 	private String tokenUri;
+	@NotNull
+	private AuthProvider provider;
 
 }

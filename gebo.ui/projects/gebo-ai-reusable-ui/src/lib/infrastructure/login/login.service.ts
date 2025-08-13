@@ -20,11 +20,12 @@ import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2ProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
-import { map, Observable, of, Subject } from "rxjs";
-import { DEFAULT_PROVIDER_ID, getAuth, resetAuth } from "../gebo-credentials";
-import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
+import { map, Observable, of, Subject, Subscription } from "rxjs";
+import { resetAuth } from "../gebo-credentials";
+import { AuthConfig } from 'angular-oauth2-oidc';
+import { GenericOauth2LoginService, GoogleOauth2Service, IOauth2LoginService } from "./oauth2/oauth2-login.service";
 
-declare const google: any;
+
 /**
  * Interface representing the result of a login operation
  * Contains optional user information and an array of toast messages to display
@@ -33,6 +34,8 @@ export interface LoginOperationResult {
   userInfo?: UserInfo;
   messages: ToastMessageOptions[];
 };
+
+
 /**
  * Service responsible for handling user authentication and related functionality.
  * Manages user sessions, login/logout operations, and password changes.
@@ -41,6 +44,7 @@ export interface LoginOperationResult {
 export class LoginService {
   private actualAuthConfig?: AuthConfig;
   private actualAuthProviderId?: string;
+  private subscription?: Subscription;
 
   /**
    * Constructor for the LoginService
@@ -51,48 +55,14 @@ export class LoginService {
    */
   public constructor(
     @Inject(BASE_PATH) private basePath: string,
-    private oauth2Service: OAuthService,
+    private genericOauth2Service: GenericOauth2LoginService,
+    private googleOauth2Service:GoogleOauth2Service,
     private activatedRouter: ActivatedRoute,
     private router: Router,
     private authControllerService: AuthControllerService,
     private oauth2ProvidersService: OAuth2ProvidersControllerService,
     private userController: UserControllerService) {
-    /*************************
-     * Forwarding oauth2 actual valid token with infos to be included in backend request header to 
-     * access the spring boot oauth2 resource server backend
-     */
-    this.oauth2Service.events.subscribe({
-      next: (event: OAuthEvent) => {
-        console.debug(event);
-        if (event.type === "token_received" || event.type === "silently_refreshed") {
-          let actualAuth = getAuth();
-          const accessToken = this.oauth2Service.getAccessToken();
-          const authProviderId = sessionStorage.getItem("authProviderId");
-          const tenantId = sessionStorage.getItem("tenantId");
-          if (!actualAuth) {
-            actualAuth = {
-              token: accessToken,
-              authType: SecurityHeaderData.AuthTypeEnum.OAUTH2,
-              empty: false
-            };
-            if (authProviderId) {
-              actualAuth.authProviderId = authProviderId;
-            }
-            if (tenantId) {
-              actualAuth.authTenantId = tenantId;
-            } else {
-              actualAuth.authTenantId = "default-tenant";
-            }
 
-          } else {
-            actualAuth.token = accessToken;
-          }
-          this.authDataSubject.next(actualAuth);
-        } else if (event.type === "logout") {
-          this.authDataSubject.next(undefined);
-        }
-      }
-    });
   }
   public authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject<SecurityHeaderData | undefined>();
   /**
@@ -169,161 +139,77 @@ export class LoginService {
   public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
     return this.oauth2ProvidersService.listAvailableProviders();
   }
-  private runOauth2Login(authConfig: AuthConfig, authProviderId?: string, providerName?: string) {
-    resetAuth();
-    if (authProviderId)
-      sessionStorage.setItem("authProviderId", authProviderId);
-    this.oauth2Service.setStorage(localStorage);
-    this.oauth2Service.configure(authConfig);
-    this.oauth2Service.setupAutomaticSilentRefresh();
-    sessionStorage.setItem("loginStatus", "executing");
-    this.oauth2Service.loadDiscoveryDocument().then(() => {
-      if (providerName === "google") {
-        this.oauth2Service.initImplicitFlow();
-      } else {
-        this.oauth2Service.initCodeFlow();
-      }
-    });
-  }
-  private isGoogleLibraryDefined(): boolean {
-    try {
-      return google && google.accounts ? true : false;
-    } catch (e) {
-      return false;
-    }
-  }
-  private runGoogleOauth2Login(authConfig: AuthConfig, authProviderId?: string) {
-    if (this.isGoogleLibraryDefined()) {
-      this.initGoogleOauthLogin(authConfig, authProviderId);
-    } else {
-      this.actualAuthConfig = authConfig;
-      this.actualAuthProviderId = authProviderId;
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        this.initGoogleOauthLogin(authConfig, authProviderId);
-      }
-      document.head.appendChild(script);
-    }
-  }
-  private initGoogleOauthLogin(authConfig: AuthConfig, authProviderId?: string): void {
-    google.accounts.id.initialize({
-      client_id: authConfig.clientId,
-      callback: (res: any) => {
 
-      }
-    });
-    google.accounts.id.prompt();
-  }
+  
   /*****************************************************************************
    * Loads the angular-oauth2-oidc AuthConfig configurations using backend specific 
    * provider (get by id) infos
    */
-  private loadProviderConfig(authProviderId: string): Observable<AuthConfig> {
-    return this.oauth2ProvidersService.getProviderClientConfig(authProviderId).pipe(map((value: Oauth2ClientConfig) => {
-      const authConfig: AuthConfig = {
-        issuer: value.issuer, // OAuth2 provider URL
-        redirectUri: window.location.origin + '/ui/oauth2-land',
-        clientId: value.clientId,
-        responseType: 'code',
-        scope: 'openid profile email',
-        disablePKCE: false,
-        showDebugInformation: true,
-        useSilentRefresh: true,
-        strictDiscoveryDocumentValidation: false,
-        useHttpBasicAuth: false // impedisce l’invio del client_secret
-
-      };
-      //tokenEndpoint: value.tokenUri,
-      return authConfig;
-    }));
+  private loadProviderConfig(authProviderId: string): Observable<Oauth2ClientConfig> {
+    return this.oauth2ProvidersService.getProviderClientConfig(authProviderId);
   }
   /******************************************************
    * Start the interactive oauth2 login for actual user by choosed Oauth2ClientAuthorizativeInfo
    */
   public loginWithOauth2(clicked: Oauth2ClientAuthorizativeInfo): Observable<boolean> {
     if (clicked.registrationId) {
-
+      sessionStorage.setItem("authProviderId", clicked.registrationId);
       return this.loadProviderConfig(clicked.registrationId).pipe(map(authConfig => {
-        //if (clicked.providerName !== "google") {
-        this.runOauth2Login(authConfig, clicked.registrationId, clicked.providerName);
-        //} else {
-        //  this.runGoogleOauth2Login(authConfig, clicked.registrationId);
-        //}
+        resetAuth();
+        const service = this.getOauth2LoginService(authConfig.provider);
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
+        this.subscription = service.authDataSubject.subscribe({
+          next: (data) => {
+            this.authDataSubject.next(data);
+          }
+
+        });
+        service.oauth2Login(authConfig, () => { this.onSuccessfullLogin(); }, () => { this.onUnsuccessfullLogin(); });
         return true;
       }));
 
     } else return of(false);
   }
-
-  /********************************************************************
-   * This has to be called in ngOninit() of app.component.ts 
-   */
-  public async initializeOauth2Refresh() {
-    const loginStatus = sessionStorage.getItem("loginStatus");
-    const auth = getAuth();
-    const authProviderId = auth && auth.authProviderId && auth.authProviderId !== DEFAULT_PROVIDER_ID ? auth.authProviderId : sessionStorage.getItem("authProviderId");
-
-
-    if (authProviderId) {
-      try {
-        const authConfig = await this.loadProviderConfig(authProviderId).toPromise();
-        if (authConfig) {
-          this.oauth2Service.configure(authConfig);
-          this.oauth2Service.setStorage(localStorage);
-          this.oauth2Service.setupAutomaticSilentRefresh();
-          if (loginStatus && loginStatus === "executing") {
-            const load = await this.oauth2Service.loadDiscoveryDocument();
-            const loginCodeFlow = await this.oauth2Service.tryLoginCodeFlow();
-          } else {
-            const ok = await this.oauth2Service.loadDiscoveryDocumentAndTryLogin()
-            if (this.oauth2Service.hasValidAccessToken()) {
-
-              const token = await this.oauth2Service.refreshToken();
-            }
-          }
-
-
-
-        }
-      } catch (e) {
-        console.error(e);
-      }
+  private getOauth2LoginService(provider: Oauth2ClientConfig.ProviderEnum): IOauth2LoginService {
+    switch (provider) {
+      case "google": return this.googleOauth2Service;
+      default: return this.genericOauth2Service;
     }
+
+  }
+  private onSuccessfullLogin(): void {
+
+
+    this.router.navigate(['ui', 'reloader'], { relativeTo: this.activatedRouter });
+  }
+  private onUnsuccessfullLogin(): void {
+    resetAuth();
+    this.router.navigate(['ui', 'login'], { relativeTo: this.activatedRouter });
+
   }
   /****************************
    * Called from the reloaded SPA application redirected URL component to get accessToken
    */
   public successfullLanding(): void {
     const authProviderId = sessionStorage.getItem("authProviderId");
-    if (this.oauth2Service.hasValidAccessToken()) {
-      sessionStorage.setItem("loginStatus", "done");
-      const token = this.oauth2Service.getAccessToken();
-      if (token) {
-        this.router.navigate(["/","ui", "reloader"], { relativeTo: this.activatedRouter });
-      }
-    }
-    /* if (authProviderId) {
-       this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
-         this.oauth2Service.configure(authConfig);
-         this.oauth2Service.setStorage(localStorage);
- 
-         this.oauth2Service.loadDiscoveryDocument().then(() => {
-           this.oauth2Service.tryLoginCodeFlow().then(() => {
-             if (this.oauth2Service.hasValidAccessToken()) {
-               this.oauth2Service.setupAutomaticSilentRefresh();
-               this.router.navigate(['ui', 'chat'], { relativeTo: this.activatedRouter });
-             } else {
-               console.error("Access token non ottenuto. Logout forzato.");
-               resetAuth();
-               this.router.navigate(['ui', 'login'], { relativeTo: this.activatedRouter });
-             }
-           });
-         });
-       });
-     }*/
-  }
 
+    if (authProviderId) {
+      this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
+        const service = this.getOauth2LoginService(authConfig.provider);
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+        }
+        this.subscription = service.authDataSubject.subscribe({
+          next: (data) => {
+            this.authDataSubject.next(data);
+          }
+
+        });
+        service.oauth2RedirectLanding(authConfig, () => { this.onSuccessfullLogin(); }, () => { this.onUnsuccessfullLogin(); });
+      });
+    }
+
+  }
 }

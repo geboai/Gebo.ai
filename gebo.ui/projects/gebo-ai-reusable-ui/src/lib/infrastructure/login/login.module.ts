@@ -35,6 +35,7 @@ import { InputTextModule } from "primeng/inputtext";
 import { ButtonModule } from "primeng/button";
 import { LoginService } from "./login.service";
 import { FieldsetModule } from "primeng/fieldset";
+import { GenericOauth2LoginService, GoogleOauth2Service } from "./oauth2/oauth2-login.service";
 
 /**
  * Defines the route configuration for the login module.
@@ -49,6 +50,6 @@ const routes:Routes=[{ path:'ui/login',component:LoginComponent}];
         MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes),FieldsetModule],
     declarations:[LoginComponent],
     exports:[LoginComponent],
-    providers:[LoginService]
+    providers:[LoginService,GenericOauth2LoginService,GoogleOauth2Service]
 })
 export class LoginModule {}

@@ -18,6 +18,7 @@ export interface Oauth2ProviderConfig {
     userNameAttribute: string;
     introspectionUri: string;
     issuerUri?: string;
+    jwkSetUri?: string;
 }
 export namespace Oauth2ProviderConfig {
     export type ProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';

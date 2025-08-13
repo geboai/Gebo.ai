@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientConfig;
+import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import lombok.AllArgsConstructor;
 
@@ -57,14 +58,22 @@ public class Oauth2DynamicClientRegistrationRepository implements IOauth2Dynamic
 
 	@Override
 	public Oauth2ClientConfig findOauth2ClientConfigById(String registrationId) {
-		ClientRegistration data = this.findByRegistrationId(registrationId);
-		Oauth2ClientConfig outData = new Oauth2ClientConfig();
-		outData.setClientId(data.getClientId());
-		outData.setIssuer(data.getProviderDetails().getIssuerUri());
-		outData.setTokenUri(data.getProviderDetails().getTokenUri());
-		outData.setRegistrationId(registrationId);
-		outData.setDescription(data.getClientName());
-		return outData;
+		try {
+			Oauth2ClientRegistration configuration = oauth2ConfigurationService
+					.findOauth2ClientRegistrationByRegistrationId(registrationId);
+			Oauth2ClientConfig outData = new Oauth2ClientConfig();
+			outData.setClientId(configuration.getClientRegistration().getClientId());
+			outData.setIssuer(configuration.getRuntimeConfiguration().getProviderConfig().getIssuerUri());
+			outData.setTokenUri(configuration.getRuntimeConfiguration().getProviderConfig().getTokenUri());
+			outData.setRegistrationId(registrationId);
+			outData.setDescription(configuration.getRuntimeConfiguration().getDescription());
+			outData.setProvider(configuration.getRuntimeConfiguration().getProvider());
+			return outData;
+		} catch (GeboOauth2Exception e) {
+			throw new RuntimeException("Exception accessing client registration", e);
+		}
+		// ClientRegistration data = this.findByRegistrationId(registrationId);
+
 	}
 
 }

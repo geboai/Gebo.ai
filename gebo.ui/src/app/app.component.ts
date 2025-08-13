@@ -95,9 +95,9 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  async ngOnInit() {
+   ngOnInit() {
     this.primengConfig.ripple.set(true);
-    await this.loginService.initializeOauth2Refresh();
+    
     if (!this.loginService.isOauth2LandingPage()) {
       this.loginService.logged.subscribe(user => {
         this.userLogged = user ? true : false;
