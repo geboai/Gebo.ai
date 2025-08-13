@@ -30,7 +30,6 @@ import { ButtonModule } from "primeng/button";
 import { FastSetupComponent } from "./fast-setup.component";
 import { DropdownModule } from "primeng/dropdown";
 import { CheckboxModule } from "primeng/checkbox";
-
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GeboAILicenceComponent } from "./licence.component";
 import { ScrollPanelModule } from "primeng/scrollpanel";

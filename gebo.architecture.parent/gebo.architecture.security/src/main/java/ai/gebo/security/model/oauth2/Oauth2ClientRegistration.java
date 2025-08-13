@@ -9,6 +9,7 @@
 package ai.gebo.security.model.oauth2;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -30,6 +31,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class Oauth2ClientRegistration {
+	private final static List<String> STANDARD_AUTHENTICATION_SCOPES = List.of("openid", "profile", "email");
 	// Contains the secret content necessary for OAuth2 client registration.
 	private final GeboOauth2SecretContent clientRegistration;
 
@@ -67,6 +69,18 @@ public class Oauth2ClientRegistration {
 		builder.tokenUri(registration.getRuntimeConfiguration().getProviderConfig().getTokenUri());
 		builder.userInfoUri(registration.getRuntimeConfiguration().getProviderConfig().getUserInfoUri());
 		builder.issuerUri(registration.getRuntimeConfiguration().getProviderConfig().getIssuerUri());
+		builder.jwkSetUri(registration.getRuntimeConfiguration().getProviderConfig().getJwkSetUri());
+		List<String> scopes = registration.getRuntimeConfiguration().getClient() != null
+				? registration.getRuntimeConfiguration().getClient().getScopes()
+				: registration.getClientRegistration().getScopes();
+
+		if (registration.getRuntimeConfiguration().getConfigurationTypes() != null && registration
+				.getRuntimeConfiguration().getConfigurationTypes().contains(Oauth2ConfigurationType.AUTHENTICATION)
+				&& scopes == null) {
+			scopes = STANDARD_AUTHENTICATION_SCOPES;
+		}
+		builder.scope(scopes);
+		
 		Map<String, Object> configurationMetaData = new HashMap<String, Object>();
 		if (registration.getClientRegistration().getTenantId() != null) {
 			configurationMetaData.put("tenant", registration.getClientRegistration().getTenantId());

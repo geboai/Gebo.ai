@@ -67,12 +67,12 @@
 		<appender-ref ref="Console" />
 	</logger>
 	
-	<logger name="ai.gebo.security" level="INFO"
+	<logger name="ai.gebo.security" level="TRACE"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	<logger name="org.springframework.security" level="INFO"
+	<logger name="org.springframework.security" level="TRACE"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />

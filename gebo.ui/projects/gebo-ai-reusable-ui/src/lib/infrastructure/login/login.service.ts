@@ -176,10 +176,11 @@ export class LoginService {
     this.oauth2Service.setStorage(localStorage);
     this.oauth2Service.configure(authConfig);
     this.oauth2Service.setupAutomaticSilentRefresh();
+    sessionStorage.setItem("loginStatus", "executing");
     this.oauth2Service.loadDiscoveryDocument().then(() => {
       if (providerName === "google") {
         this.oauth2Service.initImplicitFlow();
-      } else { 
+      } else {
         this.oauth2Service.initCodeFlow();
       }
     });
@@ -261,8 +262,11 @@ export class LoginService {
    * This has to be called in ngOninit() of app.component.ts 
    */
   public async initializeOauth2Refresh() {
+    const loginStatus = sessionStorage.getItem("loginStatus");
     const auth = getAuth();
     const authProviderId = auth && auth.authProviderId && auth.authProviderId !== DEFAULT_PROVIDER_ID ? auth.authProviderId : sessionStorage.getItem("authProviderId");
+
+
     if (authProviderId) {
       try {
         const authConfig = await this.loadProviderConfig(authProviderId).toPromise();
@@ -270,11 +274,17 @@ export class LoginService {
           this.oauth2Service.configure(authConfig);
           this.oauth2Service.setStorage(localStorage);
           this.oauth2Service.setupAutomaticSilentRefresh();
-          const ok = await this.oauth2Service.loadDiscoveryDocumentAndTryLogin()
-          if (this.oauth2Service.hasValidAccessToken()) {
+          if (loginStatus && loginStatus === "executing") {
+            const load = await this.oauth2Service.loadDiscoveryDocument();
+            const loginCodeFlow = await this.oauth2Service.tryLoginCodeFlow();
+          } else {
+            const ok = await this.oauth2Service.loadDiscoveryDocumentAndTryLogin()
+            if (this.oauth2Service.hasValidAccessToken()) {
 
-            const token = await this.oauth2Service.refreshToken();
+              const token = await this.oauth2Service.refreshToken();
+            }
           }
+
 
 
         }
@@ -289,10 +299,10 @@ export class LoginService {
   public successfullLanding(): void {
     const authProviderId = sessionStorage.getItem("authProviderId");
     if (this.oauth2Service.hasValidAccessToken()) {
-
+      sessionStorage.setItem("loginStatus", "done");
       const token = this.oauth2Service.getAccessToken();
       if (token) {
-        this.router.navigate(["ui", "reloader"], { relativeTo: this.activatedRouter });
+        this.router.navigate(["/","ui", "reloader"], { relativeTo: this.activatedRouter });
       }
     }
     /* if (authProviderId) {

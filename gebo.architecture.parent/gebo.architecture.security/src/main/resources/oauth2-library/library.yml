@@ -5,6 +5,7 @@ ai.gebo.oauth2.library.providers:
     user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
     issuer-uri: https://accounts.google.com
     introspection-uri: https://oauth2.googleapis.com/tokeninfo
+    jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
     user-name-attribute: sub
 
   - provider: facebook
@@ -29,6 +30,7 @@ ai.gebo.oauth2.library.providers:
     user-info-uri: https://graph.microsoft.com/v1.0/me
     issuer-uri: https://login.microsoftonline.com/common/v2.0
     introspection-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token/introspect
+    jwk-set-uri: https://login.microsoftonline.com/common/discovery/v2.0/keys 
     user-name-attribute: id
 
   - provider: microsoft_multitenant
@@ -36,6 +38,7 @@ ai.gebo.oauth2.library.providers:
     token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
     user-info-uri: https://graph.microsoft.com/oidc/userinfo
     issuer-uri: https://login.microsoftonline.com/{tenant-id}/v2.0  # ← tenant-specific for JWT validation
+    jwk-set-uri: https://login.microsoftonline.com/{tenant-id}/discovery/v2.0/keys
     user-name-attribute: id
 
   - provider: linkedin
@@ -52,6 +55,7 @@ ai.gebo.oauth2.library.providers:
     user-info-uri: https://appleid.apple.com/auth/token # Apple ritorna info user nell'ID Token
     issuer-uri: https://appleid.apple.com
     introspection-uri: https://appleid.apple.com/auth/introspect
+    jwk-set-uri: https://appleid.apple.com/auth/keys
     user-name-attribute: sub
 
   - provider: amazon

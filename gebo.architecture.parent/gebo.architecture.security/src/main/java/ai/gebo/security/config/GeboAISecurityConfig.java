@@ -27,6 +27,7 @@ import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserSer
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 
 import ai.gebo.crypting.services.IGeboCryptingService;
@@ -42,6 +43,7 @@ import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
+import ai.gebo.security.services.impl.GOAuth2AuthenticationSuccessHandler;
 import ai.gebo.security.services.impl.GOAuth2UserService;
 import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
 import ai.gebo.security.services.impl.GOauth2CustomAuthorizationRequestResolver;
@@ -93,6 +95,7 @@ public class GeboAISecurityConfig {
 	private final OAuth2AuthorizationRequestResolver oAuth2AuthorizationRequestResolver;
 	private final IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao;
 	private final UserDetailsService userDetailsService;
+	private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -132,8 +135,8 @@ public class GeboAISecurityConfig {
 		this.oauth2RuntimeConfigurationDao = oauth2RuntimeConfigurationDao;
 		this.tokenProvider = tokenProvider;
 		this.point = point;
-
 		this.cryptService = cryptService;
+		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler();
 
 	}
 
@@ -222,16 +225,14 @@ public class GeboAISecurityConfig {
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
 						.anyRequest().authenticated());
 		if (oauth2Enabled) {
-			configBuilder = configBuilder
-					.oauth2Login(oauth2 -> oauth2.clientRegistrationRepository(clientRegistrationRepository)
-							.authorizedClientService(oauth2AuthorizedClientService)
-							// .successHandler(authenticationSuccessHandler)
-							.authorizationEndpoint(
-									auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
-							.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
-					// Optional: use a custom success handler to issue JWT
-					).oauth2ResourceServer(
-							oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
+			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
+					.clientRegistrationRepository(clientRegistrationRepository)
+					.authorizedClientService(oauth2AuthorizedClientService).successHandler(authenticationSuccessHandler)
+					.authorizationEndpoint(
+							auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
+					.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
+			// Optional: use a custom success handler to issue JWT
+			).oauth2ResourceServer(oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
 		}
 		return configBuilder.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))

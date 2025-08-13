@@ -57,4 +57,5 @@ public class Oauth2ProviderConfig {
 	@NotNull
 	private String introspectionUri;
 	private String issuerUri;
+	private String jwkSetUri;
 }
