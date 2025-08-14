@@ -14,7 +14,7 @@ export class GeboAIOauth2LandingComponent implements OnInit {
 
     }
     ngOnInit(): void {
-        this.loginService.successfullLanding();
+        this.loginService.oauth2RedirectionLanding();
     }
 
 }

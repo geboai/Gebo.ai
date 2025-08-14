@@ -36,6 +36,7 @@ import { definePreset } from "@primeng/themes";
 
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
+import { CookieService } from 'ngx-cookie-service';
 export function getBaseUrl() {
   let host = document.location.hostname;
   let port = document.location.port;
@@ -109,7 +110,7 @@ const GeboAIPreset = definePreset(Aura, {
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes)], providers: [
       GeboBackendListService,
-
+      CookieService,
       provideAnimationsAsync(),
       providePrimeNG({
         theme: {

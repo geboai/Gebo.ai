@@ -23,7 +23,7 @@ import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
 import { resetAuth } from "../gebo-credentials";
 import { AuthConfig } from 'angular-oauth2-oidc';
-import { GenericOauth2LoginService, GoogleOauth2Service, IOauth2LoginService } from "./oauth2/oauth2-login.service";
+import { GoogleOauth2Service, IOauth2LoginService, Oauth2LoginService } from "./oauth2/oauth2-login.service";
 
 
 /**
@@ -55,14 +55,18 @@ export class LoginService {
    */
   public constructor(
     @Inject(BASE_PATH) private basePath: string,
-    private genericOauth2Service: GenericOauth2LoginService,
-    private googleOauth2Service:GoogleOauth2Service,
+    private oauth2Service: Oauth2LoginService,
     private activatedRouter: ActivatedRoute,
     private router: Router,
     private authControllerService: AuthControllerService,
     private oauth2ProvidersService: OAuth2ProvidersControllerService,
     private userController: UserControllerService) {
-
+    this.oauth2Service.authDataSubject.subscribe({
+      next: (data) => {
+        this.authDataSubject.next(data);
+      }
+    }
+    );
   }
   public authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject<SecurityHeaderData | undefined>();
   /**
@@ -140,7 +144,7 @@ export class LoginService {
     return this.oauth2ProvidersService.listAvailableProviders();
   }
 
-  
+
   /*****************************************************************************
    * Loads the angular-oauth2-oidc AuthConfig configurations using backend specific 
    * provider (get by id) infos
@@ -156,29 +160,14 @@ export class LoginService {
       sessionStorage.setItem("authProviderId", clicked.registrationId);
       return this.loadProviderConfig(clicked.registrationId).pipe(map(authConfig => {
         resetAuth();
-        const service = this.getOauth2LoginService(authConfig.provider);
-        if (this.subscription) {
-          this.subscription.unsubscribe();
-        }
-        this.subscription = service.authDataSubject.subscribe({
-          next: (data) => {
-            this.authDataSubject.next(data);
-          }
 
-        });
-        service.oauth2Login(authConfig, () => { this.onSuccessfullLogin(); }, () => { this.onUnsuccessfullLogin(); });
+        this.oauth2Service.oauth2Login(authConfig, () => { this.onSuccessfullLogin(); }, () => { this.onUnsuccessfullLogin(); });
         return true;
       }));
 
     } else return of(false);
   }
-  private getOauth2LoginService(provider: Oauth2ClientConfig.ProviderEnum): IOauth2LoginService {
-    switch (provider) {
-      case "google": return this.googleOauth2Service;
-      default: return this.genericOauth2Service;
-    }
 
-  }
   private onSuccessfullLogin(): void {
 
 
@@ -192,22 +181,13 @@ export class LoginService {
   /****************************
    * Called from the reloaded SPA application redirected URL component to get accessToken
    */
-  public successfullLanding(): void {
+  public oauth2RedirectionLanding(): void {
     const authProviderId = sessionStorage.getItem("authProviderId");
 
     if (authProviderId) {
       this.loadProviderConfig(authProviderId).subscribe((authConfig) => {
-        const service = this.getOauth2LoginService(authConfig.provider);
-        if (this.subscription) {
-          this.subscription.unsubscribe();
-        }
-        this.subscription = service.authDataSubject.subscribe({
-          next: (data) => {
-            this.authDataSubject.next(data);
-          }
 
-        });
-        service.oauth2RedirectLanding(authConfig, () => { this.onSuccessfullLogin(); }, () => { this.onUnsuccessfullLogin(); });
+        this.oauth2Service.oauth2RedirectLanding(authConfig, () => { this.onSuccessfullLogin(); }, () => { this.onUnsuccessfullLogin(); });
       });
     }
 
