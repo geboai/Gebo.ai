@@ -19,7 +19,7 @@ export interface Oauth2ProviderModifiableData {
     oauth2ClientContent: GeboOauth2SecretContent;
     authClientMethod?: Oauth2ProviderModifiableData.AuthClientMethodEnum;
     authGrantType?: Oauth2ProviderModifiableData.AuthGrantTypeEnum;
-    configurationTypes: Array<Oauth2ProviderModifiableData.ConfigurationTypesEnum>;
+    configurationType: Oauth2ProviderModifiableData.ConfigurationTypeEnum;
     description: string;
     readOnly: boolean;
 }
@@ -54,9 +54,9 @@ export namespace Oauth2ProviderModifiableData {
         DEVICECODE: 'DEVICE_CODE' as AuthGrantTypeEnum,
         TOKENEXCHANGE: 'TOKEN_EXCHANGE' as AuthGrantTypeEnum
     };
-    export type ConfigurationTypesEnum = 'AUTHENTICATION' | 'INTEGRATION';
-    export const ConfigurationTypesEnum = {
-        AUTHENTICATION: 'AUTHENTICATION' as ConfigurationTypesEnum,
-        INTEGRATION: 'INTEGRATION' as ConfigurationTypesEnum
+    export type ConfigurationTypeEnum = 'AUTHENTICATION' | 'INTEGRATION';
+    export const ConfigurationTypeEnum = {
+        AUTHENTICATION: 'AUTHENTICATION' as ConfigurationTypeEnum,
+        INTEGRATION: 'INTEGRATION' as ConfigurationTypeEnum
     };
 }

@@ -74,15 +74,15 @@ public class Oauth2ClientRegistration {
 				? registration.getRuntimeConfiguration().getClient().getScopes()
 				: registration.getClientRegistration().getScopes();
 
-		if (registration.getRuntimeConfiguration().getConfigurationTypes() != null && registration
-				.getRuntimeConfiguration().getConfigurationTypes().contains(Oauth2ConfigurationType.AUTHENTICATION)
+		if (registration.getRuntimeConfiguration().getConfigurationType() != null && registration
+				.getRuntimeConfiguration().getConfigurationType() == (Oauth2ConfigurationType.AUTHENTICATION)
 				&& scopes == null) {
 			scopes = STANDARD_AUTHENTICATION_SCOPES;
 		}
 		builder.scope(scopes);
-		
+
 		Map<String, Object> configurationMetaData = new HashMap<String, Object>();
-		if (registration.getClientRegistration().getCustomAttributes()!=null) {
+		if (registration.getClientRegistration().getCustomAttributes() != null) {
 			configurationMetaData.putAll(registration.getClientRegistration().getCustomAttributes());
 		}
 		builder.providerConfigurationMetadata(configurationMetaData);

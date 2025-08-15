@@ -56,46 +56,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 
 	}
 
-	/**
-	 * Stores a new OAuth2 configuration in the system.
-	 *
-	 * @param authProvider        The authentication provider.
-	 * @param oauth2ClientContent The secret content for the OAuth2 client.
-	 * @param clientAuthMethod    The client authentication method.
-	 * @param authGrantType       The authorization grant type.
-	 * @param configurationTypes  The list of configuration types.
-	 * @return The unique ID of the stored configuration.
-	 * @throws GeboOauth2Exception If an error occurs during the storage process.
-	 */
-	@Override
-	public String insertOauth2Configuration(@NotNull AuthProvider authProvider,
-			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod clientAuthMethod,
-			Oauth2AuthorizationGrantType authGrantType,
-			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description)
-			throws GeboOauth2Exception {
-		Oauth2ProviderConfig providerConfig = providersLibraryDao.findByCode(authProvider.name());
-		if (providerConfig == null)
-			throw new GeboOauth2Exception("No provider " + authProvider + " in the static library");
-		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
-		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
-		configuration.setAuthGrantType(authGrantType);
-		configuration.setClientAuthMethod(clientAuthMethod);
-		configuration.setConfigurationTypes(configurationTypes);
-		configuration.setProvider(authProvider);
-		configuration.setRegistrationId(uniqueId);
-		try {
-			// Store the secret content using a unique identifier
-			String secretId = secretService.storeSecret(oauth2ClientContent,
-					"Oauth2 configuration for " + authProvider.name(), "oauth2-" + authProvider.name());
-			configuration.setClientSecretId(secretId);
-		} catch (GeboCryptSecretException e) {
-			// Handle any exceptions raised during the storage of secrets
-			throw new GeboOauth2Exception("Secret layer raising an error", e);
-		}
-		repository.insert(configuration);
-		return uniqueId;
-	}
-
+	
 	/**
 	 * Stores a new OAuth2 configuration in the system using provider configuration.
 	 *
@@ -103,22 +64,21 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	 * @param oauth2ClientContent   The secret content for the OAuth2 client.
 	 * @param authClientMethod      The client authentication method.
 	 * @param authGrantType         The authorization grant type.
-	 * @param configurationTypes    The list of configuration types.
+	 * @param configurationType     The list of configuration types.
 	 * @return The unique ID of the stored configuration.
 	 * @throws GeboOauth2Exception If an error occurs during the storage process.
 	 */
 	@Override
 	public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
-			Oauth2AuthorizationGrantType authGrantType,
-			@NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes, String description)
-			throws GeboOauth2Exception {
+			Oauth2AuthorizationGrantType authGrantType, @NotNull  Oauth2ConfigurationType configurationType,
+			String description) throws GeboOauth2Exception {
 		AuthProvider authProvider = AuthProvider.oauth2_generic;
 		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
 		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
 		configuration.setAuthGrantType(authGrantType);
 		configuration.setClientAuthMethod(authClientMethod);
-		configuration.setConfigurationTypes(configurationTypes);
+		configuration.setConfigurationType(configurationType);
 		configuration.setProvider(authProvider);
 		configuration.setRegistrationId(uniqueId);
 		configuration.setProviderConfig(providerConfiguration);
@@ -134,7 +94,30 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		repository.insert(configuration);
 		return uniqueId;
 	}
-
+	@Override
+	public String insertOauth2Configuration(AuthProvider authProvider, GeboOauth2SecretContent oauth2ClientContent,
+			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
+			Oauth2ConfigurationType configurationType, String description) throws GeboOauth2Exception {
+		
+		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
+		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
+		configuration.setAuthGrantType(authGrantType);
+		configuration.setClientAuthMethod(authClientMethod);
+		configuration.setConfigurationType(configurationType);
+		configuration.setProvider(authProvider);
+		configuration.setRegistrationId(uniqueId);
+		try {
+			// Store the secret content using a unique identifier
+			String secretId = secretService.storeSecret(oauth2ClientContent,
+					"Oauth2 configuration for " + authProvider.name(), "oauth2-" + authProvider.name());
+			configuration.setClientSecretId(secretId);
+		} catch (GeboCryptSecretException e) {
+			// Handle any exceptions raised during the storage of secrets
+			throw new GeboOauth2Exception("Secret layer raising an error", e);
+		}
+		repository.insert(configuration);
+		return uniqueId;
+	}
 	/**
 	 * Deletes an existing OAuth2 configuration based on ID.
 	 *
@@ -261,7 +244,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	public List<Oauth2ClientRegistration> findOauth2ClientRegistrationByProviderAndConfigurationType(
 			AuthProvider provider, Oauth2ConfigurationType type) throws GeboOauth2Exception {
 		List<Oauth2ClientRegistration> out = new ArrayList<>();
-		List<Oauth2RuntimeConfiguration> list = repository.findByProviderAndConfigurationTypesContains(provider, type);
+		List<Oauth2RuntimeConfiguration> list = repository.findByProviderAndConfigurationType(provider, type);
 		for (Oauth2RuntimeConfiguration config : list) {
 			out.add(complete(config));
 		}
@@ -271,7 +254,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	@Override
 	public List<Oauth2ClientAuthorizativeInfo> findAllAauthorizativeRegistrations() {
 		List<Oauth2RuntimeConfiguration> list = repository
-				.findByConfigurationTypesContains(Oauth2ConfigurationType.AUTHENTICATION);
+				.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 		return list.stream().map(x -> {
 			Oauth2ClientAuthorizativeInfo data = new Oauth2ClientAuthorizativeInfo(x.getRegistrationId(),
 					x.getProvider().name(), x.getDescription());
@@ -283,7 +266,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	@Override
 	public void updateOauth2Configuration(String registrationId, Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
-			Oauth2AuthorizationGrantType authGrantType, List<Oauth2ConfigurationType> configurationTypes,
+			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType,
 			String description) throws GeboOauth2Exception {
 		Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
 		if (data == null)
@@ -294,7 +277,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 
 		data.setDescription(description);
 		data.setProviderConfig(providerConfiguration);
-		data.setConfigurationTypes(configurationTypes);
+		data.setConfigurationType(configurationType);
 		data.setClientAuthMethod(authClientMethod);
 		data.setAuthGrantType(authGrantType);
 		repository.save(data);
@@ -307,5 +290,8 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		}
 
 	}
+
+
+	
 
 }

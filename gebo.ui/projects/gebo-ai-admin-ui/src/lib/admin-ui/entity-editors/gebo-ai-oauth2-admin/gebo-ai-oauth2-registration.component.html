@@ -49,12 +49,14 @@
 
         <div class="col-6">
             <div class="flex flex-column gap-2">
-                <label for="configurationTypes">Configuration purpose</label>
-                <p-multiselect [options]="configurationTypesData" formControlName="configurationTypes"
-                    optionLabel="description" optionValue="code" placeholder="Select configuration purpose"
-                    styleClass="w-full md:w-80" aria-describedby="configurationTypes-help" [readonly]="readonly" />
-                <small id="configurationTypes-help">
-                    Choose if this settings will be used for 
+                <label for="configurationType">Configuration purpose</label>
+                <geboai-editable-listbox-component id="configurationType" formControlName="configurationType"
+                    placeholder="Select configuration purpose" [readonly]="readonly" [data]="configurationTypesData"
+                    aria-describedby="configurationType-help">
+                </geboai-editable-listbox-component>
+
+                <small id="configurationType-help">
+                    Choose if this settings will be used for
                     Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.
                 </small>
             </div>
@@ -63,6 +65,16 @@
             *ngIf="readonly!==true">
             <p-fieldset legend="OAUTH2 provider URLS">
                 <div class="grid">
+                    <div class="col-12">
+                        <div class="flex flex-column gap-2">
+                            <label for="issuerUri">Issuer Uri</label>
+                            <input pInputText id="issuerUri" formControlName="issuerUri" [readOnly]="readonly"
+                                aria-describedby="issuerUri-help" />
+                            <small id="issuerUri-help">
+                                Enter the OAUTH2 issuer URL of the provider
+                            </small>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <div class="flex flex-column gap-2">
                             <label for="authorizationUri">Authorization URL</label>
@@ -104,17 +116,17 @@
                             </small>
                         </div>
                     </div>
+
                     <div class="col-12">
                         <div class="flex flex-column gap-2">
-                            <label for="issuerUri">Issuer Uri</label>
-                            <input pInputText id="issuerUri" formControlName="issuerUri" [readOnly]="readonly"
-                                aria-describedby="issuerUri-help" />
-                            <small id="issuerUri-help">
-                                Enter the OAUTH2 issuer URL of the provider
+                            <label for="jwkSetUri">Jwk Set Uri</label>
+                            <input pInputText id="jwkSetUri" formControlName="jwkSetUri" [readOnly]="readonly"
+                                aria-describedby="jwkSetUri-help" />
+                            <small id="jwkSetUri-help">
+                                Enter the OAUTH2 Jwk Set url of the provider
                             </small>
                         </div>
                     </div>
-
                     <!-- userNameAttribute !?-->
                 </div>
             </p-fieldset>

@@ -2,8 +2,6 @@ package ai.gebo.security.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,11 +50,11 @@ public class OAuth2AdminController {
 			}
 			registrationId = oauth2ConfiguratoinService.insertOauth2Configuration(data.getProviderConfiguration(),
 					data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
-					data.getConfigurationTypes(), data.getDescription());
+					data.getConfigurationType(), data.getDescription());
 		} else {
 			registrationId = oauth2ConfiguratoinService.insertOauth2Configuration(data.getAuthProvider(),
 					data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
-					data.getConfigurationTypes(), data.getDescription());
+					data.getConfigurationType(), data.getDescription());
 		}
 		Oauth2ClientRegistration registration = oauth2ConfiguratoinService
 				.findOauth2ClientRegistrationByRegistrationId(registrationId);
@@ -76,7 +74,7 @@ public class OAuth2AdminController {
 			@NotNull @Valid @RequestBody Oauth2ProviderModifiableData data) throws GeboOauth2Exception {
 		oauth2ConfiguratoinService.updateOauth2Configuration(data.getCode(), data.getProviderConfiguration(),
 				data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
-				data.getConfigurationTypes(), data.getDescription());
+				data.getConfigurationType(), data.getDescription());
 		Oauth2ClientRegistration registration = oauth2ConfiguratoinService
 				.findOauth2ClientRegistrationByRegistrationId(data.getCode());
 		return toModifiableData(registration);
@@ -92,7 +90,7 @@ public class OAuth2AdminController {
 		if (registration == null)
 			return null;
 		Oauth2ProviderModifiableData data = new Oauth2ProviderModifiableData();
-		data.setConfigurationTypes(registration.getRuntimeConfiguration().getConfigurationTypes());
+		data.setConfigurationType(registration.getRuntimeConfiguration().getConfigurationType());
 		data.setOauth2ClientContent(registration.getClientRegistration());
 		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
 		data.setAuthClientMethod(registration.getRuntimeConfiguration().getClientAuthMethod());

@@ -14,16 +14,16 @@ import lombok.Data;
 
 @Data
 public class Oauth2ProviderModifiableData {
-	
+
 	private String code = null;
 	private @NotNull AuthProvider authProvider;
 	private Oauth2ProviderConfig providerConfiguration;
 	private @NotNull @Valid GeboOauth2SecretContent oauth2ClientContent;
 	private Oauth2ClientAuthMethod authClientMethod;
 	private Oauth2AuthorizationGrantType authGrantType;
-	private @NotNull @NotEmpty List<Oauth2ConfigurationType> configurationTypes;
+	private @NotNull Oauth2ConfigurationType configurationType;
 	private @NotNull String description;
-	
+
 	@NotNull
-	private Boolean readOnly=false;
+	private Boolean readOnly = false;
 }

@@ -26,12 +26,13 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
             userInfoUri: new FormControl(),
             userNameAttribute: new FormControl(),
             introspectionUri: new FormControl(),
-            issuerUri: new FormControl()
+            issuerUri: new FormControl(),
+            jwkSetUri: new FormControl()
         }),
         oauth2ClientContent: new FormControl(),
         authClientMethod: new FormControl(),
         authGrantType: new FormControl(),
-        configurationTypes: new FormControl(),
+        configurationType: new FormControl(),
         description: new FormControl(),
         readOnly: new FormControl()
     });
@@ -46,7 +47,7 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
     }[] = [];
     protected authClientMethodData: { code: Oauth2ProviderModifiableData.AuthClientMethodEnum, description: string }[] = [];
     protected authGrantTypeData: { code: Oauth2ProviderModifiableData.AuthGrantTypeEnum, description: string }[] = [];
-    protected configurationTypesData: { code: Oauth2ProviderModifiableData.ConfigurationTypesEnum, description: string }[] = [{ code: "AUTHENTICATION", description: "Authentication" }, { code: "INTEGRATION", description: "Integration client" }];
+    protected configurationTypesData: { code: Oauth2ProviderModifiableData.ConfigurationTypeEnum, description: string }[] = [{ code: "AUTHENTICATION", description: "Authentication" }, { code: "INTEGRATION", description: "Integration client" }];
     protected readonly: boolean = false;
     // 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'twitter' | 'slack' | 'x' | 'apple' | 'oauth2_generic' 
 
