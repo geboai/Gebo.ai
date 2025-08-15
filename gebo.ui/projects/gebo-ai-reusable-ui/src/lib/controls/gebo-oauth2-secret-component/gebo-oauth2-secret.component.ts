@@ -23,6 +23,7 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
         scopes: new FormControl(),
         customAttributes: new FormGroup({})
     });
+    @Input() public hideProviderChoice: boolean = false;
     @Input() public forcedProviderName?: string;
     @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
     @Input() oauth2MandatoryScopes: { code: string, description: string }[] = [];
@@ -88,6 +89,7 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
             keys.forEach(fld => {
                 customAttributes.removeControl(fld);
             });
+            customAttributes.updateValueAndValidity();
             this.actualProvider = this.providers.find(x => x.provider === providerName);
             const currentCustomAttributes = this.actualProvider?.customAttributes;
             this.actualEditableCustomAttributes = currentCustomAttributes ? currentCustomAttributes : [];
@@ -97,17 +99,33 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
                 if (customAttribute.attributeName)
                     customAttributes.addControl(customAttribute.attributeName, fc);
             });
-            this.formGroupChangeValueSubscription = this.formGroup.statusChanges.subscribe({
+            customAttributes.updateValueAndValidity();
+            this.formGroupChangeValueSubscription = this.formGroup.valueChanges.subscribe({
                 next: (value) => {
-                    if (value === "VALID") {
-                        const value = this.formGroup.value;
+                    if (this.formGroup.valid) {
                         this.value = value;
                         this.onChange(value);
                     }
+
                 }
             });
-            this.formGroup.updateValueAndValidity();
+            let boundValue: GeboOauth2SecretContent = {providerName: this.forcedProviderName} as GeboOauth2SecretContent;
+            if (this.value) {
+                if (this.forcedProviderName) {
+                    boundValue = {
+                        ...this.value,
+                        providerName: this.forcedProviderName
+                    };
+                } else {
+                    boundValue = this.value;
+                }
+            }
             this.oldProviderName = providerName;
+            try {
+                this.formGroup.patchValue(boundValue);
+            } catch (e) { }
+            this.formGroup.updateValueAndValidity();
+            
         }
     }
     onChange: (v: any) => void = (v) => { };

@@ -47,14 +47,14 @@
             </div>
         </div>
 
-        <div class="col-12">
+        <div class="col-6">
             <div class="flex flex-column gap-2">
-                <label for="configurationTypes">Use this configuration purpose</label>
+                <label for="configurationTypes">Configuration purpose</label>
                 <p-multiselect [options]="configurationTypesData" formControlName="configurationTypes"
                     optionLabel="description" optionValue="code" placeholder="Select configuration purpose"
                     styleClass="w-full md:w-80" aria-describedby="configurationTypes-help" [readonly]="readonly" />
                 <small id="configurationTypes-help">
-                    You must choose at least an use that this configuration will be used for, this can be to let users
+                    Choose if this settings will be used for 
                     Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.
                 </small>
             </div>
@@ -122,7 +122,7 @@
         <div class="col-12" *ngIf="readonly!==true">
             <gebo-ui-oauth2-secret-component formControlName="oauth2ClientContent"
                 [forcedProviderName]="currentProvider" [oauth2ChoosableScopes]="oauth2ChoosableScopes"
-                [oauth2MandatoryScopes]="oauth2MandatoryScopes">
+                [oauth2MandatoryScopes]="oauth2MandatoryScopes" [hideProviderChoice]="true">
             </gebo-ui-oauth2-secret-component>
             <!-- 
             <p-fieldset legend="OAUTH2 client registration">
