@@ -59,7 +59,7 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 			for (Oauth2RuntimeConfiguration config : oauth2configs) {
 				config.setReadOnly(true);
 				if (config.getClient() == null || config.getClient().getClientId() == null
-						|| config.getClient().getSecret() == null || config.getClient().getTenantId() == null) {
+						|| config.getClient().getSecret() == null) {
 					final String msg = "The Oauth2 configuration for registrationId:" + config.getRegistrationId()
 							+ " does not have a full oauth2 client plain configuration, shutting down, please correct yaml ";
 					LOGGER.error(msg);

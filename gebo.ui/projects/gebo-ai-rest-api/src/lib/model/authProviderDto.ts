@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Oauth2CustomAttribute } from './oauth2CustomAttribute';
 
 export interface AuthProviderDto { 
     provider: AuthProviderDto.ProviderEnum;
@@ -16,21 +17,16 @@ export interface AuthProviderDto {
     description: string;
     multitenant: boolean;
     loginModel: AuthProviderDto.LoginModelEnum;
+    customAttributes: Array<Oauth2CustomAttribute>;
 }
 export namespace AuthProviderDto {
-    export type ProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
+    export type ProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';
     export const ProviderEnum = {
         Local: 'local' as ProviderEnum,
-        Facebook: 'facebook' as ProviderEnum,
         Google: 'google' as ProviderEnum,
-        Github: 'github' as ProviderEnum,
         Microsoft: 'microsoft' as ProviderEnum,
         MicrosoftMultitenant: 'microsoft_multitenant' as ProviderEnum,
-        Linkedin: 'linkedin' as ProviderEnum,
-        Amazon: 'amazon' as ProviderEnum,
-        Slack: 'slack' as ProviderEnum,
-        X: 'x' as ProviderEnum,
-        Apple: 'apple' as ProviderEnum,
+        AwsCognito: 'aws_cognito' as ProviderEnum,
         Oauth2Generic: 'oauth2_generic' as ProviderEnum,
         Ldap: 'ldap' as ProviderEnum
     };

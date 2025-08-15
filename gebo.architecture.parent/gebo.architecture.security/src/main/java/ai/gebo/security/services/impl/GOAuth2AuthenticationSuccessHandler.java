@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
 import ai.gebo.security.services.IGOAuth2AuthenticationSuccessHandler;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

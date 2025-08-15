@@ -11,7 +11,7 @@
  */
 
 export interface GeboOauth2SecretContent { 
-    tenantId: string;
+    providerName: string;
     clientId: string;
     secret: string;
     scopes?: Array<string>;

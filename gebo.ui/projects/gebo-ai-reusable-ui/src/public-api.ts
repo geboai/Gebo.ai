@@ -82,4 +82,6 @@ export * from "./lib/services/auth-interceptor.service";
 export * from "./lib/services/gebo-backends-list.service";
 export * from "./lib/infrastructure/reload-forward/reload-forward.module";
 
+export * from "./lib/controls/gebo-oauth2-secret-component/gebo-oauth2-secret.module";
+
 

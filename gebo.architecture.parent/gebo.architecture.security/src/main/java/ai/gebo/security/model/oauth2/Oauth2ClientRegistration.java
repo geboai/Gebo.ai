@@ -82,8 +82,8 @@ public class Oauth2ClientRegistration {
 		builder.scope(scopes);
 		
 		Map<String, Object> configurationMetaData = new HashMap<String, Object>();
-		if (registration.getClientRegistration().getTenantId() != null) {
-			configurationMetaData.put("tenant", registration.getClientRegistration().getTenantId());
+		if (registration.getClientRegistration().getCustomAttributes()!=null) {
+			configurationMetaData.putAll(registration.getClientRegistration().getCustomAttributes());
 		}
 		builder.providerConfigurationMetadata(configurationMetaData);
 		builder.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}");

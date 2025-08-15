@@ -24,19 +24,13 @@ export interface Oauth2ProviderModifiableData {
     readOnly: boolean;
 }
 export namespace Oauth2ProviderModifiableData {
-    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
+    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';
     export const AuthProviderEnum = {
         Local: 'local' as AuthProviderEnum,
-        Facebook: 'facebook' as AuthProviderEnum,
         Google: 'google' as AuthProviderEnum,
-        Github: 'github' as AuthProviderEnum,
         Microsoft: 'microsoft' as AuthProviderEnum,
         MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
-        Linkedin: 'linkedin' as AuthProviderEnum,
-        Amazon: 'amazon' as AuthProviderEnum,
-        Slack: 'slack' as AuthProviderEnum,
-        X: 'x' as AuthProviderEnum,
-        Apple: 'apple' as AuthProviderEnum,
+        AwsCognito: 'aws_cognito' as AuthProviderEnum,
         Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
         Ldap: 'ldap' as AuthProviderEnum
     };

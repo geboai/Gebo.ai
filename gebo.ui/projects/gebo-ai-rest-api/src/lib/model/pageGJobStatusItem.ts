@@ -16,11 +16,11 @@ import { SortObject } from './sortObject';
 export interface PageGJobStatusItem { 
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<GJobStatusItem>;
     number?: number;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
     sort?: SortObject;

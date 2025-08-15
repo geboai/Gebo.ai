@@ -16,11 +16,11 @@ import { UsersGroup } from './usersGroup';
 export interface PageUsersGroup { 
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<UsersGroup>;
     number?: number;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
     sort?: SortObject;

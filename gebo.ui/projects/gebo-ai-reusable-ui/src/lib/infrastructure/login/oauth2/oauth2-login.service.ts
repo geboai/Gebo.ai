@@ -1,8 +1,8 @@
 import { SecurityHeaderData, Oauth2ClientConfig, BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
-import { Subject, Subscription, window } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth } from "../../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
-import { Inject, Injectable, OnInit } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 
 
@@ -38,7 +38,7 @@ export class GenericOauth2ServerSideLoginService implements IOauth2LoginService 
         token: token
       };
       this.authDataSubject.next(auth);
-      this.cookieService.delete("TOKEN");
+      this.cookieService.delete("TOKEN");      
       successfullCallBack();
     } else failureCallback();
   }
@@ -167,99 +167,3 @@ export class Oauth2LoginService implements IOauth2LoginService {
   }
 }
 
-declare const google: any;
-@Injectable({ providedIn: "root" })
-export class GoogleOauth2Service implements IOauth2LoginService {
-  authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
-  actualAuthConfig?: Oauth2ClientConfig;
-  tokenClient: any;
-  codeClient: any;
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    this.actualAuthConfig = config;
-    this.runGoogleOauth2Login(config, successfullCallBack, failureCallback);
-  }
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    this.actualAuthConfig = config;
-  }
-  private isGoogleLibraryDefined(): boolean {
-    try {
-      return google && google.accounts ? true : false;
-    } catch (e) {
-      return false;
-    }
-  }
-  private runGoogleOauth2Login(authConfig: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void) {
-
-    if (this.isGoogleLibraryDefined()) {
-      this.initGoogleOauthLogin(authConfig, successfullCallBack, failureCallback);
-    } else {
-      this.actualAuthConfig = authConfig;
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        this.initGoogleOauthLogin(authConfig, successfullCallBack, failureCallback);
-      }
-      document.head.appendChild(script);
-    }
-  }
-  private initGoogleOauthLogin(authConfig: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    if (!google?.accounts?.oauth2) {
-      console.error('Google Identity Services non caricato');
-      return;
-    }
-    this.codeClient = google.accounts.oauth2.initCodeClient({
-      client_id: authConfig.clientId,
-      scope: 'openid email profile',
-      ux_mode: 'popup', // oppure 'redirect'
-      redirect_uri: document.location.origin + '/ui/oauth2-land',
-      callback: (resp: any) => {
-        if (resp.code) {
-          console.log('Authorization Code ricevuto:', resp.code);
-          // invia il code al backend per scambio token
-          const data: SecurityHeaderData = {
-            authProviderId: authConfig.registrationId,
-            authTenantId: "default-tenant",
-            authType: "OAUTH2",
-            empty: false,
-            token: resp.code
-          };
-          this.authDataSubject.next(data);
-          successfullCallBack();
-        } else {
-          console.error('Errore nella risposta GIS', resp);
-        }
-      }
-    });
-    this.codeClient.requestCode();
-
-
-    /*this.tokenClient =  google.accounts.oauth2.initTokenClient({
-      client_id:  authConfig.clientId,
-      scope: 'openid profile email',
-      callback: (resp: any) => {
-        if (resp.access_token) {
-          const data:SecurityHeaderData= {
-            authProviderId: authConfig.registrationId,
-            authTenantId:"default-tenant",
-            authType:"OAUTH2",
-            empty:false,
-            token:resp.access_token
-          };
-          this.authDataSubject.next(data);
-          successfullCallBack();
-        }
-      }
-    });
-    this.tokenClient.requestAccessToken({ prompt:  ''  });*/
-    /*google.accounts.id.initialize({
-      client_id: authConfig.clientId,
-      callback: (res: any) => {
-  
-      }
-    });
-    google.accounts.id.prompt();*/
-  }
-
-}

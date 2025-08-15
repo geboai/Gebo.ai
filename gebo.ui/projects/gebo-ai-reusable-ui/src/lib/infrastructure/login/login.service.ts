@@ -23,7 +23,7 @@ import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
 import { resetAuth } from "../gebo-credentials";
 import { AuthConfig } from 'angular-oauth2-oidc';
-import { GoogleOauth2Service, IOauth2LoginService, Oauth2LoginService } from "./oauth2/oauth2-login.service";
+import { Oauth2LoginService } from "./oauth2/oauth2-login.service";
 
 
 /**
