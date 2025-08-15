@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import { AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from "@angular/forms";
 import { AuthProviderDto, GeboOauth2SecretContent, OAuth2AdminControllerService, Oauth2CustomAttribute, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subscription } from "rxjs";
 @Component({
@@ -11,10 +11,15 @@ import { Subscription } from "rxjs";
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboOauth2SecretComponent),
             multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => GeboOauth2SecretComponent),
+            multi: true
         }
     ]
 })
-export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValueAccessor, Validator {
 
     protected formGroup: FormGroup = new FormGroup({
         providerName: new FormControl(null, Validators.required),
@@ -43,6 +48,44 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
             }
         });
     }
+    validate(control: AbstractControl): ValidationErrors | null {
+        // Not ready yet → parent gets "notValidated"
+        if (this.loading) return { notValidated: true };
+
+        if (!this.actualProvider) {
+            // If providerName is required but not chosen or not found in catalog yet
+            const pn = this.formGroup.get('providerName')?.value;
+            if (!pn) return { required: { field: 'providerName' } };
+            return { notValidated: true };
+        }
+
+        // Inner form invalid → bubble up a meaningful error
+        if (this.formGroup.invalid) {
+            // Option A (simple): report a generic required error
+            // return { required: true };
+
+            // Option B (explicit): list missing fields (including dynamic ones)
+            const missing: string[] = [];
+            const addIfReq = (name: string) => {
+                const c = this.formGroup.get(name);
+                if (c && c.hasError('required')) missing.push(name);
+            };
+            addIfReq('providerName');
+            addIfReq('clientId');
+            addIfReq('secret');
+
+            const cattrs = this.formGroup.get('customAttributes') as FormGroup;
+            Object.keys(cattrs.controls).forEach(k => {
+                if (cattrs.get(k)?.hasError('required')) missing.push(`customAttributes.${k}`);
+            });
+
+            return missing.length ? { requiredFields: missing } : { invalid: true };
+        }
+
+        // All good → no error on parent control
+        return null;
+    }
+
 
     ngOnInit(): void {
         this.loading = true;
@@ -64,12 +107,21 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
             },
             complete: () => {
                 this.loading = false;
+                this.triggerRevalidate();
             }
         });
+    }
+    private validatorChange?: () => void;
+    registerOnValidatorChange(fn: () => void): void {
+        this.validatorChange = fn;
+    }
+    private triggerRevalidate() {
+        this.validatorChange?.();
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["forcedProviderName"] && this.forcedProviderName) {
             this.restructureFormGroup(this.forcedProviderName);
+            this.triggerRevalidate();
         }
     }
     writeValue(obj: any): void {
@@ -77,6 +129,7 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
         if (this.value?.providerName) {
             this.restructureFormGroup(this.value?.providerName);
         }
+        this.triggerRevalidate();
     }
     restructureFormGroup(providerName: string) {
         if (this.oldProviderName !== providerName && this.providers && this.providers.length) {
@@ -89,7 +142,7 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
             keys.forEach(fld => {
                 customAttributes.removeControl(fld);
             });
-            customAttributes.updateValueAndValidity();
+            customAttributes.updateValueAndValidity({ emitEvent: false });
             this.actualProvider = this.providers.find(x => x.provider === providerName);
             const currentCustomAttributes = this.actualProvider?.customAttributes;
             this.actualEditableCustomAttributes = currentCustomAttributes ? currentCustomAttributes : [];
@@ -99,17 +152,18 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
                 if (customAttribute.attributeName)
                     customAttributes.addControl(customAttribute.attributeName, fc);
             });
-            customAttributes.updateValueAndValidity();
+            customAttributes.updateValueAndValidity({ emitEvent: false });
             this.formGroupChangeValueSubscription = this.formGroup.valueChanges.subscribe({
                 next: (value) => {
                     if (this.formGroup.valid) {
                         this.value = value;
                         this.onChange(value);
+                        this.triggerRevalidate();
                     }
 
                 }
             });
-            let boundValue: GeboOauth2SecretContent = {providerName: this.forcedProviderName} as GeboOauth2SecretContent;
+            let boundValue: GeboOauth2SecretContent = { providerName: this.forcedProviderName } as GeboOauth2SecretContent;
             if (this.value) {
                 if (this.forcedProviderName) {
                     boundValue = {
@@ -125,7 +179,7 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
                 this.formGroup.patchValue(boundValue);
             } catch (e) { }
             this.formGroup.updateValueAndValidity();
-            
+
         }
     }
     onChange: (v: any) => void = (v) => { };
@@ -137,7 +191,9 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
         this.onTouched = fn;
     }
     setDisabledState?(isDisabled: boolean): void {
-
+        isDisabled ? this.formGroup.disable({ emitEvent: false })
+            : this.formGroup.enable({ emitEvent: false });
+        this.triggerRevalidate();
     }
     protected customAttribute(attr?: string): FormControl<any> {
         if (attr) {
