@@ -136,56 +136,7 @@
                 [forcedProviderName]="currentProvider" [oauth2ChoosableScopes]="oauth2ChoosableScopes"
                 [oauth2MandatoryScopes]="oauth2MandatoryScopes" [hideProviderChoice]="true">
             </gebo-ui-oauth2-secret-component>
-            <!-- 
-            <p-fieldset legend="OAUTH2 client registration">
-
-                <div class="grid">
-                    <div class="col-12">
-                        <div class="flex flex-column gap-2">
-                            <label for="tenantId">Tenant ID</label>
-                            <input pInputText id="tenantId" formControlName="tenantId" [readOnly]="readonly" 
-                                aria-describedby="tenantId-help" />
-                            <small id="tenantId-help">
-                                Enter the OAUTH2 client registration Tenant Id
-                            </small>
-                        </div>
-
-                    </div>
-                    <div class="col-12">
-                        <div class="flex flex-column gap-2">
-                            <label for="clientId">Client ID</label>
-                            <input pInputText id="clientId" formControlName="clientId" [readOnly]="readonly" 
-                                aria-describedby="clientId-help" />
-                            <small id="clientId-help">
-                                Enter the OAUTH2 client Id
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="flex flex-column gap-2">
-                            <label for="secret">Secret client key</label>
-                            <textarea rows="5" cols="120" pTextarea id="secret" formControlName="secret"
-                                aria-describedby="secret-help" [readOnly]="readonly">  </textarea>
-                            <small id="secret-help">
-                                Client secret for the oauth2 protocol (to be retrieved in the oauth2 authenticated 3rd
-                                party software admin area)
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col-12" *ngIf="oauth2ChoosableScopes && oauth2ChoosableScopes.length">
-                        <div class="flex flex-column gap-2">
-                            <label for="scopes">Oauth2 scopes</label>
-                            <p-multiselect [options]="oauth2ChoosableScopes" formControlName="scopes"
-                                optionLabel="description" optionValue="code" placeholder="Select Oauth2 scopes"
-                                styleClass="w-full md:w-80" [readonly]="readonly" />
-                            <small id="scopes-help">
-                                Scopes for the oauth2 registered client
-                            </small>
-                        </div>
-                    </div>
-                    
-                </div>
-            </p-fieldset>-->
+            
         </div>
     </div>
     <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">

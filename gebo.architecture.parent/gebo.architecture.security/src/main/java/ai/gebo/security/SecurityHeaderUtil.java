@@ -68,4 +68,8 @@ public class SecurityHeaderUtil {
 		return new SecurityHeaderData(token, XAuthType.LOCAL_JWT, DEFAULT_PROVIDER_ID, DEFAULT_TENANT, false);
 	}
 
+	public static SecurityHeaderData createSelfsignedJwtSecurityHeaderOauth2(String token) {
+		return new SecurityHeaderData(token, XAuthType.OAUTH2, DEFAULT_PROVIDER_ID, DEFAULT_TENANT, false);
+	}
+
 }

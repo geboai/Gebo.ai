@@ -18,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,10 @@ import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfo;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
+import ai.gebo.security.util.CookieUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 /**
@@ -58,8 +63,8 @@ public class AuthController {
 	 * @param tokenProvider         the provider for generating authentication
 	 *                              tokens
 	 */
-	public AuthController(IGHttpRequestAuthenticationManagerResolver authenticationManager, UserRepository userRepository,
-			PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider) {
+	public AuthController(IGHttpRequestAuthenticationManagerResolver authenticationManager,
+			UserRepository userRepository, PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider) {
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -108,5 +113,13 @@ public class AuthController {
 			// Return error status if authentication fails
 			return OperationStatus.<AuthResponse>ofError("Cannot authenticate with supplied credentials");
 		}
+	}
+
+	@GetMapping(value = "authValue", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<AuthResponse> authenticatedOauth2User(HttpServletRequest request,
+			HttpServletResponse response) {
+		Optional<Cookie> cookie = CookieUtils.getCookie(request, LocalJwtTokenProvider.TEMPORARY_OAUTH2_COOKIENAME);
+		String value=(String) request.getSession().getAttribute(LocalJwtTokenProvider.TEMPORARY_OAUTH2_COOKIENAME);
+		return null;
 	}
 }

@@ -60,8 +60,8 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
 
     @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
     @Input() oauth2MandatoryScopes: { code: string, description: string }[] = [];
-    @Input() oauth2ForcedProviderName?:string;
-
+    @Input() oauth2ForcedProviderName?: string;
+    @Input() hideProviderChoice: boolean = false;
     /** All possible secret types with their display descriptions */
     private typesOptions: { code?: SecretInfo.SecretTypeEnum, description?: string }[] = [
         { code: SecretInfo.SecretTypeEnum.USERNAMEPASSWORD, description: "User name & password" },

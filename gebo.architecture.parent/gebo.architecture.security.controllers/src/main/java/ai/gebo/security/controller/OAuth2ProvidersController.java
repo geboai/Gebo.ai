@@ -33,7 +33,7 @@ public class OAuth2ProvidersController {
 
 	@GetMapping(value = "listAvailableProviders", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Oauth2ClientAuthorizativeInfo> listAvailableProviders() {
-		if (geboConfig.getOauth2Enabled() != null && geboConfig.getOauth2Enabled())
+		if (geboConfig.getOauth2LoginEnabled() != null && geboConfig.getOauth2LoginEnabled())
 			return oauth2Service.findAllAauthorizativeRegistrations();
 		else
 			return List.of();
@@ -41,7 +41,7 @@ public class OAuth2ProvidersController {
 
 	@GetMapping(value = "getProviderClientConfig", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Oauth2ClientConfig getProviderClientConfig(@RequestParam("registrationId") String registrationId) {
-		if (geboConfig.getOauth2Enabled() != null && geboConfig.getOauth2Enabled())
+		if (geboConfig.getOauth2LoginEnabled() != null && geboConfig.getOauth2LoginEnabled())
 			return this.dynamicClientRegistrationRepository.findOauth2ClientConfigById(registrationId);
 		else
 			return null;

@@ -22,7 +22,7 @@ export interface PageGLookupEntry {
     content?: Array<GLookupEntry>;
     number?: number;
     numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

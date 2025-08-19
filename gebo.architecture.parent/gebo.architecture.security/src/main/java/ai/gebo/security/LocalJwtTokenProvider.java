@@ -6,17 +6,16 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security;
 
+import java.time.Instant;
 import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.security.config.GeboSecurityConfig;
@@ -29,9 +28,9 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 
 /**
- * Service responsible for creating and validating JSON Web Tokens (JWT)
- * for the application. It utilizes JWT for secure communication between
- * client and server by verifying the authenticity of tokens.
+ * Service responsible for creating and validating JSON Web Tokens (JWT) for the
+ * application. It utilizes JWT for secure communication between client and
+ * server by verifying the authenticity of tokens.
  * 
  * AI generated comments
  */
@@ -40,7 +39,7 @@ public class LocalJwtTokenProvider {
 
 	// Logger instance for logging events
 	private static final Logger logger = LoggerFactory.getLogger(LocalJwtTokenProvider.class);
-
+	public static final String TEMPORARY_OAUTH2_COOKIENAME = "Gebo.Temporary.Acquired";
 	// Configuration properties for security settings
 	private GeboSecurityConfig appProperties;
 
@@ -67,12 +66,8 @@ public class LocalJwtTokenProvider {
 		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
 		// Build and sign the JWT
-		return Jwts.builder()
-				.setSubject(userPrincipal.getUsername())
-				.setIssuedAt(new Date())
-				.setExpiration(expiryDate)
-				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
-				.compact();
+		return Jwts.builder().setSubject(userPrincipal.getUsername()).setIssuedAt(new Date()).setExpiration(expiryDate)
+				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
 	}
 
 	/**
@@ -83,16 +78,15 @@ public class LocalJwtTokenProvider {
 	 */
 	public String getUserIdFromToken(String token) {
 		// Parse the JWT to get claims
-		Claims claims = Jwts.parser()
-				.setSigningKey(appProperties.getAuth().getTokenSecret())
-				.parseClaimsJws(token)
+		Claims claims = Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(token)
 				.getBody();
 
 		return claims.getSubject();
 	}
 
 	/**
-	 * Validates the given JWT to ensure it is correct and not expired or tampered with.
+	 * Validates the given JWT to ensure it is correct and not expired or tampered
+	 * with.
 	 *
 	 * @param authToken the JWT as a String
 	 * @return true if the token is valid, false otherwise
@@ -100,9 +94,7 @@ public class LocalJwtTokenProvider {
 	public boolean validateToken(String authToken) {
 		try {
 			// Parse JWT to validate it
-			Jwts.parser()
-				.setSigningKey(appProperties.getAuth().getTokenSecret())
-				.parseClaimsJws(authToken);
+			Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
 			return true;
 		} catch (SignatureException ex) {
 			logger.error("Invalid JWT signature", ex);
@@ -117,5 +109,18 @@ public class LocalJwtTokenProvider {
 		}
 		return false;
 	}
-	
+
+	public String createToken(DefaultOidcUser principal) {
+		Date now = new Date();
+		// Define token expiration date
+		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+		Instant expiring = principal.getExpiresAt();
+		if (expiring != null) {
+			expiryDate = Date.from(expiring);
+		}
+		// Build and sign the JWT
+		return Jwts.builder().setSubject(principal.getEmail()).setIssuedAt(new Date()).setExpiration(expiryDate)
+				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
+	}
+
 }

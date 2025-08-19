@@ -34,7 +34,8 @@ public class GeboSecurityConfig {
 	private GeboLoginPolicy loginPolicy = GeboLoginPolicy.REQUIRE_INVITATION;
 	private List<Oauth2RuntimeConfiguration> oauth2configs=new ArrayList<Oauth2RuntimeConfiguration>();
 	private Boolean oauth2UISetupEnabled=true;
-	private Boolean oauth2Enabled = true;
+	private Boolean oauth2LoginEnabled = true;
+	private Boolean oauth2ResourceServerEnabled=true;
 
 
 	/**
@@ -115,12 +116,20 @@ public class GeboSecurityConfig {
 		oauth2UISetupEnabled = oauth2uiSetupEnabled;
 	}
 
-	public Boolean getOauth2Enabled() {
-		return oauth2Enabled;
+	public Boolean getOauth2LoginEnabled() {
+		return oauth2LoginEnabled;
 	}
 
-	public void setOauth2Enabled(Boolean oauth2Enabled) {
-		this.oauth2Enabled = oauth2Enabled;
+	public void setOauth2LoginEnabled(Boolean oauth2Enabled) {
+		this.oauth2LoginEnabled = oauth2Enabled;
+	}
+
+	public Boolean getOauth2ResourceServerEnabled() {
+		return oauth2ResourceServerEnabled;
+	}
+
+	public void setOauth2ResourceServerEnabled(Boolean oauth2ResourceServerEnabled) {
+		this.oauth2ResourceServerEnabled = oauth2ResourceServerEnabled;
 	}
 
 }

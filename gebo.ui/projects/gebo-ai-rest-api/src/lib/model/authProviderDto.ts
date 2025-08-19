@@ -16,7 +16,6 @@ export interface AuthProviderDto {
     type: AuthProviderDto.TypeEnum;
     description: string;
     multitenant: boolean;
-    loginModel: AuthProviderDto.LoginModelEnum;
     customAttributes: Array<Oauth2CustomAttribute>;
 }
 export namespace AuthProviderDto {
@@ -35,10 +34,5 @@ export namespace AuthProviderDto {
         LOCALJWT: 'LOCAL_JWT' as TypeEnum,
         OAUTH2: 'OAUTH2' as TypeEnum,
         LDAP: 'LDAP' as TypeEnum
-    };
-    export type LoginModelEnum = 'SPA' | 'BACKEND';
-    export const LoginModelEnum = {
-        SPA: 'SPA' as LoginModelEnum,
-        BACKEND: 'BACKEND' as LoginModelEnum
     };
 }

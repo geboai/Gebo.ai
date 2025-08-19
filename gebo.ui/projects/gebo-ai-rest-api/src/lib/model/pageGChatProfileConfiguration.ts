@@ -22,7 +22,7 @@ export interface PageGChatProfileConfiguration {
     content?: Array<GChatProfileConfiguration>;
     number?: number;
     numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

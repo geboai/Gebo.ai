@@ -22,7 +22,7 @@ export interface PageGUserChatInfo {
     content?: Array<GUserChatInfo>;
     number?: number;
     numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

@@ -1,19 +1,21 @@
-import { SecurityHeaderData, Oauth2ClientConfig, BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecurityHeaderData, Oauth2ClientConfig, BASE_PATH, AuthControllerService, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth } from "../../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
 import { Inject, Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 
-
+const STANDARD_NOT_LOGGED_MESSAGE: GUserMessage[] = [{ summary: "Login failed", detail: "Something has gone wrong in the login", id: "NOTLOGGED", jobId: "", severity: "error", timestamp: Date.now() }];
 export interface IOauth2LoginService {
   authDataSubject: Subject<SecurityHeaderData | undefined>;
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void;
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void;
+  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void;
+  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void;
 }
 @Injectable({ providedIn: "root" })
 export class GenericOauth2ServerSideLoginService implements IOauth2LoginService {
-  constructor(@Inject(BASE_PATH) private basePath: string, private cookieService: CookieService) {
+  constructor(@Inject(BASE_PATH) private basePath: string,
+    private cookieService: CookieService,
+    private authControllerService: AuthControllerService,) {
 
   }
   authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
@@ -22,28 +24,37 @@ export class GenericOauth2ServerSideLoginService implements IOauth2LoginService 
     const baseBackend = url.origin;
     return baseBackend + "/oauth2/authorization/" + config.registrationId;
   }
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     sessionStorage.setItem("OAUTH2-LOGIN-TYPE", "BACKEND");
     const url = this.createOauth2LoginUrl(config);
     document.location = url;
   }
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    
-    const token = this.cookieService.get("TOKEN");
-    if (token) {
-      const auth: SecurityHeaderData = {
-        authProviderId: config.registrationId,
-        authTenantId: "default-tenant",
-        authType: "OAUTH2",
-        token: token
-      };
-      this.authDataSubject.next(auth);
-      this.cookieService.delete("TOKEN");      
-      successfullCallBack();
-    } else failureCallback();
-  }
+  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
+    this.authControllerService.authenticatedOauth2User().subscribe({
+      next: (value) => {
 
+        if (value && value?.hasErrorMessages !== true) {
+          if (value?.result?.securityHeaderData) {
+            this.authDataSubject.next(value.result.securityHeaderData);
+            successfullCallBack();
+          }
+          else {
+            failureCallback(value?.messages ? value?.messages : STANDARD_NOT_LOGGED_MESSAGE)
+          }
+        } else {
+          failureCallback(value?.messages ? value?.messages : STANDARD_NOT_LOGGED_MESSAGE)
+        }
+      },
+      error: (e) => {
+        failureCallback(STANDARD_NOT_LOGGED_MESSAGE);
+      },
+      complete: () => {
+
+      }
+    });
+  }
 }
+
 @Injectable({ providedIn: "root" })
 export class GenericOauth2ClientLoginService implements IOauth2LoginService {
   private authConfig?: AuthConfig;
@@ -98,7 +109,7 @@ export class GenericOauth2ClientLoginService implements IOauth2LoginService {
     };
     return authConfig;
   }
-  oauth2Login(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2Login(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     this.authConfig = this.translateConfig(value);
     this.oauth2Service.setStorage(localStorage);
     this.oauth2Service.configure(this.authConfig);
@@ -110,7 +121,7 @@ export class GenericOauth2ClientLoginService implements IOauth2LoginService {
 
     });
   }
-  oauth2RedirectLanding(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2RedirectLanding(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     this.authConfig = this.translateConfig(value);
     this.oauth2Service.configure(this.authConfig);
     this.oauth2Service.setStorage(localStorage);
@@ -123,9 +134,11 @@ export class GenericOauth2ClientLoginService implements IOauth2LoginService {
         } else {
           console.error("Access token non ottenuto. Logout forzato.");
           resetAuth();
-          failureCallback();
+          failureCallback(STANDARD_NOT_LOGGED_MESSAGE);
 
         }
+      }).catch(e => {
+        failureCallback(STANDARD_NOT_LOGGED_MESSAGE);
       });
     });
   }
@@ -140,11 +153,11 @@ export class Oauth2LoginService implements IOauth2LoginService {
   private subscription?: Subscription;
   authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
 
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     const service = this.switchOauth2LoginService(config.provider);
     service.oauth2Login(config, successfullCallBack, failureCallback);
   }
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     const service = this.switchOauth2LoginService(config.provider);
     service.oauth2RedirectLanding(config, successfullCallBack, failureCallback);
   }
@@ -154,10 +167,12 @@ export class Oauth2LoginService implements IOauth2LoginService {
       this.subscription = undefined;
     }
     let service: IOauth2LoginService;
+    service = this.genericServerSideOauth2LoginService;
+    /*
     switch (provider) {
-      case "google": service = this.genericServerSideOauth2LoginService; break;
-      default: service = this.genericOauthClient2LoginService; break;
-    }
+      case "oauth2_generic": service = this.genericOauthClient2LoginService; break;
+      default: service = this.genericServerSideOauth2LoginService; break;
+    }*/
     this.subscription = service.authDataSubject.subscribe({
       next: (value) => {
         this.authDataSubject.next(value);

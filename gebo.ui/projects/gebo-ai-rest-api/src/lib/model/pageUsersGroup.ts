@@ -22,7 +22,7 @@ export interface PageUsersGroup {
     content?: Array<UsersGroup>;
     number?: number;
     numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

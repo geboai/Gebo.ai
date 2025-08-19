@@ -21,6 +21,6 @@ public class Oauth2ModuleStatusController {
 	public Oauth2ModuleStatus getStatus() {
 		return new Oauth2ModuleStatus(
 				geboSecurityConfig.getOauth2UISetupEnabled() != null && geboSecurityConfig.getOauth2UISetupEnabled(),
-				geboSecurityConfig.getOauth2Enabled() != null && geboSecurityConfig.getOauth2UISetupEnabled());
+				geboSecurityConfig.getOauth2LoginEnabled() != null && geboSecurityConfig.getOauth2UISetupEnabled());
 	}
 }
