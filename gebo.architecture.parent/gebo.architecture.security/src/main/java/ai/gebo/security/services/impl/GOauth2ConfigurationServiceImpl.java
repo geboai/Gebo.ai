@@ -34,7 +34,6 @@ import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2ProvidersLibraryDao;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Service

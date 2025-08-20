@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
+import { SecurityHeaderData } from './securityHeaderData';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    disabled?: boolean;
-    sourname?: string;
-    username?: string;
+export interface OperationStatusSecurityHeaderData { 
+    result?: SecurityHeaderData;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

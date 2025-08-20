@@ -13,7 +13,6 @@ import ai.gebo.security.model.oauth2.Oauth2ClientAuthorizativeInfo;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
-import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

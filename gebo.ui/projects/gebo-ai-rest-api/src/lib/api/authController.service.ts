@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { LoginRequest } from '../model/loginRequest';
 import { OperationStatusAuthResponse } from '../model/operationStatusAuthResponse';
+import { OperationStatusSecurityHeaderData } from '../model/operationStatusSecurityHeaderData';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -106,13 +107,23 @@ export class AuthControllerService {
     /**
      * 
      * 
+     * @param requestId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authenticatedOauth2User(observe?: 'body', reportProgress?: boolean): Observable<OperationStatusAuthResponse>;
-    public authenticatedOauth2User(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusAuthResponse>>;
-    public authenticatedOauth2User(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusAuthResponse>>;
-    public authenticatedOauth2User(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public authenticatedOauth2UserHeader(requestId: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusSecurityHeaderData>;
+    public authenticatedOauth2UserHeader(requestId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusSecurityHeaderData>>;
+    public authenticatedOauth2UserHeader(requestId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusSecurityHeaderData>>;
+    public authenticatedOauth2UserHeader(requestId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (requestId === null || requestId === undefined) {
+            throw new Error('Required parameter requestId was null or undefined when calling authenticatedOauth2UserHeader.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (requestId !== undefined && requestId !== null) {
+            queryParameters = queryParameters.set('requestId', <any>requestId);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -129,8 +140,9 @@ export class AuthControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<OperationStatusAuthResponse>('get',`${this.basePath}/auth/authValue`,
+        return this.httpClient.request<OperationStatusSecurityHeaderData>('get',`${this.basePath}/auth/authValue`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

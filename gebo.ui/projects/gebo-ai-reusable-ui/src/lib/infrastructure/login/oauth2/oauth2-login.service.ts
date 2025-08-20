@@ -4,6 +4,8 @@ import { getAuth, resetAuth } from "../../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
 import { Inject, Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
+import { ActivatedRoute } from "@angular/router";
+import { IOperationStatus } from "@Gebo.ai/reusable-ui";
 
 const STANDARD_NOT_LOGGED_MESSAGE: GUserMessage[] = [{ summary: "Login failed", detail: "Something has gone wrong in the login", id: "NOTLOGGED", jobId: "", severity: "error", timestamp: Date.now() }];
 export interface IOauth2LoginService {
@@ -14,44 +16,50 @@ export interface IOauth2LoginService {
 @Injectable({ providedIn: "root" })
 export class GenericOauth2ServerSideLoginService implements IOauth2LoginService {
   constructor(@Inject(BASE_PATH) private basePath: string,
-    private cookieService: CookieService,
-    private authControllerService: AuthControllerService,) {
-
+    private activatedRoute: ActivatedRoute,
+    private authControllerService: AuthControllerService) {
   }
   authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
   private createOauth2LoginUrl(config: Oauth2ClientConfig): string {
     const url: URL = new URL(this.basePath);
     const baseBackend = url.origin;
-    return baseBackend + "/oauth2/authorization/" + config.registrationId;
+    const nextUri = document.location.origin + "/ui/oauth2-land?status=TRANSIENT";
+    return baseBackend + "/public/oauth2LoginAttempt?registrationId=" + config.registrationId + "&nextUri=" + encodeURIComponent(nextUri);
+    //return baseBackend + "/oauth2/authorization/" + config.registrationId;
   }
   oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
-    sessionStorage.setItem("OAUTH2-LOGIN-TYPE", "BACKEND");
     const url = this.createOauth2LoginUrl(config);
     document.location = url;
   }
   oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
-    this.authControllerService.authenticatedOauth2User().subscribe({
-      next: (value) => {
-
-        if (value && value?.hasErrorMessages !== true) {
-          if (value?.result?.securityHeaderData) {
-            this.authDataSubject.next(value.result.securityHeaderData);
-            successfullCallBack();
-          }
-          else {
-            failureCallback(value?.messages ? value?.messages : STANDARD_NOT_LOGGED_MESSAGE)
-          }
-        } else {
-          failureCallback(value?.messages ? value?.messages : STANDARD_NOT_LOGGED_MESSAGE)
+    this.activatedRoute.queryParamMap.subscribe({
+      next: (paramMap) => {
+        const status = paramMap.get("status");
+        if (status === "TRANSIENT") {
+          
+          const nextUri = document.location.origin + "/ui/oauth2-land?status=AUTHORIZED";
+          const url: URL = new URL(this.basePath);
+          const baseBackend = url.origin;
+          const redirectUrl = baseBackend + "/public/oauth2LoginSPAAttemptSuccess?nextUri=" + encodeURIComponent(nextUri);
+          document.location = redirectUrl;
         }
-      },
-      error: (e) => {
-        failureCallback(STANDARD_NOT_LOGGED_MESSAGE);
-      },
-      complete: () => {
-
+        if (status === "AUTHORIZED") {
+          const data = sessionStorage.getItem("RESPONSE_STATUS");
+          if (data) {
+            const responseData: IOperationStatus<SecurityHeaderData> = JSON.parse(data);
+            if (responseData.result) {
+              this.authDataSubject.next(responseData.result);
+              successfullCallBack();
+            } else {
+              failureCallback(responseData.messages);
+            }
+          }else {
+            failureCallback();
+          }
+        }
       }
-    });
+    })
+
   }
 }
 

@@ -228,6 +228,7 @@ export * from './operationStatusListString';
 export * from './operationStatusListVirtualFilesystemNavigationTreeStatus';
 export * from './operationStatusPromptTemplateResponse';
 export * from './operationStatusPublishingStatus';
+export * from './operationStatusSecurityHeaderData';
 export * from './operationStatusWorkFolderSetupStatus';
 export * from './order';
 export * from './pageDocumentReferenceView';

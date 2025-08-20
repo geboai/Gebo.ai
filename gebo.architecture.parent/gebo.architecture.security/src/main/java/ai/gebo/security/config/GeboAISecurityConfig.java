@@ -34,9 +34,11 @@ import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.LocalJwtTokenProvider;
 import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
+import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DynamicReactiveRegistrationRepository;
 import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
+import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
@@ -109,8 +111,8 @@ public class GeboAISecurityConfig {
 			IGeboSecretsAccessService secretsService, IGUsersAdminService userAdminService,
 			GeboSecurityConfig securityProperties, GPasswordEncoder passwordEncoder,
 			IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao, LocalJwtTokenProvider tokenProvider,
-			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService,
-			UserDetailsService userDetailsService) {
+			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService, UserDetailsService userDetailsService,
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
@@ -136,7 +138,8 @@ public class GeboAISecurityConfig {
 		this.tokenProvider = tokenProvider;
 		this.point = point;
 		this.cryptService = cryptService;
-		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(tokenProvider, cryptService);
+		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(
+				backendOauth2LoginSPASupportService);
 
 	}
 

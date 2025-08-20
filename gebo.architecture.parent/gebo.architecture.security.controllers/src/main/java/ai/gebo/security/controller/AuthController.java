@@ -9,6 +9,7 @@
 
 package ai.gebo.security.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -22,21 +23,25 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.LocalJwtTokenProvider;
 import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.model.AuthResponse;
 import ai.gebo.security.model.LoginRequest;
+import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfo;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
+import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
-import ai.gebo.security.util.CookieUtils;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 /**
@@ -52,6 +57,8 @@ public class AuthController {
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private LocalJwtTokenProvider tokenProvider;
+	private IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService;
+	private static ObjectMapper mapper = new ObjectMapper();
 
 	/**
 	 * Constructs an AuthController with the necessary dependencies.
@@ -64,11 +71,14 @@ public class AuthController {
 	 *                              tokens
 	 */
 	public AuthController(IGHttpRequestAuthenticationManagerResolver authenticationManager,
-			UserRepository userRepository, PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider) {
+			UserRepository userRepository, PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider,
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenProvider = tokenProvider;
+		this.backendOauth2LoginSPASupportService = backendOauth2LoginSPASupportService;
+
 	}
 
 	/**
@@ -115,11 +125,14 @@ public class AuthController {
 		}
 	}
 
+	
+
 	@GetMapping(value = "authValue", produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<AuthResponse> authenticatedOauth2User(HttpServletRequest request,
-			HttpServletResponse response) {
-		Optional<Cookie> cookie = CookieUtils.getCookie(request, LocalJwtTokenProvider.TEMPORARY_OAUTH2_COOKIENAME);
-		String value=(String) request.getSession().getAttribute(LocalJwtTokenProvider.TEMPORARY_OAUTH2_COOKIENAME);
-		return null;
+	public OperationStatus<SecurityHeaderData> authenticatedOauth2UserHeader(HttpServletRequest request,
+			@RequestParam("requestId") String requestId)
+			throws BackendOauth2LoginSPASupportException, GeboCryptSecretException, IOException {
+		String remoteAddr = request.getRemoteAddr();
+		return this.backendOauth2LoginSPASupportService.getAuthorizationData(requestId, remoteAddr);
 	}
+
 }

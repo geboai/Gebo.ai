@@ -39,7 +39,7 @@ public class LocalJwtTokenProvider {
 
 	// Logger instance for logging events
 	private static final Logger logger = LoggerFactory.getLogger(LocalJwtTokenProvider.class);
-	public static final String TEMPORARY_OAUTH2_COOKIENAME = "Gebo.Temporary.Acquired";
+	public static final String TEMPORARY_OAUTH2_COOKIENAME = "GeboTemporaryAcquired";
 	// Configuration properties for security settings
 	private GeboSecurityConfig appProperties;
 
