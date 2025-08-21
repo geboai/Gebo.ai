@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
+import { AuthProvidersControllerService } from './api/authProvidersController.service';
 import { AzureOpenAiChatModelsConfigurationControllerService } from './api/azureOpenAiChatModelsConfigurationController.service';
 import { AzureOpenAiEmbeddingModelsConfigurationControllerService } from './api/azureOpenAiEmbeddingModelsConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
@@ -64,7 +65,6 @@ import { LogViewControllerService } from './api/logViewController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
-import { OAuth2ProvidersControllerService } from './api/oAuth2ProvidersController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
@@ -91,6 +91,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
   providers: [
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
+    AuthProvidersControllerService,
     AzureOpenAiChatModelsConfigurationControllerService,
     AzureOpenAiEmbeddingModelsConfigurationControllerService,
     BuildSystemsControllerService,
@@ -150,7 +151,6 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
     OAuth2AdminControllerService,
-    OAuth2ProvidersControllerService,
     Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,

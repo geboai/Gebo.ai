@@ -12,7 +12,7 @@
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { LoginService } from "../login/login.service";
+import { LoginService } from "./login.service";
 
 @Component({
     selector: "gebo-ai-reload-forward-component",

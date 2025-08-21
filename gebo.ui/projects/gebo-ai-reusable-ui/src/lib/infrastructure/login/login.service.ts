@@ -18,7 +18,7 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2ProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
 import { resetAuth } from "../gebo-credentials";
@@ -59,7 +59,7 @@ export class LoginService {
     private activatedRouter: ActivatedRoute,
     private router: Router,
     private authControllerService: AuthControllerService,
-    private oauth2ProvidersService: OAuth2ProvidersControllerService,
+    private oauth2ProvidersService: AuthProvidersControllerService,
     private userController: UserControllerService) {
     this.oauth2Service.authDataSubject.subscribe({
       next: (data) => {
@@ -141,7 +141,7 @@ export class LoginService {
    * Load list of oauth2 providers enabled for the user login (UI data without technical oauth2 critical infos)
    */
   public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
-    return this.oauth2ProvidersService.listAvailableProviders();
+    return this.oauth2ProvidersService.listAvailableProvidersConfig();
   }
 
 

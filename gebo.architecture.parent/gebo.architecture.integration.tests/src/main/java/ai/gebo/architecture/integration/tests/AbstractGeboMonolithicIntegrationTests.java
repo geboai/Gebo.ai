@@ -238,7 +238,6 @@ public class AbstractGeboMonolithicIntegrationTests {
 		user.setPassword("NOPASSWORD");
 		user.setEmailVerified(true);
 		user.setProvider(AuthProvider.local);
-		user.setProviderId("local-jwt");
 		user.setRoles(roles != null && !roles.isEmpty() ? roles : ALL_ROLES);
 		userRepository.insert(user);
 		return user;

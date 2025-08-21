@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { LoginService } from "../login/login.service";
+import { LoginService } from "../../login.service";
 @Component({
     selector: "gebo-oauth2-landing-component",
     templateUrl: "oauth2-landing.component.html",

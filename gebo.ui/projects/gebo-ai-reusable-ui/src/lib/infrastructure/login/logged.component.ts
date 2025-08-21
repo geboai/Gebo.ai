@@ -11,17 +11,20 @@
  
 
 import { Component, OnInit } from "@angular/core";
-import { LoginService } from "../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/login/login.service";
+import { LoginService } from "./login.service";
+import { ActivatedRoute } from "@angular/router";
+
 @Component({
-    selector: "gebo-ai-logout-component",
-    template: "<h2>logout in progress</h2>",
+    selector: "gebo-ai-logged",
+    template: "Ok logged in gebo!! {{profile}}",
     standalone: false
 })
-export class LogoutComponent implements OnInit{
-    constructor(private loginService:LoginService) {
+export class LoggedComponent implements OnInit{
+    profile:any={};
+    public constructor(public loginService: LoginService,private activatedRouter:ActivatedRoute) {
 
     }
     ngOnInit(): void {
-        this.loginService.logout();
+        
     }
 }

@@ -75,6 +75,7 @@ public enum AuthProvider {
 	final boolean multitenant;
 
 	final List<Oauth2CustomAttribute> customAttributes;
+	final AuthProviderDto authProviderDto;
 
 	AuthProvider(AuthProviderType type, String description, boolean multitenant,
 			List<Oauth2CustomAttribute> customAttributes) {
@@ -83,6 +84,7 @@ public enum AuthProvider {
 		this.multitenant = multitenant;
 
 		this.customAttributes = customAttributes;
+		this.authProviderDto = new AuthProviderDto(this, type, description, multitenant, customAttributes);
 	}
 
 	@AllArgsConstructor
@@ -111,6 +113,15 @@ public enum AuthProvider {
 		final List<Oauth2CustomAttribute> customAttributes;
 	}
 
+	public static List<AuthProviderDto> getAllProviders() {
+		List<AuthProviderDto> providers = new ArrayList<>();
+		AuthProvider[] values = values();
+		for (AuthProvider authProvider : values) {
+			providers.add(authProvider.getAuthProviderDto());
+		}
+		return providers;
+	}
+
 	public static List<AuthProviderDto> getOauth2Providers() {
 		List<AuthProviderDto> providers = new ArrayList<>();
 		AuthProvider[] values = values();
@@ -121,9 +132,7 @@ public enum AuthProvider {
 				continue;
 			}
 			default: {
-				AuthProviderDto dto = new AuthProviderDto(authProvider, authProvider.getType(),
-						authProvider.getDescription(), authProvider.multitenant, authProvider.customAttributes);
-				providers.add(dto);
+				providers.add(authProvider.getAuthProviderDto());
 			}
 
 			}

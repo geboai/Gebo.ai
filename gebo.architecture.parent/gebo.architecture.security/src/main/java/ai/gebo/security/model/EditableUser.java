@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.model;
 
@@ -23,128 +20,141 @@ import jakarta.validation.constraints.NotNull;
  */
 public class EditableUser {
 
-    /**
-     * Constructs an EditableUser by copying properties from an existing User object.
-     *
-     * @param u the User object whose details are to be copied.
-     */
-    public EditableUser(User u) {
-        this.name = u.getName();
-        this.disabled = u.getDisabled();
-        this.username = u.getUsername();
-        this.roles = u.getRoles();
-        this.sourname = u.getSourname();
-    }
+	/**
+	 * Constructs an EditableUser by copying properties from an existing User
+	 * object.
+	 *
+	 * @param u the User object whose details are to be copied.
+	 */
+	public EditableUser(User u) {
+		this.name = u.getName();
+		this.disabled = u.getDisabled();
+		this.username = u.getUsername();
+		this.roles = u.getRoles();
+		this.sourname = u.getSourname();
+		this.authProvider = u.getProvider();
+	}
 
-    @NotNull
-    private String name = null;
+	@NotNull
+	private String name = null;
 
-    @NotNull
-    private String sourname = null;
+	@NotNull
+	private String sourname = null;
 
-    @NotNull
-    private String username;
+	@NotNull
+	private String username;
 
-    private Boolean disabled = null;
+	private Boolean disabled = null;
 
-    @NotNull
-    private List<String> roles = null;
+	@NotNull
+	private List<String> roles = null;
 
-    /**
-     * Default constructor for creating an empty EditableUser instance.
-     */
-    public EditableUser() {
+	@NotNull
+	private AuthProvider authProvider = null;
 
-    }
+	/**
+	 * Default constructor for creating an empty EditableUser instance.
+	 */
+	public EditableUser() {
 
-    /**
-     * Retrieves the name of the user.
-     * 
-     * @return the user's name.
-     */
-    public String getName() {
-        return name;
-    }
+	}
 
-    /**
-     * Sets the name of the user.
-     * 
-     * @param name the new name to be assigned to the user.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * Retrieves the name of the user.
+	 * 
+	 * @return the user's name.
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Retrieves the surname of the user.
-     * 
-     * @return the user's surname.
-     */
-    public String getSourname() {
-        return sourname;
-    }
+	/**
+	 * Sets the name of the user.
+	 * 
+	 * @param name the new name to be assigned to the user.
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * Sets the surname of the user.
-     * 
-     * @param sourname the new surname to be assigned to the user.
-     */
-    public void setSourname(String sourname) {
-        this.sourname = sourname;
-    }
+	/**
+	 * Retrieves the surname of the user.
+	 * 
+	 * @return the user's surname.
+	 */
+	public String getSourname() {
+		return sourname;
+	}
 
-    /**
-     * Retrieves the username of the user.
-     * 
-     * @return the user's username.
-     */
-    public String getUsername() {
-        return username;
-    }
+	/**
+	 * Sets the surname of the user.
+	 * 
+	 * @param sourname the new surname to be assigned to the user.
+	 */
+	public void setSourname(String sourname) {
+		this.sourname = sourname;
+	}
 
-    /**
-     * Sets the username of the user.
-     * 
-     * @param username the new username to be assigned to the user.
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	/**
+	 * Retrieves the username of the user.
+	 * 
+	 * @return the user's username.
+	 */
+	public String getUsername() {
+		return username;
+	}
 
-    /**
-     * Checks if the user account is disabled.
-     * 
-     * @return true if the user is disabled, otherwise false.
-     */
-    public Boolean getDisabled() {
-        return disabled;
-    }
+	/**
+	 * Sets the username of the user.
+	 * 
+	 * @param username the new username to be assigned to the user.
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    /**
-     * Sets the disabled status of the user account.
-     * 
-     * @param disabled the new disabled status.
-     */
-    public void setDisabled(Boolean disabled) {
-        this.disabled = disabled;
-    }
+	/**
+	 * Checks if the user account is disabled.
+	 * 
+	 * @return true if the user is disabled, otherwise false.
+	 */
+	public Boolean getDisabled() {
+		return disabled;
+	}
 
-    /**
-     * Retrieves the list of roles assigned to the user.
-     * 
-     * @return a list of role names assigned to the user.
-     */
-    public List<String> getRoles() {
-        return roles;
-    }
+	/**
+	 * Sets the disabled status of the user account.
+	 * 
+	 * @param disabled the new disabled status.
+	 */
+	public void setDisabled(Boolean disabled) {
+		this.disabled = disabled;
+	}
 
-    /**
-     * Sets the list of roles for the user.
-     * 
-     * @param roles the new list of roles to be assigned.
-     */
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
+	/**
+	 * Retrieves the list of roles assigned to the user.
+	 * 
+	 * @return a list of role names assigned to the user.
+	 */
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	/**
+	 * Sets the list of roles for the user.
+	 * 
+	 * @param roles the new list of roles to be assigned.
+	 */
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
+	public AuthProvider getAuthProvider() {
+		return authProvider;
+	}
+
+	public void setAuthProvider(AuthProvider authProvider) {
+		this.authProvider = authProvider;
+	}
 
 }

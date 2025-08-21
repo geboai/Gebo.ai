@@ -20,12 +20,10 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { LoggedComponent } from "./logged.component";
-import { AuthInterceptor, ReloadForwardModule } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
-import { LogoutComponent } from "./logout.component";
 import { ConfirmationService } from "primeng/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
@@ -51,12 +49,10 @@ export function getBaseUrl() {
 export const routes: Routes = [
   { path: 'ui', redirectTo: "ui/chat", pathMatch: "full" },
   { path: '', redirectTo: "ui/chat", pathMatch: "full" },
-  { path: 'ui/logged', component: LoggedComponent },
-  { path: 'ui/logout', component: LogoutComponent },
   { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
-  { path: 'ui/oauth2-land', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIOauth2LandingModule), pathMatch: 'full' }
+
 
 ];
 const GeboAIPreset = definePreset(Aura, {
@@ -92,7 +88,7 @@ const GeboAIPreset = definePreset(Aura, {
   }
 });
 @NgModule({
-  declarations: [AppComponent, LoggedComponent, LogoutComponent],
+  declarations: [AppComponent],
   exports: [AppComponent],
   bootstrap: [AppComponent],
   imports: [CommonModule,
@@ -100,8 +96,7 @@ const GeboAIPreset = definePreset(Aura, {
     GeboAiChatApiModule,
     MegaMenuModule,
     LoginModule,
-    FastSetupModule,
-    ReloadForwardModule,
+    FastSetupModule,    
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
     ConfirmDialogModule,

@@ -18,7 +18,6 @@ export interface User {
     emailVerified?: boolean;
     disabled?: boolean;
     provider: User.ProviderEnum;
-    providerId?: string;
     roles?: Array<string>;
 }
 export namespace User {

@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AuthProviderDto } from '../model/authProviderDto';
 import { Oauth2ClientAuthorizativeInfo } from '../model/oauth2ClientAuthorizativeInfo';
 import { Oauth2ClientConfig } from '../model/oauth2ClientConfig';
 
@@ -25,7 +26,7 @@ import { Configuration }                                     from '../configurat
 
 
 @Injectable()
-export class OAuth2ProvidersControllerService {
+export class AuthProvidersControllerService {
 
     protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();
@@ -92,7 +93,7 @@ export class OAuth2ProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Oauth2ClientConfig>('get',`${this.basePath}/public/oauth2/getProviderClientConfig`,
+        return this.httpClient.request<Oauth2ClientConfig>('get',`${this.basePath}/public/AutenticationProvidersController/getProviderClientConfig`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -109,10 +110,10 @@ export class OAuth2ProvidersControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listAvailableProviders(observe?: 'body', reportProgress?: boolean): Observable<Array<Oauth2ClientAuthorizativeInfo>>;
-    public listAvailableProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Oauth2ClientAuthorizativeInfo>>>;
-    public listAvailableProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Oauth2ClientAuthorizativeInfo>>>;
-    public listAvailableProviders(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public listAuthProviders(observe?: 'body', reportProgress?: boolean): Observable<Array<AuthProviderDto>>;
+    public listAuthProviders(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AuthProviderDto>>>;
+    public listAuthProviders(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AuthProviderDto>>>;
+    public listAuthProviders(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -129,7 +130,43 @@ export class OAuth2ProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<Oauth2ClientAuthorizativeInfo>>('get',`${this.basePath}/public/oauth2/listAvailableProviders`,
+        return this.httpClient.request<Array<AuthProviderDto>>('get',`${this.basePath}/public/AutenticationProvidersController/listAuthProviders`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public listAvailableProvidersConfig(observe?: 'body', reportProgress?: boolean): Observable<Array<Oauth2ClientAuthorizativeInfo>>;
+    public listAvailableProvidersConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Oauth2ClientAuthorizativeInfo>>>;
+    public listAvailableProvidersConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Oauth2ClientAuthorizativeInfo>>>;
+    public listAvailableProvidersConfig(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<Oauth2ClientAuthorizativeInfo>>('get',`${this.basePath}/public/AutenticationProvidersController/listAvailableProvidersConfig`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
