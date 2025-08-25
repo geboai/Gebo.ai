@@ -30,17 +30,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.LocalJwtTokenProvider;
-import ai.gebo.security.SecurityHeaderUtil;
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.AuthResponse;
 import ai.gebo.security.model.LoginRequest;
 import ai.gebo.security.model.SecurityHeaderData;
+import ai.gebo.security.model.SecurityHeaderUtil;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfo;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
 import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -96,8 +97,9 @@ public class AuthController {
 			Authentication authentication = authenticationManager.authenticateByLocalJWT(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 			Optional<User> usr = userRepository.findById(loginRequest.getUsername());
-			if (usr.isPresent()) {
+			if (usr.isPresent() && usr.get().getProvider() == AuthProvider.local) {
 				User u = usr.get();
+
 				UserInfo userInfo = new UserInfo();
 				userInfo.setUsername(u.getUsername());
 				userInfo.setRoles(u.getRoles());
@@ -126,13 +128,5 @@ public class AuthController {
 	}
 
 	
-
-	@GetMapping(value = "authValue", produces = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<SecurityHeaderData> authenticatedOauth2UserHeader(HttpServletRequest request,
-			@RequestParam("requestId") String requestId)
-			throws BackendOauth2LoginSPASupportException, GeboCryptSecretException, IOException {
-		String remoteAddr = request.getRemoteAddr();
-		return this.backendOauth2LoginSPASupportService.getAuthorizationData(requestId, remoteAddr);
-	}
 
 }

@@ -14,9 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
-import ai.gebo.security.LocalJwtTokenProvider;
-import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.model.SecurityHeaderData;
+import ai.gebo.security.model.SecurityHeaderUtil;
 import ai.gebo.security.model.oauth2.Oauth2DeliveryData;
 import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;

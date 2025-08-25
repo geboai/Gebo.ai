@@ -93,7 +93,7 @@ export class AuthProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Oauth2ClientConfig>('get',`${this.basePath}/public/AutenticationProvidersController/getProviderClientConfig`,
+        return this.httpClient.request<Oauth2ClientConfig>('get',`${this.basePath}/public/AuthProvidersController/getProviderClientConfig`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -130,7 +130,7 @@ export class AuthProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<AuthProviderDto>>('get',`${this.basePath}/public/AutenticationProvidersController/listAuthProviders`,
+        return this.httpClient.request<Array<AuthProviderDto>>('get',`${this.basePath}/public/AuthProvidersController/listAuthProviders`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -166,7 +166,7 @@ export class AuthProvidersControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<Oauth2ClientAuthorizativeInfo>>('get',`${this.basePath}/public/AutenticationProvidersController/listAvailableProvidersConfig`,
+        return this.httpClient.request<Array<Oauth2ClientAuthorizativeInfo>>('get',`${this.basePath}/public/AuthProvidersController/listAvailableProvidersConfig`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

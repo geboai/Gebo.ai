@@ -78,6 +78,7 @@ import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFre
 import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
@@ -164,6 +165,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     SecretsControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    TokenRenewControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UsersAdminControllerService,

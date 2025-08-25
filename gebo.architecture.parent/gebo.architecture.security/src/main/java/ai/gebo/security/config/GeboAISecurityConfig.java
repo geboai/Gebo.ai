@@ -32,7 +32,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.security.LocalJwtTokenProvider;
 import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
@@ -51,6 +50,7 @@ import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
 import ai.gebo.security.services.impl.GOauth2CustomAuthorizationRequestResolver;
 import ai.gebo.security.services.impl.GPasswordEncoder;
 import ai.gebo.security.services.impl.GReactiveOauth2AuthorizedClientService;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import ai.gebo.security.services.impl.ReactiveGOAuth2UserService;
 
 /**

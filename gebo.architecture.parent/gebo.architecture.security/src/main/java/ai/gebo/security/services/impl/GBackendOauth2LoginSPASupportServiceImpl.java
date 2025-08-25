@@ -15,10 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.LocalJwtTokenProvider;
-import ai.gebo.security.SecurityHeaderUtil;
-import ai.gebo.security.SecurityHeaderUtil.XAuthType;
 import ai.gebo.security.model.SecurityHeaderData;
+import ai.gebo.security.model.SecurityHeaderUtil;
+import ai.gebo.security.model.SecurityHeaderUtil.XAuthType;
 import ai.gebo.security.model.oauth2.Oauth2DeliveryData;
 import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
@@ -62,7 +61,7 @@ public class GBackendOauth2LoginSPASupportServiceImpl implements IGBackendOauth2
 			if (!_data.getRemoteAddress().equalsIgnoreCase(remoteAddress))
 				throw new RuntimeException("Client registered from host:" + _data.getRemoteAddress()
 						+ " but now presenting as:" + remoteAddress);
-			String jwt = jwtTokenProvider.createToken(user);
+			String jwt = jwtTokenProvider.createToken(user, null, _data.getRegistrationId());
 			SecurityHeaderData data = SecurityHeaderUtil.createSelfsignedJwtSecurityHeaderOauth2(jwt);
 			String json = objectMapper.writeValueAsString(data);
 			String crypted = cryptingService.crypt(json);

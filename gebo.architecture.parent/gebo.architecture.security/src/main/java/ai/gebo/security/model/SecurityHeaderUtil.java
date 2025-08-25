@@ -1,4 +1,4 @@
-package ai.gebo.security;
+package ai.gebo.security.model;
 
 import java.util.Enumeration;
 
@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import ai.gebo.security.model.SecurityHeaderData;
 import jakarta.servlet.http.HttpServletRequest;
 
 public class SecurityHeaderUtil {

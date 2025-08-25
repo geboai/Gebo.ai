@@ -18,7 +18,7 @@ import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 
 @RestController
-@RequestMapping("/public/AutenticationProvidersController")
+@RequestMapping("/public/AuthProvidersController")
 public class AuthProvidersController {
 
 	private final IGOauth2ConfigurationService oauth2Service;

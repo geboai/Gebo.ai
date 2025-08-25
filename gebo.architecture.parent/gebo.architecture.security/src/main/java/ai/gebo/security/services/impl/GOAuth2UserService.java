@@ -2,6 +2,7 @@ package ai.gebo.security.services.impl;
 
 import java.util.Map;
 
+import org.springframework.boot.context.config.ConfigDataNotFoundAction;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -9,6 +10,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import ai.gebo.security.config.GeboSecurityConfig;
+import ai.gebo.security.model.AuthProvider;
+import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
@@ -29,10 +32,12 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 
 		String registrationId = userRequest.getClientRegistration().getRegistrationId();
 		Oauth2ClientRegistration config = null;
+		AuthProvider authProvider = null;
 		try {
 			config = oauth2ConfigService.findOauth2ClientRegistrationByRegistrationId(registrationId);
 			if (config == null)
 				throw new OAuth2AuthenticationException("oauth2 configuration not found");
+			authProvider = config.getRuntimeConfiguration().getProvider();
 		} catch (GeboOauth2Exception e) {
 			throw new OAuth2AuthenticationException("oauth2 configuration not found");
 		}
@@ -43,12 +48,13 @@ public class GOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, 
 
 		switch (securityProperties.getLoginPolicy()) {
 		case TRUST_EVERY_OAUTH_IDENTITY: {
-			userService.createUserIfNotExists(email, oauth2User.getAttributes());
+			userService.createUserIfNotExists(email, oauth2User.getAttributes(), authProvider);
 		}
 			break;
 		case USER_SELF_REGISTERS:
 		case REQUIRE_INVITATION: {
-			if (userService.findUserByUsername(email) == null) {
+			EditableUser user = userService.findUserByUsername(email);
+			if (user == null || user.getAuthProvider()!=authProvider) {
 				throw new OAuth2AuthenticationException("User not authorized");
 			}
 		}

@@ -24,12 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.security.CurrentUser;
-import ai.gebo.security.UserPrincipal;
 import ai.gebo.security.exception.ResourceNotFoundException;
+import ai.gebo.security.model.CurrentUser;
 import ai.gebo.security.model.GroupInfo;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfo;
+import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.IGSecurityService;

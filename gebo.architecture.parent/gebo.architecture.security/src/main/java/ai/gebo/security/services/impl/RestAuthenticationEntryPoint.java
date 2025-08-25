@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.security;
+package ai.gebo.security.services.impl;
 
 import java.io.IOException;
 

@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-import ai.gebo.security.LocalJwtTokenProvider;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 

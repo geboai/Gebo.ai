@@ -14,6 +14,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusBoolean { 
     result?: boolean;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

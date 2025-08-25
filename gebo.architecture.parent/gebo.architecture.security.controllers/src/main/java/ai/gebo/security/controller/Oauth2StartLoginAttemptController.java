@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
-import ai.gebo.security.SecurityHeaderUtil;
+import ai.gebo.security.model.SecurityHeaderUtil;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
 import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.util.CookieUtils;

@@ -17,15 +17,14 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { LoginRequest } from '../model/loginRequest';
-import { OperationStatusAuthResponse } from '../model/operationStatusAuthResponse';
+import { SecurityHeaderData } from '../model/securityHeaderData';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class AuthControllerService {
+export class TokenRenewControllerService {
 
     protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();
@@ -59,18 +58,13 @@ export class AuthControllerService {
     /**
      * 
      * 
-     * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authenticateUser(body: LoginRequest, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusAuthResponse>;
-    public authenticateUser(body: LoginRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusAuthResponse>>;
-    public authenticateUser(body: LoginRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusAuthResponse>>;
-    public authenticateUser(body: LoginRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling authenticateUser.');
-        }
+    public renew(observe?: 'body', reportProgress?: boolean): Observable<SecurityHeaderData>;
+    public renew(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SecurityHeaderData>>;
+    public renew(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SecurityHeaderData>>;
+    public renew(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -85,16 +79,10 @@ export class AuthControllerService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.request<OperationStatusAuthResponse>('post',`${this.basePath}/auth/login`,
+        return this.httpClient.request<SecurityHeaderData>('get',`${this.basePath}/api/users/TokenRenewController/renew`,
             {
-                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
