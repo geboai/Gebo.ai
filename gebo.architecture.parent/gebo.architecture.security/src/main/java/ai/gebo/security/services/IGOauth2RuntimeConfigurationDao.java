@@ -15,10 +15,10 @@ public interface IGOauth2RuntimeConfigurationDao extends IGRuntimeConfigurationD
 
 	public List<Oauth2RuntimeConfiguration> findByProvider(AuthProvider provider);
 
-	public List<Oauth2RuntimeConfiguration> findByProviderAndConfigurationTypesContains(AuthProvider provider,
+	public List<Oauth2RuntimeConfiguration> findByProviderAndConfigurationType(AuthProvider provider,
 			Oauth2ConfigurationType type);
 
-	public List<Oauth2RuntimeConfiguration> findByConfigurationTypesContains(Oauth2ConfigurationType authentication);
+	public List<Oauth2RuntimeConfiguration> findByConfigurationType(Oauth2ConfigurationType authentication);
 
 	public void save(Oauth2RuntimeConfiguration data);
 

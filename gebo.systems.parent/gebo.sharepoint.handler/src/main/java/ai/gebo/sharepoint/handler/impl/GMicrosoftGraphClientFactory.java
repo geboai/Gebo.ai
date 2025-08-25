@@ -67,7 +67,7 @@ class GMicrosoftGraphClientFactory {
 		}
 		GeboOauth2SecretContent oauth2secret = (GeboOauth2SecretContent) secretContent;
 		String clientId = oauth2secret.getClientId();
-		String tenantId = oauth2secret.getTenantId();
+		String tenantId = oauth2secret.getCustomAttributes().get("tenantId");
 		String secret = oauth2secret.getSecret();
 		var scopes = new String[] { MS_GRAPH_DEFAULT_SCOPE };
 		IdentityClientOptions options = new IdentityClientOptions();

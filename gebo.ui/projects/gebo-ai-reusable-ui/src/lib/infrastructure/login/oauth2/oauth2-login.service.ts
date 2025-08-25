@@ -1,49 +1,68 @@
-import { SecurityHeaderData, Oauth2ClientConfig, BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
-import { Subject, Subscription, window } from "rxjs";
+import { SecurityHeaderData, Oauth2ClientConfig, BASE_PATH, AuthControllerService, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth } from "../../gebo-credentials";
 import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
-import { Inject, Injectable, OnInit } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
+import { ActivatedRoute } from "@angular/router";
+import { IOperationStatus } from "@Gebo.ai/reusable-ui";
 
-
+const STANDARD_NOT_LOGGED_MESSAGE: GUserMessage[] = [{ summary: "Login failed", detail: "Something has gone wrong in the login", id: "NOTLOGGED", jobId: "", severity: "error", timestamp: Date.now() }];
 export interface IOauth2LoginService {
   authDataSubject: Subject<SecurityHeaderData | undefined>;
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void;
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void;
+  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void;
+  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void;
 }
 @Injectable({ providedIn: "root" })
 export class GenericOauth2ServerSideLoginService implements IOauth2LoginService {
-  constructor(@Inject(BASE_PATH) private basePath: string, private cookieService: CookieService) {
-
+  constructor(@Inject(BASE_PATH) private basePath: string,
+    private activatedRoute: ActivatedRoute,
+    private authControllerService: AuthControllerService) {
   }
   authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
   private createOauth2LoginUrl(config: Oauth2ClientConfig): string {
     const url: URL = new URL(this.basePath);
     const baseBackend = url.origin;
-    return baseBackend + "/oauth2/authorization/" + config.registrationId;
+    const nextUri = document.location.origin + "/ui/oauth2-land?status=TRANSIENT";
+    return baseBackend + "/public/oauth2LoginAttempt?registrationId=" + config.registrationId + "&nextUri=" + encodeURIComponent(nextUri);
+    //return baseBackend + "/oauth2/authorization/" + config.registrationId;
   }
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    sessionStorage.setItem("OAUTH2-LOGIN-TYPE", "BACKEND");
+  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     const url = this.createOauth2LoginUrl(config);
     document.location = url;
   }
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    
-    const token = this.cookieService.get("TOKEN");
-    if (token) {
-      const auth: SecurityHeaderData = {
-        authProviderId: config.registrationId,
-        authTenantId: "default-tenant",
-        authType: "OAUTH2",
-        token: token
-      };
-      this.authDataSubject.next(auth);
-      this.cookieService.delete("TOKEN");
-      successfullCallBack();
-    } else failureCallback();
-  }
+  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
+    this.activatedRoute.queryParamMap.subscribe({
+      next: (paramMap) => {
+        const status = paramMap.get("status");
+        if (status === "TRANSIENT") {
+          
+          const nextUri = document.location.origin + "/ui/oauth2-land?status=AUTHORIZED";
+          const url: URL = new URL(this.basePath);
+          const baseBackend = url.origin;
+          const redirectUrl = baseBackend + "/public/oauth2LoginSPAAttemptSuccess?nextUri=" + encodeURIComponent(nextUri);
+          document.location = redirectUrl;
+        }
+        if (status === "AUTHORIZED") {
+          const data = sessionStorage.getItem("RESPONSE_STATUS");
+          if (data) {
+            const responseData: IOperationStatus<SecurityHeaderData> = JSON.parse(data);
+            if (responseData.result) {
+              this.authDataSubject.next(responseData.result);
+              successfullCallBack();
+            } else {
+              failureCallback(responseData.messages);
+            }
+          }else {
+            failureCallback();
+          }
+        }
+      }
+    })
 
+  }
 }
+
 @Injectable({ providedIn: "root" })
 export class GenericOauth2ClientLoginService implements IOauth2LoginService {
   private authConfig?: AuthConfig;
@@ -98,7 +117,7 @@ export class GenericOauth2ClientLoginService implements IOauth2LoginService {
     };
     return authConfig;
   }
-  oauth2Login(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2Login(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     this.authConfig = this.translateConfig(value);
     this.oauth2Service.setStorage(localStorage);
     this.oauth2Service.configure(this.authConfig);
@@ -110,7 +129,7 @@ export class GenericOauth2ClientLoginService implements IOauth2LoginService {
 
     });
   }
-  oauth2RedirectLanding(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2RedirectLanding(value: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     this.authConfig = this.translateConfig(value);
     this.oauth2Service.configure(this.authConfig);
     this.oauth2Service.setStorage(localStorage);
@@ -123,9 +142,11 @@ export class GenericOauth2ClientLoginService implements IOauth2LoginService {
         } else {
           console.error("Access token non ottenuto. Logout forzato.");
           resetAuth();
-          failureCallback();
+          failureCallback(STANDARD_NOT_LOGGED_MESSAGE);
 
         }
+      }).catch(e => {
+        failureCallback(STANDARD_NOT_LOGGED_MESSAGE);
       });
     });
   }
@@ -140,11 +161,11 @@ export class Oauth2LoginService implements IOauth2LoginService {
   private subscription?: Subscription;
   authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
 
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     const service = this.switchOauth2LoginService(config.provider);
     service.oauth2Login(config, successfullCallBack, failureCallback);
   }
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
+  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: (msgs?: GUserMessage[]) => void): void {
     const service = this.switchOauth2LoginService(config.provider);
     service.oauth2RedirectLanding(config, successfullCallBack, failureCallback);
   }
@@ -154,10 +175,12 @@ export class Oauth2LoginService implements IOauth2LoginService {
       this.subscription = undefined;
     }
     let service: IOauth2LoginService;
+    service = this.genericServerSideOauth2LoginService;
+    /*
     switch (provider) {
-      case "google": service = this.genericServerSideOauth2LoginService; break;
-      default: service = this.genericOauthClient2LoginService; break;
-    }
+      case "oauth2_generic": service = this.genericOauthClient2LoginService; break;
+      default: service = this.genericServerSideOauth2LoginService; break;
+    }*/
     this.subscription = service.authDataSubject.subscribe({
       next: (value) => {
         this.authDataSubject.next(value);
@@ -167,99 +190,3 @@ export class Oauth2LoginService implements IOauth2LoginService {
   }
 }
 
-declare const google: any;
-@Injectable({ providedIn: "root" })
-export class GoogleOauth2Service implements IOauth2LoginService {
-  authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject();
-  actualAuthConfig?: Oauth2ClientConfig;
-  tokenClient: any;
-  codeClient: any;
-  oauth2Login(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    this.actualAuthConfig = config;
-    this.runGoogleOauth2Login(config, successfullCallBack, failureCallback);
-  }
-  oauth2RedirectLanding(config: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    this.actualAuthConfig = config;
-  }
-  private isGoogleLibraryDefined(): boolean {
-    try {
-      return google && google.accounts ? true : false;
-    } catch (e) {
-      return false;
-    }
-  }
-  private runGoogleOauth2Login(authConfig: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void) {
-
-    if (this.isGoogleLibraryDefined()) {
-      this.initGoogleOauthLogin(authConfig, successfullCallBack, failureCallback);
-    } else {
-      this.actualAuthConfig = authConfig;
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => {
-        this.initGoogleOauthLogin(authConfig, successfullCallBack, failureCallback);
-      }
-      document.head.appendChild(script);
-    }
-  }
-  private initGoogleOauthLogin(authConfig: Oauth2ClientConfig, successfullCallBack: () => void, failureCallback: () => void): void {
-    if (!google?.accounts?.oauth2) {
-      console.error('Google Identity Services non caricato');
-      return;
-    }
-    this.codeClient = google.accounts.oauth2.initCodeClient({
-      client_id: authConfig.clientId,
-      scope: 'openid email profile',
-      ux_mode: 'popup', // oppure 'redirect'
-      redirect_uri: document.location.origin + '/ui/oauth2-land',
-      callback: (resp: any) => {
-        if (resp.code) {
-          console.log('Authorization Code ricevuto:', resp.code);
-          // invia il code al backend per scambio token
-          const data: SecurityHeaderData = {
-            authProviderId: authConfig.registrationId,
-            authTenantId: "default-tenant",
-            authType: "OAUTH2",
-            empty: false,
-            token: resp.code
-          };
-          this.authDataSubject.next(data);
-          successfullCallBack();
-        } else {
-          console.error('Errore nella risposta GIS', resp);
-        }
-      }
-    });
-    this.codeClient.requestCode();
-
-
-    /*this.tokenClient =  google.accounts.oauth2.initTokenClient({
-      client_id:  authConfig.clientId,
-      scope: 'openid profile email',
-      callback: (resp: any) => {
-        if (resp.access_token) {
-          const data:SecurityHeaderData= {
-            authProviderId: authConfig.registrationId,
-            authTenantId:"default-tenant",
-            authType:"OAUTH2",
-            empty:false,
-            token:resp.access_token
-          };
-          this.authDataSubject.next(data);
-          successfullCallBack();
-        }
-      }
-    });
-    this.tokenClient.requestAccessToken({ prompt:  ''  });*/
-    /*google.accounts.id.initialize({
-      client_id: authConfig.clientId,
-      callback: (res: any) => {
-  
-      }
-    });
-    google.accounts.id.prompt();*/
-  }
-
-}

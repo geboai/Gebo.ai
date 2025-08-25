@@ -79,7 +79,7 @@ public class GOauth2AccessTokenServiceImpl implements IGOauth2AccessTokenService
 		}
 
 		// 1) Build the token endpoint URL
-		String tokenUrl = String.format(accessUrl, oauth2coords.getTenantId());
+		String tokenUrl = String.format(accessUrl);
 
 		// 2) Define the scope (resource + .default)
 		// String scope = "https://graph.microsoft.com/.default";

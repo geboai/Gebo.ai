@@ -19,24 +19,18 @@ export interface Oauth2ProviderModifiableData {
     oauth2ClientContent: GeboOauth2SecretContent;
     authClientMethod?: Oauth2ProviderModifiableData.AuthClientMethodEnum;
     authGrantType?: Oauth2ProviderModifiableData.AuthGrantTypeEnum;
-    configurationTypes: Array<Oauth2ProviderModifiableData.ConfigurationTypesEnum>;
+    configurationType: Oauth2ProviderModifiableData.ConfigurationTypeEnum;
     description: string;
     readOnly: boolean;
 }
 export namespace Oauth2ProviderModifiableData {
-    export type AuthProviderEnum = 'local' | 'facebook' | 'google' | 'github' | 'microsoft' | 'microsoft_multitenant' | 'linkedin' | 'amazon' | 'slack' | 'x' | 'apple' | 'oauth2_generic' | 'ldap';
+    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';
     export const AuthProviderEnum = {
         Local: 'local' as AuthProviderEnum,
-        Facebook: 'facebook' as AuthProviderEnum,
         Google: 'google' as AuthProviderEnum,
-        Github: 'github' as AuthProviderEnum,
         Microsoft: 'microsoft' as AuthProviderEnum,
         MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
-        Linkedin: 'linkedin' as AuthProviderEnum,
-        Amazon: 'amazon' as AuthProviderEnum,
-        Slack: 'slack' as AuthProviderEnum,
-        X: 'x' as AuthProviderEnum,
-        Apple: 'apple' as AuthProviderEnum,
+        AwsCognito: 'aws_cognito' as AuthProviderEnum,
         Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
         Ldap: 'ldap' as AuthProviderEnum
     };
@@ -60,9 +54,9 @@ export namespace Oauth2ProviderModifiableData {
         DEVICECODE: 'DEVICE_CODE' as AuthGrantTypeEnum,
         TOKENEXCHANGE: 'TOKEN_EXCHANGE' as AuthGrantTypeEnum
     };
-    export type ConfigurationTypesEnum = 'AUTHENTICATION' | 'INTEGRATION';
-    export const ConfigurationTypesEnum = {
-        AUTHENTICATION: 'AUTHENTICATION' as ConfigurationTypesEnum,
-        INTEGRATION: 'INTEGRATION' as ConfigurationTypesEnum
+    export type ConfigurationTypeEnum = 'AUTHENTICATION' | 'INTEGRATION';
+    export const ConfigurationTypeEnum = {
+        AUTHENTICATION: 'AUTHENTICATION' as ConfigurationTypeEnum,
+        INTEGRATION: 'INTEGRATION' as ConfigurationTypeEnum
     };
 }

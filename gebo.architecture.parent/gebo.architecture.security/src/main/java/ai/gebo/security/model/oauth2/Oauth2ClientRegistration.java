@@ -11,6 +11,8 @@ package ai.gebo.security.model.oauth2;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration.Builder;
@@ -65,30 +67,51 @@ public class Oauth2ClientRegistration {
 		builder.clientSecret(registration.getClientRegistration().getSecret());
 		builder.registrationId(registration.getRuntimeConfiguration().getRegistrationId());
 		builder.clientName(registration.getClientRegistration().getClientId());
-		builder.authorizationUri(registration.getRuntimeConfiguration().getProviderConfig().getAuthorizationUri());
-		builder.tokenUri(registration.getRuntimeConfiguration().getProviderConfig().getTokenUri());
-		builder.userInfoUri(registration.getRuntimeConfiguration().getProviderConfig().getUserInfoUri());
-		builder.issuerUri(registration.getRuntimeConfiguration().getProviderConfig().getIssuerUri());
-		builder.jwkSetUri(registration.getRuntimeConfiguration().getProviderConfig().getJwkSetUri());
+		
+		builder.authorizationUri(handlerPlaceHolders(
+				registration.getRuntimeConfiguration().getProviderConfig().getAuthorizationUri(), registration));
+		builder.tokenUri(handlerPlaceHolders(registration.getRuntimeConfiguration().getProviderConfig().getTokenUri(),
+				registration));
+		builder.userInfoUri(handlerPlaceHolders(
+				registration.getRuntimeConfiguration().getProviderConfig().getUserInfoUri(), registration));
+		builder.issuerUri(handlerPlaceHolders(registration.getRuntimeConfiguration().getProviderConfig().getIssuerUri(),
+				registration));
+		builder.jwkSetUri(handlerPlaceHolders(registration.getRuntimeConfiguration().getProviderConfig().getJwkSetUri(),
+				registration));
 		List<String> scopes = registration.getRuntimeConfiguration().getClient() != null
 				? registration.getRuntimeConfiguration().getClient().getScopes()
 				: registration.getClientRegistration().getScopes();
 
-		if (registration.getRuntimeConfiguration().getConfigurationTypes() != null && registration
-				.getRuntimeConfiguration().getConfigurationTypes().contains(Oauth2ConfigurationType.AUTHENTICATION)
+		if (registration.getRuntimeConfiguration().getConfigurationType() != null && registration
+				.getRuntimeConfiguration().getConfigurationType() == (Oauth2ConfigurationType.AUTHENTICATION)
 				&& scopes == null) {
 			scopes = STANDARD_AUTHENTICATION_SCOPES;
 		}
 		builder.scope(scopes);
-		
+		if (registration.getRuntimeConfiguration().getProviderConfig().getUserNameAttribute() != null)
+			builder.userNameAttributeName(
+					registration.getRuntimeConfiguration().getProviderConfig().getUserNameAttribute());
 		Map<String, Object> configurationMetaData = new HashMap<String, Object>();
-		if (registration.getClientRegistration().getTenantId() != null) {
-			configurationMetaData.put("tenant", registration.getClientRegistration().getTenantId());
+		if (registration.getClientRegistration().getCustomAttributes() != null) {
+			configurationMetaData.putAll(registration.getClientRegistration().getCustomAttributes());
 		}
 		builder.providerConfigurationMetadata(configurationMetaData);
 		builder.redirectUri("{baseUrl}/login/oauth2/code/{registrationId}");
 		// Build and return the ClientRegistration.
 		return builder.build();
+	}
+
+	private static String handlerPlaceHolders(String variable, Oauth2ClientRegistration registration) {
+		String out = variable;
+		if (out != null && registration.getClientRegistration() != null
+				&& registration.getClientRegistration().getCustomAttributes() != null
+				&& !registration.getClientRegistration().getCustomAttributes().isEmpty()) {
+			Set<Entry<String, String>> names = registration.getClientRegistration().getCustomAttributes().entrySet();
+			for (Entry<String, String> entry : names) {
+				out = out.replace("{" + entry.getKey() + "}", entry.getValue());
+			}
+		}
+		return out;
 	}
 
 	private static ClientAuthenticationMethod translateAuthenticationMethod(Oauth2ClientAuthMethod clientAuthMethod) {

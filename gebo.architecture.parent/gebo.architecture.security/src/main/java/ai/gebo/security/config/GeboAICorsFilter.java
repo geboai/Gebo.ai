@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import ai.gebo.security.SecurityHeaderUtil;
+import ai.gebo.security.model.SecurityHeaderUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

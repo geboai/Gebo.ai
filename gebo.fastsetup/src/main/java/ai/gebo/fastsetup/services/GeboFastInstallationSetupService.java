@@ -103,7 +103,6 @@ public class GeboFastInstallationSetupService {
 			user.setPassword(cryptService.crypt(data.getPassword()));
 			user.setEmailVerified(true);
 			user.setProvider(AuthProvider.local);
-			user.setProviderId("local-jwt");
 			user.setRoles(List.of(GeboAISecurityConfig.ADMIN_ROLE, GeboAISecurityConfig.USER_ROLE));
 			userRepository.insert(user);
 			

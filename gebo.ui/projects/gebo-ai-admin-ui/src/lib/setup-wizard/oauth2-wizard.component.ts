@@ -1,14 +1,14 @@
 import { Component, Injectable } from "@angular/core";
-import { Oauth2ClientAuthorizativeInfo, Oauth2ModuleStatusControllerService, OAuth2ProvidersControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthProvidersControllerService, Oauth2ClientAuthorizativeInfo, Oauth2ModuleStatusControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 @Injectable({ providedIn: "root" })
 export class Oauth2SetupWizardService extends AbstractStatusService {
-    constructor(private oauth2ProvidersService: OAuth2ProvidersControllerService) {
+    constructor(private oauth2ProvidersService: AuthProvidersControllerService) {
         super();
     }
     public override getBooleanStatus(): Observable<boolean> {
-        return this.oauth2ProvidersService.listAvailableProviders().pipe(map(data => data && data.length > 0));
+        return this.oauth2ProvidersService.listAvailableProvidersConfig().pipe(map(data => data && data.length > 0));
     }
 }
 @Injectable({ providedIn: "root" })
@@ -29,13 +29,13 @@ export class Oauth2SetupEnabledService extends AbstractStatusService {
 export class Oauth2WizardComponent extends BaseWizardSectionComponent {
     public providers: Oauth2ClientAuthorizativeInfo[] = [];
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
-        private oauth2ProvidersService: OAuth2ProvidersControllerService,
+        private oauth2ProvidersService: AuthProvidersControllerService,
         private geboUIActionRoutingService: GeboUIActionRoutingService) {
         super(setupWizardComunicationService);
     }
     public override reloadData(): void {
         this.loading = true;
-        this.oauth2ProvidersService.listAvailableProviders().subscribe({
+        this.oauth2ProvidersService.listAvailableProvidersConfig().subscribe({
             next: (providers) => {
                 this.providers = providers;
             },

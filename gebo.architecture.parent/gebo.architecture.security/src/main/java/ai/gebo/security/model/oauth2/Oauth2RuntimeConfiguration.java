@@ -8,15 +8,12 @@
  */
 package ai.gebo.security.model.oauth2;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.security.model.AuthProvider;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -39,7 +36,7 @@ public class Oauth2RuntimeConfiguration {
 		this.description = copyFrom.description;
 		this.readOnly = copyFrom.readOnly;
 		this.registrationId = copyFrom.registrationId;
-		this.configurationTypes = copyFrom.configurationTypes;
+		this.configurationType = copyFrom.configurationType;
 		this.providerConfig = copyFrom.providerConfig;
 	}
 
@@ -83,9 +80,9 @@ public class Oauth2RuntimeConfiguration {
 	 * The list of configuration types.
 	 */
 	@NotNull
-	@NotEmpty
+	
 	@HashIndexed
-	private List<Oauth2ConfigurationType> configurationTypes = null;
+	private Oauth2ConfigurationType configurationType = null;
 
 	/**
 	 * The OAuth2 client authentication method.

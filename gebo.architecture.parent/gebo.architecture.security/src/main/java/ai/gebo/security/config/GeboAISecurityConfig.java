@@ -32,11 +32,12 @@ import org.springframework.security.web.csrf.CsrfFilter;
 
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.security.LocalJwtTokenProvider;
 import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
+import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DynamicReactiveRegistrationRepository;
 import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;
+import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
@@ -49,6 +50,7 @@ import ai.gebo.security.services.impl.GOauth2AuthorizedClientService;
 import ai.gebo.security.services.impl.GOauth2CustomAuthorizationRequestResolver;
 import ai.gebo.security.services.impl.GPasswordEncoder;
 import ai.gebo.security.services.impl.GReactiveOauth2AuthorizedClientService;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import ai.gebo.security.services.impl.ReactiveGOAuth2UserService;
 
 /**
@@ -109,8 +111,8 @@ public class GeboAISecurityConfig {
 			IGeboSecretsAccessService secretsService, IGUsersAdminService userAdminService,
 			GeboSecurityConfig securityProperties, GPasswordEncoder passwordEncoder,
 			IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao, LocalJwtTokenProvider tokenProvider,
-			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService,
-			UserDetailsService userDetailsService) {
+			JwtAuthenticationEntryPoint point, IGeboCryptingService cryptService, UserDetailsService userDetailsService,
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
 		this.userDetailsService = userDetailsService;
 		Oauth2DynamicClientRegistrationRepository dynamicClient = new Oauth2DynamicClientRegistrationRepository(
@@ -136,7 +138,8 @@ public class GeboAISecurityConfig {
 		this.tokenProvider = tokenProvider;
 		this.point = point;
 		this.cryptService = cryptService;
-		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler();
+		this.authenticationSuccessHandler = new GOAuth2AuthenticationSuccessHandler(
+				backendOauth2LoginSPASupportService);
 
 	}
 
@@ -219,12 +222,15 @@ public class GeboAISecurityConfig {
 	 */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		boolean oauth2Enabled = securityConfig.getOauth2Enabled() != null && securityConfig.getOauth2Enabled();
+		boolean oauth2LoginEnabled = securityConfig.getOauth2LoginEnabled() != null
+				&& securityConfig.getOauth2LoginEnabled();
+		boolean oauth2ResourceServerEnabled = securityConfig.getOauth2ResourceServerEnabled() != null
+				&& securityConfig.getOauth2ResourceServerEnabled();
 		HttpSecurity configBuilder = http.cors(c -> c.disable()).csrf(csrf -> csrf.disable())
 				.addFilterAfter(corsFilter, CsrfFilter.class)
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(allowedUrls).permitAll()
 						.anyRequest().authenticated());
-		if (oauth2Enabled) {
+		if (oauth2LoginEnabled) {
 			configBuilder = configBuilder.oauth2Login(oauth2 -> oauth2
 					.clientRegistrationRepository(clientRegistrationRepository)
 					.authorizedClientService(oauth2AuthorizedClientService).successHandler(authenticationSuccessHandler)
@@ -232,30 +238,15 @@ public class GeboAISecurityConfig {
 							auth -> auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
 					.userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
 			// Optional: use a custom success handler to issue JWT
-			).oauth2ResourceServer(oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
+			);
+		}
+		if (oauth2ResourceServerEnabled) {
+			configBuilder = configBuilder.oauth2ResourceServer(
+					oauth2 -> oauth2.authenticationManagerResolver(authenticationManagerResolver()));
 		}
 		return configBuilder.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
-		// Configure security filter chain
-		/*
-		 * return http.cors(c -> c.disable()).csrf(csrf ->
-		 * csrf.disable()).addFilterAfter(corsFilter, CsrfFilter.class)
-		 * .authorizeHttpRequests(authorizeRequests ->
-		 * authorizeRequests.requestMatchers(allowedUrls).permitAll()
-		 * .anyRequest().authenticated()) .oauth2Login(oauth2 ->
-		 * oauth2.clientRegistrationRepository(clientRegistrationRepository)
-		 * .authorizedClientService(oauth2AuthorizedClientService) //
-		 * .successHandler(authenticationSuccessHandler) .authorizationEndpoint( auth ->
-		 * auth.authorizationRequestResolver(oAuth2AuthorizationRequestResolver))
-		 * .userInfoEndpoint(userInfo -> userInfo.userService(this.oauth2UserService))
-		 * // Optional: use a custom success handler to issue JWT
-		 * ).oauth2ResourceServer(oauth2 ->
-		 * oauth2.authenticationManagerResolver(authenticationManagerResolver()))
-		 * .userDetailsService(userDetailsService) .exceptionHandling(ex ->
-		 * ex.authenticationEntryPoint(point)) .sessionManagement(s ->
-		 * s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
-		 */
 	}
 
 	@Bean

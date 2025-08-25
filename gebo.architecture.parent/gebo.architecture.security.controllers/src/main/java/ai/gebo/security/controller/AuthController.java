@@ -9,6 +9,7 @@
 
 package ai.gebo.security.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -18,20 +19,30 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.model.OperationStatus;
-import ai.gebo.security.LocalJwtTokenProvider;
-import ai.gebo.security.SecurityHeaderUtil;
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.AuthResponse;
 import ai.gebo.security.model.LoginRequest;
+import ai.gebo.security.model.SecurityHeaderData;
+import ai.gebo.security.model.SecurityHeaderUtil;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfo;
 import ai.gebo.security.repository.UserRepository;
+import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
+import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 /**
@@ -47,6 +58,8 @@ public class AuthController {
 	private UserRepository userRepository;
 	private PasswordEncoder passwordEncoder;
 	private LocalJwtTokenProvider tokenProvider;
+	private IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService;
+	private static ObjectMapper mapper = new ObjectMapper();
 
 	/**
 	 * Constructs an AuthController with the necessary dependencies.
@@ -58,12 +71,15 @@ public class AuthController {
 	 * @param tokenProvider         the provider for generating authentication
 	 *                              tokens
 	 */
-	public AuthController(IGHttpRequestAuthenticationManagerResolver authenticationManager, UserRepository userRepository,
-			PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider) {
+	public AuthController(IGHttpRequestAuthenticationManagerResolver authenticationManager,
+			UserRepository userRepository, PasswordEncoder passwordEncoder, LocalJwtTokenProvider tokenProvider,
+			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService) {
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.tokenProvider = tokenProvider;
+		this.backendOauth2LoginSPASupportService = backendOauth2LoginSPASupportService;
+
 	}
 
 	/**
@@ -81,8 +97,9 @@ public class AuthController {
 			Authentication authentication = authenticationManager.authenticateByLocalJWT(
 					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 			Optional<User> usr = userRepository.findById(loginRequest.getUsername());
-			if (usr.isPresent()) {
+			if (usr.isPresent() && usr.get().getProvider() == AuthProvider.local) {
 				User u = usr.get();
+
 				UserInfo userInfo = new UserInfo();
 				userInfo.setUsername(u.getUsername());
 				userInfo.setRoles(u.getRoles());
@@ -109,4 +126,7 @@ public class AuthController {
 			return OperationStatus.<AuthResponse>ofError("Cannot authenticate with supplied credentials");
 		}
 	}
+
+	
+
 }

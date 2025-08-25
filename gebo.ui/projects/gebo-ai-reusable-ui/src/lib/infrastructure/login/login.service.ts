@@ -18,12 +18,12 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, OAuth2ProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo, TokenRenewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
-import { resetAuth } from "../gebo-credentials";
+import { getAuth, resetAuth } from "../gebo-credentials";
 import { AuthConfig } from 'angular-oauth2-oidc';
-import { GoogleOauth2Service, IOauth2LoginService, Oauth2LoginService } from "./oauth2/oauth2-login.service";
+import { Oauth2LoginService } from "./oauth2/oauth2-login.service";
 
 
 /**
@@ -45,6 +45,7 @@ export class LoginService {
   private actualAuthConfig?: AuthConfig;
   private actualAuthProviderId?: string;
   private subscription?: Subscription;
+  private tokenRenewPollingPeriodMsec: number = 60000;
 
   /**
    * Constructor for the LoginService
@@ -59,7 +60,8 @@ export class LoginService {
     private activatedRouter: ActivatedRoute,
     private router: Router,
     private authControllerService: AuthControllerService,
-    private oauth2ProvidersService: OAuth2ProvidersControllerService,
+    private oauth2ProvidersService: AuthProvidersControllerService,
+    private tokenRenewService: TokenRenewControllerService,
     private userController: UserControllerService) {
     this.oauth2Service.authDataSubject.subscribe({
       next: (data) => {
@@ -67,6 +69,25 @@ export class LoginService {
       }
     }
     );
+    this.startTokenRenew();
+  }
+  private startTokenRenew(): void {
+    setTimeout(() => {
+      this.pollTokenRenew();
+    }, this.tokenRenewPollingPeriodMsec);
+  }
+  private pollTokenRenew(): void {
+    const currentAuth = getAuth();
+    if (currentAuth) {
+      this.tokenRenewService.renew().subscribe({
+        next: (renewed) => {
+          this.authDataSubject.next(renewed);
+          this.startTokenRenew();
+        }, error: (e) => {
+
+        }
+      });
+    }
   }
   public authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject<SecurityHeaderData | undefined>();
   /**
@@ -141,7 +162,7 @@ export class LoginService {
    * Load list of oauth2 providers enabled for the user login (UI data without technical oauth2 critical infos)
    */
   public getOauth2LoginOptions(): Observable<Oauth2ClientAuthorizativeInfo[]> {
-    return this.oauth2ProvidersService.listAvailableProviders();
+    return this.oauth2ProvidersService.listAvailableProvidersConfig();
   }
 
 

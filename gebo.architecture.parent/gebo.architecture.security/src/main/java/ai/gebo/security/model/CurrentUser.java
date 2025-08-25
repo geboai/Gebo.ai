@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.security;
+package ai.gebo.security.model;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

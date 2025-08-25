@@ -9,9 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { IntegrationDocumentEnvelop } from './integrationDocumentEnvelop';
+import { GUserMessage } from './gUserMessage';
+import { SecurityHeaderData } from './securityHeaderData';
 
-export interface SpoolDocumentEndpointCodeBody1 { 
-    endpointCode?: string;
-    envelop?: IntegrationDocumentEnvelop;
+export interface OperationStatusSecurityHeaderData { 
+    result?: SecurityHeaderData;
+    messages?: Array<GUserMessage>;
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

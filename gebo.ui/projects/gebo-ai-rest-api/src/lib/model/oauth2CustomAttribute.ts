@@ -9,9 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { UserInfos } from './userInfos';
 
-export interface Oauth2LoginInfo { 
-    userInfo?: UserInfos;
-    token?: string;
+export interface Oauth2CustomAttribute { 
+    attributeName?: string;
+    attributeDescription?: string;
 }

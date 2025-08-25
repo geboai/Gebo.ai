@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -35,21 +35,30 @@ import { InputTextModule } from "primeng/inputtext";
 import { ButtonModule } from "primeng/button";
 import { LoginService } from "./login.service";
 import { FieldsetModule } from "primeng/fieldset";
-import { GenericOauth2ClientLoginService,GenericOauth2ServerSideLoginService, GoogleOauth2Service } from "./oauth2/oauth2-login.service";
+import { GenericOauth2ClientLoginService, GenericOauth2ServerSideLoginService } from "./oauth2/oauth2-login.service";
+import { GeboAIOauth2LandingComponent } from "./oauth2/oauth2landing/oauth2-landing.component";
+import { LoggedComponent } from "./logged.component";
+import { LogoutComponent } from "./logout.component";
+import { GeboAIReloadForwardComponent } from "./reload-forward.component";
 
 /**
  * Defines the route configuration for the login module.
  * Sets up the '/ui/login' path to be handled by the LoginComponent.
  */
-const routes:Routes=[{ path:'ui/login',component:LoginComponent}];
+const routes: Routes = [
+    { path: 'ui/login', component: LoginComponent },
+    { path: 'ui/oauth2-land', component: GeboAIOauth2LandingComponent },
+    { path: 'ui/logged', component: LoggedComponent },
+    { path: 'ui/logout', component: LogoutComponent }, 
+    { path: 'ui/reloader', component: GeboAIReloadForwardComponent }];
 
 @NgModule({
-    imports:[CommonModule,PasswordModule,InputTextModule,ButtonModule,
+    imports: [CommonModule, PasswordModule, InputTextModule, ButtonModule,
         BlockUIModule,
         PanelModule,
-        MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes),FieldsetModule],
-    declarations:[LoginComponent],
-    exports:[LoginComponent],
-    providers:[LoginService,GenericOauth2ClientLoginService,GenericOauth2ServerSideLoginService,GoogleOauth2Service]
+        MessagesModule, ReactiveFormsModule, FormsModule, RouterModule.forRoot(routes), FieldsetModule],
+    declarations: [LoginComponent, GeboAIOauth2LandingComponent, LoggedComponent, LogoutComponent,GeboAIReloadForwardComponent],
+    exports: [LoginComponent],
+    providers: [LoginService, GenericOauth2ClientLoginService, GenericOauth2ServerSideLoginService]
 })
-export class LoginModule {}
+export class LoginModule { }

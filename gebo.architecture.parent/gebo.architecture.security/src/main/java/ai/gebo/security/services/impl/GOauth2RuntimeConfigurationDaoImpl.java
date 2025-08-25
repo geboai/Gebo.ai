@@ -59,7 +59,7 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 			for (Oauth2RuntimeConfiguration config : oauth2configs) {
 				config.setReadOnly(true);
 				if (config.getClient() == null || config.getClient().getClientId() == null
-						|| config.getClient().getSecret() == null || config.getClient().getTenantId() == null) {
+						|| config.getClient().getSecret() == null) {
 					final String msg = "The Oauth2 configuration for registrationId:" + config.getRegistrationId()
 							+ " does not have a full oauth2 client plain configuration, shutting down, please correct yaml ";
 					LOGGER.error(msg);
@@ -111,17 +111,17 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 	}
 
 	@Override
-	public List<Oauth2RuntimeConfiguration> findByProviderAndConfigurationTypesContains(AuthProvider provider,
+	public List<Oauth2RuntimeConfiguration> findByProviderAndConfigurationType(AuthProvider provider,
 			Oauth2ConfigurationType type) {
 		return findListByPredicate(x -> x.getProvider() != null && x.getProvider() == provider
-				&& x.getConfigurationTypes() != null && x.getConfigurationTypes().contains(type));
+				&& x.getConfigurationType() ==type);
 
 	}
 
 	@Override
-	public List<Oauth2RuntimeConfiguration> findByConfigurationTypesContains(Oauth2ConfigurationType authentication) {
+	public List<Oauth2RuntimeConfiguration> findByConfigurationType(Oauth2ConfigurationType authentication) {
 		return findListByPredicate(
-				x -> x.getConfigurationTypes() != null && x.getConfigurationTypes().contains(authentication));
+				x -> x.getConfigurationType() ==authentication);
 	}
 
 	@Override

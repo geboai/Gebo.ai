@@ -22,7 +22,7 @@ export interface PageGPromptConfig {
     content?: Array<GPromptConfig>;
     number?: number;
     numberOfElements?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     empty?: boolean;
 }

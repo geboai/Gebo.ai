@@ -22,7 +22,7 @@ export interface PageDocumentReferenceView {
     content?: Array<DocumentReferenceView>;
     number?: number;
     numberOfElements?: number;
-    pageable?: PageableObject;
     sort?: SortObject;
+    pageable?: PageableObject;
     empty?: boolean;
 }

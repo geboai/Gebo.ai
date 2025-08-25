@@ -7,6 +7,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import ai.gebo.security.config.GeboSecurityConfig;
+import ai.gebo.security.model.AuthProvider;
+import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.oauth2.GeboOauth2Exception;
 import ai.gebo.security.model.oauth2.Oauth2ClientRegistration;
 import ai.gebo.security.services.IGOauth2ConfigurationService;
@@ -28,11 +30,13 @@ public class ReactiveGOAuth2UserService implements ReactiveOAuth2UserService<OAu
 
 		return data.flatMap(oauth2User -> {
 			Oauth2ClientRegistration config;
+			AuthProvider authProvider = null;
 			try {
 				config = oauth2ConfigService.findOauth2ClientRegistrationByRegistrationId(registrationId);
 				if (config == null) {
 					return Mono.error(new OAuth2AuthenticationException("OAuth2 configuration not found"));
 				}
+				authProvider = config.getRuntimeConfiguration().getProvider();
 			} catch (GeboOauth2Exception e) {
 				return Mono.error(new OAuth2AuthenticationException("OAuth2 configuration error"));
 			}
@@ -45,12 +49,13 @@ public class ReactiveGOAuth2UserService implements ReactiveOAuth2UserService<OAu
 			switch (securityProperties.getLoginPolicy()) {
 			case TRUST_EVERY_OAUTH_IDENTITY: {
 				// Create user if not exists (can be async if needed)
-				userService.createUserIfNotExists(email, oauth2User.getAttributes());
+				userService.createUserIfNotExists(email, oauth2User.getAttributes(), authProvider);
 			}
 				break;
 			case USER_SELF_REGISTERS:
 			case REQUIRE_INVITATION: {
-				if (userService.findUserByUsername(email) == null) {
+				EditableUser user = userService.findUserByUsername(email);
+				if (user == null || user.getAuthProvider() != authProvider) {
 					return Mono.error(new OAuth2AuthenticationException("User not authorized"));
 				}
 			}

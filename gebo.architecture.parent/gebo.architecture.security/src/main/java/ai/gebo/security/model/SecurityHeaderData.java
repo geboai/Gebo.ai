@@ -1,6 +1,6 @@
 package ai.gebo.security.model;
 
-import ai.gebo.security.SecurityHeaderUtil.XAuthType;
+import ai.gebo.security.model.SecurityHeaderUtil.XAuthType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

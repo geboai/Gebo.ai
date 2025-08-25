@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
+import { AuthProvidersControllerService } from './api/authProvidersController.service';
 import { AzureOpenAiChatModelsConfigurationControllerService } from './api/azureOpenAiChatModelsConfigurationController.service';
 import { AzureOpenAiEmbeddingModelsConfigurationControllerService } from './api/azureOpenAiEmbeddingModelsConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
@@ -64,7 +65,6 @@ import { LogViewControllerService } from './api/logViewController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
-import { OAuth2ProvidersControllerService } from './api/oAuth2ProvidersController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
@@ -78,6 +78,7 @@ import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFre
 import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
@@ -91,6 +92,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
   providers: [
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
+    AuthProvidersControllerService,
     AzureOpenAiChatModelsConfigurationControllerService,
     AzureOpenAiEmbeddingModelsConfigurationControllerService,
     BuildSystemsControllerService,
@@ -150,7 +152,6 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
     OAuth2AdminControllerService,
-    OAuth2ProvidersControllerService,
     Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
@@ -164,6 +165,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     SecretsControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    TokenRenewControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UsersAdminControllerService,

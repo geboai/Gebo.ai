@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
@@ -211,7 +212,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	}
 
 	@Override
-	public void createUserIfNotExists(String email, Map<String, Object> attributes) {
+	public void createUserIfNotExists(String email, Map<String, Object> attributes, AuthProvider authProvider) {
 		EditableUser user = this.findUserByUsername(email);
 		if (user == null) {
 			User _user = new User();
@@ -219,6 +220,8 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 			_user.setRoles(List.of("USER"));
 			_user.setDisabled(false);
 			_user.setEmailVerified(false);
+			_user.setProvider(authProvider);
+			_user.setPassword("NOPASSWORD");
 			userRepo.insert(_user);
 
 		}

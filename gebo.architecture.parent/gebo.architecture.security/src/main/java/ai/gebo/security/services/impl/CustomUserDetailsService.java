@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.security;
+package ai.gebo.security.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.security.exception.ResourceNotFoundException;
 import ai.gebo.security.model.User;
+import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.repository.UserRepository;
 
 /**
@@ -68,7 +69,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// Retrieve user by ID from the repository
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
-
+		
 		// Check if user is disabled
 		if (user.getDisabled() == null || !user.getDisabled()) {
 			// Create and return UserPrincipal for authenticated user

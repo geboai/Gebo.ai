@@ -41,9 +41,9 @@ public interface Oauth2RuntimeConfigurationRepository extends MongoRepository<Oa
      * @param type the configuration type to search for.
      * @return a list of Oauth2RuntimeConfiguration entities that match the specified provider and include the configuration type.
      */
-    public List<Oauth2RuntimeConfiguration> findByProviderAndConfigurationTypesContains(AuthProvider provider,
+    public List<Oauth2RuntimeConfiguration> findByProviderAndConfigurationType(AuthProvider provider,
             Oauth2ConfigurationType type);
 
-	public List<Oauth2RuntimeConfiguration> findByConfigurationTypesContains(Oauth2ConfigurationType authentication);
+	public List<Oauth2RuntimeConfiguration> findByConfigurationType(Oauth2ConfigurationType authentication);
 
 }

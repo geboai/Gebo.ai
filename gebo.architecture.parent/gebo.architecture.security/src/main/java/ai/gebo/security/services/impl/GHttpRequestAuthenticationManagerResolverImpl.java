@@ -15,9 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.gebo.security.LocalJwtTokenProvider;
-import ai.gebo.security.SecurityHeaderUtil;
 import ai.gebo.security.model.SecurityHeaderData;
+import ai.gebo.security.model.SecurityHeaderUtil;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGHttpRequestAuthenticationManagerResolver;
@@ -96,7 +95,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 				}
 			} else {
 				List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
-						.findByConfigurationTypesContains(Oauth2ConfigurationType.AUTHENTICATION);
+						.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 				if (oauth2AuthenticationConfigs.isEmpty())
 					throw new RuntimeException(
 							"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
