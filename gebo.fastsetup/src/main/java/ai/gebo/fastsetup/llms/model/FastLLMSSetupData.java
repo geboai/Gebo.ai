@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.fastsetup.model;
+package ai.gebo.fastsetup.llms.model;
 
 import jakarta.validation.constraints.NotNull;
 

@@ -291,7 +291,7 @@ public class User {
 		}
 		this.name = u.getName();
 		this.provider = u.getAuthProvider();
-		this.sourname = u.getName();
+		this.sourname = u.getSourname();
 		this.disabled = u.getDisabled();
 		this.roles = u.getRoles();
 	}

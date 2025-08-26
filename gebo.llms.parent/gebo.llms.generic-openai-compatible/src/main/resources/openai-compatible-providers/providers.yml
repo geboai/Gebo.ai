@@ -10,21 +10,33 @@ ai.gebo.llms.generic.config:
       description: Groq chat model provider
       baseUrl: https://api.groq.com/openai
 
+    - code: chatmodel-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai european AI provider chat models
+      baseUrl: https://api.regolo.ai/
+
     - code: chatmodel-xai
       providerId: xai
       description: X.ai (Grok) chat model provider
       baseUrl: https://api.x.ai/
       modelsListProvider: XaiModelsList
+
     - code: chatmodel-generic-openai
       providerId: generic-openai
       description: Generic OpenAI API compatible chat model provider
       baseUrl:
+
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services
     - code: embedding-nvidia
       providerId: nvidia
       description: NVidia Cloud embedding model provider
       baseUrl: https://integrate.api.nvidia.com
+
+    - code: embedding-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai european AI provider embedding models
+      baseUrl: https://api.regolo.ai/
 
     - code: embedding-groq
       providerId: groq

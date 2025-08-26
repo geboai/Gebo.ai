@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.fastsetup.llms.model.FastLLMSSetupData;
 import ai.gebo.fastsetup.model.ComponentLLMSStatus;
-import ai.gebo.fastsetup.model.FastLLMSSetupData;
 import ai.gebo.fastsetup.services.GeboFastLLMSSetupService;
 import ai.gebo.model.OperationStatus;
 import jakarta.validation.Valid;
