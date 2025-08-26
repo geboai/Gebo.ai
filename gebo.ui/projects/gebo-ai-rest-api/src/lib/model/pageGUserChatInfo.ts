@@ -16,11 +16,11 @@ import { SortObject } from './sortObject';
 export interface PageGUserChatInfo { 
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<GUserChatInfo>;
     number?: number;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     sort?: SortObject;
     pageable?: PageableObject;

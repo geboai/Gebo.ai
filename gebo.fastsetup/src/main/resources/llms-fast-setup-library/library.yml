@@ -107,6 +107,23 @@ ai.gebo.fastsetup.config:
           choices:
             - code: nvidia/nv-embed-v1
               description: nvidia embed v1
+    - vendorId: regolo.ai
+      name: Regolo.ai
+      description: Regolo.ai Italian AI provider
+      acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://regolo.ai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-regolo.ai
+          apiKeySecretContext: chatmodel-regolo.ai
+          doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-regolo.ai
+          apiKeySecretContext: embedding-regolo.ai
+          doModelsLookup: true
+
     - vendorId: ollama
       name: Ollama
       description: Ollama, large language model server that runs on your infrastructure

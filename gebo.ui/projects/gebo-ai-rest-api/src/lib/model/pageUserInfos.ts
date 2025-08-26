@@ -16,11 +16,11 @@ import { UserInfos } from './userInfos';
 export interface PageUserInfos { 
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<UserInfos>;
     number?: number;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     sort?: SortObject;
     pageable?: PageableObject;

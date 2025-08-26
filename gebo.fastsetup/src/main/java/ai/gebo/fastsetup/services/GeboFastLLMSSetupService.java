@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.fastsetup.services;
 
@@ -25,7 +22,12 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.fastsetup.llms.config.FastLLMSSetupConfig;
 import ai.gebo.fastsetup.llms.model.FastLLMSSetupData;
+import ai.gebo.fastsetup.llms.model.LLMSSetupConfigurationData;
+import ai.gebo.fastsetup.llms.model.LLMSSetupConfigurationData.LLMSSetupConfiguration;
+import ai.gebo.fastsetup.llms.model.LLMSSetupConfigurationModificationData;
+import ai.gebo.fastsetup.llms.model.LLMSSetupModificationResult;
 import ai.gebo.fastsetup.model.ComponentLLMSStatus;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -51,8 +53,8 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
- * Service to handle fast setup for LLMS integration in Gebo platform.
- * This class contains methods for configuring chat and embedding models.
+ * Service to handle fast setup for LLMS integration in Gebo platform. This
+ * class contains methods for configuring chat and embedding models.
  * 
  * AI generated comments
  */
@@ -62,7 +64,8 @@ public class GeboFastLLMSSetupService {
 	IGSecurityService securityService;
 
 	/**
-	 * Inner class representing a couple of configurations for language models (chat and embedding).
+	 * Inner class representing a couple of configurations for language models (chat
+	 * and embedding).
 	 */
 	static class LLMConfigCouple {
 		ProvidersAndPresets chat = null, embedding = null;
@@ -95,7 +98,7 @@ public class GeboFastLLMSSetupService {
 			 * new ProvidersAndPresets("groq", "chatmodel-groq", "llama-3.1-70b-versatile",
 			 * "groq provideed llama-3.1-70b-versatile")
 			 */
-    };
+	};
 
 	// Sample text for testing chat model configurations.
 	static final String chatText4Test = "Hi how are you?";
@@ -110,7 +113,7 @@ public class GeboFastLLMSSetupService {
 			 * new ProvidersAndPresets("groq", "embedding-groq", "llama-3.1-70b-versatile",
 			 * "groq provideed llama-3.1-70b-versatile")
 			 */
-    };
+	};
 
 	// Sample text for testing embedding model configurations.
 	static final String embeddingText4Test = "By default, the length of the embedding vector will be 1536 for text-embedding-3-small or 3072 for text-embedding-3-large. You can reduce the dimensions of the embedding by passing in the dimensions parameter without the embedding losing its concept-representing properties. We go into more detail on embedding dimensions in the embedding use case section.";
@@ -145,7 +148,7 @@ public class GeboFastLLMSSetupService {
 	@Autowired
 	IGChatProfileManagementService chatProfileManagementService;
 
-	@Autowired 
+	@Autowired
 	IGRuntimeChatProfileChatModelDao chatProfileChatModelDao;
 
 	/**
@@ -156,10 +159,12 @@ public class GeboFastLLMSSetupService {
 	}
 
 	/**
-	 * Finds a couple of language model configurations (chat and embedding) by the UI provider alias.
+	 * Finds a couple of language model configurations (chat and embedding) by the
+	 * UI provider alias.
 	 *
 	 * @param uiProvider The UI provider alias to look for.
-	 * @return LLMConfigCouple containing both chat and embedding configurations, or null if not found.
+	 * @return LLMConfigCouple containing both chat and embedding configurations, or
+	 *         null if not found.
 	 */
 	static LLMConfigCouple findCouple(String uiProvider) {
 		ProvidersAndPresets chatModel = null, embeddingModel = null;
@@ -253,7 +258,8 @@ public class GeboFastLLMSSetupService {
 
 		try {
 			// Store secrets and configure chat and embedding models.
-			secretID = secretService.storeSecret(content, "default " + data.getProvider() + " account", data.getProvider());
+			secretID = secretService.storeSecret(content, "default " + data.getProvider() + " account",
+					data.getProvider());
 			chatConfig.setApiSecretCode(secretID);
 			chatConfig.setAccessibleToAll(true);
 			embedConfig.setApiSecretCode(secretID);
@@ -292,7 +298,7 @@ public class GeboFastLLMSSetupService {
 			embedConfig.setCode(null);
 			String salutationResponse = chatModel.getChatModel().call(chatText4Test);
 			Object vector = embeddingModel.getEmbeddingModel().embed(embeddingText4Test);
-			
+
 			// Delete temporary models after testing.
 			chatModel.delete();
 			embeddingModel.delete();
@@ -317,7 +323,7 @@ public class GeboFastLLMSSetupService {
 			// Get or create default chat profile and link to current chat model.
 			GChatProfileConfiguration chatProfile = chatProfileManagementService.getOrCreateDefaultChatProfile();
 			IGChatProfileChatModel chatProfileChatModel = chatProfileChatModelDao.getChatModel(chatProfile);
-			
+
 			// Update operation status to success.
 			status = OperationStatus.of(true);
 			status.getMessages().clear();
@@ -338,19 +344,32 @@ public class GeboFastLLMSSetupService {
 			LOGGER.error("Error in the crypting subsystem for the API key storage!?", e);
 		} catch (Throwable th) {
 			// Handle generic exceptions and log them.
-			status.getMessages()
-					.add(GUserMessage.errorMessage(
-							"Default embedding & chat models settings gone wrong. Try to reinsert the API key correctly",
-							th.getMessage()));
+			status.getMessages().add(GUserMessage.errorMessage(
+					"Default embedding & chat models settings gone wrong. Try to reinsert the API key correctly",
+					th.getMessage()));
 			LOGGER.error("Default embedding & chat models settings gone wrong!?", th);
 		}
 		return status;
 	}
 
+	public LLMSSetupConfigurationData getActualConfiguration() {
+		return null;
+	}
+
+	public OperationStatus<LLMSSetupModificationResult> applyModification(
+			LLMSSetupConfigurationModificationData modification) {
+		return null;
+	}
+
+	public FastLLMSSetupConfig getSetupPresets() {
+		return null;
+	}
+
 	/**
 	 * Get the current setup status of language models (LLMS).
 	 *
-	 * @return ComponentLLMSStatus indicating the setup status of chat and embedding models.
+	 * @return ComponentLLMSStatus indicating the setup status of chat and embedding
+	 *         models.
 	 */
 	public ComponentLLMSStatus getLLMSSetupStatus() {
 		ComponentLLMSStatus status = new ComponentLLMSStatus();
