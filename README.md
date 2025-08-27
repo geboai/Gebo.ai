@@ -20,6 +20,7 @@ an enterprise version with more feature and support is also available.
       - Groq
       - Deepseek
       - MistralAI
+      - Regolo.ai (Italian/European)
       - Almost every local large language model using Ollama 
  - Configure tools & functions that each llm configuration can use      
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:

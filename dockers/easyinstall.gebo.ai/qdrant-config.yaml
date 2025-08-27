@@ -1,5 +1,39 @@
 service:
   http_port: 6333
   grpc_port: 6334
+  # Enabled interfaces
+  host: "0.0.0.0"
+
+  # Attiva autenticazione con API Key
+  api_key: "ce7c85bc-f037-4c64-91d8-70335638329d"
+
+  # Rate limiting per sicurezza contro abusi
+  max_request_size_mb: 100
+  enable_cors: false
+
 storage:
+  # Percorso dati persistenti
   path: "/var/lib/qdrant"
+
+  # Ottimizza scrittura e accesso ai dati
+  wal: true
+  optimizers:
+    default_segment_number: 6
+    max_segment_size: 100000
+    memmap_threshold: 20000
+    indexing_threshold: 20000
+
+cluster:
+  # Se usi Qdrant standalone lascia 1, altrimenti puoi scalare
+  enabled: false
+
+logger:
+  level: INFO
+  file: "/var/log/qdrant/qdrant.log"
+  rotation:
+    size: 100 MB
+    keep: 10
+    compress: true
+
+telemetry:
+  enabled: false

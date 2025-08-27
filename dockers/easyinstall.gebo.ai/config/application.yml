@@ -52,7 +52,7 @@ ai.gebo.llms.config:
 ai.gebo.vectorstore:
   use: QDRANT
   qdrant:
-    host: qdrant
+    host: localhost
     port: 6334
     tls: false
     apiKey: ce7c85bc-f037-4c64-91d8-70335638329d
@@ -93,7 +93,7 @@ ai.gebo.config:
 ai.gebo.mongodb:
   enabled: true
   databaseName: gebo-ai
-  connectionString: mongodb://mongoroot:mongopwd@mongo:27017/gebo-ai?authSource=admin
+  connectionString: mongodb://mongoroot:mongopwd@localhost:27017/gebo-ai?authSource=admin
 ai.gebo.filesystem:
   allowFilesystemSharesUI: false
   shares:
