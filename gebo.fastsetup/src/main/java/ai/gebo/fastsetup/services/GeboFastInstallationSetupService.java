@@ -98,7 +98,7 @@ public class GeboFastInstallationSetupService {
 		status.getMessages().clear();
 		try {
 			User user = new User();
-			user.setUsername(data.getUsername());
+			user.setUsername(data.getUsername().toLowerCase());
 			// Encrypting the user's password
 			user.setPassword(cryptService.crypt(data.getPassword()));
 			user.setEmailVerified(true);

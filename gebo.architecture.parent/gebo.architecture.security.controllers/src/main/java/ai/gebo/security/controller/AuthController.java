@@ -95,8 +95,9 @@ public class AuthController {
 		try {
 			// Authenticate the user using the provided credentials
 			Authentication authentication = authenticationManager.authenticateByLocalJWT(
-					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-			Optional<User> usr = userRepository.findById(loginRequest.getUsername());
+					new UsernamePasswordAuthenticationToken(loginRequest.getUsername().toLowerCase(),
+							loginRequest.getPassword()));
+			Optional<User> usr = userRepository.findById(loginRequest.getUsername().toLowerCase());
 			if (usr.isPresent() && usr.get().getProvider() == AuthProvider.local) {
 				User u = usr.get();
 
@@ -126,7 +127,5 @@ public class AuthController {
 			return OperationStatus.<AuthResponse>ofError("Cannot authenticate with supplied credentials");
 		}
 	}
-
-	
 
 }

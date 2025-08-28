@@ -280,7 +280,7 @@ public class User {
 	 */
 	public void assignValues(EditableUser u) {
 		if (this.username == null)
-			this.username = u.getUsername();
+			this.username = u.getUsername()!=null?u.getUsername().toLowerCase():null;
 		else {
 			// Check if the username is consistent or non-empty
 			if (this.username != null && ((u.getUsername() == null || u.getUsername().trim().length() == 0)
