@@ -16,13 +16,7 @@ storage:
   path: "/var/lib/qdrant"
 
   # Ottimizza scrittura e accesso ai dati
-  wal: true
-  optimizers:
-    default_segment_number: 6
-    max_segment_size: 100000
-    memmap_threshold: 20000
-    indexing_threshold: 20000
-
+ 
 cluster:
   # Se usi Qdrant standalone lascia 1, altrimenti puoi scalare
   enabled: false
