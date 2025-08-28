@@ -89,9 +89,14 @@ COPY config/application.yml /opt/gebo.ai/config
 ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
+COPY mongod.conf /etc/mongod.conf                 
+COPY mongo-init.sh /bin/mongo-init.sh   
+COPY container-start.sh /bin/container-start.sh  
+RUN chmod +x /bin/mongo-init.sh /bin/container-start.sh  
+
 
 VOLUME ["/data/db", "/var/lib/qdrant","/opt/gebo.ai/shares"]
 EXPOSE 27017 6333 12999
 
-ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/tini","--"]  
+CMD ["/bin/container-start.sh"]
