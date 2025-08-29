@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo, TokenRenewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
-import { getAuth, resetAuth } from "../gebo-credentials";
+import { getAuth, resetAuth, saveAuth } from "../gebo-credentials";
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { Oauth2LoginService } from "./oauth2/oauth2-login.service";
 
@@ -110,6 +110,9 @@ export class LoginService {
 
       const logged: boolean = result?.result?.securityHeaderData?.token ? true : false;
       if (logged && result?.result && result?.result?.userInfo) {
+        if (result.result.securityHeaderData) {
+          saveAuth(result.result.securityHeaderData);
+        }
         this.authDataSubject.next(result.result.securityHeaderData);
         this.logged.next(result?.result?.userInfo);
       } else {
