@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -17,8 +17,8 @@
  * the submission process to the backend service.
  */
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { AbstractControl, FormControl, FormGroup, RequiredValidator, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { ConfluenceSystemsControllerService, FastConfluenceSystemInsertRequest, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SecretsControllerService, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { FormControl, FormGroup } from "@angular/forms";
+import { AuthProviderDto, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { SharepointUrlService } from "./confluence-url.service";
 
@@ -38,7 +38,7 @@ import { SharepointUrlService } from "./confluence-url.service";
 export class GeboAISharepointSystemFastComponent implements OnInit {
     /** Flag to indicate if an API operation is in progress */
     public loading: boolean = false;
-    
+
     /**
      * Form group that manages the Sharepoint system configuration inputs, including:
      * - description: A human-readable name for the system
@@ -50,28 +50,28 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
         description: new FormControl(),
         baseUri: new FormControl(),
         oauth2Credentials: new FormGroup({
-            tenantId: new FormControl(),
             clientId: new FormControl(),
-            secret: new FormControl()
+            secret: new FormControl(),
+            customAttributes: new FormGroup({ tenantId: new FormControl() })
         }),
         sharepointVersion: new FormControl()
     });
-    
+
     /** Collection of messages to display to the user after operations */
     userMessages: ToastMessageOptions[] = [];
-    
+
     /** Available Sharepoint versions for selection in the form */
     sharepointVersions: { code: GSharepointContentManagementSystem.SharepointVersionEnum, description: string }[] = [/*{ code: "ONPREMISE2019", description: "On premise 2019 versions" },*/ { code: "CLOUD_VERSION", description: "Cloud version" }];
-    
+
     /** Currently selected Sharepoint version, defaults to cloud version */
     currentSharepointVersion?: GSharepointContentManagementSystem.SharepointVersionEnum = "CLOUD_VERSION";
-    
+
     /** Event emitter that fires when a new Sharepoint system is successfully created */
     @Output() newSharepointSystemEvent: EventEmitter<GConfluenceSystem> = new EventEmitter();
-    
+
     /** Event emitter that fires when the user cancels the creation process */
     @Output() cancelAction: EventEmitter<boolean> = new EventEmitter();
-    
+
     /**
      * Constructor initializes the component with necessary services and sets default values
      * 
@@ -98,7 +98,7 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
             ctrl.disable();
         }
     }
-    
+
     /**
      * Lifecycle hook that is called after component initialization.
      * Currently contains no implementation.
@@ -113,11 +113,12 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
      */
     doInsert(): void {
         const data: FastSharepointSystemInsertRequest = this.formGroup.value;
+        data.oauth2Credentials.providerName=AuthProviderDto.ProviderEnum.MicrosoftMultitenant;
         this.loading = true;
         this.sharepointSystemsService.fastSharepointConfig(data).subscribe({
             next: (result) => {
                 this.userMessages = result.messages as ToastMessageOptions[];
-                if (result.result && result.hasErrorMessages!==true) {
+                if (result.result && result.hasErrorMessages !== true) {
                     this.newSharepointSystemEvent.emit(result.result);
                 }
             },

@@ -109,7 +109,6 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
         context: {},
         contextType: this.entityName,
         targetType: "GSharepointContentManagementSystem",
-        targetFormInputs: { oauth2ForcedProviderName: AuthProviderDto.ProviderEnum.MicrosoftMultitenant },
         target: { contentManagementSystemType: sharepointCode } as GSharepointContentManagementSystem
     };
 

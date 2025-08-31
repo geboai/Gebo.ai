@@ -163,12 +163,12 @@ export class GeboOauth2SecretComponent implements OnInit, OnChanges, ControlValu
 
                 }
             });
-            let boundValue: GeboOauth2SecretContent = { providerName: this.forcedProviderName } as GeboOauth2SecretContent;
+            let boundValue: GeboOauth2SecretContent = { providerName: providerName } as GeboOauth2SecretContent;
             if (this.value) {
-                if (this.forcedProviderName) {
+                if (providerName) {
                     boundValue = {
                         ...this.value,
-                        providerName: this.forcedProviderName
+                        providerName: providerName
                     };
                 } else {
                     boundValue = this.value;

@@ -18,7 +18,7 @@
 
 import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { GSharepointContentManagementSystem, SecretInfo, SecretsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthProviderDto, GSharepointContentManagementSystem, SecretInfo, SecretsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
@@ -87,7 +87,7 @@ export class GeboAISharepointAdminComponent extends BaseEntityEditingComponent<G
     /**
      * Action request for creating a new secret
      */
-    public newSecretAction = newSecretActionRequest(this.actualIdentityContext, this.entityName, this.entity, ['OAUTH2_STANDARD']);
+    public newSecretAction = newSecretActionRequest(this.actualIdentityContext, this.entityName, this.entity, ['OAUTH2_STANDARD'],AuthProviderDto.ProviderEnum.MicrosoftMultitenant,true);
     
     /**
      * Constructor initializes the component and sets up form field behaviors
