@@ -113,7 +113,7 @@ export class GeboAISharepointAdminComponent extends BaseEntityEditingComponent<G
                     this.actualSharepointVersion = cversion;
                     switch (cversion) {
                         case "CLOUD_VERSION": {
-                            this.newSecretAction = newSecretActionRequest(this.actualIdentityContext, this.entityName, this.entity, ["OAUTH2_STANDARD"]);
+                            this.newSecretAction = newSecretActionRequest(this.actualIdentityContext, this.entityName, this.entity, ["OAUTH2_STANDARD"],AuthProviderDto.ProviderEnum.MicrosoftMultitenant,true);
                             this.requiredAndEnabled("baseUri", false);
                         }; break;
                         case "ONPREMISE2019": {
