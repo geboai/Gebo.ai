@@ -17,9 +17,11 @@
  */
 
 import { Inject, Injectable, InjectionToken, Injector, Type } from "@angular/core";
-import { GeboModuleInfo, GeboModulesConfigControllerService, GProject, GProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionPerformedCallback, GeboActionPerformedEvent, GeboAIEntitiesSettingWizardConfiguration, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent } from "@Gebo.ai/reusable-ui";
-import { forkJoin, map, Observable, of } from "rxjs";
+import { GeboModuleInfo, GeboModulesConfigControllerService, GProject } from "@Gebo.ai/gebo-ai-rest-api";
+
+import { forkJoin, map, Observable } from "rxjs";
+import { GeboAIEntitiesSettingWizardConfiguration } from "../controls/base-entity-editing-component/entities-modification-wizard";
+import { GeboActionPerformedCallback, GeboActionPerformedEvent, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent } from "../architecture/actions.model";
 
 /**
  * Injection token for providing pluggable module UI configuration.

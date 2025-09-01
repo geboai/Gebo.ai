@@ -2,42 +2,54 @@ ai.gebo.llms.generic.config:
   chatModelProviders:
     - code: chatmodel-nvidia
       providerId: nvidia
-      description: NVidia Cloud chat model provider
+      description: NVidia Cloud chat model
       baseUrl: https://integrate.api.nvidia.com
 
     - code: chatmodel-groq
       providerId: groq
-      description: Groq chat model provider
+      description: Groq chat model
       baseUrl: https://api.groq.com/openai
+
+    - code: chatmodel-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai chat models
+      baseUrl: https://api.regolo.ai/
 
     - code: chatmodel-xai
       providerId: xai
-      description: X.ai (Grok) chat model provider
+      description: X.ai (Grok) chat model
       baseUrl: https://api.x.ai/
       modelsListProvider: XaiModelsList
+
     - code: chatmodel-generic-openai
       providerId: generic-openai
-      description: Generic OpenAI API compatible chat model provider
+      description: Generic OpenAI compatible chat model
       baseUrl:
+
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services
     - code: embedding-nvidia
       providerId: nvidia
-      description: NVidia Cloud embedding model provider
+      description: NVidia Cloud embedding model
       baseUrl: https://integrate.api.nvidia.com
+
+    - code: embedding-regolo.ai
+      providerId: regolo.ai
+      description: Regolo.ai embedding model
+      baseUrl: https://api.regolo.ai/
 
     - code: embedding-groq
       providerId: groq
-      description: Groq embedding model provider
+      description: Groq embedding model
       baseUrl: https://api.groq.com/openai
 
     - code: embedding-xai
       providerId: xai
-      description: X.ai (Grok) embedding model provider
+      description: X.ai (Grok) embedding model
       baseUrl: https://api.x.ai/
       modelsListProvider: XaiModelsList
 
     - code: embedding-generic-openai
       providerId: generic-openai
-      description: Generic OpenAI API compatible embedding model provider
+      description: Generic OpenAI compatible embedding model
       baseUrl:

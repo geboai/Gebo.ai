@@ -6,11 +6,11 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
-import { GeboTokenContent, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
+
+
+
+import { AuthProviderDto, GeboTokenContent, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboActionType, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { SecretWrapper } from "../gebo-ai-secrets-admin/gebo-ai-secrets-admin-edit.component";
 
@@ -32,20 +32,33 @@ import { SecretWrapper } from "../gebo-ai-secrets-admin/gebo-ai-secrets-admin-ed
  * @param allowedTypes - Array of allowed secret types; defaults to TOKEN if not specified
  * @returns A fully configured GeboUIActionRequest object ready to be processed
  */
-export function newSecretActionRequest(secretContext:string,actualContext:string,contextObject:any,allowedTypes: SecretInfo.SecretTypeEnum[]=[SecretInfo.SecretTypeEnum.TOKEN]):GeboUIActionRequest {
-    const secretNewObject:SecretWrapper={
-        secretType:allowedTypes[0],
-        contextCode:secretContext
+export function newSecretActionRequest(secretContext: string, actualContext: string, contextObject: any, allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.TOKEN], provider?: AuthProviderDto.ProviderEnum, hideProviderChoice?: boolean, oauth2ChoosableScopes?: { code: string, description: string }[]
+    , oauth2MandatoryScopes?: { code: string, description: string }[]): GeboUIActionRequest {
+    const secretNewObject: SecretWrapper = {
+        secretType: allowedTypes[0],
+        contextCode: secretContext
     };
-    const action:GeboUIActionRequest={
-        actionType:GeboActionType.NEW,
-        contextType:actualContext,
-        context:contextObject,
-        targetType:"Secret",
-        target:secretNewObject,
-        targetFormInputs:{
-            allowedTypes:allowedTypes
+    const action: GeboUIActionRequest = {
+        actionType: GeboActionType.NEW,
+        contextType: actualContext,
+        context: contextObject,
+        targetType: "Secret",
+        target: secretNewObject,
+        targetFormInputs: {
+            allowedTypes: allowedTypes
         }
     };
+    if (provider) {
+        (action.targetFormInputs as any).oauth2ForcedProviderName = provider;
+    }
+    if (oauth2ChoosableScopes) {
+        (action.targetFormInputs as any).oauth2ChoosableScopes = oauth2ChoosableScopes;
+    }
+    if (oauth2MandatoryScopes) {
+        (action.targetFormInputs as any).oauth2MandatoryScopes = oauth2MandatoryScopes;
+    }
+    if (hideProviderChoice !== undefined && hideProviderChoice !== null) {
+        (action.targetFormInputs as any).hideProviderChoice = hideProviderChoice;
+    }
     return action;
 }

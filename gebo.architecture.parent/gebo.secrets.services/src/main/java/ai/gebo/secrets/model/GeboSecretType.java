@@ -36,5 +36,6 @@ public enum GeboSecretType {
 	CUSTOM_SECRET, // User-defined custom secret type
 	OAUTH2_STANDARD, // OAuth2 standard token type
 	OAUTH2_GOOGLE, // OAuth2 token specifically for Google services
-	GOOGLE_CLOUD_JSON_CREDENTIALS // JSON credentials for Google Cloud
+	GOOGLE_CLOUD_JSON_CREDENTIALS, // JSON credentials for Google Cloud
+	OAUTH2_AUTHORIZED_CLIENT
 }

@@ -25,7 +25,7 @@ import { ChangeDescriptionComponent } from "./change-description.component";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { DocumentRefComponent } from "./document-ref.component";
 import { GeboAIRichResponseViewerComponent } from "./rich-response.component";
-import { BrowseContentModule, GeboAIAudioRecorderModule, GeboAIChooseDocumentsPanelModule } from "@Gebo.ai/reusable-ui";
+
 import { GeboAIViewTableModule } from "../view-table/view-table.module";
 import { CLIPBOARD_OPTIONS, ClipboardButtonComponent, MarkdownModule, provideMarkdown } from "ngx-markdown";
 import { SecurityContext } from '@angular/core';
@@ -39,9 +39,37 @@ import { InputTextModule } from "primeng/inputtext";
 import { ReactiveRagChatService } from "./reactive-chat.service";
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ToastModule } from "primeng/toast";
+import { GeboAIAudioRecorderModule } from "../audio-control/audio-control.module";
+import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choose-documents-panel.module";
+import { BrowseContentModule } from "../browse-content-component/browse-content.module";
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, ButtonModule, PanelModule, BlockUIModule, TextareaModule, MessagesModule, GeboAIContentViewerModule, GeboAIContentViewerModule, BrowseContentModule, GeboAIViewTableModule, MarkdownModule.forChild(), SkeletonModule, ScrollPanelModule, OverlayModule, TableModule, FieldsetModule, GeboAIAudioRecorderModule, ScrollTopModule,GeboAIChooseDocumentsPanelModule,InputTextModule,ProgressSpinnerModule,ToastModule],
-  providers: [provideMarkdown({
+  imports: [CommonModule, 
+            ReactiveFormsModule, 
+            FormsModule,
+            SkeletonModule, 
+            ScrollPanelModule, 
+            OverlayModule, 
+            TableModule, 
+            FieldsetModule, 
+            GeboAIAudioRecorderModule, 
+            ScrollTopModule, 
+            GeboAIChooseDocumentsPanelModule,
+            InputTextModule,
+            ProgressSpinnerModule, 
+            ToastModule, 
+            DialogModule, 
+            ButtonModule, 
+            PanelModule, 
+            BlockUIModule, 
+            TextareaModule, 
+            MessagesModule, 
+            GeboAIContentViewerModule,  
+            BrowseContentModule, 
+            GeboAIViewTableModule, 
+            MarkdownModule.forChild()],
+  providers: [
+    ReactiveRagChatService,
+    provideMarkdown({
     sanitize: SecurityContext.NONE,
     clipboardOptions: {
       provide: CLIPBOARD_OPTIONS,
@@ -49,7 +77,7 @@ import { ToastModule } from "primeng/toast";
         buttonComponent: ClipboardButtonComponent,
       }
     }
-  }),ReactiveRagChatService],
+  })],
   declarations: [GeboAIReusableChatComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent],
 
   exports: [GeboAIReusableChatComponent]

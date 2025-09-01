@@ -27,7 +27,7 @@ import ai.gebo.model.annotations.EntityDescription;
  * for managing uploaded document content.
  * 
  * The class is annotated with @Document for MongoDB persistence and
- * @EntityDescription to provide metadata about the entity type.
+ * annotation EntityDescription to provide metadata about the entity type.
  */
 @Document
 @EntityDescription(description = "Uploaded documents", entityCategory = GProjectEndpoint.class)

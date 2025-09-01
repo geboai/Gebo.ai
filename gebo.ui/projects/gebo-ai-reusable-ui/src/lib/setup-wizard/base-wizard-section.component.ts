@@ -10,8 +10,7 @@
  
  
 
-import { Directive, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { SetupWizardsSection } from "./setup-wizard-step";
+import { Directive, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
 import { ToastMessageOptions } from "primeng/api";
 

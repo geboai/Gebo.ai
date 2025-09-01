@@ -11,8 +11,9 @@
  
 
 import { GVirtualFilesystemRoot, PathInfo, BrowseParam, GUserMessage, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
-import { IOperationStatus } from "@Gebo.ai/reusable-ui";
+
 import { Observable } from "rxjs";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 /**
  * AI generated comments
  * This file defines interfaces and types for the virtual filesystem in Gebo.ai.

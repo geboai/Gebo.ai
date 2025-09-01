@@ -21,7 +21,6 @@
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
 import { PanelModule } from "primeng/panel";
 import { BrowseContentComponent } from "./browse-content.component";
 import { GeboAIViewHtmlComponent } from "./view-html-content.component";
@@ -33,9 +32,6 @@ import { GeboAIViewHtmlComponent } from "./view-html-content.component";
  * It declares and exports two main components:
  * - BrowseContentComponent: Likely handles the main content browsing interface
  * - GeboAIViewHtmlComponent: Specialized component for viewing HTML content
- * 
- * Note that BrowserModule is imported but not used in the imports array, which might 
- * indicate it's meant for a different module or is a leftover import.
  */
 @NgModule({
     imports:[CommonModule,PanelModule],

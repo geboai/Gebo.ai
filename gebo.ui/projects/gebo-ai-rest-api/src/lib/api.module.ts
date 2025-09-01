@@ -1,15 +1,3 @@
-/**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- 
- 
- 
-
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
@@ -17,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { AnthropicChatModelsConfigurationControllerService } from './api/anthropicChatModelsConfigurationController.service';
 import { AuthControllerService } from './api/authController.service';
+import { AuthProvidersControllerService } from './api/authProvidersController.service';
+import { AzureOpenAiChatModelsConfigurationControllerService } from './api/azureOpenAiChatModelsConfigurationController.service';
+import { AzureOpenAiEmbeddingModelsConfigurationControllerService } from './api/azureOpenAiEmbeddingModelsConfigurationController.service';
 import { BuildSystemsControllerService } from './api/buildSystemsController.service';
 import { ChatModelsControllerService } from './api/chatModelsController.service';
 import { ChatModelsLookupControllerService } from './api/chatModelsLookupController.service';
@@ -63,6 +54,8 @@ import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
 import { HuggingfaceChatModelsConfigurationControllerService } from './api/huggingfaceChatModelsConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { IntegrationInputControllerService } from './api/integrationInputController.service';
+import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
 import { JiraBrowsingControllerService } from './api/jiraBrowsingController.service';
 import { JiraSystemsControllerService } from './api/jiraSystemsController.service';
 import { JobLauncherControllerService } from './api/jobLauncherController.service';
@@ -71,6 +64,8 @@ import { LanguageResourcesControllerService } from './api/languageResourcesContr
 import { LogViewControllerService } from './api/logViewController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
+import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
+import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
@@ -83,6 +78,7 @@ import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFre
 import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
+import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
@@ -96,6 +92,9 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
   providers: [
     AnthropicChatModelsConfigurationControllerService,
     AuthControllerService,
+    AuthProvidersControllerService,
+    AzureOpenAiChatModelsConfigurationControllerService,
+    AzureOpenAiEmbeddingModelsConfigurationControllerService,
     BuildSystemsControllerService,
     ChatModelsControllerService,
     ChatModelsLookupControllerService,
@@ -142,6 +141,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GoogleWorkspaceAccessHandshakeControllerService,
     HuggingfaceChatModelsConfigurationControllerService,
     IngestionFileTypesLibraryControllerService,
+    IntegrationInputControllerService,
+    IntegrationSystemsControllerService,
     JiraBrowsingControllerService,
     JiraSystemsControllerService,
     JobLauncherControllerService,
@@ -150,6 +151,8 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     LogViewControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
+    OAuth2AdminControllerService,
+    Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
@@ -162,6 +165,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     SecretsControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
+    TokenRenewControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UsersAdminControllerService,

@@ -5,126 +5,15 @@
 	<parent>
 		<artifactId>gebo.apps.parent</artifactId>
 		<groupId>ai.gebo.apps</groupId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.ai.app</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>ai.gebo.ragsystem</groupId>
-			<artifactId>gebo.ragsystem.starter</artifactId>
+			<groupId>ai.gebo.apps</groupId>
+			<artifactId>gebo.apps.monolithic.starter</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.webconfig</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.systems</groupId>
-			<artifactId>gebo.contentsystems.starter</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.buildsystems</groupId>
-			<artifactId>gebo.buildsystems.starter</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 
-		<dependency>
-			<groupId>ai.gebo.ragsystem</groupId>
-			<artifactId>gebo.ragsystem.content.vectorizator</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.llms</groupId>
-			<artifactId>gebo.llms.starter</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.config</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.secrets.services</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.angular.persistence.support</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.security</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.fastsetup</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo</groupId>
-			<artifactId>gebo.config.services</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.security.controllers</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.lucene</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.multilanguage.support</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<!-- -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-json</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-autoconfigure</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-webflux</artifactId>
-		</dependency>
-
-
-		<!-- added because seems that transitive dependencies does not incluide 
-			this correctly -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- -->
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-compress</artifactId>
-			<version>1.27.1</version>
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
@@ -132,7 +21,11 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-properties-migrator</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>
@@ -140,15 +33,30 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 			<dependencies>
 				<dependency>
-					<groupId>org.springdoc</groupId>
-					<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-					<version>2.0.2</version>
+					<groupId>ai.gebo.architecture</groupId>
+					<artifactId>gebo.architecture.swagger</artifactId>
+					<version>${project.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>
-
 		<profile>
 			<id>angular-ui</id>
 			<activation>
@@ -161,13 +69,12 @@
 					<version>${project.version}</version>
 				</dependency>
 			</dependencies>
+
 		</profile>
 		<profile>
 			<id>bootables</id>
 			<build>
-
 				<plugins>
-
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
@@ -176,15 +83,6 @@
 							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
 						</configuration>
 					</plugin>
-
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<source>1.8</source>
-							<target>1.8</target>
-						</configuration>
-					</plugin>
-
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-jar-plugin</artifactId>
@@ -194,20 +92,6 @@
 									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
 								</manifest>
 							</archive>
-						</configuration>
-					</plugin>
-
-					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
-
-						<configuration>
-							<jvmArguments>
-								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
-							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
-							<excludeDevtools>false</excludeDevtools>
-							<layout>JAR</layout>
-							<finalName>gebo.ai.app-bootable-${project.version}</finalName>
 						</configuration>
 					</plugin>
 
@@ -225,6 +109,24 @@
 					<forkCount>1</forkCount>
 					<reuseForks>false</reuseForks>
 					<forkMode>never</forkMode>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.cyclonedx</groupId>
+				<artifactId>cyclonedx-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+
+				<configuration>
+					<jvmArguments>
+						--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+					<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+					<excludeDevtools>false</excludeDevtools>
+					<layout>JAR</layout>
+
+					<classifier>bootable</classifier>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -54,6 +54,9 @@ import { GeboAISharepointAdminComponent } from "../gebo-ai-sharepoint-admin/gebo
 import { GeboAIJiraAdminComponent } from "../gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 import { GeboAIJiraEndpointComponent } from "../gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 import { GeboAIDeepseekChatModelAdminComponent } from "../gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";
+import { GeboAIOauth2RegistrationComponent } from "../gebo-ai-oauth2-admin/gebo-ai-oauth2-registration.component";
+import { GeboAIAzureOpenAIChatModelAdminComponent } from "../gebo-ai-models-admin/gebo-ai-azure-openai-chatmodel-admin.component";
+import { GeboAIAzureOpenAIEmbedModelAdminComponent } from "../gebo-ai-models-admin/gebo-ai-azure-openai-embedmodel-admin.component";
 
 /**
  * @Component GeboAiEntityEditingLauncherComponent
@@ -81,172 +84,175 @@ export class GeboAiEntityEditingLauncherComponent {
     /**
      * Reference to the Knowledge Base admin component type
      */
-    knowledgebaseAdminType=GeboAiKnowledgeBaseAdminComponent;
-    
+    knowledgebaseAdminType = GeboAiKnowledgeBaseAdminComponent;
+
     /**
      * Reference to the Project admin component type
      */
-    projectAdminType=GeboAiProjectAdminComponent;
-    
+    projectAdminType = GeboAiProjectAdminComponent;
+
     /**
      * Reference to the Git System admin component type
      */
-    gitSystemAdminType=GeboAiGitSystemAdminComponent
-    
+    gitSystemAdminType = GeboAiGitSystemAdminComponent
+
     /**
      * Reference to the Git Endpoint admin component type
      */
-    gitEndpointAdminType=GeboAiGitEndpointAdminComponent
-    
+    gitEndpointAdminType = GeboAiGitEndpointAdminComponent
+
     /**
      * Reference to the Secrets admin component type
      */
-    secretAdminType=GeboAiSecretsAdminEditComponent;
-    
+    secretAdminType = GeboAiSecretsAdminEditComponent;
+
     /**
      * Reference to the Job Status Viewer component type
      */
-    jobViewerType=GeboAIJobStatusViewerComponent;
-    
+    jobViewerType = GeboAIJobStatusViewerComponent;
+
     /**
      * Reference to the Uploads Endpoint component type
      */
-    uploadsType=GeboAIUploadsEndpointComponent
-    
+    uploadsType = GeboAIUploadsEndpointComponent
+
     /**
      * Reference to the File Systems Endpoint component type
      */
-    fileSystemsType=GeboAIFileSystemEndpointComponent;
-    
+    fileSystemsType = GeboAIFileSystemEndpointComponent;
+
     /**
      * Reference to the OpenAI Chat Model admin component type
      */
-    openAIChatModelType=GeboAIOpenAIChatModelAdminComponent;
-    
+    openAIChatModelType = GeboAIOpenAIChatModelAdminComponent;
+
     /**
      * Reference to the Anthropic Chat Model admin component type
      */
-    AnthropicChatModelType=GeboAIAnthropicChatModelAdminComponent;
-    
+    AnthropicChatModelType = GeboAIAnthropicChatModelAdminComponent;
+
     /**
      * Reference to the Deepseek Chat Model admin component type
      */
-    DeepseekChatModelType=GeboAIDeepseekChatModelAdminComponent;
-    
+    DeepseekChatModelType = GeboAIDeepseekChatModelAdminComponent;
+
     /**
      * Reference to the OpenAI Embedding Model admin component type
      */
-    openAIEmbedModelType=GeboAIOpenAIEmbedModelAdminComponent;
-    
+    openAIEmbedModelType = GeboAIOpenAIEmbedModelAdminComponent;
+
     /**
      * Reference to the Ollama Chat Model admin component type
      */
-    ollamaChatModelType=GeboAIOllamaChatModelAdminComponent;
-    
+    ollamaChatModelType = GeboAIOllamaChatModelAdminComponent;
+
     /**
      * Reference to the Ollama Embedding Model admin component type
      */
-    ollamaEmbedModelType=GeboAIOllamaEmbedModelAdminComponent;
-    
+    ollamaEmbedModelType = GeboAIOllamaEmbedModelAdminComponent;
+
     /**
      * Reference to the Chat Profile admin component type
      */
-    chatProfileType=GeboAIChatProfileAdminComponent;
-    
+    chatProfileType = GeboAIChatProfileAdminComponent;
+
     /**
      * Reference to the Prompt admin component type
      */
-    promptType=GeboAIPromptAdminComponent;
-    
+    promptType = GeboAIPromptAdminComponent;
+
     /**
      * Reference to the Users Group component type
      */
-    usersGroupType=GeboAIGroupComponent;
-    
+    usersGroupType = GeboAIGroupComponent;
+
     /**
      * Reference to the File System Share Reference admin component type
      */
-    GFileSystemShareReferenceType=GeboAIGFileSystemShareReferenceAdminComponent;
-    
+    GFileSystemShareReferenceType = GeboAIGFileSystemShareReferenceAdminComponent;
+
     /**
      * Reference to the Google Search Configuration component type
      */
-    googleSearchConfigType=GeboAIGoogleSearchAccountComponent;
-    
+    googleSearchConfigType = GeboAIGoogleSearchAccountComponent;
+
     /**
      * Reference to the Confluence Endpoint component type
      */
-    confluenceEndpointType=GeboAIConfluenceEndpointComponent;
-    
+    confluenceEndpointType = GeboAIConfluenceEndpointComponent;
+
     /**
      * Reference to the Confluence System admin component type
      */
-    confluenceSystemType=GeboAIConfluenceAdminComponent;
-    
+    confluenceSystemType = GeboAIConfluenceAdminComponent;
+
     /**
      * Reference to the Google Drive System admin component type
      */
-    googleDriveSystemType=GeboAiGoogleDriveSystemAdminComponent;
-    
+    googleDriveSystemType = GeboAiGoogleDriveSystemAdminComponent;
+
     /**
      * Reference to the Google Drive Endpoint admin component type
      */
-    googleDriveEndpointType=GeboAiGoogleDriveProjectEndpointAdminComponent;
-    
+    googleDriveEndpointType = GeboAiGoogleDriveProjectEndpointAdminComponent;
+
     /**
      * Reference to the Generic OpenAI API Chat Model admin component type
      */
-    genericOpenAIAPIChatModelType=GeboAIGenericOpenAIAPIChatModelAdminComponent;
-    
+    genericOpenAIAPIChatModelType = GeboAIGenericOpenAIAPIChatModelAdminComponent;
+
     /**
      * Reference to the Generic OpenAI API Embedding Model admin component type
      */
-    genericOpenAIAPIEmbeddedModelType=GeboAIGenericOpenAIAPIEmbedModelAdminComponent;
-    
+    genericOpenAIAPIEmbeddedModelType = GeboAIGenericOpenAIAPIEmbedModelAdminComponent;
+
     /**
      * Reference to the Google Vertex Chat Model admin component type
      */
-    googleVertexChatModelType=GeboAIGoogleVertexChatModelAdminComponent;
-    
+    googleVertexChatModelType = GeboAIGoogleVertexChatModelAdminComponent;
+
     /**
      * Reference to the Google Vertex Embedding Model admin component type
      */
-    googleVertexEmbeddingModelType=GeboAIGoogleVertexEmbedModelAdminComponent;
-    
+    googleVertexEmbeddingModelType = GeboAIGoogleVertexEmbedModelAdminComponent;
+
     /**
      * Reference to the MistralAI Chat Model admin component type
      */
-    mistralAIChatModelType=GeboAIMistralAIChatModelAdminComponent;
-    
+    mistralAIChatModelType = GeboAIMistralAIChatModelAdminComponent;
+
     /**
      * Reference to the MistralAI Embedding Model admin component type
      */
-    mistralAIEmbeddingModelType=GeboAIMistralAIEmbedModelAdminComponent;
-    
+    mistralAIEmbeddingModelType = GeboAIMistralAIEmbedModelAdminComponent;
+
     /**
      * Reference to the Choose Data Source Type component
      */
-    choosedDataSourceType=GeboAIChooseDataSourceTypeComponent;
-    
+    choosedDataSourceType = GeboAIChooseDataSourceTypeComponent;
+
     /**
      * Reference to the SharePoint Endpoint admin component type
      */
-    sharepointEndpointAdminType=GeboAISharepointEndpointComponent;
-    
+    sharepointEndpointAdminType = GeboAISharepointEndpointComponent;
+
     /**
      * Reference to the SharePoint System admin component type
      */
-    sharepointSystemType=GeboAISharepointAdminComponent;
-    
+    sharepointSystemType = GeboAISharepointAdminComponent;
+
     /**
      * Reference to the Jira System admin component type
      */
-    jiraSystemType=GeboAIJiraAdminComponent;
-    
+    jiraSystemType = GeboAIJiraAdminComponent;
+
     /**
      * Reference to the Jira Endpoint System admin component type
      */
-    jiraEndpointSystemType=GeboAIJiraEndpointComponent;
+    jiraEndpointSystemType = GeboAIJiraEndpointComponent;
+    geboAIOauth2RegistrationComponent = GeboAIOauth2RegistrationComponent;
+    azureOpenAIChatModelComponent = GeboAIAzureOpenAIChatModelAdminComponent;
+    azureOpenAIEmbeddingModelComponent = GeboAIAzureOpenAIEmbedModelAdminComponent;
 
     /**
      * Constructor for the GeboAiEntityEditingLauncherComponent

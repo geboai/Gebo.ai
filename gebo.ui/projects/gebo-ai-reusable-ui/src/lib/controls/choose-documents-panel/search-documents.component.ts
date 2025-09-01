@@ -21,9 +21,11 @@
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BrowseParam, DocumentReferenceView, SearchDocumentByNameParam, SemanticQueryParam, UserKnowledgeBaseBrowsingControllerService, VFilesystemReference, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
-import { browsePathObservableCallback, IOperationStatus, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "@Gebo.ai/reusable-ui";
+
 import { of } from "rxjs";
 import { EnrichedDocumentReferenceView, EnrichedDocumentReferenceViewRetrieveService } from "../content-viewer/enriched-document-reference-view.service";
+import { browsePathObservableCallback, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "../vfilesystem-selector/vfilesystem-types";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 
 /**
  * Component that provides document searching functionality through multiple methods:

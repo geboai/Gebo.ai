@@ -39,6 +39,7 @@ public class GStandardModulesConstraints {
 	public static final String ASYNC_PUBLISHING_JOB_MODULE = "async-publishing-job-module";
 	public static final String ASYNC_PUBLISHING_JOB_COMPONENT = "async-publishing-job-component";
 	public static final String SCHEDULER_MODULE = "scheduler-module";
+	public static final String INTEGRATION_MODULE = "integration-module";
 	public static final String SCHEDULER_COMPONENT = "scheduler-component";
 
 	// Constants for component names

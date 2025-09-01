@@ -1,0 +1,25 @@
+version: "3.10"
+
+services:
+  jina-vllm:
+    image: vllm/vllm-openai:latest
+    container_name: jina-vllm
+    restart: unless-stopped
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    command:
+      - --model
+      - jinaai/jina-embeddings-v4-vllm-retrieval
+      - --task
+      - embed
+      - --trust-remote-code
+      - --dtype
+      - float16
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    ports:
+      - "8000:8000"
+    runtime: nvidia

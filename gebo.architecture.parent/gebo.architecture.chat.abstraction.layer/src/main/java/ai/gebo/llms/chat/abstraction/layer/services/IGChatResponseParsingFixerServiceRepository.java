@@ -20,7 +20,6 @@ import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
  * Interface representing a repository for chat response parsing fixer services.
  * This repository provides a method to find services by the type they handle.
  *
- * @param <T> the type handled by the service.
  */
 public interface IGChatResponseParsingFixerServiceRepository
         extends IGImplementationsRepositoryPattern<IGChatResponseParsingFixerService> {

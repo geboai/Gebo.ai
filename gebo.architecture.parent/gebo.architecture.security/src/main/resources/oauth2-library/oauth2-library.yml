@@ -1,0 +1,83 @@
+ai.gebo.oauth2.library:
+  providers:
+    - provider: google
+      authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      tokenUri: https://oauth2.googleapis.com/token
+      userInfoUri: https://openidconnect.googleapis.com/v1/userinfo
+      issuerUri: https://accounts.google.com
+      introspectionUri: https://oauth2.googleapis.com/tokeninfo
+      jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
+      userNameAttribute: sub
+
+    - provider: aws_cognito
+      authorizationUri: "https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/authorize"
+      tokenUri: "https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/token"
+      userInfoUri: "https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/userInfo"
+      issuerUri: "https://cognito-idp.{region}.amazonaws.com/{userPoolId}"
+      jwkSetUri: "https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json"
+      userNameAttribute: sub
+    - provider: microsoft
+      authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+      tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+      userInfoUri: https://graph.microsoft.com/v1.0/me
+      issuerUri: https://login.microsoftonline.com/common/v2.0
+      introspectionUri: https://login.microsoftonline.com/common/oauth2/v2.0/token/introspect
+      jwkSetUri: https://login.microsoftonline.com/common/discovery/v2.0/keys
+      userNameAttribute: id
+
+    - provider: microsoft_multitenant
+      authorizationUri: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+      tokenUri: "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+      userInfoUri: "https://graph.microsoft.com/oidc/userinfo"
+      issuerUri: "https://login.microsoftonline.com/{tenant-id}/v2.0"
+      jwkSetUri: "https://login.microsoftonline.com/{tenant-id}/discovery/v2.0/keys"
+      userNameAttribute: id
+
+  #- provider: facebook
+  #  authorization-uri: https://www.facebook.com/v10.0/dialog/oauth
+  #  token-uri: https://graph.facebook.com/v10.0/oauth/access_token
+  #  user-info-uri: https://graph.facebook.com/me?fields=id,name,email
+  #  issuer-uri: https://www.facebook.com
+  #  introspection-uri: https://graph.facebook.com/debug_token
+  #  user-name-attribute: id
+
+  #- provider: github
+  #  authorization-uri: https://github.com/login/oauth/authorize
+  #  token-uri: https://github.com/login/oauth/access_token
+  #  user-info-uri: https://api.github.com/user
+  #  issuer-uri: https://github.com
+  #  introspection-uri: https://api.github.com/applications/grants # GitHub non ha introspection standard
+  #  user-name-attribute: id
+
+  #- provider: linkedin
+  #  authorization-uri: https://www.linkedin.com/oauth/v2/authorization
+  #  token-uri: https://www.linkedin.com/oauth/v2/accessToken
+  #  user-info-uri: https://api.linkedin.com/v2/me
+  #  issuer-uri: https://www.linkedin.com
+  #  introspection-uri: https://www.linkedin.com/oauth/v2/introspect
+  #  user-name-attribute: id
+
+  #- provider: apple
+  #  authorization-uri: https://appleid.apple.com/auth/authorize
+  #  token-uri: https://appleid.apple.com/auth/token
+  #  user-info-uri: https://appleid.apple.com/auth/token # Apple ritorna info user nell'ID Token
+  #  issuer-uri: https://appleid.apple.com
+  #  introspection-uri: https://appleid.apple.com/auth/introspect
+  #  jwk-set-uri: https://appleid.apple.com/auth/keys
+  #  user-name-attribute: sub
+
+  #- provider: amazon
+  #  authorization-uri: https://www.amazon.com/ap/oa
+  #  token-uri: https://api.amazon.com/auth/o2/token
+  #  user-info-uri: https://api.amazon.com/user/profile
+  #  issuer-uri: https://www.amazon.com
+  #  introspection-uri: https://api.amazon.com/auth/o2/introspect
+  #  user-name-attribute: user_id
+
+  #- provider: slack
+  #  authorization-uri: https://slack.com/oauth/v2/authorize
+  #  token-uri: https://slack.com/api/oauth.v2.access
+  #  user-info-uri: https://slack.com/api/users.identity
+  #  issuer-uri: https://slack.com
+  #  introspection-uri: https://slack.com/api/oauth.v2.access # Slack non ha introspection standard
+  #  user-name-attribute: user.id

@@ -49,8 +49,8 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
  * @param <SystemType> Type of the content management system used
  * @param <EndpointType> Type of the project endpoint
  * @param <ImplementativePositionObjectType> Type of the position object
- * @param <VFSContext> Context for the virtual filesystem
- * @param <VirtualFilesystemBrowser> Browser for virtual filesystem
+ * @param <PositionsCoordinateType> position coordinates type
+ * @param <ResourceReferenceType> resources reference type to handle resources streaming
  * 
  * AI generated comments
  */
@@ -405,7 +405,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 	 * @param system Content management system
 	 * @param endpoint Project endpoint
 	 * @param errorConsumer Consumer for access errors
-	 * @return Map<String, Object> representing the environment context
+	 * @return Map if string and object representing the environment context
 	 */
 	protected abstract Map<String, Object> createEnvironment(SystemType system, EndpointType endpoint,
 			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException;

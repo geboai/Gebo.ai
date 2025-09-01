@@ -24,7 +24,7 @@ import org.springframework.util.FileCopyUtils;
  * A class representing a binary document fragment within the Gebo system.
  * This fragment is stored with BASE64 encoding to handle binary data.
  *
- * @AI generated comments
+ * AI generated comments
  */
 public class GeboBinaryDocumentFragment extends AbstractGeboDocumentFragment {
 

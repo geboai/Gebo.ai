@@ -86,7 +86,7 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
      *
      * @return True if supports speech, false otherwise.
      */
-    public default boolean isSupportsSpeecht() {
+    public default boolean isSupportsSpeech() {
         return false;
     }
 

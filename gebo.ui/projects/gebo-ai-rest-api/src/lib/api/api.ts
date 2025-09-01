@@ -1,19 +1,13 @@
-/**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- 
- 
- 
-
 export * from './anthropicChatModelsConfigurationController.service';
 import { AnthropicChatModelsConfigurationControllerService } from './anthropicChatModelsConfigurationController.service';
 export * from './authController.service';
 import { AuthControllerService } from './authController.service';
+export * from './authProvidersController.service';
+import { AuthProvidersControllerService } from './authProvidersController.service';
+export * from './azureOpenAiChatModelsConfigurationController.service';
+import { AzureOpenAiChatModelsConfigurationControllerService } from './azureOpenAiChatModelsConfigurationController.service';
+export * from './azureOpenAiEmbeddingModelsConfigurationController.service';
+import { AzureOpenAiEmbeddingModelsConfigurationControllerService } from './azureOpenAiEmbeddingModelsConfigurationController.service';
 export * from './buildSystemsController.service';
 import { BuildSystemsControllerService } from './buildSystemsController.service';
 export * from './chatModelsController.service';
@@ -106,6 +100,10 @@ export * from './huggingfaceChatModelsConfigurationController.service';
 import { HuggingfaceChatModelsConfigurationControllerService } from './huggingfaceChatModelsConfigurationController.service';
 export * from './ingestionFileTypesLibraryController.service';
 import { IngestionFileTypesLibraryControllerService } from './ingestionFileTypesLibraryController.service';
+export * from './integrationInputController.service';
+import { IntegrationInputControllerService } from './integrationInputController.service';
+export * from './integrationSystemsController.service';
+import { IntegrationSystemsControllerService } from './integrationSystemsController.service';
 export * from './jiraBrowsingController.service';
 import { JiraBrowsingControllerService } from './jiraBrowsingController.service';
 export * from './jiraSystemsController.service';
@@ -122,6 +120,10 @@ export * from './mistralAiChatModelsConfigurationController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './mistralAiChatModelsConfigurationController.service';
 export * from './mistralAiEmbeddingModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './mistralAiEmbeddingModelsConfigurationController.service';
+export * from './oAuth2AdminController.service';
+import { OAuth2AdminControllerService } from './oAuth2AdminController.service';
+export * from './oauth2ModuleStatusController.service';
+import { Oauth2ModuleStatusControllerService } from './oauth2ModuleStatusController.service';
 export * from './ollamaChatModelsConfigurationController.service';
 import { OllamaChatModelsConfigurationControllerService } from './ollamaChatModelsConfigurationController.service';
 export * from './ollamaEmbeddingModelsConfigurationController.service';
@@ -146,6 +148,8 @@ export * from './sharepointBrowsingController.service';
 import { SharepointBrowsingControllerService } from './sharepointBrowsingController.service';
 export * from './sharepointSystemsController.service';
 import { SharepointSystemsControllerService } from './sharepointSystemsController.service';
+export * from './tokenRenewController.service';
+import { TokenRenewControllerService } from './tokenRenewController.service';
 export * from './userController.service';
 import { UserControllerService } from './userController.service';
 export * from './userKnowledgeBaseBrowsingController.service';
@@ -156,4 +160,4 @@ export * from './userspaceController.service';
 import { UserspaceControllerService } from './userspaceController.service';
 export * from './userspaceUploadController.service';
 import { UserspaceUploadControllerService } from './userspaceUploadController.service';
-export const APIS = [AnthropicChatModelsConfigurationControllerService, AuthControllerService, BuildSystemsControllerService, ChatModelsControllerService, ChatModelsLookupControllerService, CompanySystemsControllerService, ConfluenceBrowsingControllerService, ConfluenceSystemsControllerService, ContentMetaInfosControllerService, ContentsResetControllerService, DeepseekChatModelsConfigurationControllerService, EmbeddingModelsControllersService, FileSystemSharesSettingControllerService, FileSystemsBrowsingControllerService, FileSystemsControllerService, FileUploadControllerService, FileUploadsControllerService, FunctionsLookupControllerService, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GeboAdvancedSetupStatusControllerService, GeboAngularFormGroupMetaInfoControllerService, GeboChatControllerService, GeboChatProfileLookupControllerService, GeboCoreAnalisysControllerService, GeboFastChatProfileStatusControllerService, GeboFastInstallationSetupControllerService, GeboFastKnowledgeBaseSetupControllerService, GeboFastLlmsSetupControllerService, GeboFastVectorStoreSetupControllerService, GeboFastWorkFolderSetupControllerService, GeboModulesConfigControllerService, GeboRagChatControllerService, GeboUserChatsControllerService, GeboUserKnowledgeBaseSemanticSearchControllerService, GeboVectorStoreConfigurationControllerService, GenericOpenAiapiChatModelsConfigurationControllerService, GenericOpenAiapiEmbeddingModelsConfigurationControllerService, GitSystemsControllerService, GoogleDriveBrowsingControllerService, GoogleDriveSystemsControllerService, GoogleSearchConfigurationControllerService, GoogleSearchControllerService, GoogleVertexChatModelsConfigurationControllerService, GoogleVertexEmbeddingModelsConfigurationControllerService, GoogleWorkspaceAccessHandshakeControllerService, HuggingfaceChatModelsConfigurationControllerService, IngestionFileTypesLibraryControllerService, JiraBrowsingControllerService, JiraSystemsControllerService, JobLauncherControllerService, KnowledgeBaseControllerService, LanguageResourcesControllerService, LogViewControllerService, MistralAiChatModelsConfigurationControllerService, MistralAiEmbeddingModelsConfigurationControllerService, OllamaChatModelsConfigurationControllerService, OllamaEmbeddingModelsConfigurationControllerService, OnnxTransformersEmbeddingModelsConfigurationControllerService, OpenAiChatModelsConfigurationControllerService, OpenAiEmbeddingModelsConfigurationControllerService, ProjectsControllerService, PromptTemplateWizardControllerService, PromptTemplatesControllerService, ReindexingFrequencyOptionsControllerService, SecretsControllerService, SharepointBrowsingControllerService, SharepointSystemsControllerService, UserControllerService, UserKnowledgeBaseBrowsingControllerService, UsersAdminControllerService, UserspaceControllerService, UserspaceUploadControllerService];
+export const APIS = [AnthropicChatModelsConfigurationControllerService, AuthControllerService, AuthProvidersControllerService, AzureOpenAiChatModelsConfigurationControllerService, AzureOpenAiEmbeddingModelsConfigurationControllerService, BuildSystemsControllerService, ChatModelsControllerService, ChatModelsLookupControllerService, CompanySystemsControllerService, ConfluenceBrowsingControllerService, ConfluenceSystemsControllerService, ContentMetaInfosControllerService, ContentsResetControllerService, DeepseekChatModelsConfigurationControllerService, EmbeddingModelsControllersService, FileSystemSharesSettingControllerService, FileSystemsBrowsingControllerService, FileSystemsControllerService, FileUploadControllerService, FileUploadsControllerService, FunctionsLookupControllerService, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GeboAdvancedSetupStatusControllerService, GeboAngularFormGroupMetaInfoControllerService, GeboChatControllerService, GeboChatProfileLookupControllerService, GeboCoreAnalisysControllerService, GeboFastChatProfileStatusControllerService, GeboFastInstallationSetupControllerService, GeboFastKnowledgeBaseSetupControllerService, GeboFastLlmsSetupControllerService, GeboFastVectorStoreSetupControllerService, GeboFastWorkFolderSetupControllerService, GeboModulesConfigControllerService, GeboRagChatControllerService, GeboUserChatsControllerService, GeboUserKnowledgeBaseSemanticSearchControllerService, GeboVectorStoreConfigurationControllerService, GenericOpenAiapiChatModelsConfigurationControllerService, GenericOpenAiapiEmbeddingModelsConfigurationControllerService, GitSystemsControllerService, GoogleDriveBrowsingControllerService, GoogleDriveSystemsControllerService, GoogleSearchConfigurationControllerService, GoogleSearchControllerService, GoogleVertexChatModelsConfigurationControllerService, GoogleVertexEmbeddingModelsConfigurationControllerService, GoogleWorkspaceAccessHandshakeControllerService, HuggingfaceChatModelsConfigurationControllerService, IngestionFileTypesLibraryControllerService, IntegrationInputControllerService, IntegrationSystemsControllerService, JiraBrowsingControllerService, JiraSystemsControllerService, JobLauncherControllerService, KnowledgeBaseControllerService, LanguageResourcesControllerService, LogViewControllerService, MistralAiChatModelsConfigurationControllerService, MistralAiEmbeddingModelsConfigurationControllerService, OAuth2AdminControllerService, Oauth2ModuleStatusControllerService, OllamaChatModelsConfigurationControllerService, OllamaEmbeddingModelsConfigurationControllerService, OnnxTransformersEmbeddingModelsConfigurationControllerService, OpenAiChatModelsConfigurationControllerService, OpenAiEmbeddingModelsConfigurationControllerService, ProjectsControllerService, PromptTemplateWizardControllerService, PromptTemplatesControllerService, ReindexingFrequencyOptionsControllerService, SecretsControllerService, SharepointBrowsingControllerService, SharepointSystemsControllerService, TokenRenewControllerService, UserControllerService, UserKnowledgeBaseBrowsingControllerService, UsersAdminControllerService, UserspaceControllerService, UserspaceUploadControllerService];

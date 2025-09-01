@@ -25,6 +25,9 @@ echo "Changing from version $1 to $2"
 find . -name pom.xml | xargs sed -i s/"$1"/"$2"/ 
 sed -i s/"$1"/"$2"/ dockers/gebo.ai/Dockerfile
 sed -i s/"$1"/"$2"/ dockers/gebo.ai/create-image.bat
+sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/Dockerfile
+sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/create-image.bat
+
 find . -name pom.xml | xargs git stage 
 sed -i s/"$1"/"$2"/ ./gebo.ui/package.json
 git stage ./gebo.ui/package.json

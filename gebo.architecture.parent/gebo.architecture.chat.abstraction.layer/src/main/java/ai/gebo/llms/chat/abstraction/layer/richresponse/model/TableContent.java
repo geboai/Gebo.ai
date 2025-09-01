@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Represents the content of a table in a rich response model.
  * 
- * @Gebo.ai comment agent
+ * Gebo.ai comment agent
  */
 public class TableContent extends RichresponseChild {
 

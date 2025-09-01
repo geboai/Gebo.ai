@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,52 +19,50 @@
  */
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { LoginService } from "../login/login.service";
-import { getAuth } from "../gebo-credentials";
-import { AuthResponse, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 
 @Component({
     selector: "gebo-ai-current-user-profile",
     templateUrl: "user-profile.component.html",
     standalone: false
 })
-export class GeboAIUserProfileComponent implements OnInit,OnChanges{
+export class GeboAIUserProfileComponent implements OnInit, OnChanges {
     /** Flag to indicate if data is currently being loaded */
-    loading:boolean=false;
-    
+    loading: boolean = false;
+
     /** Stores the user profile information */
-    user?:UserInfo;
-    
-    /** Stores the authentication response, initialized with current auth */
-    auth?:AuthResponse=getAuth();
-    
+    user?: UserInfo;
+
+
+
     /** Controls the visibility of the change password dialog */
-    public changePasswordWindowOpened:boolean=false;
-    
+    public changePasswordWindowOpened: boolean = false;
+
     /**
      * Initializes the component with the LoginService for user data management
      * @param loginService Service that handles user authentication and profile data
      */
-    constructor( private loginService: LoginService) {
+    constructor(private loginService: LoginService) {
 
     }
-    
+
     /**
      * Lifecycle hook that initializes the component
      * Loads the user profile data from the login service upon component initialization
      * Sets loading flags appropriately during the data fetch process
      */
     ngOnInit(): void {
-        this.loading=true;
+        this.loading = true;
         this.loginService.loadUserProfile().subscribe({
-            next:(value)=> {
-                this.user=value;
+            next: (value) => {
+                this.user = value;
             },
-            complete:()=>{
-                this.loading=false;
+            complete: () => {
+                this.loading = false;
             }
         });
     }
-    
+
     /**
      * Lifecycle hook that responds to changes in input properties
      * Currently not implementing any specific behavior

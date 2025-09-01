@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,7 +20,7 @@
 
 import { Component, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { BrowseParam, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, SecretsControllerService, GSharepointProjectEndpoint, SharepointBrowsingControllerService, SharepointSystemsControllerService, GSharepointContentManagementSystem } from "@Gebo.ai/gebo-ai-rest-api";
+import { BrowseParam, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, SecretsControllerService, GSharepointProjectEndpoint, SharepointBrowsingControllerService, SharepointSystemsControllerService, GSharepointContentManagementSystem, AuthProviderDto } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";
@@ -32,7 +32,7 @@ import { SharepointUrlService } from "./confluence-url.service";
 /**
  * Constant defining the SharePoint code identifier used throughout the component
  */
-const sharepointCode:string="sharepoint-module";
+const sharepointCode: string = "sharepoint-module";
 
 /**
  * Component for managing SharePoint endpoints within the Gebo.ai system.
@@ -51,7 +51,7 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
      * The entity name used for identification in the component
      */
     protected override entityName: string = "GSharepointProjectEndpoint";
-    
+
     /**
      * The handshake code used for authentication in file uploads
      */
@@ -61,12 +61,12 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
      * Flag to control whether the project can be modified
      */
     @Input() cantModifyProject: boolean = true;
-    
+
     /**
      * Observable that provides a list of available projects
      */
     projectsObservable: Observable<GProject[]> = this.projectsController.getProjects();
-    
+
     /**
      * The form group containing all controls for the SharePoint endpoint configuration
      */
@@ -90,17 +90,17 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
         openZips: new FormControl()
 
     });
-    
+
     /**
      * Flag indicating if the endpoint is published
      */
     published: boolean = false;
-    
+
     /**
      * List of available SharePoint server systems
      */
     sharepointServersData: GSharepointContentManagementSystem[] = [];
-    
+
     /**
      * Action request configuration for creating a new SharePoint server
      */
@@ -108,40 +108,40 @@ export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponen
         actionType: GeboActionType.NEW,
         context: {},
         contextType: this.entityName,
-        targetType: "GSharepointContentManagementSystem", 
+        targetType: "GSharepointContentManagementSystem",
         target: { contentManagementSystemType: sharepointCode } as GSharepointContentManagementSystem
     };
-    
+
     /**
      * The current identity context for SharePoint
      */
     private actualIdentityContext: string = sharepointCode;
-    
+
     /**
      * Flag indicating if there are no accounts or systems available
      */
     public noAccountsAndSystems: boolean = false;
-    
+
     /**
      * The most recently selected SharePoint system code
      */
     private lastConfluenceSystemCode: string = "";
-    
+
     /**
      * Available secret identities for SharePoint connections
      */
     identities: SecretInfo[] = [];
-    
+
     /**
      * Callback for loading root nodes in SharePoint system
      */
     public loadRootsObservable: loadRootsObservableCallback = () => of({});
-    
+
     /**
      * Callback for browsing paths in SharePoint system
      */
     public browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => of({});
-    
+
     /**
      * List of available file types for SharePoint
      */

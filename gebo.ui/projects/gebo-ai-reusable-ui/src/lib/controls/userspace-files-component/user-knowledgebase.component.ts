@@ -13,9 +13,13 @@
 import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GroupInfo, UserControllerService, UserspaceControllerService, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
+import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";
+import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
+import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
+
 
 /**
  * AI generated comments

@@ -45,7 +45,6 @@ public class GeboConfigServiceImpl implements IGGeboConfigService {
 	 * configuration database service, and MongoGeboInstallation repository.
 	 * 
 	 * @param geboConfig               The Gebo configuration settings
-	 * @param configDBService          The service for configuration database
 	 * @param geboInstallationRepository The repository for MongoGeboInstallation
 	 */
 	public GeboConfigServiceImpl(GeboConfig geboConfig,

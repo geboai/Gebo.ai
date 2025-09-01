@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, Injector, Input, SimpleChanges } from "@angular/core";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -54,24 +54,29 @@ export interface SecretWrapper {
 export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<SecretWrapper> {
     /** Identifies the entity type being managed by this component */
     protected override entityName: string = "SecretWrapper";
-    
+
     /** Configures which secret types are allowed to be created/edited in this instance */
     @Input() allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.SSHKEY, SecretInfo.SecretTypeEnum.TOKEN, SecretInfo.SecretTypeEnum.USERNAMEPASSWORD, SecretInfo.SecretTypeEnum.OAUTH2STANDARD];
-    
+
+    @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
+    @Input() oauth2MandatoryScopes: { code: string, description: string }[] = [];
+    @Input() oauth2ForcedProviderName?: string;
+    @Input() hideProviderChoice: boolean = false;
     /** All possible secret types with their display descriptions */
     private typesOptions: { code?: SecretInfo.SecretTypeEnum, description?: string }[] = [
         { code: SecretInfo.SecretTypeEnum.USERNAMEPASSWORD, description: "User name & password" },
         { code: SecretInfo.SecretTypeEnum.TOKEN, description: "Token" },
         { code: SecretInfo.SecretTypeEnum.SSHKEY, description: "SSh key" },
         { code: SecretInfo.SecretTypeEnum.OAUTH2GOOGLE, description: "Google Oauth2" },
-        { code: SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS, description: "Google credentials Json file content" }];
-    
+        { code: SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS, description: "Google credentials Json file content" },
+        { code: SecretInfo.SecretTypeEnum.OAUTH2STANDARD, description: "Oauth2 standard registered client with scopes" }];
+
     /** Filtered secret types that can be selected by the user */
     public choosableTypes: { code?: SecretInfo.SecretTypeEnum, description?: string }[] = [];
-    
+
     /** Currently selected secret type */
     public actualSecretType?: SecretInfo.SecretTypeEnum;
-    
+
     /** Main form group containing all form controls for different secret types */
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
@@ -92,24 +97,23 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
             username: new FormControl(),
             password: new FormControl()
         }),
-        oauth2StandardContent: new FormGroup({
-            tenantId: new FormControl(),
-            clientId: new FormControl(),
-            secret: new FormControl()
-        }),
+        oauth2StandardContent: new FormControl(),
         googleOauth2Content: new FormGroup(
             {
-               /* uid: new FormControl(), */
                 token: new FormControl(),
                 location: new FormControl(),
-                projectId: new FormControl()
+                projectId: new FormControl(),
+                scopes: new FormControl()
             }
         ),
         googleJsonContent: new FormGroup(
             {
                 jsonContent: new FormControl()
             }
-        )
+        ),
+        oauth2Content: new FormGroup({
+
+        })
     });
 
     /**
@@ -188,26 +192,40 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
      * @param required Whether this form group's fields should be required
      */
     private switchRequired(formName: string, required: boolean) {
-        const fg: FormGroup = this.formGroup.controls[formName] as FormGroup;
-        fg.enable();
-        
-        if (fg && fg.controls) {
-            const keys = Object.keys(fg.controls);
-            if (keys) {
-                keys.forEach(k => {
-                    if (required===true) {
-                        fg.controls[k].setValidators(Validators.required);
-                    } else {
-                        fg.controls[k].clearValidators();
-                    }
-                });
+        const object = this.formGroup.controls[formName];
+        if (object instanceof FormControl) {
+            const fc = object as FormControl;
+            fc.enable();
+            if (required === true) {
+                fc.setValidators(Validators.required);
+                fc.enable();
+            } else {
+                fc.clearValidators();
+                fc.disable();
             }
-        }
-        fg.updateValueAndValidity();
-        if (required===true) {
+
+        } else {
+            const fg: FormGroup = this.formGroup.controls[formName] as FormGroup;
             fg.enable();
-        }else {
-            fg.disable();
+
+            if (fg && fg.controls) {
+                const keys = Object.keys(fg.controls);
+                if (keys) {
+                    keys.forEach(k => {
+                        if (required === true) {
+                            fg.controls[k].setValidators(Validators.required);
+                        } else {
+                            fg.controls[k].clearValidators();
+                        }
+                    });
+                }
+            }
+            fg.updateValueAndValidity();
+            if (required === true) {
+                fg.enable();
+            } else {
+                fg.disable();
+            }
         }
     }
 
@@ -308,6 +326,13 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
                     value.description = returned.description;
                     return value;
                 }));
+            }
+            case "OAUTH2_AUTHORIZED_CLIENT": {
+                const secretWrapper: SecretWrapper = {
+                    secretType: "OAUTH2_AUTHORIZED_CLIENT",
+
+                }
+                return of(secretWrapper);
             }
         }
     }

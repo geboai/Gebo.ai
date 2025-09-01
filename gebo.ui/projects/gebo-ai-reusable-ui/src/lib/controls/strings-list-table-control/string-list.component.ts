@@ -17,7 +17,6 @@
  * This component implements ControlValueAccessor to integrate with Angular's form controls.
  * It supports different types of string validation like URLs and hostnames with protocol options.
  */
-import { FormatWidth } from "@angular/common";
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormArray, FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 //TODO: COMPLETE THIS COMPONENT TO LET USER ENTER URLS/HOSTS ecc...

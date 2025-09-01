@@ -21,6 +21,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 
 /*****************************************************************
  * Strategical business logic that balances between documents, history, query
@@ -39,6 +40,7 @@ public interface IGChatRequestResourcesUsePolicy {
 	 *
 	 * @param chatProfile              The profile configuration affecting chat behavior.
 	 * @param userContext              The user-specific context for the chat.
+	 * @param user 
 	 * @param request                  The chat request details.
 	 * @param embeddingHandler         The handler for embedding model configuration.
 	 * @param chatHandler              The handler for chat model configuration.
@@ -47,6 +49,6 @@ public interface IGChatRequestResourcesUsePolicy {
 	 * @throws LLMConfigException      Thrown when there is a configuration issue with LLM.
 	 */
 	public ChatModelLimitedRequest manageRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
-			GeboChatRequest request, IGConfigurableEmbeddingModel  embeddingHandler, IGConfigurableChatModel chatHandler,
+			UserInfos user, GeboChatRequest request, IGConfigurableEmbeddingModel  embeddingHandler, IGConfigurableChatModel chatHandler,
 			List<String> visibleKnowledgeBaseCodes) throws LLMConfigException;
 }

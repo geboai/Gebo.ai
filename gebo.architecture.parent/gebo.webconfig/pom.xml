@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.webconfig</artifactId>
 	<dependencies>
@@ -14,60 +14,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux -->
+		<!--
+		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
-
 		</dependency>
-	</dependencies>
-	<profiles>
-		<profile>
-			<id>swagger-on</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<source>17</source>
-							<target>17</target>
-							<includes>
-								<include>**/*.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>build-helper-maven-plugin</artifactId>
-						<version>3.2.0</version>
-						<executions>
-							<execution>
-								<id>add-swagger-sources</id>
-								<phase>generate-sources</phase>
-								<goals>
-									<goal>add-source</goal>
-								</goals>
-								<configuration>
-									<sources>
-										<source>src/swagger/java</source>
-									</sources>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-			<dependencies>
-				<dependency>
-					<groupId>org.springdoc</groupId>
-					<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-					<version>2.0.2</version>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
+	</dependencies>	
 </project>

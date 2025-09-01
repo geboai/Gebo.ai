@@ -17,14 +17,18 @@
  */
 
 import { Component, Inject, Injector } from "@angular/core";
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { AbstractControl, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
+
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { UserspaceFilesUploadModel, UserspaceFilesUploadModelService } from "./userspace-files-upload.service";
 import { FileBeforeUploadEvent, FileProgressEvent, FileUploadEvent } from "primeng/fileupload";
-import { BASE_PATH, ContentMetaInfosControllerService, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { HttpEventType } from "@angular/common/http";
+import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";
+import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
+import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
 
 /**
  * Component responsible for managing file uploads to user workspace.

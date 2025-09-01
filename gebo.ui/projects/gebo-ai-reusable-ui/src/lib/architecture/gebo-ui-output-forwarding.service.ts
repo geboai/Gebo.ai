@@ -18,9 +18,10 @@
  * subscriptions and cleanup to prevent memory leaks.
  */
 import { EventEmitter, Injectable } from "@angular/core";
-import { WizardButtonsBarData } from "@Gebo.ai/reusable-ui";
+
 import { Observable, Subscription } from "rxjs";
 import { GeboUIModalOpenerWrapperComponent } from "./gebo-ui-modal-wrapper.component";
+import { WizardButtonsBarData } from "../controls/base-entity-editing-component/entities-modification-wizard";
 
 /**
  * Service responsible for forwarding events and managing communication between

@@ -24,6 +24,7 @@ import ai.gebo.fastsetup.model.FastInstallationSetupData;
 import ai.gebo.knlowledgebase.model.licence.GeboLicence;
 import ai.gebo.knlowledgebase.model.licence.GeboLicence.GeboLicenceType;
 import ai.gebo.knowledgebase.repositories.GeboLicenceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.config.GeboAISecurityConfig;
@@ -51,6 +52,8 @@ public class GeboFastInstallationSetupService {
 
 	@Autowired
 	IGPersistentObjectManager persistenceManager;
+	@Autowired
+	IGChatProfileManagementService chatProfileManagementService;
 
     /**
      * Constructor for GeboFastInstallationSetupService.
@@ -98,12 +101,11 @@ public class GeboFastInstallationSetupService {
 		status.getMessages().clear();
 		try {
 			User user = new User();
-			user.setUsername(data.getUsername());
+			user.setUsername(data.getUsername().toLowerCase());
 			// Encrypting the user's password
 			user.setPassword(cryptService.crypt(data.getPassword()));
 			user.setEmailVerified(true);
 			user.setProvider(AuthProvider.local);
-			user.setProviderId("local-jwt");
 			user.setRoles(List.of(GeboAISecurityConfig.ADMIN_ROLE, GeboAISecurityConfig.USER_ROLE));
 			userRepository.insert(user);
 			
@@ -120,7 +122,7 @@ public class GeboFastInstallationSetupService {
 			status.getMessages().clear();
 			status.getMessages().add(GUserMessage.successMessage("Admin user created !",
 					"Admin user " + data.getUsername() + " created successfully"));
-
+			this.chatProfileManagementService.getOrCreateDefaultChatProfile();
 		} catch (GeboCryptSecretException e) {
 			status.getMessages().add(GUserMessage.errorMessage("Problems in the crypting layer", e));
 		} catch (Throwable th) {

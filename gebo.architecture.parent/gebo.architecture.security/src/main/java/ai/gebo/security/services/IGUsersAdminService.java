@@ -13,10 +13,12 @@
 package ai.gebo.security.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UsersGroup;
@@ -125,4 +127,6 @@ public interface IGUsersAdminService {
      * @return A List of all UserInfos objects.
      */
     public List<UserInfos> getAllUsers();
+
+	public void createUserIfNotExists(String email, Map<String, Object> attributes, AuthProvider authProvider);
 }

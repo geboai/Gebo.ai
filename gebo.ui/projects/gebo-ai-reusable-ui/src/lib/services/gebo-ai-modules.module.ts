@@ -12,7 +12,6 @@
 
 import { CommonModule } from "@angular/common";
 import { ModuleWithProviders, NgModule } from "@angular/core";
-import { GeboAIModulesService } from "./gebo-ai-modules.service";
 import { GeboAIPluggableModulesConfigService, GeboAIPluggableProjectEndpointsService } from "./pluggable-project-endpoint";
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "./pluggable-knowledge-base-admin-tree-search.service";

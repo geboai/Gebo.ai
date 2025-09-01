@@ -4,25 +4,24 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-	<version>0.9.9.7-SNAPSHOT</version>
+	<version>0.9.9.7</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.5</version>
+		<version>3.5.4</version>
 	</parent>
 	<properties>
 		<java.version>17</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<org.eclipse.jgit.version>6.10.0.202406032230-r</org.eclipse.jgit.version>
-	<!-- 
-		<spring.ai.version>1.0.0-SNAPSHOT</spring.ai.version>
-		<spring.ai.version>1.0.0-RC1</spring.ai.version> 
-		-->
-		<spring.ai.version>1.0.0</spring.ai.version> 
-		
+		<!-- TODO: Test if works ok <org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
+		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
+		<apache-poi.version>5.4.1</apache-poi.version>
+		<spring.ai.version>1.0.1</spring.ai.version>
+		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
 	</properties>
 	<modules>
@@ -37,7 +36,7 @@
 		<module>gebo.config.services</module>
 		<module>gebo.fastsetup</module>
 		<module>gebo.core.parent</module>
-		<module>gebo.apps.parent</module>		
+		<module>gebo.apps.parent</module>
 		<module>gebo.modules.pocs</module>
 		<module>gebo.integrations.clients</module>
 		<module>gebo.llms.parent</module>
@@ -48,13 +47,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.38</version>
 			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
-	
+
 	<repositories>
 		<repository>
 			<id>spring-milestones</id>
@@ -72,8 +74,45 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-	</repositories> 
+	</repositories>
 	<build>
+		<pluginManagement>
+			<plugins>
+
+				<!-- === sources === -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven-source-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal> <!-- produces *.jar with sources -->
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- === javadoc === -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>jar</goal> <!-- produces *.jar with javadoc -->
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -89,10 +128,10 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub Gebo.ai Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/openi40/Gebo.ai</url>
+			<url>https://maven.pkg.github.com/geboai/Gebo.ai</url>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>		
+		</repository>
 	</distributionManagement>
 </project>

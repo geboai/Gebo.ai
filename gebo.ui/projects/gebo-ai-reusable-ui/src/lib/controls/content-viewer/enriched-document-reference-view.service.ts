@@ -11,8 +11,8 @@
  
 
 import { Injectable } from "@angular/core";
-import { ContentMetaInfosControllerService, DocumentReferenceView, GeboUserKnowledgeBaseSemanticSearchControllerService, IngestionFileType, IngestionFileTypesLibraryControllerService, PageDocumentReferenceView, SearchDocumentByNameParam, SemanticQueryParam } from "@Gebo.ai/gebo-ai-rest-api";
-import { concat, concatMap, forkJoin, map, Observable } from "rxjs";
+import { ContentMetaInfosControllerService, DocumentReferenceView, GeboUserKnowledgeBaseSemanticSearchControllerService, IngestionFileType, IngestionFileTypesLibraryControllerService, SearchDocumentByNameParam, SemanticQueryParam } from "@Gebo.ai/gebo-ai-rest-api";
+import { forkJoin, map, Observable } from "rxjs";
 /**
  * AI generated comments
  * This file provides services for retrieving and enriching document references with additional metadata

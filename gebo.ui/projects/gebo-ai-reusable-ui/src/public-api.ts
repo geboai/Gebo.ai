@@ -51,6 +51,8 @@ export * from "./lib/infrastructure/login/login.module";
 export * from "./lib/infrastructure/login/login.component";
 export * from "./lib/infrastructure/user-profile/user-profile.module";
 export * from "./lib/infrastructure/user-profile/user-profile.component";
+
+
 export * from "./lib/directives/translable/translable.module";
 export * from "./lib/setup-wizard/base-wizard-section.component";
 export * from "./lib/setup-wizard/setup-wizard-step";
@@ -76,3 +78,8 @@ export * from "./lib/infrastructure/gebo-credentials";
 export * from "./lib/services/gebo-ai-modules.module";
 export * from "./lib/services/gebo-ai-modules.service";
 export * from "./lib/services/pluggable-project-endpoint";
+export * from "./lib/services/auth-interceptor.service";
+export * from "./lib/services/gebo-backends-list.service";
+export * from "./lib/controls/gebo-oauth2-secret-component/gebo-oauth2-secret.module";
+
+

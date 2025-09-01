@@ -19,7 +19,7 @@ import ai.gebo.model.base.GObjectRef;
  * Gebo.ai comment agent
  *
  * Represents a scheduled task specifically related to a project endpoint.
- * This class extends the AbstractScheduledTask with a type parameter of GObjectRef<GProjectEndpoint>.
+ * This class extends the AbstractScheduledTask with a type parameter of GObjectRef of a GProjectEndpoint.
  * It's used in the scheduling system to handle tasks associated with project endpoints.
  */
 public class ProjectEndpointScheduledTask extends AbstractScheduledTask<GObjectRef<GProjectEndpoint>> {

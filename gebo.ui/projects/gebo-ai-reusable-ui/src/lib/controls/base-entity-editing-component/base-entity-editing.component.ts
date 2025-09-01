@@ -30,7 +30,10 @@ import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.servi
 import { ConfirmationService } from "primeng/api";
 import { GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIEntitiesSettingWizardConfiguration, WizardButtonsBarData } from "./entities-modification-wizard";
-import { errorStatus, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent, GeboWizardActionType, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { errorStatus, IOperationStatus } from "./operation-status";
+import { GeboActionType, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent, GeboWizardActionType } from "../../architecture/actions.model";
+import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+
 
 /**
  * Base component for entity editing functionality that can be extended by specific entity editors.

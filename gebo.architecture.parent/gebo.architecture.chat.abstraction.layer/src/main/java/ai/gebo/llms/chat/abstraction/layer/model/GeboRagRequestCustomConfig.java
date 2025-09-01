@@ -18,7 +18,7 @@ package ai.gebo.llms.chat.abstraction.layer.model;
  * This includes settings like `topK`, `similarityThreshold`, `historyFillWindowWeight`, 
  * and `documentsFillWindowWeight`.
  *
- * @Gebo.ai comment agent 
+ * Gebo.ai comment agent 
  */
 public class GeboRagRequestCustomConfig {
 

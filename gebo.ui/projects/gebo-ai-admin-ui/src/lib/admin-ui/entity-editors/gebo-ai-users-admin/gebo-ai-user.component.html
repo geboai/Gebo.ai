@@ -8,12 +8,12 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-dialog  [maximizable]="true" [visible]="true" [modal]="true" [style]="{width:'95%',height:'95%'}" (onHide)="changedData.emit(undefined)"
-    [closable]="false" [showHeader]="false">
+
+
+
+<p-dialog [maximizable]="true" [visible]="true" [modal]="true" [style]="{width:'95%',height:'95%'}"
+    (onHide)="changedData.emit(undefined)" [closable]="false" [showHeader]="false">
 
     <p-blockUI [target]="userUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -67,8 +67,8 @@
                 <div class="col-6">
                     <div class="flex flex-column gap-2 ">
                         <label for="roles">User roles</label>
-                        <p-multiSelect  styleClass="w-full"  formControlName="roles" id="roles" aria-describedby="roles-help"
-                            [required]="true" [options]="rolesList"></p-multiSelect>
+                        <p-multiSelect styleClass="w-full" formControlName="roles" id="roles"
+                            aria-describedby="roles-help" [required]="true" [options]="rolesList"></p-multiSelect>
                         <small id="roles-help">
                             Roles list (At least USER role is mandatory), ADMIN has administrative rights, USER can only
                             chat
@@ -76,7 +76,20 @@
                         </small>
                     </div>
                 </div>
-                <div class="col-6" *ngIf="mode==='NEW'" [formGroup]="pwdFormGroup">
+                <div class="col-6">
+                    <div class="flex flex-column gap-2 ">
+                        <label for="authProvider">Authentication provider</label>
+                        <geboai-editable-listbox-component formControlName="authProvider" id="authProvider"
+                            [required]="true" [optionsObservable]="authProviderObservable"
+                            aria-describedby="authProvider-help">
+
+                        </geboai-editable-listbox-component>
+                        <small id="authProvider-help">
+                            Authentication provider that grants user identity
+                        </small>
+                    </div>
+                </div>
+                <div class="col-6" *ngIf="mode==='NEW' && actualAuthProvider==='local'" [formGroup]="pwdFormGroup">
                     <div class="flex flex-column gap-2 ">
                         <label for="password">Password</label>
                         <p-password id="password" formControlName="password" aria-describedby="password-help"
@@ -88,7 +101,7 @@
                 </div>
             </div>
         </div>
-        <div class="geboButtonsBar" style="vertical-align: baseline;" >
+        <div class="geboButtonsBar" style="vertical-align: baseline;">
             <div class="grid">
                 <div class="col-4">
                     <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"

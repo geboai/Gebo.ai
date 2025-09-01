@@ -15,8 +15,11 @@ import { forkJoin, map, Observable, of } from "rxjs";
 import { EnrichedChild, EnrichedVFilesystemItem } from "./enriched-child";
 import { Injectable } from "@angular/core";
 import { MenuItem } from "primeng/api";
-import { GeboActionPerformedEvent, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIPluggableProjectEndpointsService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
+
 import { GeboAIModulesService } from "./gebo-ai-modules.service";
+import { GeboAIPluggableProjectEndpointsService } from "./pluggable-project-endpoint";
+import { GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest } from "../architecture/actions.model";
+import { GeboAIEntitiesSettingWizardConfiguration } from "../controls/base-entity-editing-component/entities-modification-wizard";
 
 /**
  * AI generated comments

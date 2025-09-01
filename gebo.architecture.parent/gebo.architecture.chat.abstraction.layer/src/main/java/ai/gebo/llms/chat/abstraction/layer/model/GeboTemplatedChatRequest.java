@@ -19,12 +19,12 @@ import java.util.UUID;
 
 /**
  * GeboTemplatedChatRequest is a generic class for managing chat requests 
- * with type parameter <RequestType> representing the type of query.
+ * with type parameter RequestType representing the type of query.
  * It provides various configurations required for processing chat requests.
  * 
  * AI generated comments
  * 
- * @param <RequestType> The type of the query used in the chat request.
+ * type param RequestType The type of the query used in the chat request.
  */
 public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 

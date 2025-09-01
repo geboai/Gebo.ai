@@ -18,9 +18,11 @@
  */
 
 import { UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
+
 import { of } from "rxjs";
 import { UserspaceFilesUploadModel } from "./userspace-files-upload.service";
+import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing-component/entities-modification-wizard";
+import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
 
 /**
  * Configuration array for the userspace uploads wizard.

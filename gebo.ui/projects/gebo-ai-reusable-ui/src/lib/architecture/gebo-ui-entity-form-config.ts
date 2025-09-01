@@ -11,7 +11,7 @@
  
 
 import { InjectionToken, Type } from "@angular/core";
-import { BaseEntityEditingComponent } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent } from "../controls/base-entity-editing-component/base-entity-editing.component";
 /**
  * @fileoverview This file defines interfaces and tokens for entity form configuration in Gebo.ai UI.
  * AI generated comments

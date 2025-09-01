@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * @file Authentication utility for Gebo.ai
@@ -17,7 +17,13 @@
  * stored in local storage.
  */
 
-import { AuthResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { SecurityHeaderData } from "@Gebo.ai/gebo-ai-rest-api";
+export const AUTHORIZATION_HEADER: string = "Authorization";
+export const AUTHORIZATION_TYPE_HEADER: string = "X-AuthType";
+export const AUTHORIZATION_PROVIDER_ID_HEADER: string = "X-Authprovider-id";
+export const AUTHORIZATION_TENANT_ID_HEADER: string = "X-tenant-id";
+export const DEFAULT_TENANT: string = "default-tenant";
+export const DEFAULT_PROVIDER_ID: string = "default-internal-jwt-provider";
 
 /**
  * Constant used as the key for storing Gebo.ai credentials in local storage
@@ -31,13 +37,40 @@ export const geboCredenditalString: string = "gebo.ai.credentials";
  * from JSON into an AuthResponse object, and return them. If no credentials
  * are found in local storage, it returns undefined.
  * 
- * @returns {AuthResponse | undefined} The parsed authentication response or undefined if not found
+ * @returns {SecurityHeaderData | undefined} The parsed authentication response or undefined if not found
  */
-export function getAuth(): AuthResponse | undefined {
+export function getAuth(): SecurityHeaderData | undefined {
   const value = localStorage.getItem(geboCredenditalString);
   if (value) {
-    const r: AuthResponse = JSON.parse(value);
+    const r: SecurityHeaderData = JSON.parse(value);
     return r;
   }
   return undefined;
+}
+/*************************
+ * Returns the http standard UI auth httpheader object
+ */
+export function getAuthHeader(): any {
+  const auth = getAuth();
+  if (auth && auth?.token) {
+    const outValue: any = {};
+    outValue[AUTHORIZATION_HEADER] = "Bearer " + auth.token;
+    if (auth.authType)
+      outValue[AUTHORIZATION_TYPE_HEADER] = auth.authType;
+    if (auth.authTenantId)
+      outValue[AUTHORIZATION_TENANT_ID_HEADER] = auth.authTenantId;
+    else
+      outValue[AUTHORIZATION_TENANT_ID_HEADER] = DEFAULT_TENANT;
+    if (auth.authTenantId)
+      outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = auth.authProviderId;
+    else
+      outValue[AUTHORIZATION_PROVIDER_ID_HEADER] = DEFAULT_PROVIDER_ID;
+    return outValue;
+  } else return undefined;
+}
+export function resetAuth() {
+  localStorage.removeItem(geboCredenditalString);
+}
+export function saveAuth(value: SecurityHeaderData) {
+  localStorage.setItem(geboCredenditalString, JSON.stringify(value));
 }

@@ -120,7 +120,9 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		embedModelConfig.setChoosedModel(new GBaseModelChoice());
 		embedModelConfig.getChoosedModel().setCode(TestEmbeddingModelSupportServiceImpl.TEST_EMBEDDING_MODEL_001);
 		embedModelConfig.setDefaultModel(true);
+		
 		embeddingModelRuntimeDao.addRuntimeByConfig(embedModelConfig);
+		createDefaultUser();
 		beforeEachCallback();
 		LOGGER.info("End initializing chat & embedding model");
 	}

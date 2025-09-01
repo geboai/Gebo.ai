@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.llms.parent</artifactId>
 	<groupId>ai.gebo.llms</groupId>
@@ -32,10 +32,12 @@
 		<module>gebo.llms.onxx-embeddings</module>
 		<module>gebo.llms.anthropic3</module>
 		<module>gebo.llms.openai.api.utils</module>
+		<module>gebo.llms.openai-azure</module>
 		<module>gebo.llms.google_vertex</module>
 		<module>gebo.llms.standard.functions</module>
 		<module>gebo.llms.starter</module>
 		<module>gebo.llms.tests.services</module>
 		<module>gebo.llms.deepseek</module>
+		
 	</modules>
 </project>

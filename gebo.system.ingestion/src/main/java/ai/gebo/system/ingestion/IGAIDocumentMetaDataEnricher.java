@@ -31,15 +31,16 @@ import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 public interface IGAIDocumentMetaDataEnricher {
     /**
      * Creates a metadata header for a document based on its reference and context.
-     * 
+     * @param documents TODO
      * @param reference     the document reference
      * @param knowledgeBase the knowledge base containing the document
      * @param project       the project associated with the document
      * @param endpoint      the project endpoint where the document is accessed
+     * 
      * @return metadata header information for the document
      */
-	public MetaDataHeaderInfos createMetaDataHeader(GDocumentReference reference, GKnowledgeBase knowledgeBase,
-			GProject project, GProjectEndpoint endpoint);
+	public MetaDataHeaderInfos createMetaDataHeader(List<Document> documents, GDocumentReference reference,
+			GKnowledgeBase knowledgeBase, GProject project, GProjectEndpoint endpoint);
 			
     /**
      * Enriches a list of documents with cataloging information.

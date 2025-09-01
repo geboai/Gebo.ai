@@ -52,7 +52,7 @@
 		<appender-ref ref="RollingFile" /> <appender-ref ref="Console" /> </logger> -->
 	<logger
 		name="ai.gebo.llms.abstraction.layer.services.impl.GRagDocumentsCachedDaoImpl"
-		level="DEBUG" additivity="false">
+		level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
@@ -62,6 +62,17 @@
 		<appender-ref ref="Console" />
 	</logger>
 	<logger name="org.springframework.ai.reader" level="ERROR"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	
+	<logger name="ai.gebo.security" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	<logger name="org.springframework.security" level="INFO"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />

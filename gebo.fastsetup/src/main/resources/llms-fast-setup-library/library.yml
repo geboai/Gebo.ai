@@ -1,0 +1,143 @@
+ai.gebo.fastsetup.config:
+  vendors:
+    - vendorId: openai
+      name: OpenAI
+      description: OpenAI chatgpt
+      acquireKeyUrl: https://platform.openai.com/api-keys
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://openai.com/
+      presets:
+        - type: CHAT
+          serviceHandler: chatgpt-OpenAI
+          apiKeySecretContext: chatgpt-OpenAI
+          doModelsLookup: true
+          choices:
+            - code: gpt-4o
+              description: Gpt 4o
+            - code: gpt-4.1
+              description: Gpt 4.1
+            - code: gpt-5
+              description: Gpt 5
+        - type: EMBEDDING
+          serviceHandler: embedding-OpenAI
+          apiKeySecretContext: embedding-OpenAI
+          doModelsLookup: true
+          choices:
+            - code: text-embedding-3-large
+              description: text embedding 3 large
+    - vendorId: anthropic
+      name: Anthropic
+      description: Anthropic
+      acquireKeyUrl: https://console.anthropic.com/settings/keys
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://anthropic.com/
+      presets:
+        - type: CHAT
+          serviceHandler: chat-anthropic
+          apiKeySecretContext: chat-anthropic
+          doModelsLookup: true
+          choices:
+            - code: claude-3-7-sonnet-latest
+              description: Claude Sonnet 3.7
+            - code: claude-sonnet-4-0
+              description: Claude Sonnet 4
+            - code: claude-opus-4-0
+              description: Claude Opus 4
+            - code: claude-opus-4-1
+              description: Claude Opus 4.1
+    - vendorId: deepseek
+      name: Deepseek
+      description: Deepseek
+      acquireKeyUrl: https://platform.deepseek.com/api_keys
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://www.deepseek.com/
+      presets:
+        - type: CHAT
+          serviceHandler: chat-deepseek
+          apiKeySecretContext: chat-deepseek
+          doModelsLookup: true
+    - vendorId: xai
+      name: XaI
+      description: XaI (grok)
+      acquireKeyUrl: https://console.x.ai/
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://xai.com/
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-xai
+          apiKeySecretContext: chatmodel-xai
+          doModelsLookup: true
+          choices:
+            - code: grok-3
+              description: Grok 3
+            - code: grok-4
+              description: Grok 4
+        - type: EMBEDDING
+          serviceHandler: embedding-xai
+          apiKeySecretContext: embedding-xai
+          doModelsLookup: true
+          choices:
+            - code: embedding
+              description: embedding model
+    - vendorId: nvidia
+      name: NVidia
+      description: NVidia cloud AI services
+      acquireKeyUrl: https://build.nvidia.com/
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://build.nvidia.com/models
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-nvidia
+          apiKeySecretContext: chatmodel-nvidia
+          doModelsLookup: true
+          choices:
+            - code: meta/llama-3.1-405b-instruct
+              description: meta llama 3.1 405b instruct model on nvidia infrastructures
+            - code: deepseek-ai/deepseek-r1-0528
+              description: deepseek R1 0528 on nvidia infrastructures
+        - type: EMBEDDING
+          serviceHandler: embedding-nvidia
+          apiKeySecretContext: embedding-nvidia
+          doModelsLookup: true
+          choices:
+            - code: nvidia/nv-embed-v1
+              description: nvidia embed v1
+    - vendorId: regolo.ai
+      name: Regolo.ai
+      description: Regolo.ai Italian AI provider
+      acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+      requiresApiKeY: true
+      requiresCustomUrl: false
+      webSite: https://regolo.ai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-regolo.ai
+          apiKeySecretContext: chatmodel-regolo.ai
+          doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-regolo.ai
+          apiKeySecretContext: embedding-regolo.ai
+          doModelsLookup: true
+
+    - vendorId: ollama
+      name: Ollama
+      description: Ollama, large language model server that runs on your infrastructure
+      requiresApiKeY: false
+      requiresCustomUrl: true
+      defaultCustomUrl: http://localhost:11434
+      webSite: https://ollama.com/
+      presets:
+        - type: CHAT
+          serviceHandler: chat-ollama
+          apiKeySecretContext: chat-ollama
+          doModelsLookup: true
+
+        - type: EMBEDDING
+          serviceHandler: embedding-ollama
+          apiKeySecretContext: embedding-ollama
+          doModelsLookup: true

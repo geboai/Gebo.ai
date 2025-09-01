@@ -21,8 +21,9 @@ import { DialogModule } from "primeng/dialog";
 import { ButtonModule } from "primeng/button";
 import { BlockUIModule } from "primeng/blockui";
 import { MessagesModule } from "primeng/messages";
-import { EditableListboxModule } from "@Gebo.ai/reusable-ui";
+
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 @NgModule({
     imports:[CommonModule,ReactiveFormsModule,FormsModule,TextareaModule,PanelModule,DialogModule,ButtonModule,BlockUIModule,MessagesModule,EditableListboxModule,MonacoEditorModule],
     declarations:[GeboAIPromptEditingComponent,GeboAIPromptWizardComponent],

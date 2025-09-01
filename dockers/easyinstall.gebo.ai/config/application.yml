@@ -1,0 +1,151 @@
+server:
+  port: 12999
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
+  servlet:
+    contextPath: /
+spring.servlet.multipart:
+  enabled: true
+  maxFileSize: 100MB
+  maxRequestSize: 100MB
+security.provider.1: org.bouncycastle.jce.provider.BouncyCastleProvider
+ai.gebo.multilanguage.config.classPathMode: false
+ai.gebo.multilanguage.config.folderPrefix: 
+ai.gebo.lucene.config.enabled: false
+ai.gebo.security:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    tokenExpirationMsec: 120000
+  cors:
+    allowedOrigins: http://localhost:12999,http://localhost:4200
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth2/redirect
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
+reactor.schedulers.defaultPoolSize: 16
+spring.task:
+  execution:
+    pool:
+      max-size: 16
+      queue-capacity: 100
+      keep-alive: "10s"
+
+ai.gebo.llms.config:
+  mistralAIEnabled: true
+  openAIEnabled: true
+  ollamaEnabled: true
+  googleVertexEnabled: false
+  anthropicEnabled: true
+  huggingfaceEnabled: false
+  deepseekEnabled: true
+  azureOpenAIEnabled: true
+
+ai.gebo.vectorstore:
+  use: QDRANT
+  qdrant:
+    host: localhost
+    port: 6334
+    tls: false
+    apiKey: ce7c85bc-f037-4c64-91d8-70335638329d
+spring.ai:
+  openai:
+    embedding:
+      enabled: true
+      options:
+        model: text-embedding-3-large
+    api-key: DUMMYKEY
+    chat:
+      api-key: DUMMYKEY
+      options:
+        model: gpt-3.5-turbo-16k
+
+spring.jackson:
+  date-format: yyyy-MM-dd HH:mm:ss
+  serialization:
+    INDENT_OUTPUT: true
+ai.gebo.chat:
+  promptDefaults:
+    - ragPrompt: false
+      defaultPrompt: true
+      prompt: '"""Answer the query considering the chat history, eventually present documents, and user query"""'
+
+    - ragPrompt: true
+      defaultPrompt: true
+      prompt: '"""
+        You are a knowledgeable assistant capable of retrieving relevant information from documents and responding to user queries.\n Consider the conversation history, a set of document excerpts, and a query from the user. Use the information from both the conversation history and the documents to generate a helpful and accurate response to the query.
+        Provide an accurate response based on the information retrieved from the documents and considering the context from the conversation history. If the response is incomplete complement it with all your knowledge coherently with the query.\n"""'
+
+ai.gebo.config:
+  setupConfiguresWorkdir: false
+  security: true
+  setup: true
+  customKeyStore: false
+  enableCommunityModules: true
+ai.gebo.mongodb:
+  enabled: true
+  databaseName: gebo-ai
+  connectionString: mongodb://mongoroot:mongopwd@localhost:27017/gebo-ai?authSource=admin
+ai.gebo.filesystem:
+  allowFilesystemSharesUI: false
+  shares:
+    - code: STDSHARE
+      absolutePath: /opt/gebo.ai/shares
+      description: Server shared document folder (/opt/gebo.ai/shares)
+ai.gebo.node.buildsystems:
+  systems:
+    - code: NODE-ANGULAR
+      buildSystemTypeCode: NODE.BUILD.SYSTEM
+      description: Angular project with npm/node build & packaging system
+    - code: NODE
+      buildSystemTypeCode: NODE.BUILD.SYSTEM
+      description: Node project with Npm/node build & packaging system
+ai.gebo.git.config:
+  systems:
+    - code: DEFAULT_GIT
+      contentManagementSystemType: DEFAULT.GIT.CONTENT.HANDLER
+      description: Git/Bitbucket/GitHub contents handler
+
+ai.gebo.maven.buildsystems:
+  systems:
+    - code: DEFAULT_MAVEN
+      buildSystemTypeCode: MAVEN.BUILD.SYSTEM
+      description: Maven build system 3.X
+      config:
+        mavenHome: C:\projects\runtimes\apache-maven-3.9.6
+        javaHome: C:\Java\jdk-17
+ai.gebo.vectorizator.config:
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  disposerConfig:
+    poolCardinality: 1
+    flushThreshold: 10
+    useSenderThread: true
+  vectorizatorReceiverConfig:
+    poolCardinality: 2
+    flushThreshold: 10
+    useSenderThread: true
+    timeout: 20000
+ai.gebo.core.config:
+  mongoDisposerConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 10
+    timeout: 20000
+  userMessagesReceiverConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 10		
+    timeout: 20000
+#Google search api for LLM search web function
+#ai.gebo.googlesearch:
+#                  enabled: true
+#                  apiKey: <put here your api key>
+#                  customSearchEngineId: <put here your search engine id>

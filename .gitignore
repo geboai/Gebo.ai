@@ -4,6 +4,7 @@ Gebo.ai.Config/
 *.class
 *.jar
 ***/*.jar
+.vscode/
 .project
 .classpath
 .settings/
@@ -17,4 +18,5 @@ dockers/qdrant_storage/
 com.openi40/openi40.scheduler.SpringBootEnvironment/tmlog.lck
 *.msi
 *.cab
-dockers/gebo.ai.platform/jdk-22_linux-x64_bin.tar.gz
+*.cdx.json
+dockers/gebo.ai.platform/jdk-*_linux-x64_bin.tar.gz

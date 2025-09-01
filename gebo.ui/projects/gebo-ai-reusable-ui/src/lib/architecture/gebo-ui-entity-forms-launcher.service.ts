@@ -15,8 +15,8 @@
  * AI generated comments
  */
 
-import { Inject, Injectable, Injector, Optional } from "@angular/core";
-import { GEBO_UI_ENTITY_FORM_TOKEN, GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
+import { Injectable } from "@angular/core";
+import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
 
 /**
  * Injectable service that provides functionality for launching entity forms in the Gebo UI.

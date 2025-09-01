@@ -18,7 +18,7 @@ import lombok.Data;
  * Represents expandable properties of Confluence content in an on-premise environment.
  * These properties specify what additional fields of the content can be expanded.
  * 
- * @Data annotation is from Lombok to generate boilerplate code such as getters, setters, equals, hash, and toString methods.
+ * Data annotation is from Lombok to generate boilerplate code such as getters, setters, equals, hash, and toString methods.
  * 
  * AI generated comments
  */

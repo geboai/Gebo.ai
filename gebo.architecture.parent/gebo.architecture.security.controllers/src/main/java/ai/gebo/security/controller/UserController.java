@@ -6,19 +6,17 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.security.CurrentUser;
-import ai.gebo.security.UserPrincipal;
 import ai.gebo.security.exception.ResourceNotFoundException;
+import ai.gebo.security.model.CurrentUser;
+import ai.gebo.security.model.GroupInfo;
 import ai.gebo.security.model.User;
+import ai.gebo.security.model.UserInfo;
+import ai.gebo.security.model.UserPrincipal;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.repository.UserRepository;
 import ai.gebo.security.services.IGSecurityService;
@@ -37,9 +37,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * REST controller for managing user-related operations such as fetching current user details,
- * retrieving user groups, and changing passwords.
- * AI generated comments
+ * REST controller for managing user-related operations such as fetching current
+ * user details, retrieving user groups, and changing passwords. AI generated
+ * comments
  */
 @RestController
 @PreAuthorize("hasAnyRole('USER','ADMIN')")
@@ -50,52 +50,8 @@ public class UserController {
 	private UserRepository userRepository; // Repository for accessing user data
 	@Autowired
 	private PasswordEncoder passwordEncoder; // Password encoder for handling password encryption
-	
-	@Autowired IGSecurityService securityService; // Security service for accessing additional security features
-
-	/**
-	 * Inner class representing user information, including username and roles.
-	 */
-	public static class UserInfo {
-		private String username;
-		private List<String> roles = new ArrayList<String>();
-
-		/**
-		 * Gets the username of the user.
-		 * 
-		 * @return username
-		 */
-		public String getUsername() {
-			return username;
-		}
-
-		/**
-		 * Sets the username of the user.
-		 * 
-		 * @param email the email to be set as username
-		 */
-		public void setUsername(String email) {
-			this.username = email;
-		}
-
-		/**
-		 * Gets the list of roles assigned to the user.
-		 * 
-		 * @return list of roles
-		 */
-		public List<String> getRoles() {
-			return roles;
-		}
-
-		/**
-		 * Sets the roles for the user.
-		 * 
-		 * @param roles list of roles to be assigned
-		 */
-		public void setRoles(List<String> roles) {
-			this.roles = roles;
-		}
-	};
+	@Autowired
+	private IGSecurityService securityService; // Security service for accessing additional security features
 
 	/**
 	 * Retrieves the current user's information based on the provided credentials.
@@ -104,55 +60,37 @@ public class UserController {
 	 * @return UserInfo object containing current user details
 	 * @throws ResourceNotFoundException if the user is not found
 	 */
-	@GetMapping(value="me",produces = MediaType.APPLICATION_JSON_VALUE)
-	public UserInfo getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-		Optional<User> usr = userRepository.findById(userPrincipal.getUsername());
-		if (usr.isPresent()) {
-			User u = usr.get();
-			UserInfo userInfo = new UserInfo();
-			userInfo.setUsername(u.getUsername());
-			userInfo.setRoles(u.getRoles());
-			return userInfo;
-		} else {
-			throw new ResourceNotFoundException("User", "id", userPrincipal != null ? userPrincipal.getUsername() : null);
-		}
+	@GetMapping(value = "me", produces = MediaType.APPLICATION_JSON_VALUE)
+	public UserInfo getCurrentUser() {
+		SecurityContext context = SecurityContextHolder.getContext();
+		if (context != null && context.getAuthentication() != null && context.getAuthentication().getName() != null) {
+			String userName = context.getAuthentication().getName();
+			Optional<User> usr = userRepository.findById(userName);
+			if (usr.isPresent()) {
+				User u = usr.get();
+				UserInfo userInfo = new UserInfo();
+				userInfo.setUsername(u.getUsername());
+				userInfo.setRoles(u.getRoles());
+				return userInfo;
+			} else {
+				throw new ResourceNotFoundException("User", "id", userName);
+			}
+		} else
+			throw new ResourceNotFoundException("User", "id", "unknown user");
 	}
 
-	/**
-	 * Inner class for holding group information, including code and description.
-	 */
-	public static class GroupInfo {
-		@NotNull
-		public String code=null;
-		@NotNull
-		public String description=null;
-
-		/**
-		 * Creates a GroupInfo instance from a UsersGroup object.
-		 * 
-		 * @param ug UsersGroup object to be converted
-		 * @return GroupInfo object
-		 */
-		public static GroupInfo of(UsersGroup ug) {
-			GroupInfo i=new GroupInfo();
-			i.code=ug.getCode();
-			i.description=ug.getDescription();
-			return i;
-		}
-	}
-	
 	/**
 	 * Retrieves the groups that the current user belongs to.
 	 *
 	 * @return List of GroupInfo objects representing the user's groups
 	 */
-	@GetMapping(value="getMyGroups",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "getMyGroups", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GroupInfo> getMyGroups() {
 		List<UsersGroup> glist = securityService.getCurrentUserGroups();
-		
+
 		return glist.stream().map(GroupInfo::of).toList();
 	}
-	
+
 	/**
 	 * Inner class for encapsulating parameters required for changing a password.
 	 */
@@ -170,17 +108,18 @@ public class UserController {
 	/**
 	 * Inner class for capturing the response of a password change operation.
 	 */
-	public  static  class ChangePasswordResponse {
+	public static class ChangePasswordResponse {
 		public boolean ok = false, wrongPassword = true, newPasswordNeverMatch = true;
 	}
 
 	/**
 	 * Endpoint to handle password change requests for the current user.
 	 *
-	 * @param param the parameters required for changing the password
+	 * @param param         the parameters required for changing the password
 	 * @param userPrincipal the principal of the current user
 	 * @return ChangePasswordResponse object indicating the result of the operation
-	 * @throws RuntimeException if the user is not authenticated or existing credentials are invalid
+	 * @throws RuntimeException if the user is not authenticated or existing
+	 *                          credentials are invalid
 	 */
 	@PostMapping(value = "changePassword", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ChangePasswordResponse changePassword(@Valid @RequestBody ChangePasswordParam param,

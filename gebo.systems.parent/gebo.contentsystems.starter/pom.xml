@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.systems</groupId>
 		<artifactId>gebo.systems.parent</artifactId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.contentsystems.starter</artifactId>
 	<dependencies>
@@ -57,7 +57,11 @@
 			<artifactId>gebo.googleworkspace.handlers</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>ai.gebo.systems</groupId>
+			<artifactId>gebo.integration.content.handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

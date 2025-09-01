@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.sharepoint.integration.tests;
 
@@ -68,7 +65,7 @@ public class MicrosoftSharepointIntegrationTests extends AbstractGeboMonolithicI
 		GProject pk = getProject(endpoint);
 		GeboOauth2SecretContent oauth2Credentials = new GeboOauth2SecretContent();
 		oauth2Credentials.setClientId(SHAREPOINT_CLIENT_ID);
-		oauth2Credentials.setTenantId(SHAREPOINT_TENANT_ID);
+		oauth2Credentials.getCustomAttributes().put("tenantId", SHAREPOINT_TENANT_ID);
 		oauth2Credentials.setSecret(SHAREPOINT_SECRET_KEY);
 		GSharepointContentManagementSystem system = new GSharepointContentManagementSystem();
 		system.setContentManagementSystemType(handler.getHandledSystemType().getCode());
@@ -125,7 +122,7 @@ public class MicrosoftSharepointIntegrationTests extends AbstractGeboMonolithicI
 							}
 						}
 
-					}else if (!r.folder && r.metaType==PathInfoMetaType.WEB_PAGE) {
+					} else if (!r.folder && r.metaType == PathInfoMetaType.WEB_PAGE) {
 						VFilesystemReference reference = new VFilesystemReference();
 						reference.root = root;
 						reference.path = r;
@@ -134,7 +131,7 @@ public class MicrosoftSharepointIntegrationTests extends AbstractGeboMonolithicI
 						param.path = r;
 						paths.add(reference);
 						LOGGER.info("Adding resource :" + r.name + " absolutePath:" + r.absolutePath);
-						
+
 					}
 				}
 			}

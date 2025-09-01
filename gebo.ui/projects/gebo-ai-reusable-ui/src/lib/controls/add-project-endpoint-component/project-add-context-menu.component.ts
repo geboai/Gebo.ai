@@ -18,8 +18,12 @@
  */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GProject, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionPerformedEvent, GeboAIEntitiesSettingWizardConfiguration, GeboUIActionRequest, GeboUIActionRoutingService, GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "@Gebo.ai/reusable-ui";
+
 import { MenuItem } from "primeng/api";
+import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing-component/entities-modification-wizard";
+import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
+import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architecture/actions.model";
 
 /**
  * Constants defining different module types that can be added to a project

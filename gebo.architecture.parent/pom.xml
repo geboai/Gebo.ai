@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>0.9.9.7-SNAPSHOT</version>
+    <version>0.9.9.7</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -19,8 +19,7 @@
   	<module>gebo.architecture.ai</module>
   	<module>gebo.application.messaging</module>
   	<module>gebo.secrets.services</module>
-  	<module>gebo.architecture.security.controllers</module>
-  	<module>gebo.architecture.oauth2.client</module>
+  	<module>gebo.architecture.security.controllers</module>  	
   	<module>gebo.architecture.lucene</module>
   	<module>gebo.architecture.multithreading</module>
   	<module>gebo.architecture.scheduling</module>
@@ -35,6 +34,9 @@
   	<module>gebo.architecture.environment</module>
   	<module>gebo.architecture.testing</module>
   	<module>gebo.architecture.integration.tests</module>
-  	
+
+  	<module>gebo.architecture.swagger</module>
+  	<module>gebo.architecture.mcp-clients</module>
+  	<module>gebo.architecture.mcp-server</module>
   </modules>
 </project>

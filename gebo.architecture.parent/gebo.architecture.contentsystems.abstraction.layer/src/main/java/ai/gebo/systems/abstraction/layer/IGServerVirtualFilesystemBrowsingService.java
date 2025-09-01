@@ -21,8 +21,6 @@ import ai.gebo.systems.abstraction.layer.model.ServerFileSystemContext;
  * to server environments. This service extends the general virtual filesystem
  * browsing service with a context tailored to server file systems.
  *
- * @param <ServerFileSystemContext> The type of context specific to server
- *                                  filesystem operations.
  */
 public interface IGServerVirtualFilesystemBrowsingService
 		extends IGVirtualFilesystemBrowsingService<ServerFileSystemContext> {

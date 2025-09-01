@@ -6,14 +6,12 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.security.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.EditableUser;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
@@ -33,19 +32,18 @@ import ai.gebo.security.repository.UsersGroupRepository;
 import ai.gebo.security.services.IGUsersAdminService;
 
 /**
- * AI generated comments
- * Implementation of the IGUsersAdminService interface to handle user and group
- * management.
+ * AI generated comments Implementation of the IGUsersAdminService interface to
+ * handle user and group management.
  */
 @Service
 public class GUsersAdminServiceImpl implements IGUsersAdminService {
-	
+
 	@Autowired
 	UserRepository userRepo; // Repository for user-related database operations
-	
+
 	@Autowired
 	UsersGroupRepository groupsRepo; // Repository for groups-related database operations
-	
+
 	@Autowired
 	PasswordEncoder passwordEncoder; // Encoder for hashing user passwords
 
@@ -57,12 +55,14 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	}
 
 	/**
-	 * Inserts a new user into the database after validating uniqueness and password.
+	 * Inserts a new user into the database after validating uniqueness and
+	 * password.
 	 * 
-	 * @param user The user details to insert.
+	 * @param user     The user details to insert.
 	 * @param password The plaintext password of the user.
 	 * @return An EditableUser object representing the newly created user.
-	 * @throws IllegalStateException if the user already exists or the password is invalid.
+	 * @throws IllegalStateException if the user already exists or the password is
+	 *                               invalid.
 	 */
 	@Override
 	public EditableUser insertUser(EditableUser user, String password) {
@@ -140,7 +140,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	/**
 	 * Finds users by query-by-example, supporting pagination.
 	 * 
-	 * @param qbe The example user to search for.
+	 * @param qbe      The example user to search for.
 	 * @param pageable The pagination information.
 	 * @return A pageable list of users matching the example.
 	 */
@@ -152,7 +152,7 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 	/**
 	 * Finds user groups by query-by-example, supporting pagination.
 	 * 
-	 * @param qbe The example group to search for.
+	 * @param qbe      The example group to search for.
 	 * @param pageable The pagination information.
 	 * @return A pageable list of groups matching the example.
 	 */
@@ -209,6 +209,23 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 		return new ArrayList<UserInfos>(userRepo.findAll().stream().map(x -> {
 			return new UserInfosImpl(x);
 		}).toList());
+	}
+
+	@Override
+	public void createUserIfNotExists(String email, Map<String, Object> attributes, AuthProvider authProvider) {
+		EditableUser user = this.findUserByUsername(email);
+		if (user == null) {
+			User _user = new User();
+			_user.setUsername(email);
+			_user.setRoles(List.of("USER"));
+			_user.setDisabled(false);
+			_user.setEmailVerified(false);
+			_user.setProvider(authProvider);
+			_user.setPassword("NOPASSWORD");
+			userRepo.insert(_user);
+
+		}
+
 	}
 
 }

@@ -36,7 +36,7 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
  * Service implementation of the {@link IGDocumentReferenceEnricherMapFactory} interface.
  * Provides functionality to enrich document references with hierarchical information.
  * 
- * @AI generated comments
+ * AI generated comments
  */
 @Service
 public class GDocumentReferenceEnricherMapFactoryImpl implements IGDocumentReferenceEnricherMapFactory {
