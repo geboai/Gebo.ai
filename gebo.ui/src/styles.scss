@@ -127,6 +127,8 @@ label {
 .pi.pi-x,          /* ex-Twitter */
 .pi.pi-amazon,
 .pi.pi-slack,
+.pi.pi-microsoft_multitenant,
+.pi.pi-aws_cognito,
 .pi.pi-oauth2_generic {
   display: inline-block;
   width: 3.5em;          /* 1.5 em × 5 */
@@ -134,14 +136,20 @@ label {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  filter: grayscale(100%);
+  /*filter: grayscale(100%);*/
 }
 
 /* URL SVG specifici – scaricati (es. da Simple Icons) in assets/3rdparty */
-.pi.pi-google   { background-image: url("assets/oauth2/google.svg"); }
+/*.pi.pi-google   { background-image: url("assets/oauth2/google.svg"); }*/
+.pi.pi-google   { background-image: url("assets/oauth2/google-logo-search-new-svgrepo-com.svg"); }
 .pi.pi-facebook { background-image: url("assets/oauth2/facebook.svg"); }
 .pi.pi-github   { background-image: url("assets/oauth2/github.svg"); }
-.pi.pi-microsoft{ background-image: url("assets/oauth2/microsoft.svg"); }
+/*.pi.pi-microsoft{ background-image: url("assets/oauth2/microsoft.svg"); }
+.pi.pi-microsoft_multitenant{ background-image: url("assets/oauth2/microsoft.svg"); }*/
+.pi.pi-microsoft { background-image: url("assets/oauth2/ms-symbollockup_mssymbol_19.svg"); }
+.pi.pi-microsoft_multitenant { background-image: url("assets/oauth2/ms-symbollockup_mssymbol_19.svg"); }
+.pi.pi-aws_cognito { background-image: url("assets/oauth2/aws-svgrepo-com.svg"); }
+
 .pi.pi-linkedin { background-image: url("assets/oauth2/linkedin.svg"); }
 .pi.pi-apple    { background-image: url("assets/oauth2/apple.svg"); }
 .pi.pi-x        { background-image: url("assets/oauth2/x.svg"); }   /* logo “X” */

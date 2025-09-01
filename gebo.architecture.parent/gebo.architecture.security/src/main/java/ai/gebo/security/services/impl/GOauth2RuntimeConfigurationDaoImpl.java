@@ -65,6 +65,9 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 					LOGGER.error(msg);
 					throw new IllegalStateException(msg);
 				}
+				if (config.getClient().getProviderName()==null && config.getProvider()!=null) {
+					config.getClient().setProviderName(config.getProvider().name());
+				}
 			}
 		}
 		return oauth2configs;
@@ -74,7 +77,7 @@ public class GOauth2RuntimeConfigurationDaoImpl extends GAbstractRuntimeConfigur
 	public Oauth2RuntimeConfiguration findByCode(String code) {
 		Oauth2RuntimeConfiguration data = dynamic.findByCode(code);
 		if (data != null)
-			return data;
+			return completeProvider(data);
 		Optional<Oauth2RuntimeConfiguration> entry = staticConfigs.stream()
 				.filter(x -> x.getRegistrationId() != null && x.getRegistrationId().equals(code)).findFirst();
 		return entry.isPresent() ? completeProvider(entry.get()) : null;
