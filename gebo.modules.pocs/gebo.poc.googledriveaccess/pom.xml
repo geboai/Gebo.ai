@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>gebo.modules.pocs</artifactId>
-		<version>0.9.9.7</version>
+		<version>0.9.9.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>gebo.poc.googledriveaccess</artifactId>
 	<dependencies><!--
