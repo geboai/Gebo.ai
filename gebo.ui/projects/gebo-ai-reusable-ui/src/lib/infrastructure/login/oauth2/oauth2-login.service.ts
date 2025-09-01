@@ -5,7 +5,8 @@ import { OAuthService, AuthConfig, OAuthEvent } from 'angular-oauth2-oidc';
 import { Inject, Injectable } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { ActivatedRoute } from "@angular/router";
-import { IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { IOperationStatus } from "../../../controls/base-entity-editing-component/operation-status";
+
 
 const STANDARD_NOT_LOGGED_MESSAGE: GUserMessage[] = [{ summary: "Login failed", detail: "Something has gone wrong in the login", id: "NOTLOGGED", jobId: "", severity: "error", timestamp: Date.now() }];
 export interface IOauth2LoginService {
