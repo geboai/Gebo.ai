@@ -3,7 +3,7 @@
   <parent>
     <groupId>ai.gebo.integration-tests</groupId>
     <artifactId>gebo.integration-tests.parent</artifactId>
-    <version>0.9.9.7-SNAPSHOT</version>
+    <version>0.9.9.7</version>
   </parent>
   <artifactId>sharepoint-integration-tests</artifactId>
   <dependencies>

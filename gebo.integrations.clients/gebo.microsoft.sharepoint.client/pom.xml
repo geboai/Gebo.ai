@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.integrations.clients</groupId>
 		<artifactId>gebo.integrations.clients.parent</artifactId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.microsoft.sharepoint.client</artifactId>
 	<dependencies>

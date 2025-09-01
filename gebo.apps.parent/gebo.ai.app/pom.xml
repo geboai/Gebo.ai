@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>gebo.apps.parent</artifactId>
 		<groupId>ai.gebo.apps</groupId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.ai.app</artifactId>
 	<dependencies>

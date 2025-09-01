@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.core</groupId>
 		<artifactId>gebo.core.parent</artifactId>
-		<version>0.9.9.7-SNAPSHOT</version>
+		<version>0.9.9.7</version>
 	</parent>
 	<artifactId>gebo.knowledgebase.repositories</artifactId>
 	<dependencies>
