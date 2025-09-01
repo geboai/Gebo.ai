@@ -1,37 +1,37 @@
-ai.gebo.oauth2.library.providers:
-  - provider: google
-    authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-    token-uri: https://oauth2.googleapis.com/token
-    user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
-    issuer-uri: https://accounts.google.com
-    introspection-uri: https://oauth2.googleapis.com/tokeninfo
-    jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
-    user-name-attribute: sub
+ai.gebo.oauth2.library:
+  providers:
+    - provider: google
+      authorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      tokenUri: https://oauth2.googleapis.com/token
+      userInfoUri: https://openidconnect.googleapis.com/v1/userinfo
+      issuerUri: https://accounts.google.com
+      introspectionUri: https://oauth2.googleapis.com/tokeninfo
+      jwkSetUri: https://www.googleapis.com/oauth2/v3/certs
+      userNameAttribute: sub
 
-  - provider: aws_cognito
-    authorization-uri: https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/authorize
-    token-uri: https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/token
-    user-info-uri: https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/userInfo
-    issuer-uri: https://cognito-idp.{region}.amazonaws.com/{userPoolId}
-    jwk-set-uri: https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
-    user-name-attribute: sub
+    - provider: aws_cognito
+      authorizationUri: "https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/authorize"
+      tokenUri: "https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/token"
+      userInfoUri: "https://{cognitoDomain}.auth.{region}.amazoncognito.com/oauth2/userInfo"
+      issuerUri: "https://cognito-idp.{region}.amazonaws.com/{userPoolId}"
+      jwkSetUri: "https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json"
+      userNameAttribute: sub
+    - provider: microsoft
+      authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+      tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
+      userInfoUri: https://graph.microsoft.com/v1.0/me
+      issuerUri: https://login.microsoftonline.com/common/v2.0
+      introspectionUri: https://login.microsoftonline.com/common/oauth2/v2.0/token/introspect
+      jwkSetUri: https://login.microsoftonline.com/common/discovery/v2.0/keys
+      userNameAttribute: id
 
-  - provider: microsoft
-    authorization-uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
-    token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
-    user-info-uri: https://graph.microsoft.com/v1.0/me
-    issuer-uri: https://login.microsoftonline.com/common/v2.0
-    introspection-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token/introspect
-    jwk-set-uri: https://login.microsoftonline.com/common/discovery/v2.0/keys
-    user-name-attribute: id
-
-  - provider: microsoft_multitenant
-    authorization-uri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
-    token-uri: https://login.microsoftonline.com/common/oauth2/v2.0/token
-    user-info-uri: https://graph.microsoft.com/oidc/userinfo
-    issuer-uri: https://login.microsoftonline.com/{tenant-id}/v2.0
-    jwk-set-uri: https://login.microsoftonline.com/{tenant-id}/discovery/v2.0/keys
-    user-name-attribute: id
+    - provider: microsoft_multitenant
+      authorizationUri: "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
+      tokenUri: "https://login.microsoftonline.com/common/oauth2/v2.0/token"
+      userInfoUri: "https://graph.microsoft.com/oidc/userinfo"
+      issuerUri: "https://login.microsoftonline.com/{tenant-id}/v2.0"
+      jwkSetUri: "https://login.microsoftonline.com/{tenant-id}/discovery/v2.0/keys"
+      userNameAttribute: id
 
   #- provider: facebook
   #  authorization-uri: https://www.facebook.com/v10.0/dialog/oauth

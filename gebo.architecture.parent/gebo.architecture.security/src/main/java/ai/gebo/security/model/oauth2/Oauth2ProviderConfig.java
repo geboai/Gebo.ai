@@ -10,14 +10,13 @@ package ai.gebo.security.model.oauth2;
 
 import ai.gebo.security.model.AuthProvider;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 /*******************************************************************************
  * This data represents both runtime OAuth2 provider basic configuration and
  * pre-defined standard configuration for worldwide standard OAuth2 providers.
  * AI generated comments
  */
-@Data
+
 public class Oauth2ProviderConfig {
 
 	/**
@@ -54,8 +53,55 @@ public class Oauth2ProviderConfig {
 	 */
 	@NotNull
 	private String userNameAttribute;
-	@NotNull
 	private String introspectionUri;
 	private String issuerUri;
 	private String jwkSetUri;
+	public AuthProvider getProvider() {
+		return provider;
+	}
+	public void setProvider(AuthProvider provider) {
+		this.provider = provider;
+	}
+	public String getAuthorizationUri() {
+		return authorizationUri;
+	}
+	public void setAuthorizationUri(String authorizationUri) {
+		this.authorizationUri = authorizationUri;
+	}
+	public String getTokenUri() {
+		return tokenUri;
+	}
+	public void setTokenUri(String tokenUri) {
+		this.tokenUri = tokenUri;
+	}
+	public String getUserInfoUri() {
+		return userInfoUri;
+	}
+	public void setUserInfoUri(String userInfoUri) {
+		this.userInfoUri = userInfoUri;
+	}
+	public String getUserNameAttribute() {
+		return userNameAttribute;
+	}
+	public void setUserNameAttribute(String userNameAttribute) {
+		this.userNameAttribute = userNameAttribute;
+	}
+	public String getIntrospectionUri() {
+		return introspectionUri;
+	}
+	public void setIntrospectionUri(String introspectionUri) {
+		this.introspectionUri = introspectionUri;
+	}
+	public String getIssuerUri() {
+		return issuerUri;
+	}
+	public void setIssuerUri(String issuerUri) {
+		this.issuerUri = issuerUri;
+	}
+	public String getJwkSetUri() {
+		return jwkSetUri;
+	}
+	public void setJwkSetUri(String jwkSetUri) {
+		this.jwkSetUri = jwkSetUri;
+	}
 }

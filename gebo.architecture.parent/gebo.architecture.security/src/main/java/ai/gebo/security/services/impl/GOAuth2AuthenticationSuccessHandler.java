@@ -1,23 +1,14 @@
 package ai.gebo.security.services.impl;
 
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ai.gebo.crypting.services.GeboCryptSecretException;
-import ai.gebo.crypting.services.IGeboCryptingService;
-import ai.gebo.security.model.SecurityHeaderData;
-import ai.gebo.security.model.SecurityHeaderUtil;
-import ai.gebo.security.model.oauth2.Oauth2DeliveryData;
-import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
 import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
 import ai.gebo.security.services.IGOAuth2AuthenticationSuccessHandler;

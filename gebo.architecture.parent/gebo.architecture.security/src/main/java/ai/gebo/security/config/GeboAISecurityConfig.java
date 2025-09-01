@@ -33,7 +33,6 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.repository.IOauth2DynamicClientRegistrationRepository;
-import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.repository.Oauth2DynamicClientRegistrationRepository;
 import ai.gebo.security.repository.Oauth2DynamicReactiveRegistrationRepository;
 import ai.gebo.security.repository.Oauth2RuntimeConfigurationRepository;

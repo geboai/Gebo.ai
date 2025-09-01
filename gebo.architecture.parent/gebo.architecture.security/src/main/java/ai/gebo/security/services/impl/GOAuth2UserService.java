@@ -2,7 +2,6 @@ package ai.gebo.security.services.impl;
 
 import java.util.Map;
 
-import org.springframework.boot.context.config.ConfigDataNotFoundAction;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
