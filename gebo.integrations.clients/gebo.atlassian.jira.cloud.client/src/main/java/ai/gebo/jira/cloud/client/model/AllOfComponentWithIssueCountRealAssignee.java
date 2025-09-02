@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.User;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The user assigned to issues created with this component, when &#x60;assigneeType&#x60; does not identify a valid assignee.

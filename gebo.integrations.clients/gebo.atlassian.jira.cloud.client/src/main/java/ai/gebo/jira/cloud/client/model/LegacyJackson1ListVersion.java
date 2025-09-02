@@ -24,11 +24,8 @@
 
 package ai.gebo.jira.cloud.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Version;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 /**
  * LegacyJackson1ListVersion
  */

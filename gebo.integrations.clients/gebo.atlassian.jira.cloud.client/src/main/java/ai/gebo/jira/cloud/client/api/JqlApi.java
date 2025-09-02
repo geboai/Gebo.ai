@@ -12,11 +12,23 @@
 
 package ai.gebo.jira.cloud.client.api;
 
-import ai.gebo.jira.cloud.client.invoker.ApiClient;
+import java.util.List;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import ai.gebo.jira.cloud.client.invoker.ApiClient;
 import ai.gebo.jira.cloud.client.model.AutoCompleteSuggestions;
 import ai.gebo.jira.cloud.client.model.ConvertedJQLQueries;
-import ai.gebo.jira.cloud.client.model.ErrorCollection;
 import ai.gebo.jira.cloud.client.model.JQLPersonalDataMigrationRequest;
 import ai.gebo.jira.cloud.client.model.JQLReferenceData;
 import ai.gebo.jira.cloud.client.model.JqlQueriesToParse;
@@ -24,26 +36,6 @@ import ai.gebo.jira.cloud.client.model.JqlQueriesToSanitize;
 import ai.gebo.jira.cloud.client.model.ParsedJqlQueries;
 import ai.gebo.jira.cloud.client.model.SanitizedJqlQueries;
 import ai.gebo.jira.cloud.client.model.SearchAutoCompleteFilter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 /**
  * API client for JQL (Jira Query Language) operations.

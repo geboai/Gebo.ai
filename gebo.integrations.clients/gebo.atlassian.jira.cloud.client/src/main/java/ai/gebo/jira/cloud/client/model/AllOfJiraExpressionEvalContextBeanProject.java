@@ -26,8 +26,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.IdOrKeyBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The project that is available under the &#x60;project&#x60; variable when evaluating the expression.

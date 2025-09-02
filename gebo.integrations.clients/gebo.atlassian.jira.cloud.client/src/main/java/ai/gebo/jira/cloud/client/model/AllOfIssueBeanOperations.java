@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.LinkGroup;
-import ai.gebo.jira.cloud.client.model.Operations;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * The operations that can be performed on the issue.
  */

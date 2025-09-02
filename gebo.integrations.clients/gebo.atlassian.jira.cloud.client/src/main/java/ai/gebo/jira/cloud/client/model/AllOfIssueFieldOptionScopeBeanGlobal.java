@@ -27,10 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.GlobalScopeBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * Defines the behavior of the option within the global context. If this property is set, even if set to an empty object, then the option is available in all projects.
  */

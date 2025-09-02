@@ -27,9 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.IssuesJqlMetaDataBean;
-import ai.gebo.jira.cloud.client.model.IssuesMetaBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Contains information about the &#x60;issues&#x60; variable in the context. For example, is the issues were loaded with JQL, information about the page will be included here.

@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Changelog;
-import ai.gebo.jira.cloud.client.model.PageOfChangelogs;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * Details of changelogs associated with the issue.
  */

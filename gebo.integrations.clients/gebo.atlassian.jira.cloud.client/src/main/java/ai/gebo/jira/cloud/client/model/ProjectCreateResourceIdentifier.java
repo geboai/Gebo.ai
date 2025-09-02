@@ -25,10 +25,11 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Every project-created entity has an ID that must be unique within the scope of the project creation. PCRI (Project Create Resource Identifier) is a standard format for creating IDs and references to other project entities. PCRI format is defined as follows: pcri:\\[entityType\\]:\\[type\\]:\\[entityId\\] entityType - the type of an entity, e.g. status, role, workflow type - PCRI type, either &#x60;id&#x60; - The ID of an entity that already exists in the target site, or &#x60;ref&#x60; - A unique reference to an entity that is being created entityId - entity identifier, if type is &#x60;id&#x60; - must be an existing entity ID that exists in the Jira site, if &#x60;ref&#x60; - must be unique across all entities in the scope of this project template creation

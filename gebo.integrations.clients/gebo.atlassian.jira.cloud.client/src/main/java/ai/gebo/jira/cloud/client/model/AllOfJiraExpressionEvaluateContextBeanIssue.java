@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.IdOrKeyBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The issue that is available under the &#x60;issue&#x60; variable when evaluating the expression.

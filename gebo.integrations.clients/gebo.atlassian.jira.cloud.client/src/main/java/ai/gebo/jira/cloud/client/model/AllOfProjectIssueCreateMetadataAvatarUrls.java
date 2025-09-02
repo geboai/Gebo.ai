@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.AvatarUrlsBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * List of the project&#x27;s avatars, returning the avatar size and associated URL.

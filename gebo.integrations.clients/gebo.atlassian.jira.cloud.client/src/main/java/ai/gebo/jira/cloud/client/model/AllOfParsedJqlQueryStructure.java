@@ -27,10 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.JqlQuery;
-import ai.gebo.jira.cloud.client.model.JqlQueryClause;
-import ai.gebo.jira.cloud.client.model.JqlQueryOrderByClause;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The syntax tree of the query. Empty if the query was invalid.

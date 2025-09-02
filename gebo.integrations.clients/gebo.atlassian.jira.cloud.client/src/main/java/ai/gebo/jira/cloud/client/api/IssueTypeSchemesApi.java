@@ -20,8 +20,23 @@
  */
 package ai.gebo.jira.cloud.client.api;
 
-import ai.gebo.jira.cloud.client.invoker.ApiClient;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import ai.gebo.jira.cloud.client.invoker.ApiClient;
 import ai.gebo.jira.cloud.client.model.IssueTypeIds;
 import ai.gebo.jira.cloud.client.model.IssueTypeSchemeDetails;
 import ai.gebo.jira.cloud.client.model.IssueTypeSchemeID;
@@ -31,26 +46,6 @@ import ai.gebo.jira.cloud.client.model.OrderOfIssueTypes;
 import ai.gebo.jira.cloud.client.model.PageBeanIssueTypeScheme;
 import ai.gebo.jira.cloud.client.model.PageBeanIssueTypeSchemeMapping;
 import ai.gebo.jira.cloud.client.model.PageBeanIssueTypeSchemeProjects;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-05-05T08:43:30.568333200+02:00[Europe/Rome]")
 //@Component("ai.gebo.jira.cloud.client.api.IssueTypeSchemesApi")

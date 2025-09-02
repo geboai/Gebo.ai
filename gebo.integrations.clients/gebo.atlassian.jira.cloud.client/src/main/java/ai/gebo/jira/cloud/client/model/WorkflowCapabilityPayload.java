@@ -24,17 +24,13 @@
 
 package ai.gebo.jira.cloud.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.StatusPayload;
-import ai.gebo.jira.cloud.client.model.WorkflowPayload;
-import ai.gebo.jira.cloud.client.model.WorkflowSchemePayload;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The payload for creating a workflows. See https://www.atlassian.com/software/jira/guides/workflows/overview\\#what-is-a-jira-workflow
  */

@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.PagedListUserDetailsApplicationUser;
-import ai.gebo.jira.cloud.client.model.UserDetails;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * A paginated list of the users that are members of the group. A maximum of 50 users is returned in the list, to access additional users append &#x60;[start-index:end-index]&#x60; to the expand request. For example, to access the next 50 users, use&#x60;?expand&#x3D;users[51:100]&#x60;.
  */

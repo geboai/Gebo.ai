@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.CreateDateFieldRequest;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The end date field for the plan.

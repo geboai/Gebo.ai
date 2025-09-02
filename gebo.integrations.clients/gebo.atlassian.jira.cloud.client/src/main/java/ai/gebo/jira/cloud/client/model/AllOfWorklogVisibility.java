@@ -25,8 +25,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Visibility;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Details about any restrictions in the visibility of the worklog. Optional when creating or updating a worklog.

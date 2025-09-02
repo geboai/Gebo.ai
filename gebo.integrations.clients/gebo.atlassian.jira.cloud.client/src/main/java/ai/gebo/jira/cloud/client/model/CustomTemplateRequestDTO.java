@@ -25,20 +25,9 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.BoardsPayload;
-import ai.gebo.jira.cloud.client.model.FieldCapabilityPayload;
-import ai.gebo.jira.cloud.client.model.IssueTypeProjectCreatePayload;
-import ai.gebo.jira.cloud.client.model.NotificationSchemePayload;
-import ai.gebo.jira.cloud.client.model.PermissionPayloadDTO;
-import ai.gebo.jira.cloud.client.model.ProjectPayload;
-import ai.gebo.jira.cloud.client.model.RolesCapabilityPayload;
-import ai.gebo.jira.cloud.client.model.ScopePayload;
-import ai.gebo.jira.cloud.client.model.SecuritySchemePayload;
-import ai.gebo.jira.cloud.client.model.WorkflowCapabilityPayload;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The specific request object for creating a project with template.

@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.CustomContextVariable;
-import ai.gebo.jira.cloud.client.model.JiraExpressionEvaluateContextBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * The context in which the Jira expression is evaluated.
  */

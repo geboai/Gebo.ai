@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Icon;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Details of the icon representing the status. If not provided, no status icon displays in Jira.

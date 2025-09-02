@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.User;
-import ai.gebo.jira.cloud.client.model.UserList;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * A paginated list of the users that the filter is shared with. This includes users that are members of the groups or can browse the projects that the filter is shared with.
  */

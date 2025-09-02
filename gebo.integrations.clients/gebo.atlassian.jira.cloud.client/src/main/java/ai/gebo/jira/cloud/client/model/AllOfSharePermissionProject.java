@@ -27,16 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.IssueTypeDetails;
-import ai.gebo.jira.cloud.client.model.Project;
-import ai.gebo.jira.cloud.client.model.ProjectComponent;
-import ai.gebo.jira.cloud.client.model.Version;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 /**
  * The project that the filter is shared with. This is similar to the project object returned by [Get project](#api-rest-api-3-project-projectIdOrKey-get) but it contains a subset of the properties, which are: &#x60;self&#x60;, &#x60;id&#x60;, &#x60;key&#x60;, &#x60;assigneeType&#x60;, &#x60;name&#x60;, &#x60;roles&#x60;, &#x60;avatarUrls&#x60;, &#x60;projectType&#x60;, &#x60;simplified&#x60;.   For a request, specify the &#x60;id&#x60; for the project.
  */

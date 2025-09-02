@@ -25,11 +25,9 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.JiraSelectedOptionField;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Add or clear a single select field:   *  To add, specify the option with an &#x60;optionId&#x60;.  *  To clear, pass an option with &#x60;optionId&#x60; as &#x60;-1&#x60;.

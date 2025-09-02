@@ -24,21 +24,13 @@
 
 package ai.gebo.jira.cloud.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.CustomFieldPayload;
-import ai.gebo.jira.cloud.client.model.FieldLayoutPayload;
-import ai.gebo.jira.cloud.client.model.FieldLayoutSchemePayload;
-import ai.gebo.jira.cloud.client.model.IssueLayoutPayload;
-import ai.gebo.jira.cloud.client.model.IssueTypeScreenSchemePayload;
-import ai.gebo.jira.cloud.client.model.ScreenPayload;
-import ai.gebo.jira.cloud.client.model.ScreenSchemePayload;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Defines the payload for the fields, screens, screen schemes, issue type screen schemes, field layouts, and field layout schemes
  */

@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.JiraComponentField;
-import ai.gebo.jira.cloud.client.model.JiraMultiSelectComponentField;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * Edit a multi select components field:   *  Options include &#x60;ADD&#x60;, &#x60;REPLACE&#x60;, &#x60;REMOVE&#x60;, or &#x60;REMOVE_ALL&#x60; for bulk edits.  *  To clear, use the &#x60;REMOVE_ALL&#x60; option with an empty &#x60;components&#x60; array.
  */

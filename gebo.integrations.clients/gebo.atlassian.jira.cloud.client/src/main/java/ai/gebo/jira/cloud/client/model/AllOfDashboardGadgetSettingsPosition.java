@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.DashboardGadgetPosition;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The position of the gadget. When the gadget is placed into the position, other gadgets in the same column are moved down to accommodate it.

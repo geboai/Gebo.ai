@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.UserBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The user account ID that the filter is shared with. For a request, specify the &#x60;accountId&#x60; property for the user.

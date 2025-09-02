@@ -25,8 +25,6 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.WorkflowTransition;
 
 /**
  * AllOfAppWorkflowTransitionRuleTransition
