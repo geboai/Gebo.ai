@@ -176,7 +176,7 @@ public class OpenAIChatModelConfigurationSupportService
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
 					ObservationRegistry.NOOP);
-
+			
 			return model;
 		}
 
