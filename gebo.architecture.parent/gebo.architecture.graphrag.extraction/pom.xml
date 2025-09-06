@@ -7,29 +7,17 @@
 		<artifactId>gebo.architecture.parent</artifactId>
 		<version>0.9.9.8-SNAPSHOT</version>
 	</parent>
-	<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
+	<artifactId>gebo.architecture.graphrag.extraction</artifactId>
 	<dependencies>
-
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.graphrag.model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.knowledgebase.model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.core.contents.security</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 	</dependencies>
 </project>

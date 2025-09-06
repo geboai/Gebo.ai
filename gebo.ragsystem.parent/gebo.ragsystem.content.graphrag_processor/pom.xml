@@ -3,33 +3,21 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>ai.gebo.architecture</groupId>
-		<artifactId>gebo.architecture.parent</artifactId>
+		<groupId>ai.gebo.ragsystem</groupId>
+		<artifactId>gebo.ragsystem.parent</artifactId>
 		<version>0.9.9.8-SNAPSHOT</version>
 	</parent>
-	<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
+	<artifactId>gebo.ragsystem.content.graphrag_processor</artifactId>
 	<dependencies>
-
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.knowledgebase.model</artifactId>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.application.messaging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>ai.gebo.core</groupId>
-			<artifactId>gebo.core.contents.security</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 	</dependencies>
 </project>
