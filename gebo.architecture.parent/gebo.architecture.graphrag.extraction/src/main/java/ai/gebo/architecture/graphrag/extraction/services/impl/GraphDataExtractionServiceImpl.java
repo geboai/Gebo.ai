@@ -31,7 +31,9 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration)
 			throws LLMConfigException {
-		return extract(document.getText(), configuration);
+		String text = document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "";
+		text += document.getText();
+		return extract(text, configuration);
 	}
 
 	@Override
