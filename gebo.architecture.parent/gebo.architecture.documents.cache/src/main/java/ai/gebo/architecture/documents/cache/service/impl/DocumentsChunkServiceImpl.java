@@ -44,17 +44,29 @@ import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
-public class DocumentsChunkServiceImpl implements IDocumentsChunkService {
+
+public class DocumentsChunkServiceImpl
+		extends AbstractCacheEntryCleanupService<DocumentChunkOperation, DocumentChunkOperationRepository>
+		implements IDocumentsChunkService {
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
 	private final IDocumentsCacheService cacheService;
 	private final IGGeboConfigService configService;
-	private final DocumentChunkOperationRepository chunkOperationRepository;
 	private final IGAIDocumentMetaDataEnricher metaDataEnricher;
 	private final IGDocumentReferenceIngestionHandler ingestionHandler;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 	private final static long ttlCacheIt = 5 * 60 * 1000;// tokenizing request has 5 minute validity
+
+	public DocumentsChunkServiceImpl(IDocumentsCacheService cacheService, IGGeboConfigService configService,
+			DocumentChunkOperationRepository chunkOperationRepository, IGAIDocumentMetaDataEnricher metaDataEnricher,
+			IGDocumentReferenceIngestionHandler ingestionHandler, IGPersistentObjectManager persistentObjectManager) {
+		super(chunkOperationRepository, ttlCacheIt);
+		this.cacheService = cacheService;
+		this.configService = configService;
+		this.ingestionHandler = ingestionHandler;
+		this.persistentObjectManager = persistentObjectManager;
+		this.metaDataEnricher = metaDataEnricher;
+	}
 
 	@Override
 	public DocumentChunkingResponse getChunk(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
@@ -76,8 +88,7 @@ public class DocumentsChunkServiceImpl implements IDocumentsChunkService {
 			throw new MethodNotFoundException("The images chunking is not yet implemented");
 		// Check if there is a matching request in the last ttlCacheIt period of time
 		// already done to be reused
-		List<DocumentChunkOperation> matchingOperations = chunkOperationRepository
-				.findByOriginalDocumentCode(document.getCode());
+		List<DocumentChunkOperation> matchingOperations = repository.findByOriginalDocumentCode(document.getCode());
 
 		final long actualTime = System.currentTimeMillis();
 		Comparator<? super DocumentChunkOperation> comparator = (o1,
@@ -217,7 +228,7 @@ public class DocumentsChunkServiceImpl implements IDocumentsChunkService {
 					if (!chunkOperation.getChunksList().isEmpty()) {
 						response.setId(chunkOperation.getId());
 						chunkOperation.setLastAccessed(new Date());
-						chunkOperationRepository.insert(chunkOperation);
+						repository.insert(chunkOperation);
 						int index = chunkOperation.getChunksList().indexOf(response.getCurrentChunk().getId());
 						if (chunkOperation.getChunksList().size() > index + 1) {
 							response.setNextChunkId(chunkOperation.getChunksList().get(index + 1));
@@ -234,7 +245,7 @@ public class DocumentsChunkServiceImpl implements IDocumentsChunkService {
 	@Override
 	public DocumentChunkingResponse getNextChunk(GDocumentReference document, String chunkRequestId, String chunkId)
 			throws DocumentCacheAccessException, IOException {
-		Optional<DocumentChunkOperation> optionalChunkOperation = chunkOperationRepository.findById(chunkRequestId);
+		Optional<DocumentChunkOperation> optionalChunkOperation = repository.findById(chunkRequestId);
 		if (optionalChunkOperation.isEmpty())
 			throw new DocumentCacheAccessException("Chunk operation invalid id or expired id =>" + chunkRequestId);
 		DocumentChunkOperation operation = optionalChunkOperation.get();
@@ -252,11 +263,34 @@ public class DocumentsChunkServiceImpl implements IDocumentsChunkService {
 				response.setNextChunkId(nextChunk);
 			}
 			operation.setLastAccessed(new Date());
-			this.chunkOperationRepository.save(operation);
+			this.repository.save(operation);
 			return response;
 		} else
 			throw new DocumentCacheAccessException(chunkId + " not part of the chunking operation " + chunkRequestId);
 
+	}
+
+	@Override
+	protected void cleanupResources(DocumentChunkOperation data) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin cleanupResources(..)");
+		}
+		String workDirectory = configService.getGeboWorkDirectory();
+		data.getChunksList().stream().forEach(fileName -> {
+			try {
+				Path path = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, fileName);
+				if (Files.exists(path)) {
+					Files.delete(path);
+				} else {
+					LOGGER.warn("File " + path.toString() + " not found");
+				}
+			} catch (IOException exc) {
+				LOGGER.warn("Exception while deleting " + fileName, exc);
+			}
+		});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End cleanupResources(..)");
+		}
 	}
 
 }

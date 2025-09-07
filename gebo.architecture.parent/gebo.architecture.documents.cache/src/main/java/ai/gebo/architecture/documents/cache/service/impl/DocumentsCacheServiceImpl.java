@@ -24,16 +24,26 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
-import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
-public class DocumentsCacheServiceImpl implements IDocumentsCacheService {
+public class DocumentsCacheServiceImpl
+		extends AbstractCacheEntryCleanupService<DocumentCacheEntry, DocumentCacheEntryRepository>
+		implements IDocumentsCacheService {
 	private final IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern;
 	private final IGPersistentObjectManager persistentObjectManager;
-	private final DocumentCacheEntryRepository cacheRepository;
 	private final IGGeboConfigService configService;
+
 	private final static String FILESCACHEFOLDER = ".FCACHE";
+
+	public DocumentsCacheServiceImpl(
+			IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern,
+			IGPersistentObjectManager persistentObjectManager, IGGeboConfigService configService,
+			DocumentCacheEntryRepository repository) {
+		super(repository, 5 * 60 * 1000);
+		this.configService = configService;
+		this.persistentObjectManager = persistentObjectManager;
+		this.contentManagementSystemHandlerRepositoryPattern = contentManagementSystemHandlerRepositoryPattern;
+	}
 
 	private IGContentManagementSystemHandler retrieveHandler(GDocumentReference reference)
 			throws DocumentCacheAccessException {
@@ -66,7 +76,7 @@ public class DocumentsCacheServiceImpl implements IDocumentsCacheService {
 	private InputStream streamDocumentWithLocalCache(GDocumentReference reference,
 			IGContentManagementSystemHandler handler)
 			throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
-		Optional<DocumentCacheEntry> inCacheCopy = cacheRepository.findById(reference.getCode());
+		Optional<DocumentCacheEntry> inCacheCopy = repository.findById(reference.getCode());
 		boolean loadAndCache = true;
 		if (inCacheCopy.isPresent() && inCacheCopy.get().getBinaryDocumentName() != null) {
 			loadAndCache = false;
@@ -82,11 +92,11 @@ public class DocumentsCacheServiceImpl implements IDocumentsCacheService {
 					// Serve from local filesystem
 					DocumentCacheEntry cacheEntry = inCacheCopy.get();
 					cacheEntry.setLastAccessed(new Date());
-					cacheRepository.save(cacheEntry);
+					repository.save(cacheEntry);
 					return Files.newInputStream(filePath, StandardOpenOption.READ);
 				}
 			}
-			cacheRepository.delete(inCacheCopy.get());
+			repository.delete(inCacheCopy.get());
 		}
 		String newFileName = UUID.randomUUID().toString() + "-" + System.currentTimeMillis();
 		DocumentCacheEntry cacheEntry = new DocumentCacheEntry();
@@ -98,8 +108,23 @@ public class DocumentsCacheServiceImpl implements IDocumentsCacheService {
 		Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,
 				cacheEntry.getBinaryDocumentName());
 		Files.copy(handler.streamContent(reference, new HashMap()), filePath);
-		cacheRepository.save(cacheEntry);
+		repository.save(cacheEntry);
 		return Files.newInputStream(filePath, StandardOpenOption.READ);
+	}
+
+	@Override
+	protected void cleanupResources(DocumentCacheEntry data) {
+		Path path = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER, data.getBinaryDocumentName());
+		if (Files.exists(path)) {
+			try {
+				Files.delete(path);
+			} catch (IOException e) {
+				LOGGER.warn("Cannot delete file" + path, e);
+			}
+		} else {
+			LOGGER.warn("Cannot delete file" + path + " because it does not exist");
+		}
+
 	}
 
 }
