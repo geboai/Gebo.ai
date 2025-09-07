@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.contentsystems.abstraction.layer.test;
 
@@ -45,8 +42,9 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
 /**
  * AI generated comments
  * 
- * Implementation of a test content system handler that extends the abstract content management system handler.
- * This handler is used for testing purposes and supports different test types for content consumption.
+ * Implementation of a test content system handler that extends the abstract
+ * content management system handler. This handler is used for testing purposes
+ * and supports different test types for content consumption.
  */
 @Service
 public class TestContentSystemHandlerImpl
@@ -60,7 +58,8 @@ public class TestContentSystemHandlerImpl
 	private static final TestContentManagementSystem singleSystem = new TestContentManagementSystem();
 
 	/**
-	 * Static initializer to set up the content management system type and description
+	 * Static initializer to set up the content management system type and
+	 * description
 	 */
 	static {
 		type.setCode("TEST-CONTENT-SYSTEM");
@@ -73,12 +72,12 @@ public class TestContentSystemHandlerImpl
 	 * Constructor for the test content system handler
 	 * 
 	 * @param buildSystemHandlerRepository Repository for build system handlers
-	 * @param contentHandler Factory for document references
-	 * @param localFolderDiscoveryService Service for discovering local folders
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for messages
-	 * @param endpointRepo Repository for test project endpoints
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param contentHandler               Factory for document references
+	 * @param localFolderDiscoveryService  Service for discovering local folders
+	 * @param persistentObjectManager      Manager for persistent objects
+	 * @param messageBroker                Broker for messages
+	 * @param endpointRepo                 Repository for test project endpoints
+	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
 	public TestContentSystemHandlerImpl(IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
 			IGDocumentReferenceFactory contentHandler,
@@ -105,7 +104,7 @@ public class TestContentSystemHandlerImpl
 	/**
 	 * Finds a project endpoint by system code and project endpoint code
 	 * 
-	 * @param systemCode The system code
+	 * @param systemCode          The system code
 	 * @param projectEndpointCode The project endpoint code
 	 * @return The found test project endpoint
 	 * @throws GeboContentHandlerSystemException If an error occurs
@@ -155,14 +154,15 @@ public class TestContentSystemHandlerImpl
 	}
 
 	/**
-	 * Implements the content consumption logic based on the test type of the endpoint
+	 * Implements the content consumption logic based on the test type of the
+	 * endpoint
 	 * 
 	 * @param contentManagementConfig The content management configuration
-	 * @param buildSystems The build systems
-	 * @param endpoint The test project endpoint
-	 * @param consumer The content consumer
-	 * @param messagesConsumer The user messages consumer
-	 * @param errorConsumer The error consumer
+	 * @param buildSystems            The build systems
+	 * @param endpoint                The test project endpoint
+	 * @param consumer                The content consumer
+	 * @param messagesConsumer        The user messages consumer
+	 * @param errorConsumer           The error consumer
 	 * @throws GeboContentHandlerSystemException If an error occurs
 	 */
 	@Override
@@ -174,7 +174,8 @@ public class TestContentSystemHandlerImpl
 			throw new GeboContentHandlerSystemException("Test type unknown");
 		switch (endpoint.getTestType()) {
 		case CONTAINED_CONTENTS: {
-			// Process document references, virtual folders, and user messages contained in the endpoint
+			// Process document references, virtual folders, and user messages contained in
+			// the endpoint
 			for (GDocumentReference cn : endpoint.getTestDocumentReferences()) {
 				consumer.accept(cn);
 			}
@@ -206,10 +207,11 @@ public class TestContentSystemHandlerImpl
 	 * Streams content from a document reference
 	 * 
 	 * @param reference The document reference
-	 * @param cache The cache map
+	 * @param cache     The cache map
 	 * @return An input stream for the content
-	 * @throws GeboContentHandlerSystemException If an error occurs with the content system
-	 * @throws IOException If an I/O error occurs
+	 * @throws GeboContentHandlerSystemException If an error occurs with the content
+	 *                                           system
+	 * @throws IOException                       If an I/O error occurs
 	 */
 	@Override
 	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
@@ -226,5 +228,11 @@ public class TestContentSystemHandlerImpl
 			return is;
 		} else
 			return super.streamContent(reference, cache);
+	}
+
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return true;
 	}
 }

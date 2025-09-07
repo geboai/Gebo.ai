@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.git.content.handler.impl;
 
@@ -64,11 +61,13 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
 /**
  * AI generated comments
  * 
- * Abstract class for Git content management system handlers that provides implementation
- * for interacting with Git repositories through JGit.
+ * Abstract class for Git content management system handlers that provides
+ * implementation for interacting with Git repositories through JGit.
  * 
- * @param <SystemIntegrationConfigType> Type of Git content management system configuration
- * @param <EndpointConfigType> Type of Git project endpoint configuration
+ * @param <SystemIntegrationConfigType> Type of Git content management system
+ *                                      configuration
+ * @param <EndpointConfigType>          Type of Git project endpoint
+ *                                      configuration
  */
 public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrationConfigType extends GGitContentManagementSystem, EndpointConfigType extends GGitProjectEndpoint>
 		extends GAbstractContentManagementSystemHandler<SystemIntegrationConfigType, EndpointConfigType>
@@ -79,15 +78,20 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	/**
 	 * Constructor for the Git content management system handler.
 	 * 
-	 * @param buildSystemHandlerRepository Repository pattern for build system handlers
-	 * @param contentHandler Factory for document references
-	 * @param configurationsDao DAO for content management system configurations
-	 * @param endpointsDao DAO for project endpoint runtime configurations
-	 * @param secretsAccessService Service for accessing secrets
-	 * @param localPersistentFolderDiscoveryService Service for discovering local persistent folders
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for messages
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param buildSystemHandlerRepository          Repository pattern for build
+	 *                                              system handlers
+	 * @param contentHandler                        Factory for document references
+	 * @param configurationsDao                     DAO for content management
+	 *                                              system configurations
+	 * @param endpointsDao                          DAO for project endpoint runtime
+	 *                                              configurations
+	 * @param secretsAccessService                  Service for accessing secrets
+	 * @param localPersistentFolderDiscoveryService Service for discovering local
+	 *                                              persistent folders
+	 * @param persistentObjectManager               Manager for persistent objects
+	 * @param messageBroker                         Broker for messages
+	 * @param ingestionHandler                      Handler for document reference
+	 *                                              ingestion
 	 */
 	public GAbstractGitContentManagementSystemHandler(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
@@ -96,7 +100,8 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 			IGProjectEndpointRuntimeConfigurationDao<EndpointConfigType> endpointsDao,
 			IGeboSecretsAccessService secretsAccessService,
 			IGLocalPersistentFolderDiscoveryService localPersistentFolderDiscoveryService,
-			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker, IGDocumentReferenceIngestionHandler ingestionHandler) {
+			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
+			IGDocumentReferenceIngestionHandler ingestionHandler) {
 		super(buildSystemHandlerRepository, contentHandler, configurationsDao, endpointsDao,
 				localPersistentFolderDiscoveryService, persistentObjectManager, messageBroker, ingestionHandler);
 		this.secretsAccessService = secretsAccessService;
@@ -104,17 +109,19 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	}
 
 	/**
-	 * Implements the content consumption process for Git repositories.
-	 * Clones or pulls the repository based on whether it already exists locally,
-	 * and then processes its contents.
+	 * Implements the content consumption process for Git repositories. Clones or
+	 * pulls the repository based on whether it already exists locally, and then
+	 * processes its contents.
 	 * 
-	 * @param contentManagementConfig Configuration for the content management system
-	 * @param buildSystems List of build systems
-	 * @param endpoint Endpoint configuration for the Git repository
-	 * @param consumer Consumer for the repository content
-	 * @param messagesConsumer Consumer for user messages
-	 * @param errorConsumer Consumer for content access errors
-	 * @throws GeboContentHandlerSystemException If there's an error in handling the content
+	 * @param contentManagementConfig Configuration for the content management
+	 *                                system
+	 * @param buildSystems            List of build systems
+	 * @param endpoint                Endpoint configuration for the Git repository
+	 * @param consumer                Consumer for the repository content
+	 * @param messagesConsumer        Consumer for user messages
+	 * @param errorConsumer           Consumer for content access errors
+	 * @throws GeboContentHandlerSystemException If there's an error in handling the
+	 *                                           content
 	 */
 	@Override
 	protected void consumeImplementation(SystemIntegrationConfigType contentManagementConfig,
@@ -214,21 +221,22 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	/**
 	 * Pulls updates from the remote repository into the existing local repository.
 	 * 
-	 * @param endpoint Endpoint configuration for the Git repository
+	 * @param endpoint       Endpoint configuration for the Git repository
 	 * @param folder2analyze Local folder containing the Git repository
-	 * @param publicAccess Whether the repository is publicly accessible
-	 * @param secret Secret content for authentication if not public
+	 * @param publicAccess   Whether the repository is publicly accessible
+	 * @param secret         Secret content for authentication if not public
 	 * @return Git object representing the repository
-	 * @throws IOException If there's an I/O error
-	 * @throws WrongRepositoryStateException If the repository state is invalid for the operation
+	 * @throws IOException                   If there's an I/O error
+	 * @throws WrongRepositoryStateException If the repository state is invalid for
+	 *                                       the operation
 	 * @throws InvalidConfigurationException If there's an invalid configuration
-	 * @throws InvalidRemoteException If the remote is invalid
-	 * @throws CanceledException If the operation is canceled
-	 * @throws RefNotFoundException If a reference is not found
-	 * @throws RefNotAdvertisedException If a reference is not advertised
-	 * @throws NoHeadException If there's no HEAD reference
-	 * @throws TransportException If there's a transport error
-	 * @throws GitAPIException If there's an error with the Git API
+	 * @throws InvalidRemoteException        If the remote is invalid
+	 * @throws CanceledException             If the operation is canceled
+	 * @throws RefNotFoundException          If a reference is not found
+	 * @throws RefNotAdvertisedException     If a reference is not advertised
+	 * @throws NoHeadException               If there's no HEAD reference
+	 * @throws TransportException            If there's a transport error
+	 * @throws GitAPIException               If there's an error with the Git API
 	 */
 	private Git pullExistingRepo(EndpointConfigType endpoint, File folder2analyze, boolean publicAccess,
 			AbstractGeboSecretContent secret) throws IOException, WrongRepositoryStateException,
@@ -256,15 +264,17 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	/**
 	 * Clones a remote Git repository into a local folder.
 	 * 
-	 * @param endpoint Endpoint configuration for the Git repository
+	 * @param endpoint       Endpoint configuration for the Git repository
 	 * @param folder2analyze Local folder to clone the repository into
-	 * @param publicAccess Whether the repository is publicly accessible
-	 * @param secret Secret content for authentication if not public
+	 * @param publicAccess   Whether the repository is publicly accessible
+	 * @param secret         Secret content for authentication if not public
 	 * @return Git object representing the cloned repository
-	 * @throws InvalidRemoteException If the remote is invalid
-	 * @throws TransportException If there's a transport error
-	 * @throws GitAPIException If there's an error with the Git API
-	 * @throws GeboContentHandlerSystemException If there's a system error in handling the content
+	 * @throws InvalidRemoteException            If the remote is invalid
+	 * @throws TransportException                If there's a transport error
+	 * @throws GitAPIException                   If there's an error with the Git
+	 *                                           API
+	 * @throws GeboContentHandlerSystemException If there's a system error in
+	 *                                           handling the content
 	 */
 	private Git cloneRepository(EndpointConfigType endpoint, File folder2analyze, boolean publicAccess,
 			AbstractGeboSecretContent secret)
@@ -291,7 +301,8 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	 * Recursively removes a file or directory.
 	 * 
 	 * @param file File or directory to remove
-	 * @throws GeboContentHandlerSystemException If the file or directory cannot be deleted
+	 * @throws GeboContentHandlerSystemException If the file or directory cannot be
+	 *                                           deleted
 	 */
 	protected void removeRecursively(File file) throws GeboContentHandlerSystemException {
 		if (file.isDirectory()) {
@@ -311,15 +322,21 @@ public abstract class GAbstractGitContentManagementSystemHandler<SystemIntegrati
 	}
 
 	/**
-	 * Consumes Git meta information from the repository.
-	 * Currently a placeholder for future implementation.
+	 * Consumes Git meta information from the repository. Currently a placeholder
+	 * for future implementation.
 	 * 
-	 * @param git Git object representing the repository
+	 * @param git      Git object representing the repository
 	 * @param consumer Consumer for the content
 	 */
 	protected void consumeGitMetaInformations(Git git, IGContentConsumer consumer) {
 		Repository repository = git.getRepository();
 		// Empty implementation, likely to be extended in subclasses
+	}
+
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return true;
 	}
 
 }

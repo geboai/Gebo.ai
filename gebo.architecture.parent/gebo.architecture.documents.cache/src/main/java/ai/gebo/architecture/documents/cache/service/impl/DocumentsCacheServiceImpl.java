@@ -2,7 +2,14 @@ package ai.gebo.architecture.documents.cache.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileTime;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -11,11 +18,10 @@ import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.document.model.GeboDocument;
+import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
-import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 import lombok.AllArgsConstructor;
@@ -25,6 +31,9 @@ import lombok.AllArgsConstructor;
 public class DocumentsCacheServiceImpl implements IDocumentsCacheService {
 	private final IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern;
 	private final IGPersistentObjectManager persistentObjectManager;
+	private final DocumentCacheEntryRepository cacheRepository;
+	private final IGGeboConfigService configService;
+	private final static String FILESCACHEFOLDER = ".FCACHE";
 
 	private IGContentManagementSystemHandler retrieveHandler(GDocumentReference reference)
 			throws DocumentCacheAccessException {
@@ -44,28 +53,53 @@ public class DocumentsCacheServiceImpl implements IDocumentsCacheService {
 		}
 
 	}
-	
-	@Override
-	public GeboDocument getDocument(GDocumentReference reference) throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException, GeboIngestionException {
-		
-		return this.getDocumentOnCacheMiss(reference);
-	}
-
-	private GeboDocument getDocumentOnCacheMiss(GDocumentReference reference) throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException, GeboIngestionException {
-		IGContentManagementSystemHandler handler = retrieveHandler(reference);
-		return handler.readDocument(reference, new HashMap());
-		
-	}
 
 	@Override
-	public InputStream streamDocument(GDocumentReference reference) throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
-		
-		return streamDocumentOnCacheMiss(reference);
+	public InputStream streamDocument(GDocumentReference reference)
+			throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
+		IGContentManagementSystemHandler handler = retrieveHandler(reference);
+		if (handler.isContentsOnLocalFilesystem())
+			return handler.streamContent(reference, new HashMap());
+		return streamDocumentWithLocalCache(reference, handler);
 	}
 
-	private InputStream streamDocumentOnCacheMiss(GDocumentReference reference) throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
-		IGContentManagementSystemHandler handler = retrieveHandler(reference);
-		return handler.streamContent(reference, new HashMap());
+	private InputStream streamDocumentWithLocalCache(GDocumentReference reference,
+			IGContentManagementSystemHandler handler)
+			throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
+		Optional<DocumentCacheEntry> inCacheCopy = cacheRepository.findById(reference.getCode());
+		boolean loadAndCache = true;
+		if (inCacheCopy.isPresent() && inCacheCopy.get().getBinaryDocumentName() != null) {
+			loadAndCache = false;
+			Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,
+					inCacheCopy.get().getBinaryDocumentName());
+			if (Files.exists(filePath)) {
+				Date lastModifiedActual = reference.getModificationDate();
+				FileTime localCopyTime = Files.getLastModifiedTime(filePath);
+				if (lastModifiedActual != null && localCopyTime != null) {
+					loadAndCache = lastModifiedActual.getTime() > localCopyTime.toMillis();
+				}
+				if (!loadAndCache) {
+					// Serve from local filesystem
+					DocumentCacheEntry cacheEntry = inCacheCopy.get();
+					cacheEntry.setLastAccessed(new Date());
+					cacheRepository.save(cacheEntry);
+					return Files.newInputStream(filePath, StandardOpenOption.READ);
+				}
+			}
+			cacheRepository.delete(inCacheCopy.get());
+		}
+		String newFileName = UUID.randomUUID().toString() + "-" + System.currentTimeMillis();
+		DocumentCacheEntry cacheEntry = new DocumentCacheEntry();
+		cacheEntry.setBinaryDocumentName(newFileName);
+		cacheEntry.setId(reference.getCode());
+		cacheEntry.setLastAccessed(new Date());
+		Path cacheFolder = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER);
+		Files.createDirectories(cacheFolder);
+		Path filePath = Path.of(configService.getGeboWorkDirectory(), FILESCACHEFOLDER,
+				cacheEntry.getBinaryDocumentName());
+		Files.copy(handler.streamContent(reference, new HashMap()), filePath);
+		cacheRepository.save(cacheEntry);
+		return Files.newInputStream(filePath, StandardOpenOption.READ);
 	}
 
 }

@@ -221,4 +221,9 @@ public class GUserspaceContentManagementSystemHandlerImpl
 		consume(root, contentManagementConfig, buildSystems, endpoint, rootPath, (t) -> true, consumer,
 				messagesConsumer, errorConsumer);
 	}
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return true;
+	}
 }

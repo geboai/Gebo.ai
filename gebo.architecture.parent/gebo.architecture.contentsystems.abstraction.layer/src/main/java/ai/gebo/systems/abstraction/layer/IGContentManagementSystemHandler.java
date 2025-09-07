@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.systems.abstraction.layer;
 
@@ -31,12 +28,13 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
 /**
- * AI generated comments
- * Handler interface for managing interactions with content management systems.
- * Provides methods for consuming and processing content from various endpoints.
+ * AI generated comments Handler interface for managing interactions with
+ * content management systems. Provides methods for consuming and processing
+ * content from various endpoints.
  * 
- * @param <SystemIntegrationType> The type of the content management system being integrated.
- * @param <ProjectEndpointType> The type of the project endpoint being used.
+ * @param <SystemIntegrationType> The type of the content management system
+ *                                being integrated.
+ * @param <ProjectEndpointType>   The type of the project endpoint being used.
  */
 public interface IGContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
 		extends IGMessageReceiver {
@@ -44,18 +42,21 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	/**
 	 * Retrieves the type of the system being handled by this handler.
 	 *
-	 * @return A GContentManagementSystemType representing the type of system managed.
+	 * @return A GContentManagementSystemType representing the type of system
+	 *         managed.
 	 */
 	public GContentManagementSystemType getHandledSystemType();
 
 	/**
-	 * Consumes content from the specified project endpoint using the given consumers.
+	 * Consumes content from the specified project endpoint using the given
+	 * consumers.
 	 *
-	 * @param projectEndpoint The endpoint from which to consume content.
-	 * @param consumer The content consumer to handle the content.
+	 * @param projectEndpoint  The endpoint from which to consume content.
+	 * @param consumer         The content consumer to handle the content.
 	 * @param messagesConsumer The consumer to handle user messages.
-	 * @param errorConsumer The consumer to handle access errors.
-	 * @throws GeboContentHandlerSystemException If an error occurs during content consumption.
+	 * @param errorConsumer    The consumer to handle access errors.
+	 * @throws GeboContentHandlerSystemException If an error occurs during content
+	 *                                           consumption.
 	 */
 	public void consume(ProjectEndpointType projectEndpoint, IGContentConsumer consumer,
 			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
@@ -64,10 +65,12 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	/**
 	 * Finds a project endpoint using specified system and project codes.
 	 *
-	 * @param systemCode The system code to identify the system.
-	 * @param projectEndpointCode The project endpoint code to locate the specific endpoint.
+	 * @param systemCode          The system code to identify the system.
+	 * @param projectEndpointCode The project endpoint code to locate the specific
+	 *                            endpoint.
 	 * @return The project endpoint matching the specified codes.
-	 * @throws GeboContentHandlerSystemException If the project endpoint cannot be found.
+	 * @throws GeboContentHandlerSystemException If the project endpoint cannot be
+	 *                                           found.
 	 */
 	public ProjectEndpointType findProjectEndPoint(String systemCode, String projectEndpointCode)
 			throws GeboContentHandlerSystemException;
@@ -92,7 +95,8 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	 *
 	 * @param projectEndPoint The project endpoint associated with the system.
 	 * @return The system linked to the specified endpoint.
-	 * @throws GeboContentHandlerSystemException If an error occurs during retrieval.
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           retrieval.
 	 */
 	public SystemIntegrationType getSystem(ProjectEndpointType projectEndPoint)
 			throws GeboContentHandlerSystemException;
@@ -101,10 +105,11 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	 * Streams content from a given document reference.
 	 *
 	 * @param reference The document reference for the content to stream.
-	 * @param cache A map to cache previously accessed content.
+	 * @param cache     A map to cache previously accessed content.
 	 * @return An InputStream to stream the document content.
-	 * @throws GeboContentHandlerSystemException If an error occurs accessing the content.
-	 * @throws IOException If an I/O error occurs.
+	 * @throws GeboContentHandlerSystemException If an error occurs accessing the
+	 *                                           content.
+	 * @throws IOException                       If an I/O error occurs.
 	 */
 	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException;
@@ -113,20 +118,23 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	 * Reads and returns a document from a specified reference.
 	 *
 	 * @param reference The reference to the document to read.
-	 * @param cache A map to cache document data.
+	 * @param cache     A map to cache document data.
 	 * @return A GeboDocument object representing the document content.
-	 * @throws GeboContentHandlerSystemException If an error occurs in the handler system.
-	 * @throws IOException If an I/O error occurs.
-	 * @throws GeboIngestionException If an error occurs during document ingestion.
+	 * @throws GeboContentHandlerSystemException If an error occurs in the handler
+	 *                                           system.
+	 * @throws IOException                       If an I/O error occurs.
+	 * @throws GeboIngestionException            If an error occurs during document
+	 *                                           ingestion.
 	 */
 	public GeboDocument readDocument(GDocumentReference reference, Map<String, Object> cache)
 			throws GeboContentHandlerSystemException, IOException, GeboIngestionException;
 
 	/**
-	 * Checks the status of virtual filesystem objects to determine if they are updated or deleted.
+	 * Checks the status of virtual filesystem objects to determine if they are
+	 * updated or deleted.
 	 *
-	 * @param endpoint The endpoint representing the project context.
-	 * @param itemsToCheck The stream of filesystem objects to check.
+	 * @param endpoint      The endpoint representing the project context.
+	 * @param itemsToCheck  The stream of filesystem objects to check.
 	 * @param errorConsumer The consumer to handle access errors.
 	 * @return A stream of filesystem objects that are updated or deleted.
 	 * @throws GeboContentHandlerSystemException If a system error occurs.
@@ -134,4 +142,12 @@ public interface IGContentManagementSystemHandler<SystemIntegrationType extends 
 	public Stream<GAbstractVirtualFilesystemObject> checkUpdatedOrDeleted(ProjectEndpointType endpoint,
 			Stream<GAbstractVirtualFilesystemObject> itemsToCheck, IGContentsAccessErrorConsumer errorConsumer)
 			throws GeboContentHandlerSystemException;
+
+	/****************************************************
+	 * Returns true if this handler caches files or accesses file in an accessible
+	 * filesystem
+	 * 
+	 * @return
+	 */
+	public boolean isContentsOnLocalFilesystem();
 }

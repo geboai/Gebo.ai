@@ -7,4 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class AbstractChunkingSpecs {
 	private final DocumentChunkType chunkType;
+	
 }
