@@ -57,6 +57,7 @@ import ai.gebo.llms.abstraction.layer.tests.TestEmbeddingModelConfiguration;
 import ai.gebo.llms.abstraction.layer.tests.TestEmbeddingModelSupportServiceImpl;
 import ai.gebo.llms.abstraction.layer.vectorstores.GAccountingExtendedVectorStoreAdapter;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.vectorstores.test.services.TestVectorStore;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 
@@ -102,6 +103,7 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		folder.setRootKnowledgebaseCode(pj.getRootKnowledgeBaseCode());
 		folder.setCode("runSinglePDFContentsReadingAndEmbedding");
 		folder.setDescription("Test runSinglePDFContentsReadingAndEmbedding");
+		folder.setProjectEndpointReference(GObjectRef.of(endpoint));
 		Path file = extractResource(bundleFile, extension);
 		endpoint.getTestVirtualFolders().add(folder);
 		// Create a document reference for the file using the reference factory
