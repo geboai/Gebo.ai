@@ -6,7 +6,7 @@ import ai.gebo.application.messaging.model.GWorkflowType;
 
 public interface IWorkflowRouter {
 
-	public void workflowRoute(GWorkflowType workflowType, String currentWorkflowId, String currentWorkflowStepId,
+	public void routeToNextSteps(GWorkflowType workflowType, String currentWorkflowId, String currentWorkflowStepId,
 			IGMessagePayloadType payload, IGMessageEmitter emitter);
 
 }

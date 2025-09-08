@@ -41,7 +41,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 import jakarta.el.MethodNotFoundException;
-import lombok.AllArgsConstructor;
 
 @Service
 
@@ -291,6 +290,13 @@ public class DocumentsChunkServiceImpl
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End cleanupResources(..)");
 		}
+	}
+
+	@Override
+	public boolean prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException {
+		DocumentChunkingResponse firstChunk = getChunk(document, chunkingSpecs, enrichWithMetaData);
+		return !firstChunk.isEmpty();
 	}
 
 }

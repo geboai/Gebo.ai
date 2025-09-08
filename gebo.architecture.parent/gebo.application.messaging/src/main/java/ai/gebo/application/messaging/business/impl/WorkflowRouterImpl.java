@@ -26,7 +26,7 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 	private final static Logger LOGGER = LoggerFactory.getLogger(WorkflowRouterImpl.class);
 
 	@Override
-	public void workflowRoute(GWorkflowType workflowType, String currentWorkflowId, String currentWorkflowStepId,
+	public void routeToNextSteps(GWorkflowType workflowType, String currentWorkflowId, String currentWorkflowStepId,
 			IGMessagePayloadType payload, IGMessageEmitter emitter) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin workflowRoute(....)");

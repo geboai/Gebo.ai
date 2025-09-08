@@ -43,7 +43,7 @@ public enum GStandardWorkflowStep {
 			implements Function<IGMessagePayloadType, List<GMessagingComponentRef>> {
 		@Override
 		public List<GMessagingComponentRef> apply(IGMessagePayloadType t) {
-			return List.of(getTargetOf("embedding"), getTargetOf("graphextraction"), getTargetOf("full_indexing"));
+			return List.of(getTargetOf("EMBEDDING"), getTargetOf("GRAPHEXTRACTION"), getTargetOf("FULLTEXT_INDEXING"));
 		}
 	};
 

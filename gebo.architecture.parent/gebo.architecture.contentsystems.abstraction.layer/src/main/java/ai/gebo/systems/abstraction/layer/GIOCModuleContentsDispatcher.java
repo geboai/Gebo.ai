@@ -314,7 +314,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 								payload.setRequiresEmbeddingHandshake(true);
 								payload.setJobId(jobStatus.getCode());
 								enrichers.getContentPayloadMapper().apply(payload);
-								workflowRouter.workflowRoute(GWorkflowType.STANDARD, GStandardWorkflow.INGESTION.name(),
+								workflowRouter.routeToNextSteps(GWorkflowType.STANDARD, GStandardWorkflow.INGESTION.name(),
 										GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(), payload, GIOCModuleContentsDispatcher.this);
 								howManyBatchSentToVectorization++;
 							}
