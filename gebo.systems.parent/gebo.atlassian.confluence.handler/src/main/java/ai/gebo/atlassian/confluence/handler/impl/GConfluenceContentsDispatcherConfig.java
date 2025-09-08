@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.business.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.atlassian.confluence.handler.GConfluenceProjectEndpoint;
 import ai.gebo.atlassian.confluence.handler.GConfluenceSystem;
@@ -29,7 +30,6 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
 
 /**
  * AI generated comments
@@ -53,11 +53,13 @@ public class GConfluenceContentsDispatcherConfig
 	 * @param config Configuration for content systems layer
 	 * @param documentsRepo Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
+	 * @param workflowRouter 
 	 */
 	public GConfluenceContentsDispatcherConfig(IGConfluenceContentManagementHandler handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo, ContentSystemsLayerConfiguration config, DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory,docSnapshotRepo, config, documentsRepo, virtualFolderRepo);
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,  DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo, IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
+				virtualFolderRepo, workflowRouter);
 
 	}
 

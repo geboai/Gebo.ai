@@ -22,7 +22,6 @@ import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactory;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;

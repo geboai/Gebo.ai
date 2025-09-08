@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.business.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.atlassian.confluence.handler.GConfluenceProjectEndpoint;
 import ai.gebo.atlassian.confluence.handler.GConfluenceSystem;
@@ -28,7 +29,7 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
+
 
 /**
  * Configuration class for setting up the test virtual filesystem dispatcher.
@@ -59,16 +60,17 @@ public class TestVirtualFilesystemDispatcherConfig
 	 * @param configuration                     the content systems layer configuration
 	 * @param documentReferenceRepository       the document reference repository
 	 * @param virtualFolderRepository           the virtual folder repository
+	 * @param workflowRouter 
 	 */
 	public TestVirtualFilesystemDispatcherConfig(
 			IGContentManagementSystemHandler<TestVirtualRemoteSystem, TestVirtualRemoteProjectEndpoint> handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
 			IGDocumentReferenceEnricherMapFactory mapperFactory,
 			DocumentReferenceSnapshotRepository documentsReferenceSnapshotRepository,
-			ContentSystemsLayerConfiguration configuration, DocumentReferenceRepository documentReferenceRepository,
-			VirtualFolderRepository virtualFolderRepository) {
+			 DocumentReferenceRepository documentReferenceRepository,
+			VirtualFolderRepository virtualFolderRepository, IWorkflowRouter workflowRouter) {
 		super(handler, broker, consumerFactory, evaluator, mapperFactory, documentsReferenceSnapshotRepository,
-				configuration, documentReferenceRepository, virtualFolderRepository);
+				 documentReferenceRepository, virtualFolderRepository,workflowRouter);
 
 	}
 
