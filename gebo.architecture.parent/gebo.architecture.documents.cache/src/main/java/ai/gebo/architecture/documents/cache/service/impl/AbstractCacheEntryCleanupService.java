@@ -30,9 +30,9 @@ public abstract class AbstractCacheEntryCleanupService<Type extends AbstractCach
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.add(GregorianCalendar.SECOND, (int) (-1 * cacheLastUsedMillisecondAgoExpiration / 1000));
 			Date expiredThreshold = calendar.getTime();
-			Stream<Type> dataStream = repository.findByLastAccessedLowerThan(expiredThreshold);
+			Stream<Type> dataStream = repository.findByLastAccessedLessThan(expiredThreshold);
 			dataStream.forEach(this::cleanupResources);
-			repository.deleteLastAccessedLowerThan(expiredThreshold);
+			repository.deleteByLastAccessedLessThan(expiredThreshold);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End checkExpirationTick()");
 			}

@@ -61,11 +61,11 @@ public interface IGImplementationsRepositoryPattern<ImplementedInterface> {
     public default List<ImplementedInterface> findImplementations(Predicate<ImplementedInterface> filter) {
     	List<ImplementedInterface> outImplementations=new ArrayList<ImplementedInterface>();
         List<ImplementedInterface> impls = getImplementations();
-        ImplementedInterface riface = null;
+        
         if (impls != null) {
             for (ImplementedInterface iface : impls) {
                 if (filter.test(iface)) {
-                	outImplementations.add(riface);
+                	outImplementations.add(iface);
                 }
             }
         }

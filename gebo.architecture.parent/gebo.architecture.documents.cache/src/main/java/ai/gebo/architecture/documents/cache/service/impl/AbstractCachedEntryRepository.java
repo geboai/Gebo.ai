@@ -8,7 +8,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface AbstractCachedEntryRepository<Type extends AbstractCachedEntry> extends MongoRepository<Type, String> {
-	public Stream<Type> findByLastAccessedLowerThan(Date date);
+	public Stream<Type> findByLastAccessedLessThan(Date date);
 
-	public void deleteLastAccessedLowerThan(Date date);
+	public void deleteByLastAccessedLessThan(Date date);
 }
