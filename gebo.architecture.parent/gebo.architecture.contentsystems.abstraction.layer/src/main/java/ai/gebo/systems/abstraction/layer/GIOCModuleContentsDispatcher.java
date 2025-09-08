@@ -21,14 +21,14 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.SystemComponentType;
-import ai.gebo.application.messaging.business.IWorkflowRouter;
 import ai.gebo.application.messaging.model.GInternalDeletionMessagePayload;
 import ai.gebo.application.messaging.model.GInternalDeletionMessagePayload.ObjectType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
-import ai.gebo.application.messaging.model.GStandardWorkflow;
-import ai.gebo.application.messaging.model.GStandardWorkflowStep;
-import ai.gebo.application.messaging.model.GWorkflowType;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;

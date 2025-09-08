@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -48,42 +45,36 @@ import ai.gebo.llms.abstraction.layer.vectorstores.model.GVectorizedContent.GVec
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
-import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.content.vectorizator.DocumentAccessResult;
-import ai.gebo.ragsystem.content.vectorizator.IGTokenizatorAndEmbedder;
-import ai.gebo.ragsystem.content.vectorizator.IGTokenizer;
-import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
-import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
+import ai.gebo.ragsystem.content.vectorizator.IGEmbedder;
 
 @Service
-public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GTokenizatorAndEmbedderImpl.class);
+public class GEmbedderImpl implements IGEmbedder {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GEmbedderImpl.class);
 	@Autowired
 	IGRuntimeBinder runtimeBinder;
-	@Autowired
-	IGAIDocumentMetaDataEnricher aiDocumentsMetaDataEnricher;
+
 	@Autowired
 	VectorizedContentRepository vectorizedContentRepository;
-	@Autowired
-	IGTokenizer tokenizer;
 
 	/**
 	 * Default constructor for GTokenizatorAndEmbedderImpl.
 	 */
-	public GTokenizatorAndEmbedderImpl() {
+	public GEmbedderImpl() {
 
 	}
 
 	/**
-	 * Tokenizes and embeds document fragments into vector stores using the provided embedding models.
-	 * The method processes each document, breaks it into tokens, embeds them, and saves the results
-	 * to the vector stores. It also tracks vectorization progress and sends status updates.
+	 * Tokenizes and embeds document fragments into vector stores using the provided
+	 * embedding models. The method processes each document, breaks it into tokens,
+	 * embeds them, and saves the results to the vector stores. It also tracks
+	 * vectorization progress and sends status updates.
 	 *
 	 * @param embeddingModels The list of embedding models to use for vectorization
-	 * @param messagesList The list of document messages to process
+	 * @param messagesList    The list of document messages to process
 	 */
 	@Override
-	public void tokenizeAndEmbed(List<IGConfigurableEmbeddingModel> embeddingModels,
+	public void embed(List<IGConfigurableEmbeddingModel> embeddingModels,
 			List<GMessageEnvelope<GDocumentMessageFragmentPayload>> messagesList) {
 		long startTimestamp = System.currentTimeMillis();
 		if (LOGGER.isDebugEnabled()) {
@@ -97,7 +88,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 		final Map<String, List<String>> vectorsToDeleteForVectorStoreId = new HashMap<String, List<String>>();
 		final Map<String, Map<String, Boolean>> distinctJobDocumentVectorized = new HashMap<String, Map<String, Boolean>>();
 		final HashMap<String, GContentsVectorizationStatusUpdatePayload> vectorizationPayloads = new HashMap<String, GContentsVectorizationStatusUpdatePayload>();
-		
+
 		// Collect document IDs and prepare lists for deleted documents
 		for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
 			ids.add(x.getPayload().getDocumentReference().getCode());
@@ -137,7 +128,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 			x.setVectorsId(new ArrayList<String>());
 
 		});
-		
+
 		// Delete existing vectors from vector stores
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
 			List<String> ids2delete = vectorsToDeleteForVectorStoreId.get(embeddingModel.getCode());
@@ -145,7 +136,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				embeddingModel.getVectorStore().delete(ids2delete);
 			}
 		}
-		
+
 		List<GVectorizedContent> vectorizedToDelete = new ArrayList<GVectorizedContent>();
 		// Handle deletions of vectorized content
 		for (Integer index : toBeRemoved) {
@@ -156,7 +147,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				vectorizedToDelete.addAll(vectorizedList);
 			}
 		}
-		
+
 		// Remove deleted documents from processing list
 		if (!toBeRemoved.isEmpty()) {
 			List<GMessageEnvelope<GDocumentMessageFragmentPayload>> onlyValidEntries = new ArrayList<GMessageEnvelope<GDocumentMessageFragmentPayload>>();
@@ -169,7 +160,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 			}
 			messagesList = onlyValidEntries;
 		}
-		
+
 		// Group embedding models by token threshold
 		TreeMap<Integer, List<IGConfigurableEmbeddingModel>> groupByEmbedSize = new TreeMap<Integer, List<IGConfigurableEmbeddingModel>>();
 		List<String> validEmbedders = new ArrayList<String>();
@@ -181,10 +172,10 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 			groupByEmbedSize.get(embedder.getTokenizationThreshold()).add(embedder);
 			validEmbedders.add(embedder.getCode());
 		}
-		
+
 		Date now = new Date();
 		List<GUserMessage> allUserMessages = new ArrayList<GUserMessage>();
-		
+
 		// Process documents for each token threshold group
 		for (Map.Entry<Integer, List<IGConfigurableEmbeddingModel>> entry : groupByEmbedSize.entrySet()) {
 			List<GUserMessage> userMessages = new ArrayList<GUserMessage>();
@@ -193,28 +184,26 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				return x.getCode();
 			}).toList();
 			HashMap<String, List<String>> newIdsPerDocCode = new HashMap<String, List<String>>();
-			
+
 			// Tokenize documents and prepare for embedding
 			for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
 				GDocumentMessageFragmentPayload payload = x.getPayload();
-				int nTokens=512;
-				//before it was:  entry.getKey().intValue()
-				List<Document> thesedocs = tokenizer.tokenize(payload.getDocuments(), nTokens);
-				List<Document> enriched = aiDocumentsMetaDataEnricher.enrichCatalogingInformations(thesedocs,
-						payload.getDocumentReference(), payload.getKnowledgeBase(), payload.getProject(),
-						payload.getEndPoint());
+				int nTokens = 512;
+				// before it was: entry.getKey().intValue()
+
+				List<Document> enriched = payload.getDocuments();
 				newIdsPerDocCode.put(x.getPayload().getDocumentReference().getCode(), enriched.stream().map(y -> {
 					return y.getId();
 				}).toList());
 				tokenizeddocuments.addAll(enriched);
-				
+
 				// Create success message for this document
 				String messageSummary = "Document: " + payload.getDocumentReference().getName()
 						+ " embedded successfully";
 				String messageDetail = "Embedding document " + payload.getDocumentReference().getCode()
 						+ " with nr of tokenized fragments: " + enriched.size() + " in embedding models vector stores "
 						+ theseEmbeddingModels;
-				
+
 				// Update vectorization job statistics
 				if (x.getPayload().getJobId() != null) {
 					GContentsVectorizationStatusUpdatePayload accountingEntry = vectorizationPayloads
@@ -235,12 +224,12 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 						accountingEntry.setVectorizedTokens(accountingEntry.getVectorizedTokens() + tokensCount);
 					}
 				}
-				
+
 				GUserMessage message = GUserMessage.successMessage(messageSummary, messageDetail);
 				message.setJobId(x.getPayload().getJobId());
 				userMessages.add(message);
 			}
-			
+
 			try {
 				// Process each embedding model for the current token threshold group
 				List<IGConfigurableEmbeddingModel> embedders = entry.getValue();
@@ -251,18 +240,18 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 						reqTime = System.currentTimeMillis();
 						LOGGER.debug("Begin embed & save to vector store:" + vectorStoreId);
 					}
-					
+
 					// Add tokenized documents to vector store
 					if (!tokenizeddocuments.isEmpty()) {
 						embedder.getVectorStore().add(tokenizeddocuments);
 					}
-					
+
 					if (LOGGER.isDebugEnabled()) {
 						long difference = System.currentTimeMillis() - reqTime;
 						LOGGER.debug(
 								"End  embed & save to vector store:" + vectorStoreId + " time-msec=>" + difference);
 					}
-					
+
 					// Update vectorized content records
 					List<String> vectorsToBeDeleted = new ArrayList<String>();
 					for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
@@ -280,7 +269,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 						if (vectorizedList == null) {
 							vectorizedMap.put(code, vectorizedList = new ArrayList<GVectorizedContent>());
 						}
-						
+
 						// Find or create vectorized content entry
 						Optional<GVectorizedContent> foundEntry = vectorizedList.stream().filter(y -> {
 							return y.getId().getDocReferenceCode().equals(code)
@@ -320,7 +309,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 							vectorizedList.add(vect);
 						}
 					}
-					
+
 					// Delete old vectors if needed
 					if (!vectorsToBeDeleted.isEmpty()) {
 						try {
@@ -335,22 +324,10 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				// Handle embedding errors
 				LOGGER.error("Error in saving to VectorStore", th);
 				sendHandshake = false;
-				for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
-					List<Document> thesedocs = tokenizer.tokenize(x.getPayload().getDocuments(),
-							entry.getKey().intValue());
-					newIdsPerDocCode.put(x.getPayload().getDocumentReference().getCode(), thesedocs.stream().map(y -> {
-						return y.getId();
-					}).toList());
-					tokenizeddocuments.addAll(thesedocs);
-					String messageSummary = "Error embedding: " + x.getPayload().getDocumentReference().getName();
 
-					GUserMessage message = GUserMessage.errorMessage(messageSummary, th);
-					message.setJobId(x.getPayload().getJobId());
-					allUserMessages.add(message);
-				}
 			}
 		}
-		
+
 		// Prepare vectorized content records for saving
 		List<GVectorizedContent> vectorizedList = new ArrayList<GVectorizedContent>();
 		for (List<GVectorizedContent> v : vectorizedMap.values()) {
@@ -362,7 +339,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				}
 			}
 		}
-		
+
 		// Delete and save vectorized content records
 		if (!vectorizedToDelete.isEmpty()) {
 			vectorizedContentRepository.deleteAll(vectorizedToDelete);
@@ -384,7 +361,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			emitter.send(msg);
 		}
-		
+
 		// Send embedding handshakes if required
 		if (sendHandshake) {
 			List<GMessageEnvelope<GContentEmbeddingHandshakePayload>> handshakes = new ArrayList<GMessageEnvelope<GContentEmbeddingHandshakePayload>>();
@@ -405,7 +382,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				emitter.send(gmsg);
 			}
 		}
-		
+
 		// Send user messages
 		for (GUserMessage userMessage : allUserMessages) {
 			GUserMessagePayload payload = new GUserMessagePayload();
@@ -416,7 +393,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 			userMessageMsg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			emitter.send(userMessageMsg);
 		}
-		
+
 		long endTimestamp = System.currentTimeMillis();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End tokenizeAndEmbed(....) embedded in ms:" + (endTimestamp - startTimestamp));
@@ -425,9 +402,11 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 
 	/**
 	 * Notifies the system about documents that failed during the ingestion process.
-	 * This method creates error messages and updates vectorization status for failed documents.
+	 * This method creates error messages and updates vectorization status for
+	 * failed documents.
 	 *
-	 * @param impossibleToIngest List of document access results that could not be processed
+	 * @param impossibleToIngest List of document access results that could not be
+	 *                           processed
 	 */
 	@Override
 	public void notifyFailingIngestion(List<DocumentAccessResult> impossibleToIngest) {
@@ -435,7 +414,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 				.getImplementationOf(GContentVectorizationEmitterComponent.class);
 
 		Map<String, GContentsVectorizationStatusUpdatePayload> payloads = new HashMap<String, GContentsVectorizationStatusUpdatePayload>();
-		
+
 		// Process each failed document
 		for (DocumentAccessResult documentAccessResult : impossibleToIngest) {
 			if (!documentAccessResult.isSuccessfullyHandled()) {
@@ -445,7 +424,7 @@ public class GTokenizatorAndEmbedderImpl implements IGTokenizatorAndEmbedder {
 					payloads.get(jobId).setJobId(jobId);
 				}
 				payloads.get(jobId).setVectorizationErrors(payloads.get(jobId).getVectorizationErrors() + 1);
-				
+
 				// Send user message about the error if available
 				if (documentAccessResult.getNegativeMessage() != null) {
 					GUserMessagePayload payload = new GUserMessagePayload();

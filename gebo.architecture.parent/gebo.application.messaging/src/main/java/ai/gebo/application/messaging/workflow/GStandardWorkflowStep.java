@@ -1,9 +1,11 @@
-package ai.gebo.application.messaging.model;
+package ai.gebo.application.messaging.workflow;
 
 import java.util.List;
 import java.util.function.Function;
 
 import ai.gebo.application.messaging.IGMessagePayloadType;
+import ai.gebo.application.messaging.model.GMessagingComponentRef;
+import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -43,7 +45,7 @@ public enum GStandardWorkflowStep {
 			implements Function<IGMessagePayloadType, List<GMessagingComponentRef>> {
 		@Override
 		public List<GMessagingComponentRef> apply(IGMessagePayloadType t) {
-			return List.of(getTargetOf("EMBEDDING"), getTargetOf("GRAPHEXTRACTION"), getTargetOf("FULLTEXT_INDEXING"));
+			return List.of(getTargetOf("EMBEDDING"), getTargetOf("GRAPHEXTRACTION")/*, getTargetOf("FULLTEXT_INDEXING")*/);
 		}
 	};
 

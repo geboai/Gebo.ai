@@ -3,12 +3,14 @@ package ai.gebo.architecture.documents.cache.service.impl;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.SystemComponentType;
-import ai.gebo.application.messaging.business.IWorkflowRouter;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IChunkingMessagingComponent;
@@ -25,6 +27,7 @@ public class ChunkingMessagingComponentImpl implements IChunkingMessagingCompone
 	private final IDocumentsChunkService chunkingService;
 	private final IChunkingParametersProvider parameterProvider;
 	private final IWorkflowRouter workflowRouter;
+	private final static Logger LOGGER = LoggerFactory.getLogger(ChunkingMessagingComponentImpl.class);
 
 	@Override
 	public List<String> getEmittedPayloadTypes() {
@@ -65,16 +68,16 @@ public class ChunkingMessagingComponentImpl implements IChunkingMessagingCompone
 	public void accept(GMessageEnvelope envelope) {
 		if (envelope.getPayload() instanceof GDocumentReferencePayload payload) {
 			ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
+			boolean processed = false;
 			try {
-				boolean processed = this.chunkingService.prepareChunks(payload.getDocumentReference(),
-						params.getSpecs(), params.isEnrichWithMetaData());
+				processed = this.chunkingService.prepareChunks(payload.getDocumentReference(), params.getSpecs(),
+						params.isEnrichWithMetaData());
 				if (processed) {
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), payload, this);
 				}
 			} catch (Throwable e) {
-
-				e.printStackTrace();
+				LOGGER.error("Fail to prepare & deliver chunks =>" + processed, e);
 			}
 		}
 	}

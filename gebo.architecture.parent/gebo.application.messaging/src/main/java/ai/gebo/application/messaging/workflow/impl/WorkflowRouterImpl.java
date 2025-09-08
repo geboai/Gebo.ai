@@ -1,4 +1,4 @@
-package ai.gebo.application.messaging.business.impl;
+package ai.gebo.application.messaging.workflow.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessagePayloadType;
-import ai.gebo.application.messaging.business.IWorkflowMessagesRouter;
-import ai.gebo.application.messaging.business.IWorkflowMessagesRouterRepositoryPattern;
-import ai.gebo.application.messaging.business.IWorkflowRouter;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
-import ai.gebo.application.messaging.model.GWorkflowType;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
+import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouterRepositoryPattern;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import lombok.AllArgsConstructor;
 
 @Component
@@ -41,13 +41,17 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 				destinations.addAll(_destinations);
 		}
 		for (GMessagingComponentRef target : destinations) {
-			GMessageEnvelope<IGMessagePayloadType> envelope = GMessageEnvelope.newMessageFrom(emitter, payload);
-			envelope.setWorkflowType(workflowType);
-			envelope.setWorkflowId(target.getWorkflowId());
-			envelope.setWorkflowStepId(target.getStepId());
-			envelope.setTargetModule(target.getModuleId());
-			envelope.setTargetComponent(target.getComponentId());
-			broker.accept(envelope);
+			try {
+				GMessageEnvelope<IGMessagePayloadType> envelope = GMessageEnvelope.newMessageFrom(emitter, payload);
+				envelope.setWorkflowType(workflowType);
+				envelope.setWorkflowId(target.getWorkflowId());
+				envelope.setWorkflowStepId(target.getStepId());
+				envelope.setTargetModule(target.getModuleId());
+				envelope.setTargetComponent(target.getComponentId());
+				broker.accept(envelope);
+			} catch (Throwable th) {
+				LOGGER.error("Error routing message", th);
+			}
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End workflowRoute(....)");

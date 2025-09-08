@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
-import ai.gebo.application.messaging.business.IWorkflowRouter;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.atlassian.confluence.handler.GConfluenceProjectEndpoint;
 import ai.gebo.atlassian.confluence.handler.GConfluenceSystem;

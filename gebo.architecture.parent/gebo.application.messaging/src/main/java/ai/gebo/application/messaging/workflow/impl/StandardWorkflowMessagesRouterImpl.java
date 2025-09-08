@@ -1,15 +1,15 @@
-package ai.gebo.application.messaging.business.impl;
+package ai.gebo.application.messaging.workflow.impl;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.IGMessagePayloadType;
-import ai.gebo.application.messaging.business.IWorkflowMessagesRouter;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
-import ai.gebo.application.messaging.model.GStandardWorkflow;
-import ai.gebo.application.messaging.model.GStandardWorkflowStep;
-import ai.gebo.application.messaging.model.GWorkflowType;
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
 
 @Component
 public class StandardWorkflowMessagesRouterImpl implements IWorkflowMessagesRouter {

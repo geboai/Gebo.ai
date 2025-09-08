@@ -1,13 +1,13 @@
-package ai.gebo.application.messaging.business.impl;
+package ai.gebo.application.messaging.workflow.impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import ai.gebo.application.messaging.business.IWorkflowMessagesRouter;
-import ai.gebo.application.messaging.business.IWorkflowMessagesRouterRepositoryPattern;
-import ai.gebo.application.messaging.model.GWorkflowType;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
+import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouterRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
 
 @Component

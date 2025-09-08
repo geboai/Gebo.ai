@@ -54,7 +54,7 @@ public class DocumentsChunkServiceImpl
 	private final IGDocumentReferenceIngestionHandler ingestionHandler;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final static ObjectMapper objectMapper = new ObjectMapper();
-	private final static long ttlCacheIt = 5 * 60 * 1000;// tokenizing request has 5 minute validity
+	private final static long ttlCacheIt = 10 * 60 * 1000;// tokenizing request has 5 minute validity
 
 	public DocumentsChunkServiceImpl(IDocumentsCacheService cacheService, IGGeboConfigService configService,
 			DocumentChunkOperationRepository chunkOperationRepository, IGAIDocumentMetaDataEnricher metaDataEnricher,
@@ -294,9 +294,21 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public boolean prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
-			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException {
+			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException,
+			GeboContentHandlerSystemException, GeboIngestionException {
 		DocumentChunkingResponse firstChunk = getChunk(document, chunkingSpecs, enrichWithMetaData);
 		return !firstChunk.isEmpty();
+	}
+
+	@Override
+	public DocumentChunkingResponse getCachedChunk(GDocumentReference document) throws DocumentCacheAccessException,
+			IOException, GeboContentHandlerSystemException, GeboIngestionException {
+		List<DocumentChunkOperation> data = repository.findByOriginalDocumentCode(document.getCode());
+		if (!data.isEmpty()) {
+			DocumentChunkOperation entry = data.get(0);
+			return getNextChunk(document, entry.getId(), entry.getChunksList().get(0));
+		}
+		throw new DocumentCacheAccessException("No existing cached chunks");
 	}
 
 }

@@ -1,8 +1,7 @@
-package ai.gebo.application.messaging.business;
+package ai.gebo.application.messaging.workflow;
 
 import java.util.List;
 
-import ai.gebo.application.messaging.model.GWorkflowType;
 import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 
 public interface IWorkflowMessagesRouterRepositoryPattern

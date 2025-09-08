@@ -1,10 +1,9 @@
-package ai.gebo.application.messaging.business;
+package ai.gebo.application.messaging.workflow;
 
 import java.util.List;
 
 import ai.gebo.application.messaging.IGMessagePayloadType;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
-import ai.gebo.application.messaging.model.GWorkflowType;
 
 public interface IWorkflowMessagesRouter {
 	public String getId();

@@ -40,9 +40,9 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.content.vectorizator.DocumentAccessResult;
-import ai.gebo.ragsystem.content.vectorizator.IGDocumentContentAccessor;
+import ai.gebo.ragsystem.content.vectorizator.IGDocumentChunkServiceAccessor;
 import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingRouter;
-import ai.gebo.ragsystem.content.vectorizator.IGTokenizatorAndEmbedder;
+import ai.gebo.ragsystem.content.vectorizator.IGEmbedder;
 
 @Service
 public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
@@ -59,7 +59,7 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 	
 	/** Service for accessing document content */
 	@Autowired
-	protected IGDocumentContentAccessor documentContentAccessor;
+	protected IGDocumentChunkServiceAccessor chunkedContentAccessor;
 	
 	/** Runtime binder for obtaining service implementations */
 	@Autowired
@@ -93,7 +93,7 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 		List<DocumentAccessResult> impossibleToIngest = new ArrayList<DocumentAccessResult>();
 		if (!documentReferencePayloads.isEmpty()) {
 			allmsgpayload.removeAll(documentReferencePayloads);
-			List<DocumentAccessResult> ingestedContents = doIngestion(documentReferencePayloads);
+			List<DocumentAccessResult> ingestedContents = readChunks(documentReferencePayloads);
 			for (DocumentAccessResult ingested : ingestedContents) {
 				if (ingested.isSuccessfullyHandled())
 					allmsgpayload.addAll(ingested.getIngested());
@@ -103,8 +103,8 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 			}
 		}
 		if (!impossibleToIngest.isEmpty()) {
-			IGTokenizatorAndEmbedder tokenizatorAndEmbedder = null;
-			tokenizatorAndEmbedder = binder.getImplementationOf(IGTokenizatorAndEmbedder.class);
+			IGEmbedder tokenizatorAndEmbedder = null;
+			tokenizatorAndEmbedder = binder.getImplementationOf(IGEmbedder.class);
 			tokenizatorAndEmbedder.notifyFailingIngestion(impossibleToIngest);
 
 		}
@@ -149,7 +149,7 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 			embeddingsByKnowledgebase.put(kbase.getCode(), embeddingModels);
 		}
 		// Process document fragments with appropriate embedding models
-		IGTokenizatorAndEmbedder tokenizatorAndEmbedder = null;
+		IGEmbedder tokenizatorAndEmbedder = null;
 		for (GKnowledgeBase kbase : kbases) {
 			List<IGConfigurableEmbeddingModel> embeddingModels = embeddingsByKnowledgebase.get(kbase.getCode());
 			List<GMessageEnvelope<GDocumentMessageFragmentPayload>> messagesList = byknowledgebaseCode
@@ -157,9 +157,9 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 			if (embeddingModels != null && messagesList != null && !embeddingModels.isEmpty()
 					&& !messagesList.isEmpty()) {
 				if (tokenizatorAndEmbedder == null) {
-					tokenizatorAndEmbedder = binder.getImplementationOf(IGTokenizatorAndEmbedder.class);
+					tokenizatorAndEmbedder = binder.getImplementationOf(IGEmbedder.class);
 				}
-				tokenizatorAndEmbedder.tokenizeAndEmbed(embeddingModels, messagesList);
+				tokenizatorAndEmbedder.embed(embeddingModels, messagesList);
 			}
 		}
 	}
@@ -170,12 +170,12 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 	 * @param documentReferencePayloads List of document reference envelopes to be ingested
 	 * @return List of document access results
 	 */
-	private List<DocumentAccessResult> doIngestion(
+	private List<DocumentAccessResult> readChunks(
 			List<GMessageEnvelope<GDocumentReferencePayload>> documentReferencePayloads) {
 
 		List<DocumentAccessResult> ingested = new ArrayList<DocumentAccessResult>();
 		for (GMessageEnvelope<GDocumentReferencePayload> envelope : documentReferencePayloads) {
-			DocumentAccessResult ingest = documentContentAccessor.access(envelope);
+			DocumentAccessResult ingest = chunkedContentAccessor.access(envelope);
 			ingested.add(ingest);
 		}
 		return ingested;

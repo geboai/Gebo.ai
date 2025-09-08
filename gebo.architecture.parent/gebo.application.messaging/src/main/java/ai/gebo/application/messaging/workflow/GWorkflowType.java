@@ -1,4 +1,4 @@
-package ai.gebo.application.messaging.model;
+package ai.gebo.application.messaging.workflow;
 
 public enum GWorkflowType {
 	STANDARD, CUSTOM

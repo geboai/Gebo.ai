@@ -14,6 +14,9 @@ public interface IDocumentsChunkService {
 			boolean enrichWithMetaData)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
+	DocumentChunkingResponse getCachedChunk(GDocumentReference document)
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
+
 	DocumentChunkingResponse getChunk(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
 			boolean enrichWithMetaData)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;

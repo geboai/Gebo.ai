@@ -22,6 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessagePayloadType;
 import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import jakarta.validation.constraints.NotNull;
 
 /**

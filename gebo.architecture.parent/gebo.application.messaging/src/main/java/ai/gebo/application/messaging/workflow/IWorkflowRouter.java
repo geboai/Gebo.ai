@@ -1,8 +1,7 @@
-package ai.gebo.application.messaging.business;
+package ai.gebo.application.messaging.workflow;
 
 import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessagePayloadType;
-import ai.gebo.application.messaging.model.GWorkflowType;
 
 public interface IWorkflowRouter {
 
