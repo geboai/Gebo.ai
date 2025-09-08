@@ -12,7 +12,7 @@
 
 /**
  * AI generated comments
- * Implementation of the {@link IGEmbeddingRouter} interface that routes documents for embedding processing.
+ * Implementation of the {@link IGEmbeddingMessageReceiver} interface that routes documents for embedding processing.
  * This service handles document ingestion and distributes document fragments to appropriate embedding models
  * based on knowledge base configurations.
  */
@@ -41,13 +41,13 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.content.vectorizator.DocumentAccessResult;
 import ai.gebo.ragsystem.content.vectorizator.IGDocumentChunkServiceAccessor;
-import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingRouter;
+import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;
 import ai.gebo.ragsystem.content.vectorizator.IGEmbedder;
 
 @Service
-public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
+public class GEmbeddingMessageReceiverImpl implements IGEmbeddingMessageReceiver {
 	/** Logger for this class */
-	private static Logger LOGGER = LoggerFactory.getLogger(GEmbeddingRouterImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(GEmbeddingMessageReceiverImpl.class);
 	
 	/** Repository for accessing knowledge base information */
 	@Autowired
@@ -68,7 +68,7 @@ public class GEmbeddingRouterImpl implements IGEmbeddingRouter {
 	/**
 	 * Default constructor
 	 */
-	public GEmbeddingRouterImpl() {
+	public GEmbeddingMessageReceiverImpl() {
 
 	}
 

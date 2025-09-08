@@ -22,7 +22,7 @@ import ai.gebo.application.messaging.IGBatchMessagesReceiver;
  * embedding processing. The embedding router is responsible for directing embedding
  * requests to appropriate embedding services or processors.
  */
-public interface IGEmbeddingRouter extends IGBatchMessagesReceiver{
+public interface IGEmbeddingMessageReceiver extends IGBatchMessagesReceiver{
 	
 	
 }

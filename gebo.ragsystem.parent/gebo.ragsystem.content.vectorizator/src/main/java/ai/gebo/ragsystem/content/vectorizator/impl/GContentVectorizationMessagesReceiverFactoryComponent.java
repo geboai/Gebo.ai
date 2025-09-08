@@ -25,7 +25,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.GDocumentMessageFragmentPayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.core.messages.GRawContentMessageFragmentPayload;
-import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingRouter;
+import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;
 import ai.gebo.ragsystem.content.vectorizator.config.GeboVectorizatorConfig;
 
 /**
@@ -170,7 +170,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	 */
 	@Override
 	public IGTimedOutMessageReceiver create() {
-		IGEmbeddingRouter router = runtimeBinder.getImplementationOf(IGEmbeddingRouter.class);
+		IGEmbeddingMessageReceiver router = runtimeBinder.getImplementationOf(IGEmbeddingMessageReceiver.class);
 		return new BatchContentVectorizationMessagesReceiver(router,
 				factoryConfig.getFlushThreshold() != null ? factoryConfig.getFlushThreshold() : 10);
 	}
