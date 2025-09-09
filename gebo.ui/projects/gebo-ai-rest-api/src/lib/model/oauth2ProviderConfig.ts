@@ -16,7 +16,7 @@ export interface Oauth2ProviderConfig {
     tokenUri: string;
     userInfoUri: string;
     userNameAttribute: string;
-    introspectionUri: string;
+    introspectionUri?: string;
     issuerUri?: string;
     jwkSetUri?: string;
 }

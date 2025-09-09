@@ -1,3 +1,4 @@
+export * from './aggregatedEvents';
 export * from './authProviderDto';
 export * from './authResponse';
 export * from './browseParam';
@@ -311,7 +312,7 @@ export * from './userspaceKnowledgebaseDto';
 export * from './vDocumentInfo';
 export * from './vFilesystemReference';
 export * from './vFolderInfo';
-export * from './vectorizatorBatchProcessed';
 export * from './virtualFilesystemNavigationNode';
 export * from './virtualFilesystemNavigationTreeStatus';
 export * from './workFolderSetupStatus';
+export * from './workflowStatus';

@@ -15,8 +15,8 @@ export interface Order {
     property?: string;
     ignoreCase?: boolean;
     nullHandling?: Order.NullHandlingEnum;
-    ascending?: boolean;
     descending?: boolean;
+    ascending?: boolean;
 }
 export namespace Order {
     export type DirectionEnum = 'ASC' | 'DESC';

@@ -9,25 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ContentsBatchProcessed } from './contentsBatchProcessed';
-import { VectorizatorBatchProcessed } from './vectorizatorBatchProcessed';
+import { AggregatedEvents } from './aggregatedEvents';
+import { WorkflowStatus } from './workflowStatus';
 
 export interface JobSummary { 
     code?: string;
     description?: string;
     startDateTime?: Date;
     endDateTime?: Date;
-    howManyBatchDocuments?: number;
-    howManyBatchSentToVectorization?: number;
-    howManyBatchContentsReadingErrors?: number;
-    howManyBatchPersistendDocuments?: number;
-    currentBatchDocumentVectorizedCounter?: number;
-    currentBatchDocumentReceviedCounter?: number;
-    vectorizationErrors?: number;
-    vectorizedSegments?: number;
-    vectorizedTokens?: number;
-    contentsReadTerminated?: boolean;
-    vectorizationTerminated?: boolean;
-    contentsProcessingData?: Array<ContentsBatchProcessed>;
-    vectorizationProcessingData?: Array<VectorizatorBatchProcessed>;
+    finished?: boolean;
+    workflowStatus?: WorkflowStatus;
+    aggregatedProcessingData?: Array<AggregatedEvents>;
 }

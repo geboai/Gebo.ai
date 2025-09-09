@@ -9,15 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ContentsBatchProcessed } from './contentsBatchProcessed';
 
-export interface VectorizatorBatchProcessed { 
-    id?: string;
-    jobId?: string;
-    currentBatchDocumentVectorizedCounter?: number;
-    currentBatchDocumentReceviedCounter?: number;
-    vectorizationErrors?: number;
-    vectorizedSegments?: number;
-    vectorizedTokens?: number;
-    timestamp?: Date;
-    lastMessage?: boolean;
+export interface AggregatedEvents { 
+    aggregated?: ContentsBatchProcessed;
+    events?: Array<ContentsBatchProcessed>;
 }
