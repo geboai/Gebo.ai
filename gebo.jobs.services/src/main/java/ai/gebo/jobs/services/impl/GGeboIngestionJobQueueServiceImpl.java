@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.impl;
 
@@ -27,6 +24,7 @@ import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
 import ai.gebo.jobs.services.model.JobSummary;
+import ai.gebo.jobs.services.model.JobSummary.AggregatedEvents;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -35,9 +33,9 @@ import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.model.base.GObjectRef;
 
 /**
- * Implementation of the Gebo Ingestion Job Queue Service.
- * This service manages the queue of ingestion jobs for processing and vectorizing content.
- * AI generated comments
+ * Implementation of the Gebo Ingestion Job Queue Service. This service manages
+ * the queue of ingestion jobs for processing and vectorizing content. AI
+ * generated comments
  */
 @Component()
 @Scope("singleton")
@@ -45,23 +43,21 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	/** The ingestion manager responsible for handling ingestion tasks */
 	@Autowired
 	GeboIngestionManager ingestionManager;
-	
+
 	/** Map to track the status of jobs by their code */
 	Map<String, GJobStatus> statusMap = new HashMap<String, GJobStatus>();
-	
+
 	/** Service for handling ingestion job operations */
 	@Autowired
 	IGGeboIngestionJobService readingService;
-	
+
 	/** Repository for persisting job status information */
 	@Autowired
 	JobStatusRepository statusRepository;
-	
+
 	/** Repository for content batch processing data */
 	@Autowired
 	ContentsBatchProcessedRepository contentsBatchRepo;
-	
-	
 
 	/**
 	 * Default constructor
@@ -164,7 +160,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * 
 	 * @param endpoint The project endpoint reference
 	 * @return A runnable task for async execution
-	 * @throws GeboJobServiceException If a job is already running
+	 * @throws GeboJobServiceException  If a job is already running
 	 * @throws GeboPersistenceException If there's an issue with persistence
 	 */
 	@Override
@@ -183,10 +179,10 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	/**
 	 * Retrieves a summary of a job with optional details
 	 * 
-	 * @param jobId The job ID to get summary for
+	 * @param jobId   The job ID to get summary for
 	 * @param details Whether to include detailed vectorization processing data
 	 * @return A job summary object or null if job not found
-	 * @throws GeboJobServiceException If there's an issue with the job service
+	 * @throws GeboJobServiceException  If there's an issue with the job service
 	 * @throws GeboPersistenceException If there's an issue with persistence
 	 */
 	@Override
@@ -200,20 +196,25 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		summary.setCode(job.getCode());
 		summary.setDescription(job.getDescription());
 		Stream<ContentsBatchProcessed> contentsBatchStream = contentsBatchRepo.findByJobId(jobId);
+		final Map<String, AggregatedEvents> aggregated = new HashMap<String, JobSummary.AggregatedEvents>();
 		contentsBatchStream.forEach(x -> {
-			summary.getContentsProcessingData().add(x);
-			summary.setHowManyBatchDocuments(summary.getHowManyBatchDocuments() + x.getBatchDocumentsInput());
-			summary.setHowManyBatchSentToVectorization(
-					summary.getHowManyBatchSentToVectorization() + x.getBatchSentToNextStep());
-			summary.setHowManyBatchContentsReadingErrors(
-					summary.getHowManyBatchContentsReadingErrors() + x.getBatchDocumentsProcessingErrors());
-			summary.setHowManyBatchPersistendDocuments(
-					summary.getHowManyBatchPersistendDocuments() + x.getBatchDocumentsProcessed());
-			if (x.getLastMessage() != null && x.getLastMessage()) {
-				summary.setContentsReadTerminated(true);
+			String key = x.getWorkflowType() + "-" + x.getWorkflowId() + "-" + x.getWorkflowStepId();
+			AggregatedEvents aggregatedValue = aggregated.get(key);
+			if (aggregatedValue == null) {
+				aggregatedValue = new AggregatedEvents();
+				aggregatedValue.setAggregated(new ContentsBatchProcessed());
+				aggregatedValue.getAggregated().setJobId(jobId);
+				aggregatedValue.getAggregated().setWorkflowType(x.getWorkflowType());
+				aggregatedValue.getAggregated().setWorkflowId(x.getWorkflowId());
+				aggregatedValue.getAggregated().setWorkflowStepId(x.getWorkflowStepId());
+				aggregated.put(key, aggregatedValue);
+				summary.getAggregatedProcessingData().add(aggregatedValue);
 			}
+			aggregatedValue.getAggregated().incrementBy(x);
+			aggregatedValue.getEvents().add(x);
+
 		});
-		
+
 		return summary;
 	}
 

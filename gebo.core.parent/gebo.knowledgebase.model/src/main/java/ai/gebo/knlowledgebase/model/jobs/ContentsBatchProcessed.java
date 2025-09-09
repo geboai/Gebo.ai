@@ -42,7 +42,7 @@ public class ContentsBatchProcessed {
 	private String workflowId = null;
 	@HashIndexed
 	private String workflowStepId = null;
-	
+
 	/**
 	 * Indicator of whether this is the last message in the batch.
 	 */
@@ -74,6 +74,15 @@ public class ContentsBatchProcessed {
 	 * The number of documents successfully persisted in the batch.
 	 */
 	private long batchDocumentsProcessed = 0;
-	
+
+	public void incrementBy(ContentsBatchProcessed x) {
+		this.batchDocumentsInput += x.batchDocumentsInput;
+		this.batchDocumentsProcessed += x.batchDocumentsProcessed;
+		this.batchDocumentsProcessingErrors += x.batchDocumentsProcessingErrors;
+		this.batchSentToNextStep += x.batchSentToNextStep;
+		this.chunksProcessed += x.chunksProcessed;
+		this.tokensProcessed += x.tokensProcessed;
+
+	}
 
 }

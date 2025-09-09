@@ -165,16 +165,11 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 				processed.setTokensProcessed(payload.getTokensProcessed());
 				processed.setLastMessage(payload.getLastMessage());
 				processed.setTimestamp(payload.getTimestamp());
-				processed.setId(UUID.randomUUID().toString());				
+				processed.setId(UUID.randomUUID().toString());
 				ContentsBatchProcessedRepository repo = binder
 						.getImplementationOf(ContentsBatchProcessedRepository.class);
 				repo.insert(processed);
-				Optional<GJobStatus> optstatus = jobsRepo.findById(payload.getJobId());
-				if (optstatus.isPresent()) {
-					GJobStatus status = optstatus.get();
-					status.updateWith(processed);
-					jobsRepo.save(status);
-				}
+
 			} else {
 				throw new IllegalStateException("This receiver cannot handle payload type:" + t.getPayloadType());
 			}
