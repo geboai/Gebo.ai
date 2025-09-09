@@ -30,7 +30,7 @@ public class GContentsProcessingStatusUpdatePayload extends GBaseMessagePayload 
 
 	// Number of batch documents processed in various stages
 	private long batchDocumentsInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
-			batchDocumentsProcessed = 0l, processedChunks = 0l, processedTokens = 0l;
+			batchDocumentsProcessed = 0l, cunksProcessed = 0l, tokensProcessed = 0l;
 	private String workflowType = null, workflowId = null, workflowStepId = null;
 	// Timestamp indicating when this status update was created
 	private Date timestamp = new Date();

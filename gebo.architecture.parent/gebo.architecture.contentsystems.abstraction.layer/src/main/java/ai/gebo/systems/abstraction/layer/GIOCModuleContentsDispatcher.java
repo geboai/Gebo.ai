@@ -314,8 +314,10 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 								payload.setRequiresEmbeddingHandshake(true);
 								payload.setJobId(jobStatus.getCode());
 								enrichers.getContentPayloadMapper().apply(payload);
-								workflowRouter.routeToNextSteps(GWorkflowType.STANDARD, GStandardWorkflow.INGESTION.name(),
-										GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(), payload, GIOCModuleContentsDispatcher.this);
+								workflowRouter.routeToNextSteps(GWorkflowType.STANDARD,
+										GStandardWorkflow.INGESTION.name(),
+										GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(), payload,
+										GIOCModuleContentsDispatcher.this);
 								howManyBatchSentToVectorization++;
 							}
 
@@ -338,10 +340,14 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 				if (howManyBatchSentToVectorization > NBATCH_DOCS_STATSMESSAGE) {
 					GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
 					payload.setJobId(jobStatus.getCode());
+					payload.setWorkflowType(GWorkflowType.STANDARD.name());
+					payload.setWorkflowId(GStandardWorkflow.INGESTION.name());
+					payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
 					payload.setBatchDocumentsInput(howManyBatchDocuments);
 					payload.setBatchDocumentsProcessingErrors(howManyBatchContentsReadingErrors);
 					payload.setBatchDocumentsProcessed(howManyBatchPersistendDocuments);
 					payload.setBatchSentToNextStep(howManyBatchSentToVectorization);
+					
 					payload.setLastMessage(false);
 					payload.setTimestamp(new Date());
 					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
@@ -407,6 +413,9 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 				}
 				GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
 				payload.setJobId(jobStatus.getCode());
+				payload.setWorkflowType(GWorkflowType.STANDARD.name());
+				payload.setWorkflowId(GStandardWorkflow.INGESTION.name());
+				payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
 				payload.setBatchDocumentsInput(howManyBatchDocuments);
 				payload.setBatchDocumentsProcessingErrors(howManyBatchContentsReadingErrors);
 				payload.setBatchDocumentsProcessed(howManyBatchPersistendDocuments);

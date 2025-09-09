@@ -154,18 +154,18 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 						.getPayload();
 				ContentsBatchProcessed processed = new ContentsBatchProcessed();
 				processed.setJobId(payload.getJobId());
+				processed.setWorkflowType(payload.getWorkflowType());
+				processed.setWorkflowId(payload.getWorkflowId());
+				processed.setWorkflowStepId(payload.getWorkflowStepId());
 				processed.setBatchDocumentsInput(payload.getBatchDocumentsInput());
 				processed.setBatchDocumentsProcessingErrors(payload.getBatchDocumentsProcessingErrors());
 				processed.setBatchDocumentsProcessed(payload.getBatchDocumentsProcessed());
 				processed.setBatchSentToNextStep(payload.getBatchSentToNextStep());
-				processed.setProcessedChunks(payload.getProcessedChunks());
-				processed.setProcessedTokens(payload.getProcessedTokens());
+				processed.setChunksProcessed(payload.getCunksProcessed());
+				processed.setTokensProcessed(payload.getTokensProcessed());
 				processed.setLastMessage(payload.getLastMessage());
 				processed.setTimestamp(payload.getTimestamp());
-				processed.setId(UUID.randomUUID().toString());
-				processed.setWorkflowType(payload.getWorkflowType());
-				processed.setWorkflowId(payload.getWorkflowId());
-				processed.setWorkflowStepId(payload.getWorkflowStepId());
+				processed.setId(UUID.randomUUID().toString());				
 				ContentsBatchProcessedRepository repo = binder
 						.getImplementationOf(ContentsBatchProcessedRepository.class);
 				repo.insert(processed);

@@ -53,7 +53,7 @@ public class JobSummary implements Serializable {
 	
 	// Detailed processing data
 	private List<ContentsBatchProcessed> contentsProcessingData=new ArrayList<ContentsBatchProcessed>();
-	private List<VectorizatorBatchProcessed> vectorizationProcessingData=new ArrayList<VectorizatorBatchProcessed>();
+	
 	
 	/**
 	 * Default constructor for JobSummary
@@ -270,21 +270,7 @@ public class JobSummary implements Serializable {
 		this.contentsProcessingData = contentsProcessingData;
 	}
 
-	/**
-	 * Gets the list of vectorization batch processing data
-	 * @return list of vectorization batch processing data
-	 */
-	public List<VectorizatorBatchProcessed> getVectorizationProcessingData() {
-		return vectorizationProcessingData;
-	}
-
-	/**
-	 * Sets the list of vectorization batch processing data
-	 * @param vectorizationProcessingData the list to set
-	 */
-	public void setVectorizationProcessingData(List<VectorizatorBatchProcessed> vectorizationProcessingData) {
-		this.vectorizationProcessingData = vectorizationProcessingData;
-	}
+	
 
 	/**
 	 * Gets the total count of vectorized segments

@@ -63,8 +63,8 @@ public class ContentsBatchProcessed {
 	 * The number of documents sent to vectorization in the batch.
 	 */
 	private long batchSentToNextStep = 0;
-	private long processedChunks = 0l;
-	private long processedTokens = 0l;
+	private long chunksProcessed = 0l;
+	private long tokensProcessed = 0l;
 	/**
 	 * The number of content reading errors encountered in the batch.
 	 */

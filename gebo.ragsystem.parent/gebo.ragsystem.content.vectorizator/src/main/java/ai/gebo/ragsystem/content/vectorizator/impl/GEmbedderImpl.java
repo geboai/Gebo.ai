@@ -209,7 +209,7 @@ public class GEmbedderImpl implements IGEmbedder {
 
 				GContentsProcessingStatusUpdatePayload accountingEntry = vectorizationStatistics.get(key);
 				if (accountingEntry != null) {
-					accountingEntry.setProcessedChunks(accountingEntry.getProcessedChunks() + enriched.size());
+					accountingEntry.setCunksProcessed(accountingEntry.getCunksProcessed() + enriched.size());
 					long tokensCount = 0l;
 					for (Document doc : enriched) {
 						if (doc.getMetadata() != null
@@ -220,7 +220,7 @@ public class GEmbedderImpl implements IGEmbedder {
 							}
 						}
 					}
-					accountingEntry.setProcessedTokens(accountingEntry.getProcessedTokens() + tokensCount);
+					accountingEntry.setTokensProcessed(accountingEntry.getTokensProcessed() + tokensCount);
 
 				}
 

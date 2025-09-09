@@ -29,11 +29,9 @@ import ai.gebo.jobs.services.IGGeboIngestionJobService;
 import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
-import ai.gebo.knlowledgebase.model.jobs.VectorizatorBatchProcessed;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
-import ai.gebo.knowledgebase.repositories.VectorizatorBatchProcessedRepository;
 import ai.gebo.model.base.GObjectRef;
 
 /**
@@ -63,9 +61,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	@Autowired
 	ContentsBatchProcessedRepository contentsBatchRepo;
 	
-	/** Repository for vectorization batch processing data */
-	@Autowired
-	VectorizatorBatchProcessedRepository vectorizatorBatchProcessesRepo;
+	
 
 	/**
 	 * Default constructor
@@ -217,23 +213,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 				summary.setContentsReadTerminated(true);
 			}
 		});
-		Stream<VectorizatorBatchProcessed> vectorizationBatchStream = vectorizatorBatchProcessesRepo.findByJobId(jobId);
-		vectorizationBatchStream.forEach(x -> {
-			if (details) {
-				summary.getVectorizationProcessingData().add(x);
-			}
-			summary.setCurrentBatchDocumentReceviedCounter(
-					summary.getCurrentBatchDocumentReceviedCounter() + x.getCurrentBatchDocumentReceviedCounter());
-			summary.setCurrentBatchDocumentVectorizedCounter(
-					summary.getCurrentBatchDocumentVectorizedCounter() + x.getCurrentBatchDocumentVectorizedCounter());
-			summary.setVectorizedSegments(summary.getVectorizedSegments() + x.getVectorizedSegments());
-			summary.setVectorizedTokens(summary.getVectorizedTokens() + x.getVectorizedTokens());
-
-			summary.setVectorizationErrors(summary.getVectorizationErrors() + x.getVectorizationErrors());
-		});
-		summary.setVectorizationTerminated(
-				(summary.getCurrentBatchDocumentVectorizedCounter() + summary.getVectorizationErrors()) >= summary
-						.getHowManyBatchSentToVectorization());
+		
 		return summary;
 	}
 

@@ -366,23 +366,7 @@ public class GJobStatus extends GBaseObject {
         this.howManyBatchSentToVectorization += processed.getBatchSentToNextStep();
     }
 
-    /**
-     * Updates the job status with the processed vectorization batch information.
-     * @param processed the vectorization batch processed information
-     */
-    public void updateWith(VectorizatorBatchProcessed processed) {
-        this.vectorizedSegments += processed.getVectorizedSegments();
-        this.vectorizedTokens += processed.getVectorizedTokens();
-        this.vectorizationErrors += processed.getVectorizationErrors();
-        this.currentBatchDocumentReceviedCounter += processed.getCurrentBatchDocumentReceviedCounter();
-        this.currentBatchDocumentVectorizedCounter += processed.getCurrentBatchDocumentVectorizedCounter();
-        this.vectorizationEnded = (this.currentBatchDocumentVectorizedCounter
-                + this.vectorizationErrors) >= this.howManyBatchSentToVectorization;
-        if (this.vectorizationEnded) {
-            this.endDateTime = new Date();
-            this.finished = true;
-        }
-    }
+    
 
     /**
      * @return number of currently vectorized documents in the batch
