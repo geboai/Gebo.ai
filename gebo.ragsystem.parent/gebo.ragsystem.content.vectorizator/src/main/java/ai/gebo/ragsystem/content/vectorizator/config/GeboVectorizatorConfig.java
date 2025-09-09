@@ -46,7 +46,7 @@ public class GeboVectorizatorConfig {
 		disposerConfig.setUseSenderThread(false);
 		vectorizatorReceiverConfig.setPoolCardinality(1);
 		vectorizatorReceiverConfig.setUseSenderThread(true);
-		vectorizatorReceiverConfig.setTimeout(20000l);
+		vectorizatorReceiverConfig.setTimeout(5000l);
 		vectorizatorReceiverConfig.setFlushThreshold(10);
 	}
 

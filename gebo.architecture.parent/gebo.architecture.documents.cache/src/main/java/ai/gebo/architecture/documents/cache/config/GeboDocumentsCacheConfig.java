@@ -45,7 +45,7 @@ public class GeboDocumentsCacheConfig {
 		
 		documentChunkerReceiverConfig.setPoolCardinality(1);
 		documentChunkerReceiverConfig.setUseSenderThread(true);
-		documentChunkerReceiverConfig.setTimeout(20000l);
+		documentChunkerReceiverConfig.setTimeout(5000l);
 		documentChunkerReceiverConfig.setFlushThreshold(10);
 	}
 

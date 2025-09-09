@@ -33,7 +33,6 @@ public class JobSummary implements Serializable {
 	// Job timing information
 	private Date startDateTime = null;
 	private Date endDateTime = null;
-	private boolean finished = false;
 	private WorkflowStatus workflowStatus = null;
 
 	@Data

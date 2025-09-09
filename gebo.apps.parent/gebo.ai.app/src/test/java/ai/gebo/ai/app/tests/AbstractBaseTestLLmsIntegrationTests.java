@@ -41,6 +41,7 @@ import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
@@ -119,18 +120,21 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
+		WorkflowStatus workflowStatus = summary.getWorkflowStatus();
 		int NMAXCYCLES = 20;
 		int nCycles = 0;
 		do {
 			Thread.sleep(10000);
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-
+			workflowStatus = summary.getWorkflowStatus();
 			nCycles++;
 
-		} while (summary.isFinished() && nCycles < NMAXCYCLES);
+		} while (!((workflowStatus == null || (workflowStatus.getTotalDocumentsSuccessfull()
+				+ workflowStatus.getTotalDocumentsWithErrors()) > howManyFilesWait)) && nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-		assertTrue(summary.isFinished(), "Contents read have to be terminated in this point");
+		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isCompleted(),
+				"Contents read have to be terminated in this point");
 		/*
 		 * assertTrue(summary.getVectorizationTerminated(),
 		 * "Vectorization have to be terminated in this point");

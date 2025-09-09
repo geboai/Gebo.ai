@@ -149,9 +149,8 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 			if (t.getPayload() instanceof GUserMessagePayload) {
 				// Pass user message payloads to the super class for processing
 				super.accept(t);
-			} else if (t.getPayload() instanceof GContentsProcessingStatusUpdatePayload) {
-				GContentsProcessingStatusUpdatePayload payload = (GContentsProcessingStatusUpdatePayload) t
-						.getPayload();
+			} else if (t.getPayload() instanceof GContentsProcessingStatusUpdatePayload payload) {
+			
 				ContentsBatchProcessed processed = new ContentsBatchProcessed();
 				processed.setJobId(payload.getJobId());
 				processed.setWorkflowType(payload.getWorkflowType());
@@ -161,7 +160,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 				processed.setBatchDocumentsProcessingErrors(payload.getBatchDocumentsProcessingErrors());
 				processed.setBatchDocumentsProcessed(payload.getBatchDocumentsProcessed());
 				processed.setBatchSentToNextStep(payload.getBatchSentToNextStep());
-				processed.setChunksProcessed(payload.getCunksProcessed());
+				processed.setChunksProcessed(payload.getChunksProcessed());
 				processed.setTokensProcessed(payload.getTokensProcessed());
 				processed.setLastMessage(payload.getLastMessage());
 				processed.setTimestamp(payload.getTimestamp());

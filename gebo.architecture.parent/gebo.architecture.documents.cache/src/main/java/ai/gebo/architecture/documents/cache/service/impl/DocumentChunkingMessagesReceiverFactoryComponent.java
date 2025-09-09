@@ -14,6 +14,7 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.documents.cache.config.GeboDocumentsCacheConfig;
 import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesReceiverFactoryComponent;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 
 @Component
@@ -44,7 +45,8 @@ public class DocumentChunkingMessagesReceiverFactoryComponent extends GAbstractT
 	@Override
 	public List<String> getEmittedPayloadTypes() {
 
-		return List.of(GDocumentReferencePayload.class.getName());
+		return List.of(GDocumentReferencePayload.class.getName(),
+				GContentsProcessingStatusUpdatePayload.class.getName());
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import lombok.AllArgsConstructor;
 
 @Component
 @AllArgsConstructor
-public class StandardWorkflowStatusHandlerImpl implements IWorkflowStatusHandler {
+public class GStandardWorkflowStatusHandlerImpl implements IWorkflowStatusHandler {
 	final ContentsBatchProcessedRepository contentsBatchRepo;
 
 	@Override
@@ -79,10 +79,9 @@ public class StandardWorkflowStatusHandlerImpl implements IWorkflowStatusHandler
 		// Todo next calculation is ok for demo but not for production
 		long totalDocuments = discovery != null ? discovery.getBatchDocumentsInput() : 0l;
 		long totalDocumentsWithErrors = (discovery != null ? discovery.getBatchDocumentsProcessingErrors() : 0l)
-				+ Math.max((tokenization != null ? tokenization.getBatchDocumentsProcessingErrors() : 0),
+				+ Math.max((tokenization != null ? embedding.getBatchDocumentsProcessingErrors() : 0),
 						(graphextraction != null ? graphextraction.getBatchDocumentsProcessingErrors() : 0));
-		long totalDocumentsSuccessfull = Math.max(
-				(tokenization != null ? tokenization.getBatchDocumentsProcessed() : 0),
+		long totalDocumentsSuccessfull = Math.max((tokenization != null ? embedding.getBatchDocumentsProcessed() : 0),
 				(graphextraction != null ? graphextraction.getBatchDocumentsProcessed() : 0));
 		boolean completed = totalDocumentsWithErrors + totalDocumentsSuccessfull > totalDocuments;
 		boolean hasErrors = totalDocumentsWithErrors > 0;
