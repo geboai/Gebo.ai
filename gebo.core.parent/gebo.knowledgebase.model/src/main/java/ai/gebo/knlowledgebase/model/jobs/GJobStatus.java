@@ -64,7 +64,7 @@ public class GJobStatus extends GBaseObject {
 
 	// Code identifying the parent job
 	private String parentJobCode = null;
-
+	private WorkflowStatus workflowStatus = null;
 	/**
 	 * Serial version UID for serialization purposes.
 	 */

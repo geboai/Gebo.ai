@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
+import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import lombok.Data;
 
 /**
@@ -33,6 +34,7 @@ public class JobSummary implements Serializable {
 	private Date startDateTime = null;
 	private Date endDateTime = null;
 	private boolean finished = false;
+	private WorkflowStatus workflowStatus = null;
 
 	@Data
 	public static class AggregatedEvents {

@@ -10,6 +10,7 @@
 package ai.gebo.jobs.services.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -18,6 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler.ComputedWorkflowStatus;
+import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
@@ -27,6 +32,7 @@ import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.jobs.services.model.JobSummary.AggregatedEvents;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
@@ -58,6 +64,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	/** Repository for content batch processing data */
 	@Autowired
 	ContentsBatchProcessedRepository contentsBatchRepo;
+	@Autowired
+	IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
 
 	/**
 	 * Default constructor
@@ -195,6 +203,19 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		final JobSummary summary = new JobSummary();
 		summary.setCode(job.getCode());
 		summary.setDescription(job.getDescription());
+		String workflowType = job.getWorkflowType();
+		String workflowId = job.getWorkflowId();
+		List<IWorkflowStatusHandler> handler = workflowHandlersRepositoryPattern
+				.findByWorkflowsTypeAndId(GWorkflowType.valueOf(workflowType), workflowId);
+		if (!handler.isEmpty()) {
+			ComputedWorkflowStatus status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
+			summary.setWorkflowStatus(new WorkflowStatus());
+			summary.getWorkflowStatus().setCompleted(status.isCompleted());
+			summary.getWorkflowStatus().setHasErrors(status.isHasErrors());
+			summary.getWorkflowStatus().setTotalDocuments(status.getTotalDocuments());
+			summary.getWorkflowStatus().setTotalDocumentsSuccessfull(status.getTotalDocumentsSuccessfull());
+			summary.getWorkflowStatus().setTotalDocumentsWithErrors(status.getTotalDocumentsWithErrors());
+		}
 		Stream<ContentsBatchProcessed> contentsBatchStream = contentsBatchRepo.findByJobId(jobId);
 		final Map<String, AggregatedEvents> aggregated = new HashMap<String, JobSummary.AggregatedEvents>();
 		contentsBatchStream.forEach(x -> {
@@ -212,7 +233,6 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			}
 			aggregatedValue.getAggregated().incrementBy(x);
 			aggregatedValue.getEvents().add(x);
-
 		});
 
 		return summary;
