@@ -35,8 +35,9 @@ import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
-import ai.gebo.core.messages.GContentsVectorizationStatusUpdatePayload;
+import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentMessageFragmentPayload;
 import ai.gebo.core.messages.GUserMessagePayload;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -87,7 +88,7 @@ public class GEmbedderImpl implements IGEmbedder {
 		final Map<String, List<GVectorizedContent>> vectorizedMap = new HashMap<String, List<GVectorizedContent>>();
 		final Map<String, List<String>> vectorsToDeleteForVectorStoreId = new HashMap<String, List<String>>();
 		final Map<String, Map<String, Boolean>> distinctJobDocumentVectorized = new HashMap<String, Map<String, Boolean>>();
-		final HashMap<String, GContentsVectorizationStatusUpdatePayload> vectorizationPayloads = new HashMap<String, GContentsVectorizationStatusUpdatePayload>();
+		final HashMap<String, GContentsProcessingStatusUpdatePayload> vectorizationStatistics = new HashMap<String, GContentsProcessingStatusUpdatePayload>();
 
 		// Collect document IDs and prepare lists for deleted documents
 		for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
@@ -98,16 +99,18 @@ public class GEmbedderImpl implements IGEmbedder {
 				toBeRemoved.add(idx);
 			} else {
 				// Count vectorization batch nr. of documents and completed
-				if (x.getPayload().getJobId() != null) {
-					if (!vectorizationPayloads.containsKey(x.getPayload().getJobId())) {
-						GContentsVectorizationStatusUpdatePayload payload = new GContentsVectorizationStatusUpdatePayload();
-						payload.setJobId(x.getPayload().getJobId());
-						vectorizationPayloads.put(x.getPayload().getJobId(), payload);
-					}
-					GContentsVectorizationStatusUpdatePayload ctr = vectorizationPayloads
-							.get(x.getPayload().getJobId());
-					ctr.setCurrentBatchDocumentReceviedCounter(ctr.getCurrentBatchDocumentReceviedCounter() + 1);
+				String key = getProcessingKey(x);
+
+				if (!vectorizationStatistics.containsKey(key)) {
+					GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
+					payload.setJobId(x.getPayload().getJobId());
+					payload.setWorkflowType(x.getWorkflowType() != null ? x.getWorkflowType().name() : null);
+					payload.setWorkflowId(x.getWorkflowId());
+					payload.setWorkflowStepId(x.getWorkflowStepId());
+					vectorizationStatistics.put(key, payload);
 				}
+				GContentsProcessingStatusUpdatePayload ctr = vectorizationStatistics.get(key);
+				ctr.setBatchDocumentsInput(ctr.getBatchDocumentsInput() + 1);
 			}
 			idx++;
 		}
@@ -188,8 +191,6 @@ public class GEmbedderImpl implements IGEmbedder {
 			// Tokenize documents and prepare for embedding
 			for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
 				GDocumentMessageFragmentPayload payload = x.getPayload();
-				int nTokens = 512;
-				// before it was: entry.getKey().intValue()
 
 				List<Document> enriched = payload.getDocuments();
 				newIdsPerDocCode.put(x.getPayload().getDocumentReference().getCode(), enriched.stream().map(y -> {
@@ -203,26 +204,24 @@ public class GEmbedderImpl implements IGEmbedder {
 				String messageDetail = "Embedding document " + payload.getDocumentReference().getCode()
 						+ " with nr of tokenized fragments: " + enriched.size() + " in embedding models vector stores "
 						+ theseEmbeddingModels;
-
+				String key = getProcessingKey(x);
 				// Update vectorization job statistics
-				if (x.getPayload().getJobId() != null) {
-					GContentsVectorizationStatusUpdatePayload accountingEntry = vectorizationPayloads
-							.get(x.getPayload().getJobId());
-					if (accountingEntry != null) {
-						accountingEntry
-								.setVectorizedSegments(accountingEntry.getVectorizedSegments() + enriched.size());
-						long tokensCount = 0l;
-						for (Document doc : enriched) {
-							if (doc.getMetadata() != null
-									&& doc.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)) {
-								Object tokens = doc.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH);
-								if (tokens instanceof Number) {
-									tokensCount += ((Number) tokens).longValue();
-								}
+
+				GContentsProcessingStatusUpdatePayload accountingEntry = vectorizationStatistics.get(key);
+				if (accountingEntry != null) {
+					accountingEntry.setProcessedChunks(accountingEntry.getProcessedChunks() + enriched.size());
+					long tokensCount = 0l;
+					for (Document doc : enriched) {
+						if (doc.getMetadata() != null
+								&& doc.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)) {
+							Object tokens = doc.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH);
+							if (tokens instanceof Number) {
+								tokensCount += ((Number) tokens).longValue();
 							}
 						}
-						accountingEntry.setVectorizedTokens(accountingEntry.getVectorizedTokens() + tokensCount);
 					}
+					accountingEntry.setProcessedTokens(accountingEntry.getProcessedTokens() + tokensCount);
+
 				}
 
 				GUserMessage message = GUserMessage.successMessage(messageSummary, messageDetail);
@@ -351,10 +350,10 @@ public class GEmbedderImpl implements IGEmbedder {
 		// Send vectorization status updates
 		GContentVectorizationEmitterComponent emitter = runtimeBinder
 				.getImplementationOf(GContentVectorizationEmitterComponent.class);
-		for (GContentsVectorizationStatusUpdatePayload vectPayload : vectorizationPayloads.values()) {
+		for (GContentsProcessingStatusUpdatePayload vectPayload : vectorizationStatistics.values()) {
 			Map<String, Boolean> map = distinctJobDocumentVectorized.get(vectPayload.getJobId());
-			vectPayload.setCurrentBatchDocumentVectorizedCounter(map != null ? map.size() : 0);
-			GMessageEnvelope<GContentsVectorizationStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
+			vectPayload.setBatchDocumentsProcessed((long) (map != null ? map.size() : 0));
+			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
 					vectPayload);
 			msg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
@@ -413,17 +412,26 @@ public class GEmbedderImpl implements IGEmbedder {
 		GContentVectorizationEmitterComponent emitter = runtimeBinder
 				.getImplementationOf(GContentVectorizationEmitterComponent.class);
 
-		Map<String, GContentsVectorizationStatusUpdatePayload> payloads = new HashMap<String, GContentsVectorizationStatusUpdatePayload>();
+		Map<String, GContentsProcessingStatusUpdatePayload> payloads = new HashMap<String, GContentsProcessingStatusUpdatePayload>();
 
 		// Process each failed document
 		for (DocumentAccessResult documentAccessResult : impossibleToIngest) {
 			if (!documentAccessResult.isSuccessfullyHandled()) {
-				final String jobId = documentAccessResult.getDocReferenceMessage().getPayload().getJobId();
-				if (!payloads.containsKey(documentAccessResult.getDocReferenceMessage().getPayload().getJobId())) {
-					payloads.put(jobId, new GContentsVectorizationStatusUpdatePayload());
-					payloads.get(jobId).setJobId(jobId);
+				final String key = getProcessingKey(documentAccessResult.getDocReferenceMessage());
+				if (!payloads.containsKey(key)) {
+					GContentsProcessingStatusUpdatePayload errorInstance = new GContentsProcessingStatusUpdatePayload();
+					errorInstance.setJobId(documentAccessResult.getDocReferenceMessage().getPayload().getJobId());
+					errorInstance
+							.setWorkflowType(documentAccessResult.getDocReferenceMessage().getWorkflowType() != null
+									? documentAccessResult.getDocReferenceMessage().getWorkflowType().name()
+									: null);
+					errorInstance.setWorkflowId(documentAccessResult.getDocReferenceMessage().getWorkflowId());
+					errorInstance.setWorkflowStepId(documentAccessResult.getDocReferenceMessage().getWorkflowStepId());
+					payloads.put(key, errorInstance);
+
 				}
-				payloads.get(jobId).setVectorizationErrors(payloads.get(jobId).getVectorizationErrors() + 1);
+				payloads.get(key)
+						.setBatchDocumentsProcessingErrors((payloads.get(key).getBatchDocumentsProcessingErrors() + 1));
 
 				// Send user message about the error if available
 				if (documentAccessResult.getNegativeMessage() != null) {
@@ -431,7 +439,8 @@ public class GEmbedderImpl implements IGEmbedder {
 					payload.setUserMessage(documentAccessResult.getNegativeMessage());
 					GMessageEnvelope<GUserMessagePayload> userMessageMsg = GMessageEnvelope.newMessageFrom(emitter,
 							payload);
-					payload.getUserMessage().setJobId(jobId);
+					payload.getUserMessage()
+							.setJobId(documentAccessResult.getDocReferenceMessage().getPayload().getJobId());
 					userMessageMsg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 					userMessageMsg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
 					userMessageMsg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
@@ -441,14 +450,22 @@ public class GEmbedderImpl implements IGEmbedder {
 		}
 
 		// Send vectorization status updates for each job with errors
-		for (GContentsVectorizationStatusUpdatePayload vectPayload : payloads.values()) {
-			GMessageEnvelope<GContentsVectorizationStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
+		for (GContentsProcessingStatusUpdatePayload vectPayload : payloads.values()) {
+			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> msg = GMessageEnvelope.newMessageFrom(emitter,
 					vectPayload);
 			msg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);			
 			emitter.send(msg);
 		}
+
+	}
+
+	private String getProcessingKey(GMessageEnvelope<? extends GAbstractContentMessageFragmentPayload> data) {
+
+		return data.getPayload().getJobId() + "-" + data.getWorkflowType() + "-" + data.getWorkflowId() + "-"
+				+ data.getWorkflowStepId();
+
 	}
 
 }

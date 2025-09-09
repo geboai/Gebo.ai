@@ -22,7 +22,6 @@ import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
-import ai.gebo.core.messages.GDocumentMessageFragmentPayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.core.messages.GRawContentMessageFragmentPayload;
 import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;

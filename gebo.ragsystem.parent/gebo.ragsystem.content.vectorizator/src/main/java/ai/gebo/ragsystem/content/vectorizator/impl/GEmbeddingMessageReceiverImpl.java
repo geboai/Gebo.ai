@@ -20,7 +20,6 @@ package ai.gebo.ragsystem.content.vectorizator.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -41,8 +40,8 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.content.vectorizator.DocumentAccessResult;
 import ai.gebo.ragsystem.content.vectorizator.IGDocumentChunkServiceAccessor;
-import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;
 import ai.gebo.ragsystem.content.vectorizator.IGEmbedder;
+import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;
 
 @Service
 public class GEmbeddingMessageReceiverImpl implements IGEmbeddingMessageReceiver {

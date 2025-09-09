@@ -206,13 +206,13 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		Stream<ContentsBatchProcessed> contentsBatchStream = contentsBatchRepo.findByJobId(jobId);
 		contentsBatchStream.forEach(x -> {
 			summary.getContentsProcessingData().add(x);
-			summary.setHowManyBatchDocuments(summary.getHowManyBatchDocuments() + x.getHowManyBatchDocuments());
+			summary.setHowManyBatchDocuments(summary.getHowManyBatchDocuments() + x.getBatchDocumentsInput());
 			summary.setHowManyBatchSentToVectorization(
-					summary.getHowManyBatchSentToVectorization() + x.getHowManyBatchSentToVectorization());
+					summary.getHowManyBatchSentToVectorization() + x.getBatchSentToNextStep());
 			summary.setHowManyBatchContentsReadingErrors(
-					summary.getHowManyBatchContentsReadingErrors() + x.getHowManyBatchContentsReadingErrors());
+					summary.getHowManyBatchContentsReadingErrors() + x.getBatchDocumentsProcessingErrors());
 			summary.setHowManyBatchPersistendDocuments(
-					summary.getHowManyBatchPersistendDocuments() + x.getHowManyBatchPersistendDocuments());
+					summary.getHowManyBatchPersistendDocuments() + x.getBatchDocumentsProcessed());
 			if (x.getLastMessage() != null && x.getLastMessage()) {
 				summary.setContentsReadTerminated(true);
 			}

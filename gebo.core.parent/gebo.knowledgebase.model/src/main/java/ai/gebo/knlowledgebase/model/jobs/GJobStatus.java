@@ -360,10 +360,10 @@ public class GJobStatus extends GBaseObject {
             this.lastBatchMessage = true;
             this.contentBatchEnded = true;
         }
-        this.howManyBatchDocuments += processed.getHowManyBatchDocuments();
-        this.howManyBatchContentsReadingErrors += processed.getHowManyBatchContentsReadingErrors();
-        this.howManyBatchPersistendDocuments += processed.getHowManyBatchDocuments();
-        this.howManyBatchSentToVectorization += processed.getHowManyBatchSentToVectorization();
+        this.howManyBatchDocuments += processed.getBatchDocumentsInput();
+        this.howManyBatchContentsReadingErrors += processed.getBatchDocumentsProcessingErrors();
+        this.howManyBatchPersistendDocuments += processed.getBatchDocumentsInput();
+        this.howManyBatchSentToVectorization += processed.getBatchSentToNextStep();
     }
 
     /**

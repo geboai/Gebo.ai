@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,6 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
-import ai.gebo.core.messages.GAbstractContentMessageFragmentPayload;
 import ai.gebo.core.messages.GDocumentMessageFragmentPayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -34,10 +32,6 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReferenceSnapshot;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.ragsystem.content.vectorizator.DocumentAccessResult;
 import ai.gebo.ragsystem.content.vectorizator.IGDocumentChunkServiceAccessor;
-import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
-import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator.SendEvaluationPolicy;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
-import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandlerRepositoryPattern;
 
 /**
  * AI generated comments
@@ -121,6 +115,9 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 			message.setTargetModule(GStandardModulesConstraints.VECTORIZATOR_MODULE);
 			message.setTargetComponent(GStandardModulesConstraints.VECTORIZATION_COMPONENT);
 			message.getPayload().setJobId(envelope.getPayload().getJobId());
+			message.setWorkflowType(envelope.getWorkflowType());
+			message.setWorkflowId(envelope.getWorkflowId());
+			message.setWorkflowStepId(envelope.getWorkflowStepId());
 			ingested.add(message);
 			// Update token count and hash information
 			snapshot.setTokensCount(snapshot.getTokensCount() + message.getPayload().getEstimatedTokens());

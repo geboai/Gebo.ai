@@ -338,10 +338,10 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 				if (howManyBatchSentToVectorization > NBATCH_DOCS_STATSMESSAGE) {
 					GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
 					payload.setJobId(jobStatus.getCode());
-					payload.setHowManyBatchDocuments(howManyBatchDocuments);
-					payload.setHowManyBatchContentsReadingErrors(howManyBatchContentsReadingErrors);
-					payload.setHowManyBatchPersistendDocuments(howManyBatchPersistendDocuments);
-					payload.setHowManyBatchSentToVectorization(howManyBatchSentToVectorization);
+					payload.setBatchDocumentsInput(howManyBatchDocuments);
+					payload.setBatchDocumentsProcessingErrors(howManyBatchContentsReadingErrors);
+					payload.setBatchDocumentsProcessed(howManyBatchPersistendDocuments);
+					payload.setBatchSentToNextStep(howManyBatchSentToVectorization);
 					payload.setLastMessage(false);
 					payload.setTimestamp(new Date());
 					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
@@ -407,10 +407,10 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 				}
 				GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
 				payload.setJobId(jobStatus.getCode());
-				payload.setHowManyBatchDocuments(howManyBatchDocuments);
-				payload.setHowManyBatchContentsReadingErrors(howManyBatchContentsReadingErrors);
-				payload.setHowManyBatchPersistendDocuments(howManyBatchPersistendDocuments);
-				payload.setHowManyBatchSentToVectorization(howManyBatchSentToVectorization);
+				payload.setBatchDocumentsInput(howManyBatchDocuments);
+				payload.setBatchDocumentsProcessingErrors(howManyBatchContentsReadingErrors);
+				payload.setBatchDocumentsProcessed(howManyBatchPersistendDocuments);
+				payload.setBatchSentToNextStep(howManyBatchSentToVectorization);
 				payload.setLastMessage(true);
 				payload.setTimestamp(new Date());
 				GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
