@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.impl;
 
@@ -20,6 +17,8 @@ package ai.gebo.jobs.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
@@ -37,7 +36,7 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 	 */
 	@Autowired
 	GeboIngestionManager ingestionManager;
-	
+
 	/**
 	 * Repository pattern implementation for IOC module contents dispatchers
 	 */
@@ -52,7 +51,8 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 	}
 
 	/**
-	 * Internal class that extends GConsumers to handle specific content consumption needs
+	 * Internal class that extends GConsumers to handle specific content consumption
+	 * needs
 	 */
 	static class InternalGConsumers extends GConsumers {
 
@@ -65,9 +65,12 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 		}
 
 		/**
-		 * Factory method to create an InternalGConsumers instance from a Consumers object
+		 * Factory method to create an InternalGConsumers instance from a Consumers
+		 * object
+		 * 
 		 * @param c The source Consumers object
-		 * @return A new InternalGConsumers instance with properties copied from the input
+		 * @return A new InternalGConsumers instance with properties copied from the
+		 *         input
 		 */
 		static InternalGConsumers of(Consumers c) {
 			InternalGConsumers ic = new InternalGConsumers();
@@ -79,16 +82,19 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 
 	/**
 	 * Retrieves a consumer for the specified project endpoint
+	 * 
 	 * @param endpoint The project endpoint for which to get a consumer
 	 * @return A GConsumers instance for the specified endpoint
-	 * @throws GeboJobServiceException If the required handler is not found or dispatcher throws an exception
+	 * @throws GeboJobServiceException If the required handler is not found or
+	 *                                 dispatcher throws an exception
 	 */
 	@Override
 	public GConsumers getConsumer(GProjectEndpoint endpoint) throws GeboJobServiceException {
 		IGIOCModuleContentsDispatcher handler = iocRepositoryPattern.findByProjectEndpoint(endpoint);
 		if (handler == null)
 			throw new GeboJobServiceException("Required IGIOCModuleContentsDispatcher not found");
-		GJobStatus jobStatus = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint);
+		GJobStatus jobStatus = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
+				GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
 		Consumers consumers;
 		try {
 			consumers = handler.dispatchContentsConsumers(endpoint, jobStatus);

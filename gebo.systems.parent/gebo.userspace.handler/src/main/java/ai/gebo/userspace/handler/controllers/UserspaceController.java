@@ -6,13 +6,8 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.userspace.handler.controllers;
-
-
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.application.messaging.IGMessageBroker;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -73,14 +70,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * Controller for managing user space operations, including knowledgebases, folders, and files.
- * AI generated comments
+ * Controller for managing user space operations, including knowledgebases,
+ * folders, and files. AI generated comments
  */
 @RestController
 @RequestMapping(value = "api/user/UserspaceController")
 public class UserspaceController
 		extends GAbstractSystemsArchitectureController<GUserspaceContentManagementSystem, GUserspaceProjectEndpoint> {
-	
+
 	/**
 	 * Nested emitter component for userspace controller messaging
 	 */
@@ -259,7 +256,8 @@ public class UserspaceController
 	 * Deletes a user knowledgebase
 	 * 
 	 * @param object The knowledgebase DTO to delete
-	 * @throws GeboPersistenceException If there's an error deleting from the database
+	 * @throws GeboPersistenceException If there's an error deleting from the
+	 *                                  database
 	 */
 	@PostMapping(value = "deleteUserKnowledgebase", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserKnowledgebase(@NotNull @Valid @RequestBody UserspaceKnowledgebaseDto object)
@@ -375,7 +373,8 @@ public class UserspaceController
 	 * Deletes a userspace folder
 	 * 
 	 * @param folderdto The folder DTO to delete
-	 * @throws GeboPersistenceException If there's an error deleting from the database
+	 * @throws GeboPersistenceException If there's an error deleting from the
+	 *                                  database
 	 */
 	@PostMapping(value = "deleteUserspaceFolder", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserspaceFolder(@NotNull @Valid @RequestBody UserspaceFolderDto folderdto)
@@ -438,9 +437,12 @@ public class UserspaceController
 	 * 
 	 * @param userspaceUploadCode The upload endpoint code
 	 * @return List of file DTOs
-	 * @throws GeboPersistenceException If there's an error accessing the database
-	 * @throws GeboContentHandlerSystemException If there's an error with the content handler
-	 * @throws IOException If there's an error reading from the filesystem
+	 * @throws GeboPersistenceException          If there's an error accessing the
+	 *                                           database
+	 * @throws GeboContentHandlerSystemException If there's an error with the
+	 *                                           content handler
+	 * @throws IOException                       If there's an error reading from
+	 *                                           the filesystem
 	 */
 	@GetMapping(value = "listUserspaceFiles", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<UserspaceFileDto> listUserspaceFiles(@RequestParam("userspaceUploadCode") String userspaceUploadCode)
@@ -581,7 +583,8 @@ public class UserspaceController
 					"Wait some minutes to try to publish again"));
 		} else {
 			try {
-				GJobStatus job = this.jobQueueService.createNewAsyncJob(endpoint);
+				GJobStatus job = this.jobQueueService.createNewAsyncJob(endpoint, GWorkflowType.STANDARD.name(),
+						GStandardWorkflow.INGESTION.name());
 				status.jobId = job.getCode();
 				status.underPubishingAlgorithm = true;
 				status.hasBeenPublished = true;

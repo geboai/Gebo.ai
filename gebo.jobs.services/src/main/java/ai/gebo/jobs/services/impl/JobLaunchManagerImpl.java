@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.impl;
 
@@ -35,26 +32,26 @@ import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGJobLaunchManager;
 
 /**
- * AI generated comments
- * Implementation of the Job Launch Manager that handles asynchronous job launching operations.
- * This class is responsible for processing project endpoint publishing requests and creating
- * corresponding jobs.
+ * AI generated comments Implementation of the Job Launch Manager that handles
+ * asynchronous job launching operations. This class is responsible for
+ * processing project endpoint publishing requests and creating corresponding
+ * jobs.
  */
 @Component
 @Scope("singleton")
 public class JobLaunchManagerImpl implements IGJobLaunchManager {
 	private final static Logger LOGGER = LoggerFactory.getLogger(JobLaunchManagerImpl.class);
-	
+
 	/**
 	 * Service for handling ingestion job queues
 	 */
 	private final IGGeboIngestionJobQueueService jobLauncherController;
-	
+
 	/**
 	 * Manager for persistent object operations
 	 */
 	private final IGPersistentObjectManager persistentObjectManager;
-	
+
 	/**
 	 * Message broker for inter-component communication
 	 */
@@ -63,14 +60,16 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 	/**
 	 * Constructor initializing the Job Launch Manager with required dependencies
 	 * 
-	 * @param jobLauncherController Service for handling ingestion job queues
+	 * @param jobLauncherController   Service for handling ingestion job queues
 	 * @param persistentObjectManager Manager for persistent object operations
-	 * @param broker Message broker for inter-component communication
+	 * @param broker                  Message broker for inter-component
+	 *                                communication
 	 */
-	public JobLaunchManagerImpl(IGGeboIngestionJobQueueService jobLauncherController,IGPersistentObjectManager persistentObjectManager,IGMessageBroker broker) {
+	public JobLaunchManagerImpl(IGGeboIngestionJobQueueService jobLauncherController,
+			IGPersistentObjectManager persistentObjectManager, IGMessageBroker broker) {
 		this.jobLauncherController = jobLauncherController;
-		this.persistentObjectManager=persistentObjectManager;
-		this.broker=broker;
+		this.persistentObjectManager = persistentObjectManager;
+		this.broker = broker;
 
 	}
 
@@ -141,8 +140,8 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 	}
 
 	/**
-	 * Processes incoming message envelopes
-	 * When a PublishProjectEndpointMessagePayload is received, it creates a new job and
+	 * Processes incoming message envelopes When a
+	 * PublishProjectEndpointMessagePayload is received, it creates a new job and
 	 * sends back an acknowledgment message
 	 * 
 	 * @param envelope The message envelope to process
@@ -151,19 +150,23 @@ public class JobLaunchManagerImpl implements IGJobLaunchManager {
 	public void accept(GMessageEnvelope envelope) {
 		if (envelope.getPayload() instanceof PublishProjectEndpointMessagePayload) {
 			PublishProjectEndpointMessagePayload payload = (PublishProjectEndpointMessagePayload) envelope.getPayload();
-			
+
 			try {
 				// Find the endpoint from the reference
-				GProjectEndpoint endpoint=persistentObjectManager.findByReference(payload.getProjectEndpoint(), GProjectEndpoint.class);
+				GProjectEndpoint endpoint = persistentObjectManager.findByReference(payload.getProjectEndpoint(),
+						GProjectEndpoint.class);
 				// Create a new asynchronous job for the endpoint
-				GJobStatus jobStatus = jobLauncherController.createNewAsyncJob(endpoint);
+				GJobStatus jobStatus = jobLauncherController.createNewAsyncJob(endpoint,
+						envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
+						envelope.getWorkflowId());
 				// Create an acknowledgment message
 				PublishProjectEndpointAckMessagePayload ackPayload = new PublishProjectEndpointAckMessagePayload();
 				ackPayload.setJobId(jobStatus.getCode());
 				ackPayload.setCorrelationId(payload.getCorrelationId());
 				ackPayload.setProjectEndpoint(payload.getProjectEndpoint());
 				// Create an envelope and set the target
-				GMessageEnvelope<PublishProjectEndpointAckMessagePayload> ackEnvelope = GMessageEnvelope.newMessageFrom(this, ackPayload);
+				GMessageEnvelope<PublishProjectEndpointAckMessagePayload> ackEnvelope = GMessageEnvelope
+						.newMessageFrom(this, ackPayload);
 				ackEnvelope.setTargetModule(envelope.getSourceModule());
 				ackEnvelope.setTargetComponent(envelope.getSourceComponent());
 				// Send the acknowledgment

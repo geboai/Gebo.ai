@@ -24,6 +24,8 @@ import org.springframework.ai.vectorstore.VectorStore;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.model.JobSummary;
@@ -185,7 +187,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
 			boolean checkVectorDeletionNotOccurred)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint);
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
 		int nCycles = 0;
@@ -303,7 +306,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore,
 			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint);
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 
 		int nCycles = 0;

@@ -31,10 +31,12 @@ public interface IGGeboIngestionJobQueueService {
 	 * Creates a new asynchronous ingestion job for the specified project endpoint.
 	 * 
 	 * @param item The project endpoint to be processed
+	 * @param workflowType TODO
+	 * @param workflowId TODO
 	 * @return The status of the newly created job
 	 * @throws GeboJobServiceException If job creation fails
 	 */
-	public GJobStatus createNewAsyncJob(GProjectEndpoint item) throws GeboJobServiceException;
+	public GJobStatus createNewAsyncJob(GProjectEndpoint item, String workflowType, String workflowId) throws GeboJobServiceException;
 
 	/**
 	 * Aborts an asynchronous job that is currently running.
@@ -49,10 +51,12 @@ public interface IGGeboIngestionJobQueueService {
 	 * This method will block until the job completes.
 	 * 
 	 * @param item The project endpoint to be processed
+	 * @param workflowType TODO
+	 * @param workflowId TODO
 	 * @return The final status of the executed job
 	 * @throws GeboJobServiceException If job execution fails
 	 */
-	public GJobStatus executeSyncJob(GProjectEndpoint item) throws GeboJobServiceException;
+	public GJobStatus executeSyncJob(GProjectEndpoint item, String workflowType, String workflowId) throws GeboJobServiceException;
 
 	/**
 	 * Checks if a synchronous job is currently running for the specified project endpoint.
@@ -83,11 +87,13 @@ public interface IGGeboIngestionJobQueueService {
 	 * Creates a runnable task for publication processing of the specified endpoint.
 	 * 
 	 * @param endpoint Reference to the project endpoint to be processed
+	 * @param workflowType TODO
+	 * @param workflowId TODO
 	 * @return A runnable task that can be submitted to an executor
 	 * @throws GeboJobServiceException If the runnable cannot be created
 	 * @throws GeboPersistenceException If there are persistence-related issues
 	 */
-	public IGRunnable createPublicationRunnable(GObjectRef<GProjectEndpoint> endpoint)
+	public IGRunnable createPublicationRunnable(GObjectRef<GProjectEndpoint> endpoint, String workflowType, String workflowId)
 			throws GeboJobServiceException, GeboPersistenceException;
 
 	/**
