@@ -1,4 +1,4 @@
-package ai.gebo.llms.chat.abstraction.layer.services.impl;
+package ai.gebo.architecture.documents.cache.service.impl;
 
 import org.springframework.stereotype.Component;
 
