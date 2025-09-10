@@ -32,7 +32,7 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 			LOGGER.debug("Begin workflowRoute(....)");
 		}
 		List<IWorkflowMessagesRouter> routers = this.workflowMessagesRouterRepositoryPattern
-				.findByWorkflowsTypeAndId(workflowType, currentWorkflowId);
+				.findByWorkflowsTypeAndWorkflowId(workflowType, currentWorkflowId);
 		List<GMessagingComponentRef> destinations = new ArrayList<GMessagingComponentRef>();
 		for (IWorkflowMessagesRouter router : routers) {
 			List<GMessagingComponentRef> _destinations = router.onProcessedRoutes(currentWorkflowId,

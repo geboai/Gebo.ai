@@ -11,6 +11,8 @@ public interface IGraphDataExtractionService {
 	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration)
 			throws LLMConfigException;
 
+	public boolean isConfigured();
+
 	public LLMExtractionResult extract(Document document, GDocumentReference docreference) throws LLMConfigException;
 
 	public LLMExtractionResult extract(String text, GraphRagExtractionConfig configuration) throws LLMConfigException;

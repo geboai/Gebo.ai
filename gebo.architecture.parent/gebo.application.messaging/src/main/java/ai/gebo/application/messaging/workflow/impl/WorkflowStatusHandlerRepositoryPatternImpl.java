@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.workflow.GWorkflowType;
-import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractImplementationsRepositoryPattern;
@@ -29,7 +28,7 @@ public class WorkflowStatusHandlerRepositoryPatternImpl
 	}
 
 	@Override
-	public List<IWorkflowStatusHandler> findByWorkflowsTypeAndId(final GWorkflowType workflowType, String workflowId) {
+	public List<IWorkflowStatusHandler> findByWorkflowsTypeAndWorkflowId(final GWorkflowType workflowType, String workflowId) {
 
 		return findImplementations(x -> {
 			return ((workflowType != null && x.getWorkflowType() == workflowType)

@@ -6,5 +6,5 @@ import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 
 public interface IWorkflowStatusHandlerRepositoryPattern
 		extends IGImplementationsRepositoryPattern<IWorkflowStatusHandler> {
-	public List<IWorkflowStatusHandler> findByWorkflowsTypeAndId(GWorkflowType workflowType, String workflowId);
+	public List<IWorkflowStatusHandler> findByWorkflowsTypeAndWorkflowId(GWorkflowType workflowType, String workflowId);
 }

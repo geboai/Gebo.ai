@@ -1,7 +1,5 @@
 package ai.gebo.systems.abstraction.layer.impl;
 
-import static org.mockito.ArgumentMatchers.booleanThat;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +9,10 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
+import ai.gebo.application.messaging.workflow.IWorkflowStepEnabledHandler;
+import ai.gebo.application.messaging.workflow.IWorkflowStepEnabledHandlerRepositoryPattern;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
@@ -24,7 +24,35 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHandler {
 	protected final ContentsBatchProcessedRepository contentsBatchRepo;
+	protected final IWorkflowStepEnabledHandlerRepositoryPattern stepEnabledHandlerRepositoryPattern;
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+	protected abstract ComputedWorkflowStructure workflowStructureImplementation(String workflowType,
+			String workflowId);
+
+	@Override
+	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId) {
+		ComputedWorkflowStructure structure = workflowStructureImplementation(workflowType, workflowId);
+		this.checkEnabledNodes(structure.getRootStep());
+		return structure;
+	}
+
+	private void checkEnabledNodes(ComputedWorkflowItem rootStep) {
+		IWorkflowStepEnabledHandler handler = stepEnabledHandlerRepositoryPattern
+				.findByWorkflowsTypeAndWorkflowIdAndWorkflowStepId(GWorkflowType.valueOf(rootStep.getWorkflowType()),
+						rootStep.getWorkflowId(), rootStep.getWorkflowStepId());
+		rootStep.setEnabledStep(
+				handler != null && handler.isEnabled(rootStep.getWorkflowId(), rootStep.getWorkflowStepId()));
+		if (rootStep.isEnabledStep()) {
+			rootStep.getChilds().forEach(childStep -> {
+				checkEnabledNodes(childStep);
+			});
+		} else
+			rootStep.getChilds().forEach(childStep -> {
+				childStep.setEnabledStep(false);
+			});
+
+	}
 
 	@Override
 	public ComputedWorkflowResult computeWorkflowStatus(String jobId, String workflowType, String workflowId) {
@@ -37,18 +65,19 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 			result = new ComputedWorkflowResult();
 			result.setWorkflowType(workflowType);
 			result.setWorkflowId(workflowId);
-			GStandardWorkflowStep[] workflowSteps = GStandardWorkflowStep.values();
+			List<ComputedWorkflowItem> workflowSteps = items(structure.getRootStep());
 			Map<String, ContentsBatchProcessed> aggregated = new HashMap<String, ContentsBatchProcessed>();
-			List<GStandardWorkflowStep> steps = new ArrayList<GStandardWorkflowStep>();
-			for (GStandardWorkflowStep thisStep : workflowSteps) {
-				if (thisStep.getWorkflow().name().equalsIgnoreCase(workflowId)) {
+			List<ComputedWorkflowItem> steps = new ArrayList<ComputedWorkflowItem>();
+			for (ComputedWorkflowItem thisStep : workflowSteps) {
+				if (thisStep.getWorkflowId().equalsIgnoreCase(workflowId)) {
 					steps.add(thisStep);
 					ContentsBatchProcessed aggregate = new ContentsBatchProcessed();
 					aggregate.setJobId(jobId);
 					aggregate.setWorkflowType(workflowType);
 					aggregate.setWorkflowId(workflowId);
-					aggregate.setWorkflowStepId(thisStep.name());
-					aggregated.put(thisStep.name().toUpperCase(), aggregate);
+					aggregate.setWorkflowStepId(thisStep.getWorkflowStepId());
+
+					aggregated.put(thisStep.getWorkflowStepId().toUpperCase(), aggregate);
 				}
 			}
 			Stream<ContentsBatchProcessed> data = contentsBatchRepo.findByJobId(jobId);
@@ -69,6 +98,17 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		}
 		return result;
 
+	}
+
+	private List<ComputedWorkflowItem> items(ComputedWorkflowItem rootStep) {
+		List<ComputedWorkflowItem> data = new ArrayList<ComputedWorkflowItem>();
+		if (rootStep != null) {
+			data.add(rootStep);
+			rootStep.getChilds().forEach(child -> {
+				data.addAll(items(child));
+			});
+		}
+		return data.stream().filter(x -> x.isEnabledStep()).toList();
 	}
 
 	private void checkStatus(ComputedWorkflowResult result) {

@@ -197,4 +197,10 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		throw new LLMConfigException("There is no available configuration for knowledge extraction");
 	}
 
+	@Override
+	public boolean isConfigured() {
+		long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
+		return count > 0;
+	}
+
 }

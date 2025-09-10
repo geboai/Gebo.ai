@@ -28,7 +28,7 @@ public class WorkflowMessagesRouterRepositoryPattern
 	}
 
 	@Override
-	public List<IWorkflowMessagesRouter> findByWorkflowsTypeAndId(final GWorkflowType workflowType, String workflowId) {
+	public List<IWorkflowMessagesRouter> findByWorkflowsTypeAndWorkflowId(final GWorkflowType workflowType, String workflowId) {
 
 		return findImplementations(x -> {
 			return ((workflowType != null && x.getWorkflowType() == workflowType)

@@ -10,16 +10,21 @@ import ai.gebo.application.messaging.model.GMessagingComponentRef;
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.IWorkflowStepEnabledHandlerRepositoryPattern;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStructure;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 
 @Component
 
 public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHandler {
+	private final IGRuntimeBinder binder;
 
-	public GStandardWorkflowStatusHandlerImpl(ContentsBatchProcessedRepository contentsBatchRepo) {
-		super(contentsBatchRepo);
+	public GStandardWorkflowStatusHandlerImpl(ContentsBatchProcessedRepository contentsBatchRepo,
+			IGRuntimeBinder binder, IWorkflowStepEnabledHandlerRepositoryPattern stepEnabledHandlerRepositoryPattern) {
+		super(contentsBatchRepo, stepEnabledHandlerRepositoryPattern);
+		this.binder = binder;
 
 	}
 
@@ -45,8 +50,56 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 		return found;
 	}
 
+	private ComputedWorkflowItem createStep(GStandardWorkflowStep step, List<GStandardWorkflowStep> steps, int level,
+			String workflowType, String workflowId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(
+					"Begin createStep(" + step.name() + ",..," + level + "," + workflowType + "," + workflowId + ")");
+		}
+		ComputedWorkflowItem root = new ComputedWorkflowItem();
+		root.setWorkflowType(workflowType);
+		root.setWorkflowId(workflowId);
+		root.setWorkflowStepId(step.name());
+		root.setDescription(step.name());
+		root.setEnabledStep(true);
+		List<GStandardWorkflowStep> childSteps = new ArrayList<GStandardWorkflowStep>();
+		List<GMessagingComponentRef> nextSteps = step.getOnProcessedForwardComponents().apply(null, binder);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("step=" + step.name() + " nextSteps=" + nextSteps);
+		}
+		for (GMessagingComponentRef nextComponent : nextSteps) {
+			final String stepId = nextComponent.getWorkflowStepId();
+			boolean alreadyIn = childSteps.stream().anyMatch(x -> x.name().equalsIgnoreCase(stepId));
+			if (!alreadyIn) {
+				Optional<GStandardWorkflowStep> thisStep = steps.stream().filter(x -> x.name().equalsIgnoreCase(stepId))
+						.findFirst();
+				if (thisStep.isPresent()) {
+					childSteps.add(thisStep.get());
+				}
+			}
+		}
+		for (GStandardWorkflowStep thisStep : childSteps) {
+			root.getChilds().add(createStep(thisStep, steps, level + 1, workflowType, workflowId));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(
+					"End createStep(" + step.name() + ",..," + level + "," + workflowType + "," + workflowId + ")");
+		}
+		return root;
+	}
+
+	private <T> List<T> toList(T array[]) {
+		List<T> data = new ArrayList<T>();
+		if (array != null) {
+			for (T t : array) {
+				data.add(t);
+			}
+		}
+		return data;
+	}
+
 	@Override
-	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId) {
+	protected ComputedWorkflowStructure workflowStructureImplementation(String workflowType, String workflowId) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getWorkflowStructure(" + workflowType + "," + workflowId + ")");
 		}
@@ -80,53 +133,5 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 			LOGGER.debug("End getWorkflowStructure(" + workflowType + "," + workflowId + ")");
 		}
 		return structure;
-	}
-
-	private ComputedWorkflowItem createStep(GStandardWorkflowStep step, List<GStandardWorkflowStep> steps, int level,
-			String workflowType, String workflowId) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(
-					"Begin createStep(" + step.name() + ",..," + level + "," + workflowType + "," + workflowId + ")");
-		}
-		ComputedWorkflowItem root = new ComputedWorkflowItem();
-		root.setWorkflowType(workflowType);
-		root.setWorkflowId(workflowId);
-		root.setWorkflowStepId(step.name());
-		root.setDescription(step.name());
-		root.setEnabledStep(true);
-		List<GStandardWorkflowStep> childSteps = new ArrayList<GStandardWorkflowStep>();
-		List<GMessagingComponentRef> nextSteps = step.getOnProcessedForwardComponents().apply(null);
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("step=" + step.name() + " nextSteps=" + nextSteps);
-		}
-		for (GMessagingComponentRef nextComponent : nextSteps) {
-			final String stepId = nextComponent.getWorkflowStepId();
-			boolean alreadyIn = childSteps.stream().anyMatch(x -> x.name().equalsIgnoreCase(stepId));
-			if (!alreadyIn) {
-				Optional<GStandardWorkflowStep> thisStep = steps.stream().filter(x -> x.name().equalsIgnoreCase(stepId))
-						.findFirst();
-				if (thisStep.isPresent()) {
-					childSteps.add(thisStep.get());
-				}
-			}
-		}
-		for (GStandardWorkflowStep thisStep : childSteps) {
-			root.getChilds().add(createStep(thisStep, steps, level + 1, workflowType, workflowId));
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(
-					"End createStep(" + step.name() + ",..," + level + "," + workflowType + "," + workflowId + ")");
-		}
-		return root;
-	}
-
-	private <T> List<T> toList(T array[]) {
-		List<T> data = new ArrayList<T>();
-		if (array != null) {
-			for (T t : array) {
-				data.add(t);
-			}
-		}
-		return data;
 	}
 }

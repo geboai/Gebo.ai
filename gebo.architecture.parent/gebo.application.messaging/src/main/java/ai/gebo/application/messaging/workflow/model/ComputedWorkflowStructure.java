@@ -1,8 +1,5 @@
 package ai.gebo.application.messaging.workflow.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Data;
 
 @Data

@@ -10,13 +10,14 @@ import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import lombok.AllArgsConstructor;
 
 @Component
+@AllArgsConstructor
 public class StandardWorkflowMessagesRouterImpl implements IWorkflowMessagesRouter {
-
-	public StandardWorkflowMessagesRouterImpl() {
-
-	}
+	private final IGRuntimeBinder binder;
+	
 
 	@Override
 	public String getId() {
@@ -37,7 +38,7 @@ public class StandardWorkflowMessagesRouterImpl implements IWorkflowMessagesRout
 		} catch (Throwable th) {
 			return false;
 		}
-	}
+	} 
 
 	@Override
 	public List<GMessagingComponentRef> onProcessedRoutes(String workflowId, String stepId,
@@ -47,7 +48,7 @@ public class StandardWorkflowMessagesRouterImpl implements IWorkflowMessagesRout
 		for (GStandardWorkflowStep gStandardWorkflowStep : workflowSteps) {
 			if (gStandardWorkflowStep.getWorkflow().name().equalsIgnoreCase(workflowId)
 					&& gStandardWorkflowStep.name().equalsIgnoreCase(stepId)) {
-				outValues = gStandardWorkflowStep.getOnProcessedForwardComponents().apply(payload);
+				outValues = gStandardWorkflowStep.getOnProcessedForwardComponents().apply(payload, binder);
 			}
 		}
 		return outValues;
