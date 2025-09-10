@@ -10,18 +10,22 @@
  * Do not edit the class manually.
  */
 
-export interface ContentsBatchProcessed { 
-    id?: string;
+export interface ComputedWorkflowStatus { 
     jobId?: string;
     workflowType?: string;
     workflowId?: string;
     workflowStepId?: string;
-    lastMessage?: boolean;
-    timestamp?: Date;
+    description?: string;
     batchDocumentsInput?: number;
+    batchDocumentsProcessingErrors?: number;
+    batchDocumentsProcessed?: number;
     batchSentToNextStep?: number;
     chunksProcessed?: number;
     tokensProcessed?: number;
-    batchDocumentsProcessingErrors?: number;
-    batchDocumentsProcessed?: number;
+    completed?: boolean;
+    hasErrors?: boolean;
+    startedRunning?: boolean;
+    levelId?: number;
+    enabledStep?: boolean;
+    childs?: Array<ComputedWorkflowStatus>;
 }

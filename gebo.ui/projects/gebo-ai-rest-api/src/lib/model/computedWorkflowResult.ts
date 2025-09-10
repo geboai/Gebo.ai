@@ -9,9 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ContentsBatchProcessed } from './contentsBatchProcessed';
+import { ComputedWorkflowStatus } from './computedWorkflowStatus';
 
-export interface AggregatedEvents { 
-    aggregated?: ContentsBatchProcessed;
-    events?: Array<ContentsBatchProcessed>;
+export interface ComputedWorkflowResult { 
+    workflowType?: string;
+    workflowId?: string;
+    description?: string;
+    finished?: boolean;
+    hasErrors?: boolean;
+    rootStatus?: ComputedWorkflowStatus;
 }

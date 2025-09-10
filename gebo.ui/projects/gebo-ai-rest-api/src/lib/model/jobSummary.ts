@@ -9,15 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { AggregatedEvents } from './aggregatedEvents';
-import { WorkflowStatus } from './workflowStatus';
+import { ComputedWorkflowResult } from './computedWorkflowResult';
 
 export interface JobSummary { 
     code?: string;
     description?: string;
+    workflowType?: string;
+    workflowId?: string;
     startDateTime?: Date;
     endDateTime?: Date;
-    finished?: boolean;
-    workflowStatus?: WorkflowStatus;
-    aggregatedProcessingData?: Array<AggregatedEvents>;
+    workflowStatus?: ComputedWorkflowResult;
 }

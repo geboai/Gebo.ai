@@ -17,9 +17,9 @@ export interface GJobStatusItem {
     finished?: boolean;
     processing?: boolean;
     endDateTime?: Date;
-    jobType?: GJobStatusItem.JobTypeEnum;
     code?: string;
     startDateTime?: Date;
+    jobType?: GJobStatusItem.JobTypeEnum;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
 }
 export namespace GJobStatusItem {

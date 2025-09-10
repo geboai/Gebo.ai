@@ -1,4 +1,3 @@
-export * from './aggregatedEvents';
 export * from './authProviderDto';
 export * from './authResponse';
 export * from './browseParam';
@@ -17,10 +16,11 @@ export * from './componentEnabledStatus';
 export * from './componentLLMSStatus';
 export * from './componentSetupStatus';
 export * from './componentVectorStoreStatus';
+export * from './computedWorkflowResult';
+export * from './computedWorkflowStatus';
 export * from './configurationEntry';
 export * from './contentMetaInfo';
 export * from './contentObject';
-export * from './contentsBatchProcessed';
 export * from './dataPage';
 export * from './defaultPromptForChatModelParam';
 export * from './defaultPromptForChatModelReferenceParam';

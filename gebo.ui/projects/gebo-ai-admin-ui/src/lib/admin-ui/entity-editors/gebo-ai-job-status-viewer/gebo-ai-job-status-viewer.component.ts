@@ -194,7 +194,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
       const observables: [Observable<GJobStatus>, Observable<PageGUserMessage>, Observable<JobSummary>] = [this.JobLauncherControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
         jobId: this.entity?.code,
         dataPage: this.actualPage
-      }), this.JobLauncherControllerService.getJobSummary(this.entity.code, true)];
+      }), this.JobLauncherControllerService.getJobSummary(this.entity.code)];
       this.loadingRelatedBackend = true;
       forkJoin(observables).subscribe({
         next: (values) => {
