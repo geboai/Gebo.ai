@@ -13,7 +13,7 @@ public class GMessagingComponentRef implements Serializable {
 	private String moduleId = null;
 	private String componentId = null;
 	private String workflowId = null;
-	private String stepId = null;
+	private String workflowStepId = null;
 	
 
 }

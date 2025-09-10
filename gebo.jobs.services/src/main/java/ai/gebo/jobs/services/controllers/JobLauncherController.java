@@ -164,9 +164,8 @@ public class JobLauncherController {
 	 *                                  data
 	 */
 	@GetMapping(value = "getJobSummary", produces = MediaType.APPLICATION_JSON_VALUE)
-	public JobSummary getJobSummary(@RequestParam("jobCode") String jobId,
-			@RequestParam("statsDetails") Boolean statsDetails)
+	public JobSummary getJobSummary(@RequestParam("jobCode") String jobId)
 			throws GeboJobServiceException, GeboPersistenceException {
-		return jobQueueService.getJobSummary(jobId, statsDetails != null && statsDetails);
+		return jobQueueService.getJobSummary(jobId);
 	}
 }

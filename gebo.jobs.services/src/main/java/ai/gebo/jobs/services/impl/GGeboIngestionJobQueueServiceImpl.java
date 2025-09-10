@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -21,18 +20,15 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
-import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler.ComputedWorkflowStatus;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
 import ai.gebo.jobs.services.model.JobSummary;
-import ai.gebo.jobs.services.model.JobSummary.AggregatedEvents;
-import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
-import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
@@ -82,10 +78,12 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @throws GeboJobServiceException If a job is already running for the endpoint
 	 */
 	@Override
-	public GJobStatus createNewAsyncJob(GProjectEndpoint item, String workflowType, String workflowId) throws GeboJobServiceException {
+	public GJobStatus createNewAsyncJob(GProjectEndpoint item, String workflowType, String workflowId)
+			throws GeboJobServiceException {
 		if (ingestionManager.isJobRunning(GObjectRef.of(item)))
 			throw new GeboJobServiceException("Already running sync on " + item.getCode());
-		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType, workflowId);
+		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
+				workflowId);
 		synchronized (statusMap) {
 			statusMap.put(status.getCode(), status);
 			readingService.completeAsyncJob(status);
@@ -113,10 +111,12 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @throws GeboJobServiceException If a job is already running for the endpoint
 	 */
 	@Override
-	public GJobStatus executeSyncJob(GProjectEndpoint item, String workflowType, String workflowId) throws GeboJobServiceException {
+	public GJobStatus executeSyncJob(GProjectEndpoint item, String workflowType, String workflowId)
+			throws GeboJobServiceException {
 		if (readingService.isJobRunning(GObjectRef.of(item)))
 			throw new GeboJobServiceException("Already running sync on " + item.getCode());
-		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType, workflowId);
+		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
+				workflowId);
 		return ingestionManager.internalReadAndVectorizeContents(status);
 	}
 
@@ -172,11 +172,12 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @throws GeboPersistenceException If there's an issue with persistence
 	 */
 	@Override
-	public IGRunnable createPublicationRunnable(GObjectRef<GProjectEndpoint> endpoint, String workflowType, String workflowId)
-			throws GeboJobServiceException, GeboPersistenceException {
+	public IGRunnable createPublicationRunnable(GObjectRef<GProjectEndpoint> endpoint, String workflowType,
+			String workflowId) throws GeboJobServiceException, GeboPersistenceException {
 		if (readingService.isJobRunning(endpoint))
 			throw new GeboJobServiceException("Already running sync on " + endpoint.getCode());
-		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint, workflowType, workflowId);
+		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
+				workflowType, workflowId);
 		synchronized (statusMap) {
 			statusMap.put(status.getCode(), status);
 		}
@@ -194,8 +195,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	 * @throws GeboPersistenceException If there's an issue with persistence
 	 */
 	@Override
-	public JobSummary getJobSummary(String jobId, boolean details)
-			throws GeboJobServiceException, GeboPersistenceException {
+	public JobSummary getJobSummary(String jobId) throws GeboJobServiceException, GeboPersistenceException {
 		Optional<GJobStatus> jobOpt = statusRepository.findById(jobId);
 		if (jobOpt.isEmpty())
 			return null;
@@ -208,33 +208,9 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		List<IWorkflowStatusHandler> handler = workflowHandlersRepositoryPattern
 				.findByWorkflowsTypeAndId(GWorkflowType.valueOf(workflowType), workflowId);
 		if (!handler.isEmpty()) {
-			ComputedWorkflowStatus status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
-			summary.setWorkflowStatus(new WorkflowStatus());
-			summary.getWorkflowStatus().setCompleted(status.isCompleted());
-			summary.getWorkflowStatus().setHasErrors(status.isHasErrors());
-			summary.getWorkflowStatus().setTotalDocuments(status.getTotalDocuments());
-			summary.getWorkflowStatus().setTotalDocumentsSuccessfull(status.getTotalDocumentsSuccessfull());
-			summary.getWorkflowStatus().setTotalDocumentsWithErrors(status.getTotalDocumentsWithErrors());
+			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
+			summary.setWorkflowStatus(status);
 		}
-		Stream<ContentsBatchProcessed> contentsBatchStream = contentsBatchRepo.findByJobId(jobId);
-		final Map<String, AggregatedEvents> aggregated = new HashMap<String, JobSummary.AggregatedEvents>();
-		contentsBatchStream.forEach(x -> {
-			String key = x.getWorkflowType() + "-" + x.getWorkflowId() + "-" + x.getWorkflowStepId();
-			AggregatedEvents aggregatedValue = aggregated.get(key);
-			if (aggregatedValue == null) {
-				aggregatedValue = new AggregatedEvents();
-				aggregatedValue.setAggregated(new ContentsBatchProcessed());
-				aggregatedValue.getAggregated().setJobId(jobId);
-				aggregatedValue.getAggregated().setWorkflowType(x.getWorkflowType());
-				aggregatedValue.getAggregated().setWorkflowId(x.getWorkflowId());
-				aggregatedValue.getAggregated().setWorkflowStepId(x.getWorkflowStepId());
-				aggregated.put(key, aggregatedValue);
-				summary.getAggregatedProcessingData().add(aggregatedValue);
-			}
-			aggregatedValue.getAggregated().incrementBy(x);
-			aggregatedValue.getEvents().add(x);
-		});
-
 		return summary;
 	}
 

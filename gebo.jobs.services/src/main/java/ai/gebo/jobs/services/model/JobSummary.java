@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import lombok.Data;
@@ -29,17 +31,12 @@ public class JobSummary implements Serializable {
 	// Job identification
 	private String code = null;
 	private String description = null;
+	private String workflowType = null;
+	private String workflowId = null;
 
 	// Job timing information
 	private Date startDateTime = null;
 	private Date endDateTime = null;
-	private WorkflowStatus workflowStatus = null;
+	private ComputedWorkflowResult workflowStatus = null;
 
-	@Data
-	public static class AggregatedEvents {
-		private ContentsBatchProcessed aggregated = null;
-		private List<ContentsBatchProcessed> events = new ArrayList<ContentsBatchProcessed>();
-	}
-
-	private List<AggregatedEvents> aggregatedProcessingData = new ArrayList<AggregatedEvents>();
 }

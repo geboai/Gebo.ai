@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.contentsystems.abstraction.layer.test.TestConstants;
@@ -120,7 +121,7 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-		WorkflowStatus workflowStatus = summary.getWorkflowStatus();
+		ComputedWorkflowResult workflowStatus = summary.getWorkflowStatus();
 		int NMAXCYCLES = 20;
 		int nCycles = 0;
 		do {
@@ -129,11 +130,10 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 			workflowStatus = summary.getWorkflowStatus();
 			nCycles++;
 
-		} while (!((workflowStatus == null || (workflowStatus.getTotalDocumentsSuccessfull()
-				+ workflowStatus.getTotalDocumentsWithErrors()) > howManyFilesWait)) && nCycles < NMAXCYCLES);
+		} while (!(workflowStatus == null || (!workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isCompleted(),
+		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),
 				"Contents read have to be terminated in this point");
 		/*
 		 * assertTrue(summary.getVectorizationTerminated(),

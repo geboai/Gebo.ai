@@ -45,7 +45,7 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 				GMessageEnvelope<IGMessagePayloadType> envelope = GMessageEnvelope.newMessageFrom(emitter, payload);
 				envelope.setWorkflowType(workflowType);
 				envelope.setWorkflowId(target.getWorkflowId());
-				envelope.setWorkflowStepId(target.getStepId());
+				envelope.setWorkflowStepId(target.getWorkflowStepId());
 				envelope.setTargetModule(target.getModuleId());
 				envelope.setTargetComponent(target.getComponentId());
 				broker.accept(envelope);

@@ -1,26 +1,27 @@
 package ai.gebo.systems.abstraction.layer.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.application.messaging.model.GMessagingComponentRef;
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
-import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
-import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStructure;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
-import lombok.AllArgsConstructor;
 
 @Component
-@AllArgsConstructor
-public class GStandardWorkflowStatusHandlerImpl implements IWorkflowStatusHandler {
-	final ContentsBatchProcessedRepository contentsBatchRepo;
+
+public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHandler {
+
+	public GStandardWorkflowStatusHandlerImpl(ContentsBatchProcessedRepository contentsBatchRepo) {
+		super(contentsBatchRepo);
+
+	}
 
 	@Override
 	public String getId() {
@@ -45,49 +46,70 @@ public class GStandardWorkflowStatusHandlerImpl implements IWorkflowStatusHandle
 	}
 
 	@Override
-	public ComputedWorkflowStatus computeWorkflowStatus(String jobId, String workflowType, String workflowId) {
-
-		GStandardWorkflowStep[] workflowSteps = GStandardWorkflowStep.values();
-		Map<String, ContentsBatchProcessed> aggregated = new HashMap<String, ContentsBatchProcessed>();
-		List<GStandardWorkflowStep> steps = new ArrayList<GStandardWorkflowStep>();
-		for (GStandardWorkflowStep thisStep : workflowSteps) {
-			if (thisStep.getWorkflow().name().equalsIgnoreCase(workflowId)) {
-				steps.add(thisStep);
-				ContentsBatchProcessed aggregate = new ContentsBatchProcessed();
-				aggregate.setJobId(jobId);
-				aggregate.setWorkflowType(workflowType);
-				aggregate.setWorkflowId(workflowId);
-				aggregate.setWorkflowStepId(thisStep.name());
-				aggregated.put(thisStep.name().toUpperCase(), aggregate);
+	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId) {
+		GStandardWorkflow[] data = GStandardWorkflow.values();
+		ComputedWorkflowStructure structure = null;
+		GStandardWorkflow currentWorkflow = null;
+		for (int i = 0; i < data.length; i++) {
+			GStandardWorkflow workflow = data[i];
+			if (workflow.name().equalsIgnoreCase(workflowId)) {
+				currentWorkflow = workflow;
+				break;
 			}
 		}
-		Stream<ContentsBatchProcessed> data = contentsBatchRepo.findByJobId(jobId);
-		data.forEach(entry -> {
-			if (entry.getWorkflowStepId() != null) {
-				ContentsBatchProcessed aggregate = aggregated.get(entry.getWorkflowStepId().toUpperCase());
-				if (aggregate != null) {
-					aggregate.incrementBy(entry);
-				}
+		if (currentWorkflow != null) {
+			final GStandardWorkflow workflow = currentWorkflow;
+			List<GStandardWorkflowStep> steps = toList(GStandardWorkflowStep.values());
+			steps = steps.stream().filter(x -> x.getWorkflow() == workflow).toList();
+			Optional<GStandardWorkflowStep> optionalRootStep = steps.stream().filter(x -> x.isWorkflowStartStep())
+					.findAny();
+			if (optionalRootStep.isPresent()) {
+				structure = new ComputedWorkflowStructure();
+				structure.setWorkflowType(workflowType);
+				structure.setWorkflowId(workflowId);
+				structure.setEnabled(true);
+				structure.setDescription(currentWorkflow.name());
+				structure.setRootStep(createStep(optionalRootStep.get(), steps, 0, workflowType, workflowId));
+
 			}
-		});
-		ContentsBatchProcessed discovery = aggregated
-				.get(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name().toUpperCase());
-		ContentsBatchProcessed tokenization = aggregated.get(GStandardWorkflowStep.TOKENIZATION.name().toUpperCase());
-		ContentsBatchProcessed embedding = aggregated.get(GStandardWorkflowStep.EMBEDDING.name().toUpperCase());
-		ContentsBatchProcessed graphextraction = aggregated
-				.get(GStandardWorkflowStep.GRAPHEXTRACTION.name().toUpperCase());
-		// Todo next calculation is ok for demo but not for production
-		long totalDocuments = discovery != null ? discovery.getBatchDocumentsInput() : 0l;
-		long totalDocumentsWithErrors = (discovery != null ? discovery.getBatchDocumentsProcessingErrors() : 0l)
-				+ Math.max((tokenization != null ? embedding.getBatchDocumentsProcessingErrors() : 0),
-						(graphextraction != null ? graphextraction.getBatchDocumentsProcessingErrors() : 0));
-		long totalDocumentsSuccessfull = Math.max((tokenization != null ? embedding.getBatchDocumentsProcessed() : 0),
-				(graphextraction != null ? graphextraction.getBatchDocumentsProcessed() : 0));
-		boolean completed = totalDocumentsWithErrors + totalDocumentsSuccessfull > totalDocuments;
-		boolean hasErrors = totalDocumentsWithErrors > 0;
-		ComputedWorkflowStatus status = new ComputedWorkflowStatus(completed, hasErrors, totalDocuments,
-				totalDocumentsWithErrors, totalDocumentsSuccessfull);
-		return status;
+		}
+		return structure;
 	}
 
+	private ComputedWorkflowItem createStep(GStandardWorkflowStep step, List<GStandardWorkflowStep> steps, int level,
+			String workflowType, String workflowId) {
+		ComputedWorkflowItem root = new ComputedWorkflowItem();
+		root.setWorkflowType(workflowType);
+		root.setWorkflowId(workflowId);
+		root.setWorkflowStepId(step.name());
+		root.setDescription(step.name());
+		root.setEnabledStep(true);
+		List<GStandardWorkflowStep> childSteps = new ArrayList<GStandardWorkflowStep>();
+		List<GMessagingComponentRef> nextSteps = step.getOnProcessedForwardComponents().apply(null);
+		for (GMessagingComponentRef nextComponent : nextSteps) {
+			final String stepId = nextComponent.getWorkflowStepId();
+			boolean alreadyIn = childSteps.stream().anyMatch(x -> x.name().equalsIgnoreCase(stepId));
+			if (!alreadyIn) {
+				Optional<GStandardWorkflowStep> thisStep = steps.stream().filter(x -> x.name().equalsIgnoreCase(stepId))
+						.findFirst();
+				if (thisStep.isPresent()) {
+					childSteps.add(thisStep.get());
+				}
+			}
+		}
+		for (GStandardWorkflowStep thisStep : childSteps) {
+			root.getChilds().add(createStep(thisStep, childSteps, level + 1, workflowType, workflowId));
+		}
+		return root;
+	}
+
+	private <T> List<T> toList(T array[]) {
+		List<T> data = new ArrayList<T>();
+		if (array != null) {
+			for (T t : array) {
+				data.add(t);
+			}
+		}
+		return data;
+	}
 }

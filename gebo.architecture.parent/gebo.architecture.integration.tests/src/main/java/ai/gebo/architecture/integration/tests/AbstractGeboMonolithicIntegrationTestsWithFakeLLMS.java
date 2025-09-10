@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.model.JobSummary;
@@ -194,7 +195,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
 		int nCycles = 0;
 		Thread.sleep(20000); // Initial delay before starting polling loop
-		WorkflowStatus workflowStatus = null;
+		ComputedWorkflowResult workflowStatus = null;
 		do {
 			Thread.sleep(10000); // Interval between job status checks
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
@@ -203,11 +204,10 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 			LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 			nCycles++;
 
-		} while (((workflowStatus == null || (workflowStatus.getTotalDocumentsSuccessfull()
-				+ workflowStatus.getTotalDocumentsWithErrors()) < howManyFilesWait)) && nCycles < NMAXCYCLES);
+		} while ((workflowStatus == null || (!workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isCompleted(),
+		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),
 				"Contents read have to be terminated in this point");
 		// assertTrue(summary.getVectorizationTerminated(), "Vectorization have to be
 		// terminated in this point");
@@ -329,11 +329,11 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 				LOGGER.info("RESULTING_VECTORIZED-DOCUMENTS:" + vectorizedDocuments);
 			}
 
-		} while (!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isCompleted())
+		} while (!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished())
 				&& nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-		assertTrue((summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isCompleted()),
+		assertTrue((summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished()),
 				"Contents read have to be terminated in this point");
 		// assertTrue(summary.getVectorizationTerminated(), "Vectorization have to be
 		// terminated in this point");

@@ -82,7 +82,8 @@ public class ContentsBatchProcessed {
 		this.batchSentToNextStep += x.batchSentToNextStep;
 		this.chunksProcessed += x.chunksProcessed;
 		this.tokensProcessed += x.tokensProcessed;
-
+		this.lastMessage = (this.lastMessage != null && this.lastMessage)
+				|| (x.getLastMessage() != null && x.getLastMessage());
 	}
 
 }
