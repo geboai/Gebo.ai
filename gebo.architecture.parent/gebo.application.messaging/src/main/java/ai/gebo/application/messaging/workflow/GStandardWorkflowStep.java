@@ -27,7 +27,7 @@ public enum GStandardWorkflowStep {
 	GRAPHEXTRACTION(GStandardWorkflow.INGESTION,
 			new GMessagingComponentRef(GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE,
 					GStandardModulesConstraints.KNOWLEDGE_GRAPH_COMPONENT, GStandardWorkflow.INGESTION.name(),
-					"tokenization"),
+					"graphextraction"),
 			new VoidForwards(), false, false),
 	FULLTEXT_INDEXING(GStandardWorkflow.INGESTION,
 			new GMessagingComponentRef(GStandardModulesConstraints.FULLTEXT_MODULE,
@@ -45,7 +45,8 @@ public enum GStandardWorkflowStep {
 			implements Function<IGMessagePayloadType, List<GMessagingComponentRef>> {
 		@Override
 		public List<GMessagingComponentRef> apply(IGMessagePayloadType t) {
-			return List.of(getTargetOf("EMBEDDING"), getTargetOf("GRAPHEXTRACTION")/*, getTargetOf("FULLTEXT_INDEXING")*/);
+			return List.of(getTargetOf("EMBEDDING"),
+					getTargetOf("GRAPHEXTRACTION")/* , getTargetOf("FULLTEXT_INDEXING") */);
 		}
 	};
 

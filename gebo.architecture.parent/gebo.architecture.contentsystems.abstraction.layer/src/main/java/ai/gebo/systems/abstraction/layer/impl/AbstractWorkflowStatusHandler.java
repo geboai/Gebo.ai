@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
@@ -21,9 +24,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHandler {
 	protected final ContentsBatchProcessedRepository contentsBatchRepo;
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public ComputedWorkflowResult computeWorkflowStatus(String jobId, String workflowType, String workflowId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin computeWorkflowStatus(" + jobId + "," + workflowType + "," + workflowId + ")");
+		}
 		ComputedWorkflowStructure structure = getWorkflowStructure(workflowType, workflowId);
 		ComputedWorkflowResult result = null;
 		if (structure != null) {
@@ -56,6 +63,9 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 			result.setRootStatus(composeStatus(structure.getRootStep(), aggregated));
 			this.visitAndCompileStatus(result.getRootStatus());
 
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End computeWorkflowStatus(" + jobId + "," + workflowType + "," + workflowId + ")");
 		}
 		return result;
 

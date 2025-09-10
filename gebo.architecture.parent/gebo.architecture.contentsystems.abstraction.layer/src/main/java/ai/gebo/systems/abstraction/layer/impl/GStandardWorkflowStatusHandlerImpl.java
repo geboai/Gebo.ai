@@ -47,6 +47,9 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 
 	@Override
 	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getWorkflowStructure(" + workflowType + "," + workflowId + ")");
+		}
 		GStandardWorkflow[] data = GStandardWorkflow.values();
 		ComputedWorkflowStructure structure = null;
 		GStandardWorkflow currentWorkflow = null;
@@ -73,11 +76,18 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 
 			}
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getWorkflowStructure(" + workflowType + "," + workflowId + ")");
+		}
 		return structure;
 	}
 
 	private ComputedWorkflowItem createStep(GStandardWorkflowStep step, List<GStandardWorkflowStep> steps, int level,
 			String workflowType, String workflowId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(
+					"Begin createStep(" + step.name() + ",..," + level + "," + workflowType + "," + workflowId + ")");
+		}
 		ComputedWorkflowItem root = new ComputedWorkflowItem();
 		root.setWorkflowType(workflowType);
 		root.setWorkflowId(workflowId);
@@ -86,6 +96,9 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 		root.setEnabledStep(true);
 		List<GStandardWorkflowStep> childSteps = new ArrayList<GStandardWorkflowStep>();
 		List<GMessagingComponentRef> nextSteps = step.getOnProcessedForwardComponents().apply(null);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("step=" + step.name() + " nextSteps=" + nextSteps);
+		}
 		for (GMessagingComponentRef nextComponent : nextSteps) {
 			final String stepId = nextComponent.getWorkflowStepId();
 			boolean alreadyIn = childSteps.stream().anyMatch(x -> x.name().equalsIgnoreCase(stepId));
@@ -98,7 +111,11 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 			}
 		}
 		for (GStandardWorkflowStep thisStep : childSteps) {
-			root.getChilds().add(createStep(thisStep, childSteps, level + 1, workflowType, workflowId));
+			root.getChilds().add(createStep(thisStep, steps, level + 1, workflowType, workflowId));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(
+					"End createStep(" + step.name() + ",..," + level + "," + workflowType + "," + workflowId + ")");
 		}
 		return root;
 	}
