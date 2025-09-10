@@ -207,7 +207,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
           if (anyVersion && anyVersion?.page?.totalElements) {
             this.actualPageData.totalElements = anyVersion?.page?.totalElements;
           }
-          if (!(this.jobSummary?.contentsReadTerminated === true && this.jobSummary?.vectorizationTerminated === true)) {
+          
             let delayInMilliseconds: number = 10000; // 2000 milliseconds (2 seconds) delay
             if (this.actualPageData && this.actualPageData.totalElements !== undefined && this.actualPageData.totalElements < 3) {
               delayInMilliseconds = 2000;
@@ -215,7 +215,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
             setTimeout(() => {
               this.reloadPeriodically();
             }, delayInMilliseconds);
-          }
+          
         },
         complete: () => {
           this.loadingRelatedBackend = false;
@@ -285,9 +285,10 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
         { data: [], label: "",backgroundColor:[] }
       ]
     };
-    if (this.jobSummary && this.jobSummary.contentsProcessingData && this.jobSummary.contentsProcessingData.length) {
+    if (this.jobSummary ) {
 
       const categories: string[] = [];
+      /*
       this.jobSummary.contentsProcessingData.forEach(x => {
 
         contentsGraphicData.datasets[0].data.push(x.howManyBatchDocuments ? x.howManyBatchDocuments : 0);
@@ -297,13 +298,13 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
         contentsGraphicData.datasets[2].data.push(x.howManyBatchContentsReadingErrors ? x.howManyBatchContentsReadingErrors : 0);
         contentsGraphicData.datasets[2].backgroundColor?.push("red");
         categories.push(this.totsString(x.timestamp));
-      });
+      });*/
       contentsGraphicData.labels = categories;
 
 
     }
     this.contentsReadData = contentsGraphicData;
-
+    /*
     if (this.jobSummary && this.jobSummary.vectorizationProcessingData && this.jobSummary.vectorizationProcessingData.length) {
       this.jobSummary.vectorizationProcessingData.forEach(x => {
 
@@ -323,10 +324,11 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
         contentsVectorizationVolume.labels.push(this.totsString(x.timestamp));
       });
     }
-
+    */
     this.contentsVectorizationData = vectorizationGraphicData;
     this.contentsVectorizationVolume = contentsVectorizationVolume;
     if (this.jobSummary) {
+      /*
       const howMuchTotalToVectorize: number = this.jobSummary.howManyBatchSentToVectorization ? this.jobSummary.howManyBatchSentToVectorization : 0;
       const howMuchAreVectorized: number = this.jobSummary.currentBatchDocumentVectorizedCounter ? this.jobSummary.currentBatchDocumentVectorizedCounter : 0;
       const notYetVectorized = howMuchTotalToVectorize - howMuchAreVectorized;
@@ -336,7 +338,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
         pichartResults.datasets[0].data.push(howMuchAreVectorized);
         pichartResults.datasets[0].backgroundColor?.push("#32EB8C");
         this.resultsPiechart = pichartResults;
-      }
+      }*/
     }
   }
 

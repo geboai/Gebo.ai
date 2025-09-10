@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.uploads.content.handler.impl;
 
@@ -18,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
@@ -26,46 +24,50 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
 import ai.gebo.uploads.content.handler.GUploadsContentManagementSystem;
 import ai.gebo.uploads.content.handler.GUploadsProjectEndpoint;
 import ai.gebo.uploads.content.handler.IGUploadsContentManagementSystemHandler;
 
 /**
- * AI generated comments
- * Configuration class for the Uploads Module Contents Dispatcher.
- * This class extends SingletonBuilder to create a singleton instance of
- * a content dispatcher specifically for uploads handling.
+ * AI generated comments Configuration class for the Uploads Module Contents
+ * Dispatcher. This class extends SingletonBuilder to create a singleton
+ * instance of a content dispatcher specifically for uploads handling.
  */
 @Configuration
 public class GUploadsModuleContentsDispatcherConfig
 		extends SingletonBuilder<GUploadsContentManagementSystem, GUploadsProjectEndpoint> {
 
 	/**
-	 * Constructor for GUploadsModuleContentsDispatcherConfig.
-	 * Initializes the dispatcher with all necessary dependencies for handling uploads.
+	 * Constructor for GUploadsModuleContentsDispatcherConfig. Initializes the
+	 * dispatcher with all necessary dependencies for handling uploads.
 	 * 
-	 * @param handler The handler for uploads content management system
-	 * @param broker Message broker for communication
-	 * @param consumerFactory Factory for content consumers
-	 * @param evaluator Evaluator for content dispatching decisions
-	 * @param mapperFactory Factory for document reference enrichers
-	 * @param docSnapshotRepo Repository for document reference snapshots
-	 * @param config Configuration for the content systems layer
-	 * @param documentsRepo Repository for document references
+	 * @param handler           The handler for uploads content management system
+	 * @param broker            Message broker for communication
+	 * @param consumerFactory   Factory for content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enrichers
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for the content systems layer
+	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
+	 * @param workflowRouter
 	 */
 	public GUploadsModuleContentsDispatcherConfig(IGUploadsContentManagementSystemHandler handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo, ContentSystemsLayerConfiguration config, DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory,docSnapshotRepo, config, documentsRepo, virtualFolderRepo);
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
+				virtualFolderRepo, workflowRouter);
 	}
 
 	/**
-	 * Creates and returns a singleton bean for the uploads content dispatcher.
-	 * This dispatcher is responsible for managing the flow of upload content through the system.
+	 * Creates and returns a singleton bean for the uploads content dispatcher. This
+	 * dispatcher is responsible for managing the flow of upload content through the
+	 * system.
 	 * 
-	 * @return A singleton instance of GIOCModuleContentsDispatcher configured for uploads
+	 * @return A singleton instance of GIOCModuleContentsDispatcher configured for
+	 *         uploads
 	 */
 	@Bean
 	@Scope("singleton")

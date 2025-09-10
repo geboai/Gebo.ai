@@ -31,4 +31,12 @@ export interface GBaseChatModelConfig {
     temperature?: number;
     contextLength?: number;
     defaultModelPrompt?: string;
+    forUses?: Array<GBaseChatModelConfig.ForUsesEnum>;
+}
+export namespace GBaseChatModelConfig {
+    export type ForUsesEnum = 'CHAT' | 'GRAPH_EXTRACTION';
+    export const ForUsesEnum = {
+        CHAT: 'CHAT' as ForUsesEnum,
+        GRAPHEXTRACTION: 'GRAPH_EXTRACTION' as ForUsesEnum
+    };
 }

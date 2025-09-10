@@ -22,7 +22,7 @@ import ai.gebo.core.messages.GDocumentReferencePayload;
  * This interface defines functionality for retrieving document content
  * based on document reference information contained in a message envelope.
  */
-public interface IGDocumentContentAccessor {
+public interface IGDocumentChunkServiceAccessor {
     /**
      * Accesses document content based on the provided document reference.
      *

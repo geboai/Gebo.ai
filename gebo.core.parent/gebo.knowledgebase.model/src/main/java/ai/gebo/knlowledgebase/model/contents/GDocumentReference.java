@@ -12,8 +12,6 @@
 
 package ai.gebo.knlowledgebase.model.contents;
 
-import java.util.Map;
-
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 

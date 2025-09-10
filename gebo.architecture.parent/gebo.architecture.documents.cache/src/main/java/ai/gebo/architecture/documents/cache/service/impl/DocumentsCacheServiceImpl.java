@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
@@ -32,7 +34,7 @@ public class DocumentsCacheServiceImpl
 	private final IGContentManagementSystemHandlerRepositoryPattern contentManagementSystemHandlerRepositoryPattern;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGGeboConfigService configService;
-
+	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsCacheServiceImpl.class);
 	private final static String FILESCACHEFOLDER = ".FCACHE";
 
 	public DocumentsCacheServiceImpl(
@@ -67,9 +69,19 @@ public class DocumentsCacheServiceImpl
 	@Override
 	public InputStream streamDocument(GDocumentReference reference)
 			throws DocumentCacheAccessException, GeboContentHandlerSystemException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin streamDocument(" + reference.getCode() + ");");
+		}
 		IGContentManagementSystemHandler handler = retrieveHandler(reference);
-		if (handler.isContentsOnLocalFilesystem())
+		if (handler.isContentsOnLocalFilesystem()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming from local filesystem");
+			}
 			return handler.streamContent(reference, new HashMap());
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End streamDocument(" + reference.getCode() + ") => streaming and cache remote system");
+		}
 		return streamDocumentWithLocalCache(reference, handler);
 	}
 

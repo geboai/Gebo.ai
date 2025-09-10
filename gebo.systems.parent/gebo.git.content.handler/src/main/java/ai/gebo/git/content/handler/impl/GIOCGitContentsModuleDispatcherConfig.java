@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.git.content.handler.impl;
 
@@ -18,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.git.content.handler.GGitContentManagementSystem;
 import ai.gebo.git.content.handler.GGitProjectEndpoint;
@@ -29,15 +27,14 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
 
 /**
  * AI generated comments
  * 
- * Configuration class for Git content module dispatcher.
- * This class extends SingletonBuilder to create a singleton instance of
- * GIOCModuleContentsDispatcher specialized for Git content management.
- * It provides the Spring bean configuration for Git content handling capabilities.
+ * Configuration class for Git content module dispatcher. This class extends
+ * SingletonBuilder to create a singleton instance of
+ * GIOCModuleContentsDispatcher specialized for Git content management. It
+ * provides the Spring bean configuration for Git content handling capabilities.
  */
 @Configuration
 public class GIOCGitContentsModuleDispatcherConfig
@@ -46,27 +43,33 @@ public class GIOCGitContentsModuleDispatcherConfig
 	/**
 	 * Constructor for the Git contents module dispatcher configuration.
 	 * 
-	 * @param handler The handler for Git content management system operations
-	 * @param broker Message broker for communication between components
-	 * @param consumerFactory Factory for creating content consumers
-	 * @param evaluator Evaluator for content dispatching decisions
-	 * @param mapperFactory Factory for document reference enricher maps
-	 * @param docSnapshotRepo Repository for document reference snapshots
-	 * @param config Configuration for the content systems layer
-	 * @param documentsRepo Repository for document references
+	 * @param handler           The handler for Git content management system
+	 *                          operations
+	 * @param broker            Message broker for communication between components
+	 * @param consumerFactory   Factory for creating content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enricher maps
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for the content systems layer
+	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
+	 * @param workflowRouter
 	 */
 	public GIOCGitContentsModuleDispatcherConfig(
 			IGBaseGitContentManagementSystemHandler<GGitContentManagementSystem, GGitProjectEndpoint> handler,
 			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo, ContentSystemsLayerConfiguration config, DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory,docSnapshotRepo, config, documentsRepo, virtualFolderRepo);
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
+				virtualFolderRepo, workflowRouter);
 
 	}
 
 	/**
-	 * Creates and provides a singleton instance of the Git contents module dispatcher.
-	 * This bean is responsible for dispatching Git content related operations.
+	 * Creates and provides a singleton instance of the Git contents module
+	 * dispatcher. This bean is responsible for dispatching Git content related
+	 * operations.
 	 * 
 	 * @return A singleton instance of GIOCModuleContentsDispatcher for Git content
 	 */

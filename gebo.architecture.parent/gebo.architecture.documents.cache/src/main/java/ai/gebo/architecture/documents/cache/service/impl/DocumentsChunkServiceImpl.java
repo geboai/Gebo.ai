@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
@@ -41,7 +43,6 @@ import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler.IngestionHandlerData;
 import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 import jakarta.el.MethodNotFoundException;
-import lombok.AllArgsConstructor;
 
 @Service
 
@@ -55,7 +56,8 @@ public class DocumentsChunkServiceImpl
 	private final IGDocumentReferenceIngestionHandler ingestionHandler;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final static ObjectMapper objectMapper = new ObjectMapper();
-	private final static long ttlCacheIt = 5 * 60 * 1000;// tokenizing request has 5 minute validity
+	private final static Logger LOGGER = LoggerFactory.getLogger(DocumentsChunkServiceImpl.class);
+	private final static long ttlCacheIt = 10 * 60 * 1000;// tokenizing request has 5 minute validity
 
 	public DocumentsChunkServiceImpl(IDocumentsCacheService cacheService, IGGeboConfigService configService,
 			DocumentChunkOperationRepository chunkOperationRepository, IGAIDocumentMetaDataEnricher metaDataEnricher,
@@ -72,6 +74,9 @@ public class DocumentsChunkServiceImpl
 	public DocumentChunkingResponse getChunk(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
 			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException,
 			GeboContentHandlerSystemException, GeboIngestionException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getChunk(" + document.getCode() + ",...)");
+		}
 		// Take work directory
 		String workDirectory = configService.getGeboWorkDirectory();
 		// If caching folder do not exist create it
@@ -115,6 +120,9 @@ public class DocumentsChunkServiceImpl
 				}).findFirst();
 		// if there is a matching operation than we return those chunks
 		if (matchingOperation.isPresent()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("operation getChunk(" + document.getCode() + ",...) has found cached data");
+			}
 			// returning the first chunk as 0 index id
 			DocumentChunkOperation operationData = matchingOperation.get();
 			return getNextChunk(document, operationData.getId(), operationData.getChunksList().get(0));
@@ -128,7 +136,9 @@ public class DocumentsChunkServiceImpl
 		// We ask the cacheService to stream the document
 		try (InputStream is = this.cacheService.streamDocument(document)) {
 			if (is != null) {
-
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Doing raw ingestion");
+				}
 				IngestionHandlerData content = ingestionHandler.handleContent(document, is);
 				if (!content.isUnmanagedContent()) {
 					// if we have an handled content from the ingestion layer we proceed
@@ -148,7 +158,7 @@ public class DocumentsChunkServiceImpl
 							MetaDataHeaderInfos metaDataHeader = null;
 							// We calculate metaDataHeader if enrichWithMetaData is true (it will be the
 							// same metadata for all other chunks)
-							if (enrichWithMetaData && doc.isText()) {
+							if (enrichWithMetaData && metaDataHeader == null && doc.isText()) {
 								try {
 									GProject project = document.getParentProjectCode() != null
 											? persistentObjectManager.findById(GProject.class,
@@ -206,6 +216,10 @@ public class DocumentsChunkServiceImpl
 										chunkOperation.getChunksList().add(chunk.getId());
 										Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME,
 												chunk.getId());
+										if (LOGGER.isDebugEnabled()) {
+											LOGGER.debug("document " + document.getCode() + " Writing chunk=>"
+													+ chunk.getId() + " tokens=>" + tokensSize);
+										}
 										objectMapper.writeValue(writtenFile.toFile(), chunk);
 										if (response.getCurrentChunk() == null) {
 											response.setCurrentChunk(chunk);
@@ -233,10 +247,17 @@ public class DocumentsChunkServiceImpl
 						if (chunkOperation.getChunksList().size() > index + 1) {
 							response.setNextChunkId(chunkOperation.getChunksList().get(index + 1));
 						}
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Saved chunking operation for (" + document.getCode() + ",...) nchunks="
+									+ chunkOperation.getChunksList().size());
+						}
 					}
 
 				}
 			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End getChunk(" + document.getCode() + ",...)");
 		}
 		return response;
 
@@ -245,6 +266,9 @@ public class DocumentsChunkServiceImpl
 	@Override
 	public DocumentChunkingResponse getNextChunk(GDocumentReference document, String chunkRequestId, String chunkId)
 			throws DocumentCacheAccessException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
+		}
 		Optional<DocumentChunkOperation> optionalChunkOperation = repository.findById(chunkRequestId);
 		if (optionalChunkOperation.isEmpty())
 			throw new DocumentCacheAccessException("Chunk operation invalid id or expired id =>" + chunkRequestId);
@@ -264,6 +288,9 @@ public class DocumentsChunkServiceImpl
 			}
 			operation.setLastAccessed(new Date());
 			this.repository.save(operation);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
+			}
 			return response;
 		} else
 			throw new DocumentCacheAccessException(chunkId + " not part of the chunking operation " + chunkRequestId);
@@ -291,6 +318,40 @@ public class DocumentsChunkServiceImpl
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End cleanupResources(..)");
 		}
+	}
+
+	@Override
+	public boolean prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException,
+			GeboContentHandlerSystemException, GeboIngestionException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
+		}
+		DocumentChunkingResponse firstChunk = getChunk(document, chunkingSpecs, enrichWithMetaData);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End prepareChunks(" + document.getCode() + "..)");
+		}
+		return !firstChunk.isEmpty();
+	}
+
+	@Override
+	public DocumentChunkingResponse getCachedChunk(GDocumentReference document) throws DocumentCacheAccessException,
+			IOException, GeboContentHandlerSystemException, GeboIngestionException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
+		}
+		List<DocumentChunkOperation> data = repository.findByOriginalDocumentCode(document.getCode());
+		if (!data.isEmpty()) {
+			DocumentChunkOperation entry = data.get(0);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk");
+			}
+			return getNextChunk(document, entry.getId(), entry.getChunksList().get(0));
+		}
+
+		LOGGER.error("Chunks for document " + document.getCode() + " have not been found");
+
+		throw new DocumentCacheAccessException("No existing cached chunks");
 	}
 
 }

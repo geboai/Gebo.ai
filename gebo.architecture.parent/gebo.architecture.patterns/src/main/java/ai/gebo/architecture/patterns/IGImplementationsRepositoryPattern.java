@@ -52,7 +52,25 @@ public interface IGImplementationsRepositoryPattern<ImplementedInterface> {
         }
         return riface;
     }
-    
+    /**
+     * Finds a specific implementation of the interface using a given predicate filter.
+     * 
+     * @param filter A predicate used to test each implementation.
+     * @return The implementation that matches the filter, or null if none found.
+     */
+    public default List<ImplementedInterface> findImplementations(Predicate<ImplementedInterface> filter) {
+    	List<ImplementedInterface> outImplementations=new ArrayList<ImplementedInterface>();
+        List<ImplementedInterface> impls = getImplementations();
+        
+        if (impls != null) {
+            for (ImplementedInterface iface : impls) {
+                if (filter.test(iface)) {
+                	outImplementations.add(iface);
+                }
+            }
+        }
+        return outImplementations;
+    }
     /**
      * Maps each implementation to a new form using a specified function.
      * 

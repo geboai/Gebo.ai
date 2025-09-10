@@ -13,10 +13,15 @@
 export interface ContentsBatchProcessed { 
     id?: string;
     jobId?: string;
+    workflowType?: string;
+    workflowId?: string;
+    workflowStepId?: string;
     lastMessage?: boolean;
     timestamp?: Date;
-    howManyBatchDocuments?: number;
-    howManyBatchSentToVectorization?: number;
-    howManyBatchContentsReadingErrors?: number;
-    howManyBatchPersistendDocuments?: number;
+    batchDocumentsInput?: number;
+    batchSentToNextStep?: number;
+    chunksProcessed?: number;
+    tokensProcessed?: number;
+    batchDocumentsProcessingErrors?: number;
+    batchDocumentsProcessed?: number;
 }

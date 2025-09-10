@@ -14,14 +14,16 @@ import lombok.AllArgsConstructor;
 public abstract class AbstractCacheEntryCleanupService<Type extends AbstractCachedEntry, RepositoryType extends AbstractCachedEntryRepository<Type>> {
 	protected final RepositoryType repository;
 	protected final long cacheLastUsedMillisecondAgoExpiration;
-	protected final Logger LOGGER = LoggerFactory.getLogger(AbstractCacheEntryCleanupService.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(AbstractCacheEntryCleanupService.class);
+
 	/********************************************************
 	 * Cleans filesystem resources
+	 * 
 	 * @param data
 	 */
 	protected abstract void cleanupResources(Type data);
 
-	@Scheduled(initialDelay = 10000, fixedRate = 120000)
+	// @Scheduled(initialDelay = 10000, fixedRate = 120000)
 	public void checkExpirationTick() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin checkExpirationTick()");
@@ -30,9 +32,9 @@ public abstract class AbstractCacheEntryCleanupService<Type extends AbstractCach
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.add(GregorianCalendar.SECOND, (int) (-1 * cacheLastUsedMillisecondAgoExpiration / 1000));
 			Date expiredThreshold = calendar.getTime();
-			Stream<Type> dataStream = repository.findByLastAccessedLowerThan(expiredThreshold);
+			Stream<Type> dataStream = repository.findByLastAccessedLessThan(expiredThreshold);
 			dataStream.forEach(this::cleanupResources);
-			repository.deleteLastAccessedLowerThan(expiredThreshold);
+			repository.deleteByLastAccessedLessThan(expiredThreshold);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End checkExpirationTick()");
 			}

@@ -13,39 +13,11 @@
 
 package ai.gebo.ai.app.tests;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
 import java.util.List;
-import java.util.function.Consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.AutoConfigureDataMongo;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.util.FileCopyUtils;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ai.gebo.architecture.environment.EnvironmentHolder;
-import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTests;
 import ai.gebo.architecture.integration.tests.AbstractGeboMonolithicIntegrationTestsWithFakeLLMS;
-import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
-import ai.gebo.knlowledgebase.model.projects.GProject;
-import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.monolithic.app.Main;
 
 /**

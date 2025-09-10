@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.controllers;
 
@@ -24,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.multithreading.IGEntityProcessingRunnableFactoryRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -40,9 +39,9 @@ import ai.gebo.model.base.GObjectRef;
 /**
  * AI generated comments
  * 
- * Controller for managing job operations in the Gebo platform.
- * This class provides REST endpoints for creating, monitoring, and aborting jobs.
- * Access is restricted to users with the 'ADMIN' role.
+ * Controller for managing job operations in the Gebo platform. This class
+ * provides REST endpoints for creating, monitoring, and aborting jobs. Access
+ * is restricted to users with the 'ADMIN' role.
  */
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -71,14 +70,16 @@ public class JobLauncherController {
 	}
 
 	/**
-	 * Creates a new job for a project endpoint.
-	 * If the endpoint is not published, it will be published first.
-	 * Checks if there's already a running job for the endpoint before creating a new one.
+	 * Creates a new job for a project endpoint. If the endpoint is not published,
+	 * it will be published first. Checks if there's already a running job for the
+	 * endpoint before creating a new one.
 	 * 
 	 * @param endpoint Reference to the project endpoint to create a job for
-	 * @return Operation status with the job status or warning message if job is already running
-	 * @throws GeboJobServiceException If there's an error in the job service
-	 * @throws GeboPersistenceException If there's an error accessing persistent data
+	 * @return Operation status with the job status or warning message if job is
+	 *         already running
+	 * @throws GeboJobServiceException  If there's an error in the job service
+	 * @throws GeboPersistenceException If there's an error accessing persistent
+	 *                                  data
 	 */
 	@PostMapping(value = "createJob", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GJobStatus> createJob(@RequestBody GObjectRef<GProjectEndpoint> endpoint)
@@ -98,7 +99,8 @@ public class JobLauncherController {
 							"Let's view the status in the log page or try relaunch publishing later"));
 			return status;
 		} else
-			return OperationStatus.of(jobQueueService.createNewAsyncJob(endpointObject));
+			return OperationStatus.of(jobQueueService.createNewAsyncJob(endpointObject, GWorkflowType.STANDARD.name(),
+					GStandardWorkflow.INGESTION.name()));
 	}
 
 	/**
@@ -139,7 +141,8 @@ public class JobLauncherController {
 	 * Checks if a project endpoint has any running jobs.
 	 * 
 	 * @param endpoint Reference to the project endpoint to check
-	 * @return An object containing the endpoint reference and a flag indicating if it has running jobs
+	 * @return An object containing the endpoint reference and a flag indicating if
+	 *         it has running jobs
 	 */
 	@PostMapping(value = "getHasRunningJobs", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public HasRunningJobs getHasRunningJobs(@RequestBody GObjectRef<GProjectEndpoint> endpoint) {
@@ -152,15 +155,17 @@ public class JobLauncherController {
 	/**
 	 * Retrieves a summary of a job including optional detailed statistics.
 	 * 
-	 * @param jobId The unique identifier of the job
+	 * @param jobId        The unique identifier of the job
 	 * @param statsDetails Flag indicating whether to include detailed statistics
 	 * @return A summary of the job
-	 * @throws GeboJobServiceException If there's an error retrieving the job summary
-	 * @throws GeboPersistenceException If there's an error accessing persistent data
+	 * @throws GeboJobServiceException  If there's an error retrieving the job
+	 *                                  summary
+	 * @throws GeboPersistenceException If there's an error accessing persistent
+	 *                                  data
 	 */
 	@GetMapping(value = "getJobSummary", produces = MediaType.APPLICATION_JSON_VALUE)
-	public JobSummary getJobSummary(@RequestParam("jobCode") String jobId,@RequestParam("statsDetails") Boolean statsDetails)
+	public JobSummary getJobSummary(@RequestParam("jobCode") String jobId)
 			throws GeboJobServiceException, GeboPersistenceException {
-		return jobQueueService.getJobSummary(jobId,statsDetails!=null && statsDetails);
+		return jobQueueService.getJobSummary(jobId);
 	}
 }

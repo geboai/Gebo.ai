@@ -43,6 +43,7 @@ import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -103,6 +104,8 @@ public class AbstractGeboMonolithicIntegrationTests {
 	/** List of all MongoDB repositories used. */
 	@Autowired
 	protected List<IGBaseMongoDBRepository> allRepositories;
+	@Autowired
+	protected DocumentReferenceRepository documentReferenceRepository;
 	/** Repository for vectorized content. */
 	@Autowired
 	protected VectorizedContentRepository vectorizedContentRepository;
@@ -422,5 +425,8 @@ public class AbstractGeboMonolithicIntegrationTests {
 	 */
 	protected <T> void showMessages(OperationStatus<T> status) {
 		showMessages(status.getMessages());
+	}
+	protected long getNRDocuments(GProjectEndpoint endpoint) {
+		return this.documentReferenceRepository.countByProjectEndpoint(endpoint);
 	}
 }
