@@ -19,5 +19,10 @@
 			<artifactId>gebo.application.messaging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.documents.cache</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

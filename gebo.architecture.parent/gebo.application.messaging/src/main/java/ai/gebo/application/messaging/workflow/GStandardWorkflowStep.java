@@ -46,7 +46,7 @@ public enum GStandardWorkflowStep {
 		@Override
 		public List<GMessagingComponentRef> apply(IGMessagePayloadType t) {
 			return List.of(getTargetOf("EMBEDDING"),
-					getTargetOf("GRAPHEXTRACTION")/* , getTargetOf("FULLTEXT_INDEXING") */);
+					getTargetOf("GRAPHEXTRACTION") /* , getTargetOf("FULLTEXT_INDEXING") */);
 		}
 	};
 
