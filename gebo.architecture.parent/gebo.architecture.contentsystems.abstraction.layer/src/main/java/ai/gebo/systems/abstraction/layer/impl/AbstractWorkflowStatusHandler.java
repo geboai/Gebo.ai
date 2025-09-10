@@ -62,13 +62,30 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 			});
 			result.setRootStatus(composeStatus(structure.getRootStep(), aggregated));
 			this.visitAndCompileStatus(result.getRootStatus());
-
+			this.checkStatus(result);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End computeWorkflowStatus(" + jobId + "," + workflowType + "," + workflowId + ")");
 		}
 		return result;
 
+	}
+
+	private void checkStatus(ComputedWorkflowResult result) {
+		List<ComputedWorkflowStatus> items = items(result.getRootStatus());
+		result.setFinished(items.stream().allMatch(x -> (x.isCompleted() || !x.isEnabledStep())));
+		result.setHasErrors(items.stream().anyMatch(x -> x.isHasErrors()));
+	}
+
+	private List<ComputedWorkflowStatus> items(ComputedWorkflowStatus root) {
+		List<ComputedWorkflowStatus> data = new ArrayList<ComputedWorkflowStatus>();
+		if (root != null) {
+			data.add(root);
+			root.getChilds().forEach(child -> {
+				data.addAll(items(child));
+			});
+		}
+		return data;
 	}
 
 	private ComputedWorkflowStatus composeStatus(ComputedWorkflowItem rootStep,
@@ -81,7 +98,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		status.setEnabledStep(true);
 		status.setLevelId(rootStep.getLevelId());
 
-		ContentsBatchProcessed data = aggregated.get(status.getWorkflowStepId());
+		ContentsBatchProcessed data = aggregated.get(status.getWorkflowStepId().toUpperCase());
 		if (data != null) {
 			status.setBatchDocumentsInput(data.getBatchDocumentsInput());
 			status.setBatchDocumentsProcessed(data.getBatchDocumentsProcessed());
@@ -95,6 +112,11 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 				status.setCompleted(data.getLastMessage() != null && data.getLastMessage());
 			}
 			status.setHasErrors(status.getBatchDocumentsProcessingErrors() > 0);
+		}
+		if (rootStep.getChilds() != null && !rootStep.getChilds().isEmpty()) {
+			for (ComputedWorkflowItem metaStep : rootStep.getChilds()) {
+				status.getChilds().add(composeStatus(metaStep, aggregated));
+			}
 		}
 		return status;
 	}

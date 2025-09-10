@@ -129,8 +129,8 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 			workflowStatus = summary.getWorkflowStatus();
 			nCycles++;
-
-		} while (!(workflowStatus == null || (!workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
+			LOGGER.info("Cycle " + nCycles + " situation=>" + workflowStatus);
+		} while ((!(workflowStatus != null && workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),
