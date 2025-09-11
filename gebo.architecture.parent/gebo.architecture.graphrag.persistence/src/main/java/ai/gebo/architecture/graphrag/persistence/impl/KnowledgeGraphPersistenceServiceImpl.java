@@ -1,5 +1,6 @@
 package ai.gebo.architecture.graphrag.persistence.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,9 +124,14 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 			eventInChunk.setLongDescription(event.getLongDescription());
 			eventInChunk.setType(event.getType());
 			TimeSegment segment = event.getTime();
-			if (segment != null) {				
+			if (segment != null) {
 				eventInChunk.setStartDateTime(segment.getStartDateTime());
 				eventInChunk.setEndDateTime(segment.getEndDateTime());
+			}
+			eventInChunk.setParticipants(new ArrayList<GraphEntityObject>());
+			List<EntityObject> participants = event.getParticipantEntities();
+			for (EntityObject participant : participants) {
+				eventInChunk.getParticipants().add(findMatchingEntity(participant, cache, true));
 			}
 			eventInChunkRepository.save(eventInChunk);
 		}
