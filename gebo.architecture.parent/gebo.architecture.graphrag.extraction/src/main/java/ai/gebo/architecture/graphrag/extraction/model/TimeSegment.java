@@ -1,4 +1,4 @@
-package ai.gebo.architecture.graphrag.model;
+package ai.gebo.architecture.graphrag.extraction.model;
 
 import lombok.Data;
 

@@ -10,12 +10,12 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
+import ai.gebo.architecture.graphrag.extraction.model.GraphEntityStandardType;
 import ai.gebo.architecture.graphrag.extraction.model.GraphObjectType;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.repositories.GraphRagExtractionConfigRepository;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
-import ai.gebo.architecture.graphrag.model.GraphEntityStandardType;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -194,16 +194,17 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		if (defaultLevelConfig != null) {
 			return extract(document, defaultLevelConfig);
 		}
-		//TODO: return to throw when no custom configs or default are there
+		// TODO: return to throw when no custom configs or default are there
 		return extract(document, mainConfiguration);
-		//throw new LLMConfigException("There is no available configuration for knowledge extraction");
+		// throw new LLMConfigException("There is no available configuration for
+		// knowledge extraction");
 	}
 
 	@Override
 	public boolean isConfigured() {
-		//TODO: return to uncomment 
-		//long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
-		//return count > 0;
+		// TODO: return to uncomment
+		// long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
+		// return count > 0;
 		return true;
 	}
 

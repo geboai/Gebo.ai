@@ -3,7 +3,6 @@ package ai.gebo.architecture.graphrag.extraction.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.gebo.architecture.graphrag.model.TimeSegment;
 import lombok.Data;
 
 @Data

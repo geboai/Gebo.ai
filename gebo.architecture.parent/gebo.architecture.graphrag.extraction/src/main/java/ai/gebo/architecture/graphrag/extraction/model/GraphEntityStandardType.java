@@ -1,11 +1,11 @@
-package ai.gebo.architecture.graphrag.model;
+package ai.gebo.architecture.graphrag.extraction.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum GraphEntityStandardType implements IGraphObjectType {
+public enum GraphEntityStandardType {
 	PRODUCT("PRODUCT", "A good or a product of some kind, phisical or digital, material or immaterial"),
 	PERSON("PERSON", "Person"), COMPANY("COMPANY", "Company"), PROJECT("PROJECT", "Project");
 

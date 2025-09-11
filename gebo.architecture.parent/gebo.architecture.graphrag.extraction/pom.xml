@@ -9,11 +9,7 @@
 	</parent>
 	<artifactId>gebo.architecture.graphrag.extraction</artifactId>
 	<dependencies>
-		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.graphrag.model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>

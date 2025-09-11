@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
+import ai.gebo.architecture.graphrag.extraction.model.TimeSegment;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
@@ -141,6 +142,12 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 				eventInChunk.setConfidence(event.getConfidence());
 				eventInChunk.setLongDescription(event.getLongDescription());
 				eventInChunk.setType(event.getType());
+				TimeSegment segment = event.getTime();
+				if (segment != null) {
+					eventInChunk.setEventTime(new ai.gebo.architecture.graphrag.persistence.model.TimeSegment());
+					eventInChunk.getEventTime().setStartDateTime(segment.getStartDateTime());
+					eventInChunk.getEventTime().setEndDateTime(segment.getEndDateTime());
+				}
 				eventInChunkRepository.save(eventInChunk);
 			}
 		}
