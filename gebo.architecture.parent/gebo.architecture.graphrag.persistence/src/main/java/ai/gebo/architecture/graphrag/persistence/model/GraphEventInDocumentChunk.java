@@ -11,5 +11,6 @@ import lombok.Data;
 public class GraphEventInDocumentChunk extends AbstractInDocumentChunkObject {
 	@Relationship(type = "discovered_event", direction = Relationship.Direction.OUTGOING)
 	private GraphEventObject discoveredEvent;
-	private TimeSegment eventTime = null;
+	private String startDateTime = null;
+	private String endDateTime = null;
 }

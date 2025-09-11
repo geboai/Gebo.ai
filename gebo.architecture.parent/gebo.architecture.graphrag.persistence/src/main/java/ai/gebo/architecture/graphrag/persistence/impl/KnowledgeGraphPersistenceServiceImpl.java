@@ -123,10 +123,9 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 			eventInChunk.setLongDescription(event.getLongDescription());
 			eventInChunk.setType(event.getType());
 			TimeSegment segment = event.getTime();
-			if (segment != null) {
-				eventInChunk.setEventTime(new ai.gebo.architecture.graphrag.persistence.model.TimeSegment());
-				eventInChunk.getEventTime().setStartDateTime(segment.getStartDateTime());
-				eventInChunk.getEventTime().setEndDateTime(segment.getEndDateTime());
+			if (segment != null) {				
+				eventInChunk.setStartDateTime(segment.getStartDateTime());
+				eventInChunk.setEndDateTime(segment.getEndDateTime());
 			}
 			eventInChunkRepository.save(eventInChunk);
 		}
