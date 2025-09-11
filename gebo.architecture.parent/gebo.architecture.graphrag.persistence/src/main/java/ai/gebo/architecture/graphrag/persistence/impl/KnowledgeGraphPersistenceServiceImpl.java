@@ -100,7 +100,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 			String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
 					+ entity.getName().toUpperCase();
 			// check eventual cache
-			GraphEntityObject hit = findMatchingEntity(entity, cache);
+			GraphEntityObject hit = findMatchingEntity(entity, cache, true);
 			GraphEntityInDocumentChunk entityInChunk = new GraphEntityInDocumentChunk();
 			entityInChunk.setId(UUID.randomUUID().toString());
 			entityInChunk.setDiscoveredEntity(hit);
@@ -114,88 +114,45 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		for (EventObject event : events) {
 			String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
 					+ event.getTitle().toUpperCase();
-			GraphEventObject hit = (GraphEventObject) cache.get(key);
-			if (hit == null) {
-				// retrieve from existing entities
-				List<GraphEventObject> matches = eventObjectRepository.findByTypeAndTitle(event.getType().toUpperCase(),
-						event.getTitle().toUpperCase());
-				// if found load in cache and consider it
-				if (matches != null && !matches.isEmpty()) {
-					hit = matches.get(0);
-					cache.put(key, hit);
-				}
-				// if not found insert in graph db
-				if (hit == null) {
-					hit = new GraphEventObject();
-					hit.setId(UUID.randomUUID().toString());
-					hit.setType(event.getType().toUpperCase());
-					hit.setTitle(event.getTitle().toUpperCase());
-					hit.setLongDescription(event.getLongDescription());
-					hit.setAttributes(event.getAttributes());
-					eventObjectRepository.save(hit);
-					cache.put(key, hit);
-				}
-				GraphEventInDocumentChunk eventInChunk = new GraphEventInDocumentChunk();
-				eventInChunk.setId(UUID.randomUUID().toString());
-				eventInChunk.setDiscoveredEvent(hit);
-				eventInChunk.setDocumentChunk(ref);
-				eventInChunk.setConfidence(event.getConfidence());
-				eventInChunk.setLongDescription(event.getLongDescription());
-				eventInChunk.setType(event.getType());
-				TimeSegment segment = event.getTime();
-				if (segment != null) {
-					eventInChunk.setEventTime(new ai.gebo.architecture.graphrag.persistence.model.TimeSegment());
-					eventInChunk.getEventTime().setStartDateTime(segment.getStartDateTime());
-					eventInChunk.getEventTime().setEndDateTime(segment.getEndDateTime());
-				}
-				eventInChunkRepository.save(eventInChunk);
+			GraphEventObject hit = findMatchingEvent(event, cache, true);
+			GraphEventInDocumentChunk eventInChunk = new GraphEventInDocumentChunk();
+			eventInChunk.setId(UUID.randomUUID().toString());
+			eventInChunk.setDiscoveredEvent(hit);
+			eventInChunk.setDocumentChunk(ref);
+			eventInChunk.setConfidence(event.getConfidence());
+			eventInChunk.setLongDescription(event.getLongDescription());
+			eventInChunk.setType(event.getType());
+			TimeSegment segment = event.getTime();
+			if (segment != null) {
+				eventInChunk.setEventTime(new ai.gebo.architecture.graphrag.persistence.model.TimeSegment());
+				eventInChunk.getEventTime().setStartDateTime(segment.getStartDateTime());
+				eventInChunk.getEventTime().setEndDateTime(segment.getEndDateTime());
 			}
+			eventInChunkRepository.save(eventInChunk);
 		}
 		List<RelationObject> relations = extraction.getExtraction().getRelations();
 		for (RelationObject relation : relations) {
-			GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache);
-			GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache);
+			GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, true);
+			GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache, true);
 			if (fromEntity == null || toEntity == null)
 				continue;
 			String key = relation.getClass().getName() + "-" + relation.getType().toUpperCase() + "-"
 					+ fromEntity.getId() + "-" + toEntity.getId();
-			GraphRelationObject hit = (GraphRelationObject) cache.get(key);
-			if (hit == null) {
-
-				// retrieve from existing entities
-				List<GraphRelationObject> matches = relationObjectRepository.findByTypeAndFromEntityIdAndToEntityId(
-						relation.getType().toUpperCase(), fromEntity.getId(), toEntity.getId());
-				// if found load in cache and consider it
-				if (matches != null && !matches.isEmpty()) {
-					hit = matches.get(0);
-					cache.put(key, hit);
-				}
-				// if not found insert in graph db
-				if (hit == null) {
-					hit = new GraphRelationObject();
-					hit.setId(UUID.randomUUID().toString());
-					hit.setType(relation.getType().toUpperCase());
-					hit.setFromEntity(fromEntity);
-					hit.setToEntity(toEntity);
-					hit.setLongDescription(relation.getLongDescription());
-					hit.setAttributes(relation.getAttributes());
-					relationObjectRepository.save(hit);
-					cache.put(key, hit);
-				}
-				GraphRelationInDocumentChunk relationtInChunk = new GraphRelationInDocumentChunk();
-				relationtInChunk.setId(UUID.randomUUID().toString());
-				relationtInChunk.setDiscoveredRelation(hit);
-				relationtInChunk.setDocumentChunk(ref);
-				relationtInChunk.setConfidence(relation.getConfidence());
-				relationtInChunk.setLongDescription(relation.getLongDescription());
-				relationtInChunk.setType(relation.getType());
-				relationInChunkRepository.save(relationtInChunk);
-			}
+			GraphRelationObject hit = findMatchingRelation(relation, cache, true);
+			GraphRelationInDocumentChunk relationtInChunk = new GraphRelationInDocumentChunk();
+			relationtInChunk.setId(UUID.randomUUID().toString());
+			relationtInChunk.setDiscoveredRelation(hit);
+			relationtInChunk.setDocumentChunk(ref);
+			relationtInChunk.setConfidence(relation.getConfidence());
+			relationtInChunk.setLongDescription(relation.getLongDescription());
+			relationtInChunk.setType(relation.getType());
+			relationInChunkRepository.save(relationtInChunk);
 		}
 		return outData;
 	}
 
-	private GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache) {
+	private GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache,
+			boolean insertIfNotFound) {
 		String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
 				+ entity.getName().toUpperCase();
 		// check eventual cache
@@ -210,7 +167,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 				cache.put(key, hit);
 			}
 			// if not found insert in graph db
-			if (hit == null) {
+			if (hit == null && insertIfNotFound) {
 				hit = new GraphEntityObject();
 				hit.setId(UUID.randomUUID().toString());
 				hit.setType(entity.getType().toUpperCase());
@@ -218,6 +175,69 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 				hit.setLongDescription(entity.getLongDescription());
 				hit.setAttributes(entity.getAttributes());
 				entityObjectRepository.save(hit);
+				cache.put(key, hit);
+			}
+		}
+		return hit;
+	}
+
+	private GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache, boolean insertIfNotFound) {
+		String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
+				+ event.getTitle().toUpperCase();
+		GraphEventObject hit = (GraphEventObject) cache.get(key);
+		if (hit == null) {
+			// retrieve from existing entities
+			List<GraphEventObject> matches = eventObjectRepository.findByTypeAndTitle(event.getType().toUpperCase(),
+					event.getTitle().toUpperCase());
+			// if found load in cache and consider it
+			if (matches != null && !matches.isEmpty()) {
+				hit = matches.get(0);
+				cache.put(key, hit);
+			}
+			// if not found insert in graph db
+			if (hit == null && insertIfNotFound) {
+				hit = new GraphEventObject();
+				hit.setId(UUID.randomUUID().toString());
+				hit.setType(event.getType().toUpperCase());
+				hit.setTitle(event.getTitle().toUpperCase());
+				hit.setLongDescription(event.getLongDescription());
+				hit.setAttributes(event.getAttributes());
+				eventObjectRepository.save(hit);
+				cache.put(key, hit);
+			}
+		}
+
+		return hit;
+	}
+
+	private GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
+			boolean insertIfNotFound) {
+		GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, insertIfNotFound);
+		GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache, insertIfNotFound);
+		if (fromEntity == null || toEntity == null)
+			return null;
+		String key = relation.getClass().getName() + "-" + relation.getType().toUpperCase() + "-" + fromEntity.getId()
+				+ "-" + toEntity.getId();
+		GraphRelationObject hit = (GraphRelationObject) cache.get(key);
+		if (hit == null) {
+			// retrieve from existing entities
+			List<GraphRelationObject> matches = relationObjectRepository.findByTypeAndFromEntityIdAndToEntityId(
+					relation.getType().toUpperCase(), fromEntity.getId(), toEntity.getId());
+			// if found load in cache and consider it
+			if (matches != null && !matches.isEmpty()) {
+				hit = matches.get(0);
+				cache.put(key, hit);
+			}
+			// if not found insert in graph db
+			if (hit == null && insertIfNotFound) {
+				hit = new GraphRelationObject();
+				hit.setId(UUID.randomUUID().toString());
+				hit.setType(relation.getType().toUpperCase());
+				hit.setFromEntity(fromEntity);
+				hit.setToEntity(toEntity);
+				hit.setLongDescription(relation.getLongDescription());
+				hit.setAttributes(relation.getAttributes());
+				relationObjectRepository.save(hit);
 				cache.put(key, hit);
 			}
 		}
