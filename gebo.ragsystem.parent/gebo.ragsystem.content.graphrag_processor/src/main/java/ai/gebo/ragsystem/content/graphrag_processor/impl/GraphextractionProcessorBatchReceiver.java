@@ -1,10 +1,15 @@
 package ai.gebo.ragsystem.content.graphrag_processor.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,29 +23,36 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
+import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesReceiverFactoryComponent;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
+import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
+import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.ragsystem.content.graphrag_processor.IGraphRagProcessorMessagesReceiverFactoryComponent;
+import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class GraphRagProcessorBatchReceiver implements IGBatchMessagesReceiver {
+public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesReceiver {
 	private final IDocumentsChunkService chunkingService;
 
 	private final IWorkflowRouter workflowRouter;
 	private final IGraphRagProcessorMessagesReceiverFactoryComponent emitter;
 	private final IGMessageBroker broker;
 	private final IGraphDataExtractionService graphRagExtractionService;
-	private final static Logger LOGGER = LoggerFactory.getLogger(GraphRagProcessorBatchReceiver.class);
+	private final IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
+	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
 
 	public GContentsProcessingStatusUpdatePayload acceptSingleMessage(GMessageEnvelope envelope) {
 		GContentsProcessingStatusUpdatePayload data = null;
@@ -56,23 +68,16 @@ public class GraphRagProcessorBatchReceiver implements IGBatchMessagesReceiver {
 				data.setWorkflowId(envelope.getWorkflowId());
 				data.setWorkflowStepId(envelope.getWorkflowStepId());
 				data.setBatchDocumentsInput(1);
-				DocumentChunkingResponse chunkingResponse = chunkingService
-						.getCachedChunk(payload.getDocumentReference());
-				if (!chunkingResponse.isEmpty()) {
-					do {
-						DocumentChunk chunk = chunkingResponse.getCurrentChunk();
-						Document document = new Document(chunk.getId(), chunk.getChunkData(), chunk.getMetaData());
-						LLMExtractionResult extraction = graphRagExtractionService.extract(document,
-								payload.getDocumentReference());
-						if (chunkingResponse.getNextChunkId() != null) {
-							chunkingResponse = chunkingService.getNextChunk(payload.getDocumentReference(),
-									chunkingResponse.getId(), chunkingResponse.getNextChunkId());
-						} else {
-							chunkingResponse = null;
-						}
-					} while (chunkingResponse != null && !chunkingResponse.isEmpty());
-				}
-				data.setBatchDocumentsProcessed(1);
+				// Best effort approach
+				Consumer<KnowledgeExtractionData> consumer = knowledgeGraphPersistenceService
+						.knowledgeGraphUpdater(payload.getDocumentReference());
+				KnowledgeExtractionIterator iterator = new KnowledgeExtractionIterator(payload.getDocumentReference(),
+						chunkingService, graphRagExtractionService);
+				Spliterator<KnowledgeExtractionData> spliterator = Spliterators.spliteratorUnknownSize(iterator,
+						Spliterator.ORDERED | Spliterator.NONNULL);
+				Stream<KnowledgeExtractionData> stream = StreamSupport.stream(spliterator, false);
+				data.setBatchDocumentsProcessed(!iterator.isExceptionOccurred() ? 1 : 0);
+				data.setBatchDocumentsProcessingErrors(iterator.isExceptionOccurred() ? 1 : 0);
 				workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 						envelope.getWorkflowStepId(), payload, emitter);
 			} catch (Throwable th) {
@@ -107,12 +112,15 @@ public class GraphRagProcessorBatchReceiver implements IGBatchMessagesReceiver {
 		}
 		final Map<String, GContentsProcessingStatusUpdatePayload> aggregated = new HashMap<String, GContentsProcessingStatusUpdatePayload>();
 		feedbakcs.stream().forEach(countData -> {
-			String key = countData.getJobId() + "-" + countData.getWorkflowType() + "-" + countData.getWorkflowId()
-					+ "-" + countData.getWorkflowStepId();
-			if (!aggregated.containsKey(key)) {
-				aggregated.put(key, countData);
-			} else
-				aggregated.get(key).incrementBy(countData);
+			if (countData.getJobId() != null && countData.getWorkflowType() != null && countData.getWorkflowId() != null
+					&& countData.getWorkflowStepId() != null) {
+				String key = countData.getJobId() + "-" + countData.getWorkflowType() + "-" + countData.getWorkflowId()
+						+ "-" + countData.getWorkflowStepId();
+				if (!aggregated.containsKey(key)) {
+					aggregated.put(key, countData);
+				} else
+					aggregated.get(key).incrementBy(countData);
+			}
 		});
 		aggregated.values().stream().forEach(payload -> {
 			if (LOGGER.isDebugEnabled()) {

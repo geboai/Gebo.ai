@@ -19,12 +19,12 @@ import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessor
 
 @Component
 
-public class GraphRagProcessorMessagesReceiverFactoryComponent extends GAbstractTimedOutMessageReceiverFactory
+public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GAbstractTimedOutMessageReceiverFactory
 		implements IGraphRagProcessorMessagesReceiverFactoryComponent {
 
 	protected final IGRuntimeBinder runtimeBinder;
 	private final static Logger LOGGER = LoggerFactory
-			.getLogger(GraphRagProcessorMessagesReceiverFactoryComponent.class);
+			.getLogger(GraphextractionProcessorMessagesReceiverFactoryComponent.class);
 
 	public class GraphRagProcessorBatchGrouperReceiver extends GNestedBatchAggregatorMessageReceiver {
 
@@ -35,7 +35,7 @@ public class GraphRagProcessorMessagesReceiverFactoryComponent extends GAbstract
 
 	}
 
-	public GraphRagProcessorMessagesReceiverFactoryComponent(GeboGraphRagProcessorConfig config,
+	public GraphextractionProcessorMessagesReceiverFactoryComponent(GeboGraphRagProcessorConfig config,
 			IGRuntimeBinder runtimeBinder) {
 		super(config.getGraphRagProcessorReceiverConfig());
 		this.runtimeBinder = runtimeBinder;
@@ -82,7 +82,7 @@ public class GraphRagProcessorMessagesReceiverFactoryComponent extends GAbstract
 	public IGTimedOutMessageReceiver create() {
 
 		return new GraphRagProcessorBatchGrouperReceiver(
-				runtimeBinder.getImplementationOf(GraphRagProcessorBatchReceiver.class),
+				runtimeBinder.getImplementationOf(GraphextractionProcessorBatchReceiver.class),
 				factoryConfig.getFlushThreshold());
 	}
 

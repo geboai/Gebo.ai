@@ -10,5 +10,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class KnowledgeExtractionData {
 	private final LLMExtractionResult extraction;
-	private final Document documentChunk;
+	private final Document documentChunk;	
 }
