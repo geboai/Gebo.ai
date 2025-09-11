@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
+import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityInDocumentChunk;
@@ -31,6 +33,7 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRe
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -55,8 +58,8 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 	}
 
 	@Override
-	public void knowledgeGraphUpdate(final GDocumentReference documentReference,
-			Stream<KnowledgeExtractionData> stream) {
+	public void knowledgeGraphUpdate(final GDocumentReference documentReference, Stream<KnowledgeExtractionData> stream,
+			Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer) {
 		this.knowledgeGraphDelete(documentReference);
 		GraphDocumentReference ref = new GraphDocumentReference();
 		ref.setCode(documentReference.getCode());
@@ -67,12 +70,15 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		this.docReferenceRepository.save(ref);
 		final Map<String, Object> cache = new HashMap<String, Object>();
 		stream.forEach(entry -> {
-			saveExtraction(entry, documentReference, cache);
+			KnowledgeExtractionEvent event = saveExtraction(entry, documentReference, cache);
+			if (event != null)
+				processingUpdatesConsumer.accept(event);
 		});
 	}
 
-	private void saveExtraction(KnowledgeExtractionData extraction, GDocumentReference documentReference,
-			Map<String, Object> cache) {
+	private KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction,
+			GDocumentReference documentReference, Map<String, Object> cache) {
+		KnowledgeExtractionEvent outData = null;
 		GraphDocumentChunk ref = new GraphDocumentChunk();
 		ref.setId(extraction.getDocumentChunk().getId());
 		ref.setDocumentCode(documentReference.getCode());
@@ -82,6 +88,11 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		ref.setProjectEndpointCode(documentReference.getProjectEndpointReference().getCode());
 		ref.setText(extraction.getDocumentChunk().getText());
 		ref.setMetaData(extraction.getDocumentChunk().getMetadata());
+		Object tokenLength = ref.getMetaData() != null ? ref.getMetaData().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
+				: null;
+		if (tokenLength != null && tokenLength instanceof Number tokens) {
+			outData = new KnowledgeExtractionEvent(tokens.longValue(), 0, 1, false);
+		}
 		docChunkRepository.save(ref);
 		List<EntityObject> entities = extraction.getExtraction().getEntities();
 		for (EntityObject entity : entities) {
@@ -174,6 +185,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 				relationInChunkRepository.save(relationtInChunk);
 			}
 		}
+		return outData;
 	}
 
 	private GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache) {

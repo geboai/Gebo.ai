@@ -34,6 +34,7 @@ import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
+import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
@@ -54,6 +55,58 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 	private final IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
 
+	class ProcessingStatusUpdater implements Consumer<IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent> {
+
+		private String jobId;
+		private String workflowType;
+		private String workflowId;
+		private String workflowStepId;
+		private long howManyAccepted = 0;
+		private static final long BATCHING_CYCLES_NUMBER = 20;
+		private KnowledgeExtractionEvent cumulated = null;
+
+		ProcessingStatusUpdater(String jobId, String workflowType, String workflowId, String workflowStepId) {
+			this.jobId = jobId;
+			this.workflowType = workflowType;
+			this.workflowId = workflowId;
+			this.workflowStepId = workflowStepId;
+		}
+
+		@Override
+		public void accept(KnowledgeExtractionEvent t) {
+			howManyAccepted++;
+			if (cumulated == null)
+				cumulated = t;
+			else {
+				cumulated.incrementBy(t);
+			}
+			if ((howManyAccepted % BATCHING_CYCLES_NUMBER) == 0) {
+				flush();
+			}
+		}
+
+		void flush() {
+			if (cumulated != null) {
+				GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
+				payload.setJobId(jobId);
+				payload.setWorkflowType(workflowType);
+				payload.setWorkflowId(workflowId);
+				payload.setWorkflowStepId(workflowStepId);
+				payload.setBatchDocumentsInput(0);
+				payload.setChunksProcessed(cumulated.getProcessedSegments());
+				payload.setTokensProcessed(cumulated.getProcessedTokens());
+				GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope
+						.newMessageFrom(emitter, payload);
+				envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+				envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
+				envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+				broker.accept(envelope);
+				cumulated = null;
+			}
+
+		}
+	};
+
 	public GContentsProcessingStatusUpdatePayload acceptSingleMessage(GMessageEnvelope envelope) {
 		GContentsProcessingStatusUpdatePayload data = null;
 
@@ -61,6 +114,9 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 			LOGGER.debug("Begin acceptSingleMessage(...)");
 		}
 		if (envelope.getPayload() instanceof GDocumentReferencePayload payload) {
+			ProcessingStatusUpdater updatesConsumer = new ProcessingStatusUpdater(payload.getJobId(),
+					envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
+					envelope.getWorkflowId(), envelope.getWorkflowStepId());
 			try {
 				data = new GContentsProcessingStatusUpdatePayload();
 				data.setJobId(payload.getJobId());
@@ -75,7 +131,10 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				Spliterator<KnowledgeExtractionData> spliterator = Spliterators.spliteratorUnknownSize(iterator,
 						Spliterator.ORDERED | Spliterator.NONNULL);
 				Stream<KnowledgeExtractionData> stream = StreamSupport.stream(spliterator, false);
-				knowledgeGraphPersistenceService.knowledgeGraphUpdate(payload.getDocumentReference(), stream);
+
+				knowledgeGraphPersistenceService.knowledgeGraphUpdate(payload.getDocumentReference(), stream,
+						updatesConsumer);
+
 				data.setBatchDocumentsProcessed(!iterator.isExceptionOccurred() ? 1 : 0);
 				data.setBatchDocumentsProcessingErrors(iterator.isExceptionOccurred() ? 1 : 0);
 				workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
@@ -83,6 +142,11 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 			} catch (Throwable th) {
 				data.setBatchDocumentsProcessingErrors(1);
 				LOGGER.error("Error accessing chunks for:" + payload.getDocumentReference().getCode(), th);
+			} finally {
+				try {
+					updatesConsumer.flush();
+				} catch (Throwable th) {
+				}
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
