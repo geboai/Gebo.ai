@@ -3,6 +3,7 @@ package ai.gebo.architecture.graphrag.persistence.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.data.neo4j.core.schema.CompositeProperty;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 
@@ -27,5 +28,6 @@ public class GraphDocumentChunk {
 	private String projectEndpointCode = null;
 	@NotNull
 	private String text = null;
+	@CompositeProperty(prefix = "metaData")
 	private Map<String, Object> metaData = new HashMap<String, Object>();
 }

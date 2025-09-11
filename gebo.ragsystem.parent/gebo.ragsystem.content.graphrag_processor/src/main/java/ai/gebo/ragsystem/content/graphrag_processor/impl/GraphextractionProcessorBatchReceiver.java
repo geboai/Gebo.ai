@@ -69,13 +69,13 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				data.setWorkflowStepId(envelope.getWorkflowStepId());
 				data.setBatchDocumentsInput(1);
 				// Best effort approach
-				Consumer<KnowledgeExtractionData> consumer = knowledgeGraphPersistenceService
-						.knowledgeGraphUpdater(payload.getDocumentReference());
+
 				KnowledgeExtractionIterator iterator = new KnowledgeExtractionIterator(payload.getDocumentReference(),
 						chunkingService, graphRagExtractionService);
 				Spliterator<KnowledgeExtractionData> spliterator = Spliterators.spliteratorUnknownSize(iterator,
 						Spliterator.ORDERED | Spliterator.NONNULL);
 				Stream<KnowledgeExtractionData> stream = StreamSupport.stream(spliterator, false);
+				knowledgeGraphPersistenceService.knowledgeGraphUpdate(payload.getDocumentReference(), stream);
 				data.setBatchDocumentsProcessed(!iterator.isExceptionOccurred() ? 1 : 0);
 				data.setBatchDocumentsProcessingErrors(iterator.isExceptionOccurred() ? 1 : 0);
 				workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),

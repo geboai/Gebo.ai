@@ -7,18 +7,11 @@
 		<artifactId>gebo.architecture.parent</artifactId>
 		<version>0.9.9.8-SNAPSHOT</version>
 	</parent>
-	<artifactId>gebo.architecture.graphrag.persistence</artifactId>
+	<artifactId>gebo.architecture.neo4j</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-neo4j</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-neo4j -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-neo4j</artifactId>
-		</dependency>
-
 	</dependencies>
 </project>

@@ -98,6 +98,16 @@
 			<artifactId>gebo.architecture.documents.cache</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>ai.gebo.ragsystem</groupId>
+			<artifactId>gebo.ragsystem.content.graphrag_processor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.neo4j</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

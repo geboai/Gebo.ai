@@ -52,12 +52,12 @@ public class GraphextractionProcessorMessagesReceiverFactoryComponent extends GA
 	@Override
 	public String getMessagingModuleId() {
 
-		return GStandardModulesConstraints.TOKENIZER_MODULE;
+		return GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE;
 	}
 
 	@Override
 	public String getMessagingSystemId() {
-		return GStandardModulesConstraints.TOKENIZER_COMPONENT;
+		return GStandardModulesConstraints.KNOWLEDGE_GRAPH_COMPONENT;
 	}
 
 	@Override

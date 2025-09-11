@@ -1,5 +1,7 @@
 package ai.gebo.architecture.graphrag.persistence.repositories;
 
-public interface GraphEntityInDocumentChunkRepository {
+import ai.gebo.architecture.graphrag.persistence.model.GraphEntityInDocumentChunk;
+
+public interface GraphEntityInDocumentChunkRepository extends AbstractInDocumentChunkObjectRepository<GraphEntityInDocumentChunk> {
 
 }

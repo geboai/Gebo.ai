@@ -27,7 +27,9 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.FileCopyUtils;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.Neo4jContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -156,7 +158,9 @@ public class AbstractGeboMonolithicIntegrationTests {
 	/** Container to manage a MongoDB instance for integration tests. */
 	@Container
 	protected static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
-
+	@Container
+    private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("neo4j:latest"))
+        .withoutAuthentication(); // Disable password
 	/** ObjectMapper instance for JSON operations. */
 	protected static ObjectMapper mapper = new ObjectMapper();
 
@@ -426,6 +430,7 @@ public class AbstractGeboMonolithicIntegrationTests {
 	protected <T> void showMessages(OperationStatus<T> status) {
 		showMessages(status.getMessages());
 	}
+
 	protected long getNRDocuments(GProjectEndpoint endpoint) {
 		return this.documentReferenceRepository.countByProjectEndpoint(endpoint);
 	}

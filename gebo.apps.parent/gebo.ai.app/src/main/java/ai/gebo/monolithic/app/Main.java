@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.monolithic.app;
 
@@ -22,6 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.data.web.config.EnableSpringDataWebSupport.PageSerializationMode;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -31,9 +29,9 @@ import ai.gebo.architecture.environment.EnvironmentHolder;
 import ai.gebo.config.service.IGGeboConfigService;
 
 /**
- * Main class for the Gebo AI Monolithic Application.
- * This class is responsible for bootstrapping the application using Spring Boot.
- * It implements the CommandLineRunner interface to execute code on startup.
+ * Main class for the Gebo AI Monolithic Application. This class is responsible
+ * for bootstrapping the application using Spring Boot. It implements the
+ * CommandLineRunner interface to execute code on startup.
  *
  * AI generated comments
  */
@@ -44,6 +42,7 @@ import ai.gebo.config.service.IGGeboConfigService;
 @EnableAsync
 @EnableScheduling
 @EnableMongoRepositories(basePackages = "ai.gebo")
+@EnableNeo4jRepositories(basePackages = "ai.gebo")
 @EnableSpringDataWebSupport(pageSerializationMode = PageSerializationMode.VIA_DTO)
 public class Main implements CommandLineRunner {
 
@@ -54,15 +53,16 @@ public class Main implements CommandLineRunner {
 	IGGeboConfigService configService;
 
 	/**
-	 * The main entry point of the application.
-	 * It verifies the presence of the GEBO_HOME environment variable and property.
-	 * If not set, it logs an error and terminates the application.
+	 * The main entry point of the application. It verifies the presence of the
+	 * GEBO_HOME environment variable and property. If not set, it logs an error and
+	 * terminates the application.
 	 * 
 	 * @param args command-line arguments passed to the application
 	 */
 	public static void main(String[] args) {
 		LOG.info("STARTING THE APPLICATION");
-		if (EnvironmentHolder.GEBO_HOME_ENVIRONMENT_VALUE == null || EnvironmentHolder.GEBO_HOME_ENVIRONMENT_VALUE.trim().length() == 0) {
+		if (EnvironmentHolder.GEBO_HOME_ENVIRONMENT_VALUE == null
+				|| EnvironmentHolder.GEBO_HOME_ENVIRONMENT_VALUE.trim().length() == 0) {
 			LOG.error(errorMessage);
 			System.out.println(errorMessage);
 			System.err.println(errorMessage);
@@ -73,7 +73,8 @@ public class Main implements CommandLineRunner {
 	}
 
 	/**
-	 * Method to be run on startup, implementing logic to ensure environment variables are set.
+	 * Method to be run on startup, implementing logic to ensure environment
+	 * variables are set.
 	 *
 	 * @param args command-line arguments passed to the application
 	 */
