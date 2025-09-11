@@ -13,10 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
+import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.extraction.model.TimeSegment;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent;
+import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityInDocumentChunk;
@@ -26,6 +27,8 @@ import ai.gebo.architecture.graphrag.persistence.model.GraphEventObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphRelationInDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphRelationObject;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
+import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
+import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityInDocumentChunkRepository;
@@ -40,15 +43,15 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPersistenceService {
-	private final GraphDocumentReferenceRepository docReferenceRepository;
-	private final GraphDocumentChunkRepository docChunkRepository;
-	private final GraphEntityObjectRepository entityObjectRepository;
-	private final GraphEntityInDocumentChunkRepository entityInChunkRepository;
-	private final GraphEventObjectRepository eventObjectRepository;
-	private final GraphEventInDocumentChunkRepository eventInChunkRepository;
-	private final GraphRelationObjectRepository relationObjectRepository;
-	private final GraphRelationInDocumentChunkRepository relationInChunkRepository;
+public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPersistenceService,IKnowledgeGraphSearchService {
+	 final GraphDocumentReferenceRepository docReferenceRepository;
+	 final GraphDocumentChunkRepository docChunkRepository;
+	 final GraphEntityObjectRepository entityObjectRepository;
+	 final GraphEntityInDocumentChunkRepository entityInChunkRepository;
+	 final GraphEventObjectRepository eventObjectRepository;
+	 final GraphEventInDocumentChunkRepository eventInChunkRepository;
+	 final GraphRelationObjectRepository relationObjectRepository;
+	 final GraphRelationInDocumentChunkRepository relationInChunkRepository;
 
 	@Override
 	public void knowledgeGraphDelete(GDocumentReference documentReference) {
@@ -156,7 +159,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		return outData;
 	}
 
-	private GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache,
+	 GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
 				+ entity.getName().toUpperCase();
@@ -186,7 +189,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		return hit;
 	}
 
-	private GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache, boolean insertIfNotFound) {
+	 GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache, boolean insertIfNotFound) {
 		String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
 				+ event.getTitle().toUpperCase();
 		GraphEventObject hit = (GraphEventObject) cache.get(key);
@@ -215,7 +218,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		return hit;
 	}
 
-	private GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
+	 GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, insertIfNotFound);
 		GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache, insertIfNotFound);
@@ -248,4 +251,17 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		}
 		return hit;
 	}
+
+	 @Override
+	 public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK,
+			List<String> knowledgeBasesCodes) {
+		// TODO Auto-generated method stub
+		return null;
+	 }
+
+	 @Override
+	 public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK) {
+		// TODO Auto-generated method stub
+		return null;
+	 }
 }
