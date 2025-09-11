@@ -23,7 +23,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 
 	@Override
 	public Consumer<KnowledgeExtractionData> knowledgeGraphUpdater(GDocumentReference documentReference) {
-		
+		this.knowledgeGraphDelete(documentReference);
 		return null;
 	}
 

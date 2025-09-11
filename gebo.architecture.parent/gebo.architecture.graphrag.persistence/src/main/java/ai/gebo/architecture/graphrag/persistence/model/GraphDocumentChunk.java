@@ -1,0 +1,31 @@
+package ai.gebo.architecture.graphrag.persistence.model;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Node("docchunk")
+@Data
+public class GraphDocumentChunk {
+	@Id
+	@NotNull
+	private String id = null;
+	@NotNull
+	private String documentCode = null;
+	@NotNull
+	private String projectCode = null;
+	@NotNull
+	private String knowledgeBaseCode = null;
+	@NotNull
+	private String projectEndpointClass = null;
+	@NotNull
+	private String projectEndpointCode = null;
+	@NotNull
+	private String text = null;
+	private Map<String, Object> metaData = new HashMap<String, Object>();
+}
