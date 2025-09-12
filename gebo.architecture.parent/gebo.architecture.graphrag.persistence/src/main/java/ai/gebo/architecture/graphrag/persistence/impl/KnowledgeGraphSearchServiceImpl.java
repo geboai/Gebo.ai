@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.graphrag.persistence.model.GraphExtractionMatching;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
@@ -38,20 +39,19 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 		super(docReferenceRepository, docChunkRepository, entityObjectRepository, entityInChunkRepository,
 				eventObjectRepository, eventInChunkRepository, relationObjectRepository, relationInChunkRepository,
 				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository);
-		// TODO Auto-generated constructor stub
+
 	}
 
 	@Override
 	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK,
 			List<String> knowledgeBasesCodes) {
-		// TODO Auto-generated method stub
+		GraphExtractionMatching matching = searchMatches(extraction);
 		return null;
 	}
 
 	@Override
 	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK) {
-		// TODO Auto-generated method stub
-		return null;
+		return knowledgeGraphSearch(extraction, topK, null);
 	}
 
 }

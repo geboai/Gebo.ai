@@ -1,5 +1,6 @@
 package ai.gebo.architecture.graphrag.persistence.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,11 +10,13 @@ import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
+import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventObject;
+import ai.gebo.architecture.graphrag.persistence.model.GraphExtractionMatching;
 import ai.gebo.architecture.graphrag.persistence.model.GraphRelationObject;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
@@ -44,7 +47,8 @@ public class AbstractGraphPersistenceService {
 	protected final GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository;
 	protected final GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository;
 
-	GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache, boolean insertIfNotFound) {
+	protected GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache,
+			boolean insertIfNotFound) {
 		String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
 				+ entity.getName().toUpperCase();
 		// check eventual cache
@@ -73,7 +77,7 @@ public class AbstractGraphPersistenceService {
 		return hit;
 	}
 
-	GraphEntityAliasObject findMatchingEntityAlias(EntityAliasObject alias, Map<String, Object> cache,
+	protected GraphEntityAliasObject findMatchingEntityAlias(EntityAliasObject alias, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEntityObject referenceObject = findMatchingEntity(alias.getReferenceObject(), cache, insertIfNotFound);
 		GraphEntityObject aliasObject = findMatchingEntity(alias.getAliasObject(), cache, insertIfNotFound);
@@ -121,7 +125,8 @@ public class AbstractGraphPersistenceService {
 		return hit;
 	}
 
-	GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache, boolean insertIfNotFound) {
+	protected GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache,
+			boolean insertIfNotFound) {
 		String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
 				+ event.getTitle().toUpperCase();
 		GraphEventObject hit = (GraphEventObject) cache.get(key);
@@ -150,7 +155,7 @@ public class AbstractGraphPersistenceService {
 		return hit;
 	}
 
-	GraphEventAliasObject findMatchingEventAlias(EventAliasObject alias, Map<String, Object> cache,
+	protected GraphEventAliasObject findMatchingEventAlias(EventAliasObject alias, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEventObject referenceObject = findMatchingEvent(alias.getReferenceObject(), cache, insertIfNotFound);
 		GraphEventObject aliasObject = findMatchingEvent(alias.getAliasObject(), cache, insertIfNotFound);
@@ -190,7 +195,7 @@ public class AbstractGraphPersistenceService {
 				hit.setReferenceObject(referenceObject);
 				hit.setAliasObject(aliasObject);
 				hit.setLongDescription(alias.getLongDescription());
-				hit.setAttributes(alias.getAttributes());				
+				hit.setAttributes(alias.getAttributes());
 				eventAliasRepository.save(hit);
 				cache.put(key, hit);
 			}
@@ -198,7 +203,7 @@ public class AbstractGraphPersistenceService {
 		return hit;
 	}
 
-	GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
+	protected GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, insertIfNotFound);
 		GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache, insertIfNotFound);
@@ -230,6 +235,28 @@ public class AbstractGraphPersistenceService {
 			}
 		}
 		return hit;
+	}
+
+	protected GraphExtractionMatching searchMatches(LLMExtractionResult extraction) {
+		GraphExtractionMatching out = null;
+		final Map<String, Object> cache = new HashMap<String, Object>();
+		List<GraphEntityObject> entities = extraction.getEntities().stream().map(x -> {
+			return this.findMatchingEntity(x, cache, false);
+		}).filter(ent -> ent != null).toList();
+		List<GraphEventObject> events = extraction.getEvents().stream().map(x -> {
+			return findMatchingEvent(x, cache, false);
+		}).filter(y -> y != null).toList();
+		List<GraphRelationObject> relations = extraction.getRelations().stream().map(x -> {
+			return findMatchingRelation(x, cache, false);
+		}).filter(y -> y != null).toList();
+		List<GraphEntityAliasObject> entityAliases = extraction.getEntityAliases().stream().map(x -> {
+			return findMatchingEntityAlias(x, cache, false);
+		}).filter(y -> y != null).toList();
+		List<GraphEventAliasObject> eventAliases = extraction.getEventAliases().stream().map(x -> {
+			return findMatchingEventAlias(x, cache, false);
+		}).filter(y -> y != null).toList();
+		out = new GraphExtractionMatching(entities, events, relations, entityAliases, eventAliases);
+		return out;
 	}
 
 }
