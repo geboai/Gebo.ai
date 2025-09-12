@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import ai.gebo.architecture.graphrag.extraction.model.AbstractAliasObject.EquivalenceType;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
@@ -27,6 +28,7 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRe
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
 import lombok.AllArgsConstructor;
+
 @AllArgsConstructor
 public class AbstractGraphPersistenceService {
 	protected final GraphDocumentReferenceRepository docReferenceRepository;
@@ -41,6 +43,7 @@ public class AbstractGraphPersistenceService {
 	protected final GraphEntityAliasObjectRepository entityAliasRepository;
 	protected final GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository;
 	protected final GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository;
+
 	GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache, boolean insertIfNotFound) {
 		String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
 				+ entity.getName().toUpperCase();
@@ -69,6 +72,7 @@ public class AbstractGraphPersistenceService {
 		}
 		return hit;
 	}
+
 	GraphEntityAliasObject findMatchingEntityAlias(EntityAliasObject alias, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEntityObject referenceObject = findMatchingEntity(alias.getReferenceObject(), cache, insertIfNotFound);
@@ -104,6 +108,9 @@ public class AbstractGraphPersistenceService {
 				hit.setId(UUID.randomUUID().toString());
 				hit.setType(alias.getType().toUpperCase());
 				hit.setReferenceObject(referenceObject);
+				hit.setEquivalenceType(alias.getEquivalenceType() != EquivalenceType.SYNONYM
+						? ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.ALIAS
+						: ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.SYNONYM);
 				hit.setAliasObject(aliasObject);
 				hit.setLongDescription(alias.getLongDescription());
 				hit.setAttributes(alias.getAttributes());
@@ -113,6 +120,7 @@ public class AbstractGraphPersistenceService {
 		}
 		return hit;
 	}
+
 	GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache, boolean insertIfNotFound) {
 		String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
 				+ event.getTitle().toUpperCase();
@@ -138,9 +146,10 @@ public class AbstractGraphPersistenceService {
 				cache.put(key, hit);
 			}
 		}
-	
+
 		return hit;
 	}
+
 	GraphEventAliasObject findMatchingEventAlias(EventAliasObject alias, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEventObject referenceObject = findMatchingEvent(alias.getReferenceObject(), cache, insertIfNotFound);
@@ -175,16 +184,20 @@ public class AbstractGraphPersistenceService {
 				hit = new GraphEventAliasObject();
 				hit.setId(UUID.randomUUID().toString());
 				hit.setType(alias.getType().toUpperCase());
+				hit.setEquivalenceType(alias.getEquivalenceType() != EquivalenceType.SYNONYM
+						? ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.ALIAS
+						: ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.SYNONYM);
 				hit.setReferenceObject(referenceObject);
 				hit.setAliasObject(aliasObject);
 				hit.setLongDescription(alias.getLongDescription());
-				hit.setAttributes(alias.getAttributes());
+				hit.setAttributes(alias.getAttributes());				
 				eventAliasRepository.save(hit);
 				cache.put(key, hit);
 			}
 		}
 		return hit;
 	}
+
 	GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
 			boolean insertIfNotFound) {
 		GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, insertIfNotFound);
