@@ -24,8 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;

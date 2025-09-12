@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageGPromptConfig { 
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<GPromptConfig>;
     number?: number;
-    numberOfElements?: number;
     sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 }

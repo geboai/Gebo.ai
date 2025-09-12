@@ -1,4 +1,4 @@
-package ai.gebo.architecture.graphrag.persistence;
+package ai.gebo.architecture.graphrag.services;
 
 import java.util.List;
 

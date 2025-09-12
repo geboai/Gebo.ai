@@ -33,8 +33,8 @@ import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesRec
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphPersistenceService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;

@@ -1,4 +1,4 @@
-package ai.gebo.architecture.graphrag.persistence.impl;
+package ai.gebo.architecture.graphrag.services.impl;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.graphrag.persistence.model.ChunkHitRow;
 import ai.gebo.architecture.graphrag.persistence.model.ChunkMeta;
 import ai.gebo.architecture.graphrag.persistence.model.ChunkNeighborRow;
@@ -39,6 +38,7 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocume
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import jakarta.annotation.Nullable;
@@ -46,8 +46,6 @@ import jakarta.annotation.Nullable;
 @Service
 public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceService
 		implements IKnowledgeGraphSearchService {
-	private final IGraphDataExtractionService extractionService;
-
 	public KnowledgeGraphSearchServiceImpl(GraphDocumentReferenceRepository docReferenceRepository,
 			GraphDocumentChunkRepository docChunkRepository, GraphEntityObjectRepository entityObjectRepository,
 			GraphEntityInDocumentChunkRepository entityInChunkRepository,
@@ -62,8 +60,8 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 			IGraphDataExtractionService extractionService) {
 		super(docReferenceRepository, docChunkRepository, entityObjectRepository, entityInChunkRepository,
 				eventObjectRepository, eventInChunkRepository, relationObjectRepository, relationInChunkRepository,
-				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository);
-		this.extractionService = extractionService;
+				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository,
+				extractionService);
 
 	}
 
@@ -210,14 +208,11 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 	}
 
 	@Override
-	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(String query, List<String> knowledgeBases, int topK) throws LLMConfigException {
+	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(String query, List<String> knowledgeBases, int topK)
+			throws LLMConfigException {
 		LLMExtractionResult extraction = extractionService.extract(query, knowledgeBases);
 		return knowledgeGraphSearch(extraction, topK, knowledgeBases);
 	}
 
-	@Override 
-	public boolean isConfigured() {
-
-		return extractionService.isConfigured();
-	}
+	
 }

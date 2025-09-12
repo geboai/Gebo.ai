@@ -52,6 +52,7 @@ import { GoogleSearchControllerService } from './api/googleSearchController.serv
 import { GoogleVertexChatModelsConfigurationControllerService } from './api/googleVertexChatModelsConfigurationController.service';
 import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api/googleVertexEmbeddingModelsConfigurationController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
+import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
 import { HuggingfaceChatModelsConfigurationControllerService } from './api/huggingfaceChatModelsConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
@@ -139,6 +140,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GoogleVertexChatModelsConfigurationControllerService,
     GoogleVertexEmbeddingModelsConfigurationControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
+    GraphRagConfigurationControllerService,
     HuggingfaceChatModelsConfigurationControllerService,
     IngestionFileTypesLibraryControllerService,
     IntegrationInputControllerService,

@@ -1,4 +1,4 @@
-package ai.gebo.architecture.graphrag.persistence.impl;
+package ai.gebo.architecture.graphrag.services.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.extraction.model.TimeSegment;
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
+import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasInDocumentChunk;
@@ -43,6 +43,7 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocume
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
+import ai.gebo.architecture.graphrag.services.IKnowledgeGraphPersistenceService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
 
@@ -61,10 +62,10 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			GraphEventAliasObjectRepository eventAliasRepository,
 			GraphEntityAliasObjectRepository entityAliasRepository,
 			GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository,
-			GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository) {
+			GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository, IGraphDataExtractionService extractionService) {
 		super(docReferenceRepository, docChunkRepository, entityObjectRepository, entityInChunkRepository,
 				eventObjectRepository, eventInChunkRepository, relationObjectRepository, relationInChunkRepository,
-				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository);
+				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository,extractionService);
 
 	}
 

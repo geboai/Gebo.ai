@@ -194,18 +194,15 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		if (defaultLevelConfig != null) {
 			return extract(document, defaultLevelConfig);
 		}
-		// TODO: return to throw when no custom configs or default are there
-		return extract(document, mainConfiguration);
-		// throw new LLMConfigException("There is no available configuration for
-		// knowledge extraction");
+		throw new LLMConfigException("There is no available configuration for knowledge extraction");
 	}
 
 	@Override
 	public boolean isConfigured() {
-		// TODO: return to uncomment
-		// long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
-		// return count > 0;
-		return true;
+
+		long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
+		return count > 0;
+		// return true;
 	}
 
 	@Override
@@ -216,14 +213,15 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		if (!defaultConfigs.isEmpty()) {
 			defaultLevelConfig = defaultConfigs.get(0);
 		}
-		GraphRagExtractionConfig  joinConfiguration=joinConfigurations(mainConfiguration,defaultLevelConfig,knowledgeBases);
+		GraphRagExtractionConfig joinConfiguration = joinConfigurations(mainConfiguration, defaultLevelConfig,
+				knowledgeBases);
 		return extract(query, joinConfiguration);
 	}
 
 	private GraphRagExtractionConfig joinConfigurations(GraphRagExtractionConfig mainConfiguration,
 			GraphRagExtractionConfig defaultLevelConfig, List<String> knowledgeBases) {
-		//TODO: implement logics
-		return mainConfiguration;	
+		// TODO: implement logics
+		return defaultLevelConfig;
 	}
 
 }

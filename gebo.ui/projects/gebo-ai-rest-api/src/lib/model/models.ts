@@ -156,6 +156,8 @@ export * from './getJobMessagesParam';
 export * from './googleSearchRequest';
 export * from './googleSearchResultItem';
 export * from './googleSearchResults';
+export * from './graphObjectType';
+export * from './graphRagExtractionConfig';
 export * from './groupInfo';
 export * from './handShakeToken';
 export * from './hasRunningJobs';

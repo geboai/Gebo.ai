@@ -1,4 +1,4 @@
-package ai.gebo.architecture.graphrag.persistence.impl;
+package ai.gebo.architecture.graphrag.services.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +12,7 @@ import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
+import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventAliasObject;
@@ -46,6 +47,7 @@ public class AbstractGraphPersistenceService {
 	protected final GraphEntityAliasObjectRepository entityAliasRepository;
 	protected final GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository;
 	protected final GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository;
+	protected final IGraphDataExtractionService extractionService;
 
 	protected GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache,
 			boolean insertIfNotFound) {
@@ -258,8 +260,10 @@ public class AbstractGraphPersistenceService {
 		out = new GraphExtractionMatching(entities, events, relations, entityAliases, eventAliases);
 		return out;
 	}
-	
+
 	public boolean isConfigured() {
-		return true;
+
+		return extractionService.isConfigured();
 	}
+
 }

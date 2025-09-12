@@ -15,6 +15,11 @@ public interface GraphRagExtractionConfigRepository extends IGBaseMongoDBReposit
 
 	public List<GraphRagExtractionConfig> findByKnowledgeBaseCode(String knowledgeBaseCode);
 
+	public List<GraphRagExtractionConfig> findByKnowledgeBaseCodeAndProjectCodeIsNull(String knowledgeBaseCode);
+
+	public List<GraphRagExtractionConfig> findByKnowledgeBaseCodeAndProjectCode(String knowledgeBaseCode,
+			String projectCode);
+
 	public List<GraphRagExtractionConfig> findByDefaultConfiguration(Boolean trueValue);
 
 	public long countByDefaultConfiguration(Boolean trueValue);
