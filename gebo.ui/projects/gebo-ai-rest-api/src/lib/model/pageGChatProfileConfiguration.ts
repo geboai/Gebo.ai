@@ -19,10 +19,10 @@ export interface PageGChatProfileConfiguration {
     size?: number;
     content?: Array<GChatProfileConfiguration>;
     number?: number;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 }

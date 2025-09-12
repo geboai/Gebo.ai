@@ -20,7 +20,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.AbstractMessage;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
 import org.springframework.ai.chat.messages.Message;
@@ -84,6 +83,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Autowired
 	protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
+	
 
 	/**
 	 * Inner class representing a system message containing document data.

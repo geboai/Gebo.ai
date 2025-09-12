@@ -14,8 +14,8 @@ import java.util.List;
 
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.content.Media;
+import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.document.model.GeboDocument;

@@ -1,0 +1,75 @@
+<p-panel #graphRagConfigUI header="Graphrag/knowledge extraction configuration" [formGroup]="formGroup">
+    <p-blockUI [target]="graphRagConfigUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <div class="geboDialogContent">
+        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-toast />
+
+        <div class="grid">
+
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="description">Description</label>
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                        aria-describedby="description-help" />
+                    <small id="description-help">
+                        Enter the description of this knowledge graph data extraction stage configuration
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2 ">
+                    <label for="code">Unique Code</label>
+                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
+                    <small id="code-help">
+                        Automatically generated unique code of the knowledge graph data extraction stage.
+                    </small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="flex flex-column gap-2">
+                    <label for="usedModelConfiguration">LLM used for data extraction</label>
+                    <p-select styleClass="w-full" formControlName="usedModelConfiguration" styleClass="w-full"
+                        id="usedModelConfiguration" [options]="chatModelsData" optionLabel="description"
+                        aria-describedby="usedModelConfiguration-help"
+                        placeholder="Select a chat model configuration"></p-select>
+                    <small id="usedModelConfiguration-help">
+                        Specify large language model used for knowledge extraction, default one will be used if none is
+                        selected.
+                    </small>
+                </div>
+            </div>
+            <div class="col-6"
+                *ngIf="formGroup.controls['usedModelConfiguration']?.value?true:false && defaultChatModel">
+                <div class="flex flex-column gap-2">
+                    <label for="defaultModel">Default large language model</label>
+                    <label id="defaultModel">{{defaultChatModel?.description}}</label>
+                    <small id="defaultModel-help">
+                        The default large language model will be used for knowledge extraction
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
+        <div class="grid">
+            <div class="col-4">
+                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                    [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
+                    styleClass="w-full"></p-button>
+            </div>
+
+            <div class="col-4">
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
+            </div>
+            <div class="col-4">
+                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                    styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
+            </div>
+
+        </div>
+    </div>
+</p-panel>

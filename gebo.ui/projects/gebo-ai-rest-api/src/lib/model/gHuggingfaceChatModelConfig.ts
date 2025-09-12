@@ -31,4 +31,12 @@ export interface GHuggingfaceChatModelConfig {
     temperature?: number;
     contextLength?: number;
     defaultModelPrompt?: string;
+    forUses?: Array<GHuggingfaceChatModelConfig.ForUsesEnum>;
+}
+export namespace GHuggingfaceChatModelConfig {
+    export type ForUsesEnum = 'CHAT' | 'GRAPH_EXTRACTION';
+    export const ForUsesEnum = {
+        CHAT: 'CHAT' as ForUsesEnum,
+        GRAPHEXTRACTION: 'GRAPH_EXTRACTION' as ForUsesEnum
+    };
 }

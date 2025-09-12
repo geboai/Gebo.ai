@@ -19,10 +19,10 @@ export interface PageUserInfos {
     size?: number;
     content?: Array<UserInfos>;
     number?: number;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 }

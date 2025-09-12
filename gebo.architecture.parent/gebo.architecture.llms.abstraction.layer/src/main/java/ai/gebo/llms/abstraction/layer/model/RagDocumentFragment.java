@@ -53,6 +53,7 @@ public class RagDocumentFragment implements IRagContent {
 	
 	// Weighted ranking score for results
 	private double weightedResultsRanking = 0.0;
+	private String origin = null;
 
 	/**
 	 * Constructs a new RagDocumentFragment using the provided document and metadata.
@@ -230,5 +231,13 @@ public class RagDocumentFragment implements IRagContent {
 	 */
 	public void setWeightedResultsRanking(double weightedResultsRanking) {
 		this.weightedResultsRanking = weightedResultsRanking;
+	}
+
+	public String getOrigin() {
+		return origin;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
 	}
 }

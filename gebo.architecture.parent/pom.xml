@@ -38,5 +38,9 @@
   	<module>gebo.architecture.swagger</module>
   	<module>gebo.architecture.mcp-clients</module>
   	<module>gebo.architecture.mcp-server</module>
+  	<module>gebo.architecture.graphrag.extraction</module>
+  	<module>gebo.architecture.graphrag.persistence</module>
+  	<module>gebo.architecture.documents.cache</module>
+  	<module>gebo.architecture.neo4j</module>
   </modules>
 </project>

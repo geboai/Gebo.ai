@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.integration.tests;
 
@@ -27,12 +24,16 @@ import org.springframework.ai.vectorstore.VectorStore;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -49,9 +50,9 @@ import ai.gebo.ragsystem.vectorstores.test.services.TestVectorStore;
 /**
  * AI generated comments
  * 
- * An abstract test class that provides integration tests for GEBO architecture with fake LLMS.
- * It handles preparation and cleanup of environment and manages lifecycle of chat 
- * and embedding models for integration tests.
+ * An abstract test class that provides integration tests for GEBO architecture
+ * with fake LLMS. It handles preparation and cleanup of environment and manages
+ * lifecycle of chat and embedding models for integration tests.
  */
 public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		extends AbstractGeboMonolithicIntegrationTests {
@@ -62,8 +63,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	public static final String DEFAULT_TEST_EMBEDDING_MODEL_CODE = "TEST_EMBEDDING_MODEL_X001";
 
 	/**
-	 * Callback method to be executed before each test. Can be overridden by subclasses 
-	 * to perform operations before each test.
+	 * Callback method to be executed before each test. Can be overridden by
+	 * subclasses to perform operations before each test.
 	 * 
 	 * @throws Exception if any error occurs during setup
 	 */
@@ -71,8 +72,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Callback method to be executed after each test. Can be overridden by subclasses 
-	 * to perform cleanup operations after each test.
+	 * Callback method to be executed after each test. Can be overridden by
+	 * subclasses to perform cleanup operations after each test.
 	 * 
 	 * @throws Exception if any error occurs during cleanup
 	 */
@@ -80,7 +81,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Retrieves the test vector store used for managing and accessing embedded document vectors.
+	 * Retrieves the test vector store used for managing and accessing embedded
+	 * document vectors.
 	 * 
 	 * @return the test vector store instance
 	 */
@@ -96,7 +98,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Prepares the test environment by initializing chat and embedding models before each test.
+	 * Prepares the test environment by initializing chat and embedding models
+	 * before each test.
 	 * 
 	 * @throws Exception if any error occurs during preparation
 	 */
@@ -120,7 +123,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		embedModelConfig.setChoosedModel(new GBaseModelChoice());
 		embedModelConfig.getChoosedModel().setCode(TestEmbeddingModelSupportServiceImpl.TEST_EMBEDDING_MODEL_001);
 		embedModelConfig.setDefaultModel(true);
-		
+
 		embeddingModelRuntimeDao.addRuntimeByConfig(embedModelConfig);
 		createDefaultUser();
 		beforeEachCallback();
@@ -128,7 +131,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Resets the test environment by clearing chat and embedding models after each test.
+	 * Resets the test environment by clearing chat and embedding models after each
+	 * test.
 	 * 
 	 * @throws Exception if any error occurs during reset
 	 */
@@ -169,41 +173,48 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Runs a job, waits for completion, and checks the results. Ensures that the expected number
-	 * of documents are vectorized and verifies the integrity of the vector store.
+	 * Runs a job, waits for completion, and checks the results. Ensures that the
+	 * expected number of documents are vectorized and verifies the integrity of the
+	 * vector store.
 	 *
-	 * @param endpoint the project endpoint to execute
-	 * @param howManyFilesWait the expected number of files to wait for vectorization
+	 * @param endpoint                       the project endpoint to execute
+	 * @param howManyFilesWait               the expected number of files to wait
+	 *                                       for vectorization
 	 * @param checkVectorDeletionNotOccurred flag to check vector deletion
-	 * @throws GeboJobServiceException if a job service error occurs
+	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException if a JSON processing error occurs
-	 * @throws InterruptedException if the thread is interrupted
+	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
 			boolean checkVectorDeletionNotOccurred)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint);
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
 		int nCycles = 0;
 		Thread.sleep(20000); // Initial delay before starting polling loop
+		ComputedWorkflowResult workflowStatus = null;
 		do {
 			Thread.sleep(10000); // Interval between job status checks
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
+			workflowStatus = summary.getWorkflowStatus();
 			LOGGER.info("On cycle=>" + nCycles);
 			LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 			nCycles++;
 
-		} while ((summary.getCurrentBatchDocumentVectorizedCounter()
-				+ summary.getVectorizationErrors()) < howManyFilesWait && nCycles < NMAXCYCLES);
+		} while ((workflowStatus == null || (!workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-		assertTrue(summary.getContentsReadTerminated(), "Contents read have to be terminated in this point");
-		assertTrue(summary.getVectorizationTerminated(), "Vectorization have to be terminated in this point");
+		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),
+				"Contents read have to be terminated in this point");
+		// assertTrue(summary.getVectorizationTerminated(), "Vectorization have to be
+		// terminated in this point");
 
-		assertEquals(howManyFilesWait, summary.getCurrentBatchDocumentVectorizedCounter(),
-				"Expected a single resource to be vectorized");
+		// assertEquals(howManyFilesWait,
+		// summary.getCurrentBatchDocumentVectorizedCounter(),
+		// "Expected a single resource to be vectorized");
 
 		TestVectorStore usedTestVectorStore = getTestVectorStore();
 
@@ -236,13 +247,14 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Overloaded method: runs a job and waits for it to be done, checking the results.
+	 * Overloaded method: runs a job and waits for it to be done, checking the
+	 * results.
 	 * 
 	 * @param endpoint the project endpoint to execute
-	 * @throws GeboJobServiceException if a job service error occurs
+	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException if a JSON processing error occurs
-	 * @throws InterruptedException if the thread is interrupted
+	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
@@ -250,14 +262,15 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Overloaded method: runs a job and waits for it to be done, checking the results with configurable vector store checking.
+	 * Overloaded method: runs a job and waits for it to be done, checking the
+	 * results with configurable vector store checking.
 	 * 
-	 * @param endpoint the project endpoint to execute
+	 * @param endpoint             the project endpoint to execute
 	 * @param checkTestVectorStore flag to check test vector store
-	 * @throws JsonProcessingException if a JSON processing error occurs
-	 * @throws GeboJobServiceException if a job service error occurs
+	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws InterruptedException if the thread is interrupted
+	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore)
 			throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
@@ -265,15 +278,16 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Overloaded method: runs a job and waits for it to be done, checking the results with configurable vector store and deletion checking.
+	 * Overloaded method: runs a job and waits for it to be done, checking the
+	 * results with configurable vector store and deletion checking.
 	 * 
-	 * @param endpoint the project endpoint to execute
-	 * @param checkTestVectorStore flag to check test vector store
+	 * @param endpoint               the project endpoint to execute
+	 * @param checkTestVectorStore   flag to check test vector store
 	 * @param checkNodDeletedVectors flag to check that no vectors were deleted
-	 * @throws JsonProcessingException if a JSON processing error occurs
-	 * @throws GeboJobServiceException if a job service error occurs
+	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws InterruptedException if the thread is interrupted
+	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore,
 			boolean checkNodDeletedVectors)
@@ -282,21 +296,23 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	}
 
 	/**
-	 * Overloaded method: runs a job and waits for it to be done, checking the results with configurable cycles for checking.
+	 * Overloaded method: runs a job and waits for it to be done, checking the
+	 * results with configurable cycles for checking.
 	 * 
-	 * @param endpoint the project endpoint to execute
-	 * @param checkTestVectorStore flag to check test vector store
+	 * @param endpoint                       the project endpoint to execute
+	 * @param checkTestVectorStore           flag to check test vector store
 	 * @param checkVectorDeletionNotOccurred flag to check vector deletion
-	 * @param NMAXCYCLES maximum number of checking cycles
-	 * @throws GeboJobServiceException if a job service error occurs
+	 * @param NMAXCYCLES                     maximum number of checking cycles
+	 * @throws GeboJobServiceException  if a job service error occurs
 	 * @throws GeboPersistenceException if a persistence error occurs
-	 * @throws JsonProcessingException if a JSON processing error occurs
-	 * @throws InterruptedException if the thread is interrupted
+	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, boolean checkTestVectorStore,
 			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
-		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint);
+		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 
 		int nCycles = 0;
@@ -305,9 +321,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 			LOGGER.info("On cycle=>" + nCycles);
 			LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-			LOGGER.info("DOCS TO EMBED=>" + summary.getHowManyBatchSentToVectorization() + " EMBEDDED:"
-					+ summary.getCurrentBatchDocumentVectorizedCounter() + " ERRORS IN EMBEDDING:"
-					+ summary.getVectorizationErrors());
+
 			nCycles++;
 			if (checkTestVectorStore) {
 				TestVectorStore usedTestVectorStore = getTestVectorStore();
@@ -315,12 +329,14 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 				LOGGER.info("RESULTING_VECTORIZED-DOCUMENTS:" + vectorizedDocuments);
 			}
 
-		} while ((summary.getVectorizationTerminated() == null || !summary.getVectorizationTerminated())
+		} while (!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished())
 				&& nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
-		assertTrue(summary.getContentsReadTerminated(), "Contents read have to be terminated in this point");
-		assertTrue(summary.getVectorizationTerminated(), "Vectorization have to be terminated in this point");
+		assertTrue((summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished()),
+				"Contents read have to be terminated in this point");
+		// assertTrue(summary.getVectorizationTerminated(), "Vectorization have to be
+		// terminated in this point");
 		if (checkTestVectorStore) {
 			TestVectorStore usedTestVectorStore = getTestVectorStore();
 

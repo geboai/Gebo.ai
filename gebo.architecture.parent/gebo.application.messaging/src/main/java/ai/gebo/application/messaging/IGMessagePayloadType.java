@@ -12,6 +12,7 @@
 
 package ai.gebo.application.messaging;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -21,7 +22,7 @@ import java.util.Date;
  * Implementations of this interface should provide a unique identifier for 
  * the payload and the timestamp when the payload was created.
  */
-public interface IGMessagePayloadType {
+public interface IGMessagePayloadType extends Serializable{
     
     /**
      * Retrieve the unique identifier for the payload.

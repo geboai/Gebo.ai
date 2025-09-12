@@ -57,6 +57,7 @@ import { GeboAIDeepseekChatModelAdminComponent } from "../gebo-ai-models-admin/g
 import { GeboAIOauth2RegistrationComponent } from "../gebo-ai-oauth2-admin/gebo-ai-oauth2-registration.component";
 import { GeboAIAzureOpenAIChatModelAdminComponent } from "../gebo-ai-models-admin/gebo-ai-azure-openai-chatmodel-admin.component";
 import { GeboAIAzureOpenAIEmbedModelAdminComponent } from "../gebo-ai-models-admin/gebo-ai-azure-openai-embedmodel-admin.component";
+import { GeboAIGraphRagExtractionConfigComponent } from "../gebo-graph-rag-extraction-config-admin/graph-rag-extraction-config.component";
 
 /**
  * @Component GeboAiEntityEditingLauncherComponent
@@ -253,6 +254,8 @@ export class GeboAiEntityEditingLauncherComponent {
     geboAIOauth2RegistrationComponent = GeboAIOauth2RegistrationComponent;
     azureOpenAIChatModelComponent = GeboAIAzureOpenAIChatModelAdminComponent;
     azureOpenAIEmbeddingModelComponent = GeboAIAzureOpenAIEmbedModelAdminComponent;
+
+    geboGraphRagExtractionConfigComponent=GeboAIGraphRagExtractionConfigComponent;
 
     /**
      * Constructor for the GeboAiEntityEditingLauncherComponent

@@ -15,6 +15,6 @@ import { PromptTemplateResponse } from './promptTemplateResponse';
 export interface OperationStatusPromptTemplateResponse { 
     result?: PromptTemplateResponse;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

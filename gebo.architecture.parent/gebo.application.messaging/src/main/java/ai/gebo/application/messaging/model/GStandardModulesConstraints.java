@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.application.messaging.model;
 
@@ -41,6 +38,11 @@ public class GStandardModulesConstraints {
 	public static final String SCHEDULER_MODULE = "scheduler-module";
 	public static final String INTEGRATION_MODULE = "integration-module";
 	public static final String SCHEDULER_COMPONENT = "scheduler-component";
+	public static final String TOKENIZER_MODULE = "tokenizer-module";
+	public static final String TOKENIZER_COMPONENT = "tokenizer-component";
+
+	public static final String KNOWLEDGE_GRAPH_MODULE = "knowledge-graph-module";
+	public static final String KNOWLEDGE_GRAPH_COMPONENT = "knowledge-graph-component";
 
 	// Constants for component names
 	public static final String RESOURCES_DISPOSE_COMPONENT = "resources-dispose-component";

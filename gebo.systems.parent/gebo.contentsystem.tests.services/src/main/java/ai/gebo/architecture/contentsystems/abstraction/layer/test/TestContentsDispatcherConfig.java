@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.contentsystems.abstraction.layer.test;
 
@@ -18,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceSnapshotRepository;
@@ -26,46 +24,52 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
 
 /**
- * Configuration class for the test content dispatcher system.
- * AI generated comments
+ * Configuration class for the test content dispatcher system. AI generated
+ * comments
  * 
- * This class extends the SingletonBuilder to create a properly configured 
- * GIOCModuleContentsDispatcher for test content management systems and project endpoints.
- * It integrates with Spring's dependency injection framework to provide 
- * a singleton instance of the content dispatcher.
+ * This class extends the SingletonBuilder to create a properly configured
+ * GIOCModuleContentsDispatcher for test content management systems and project
+ * endpoints. It integrates with Spring's dependency injection framework to
+ * provide a singleton instance of the content dispatcher.
  */
 @Configuration
-public class TestContentsDispatcherConfig extends SingletonBuilder<TestContentManagementSystem, TestProjectEndpoint>{
+public class TestContentsDispatcherConfig extends SingletonBuilder<TestContentManagementSystem, TestProjectEndpoint> {
 
-    /**
-     * Constructor that initializes the TestContentsDispatcherConfig with all required dependencies.
-     * 
-     * @param handler The implementation of the test content system handler
-     * @param broker Message broker for content-related communication
-     * @param consumerFactory Factory for creating content consumers
-     * @param evaluator Evaluator for content dispatching decisions
-     * @param mapperFactory Factory for document reference enricher maps
-     * @param docSnapshotRepo Repository for document reference snapshots
-     * @param config Configuration for the content systems layer
-     * @param documentsRepo Repository for document references
-     * @param virtualFolderRepo Repository for virtual folders
-     */
-	public TestContentsDispatcherConfig(
-			TestContentSystemHandlerImpl handler,
-			IGMessageBroker broker, IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo, ContentSystemsLayerConfiguration config, DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory,docSnapshotRepo, config, documentsRepo, virtualFolderRepo);
-		
-	}
-	
 	/**
-	 * Provides a singleton instance of the GIOCModuleContentsDispatcher configured for test environments.
-	 * This bean is qualified with "testContentsDispatcher" for specific injection.
+	 * Constructor that initializes the TestContentsDispatcherConfig with all
+	 * required dependencies.
 	 * 
-	 * @return A configured GIOCModuleContentsDispatcher for handling test content management systems and project endpoints
+	 * @param handler           The implementation of the test content system
+	 *                          handler
+	 * @param broker            Message broker for content-related communication
+	 * @param consumerFactory   Factory for creating content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enricher maps
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for the content systems layer
+	 * @param documentsRepo     Repository for document references
+	 * @param virtualFolderRepo Repository for virtual folders
+	 * @param workflowRouter
+	 */
+	public TestContentsDispatcherConfig(TestContentSystemHandlerImpl handler, IGMessageBroker broker,
+			IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
+				virtualFolderRepo, workflowRouter);
+
+	}
+
+	/**
+	 * Provides a singleton instance of the GIOCModuleContentsDispatcher configured
+	 * for test environments. This bean is qualified with "testContentsDispatcher"
+	 * for specific injection.
+	 * 
+	 * @return A configured GIOCModuleContentsDispatcher for handling test content
+	 *         management systems and project endpoints
 	 */
 	@Bean
 	@Scope("singleton")

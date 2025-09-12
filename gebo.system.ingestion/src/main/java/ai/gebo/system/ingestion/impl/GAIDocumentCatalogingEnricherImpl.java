@@ -262,6 +262,7 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	 * @param infos    The metadata header information to add
 	 * @return The enriched document
 	 */
+	@Override
 	public Document enrich(Document document, MetaDataHeaderInfos infos) {
 		StringBuffer newContent = new StringBuffer();
 		if (document.getMetadata() != null && document.getMetadata().containsKey(DocumentMetaInfos.TITLE)) {

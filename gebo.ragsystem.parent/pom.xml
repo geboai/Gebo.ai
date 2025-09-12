@@ -18,6 +18,7 @@
 		<module>gebo.ragsystem.starter</module>
 
 		<module>gebo.ragsystem.vectorstores.test.services</module>
+		<module>gebo.ragsystem.content.graphrag_processor</module>
 	</modules>
 	<dependencies>
 		<dependency>

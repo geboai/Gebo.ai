@@ -229,5 +229,9 @@ public class GUploadsContentManagementSystemHandlerImpl
 
 		return GStandardModulesConstraints.UPLOADS_MODULE;
 	}
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
 
+		return true;
+	}
 }

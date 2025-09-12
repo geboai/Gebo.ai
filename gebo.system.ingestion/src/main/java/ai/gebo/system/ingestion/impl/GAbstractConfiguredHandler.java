@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.system.ingestion.impl;
 
@@ -39,12 +36,13 @@ import ai.gebo.system.ingestion.model.IngestionHandlerConfig;
 import ai.gebo.system.ingestion.model.SpecialFile;
 
 /**
- * Abstract base class for document ingestion handlers that are configured via database.
- * AI generated comments
+ * Abstract base class for document ingestion handlers that are configured via
+ * database. AI generated comments
  * 
- * This class implements IGSpecializedDocumentReferenceIngestionHandler interface and provides
- * common functionality for specialized document handlers, including configuration management,
- * file type recognition, and metadata processing.
+ * This class implements IGSpecializedDocumentReferenceIngestionHandler
+ * interface and provides common functionality for specialized document
+ * handlers, including configuration management, file type recognition, and
+ * metadata processing.
  */
 public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumentReferenceIngestionHandler {
 	/** Configuration for this handler */
@@ -59,7 +57,8 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 	protected Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	/**
-	 * Constructor that initializes the handler with configuration from the database.
+	 * Constructor that initializes the handler with configuration from the
+	 * database.
 	 * 
 	 * @param dao The data access object used to retrieve the handler configuration
 	 * @throws IllegalStateException if the handler configuration is not found
@@ -151,7 +150,7 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 	 * Enriches metadata with file type information.
 	 * 
 	 * @param reference The document reference
-	 * @param meta The metadata map to enrich
+	 * @param meta      The metadata map to enrich
 	 */
 	protected void enrichMetaData(GDocumentReference reference, Map<String, Object> meta) {
 		IngestionFileType fileType = getFileType(reference);
@@ -186,12 +185,12 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 	/**
 	 * Processes an input stream containing text-only content into a GeboDocument.
 	 * 
-	 * @param reference The document reference
-	 * @param is The input stream containing the document content
+	 * @param reference      The document reference
+	 * @param is             The input stream containing the document content
 	 * @param manageMetainfo Metadata map for the document
 	 * @return A GeboDocument containing the processed text content
 	 * @throws GeboIngestionException If there is an error during ingestion
-	 * @throws IOException If there is an I/O error
+	 * @throws IOException            If there is an I/O error
 	 */
 	@Override
 	public GeboDocument handleTextOnlyContent(GDocumentReference reference, InputStream is,
@@ -201,18 +200,18 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 		Stream<Document> stream = handleContent(reference, is, manageMetainfo);
 		if (stream != null) {
 			stream.forEach(x -> {
-				if (x.isText())
-					sb.append(x.getText());
+				if (x.isText() && x.getText() != null && x.getText().trim().length() > 0)
+					doc.getTexts().add(GeboTextDocumentFragment.plainText(x.getText()));
 			});
 		}
-		doc.getTexts().add(GeboTextDocumentFragment.plainText(sb.toString()));
+
 		return doc;
 	}
 
 	/**
 	 * Converts a document reference to a GeboDocument with metadata.
 	 * 
-	 * @param reference The document reference
+	 * @param reference      The document reference
 	 * @param manageMetainfo Metadata map for the document
 	 * @return A new GeboDocument with basic properties set
 	 */
@@ -234,16 +233,19 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 	/**
 	 * Processes a text file in a specific internal format.
 	 * 
-	 * @param reference The document reference
-	 * @param uniqueFragmentContentType The content type to assign to the text fragment
-	 * @param is The input stream containing the document content
-	 * @param manageMetainfo Metadata map for the document
+	 * @param reference                 The document reference
+	 * @param uniqueFragmentContentType The content type to assign to the text
+	 *                                  fragment
+	 * @param is                        The input stream containing the document
+	 *                                  content
+	 * @param manageMetainfo            Metadata map for the document
 	 * @return A GeboDocument containing the processed text content
 	 * @throws GeboIngestionException If there is an error during ingestion
-	 * @throws IOException If there is an I/O error
+	 * @throws IOException            If there is an I/O error
 	 */
-	protected GeboDocument internalTextFileFormatTextOnlyContent(GDocumentReference reference, String uniqueFragmentContentType,
-			InputStream is, Map<String, Object> manageMetainfo) throws GeboIngestionException, IOException {
+	protected GeboDocument internalTextFileFormatTextOnlyContent(GDocumentReference reference,
+			String uniqueFragmentContentType, InputStream is, Map<String, Object> manageMetainfo)
+			throws GeboIngestionException, IOException {
 		GeboDocument doc = toDocument(reference, manageMetainfo);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		FileCopyUtils.copy(is, bos);

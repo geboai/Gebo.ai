@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.googledrive.handlers.impl;
 
@@ -18,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint;
 import ai.gebo.googledrive.handlers.GGoogleDriveSystem;
@@ -29,40 +27,46 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
 
 /**
- * AI generated comments
- * Configuration class responsible for setting up the Google Drive contents dispatcher.
- * This class extends the SingletonBuilder to create a dispatcher for handling
- * Google Drive system and project endpoint interactions.
+ * AI generated comments Configuration class responsible for setting up the
+ * Google Drive contents dispatcher. This class extends the SingletonBuilder to
+ * create a dispatcher for handling Google Drive system and project endpoint
+ * interactions.
  */
 @Configuration
 public class GGoogleDriveContentsDispatcherConfig
 		extends SingletonBuilder<GGoogleDriveSystem, GGoogleDriveProjectEndpoint> {
 
 	/**
-	 * Constructor that initializes the Google Drive contents dispatcher configuration.
+	 * Constructor that initializes the Google Drive contents dispatcher
+	 * configuration.
 	 * 
-	 * @param handler The Google Drive system content handler implementation
-	 * @param broker The message broker for dispatching events
-	 * @param consumerFactory Factory for creating content consumers
-	 * @param evaluator Evaluator for content dispatching decisions
-	 * @param mapperFactory Factory for document reference enricher maps
-	 * @param docSnapshotRepo Repository for document reference snapshots
-	 * @param config Configuration for the content systems layer
-	 * @param documentsRepo Repository for document references
+	 * @param handler           The Google Drive system content handler
+	 *                          implementation
+	 * @param broker            The message broker for dispatching events
+	 * @param consumerFactory   Factory for creating content consumers
+	 * @param evaluator         Evaluator for content dispatching decisions
+	 * @param mapperFactory     Factory for document reference enricher maps
+	 * @param docSnapshotRepo   Repository for document reference snapshots
+	 * @param config            Configuration for the content systems layer
+	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
+	 * @param workflowRouter
 	 */
 	public GGoogleDriveContentsDispatcherConfig(IGGoogleDriveSystemContentHandler handler, IGMessageBroker broker,
 			IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
-			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo, ContentSystemsLayerConfiguration config, DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory,docSnapshotRepo, config, documentsRepo, virtualFolderRepo);
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo,
+			IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo,
+				virtualFolderRepo, workflowRouter);
 
 	}
 
 	/**
-	 * Creates and returns a singleton instance of the Google Drive contents dispatcher.
+	 * Creates and returns a singleton instance of the Google Drive contents
+	 * dispatcher.
 	 * 
 	 * @return A configured GIOCModuleContentsDispatcher for Google Drive
 	 */
