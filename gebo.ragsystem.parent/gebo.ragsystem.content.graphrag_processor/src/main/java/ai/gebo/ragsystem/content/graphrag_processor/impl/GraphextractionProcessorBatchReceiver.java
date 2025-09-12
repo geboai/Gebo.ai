@@ -34,7 +34,7 @@ import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent;
+import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
@@ -55,7 +55,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 	private final IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
 
-	class ProcessingStatusUpdater implements Consumer<IKnowledgeGraphPersistenceService.KnowledgeExtractionEvent> {
+	class ProcessingStatusUpdater implements Consumer<KnowledgeExtractionEvent> {
 
 		private String jobId;
 		private String workflowType;

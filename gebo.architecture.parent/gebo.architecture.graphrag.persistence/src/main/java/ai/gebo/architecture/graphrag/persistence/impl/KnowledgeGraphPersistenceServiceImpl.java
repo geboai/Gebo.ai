@@ -11,7 +11,9 @@ import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
+import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
@@ -20,8 +22,12 @@ import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceServi
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
+import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasInDocumentChunk;
+import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityInDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityObject;
+import ai.gebo.architecture.graphrag.persistence.model.GraphEventAliasInDocumentChunk;
+import ai.gebo.architecture.graphrag.persistence.model.GraphEventAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventInDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphRelationInDocumentChunk;
@@ -31,8 +37,12 @@ import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
+import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasInDocumentChunkRepository;
+import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityObjectRepository;
+import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasInDocumentChunkRepository;
+import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
@@ -42,16 +52,26 @@ import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
-public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPersistenceService,IKnowledgeGraphSearchService {
-	 final GraphDocumentReferenceRepository docReferenceRepository;
-	 final GraphDocumentChunkRepository docChunkRepository;
-	 final GraphEntityObjectRepository entityObjectRepository;
-	 final GraphEntityInDocumentChunkRepository entityInChunkRepository;
-	 final GraphEventObjectRepository eventObjectRepository;
-	 final GraphEventInDocumentChunkRepository eventInChunkRepository;
-	 final GraphRelationObjectRepository relationObjectRepository;
-	 final GraphRelationInDocumentChunkRepository relationInChunkRepository;
+
+public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersistenceService
+		implements IKnowledgeGraphPersistenceService {
+
+	public KnowledgeGraphPersistenceServiceImpl(GraphDocumentReferenceRepository docReferenceRepository,
+			GraphDocumentChunkRepository docChunkRepository, GraphEntityObjectRepository entityObjectRepository,
+			GraphEntityInDocumentChunkRepository entityInChunkRepository,
+			GraphEventObjectRepository eventObjectRepository,
+			GraphEventInDocumentChunkRepository eventInChunkRepository,
+			GraphRelationObjectRepository relationObjectRepository,
+			GraphRelationInDocumentChunkRepository relationInChunkRepository,
+			GraphEventAliasObjectRepository eventAliasRepository,
+			GraphEntityAliasObjectRepository entityAliasRepository,
+			GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository,
+			GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository) {
+		super(docReferenceRepository, docChunkRepository, entityObjectRepository, entityInChunkRepository,
+				eventObjectRepository, eventInChunkRepository, relationObjectRepository, relationInChunkRepository,
+				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository);
+
+	}
 
 	@Override
 	public void knowledgeGraphDelete(GDocumentReference documentReference) {
@@ -75,16 +95,17 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		this.docReferenceRepository.save(ref);
 		final Map<String, Object> cache = new HashMap<String, Object>();
 		stream.forEach(entry -> {
-			KnowledgeExtractionEvent event = saveExtraction(entry, documentReference, cache);
+			KnowledgeExtractionEvent event = saveExtraction(entry, ref, documentReference, cache);
 			if (event != null)
 				processingUpdatesConsumer.accept(event);
 		});
 	}
 
-	private KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction,
+	private KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction,GraphDocumentReference docRef,
 			GDocumentReference documentReference, Map<String, Object> cache) {
 		KnowledgeExtractionEvent outData = null;
 		GraphDocumentChunk ref = new GraphDocumentChunk();
+		ref.setChunkOf(docRef);
 		ref.setId(extraction.getDocumentChunk().getId());
 		ref.setDocumentCode(documentReference.getCode());
 		ref.setKnowledgeBaseCode(documentReference.getRootKnowledgebaseCode());
@@ -101,8 +122,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		docChunkRepository.save(ref);
 		List<EntityObject> entities = extraction.getExtraction().getEntities();
 		for (EntityObject entity : entities) {
-			String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
-					+ entity.getName().toUpperCase();
+
 			// check eventual cache
 			GraphEntityObject hit = findMatchingEntity(entity, cache, true);
 			GraphEntityInDocumentChunk entityInChunk = new GraphEntityInDocumentChunk();
@@ -116,8 +136,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		}
 		List<EventObject> events = extraction.getExtraction().getEvents();
 		for (EventObject event : events) {
-			String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
-					+ event.getTitle().toUpperCase();
+
 			GraphEventObject hit = findMatchingEvent(event, cache, true);
 			GraphEventInDocumentChunk eventInChunk = new GraphEventInDocumentChunk();
 			eventInChunk.setId(UUID.randomUUID().toString());
@@ -140,12 +159,7 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 		}
 		List<RelationObject> relations = extraction.getExtraction().getRelations();
 		for (RelationObject relation : relations) {
-			GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, true);
-			GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache, true);
-			if (fromEntity == null || toEntity == null)
-				continue;
-			String key = relation.getClass().getName() + "-" + relation.getType().toUpperCase() + "-"
-					+ fromEntity.getId() + "-" + toEntity.getId();
+
 			GraphRelationObject hit = findMatchingRelation(relation, cache, true);
 			GraphRelationInDocumentChunk relationtInChunk = new GraphRelationInDocumentChunk();
 			relationtInChunk.setId(UUID.randomUUID().toString());
@@ -156,112 +170,30 @@ public class KnowledgeGraphPersistenceServiceImpl implements IKnowledgeGraphPers
 			relationtInChunk.setType(relation.getType());
 			relationInChunkRepository.save(relationtInChunk);
 		}
+		List<EntityAliasObject> entityAliases = extraction.getExtraction().getEntityAliases();
+		for (EntityAliasObject entityAliasObject : entityAliases) {
+			GraphEntityAliasObject alias = findMatchingEntityAlias(entityAliasObject, cache, true);
+			GraphEntityAliasInDocumentChunk aliasInChunk = new GraphEntityAliasInDocumentChunk();
+			aliasInChunk.setId(UUID.randomUUID().toString());
+			aliasInChunk.setDocumentChunk(ref);
+			aliasInChunk.setDiscoveredEntityAlias(alias);
+			aliasInChunk.setConfidence(entityAliasObject.getConfidence());
+			aliasInChunk.setLongDescription(alias.getLongDescription());
+			aliasInChunk.setType(alias.getType());
+			entityAliasChunkRepository.save(aliasInChunk);
+		}
+		List<EventAliasObject> eventAliases = extraction.getExtraction().getEventAliases();
+		for (EventAliasObject entityAliasObject : eventAliases) {
+			GraphEventAliasObject alias = findMatchingEventAlias(entityAliasObject, cache, true);
+			GraphEventAliasInDocumentChunk aliasInChunk = new GraphEventAliasInDocumentChunk();
+			aliasInChunk.setId(UUID.randomUUID().toString());
+			aliasInChunk.setDocumentChunk(ref);
+			aliasInChunk.setDiscoveredEventAlias(alias);
+			aliasInChunk.setConfidence(entityAliasObject.getConfidence());
+			aliasInChunk.setLongDescription(alias.getLongDescription());
+			aliasInChunk.setType(alias.getType());
+			eventAliasChunkRepository.save(aliasInChunk);
+		}
 		return outData;
 	}
-
-	 GraphEntityObject findMatchingEntity(EntityObject entity, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		String key = entity.getClass().getName() + "-" + entity.getType().toUpperCase() + "-"
-				+ entity.getName().toUpperCase();
-		// check eventual cache
-		GraphEntityObject hit = (GraphEntityObject) cache.get(key);
-		if (hit == null) {
-			// retrieve from existing entities
-			List<GraphEntityObject> matches = entityObjectRepository.findByTypeAndName(entity.getType().toUpperCase(),
-					entity.getName().toUpperCase());
-			// if found load in cache and consider it
-			if (matches != null && !matches.isEmpty()) {
-				hit = matches.get(0);
-				cache.put(key, hit);
-			}
-			// if not found insert in graph db
-			if (hit == null && insertIfNotFound) {
-				hit = new GraphEntityObject();
-				hit.setId(UUID.randomUUID().toString());
-				hit.setType(entity.getType().toUpperCase());
-				hit.setName(entity.getName().toUpperCase());
-				hit.setLongDescription(entity.getLongDescription());
-				hit.setAttributes(entity.getAttributes());
-				entityObjectRepository.save(hit);
-				cache.put(key, hit);
-			}
-		}
-		return hit;
-	}
-
-	 GraphEventObject findMatchingEvent(EventObject event, Map<String, Object> cache, boolean insertIfNotFound) {
-		String key = event.getClass().getName() + "-" + event.getType().toUpperCase() + "-"
-				+ event.getTitle().toUpperCase();
-		GraphEventObject hit = (GraphEventObject) cache.get(key);
-		if (hit == null) {
-			// retrieve from existing entities
-			List<GraphEventObject> matches = eventObjectRepository.findByTypeAndTitle(event.getType().toUpperCase(),
-					event.getTitle().toUpperCase());
-			// if found load in cache and consider it
-			if (matches != null && !matches.isEmpty()) {
-				hit = matches.get(0);
-				cache.put(key, hit);
-			}
-			// if not found insert in graph db
-			if (hit == null && insertIfNotFound) {
-				hit = new GraphEventObject();
-				hit.setId(UUID.randomUUID().toString());
-				hit.setType(event.getType().toUpperCase());
-				hit.setTitle(event.getTitle().toUpperCase());
-				hit.setLongDescription(event.getLongDescription());
-				hit.setAttributes(event.getAttributes());
-				eventObjectRepository.save(hit);
-				cache.put(key, hit);
-			}
-		}
-
-		return hit;
-	}
-
-	 GraphRelationObject findMatchingRelation(RelationObject relation, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		GraphEntityObject fromEntity = findMatchingEntity(relation.getFromEntity(), cache, insertIfNotFound);
-		GraphEntityObject toEntity = findMatchingEntity(relation.getToEntity(), cache, insertIfNotFound);
-		if (fromEntity == null || toEntity == null)
-			return null;
-		String key = relation.getClass().getName() + "-" + relation.getType().toUpperCase() + "-" + fromEntity.getId()
-				+ "-" + toEntity.getId();
-		GraphRelationObject hit = (GraphRelationObject) cache.get(key);
-		if (hit == null) {
-			// retrieve from existing entities
-			List<GraphRelationObject> matches = relationObjectRepository.findByTypeAndFromEntityIdAndToEntityId(
-					relation.getType().toUpperCase(), fromEntity.getId(), toEntity.getId());
-			// if found load in cache and consider it
-			if (matches != null && !matches.isEmpty()) {
-				hit = matches.get(0);
-				cache.put(key, hit);
-			}
-			// if not found insert in graph db
-			if (hit == null && insertIfNotFound) {
-				hit = new GraphRelationObject();
-				hit.setId(UUID.randomUUID().toString());
-				hit.setType(relation.getType().toUpperCase());
-				hit.setFromEntity(fromEntity);
-				hit.setToEntity(toEntity);
-				hit.setLongDescription(relation.getLongDescription());
-				hit.setAttributes(relation.getAttributes());
-				relationObjectRepository.save(hit);
-				cache.put(key, hit);
-			}
-		}
-		return hit;
-	}
-
-	 @Override
-	 public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK,
-			List<String> knowledgeBasesCodes) {
-		// TODO Auto-generated method stub
-		return null;
-	 }
-
-	 @Override
-	 public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK) {
-		// TODO Auto-generated method stub
-		return null;
-	 }
 }
