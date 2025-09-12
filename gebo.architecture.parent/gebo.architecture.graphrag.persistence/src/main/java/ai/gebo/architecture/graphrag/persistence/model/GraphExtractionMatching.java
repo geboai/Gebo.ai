@@ -1,10 +1,8 @@
 package ai.gebo.architecture.graphrag.persistence.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 @AllArgsConstructor

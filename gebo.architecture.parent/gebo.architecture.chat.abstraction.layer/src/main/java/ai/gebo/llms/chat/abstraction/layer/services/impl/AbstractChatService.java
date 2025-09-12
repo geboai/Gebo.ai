@@ -20,7 +20,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.AbstractMessage;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
 import org.springframework.ai.chat.messages.Message;
@@ -42,9 +41,6 @@ import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
-import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
-import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
-import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -87,8 +83,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Autowired
 	protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
-	@Autowired
-	protected IGraphDataExtractionService graphDataExtractionService;//graph data extraction service
+	
 
 	/**
 	 * Inner class representing a system message containing document data.
@@ -313,7 +308,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final Prompt prompt, final KBContext context, final GeboChatRequest request,
 			final GeboChatResponse response, final GUserChatContext userContext, final List<ChatInteractions> messages,
 			final List<GResponseDocumentRef> docrefs, List<Document> docs) throws LLMConfigException {
-		LLMExtractionResult graphData = graphDataExtractionService.extract(request.getQuery(), new GraphRagExtractionConfig());
 		ChatClient client = configurableChatModel.getChatClient();
 		final Map<String, Object> toolsContext = ToolCallbackDeclarationUtil.newToolContextEnvironment(context);
 		try {

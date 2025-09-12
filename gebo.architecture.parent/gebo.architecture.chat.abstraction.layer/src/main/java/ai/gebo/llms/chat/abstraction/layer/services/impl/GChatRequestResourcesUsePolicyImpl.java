@@ -10,7 +10,9 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +24,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
+import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions;
 import ai.gebo.llms.abstraction.layer.model.RagQueryOptions.CompletenessLevel;
@@ -69,6 +75,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 	@Autowired
 	IGModelsLibraryDao modelsLibraryDao;
+	@Autowired
+	IKnowledgeGraphSearchService knowledgeGraphSearch;
 
 	protected JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
@@ -217,6 +225,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		RagQueryOptions ragQueryOptions = null;
 		ragQueryOptions = new RagQueryOptions();
 		ragQueryOptions.setMaxTokens(availableTokensForDocuments);
+		int topK = chatProfile.getTopK() != null ? chatProfile.getTopK() : ragResourcesConfig.getDefaultTopK();
 		ragQueryOptions.setSimilarityThreashold(this.ragResourcesConfig.getDefaultSimilarityThreshold());
 		if (chatProfile.getSimilaritySearchThreshold() != null) {
 			if (chatProfile.getSimilaritySearchThreshold() > 0.0 && chatProfile.getSimilaritySearchThreshold() < 1.00) {
@@ -226,14 +235,16 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 						+ chatProfile.getSimilaritySearchThreshold() + " for code=" + chatProfile.getCode());
 			}
 		}
-		if (request.getForcedRequestDocuments() != null && !request.getForcedRequestDocuments().isEmpty()) {
+		boolean forcedChatWithDocuments = request.getForcedRequestDocuments() != null
+				&& !request.getForcedRequestDocuments().isEmpty();
+		if (forcedChatWithDocuments) {
 			// CHAT WITH DOCUMENTS OPTIONS
 
 			ragQueryOptions.setCompleteness(CompletenessLevel.FULL_DOCUMENTS);
 			extractedDocuments = ragDocumentsCachedDao.chatWithDocumentsSearch(request.getQuery(), ragQueryOptions,
 					request.getForcedRequestDocuments(), visibleKnowledgeBaseCodes, embeddingHandler, user);
 		} else {
-			int topK = chatProfile.getTopK() != null ? chatProfile.getTopK() : ragResourcesConfig.getDefaultTopK();
+
 			ragQueryOptions.setTopK(topK);
 			ragQueryOptions.setCompleteness(CompletenessLevel.MAX_TOKENS);
 			if (chatProfile.getDisableMultiHopRag() != null && chatProfile.getDisableMultiHopRag()) {
@@ -245,9 +256,23 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 						chatProfile.getOtherSearchSimilarityThreshold(), user);
 			}
 		}
+		extractedDocuments.getDocumentItems().forEach(x -> x.getFragments().forEach(y -> {
+			y.setOrigin("SEMANTIC-RAG");
+		}));
 		lrequest.setDocuments(new TokenLimitedContent<RagDocumentsCachedDaoResult>());
 		lrequest.getDocuments().setValue(extractedDocuments);
 		lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
+		if (!forcedChatWithDocuments) {
+			// Run graph rag after semantic rag to provide context on more
+			// factual/entity/events based approach
+			if (availableTokensForDocuments > lrequest.getDocuments().getNToken()
+					&& this.knowledgeGraphSearch.isConfigured()) {
+				List<KnowledgeGraphSearchResult> graphRagResults = this.knowledgeGraphSearch
+						.knowledgeGraphSearch(request.getQuery(), visibleKnowledgeBaseCodes, topK);
+				mergeGraphRagResults(lrequest.getDocuments(), graphRagResults, availableTokensForDocuments);
+			}
+			lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
+		}
 		stats = lrequest.getStats();
 		if (stats.availableNTokens < toolsTokensSpaceReservation) {
 			// now check real documents size allocations and recalculate
@@ -260,6 +285,40 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			LOGGER.debug("End manageRequest(.....) stats=>" + logObject(stats));
 		}
 		return lrequest;
+	}
+
+	private void mergeGraphRagResults(TokenLimitedContent<RagDocumentsCachedDaoResult> documents,
+			List<KnowledgeGraphSearchResult> graphRagResults, int availableTokensForDocuments) {
+		final Map<String, List<RagDocumentFragment>> fragments = new HashMap<String, List<RagDocumentFragment>>();
+		final Map<String, RagDocumentReferenceItem> alreadyExisting = new HashMap<String, RagDocumentReferenceItem>();
+		documents.getValue().getDocumentItems().forEach(x -> {
+			alreadyExisting.put(x.getCode(), x);
+		});
+		graphRagResults.stream().forEach(x -> {
+			String documentCode = x.getExtractedDocumentMetaData().getCode();
+			if (documentCode == null)
+				return;
+			if (!fragments.containsKey(documentCode)) {
+				fragments.put(documentCode, new ArrayList<RagDocumentFragment>());
+			}
+			RagDocumentFragment fragment = new RagDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
+			fragment.setOrigin("GRAPH-RAG");
+			RagDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
+			boolean fragmentAlreadyFound = existingDoc != null && existingDoc.getFragments().stream()
+					.anyMatch(f -> f.getCode() != null && f.getCode().equals(fragment.getCode()));
+			if ((!fragmentAlreadyFound)
+					&& (documents.getNToken() + fragment.getNTokens()) <= availableTokensForDocuments) {
+				if (existingDoc == null) {
+					existingDoc = new RagDocumentReferenceItem(x.getExtractedDocumentMetaData());
+					alreadyExisting.put(documentCode, existingDoc);
+					documents.getValue().getDocumentItems().add(existingDoc);
+				}
+				existingDoc.getFragments().add(fragment);
+			}
+			documents.getValue().recalculateSize();
+
+		});
+
 	}
 
 	/**

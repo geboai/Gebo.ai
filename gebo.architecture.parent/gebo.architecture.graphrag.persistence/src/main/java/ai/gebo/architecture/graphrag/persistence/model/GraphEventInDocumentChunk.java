@@ -2,7 +2,6 @@ package ai.gebo.architecture.graphrag.persistence.model;
 
 import java.util.List;
 
-import org.springframework.data.neo4j.core.schema.CompositeProperty;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 

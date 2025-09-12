@@ -1,5 +1,7 @@
 package ai.gebo.architecture.graphrag.extraction.services;
 
+import java.util.List;
+
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
@@ -14,7 +16,10 @@ public interface IGraphDataExtractionService {
 	public boolean isConfigured();
 
 	public LLMExtractionResult extract(Document document, GDocumentReference docreference) throws LLMConfigException;
+	
 
-	public LLMExtractionResult extract(String text, GraphRagExtractionConfig configuration) throws LLMConfigException;
+	public LLMExtractionResult extract(String query, GraphRagExtractionConfig configuration) throws LLMConfigException;
+
+	public LLMExtractionResult extract(String query, List<String> knowledgeBases) throws LLMConfigException;
 
 }

@@ -258,5 +258,8 @@ public class AbstractGraphPersistenceService {
 		out = new GraphExtractionMatching(entities, events, relations, entityAliases, eventAliases);
 		return out;
 	}
-
+	
+	public boolean isConfigured() {
+		return true;
+	}
 }

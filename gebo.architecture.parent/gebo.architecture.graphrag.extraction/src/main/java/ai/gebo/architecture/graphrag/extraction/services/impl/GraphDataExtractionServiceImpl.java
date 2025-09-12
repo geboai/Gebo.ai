@@ -208,4 +208,22 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		return true;
 	}
 
+	@Override
+	public LLMExtractionResult extract(String query, List<String> knowledgeBases) throws LLMConfigException {
+		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig defaultLevelConfig = null;
+		List<GraphRagExtractionConfig> defaultConfigs = this.configRepository.findByDefaultConfiguration(Boolean.TRUE);
+		if (!defaultConfigs.isEmpty()) {
+			defaultLevelConfig = defaultConfigs.get(0);
+		}
+		GraphRagExtractionConfig  joinConfiguration=joinConfigurations(mainConfiguration,defaultLevelConfig,knowledgeBases);
+		return extract(query, joinConfiguration);
+	}
+
+	private GraphRagExtractionConfig joinConfigurations(GraphRagExtractionConfig mainConfiguration,
+			GraphRagExtractionConfig defaultLevelConfig, List<String> knowledgeBases) {
+		//TODO: implement logics
+		return mainConfiguration;	
+	}
+
 }

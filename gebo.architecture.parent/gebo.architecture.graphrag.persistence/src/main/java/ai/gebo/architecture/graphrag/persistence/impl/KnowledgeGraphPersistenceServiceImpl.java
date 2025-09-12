@@ -9,17 +9,14 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
-import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.extraction.model.TimeSegment;
 import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphPersistenceService;
-import ai.gebo.architecture.graphrag.persistence.IKnowledgeGraphSearchService;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasInDocumentChunk;
@@ -34,7 +31,6 @@ import ai.gebo.architecture.graphrag.persistence.model.GraphRelationInDocumentCh
 import ai.gebo.architecture.graphrag.persistence.model.GraphRelationObject;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
-import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasInDocumentChunkRepository;
@@ -49,7 +45,6 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDoc
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
-import lombok.AllArgsConstructor;
 
 @Service
 
