@@ -210,6 +210,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		if (!handler.isEmpty()) {
 			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
 			summary.setWorkflowStatus(status);
+			
 		}
 		return summary;
 	}

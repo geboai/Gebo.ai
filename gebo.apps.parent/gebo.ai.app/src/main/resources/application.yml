@@ -33,11 +33,11 @@ ai.gebo.security:
     - registrationId: keycloakClient
       description: Keycloak Oauth2 test configuration
       provider: oauth2_generic
-      client: 
+      client:
         secret: ltxhyiESLC4FCKnPww6Ylc50HYEIf7Pg
         clientId: keycloakClient
         tenantId: default
-        scopes: 
+        scopes:
       configurationTypes: AUTHENTICATION
       providerConfig:
         provider: oauth2_generic
@@ -144,20 +144,29 @@ ai.gebo.vectorizator.config:
     useSenderThread: true
   vectorizatorReceiverConfig:
     poolCardinality: 2
-    flushThreshold: 10
+    flushThreshold: 6
     useSenderThread: true
-    timeout: 20000
+    timeout: 10000
+
+ai.gebo.graphrag.processor:
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  graphRagProcessorReceiverConfig:
+    poolCardinality: 2
+    flushThreshold: 6
+    useSenderThread: true
+    timeout: 10000
+
 ai.gebo.core.config:
   mongoDisposerConfig:
     poolCardinality: 1
     useSenderThread: true
-    flushThreshold: 10
-    timeout: 20000
+    flushThreshold: 6
+    timeout: 10000
   userMessagesReceiverConfig:
     poolCardinality: 1
     useSenderThread: true
     flushThreshold: 10
-    timeout: 20000
+    timeout: 10000
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

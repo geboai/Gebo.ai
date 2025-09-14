@@ -33,10 +33,10 @@ public class JobSummary implements Serializable {
 	private String description = null;
 	private String workflowType = null;
 	private String workflowId = null;
-
 	// Job timing information
 	private Date startDateTime = null;
 	private Date endDateTime = null;
 	private ComputedWorkflowResult workflowStatus = null;
+	
 
 }

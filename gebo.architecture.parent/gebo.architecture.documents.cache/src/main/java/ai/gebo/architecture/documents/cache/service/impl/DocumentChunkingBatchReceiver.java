@@ -17,6 +17,7 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
+import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesReceiverFactoryComponent;
@@ -49,17 +50,21 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 			}
 			data.setJobId(payload.getJobId());
 			ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
-			boolean processed = false;
+
+			DocumentChunkingResponse processed = null;
 			try {
 				data.setBatchDocumentsInput(1);
 				processed = chunkingService.prepareChunks(payload.getDocumentReference(), params.getSpecs(),
 						params.isEnrichWithMetaData());
-				if (processed) {
+				if (!processed.isEmpty()) {
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), payload, emitter);
 
 				}
+				data.setTokensProcessed(processed.getTotalTokensSize());
+				data.setChunksProcessed(processed.getTotalChunksNumber());
 				data.setBatchDocumentsProcessed(1);
+				data.setBatchSentToNextStep(1);
 			} catch (Throwable e) {
 				LOGGER.error("Fail to prepare & deliver chunks =>" + processed, e);
 				data.setBatchDocumentsProcessingErrors(1);

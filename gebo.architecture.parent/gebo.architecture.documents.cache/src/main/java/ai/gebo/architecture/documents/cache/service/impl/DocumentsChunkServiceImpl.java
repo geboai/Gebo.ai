@@ -147,7 +147,7 @@ public class DocumentsChunkServiceImpl
 					// disk in chunks without heavy memory use
 					// Start filling the chunkOperation to remain saved in mongodb for later use and
 					// next chunk calls
-					DocumentChunkOperation chunkOperation = new DocumentChunkOperation();
+					final DocumentChunkOperation chunkOperation = new DocumentChunkOperation();
 					chunkOperation.setEnrichWithMetaData(enrichWithMetaData);
 					chunkOperation.setChunkingSpecs(chunkingSpecs);
 					chunkOperation.setOriginalDocumentCode(document.getCode());
@@ -213,6 +213,12 @@ public class DocumentsChunkServiceImpl
 										response.setEmpty(false);
 										DocumentChunk chunk = DocumentChunk.ofText(document.getCode(),
 												_document.getText(), _document.getMetadata());
+										chunk.setBytesSize((long) bytesSize);
+										chunk.setTokensSize((long) tokensSize);
+										chunkOperation.setTotalBytesSize(
+												chunkOperation.getTotalBytesSize() + ((long) bytesSize));
+										chunkOperation.setTotalTokensSize(
+												chunkOperation.getTotalTokensSize() + ((long) tokensSize));
 										chunkOperation.getChunksList().add(chunk.getId());
 										Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME,
 												chunk.getId());
@@ -242,6 +248,9 @@ public class DocumentsChunkServiceImpl
 					if (!chunkOperation.getChunksList().isEmpty()) {
 						response.setId(chunkOperation.getId());
 						chunkOperation.setLastAccessed(new Date());
+						response.setTotalBytesSize(chunkOperation.getTotalBytesSize());
+						response.setTotalTokensSize(chunkOperation.getTotalTokensSize());
+						response.setTotalChunksNumber(chunkOperation.getChunksList().size());
 						repository.insert(chunkOperation);
 						int index = chunkOperation.getChunksList().indexOf(response.getCurrentChunk().getId());
 						if (chunkOperation.getChunksList().size() > index + 1) {
@@ -282,6 +291,9 @@ public class DocumentsChunkServiceImpl
 			DocumentChunk chunk = objectMapper.readValue(fileToRead.toFile(), DocumentChunk.class);
 			response.setCurrentChunk(chunk);
 			response.setId(chunkRequestId);
+			response.setTotalChunksNumber(operation.getChunksList().size());
+			response.setTotalBytesSize(operation.getTotalBytesSize());
+			response.setTotalTokensSize(operation.getTotalTokensSize());
 			if (index < operation.getChunksList().size() - 1) {
 				String nextChunk = operation.getChunksList().get(index + 1);
 				response.setNextChunkId(nextChunk);
@@ -321,9 +333,9 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public boolean prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
-			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException,
-			GeboContentHandlerSystemException, GeboIngestionException {
+	public DocumentChunkingResponse prepareChunks(GDocumentReference document,
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData) throws DocumentCacheAccessException,
+			IOException, GeboContentHandlerSystemException, GeboIngestionException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
 		}
@@ -331,7 +343,7 @@ public class DocumentsChunkServiceImpl
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareChunks(" + document.getCode() + "..)");
 		}
-		return !firstChunk.isEmpty();
+		return firstChunk;
 	}
 
 	@Override

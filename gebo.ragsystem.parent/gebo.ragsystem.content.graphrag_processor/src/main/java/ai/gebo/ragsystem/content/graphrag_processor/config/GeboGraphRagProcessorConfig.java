@@ -26,7 +26,7 @@ import lombok.Data;
  * including message size limits and receiver configurations.
  */
 @Configuration
-@ConfigurationProperties(value = "ai.gebo.graphrag.processor.config")
+@ConfigurationProperties(value = "ai.gebo.graphrag.processor")
 @Data
 public class GeboGraphRagProcessorConfig {
 	/** Maximum cumulative size of messages in bytes before processing (default: 1MB) */

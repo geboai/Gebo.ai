@@ -10,7 +10,7 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.system.ingestion.GeboIngestionException;
 
 public interface IDocumentsChunkService {
-	boolean prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+	DocumentChunkingResponse prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
 			boolean enrichWithMetaData)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 

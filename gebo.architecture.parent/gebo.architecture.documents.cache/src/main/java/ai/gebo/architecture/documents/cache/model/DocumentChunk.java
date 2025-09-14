@@ -14,8 +14,10 @@ public class DocumentChunk {
 	private DocumentChunkType chunkType = null;
 	private String chunkData = null;
 	private Map<String, Object> metaData = new HashMap<String, Object>();
+	private Long tokensSize = null, bytesSize = null;
 
-	public static DocumentChunk ofText(String originalDocumentCode,String id, String mimeType, String text, Map<String, Object> metaData) {
+	public static DocumentChunk ofText(String originalDocumentCode, String id, String mimeType, String text,
+			Map<String, Object> metaData) {
 		DocumentChunk chunk = new DocumentChunk();
 		chunk.setId(id);
 		chunk.setOriginalDocumentCode(originalDocumentCode);
@@ -27,7 +29,7 @@ public class DocumentChunk {
 		return chunk;
 	}
 
-	public static DocumentChunk ofText(String originalDocumentCode,String text, Map<String, Object> metaData) {
-		return ofText(originalDocumentCode,UUID.randomUUID().toString(), "text/plain", text, metaData);
+	public static DocumentChunk ofText(String originalDocumentCode, String text, Map<String, Object> metaData) {
+		return ofText(originalDocumentCode, UUID.randomUUID().toString(), "text/plain", text, metaData);
 	}
 }
