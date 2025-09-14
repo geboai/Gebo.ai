@@ -205,12 +205,14 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		summary.setDescription(job.getDescription());
 		String workflowType = job.getWorkflowType();
 		String workflowId = job.getWorkflowId();
+		summary.setWorkflowType(workflowType);
+		summary.setWorkflowId(workflowId);
 		List<IWorkflowStatusHandler> handler = workflowHandlersRepositoryPattern
 				.findByWorkflowsTypeAndWorkflowId(GWorkflowType.valueOf(workflowType), workflowId);
 		if (!handler.isEmpty()) {
 			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
 			summary.setWorkflowStatus(status);
-			
+
 		}
 		return summary;
 	}
