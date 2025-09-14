@@ -121,16 +121,16 @@ public abstract class AbstractBaseTestLLmsIntegrationTests extends AbstractBaseI
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-		ComputedWorkflowResult workflowStatus = summary.getWorkflowStatus();
+		
 		int NMAXCYCLES = 20;
 		int nCycles = 0;
 		do {
 			Thread.sleep(10000);
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-			workflowStatus = summary.getWorkflowStatus();
 			nCycles++;
-			LOGGER.info("Cycle " + nCycles + " situation=>" + workflowStatus);
-		} while ((!(workflowStatus != null && workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
+			LOGGER.info("Cycle " + nCycles );
+			printSummary(summary);
+		} while ((!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished())) && nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),

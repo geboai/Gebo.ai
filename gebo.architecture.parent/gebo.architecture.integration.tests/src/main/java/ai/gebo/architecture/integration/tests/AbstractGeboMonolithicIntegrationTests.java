@@ -35,6 +35,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.environment.EnvironmentHolder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -42,6 +43,7 @@ import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
@@ -159,8 +161,8 @@ public class AbstractGeboMonolithicIntegrationTests {
 	@Container
 	protected static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
 	@Container
-    private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("neo4j:latest"))
-        .withoutAuthentication(); // Disable password
+	private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("neo4j:latest"))
+			.withoutAuthentication(); // Disable password
 	/** ObjectMapper instance for JSON operations. */
 	protected static ObjectMapper mapper = new ObjectMapper();
 
@@ -408,6 +410,38 @@ public class AbstractGeboMonolithicIntegrationTests {
 		}
 			break;
 		}
+	}
+
+	protected void printSummary(JobSummary summary) {
+		LOGGER.info("Begin summary for workflow:" + summary.getWorkflowType() + " " + summary.getWorkflowId()
+				+ " ***********************************************");
+		if (summary.getWorkflowStatus() == null) {
+			LOGGER.info("Now orkflow status present!!!");
+		} else {
+			LOGGER.info("finished=" + summary.getWorkflowStatus().isFinished() + " hasErrors:"
+					+ summary.getWorkflowStatus().isHasErrors());
+			printWorkflowStatusNode(summary.getWorkflowStatus().getRootStatus(), 0);
+		}
+		LOGGER.info("End summary for workflow:" + summary.getWorkflowType() + " " + summary.getWorkflowId()
+				+ " ***********************************************");
+
+	}
+
+	protected void printWorkflowStatusNode(ComputedWorkflowStatus rootStatus, int i) {
+		int offset = (i + 1) * 2;
+		String offsetString = "";
+		for (int j = 0; j < offset; j++) {
+			offsetString += " ";
+		}
+		LOGGER.info(offsetString + " stepId:" + rootStatus.getWorkflowStepId() + " completed:"
+				+ rootStatus.isCompleted() + " hasErrors:" + rootStatus.isHasErrors() + " input:"
+				+ rootStatus.getBatchDocumentsInput() + " processed:" + rootStatus.getBatchDocumentsProcessed()
+				+ " errors:" + rootStatus.getBatchDocumentsProcessingErrors() + " sentToNextStep:"
+				+ rootStatus.getBatchSentToNextStep());
+		for (ComputedWorkflowStatus child : rootStatus.getChilds()) {
+			printWorkflowStatusNode(child, i + 1);
+		}
+
 	}
 
 	/**

@@ -195,16 +195,16 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
 		int nCycles = 0;
 		Thread.sleep(20000); // Initial delay before starting polling loop
-		ComputedWorkflowResult workflowStatus = null;
+
 		do {
 			Thread.sleep(10000); // Interval between job status checks
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-			workflowStatus = summary.getWorkflowStatus();
 			LOGGER.info("On cycle=>" + nCycles);
-			LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
+			// LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 			nCycles++;
-
-		} while ((workflowStatus == null || (!workflowStatus.isFinished())) && nCycles < NMAXCYCLES);
+			printSummary(summary);
+		} while ((!(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished()))
+				&& nCycles < NMAXCYCLES);
 		summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 		LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
 		assertTrue(summary.getWorkflowStatus() != null && summary.getWorkflowStatus().isFinished(),
@@ -320,7 +320,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 			Thread.sleep(10000);
 			summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
 			LOGGER.info("On cycle=>" + nCycles);
-			LOGGER.info("Summary=" + mapper.writeValueAsString(summary));
+			printSummary(summary);
 
 			nCycles++;
 			if (checkTestVectorStore) {
