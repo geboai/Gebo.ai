@@ -59,6 +59,8 @@ public class ContentsBatchProcessed {
 	 */
 	private long batchDocumentsInput = 0;
 
+	private long batchDiscardedInput = 0;
+
 	/**
 	 * The number of documents sent to vectorization in the batch.
 	 */
@@ -80,6 +82,7 @@ public class ContentsBatchProcessed {
 		this.batchDocumentsProcessed += x.batchDocumentsProcessed;
 		this.batchDocumentsProcessingErrors += x.batchDocumentsProcessingErrors;
 		this.batchSentToNextStep += x.batchSentToNextStep;
+		this.batchDiscardedInput += x.batchDiscardedInput;
 		this.chunksProcessed += x.chunksProcessed;
 		this.tokensProcessed += x.tokensProcessed;
 		this.lastMessage = (this.lastMessage != null && this.lastMessage)
@@ -91,6 +94,7 @@ public class ContentsBatchProcessed {
 		this.batchDocumentsProcessed += x.getBatchDocumentsProcessed();
 		this.batchDocumentsProcessingErrors += x.getBatchDocumentsProcessingErrors();
 		this.batchSentToNextStep += x.getBatchSentToNextStep();
+		this.batchDiscardedInput += x.getBatchDiscardedInput();
 		this.chunksProcessed += x.getChunksProcessed();
 		this.tokensProcessed += x.getTokensProcessed();
 		this.lastMessage = (this.lastMessage != null && this.lastMessage) || (x.isLastMessage());

@@ -435,9 +435,9 @@ public class AbstractGeboMonolithicIntegrationTests {
 		}
 		LOGGER.info(offsetString + " stepId:" + rootStatus.getWorkflowStepId() + " completed:"
 				+ rootStatus.isCompleted() + " hasErrors:" + rootStatus.isHasErrors() + " input:"
-				+ rootStatus.getBatchDocumentsInput() + " processed:" + rootStatus.getBatchDocumentsProcessed()
-				+ " errors:" + rootStatus.getBatchDocumentsProcessingErrors() + " sentToNextStep:"
-				+ rootStatus.getBatchSentToNextStep());
+				+ rootStatus.getBatchDocumentsInput() + " discarded:" + rootStatus.getBatchDiscardedInput() + " processed:"
+				+ rootStatus.getBatchDocumentsProcessed() + " errors:" + rootStatus.getBatchDocumentsProcessingErrors()
+				+ " sentToNextStep:" + rootStatus.getBatchSentToNextStep());
 		for (ComputedWorkflowStatus child : rootStatus.getChilds()) {
 			printWorkflowStatusNode(child, i + 1);
 		}

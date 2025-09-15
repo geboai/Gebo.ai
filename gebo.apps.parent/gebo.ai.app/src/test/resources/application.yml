@@ -25,6 +25,10 @@ vectorizatorReceiverConfig:
   timeout: 10000
 
 ai.gebo.graphrag.processor:
+  discardedExtensions: 
+    - .xls
+    - .xlsx
+    - .ods
   maximumMessagesCumulatedBytesThreshold: 2097152
   graphRagProcessorReceiverConfig:
     poolCardinality: 2

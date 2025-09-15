@@ -26,6 +26,8 @@ public interface ContentsBatchProcessedSummary {
 
 	public long getBatchDocumentsProcessed();
 
+	public long getBatchDiscardedInput();
+
 	public Date getTimestampMin();
 
 	public Date getTimestampMax();

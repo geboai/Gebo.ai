@@ -87,7 +87,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final DocumentReferenceRepository documentReferenceRepository;
 	private final VirtualFolderRepository virtualFolderRepository;
 	private long batchDocumentInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
-			batchDocumentsProcessed = 0l;
+			batchDocumentsProcessed = 0l, batchDiscardedInput = 0l;
+
 	protected static final Logger LOGGER = LoggerFactory.getLogger(GIOCContentConsumer.class);
 
 	@Override
@@ -134,6 +135,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						workflowRouter.routeToNextSteps(GWorkflowType.STANDARD, GStandardWorkflow.INGESTION.name(),
 								GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(), payload, dispatcher);
 						batchSentToNextStep++;
+					} else {
+						batchDiscardedInput++;
 					}
 
 				} catch (Throwable throwable) {
@@ -142,6 +145,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					userMessagesConsumer.accept(
 							GUserMessage.errorMessage("Content: " + docref.getName() + " handling error", throwable));
 				}
+			} else {
+				batchDiscardedInput++;
 			}
 		}
 		try {
@@ -162,7 +167,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
 			payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
 			payload.setBatchSentToNextStep(batchSentToNextStep);
-
+			payload.setBatchDiscardedInput(batchDiscardedInput);
 			payload.setLastMessage(false);
 			payload.setTimestamp(new Date());
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
@@ -174,6 +179,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			batchSentToNextStep = 0l;
 			batchDocumentsProcessingErrors = 0l;
 			batchDocumentsProcessed = 0l;
+			batchDiscardedInput = 0l;
 			broker.accept(cmessage);
 		}
 	}
@@ -235,6 +241,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
 		payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
 		payload.setBatchSentToNextStep(batchSentToNextStep);
+		payload.setBatchDiscardedInput(batchDiscardedInput);
 		payload.setLastMessage(true);
 		payload.setTimestamp(new Date());
 		GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope

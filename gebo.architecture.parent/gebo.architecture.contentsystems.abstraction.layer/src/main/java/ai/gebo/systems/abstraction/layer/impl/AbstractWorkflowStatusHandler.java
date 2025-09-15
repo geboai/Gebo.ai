@@ -145,6 +145,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 			status.setBatchDocumentsProcessed(data.getBatchDocumentsProcessed());
 			status.setBatchDocumentsProcessingErrors(data.getBatchDocumentsProcessingErrors());
 			status.setBatchSentToNextStep(data.getBatchSentToNextStep());
+			status.setBatchDiscardedInput(data.getBatchDiscardedInput());
 			status.setChunksProcessed(data.getChunksProcessed());
 			status.setTokensProcessed(data.getTokensProcessed());
 			status.setStartedRunning(data.getBatchDocumentsInput() > 0l);
@@ -169,7 +170,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		for (ComputedWorkflowStatus child : childs) {
 			boolean completed = rootStatus.isCompleted()
 					&& (rootStatus.getBatchSentToNextStep() == (child.getBatchDocumentsProcessed()
-							+ child.getBatchDocumentsProcessingErrors()));
+							+ child.getBatchDiscardedInput() + +child.getBatchDocumentsProcessingErrors()));
 			child.setCompleted(completed);
 			visitAndCompileStatus(child);
 		}

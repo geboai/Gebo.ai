@@ -31,6 +31,7 @@ import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider.ChunkingParams;
 import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesReceiverFactoryComponent;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
@@ -40,6 +41,7 @@ import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.ragsystem.content.graphrag_processor.IGraphRagProcessorMessagesReceiverFactoryComponent;
+import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessorConfig;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
@@ -47,6 +49,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesReceiver {
 	private final IDocumentsChunkService chunkingService;
+	private final GeboGraphRagProcessorConfig staticConfig;
 
 	private final IWorkflowRouter workflowRouter;
 	private final IGraphRagProcessorMessagesReceiverFactoryComponent emitter;
@@ -125,20 +128,25 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				data.setWorkflowStepId(envelope.getWorkflowStepId());
 				data.setBatchDocumentsInput(1);
 				// Best effort approach
+				boolean discardFile = this.staticConfig.getDiscardedExtensions() != null && this.staticConfig
+						.getDiscardedExtensions().contains(payload.getDocumentReference().getExtension());
+				if (!discardFile) {
+					KnowledgeExtractionIterator iterator = new KnowledgeExtractionIterator(
+							payload.getDocumentReference(), chunkingService, graphRagExtractionService);
+					Spliterator<KnowledgeExtractionData> spliterator = Spliterators.spliteratorUnknownSize(iterator,
+							Spliterator.ORDERED | Spliterator.NONNULL);
+					Stream<KnowledgeExtractionData> stream = StreamSupport.stream(spliterator, false);
 
-				KnowledgeExtractionIterator iterator = new KnowledgeExtractionIterator(payload.getDocumentReference(),
-						chunkingService, graphRagExtractionService);
-				Spliterator<KnowledgeExtractionData> spliterator = Spliterators.spliteratorUnknownSize(iterator,
-						Spliterator.ORDERED | Spliterator.NONNULL);
-				Stream<KnowledgeExtractionData> stream = StreamSupport.stream(spliterator, false);
+					knowledgeGraphPersistenceService.knowledgeGraphUpdate(payload.getDocumentReference(), stream,
+							updatesConsumer);
 
-				knowledgeGraphPersistenceService.knowledgeGraphUpdate(payload.getDocumentReference(), stream,
-						updatesConsumer);
-
-				data.setBatchDocumentsProcessed(!iterator.isExceptionOccurred() ? 1 : 0);
-				data.setBatchDocumentsProcessingErrors(iterator.isExceptionOccurred() ? 1 : 0);
-				workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
-						envelope.getWorkflowStepId(), payload, emitter);
+					data.setBatchDocumentsProcessed(!iterator.isExceptionOccurred() ? 1 : 0);
+					data.setBatchDocumentsProcessingErrors(iterator.isExceptionOccurred() ? 1 : 0);
+					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
+							envelope.getWorkflowStepId(), payload, emitter);
+				} else {
+					data.setBatchDiscardedInput(1);
+				}
 			} catch (Throwable th) {
 				data.setBatchDocumentsProcessingErrors(1);
 				LOGGER.error("Error accessing chunks for:" + payload.getDocumentReference().getCode(), th);
