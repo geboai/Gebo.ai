@@ -253,10 +253,9 @@ public class DocumentsChunkServiceImpl
 									}
 								}
 
-							} else
-								throw new IllegalArgumentException(
-										"The text specs have to be of type TextChunkingSpecs");
+							}
 						} catch (Throwable th) {
+							LOGGER.error("Exception in reading file " + document.getCode(), th);
 							exceptions.add(th);
 						}
 
