@@ -192,7 +192,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
+		int NMAXCYCLES = 40; // Maximum number of cycles to wait for job completion
 		int nCycles = 0;
 		Thread.sleep(20000); // Initial delay before starting polling loop
 

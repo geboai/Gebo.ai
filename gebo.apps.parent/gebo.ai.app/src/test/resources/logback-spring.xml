@@ -64,6 +64,12 @@
 		<appender-ref ref="Console" />
 	</logger>
 	-->
+	
+	<logger name="ai.gebo.architecture.documents.cache" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
 	<logger name="ai.gebo.application.messaging" level="INFO"
 		additivity="false">
 		<appender-ref ref="RollingFile" />

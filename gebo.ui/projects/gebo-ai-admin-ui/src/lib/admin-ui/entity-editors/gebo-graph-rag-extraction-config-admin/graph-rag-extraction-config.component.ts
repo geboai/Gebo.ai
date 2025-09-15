@@ -2,7 +2,7 @@ import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfigurationEntry, GObjectRefGBaseModelConfig } from "gebo-ai-rest-api";
+import { ConfigurationEntry, GObjectRefGBaseModelConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 @Component({
