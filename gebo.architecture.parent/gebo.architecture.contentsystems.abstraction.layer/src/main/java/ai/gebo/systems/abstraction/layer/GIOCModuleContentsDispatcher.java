@@ -294,7 +294,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 							LOGGER.warn("Duplicated code:" + docref.getCode() + " count=" + count);
 						}
 					}
-					howManyBatchDocuments++;
+					
 					// skipped vectorization contents are not sent to vectorization or indexing
 					if (docref.getSkippedVectorizationContent() == null || !docref.getSkippedVectorizationContent()) {
 						try {
@@ -302,6 +302,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 							boolean forwardIngestionHandling = evaluator.isProcessable(evaluationPolicy, docref,
 									handler, handlerCache);
 							if (forwardIngestionHandling) {
+								howManyBatchDocuments++;
 								final GDocumentReferenceSnapshot snapshot = new GDocumentReferenceSnapshot();
 								snapshot.setCode(docref.getCode());
 								snapshot.setModifiedDate(docref.getModificationDate());

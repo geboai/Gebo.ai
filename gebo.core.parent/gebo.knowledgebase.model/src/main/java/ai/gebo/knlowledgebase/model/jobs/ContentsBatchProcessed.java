@@ -86,4 +86,15 @@ public class ContentsBatchProcessed {
 				|| (x.getLastMessage() != null && x.getLastMessage());
 	}
 
+	public void incrementBy(ContentsBatchProcessedSummary x) {
+		this.batchDocumentsInput += x.getBatchDocumentsInput();
+		this.batchDocumentsProcessed += x.getBatchDocumentsProcessed();
+		this.batchDocumentsProcessingErrors += x.getBatchDocumentsProcessingErrors();
+		this.batchSentToNextStep += x.getBatchSentToNextStep();
+		this.chunksProcessed += x.getChunksProcessed();
+		this.tokensProcessed += x.getTokensProcessed();
+		this.lastMessage = (this.lastMessage != null && this.lastMessage) || (x.isLastMessage());
+
+	}
+
 }

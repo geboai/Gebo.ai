@@ -48,26 +48,36 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Treating file:" + payload.getDocumentReference().getCode());
 			}
+			data.setBatchDocumentsInput(1);
 			data.setJobId(payload.getJobId());
-			ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
 
 			DocumentChunkingResponse processed = null;
 			try {
-				data.setBatchDocumentsInput(1);
+				ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
 				processed = chunkingService.prepareChunks(payload.getDocumentReference(), params.getSpecs(),
 						params.isEnrichWithMetaData());
-				if (!processed.isEmpty()) {
-					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
-							envelope.getWorkflowStepId(), payload, emitter);
 
-				}
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());
 				data.setBatchDocumentsProcessed(1);
 				data.setBatchSentToNextStep(1);
+				if (!processed.isEmpty()) {
+					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
+							envelope.getWorkflowStepId(), payload, emitter);
+				}
 			} catch (Throwable e) {
 				LOGGER.error("Fail to prepare & deliver chunks =>" + processed, e);
 				data.setBatchDocumentsProcessingErrors(1);
+			} finally {
+				try {
+					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> _envelope = GMessageEnvelope
+							.newMessageFrom(emitter, data);
+					_envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					_envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
+					_envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+					broker.accept(_envelope);
+				} catch (Throwable th) {
+				}
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
@@ -86,34 +96,12 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Start contents chunking loop");
 		}
-		final List<GContentsProcessingStatusUpdatePayload> feedbakcs = new ArrayList<GContentsProcessingStatusUpdatePayload>();
+
 		_stream.forEach(message -> {
-			GContentsProcessingStatusUpdatePayload feedback = acceptSingleMessage(message);
-			feedbakcs.add(feedback);
+			acceptSingleMessage(message);
+
 		});
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End contents chunking loop with cardinality=>" + feedbakcs.size());
-		}
-		final Map<String, GContentsProcessingStatusUpdatePayload> aggregated = new HashMap<String, GContentsProcessingStatusUpdatePayload>();
-		feedbakcs.stream().forEach(countData -> {
-			String key = countData.getJobId() + "-" + countData.getWorkflowType() + "-" + countData.getWorkflowId()
-					+ "-" + countData.getWorkflowStepId();
-			if (!aggregated.containsKey(key)) {
-				aggregated.put(key, countData);
-			} else
-				aggregated.get(key).incrementBy(countData);
-		});
-		aggregated.values().stream().forEach(payload -> {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Notifying concentrator component with:" + payload.toString());
-			}
-			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope.newMessageFrom(emitter,
-					payload);
-			envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-			envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-			envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-			broker.accept(envelope);
-		});
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End acceptMessages(...)");
 		}

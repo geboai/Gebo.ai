@@ -18,6 +18,7 @@ import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStructure;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
+import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessedSummary;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import lombok.AllArgsConstructor;
 
@@ -80,7 +81,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 					aggregated.put(thisStep.getWorkflowStepId().toUpperCase(), aggregate);
 				}
 			}
-			Stream<ContentsBatchProcessed> data = contentsBatchRepo.findByJobId(jobId);
+			List<ContentsBatchProcessedSummary> data = contentsBatchRepo.aggregateByJobId(jobId);
 			data.forEach(entry -> {
 				if (entry.getWorkflowStepId() != null) {
 					ContentsBatchProcessed aggregate = aggregated.get(entry.getWorkflowStepId().toUpperCase());
