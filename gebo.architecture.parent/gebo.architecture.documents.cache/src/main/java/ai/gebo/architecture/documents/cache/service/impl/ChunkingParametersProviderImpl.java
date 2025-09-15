@@ -18,7 +18,7 @@ public class ChunkingParametersProviderImpl implements IChunkingParametersProvid
 	@Override
 	public ChunkingParams provideChunkingParams(GDocumentReference reference) {
 
-		return new ChunkingParams(List.of(new TextChunkingSpecs()), true);
+		return new ChunkingParams(List.of(new TextChunkingSpecs()), true, 5000000);
 	}
 
 }

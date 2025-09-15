@@ -22,7 +22,10 @@ public class KnowledgeExtractionIterator implements Iterator<KnowledgeExtraction
 	private final GDocumentReference reference;
 	private final IDocumentsChunkService chunkingService;
 	private final IGraphDataExtractionService graphRagExtractionService;
+	// Current chunks set
 	private DocumentChunkingResponse current = null;
+	// index on the current chunks set of the current Chunk
+	private int currentIndex = 0;
 	private boolean prepared = false; // per gestire lo stato di fine
 	private boolean hasNextCached = false;
 	private boolean exceptionOccurred = false;
@@ -34,22 +37,28 @@ public class KnowledgeExtractionIterator implements Iterator<KnowledgeExtraction
 		this.reference = reference;
 		this.chunkingService = chunkingService;
 		this.graphRagExtractionService = graphRagExtractionService;
-		this.current = chunkingService.getCachedChunk(reference);
+		this.current = chunkingService.getCachedChunkSet(reference);
 	}
 
 	@Override
-	public boolean hasNext() {
+	public synchronized boolean hasNext() {
 		if (exceptionOccurred)
 			return false;
 		if (!prepared) {
-			hasNextCached = (current != null && !current.isEmpty());
+			// there is a next element if the current response is not empty and
+			// the current index points to an existing chunk in the actual set or
+			// there is a next set to be loaded
+			hasNextCached = (current != null && !current.isEmpty()
+					&& (currentIndex < current.getCurrentChunkSet().getChunks().size()
+							|| current.getNextChunkSetId() != null));
 			prepared = true;
+
 		}
 		return hasNextCached;
 	}
 
 	@Override
-	public KnowledgeExtractionData next() {
+	public synchronized KnowledgeExtractionData next() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin next()");
 		}
@@ -57,17 +66,23 @@ public class KnowledgeExtractionIterator implements Iterator<KnowledgeExtraction
 			throw new java.util.NoSuchElementException();
 		KnowledgeExtractionData data = null;
 		try {
-
-			DocumentChunk chunk = current.getCurrentChunk();
+			if (currentIndex >= current.getCurrentChunkSet().getChunks().size()) {
+				this.currentIndex = 0;
+				if (current.getNextChunkSetId() != null) {
+					current = chunkingService.getNextChunkSet(reference, current.getId(), current.getNextChunkSetId());
+				} else {
+					current = null;
+				}
+			}
+			if (current == null) {
+				throw new java.util.NoSuchElementException();
+			}
+			DocumentChunk chunk = current.getCurrentChunkSet().getChunks().get(currentIndex);
+			currentIndex++;
 			Document document = new Document(chunk.getId(), chunk.getChunkData(), chunk.getMetaData());
 			LLMExtractionResult extraction = graphRagExtractionService.extract(document, reference);
 			data = new KnowledgeExtractionData(extraction, document);
 
-			if (current.getNextChunkId() != null) {
-				current = chunkingService.getNextChunk(reference, current.getId(), current.getNextChunkId());
-			} else {
-				current = null;
-			}
 		} catch (Throwable throwable) {
 			LOGGER.error("Exception in knowledge extraction", throwable);
 			exceptionOccurred = true;

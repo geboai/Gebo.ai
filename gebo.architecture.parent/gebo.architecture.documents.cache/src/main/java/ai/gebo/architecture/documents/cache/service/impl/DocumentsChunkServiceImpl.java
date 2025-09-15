@@ -25,6 +25,7 @@ import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkType;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
+import ai.gebo.architecture.documents.cache.model.DocumentChunksSet;
 import ai.gebo.architecture.documents.cache.model.TextChunkingSpecs;
 import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
 import ai.gebo.architecture.documents.cache.service.IDocumentsCacheService;
@@ -71,8 +72,8 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse getChunk(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
-			boolean enrichWithMetaData) throws DocumentCacheAccessException, IOException,
+	public DocumentChunkingResponse getChunkSet(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+			boolean enrichWithMetaData, long tokensPerChunkSet) throws DocumentCacheAccessException, IOException,
 			GeboContentHandlerSystemException, GeboIngestionException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getChunk(" + document.getCode() + ",...)");
@@ -125,13 +126,21 @@ public class DocumentsChunkServiceImpl
 			}
 			// returning the first chunk as 0 index id
 			DocumentChunkOperation operationData = matchingOperation.get();
-			return getNextChunk(document, operationData.getId(), operationData.getChunksList().get(0));
+			return getNextChunkSet(document, operationData.getId(), operationData.getChunkSetsList().get(0));
 		}
 		// We have to calculate chunking from scratch
 		Optional<AbstractChunkingSpecs> textConfig = chunkingSpecs.stream()
 				.filter(x -> x.getChunkType() == DocumentChunkType.TEXT).findFirst();
 		final DocumentChunkingResponse response = new DocumentChunkingResponse();
 		final List<Throwable> exceptions = new ArrayList<Throwable>();
+		TokenTextSplitter tokensplitter = null;
+		if (textConfig.get() instanceof TextChunkingSpecs textSpecs) {
+
+			tokensplitter = new TokenTextSplitter(textSpecs.getDefaultChunkSize(), textSpecs.getMinChunkSizeChars(),
+					textSpecs.getMinChunkLengthToEmbed(), textSpecs.getMaxNumChunks(), textSpecs.isKeepSeparator());
+		}
+		final TokenTextSplitter usedSplitter = tokensplitter;
+		final JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
 		response.setEmpty(true);
 		// We ask the cacheService to stream the document
 		try (InputStream is = this.cacheService.streamDocument(document)) {
@@ -148,10 +157,13 @@ public class DocumentsChunkServiceImpl
 					// Start filling the chunkOperation to remain saved in mongodb for later use and
 					// next chunk calls
 					final DocumentChunkOperation chunkOperation = new DocumentChunkOperation();
+					final List<DocumentChunksSet> chunkSets = new ArrayList<DocumentChunksSet>();
 					chunkOperation.setEnrichWithMetaData(enrichWithMetaData);
 					chunkOperation.setChunkingSpecs(chunkingSpecs);
 					chunkOperation.setOriginalDocumentCode(document.getCode());
-					// Start streaming ingested AI documents
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Start looping contents stream");
+					}
 					docsStream.forEach(doc -> {
 
 						try {
@@ -181,91 +193,113 @@ public class DocumentsChunkServiceImpl
 								}
 							}
 							// discard zero length contents
-							if (textConfig.isPresent() && doc.isText() && doc.getText() != null
+							if (usedSplitter != null && doc.isText() && doc.getText() != null
 									&& doc.getText().trim().length() > 0) {
-								AbstractChunkingSpecs spec = textConfig.get();
-								if (spec instanceof TextChunkingSpecs textSpecs) {
 
-									TokenTextSplitter tokensplitter = new TokenTextSplitter(
-											textSpecs.getDefaultChunkSize(), textSpecs.getMinChunkSizeChars(),
-											textSpecs.getMinChunkLengthToEmbed(), textSpecs.getMaxNumChunks(),
-											textSpecs.isKeepSeparator());
-
-									List<Document> outContents = tokensplitter.split(doc);
-									if (enrichWithMetaData && metaDataHeader != null) {
-										List<Document> withMetaData = new ArrayList<Document>();
-										for (Document thisDoc : outContents) {
-											withMetaData.add(this.metaDataEnricher.enrich(thisDoc, metaDataHeader));
-										}
-										outContents = withMetaData;
+								List<Document> outContents = usedSplitter.split(doc);
+								if (enrichWithMetaData && metaDataHeader != null) {
+									List<Document> withMetaData = new ArrayList<Document>();
+									for (Document thisDoc : outContents) {
+										withMetaData.add(this.metaDataEnricher.enrich(thisDoc, metaDataHeader));
 									}
-									JTokkitTokenCountEstimator estimator = new JTokkitTokenCountEstimator();
-									response.setEmpty(outContents.isEmpty());
-									for (Document _document : outContents) {
+									outContents = withMetaData;
+								}
 
-										int bytesSize = _document.getText() != null ? _document.getText().length() * 2
-												: 0;
-										int tokensSize = _document.getText() != null && _document.isText()
-												? estimator.estimate(_document.getText())
-												: 0;
-										_document.getMetadata().put(DocumentMetaInfos.GEBO_BYTES_LENGTH, bytesSize);
-										_document.getMetadata().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, tokensSize);
-										response.setEmpty(false);
-										DocumentChunk chunk = DocumentChunk.ofText(document.getCode(),
-												_document.getText(), _document.getMetadata());
-										chunk.setBytesSize((long) bytesSize);
-										chunk.setTokensSize((long) tokensSize);
-										chunkOperation.setTotalBytesSize(
-												chunkOperation.getTotalBytesSize() + ((long) bytesSize));
-										chunkOperation.setTotalTokensSize(
-												chunkOperation.getTotalTokensSize() + ((long) tokensSize));
-										chunkOperation.getChunksList().add(chunk.getId());
+								response.setEmpty(outContents.isEmpty());
+								for (Document _document : outContents) {
+
+									int bytesSize = _document.getText() != null ? _document.getText().length() * 2 : 0;
+									int tokensSize = _document.getText() != null && _document.isText()
+											? estimator.estimate(_document.getText())
+											: 0;
+									_document.getMetadata().put(DocumentMetaInfos.GEBO_BYTES_LENGTH, bytesSize);
+									_document.getMetadata().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, tokensSize);
+									response.setEmpty(false);
+									DocumentChunk chunk = DocumentChunk.ofText(document.getCode(), _document.getText(),
+											_document.getMetadata());
+									chunk.setBytesSize((long) bytesSize);
+									chunk.setTokensSize((long) tokensSize);
+									chunkOperation
+											.setTotalBytesSize(chunkOperation.getTotalBytesSize() + ((long) bytesSize));
+									chunkOperation.setTotalTokensSize(
+											chunkOperation.getTotalTokensSize() + ((long) tokensSize));
+									chunkOperation.setTotalChunks(chunkOperation.getTotalChunks() + 1);
+									DocumentChunksSet currentChunkSet = null;
+									if (chunkSets.isEmpty()) {
+										currentChunkSet = new DocumentChunksSet();
+										chunkSets.add(currentChunkSet);
+										chunkOperation.getChunkSetsList().add(currentChunkSet.getId());
+									} else {
+										currentChunkSet = chunkSets.get(0);
+									}
+									currentChunkSet.getChunks().add(chunk);
+									currentChunkSet
+											.setTotalBytes(currentChunkSet.getTotalBytes() + chunk.getBytesSize());
+									currentChunkSet
+											.setTotalTokens(currentChunkSet.getTotalTokens() + chunk.getTokensSize());
+									if (currentChunkSet.getTotalTokens() > tokensPerChunkSet) {
 										Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME,
-												chunk.getId());
+												currentChunkSet.getId());
 										if (LOGGER.isDebugEnabled()) {
 											LOGGER.debug("document " + document.getCode() + " Writing chunk=>"
-													+ chunk.getId() + " tokens=>" + tokensSize);
+													+ currentChunkSet.getId() + " tokens=>"
+													+ currentChunkSet.getTotalTokens());
 										}
-										objectMapper.writeValue(writtenFile.toFile(), chunk);
-										if (response.getCurrentChunk() == null) {
-											response.setCurrentChunk(chunk);
-										}
+										objectMapper.writeValue(writtenFile.toFile(), currentChunkSet);
+										chunkSets.clear();
 									}
+									if (response.getCurrentChunkSet() == null) {
+										response.setCurrentChunkSet(currentChunkSet);
+									}
+								}
 
-								} else
-									throw new IllegalArgumentException(
-											"The text specs have to be of type TextChunkingSpecs");
 							}
 						} catch (Throwable th) {
+							LOGGER.error("Exception in reading file " + document.getCode(), th);
 							exceptions.add(th);
 						}
 
 					});
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("End looping contents stream");
+					}
 					if (!exceptions.isEmpty()) {
 						throw new DocumentCacheAccessException("Cannot split in chunk because of an exception",
 								exceptions);
 					}
-					if (!chunkOperation.getChunksList().isEmpty()) {
+					if (!chunkSets.isEmpty()) {
+						DocumentChunksSet currentChunkSet = chunkSets.get(0);
+						Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, currentChunkSet.getId());
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("document " + document.getCode() + " Writing chunk=>" + currentChunkSet.getId()
+									+ " tokens=>" + currentChunkSet.getTotalTokens());
+						}
+						objectMapper.writeValue(writtenFile.toFile(), currentChunkSet);
+						chunkSets.clear();
+					}
+					if (!chunkOperation.getChunkSetsList().isEmpty()) {
 						response.setId(chunkOperation.getId());
 						chunkOperation.setLastAccessed(new Date());
 						response.setTotalBytesSize(chunkOperation.getTotalBytesSize());
 						response.setTotalTokensSize(chunkOperation.getTotalTokensSize());
-						response.setTotalChunksNumber(chunkOperation.getChunksList().size());
+						response.setTotalChunksNumber(chunkOperation.getTotalChunks());
 						repository.insert(chunkOperation);
-						int index = chunkOperation.getChunksList().indexOf(response.getCurrentChunk().getId());
-						if (chunkOperation.getChunksList().size() > index + 1) {
-							response.setNextChunkId(chunkOperation.getChunksList().get(index + 1));
+						int index = chunkOperation.getChunkSetsList().indexOf(response.getCurrentChunkSet().getId());
+						if (chunkOperation.getChunkSetsList().size() > index + 1) {
+							response.setNextChunkSetId(chunkOperation.getChunkSetsList().get(index + 1));
 						}
 						if (LOGGER.isDebugEnabled()) {
 							LOGGER.debug("Saved chunking operation for (" + document.getCode() + ",...) nchunks="
-									+ chunkOperation.getChunksList().size());
+									+ chunkOperation.getChunkSetsList().size());
 						}
 					}
 
 				}
 			}
 		}
-		if (LOGGER.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled())
+
+		{
 			LOGGER.debug("End getChunk(" + document.getCode() + ",...)");
 		}
 		return response;
@@ -273,7 +307,7 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse getNextChunk(GDocumentReference document, String chunkRequestId, String chunkId)
+	public DocumentChunkingResponse getNextChunkSet(GDocumentReference document, String chunkRequestId, String chunkId)
 			throws DocumentCacheAccessException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getNextChunk(" + document.getCode() + ",'" + chunkRequestId + "','" + chunkId + "')");
@@ -282,21 +316,21 @@ public class DocumentsChunkServiceImpl
 		if (optionalChunkOperation.isEmpty())
 			throw new DocumentCacheAccessException("Chunk operation invalid id or expired id =>" + chunkRequestId);
 		DocumentChunkOperation operation = optionalChunkOperation.get();
-		int index = operation.getChunksList().indexOf(chunkId);
+		int index = operation.getChunkSetsList().indexOf(chunkId);
 		if (index >= 0) {
 			DocumentChunkingResponse response = new DocumentChunkingResponse();
 			response.setEmpty(false);
 			String workDirectory = configService.getGeboWorkDirectory();
 			Path fileToRead = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, chunkId);
-			DocumentChunk chunk = objectMapper.readValue(fileToRead.toFile(), DocumentChunk.class);
-			response.setCurrentChunk(chunk);
+			DocumentChunksSet chunkSet = objectMapper.readValue(fileToRead.toFile(), DocumentChunksSet.class);
+			response.setCurrentChunkSet(chunkSet);
 			response.setId(chunkRequestId);
-			response.setTotalChunksNumber(operation.getChunksList().size());
+			response.setTotalChunksNumber(operation.getTotalChunks());
 			response.setTotalBytesSize(operation.getTotalBytesSize());
 			response.setTotalTokensSize(operation.getTotalTokensSize());
-			if (index < operation.getChunksList().size() - 1) {
-				String nextChunk = operation.getChunksList().get(index + 1);
-				response.setNextChunkId(nextChunk);
+			if (index < operation.getChunkSetsList().size() - 1) {
+				String nextChunk = operation.getChunkSetsList().get(index + 1);
+				response.setNextChunkSetId(nextChunk);
 			}
 			operation.setLastAccessed(new Date());
 			this.repository.save(operation);
@@ -315,7 +349,7 @@ public class DocumentsChunkServiceImpl
 			LOGGER.debug("Begin cleanupResources(..)");
 		}
 		String workDirectory = configService.getGeboWorkDirectory();
-		data.getChunksList().stream().forEach(fileName -> {
+		data.getChunkSetsList().stream().forEach(fileName -> {
 			try {
 				Path path = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME, fileName);
 				if (Files.exists(path)) {
@@ -334,12 +368,14 @@ public class DocumentsChunkServiceImpl
 
 	@Override
 	public DocumentChunkingResponse prepareChunks(GDocumentReference document,
-			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData) throws DocumentCacheAccessException,
-			IOException, GeboContentHandlerSystemException, GeboIngestionException {
+			List<AbstractChunkingSpecs> chunkingSpecs, boolean enrichWithMetaData, long tokensPerChunkSet)
+			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException,
+			GeboIngestionException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin prepareChunks(" + document.getCode() + "..)");
 		}
-		DocumentChunkingResponse firstChunk = getChunk(document, chunkingSpecs, enrichWithMetaData);
+		DocumentChunkingResponse firstChunk = getChunkSet(document, chunkingSpecs, enrichWithMetaData,
+				tokensPerChunkSet);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareChunks(" + document.getCode() + "..)");
 		}
@@ -347,7 +383,7 @@ public class DocumentsChunkServiceImpl
 	}
 
 	@Override
-	public DocumentChunkingResponse getCachedChunk(GDocumentReference document) throws DocumentCacheAccessException,
+	public DocumentChunkingResponse getCachedChunkSet(GDocumentReference document) throws DocumentCacheAccessException,
 			IOException, GeboContentHandlerSystemException, GeboIngestionException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getCachedChunk(" + document.getCode() + "..)");
@@ -358,7 +394,7 @@ public class DocumentsChunkServiceImpl
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End getCachedChunk(" + document.getCode() + "..) getting next chunk");
 			}
-			return getNextChunk(document, entry.getId(), entry.getChunksList().get(0));
+			return getNextChunkSet(document, entry.getId(), entry.getChunkSetsList().get(0));
 		}
 
 		LOGGER.error("Chunks for document " + document.getCode() + " have not been found");

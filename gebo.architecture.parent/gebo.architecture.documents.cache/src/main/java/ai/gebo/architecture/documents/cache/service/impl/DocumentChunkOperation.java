@@ -17,10 +17,12 @@ public class DocumentChunkOperation extends AbstractCachedEntry {
 	@HashIndexed
 	private String originalDocumentCode = null;
 
-	private List<String> chunksList = new ArrayList<String>();
+	private List<String> chunkSetsList = new ArrayList<String>();
 	private List<AbstractChunkingSpecs> chunkingSpecs = new ArrayList<AbstractChunkingSpecs>();
 	private boolean enrichWithMetaData = false;
 	private long totalBytesSize = 0l, totalTokensSize = 0l;
+	private int totalChunks = 0;
+
 	public DocumentChunkOperation() {
 		id = UUID.randomUUID().toString();
 	}
