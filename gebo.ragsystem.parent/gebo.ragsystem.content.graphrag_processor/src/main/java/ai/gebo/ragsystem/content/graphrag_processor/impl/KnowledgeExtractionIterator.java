@@ -41,7 +41,7 @@ public class KnowledgeExtractionIterator implements Iterator<KnowledgeExtraction
 	}
 
 	@Override
-	public boolean hasNext() {
+	public synchronized boolean hasNext() {
 		if (exceptionOccurred)
 			return false;
 		if (!prepared) {
@@ -58,7 +58,7 @@ public class KnowledgeExtractionIterator implements Iterator<KnowledgeExtraction
 	}
 
 	@Override
-	public KnowledgeExtractionData next() {
+	public synchronized KnowledgeExtractionData next() {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin next()");
 		}

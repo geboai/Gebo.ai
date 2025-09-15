@@ -39,10 +39,7 @@
 		<appender-ref ref="Console" />
 	</logger>
 	
-	<logger name="ai.gebo.architecture.documents.cache" level="INFO" additivity="false">
-		<appender-ref ref="RollingFile" />
-		<appender-ref ref="Console" />
-	</logger>
+	
 	<logger name="ai.gebo.systems.abstraction.layer.impl" level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
@@ -65,7 +62,7 @@
 	</logger>
 	-->
 	
-	<logger name="ai.gebo.architecture.documents.cache" level="INFO"
+	<logger name="ai.gebo.architecture.documents.cache" level="DEBUG"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />

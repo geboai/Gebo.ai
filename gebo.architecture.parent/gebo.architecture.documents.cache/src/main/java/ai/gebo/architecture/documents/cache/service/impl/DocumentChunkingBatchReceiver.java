@@ -1,5 +1,6 @@
 package ai.gebo.architecture.documents.cache.service.impl;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -56,12 +57,12 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());
 				if (!processed.isEmpty()) {
-					
+
 					data.setBatchDocumentsProcessed(1);
 					data.setBatchSentToNextStep(1);
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), payload, emitter);
-				}else {
+				} else {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Empty file: " + payload.getDocumentReference().getCode());
 					}
@@ -92,16 +93,14 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin acceptMessages(...) with msg cardinality of:" + messages.getPayload().size());
 		}
-		GMessagesBatchPayload payloads = messages.getPayload();
-		Stream<GMessageEnvelope> _stream = payloads.stream();
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Start contents chunking loop");
 		}
-
-		_stream.forEach(message -> {
+		List<GMessageEnvelope> envelopes = messages.getPayload();
+		for (GMessageEnvelope message : envelopes) {
 			acceptSingleMessage(message);
-
-		});
+		}
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End acceptMessages(...)");
