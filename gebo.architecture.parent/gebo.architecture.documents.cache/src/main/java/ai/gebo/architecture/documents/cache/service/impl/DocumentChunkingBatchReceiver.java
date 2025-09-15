@@ -1,9 +1,5 @@
 package ai.gebo.architecture.documents.cache.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -55,7 +51,7 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 			try {
 				ChunkingParams params = parameterProvider.provideChunkingParams(payload.getDocumentReference());
 				processed = chunkingService.prepareChunks(payload.getDocumentReference(), params.getSpecs(),
-						params.isEnrichWithMetaData());
+						params.isEnrichWithMetaData(), params.getTokensPerChunkSet());
 
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());

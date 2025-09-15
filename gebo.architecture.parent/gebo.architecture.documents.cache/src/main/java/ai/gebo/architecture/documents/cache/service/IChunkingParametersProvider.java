@@ -13,6 +13,7 @@ public interface IChunkingParametersProvider {
 	public static class ChunkingParams {
 		private final List<AbstractChunkingSpecs> specs;
 		private final boolean enrichWithMetaData;
+		private final long tokensPerChunkSet;
 	}
 
 	public ChunkingParams provideChunkingParams(GDocumentReference reference);

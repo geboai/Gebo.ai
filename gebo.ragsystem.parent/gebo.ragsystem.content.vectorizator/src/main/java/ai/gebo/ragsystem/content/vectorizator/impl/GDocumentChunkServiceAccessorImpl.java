@@ -82,13 +82,16 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 			// Retrieve content stream from the document
 			List<Document> fragments = new ArrayList<Document>();
 
-			DocumentChunkingResponse chunkResponse = chunkingService.getCachedChunk(docref);
+			DocumentChunkingResponse chunkResponse = chunkingService.getCachedChunkSet(docref);
 			while (chunkResponse != null && !chunkResponse.isEmpty()) {
-				fragments.add(new Document(chunkResponse.getCurrentChunk().getId(),
-						chunkResponse.getCurrentChunk().getChunkData(), chunkResponse.getCurrentChunk().getMetaData()));
-				if (chunkResponse.getNextChunkId() != null) {
-					chunkResponse = chunkingService.getNextChunk(docref, chunkResponse.getId(),
-							chunkResponse.getNextChunkId());
+				List<Document> fragmentsSet = chunkResponse.getCurrentChunkSet().getChunks().stream()
+						.map(currentChunk -> new Document(currentChunk.getId(), currentChunk.getChunkData(),
+								currentChunk.getMetaData()))
+						.toList();
+				fragments.addAll(fragmentsSet);
+				if (chunkResponse.getNextChunkSetId() != null) {
+					chunkResponse = chunkingService.getNextChunkSet(docref, chunkResponse.getId(),
+							chunkResponse.getNextChunkSetId());
 				} else
 					chunkResponse = null;
 			}

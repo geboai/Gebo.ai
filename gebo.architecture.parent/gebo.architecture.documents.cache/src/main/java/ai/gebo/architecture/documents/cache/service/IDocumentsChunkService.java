@@ -11,16 +11,16 @@ import ai.gebo.system.ingestion.GeboIngestionException;
 
 public interface IDocumentsChunkService {
 	DocumentChunkingResponse prepareChunks(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
-			boolean enrichWithMetaData)
+			boolean enrichWithMetaData, long tokensPerChunkSet)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
-	DocumentChunkingResponse getCachedChunk(GDocumentReference document)
+	DocumentChunkingResponse getCachedChunkSet(GDocumentReference document)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
-	DocumentChunkingResponse getChunk(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
-			boolean enrichWithMetaData)
+	DocumentChunkingResponse getChunkSet(GDocumentReference document, List<AbstractChunkingSpecs> chunkingSpecs,
+			boolean enrichWithMetaData, long tokensPerChunkSet)
 			throws DocumentCacheAccessException, IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
-	DocumentChunkingResponse getNextChunk(GDocumentReference document, String chunkRequestId, String nextChunkId)
+	DocumentChunkingResponse getNextChunkSet(GDocumentReference document, String chunkRequestId, String nextChunkId)
 			throws DocumentCacheAccessException, IOException;
 }
