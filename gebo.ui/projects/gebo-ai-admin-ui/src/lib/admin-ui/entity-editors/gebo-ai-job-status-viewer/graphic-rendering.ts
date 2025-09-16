@@ -23,7 +23,7 @@ function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPie
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
-        chart.labels.push(new Date(data.startDateTime).toLocaleString());
+        chart.labels.push(new Date(data.startDateTime).toLocaleTimeString());
       }
       chart.datasets[0].data.push(n(data.batchDocumentsInput));
       chart.datasets[1].data.push(n(data.batchDocumentsProcessed));
@@ -47,7 +47,7 @@ function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieCha
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
-        chart.labels.push(new Date(data.startDateTime).toLocaleString());
+        chart.labels.push(new Date(data.startDateTime).toLocaleTimeString());
       }
 
       chart.datasets[0].data.push(n(data.tokensProcessed));
