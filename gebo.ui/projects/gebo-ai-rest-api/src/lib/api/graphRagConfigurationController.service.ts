@@ -25,7 +25,6 @@ import { Configuration }                                     from '../configurat
 
 @Injectable()
 export class GraphRagConfigurationControllerService {
-    [x: string]: any;
 
     protected basePath = 'http://localhost:12999';
     public defaultHeaders = new HttpHeaders();

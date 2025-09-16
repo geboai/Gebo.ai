@@ -20,6 +20,7 @@ export interface ComputedWorkflowStatus {
     batchDocumentsProcessingErrors?: number;
     batchDocumentsProcessed?: number;
     batchSentToNextStep?: number;
+    batchDiscardedInput?: number;
     chunksProcessed?: number;
     tokensProcessed?: number;
     completed?: boolean;

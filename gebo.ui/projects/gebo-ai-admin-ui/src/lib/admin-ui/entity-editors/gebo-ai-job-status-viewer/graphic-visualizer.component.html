@@ -1,0 +1,14 @@
+<div class="grid" *ngIf="rendered">
+    <div class="col-3">
+        <div class="card">
+            <label>{{rendered.description}}</label>
+            <p-chart type="pie" [data]="rendered.piechart" [options]="pieOptions" [height]="'200px'" />
+        </div>
+
+    </div>
+    <div class="col-9"></div>
+</div>
+<span *ngIf="rendered?.childs?.length">
+    <gebo-ai-jobsummary-graphic-visualizer *ngFor="let entry of rendered?.childs"
+        [rendered]="entry"></gebo-ai-jobsummary-graphic-visualizer>
+</span>

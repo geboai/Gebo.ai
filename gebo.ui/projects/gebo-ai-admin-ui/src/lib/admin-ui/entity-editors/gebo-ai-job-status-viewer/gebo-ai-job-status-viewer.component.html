@@ -8,9 +8,9 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="jobStatusView" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -41,17 +41,15 @@
           </small>
         </div>
       </div>
-      
+
       <div class="col-3">
         <div class="flex flex-column gap-2 ">
           <label for="actualStatus">Status</label>
           <div>
-            <!-- 
-            <span *ngIf="jobSummary?.contentsReadTerminated!==true">Under processing</span>
-            <span
-              *ngIf="jobSummary?.contentsReadTerminated==true && jobSummary?.vectorizationTerminated===true">Finished</span>
-            <span *ngIf="jobSummary?.contentsReadTerminated==true && jobSummary?.vectorizationTerminated!==true">Wait
-              for end of embedding</span> -->
+            
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true" style="color: red;">Not processed completely</span>
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true" style="color: green;">Processed completely</span>
+            
           </div>
           <small id="actualStatus-help">
             Status of the task, still running, finished or finished with errors.
@@ -63,7 +61,6 @@
           <div class="col-4"><p-button (onClick)="cancelAction.emit(true)" icon="pi pi-times" [outlined]="true"
               label="Close" severity="contrast"></p-button></div>
           <div class="col-4"><p-button icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true"
-              
               (onClick)="doDelete()"></p-button></div>
           <div class="col-4"></div>
         </div>
@@ -78,106 +75,14 @@
     <div class="col-12">
       <p-tabView>
 
-        <p-tabPanel header="Publication stats">
-          <div class="grid">
-            <div class="col-6">
-              <div class="card">
-                <p-chart type="bar" [data]="contentsReadData" [options]="basicOptions" [height]="'200px'" />
-              </div>
-              <div class="card">
-                <p-chart type="bar" [data]="contentsVectorizationData" [options]="basicOptions" [height]="'200px'" />
-              </div>
-              <div class="card">
-                <p-chart type="bar" [data]="contentsVectorizationVolume" [options]="basicOptions" [height]="'200px'" />
-              </div>
-            </div>
-            <div class="col-6">
-              <p-chart type="pie" *ngIf="resultsPiechart" [data]="resultsPiechart" [options]="pieOptions" [height]="'500px'" />
-            </div>
-          </div>
-          <!-- 
-          <div class="grid">
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="scannedDocuments">Inspected documents</label>
-                <div>
-                  {{jobSummary?.howManyBatchDocuments}}
-                </div>
-                <small id="scannedDocuments-help">
-                  Total number of documents inspected
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="readingErrorsDocuments">With access or reading errors</label>
-                <div>
-                  {{jobSummary?.howManyBatchContentsReadingErrors}}
-                </div>
-                <small id="readingErrorsDocuments-help">
-                  Nr. docs with errors
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="scannedDocuments">Sent to embedding phase</label>
-                <div>
-                  {{jobSummary?.howManyBatchSentToVectorization}}
-                </div>
-                <small id="scannedDocuments-help">
-                  New or modified docs sent to embedding
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="scannedFinished">Documents inspection finished</label>
-                <div>
-                  {{jobSummary?.contentsReadTerminated===true?"Yes":"No"}}
-                </div>
-                <small id="scannedFinished-help">
-                  Documents inspection phase is terminated
-                </small>
-              </div>
-            </div>
-            <div class="col-4">
+        <p-tabPanel header="Processes stats">
+          <div class="grid" *ngIf="rootGraphicData">
+            <div class="col-12">
+              <gebo-ai-jobsummary-graphic-visualizer
+                [rendered]="rootGraphicData"></gebo-ai-jobsummary-graphic-visualizer>
 
             </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="embeddingReceiveddDocuments">Embedding received docs</label>
-                <div>
-                  {{jobSummary?.currentBatchDocumentReceviedCounter}}
-                </div>
-                <small id="embeddingReceiveddDocuments-help">
-                  Docs received from embedding system
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="embeddedDocuments">Number of embedded documents</label>
-                <div>
-                  {{jobSummary?.currentBatchDocumentVectorizedCounter}}
-                </div>
-                <small id="embeddedDocuments-help">
-                  Nr. of docs successfully embedded
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="vectorizationTerminated">Embedding finished</label>
-                <div>
-                  {{jobSummary?.vectorizationTerminated===true?"Yes":"No"}}
-                </div>
-                <small id="vectorizationTerminated-help">
-                  Data embedding phase is terminated
-                </small>
-              </div>
-            </div>
-          </div>-->
+          </div>
         </p-tabPanel>
         <p-tabPanel header="Publication log">
           <p-messages [value]="logMessages" [enableService]="false" [closable]="false"></p-messages>
