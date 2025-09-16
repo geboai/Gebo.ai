@@ -142,7 +142,7 @@ public class GFilesystemContentManagementSystemHandlerImpl
 					return true;
 				}
 			};
-			if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+			if (Files.exists(file)) {
 				this.consume(rootItem, contentManagementConfig, buildSystems, endpoint, file, predicate, consumer,
 						messagesConsumer, errorConsumer);
 			} else
