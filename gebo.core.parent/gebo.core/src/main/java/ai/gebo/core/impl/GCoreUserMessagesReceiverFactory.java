@@ -163,7 +163,7 @@ public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageRe
 				processed.setChunksProcessed(payload.getChunksProcessed());
 				processed.setTokensProcessed(payload.getTokensProcessed());
 				processed.setLastMessage(payload.getLastMessage());
-				processed.setTimestamp(payload.getTimestamp());
+				processed.setTimestamp(t.getTimestamp());
 				processed.setId(UUID.randomUUID().toString());
 				ContentsBatchProcessedRepository repo = binder
 						.getImplementationOf(ContentsBatchProcessedRepository.class);

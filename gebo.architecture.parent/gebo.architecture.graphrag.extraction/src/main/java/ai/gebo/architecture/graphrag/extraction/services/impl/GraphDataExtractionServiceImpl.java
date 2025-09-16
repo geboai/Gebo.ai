@@ -10,10 +10,15 @@ import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
+import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
+import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
+import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
+import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.GraphEntityStandardType;
 import ai.gebo.architecture.graphrag.extraction.model.GraphObjectType;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
+import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.extraction.repositories.GraphRagExtractionConfigRepository;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -55,9 +60,49 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		promptTemplate.add("format", formatSpecification);
 		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptTemplate.create()).system(text);
 
-		return requestSpec.call().entity(LLMExtractionResult.class);
+		return clean(requestSpec.call().entity(LLMExtractionResult.class));
 	}
 
+	private LLMExtractionResult clean(LLMExtractionResult data) {
+		LLMExtractionResult cleanResult = new LLMExtractionResult();
+		List<EntityObject> entities = data.getEntities().stream().filter(GraphDataExtractionServiceImpl::validEntity)
+				.toList();
+		cleanResult.setEntities(entities);
+		List<EventObject> events = data.getEvents().stream().filter(GraphDataExtractionServiceImpl::validEvent)
+				.map(y -> {
+					List<EntityObject> participants = y.getParticipantEntities().stream()
+							.filter(GraphDataExtractionServiceImpl::validEntity).toList();
+					y.setParticipantEntities(participants);
+					return y;
+				}).filter(u -> u.getParticipantEntities() != null && !u.getParticipantEntities().isEmpty()).toList();
+		cleanResult.setEvents(events);
+		List<RelationObject> relations = cleanResult.getRelations().stream()
+				.filter(GraphDataExtractionServiceImpl::validRelation)
+				.toList();
+		cleanResult.setRelations(relations);
+		List<EntityAliasObject> aliases = data
+				.getEntityAliases().stream().filter(x -> validEntity(x.getAliasObject())
+						&& validEntity(x.getReferenceObject()) && x.getEquivalenceType() != null && x.getType() != null)
+				.toList();
+		cleanResult.setEntityAliases(aliases);
+		List<EventAliasObject> eventAlias = data
+				.getEventAliases().stream().filter(x -> validEvent(x.getAliasObject())
+						&& validEvent(x.getReferenceObject()) && x.getType() != null && x.getEquivalenceType() != null)
+				.toList();
+		cleanResult.setEventAliases(eventAlias);
+		return cleanResult;
+	}
+
+	private static boolean validEntity(EntityObject x) {
+		return x != null && x.getName() != null && x.getType() != null;
+	}
+
+	private static boolean validEvent(EventObject x) {
+		return x != null && x.getTitle() != null && x.getType() != null;
+	}
+	private static boolean validRelation(RelationObject x) {
+		return x.getType() != null && validEntity(x.getFromEntity()) && validEntity(x.getToEntity());
+	}
 	private String createFormatSpecification(GraphRagExtractionConfig configuration) {
 		BeanOutputConverter<LLMExtractionResult> beanOutputConverter = new BeanOutputConverter<>(
 				LLMExtractionResult.class);

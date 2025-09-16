@@ -69,7 +69,6 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		this.virtualFolderRepository = virtualFolderRepository;
 	}
 
-	static private final long NBATCH_DOCS_STATSMESSAGE = 50;
 	private final GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> dispatcher;
 	private final IWorkflowRouter workflowRouter;
 	private final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler;
@@ -100,7 +99,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		}
 		if (t instanceof GDocumentReference) {
 			GDocumentReference docref = (GDocumentReference) t;
-
+			batchDocumentInput++;
 			if (docref.getCode() != null) {
 				if (!docsCounters.containsKey(docref.getCode())) {
 					docsCounters.put(docref.getCode(), 1);
@@ -132,8 +131,12 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						payload.setRequiresEmbeddingHandshake(true);
 						payload.setJobId(jobStatus.getCode());
 						enrichers.getContentPayloadMapper().apply(payload);
-						workflowRouter.routeToNextSteps(GWorkflowType.STANDARD, GStandardWorkflow.INGESTION.name(),
-								GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(), payload, dispatcher);
+						workflowRouter.routeToNextSteps(
+								this.jobStatus.getWorkflowType() != null
+										? GWorkflowType.valueOf(this.jobStatus.getWorkflowType())
+										: null,
+								this.jobStatus.getWorkflowId(), GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(),
+								payload, dispatcher);
 						batchSentToNextStep++;
 					} else {
 						batchDiscardedInput++;
@@ -152,36 +155,40 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		try {
 			documentConsumer.accept(t);
 			if (t instanceof GDocumentReference) {
-				batchDocumentInput++;
+
 			}
 		} catch (Throwable throwable) {
 			LOGGER.error("Error handling standard consumer for element:" + t.getCode(), throwable);
+			batchDocumentsProcessingErrors++;
+		} finally {
+			try {
+				GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
+				payload.setJobId(jobStatus.getCode());
+				payload.setWorkflowType(jobStatus.getWorkflowType());
+				payload.setWorkflowId(jobStatus.getWorkflowId());
+				payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
+				payload.setBatchDocumentsInput(batchDocumentInput);
+				payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
+				payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
+				payload.setBatchSentToNextStep(batchSentToNextStep);
+				payload.setBatchDiscardedInput(batchDiscardedInput);
+				payload.setLastMessage(false);
+				payload.setTimestamp(new Date());
+				GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
+						.newMessageFrom(this.dispatcher, payload);
+				cmessage.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+				cmessage.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
+				cmessage.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+				batchDocumentInput = 0l;
+				batchSentToNextStep = 0l;
+				batchDocumentsProcessingErrors = 0l;
+				batchDocumentsProcessed = 0l;
+				batchDiscardedInput = 0l;
+				broker.accept(cmessage);
+			} catch (Throwable exc) {
+			}
 		}
-		if (batchSentToNextStep > NBATCH_DOCS_STATSMESSAGE) {
-			GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
-			payload.setJobId(jobStatus.getCode());
-			payload.setWorkflowType(GWorkflowType.STANDARD.name());
-			payload.setWorkflowId(GStandardWorkflow.INGESTION.name());
-			payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
-			payload.setBatchDocumentsInput(batchDocumentInput);
-			payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
-			payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
-			payload.setBatchSentToNextStep(batchSentToNextStep);
-			payload.setBatchDiscardedInput(batchDiscardedInput);
-			payload.setLastMessage(false);
-			payload.setTimestamp(new Date());
-			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
-					.newMessageFrom(this.dispatcher, payload);
-			cmessage.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-			cmessage.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-			cmessage.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-			batchDocumentInput = 0l;
-			batchSentToNextStep = 0l;
-			batchDocumentsProcessingErrors = 0l;
-			batchDocumentsProcessed = 0l;
-			batchDiscardedInput = 0l;
-			broker.accept(cmessage);
-		}
+
 	}
 
 	@Override
@@ -232,24 +239,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			// Debug logging of received document information for the dispatcher
 			LOGGER.debug("CONTENT-HANDLER-RECEIVED-DOCUMENTS:" + docsCounters.keySet());
 		}
-		GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
-		payload.setJobId(jobStatus.getCode());
-		payload.setWorkflowType(GWorkflowType.STANDARD.name());
-		payload.setWorkflowId(GStandardWorkflow.INGESTION.name());
-		payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
-		payload.setBatchDocumentsInput(batchDocumentInput);
-		payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
-		payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
-		payload.setBatchSentToNextStep(batchSentToNextStep);
-		payload.setBatchDiscardedInput(batchDiscardedInput);
-		payload.setLastMessage(true);
-		payload.setTimestamp(new Date());
-		GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope
-				.newMessageFrom(this.dispatcher, payload);
-		cmessage.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-		cmessage.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-		cmessage.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-		broker.accept(cmessage);
+
 	}
 
 }

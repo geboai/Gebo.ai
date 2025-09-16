@@ -72,7 +72,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	@Autowired
 	IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
 
-	private final static long STATS_TIME_SLOT = 60 * 1000;
+	private final static long STATS_TIME_SLOT =  1000*60;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
 	/**
@@ -197,6 +197,10 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 
 	}
 
+	private static String of(String s) {
+		return s != null ? s.trim().toLowerCase() : "";
+	}
+
 	/**
 	 * Retrieves a summary of a job with optional details
 	 * 
@@ -227,7 +231,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			final List<ComputedWorkflowStatus> itemslist = handler.get(0).items(status.getRootStatus());
 			final TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>> stats = new TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>>();
 			Stream<ContentsBatchProcessed> stream = contentsBatchRepo.findByJobId(jobId);
-			stream.forEach(processed -> {
+			List<ContentsBatchProcessed> list = stream.toList();
+			list.forEach(processed -> {
 				Date timestamp = processed.getTimestamp();
 				if (timestamp != null) {
 					long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;
@@ -236,8 +241,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 					if (!stats.containsKey(key)) {
 						stats.put(key, new HashMap<String, JobWorkflowStepSummaryTimeSlotStats>());
 					}
-					String stepKey = jobId + "-" + processed.getWorkflowType() + "-" + processed.getWorkflowId() + "-"
-							+ processed.getWorkflowStepId();
+					String stepKey = of(jobId) + "-" + of(processed.getWorkflowType()) + "-"
+							+ of(processed.getWorkflowId()) + "-" + processed.getWorkflowStepId();
 					if (!stats.get(key).containsKey(stepKey)) {
 						JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
 						statsEntry.setStartDateTime(new Date(minutesFloorStart));
@@ -245,7 +250,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 						stats.get(key).put(stepKey, statsEntry);
 					}
 					stats.get(key).get(stepKey).incrementBy(processed);
-				}else {
+				} else {
 					LOGGER.error("Entry without timestamp");
 				}
 			});
@@ -253,8 +258,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 				long startDateTime = stats.firstKey();
 				long endDateTime = stats.lastKey();
 				for (ComputedWorkflowStatus item : itemslist) {
-					String stepKey = jobId + "-" + item.getWorkflowType() + "-" + item.getWorkflowId() + "-"
-							+ item.getWorkflowStepId();
+					String stepKey = of(jobId) + "-" + of(item.getWorkflowType()) + "-" + of(item.getWorkflowId()) + "-"
+							+ of(item.getWorkflowStepId());
 					JobWorkflowStepSummary stepSummary = new JobWorkflowStepSummary();
 					stepSummary.setWorkflowType(item.getWorkflowType());
 					stepSummary.setWorkflowId(item.getWorkflowId());
@@ -279,7 +284,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 
 			}
 		}
-
+		//LOGGER.info("Summary=>"+summary.getWorkflowStepsSummaries());
 		return summary;
 	}
 

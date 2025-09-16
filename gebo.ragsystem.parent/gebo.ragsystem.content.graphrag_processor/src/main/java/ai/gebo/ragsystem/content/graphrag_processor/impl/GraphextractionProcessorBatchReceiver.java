@@ -83,7 +83,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 			else {
 				cumulated.incrementBy(t);
 			}
-			if ((howManyAccepted % BATCHING_CYCLES_NUMBER) == 0) {
+			if ((howManyAccepted >= BATCHING_CYCLES_NUMBER)) {
 				flush();
 			}
 		}
@@ -105,6 +105,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 				broker.accept(envelope);
 				cumulated = null;
+				howManyAccepted = 0;
 			}
 
 		}
