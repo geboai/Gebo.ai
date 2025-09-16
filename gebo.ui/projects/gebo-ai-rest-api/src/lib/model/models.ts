@@ -168,6 +168,8 @@ export * from './integrationDocumentEnvelop';
 export * from './integrationInputControllerSpoolDocumentBody';
 export * from './jobSummary';
 export * from './jobTicket';
+export * from './jobWorkflowStepSummary';
+export * from './jobWorkflowStepSummaryTimeSlotStats';
 export * from './jobsEntriesForClassNameFilter';
 export * from './jobsEntriesForJobType';
 export * from './jobsEntriesForProjectEndpointFilter';

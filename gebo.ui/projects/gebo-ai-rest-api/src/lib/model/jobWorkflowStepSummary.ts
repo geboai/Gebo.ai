@@ -9,16 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ComputedWorkflowResult } from './computedWorkflowResult';
-import { JobWorkflowStepSummary } from './jobWorkflowStepSummary';
+import { JobWorkflowStepSummaryTimeSlotStats } from './jobWorkflowStepSummaryTimeSlotStats';
 
-export interface JobSummary { 
-    code?: string;
-    description?: string;
+export interface JobWorkflowStepSummary { 
     workflowType?: string;
     workflowId?: string;
-    startDateTime?: Date;
-    endDateTime?: Date;
-    workflowStatus?: ComputedWorkflowResult;
-    workflowStepsSummaries?: Array<JobWorkflowStepSummary>;
+    workflowStepId?: string;
+    timesamples?: Array<JobWorkflowStepSummaryTimeSlotStats>;
 }

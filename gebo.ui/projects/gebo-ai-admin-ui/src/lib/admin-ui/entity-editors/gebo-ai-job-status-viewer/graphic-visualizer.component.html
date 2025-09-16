@@ -6,7 +6,16 @@
         </div>
 
     </div>
-    <div class="col-9"></div>
+    <div class="col-9">
+        <div class="grid">
+            <div class="col-12" *ngIf="rendered.documentsChart">
+                <p-chart type="bar" [data]="rendered.documentsChart" [options]="pieOptions" [height]="'200px'" />
+            </div>
+            <div class="col-12" *ngIf="rendered.tokensChart">
+                <p-chart type="bar" [data]="rendered.tokensChart" [options]="pieOptions" [height]="'200px'" />
+            </div>
+        </div>
+    </div>
 </div>
 <span *ngIf="rendered?.childs?.length">
     <gebo-ai-jobsummary-graphic-visualizer *ngFor="let entry of rendered?.childs"

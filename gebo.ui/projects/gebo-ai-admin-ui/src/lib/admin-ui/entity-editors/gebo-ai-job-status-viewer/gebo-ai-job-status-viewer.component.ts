@@ -169,7 +169,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
   private refreshGraphics(): void {
     this.rootGraphicData = undefined;
     if (this.jobSummary?.workflowStatus?.rootStatus) {
-      this.rootGraphicData = renderData(this.jobSummary?.workflowStatus?.rootStatus);
+      this.rootGraphicData = renderData(this.jobSummary?.workflowStatus?.rootStatus,this.jobSummary?.workflowStepsSummaries);
     }
 
   }

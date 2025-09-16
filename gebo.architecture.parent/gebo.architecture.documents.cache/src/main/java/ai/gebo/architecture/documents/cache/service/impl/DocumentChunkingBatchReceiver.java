@@ -1,5 +1,6 @@
 package ai.gebo.architecture.documents.cache.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -56,9 +57,11 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 
 				data.setTokensProcessed(processed.getTotalTokensSize());
 				data.setChunksProcessed(processed.getTotalChunksNumber());
+				data.setTimestamp(new Date());
 				if (!processed.isEmpty()) {
 					data.setBatchDocumentsProcessed(1);
 					data.setBatchSentToNextStep(1);
+					
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), payload, emitter);
 				} else {

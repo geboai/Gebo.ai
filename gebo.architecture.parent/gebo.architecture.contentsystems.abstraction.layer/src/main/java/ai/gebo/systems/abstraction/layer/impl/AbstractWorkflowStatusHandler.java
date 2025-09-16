@@ -101,16 +101,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 
 	}
 
-	private List<ComputedWorkflowItem> items(ComputedWorkflowItem rootStep) {
-		List<ComputedWorkflowItem> data = new ArrayList<ComputedWorkflowItem>();
-		if (rootStep != null) {
-			data.add(rootStep);
-			rootStep.getChilds().forEach(child -> {
-				data.addAll(items(child));
-			});
-		}
-		return data.stream().filter(x -> x.isEnabledStep()).toList();
-	}
+	
 
 	private void checkStatus(ComputedWorkflowResult result) {
 		List<ComputedWorkflowStatus> items = items(result.getRootStatus());
@@ -118,16 +109,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		result.setHasErrors(items.stream().anyMatch(x -> x.isHasErrors()));
 	}
 
-	private List<ComputedWorkflowStatus> items(ComputedWorkflowStatus root) {
-		List<ComputedWorkflowStatus> data = new ArrayList<ComputedWorkflowStatus>();
-		if (root != null) {
-			data.add(root);
-			root.getChilds().forEach(child -> {
-				data.addAll(items(child));
-			});
-		}
-		return data;
-	}
+	
 
 	private ComputedWorkflowStatus composeStatus(ComputedWorkflowItem rootStep,
 			Map<String, ContentsBatchProcessed> aggregated) {

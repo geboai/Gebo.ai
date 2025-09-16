@@ -9,11 +9,16 @@
 
 package ai.gebo.jobs.services.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -22,12 +27,16 @@ import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandler;
 import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPattern;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.architecture.multithreading.IGRunnable;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGGeboIngestionJobService;
 import ai.gebo.jobs.services.model.JobSummary;
+import ai.gebo.jobs.services.model.JobWorkflowStepSummary;
+import ai.gebo.jobs.services.model.JobWorkflowStepSummaryTimeSlotStats;
+import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
@@ -62,6 +71,9 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 	ContentsBatchProcessedRepository contentsBatchRepo;
 	@Autowired
 	IWorkflowStatusHandlerRepositoryPattern workflowHandlersRepositoryPattern;
+
+	private final static long STATS_TIME_SLOT = 60 * 1000;
+	private final static Logger LOGGER = LoggerFactory.getLogger(GGeboIngestionJobQueueServiceImpl.class);
 
 	/**
 	 * Default constructor
@@ -212,8 +224,62 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 		if (!handler.isEmpty()) {
 			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
 			summary.setWorkflowStatus(status);
+			final List<ComputedWorkflowStatus> itemslist = handler.get(0).items(status.getRootStatus());
+			final TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>> stats = new TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>>();
+			Stream<ContentsBatchProcessed> stream = contentsBatchRepo.findByJobId(jobId);
+			stream.forEach(processed -> {
+				Date timestamp = processed.getTimestamp();
+				if (timestamp != null) {
+					long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;
+					long minutesFloorEnd = minutesFloorStart + STATS_TIME_SLOT;
+					Long key = new Long(minutesFloorStart);
+					if (!stats.containsKey(key)) {
+						stats.put(key, new HashMap<String, JobWorkflowStepSummaryTimeSlotStats>());
+					}
+					String stepKey = jobId + "-" + processed.getWorkflowType() + "-" + processed.getWorkflowId() + "-"
+							+ processed.getWorkflowStepId();
+					if (!stats.get(key).containsKey(stepKey)) {
+						JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
+						statsEntry.setStartDateTime(new Date(minutesFloorStart));
+						statsEntry.setEndDateTime(new Date(minutesFloorEnd));
+						stats.get(key).put(stepKey, statsEntry);
+					}
+					stats.get(key).get(stepKey).incrementBy(processed);
+				}else {
+					LOGGER.error("Entry without timestamp");
+				}
+			});
+			if (stats.firstKey() != null && stats.lastKey() != null) {
+				long startDateTime = stats.firstKey();
+				long endDateTime = stats.lastKey();
+				for (ComputedWorkflowStatus item : itemslist) {
+					String stepKey = jobId + "-" + item.getWorkflowType() + "-" + item.getWorkflowId() + "-"
+							+ item.getWorkflowStepId();
+					JobWorkflowStepSummary stepSummary = new JobWorkflowStepSummary();
+					stepSummary.setWorkflowType(item.getWorkflowType());
+					stepSummary.setWorkflowId(item.getWorkflowId());
+					stepSummary.setWorkflowStepId(item.getWorkflowStepId());
+					summary.getWorkflowStepsSummaries().add(stepSummary);
+					for (long actualDateTime = startDateTime; actualDateTime <= endDateTime; actualDateTime += STATS_TIME_SLOT) {
+						Map<String, JobWorkflowStepSummaryTimeSlotStats> entry = stats.get(new Long(actualDateTime));
+						JobWorkflowStepSummaryTimeSlotStats slot = null;
+						if (entry != null && entry.containsKey(stepKey)) {
+							slot = entry.get(stepKey);
+							if (LOGGER.isDebugEnabled()) {
+								LOGGER.debug("date=" + new Date(actualDateTime) + "=>" + slot.toString());
+							}
+						} else {
+							slot = new JobWorkflowStepSummaryTimeSlotStats();
+							slot.setStartDateTime(new Date(actualDateTime));
+							slot.setEndDateTime(new Date(actualDateTime + STATS_TIME_SLOT));
+						}
+						stepSummary.getTimesamples().add(slot);
+					}
+				}
 
+			}
 		}
+
 		return summary;
 	}
 

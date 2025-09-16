@@ -37,6 +37,6 @@ public class JobSummary implements Serializable {
 	private Date startDateTime = null;
 	private Date endDateTime = null;
 	private ComputedWorkflowResult workflowStatus = null;
-	
+	private List<JobWorkflowStepSummary> workflowStepsSummaries = new ArrayList<JobWorkflowStepSummary>();
 
 }
