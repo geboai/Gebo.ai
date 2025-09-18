@@ -50,6 +50,16 @@
                     </small>
                 </div>
             </div>
+            <div class="col-12" >
+                <div class="flex flex-column gap-2">
+                    <label for="response">Extraction prompt</label>
+                    <textarea rows="15" cols="250"  pTextarea id="extractionPrompt" formControlName="extractionPrompt" [required]="true"
+                        aria-describedby="extractionPrompt-help"></textarea>
+                    <small id="extractionPrompt-help">
+                        Large language model prompt for entity/events/relation and aliases extraction
+                    </small>
+                </div>
+            </div>
         </div>
     </div>
 

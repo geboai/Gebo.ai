@@ -264,7 +264,6 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 					stepSummary.setWorkflowType(item.getWorkflowType());
 					stepSummary.setWorkflowId(item.getWorkflowId());
 					stepSummary.setWorkflowStepId(item.getWorkflowStepId());
-					summary.getWorkflowStepsSummaries().add(stepSummary);
 					for (long actualDateTime = startDateTime; actualDateTime <= endDateTime; actualDateTime += STATS_TIME_SLOT) {
 						Map<String, JobWorkflowStepSummaryTimeSlotStats> entry = stats.get(new Long(actualDateTime));
 						JobWorkflowStepSummaryTimeSlotStats slot = null;
@@ -280,6 +279,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 						}
 						stepSummary.getTimesamples().add(slot);
 					}
+					summary.getWorkflowStepsSummaries().add(stepSummary);
 				}
 
 			}
