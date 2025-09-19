@@ -174,8 +174,14 @@ public class AbstractGeboMonolithicIntegrationTests {
 	@DynamicPropertySource
 	public static void containersProperties(DynamicPropertyRegistry registry) {
 		mongoDBContainer.start();
+		neo4jContainer.start();
 		registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+		
+		String boltUrl = neo4jContainer.getBoltUrl();
+		registry.add("spring.neo4j.uri", neo4jContainer::getBoltUrl);
+
 	}
 
 	/**
@@ -435,9 +441,10 @@ public class AbstractGeboMonolithicIntegrationTests {
 		}
 		LOGGER.info(offsetString + " stepId:" + rootStatus.getWorkflowStepId() + " completed:"
 				+ rootStatus.isCompleted() + " hasErrors:" + rootStatus.isHasErrors() + " input:"
-				+ rootStatus.getBatchDocumentsInput() + " discarded:" + rootStatus.getBatchDiscardedInput() + " processed:"
-				+ rootStatus.getBatchDocumentsProcessed() + " errors:" + rootStatus.getBatchDocumentsProcessingErrors()
-				+ " sentToNextStep:" + rootStatus.getBatchSentToNextStep());
+				+ rootStatus.getBatchDocumentsInput() + " discarded:" + rootStatus.getBatchDiscardedInput()
+				+ " processed:" + rootStatus.getBatchDocumentsProcessed() + " errors:"
+				+ rootStatus.getBatchDocumentsProcessingErrors() + " sentToNextStep:"
+				+ rootStatus.getBatchSentToNextStep());
 		for (ComputedWorkflowStatus child : rootStatus.getChilds()) {
 			printWorkflowStatusNode(child, i + 1);
 		}

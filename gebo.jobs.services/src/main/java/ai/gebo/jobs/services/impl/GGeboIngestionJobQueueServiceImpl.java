@@ -254,7 +254,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 					LOGGER.error("Entry without timestamp");
 				}
 			});
-			if (stats.firstKey() != null && stats.lastKey() != null) {
+			if (!stats.isEmpty() && stats.firstKey() != null && stats.lastKey() != null) {
 				long startDateTime = stats.firstKey();
 				long endDateTime = stats.lastKey();
 				for (ComputedWorkflowStatus item : itemslist) {

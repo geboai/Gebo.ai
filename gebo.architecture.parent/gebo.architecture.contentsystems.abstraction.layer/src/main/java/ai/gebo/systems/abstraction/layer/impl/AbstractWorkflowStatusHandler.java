@@ -101,15 +101,11 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 
 	}
 
-	
-
 	private void checkStatus(ComputedWorkflowResult result) {
 		List<ComputedWorkflowStatus> items = items(result.getRootStatus());
 		result.setFinished(items.stream().allMatch(x -> (x.isCompleted() || !x.isEnabledStep())));
 		result.setHasErrors(items.stream().anyMatch(x -> x.isHasErrors()));
 	}
-
-	
 
 	private ComputedWorkflowStatus composeStatus(ComputedWorkflowItem rootStep,
 			Map<String, ContentsBatchProcessed> aggregated) {
@@ -152,7 +148,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		for (ComputedWorkflowStatus child : childs) {
 			boolean completed = rootStatus.isCompleted()
 					&& (rootStatus.getBatchSentToNextStep() == (child.getBatchDocumentsProcessed()
-							+ child.getBatchDiscardedInput() + +child.getBatchDocumentsProcessingErrors()));
+							+ child.getBatchDiscardedInput() + child.getBatchDocumentsProcessingErrors()));
 			child.setCompleted(completed);
 			visitAndCompileStatus(child);
 		}

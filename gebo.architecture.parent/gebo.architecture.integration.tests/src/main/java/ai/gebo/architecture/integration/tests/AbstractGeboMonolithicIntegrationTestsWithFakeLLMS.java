@@ -27,6 +27,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
+import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
+import ai.gebo.architecture.graphrag.extraction.model.EventObject;
+import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
+import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.model.JobSummary;
@@ -42,9 +46,12 @@ import ai.gebo.llms.abstraction.layer.tests.TestChatModelConfiguration;
 import ai.gebo.llms.abstraction.layer.tests.TestChatModelSupportServiceImpl;
 import ai.gebo.llms.abstraction.layer.tests.TestEmbeddingModelConfiguration;
 import ai.gebo.llms.abstraction.layer.tests.TestEmbeddingModelSupportServiceImpl;
+import ai.gebo.llms.abstraction.layer.tests.TestKnowledgeExtractionChatModelSupportServiceImpl;
+import ai.gebo.llms.abstraction.layer.tests.TestKnowledgeExtractionModelConfiguration;
 import ai.gebo.llms.abstraction.layer.vectorstores.GAccountingExtendedVectorStoreAdapter;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
+import ai.gebo.model.base.GObjectRef;
 import ai.gebo.ragsystem.vectorstores.test.services.TestVectorStore;
 
 /**
@@ -61,6 +68,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	public static final String DEFAULT_TEST_CHAT_MODEL_CODE = "TEST_CHAT_MODEL_X001";
 	// Default test embedding model code
 	public static final String DEFAULT_TEST_EMBEDDING_MODEL_CODE = "TEST_EMBEDDING_MODEL_X001";
+
+	public static final String DEFAULT_KNOWLEDGE_EXTRACTION_CHAT_MODEL_CODE = "DEFAULT_KNOWLEDGE_EXTRACTION_CHAT_MODEL_CODE_001";
 
 	/**
 	 * Callback method to be executed before each test. Can be overridden by
@@ -109,6 +118,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		LOGGER.info("GEBO_HOME=" + HOME.toString());
 		LOGGER.info("GEBO_WORKDIRECTORY=" + HOME.toString());
 		cleanAllDb();
+		// Prepare a default chat model configuration
 		TestChatModelConfiguration testChatModelConfiguration = new TestChatModelConfiguration();
 		testChatModelConfiguration
 				.setModelTypeCode(TestChatModelSupportServiceImpl.TEST_CONFIGURABLE_CHAT_MODEL_SERVICE);
@@ -117,17 +127,58 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		testChatModelConfiguration.setDefaultModel(true);
 		testChatModelConfiguration.setCode(DEFAULT_TEST_CHAT_MODEL_CODE);
 		chatModelRuntimeDao.addRuntimeByConfig(testChatModelConfiguration);
+		// Prepare an embedding model configuration
 		TestEmbeddingModelConfiguration embedModelConfig = new TestEmbeddingModelConfiguration();
 		embedModelConfig.setCode(DEFAULT_TEST_EMBEDDING_MODEL_CODE);
 		embedModelConfig.setModelTypeCode(TestEmbeddingModelSupportServiceImpl.TEST_EMBEDDING_MODEL);
 		embedModelConfig.setChoosedModel(new GBaseModelChoice());
 		embedModelConfig.getChoosedModel().setCode(TestEmbeddingModelSupportServiceImpl.TEST_EMBEDDING_MODEL_001);
 		embedModelConfig.setDefaultModel(true);
-
 		embeddingModelRuntimeDao.addRuntimeByConfig(embedModelConfig);
+		// Prepare a knowledge extraction (IE) model configuration with default fixed
+		// extraction data
+		TestKnowledgeExtractionModelConfiguration knowledgeExtractionChatModelConfig = new TestKnowledgeExtractionModelConfiguration();
+		knowledgeExtractionChatModelConfig.setModelTypeCode(
+				TestKnowledgeExtractionChatModelSupportServiceImpl.TEST_CONFIGURABLE_KNOWLEDGE_EXTRACTION_CHAT_MODEL_SERVICE);
+		knowledgeExtractionChatModelConfig.setChoosedModel(new GBaseModelChoice());
+		knowledgeExtractionChatModelConfig.getChoosedModel()
+				.setCode(TestKnowledgeExtractionChatModelSupportServiceImpl.TEST_KNOWLEDGE_EXTRACTION_MODEL_001);
+		knowledgeExtractionChatModelConfig.setDefaultModel(false);
+		knowledgeExtractionChatModelConfig.setCode(DEFAULT_KNOWLEDGE_EXTRACTION_CHAT_MODEL_CODE);
+		LLMExtractionResult extractionResult = this.createGraphragExtractionSample();
+		knowledgeExtractionChatModelConfig.getResponseObjects().put(LLMExtractionResult.class, extractionResult);
+		chatModelRuntimeDao.addRuntimeByConfig(knowledgeExtractionChatModelConfig);
+		GraphRagExtractionConfig graphragConfig = new GraphRagExtractionConfig();
+		graphragConfig.setExtractionPrompt("This is a knowledge extraction prompt \n\n${format}");
+		graphragConfig.setDefaultConfiguration(true);
+		graphragConfig.setUsedModelConfiguration(GObjectRef.of(knowledgeExtractionChatModelConfig));
+		graphragConfig.setDescription("Default knowledge extraction model");
+		persistentObjectManager.insert(graphragConfig);
 		createDefaultUser();
 		beforeEachCallback();
 		LOGGER.info("End initializing chat & embedding model");
+	}
+
+	private LLMExtractionResult createGraphragExtractionSample() {
+		LLMExtractionResult data = new LLMExtractionResult();
+		EntityObject entity = new EntityObject();
+		entity.setType("PRODUCT");
+		entity.setName("Yamaha XTZ");
+		entity.setConfidence(0.9);
+		entity.setLongDescription("Yamaha XTZ motorbike");
+		data.getEntities().add(entity);
+		EntityObject entity1 = new EntityObject();
+		entity1.setType("PRODUCT");
+		entity1.setName("Citroen pallas");
+		entity1.setConfidence(0.9);
+		entity1.setLongDescription("Citroen pallas car");
+		data.getEntities().add(entity1);
+		EventObject event = new EventObject();
+		event.setParticipantEntities(List.of(entity, entity1));
+		event.setTitle("Collision on the road");
+		event.setType("ACCIDENT");
+		data.getEvents().add(event);
+		return data;
 	}
 
 	/**
@@ -192,7 +243,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-		int NMAXCYCLES = 40; // Maximum number of cycles to wait for job completion
+		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
 		int nCycles = 0;
 		Thread.sleep(20000); // Initial delay before starting polling loop
 
