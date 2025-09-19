@@ -114,7 +114,7 @@ public class SharedFilesystemIntegrationTest extends AbstractBaseTestLLmsIntegra
 		endpoint.setPath(List.of(VFilesystemReference.from(Path.of(baseFolder))));
 		endpoint.setOpenZips(true);
 		endpoint = persistentObjectManager.update(endpoint);
-		runAndWaitDoneCheckingResults(endpoint, 10, true, 50);
+		runAndWaitDoneCheckingResults(endpoint, 10, true, 90);
 		cleanPersistent(endpoint);
 	}
 

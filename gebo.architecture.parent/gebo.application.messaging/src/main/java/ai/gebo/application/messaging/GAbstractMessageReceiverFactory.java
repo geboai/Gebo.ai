@@ -14,11 +14,13 @@ package ai.gebo.application.messaging;
 
 import java.util.List;
 
+import ai.gebo.architecture.multithreading.IGThreadPoolConsumer;
+
 /**
  * Gebo.ai comment agent
  * Abstract factory class for creating message receivers. Implements common functionalities for message receiver factories.
  */
-public abstract class GAbstractMessageReceiverFactory implements IGMessageReceiverFactory {
+public abstract class GAbstractMessageReceiverFactory implements IGMessageReceiverFactory,IGThreadPoolConsumer {
     
     // Configuration settings for the message receiver factory.
     protected final MessageReceiverFactoryConfig factoryConfig;
