@@ -178,7 +178,7 @@ public class AbstractGeboMonolithicIntegrationTests {
 		registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
-		
+
 		String boltUrl = neo4jContainer.getBoltUrl();
 		registry.add("spring.neo4j.uri", neo4jContainer::getBoltUrl);
 
@@ -444,7 +444,8 @@ public class AbstractGeboMonolithicIntegrationTests {
 				+ rootStatus.getBatchDocumentsInput() + " discarded:" + rootStatus.getBatchDiscardedInput()
 				+ " processed:" + rootStatus.getBatchDocumentsProcessed() + " errors:"
 				+ rootStatus.getBatchDocumentsProcessingErrors() + " sentToNextStep:"
-				+ rootStatus.getBatchSentToNextStep());
+				+ rootStatus.getBatchSentToNextStep() + " segments:" + rootStatus.getChunksProcessed() + " tokens:"
+				+ rootStatus.getTokensProcessed());
 		for (ComputedWorkflowStatus child : rootStatus.getChilds()) {
 			printWorkflowStatusNode(child, i + 1);
 		}

@@ -238,12 +238,31 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
-			boolean checkVectorDeletionNotOccurred)
+			boolean checkVectorDeletionNotOccurred) throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
+		this.runAndWaitDoneCheckingResults(endpoint, howManyFilesWait, checkVectorDeletionNotOccurred, 20);
+	}
+
+	/**
+	 * Runs a job, waits for completion, and checks the results. Ensures that the
+	 * expected number of documents are vectorized and verifies the integrity of the
+	 * vector store.
+	 *
+	 * @param endpoint                       the project endpoint to execute
+	 * @param howManyFilesWait               the expected number of files to wait
+	 *                                       for vectorization
+	 * @param checkVectorDeletionNotOccurred flag to check vector deletion
+	 * @throws GeboJobServiceException  if a job service error occurs
+	 * @throws GeboPersistenceException if a persistence error occurs
+	 * @throws JsonProcessingException  if a JSON processing error occurs
+	 * @throws InterruptedException     if the thread is interrupted
+	 */
+	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
+			boolean checkVectorDeletionNotOccurred, int NMAXCYCLES)
 			throws GeboJobServiceException, GeboPersistenceException, JsonProcessingException, InterruptedException {
 		GJobStatus syncJobStatus = ingestionJobService.executeSyncJob(endpoint, GWorkflowType.STANDARD.name(),
 				GStandardWorkflow.INGESTION.name());
 		JobSummary summary = ingestionJobService.getJobSummary(syncJobStatus.getCode());
-		int NMAXCYCLES = 20; // Maximum number of cycles to wait for job completion
+		// Maximum number of cycles to wait for job completion
 		int nCycles = 0;
 		Thread.sleep(20000); // Initial delay before starting polling loop
 

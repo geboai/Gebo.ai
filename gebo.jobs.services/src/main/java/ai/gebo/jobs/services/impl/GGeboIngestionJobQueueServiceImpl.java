@@ -231,8 +231,7 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			final List<ComputedWorkflowStatus> itemslist = handler.get(0).items(status.getRootStatus());
 			final TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>> stats = new TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>>();
 			Stream<ContentsBatchProcessed> stream = contentsBatchRepo.findByJobId(jobId);
-			List<ContentsBatchProcessed> list = stream.toList();
-			list.forEach(processed -> {
+			stream.forEach(processed -> {
 				Date timestamp = processed.getTimestamp();
 				if (timestamp != null) {
 					long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;

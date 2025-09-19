@@ -111,13 +111,13 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 		}
 	};
 
-	public GContentsProcessingStatusUpdatePayload acceptSingleMessage(GMessageEnvelope envelope) {
-		GContentsProcessingStatusUpdatePayload data = null;
+	public void acceptSingleMessage(GMessageEnvelope envelope) {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin acceptSingleMessage(...)");
 		}
 		if (envelope.getPayload() instanceof GDocumentReferencePayload payload) {
+			GContentsProcessingStatusUpdatePayload data = null;
 			ProcessingStatusUpdater updatesConsumer = new ProcessingStatusUpdater(payload.getJobId(),
 					envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
 					envelope.getWorkflowId(), envelope.getWorkflowStepId());
@@ -156,12 +156,21 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 					updatesConsumer.flush();
 				} catch (Throwable th) {
 				}
+				try {
+					GMessageEnvelope<GContentsProcessingStatusUpdatePayload> sendEnvelope = GMessageEnvelope
+							.newMessageFrom(emitter, data);
+					sendEnvelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
+					sendEnvelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
+					sendEnvelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+					broker.accept(sendEnvelope);
+				} catch (Throwable th) {
+				}
 			}
 		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End acceptSingleMessage(...) => " + data.toString());
+			LOGGER.debug("End acceptSingleMessage(...)");
 		}
-		return data;
+
 	}
 
 	@Override
@@ -176,36 +185,10 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 		}
 		final List<GContentsProcessingStatusUpdatePayload> feedbakcs = new ArrayList<GContentsProcessingStatusUpdatePayload>();
 		_stream.forEach(message -> {
-			GContentsProcessingStatusUpdatePayload feedback = acceptSingleMessage(message);
-			if (feedback != null)
-				feedbakcs.add(feedback);
+			acceptSingleMessage(message);
+
 		});
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End contents chunking loop with cardinality=>" + feedbakcs.size());
-		}
-		final Map<String, GContentsProcessingStatusUpdatePayload> aggregated = new HashMap<String, GContentsProcessingStatusUpdatePayload>();
-		feedbakcs.stream().forEach(countData -> {
-			if (countData.getJobId() != null && countData.getWorkflowType() != null && countData.getWorkflowId() != null
-					&& countData.getWorkflowStepId() != null) {
-				String key = countData.getJobId() + "-" + countData.getWorkflowType() + "-" + countData.getWorkflowId()
-						+ "-" + countData.getWorkflowStepId();
-				if (!aggregated.containsKey(key)) {
-					aggregated.put(key, countData);
-				} else
-					aggregated.get(key).incrementBy(countData);
-			}
-		});
-		aggregated.values().stream().forEach(payload -> {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Notifying concentrator component with:" + payload.toString());
-			}
-			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope.newMessageFrom(emitter,
-					payload);
-			envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-			envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-			envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-			broker.accept(envelope);
-		});
+
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End acceptMessages(...)");
 		}
