@@ -85,7 +85,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		GraphDocumentReference ref = knowledgeGraphInsertDocument(documentReference);
 		knowledgeGraphInsertChunks(documentReference, ref, stream, processingUpdatesConsumer);
 	}
-	@Transactional
+
 	@Override
 	public KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction, GraphDocumentReference docRef,
 			GDocumentReference documentReference, Map<String, Object> cache) {
