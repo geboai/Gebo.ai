@@ -46,22 +46,19 @@ import jakarta.annotation.Nullable;
 @Service
 public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceService
 		implements IKnowledgeGraphSearchService {
+
 	public KnowledgeGraphSearchServiceImpl(GraphDocumentReferenceRepository docReferenceRepository,
-			GraphDocumentChunkRepository docChunkRepository, GraphEntityObjectRepository entityObjectRepository,
-			GraphEntityInDocumentChunkRepository entityInChunkRepository,
-			GraphEventObjectRepository eventObjectRepository,
-			GraphEventInDocumentChunkRepository eventInChunkRepository,
-			GraphRelationObjectRepository relationObjectRepository,
-			GraphRelationInDocumentChunkRepository relationInChunkRepository,
-			GraphEventAliasObjectRepository eventAliasRepository,
-			GraphEntityAliasObjectRepository entityAliasRepository,
+			GraphDocumentChunkRepository docChunkRepository, GraphEntityObjectDao entityObjectDao,
+			GraphEntityInDocumentChunkRepository entityInChunkRepository, GraphEventObjectDao eventObjectDao,
+			GraphEventInDocumentChunkRepository eventInChunkRepository, GraphRelationObjectDao relationObjectDao,
+			GraphRelationInDocumentChunkRepository relationInChunkRepository, GraphEventAliasObjectDao eventAliasDao,
+			GraphEntityAliasObjectDao entityAliasDao,
 			GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository,
 			GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository,
 			IGraphDataExtractionService extractionService) {
-		super(docReferenceRepository, docChunkRepository, entityObjectRepository, entityInChunkRepository,
-				eventObjectRepository, eventInChunkRepository, relationObjectRepository, relationInChunkRepository,
-				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository,
-				extractionService);
+		super(docReferenceRepository, docChunkRepository, entityObjectDao, entityInChunkRepository, eventObjectDao,
+				eventInChunkRepository, relationObjectDao, relationInChunkRepository, eventAliasDao, entityAliasDao,
+				entityAliasChunkRepository, eventAliasChunkRepository, extractionService);
 
 	}
 
@@ -210,9 +207,9 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 	@Override
 	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(String query, List<String> knowledgeBases, int topK)
 			throws LLMConfigException {
-		LLMExtractionResult extraction = extractionService.extract(query, knowledgeBases);
+		Map<String, Object> cache = new HashMap<>();
+		LLMExtractionResult extraction = extractionService.extract(query, knowledgeBases, cache);
 		return knowledgeGraphSearch(extraction, topK, knowledgeBases);
 	}
 
-	
 }

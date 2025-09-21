@@ -1,19 +1,17 @@
 package ai.gebo.ragsystem.content.graphrag_processor.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGBatchMessagesReceiver;
@@ -23,26 +21,18 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
-import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
-import ai.gebo.architecture.documents.cache.service.DocumentCacheAccessException;
-import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
-import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider.ChunkingParams;
-import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesReceiverFactoryComponent;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
-import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
-import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
+import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
+import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphPersistenceService;
-import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
-import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.ragsystem.content.graphrag_processor.IGraphRagProcessorMessagesReceiverFactoryComponent;
 import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessorConfig;
-import ai.gebo.system.ingestion.GeboIngestionException;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -56,7 +46,9 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 	private final IGMessageBroker broker;
 	private final IGraphDataExtractionService graphRagExtractionService;
 	private final IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
+	private final GeboGraphRagProcessorConfig processorConfig;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
+	private final GraphextractionHelper extractionHelper;
 
 	class ProcessingStatusUpdater implements Consumer<KnowledgeExtractionEvent> {
 
@@ -132,17 +124,59 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				boolean discardFile = this.staticConfig.getDiscardedExtensions() != null && this.staticConfig
 						.getDiscardedExtensions().contains(payload.getDocumentReference().getExtension());
 				if (!discardFile) {
-					KnowledgeExtractionIterator iterator = new KnowledgeExtractionIterator(
-							payload.getDocumentReference(), chunkingService, graphRagExtractionService);
-					Spliterator<KnowledgeExtractionData> spliterator = Spliterators.spliteratorUnknownSize(iterator,
-							Spliterator.ORDERED | Spliterator.NONNULL);
-					Stream<KnowledgeExtractionData> stream = StreamSupport.stream(spliterator, false);
+					final Map<String, Object> cache = new HashMap<String, Object>();
+					knowledgeGraphPersistenceService.knowledgeGraphDelete(payload.getDocumentReference());
+					final GraphDocumentReference graphDocumentObject = knowledgeGraphPersistenceService
+							.knowledgeGraphInsertDocument(payload.getDocumentReference());
+					ExecutorService ex = Executors.newFixedThreadPool(
+							processorConfig.getGraphRagProcessorReceiverConfig().getConcurrentGraphExtractionWorkers());
 
-					knowledgeGraphPersistenceService.knowledgeGraphUpdate(payload.getDocumentReference(), stream,
-							updatesConsumer);
+					try {
+						DocumentChunkingResponse current = chunkingService
+								.getCachedChunkSet(payload.getDocumentReference());
 
-					data.setBatchDocumentsProcessed(!iterator.isExceptionOccurred() ? 1 : 0);
-					data.setBatchDocumentsProcessingErrors(iterator.isExceptionOccurred() ? 1 : 0);
+						while (current != null && !current.isEmpty()) {
+							Stream<DocumentChunk> chunks = current.getCurrentChunkSet().getChunks().stream();
+
+							Stream<CompletableFuture<KnowledgeExtractionEvent>> futureStream = chunks
+									.map((x) -> CompletableFuture.supplyAsync(() -> {
+										try {
+											long startTime = System.currentTimeMillis();
+											KnowledgeExtractionData extraction = this.extractionHelper.doProcessChunk(x,
+													payload.getDocumentReference(), cache);
+											KnowledgeExtractionEvent event = this.knowledgeGraphPersistenceService
+													.saveExtraction(extraction, graphDocumentObject,
+															payload.getDocumentReference(), cache);
+											if (staticConfig.getGraphRagProcessorReceiverConfig()
+													.getMinimumDelayBetweenRequests() > 0) {
+												long elapsedTime = System.currentTimeMillis() - startTime;
+												long delta = staticConfig.getGraphRagProcessorReceiverConfig()
+														.getMinimumDelayBetweenRequests() - elapsedTime;
+												if (delta > 0) {
+													Thread.currentThread().sleep(delta);
+												}
+											}
+											return event;
+										} catch (Throwable th) {
+											final String msg = "Error in async worker for dicument "
+													+ payload.getDocumentReference().getCode();
+											LOGGER.error(msg, th);
+											throw new RuntimeException(msg, th);
+										}
+									}, ex));
+							futureStream.map(CompletableFuture::join).forEach(updatesConsumer);
+							if (current.getNextChunkSetId() != null) {
+								current = chunkingService.getNextChunkSet(payload.getDocumentReference(),
+										current.getId(), current.getNextChunkSetId());
+							} else {
+								current = null;
+							}
+						}
+					} finally {
+						ex.shutdown();
+					}
+					data.setBatchDocumentsProcessed(1);
+					data.setBatchDocumentsProcessingErrors(0);
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), payload, emitter);
 				} else {

@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
@@ -53,19 +55,17 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		implements IKnowledgeGraphPersistenceService {
 
 	public KnowledgeGraphPersistenceServiceImpl(GraphDocumentReferenceRepository docReferenceRepository,
-			GraphDocumentChunkRepository docChunkRepository, GraphEntityObjectRepository entityObjectRepository,
-			GraphEntityInDocumentChunkRepository entityInChunkRepository,
-			GraphEventObjectRepository eventObjectRepository,
-			GraphEventInDocumentChunkRepository eventInChunkRepository,
-			GraphRelationObjectRepository relationObjectRepository,
-			GraphRelationInDocumentChunkRepository relationInChunkRepository,
-			GraphEventAliasObjectRepository eventAliasRepository,
-			GraphEntityAliasObjectRepository entityAliasRepository,
+			GraphDocumentChunkRepository docChunkRepository, GraphEntityObjectDao entityObjectDao,
+			GraphEntityInDocumentChunkRepository entityInChunkRepository, GraphEventObjectDao eventObjectDao,
+			GraphEventInDocumentChunkRepository eventInChunkRepository, GraphRelationObjectDao relationObjectDao,
+			GraphRelationInDocumentChunkRepository relationInChunkRepository, GraphEventAliasObjectDao eventAliasDao,
+			GraphEntityAliasObjectDao entityAliasDao,
 			GraphEntityAliasInDocumentChunkRepository entityAliasChunkRepository,
-			GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository, IGraphDataExtractionService extractionService) {
-		super(docReferenceRepository, docChunkRepository, entityObjectRepository, entityInChunkRepository,
-				eventObjectRepository, eventInChunkRepository, relationObjectRepository, relationInChunkRepository,
-				eventAliasRepository, entityAliasRepository, entityAliasChunkRepository, eventAliasChunkRepository,extractionService);
+			GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository,
+			IGraphDataExtractionService extractionService) {
+		super(docReferenceRepository, docChunkRepository, entityObjectDao, entityInChunkRepository, eventObjectDao,
+				eventInChunkRepository, relationObjectDao, relationInChunkRepository, eventAliasDao, entityAliasDao,
+				entityAliasChunkRepository, eventAliasChunkRepository, extractionService);
 
 	}
 
@@ -82,22 +82,12 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 	public void knowledgeGraphUpdate(final GDocumentReference documentReference, Stream<KnowledgeExtractionData> stream,
 			Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer) {
 		this.knowledgeGraphDelete(documentReference);
-		GraphDocumentReference ref = new GraphDocumentReference();
-		ref.setCode(documentReference.getCode());
-		ref.setKnowledgeBaseCode(documentReference.getRootKnowledgebaseCode());
-		ref.setProjectCode(documentReference.getParentProjectCode());
-		ref.setProjectEndpointClass(documentReference.getProjectEndpointReference().getClassName());
-		ref.setProjectEndpointCode(documentReference.getProjectEndpointReference().getCode());
-		this.docReferenceRepository.save(ref);
-		final Map<String, Object> cache = new HashMap<String, Object>();
-		stream.forEach(entry -> {
-			KnowledgeExtractionEvent event = saveExtraction(entry, ref, documentReference, cache);
-			if (event != null)
-				processingUpdatesConsumer.accept(event);
-		});
+		GraphDocumentReference ref = knowledgeGraphInsertDocument(documentReference);
+		knowledgeGraphInsertChunks(documentReference, ref, stream, processingUpdatesConsumer);
 	}
-
-	private KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction,GraphDocumentReference docRef,
+	@Transactional
+	@Override
+	public KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction, GraphDocumentReference docRef,
 			GDocumentReference documentReference, Map<String, Object> cache) {
 		KnowledgeExtractionEvent outData = null;
 		GraphDocumentChunk ref = new GraphDocumentChunk();
@@ -120,7 +110,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		for (EntityObject entity : entities) {
 
 			// check eventual cache
-			GraphEntityObject hit = findMatchingEntity(entity, cache, true);
+			GraphEntityObject hit = findOrCreateMatchingEntity(entity, cache, true);
 			GraphEntityInDocumentChunk entityInChunk = new GraphEntityInDocumentChunk();
 			entityInChunk.setId(UUID.randomUUID().toString());
 			entityInChunk.setDiscoveredEntity(hit);
@@ -133,7 +123,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		List<EventObject> events = extraction.getExtraction().getEvents();
 		for (EventObject event : events) {
 
-			GraphEventObject hit = findMatchingEvent(event, cache, true);
+			GraphEventObject hit = findOrCreateMatchingEvent(event, cache, true);
 			GraphEventInDocumentChunk eventInChunk = new GraphEventInDocumentChunk();
 			eventInChunk.setId(UUID.randomUUID().toString());
 			eventInChunk.setDiscoveredEvent(hit);
@@ -149,14 +139,14 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			eventInChunk.setParticipants(new ArrayList<GraphEntityObject>());
 			List<EntityObject> participants = event.getParticipantEntities();
 			for (EntityObject participant : participants) {
-				eventInChunk.getParticipants().add(findMatchingEntity(participant, cache, true));
+				eventInChunk.getParticipants().add(findOrCreateMatchingEntity(participant, cache, true));
 			}
 			eventInChunkRepository.save(eventInChunk);
 		}
 		List<RelationObject> relations = extraction.getExtraction().getRelations();
 		for (RelationObject relation : relations) {
 
-			GraphRelationObject hit = findMatchingRelation(relation, cache, true);
+			GraphRelationObject hit = findOrCreateMatchingRelation(relation, cache, true);
 			GraphRelationInDocumentChunk relationtInChunk = new GraphRelationInDocumentChunk();
 			relationtInChunk.setId(UUID.randomUUID().toString());
 			relationtInChunk.setDiscoveredRelation(hit);
@@ -168,7 +158,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		}
 		List<EntityAliasObject> entityAliases = extraction.getExtraction().getEntityAliases();
 		for (EntityAliasObject entityAliasObject : entityAliases) {
-			GraphEntityAliasObject alias = findMatchingEntityAlias(entityAliasObject, cache, true);
+			GraphEntityAliasObject alias = findOrCreateMatchingEntityAlias(entityAliasObject, cache, true);
 			GraphEntityAliasInDocumentChunk aliasInChunk = new GraphEntityAliasInDocumentChunk();
 			aliasInChunk.setId(UUID.randomUUID().toString());
 			aliasInChunk.setDocumentChunk(ref);
@@ -180,7 +170,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		}
 		List<EventAliasObject> eventAliases = extraction.getExtraction().getEventAliases();
 		for (EventAliasObject entityAliasObject : eventAliases) {
-			GraphEventAliasObject alias = findMatchingEventAlias(entityAliasObject, cache, true);
+			GraphEventAliasObject alias = findOrCreateMatchingEventAlias(entityAliasObject, cache, true);
 			GraphEventAliasInDocumentChunk aliasInChunk = new GraphEventAliasInDocumentChunk();
 			aliasInChunk.setId(UUID.randomUUID().toString());
 			aliasInChunk.setDocumentChunk(ref);
@@ -191,5 +181,29 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			eventAliasChunkRepository.save(aliasInChunk);
 		}
 		return outData;
+	}
+
+	@Override
+	public GraphDocumentReference knowledgeGraphInsertDocument(GDocumentReference documentReference) {
+		GraphDocumentReference ref = new GraphDocumentReference();
+		ref.setCode(documentReference.getCode());
+		ref.setKnowledgeBaseCode(documentReference.getRootKnowledgebaseCode());
+		ref.setProjectCode(documentReference.getParentProjectCode());
+		ref.setProjectEndpointClass(documentReference.getProjectEndpointReference().getClassName());
+		ref.setProjectEndpointCode(documentReference.getProjectEndpointReference().getCode());
+		this.docReferenceRepository.save(ref);
+		return ref;
+	}
+
+	@Override
+	public void knowledgeGraphInsertChunks(GDocumentReference documentReference, GraphDocumentReference ref,
+			Stream<KnowledgeExtractionData> stream, Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer) {
+		final Map<String, Object> cache = new HashMap<String, Object>();
+		stream.forEach(entry -> {
+			KnowledgeExtractionEvent event = saveExtraction(entry, ref, documentReference, cache);
+			if (event != null)
+				processingUpdatesConsumer.accept(event);
+		});
+
 	}
 }

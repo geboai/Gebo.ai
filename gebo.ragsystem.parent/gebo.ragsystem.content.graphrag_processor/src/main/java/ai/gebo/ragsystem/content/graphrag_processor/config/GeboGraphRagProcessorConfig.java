@@ -29,6 +29,12 @@ import lombok.Data;
 @ConfigurationProperties(value = "ai.gebo.graphrag.processor")
 @Data
 public class GeboGraphRagProcessorConfig {
+	@Data
+	public static class GraphRagCustomReceiverConfig extends TimedOutMessageReceiverFactoryConfig {
+		long minimumDelayBetweenRequests = -1;
+		int concurrentGraphExtractionWorkers = 4;
+	}
+
 	/**
 	 * Maximum cumulative size of messages in bytes before processing (default: 1MB)
 	 */
@@ -39,7 +45,7 @@ public class GeboGraphRagProcessorConfig {
 	 * Configuration for the vectorization message receiver with timeout
 	 * capabilities
 	 */
-	TimedOutMessageReceiverFactoryConfig graphRagProcessorReceiverConfig = new TimedOutMessageReceiverFactoryConfig();
+	GraphRagCustomReceiverConfig graphRagProcessorReceiverConfig = new GraphRagCustomReceiverConfig();
 
 	/**
 	 * Default constructor that initializes the configuration objects with default

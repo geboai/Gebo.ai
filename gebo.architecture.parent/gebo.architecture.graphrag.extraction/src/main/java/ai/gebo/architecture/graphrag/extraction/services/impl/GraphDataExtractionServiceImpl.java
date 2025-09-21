@@ -2,8 +2,10 @@ package ai.gebo.architecture.graphrag.extraction.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
@@ -32,33 +34,48 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GraphDataExtractionServiceImpl implements IGraphDataExtractionService {
+	private static final String GRAPHRAG_EXTRACTION_PROMPT_OBJECT = "Graphrag-extraction-prompt-object";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED = "GraphRagExtractionConfig-by-default-config-checked";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG = "GraphRagExtractionConfig-by-default-config";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED = "GraphRagExtractionConfig-by-knowledgebase-and-project-checked";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE = "GraphRagExtractionConfig-by-knowledgebase";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED = "GraphRagExtractionConfig-by-datasource-checked";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT = "GraphRagExtractionConfig-by-project";
+	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE = "GraphRagExtractionConfig-by-datasource";
 	private final IGChatModelRuntimeConfigurationDao chatModelsConfiguration;
 	private final GraphRagExtractionStaticConfig staticConfig;
 	private final GraphRagExtractionConfigRepository configRepository;
 
 	@Override
-	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration)
-			throws LLMConfigException {
+	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration,
+			Map<String, Object> cache) throws LLMConfigException {
 		String text = document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "";
 		text += document.getText();
-		return extract(text, configuration);
+		return extract(text, configuration, cache);
 	}
 
 	@Override
-	public LLMExtractionResult extract(String text, GraphRagExtractionConfig configuration) throws LLMConfigException {
+	public LLMExtractionResult extract(String text, GraphRagExtractionConfig configuration, Map<String, Object> cache)
+			throws LLMConfigException {
 		IGConfigurableChatModel chatModel = getChatModel(configuration);
+
 		if (chatModel == null)
 			throw new LLMConfigException("No configured extraction model");
-		String formatSpecification = createFormatSpecification(configuration);
-		String prompt = staticConfig.getExtractionConfig() != null
-				? staticConfig.getExtractionConfig().getExtractionPrompt()
-				: null;
-		if (configuration != null && configuration.getExtractionPrompt() != null) {
-			prompt = configuration.getExtractionPrompt();
+		Prompt promptObject = (Prompt) cache.get(GRAPHRAG_EXTRACTION_PROMPT_OBJECT);
+		if (promptObject == null) {
+			String formatSpecification = createFormatSpecification(configuration);
+			String prompt = staticConfig.getExtractionConfig() != null
+					? staticConfig.getExtractionConfig().getExtractionPrompt()
+					: null;
+			if (configuration != null && configuration.getExtractionPrompt() != null) {
+				prompt = configuration.getExtractionPrompt();
+			}
+			PromptTemplate promptTemplate = new PromptTemplate(prompt);
+			promptTemplate.add("format", formatSpecification);
+			promptObject = promptTemplate.create();
+			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
-		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		promptTemplate.add("format", formatSpecification);
-		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptTemplate.create()).system(text);
+		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).system(text);
 
 		return clean(requestSpec.call().entity(LLMExtractionResult.class));
 	}
@@ -77,8 +94,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 				}).filter(u -> u.getParticipantEntities() != null && !u.getParticipantEntities().isEmpty()).toList();
 		cleanResult.setEvents(events);
 		List<RelationObject> relations = cleanResult.getRelations().stream()
-				.filter(GraphDataExtractionServiceImpl::validRelation)
-				.toList();
+				.filter(GraphDataExtractionServiceImpl::validRelation).toList();
 		cleanResult.setRelations(relations);
 		List<EntityAliasObject> aliases = data
 				.getEntityAliases().stream().filter(x -> validEntity(x.getAliasObject())
@@ -100,9 +116,11 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	private static boolean validEvent(EventObject x) {
 		return x != null && x.getTitle() != null && x.getType() != null;
 	}
+
 	private static boolean validRelation(RelationObject x) {
 		return x.getType() != null && validEntity(x.getFromEntity()) && validEntity(x.getToEntity());
 	}
+
 	private String createFormatSpecification(GraphRagExtractionConfig configuration) {
 		BeanOutputConverter<LLMExtractionResult> beanOutputConverter = new BeanOutputConverter<>(
 				LLMExtractionResult.class);
@@ -186,58 +204,77 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	}
 
 	@Override
-	public LLMExtractionResult extract(Document document, GDocumentReference docreference) throws LLMConfigException {
+	public LLMExtractionResult extract(Document document, GDocumentReference docreference, Map<String, Object> cache)
+			throws LLMConfigException {
 		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
-		GraphRagExtractionConfig dataSourceLevelConfig = null;
-		GraphRagExtractionConfig projectLevelConfig = null;
-		GraphRagExtractionConfig knowledgeBaseLevelConfig = null;
-		GraphRagExtractionConfig defaultLevelConfig = null;
-		List<GraphRagExtractionConfig> defaultConfigs = this.configRepository.findByDefaultConfiguration(Boolean.TRUE);
-		if (!defaultConfigs.isEmpty()) {
-			defaultLevelConfig = defaultConfigs.get(0);
+		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
+		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT);
+		GraphRagExtractionConfig knowledgeBaseLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE);
+		GraphRagExtractionConfig defaultLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG);
+		if (defaultLevelConfig == null) {
+			List<GraphRagExtractionConfig> defaultConfigs = this.configRepository
+					.findByDefaultConfiguration(Boolean.TRUE);
+			if (!defaultConfigs.isEmpty()) {
+				defaultLevelConfig = defaultConfigs.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG, defaultLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED, "true");
 		}
-		List<GraphRagExtractionConfig> forDataSource = this.configRepository.findByEndpointClassNameAndEndpointCode(
-				docreference.getProjectEndpointReference().getClassName(),
-				docreference.getProjectEndpointReference().getCode());
 
 		String knowledgeBaseCode = docreference.getRootKnowledgebaseCode();
 		String projectCode = docreference.getParentProjectCode();
-		if (knowledgeBaseCode != null) {
+		if (knowledgeBaseCode != null
+				&& !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED)) {
 			List<GraphRagExtractionConfig> forKnowledgeBase = this.configRepository
 					.findByKnowledgeBaseCode(knowledgeBaseCode);
 			for (GraphRagExtractionConfig kc : forKnowledgeBase) {
 				if (kc.getProjectCode() == null && knowledgeBaseLevelConfig == null) {
 					knowledgeBaseLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE, knowledgeBaseLevelConfig);
 				}
 				if (kc.getProjectCode() != null && projectCode != null && kc.getProjectCode().equals(projectCode)
 						&& projectLevelConfig == null) {
 					projectLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT, projectLevelConfig);
 				}
 			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED, "true");
 		}
-		if (!forDataSource.isEmpty()) {
-			dataSourceLevelConfig = forDataSource.get(0);
+		if (dataSourceLevelConfig == null && !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED)) {
+			List<GraphRagExtractionConfig> forDataSource = this.configRepository.findByEndpointClassNameAndEndpointCode(
+					docreference.getProjectEndpointReference().getClassName(),
+					docreference.getProjectEndpointReference().getCode());
+			if (!forDataSource.isEmpty()) {
+				dataSourceLevelConfig = forDataSource.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE, dataSourceLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED, "true");
+
 		}
 
-		return extract(document, mainConfiguration, defaultLevelConfig, knowledgeBaseLevelConfig, projectLevelConfig,
-				dataSourceLevelConfig);
+		return extract(document, cache, mainConfiguration, defaultLevelConfig, knowledgeBaseLevelConfig,
+				projectLevelConfig, dataSourceLevelConfig);
 	}
 
-	private LLMExtractionResult extract(Document document, GraphRagExtractionConfig mainConfiguration,
-			GraphRagExtractionConfig defaultLevelConfig, GraphRagExtractionConfig knowledgeBaseLevelConfig,
-			GraphRagExtractionConfig projectLevelConfig, GraphRagExtractionConfig dataSourceLevelConfig)
-			throws LLMConfigException {
+	private LLMExtractionResult extract(Document document, Map<String, Object> cache,
+			GraphRagExtractionConfig mainConfiguration, GraphRagExtractionConfig defaultLevelConfig,
+			GraphRagExtractionConfig knowledgeBaseLevelConfig, GraphRagExtractionConfig projectLevelConfig,
+			GraphRagExtractionConfig dataSourceLevelConfig) throws LLMConfigException {
 		if (dataSourceLevelConfig != null) {
-			return extract(document, dataSourceLevelConfig);
+			return extract(document, dataSourceLevelConfig, cache);
 		}
 		if (projectLevelConfig != null) {
-			return extract(document, projectLevelConfig);
+			return extract(document, projectLevelConfig, cache);
 		}
 		if (knowledgeBaseLevelConfig != null) {
-			return extract(document, knowledgeBaseLevelConfig);
+			return extract(document, knowledgeBaseLevelConfig, cache);
 		}
 		if (defaultLevelConfig != null) {
-			return extract(document, defaultLevelConfig);
+			return extract(document, defaultLevelConfig, cache);
 		}
 		throw new LLMConfigException("There is no available configuration for knowledge extraction");
 	}
@@ -251,7 +288,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	}
 
 	@Override
-	public LLMExtractionResult extract(String query, List<String> knowledgeBases) throws LLMConfigException {
+	public LLMExtractionResult extract(String query, List<String> knowledgeBases, Map<String, Object> cache)
+			throws LLMConfigException {
 		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
 		GraphRagExtractionConfig defaultLevelConfig = null;
 		List<GraphRagExtractionConfig> defaultConfigs = this.configRepository.findByDefaultConfiguration(Boolean.TRUE);
@@ -260,7 +298,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		}
 		GraphRagExtractionConfig joinConfiguration = joinConfigurations(mainConfiguration, defaultLevelConfig,
 				knowledgeBases);
-		return extract(query, joinConfiguration);
+		return extract(query, joinConfiguration, cache);
 	}
 
 	private GraphRagExtractionConfig joinConfigurations(GraphRagExtractionConfig mainConfiguration,
