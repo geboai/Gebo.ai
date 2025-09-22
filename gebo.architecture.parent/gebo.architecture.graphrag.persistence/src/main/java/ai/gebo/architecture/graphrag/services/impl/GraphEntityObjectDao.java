@@ -44,7 +44,7 @@ public class GraphEntityObjectDao
 				reconcyle.getName().toUpperCase());
 		if (matches != null && !matches.isEmpty()) {
 			hit = matches.get(0);
-
+			cache.put(key, hit);
 		}
 		if (hit == null) {
 			hit = new GraphEntityObject();

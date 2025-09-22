@@ -1,5 +1,6 @@
 package ai.gebo.architecture.graphrag.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -28,5 +29,11 @@ public abstract class AbstractNeo4jKnowledgeGraphObjectDao<Type extends ai.gebo.
 			cache.put(key, result);
 		}
 		return result;
+	}
+
+	public void merge(List<GraphObjectReference<Type, ReconcileObject>> data, Map<String, Object> cache) {
+		for (GraphObjectReference<Type, ReconcileObject> entry : data) {
+			entry.setGraphObject(findOrCreateUncached(entry.getExtractedObject(), cache));
+		}
 	}
 }
