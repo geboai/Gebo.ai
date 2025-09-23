@@ -15,9 +15,10 @@ import jakarta.annotation.Nullable;
 public interface GraphDocumentChunkRepository extends Neo4jRepository<GraphDocumentChunk, String> {
 	public void deleteByDocumentCode(String code);
 
+	// trova i chunk che contengono entity_alias o event_alias connessi in 1-hop
+	// ai canonical anchor (entity_object / event_object) richiesti
 	@Query("""
-			// trova i chunk che contengono entity_alias o event_alias connessi in 1-hop
-			// ai canonical anchor (entity_object / event_object) richiesti
+
 			WITH $entityIds AS eids, $eventIds AS evIds
 			MATCH (c:document_chunk)<-[:in_chunk]-(aic)-[:discovered_entity_alias|:discovered_event_alias]->(a)
 			WHERE

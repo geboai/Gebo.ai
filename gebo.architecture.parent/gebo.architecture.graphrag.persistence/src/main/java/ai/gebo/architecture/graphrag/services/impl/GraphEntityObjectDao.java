@@ -21,41 +21,16 @@ public class GraphEntityObjectDao
 
 	}
 
-	
-
 	@Override
-	String createLogicalKey(EntityObject reconcyle) {
-		String key = reconcyle.getClass().getName() + "-" + reconcyle.getType().toUpperCase() + "-"
-				+ reconcyle.getName().toUpperCase();
-		return key;
-	}
-
-	@Override
-	GraphEntityObject findByCacheLookup(EntityObject reconcyle, Map<String, Object> cache) {
-		String key = createLogicalKey(reconcyle);
-		return (GraphEntityObject) cache.get(key);
-	}
-	@Transactional
-	@Override
-	GraphEntityObject findOrCreateUncached(EntityObject reconcyle, Map<String, Object> cache) {
+	GraphEntityObject createCopyOf(EntityObject reconcyle) {
 		GraphEntityObject hit = null;
-		String key = createLogicalKey(reconcyle);
-		List<GraphEntityObject> matches = repository.findByTypeAndName(reconcyle.getType().toUpperCase(),
-				reconcyle.getName().toUpperCase());
-		if (matches != null && !matches.isEmpty()) {
-			hit = matches.get(0);
-			cache.put(key, hit);
-		}
-		if (hit == null) {
-			hit = new GraphEntityObject();
-			hit.setId(UUID.randomUUID().toString());
-			hit.setType(reconcyle.getType().toUpperCase());
-			hit.setName(reconcyle.getName().toUpperCase());
-			hit.setLongDescription(reconcyle.getLongDescription());
-			hit.setAttributes(reconcyle.getAttributes());
-			repository.save(hit);			
-			cache.put(key, hit);
-		}
+		hit = new GraphEntityObject();
+		hit.setId(UUID.randomUUID().toString());
+		hit.setType(reconcyle.getType().toUpperCase());
+		hit.setName(reconcyle.getName().toUpperCase());
+		hit.setLongDescription(reconcyle.getLongDescription());
+		hit.setAttributes(reconcyle.getAttributes());
+		hit.assignId();
 		return hit;
 	}
 

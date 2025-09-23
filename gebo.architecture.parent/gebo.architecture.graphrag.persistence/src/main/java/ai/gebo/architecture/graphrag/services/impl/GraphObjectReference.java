@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ai.gebo.architecture.graphrag.persistence.model.AbstractGraphObject;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data class GraphObjectReference<Neo4JType extends AbstractGraphObject, ExtractedType extends ai.gebo.architecture.graphrag.extraction.model.AbstractGraphObject> {
-	private String logicKey = null;
-	private Neo4JType graphObject = null;
-	private ExtractedType extractedObject = null;
-	private Map<String, ExtractedType> chunkIds = new HashMap<>();
+@Data 
+@AllArgsConstructor
+class GraphObjectReference<Neo4JType extends AbstractGraphObject, ExtractedType extends ai.gebo.architecture.graphrag.extraction.model.AbstractGraphObject> {
+	private final ExtractedType extractedObject;
+	private final Neo4JType graphObject;	
+	private final Map<String, ExtractedType> chunkIds = new HashMap<>();
 }

@@ -9,11 +9,17 @@ import org.springframework.data.neo4j.core.schema.Id;
 import lombok.Data;
 
 @Data
-public class AbstractGraphObject {
+public abstract class AbstractGraphObject {
 	@Id
-	private String id = null;
-	private String type = null;
+	protected String id = null;
+	protected String type = null;
 	@CompositeProperty(prefix = "attributes")
-	private Map<String, Object> attributes = new HashMap<String, Object>();
-	private String longDescription = null;
+	protected Map<String, Object> attributes = new HashMap<String, Object>();
+	protected String longDescription = null;
+
+	public abstract String computeId();
+
+	public final void assignId() {
+		this.id = computeId();
+	}
 }

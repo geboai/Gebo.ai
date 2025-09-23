@@ -6,6 +6,6 @@ import ai.gebo.architecture.graphrag.persistence.model.GraphEventObject;
 
 public interface GraphEventObjectRepository extends AbstractGraphObjectRepository<GraphEventObject>{
 
-	List<GraphEventObject> findByTypeAndTitle(String upperCase, String upperCase2);
+	List<GraphEventObject> findByTypeAndName(String upperCase, String upperCase2);
 
 }

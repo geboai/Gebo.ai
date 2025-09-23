@@ -28,8 +28,7 @@ public interface IKnowledgeGraphPersistenceService {
 		knowledgeGraphUpdate(documentReference, data != null ? data.stream() : Stream.of(), processingUpdatesConsumer);
 	}
 
-	public KnowledgeExtractionEvent saveExtraction(KnowledgeExtractionData extraction, GraphDocumentReference docRef,
-			GDocumentReference documentReference, Map<String, Object> cache);
+	
 
 	public boolean isConfigured();
 

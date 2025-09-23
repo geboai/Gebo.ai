@@ -25,59 +25,21 @@ public class GraphEventAliasObjectDao extends
 
 	}
 
-	
-
 	@Override
-	String createLogicalKey(EventAliasObject alias) {
-		String key = alias.getClass().getName() + "-" + eventDao.createLogicalKey(alias.getAliasObject()) + "-"
-				+ eventDao.createLogicalKey(alias.getReferenceObject());
-		return key;
-	}
-
-	@Override
-	GraphEventAliasObject findByCacheLookup(EventAliasObject reconcyle, Map<String, Object> cache) {
-		String key = createLogicalKey(reconcyle);
-		return (GraphEventAliasObject) cache.get(key);
-	}
-	@Transactional
-	@Override
-	GraphEventAliasObject findOrCreateUncached(EventAliasObject alias, Map<String, Object> cache) {
-		String key = createLogicalKey(alias);
-		GraphEventObject referenceObject = eventDao.findOrCreateMatching(alias.getReferenceObject(), cache, true);
-		GraphEventObject aliasObject = eventDao.findOrCreateMatching(alias.getAliasObject(), cache, true);
-
+	GraphEventAliasObject createCopyOf(EventAliasObject alias) {
+		GraphEventObject referenceObject = eventDao.createCopyOf(alias.getReferenceObject());
+		GraphEventObject aliasObject = eventDao.createCopyOf(alias.getAliasObject());
 		GraphEventAliasObject hit = null;
-
-		// retrieve from existing entities
-		List<GraphEventAliasObject> matches = repository
-				.findByReferenceObjectIdAndAliasObjectId(referenceObject.getId(), aliasObject.getId());
-		// if found load in cache and consider it
-		if (matches != null && !matches.isEmpty()) {
-			hit = matches.get(0);
-			cache.put(key, hit);
-		}
-		if (hit == null) {
-			matches = repository.findByReferenceObjectIdAndAliasObjectId(aliasObject.getId(), referenceObject.getId());
-			if (matches != null && !matches.isEmpty()) {
-				hit = matches.get(0);
-				cache.put(key, hit);
-			}
-		}
-		// if not found insert in graph db
-		if (hit == null) {
-			hit = new GraphEventAliasObject();
-			hit.setId(UUID.randomUUID().toString());
-			hit.setType(alias.getType().toUpperCase());
-			hit.setEquivalenceType(alias.getEquivalenceType() != EquivalenceType.SYNONYM
-					? ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.ALIAS
-					: ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.SYNONYM);
-			hit.setReferenceObject(referenceObject);
-			hit.setAliasObject(aliasObject);
-			hit.setLongDescription(alias.getLongDescription());
-			hit.setAttributes(alias.getAttributes());
-			repository.save(hit);
-			cache.put(key, hit);
-		}
+		hit = new GraphEventAliasObject();
+		hit.setType(alias.getType().toUpperCase());
+		hit.setEquivalenceType(alias.getEquivalenceType() != EquivalenceType.SYNONYM
+				? ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.ALIAS
+				: ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.SYNONYM);
+		hit.setReferenceObject(referenceObject);
+		hit.setAliasObject(aliasObject);
+		hit.setLongDescription(alias.getLongDescription());
+		hit.setAttributes(alias.getAttributes());
+		hit.assignId();
 		return hit;
 	}
 
