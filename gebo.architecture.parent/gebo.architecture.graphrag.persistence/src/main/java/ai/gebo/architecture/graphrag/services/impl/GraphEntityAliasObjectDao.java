@@ -37,9 +37,6 @@ public class GraphEntityAliasObjectDao extends
 		GraphEntityObject aliasObject = entityDao.createCopyOf(alias.getAliasObject());
 		hit.setType(alias.getType().toUpperCase());
 		hit.setReferenceObject(referenceObject);
-		hit.setEquivalenceType(alias.getEquivalenceType() != EquivalenceType.SYNONYM
-				? ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.ALIAS
-				: ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.SYNONYM);
 		hit.setAliasObject(aliasObject);
 		hit.setLongDescription(alias.getLongDescription());
 		hit.setAttributes(alias.getAttributes());

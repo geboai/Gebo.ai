@@ -13,8 +13,8 @@ import jakarta.annotation.Nullable;
 public interface GraphEventAliasInDocumentChunkRepository
 		extends AbstractInDocumentChunkObjectRepository<GraphEventAliasInDocumentChunk> {
 	@Query("""
-			MATCH (c:document_chunk)<-[:in_chunk]-(evic:event_alias_chunk)-[:discovered_event_alias]->(ev:event_alias)
-			MATCH (c)-[:of_document]->(dr:document_reference)
+			MATCH (c:document_chunk)<-[:contained_in]-(evic:event_alias_chunk)-[:discovered_event_alias]->(ev:event_alias)
+			MATCH (c)-[:chunk_of]->(dr:document_reference)
 			WHERE ev.id IN $aliasIds
 			  AND ($kbCodes IS NULL OR dr.knowledgebase_code IN $kbCodes)
 			RETURN c.id AS chunkId,

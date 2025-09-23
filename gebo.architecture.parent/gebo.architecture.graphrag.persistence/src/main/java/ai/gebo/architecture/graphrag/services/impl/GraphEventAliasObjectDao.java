@@ -32,9 +32,6 @@ public class GraphEventAliasObjectDao extends
 		GraphEventAliasObject hit = null;
 		hit = new GraphEventAliasObject();
 		hit.setType(alias.getType().toUpperCase());
-		hit.setEquivalenceType(alias.getEquivalenceType() != EquivalenceType.SYNONYM
-				? ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.ALIAS
-				: ai.gebo.architecture.graphrag.persistence.model.AbstractGraphAliasObject.EquivalenceType.SYNONYM);
 		hit.setReferenceObject(referenceObject);
 		hit.setAliasObject(aliasObject);
 		hit.setLongDescription(alias.getLongDescription());
