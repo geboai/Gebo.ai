@@ -138,15 +138,12 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 						while (current != null && !current.isEmpty()) {
 							Stream<DocumentChunk> chunks = current.getCurrentChunkSet().getChunks().stream();
 
-							Stream<CompletableFuture<KnowledgeExtractionEvent>> futureStream = chunks
+							Stream<CompletableFuture<KnowledgeExtractionData>> futureStream = chunks
 									.map((x) -> CompletableFuture.supplyAsync(() -> {
 										try {
 											long startTime = System.currentTimeMillis();
 											KnowledgeExtractionData extraction = this.extractionHelper.doProcessChunk(x,
 													payload.getDocumentReference(), cache);
-											KnowledgeExtractionEvent event = this.knowledgeGraphPersistenceService
-													.saveExtraction(extraction, graphDocumentObject,
-															payload.getDocumentReference(), cache);
 											if (staticConfig.getGraphRagProcessorReceiverConfig()
 													.getMinimumDelayBetweenRequests() > 0) {
 												long elapsedTime = System.currentTimeMillis() - startTime;
@@ -156,7 +153,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 													Thread.currentThread().sleep(delta);
 												}
 											}
-											return event;
+											return extraction;
 										} catch (Throwable th) {
 											final String msg = "Error in async worker for dicument "
 													+ payload.getDocumentReference().getCode();
@@ -164,7 +161,11 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 											throw new RuntimeException(msg, th);
 										}
 									}, ex));
-							futureStream.map(CompletableFuture::join).forEach(updatesConsumer);
+							Stream<KnowledgeExtractionData> knowledgeExtractionStream = futureStream
+									.map(CompletableFuture::join);
+							this.knowledgeGraphPersistenceService.knowledgeGraphInsertChunks(
+									payload.getDocumentReference(), graphDocumentObject, knowledgeExtractionStream,
+									updatesConsumer, cache);
 							if (current.getNextChunkSetId() != null) {
 								current = chunkingService.getNextChunkSet(payload.getDocumentReference(),
 										current.getId(), current.getNextChunkSetId());

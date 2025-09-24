@@ -49,48 +49,43 @@ public class AbstractGraphPersistenceService {
 	protected final GraphEventAliasInDocumentChunkRepository eventAliasChunkRepository;
 	protected final IGraphDataExtractionService extractionService;
 
-	protected GraphEntityObject findOrCreateMatchingEntity(EntityObject entity, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		return this.entityObjectDao.findOrCreateMatching(entity, cache, insertIfNotFound);
+	protected GraphEntityObject createMatchingEntity(EntityObject entity) {
+		return this.entityObjectDao.createCopyOf(entity);
 	}
 
-	protected GraphEntityAliasObject findOrCreateMatchingEntityAlias(EntityAliasObject alias, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		return this.entityAliasDao.findOrCreateMatching(alias, cache, insertIfNotFound);
+	protected GraphEntityAliasObject createMatchingEntityAlias(EntityAliasObject alias) {
+		return this.entityAliasDao.createCopyOf(alias);
 	}
 
-	protected GraphEventObject findOrCreateMatchingEvent(EventObject event, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		return eventObjectDao.findOrCreateMatching(event, cache, insertIfNotFound);
+	protected GraphEventObject createMatchingEvent(EventObject event) {
+		return eventObjectDao.createCopyOf(event);
 	}
 
-	protected GraphEventAliasObject findOrCreateMatchingEventAlias(EventAliasObject alias, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		return eventAliasDao.findOrCreateMatching(alias, cache, insertIfNotFound);
+	protected GraphEventAliasObject createMatchingEventAlias(EventAliasObject alias) {
+		return eventAliasDao.createCopyOf(alias);
 	}
 
-	protected GraphRelationObject findOrCreateMatchingRelation(RelationObject relation, Map<String, Object> cache,
-			boolean insertIfNotFound) {
-		return relationObjectDao.findOrCreateMatching(relation, cache, insertIfNotFound);
+	protected GraphRelationObject createMatchingRelation(RelationObject relation) {
+		return relationObjectDao.createCopyOf(relation);
 	}
 
 	protected GraphExtractionMatching searchMatches(LLMExtractionResult extraction) {
 		GraphExtractionMatching out = null;
 		final Map<String, Object> cache = new HashMap<String, Object>();
 		List<GraphEntityObject> entities = extraction.getEntities().stream().map(x -> {
-			return this.findOrCreateMatchingEntity(x, cache, false);
+			return this.createMatchingEntity(x);
 		}).filter(ent -> ent != null).toList();
 		List<GraphEventObject> events = extraction.getEvents().stream().map(x -> {
-			return findOrCreateMatchingEvent(x, cache, false);
+			return createMatchingEvent(x);
 		}).filter(y -> y != null).toList();
 		List<GraphRelationObject> relations = extraction.getRelations().stream().map(x -> {
-			return findOrCreateMatchingRelation(x, cache, false);
+			return createMatchingRelation(x);
 		}).filter(y -> y != null).toList();
 		List<GraphEntityAliasObject> entityAliases = extraction.getEntityAliases().stream().map(x -> {
-			return findOrCreateMatchingEntityAlias(x, cache, false);
+			return createMatchingEntityAlias(x);
 		}).filter(y -> y != null).toList();
 		List<GraphEventAliasObject> eventAliases = extraction.getEventAliases().stream().map(x -> {
-			return findOrCreateMatchingEventAlias(x, cache, false);
+			return createMatchingEventAlias(x);
 		}).filter(y -> y != null).toList();
 		out = new GraphExtractionMatching(entities, events, relations, entityAliases, eventAliases);
 		return out;

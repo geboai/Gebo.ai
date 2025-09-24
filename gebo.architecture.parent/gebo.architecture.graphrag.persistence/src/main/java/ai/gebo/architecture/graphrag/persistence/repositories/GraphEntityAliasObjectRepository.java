@@ -6,6 +6,6 @@ import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasObject;
 
 public interface GraphEntityAliasObjectRepository extends AbstractGraphObjectRepository<GraphEntityAliasObject> {
 
-	List<GraphEntityAliasObject> findByReferenceObjectIdAndAliasObjectId(String id, String id2);
+	
 
 }

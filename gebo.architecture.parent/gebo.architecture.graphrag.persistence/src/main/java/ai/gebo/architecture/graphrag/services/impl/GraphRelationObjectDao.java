@@ -24,45 +24,16 @@ public class GraphRelationObjectDao extends
 	}
 
 	@Override
-	String createLogicalKey(RelationObject relation) {
-		String key = relation.getClass().getName() + "-" + relation.getType().toUpperCase()
-				+ entityDao.createLogicalKey(relation.getFromEntity()) + "-"
-				+ entityDao.createLogicalKey(relation.getToEntity());
-		return key;
-	}
-
-	@Override
-	GraphRelationObject findByCacheLookup(RelationObject reconcyle, Map<String, Object> cache) {
-		String key = createLogicalKey(reconcyle);
-		return (GraphRelationObject) cache.get(key);
-	}
-
-	@Transactional
-	@Override
-	GraphRelationObject findOrCreateUncached(RelationObject reconcyle, Map<String, Object> cache) {
-		String key = createLogicalKey(reconcyle);
-		GraphEntityObject fromEntity = entityDao.findOrCreateMatching(reconcyle.getFromEntity(), cache, true);
-		GraphEntityObject toEntity = entityDao.findOrCreateMatching(reconcyle.getToEntity(), cache, true);
-		GraphRelationObject hit = null;
-		List<GraphRelationObject> matches = repository.findByTypeAndFromEntityIdAndToEntityId(
-				reconcyle.getType().toUpperCase(), fromEntity.getId(), toEntity.getId());
-		// if found load in cache and consider it
-		if (matches != null && !matches.isEmpty()) {
-			hit = matches.get(0);
-			cache.put(key, hit);
-		}
-		// if not found insert in graph db
-		if (hit == null) {
-			hit = new GraphRelationObject();
-			hit.setId(UUID.randomUUID().toString());
-			hit.setType(reconcyle.getType().toUpperCase());
-			hit.setFromEntity(fromEntity);
-			hit.setToEntity(toEntity);
-			hit.setLongDescription(reconcyle.getLongDescription());
-			hit.setAttributes(reconcyle.getAttributes());
-			repository.save(hit);
-			cache.put(key, hit);
-		}
+	GraphRelationObject createCopyOf(RelationObject reconcyle) {
+		GraphEntityObject fromEntity = entityDao.createCopyOf(reconcyle.getFromEntity());
+		GraphEntityObject toEntity = entityDao.createCopyOf(reconcyle.getToEntity());
+		GraphRelationObject hit = new GraphRelationObject();
+		hit.setType(reconcyle.getType().toUpperCase());
+		hit.setFromEntity(fromEntity);
+		hit.setToEntity(toEntity);
+		hit.setLongDescription(reconcyle.getLongDescription());
+		hit.setAttributes(reconcyle.getAttributes());
+		hit.assignId();
 		return hit;
 	}
 
