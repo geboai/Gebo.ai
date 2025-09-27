@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class Neo4jDdlRunner {
-
+	private static Logger LOGGER = LoggerFactory.getLogger(Neo4jDdlRunner.class);
 	@Value("classpath:neo4j-graphrag-ddl/knowledge-model.ddl")
 	private Resource ddl;
 
@@ -37,7 +39,9 @@ public class Neo4jDdlRunner {
 		// Consiglio: separa i comandi con ';' su una riga propria o usa delimitatori
 		// '-- #stmt'.
 		Arrays.stream(script.split("(?m);\\s*$")).map(String::trim)
-				.filter(s -> !s.isBlank() && !s.startsWith("//") && !s.startsWith("--"))
-				.forEach(stmt -> neo4jClient.query(stmt).run());
+				.filter(s -> !s.isBlank() && !s.startsWith("//") && !s.startsWith("--")).forEach(stmt -> {
+					LOGGER.info("Running NEO4J:" + stmt);
+					neo4jClient.query(stmt).run();
+				});
 	}
 }

@@ -18,41 +18,34 @@ public interface GraphDocumentChunkRepository extends Neo4jRepository<GraphDocum
 	// trova i chunk che contengono entity_alias o event_alias connessi in 1-hop
 	// ai canonical anchor (entity_object / event_object) richiesti
 	@Query("""
-
 			WITH $entityIds AS eids, $eventIds AS evIds
-			MATCH (c:document_chunk)<-[:in_chunk]-(aic)-[:discovered_entity_alias|:discovered_event_alias]->(a)
-			WHERE
-			  (
-			    size(eids) > 0 AND
-			    EXISTS {
-			      MATCH (a)-[:alias_of|:referred_on]->(canon)
-			      WHERE (canon:entity_object AND canon.id IN eids)
-			    }
-			  ) OR
-			  (
-			    size(evIds) > 0 AND
-			    EXISTS {
-			      MATCH (a)-[:alias_of|:referred_on]->(canon)
-			      WHERE (canon:event_object AND canon.id IN evIds)
-			    }
-			  )
-			MATCH (c)-[:of_document]->(dr:document_reference)
-			WHERE ($kbCodes IS NULL OR dr.knowledgebase_code IN $kbCodes)
+			MATCH (c:document_chunk)<-[:contained_in]-(aic)-[:discovered_entity_alias|:discovered_event_alias]->(a)
+			WHERE (
+			  size(eids) > 0 AND EXISTS {
+			    MATCH (a)-[:alias_of|:referred_on]->(canon:entity_object)
+			    WHERE canon.id IN eids
+			  }
+			) OR (
+			  size(evIds) > 0 AND EXISTS {
+			    MATCH (a)-[:alias_of|:referred_on]->(canon:event_object)
+			    WHERE canon.id IN evIds
+			  }
+			)
+			MATCH (c)-[:chunk_of]->(dr:document_reference)
+			WHERE $kbCodes IS NULL OR dr.knowledgeBaseCode IN $kbCodes
 			RETURN c.id AS chunkId,
-			       dr.id AS documentReferenceId,
-			       count(*) AS neighborCount
+       dr.code AS documentReferenceId,
+       count(*) AS neighborCount
 			""")
 	List<ChunkNeighborRow> findChunksNearAnchors1Hop(@Param("entityIds") Collection<String> entityIds,
 			@Param("eventIds") Collection<String> eventIds, @Param("kbCodes") @Nullable Collection<String> kbCodes);
 
 	@Query("""
-			MATCH (c:document_chunk)-[:of_document]->(dr:document_reference)
+			MATCH (c:document_chunk)-[:chunk_of]->(dr:document_reference)
 			WHERE c.id IN $chunkIds
 			RETURN c.id AS chunkId,
-			       dr.id AS documentReferenceId,
-			       dr.knowledgebase_code AS knowledgebaseCode,
-			       c.token_count AS tokenCount,
-			       dr.epoch_millis AS documentEpochMillis
+		       dr.code AS documentReferenceId,
+		       dr.knowledgeBaseCode AS knowledgebaseCode
 			""")
 	List<ChunkMeta> fetchChunkMetas(@Param("chunkIds") Collection<String> chunkIds);
 }

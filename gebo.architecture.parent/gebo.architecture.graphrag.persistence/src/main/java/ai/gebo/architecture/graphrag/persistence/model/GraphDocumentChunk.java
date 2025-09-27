@@ -11,7 +11,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Node("docchunk")
+@Node("document_chunk")
 @Data
 public class GraphDocumentChunk {
 	@Id
@@ -29,7 +29,7 @@ public class GraphDocumentChunk {
 	private String projectEndpointCode = null;
 	@NotNull
 	private String text = null;
-	@Relationship(type = ":chunk_of", direction = Relationship.Direction.OUTGOING)
+	@Relationship(type = "chunk_of", direction = Relationship.Direction.OUTGOING)
 	private GraphDocumentReference chunkOf = null;
 	@CompositeProperty(prefix = "metaData")
 	private Map<String, Object> metaData = new HashMap<String, Object>();

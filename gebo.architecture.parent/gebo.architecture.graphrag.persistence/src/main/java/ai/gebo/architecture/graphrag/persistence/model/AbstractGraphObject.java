@@ -15,7 +15,7 @@ public abstract class AbstractGraphObject {
 	protected String type = null;
 	@CompositeProperty(prefix = "attributes")
 	protected Map<String, Object> attributes = new HashMap<String, Object>();
-	protected String longDescription = null;
+	protected String longDescription = "";
 
 	public abstract String computeId();
 

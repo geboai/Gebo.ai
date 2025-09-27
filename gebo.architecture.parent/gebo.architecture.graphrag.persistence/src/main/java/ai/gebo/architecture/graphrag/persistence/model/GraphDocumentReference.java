@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Node("docreference")
+@Node("document_reference")
 @Data
 public class GraphDocumentReference {
 	@Id
