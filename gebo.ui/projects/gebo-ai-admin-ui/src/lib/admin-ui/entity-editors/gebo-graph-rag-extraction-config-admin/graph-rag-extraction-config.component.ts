@@ -1,8 +1,7 @@
 import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, CompanySystemsControllerService, ConfigurationEntry, GKnowledgeBase, GObjectRef, GObjectRefGBaseModelConfig, GProject, GraphRagConfigurationControllerService, GraphRagExtractionConfig, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfigurationEntry, GObjectRefGBaseModelConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 @Component({
@@ -27,23 +26,38 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         customEntityTypes: new FormControl(),
         customEventTypes: new FormControl(),
         customRelationTypes: new FormControl(),
-        usedModelConfiguration: new FormControl()
+        usedModelConfiguration: new FormControl(),
+        graphRagAllSources: new FormControl()
     });
     protected systemConfiguration?: GraphRagExtractionConfig;
     /** Available chat models to choose from */
     protected chatModelsData?: GObjectRefGBaseModelConfig[] = [];
 
+    protected knowledgeBase?: GKnowledgeBase;
+    protected project?: GProject;
+    protected dataSource?: GObjectRef;
+    protected defaultConfiguration: boolean = false;
+
     /** The default chat model configuration */
-    protected defaultChatModel?: {code?:string,description?:string};
+    protected defaultChatModel?: { code?: string, description?: string };
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
         private geboChatModels: ChatModelsControllerService,
-        private graphRagExtractionConfigService: GraphRagConfigurationControllerService) {
+        private graphRagExtractionConfigService: GraphRagConfigurationControllerService,
+        private knowledgeBaseService: KnowledgeBaseControllerService,
+        private projectsService: ProjectsControllerService,
+        private systemsService: CompanySystemsControllerService) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
+        this.formGroup.controls["defaultConfiguration"].valueChanges.subscribe({
+            next: (value) => {
+                this.defaultConfiguration = value === true;
+            }
+        });
     }
+
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
@@ -52,16 +66,16 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
             .subscribe({
                 next: (data) => {
                     this.chatModelsData = data[0]?.map(x => x.objectReference).filter(x => x ? true : false) as GObjectRefGBaseModelConfig[];
-                    const chatModels=data[0];
+                    const chatModels = data[0];
                     if (chatModels) {
-                        let usedDefault:ConfigurationEntry;
-                        chatModels.forEach(m=>{
-                            if (m.configuration?.defaultModel===true) {
-                                usedDefault=m;
-                                this.defaultChatModel=m.configuration;
+                        let usedDefault: ConfigurationEntry;
+                        chatModels.forEach(m => {
+                            if (m.configuration?.defaultModel === true) {
+                                usedDefault = m;
+                                this.defaultChatModel = m.configuration;
                             }
                         });
-                        
+
                     }
                     this.systemConfiguration = data[1];
                     if (this.mode == "NEW") {
@@ -73,11 +87,44 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
                 }
             })
     }
+    private loadLookups(actualValue: GraphRagExtractionConfig): void {
+        const observables: Observable<any>[] = [];
+        this.knowledgeBase = undefined;
+        this.project = undefined;
+        this.dataSource = undefined;
+        if (actualValue?.knowledgeBaseCode) {
+            observables.push(this.knowledgeBaseService.findKnowledgeBaseByCode(actualValue.knowledgeBaseCode));
+        }
+        if (actualValue?.projectCode) {
+            observables.push(this.projectsService.findProjectByCode(actualValue.projectCode));
+        }
+        if (actualValue?.endpoint) {
+            observables.push(this.systemsService.getProjectEndpointByObjectRef(actualValue?.endpoint));
+        }
+        if (observables && observables.length) {
+            this.loadingRelatedBackend = true;
+            forkJoin(observables).subscribe({
+                next: (data) => {
+                    this.knowledgeBase = data[0];
+                    if (observables.length > 1) {
+                        this.project = data[1];
+                    }
+                    if (observables.length > 2) {
+                        this.dataSource = data[2];
+                    }
+                },
+                complete: () => {
+                    this.loadingRelatedBackend = false;
+                }
+            });
+        }
+    }
     protected override onLoadedPersistentData(actualValue: GraphRagExtractionConfig): void {
-
+        this.loadLookups(actualValue);
     }
     protected override onNewData(actualValue: GraphRagExtractionConfig): void {
         this.loadingRelatedBackend = true;
+        this.loadLookups(actualValue);
         this.graphRagExtractionConfigService.getSystemGraphRagExtractionConfign().subscribe({
             next: (systemConfiguration) => {
                 this.systemConfiguration = systemConfiguration;

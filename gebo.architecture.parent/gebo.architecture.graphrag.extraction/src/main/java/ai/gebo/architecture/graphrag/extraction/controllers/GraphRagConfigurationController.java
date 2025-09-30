@@ -1,4 +1,4 @@
-package ai.gebo.architecture.graphrag.persistence.controllers;
+package ai.gebo.architecture.graphrag.extraction.controllers;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +18,9 @@ import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import ai.gebo.architecture.graphrag.extraction.repositories.GraphRagExtractionConfigRepository;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.model.base.GObjectRef;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -57,6 +60,12 @@ public class GraphRagConfigurationController {
 		return configRepository.findByKnowledgeBaseCodeAndProjectCode(knowledgeBaseCode, projectCode);
 	}
 
+	@PostMapping(value = "findGraphRagExtractionConfigByProjectEndpointGObjectRef", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<GraphRagExtractionConfig> findGraphRagExtractionConfigByProjectEndpointGObjectRef(
+			@NotNull @RequestBody GObjectRef<GProjectEndpoint> objectRef) {
+		return configRepository.findByEndpointCodeAndEndpointClassName(objectRef.getCode(), objectRef.getClassName());
+	}
+
 	@GetMapping(value = "findGraphRagExtractionConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GraphRagExtractionConfig findGraphRagExtractionConfigByCode(@RequestParam("code") String code) {
 		Optional<GraphRagExtractionConfig> data = configRepository.findById(code);
@@ -64,11 +73,14 @@ public class GraphRagConfigurationController {
 	}
 
 	@PostMapping(value = "saveGraphRagExtractionConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GraphRagExtractionConfig saveGraphRagExtractionConfig(@RequestBody GraphRagExtractionConfig data) throws GeboPersistenceException {
+	public GraphRagExtractionConfig saveGraphRagExtractionConfig(@RequestBody GraphRagExtractionConfig data)
+			throws GeboPersistenceException {
 		return this.persistentObjectManager.update(data);
 	}
+
 	@PostMapping(value = "instertGraphRagExtractionConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GraphRagExtractionConfig instertGraphRagExtractionConfig(@RequestBody GraphRagExtractionConfig data) throws GeboPersistenceException {
+	public GraphRagExtractionConfig instertGraphRagExtractionConfig(@RequestBody GraphRagExtractionConfig data)
+			throws GeboPersistenceException {
 		return this.persistentObjectManager.insert(data);
 	}
 }

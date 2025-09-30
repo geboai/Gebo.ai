@@ -10,6 +10,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import lombok.Data;
+
 @Document
 @Data
 public class GraphRagExtractionConfig extends GBaseObject {
@@ -19,11 +20,12 @@ public class GraphRagExtractionConfig extends GBaseObject {
 	private String projectCode = null;
 	@HashIndexed
 	private Boolean defaultConfiguration = null;
+	private Boolean graphRagAllSources = null;
 	@HashIndexed
 	private GObjectRef<GProjectEndpoint> endpoint = null;
 	private String extractionPrompt = null;
 	private List<GraphObjectType> customEntityTypes = null;
 	private List<GraphObjectType> customEventTypes = null;
 	private List<GraphObjectType> customRelationTypes = null;
-	private GObjectRef<GBaseChatModelConfig> usedModelConfiguration = null;	
+	private GObjectRef<GBaseChatModelConfig> usedModelConfiguration = null;
 }

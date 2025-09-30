@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GObjectRefGProjectEndpoint } from '../model/gObjectRefGProjectEndpoint';
 import { GraphRagExtractionConfig } from '../model/graphRagExtractionConfig';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -242,6 +243,53 @@ export class GraphRagConfigurationControllerService {
         return this.httpClient.request<Array<GraphRagExtractionConfig>>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'body', reportProgress?: boolean): Observable<Array<GraphRagExtractionConfig>>;
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GraphRagExtractionConfig>>>;
+    public findGraphRagExtractionConfigByProjectEndpointGObjectRef(body: GObjectRefGProjectEndpoint, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling findGraphRagExtractionConfigByProjectEndpointGObjectRef.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<GraphRagExtractionConfig>>('post',`${this.basePath}/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByProjectEndpointGObjectRef`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

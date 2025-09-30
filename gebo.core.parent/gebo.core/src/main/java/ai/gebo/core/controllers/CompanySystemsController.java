@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.controllers;
 
@@ -33,13 +30,13 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystemType;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.systems.abstraction.layer.IGContentManagementSystemHandler;
-
+import jakarta.validation.constraints.NotNull;
 
 /**
- * Controller for handling company systems-related endpoints in the API.
- * This controller is restricted to users with the ADMIN role.
- * Provides various endpoints to retrieve content system information
- * such as types, systems, specific system information, and project endpoints.
+ * Controller for handling company systems-related endpoints in the API. This
+ * controller is restricted to users with the ADMIN role. Provides various
+ * endpoints to retrieve content system information such as types, systems,
+ * specific system information, and project endpoints.
  * 
  * AI generated comments
  */
@@ -50,7 +47,8 @@ public class CompanySystemsController {
 
 	@Autowired(required = false)
 	List<IGContentManagementSystemHandler> handlers;
-	@Autowired IGPersistentObjectManager persistentObjectManager;
+	@Autowired
+	IGPersistentObjectManager persistentObjectManager;
 
 	/**
 	 * Default constructor for CompanySystemsController.
@@ -97,7 +95,8 @@ public class CompanySystemsController {
 	 * Endpoint to retrieve a specific content management system type by its code.
 	 * 
 	 * @param systemTypeCode The code of the system type.
-	 * @return The GContentManagementSystemType matching the given code, or null if not found.
+	 * @return The GContentManagementSystemType matching the given code, or null if
+	 *         not found.
 	 */
 	@GetMapping(value = "getContentSystemType", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GContentManagementSystemType getContentSystemType(@RequestParam("systemTypeCode") String systemTypeCode) {
@@ -114,11 +113,13 @@ public class CompanySystemsController {
 	}
 
 	/**
-	 * Endpoint to retrieve a specific content management system by its system type code and system code.
+	 * Endpoint to retrieve a specific content management system by its system type
+	 * code and system code.
 	 * 
 	 * @param systemTypeCode The code of the system type.
-	 * @param systemCode The code of the system.
-	 * @return The GContentManagementSystem matching the given codes, or null if not found.
+	 * @param systemCode     The code of the system.
+	 * @return The GContentManagementSystem matching the given codes, or null if not
+	 *         found.
 	 */
 	@GetMapping(value = "getContentSystem", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GContentManagementSystem getContentSystem(@RequestParam("systemTypeCode") String systemTypeCode,
@@ -141,13 +142,15 @@ public class CompanySystemsController {
 	}
 
 	/**
-	 * Endpoint to retrieve a project endpoint by system type code, system code, and project endpoint code.
+	 * Endpoint to retrieve a project endpoint by system type code, system code, and
+	 * project endpoint code.
 	 * 
-	 * @param systemTypeCode The code of the system type.
-	 * @param systemCode The code of the system.
+	 * @param systemTypeCode      The code of the system type.
+	 * @param systemCode          The code of the system.
 	 * @param projectEndpointCode The code of the project endpoint.
 	 * @return The GProjectEndpoint matching the given codes, or null if not found.
-	 * @throws GeboContentHandlerSystemException if there is a system handling error.
+	 * @throws GeboContentHandlerSystemException if there is a system handling
+	 *                                           error.
 	 */
 	@GetMapping(value = "getProjectEndpoint", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GProjectEndpoint getProjectEndpoint(@RequestParam("systemTypeCode") String systemTypeCode,
@@ -165,8 +168,15 @@ public class CompanySystemsController {
 		return null;
 	}
 
+	@PostMapping(value = "getProjectEndpointByObjectRef", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GProjectEndpoint getProjectEndpointByObjectRef(
+			@NotNull @RequestBody GObjectRef<GProjectEndpoint> endpointRef) throws GeboPersistenceException {
+		return this.persistentObjectManager.findByReference(endpointRef, GProjectEndpoint.class);
+	}
+
 	/**
-	 * Static inner class to encapsulate system information including system type, system, and endpoint.
+	 * Static inner class to encapsulate system information including system type,
+	 * system, and endpoint.
 	 */
 	public static class SystemInfos {
 		public GContentManagementSystemType systemType = null;
@@ -175,20 +185,23 @@ public class CompanySystemsController {
 	};
 
 	/**
-	 * Endpoint to retrieve project endpoint system information based on a reference to a GProjectEndpoint.
+	 * Endpoint to retrieve project endpoint system information based on a reference
+	 * to a GProjectEndpoint.
 	 * 
 	 * @param reference Reference to the GProjectEndpoint.
 	 * @return SystemInfos containing system type, system, and endpoint data.
-	 * @throws GeboPersistenceException if there is a persistence error.
-	 * @throws GeboContentHandlerSystemException if there is a system handling error.
+	 * @throws GeboPersistenceException          if there is a persistence error.
+	 * @throws GeboContentHandlerSystemException if there is a system handling
+	 *                                           error.
 	 */
 	@PostMapping(value = "getProjectEndpointSystemInfos", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public SystemInfos getProjectEndpointSystemInfos(@RequestBody GObjectRef<GProjectEndpoint> reference) throws GeboPersistenceException, GeboContentHandlerSystemException {
+	public SystemInfos getProjectEndpointSystemInfos(@RequestBody GObjectRef<GProjectEndpoint> reference)
+			throws GeboPersistenceException, GeboContentHandlerSystemException {
 		SystemInfos info = new SystemInfos();
-		
+
 		// Retrieve endpoint from persistent storage
 		info.endpoint = persistentObjectManager.findByReference(reference, GProjectEndpoint.class);
-		
+
 		// Find the matching system and system type using handlers
 		if (handlers != null) {
 			for (IGContentManagementSystemHandler handler : handlers) {
@@ -201,5 +214,5 @@ public class CompanySystemsController {
 		}
 		return null;
 	}
-	
+
 }

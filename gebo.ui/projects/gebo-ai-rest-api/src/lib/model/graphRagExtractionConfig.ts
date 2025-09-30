@@ -23,6 +23,7 @@ export interface GraphRagExtractionConfig {
     knowledgeBaseCode?: string;
     projectCode?: string;
     defaultConfiguration?: boolean;
+    graphRagAllSources?: boolean;
     endpoint?: GObjectRefGProjectEndpoint;
     extractionPrompt?: string;
     customEntityTypes?: Array<GraphObjectType>;
