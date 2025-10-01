@@ -15,6 +15,9 @@ public class JobWorkflowStepSummaryTimeSlotStats {
 	private long tokensProcessed = 0l;
 	private long batchDocumentsProcessingErrors = 0;
 	private long batchDocumentsProcessed = 0;
+	private long errorChunks = 0;
+	private long errorTokens = 0;
+
 	public void incrementBy(ContentsBatchProcessed x) {
 		this.batchDocumentsInput += x.getBatchDocumentsInput();
 		this.batchDocumentsProcessed += x.getBatchDocumentsProcessed();
@@ -23,6 +26,8 @@ public class JobWorkflowStepSummaryTimeSlotStats {
 		this.batchDiscardedInput += x.getBatchDiscardedInput();
 		this.chunksProcessed += x.getChunksProcessed();
 		this.tokensProcessed += x.getChunksProcessed();
-		
+		this.errorChunks += x.getErrorChunks();
+		this.errorTokens += x.getErrorTokens();
+
 	}
 }

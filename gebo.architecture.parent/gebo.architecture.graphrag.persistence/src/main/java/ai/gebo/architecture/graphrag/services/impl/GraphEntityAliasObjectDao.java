@@ -32,7 +32,7 @@ public class GraphEntityAliasObjectDao extends
 
 	@Override
 	GraphEntityAliasObject createCopyOf(EntityAliasObject alias) {
-		GraphEntityAliasObject hit = null;
+		GraphEntityAliasObject hit = new GraphEntityAliasObject();
 		GraphEntityObject referenceObject = entityDao.createCopyOf(alias.getReferenceObject());
 		GraphEntityObject aliasObject = entityDao.createCopyOf(alias.getAliasObject());
 		hit.setType(alias.getType().toUpperCase());

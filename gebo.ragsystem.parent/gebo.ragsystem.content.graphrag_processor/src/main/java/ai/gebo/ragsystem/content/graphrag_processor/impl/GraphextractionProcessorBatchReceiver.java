@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGBatchMessagesReceiver;
@@ -24,6 +25,7 @@ import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.documents.cache.model.DocumentChunk;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
+import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentReference;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionData;
@@ -59,6 +61,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 		private long howManyAccepted = 0;
 		private static final long BATCHING_CYCLES_NUMBER = 20;
 		private KnowledgeExtractionEvent cumulated = null;
+		private boolean errorsOccurred = false;
 
 		ProcessingStatusUpdater(String jobId, String workflowType, String workflowId, String workflowStepId) {
 			this.jobId = jobId;
@@ -75,6 +78,9 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 			else {
 				cumulated.incrementBy(t);
 			}
+			if (!errorsOccurred) {
+				errorsOccurred = (cumulated.getErrorChunks() > 0l || cumulated.getErrorTokens() > 0l);
+			}
 			if ((howManyAccepted >= BATCHING_CYCLES_NUMBER)) {
 				flush();
 			}
@@ -90,6 +96,9 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				payload.setBatchDocumentsInput(0);
 				payload.setChunksProcessed(cumulated.getProcessedSegments());
 				payload.setTokensProcessed(cumulated.getProcessedTokens());
+				payload.setErrorChunks(cumulated.getErrorChunks());
+				payload.setErrorTokens(cumulated.getErrorTokens());
+
 				GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope
 						.newMessageFrom(emitter, payload);
 				envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
@@ -100,6 +109,10 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				howManyAccepted = 0;
 			}
 
+		}
+
+		public boolean isErrorsOccurred() {
+			return errorsOccurred;
 		}
 	};
 
@@ -140,26 +153,36 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 
 							Stream<CompletableFuture<KnowledgeExtractionData>> futureStream = chunks
 									.map((x) -> CompletableFuture.supplyAsync(() -> {
+										long startTime = System.currentTimeMillis();
+										KnowledgeExtractionData extraction = null;
 										try {
-											long startTime = System.currentTimeMillis();
-											KnowledgeExtractionData extraction = this.extractionHelper.doProcessChunk(x,
+
+											extraction = this.extractionHelper.doProcessChunk(x,
 													payload.getDocumentReference(), cache);
-											if (staticConfig.getGraphRagProcessorReceiverConfig()
-													.getMinimumDelayBetweenRequests() > 0) {
-												long elapsedTime = System.currentTimeMillis() - startTime;
-												long delta = staticConfig.getGraphRagProcessorReceiverConfig()
-														.getMinimumDelayBetweenRequests() - elapsedTime;
-												if (delta > 0) {
-													Thread.currentThread().sleep(delta);
-												}
-											}
-											return extraction;
+
 										} catch (Throwable th) {
-											final String msg = "Error in async worker for dicument "
+											final String msg = "Error in async worker for document "
 													+ payload.getDocumentReference().getCode();
 											LOGGER.error(msg, th);
-											throw new RuntimeException(msg, th);
+											extraction = new KnowledgeExtractionData(new LLMExtractionResult(),
+													new Document(x.getId(), x.getChunkData(), x.getMetaData()), true);
 										}
+										if (staticConfig.getGraphRagProcessorReceiverConfig()
+												.getMinimumDelayBetweenRequests() > 0) {
+											long elapsedTime = System.currentTimeMillis() - startTime;
+											long delta = staticConfig.getGraphRagProcessorReceiverConfig()
+													.getMinimumDelayBetweenRequests() - elapsedTime;
+											if (delta > 0) {
+												try {
+													Thread.currentThread().sleep(delta);
+												} catch (Throwable th) {
+													final String msg = "Error in internal sleep(..) on async worker for document "
+															+ payload.getDocumentReference().getCode();
+													LOGGER.error(msg, th);
+												}
+											}
+										}
+										return extraction;
 									}, ex));
 							Stream<KnowledgeExtractionData> knowledgeExtractionStream = futureStream
 									.map(CompletableFuture::join);
@@ -176,8 +199,8 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 					} finally {
 						ex.shutdown();
 					}
-					data.setBatchDocumentsProcessed(1);
-					data.setBatchDocumentsProcessingErrors(0);
+					data.setBatchDocumentsProcessed(updatesConsumer.isErrorsOccurred() ? 0 : 1);
+					data.setBatchDocumentsProcessingErrors(updatesConsumer.isErrorsOccurred() ? 1 : 0);
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
 							envelope.getWorkflowStepId(), payload, emitter);
 				} else {

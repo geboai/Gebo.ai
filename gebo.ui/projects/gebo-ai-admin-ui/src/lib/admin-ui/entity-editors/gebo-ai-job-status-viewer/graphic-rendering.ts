@@ -41,9 +41,12 @@ function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieCha
     datasets: [{
       label: "Processed tokens",
       data: []
+    },{
+      label:"Error processing tokens",
+      data: []
     }]
   };
-  let hasNotZeroTokens = foundProcessStepSummary?.timesamples?.filter(ts => ts.tokensProcessed && ts.tokensProcessed > 0);
+  let hasNotZeroTokens = foundProcessStepSummary?.timesamples?.filter(ts => (ts.tokensProcessed && ts.tokensProcessed > 0 ) || (ts.errorChunks && ts.errorChunks>0) );
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
@@ -51,7 +54,7 @@ function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieCha
       }
 
       chart.datasets[0].data.push(n(data.tokensProcessed));
-
+      chart.datasets[1].data.push(n(data.errorTokens));
     });
 
   }

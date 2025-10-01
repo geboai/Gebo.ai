@@ -159,26 +159,28 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 		final GraphSaveStructure saveStructure = new GraphSaveStructure(cache);
 		stream.forEach(data -> {
 			final String chunkId = data.getDocumentChunk().getId();
-			saveStructure.entities.add(data.getExtraction().getEntities(), chunkId);
-			saveStructure.events.add(data.getExtraction().getEvents(), chunkId);
-			data.getExtraction().getEvents().stream().forEach(x -> {
-				saveStructure.entities.add(x.getParticipantEntities(), chunkId);
-			});
-			saveStructure.relations.add(data.getExtraction().getRelations(), chunkId);
-			data.getExtraction().getRelations().stream().forEach(x -> {
-				saveStructure.entities.add(x.getFromEntity(), chunkId);
-				saveStructure.entities.add(x.getToEntity(), chunkId);
-			});
-			saveStructure.entityAlias.add(data.getExtraction().getEntityAliases(), chunkId);
-			data.getExtraction().getEntityAliases().stream().forEach(x -> {
-				saveStructure.entities.add(x.getAliasObject(), chunkId);
-				saveStructure.entities.add(x.getReferenceObject(), chunkId);
-			});
-			saveStructure.eventsAlias.add(data.getExtraction().getEventAliases(), chunkId);
-			data.getExtraction().getEventAliases().stream().forEach(x -> {
-				saveStructure.events.add(x.getAliasObject(), chunkId);
-				saveStructure.events.add(x.getReferenceObject(), chunkId);
-			});
+			if (!data.isErrorProcessing()) {
+				saveStructure.entities.add(data.getExtraction().getEntities(), chunkId);
+				saveStructure.events.add(data.getExtraction().getEvents(), chunkId);
+				data.getExtraction().getEvents().stream().forEach(x -> {
+					saveStructure.entities.add(x.getParticipantEntities(), chunkId);
+				});
+				saveStructure.relations.add(data.getExtraction().getRelations(), chunkId);
+				data.getExtraction().getRelations().stream().forEach(x -> {
+					saveStructure.entities.add(x.getFromEntity(), chunkId);
+					saveStructure.entities.add(x.getToEntity(), chunkId);
+				});
+				saveStructure.entityAlias.add(data.getExtraction().getEntityAliases(), chunkId);
+				data.getExtraction().getEntityAliases().stream().forEach(x -> {
+					saveStructure.entities.add(x.getAliasObject(), chunkId);
+					saveStructure.entities.add(x.getReferenceObject(), chunkId);
+				});
+				saveStructure.eventsAlias.add(data.getExtraction().getEventAliases(), chunkId);
+				data.getExtraction().getEventAliases().stream().forEach(x -> {
+					saveStructure.events.add(x.getAliasObject(), chunkId);
+					saveStructure.events.add(x.getReferenceObject(), chunkId);
+				});
+			}
 			GraphDocumentChunk chunk = new GraphDocumentChunk();
 			chunk.setId(chunkId);
 			chunk.setDocumentCode(documentReference.getCode());
@@ -191,25 +193,32 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			chunk.setChunkOf(ref);
 			long processedTokens = 0l;
 			long processedBytes = 0l;
-			long processedSegments = 1l;
+			long processedSegments = data.isErrorProcessing() ? 0 : 1;
+			long errorChunks = data.isErrorProcessing() ? 1 : 0;
+			long errorTokens = 0l;
 			if (chunk.getMetaData() != null && chunk.getMetaData().containsKey(DocumentMetaInfos.GEBO_BYTES_LENGTH)
 					&& chunk.getMetaData().get(DocumentMetaInfos.GEBO_BYTES_LENGTH) instanceof Number bytesSize) {
-				processedBytes += bytesSize.longValue();
+				if (!data.isErrorProcessing()) {
+					processedBytes += bytesSize.longValue();
+				}
 			}
 			if (chunk.getMetaData() != null && chunk.getMetaData().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
 					&& chunk.getMetaData().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) instanceof Number tokensSize) {
-				processedTokens += tokensSize.longValue();
+				if (data.isErrorProcessing()) {
+					errorTokens += tokensSize.longValue();
+				} else {
+					processedTokens += tokensSize.longValue();
+				}
 			}
-			boolean error = false;
+			boolean error = data.isErrorProcessing();
 			KnowledgeExtractionEvent event = new KnowledgeExtractionEvent(processedTokens, processedBytes,
-					processedSegments, error);
+					processedSegments, errorChunks, errorTokens, error);
 			processingUpdatesConsumer.accept(event);
 			saveStructure.chunks.put(chunkId, chunk);
 		});
 		reconcileObjects(saveStructure, cache);
 	}
 
-	
 	void reconcileObjects(final GraphSaveStructure saveStructure, final Map<String, Object> cache) {
 		if (saveStructure.chunks.isEmpty())
 			return;
@@ -225,11 +234,16 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 				.values().stream().toList();
 		// merge objects by reference so on next step the GraphObjectReference have
 		// conciled neo4j entry and its logic extraction info
-		super.entityObjectDao.merge(entitiesToReconcile, cache);
-		super.eventObjectDao.merge(eventsToReconcile, cache);
-		super.relationObjectDao.merge(relationsToReconcile, cache);
-		super.entityAliasDao.merge(entityAliasToReconcile, cache);
-		super.eventAliasDao.merge(eventsAliasToReconcile, cache);
+		if (!entitiesToReconcile.isEmpty())
+			super.entityObjectDao.merge(entitiesToReconcile, cache);
+		if (!eventsToReconcile.isEmpty())
+			super.eventObjectDao.merge(eventsToReconcile, cache);
+		if (!relationsToReconcile.isEmpty())
+			super.relationObjectDao.merge(relationsToReconcile, cache);
+		if (!entityAliasToReconcile.isEmpty())
+			super.entityAliasDao.merge(entityAliasToReconcile, cache);
+		if (!eventsAliasToReconcile.isEmpty())
+			super.eventAliasDao.merge(eventsAliasToReconcile, cache);
 		saveChunks(saveStructure);
 		saveEntityChunksRelated(saveStructure);
 		saveRelationChunksRelated(saveStructure);

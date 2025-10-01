@@ -23,12 +23,14 @@ import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessedSummary;
  * operations on the 'ContentsBatchProcessed' collection in the MongoDB.
  */
 public interface ContentsBatchProcessedRepository extends MongoRepository<ContentsBatchProcessed, String> {
+
 	@Aggregation(pipeline = { "{ $match: { jobId: ?0 } }", "{ $group: { "
 			+ "  _id: { workflowType: '$workflowType', workflowId: '$workflowId', workflowStepId: '$workflowStepId' }, "
 			+ "  jobId: { $first: '$jobId' }, " + "  batchDocumentsInput: { $sum: '$batchDocumentsInput' }, "
 			+ "  batchSentToNextStep: { $sum: '$batchSentToNextStep' }, "
 			+ "  batchDiscardedInput: { $sum: '$batchDiscardedInput' },"
 			+ "  chunksProcessed: { $sum: '$chunksProcessed' }, " + "  tokensProcessed: { $sum: '$tokensProcessed' }, "
+			+ "  errorChunks:{ $sum: '$errorChunks' },  errorTokens: { $sum: '$errorTokens' },"
 			+ "  batchDocumentsProcessingErrors: { $sum: '$batchDocumentsProcessingErrors' }, "
 			+ "  batchDocumentsProcessed: { $sum: '$batchDocumentsProcessed' }, "
 			+ "  lastMessageAny: { $sum: { $cond: [ { $eq: ['$lastMessage', true] }, 1, 0 ] } }, "
@@ -37,7 +39,7 @@ public interface ContentsBatchProcessedRepository extends MongoRepository<Conten
 					+ "  workflowId: '$_id.workflowId', " + "  workflowStepId: '$_id.workflowStepId', "
 					+ "  lastMessage: { $gt: ['$lastMessageAny', 0] }, " + "  batchDocumentsInput: 1, "
 					+ "  batchSentToNextStep: 1, batchDiscardedInput: 1, " + "  chunksProcessed: 1, "
-					+ "  tokensProcessed: 1, " + "  batchDocumentsProcessingErrors: 1, "
+					+ "  tokensProcessed: 1, errorChunks:1,  errorTokens: 1," + "  batchDocumentsProcessingErrors: 1, "
 					+ "  batchDocumentsProcessed: 1, " + "  timestampMin: 1, " + "  timestampMax: 1 " + "} }",
 			"{ $sort: { workflowType: 1, workflowId: 1, workflowStepId: 1 } }" })
 	public List<ContentsBatchProcessedSummary> aggregateByJobId(String jobId);

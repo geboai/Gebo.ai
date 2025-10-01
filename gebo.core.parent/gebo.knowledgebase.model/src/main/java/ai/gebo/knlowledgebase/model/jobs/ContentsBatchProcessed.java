@@ -67,6 +67,7 @@ public class ContentsBatchProcessed {
 	private long batchSentToNextStep = 0;
 	private long chunksProcessed = 0l;
 	private long tokensProcessed = 0l;
+	private long errorChunks = 0, errorTokens = 0;
 	/**
 	 * The number of content reading errors encountered in the batch.
 	 */
@@ -85,6 +86,8 @@ public class ContentsBatchProcessed {
 		this.batchDiscardedInput += x.batchDiscardedInput;
 		this.chunksProcessed += x.chunksProcessed;
 		this.tokensProcessed += x.tokensProcessed;
+		this.errorChunks += x.errorChunks;
+		this.errorTokens += x.errorTokens;
 		this.lastMessage = (this.lastMessage != null && this.lastMessage)
 				|| (x.getLastMessage() != null && x.getLastMessage());
 	}
@@ -97,6 +100,8 @@ public class ContentsBatchProcessed {
 		this.batchDiscardedInput += x.getBatchDiscardedInput();
 		this.chunksProcessed += x.getChunksProcessed();
 		this.tokensProcessed += x.getTokensProcessed();
+		this.errorChunks += x.getErrorChunks();
+		this.errorTokens += x.getErrorTokens();
 		this.lastMessage = (this.lastMessage != null && this.lastMessage) || (x.isLastMessage());
 
 	}

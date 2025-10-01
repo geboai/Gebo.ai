@@ -22,7 +22,7 @@ public class GraphextractionHelper {
 			Map<String, Object> cache) throws LLMConfigException {
 		Document document = new Document(chunk.getId(), chunk.getChunkData(), chunk.getMetaData());
 		LLMExtractionResult extraction = graphRagExtractionService.extract(document, reference, cache);
-		return new KnowledgeExtractionData(extraction, document);
+		return new KnowledgeExtractionData(extraction, document,false);
 	}
 
 }

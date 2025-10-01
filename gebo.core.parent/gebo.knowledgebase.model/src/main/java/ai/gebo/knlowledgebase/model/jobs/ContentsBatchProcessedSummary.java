@@ -27,7 +27,9 @@ public interface ContentsBatchProcessedSummary {
 	public long getBatchDocumentsProcessed();
 
 	public long getBatchDiscardedInput();
-
+	public long getErrorChunks();
+	public long getErrorTokens();
+	
 	public Date getTimestampMin();
 
 	public Date getTimestampMax();

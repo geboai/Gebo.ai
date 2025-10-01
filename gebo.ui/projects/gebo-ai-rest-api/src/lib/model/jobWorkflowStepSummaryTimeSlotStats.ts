@@ -20,4 +20,6 @@ export interface JobWorkflowStepSummaryTimeSlotStats {
     tokensProcessed?: number;
     batchDocumentsProcessingErrors?: number;
     batchDocumentsProcessed?: number;
+    errorChunks?: number;
+    errorTokens?: number;
 }

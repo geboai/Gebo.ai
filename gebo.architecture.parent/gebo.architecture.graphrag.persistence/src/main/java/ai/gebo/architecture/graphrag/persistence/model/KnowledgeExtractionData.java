@@ -11,4 +11,5 @@ import lombok.Getter;
 public class KnowledgeExtractionData {
 	private final LLMExtractionResult extraction;
 	private final Document documentChunk;	
+	private final boolean errorProcessing;
 }
