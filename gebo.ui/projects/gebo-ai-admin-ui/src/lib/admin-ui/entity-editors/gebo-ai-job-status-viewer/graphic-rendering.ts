@@ -8,27 +8,35 @@ function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPie
     labels: [],
     datasets: [{
       label: "Received docs",
-      data: []
+      data: [],
+      backgroundColor:[]
     }, {
       label: "Processed docs",
-      data: []
+      data: [],
+      backgroundColor:[]
     }, {
       label: "Error docs",
-      data: []
+      data: [],
+      backgroundColor:[]
     }, {
       label: "Discarded docs",
-      data: []
+      data: [],
+      backgroundColor:[]
     }]
   };
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
-        chart.labels.push(new Date(data.startDateTime).toLocaleTimeString());
+        chart.labels.push(shortTime(data.startDateTime));
       }
       chart.datasets[0].data.push(n(data.batchDocumentsInput));
+      chart.datasets[0].backgroundColor?.push("orange");
       chart.datasets[1].data.push(n(data.batchDocumentsProcessed));
+      chart.datasets[1].backgroundColor?.push("green");
       chart.datasets[2].data.push(n(data.batchDocumentsProcessingErrors));
+      chart.datasets[2].backgroundColor?.push("red");
       chart.datasets[3].data.push(n(data.batchDiscardedInput));
+      chart.datasets[3].backgroundColor?.push("gray");
     });
     return chart;
   }
@@ -40,21 +48,25 @@ function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieCha
     labels: [],
     datasets: [{
       label: "Processed tokens",
-      data: []
+      data: [],
+      backgroundColor:[]
     },{
       label:"Error processing tokens",
-      data: []
+      data: [],
+      backgroundColor:[]
     }]
   };
   let hasNotZeroTokens = foundProcessStepSummary?.timesamples?.filter(ts => (ts.tokensProcessed && ts.tokensProcessed > 0 ) || (ts.errorChunks && ts.errorChunks>0) );
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
-        chart.labels.push(new Date(data.startDateTime).toLocaleTimeString());
+        chart.labels.push(shortTime(data.startDateTime));
       }
 
       chart.datasets[0].data.push(n(data.tokensProcessed));
+      chart.datasets[0].backgroundColor?.push("green");
       chart.datasets[1].data.push(n(data.errorTokens));
+      chart.datasets[1].backgroundColor?.push("red");
     });
 
   }
@@ -100,5 +112,14 @@ export interface StatusRendering extends ComputedWorkflowStatus {
   documentsChart?: NGPieChart;
   tokensChart?: NGPieChart;
   childs?: StatusRendering[];
+}
+
+function shortTime(startDateTime: Date): string {
+  const input:Date|undefined=startDateTime?new Date(startDateTime):undefined;
+  if (input) {
+    const hour= input.getHours();
+    const minutes=input.getMinutes();
+    return (hour<10?"0"+hour:""+hour)+":"+(minutes<10?"0"+minutes:""+minutes);
+  }else return "";
 }
 

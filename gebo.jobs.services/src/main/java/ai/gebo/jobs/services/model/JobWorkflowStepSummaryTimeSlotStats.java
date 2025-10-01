@@ -25,7 +25,7 @@ public class JobWorkflowStepSummaryTimeSlotStats {
 		this.batchSentToNextStep += x.getBatchSentToNextStep();
 		this.batchDiscardedInput += x.getBatchDiscardedInput();
 		this.chunksProcessed += x.getChunksProcessed();
-		this.tokensProcessed += x.getChunksProcessed();
+		this.tokensProcessed += x.getTokensProcessed();
 		this.errorChunks += x.getErrorChunks();
 		this.errorTokens += x.getErrorTokens();
 
