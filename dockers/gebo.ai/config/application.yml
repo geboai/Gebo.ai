@@ -16,6 +16,12 @@ security.provider.1: org.bouncycastle.jce.provider.BouncyCastleProvider
 ai.gebo.multilanguage.config.classPathMode: false
 ai.gebo.multilanguage.config.folderPrefix: 
 ai.gebo.lucene.config.enabled: false
+spring:
+  neo4j:
+    uri: bolt://neo4j:7687
+    authentication:
+      username: neo4j
+      password: neo4jmaster
 ai.gebo.security:
   auth:
     tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
@@ -130,20 +136,33 @@ ai.gebo.vectorizator.config:
     useSenderThread: true
   vectorizatorReceiverConfig:
     poolCardinality: 2
-    flushThreshold: 10
+    flushThreshold: 6
     useSenderThread: true
-    timeout: 20000
+    timeout: 10000
+
+ai.gebo.graphrag.processor:
+  discardedExtensions: 
+    - .xls
+    - .xlsx
+    - .ods
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  graphRagProcessorReceiverConfig:
+    poolCardinality: 2
+    flushThreshold: 6
+    useSenderThread: true
+    timeout: 10000
+
 ai.gebo.core.config:
   mongoDisposerConfig:
     poolCardinality: 1
     useSenderThread: true
-    flushThreshold: 10
-    timeout: 20000
+    flushThreshold: 6
+    timeout: 10000
   userMessagesReceiverConfig:
     poolCardinality: 1
     useSenderThread: true
-    flushThreshold: 10		
-    timeout: 20000
+    flushThreshold: 10
+    timeout: 10000
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

@@ -1,4 +1,4 @@
-version: '3.1'
+version: "3.1"
 #================================================================
 # This compose file creates a service for gebo.ai enterprise retrive augmented generation system
 # and its required mongodb (database) and qdrant (vector database) services
@@ -41,9 +41,33 @@ services:
     volumes:
       # Bind mount a local directory
       - /home/gebo.ai/qdrant:/qdrant/storage
+  neo4j:
+    image: neo4j:5
+    restart: always
+    # Expose HTTP (7474) and Bolt (7687) on loopback for local access
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    environment:
+      # Auth: username/password
+      NEO4J_AUTH: "neo4j/neo4jmaster"
+      # Optional tuning (comment out if not needed)
+      NEO4J_server_memory_heap_initial__size: 1G
+      NEO4J_server_memory_heap_max__size: 2G
+      NEO4J_server_memory_pagecache_size: 512M
+      # Allow APOC when you add the plugin in /plugins
+      NEO4JLABS_PLUGINS: '["apoc"]'
+      NEO4J_apoc_export_file_enabled: "true"
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_apoc_import_file_use__neo4j__config: "true"
+    volumes:
+      - /home/gebo.ai/neo4j/data:/data
+      - /home/gebo.ai/neo4j/logs:/logs
+      - /home/gebo.ai/neo4j/plugins:/plugins
+      - /home/gebo.ai/neo4j/import:/import
 
   # =======================
-  # gebo.ai 
+  # gebo.ai
   # =======================
   # Bound to all host interface
   gebo.ai:
@@ -54,6 +78,7 @@ services:
     depends_on:
       - mongo
       - qdrant
+      - neo4j
     volumes:
       # Bind mount two local directories for work and home
       - /home/gebo.ai/work:/opt/gebo.ai/work
@@ -65,18 +90,17 @@ services:
         limits:
           # Limit memory usage to 4GB
           memory: 4G
-          
+
     environment:
       SPRING_PROFILES_ACTIVE: "prod"
       #Jvm settings
-      JAVA_TOOL_OPTIONS:
-        --enable-native-access=ALL-UNNAMED 
-        -Dsun.jnu.encoding=UTF-8 
-        -Dfile.encoding=UTF-8       
-        -XX:+AggressiveHeap         
-        -XX:+PrintGCDetails        
-        -Xlog:gc:/opt/gebo.ai/logs/gc.log 
+      JAVA_TOOL_OPTIONS: --enable-native-access=ALL-UNNAMED
+        -Dsun.jnu.encoding=UTF-8
+        -Dfile.encoding=UTF-8
+        -XX:+AggressiveHeap
+        -XX:+PrintGCDetails
+        -Xlog:gc:/opt/gebo.ai/logs/gc.log
         -Xms2g
         -Xmx4g
         -XX:MaxMetaspaceSize=512m
-        --add-opens=java.base/java.nio.charset=ALL-UNNAMED         
+        --add-opens=java.base/java.nio.charset=ALL-UNNAMED

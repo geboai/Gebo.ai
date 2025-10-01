@@ -37,7 +37,21 @@ services:
       QDRANT__STORAGE__RAM_DISK_SIZE: "256MB"
       QDRANT__STORAGE__MAX_SEGMENT_SIZE: "1000000"
     
-
+  neo4j:
+     image: neo4j:5
+     restart: always
+     ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+     environment:
+      NEO4J_AUTH: "neo4j/neo4jmaster"
+      NEO4J_server_memory_heap_initial__size: 1G
+      NEO4J_server_memory_heap_max__size: 2G
+      NEO4J_server_memory_pagecache_size: 512M
+      NEO4JLABS_PLUGINS: '["apoc"]'
+      NEO4J_apoc_export_file_enabled: "true"
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_apoc_import_file_use__neo4j__config: "true"
   # =======================
   # gebo.ai 
   # =======================
@@ -50,7 +64,7 @@ services:
     depends_on:
       - mongo
       - qdrant
-    
+      - neo4j 
     deploy:
       resources:
         limits:
