@@ -60,7 +60,7 @@ public class GStandardWorkflowStatusHandlerImpl extends AbstractWorkflowStatusHa
 		root.setWorkflowType(workflowType);
 		root.setWorkflowId(workflowId);
 		root.setWorkflowStepId(step.name());
-		root.setDescription(step.name());
+		root.setDescription(step.getDescription());
 		root.setEnabledStep(true);
 		List<GStandardWorkflowStep> childSteps = new ArrayList<GStandardWorkflowStep>();
 		List<GMessagingComponentRef> nextSteps = step.getOnProcessedForwardComponents().apply(null, binder);

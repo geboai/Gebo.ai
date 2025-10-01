@@ -47,8 +47,8 @@
           <label for="actualStatus">Status</label>
           <div>
             
-            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true" style="color: red;">Not processed completely</span>
-            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true" style="color: green;">Processed completely</span>
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true"  style="color: orange;"><i class="pi pi-spin pi-cog"></i>Not processed completely</span>
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true"  style="color: green;"><i class="pi pi-check"></i>Processed completely</span>
             
           </div>
           <small id="actualStatus-help">

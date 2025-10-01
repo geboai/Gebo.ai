@@ -1,7 +1,8 @@
 <div class="grid" *ngIf="rendered">
+    <div class="col-12"><label ><i [ngClass]="(rendered.completed===true?'pi pi-check':'pi pi-spin pi-cog')"></i>{{rendered.description}} ({{rendered.completed===true?"Completed":"Executing"}})</label></div>
     <div class="col-3">
         <div class="card">
-            <label>{{rendered.description}}</label>
+            
             <p-chart type="pie" [data]="rendered.piechart" [options]="pieOptions" [height]="'170px'" />
         </div>
 

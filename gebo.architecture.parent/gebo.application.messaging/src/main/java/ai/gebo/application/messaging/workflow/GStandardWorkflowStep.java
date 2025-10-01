@@ -17,31 +17,32 @@ public enum GStandardWorkflowStep {
 	DOCUMENT_DISCOVERY(GStandardWorkflow.INGESTION,
 			new GMessagingComponentRef("generical-endpoing-module", "generical-endpoint-component",
 					GStandardWorkflow.INGESTION.name(), "document_discovery"),
-			new DocumentDiscoveryForwards(), true, true),
+			new DocumentDiscoveryForwards(), true, true, "Analyzing documents list"),
 	TOKENIZATION(GStandardWorkflow.INGESTION, new GMessagingComponentRef(GStandardModulesConstraints.TOKENIZER_MODULE,
 			GStandardModulesConstraints.TOKENIZER_COMPONENT, GStandardWorkflow.INGESTION.name(), "tokenization"),
-			new TokenizationForwards(), false, true),
+			new TokenizationForwards(), false, true, "Documents tokenization"),
 
 	EMBEDDING(GStandardWorkflow.INGESTION, new GMessagingComponentRef(GStandardModulesConstraints.VECTORIZATOR_MODULE,
 			GStandardModulesConstraints.VECTORIZATION_COMPONENT, GStandardWorkflow.INGESTION.name(), "embedding"),
-			new VoidForwards(), false, false),
+			new VoidForwards(), false, false, "Semantic indexing (embedding for semantic rag)"),
 
 	GRAPHEXTRACTION(GStandardWorkflow.INGESTION,
 			new GMessagingComponentRef(GStandardModulesConstraints.KNOWLEDGE_GRAPH_MODULE,
 					GStandardModulesConstraints.KNOWLEDGE_GRAPH_COMPONENT, GStandardWorkflow.INGESTION.name(),
 					"graphextraction"),
-			new VoidForwards(), false, false),
+			new VoidForwards(), false, false, "Entity/Relations/Events indexing (graphrag)"),
 	FULLTEXT_INDEXING(GStandardWorkflow.INGESTION,
 			new GMessagingComponentRef(GStandardModulesConstraints.FULLTEXT_MODULE,
 					GStandardModulesConstraints.FULLTEXT_INDEXING_COMPONENT, GStandardWorkflow.INGESTION.name(),
 					"fulltext_indexing"),
-			new VoidForwards(), false, false);
+			new VoidForwards(), false, false, "Full text indexing");
 
 	private final GStandardWorkflow workflow;
 	private final GMessagingComponentRef targetComponent;
 	private final BiFunction<IGMessagePayloadType, IGRuntimeBinder, List<GMessagingComponentRef>> onProcessedForwardComponents;
 	private final boolean workflowStartStep;
 	private final boolean mandatoryStep;
+	private final String description;
 	private static final BiFunction<List<String>, IGRuntimeBinder, List<GMessagingComponentRef>> verifyEnabledModules = new BiFunction<List<String>, IGRuntimeBinder, List<GMessagingComponentRef>>() {
 
 		@Override

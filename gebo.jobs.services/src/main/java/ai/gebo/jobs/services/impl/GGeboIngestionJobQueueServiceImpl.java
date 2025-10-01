@@ -242,14 +242,14 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 					}
 					String stepKey = (of(jobId) + "-" + of(processed.getWorkflowType()) + "-"
 							+ of(processed.getWorkflowId()) + "-" + processed.getWorkflowStepId()).toLowerCase();
-					LOGGER.info(stepKey);
+					
 					if (!stats.get(key).containsKey(stepKey)) {
 						JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
 						statsEntry.setStartDateTime(new Date(minutesFloorStart));
 						statsEntry.setEndDateTime(new Date(minutesFloorEnd));
 						stats.get(key).put(stepKey, statsEntry);
 					}
-					LOGGER.info(key + " " + stepKey +" "+ processed);
+					
 					stats.get(key).get(stepKey).incrementBy(processed);
 				} else {
 					LOGGER.error("Entry without timestamp");
