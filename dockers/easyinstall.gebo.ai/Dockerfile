@@ -28,7 +28,7 @@ VOLUME /opt/gebo.ai/logs
 #RUN useradd --home-dir /opt/gebo.ai --shell /bin/bash gebo.ai
 #RUN chown gebo.ai:users -R /opt/gebo.ai
 #USER gebo.ai
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
+ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -XX:+AggressiveHeap  -XX:+PrintGCDetails" 
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 
@@ -99,6 +99,7 @@ RUN mkdir -p /opt/gebo.ai/home
 RUN mkdir -p /opt/gebo.ai/config
 RUN mkdir -p /opt/gebo.ai/work
 RUN mkdir -p /opt/gebo.ai/shares
+RUN mkdir -p /var/log/gebo.ai
 COPY gebo.ai.app-0.9.9.8-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
@@ -113,7 +114,7 @@ RUN set -eux; \
 RUN chmod a+x /bin/mongo-init.sh /bin/container-start.sh  /bin/neo4j-entry.sh /bin/gebo.ai.sh
 
 
-VOLUME ["/data/db", "/var/lib/qdrant", "/var/lib/neo4j", "/var/log/neo4j", "/opt/gebo.ai/shares"]
+VOLUME ["/data/db", "/var/lib/qdrant", "/var/lib/neo4j", "/var/log/neo4j","/var/log/gebo.ai", "/opt/gebo.ai/shares"]
 EXPOSE 27017 6333 7474 7687  12999
 
 
