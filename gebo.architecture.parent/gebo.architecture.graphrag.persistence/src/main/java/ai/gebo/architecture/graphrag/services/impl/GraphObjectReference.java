@@ -13,4 +13,5 @@ class GraphObjectReference<Neo4JType extends AbstractGraphObject, ExtractedType 
 	private final ExtractedType extractedObject;
 	private final Neo4JType graphObject;	
 	private final Map<String, ExtractedType> chunkIds = new HashMap<>();
+	private final Map<String, ExtractedType> chunkGroupIds = new HashMap<>();
 }

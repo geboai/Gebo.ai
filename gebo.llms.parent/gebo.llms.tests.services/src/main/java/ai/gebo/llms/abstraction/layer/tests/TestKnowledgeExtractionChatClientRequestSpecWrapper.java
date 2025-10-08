@@ -1,6 +1,7 @@
 package ai.gebo.llms.abstraction.layer.tests;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -14,7 +15,10 @@ import org.springframework.ai.chat.client.ChatClient.PromptUserSpec;
 import org.springframework.ai.chat.client.ChatClient.StreamResponseSpec;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.template.TemplateRenderer;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
@@ -24,8 +28,28 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class TestKnowledgeExtractionChatClientRequestSpecWrapper implements ChatClientRequestSpec {
+	final Prompt prompt;
 	private final ChatClientRequestSpec wrapped;
 	private final TestKnowledgeExtractionModelConfiguration configuration;
+	final List<Message> messages = new ArrayList<>();
+	final List<Advisor> advisors = new ArrayList<>();
+
+	private <T> void add(List<T> list, T[] array) {
+		if (array != null) {
+			for (T d : array) {
+				if (d != null)
+					list.add(d);
+			}
+		}
+	}
+
+	private <T> void add(List<T> list, List<T> array) {
+		for (T d : array) {
+			if (d != null)
+				list.add(d);
+		}
+	}
+
 	@Override
 	public Builder mutate() {
 
@@ -35,30 +59,33 @@ public class TestKnowledgeExtractionChatClientRequestSpecWrapper implements Chat
 	@Override
 	public ChatClientRequestSpec advisors(Consumer<AdvisorSpec> consumer) {
 
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.advisors(consumer), configuration);
+		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(prompt, wrapped.advisors(consumer),
+				configuration);
 	}
 
 	@Override
 	public ChatClientRequestSpec advisors(Advisor... advisors) {
-
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.advisors(advisors), configuration);
+		add(this.advisors, advisors);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec advisors(List<Advisor> advisors) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.advisors(advisors), configuration);
+		add(this.advisors, advisors);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec messages(Message... messages) {
-
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.messages(messages), configuration);
+		add(this.messages, messages);
+		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(prompt, wrapped.messages(messages),
+				configuration);
 	}
 
 	@Override
 	public ChatClientRequestSpec messages(List<Message> messages) {
-
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.messages(messages), configuration);
+		add(this.messages, messages);
+		return this;
 	}
 
 	@Override
@@ -69,83 +96,90 @@ public class TestKnowledgeExtractionChatClientRequestSpecWrapper implements Chat
 
 	@Override
 	public ChatClientRequestSpec toolNames(String... toolNames) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.toolNames(toolNames), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec tools(Object... toolObjects) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.tools(toolObjects), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec toolCallbacks(ToolCallback... toolCallbacks) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.toolCallbacks(toolCallbacks), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec toolCallbacks(List<ToolCallback> toolCallbacks) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.toolCallbacks(toolCallbacks), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec toolCallbacks(ToolCallbackProvider... toolCallbackProviders) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.toolCallbacks(toolCallbackProviders), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec toolContext(Map<String, Object> toolContext) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.toolContext(toolContext), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec system(String text) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.system(text), configuration);
+		this.messages.add(new SystemMessage(text));
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec system(Resource textResource, Charset charset) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.system(textResource, charset), configuration);
+		this.messages.add(new SystemMessage(textResource));
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec system(Resource text) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.system(text), configuration);
+		this.messages.add(new SystemMessage(text));
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec system(Consumer<PromptSystemSpec> consumer) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.system(consumer), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec user(String text) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.system(text), configuration);
+		this.messages.add(new UserMessage(text));
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec user(Resource text, Charset charset) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.user(text, charset), configuration);
+		this.messages.add(new UserMessage(text));
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec user(Resource text) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.user(text), configuration);
+		this.messages.add(new UserMessage(text));
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec user(Consumer<PromptUserSpec> consumer) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.user(consumer), configuration);
+		return this;
 	}
 
 	@Override
 	public ChatClientRequestSpec templateRenderer(TemplateRenderer templateRenderer) {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.templateRenderer(templateRenderer), configuration);
+		return this;
+		
 	}
 
 	@Override
 	public CallResponseSpec call() {
 
-		return new TestKnowledgeExtractionCallResponseSpecWrapper(wrapped.call(), configuration);
+		return new TestKnowledgeExtractionCallResponseSpecWrapper(wrapped.call(), configuration, this);
 	}
 
 	@Override

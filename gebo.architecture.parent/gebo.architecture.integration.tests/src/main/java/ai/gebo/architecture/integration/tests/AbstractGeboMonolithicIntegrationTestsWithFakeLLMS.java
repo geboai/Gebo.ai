@@ -42,6 +42,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
+import ai.gebo.llms.abstraction.layer.tests.KnowledgeExtractionCallEvent;
 import ai.gebo.llms.abstraction.layer.tests.TestChatModelConfiguration;
 import ai.gebo.llms.abstraction.layer.tests.TestChatModelSupportServiceImpl;
 import ai.gebo.llms.abstraction.layer.tests.TestEmbeddingModelConfiguration;
@@ -145,8 +146,11 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 				.setCode(TestKnowledgeExtractionChatModelSupportServiceImpl.TEST_KNOWLEDGE_EXTRACTION_MODEL_001);
 		knowledgeExtractionChatModelConfig.setDefaultModel(false);
 		knowledgeExtractionChatModelConfig.setCode(DEFAULT_KNOWLEDGE_EXTRACTION_CHAT_MODEL_CODE);
-		LLMExtractionResult extractionResult = this.createGraphragExtractionSample();
-		knowledgeExtractionChatModelConfig.getResponseObjects().put(LLMExtractionResult.class, extractionResult);
+		// LLMExtractionResult extractionResult = this.createGraphragExtractionSample();
+		// knowledgeExtractionChatModelConfig.getResponseObjects().put(LLMExtractionResult.class,
+		// extractionResult);
+		knowledgeExtractionChatModelConfig.getResponseCallbacks().put(LLMExtractionResult.class,
+				(KnowledgeExtractionCallEvent event) -> this.createGraphragExtractionSample(event));
 		chatModelRuntimeDao.addRuntimeByConfig(knowledgeExtractionChatModelConfig);
 		GraphRagExtractionConfig graphragConfig = new GraphRagExtractionConfig();
 		graphragConfig.setExtractionPrompt("This is a knowledge extraction prompt \n\n${format}");
@@ -159,24 +163,54 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		LOGGER.info("End initializing chat & embedding model");
 	}
 
+	private static final String START_CHUNK_ID = "[CHUNK-ID]";
+	private static final String END_CHUNK_ID = "[/CHUNK-ID]";
+
+	private LLMExtractionResult createGraphragExtractionSample(KnowledgeExtractionCallEvent event) {
+
+		List<String> documentIds = event.getMessages().stream().map(x -> {
+			if (x.getText() != null) {
+				String text = x.getText();
+				int startIndex = text.indexOf(START_CHUNK_ID);
+				int endIndex = text.indexOf(END_CHUNK_ID);
+				if (startIndex >= 0 && endIndex >= 0) {
+					String id = text.substring(startIndex + START_CHUNK_ID.length(), endIndex);
+					return id;
+				} else
+					return null;
+			} else {
+				return null;
+			}
+		}).filter(y -> y != null).toList();
+		LLMExtractionResult sample = createGraphragExtractionSample(documentIds);
+		return sample;
+	}
+
 	private LLMExtractionResult createGraphragExtractionSample() {
+		return this.createGraphragExtractionSample(List.of());
+	}
+
+	private LLMExtractionResult createGraphragExtractionSample(List<String> ids) {
 		LLMExtractionResult data = new LLMExtractionResult();
 		EntityObject entity = new EntityObject();
 		entity.setType("PRODUCT");
 		entity.setName("Yamaha XTZ");
 		entity.setConfidence(0.9);
 		entity.setLongDescription("Yamaha XTZ motorbike");
+		entity.getChunkIds().addAll(ids);
 		data.getEntities().add(entity);
 		EntityObject entity1 = new EntityObject();
 		entity1.setType("PRODUCT");
 		entity1.setName("Citroen pallas");
 		entity1.setConfidence(0.9);
 		entity1.setLongDescription("Citroen pallas car");
+		entity1.getChunkIds().addAll(ids);
 		data.getEntities().add(entity1);
 		EventObject event = new EventObject();
 		event.setParticipantEntities(List.of(entity, entity1));
 		event.setTitle("Collision on the road");
 		event.setType("ACCIDENT");
+		event.getChunkIds().addAll(ids);
 		data.getEvents().add(event);
 		return data;
 	}
@@ -238,7 +272,8 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 	 * @throws InterruptedException     if the thread is interrupted
 	 */
 	protected void runAndWaitDoneCheckingResults(GProjectEndpoint endpoint, long howManyFilesWait,
-			boolean checkVectorDeletionNotOccurred) throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
+			boolean checkVectorDeletionNotOccurred)
+			throws JsonProcessingException, GeboJobServiceException, GeboPersistenceException, InterruptedException {
 		this.runAndWaitDoneCheckingResults(endpoint, howManyFilesWait, checkVectorDeletionNotOccurred, 20);
 	}
 

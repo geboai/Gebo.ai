@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Spliterators;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -50,7 +54,6 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 	private final IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
 	private final GeboGraphRagProcessorConfig processorConfig;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
-	private final GraphextractionHelper extractionHelper;
 
 	class ProcessingStatusUpdater implements Consumer<KnowledgeExtractionEvent> {
 
@@ -137,35 +140,46 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				boolean discardFile = this.staticConfig.getDiscardedExtensions() != null && this.staticConfig
 						.getDiscardedExtensions().contains(payload.getDocumentReference().getExtension());
 				if (!discardFile) {
-					final Map<String, Object> cache = new HashMap<String, Object>();
 					knowledgeGraphPersistenceService.knowledgeGraphDelete(payload.getDocumentReference());
 					final GraphDocumentReference graphDocumentObject = knowledgeGraphPersistenceService
 							.knowledgeGraphInsertDocument(payload.getDocumentReference());
+					final Map<String, Object> cache = new HashMap<String, Object>();
+					final Predicate<List<Document>> splitPredicate = graphRagExtractionService
+							.getBatchingPredicate(payload.getDocumentReference(), cache);
+
 					ExecutorService ex = Executors.newFixedThreadPool(
 							processorConfig.getGraphRagProcessorReceiverConfig().getConcurrentGraphExtractionWorkers());
 
 					try {
+
 						DocumentChunkingResponse current = chunkingService
 								.getCachedChunkSet(payload.getDocumentReference());
 
 						while (current != null && !current.isEmpty()) {
 							Stream<DocumentChunk> chunks = current.getCurrentChunkSet().getChunks().stream();
-
-							Stream<CompletableFuture<KnowledgeExtractionData>> futureStream = chunks
-									.map((x) -> CompletableFuture.supplyAsync(() -> {
+							Stream<Document> documentsStream = chunks
+									.map(x -> new Document(x.getId(), x.getChunkData(), x.getMetaData()));
+							Stream<List<Document>> documentBatches = PredicateGrouping.groupByPredicate(documentsStream,
+									splitPredicate);
+							Stream<CompletableFuture<KnowledgeExtractionData>> futureStream = documentBatches
+									.map((List<Document> x) -> CompletableFuture.supplyAsync(() -> {
 										long startTime = System.currentTimeMillis();
 										KnowledgeExtractionData extraction = null;
 										try {
-
-											extraction = this.extractionHelper.doProcessChunk(x,
+											if (LOGGER.isDebugEnabled()) {
+												LOGGER.debug("doc:" + payload.getDocumentReference().getCode()
+														+ " thread -> " + Thread.currentThread().getName()
+														+ " docs cardinality=> " + x.size());
+											}
+											LLMExtractionResult extractData = this.graphRagExtractionService.extract(x,
 													payload.getDocumentReference(), cache);
-
+											extraction = new KnowledgeExtractionData(extractData, x, false);
 										} catch (Throwable th) {
 											final String msg = "Error in async worker for document "
 													+ payload.getDocumentReference().getCode();
 											LOGGER.error(msg, th);
-											extraction = new KnowledgeExtractionData(new LLMExtractionResult(),
-													new Document(x.getId(), x.getChunkData(), x.getMetaData()), true);
+											extraction = new KnowledgeExtractionData(new LLMExtractionResult(), x,
+													true);
 										}
 										if (staticConfig.getGraphRagProcessorReceiverConfig()
 												.getMinimumDelayBetweenRequests() > 0) {

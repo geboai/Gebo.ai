@@ -18,6 +18,8 @@ public class GraphDocumentChunk {
 	@NotNull
 	private String id = null;
 	@NotNull
+	private String chunksGroupId=null;
+	@NotNull
 	private String documentCode = null;
 	@NotNull
 	private String projectCode = null;

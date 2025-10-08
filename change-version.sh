@@ -27,6 +27,7 @@ sed -i s/"$1"/"$2"/ dockers/gebo.ai/Dockerfile
 sed -i s/"$1"/"$2"/ dockers/gebo.ai/create-image.bat
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/Dockerfile
 sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/create-image.bat
+sed -i s/"$1"/"$2"/ dockers/easyinstall.gebo.ai/*.sh
 
 find . -name pom.xml | xargs git stage 
 sed -i s/"$1"/"$2"/ ./gebo.ui/package.json
@@ -34,5 +35,6 @@ git stage ./gebo.ui/package.json
 find ./gebo.ui/projects -name package.json | xargs sed -i s/"$1"/"$2"/ 
 find ./gebo.ui/projects -name package.json | xargs git stage
 git stage dockers/gebo.ai/Dockerfile dockers/gebo.ai/create-image.bat
+git stage dockers/easyinstall.gebo.ai/Dockerfile dockers/easyinstall.gebo.ai/create-image.bat dockers/easyinstall.gebo.ai/*.sh
 git commit -m"Changed version from $1 to $2"
 

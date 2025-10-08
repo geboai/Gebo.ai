@@ -25,9 +25,9 @@ import lombok.Data;
  */
 @Data
 public class TestKnowledgeExtractionModelConfiguration extends GBaseChatModelConfig {
-	
+
 	Function<String, String> testResponseLogic = (s) -> s;
 	public Map<Class, Object> responseObjects = new HashMap<Class, Object>();
-
+	public Map<Class, Function<KnowledgeExtractionCallEvent, Object>> responseCallbacks = new HashMap<>();
 
 }

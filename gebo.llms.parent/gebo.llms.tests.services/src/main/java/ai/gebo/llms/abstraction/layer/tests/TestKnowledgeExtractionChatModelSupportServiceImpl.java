@@ -69,8 +69,15 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 		@Override
 		public ChatClient getChatClient() {
 			ChatClient wrapped = super.getChatClient();
-			TestKnowledgeExtractionChatClientWrapper client = new TestKnowledgeExtractionChatClientWrapper(wrapped,this.config);
+			TestKnowledgeExtractionChatClientWrapper client = new TestKnowledgeExtractionChatClientWrapper(wrapped,
+					this.config);
 			return client;
+		}
+
+		@Override
+		public int getContextLength() {
+
+			return 8192;
 		}
 
 	};
