@@ -140,27 +140,36 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				boolean discardFile = this.staticConfig.getDiscardedExtensions() != null && this.staticConfig
 						.getDiscardedExtensions().contains(payload.getDocumentReference().getExtension());
 				if (!discardFile) {
+					// delete the document and related data from the neo4j database
 					knowledgeGraphPersistenceService.knowledgeGraphDelete(payload.getDocumentReference());
+					// insert the document in the neo4j database
 					final GraphDocumentReference graphDocumentObject = knowledgeGraphPersistenceService
 							.knowledgeGraphInsertDocument(payload.getDocumentReference());
+					// initialize a cache for process speedup
 					final Map<String, Object> cache = new HashMap<String, Object>();
+					// get a predicate to cluster multiple chunks on a single llm request if is
+					// feasible
 					final Predicate<List<Document>> splitPredicate = graphRagExtractionService
 							.getBatchingPredicate(payload.getDocumentReference(), cache);
-
-					ExecutorService ex = Executors.newFixedThreadPool(
+					// initializing an executor for parallel threads
+					final ExecutorService ex = Executors.newFixedThreadPool(
 							processorConfig.getGraphRagProcessorReceiverConfig().getConcurrentGraphExtractionWorkers());
 
 					try {
-
+						// get the first cached chunks group
 						DocumentChunkingResponse current = chunkingService
 								.getCachedChunkSet(payload.getDocumentReference());
 
 						while (current != null && !current.isEmpty()) {
+							// Stream the chunks in this group
 							Stream<DocumentChunk> chunks = current.getCurrentChunkSet().getChunks().stream();
+							// Transform to Documents
 							Stream<Document> documentsStream = chunks
 									.map(x -> new Document(x.getId(), x.getChunkData(), x.getMetaData()));
-							Stream<List<Document>> documentBatches = PredicateGrouping.groupByPredicate(documentsStream,
-									splitPredicate);
+							// Batch documents according to grouping predicate (context window sizing)
+							Stream<List<Document>> documentBatches = PredicateGrouping
+									.groupGreedyDelayInvalidByPredicate(documentsStream, splitPredicate);
+							// Setup an array of executions of batched contents for information extraction
 							Stream<CompletableFuture<KnowledgeExtractionData>> futureStream = documentBatches
 									.map((List<Document> x) -> CompletableFuture.supplyAsync(() -> {
 										long startTime = System.currentTimeMillis();
@@ -198,11 +207,14 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 										}
 										return extraction;
 									}, ex));
+							// Run the executions (in parallel)
 							Stream<KnowledgeExtractionData> knowledgeExtractionStream = futureStream
 									.map(CompletableFuture::join);
+							// Save the results
 							this.knowledgeGraphPersistenceService.knowledgeGraphInsertChunks(
 									payload.getDocumentReference(), graphDocumentObject, knowledgeExtractionStream,
 									updatesConsumer, cache);
+							// Fetch next group of chunks
 							if (current.getNextChunkSetId() != null) {
 								current = chunkingService.getNextChunkSet(payload.getDocumentReference(),
 										current.getId(), current.getNextChunkSetId());

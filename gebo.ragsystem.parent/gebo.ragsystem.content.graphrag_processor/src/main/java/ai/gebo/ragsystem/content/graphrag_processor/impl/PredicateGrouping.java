@@ -106,7 +106,7 @@ public class PredicateGrouping {
 	   *
 	   * Sequential only.
 	   */
-	  public static <T> Stream<List<T>> groupGreedyDelayInvalid(Stream<T> source,
+	  public static <T> Stream<List<T>> groupGreedyDelayInvalidByPredicate(Stream<T> source,
 	                                                            Predicate<? super List<T>> p) {
 	    Objects.requireNonNull(source); Objects.requireNonNull(p);
 
@@ -206,9 +206,8 @@ public class PredicateGrouping {
 	  }
 	public static void main(String[] args) {
 		List<Integer> dataArray=List.of(10, 10, 10, 10, 10, 10, 10, 20,10,20, 30, 60, 30, 20, 99, 100);
-		dataArray.stream().forEach(x->{
-			System.out.println(x);
-		});
+		System.out.println(dataArray);
+		
 		Stream<Integer> stream = dataArray.stream();
 		Predicate<List<Integer>> lessThan100 = (List<Integer> data) -> {
 			int sum = 0;
@@ -223,7 +222,7 @@ public class PredicateGrouping {
 		});
 		System.out.println("groupGreedyDelayInvalid");
 		stream = dataArray.stream();
-		groupGreedyDelayInvalid(stream, lessThan100).forEach(x->{
+		groupGreedyDelayInvalidByPredicate(stream, lessThan100).forEach(x->{
 			System.out.println(x);
 		});
 	}
