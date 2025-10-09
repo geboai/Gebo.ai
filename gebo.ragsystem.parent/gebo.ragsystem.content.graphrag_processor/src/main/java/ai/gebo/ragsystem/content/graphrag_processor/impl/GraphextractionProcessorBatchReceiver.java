@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterators;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -37,6 +33,7 @@ import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphPersistenceService;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.ragsystem.content.graphrag_processor.IGraphRagProcessorMessagesReceiverFactoryComponent;
 import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessorConfig;
 import lombok.AllArgsConstructor;
@@ -55,70 +52,6 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 	private final GeboGraphRagProcessorConfig processorConfig;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
 
-	class ProcessingStatusUpdater implements Consumer<KnowledgeExtractionEvent> {
-
-		private String jobId;
-		private String workflowType;
-		private String workflowId;
-		private String workflowStepId;
-		private long howManyAccepted = 0;
-		private static final long BATCHING_CYCLES_NUMBER = 20;
-		private KnowledgeExtractionEvent cumulated = null;
-		private boolean errorsOccurred = false;
-
-		ProcessingStatusUpdater(String jobId, String workflowType, String workflowId, String workflowStepId) {
-			this.jobId = jobId;
-			this.workflowType = workflowType;
-			this.workflowId = workflowId;
-			this.workflowStepId = workflowStepId;
-		}
-
-		@Override
-		public void accept(KnowledgeExtractionEvent t) {
-			howManyAccepted++;
-			if (cumulated == null)
-				cumulated = t;
-			else {
-				cumulated.incrementBy(t);
-			}
-			if (!errorsOccurred) {
-				errorsOccurred = (cumulated.getErrorChunks() > 0l || cumulated.getErrorTokens() > 0l);
-			}
-			if ((howManyAccepted >= BATCHING_CYCLES_NUMBER)) {
-				flush();
-			}
-		}
-
-		void flush() {
-			if (cumulated != null) {
-				GContentsProcessingStatusUpdatePayload payload = new GContentsProcessingStatusUpdatePayload();
-				payload.setJobId(jobId);
-				payload.setWorkflowType(workflowType);
-				payload.setWorkflowId(workflowId);
-				payload.setWorkflowStepId(workflowStepId);
-				payload.setBatchDocumentsInput(0);
-				payload.setChunksProcessed(cumulated.getProcessedSegments());
-				payload.setTokensProcessed(cumulated.getProcessedTokens());
-				payload.setErrorChunks(cumulated.getErrorChunks());
-				payload.setErrorTokens(cumulated.getErrorTokens());
-
-				GMessageEnvelope<GContentsProcessingStatusUpdatePayload> envelope = GMessageEnvelope
-						.newMessageFrom(emitter, payload);
-				envelope.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
-				envelope.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-				envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-				broker.accept(envelope);
-				cumulated = null;
-				howManyAccepted = 0;
-			}
-
-		}
-
-		public boolean isErrorsOccurred() {
-			return errorsOccurred;
-		}
-	};
-
 	public void acceptSingleMessage(GMessageEnvelope envelope) {
 
 		if (LOGGER.isDebugEnabled()) {
@@ -126,9 +59,9 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 		}
 		if (envelope.getPayload() instanceof GDocumentReferencePayload payload) {
 			GContentsProcessingStatusUpdatePayload data = null;
-			ProcessingStatusUpdater updatesConsumer = new ProcessingStatusUpdater(payload.getJobId(),
-					envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
-					envelope.getWorkflowId(), envelope.getWorkflowStepId());
+			GraphextractionProcessingStatusUpdater updatesConsumer = new GraphextractionProcessingStatusUpdater(
+					payload.getJobId(), envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
+					envelope.getWorkflowId(), envelope.getWorkflowStepId(), broker, emitter);
 			try {
 				data = new GContentsProcessingStatusUpdatePayload();
 				data.setJobId(payload.getJobId());
@@ -183,12 +116,14 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 											LLMExtractionResult extractData = this.graphRagExtractionService.extract(x,
 													payload.getDocumentReference(), cache);
 											extraction = new KnowledgeExtractionData(extractData, x, false);
+											updatesConsumer.accept(createExtractionEvent(extraction));
 										} catch (Throwable th) {
 											final String msg = "Error in async worker for document "
 													+ payload.getDocumentReference().getCode();
 											LOGGER.error(msg, th);
 											extraction = new KnowledgeExtractionData(new LLMExtractionResult(), x,
 													true);
+											updatesConsumer.accept(createExtractionEvent(extraction));
 										}
 										if (staticConfig.getGraphRagProcessorReceiverConfig()
 												.getMinimumDelayBetweenRequests() > 0) {
@@ -213,7 +148,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 							// Save the results
 							this.knowledgeGraphPersistenceService.knowledgeGraphInsertChunks(
 									payload.getDocumentReference(), graphDocumentObject, knowledgeExtractionStream,
-									updatesConsumer, cache);
+									cache);
 							// Fetch next group of chunks
 							if (current.getNextChunkSetId() != null) {
 								current = chunkingService.getNextChunkSet(payload.getDocumentReference(),
@@ -255,6 +190,42 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 			LOGGER.debug("End acceptSingleMessage(...)");
 		}
 
+	}
+
+	private KnowledgeExtractionEvent createExtractionEvent(KnowledgeExtractionData extraction) {
+		long processedTokens = 0l;
+		long processedBytes = 0l;
+		long processedSegments = 0l;
+		long errorChunks = 0l;
+		long errorTokens = 0l;
+		boolean error = extraction.isErrorProcessing();
+		long totalSegments = 0;
+		long totalTokens = 0;
+		long totalBytes = 0;
+		if (extraction.getDocumentChunks() != null) {
+			totalSegments = extraction.getDocumentChunks().size();
+			for (Document doc : extraction.getDocumentChunks()) {
+				if (doc.getMetadata() != null && doc.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
+						&& doc.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) instanceof Number tokens) {
+					totalTokens += tokens.longValue();
+				}
+				if (doc.getMetadata() != null && doc.getMetadata().containsKey(DocumentMetaInfos.GEBO_BYTES_LENGTH)
+						&& doc.getMetadata().get(DocumentMetaInfos.GEBO_BYTES_LENGTH) instanceof Number bytesLength) {
+					totalBytes += bytesLength.longValue();
+				}
+			}
+		}
+		if (!error) {
+			processedTokens = totalTokens;
+			processedSegments = totalSegments;
+			processedBytes = totalBytes;
+		} else {
+			errorTokens = totalTokens;
+			errorChunks = totalSegments;
+		}
+		KnowledgeExtractionEvent evt = new KnowledgeExtractionEvent(processedTokens, processedBytes, processedSegments,
+				errorChunks, errorTokens, error);
+		return evt;
 	}
 
 	@Override

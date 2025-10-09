@@ -8,14 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
@@ -23,7 +20,6 @@ import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
-import ai.gebo.architecture.graphrag.extraction.model.TimeSegment;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 import ai.gebo.architecture.graphrag.persistence.model.AbstractGraphObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
@@ -43,15 +39,10 @@ import ai.gebo.architecture.graphrag.persistence.model.KnowledgeExtractionEvent;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphPersistenceService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
@@ -91,7 +82,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer) {
 		this.knowledgeGraphDelete(documentReference);
 		GraphDocumentReference ref = knowledgeGraphInsertDocument(documentReference);
-		knowledgeGraphInsertChunks(documentReference, ref, stream, processingUpdatesConsumer, new HashMap<>());
+		knowledgeGraphInsertChunks(documentReference, ref, stream, new HashMap<>());
 	}
 
 	@Override
@@ -159,8 +150,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 
 	@Override
 	public void knowledgeGraphInsertChunks(GDocumentReference documentReference, GraphDocumentReference ref,
-			Stream<KnowledgeExtractionData> stream, Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer,
-			Map<String, Object> cache) {
+			Stream<KnowledgeExtractionData> stream, Map<String, Object> cache) {
 		final String chunksGroupId = UUID.randomUUID().toString();
 		final GraphSaveStructure saveStructure = new GraphSaveStructure(cache);
 		stream.forEach(data -> {
@@ -226,7 +216,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			boolean error = data.isErrorProcessing();
 			KnowledgeExtractionEvent event = new KnowledgeExtractionEvent(processedTokens, processedBytes,
 					processedSegments, errorChunks, errorTokens, error);
-			processingUpdatesConsumer.accept(event);
+			
 			saveStructure.chunks.put(chunksGroupId, chunks);
 		});
 		reconcileObjects(saveStructure, cache);

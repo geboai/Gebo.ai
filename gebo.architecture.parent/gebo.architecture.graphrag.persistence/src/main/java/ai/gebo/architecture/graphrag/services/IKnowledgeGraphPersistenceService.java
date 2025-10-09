@@ -17,8 +17,7 @@ public interface IKnowledgeGraphPersistenceService {
 	public GraphDocumentReference knowledgeGraphInsertDocument(GDocumentReference documentReference);
 
 	public void knowledgeGraphInsertChunks(GDocumentReference documentReference, GraphDocumentReference ref,
-			Stream<KnowledgeExtractionData> stream, Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer,
-			Map<String, Object> cache);
+			Stream<KnowledgeExtractionData> stream, Map<String, Object> cache);
 
 	public void knowledgeGraphUpdate(GDocumentReference documentReference, Stream<KnowledgeExtractionData> stream,
 			Consumer<KnowledgeExtractionEvent> processingUpdatesConsumer);
