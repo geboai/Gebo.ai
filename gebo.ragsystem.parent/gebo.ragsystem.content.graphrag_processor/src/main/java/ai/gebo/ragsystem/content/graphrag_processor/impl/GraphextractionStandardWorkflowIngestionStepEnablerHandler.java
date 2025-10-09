@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.workflow.AbstractStandardWorkflowIngestionStepEnablerHandler;
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
 
 @Component
@@ -18,9 +19,9 @@ public class GraphextractionStandardWorkflowIngestionStepEnablerHandler
 	}
 
 	@Override
-	public boolean isEnabled(String workflowId, String workflowStepId) {
+	public boolean isEnabled(String workflowId, String workflowStepId, WorkflowContext context) {
 
-		return this.extractionService.isConfigured();
+		return this.extractionService.isConfigured(context);
 	}
 
 }

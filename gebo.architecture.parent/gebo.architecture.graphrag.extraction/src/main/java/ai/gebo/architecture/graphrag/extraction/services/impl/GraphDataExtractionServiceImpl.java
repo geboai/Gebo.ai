@@ -3,14 +3,19 @@ package ai.gebo.architecture.graphrag.extraction.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
@@ -29,6 +34,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -280,11 +286,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	}
 
 	@Override
-	public boolean isConfigured() {
-
-		long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
-		return count > 0;
-		// return true;
+	public boolean isConfigured(WorkflowContext context) {
+		return this.configRepository.hasConfiguration(context);
 	}
 
 	@Override
@@ -305,6 +308,212 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			GraphRagExtractionConfig defaultLevelConfig, List<String> knowledgeBases) {
 		// TODO: implement logics
 		return defaultLevelConfig;
+	}
+
+	@Override
+	public LLMExtractionResult extract(List<Document> documents, GDocumentReference docreference,
+			Map<String, Object> cache) throws LLMConfigException {
+		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
+		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT);
+		GraphRagExtractionConfig knowledgeBaseLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE);
+		GraphRagExtractionConfig defaultLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG);
+		if (defaultLevelConfig == null) {
+			List<GraphRagExtractionConfig> defaultConfigs = this.configRepository
+					.findByDefaultConfiguration(Boolean.TRUE);
+			if (!defaultConfigs.isEmpty()) {
+				defaultLevelConfig = defaultConfigs.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG, defaultLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED, "true");
+		}
+
+		String knowledgeBaseCode = docreference.getRootKnowledgebaseCode();
+		String projectCode = docreference.getParentProjectCode();
+		if (knowledgeBaseCode != null
+				&& !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED)) {
+			List<GraphRagExtractionConfig> forKnowledgeBase = this.configRepository
+					.findByKnowledgeBaseCode(knowledgeBaseCode);
+			for (GraphRagExtractionConfig kc : forKnowledgeBase) {
+				if (kc.getProjectCode() == null && knowledgeBaseLevelConfig == null) {
+					knowledgeBaseLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE, knowledgeBaseLevelConfig);
+				}
+				if (kc.getProjectCode() != null && projectCode != null && kc.getProjectCode().equals(projectCode)
+						&& projectLevelConfig == null) {
+					projectLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT, projectLevelConfig);
+				}
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED, "true");
+		}
+		if (dataSourceLevelConfig == null && !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED)) {
+			List<GraphRagExtractionConfig> forDataSource = this.configRepository.findByEndpointClassNameAndEndpointCode(
+					docreference.getProjectEndpointReference().getClassName(),
+					docreference.getProjectEndpointReference().getCode());
+			if (!forDataSource.isEmpty()) {
+				dataSourceLevelConfig = forDataSource.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE, dataSourceLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED, "true");
+
+		}
+		return extract(documents, cache, mainConfiguration, defaultLevelConfig, knowledgeBaseLevelConfig,
+				projectLevelConfig, dataSourceLevelConfig);
+
+	}
+
+	private LLMExtractionResult extract(List<Document> documents, Map<String, Object> cache,
+			GraphRagExtractionConfig mainConfiguration, GraphRagExtractionConfig defaultLevelConfig,
+			GraphRagExtractionConfig knowledgeBaseLevelConfig, GraphRagExtractionConfig projectLevelConfig,
+			GraphRagExtractionConfig dataSourceLevelConfig) throws LLMConfigException {
+
+		if (dataSourceLevelConfig != null) {
+			return extract(documents, dataSourceLevelConfig, cache);
+		}
+		if (projectLevelConfig != null) {
+			return extract(documents, projectLevelConfig, cache);
+		}
+		if (knowledgeBaseLevelConfig != null) {
+			return extract(documents, knowledgeBaseLevelConfig, cache);
+		}
+		if (defaultLevelConfig != null) {
+			return extract(documents, defaultLevelConfig, cache);
+		}
+		throw new LLMConfigException("There is no available configuration for knowledge extraction");
+	}
+
+	@Override
+	public LLMExtractionResult extract(List<Document> documents, GraphRagExtractionConfig configuration,
+			Map<String, Object> cache) throws LLMConfigException {
+
+		IGConfigurableChatModel chatModel = getChatModel(configuration);
+
+		if (chatModel == null)
+			throw new LLMConfigException("No configured extraction model");
+		Prompt promptObject = (Prompt) cache.get(GRAPHRAG_EXTRACTION_PROMPT_OBJECT);
+		if (promptObject == null) {
+			String formatSpecification = createFormatSpecification(configuration);
+			String prompt = staticConfig.getExtractionConfig() != null
+					? staticConfig.getExtractionConfig().getExtractionPrompt()
+					: null;
+			if (configuration != null && configuration.getExtractionPrompt() != null) {
+				prompt = configuration.getExtractionPrompt();
+			}
+			PromptTemplate promptTemplate = new PromptTemplate(prompt);
+			promptTemplate.add("format", formatSpecification);
+			promptObject = promptTemplate.create();
+			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
+		}
+		List<Message> messages = documents.stream()
+				.map(x -> (Message) new SystemMessage(
+						"[CHUNK-ID]" + x.getId() + "[/CHUNK-ID]\r\n" + x.getText() + "\r\n" + x.getMetadata()))
+				.toList();
+		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
+		return clean(requestSpec.call().entity(LLMExtractionResult.class));
+	}
+
+	public final static BiPredicate<List<Document>, Integer> groupingPredicate = (List<Document> batch,
+			Integer tokensBudget) -> {
+		boolean continueGrouping = true;
+		long totalSize = 0;
+		if (batch != null) {
+			for (Document doc : batch) {
+				if (doc.getMetadata() != null && doc.getMetadata().containsKey(DocumentMetaInfos.GEBO_TOKEN_LENGTH)
+						&& doc.getMetadata().get(DocumentMetaInfos.GEBO_TOKEN_LENGTH) instanceof Number size) {
+					totalSize += size.longValue();
+					continueGrouping = continueGrouping && (totalSize < tokensBudget.longValue());
+				} else {
+					continueGrouping = false;
+					break;
+				}
+			}
+		}
+		return continueGrouping;
+	};
+
+	@Override
+	public Predicate<List<Document>> getBatchingPredicate(GraphRagExtractionConfig configuration,
+			Map<String, Object> cache) throws LLMConfigException {
+		IGConfigurableChatModel chatModel = getChatModel(configuration);
+		int length = chatModel.getContextLength();
+		if (length > 512) {
+			length -= 512;
+		}
+		final int lengthMax = length;
+		Predicate<List<Document>> predicate = (List<Document> data) -> groupingPredicate.test(data, lengthMax);
+		return predicate;
+	}
+
+	@Override
+	public Predicate<List<Document>> getBatchingPredicate(GDocumentReference docreference, Map<String, Object> cache)
+			throws LLMConfigException {
+		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
+		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT);
+		GraphRagExtractionConfig knowledgeBaseLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE);
+		GraphRagExtractionConfig defaultLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG);
+		if (defaultLevelConfig == null) {
+			List<GraphRagExtractionConfig> defaultConfigs = this.configRepository
+					.findByDefaultConfiguration(Boolean.TRUE);
+			if (!defaultConfigs.isEmpty()) {
+				defaultLevelConfig = defaultConfigs.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG, defaultLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED, "true");
+		}
+
+		String knowledgeBaseCode = docreference.getRootKnowledgebaseCode();
+		String projectCode = docreference.getParentProjectCode();
+		if (knowledgeBaseCode != null
+				&& !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED)) {
+			List<GraphRagExtractionConfig> forKnowledgeBase = this.configRepository
+					.findByKnowledgeBaseCode(knowledgeBaseCode);
+			for (GraphRagExtractionConfig kc : forKnowledgeBase) {
+				if (kc.getProjectCode() == null && knowledgeBaseLevelConfig == null) {
+					knowledgeBaseLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE, knowledgeBaseLevelConfig);
+				}
+				if (kc.getProjectCode() != null && projectCode != null && kc.getProjectCode().equals(projectCode)
+						&& projectLevelConfig == null) {
+					projectLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT, projectLevelConfig);
+				}
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED, "true");
+		}
+		if (dataSourceLevelConfig == null && !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED)) {
+			List<GraphRagExtractionConfig> forDataSource = this.configRepository.findByEndpointClassNameAndEndpointCode(
+					docreference.getProjectEndpointReference().getClassName(),
+					docreference.getProjectEndpointReference().getCode());
+			if (!forDataSource.isEmpty()) {
+				dataSourceLevelConfig = forDataSource.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE, dataSourceLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED, "true");
+
+		}
+		if (dataSourceLevelConfig != null) {
+			return getBatchingPredicate(dataSourceLevelConfig, cache);
+		}
+		if (projectLevelConfig != null) {
+			return getBatchingPredicate(projectLevelConfig, cache);
+		}
+		if (knowledgeBaseLevelConfig != null) {
+			return getBatchingPredicate(knowledgeBaseLevelConfig, cache);
+		}
+		if (defaultLevelConfig != null) {
+			return getBatchingPredicate(defaultLevelConfig, cache);
+		}
+		throw new LLMConfigException("There is no available configuration for knowledge extraction");
 	}
 
 }

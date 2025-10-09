@@ -17,8 +17,12 @@ import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStructure;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessedSummary;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import lombok.AllArgsConstructor;
 
@@ -26,27 +30,29 @@ import lombok.AllArgsConstructor;
 public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHandler {
 	protected final ContentsBatchProcessedRepository contentsBatchRepo;
 	protected final IWorkflowStepEnabledHandlerRepositoryPattern stepEnabledHandlerRepositoryPattern;
+	protected final IGPersistentObjectManager persistentObject;
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	protected abstract ComputedWorkflowStructure workflowStructureImplementation(String workflowType,
-			String workflowId);
+			String workflowId, WorkflowContext context);
 
 	@Override
-	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId) {
-		ComputedWorkflowStructure structure = workflowStructureImplementation(workflowType, workflowId);
-		this.checkEnabledNodes(structure.getRootStep());
+	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId,
+			WorkflowContext context) {
+		ComputedWorkflowStructure structure = workflowStructureImplementation(workflowType, workflowId,context);
+		this.checkEnabledNodes(structure.getRootStep(),context);
 		return structure;
 	}
 
-	private void checkEnabledNodes(ComputedWorkflowItem rootStep) {
+	private void checkEnabledNodes(ComputedWorkflowItem rootStep, WorkflowContext context) {
 		IWorkflowStepEnabledHandler handler = stepEnabledHandlerRepositoryPattern
 				.findByWorkflowsTypeAndWorkflowIdAndWorkflowStepId(GWorkflowType.valueOf(rootStep.getWorkflowType()),
 						rootStep.getWorkflowId(), rootStep.getWorkflowStepId());
 		rootStep.setEnabledStep(
-				handler != null && handler.isEnabled(rootStep.getWorkflowId(), rootStep.getWorkflowStepId()));
+				handler != null && handler.isEnabled(rootStep.getWorkflowId(), rootStep.getWorkflowStepId(),context));
 		if (rootStep.isEnabledStep()) {
 			rootStep.getChilds().forEach(childStep -> {
-				checkEnabledNodes(childStep);
+				checkEnabledNodes(childStep,context);
 			});
 		} else
 			rootStep.getChilds().forEach(childStep -> {
@@ -60,44 +66,52 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin computeWorkflowStatus(" + jobId + "," + workflowType + "," + workflowId + ")");
 		}
-		ComputedWorkflowStructure structure = getWorkflowStructure(workflowType, workflowId);
-		ComputedWorkflowResult result = null;
-		if (structure != null) {
-			result = new ComputedWorkflowResult();
-			result.setWorkflowType(workflowType);
-			result.setWorkflowId(workflowId);
-			List<ComputedWorkflowItem> workflowSteps = items(structure.getRootStep());
-			Map<String, ContentsBatchProcessed> aggregated = new HashMap<String, ContentsBatchProcessed>();
-			List<ComputedWorkflowItem> steps = new ArrayList<ComputedWorkflowItem>();
-			for (ComputedWorkflowItem thisStep : workflowSteps) {
-				if (thisStep.getWorkflowId().equalsIgnoreCase(workflowId)) {
-					steps.add(thisStep);
-					ContentsBatchProcessed aggregate = new ContentsBatchProcessed();
-					aggregate.setJobId(jobId);
-					aggregate.setWorkflowType(workflowType);
-					aggregate.setWorkflowId(workflowId);
-					aggregate.setWorkflowStepId(thisStep.getWorkflowStepId());
+		try {
+			GJobStatus job = persistentObject.findById(GJobStatus.class, jobId);
 
-					aggregated.put(thisStep.getWorkflowStepId().toUpperCase(), aggregate);
-				}
-			}
-			List<ContentsBatchProcessedSummary> data = contentsBatchRepo.aggregateByJobId(jobId);
-			data.forEach(entry -> {
-				if (entry.getWorkflowStepId() != null) {
-					ContentsBatchProcessed aggregate = aggregated.get(entry.getWorkflowStepId().toUpperCase());
-					if (aggregate != null) {
-						aggregate.incrementBy(entry);
+			WorkflowContext context = new WorkflowContext(job.getKnowledgeBaseCode(), job.getProjectCode(),
+					job.getProjectEndpointReference());
+			ComputedWorkflowStructure structure = getWorkflowStructure(workflowType, workflowId, context);
+			ComputedWorkflowResult result = null;
+			if (structure != null) {
+				result = new ComputedWorkflowResult();
+				result.setWorkflowType(workflowType);
+				result.setWorkflowId(workflowId);
+				List<ComputedWorkflowItem> workflowSteps = items(structure.getRootStep());
+				Map<String, ContentsBatchProcessed> aggregated = new HashMap<String, ContentsBatchProcessed>();
+				List<ComputedWorkflowItem> steps = new ArrayList<ComputedWorkflowItem>();
+				for (ComputedWorkflowItem thisStep : workflowSteps) {
+					if (thisStep.getWorkflowId().equalsIgnoreCase(workflowId)) {
+						steps.add(thisStep);
+						ContentsBatchProcessed aggregate = new ContentsBatchProcessed();
+						aggregate.setJobId(jobId);
+						aggregate.setWorkflowType(workflowType);
+						aggregate.setWorkflowId(workflowId);
+						aggregate.setWorkflowStepId(thisStep.getWorkflowStepId());
+
+						aggregated.put(thisStep.getWorkflowStepId().toUpperCase(), aggregate);
 					}
 				}
-			});
-			result.setRootStatus(composeStatus(structure.getRootStep(), aggregated));
-			this.visitAndCompileStatus(result.getRootStatus());
-			this.checkStatus(result);
+				List<ContentsBatchProcessedSummary> data = contentsBatchRepo.aggregateByJobId(jobId);
+				data.forEach(entry -> {
+					if (entry.getWorkflowStepId() != null) {
+						ContentsBatchProcessed aggregate = aggregated.get(entry.getWorkflowStepId().toUpperCase());
+						if (aggregate != null) {
+							aggregate.incrementBy(entry);
+						}
+					}
+				});
+				result.setRootStatus(composeStatus(structure.getRootStep(), aggregated));
+				this.visitAndCompileStatus(result.getRootStatus());
+				this.checkStatus(result);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End computeWorkflowStatus(" + jobId + "," + workflowType + "," + workflowId + ")");
+			}
+			return result;
+		} catch (GeboPersistenceException e) {
+			throw new RuntimeException("Exception while accessing the mongo persistence layer", e);
 		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End computeWorkflowStatus(" + jobId + "," + workflowType + "," + workflowId + ")");
-		}
-		return result;
 
 	}
 

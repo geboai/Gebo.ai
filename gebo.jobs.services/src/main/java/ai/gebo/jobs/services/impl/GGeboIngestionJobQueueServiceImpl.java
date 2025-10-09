@@ -94,14 +94,20 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			throws GeboJobServiceException {
 		if (ingestionManager.isJobRunning(GObjectRef.of(item)))
 			throw new GeboJobServiceException("Already running sync on " + item.getCode());
-		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
-				workflowId);
-		synchronized (statusMap) {
-			statusMap.put(status.getCode(), status);
-			readingService.completeAsyncJob(status);
+		GJobStatus status;
+		try {
+			status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
+					workflowId);
 
+			synchronized (statusMap) {
+				statusMap.put(status.getCode(), status);
+				readingService.completeAsyncJob(status);
+
+			}
+			return status;
+		} catch (GeboPersistenceException e) {
+			throw new GeboJobServiceException("Exception on persistence access", e);
 		}
-		return status;
 	}
 
 	/**
@@ -127,9 +133,14 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 			throws GeboJobServiceException {
 		if (readingService.isJobRunning(GObjectRef.of(item)))
 			throw new GeboJobServiceException("Already running sync on " + item.getCode());
-		GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item, workflowType,
-				workflowId);
-		return ingestionManager.internalReadAndVectorizeContents(status);
+		try {
+			GJobStatus status = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(item,
+					workflowType, workflowId);
+			return ingestionManager.internalReadAndVectorizeContents(status);
+		} catch (GeboPersistenceException e) {
+			throw new GeboJobServiceException("Exception on persistence access", e);
+		}
+
 	}
 
 	/**
@@ -242,14 +253,14 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 					}
 					String stepKey = (of(jobId) + "-" + of(processed.getWorkflowType()) + "-"
 							+ of(processed.getWorkflowId()) + "-" + processed.getWorkflowStepId()).toLowerCase();
-					
+
 					if (!stats.get(key).containsKey(stepKey)) {
 						JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
 						statsEntry.setStartDateTime(new Date(minutesFloorStart));
 						statsEntry.setEndDateTime(new Date(minutesFloorEnd));
 						stats.get(key).put(stepKey, statsEntry);
 					}
-					
+
 					stats.get(key).get(stepKey).incrementBy(processed);
 				} else {
 					LOGGER.error("Entry without timestamp");
@@ -259,8 +270,8 @@ public class GGeboIngestionJobQueueServiceImpl implements IGGeboIngestionJobQueu
 				long startDateTime = stats.firstKey();
 				long endDateTime = stats.lastKey();
 				for (ComputedWorkflowStatus item : itemslist) {
-					String stepKey = (of(jobId) + "-" + of(item.getWorkflowType()) + "-" + of(item.getWorkflowId()) + "-"
-							+ of(item.getWorkflowStepId())).toLowerCase();
+					String stepKey = (of(jobId) + "-" + of(item.getWorkflowType()) + "-" + of(item.getWorkflowId())
+							+ "-" + of(item.getWorkflowStepId())).toLowerCase();
 					JobWorkflowStepSummary stepSummary = new JobWorkflowStepSummary();
 					stepSummary.setWorkflowType(item.getWorkflowType());
 					stepSummary.setWorkflowId(item.getWorkflowId());

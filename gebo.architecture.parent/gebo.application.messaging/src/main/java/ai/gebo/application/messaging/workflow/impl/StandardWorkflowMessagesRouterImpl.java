@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import ai.gebo.application.messaging.IGMessagePayloadType;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import lombok.AllArgsConstructor;
 
@@ -42,13 +42,13 @@ public class StandardWorkflowMessagesRouterImpl implements IWorkflowMessagesRout
 
 	@Override
 	public List<GMessagingComponentRef> onProcessedRoutes(String workflowId, String stepId,
-			IGMessagePayloadType payload) {
+			WorkflowMessageContext messageContext) {
 		List<GMessagingComponentRef> outValues = List.of();
 		GStandardWorkflowStep[] workflowSteps = GStandardWorkflowStep.values();
 		for (GStandardWorkflowStep gStandardWorkflowStep : workflowSteps) {
 			if (gStandardWorkflowStep.getWorkflow().name().equalsIgnoreCase(workflowId)
 					&& gStandardWorkflowStep.name().equalsIgnoreCase(stepId)) {
-				outValues = gStandardWorkflowStep.getOnProcessedForwardComponents().apply(payload, binder);
+				outValues = gStandardWorkflowStep.getOnProcessedForwardComponents().apply(messageContext, binder);
 			}
 		}
 		return outValues;

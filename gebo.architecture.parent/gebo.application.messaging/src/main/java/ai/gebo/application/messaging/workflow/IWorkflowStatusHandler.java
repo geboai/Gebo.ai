@@ -7,6 +7,7 @@ import ai.gebo.application.messaging.workflow.model.ComputedWorkflowItem;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStructure;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 
 public interface IWorkflowStatusHandler {
 
@@ -18,7 +19,8 @@ public interface IWorkflowStatusHandler {
 
 	public ComputedWorkflowResult computeWorkflowStatus(String jobId, String workflowType, String workflowId);
 
-	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId);
+	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId,
+			WorkflowContext context);
 
 	public default List<ComputedWorkflowItem> items(ComputedWorkflowItem rootStep) {
 		List<ComputedWorkflowItem> data = new ArrayList<ComputedWorkflowItem>();

@@ -3,6 +3,7 @@ package ai.gebo.llms.abstraction.layer.tests;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.springframework.ai.chat.client.ChatClient.CallResponseSpec;
 import org.springframework.ai.chat.client.ChatClientResponse;
@@ -17,6 +18,7 @@ import lombok.AllArgsConstructor;
 public class TestKnowledgeExtractionCallResponseSpecWrapper implements CallResponseSpec {
 	private final CallResponseSpec wrapped;
 	private final TestKnowledgeExtractionModelConfiguration configuration;
+	private final TestKnowledgeExtractionChatClientRequestSpecWrapper caller;
 
 	@Override
 	public <T> T entity(ParameterizedTypeReference<T> type) {
@@ -33,11 +35,19 @@ public class TestKnowledgeExtractionCallResponseSpecWrapper implements CallRespo
 
 	@Override
 	public <T> T entity(Class<T> type) {
-		if (!configuration.getResponseObjects().containsKey(type))
-			throw new RuntimeException("The required object value of type=> " + type.getName()
-					+ " has not been loaded before calling the responseEntity(..) method");
-		T data = (T) configuration.getResponseObjects().get(type);
-		return data;
+
+		if (configuration.getResponseObjects().containsKey(type)) {
+			T data = (T) configuration.getResponseObjects().get(type);
+			return data;
+		}
+		if (configuration.getResponseCallbacks().containsKey(type)) {
+			Function<KnowledgeExtractionCallEvent, Object> function = configuration.getResponseCallbacks().get(type);
+			KnowledgeExtractionCallEvent event = new KnowledgeExtractionCallEvent(caller.prompt, caller.messages,
+					caller.advisors);
+			return (T) function.apply(event);
+		}
+		throw new RuntimeException("The required object value of type=> " + type.getName()
+				+ " has not been loaded before calling the responseEntity(..) method");
 	}
 
 	@Override
@@ -60,12 +70,22 @@ public class TestKnowledgeExtractionCallResponseSpecWrapper implements CallRespo
 
 	@Override
 	public <T> ResponseEntity<ChatResponse, T> responseEntity(Class<T> type) {
-		if (!configuration.getResponseObjects().containsKey(type))
-			throw new RuntimeException("The required object value of type=> " + type.getName()
-					+ " has not been loaded before calling the responseEntity(..) method");
-		T data = (T) configuration.getResponseObjects().get(type);
-		ChatResponse resp = new ChatResponse(List.of());
-		return new ResponseEntity<ChatResponse, T>(resp, data);
+		if (configuration.getResponseObjects().containsKey(type)) {
+			T data = (T) configuration.getResponseObjects().get(type);
+			ChatResponse resp = new ChatResponse(List.of());
+			return new ResponseEntity<ChatResponse, T>(resp, data);
+		}
+		if (configuration.getResponseCallbacks().containsKey(type)) {
+			Function<KnowledgeExtractionCallEvent, Object> function = configuration.getResponseCallbacks().get(type);
+			KnowledgeExtractionCallEvent event = new KnowledgeExtractionCallEvent(caller.prompt, caller.messages,
+					caller.advisors);
+			T data = (T) function.apply(event);
+			ChatResponse resp = new ChatResponse(List.of());
+			return new ResponseEntity<ChatResponse, T>(resp, data);
+		}
+		throw new RuntimeException("The required object value of type=> " + type.getName()
+				+ " has not been loaded before calling the responseEntity(..) method");
+
 	}
 
 	@Override

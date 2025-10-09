@@ -14,20 +14,21 @@ class TestKnowledgeExtractionChatClientWrapper implements ChatClient {
 
 	@Override
 	public ChatClientRequestSpec prompt() {
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.prompt(), configuration);
+		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(null, wrapped.prompt(), configuration);
 
 	}
 
 	@Override
 	public ChatClientRequestSpec prompt(String content) {
 
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.prompt(content), configuration);
+		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(new Prompt(content), wrapped.prompt(content),
+				configuration);
 	}
 
 	@Override
 	public ChatClientRequestSpec prompt(Prompt prompt) {
 
-		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(wrapped.prompt(prompt), configuration);
+		return new TestKnowledgeExtractionChatClientRequestSpecWrapper(prompt, wrapped.prompt(prompt), configuration);
 	}
 
 	@Override

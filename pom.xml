@@ -122,8 +122,20 @@
 						${project.groupId}-${project.artifactId}-${project.version}</finalName>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>native</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
+		</profile>
+	</profiles>
 	<distributionManagement>
 		<repository>
 			<id>github</id>

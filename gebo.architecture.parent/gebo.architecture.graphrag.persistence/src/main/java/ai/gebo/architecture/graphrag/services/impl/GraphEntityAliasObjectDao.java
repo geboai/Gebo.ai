@@ -1,14 +1,7 @@
 package ai.gebo.architecture.graphrag.services.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Transactional;
 
-import ai.gebo.architecture.graphrag.extraction.model.AbstractAliasObject.EquivalenceType;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityObject;

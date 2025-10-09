@@ -1,5 +1,7 @@
 package ai.gebo.application.messaging.workflow;
 
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
+
 public interface IWorkflowStepEnabledHandler {
 	public String getId();
 
@@ -7,5 +9,5 @@ public interface IWorkflowStepEnabledHandler {
 
 	public boolean handleWorkflowStep(String workflowId, String workflowStepId);
 
-	public boolean isEnabled(String workflowId, String workflowStepId);
+	public boolean isEnabled(String workflowId, String workflowStepId, WorkflowContext context);
 }

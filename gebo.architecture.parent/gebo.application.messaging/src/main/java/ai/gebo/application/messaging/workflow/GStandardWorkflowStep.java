@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import ai.gebo.application.messaging.IGMessagePayloadType;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,51 +40,52 @@ public enum GStandardWorkflowStep {
 
 	private final GStandardWorkflow workflow;
 	private final GMessagingComponentRef targetComponent;
-	private final BiFunction<IGMessagePayloadType, IGRuntimeBinder, List<GMessagingComponentRef>> onProcessedForwardComponents;
+	private final BiFunction<WorkflowMessageContext, IGRuntimeBinder, List<GMessagingComponentRef>> onProcessedForwardComponents;
 	private final boolean workflowStartStep;
 	private final boolean mandatoryStep;
 	private final String description;
-	private static final BiFunction<List<String>, IGRuntimeBinder, List<GMessagingComponentRef>> verifyEnabledModules = new BiFunction<List<String>, IGRuntimeBinder, List<GMessagingComponentRef>>() {
 
-		@Override
-		public List<GMessagingComponentRef> apply(List<String> list, IGRuntimeBinder binder) {
-			final IWorkflowStepEnabledHandlerRepositoryPattern workflowStepEnablerRepoPattern = binder
-					.getImplementationOf(IWorkflowStepEnabledHandlerRepositoryPattern.class);
-			if (list == null)
-				list = new ArrayList<String>();
-			List<GStandardWorkflowStep> steps = list.stream().map(x -> GStandardWorkflowStep.valueOf(x)).toList();
-			List<GMessagingComponentRef> out = steps.stream().filter(step -> {
-				if (step.isMandatoryStep())
-					return true;
-				IWorkflowStepEnabledHandler handler = workflowStepEnablerRepoPattern
-						.findByWorkflowsTypeAndWorkflowIdAndWorkflowStepId(GWorkflowType.STANDARD,
-								GStandardWorkflow.INGESTION.name(), step.name());
-				return handler != null && handler.isEnabled(GStandardWorkflow.INGESTION.name(), step.name());
-			}).map(y -> y.getTargetComponent()).toList();
-			return out;
-		}
-	};
+	private static final List<GMessagingComponentRef> verifyEnabledModules(List<String> list, IGRuntimeBinder binder,
+			WorkflowContext context) {
+
+		final IWorkflowStepEnabledHandlerRepositoryPattern workflowStepEnablerRepoPattern = binder
+				.getImplementationOf(IWorkflowStepEnabledHandlerRepositoryPattern.class);
+		if (list == null)
+			list = new ArrayList<String>();
+		List<GStandardWorkflowStep> steps = list.stream().map(x -> GStandardWorkflowStep.valueOf(x)).toList();
+		List<GMessagingComponentRef> out = steps.stream().filter(step -> {
+			if (step.isMandatoryStep())
+				return true;
+			IWorkflowStepEnabledHandler handler = workflowStepEnablerRepoPattern
+					.findByWorkflowsTypeAndWorkflowIdAndWorkflowStepId(GWorkflowType.STANDARD,
+							GStandardWorkflow.INGESTION.name(), step.name());
+			return handler != null && handler.isEnabled(GStandardWorkflow.INGESTION.name(), step.name(), context);
+		}).map(y -> y.getTargetComponent()).toList();
+		return out;
+
+	}
 
 	private static final class TokenizationForwards
-			implements BiFunction<IGMessagePayloadType, IGRuntimeBinder, List<GMessagingComponentRef>> {
+			implements BiFunction<WorkflowMessageContext, IGRuntimeBinder, List<GMessagingComponentRef>> {
 		@Override
-		public List<GMessagingComponentRef> apply(IGMessagePayloadType t, IGRuntimeBinder binder) {
-			return verifyEnabledModules.apply(List.of("EMBEDDING", "GRAPHEXTRACTION", "FULLTEXT_INDEXING"), binder);
+		public List<GMessagingComponentRef> apply(WorkflowMessageContext t, IGRuntimeBinder binder) {
+			return verifyEnabledModules(List.of("EMBEDDING", "GRAPHEXTRACTION", "FULLTEXT_INDEXING"), binder,
+					t.getWorkflowContext());
 		}
 	};
 
 	private static final class VoidForwards
-			implements BiFunction<IGMessagePayloadType, IGRuntimeBinder, List<GMessagingComponentRef>> {
+			implements BiFunction<WorkflowMessageContext, IGRuntimeBinder, List<GMessagingComponentRef>> {
 		@Override
-		public List<GMessagingComponentRef> apply(IGMessagePayloadType t, IGRuntimeBinder binder) {
+		public List<GMessagingComponentRef> apply(WorkflowMessageContext t, IGRuntimeBinder binder) {
 			return List.of();
 		}
 	};
 
 	private static final class DocumentDiscoveryForwards
-			implements BiFunction<IGMessagePayloadType, IGRuntimeBinder, List<GMessagingComponentRef>> {
+			implements BiFunction<WorkflowMessageContext, IGRuntimeBinder, List<GMessagingComponentRef>> {
 		@Override
-		public List<GMessagingComponentRef> apply(IGMessagePayloadType t, IGRuntimeBinder binder) {
+		public List<GMessagingComponentRef> apply(WorkflowMessageContext t, IGRuntimeBinder binder) {
 			return List.of(getTargetOf("tokenization"));
 		}
 	};

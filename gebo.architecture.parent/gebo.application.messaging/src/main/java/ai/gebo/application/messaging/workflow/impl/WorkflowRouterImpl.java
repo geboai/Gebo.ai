@@ -16,6 +16,7 @@ import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouter;
 import ai.gebo.application.messaging.workflow.IWorkflowMessagesRouterRepositoryPattern;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 import lombok.AllArgsConstructor;
 
 @Component
@@ -27,7 +28,7 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 
 	@Override
 	public void routeToNextSteps(GWorkflowType workflowType, String currentWorkflowId, String currentWorkflowStepId,
-			IGMessagePayloadType payload, IGMessageEmitter emitter) {
+			WorkflowMessageContext messageContext, IGMessageEmitter emitter) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin workflowRoute(....)");
 		}
@@ -36,13 +37,14 @@ public class WorkflowRouterImpl implements IWorkflowRouter {
 		List<GMessagingComponentRef> destinations = new ArrayList<GMessagingComponentRef>();
 		for (IWorkflowMessagesRouter router : routers) {
 			List<GMessagingComponentRef> _destinations = router.onProcessedRoutes(currentWorkflowId,
-					currentWorkflowStepId, payload);
+					currentWorkflowStepId, messageContext);
 			if (_destinations != null)
 				destinations.addAll(_destinations);
 		}
 		for (GMessagingComponentRef target : destinations) {
 			try {
-				GMessageEnvelope<IGMessagePayloadType> envelope = GMessageEnvelope.newMessageFrom(emitter, payload);
+				GMessageEnvelope<IGMessagePayloadType> envelope = GMessageEnvelope.newMessageFrom(emitter,
+						messageContext.getPayload());
 				envelope.setWorkflowType(workflowType);
 				envelope.setWorkflowId(target.getWorkflowId());
 				envelope.setWorkflowStepId(target.getWorkflowStepId());

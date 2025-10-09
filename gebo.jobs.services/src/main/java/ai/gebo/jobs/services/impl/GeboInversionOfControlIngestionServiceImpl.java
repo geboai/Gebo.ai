@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
@@ -93,12 +94,13 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 		IGIOCModuleContentsDispatcher handler = iocRepositoryPattern.findByProjectEndpoint(endpoint);
 		if (handler == null)
 			throw new GeboJobServiceException("Required IGIOCModuleContentsDispatcher not found");
-		GJobStatus jobStatus = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
-				GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
+
 		Consumers consumers;
 		try {
+			GJobStatus jobStatus = ingestionManager.internalCreateContentsExtractionAndVectorizationStatus(endpoint,
+					GWorkflowType.STANDARD.name(), GStandardWorkflow.INGESTION.name());
 			consumers = handler.dispatchContentsConsumers(endpoint, jobStatus);
-		} catch (GeboContentHandlerSystemException e) {
+		} catch (GeboContentHandlerSystemException | GeboPersistenceException e) {
 			throw new GeboJobServiceException("Exception in  handler.dispatchContentsConsumers(...)", e);
 		}
 

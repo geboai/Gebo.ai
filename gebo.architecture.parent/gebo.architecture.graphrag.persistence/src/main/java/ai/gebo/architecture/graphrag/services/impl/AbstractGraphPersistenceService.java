@@ -3,9 +3,8 @@ package ai.gebo.architecture.graphrag.services.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import ai.gebo.architecture.graphrag.extraction.model.AbstractAliasObject.EquivalenceType;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
@@ -22,15 +21,10 @@ import ai.gebo.architecture.graphrag.persistence.model.GraphRelationObject;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphDocumentReferenceRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventObjectRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
-import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationObjectRepository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -91,9 +85,9 @@ public class AbstractGraphPersistenceService {
 		return out;
 	}
 
-	public boolean isConfigured() {
-
-		return extractionService.isConfigured();
+	public boolean isConfigured(WorkflowContext context) {
+		
+		return extractionService.isConfigured(context);
 	}
 
 }
