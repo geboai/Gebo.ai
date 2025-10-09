@@ -15,6 +15,8 @@ import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GMessagesBatchPayload;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 import ai.gebo.architecture.documents.cache.model.DocumentChunkingResponse;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider;
 import ai.gebo.architecture.documents.cache.service.IChunkingParametersProvider.ChunkingParams;
@@ -22,6 +24,7 @@ import ai.gebo.architecture.documents.cache.service.IDocumentChunkingMessagesRec
 import ai.gebo.architecture.documents.cache.service.IDocumentsChunkService;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
+import ai.gebo.model.base.GObjectRef;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -61,9 +64,12 @@ public class DocumentChunkingBatchReceiver implements IGBatchMessagesReceiver {
 				if (!processed.isEmpty()) {
 					data.setBatchDocumentsProcessed(1);
 					data.setBatchSentToNextStep(1);
-					
+
+					WorkflowContext workflowContext = new WorkflowContext(payload.getKnowledgeBase().getCode(),
+							payload.getProject().getCode(), GObjectRef.of(payload.getEndPoint()));
+					WorkflowMessageContext messageContext = new WorkflowMessageContext(workflowContext, payload);
 					workflowRouter.routeToNextSteps(envelope.getWorkflowType(), envelope.getWorkflowId(),
-							envelope.getWorkflowStepId(), payload, emitter);
+							envelope.getWorkflowStepId(), messageContext, emitter);
 				} else {
 					data.setBatchDiscardedInput(1);
 					if (LOGGER.isDebugEnabled()) {

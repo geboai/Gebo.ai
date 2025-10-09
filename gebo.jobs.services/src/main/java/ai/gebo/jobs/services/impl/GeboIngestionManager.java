@@ -28,6 +28,7 @@ import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus.JobType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatusItem;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.knowledgebase.repositories.UserMessageRepository;
@@ -83,14 +84,18 @@ class GeboIngestionManager {
 	 * 
 	 * @param item The project endpoint for which to create the job
 	 * @return A new GJobStatus instance representing the created job
+	 * @throws GeboPersistenceException
 	 */
 	GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GProjectEndpoint item, String workflowType,
-			String workflowId) {
+			String workflowId) throws GeboPersistenceException {
 		GJobStatus status = new GJobStatus();
 		status.setCode(UUID.randomUUID().toString());
 		status.setDescription("Job to complete reading and LLM embedding contents of " + item.getDescription() + " ["
 				+ item.getCode() + "]");
 		status.setProjectEndpointReference(GObjectRef.of(item));
+		status.setProjectCode(item.getParentProjectCode());
+		GProject project = persistentObjectManager.findById(GProject.class, item.getParentProjectCode());
+		status.setKnowledgeBaseCode(project.getRootKnowledgeBaseCode());
 		status.setStartDateTime(new Date());
 		status.setWorkflowType(workflowType);
 		status.setWorkflowId(workflowId);

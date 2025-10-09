@@ -14,14 +14,21 @@ import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.model.JobSummary;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knlowledgebase.model.projects.GProject;
+import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 
 public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests {
 	@Autowired
 	ContentsBatchProcessedRepository repo;
-
+	@Override
+	protected void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint)
+			throws GeboPersistenceException {
+		
+	}
 	@Test
 	public void testWorkflowCompletion() throws GeboPersistenceException, GeboJobServiceException {
 		GJobStatus status = new GJobStatus();
@@ -74,18 +81,18 @@ public class WorkflowCompletionTest extends AbstractBaseTestLLmsIntegrationTests
 		repo.insert(processed);
 		summary = this.ingestionJobService.getJobSummary(status.getCode());
 		printSummary(summary);
-		assertFalse(summary.getWorkflowStatus().isFinished(), "The status with no logged entries must be not finished");
-		processed = new ContentsBatchProcessed();
-		processed.setJobId(status.getCode());
-		processed.setWorkflowType(GWorkflowType.STANDARD.name());
-		processed.setWorkflowId(GStandardWorkflow.INGESTION.name());
-		processed.setWorkflowStepId(GStandardWorkflowStep.GRAPHEXTRACTION.name());
-		processed.setBatchDocumentsInput(1);
-		processed.setBatchDocumentsProcessed(1);
-		processed.setBatchSentToNextStep(1);
-		processed.setTimestamp(new java.util.Date());
-		processed.setId(UUID.randomUUID().toString());
-		repo.insert(processed);
+		//assertFalse(summary.getWorkflowStatus().isFinished(), "The status with no logged entries must be not finished");
+		//processed = new ContentsBatchProcessed();
+		//processed.setJobId(status.getCode());
+		//processed.setWorkflowType(GWorkflowType.STANDARD.name());
+		//processed.setWorkflowId(GStandardWorkflow.INGESTION.name());
+		//processed.setWorkflowStepId(GStandardWorkflowStep.GRAPHEXTRACTION.name());
+		//processed.setBatchDocumentsInput(1);
+		//processed.setBatchDocumentsProcessed(1);
+		//processed.setBatchSentToNextStep(1);
+		//processed.setTimestamp(new java.util.Date());
+		//processed.setId(UUID.randomUUID().toString());
+		//repo.insert(processed);
 		summary = this.ingestionJobService.getJobSummary(status.getCode());
 		printSummary(summary);
 		assertTrue(summary.getWorkflowStatus().isFinished(), "The status with correct structure must be signed as finished");

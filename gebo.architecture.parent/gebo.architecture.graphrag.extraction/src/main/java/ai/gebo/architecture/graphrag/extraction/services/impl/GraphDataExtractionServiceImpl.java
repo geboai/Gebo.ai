@@ -15,6 +15,7 @@ import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
@@ -285,11 +286,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	}
 
 	@Override
-	public boolean isConfigured() {
-
-		long count = this.configRepository.countByDefaultConfiguration(Boolean.TRUE);
-		return count > 0;
-		// return true;
+	public boolean isConfigured(WorkflowContext context) {
+		return this.configRepository.hasConfiguration(context);
 	}
 
 	@Override

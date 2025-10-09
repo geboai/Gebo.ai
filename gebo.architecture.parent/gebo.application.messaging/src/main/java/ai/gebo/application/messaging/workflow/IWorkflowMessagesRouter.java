@@ -2,8 +2,8 @@ package ai.gebo.application.messaging.workflow;
 
 import java.util.List;
 
-import ai.gebo.application.messaging.IGMessagePayloadType;
 import ai.gebo.application.messaging.model.GMessagingComponentRef;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 
 public interface IWorkflowMessagesRouter {
 	public String getId();
@@ -13,5 +13,5 @@ public interface IWorkflowMessagesRouter {
 	public boolean handleWorkflow(String workFlowId);
 
 	public List<GMessagingComponentRef> onProcessedRoutes(String workflowId, String stepId,
-			IGMessagePayloadType payload);
+			WorkflowMessageContext messageContext);
 }

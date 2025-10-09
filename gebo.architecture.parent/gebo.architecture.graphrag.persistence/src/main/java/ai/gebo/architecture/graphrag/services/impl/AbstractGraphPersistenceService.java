@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
@@ -84,9 +85,9 @@ public class AbstractGraphPersistenceService {
 		return out;
 	}
 
-	public boolean isConfigured() {
-
-		return extractionService.isConfigured();
+	public boolean isConfigured(WorkflowContext context) {
+		
+		return extractionService.isConfigured(context);
 	}
 
 }

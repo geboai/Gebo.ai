@@ -216,7 +216,7 @@ public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersisten
 			boolean error = data.isErrorProcessing();
 			KnowledgeExtractionEvent event = new KnowledgeExtractionEvent(processedTokens, processedBytes,
 					processedSegments, errorChunks, errorTokens, error);
-			
+
 			saveStructure.chunks.put(chunksGroupId, chunks);
 		});
 		reconcileObjects(saveStructure, cache);

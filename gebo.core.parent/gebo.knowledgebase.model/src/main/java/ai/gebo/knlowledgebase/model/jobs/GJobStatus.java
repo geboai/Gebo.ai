@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -38,9 +39,11 @@ public class GJobStatus extends GBaseObject {
 	}
 
 	// Type of job currently being processed
+	@NotNull
 	private JobType jobType = null;
-
+	@NotNull
 	private String workflowType = null;
+	@NotNull
 	private String workflowId = null;
 
 	// Indicates whether the job is currently in processing state
@@ -58,13 +61,18 @@ public class GJobStatus extends GBaseObject {
 
 	// End date and time of the job
 	private Date endDateTime = null;
-
 	// Reference to the associated project endpoint
+	@NotNull
 	private GObjectRef<GProjectEndpoint> projectEndpointReference = null;
-
+	// Knowledge base code
+	@NotNull
+	private String knowledgeBaseCode = null;
+	@NotNull
+	private String projectCode = null;
 	// Code identifying the parent job
 	private String parentJobCode = null;
 	private WorkflowStatus workflowStatus = null;
+
 	/**
 	 * Serial version UID for serialization purposes.
 	 */

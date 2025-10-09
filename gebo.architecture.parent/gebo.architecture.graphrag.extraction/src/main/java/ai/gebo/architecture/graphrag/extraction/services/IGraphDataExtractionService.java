@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
@@ -27,7 +28,7 @@ public interface IGraphDataExtractionService {
 	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration,
 			Map<String, Object> cache) throws LLMConfigException;
 
-	public boolean isConfigured();
+	public boolean isConfigured(WorkflowContext context);
 
 	public LLMExtractionResult extract(Document document, GDocumentReference docreference, Map<String, Object> cache)
 			throws LLMConfigException;

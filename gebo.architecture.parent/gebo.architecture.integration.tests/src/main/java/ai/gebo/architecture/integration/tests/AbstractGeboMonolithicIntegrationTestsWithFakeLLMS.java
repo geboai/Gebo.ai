@@ -35,10 +35,13 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.jobs.WorkflowStatus;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -161,6 +164,21 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		createDefaultUser();
 		beforeEachCallback();
 		LOGGER.info("End initializing chat & embedding model");
+	}
+
+	@Override
+	protected void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint)
+			throws GeboPersistenceException {
+		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_KNOWLEDGE_EXTRACTION_CHAT_MODEL_CODE);
+		GraphRagExtractionConfig graphragConfig = new GraphRagExtractionConfig();
+		graphragConfig.setExtractionPrompt("This is a knowledge extraction prompt \n\n${format}");
+		graphragConfig.setDefaultConfiguration(true);
+		graphragConfig.setUsedModelConfiguration(GObjectRef.of((GBaseChatModelConfig) model.getConfig()));
+		graphragConfig.setDescription("Default knowledge extraction model");
+		graphragConfig.setKnowledgeBaseCode(kb.getCode());
+		graphragConfig.setProjectCode(project.getCode());
+		graphragConfig.setEndpoint(GObjectRef.of(endpoint));
+		persistentObjectManager.insert(graphragConfig);
 	}
 
 	private static final String START_CHUNK_ID = "[CHUNK-ID]";

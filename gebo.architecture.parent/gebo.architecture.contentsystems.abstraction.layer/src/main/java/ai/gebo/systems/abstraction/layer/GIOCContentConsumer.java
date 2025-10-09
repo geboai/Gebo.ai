@@ -19,6 +19,8 @@ import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GStandardWorkflowStep;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.application.messaging.workflow.IWorkflowRouter;
+import ai.gebo.application.messaging.workflow.model.WorkflowContext;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumer;
 import ai.gebo.architecture.contenthandling.interfaces.IGUserMessagesConsumer;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
@@ -47,6 +49,25 @@ import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.E
  */
 class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GProjectEndpoint>
 		implements IGContentConsumer {
+	private final IWorkflowRouter workflowRouter;
+	private final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler;
+	private final SendEvaluationPolicy evaluationPolicy = SendEvaluationPolicy.TIMESTAMP_HASH_POLICY;
+	private final IGContentDispatchingEvaluator evaluator;
+	private final ProjectEndpointType endpoint;
+	private final EnricherMappers enrichers;
+	private final GJobStatus jobStatus;
+	private final Map<String, Integer> docsCounters = new HashMap<String, Integer>();
+	private final Map<String, Object> handlerCache = new HashMap<String, Object>();
+	private final IGContentsAccessErrorConsumer errorConsumer;
+	private final IGUserMessagesConsumer userMessagesConsumer;
+	private final IGContentConsumer documentConsumer;
+	private final IGMessageBroker broker;
+	private final DocumentReferenceRepository documentReferenceRepository;
+	private final VirtualFolderRepository virtualFolderRepository;
+	private long batchDocumentInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
+			batchDocumentsProcessed = 0l, batchDiscardedInput = 0l;
+	private final WorkflowContext workflowContext;
+
 	GIOCContentConsumer(EnricherMappers enrich, GJobStatus jobStatus, IGContentDispatchingEvaluator evaluator,
 			IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler,
 			ProjectEndpointType endpoint, IWorkflowRouter workflowRouter,
@@ -67,26 +88,11 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 		this.broker = broker;
 		this.documentReferenceRepository = documentReferenceRepository;
 		this.virtualFolderRepository = virtualFolderRepository;
+		this.workflowContext = new WorkflowContext(jobStatus.getKnowledgeBaseCode(), jobStatus.getProjectCode(),
+				jobStatus.getProjectEndpointReference());
 	}
 
 	private final GIOCModuleContentsDispatcher<SystemIntegrationType, ProjectEndpointType> dispatcher;
-	private final IWorkflowRouter workflowRouter;
-	private final IGContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> handler;
-	private final SendEvaluationPolicy evaluationPolicy = SendEvaluationPolicy.TIMESTAMP_HASH_POLICY;
-	private final IGContentDispatchingEvaluator evaluator;
-	private final ProjectEndpointType endpoint;
-	private final EnricherMappers enrichers;
-	private final GJobStatus jobStatus;
-	private final Map<String, Integer> docsCounters = new HashMap<String, Integer>();
-	private final Map<String, Object> handlerCache = new HashMap<String, Object>();
-	private final IGContentsAccessErrorConsumer errorConsumer;
-	private final IGUserMessagesConsumer userMessagesConsumer;
-	private final IGContentConsumer documentConsumer;
-	private final IGMessageBroker broker;
-	private final DocumentReferenceRepository documentReferenceRepository;
-	private final VirtualFolderRepository virtualFolderRepository;
-	private long batchDocumentInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
-			batchDocumentsProcessed = 0l, batchDiscardedInput = 0l;
 
 	protected static final Logger LOGGER = LoggerFactory.getLogger(GIOCContentConsumer.class);
 
@@ -131,12 +137,13 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						payload.setRequiresEmbeddingHandshake(true);
 						payload.setJobId(jobStatus.getCode());
 						enrichers.getContentPayloadMapper().apply(payload);
+						WorkflowMessageContext messageContext = new WorkflowMessageContext(workflowContext, payload);
 						workflowRouter.routeToNextSteps(
 								this.jobStatus.getWorkflowType() != null
 										? GWorkflowType.valueOf(this.jobStatus.getWorkflowType())
 										: null,
 								this.jobStatus.getWorkflowId(), GStandardWorkflowStep.DOCUMENT_DISCOVERY.name(),
-								payload, dispatcher);
+								messageContext, dispatcher);
 						batchSentToNextStep++;
 					} else {
 						batchDiscardedInput++;

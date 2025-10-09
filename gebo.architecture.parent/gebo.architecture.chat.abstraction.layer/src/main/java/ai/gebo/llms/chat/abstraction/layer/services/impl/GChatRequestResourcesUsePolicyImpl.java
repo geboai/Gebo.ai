@@ -266,7 +266,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			// Run graph rag after semantic rag to provide context on more
 			// factual/entity/events based approach
 			if (availableTokensForDocuments > lrequest.getDocuments().getNToken()
-					&& this.knowledgeGraphSearch.isConfigured()) {
+					&& this.knowledgeGraphSearch.isConfigured(null)) {
 				List<KnowledgeGraphSearchResult> graphRagResults = this.knowledgeGraphSearch
 						.knowledgeGraphSearch(request.getQuery(), visibleKnowledgeBaseCodes, topK);
 				mergeGraphRagResults(lrequest.getDocuments(), graphRagResults, availableTokensForDocuments);

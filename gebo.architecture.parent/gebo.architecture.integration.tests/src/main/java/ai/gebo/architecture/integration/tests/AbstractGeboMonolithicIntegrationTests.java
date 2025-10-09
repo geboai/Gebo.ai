@@ -73,7 +73,7 @@ import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService
  * services needed for the tests.
  */
 @AutoConfigureDataMongo
-public class AbstractGeboMonolithicIntegrationTests {
+public abstract class AbstractGeboMonolithicIntegrationTests {
 
 	/** Manager for handling persistent objects. */
 	@Autowired
@@ -221,8 +221,13 @@ public class AbstractGeboMonolithicIntegrationTests {
 		T endpoint = type.newInstance();
 		endpoint.setDescription(description);
 		endpoint.setParentProjectCode(testPj.getCode());
-		return persistentObjectManager.insert(endpoint);
+
+		T data = persistentObjectManager.insert(endpoint);
+		this.enableWorkflowSteps(testKB, testPj, data);
+		return data;
 	}
+
+	protected abstract void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint) throws GeboPersistenceException;
 
 	protected static final List<String> ALL_ROLES = List.of(GeboAISecurityConfig.ADMIN_ROLE,
 			GeboAISecurityConfig.USER_ROLE);
