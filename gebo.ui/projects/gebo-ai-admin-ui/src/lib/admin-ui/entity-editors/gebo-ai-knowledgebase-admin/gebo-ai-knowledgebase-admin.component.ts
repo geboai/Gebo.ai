@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -25,6 +25,7 @@ import { forkJoin, map, Observable, of } from "rxjs";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../../../../../gebo-ai-reusable-ui/src/lib/services/pluggable-knowledge-base-admin-tree-search.service";
 import { EnrichedChild } from "../../../../../../gebo-ai-reusable-ui/src/lib/services/enriched-child";
 import { ConfirmationService } from "primeng/api";
+import { GObjectRef } from "gebo-ai-rest-api";
 
 /**
  * Component for administering knowledge bases in the Gebo.ai system.
@@ -41,7 +42,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
      * Name of the entity type being managed by this component
      */
     protected override entityName: string = "GKnowledgeBase";
-    
+
     /**
      * Form group containing all editable fields of the knowledge base
      */
@@ -57,61 +58,67 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
             knowledgeBaseReferences: new FormControl(),
             embeddingModelReferences: new FormControl(),
             accessibleGroups: new FormControl(),
-	        accessibleUsers: new FormControl(),
-	        accessibleToAll: new FormControl(),
+            accessibleUsers: new FormControl(),
+            accessibleToAll: new FormControl(),
             objectSpaceType: new FormControl()
         }
     );
-    
+
     /**
      * List of child projects under this knowledge base
      */
     public rootChildProjects: EnrichedChild[] = [];
-    
+
     /**
      * Available embedding models that can be associated with this knowledge base
      */
     public modelsChoicesSource: { description?: string, code?: string, className?: string; }[] = [];
-    
+
     /**
      * All knowledge bases in the system (excluding the current one)
      */
     allKnowledgeBaseData: GKnowledgeBase[] = [];
-    
+    graphRagContext?: { knowledgeBaseCode?: string; projectCode?: string; reference?: GObjectRef; };
+
     /**
      * Initializes the component with required services and dependencies
      */
     constructor(
-        injector:Injector,
+        injector: Injector,
         private treeSearchService: GeboAIPluggableKnowledgeAdminBaseTreeSearchService,
         private knowledgeBaseControllerService: KnowledgeBaseControllerService,
         private embeddingConfigurationsControllerService: EmbeddingModelsControllersService,
         private geboFGService: GeboFormGroupsService,
-        private contentsResetService:ContentsResetControllerService,
-        private confirmService:ConfirmationService,
-        
+        private contentsResetService: ContentsResetControllerService,
+        private confirmService: ConfirmationService,
+
         private actionServices: GeboUIActionRoutingService, private outForwardingService?: GeboUIOutputForwardingService) {
-        super(injector,geboFGService,confirmService,actionServices, outForwardingService);
+        super(injector, geboFGService, confirmService, actionServices, outForwardingService);
 
     }
-    
+
     /**
      * Returns a comma-separated string of all referenced knowledge base descriptions
      */
-    public get kbDescriptions():string {
-        let outValue:string="";
+    public get kbDescriptions(): string {
+        let outValue: string = "";
         if (this.allKnowledgeBaseData && this.allKnowledgeBaseData.length && this.entity && this.entity.knowledgeBaseReferences) {
-            this.entity.knowledgeBaseReferences.forEach(ov=>{
-                const foundThis=this.allKnowledgeBaseData.find(x=>x.code===ov);
-                outValue=outValue+(outValue.length ?",":"") + (foundThis?foundThis?.description:"");
+            this.entity.knowledgeBaseReferences.forEach(ov => {
+                const foundThis = this.allKnowledgeBaseData.find(x => x.code === ov);
+                outValue = outValue + (outValue.length ? "," : "") + (foundThis ? foundThis?.description : "");
             });
         }
-        if (outValue.length===0) {
-            outValue="No other knowledge base references";
+        if (outValue.length === 0) {
+            outValue = "No other knowledge base references";
         }
         return outValue;
     }
-    
+    protected override onLoadedPersistentData(actualValue: GKnowledgeBase): void {
+        super.onLoadedPersistentData(actualValue);
+        this.graphRagContext={
+            knowledgeBaseCode: actualValue?.code
+        };
+    }
     /**
      * Initializes the component by loading embedding models and knowledge bases
      */
@@ -122,7 +129,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
         forkJoin([this.embeddingConfigurationsControllerService.getRuntimeConfiguredEmbeddingModels(), this.knowledgeBaseControllerService.getKnowledgeBases()]).subscribe({
             next: recvd => {
                 const values = recvd[0];
-                this.allKnowledgeBaseData = recvd[1].filter(x=>x.code!==this.entity?.code);
+                this.allKnowledgeBaseData = recvd[1].filter(x => x.code !== this.entity?.code);
                 const modelsChoicesSource: { description?: string, code?: string, className?: string }[] = [];
                 values.forEach(entry => {
                     const config = entry.configuration;
@@ -151,7 +158,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
             this.loadProjects();
         }
     }
-    
+
     /**
      * Loads all projects associated with the current knowledge base
      */
@@ -169,7 +176,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
             });
         }
     }
-    
+
     /**
      * Creates a new project under the current knowledge base
      */
@@ -197,7 +204,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
         );
 
     }
-    
+
     /**
      * Opens an existing project for editing
      * @param data The project to open
@@ -230,7 +237,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
     override findByCode(code: string): Observable<GKnowledgeBase | null> {
         return this.knowledgeBaseControllerService.findKnowledgeBaseByCode(code);
     }
-    
+
     /**
      * Saves changes to an existing knowledge base
      * @param value The knowledge base with updated values
@@ -240,7 +247,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
 
         return this.knowledgeBaseControllerService.updateKnowledgeBase(value);
     }
-    
+
     /**
      * Creates a new knowledge base
      * @param value The knowledge base data to insert
@@ -250,7 +257,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
 
         return this.knowledgeBaseControllerService.insertKnowledgeBase(value);
     }
-    
+
     /**
      * Deletes a knowledge base
      * @param value The knowledge base to delete
@@ -269,27 +276,27 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
     override canBeDeleted(value: GKnowledgeBase): Observable<{ canBeDeleted: boolean; message: string; }> {
         return of({ canBeDeleted: true, message: "" });
     }
-    
+
     /**
      * Triggers reindexing of the knowledge base contents after confirmation
      */
-    doReindex():void {
+    doReindex(): void {
         this.confirmService.confirm({
-            header:"Reindex contents command",
-            message:"Are you shure you want to reindex these contents?",
-            accept:()=>{
-                this.loadingRelatedBackend=true;
+            header: "Reindex contents command",
+            message: "Are you shure you want to reindex these contents?",
+            accept: () => {
+                this.loadingRelatedBackend = true;
                 this.contentsResetService.resetContentsIngestion({
                     knowledgeBaseCode: this.entity?.code
                 }).subscribe({
-                    next:(value)=>{
+                    next: (value) => {
 
                     },
-                    complete:()=>{
-                        this.loadingRelatedBackend=false;
+                    complete: () => {
+                        this.loadingRelatedBackend = false;
                     }
                 })
-            }   
+            }
         })
     }
 }

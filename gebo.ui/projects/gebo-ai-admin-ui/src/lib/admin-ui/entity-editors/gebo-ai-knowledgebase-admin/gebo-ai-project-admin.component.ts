@@ -24,6 +24,7 @@ import { Component, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, EnrichedChild, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { GObjectRef } from "gebo-ai-rest-api";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 
@@ -79,7 +80,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * Array of child entities related to this project
      */
     treeChilds: EnrichedChild[] = [];
-
+    graphRagContext?: { knowledgeBaseCode?: string; projectCode?: string; reference?: GObjectRef; };
     /**
      * Constructor initializing the component with required services
      * Sets up subscriptions to form value changes to update related data
@@ -121,6 +122,10 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * @param actualValue The loaded project data
      */
     protected override onLoadedPersistentData(actualValue: GProject): void {
+        this.graphRagContext={
+            knowledgeBaseCode: actualValue?.rootKnowledgeBaseCode,
+            projectCode: actualValue?.code
+        };
         this.loadingRelatedBackend = true;
         this.treeService.loadProjectChilds(actualValue).subscribe({
             next: (childs) => {

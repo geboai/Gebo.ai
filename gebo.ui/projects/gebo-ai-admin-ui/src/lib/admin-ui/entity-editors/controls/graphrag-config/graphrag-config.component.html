@@ -1,0 +1,23 @@
+<p-panel #graphRagSettingUI *ngIf="context?true:false">
+    <p-blockUI [target]="graphRagSettingUI" [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <div class="grid" *ngIf="graphRagIsSetup===true">
+        <div class="col-12">
+            <div class="flex flex-column gap-2">
+                <label >Graphrag settings</label>
+                <p-button icon="pi pi-sitemap" *ngIf="graphRagConfig?true:false" label="Edit configuration" (onClick)="editConfiguration()"></p-button>
+                <p-button icon="pi pi-sitemap" *ngIf="graphRagConfig?false:true" label="Add configuration" (onClick)="newConfiguration()"></p-button>
+                <small id="button-help" *ngIf="graphRagConfig?true:false">
+                    Click here to view/modify information extraction configuration for graphrag 
+                </small>
+                <small id="button-help" *ngIf="graphRagConfig?false:true">
+                    Click here to configure information extraction for graphrag  (actually not configured) 
+                </small>
+            </div>
+        </div>
+    </div>
+    <div class="grid" *ngIf="graphRagIsSetup===false">
+        <label>Configure graphrag in the setup area if you want to use it in this section</label>
+    </div>
+</p-panel>

@@ -40,6 +40,7 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
 
     /** The default chat model configuration */
     protected defaultChatModel?: { code?: string, description?: string };
+    protected configurationLabel?: string;
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
@@ -111,6 +112,14 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
                     }
                     if (observables.length > 2) {
                         this.dataSource = data[2];
+                    }
+                    let label: string = "Configuration for ";
+                    if (this.knowledgeBase) label += " Knowledge base: " + this.knowledgeBase.description;
+                    if (this.project) label += " Project: " + this.project.description;
+                    if (this.dataSource) label += " Data source: " + this.dataSource.description;
+                    this.configurationLabel = label;
+                    if (!this.formGroup.controls["description"].value ) {
+                        this.formGroup.controls["description"].setValue(this.configurationLabel);
                     }
                 },
                 complete: () => {

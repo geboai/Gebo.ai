@@ -8,9 +8,9 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="pjCompo" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -19,7 +19,7 @@
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid">
-            
+
             <div class="col-6">
                 <div class="flex flex-column gap-2">
                     <label for="description">Description</label>
@@ -39,20 +39,18 @@
                     </small>
                 </div>
             </div>
-
-        </div>
-        <div class="col-6">
+<div class="col-6">
             <div class="flex flex-column gap-2 ">
                 <label for="rootKnowledgeBaseCode">knowledge base</label>
-                <geboai-editable-listbox-component id="rootKnowledgeBaseCode"
-                    formControlName="rootKnowledgeBaseCode" aria-describedby="rootKnowledgeBaseCode-help"
-                    [optionsObservable]="knowledgeBases"
+                <geboai-editable-listbox-component id="rootKnowledgeBaseCode" formControlName="rootKnowledgeBaseCode"
+                    aria-describedby="rootKnowledgeBaseCode-help" [optionsObservable]="knowledgeBases"
                     [readonly]="editKnowledgebase!==true"></geboai-editable-listbox-component>
                 <small id="rootKnowledgeBaseCode-help">
                     knowledge base.
                 </small>
             </div>
         </div>
+        <!-- 
         <div class="col-6">
             <div class="flex flex-column gap-2 ">
                 <label for="parentProjectCode">Parent project</label>
@@ -62,24 +60,30 @@
                     Parent project
                 </small>
             </div>
+        </div> -->
+        <div class="col-6" *ngIf="graphRagContext">
+            <gebo-ai-graphrag-component [context]="graphRagContext"></gebo-ai-graphrag-component>
         </div>
+        </div>
+        
     </div>
     <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
         <div class="grid">
             <div class="col-3">
                 <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-                    [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+                    [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full" />
+                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                    styleClass="w-full" />
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"  title="Reindex contents"
-                    [disabled]="mode==='NEW'"   styleClass="w-full" ></p-button>
+                <p-button [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"
+                    title="Reindex contents" [disabled]="mode==='NEW'" styleClass="w-full"></p-button>
             </div>
             <div class="col-3">
                 <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-                    [disabled]="canDelete===false"   styleClass="w-full"  />
+                    [disabled]="canDelete===false" styleClass="w-full" />
             </div>
         </div>
     </div>

@@ -8,9 +8,9 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="kbCompo" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -63,7 +63,7 @@
                         <div class="flex flex-column gap-2 ">
                             <label for="embeddingModelReferences">Used embedding models (leave empty to use system
                                 default)</label>
-                            <p-multiSelect  styleClass="w-full"  [options]="modelsChoicesSource" 
+                            <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource"
                                 formControlName="embeddingModelReferences" id="embeddingModelReferences"
                                 placeholder="Select embedding models" optionLabel="description" display="chip"
                                 [showClear]="true" aria-describedby="embeddingModelReferences-help" />
@@ -71,6 +71,9 @@
                                 Embedding models for the knowledge base, leave empty will use the default one.
                             </small>
                         </div>
+                    </div>
+                    <div class="col-6" *ngIf="graphRagContext">
+                        <gebo-ai-graphrag-component [context]="graphRagContext"></gebo-ai-graphrag-component>
                     </div>
                 </div>
             </p-tabPanel>
