@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -22,9 +22,9 @@
 
 import { Component, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, EnrichedChild, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { GObjectRef } from "gebo-ai-rest-api";
+
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 
@@ -44,7 +44,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * The entity name for this component
      */
     protected override entityName: string = "GProject";
-    
+
     /**
      * Form group defining the structure and controls for the project edit form
      * Contains fields for all editable properties of a project
@@ -65,17 +65,17 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * Flag indicating whether knowledge base editing is enabled
      */
     @Input() editKnowledgebase: boolean = false;
-    
+
     /**
      * Observable containing all knowledge bases available for selection
      */
     knowledgeBases: Observable<GKnowledgeBase[]> = this.knowledgeBaseControllerService.getKnowledgeBases();
-    
+
     /**
      * The parent project of the current project, if any
      */
     public parentProject?: GProject;
-    
+
     /**
      * Array of child entities related to this project
      */
@@ -122,7 +122,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * @param actualValue The loaded project data
      */
     protected override onLoadedPersistentData(actualValue: GProject): void {
-        this.graphRagContext={
+        this.graphRagContext = {
             knowledgeBaseCode: actualValue?.rootKnowledgeBaseCode,
             projectCode: actualValue?.code
         };

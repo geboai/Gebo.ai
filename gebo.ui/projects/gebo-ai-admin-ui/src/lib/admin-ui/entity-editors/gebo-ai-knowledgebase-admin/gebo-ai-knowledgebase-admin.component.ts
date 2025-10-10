@@ -19,13 +19,11 @@
 
 import { Component, Injector, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ContentsResetControllerService, EmbeddingModelsControllersService, GKnowledgeBase, GProject, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { forkJoin, map, Observable, of } from "rxjs";
-import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../../../../../gebo-ai-reusable-ui/src/lib/services/pluggable-knowledge-base-admin-tree-search.service";
-import { EnrichedChild } from "../../../../../../gebo-ai-reusable-ui/src/lib/services/enriched-child";
+import { ContentsResetControllerService, EmbeddingModelsControllersService, GKnowledgeBase, GObjectRef, GProject, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent, EnrichedChild, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
-import { GObjectRef } from "gebo-ai-rest-api";
+import { forkJoin, map, Observable, of } from "rxjs";
+
 
 /**
  * Component for administering knowledge bases in the Gebo.ai system.
