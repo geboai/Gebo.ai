@@ -32,4 +32,5 @@ export interface GraphRagExtractionConfig {
     customRelationTypes?: Array<GraphObjectType>;
     usedModelConfiguration?: GObjectRefGBaseChatModelConfig;
     contentSelectionFilter?: GContentSelectionFilter;
+    processEveryDocument?: boolean;
 }

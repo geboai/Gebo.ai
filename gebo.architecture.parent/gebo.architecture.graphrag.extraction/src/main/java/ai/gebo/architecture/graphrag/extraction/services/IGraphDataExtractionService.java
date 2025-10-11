@@ -39,4 +39,6 @@ public interface IGraphDataExtractionService {
 	public LLMExtractionResult extract(String query, List<String> knowledgeBases, Map<String, Object> cache)
 			throws LLMConfigException;
 
+	public boolean isTreatedDocument(GDocumentReference reference, Map<String, Object> cache);
+
 }

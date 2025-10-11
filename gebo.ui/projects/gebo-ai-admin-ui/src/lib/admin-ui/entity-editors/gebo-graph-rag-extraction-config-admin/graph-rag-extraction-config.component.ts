@@ -27,7 +27,9 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         customEventTypes: new FormControl(),
         customRelationTypes: new FormControl(),
         usedModelConfiguration: new FormControl(),
-        graphRagAllSources: new FormControl()
+        graphRagAllSources: new FormControl(),
+        contentSelectionFilter: new FormControl(),
+        processEveryDocument: new FormControl()
     });
     protected systemConfiguration?: GraphRagExtractionConfig;
     /** Available chat models to choose from */

@@ -28,6 +28,7 @@ import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.extraction.repositories.GraphRagExtractionConfigRepository;
 import ai.gebo.architecture.graphrag.extraction.services.IGraphDataExtractionService;
+import ai.gebo.knlowledgebase.model.contents.ContentSelectionFilterPredicate;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -514,6 +515,81 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			return getBatchingPredicate(defaultLevelConfig, cache);
 		}
 		throw new LLMConfigException("There is no available configuration for knowledge extraction");
+	}
+
+	@Override
+	public boolean isTreatedDocument(GDocumentReference docreference, Map<String, Object> cache) {
+		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
+		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT);
+		GraphRagExtractionConfig knowledgeBaseLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE);
+		GraphRagExtractionConfig defaultLevelConfig = (GraphRagExtractionConfig) cache
+				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG);
+		if (defaultLevelConfig == null) {
+			List<GraphRagExtractionConfig> defaultConfigs = this.configRepository
+					.findByDefaultConfiguration(Boolean.TRUE);
+			if (!defaultConfigs.isEmpty()) {
+				defaultLevelConfig = defaultConfigs.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG, defaultLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED, "true");
+		}
+
+		String knowledgeBaseCode = docreference.getRootKnowledgebaseCode();
+		String projectCode = docreference.getParentProjectCode();
+		if (knowledgeBaseCode != null
+				&& !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED)) {
+			List<GraphRagExtractionConfig> forKnowledgeBase = this.configRepository
+					.findByKnowledgeBaseCode(knowledgeBaseCode);
+			for (GraphRagExtractionConfig kc : forKnowledgeBase) {
+				if (kc.getProjectCode() == null && knowledgeBaseLevelConfig == null) {
+					knowledgeBaseLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE, knowledgeBaseLevelConfig);
+				}
+				if (kc.getProjectCode() != null && projectCode != null && kc.getProjectCode().equals(projectCode)
+						&& projectLevelConfig == null) {
+					projectLevelConfig = kc;
+					cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT, projectLevelConfig);
+				}
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED, "true");
+		}
+		if (dataSourceLevelConfig == null && !cache.containsKey(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED)) {
+			List<GraphRagExtractionConfig> forDataSource = this.configRepository.findByEndpointClassNameAndEndpointCode(
+					docreference.getProjectEndpointReference().getClassName(),
+					docreference.getProjectEndpointReference().getCode());
+			if (!forDataSource.isEmpty()) {
+				dataSourceLevelConfig = forDataSource.get(0);
+				cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE, dataSourceLevelConfig);
+			}
+			cache.put(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED, "true");
+
+		}
+		if (dataSourceLevelConfig != null) {
+			return checkProcessability(dataSourceLevelConfig, docreference);
+		}
+		if (projectLevelConfig != null) {
+			return checkProcessability(projectLevelConfig, docreference);
+		}
+		if (knowledgeBaseLevelConfig != null) {
+			return checkProcessability(knowledgeBaseLevelConfig, docreference);
+		}
+		if (defaultLevelConfig != null) {
+			return checkProcessability(defaultLevelConfig, docreference);
+		}
+		return false;
+	}
+
+	private boolean checkProcessability(GraphRagExtractionConfig config, GDocumentReference docreference) {
+		if (config.getProcessEveryDocument() != null && config.getProcessEveryDocument())
+			return true;
+		if (config.getContentSelectionFilter() != null) {
+			return ContentSelectionFilterPredicate.filterMatches(config.getContentSelectionFilter(), docreference);
+		}
+		return false;
 	}
 
 }

@@ -82,4 +82,5 @@ export * from "./lib/services/auth-interceptor.service";
 export * from "./lib/services/gebo-backends-list.service";
 export * from "./lib/controls/gebo-oauth2-secret-component/gebo-oauth2-secret.module";
 
+export * from "./lib/controls/content-selection-filter-component/content-selection-filter.module";
 

@@ -66,6 +66,7 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 					payload.getJobId(), envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null,
 					envelope.getWorkflowId(), envelope.getWorkflowStepId(), broker, emitter);
 			try {
+				final Map<String, Object> cache = new HashMap<String, Object>();
 				data = new GContentsProcessingStatusUpdatePayload();
 				data.setJobId(payload.getJobId());
 				data.setWorkflowType(envelope.getWorkflowType() != null ? envelope.getWorkflowType().name() : null);
@@ -75,14 +76,15 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				// Best effort approach
 				boolean discardFile = this.staticConfig.getDiscardedExtensions() != null && this.staticConfig
 						.getDiscardedExtensions().contains(payload.getDocumentReference().getExtension());
-				if (!discardFile) {
+				if (!discardFile
+						&& graphRagExtractionService.isTreatedDocument(payload.getDocumentReference(), cache)) {
 					// delete the document and related data from the neo4j database
 					knowledgeGraphPersistenceService.knowledgeGraphDelete(payload.getDocumentReference());
 					// insert the document in the neo4j database
 					final GraphDocumentReference graphDocumentObject = knowledgeGraphPersistenceService
 							.knowledgeGraphInsertDocument(payload.getDocumentReference());
 					// initialize a cache for process speedup
-					final Map<String, Object> cache = new HashMap<String, Object>();
+
 					// get a predicate to cluster multiple chunks on a single llm request if is
 					// feasible
 					final Predicate<List<Document>> splitPredicate = graphRagExtractionService

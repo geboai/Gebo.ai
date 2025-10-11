@@ -14,8 +14,18 @@ export interface GContentSelectionFilterCriteria {
     mimeContentTypes?: Array<string>;
     extensions?: Array<string>;
     nameFilter?: string;
+    nameFilterCriteria?: GContentSelectionFilterCriteria.NameFilterCriteriaEnum;
     maxFileSize?: number;
     maxTokenSize?: number;
     maxModificationAgeInDays?: number;
     empty?: boolean;
+}
+export namespace GContentSelectionFilterCriteria {
+    export type NameFilterCriteriaEnum = 'CONTAINS' | 'EQUALS' | 'STARTS_WITH' | 'ENDS_WITH';
+    export const NameFilterCriteriaEnum = {
+        CONTAINS: 'CONTAINS' as NameFilterCriteriaEnum,
+        EQUALS: 'EQUALS' as NameFilterCriteriaEnum,
+        STARTSWITH: 'STARTS_WITH' as NameFilterCriteriaEnum,
+        ENDSWITH: 'ENDS_WITH' as NameFilterCriteriaEnum
+    };
 }

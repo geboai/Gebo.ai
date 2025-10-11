@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class GContentSelectionFilter {
+public class GContentSelectionFilter{
 	private List<GContentSelectionFilterCriteria> criterias = new ArrayList<>();
+	
 }

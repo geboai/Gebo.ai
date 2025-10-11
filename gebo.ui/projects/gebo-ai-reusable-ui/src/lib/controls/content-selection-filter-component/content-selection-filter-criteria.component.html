@@ -1,0 +1,19 @@
+<!-- extensions: new FormControl(),
+            nameFilter: new FormControl(),
+            nameFilterCriteria: new FormControl(),
+            maxFileSize: new FormControl(),
+            maxTokenSize: new FormControl(),
+            maxModificationAgeInDays: new FormControl()-->
+<div class="grid" *ngIf="formGroup" [formGroup]="formGroup">
+    <div class="col-2">
+        <geboai-editable-listbox-component placeholder="File name filtering criteria" formControlName="nameFilterCriteria" [data]="filterFormCriterias">
+
+        </geboai-editable-listbox-component>
+    </div>
+    <div class="col-4"><input pInputText formControlName="nameFilter" placeholder="File name"></div>
+    
+    <div class="col-3"><p-input-number formControlName="maxFileSize" placeholder="Max file size in Bytes"
+            class="w-full"></p-input-number></div>
+    <div class="col-3"><p-input-number formControlName="maxModificationAgeInDays" placeholder="File last modification, days ago"
+            class="w-full"></p-input-number></div>
+</div>

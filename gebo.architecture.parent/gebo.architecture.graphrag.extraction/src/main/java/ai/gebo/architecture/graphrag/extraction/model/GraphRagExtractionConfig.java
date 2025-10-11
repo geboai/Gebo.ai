@@ -30,4 +30,5 @@ public class GraphRagExtractionConfig extends GBaseObject {
 	private List<GraphObjectType> customRelationTypes = null;
 	private GObjectRef<GBaseChatModelConfig> usedModelConfiguration = null;
 	private GContentSelectionFilter contentSelectionFilter = null;
+	private Boolean processEveryDocument = null;
 }
