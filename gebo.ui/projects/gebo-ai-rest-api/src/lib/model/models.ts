@@ -61,6 +61,8 @@ export * from './gConfluenceProjectEndpoint';
 export * from './gConfluenceSystem';
 export * from './gContentManagementSystem';
 export * from './gContentManagementSystemType';
+export * from './gContentSelectionFilter';
+export * from './gContentSelectionFilterCriteria';
 export * from './gDeepseekChatModelChoice';
 export * from './gDeepseekChatModelConfig';
 export * from './gEmbeddingModelType';

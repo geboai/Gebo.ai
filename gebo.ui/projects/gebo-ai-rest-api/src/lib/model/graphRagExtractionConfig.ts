@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GContentSelectionFilter } from './gContentSelectionFilter';
 import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
 import { GraphObjectType } from './graphObjectType';
@@ -30,4 +31,5 @@ export interface GraphRagExtractionConfig {
     customEventTypes?: Array<GraphObjectType>;
     customRelationTypes?: Array<GraphObjectType>;
     usedModelConfiguration?: GObjectRefGBaseChatModelConfig;
+    contentSelectionFilter?: GContentSelectionFilter;
 }

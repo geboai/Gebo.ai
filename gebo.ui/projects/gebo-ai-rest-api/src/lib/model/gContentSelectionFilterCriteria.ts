@@ -10,8 +10,12 @@
  * Do not edit the class manually.
  */
 
-export interface SortObject { 
+export interface GContentSelectionFilterCriteria { 
+    mimeContentTypes?: Array<string>;
+    extensions?: Array<string>;
+    nameFilter?: string;
+    maxFileSize?: number;
+    maxTokenSize?: number;
+    maxModificationAgeInDays?: number;
     empty?: boolean;
-    unsorted?: boolean;
-    sorted?: boolean;
 }

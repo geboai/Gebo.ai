@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import ai.gebo.knlowledgebase.model.contents.GContentSelectionFilter;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GBaseObject;
@@ -28,4 +29,5 @@ public class GraphRagExtractionConfig extends GBaseObject {
 	private List<GraphObjectType> customEventTypes = null;
 	private List<GraphObjectType> customRelationTypes = null;
 	private GObjectRef<GBaseChatModelConfig> usedModelConfiguration = null;
+	private GContentSelectionFilter contentSelectionFilter = null;
 }

@@ -19,15 +19,17 @@ export interface GJobStatus {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    jobType?: GJobStatus.JobTypeEnum;
-    workflowType?: string;
-    workflowId?: string;
+    jobType: GJobStatus.JobTypeEnum;
+    workflowType: string;
+    workflowId: string;
     processing?: boolean;
     finished?: boolean;
     error?: boolean;
     startDateTime?: Date;
     endDateTime?: Date;
-    projectEndpointReference?: GObjectRefGProjectEndpoint;
+    projectEndpointReference: GObjectRefGProjectEndpoint;
+    knowledgeBaseCode: string;
+    projectCode: string;
     parentJobCode?: string;
     workflowStatus?: WorkflowStatus;
 }
