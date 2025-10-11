@@ -18,7 +18,7 @@
  */
 
 import { Injector } from "@angular/core";
-import { GJobStatus, GKnowledgeBase, GObjectRefGProjectEndpoint, GProject, GProjectEndpoint, JobLauncherControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GJobStatus, GKnowledgeBase, GObjectRef, GObjectRefGProjectEndpoint, GProject, GProjectEndpoint, JobLauncherControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ChooseDataSourceType, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { map, Observable, of } from "rxjs";
 
@@ -179,17 +179,12 @@ export const KNOWLEDGEBASE_WIZARD: GeboAIEntitiesSettingWizardConfiguration[] = 
     nextStepNavigation: (actualComponent: BaseEntityEditingComponent<any>,injector:Injector, actualData?: any) => {
         const reference = actualComponent.objectReference;
         const jobStatusService=injector.get(JobLauncherControllerService);
-        const param:GObjectRefGProjectEndpoint={
+        const param:GObjectRef={
             className:reference?.className,
             code:reference?.code,
             description:"Publishing " + actualData?.description
         }
         const observable=jobStatusService.createJob(param);
-        const data: GJobStatus = {
-            description: "Publishing " + actualData?.description,
-            projectEndpointReference: reference
-        }
-        
         return observable.pipe(map(r=>{
             const action: GeboUIActionRequest = {
                 actionType: GeboActionType.NEW,
