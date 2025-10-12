@@ -156,3 +156,38 @@ label {
 .pi.pi-amazon   { background-image: url("assets/oauth2/amazon.svg"); }
 .pi.pi-slack    { background-image: url("assets/oauth2/slack.svg"); }
 .pi.pi-oauth2_generic    { background-image: url("assets/oauth2/oauth-svgrepo-com.svg"); }
+
+/* Stato normale: solo underline leggera */
+.p-inputtext,
+.p-dropdown .p-dropdown-label,
+.p-calendar .p-inputtext,
+.p-inputnumber .p-inputtext,
+.p-textarea {
+  border: 0 !important;
+  border-bottom: 1px solid var(--surface-400, #ced4da) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Stato invalido: underline rossa */
+.p-inputtext.ng-invalid.ng-touched,
+.p-inputtext.ng-invalid.ng-dirty,
+.p-inputtext.p-invalid,
+.p-dropdown.p-invalid .p-dropdown-label,
+.p-calendar.p-invalid .p-inputtext,
+.p-inputnumber.p-invalid .p-inputtext,
+.p-textarea.p-invalid {
+  border: 0 !important;
+  border-bottom: 2px solid var(--red-500, #ef4444) !important;
+  box-shadow: none !important;
+}
+
+/* Focus su invalido: rinforza l'underline */
+.p-inputtext.ng-invalid:focus,
+.p-inputtext.p-invalid:focus,
+.p-dropdown.p-invalid .p-dropdown-label:focus,
+.p-calendar.p-invalid .p-inputtext:focus,
+.p-inputnumber.p-invalid .p-inputtext:focus {
+  outline: 0;
+  box-shadow: 0 1px 0 0 var(--red-500, #ef4444) !important;
+}

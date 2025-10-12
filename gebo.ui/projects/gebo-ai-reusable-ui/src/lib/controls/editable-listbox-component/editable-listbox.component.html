@@ -13,7 +13,7 @@
  
 
 <p-select styleClass="w-full"  *ngIf="readonly?false:true" [options]="options" optionLabel="description" optionValue="code"
-    [placeholder]="placeholder" [(ngModel)]="value"  [loading]="loading" [disabled]="disabled"
+    [placeholder]="placeholder" [(ngModel)]="value"  [loading]="loading" [disabled]="disabled" 
     (onChange)="changedValue($event)" >
     <ng-template let-item pTemplate="item">
         <div class="flex align-items-left gap-2" *ngIf="item.code!==createNewValueCodeConstant" style="width: 100%;" >
