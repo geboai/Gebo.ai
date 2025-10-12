@@ -4,16 +4,16 @@
             maxFileSize: new FormControl(),
             maxTokenSize: new FormControl(),
             maxModificationAgeInDays: new FormControl()-->
-<div class="grid" *ngIf="formGroup" [formGroup]="formGroup">
+<div class="grid" *ngIf="fg" [formGroup]="fg">
     <div class="col-2">
         <geboai-editable-listbox-component placeholder="File name filtering criteria" formControlName="nameFilterCriteria" [data]="filterFormCriterias">
 
         </geboai-editable-listbox-component>
     </div>
-    <div class="col-4"><input pInputText formControlName="nameFilter" placeholder="File name"></div>
-    
-    <div class="col-3"><p-input-number formControlName="maxFileSize" placeholder="Max file size in Bytes"
-            class="w-full"></p-input-number></div>
-    <div class="col-3"><p-input-number formControlName="maxModificationAgeInDays" placeholder="File last modification, days ago"
-            class="w-full"></p-input-number></div>
+    <div class="col-4"><input pInputText formControlName="nameFilter" placeholder="File name" styleClass="w-full"></div>
+    <div class="col-2"><p-multiselect [options]="fileTypes"  optionLabel="description" optionValue="code" placeholder="Select file types"  styleClass="w-full md:w-80" /></div>
+    <div class="col-2"><p-input-number formControlName="maxFileSize" placeholder="Max file size in Bytes"
+            styleClass="w-full"></p-input-number></div>
+    <div class="col-2"><p-input-number formControlName="maxModificationAgeInDays" placeholder="File last modification, days ago"
+            styleClass="w-full"></p-input-number></div>
 </div>

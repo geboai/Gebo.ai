@@ -8,8 +8,8 @@ import { GContentSelectionFilterCriteria, IngestionFileType } from "@Gebo.ai/geb
     standalone: false
 })
 export class GeboAISelectionFilterCriteriaComponent {
-    @Input() formGroup?: FormGroup;
-    @Input() fileTypes: IngestionFileType[] = [];
+    @Input() fg?: FormGroup;
+    @Input() fileTypes: {code:string,description:string}[] = [];
     protected filterFormCriterias: { code: string, description: string }[] = [
         { code: GContentSelectionFilterCriteria.NameFilterCriteriaEnum.CONTAINS, description: "Contains" },
         { code: GContentSelectionFilterCriteria.NameFilterCriteriaEnum.ENDSWITH, description: "Ends with" },

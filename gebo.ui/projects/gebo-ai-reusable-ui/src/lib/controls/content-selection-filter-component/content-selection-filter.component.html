@@ -1,15 +1,15 @@
-<p-fieldset legend="File selection criterias">
-    <div class="grid" *ngFor="let fg in criterias;let i = index">
+<p-fieldset [legend]="title">
+    <div class="grid" *ngFor="let fg of criterias.controls;let i = index">
         <div class="col-11" >
-            <gebo-ai-selection-filter-criteria-component [formGroup]="fg" [fileTypes]="fileTypes"></gebo-ai-selection-filter-criteria-component>
+            <gebo-ai-selection-filter-criteria-component  [fg]="criteriaAt(i)" [fileTypes]="fileTypes"></gebo-ai-selection-filter-criteria-component>
         </div>
         <div class="col-1">
-            <p-button icon="pi pi-remove" (onClick)="removeRow(i)"></p-button>
+            <p-button icon="pi pi-trash" (onClick)="removeRow(i)" *ngIf="i>0" [text]="true" [rounded]="true" [raised]="true"  severity="danger" [outlined]="true" title="Remove"></p-button>
         </div>
     </div>
     <div class="grid">
         <div class="col-1">
-            <p-button icon="pi pi-add" (onClick)="addRow()"></p-button>
+            <p-button icon="pi pi-plus" title="add a selection criteria" [text]="true" (onClick)="addRow()" [raised]="true" [rounded]="true" severity="info" [outlined]="true"></p-button>
         </div>
         <div class="col-11"></div>
     </div>

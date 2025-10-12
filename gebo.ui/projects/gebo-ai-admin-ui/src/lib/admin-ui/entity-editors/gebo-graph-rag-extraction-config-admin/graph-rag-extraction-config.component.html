@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-9" *ngIf="formGroup.controls['processEveryDocument'].value!==true">
                                 <gebo-ai-content-selection-filter-component
-                                    formControlName="contentSelectionFilter"></gebo-ai-content-selection-filter-component>
+                                    formControlName="contentSelectionFilter" title="File selection criterias for graphrag processing"></gebo-ai-content-selection-filter-component>
                             </div>
                         </div>
                     </div>
@@ -102,7 +102,6 @@
                                 </small>
                             </div>
                         </div>
-
                         <div class="col-12">
                             <div class="flex flex-column gap-2">
                                 <label for="response">Information extraction prompt</label>
