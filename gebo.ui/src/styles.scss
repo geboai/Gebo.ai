@@ -191,3 +191,7 @@ label {
   outline: 0;
   box-shadow: 0 1px 0 0 var(--red-500, #ef4444) !important;
 }
+.gebo-ai-invalid-underline {
+  border-bottom: 2px solid #f44336 !important;
+  outline: none;
+}

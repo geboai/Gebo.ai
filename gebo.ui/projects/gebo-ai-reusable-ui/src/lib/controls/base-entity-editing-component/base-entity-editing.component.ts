@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -33,6 +33,7 @@ import { GeboAIEntitiesSettingWizardConfiguration, WizardButtonsBarData } from "
 import { errorStatus, IOperationStatus } from "./operation-status";
 import { GeboActionType, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent, GeboWizardActionType } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
+import { GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 
 /**
@@ -42,119 +43,119 @@ import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-ro
  * @template RecordType - The type of entity being edited, which should include optional code and description properties
  */
 @Component({
-    selector: "base-entity-component",
-    template: "",
-    standalone: false
+  selector: "base-entity-component",
+  template: "",
+  standalone: false
 })
-export abstract class BaseEntityEditingComponent<RecordType extends { code?: string, description?: string }> implements OnInit, OnChanges, OnDestroy {
+export abstract class BaseEntityEditingComponent<RecordType extends { code?: string, description?: string }> implements OnInit, OnChanges, OnDestroy, GeboAIFieldHost {
   /** Flag to track if a save operation is in progress */
   private savingBackend: boolean = false;
-  
+
   /** Flag to track if a delete operation is in progress */
   private deletingBackend: boolean = false;
-  
+
   /** Flag to track if duplicate checking is in progress */
   private checkingDuplicatesBackend: boolean = false;
-  
+
   /** Flag to track if a can-be-deleted check is in progress */
   private canBeDeletedCheckBackend: boolean = false;
-  
+
   /** Flag to track if controls are being loaded */
   private missingControlLoading: boolean = false;
-  
+
   /** Flag to track if related backend operations are in progress */
   protected loadingRelatedBackend: boolean = false;
-  
+
   //if manageOperationStatus is true than in insert and update calls the extending class MUST call the updateLastOperationStatus method with 
   // OperationStatus returned from backend and aborts the functional save and close logic going further to editing and correct mode
   protected manageOperationStatus: boolean = false;
-  
+
   /** Backend class name for object reference */
   protected backendClassName?: string;
-  
+
   /** Flag to track if code was not present */
   public codeWhasNotPresent: boolean = false;
-  
+
   /** Flag to determine if entity can be deleted */
   public canDelete: boolean = false;
-  
+
   /** Collection of messages to display to the user */
   public userMessages: ToastMessageOptions[] = [];
-  
+
   /** Flag to determine if entity can be saved */
   public canSave: boolean = false;
-  
+
   /** Reference to the object in the backend */
   public objectReference?: GObjectRef;
-  
+
   /** Flag to indicate if entity data has been loaded */
   public entityDataLoaded: boolean = false;
-  
+
   /** Flag to indicate if backend processing is running */
   public relatedBackendProcessingRunning: boolean = false;
-  
+
   /** Flag to enable periodic backend processing checks */
   protected doPeriodicBackendProcessingCheck: boolean = false;
-  
+
   /** Abstract property for the entity name that must be defined by child classes */
   protected abstract entityName: string;
-  
+
   /** Last operation status for tracking results of operations */
   private lastOperationStatus?: IOperationStatus<RecordType>;
-  
+
   /** Timer for periodic validation checks */
   private programmed?: any = undefined;
-  
+
   /**
    * Returns the name of the entity being edited
    */
   public get actualEntityName(): string {
     return this.entityName;
   }
-  
+
   /** The mode of operation: NEW, EDIT, or EDIT_OR_NEW */
   @Input() mode: "NEW" | "EDIT" | "EDIT_OR_NEW" = "EDIT";
-  
+
   /** Storage for wizard session data */
   @Input() wizardSessionStorage?: any = undefined;
-  
+
   /** Configuration for wizard steps */
   @Input() wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[];
-  
+
   /** Callback for when a wizard action is performed */
   @Input() onWizardActionPerformed?: GeboWizardActionPerformedCallback;
-  
+
   /** ID of the current wizard step configuration */
   @Input() actualWizardStepConfigrationId?: string;
-  
+
   /** The entity being edited */
   @Input() entity?: RecordType;
-  
+
   /** Event emitted when a new entity is created */
   @Output() createdNew: EventEmitter<RecordType> = new EventEmitter();
-  
+
   /** Event emitted when an entity is updated */
   @Output() updated: EventEmitter<RecordType> = new EventEmitter();
-  
+
   /** Event emitted when an entity is deleted */
   @Output() deleted: EventEmitter<boolean> = new EventEmitter();
-  
+
   /** Event emitted when editing is cancelled */
   @Output() cancelAction: EventEmitter<boolean> = new EventEmitter();
-  
+
   /** Subject for tracking form validity */
   public formInvalid: Subject<boolean> = new Subject();
-  
+
   /** Flag to track if entity has been refreshed by code */
   private refreshedByCode: boolean = false;
-  
+
   /**
    * Determines if any backend operation is in progress
    */
   get loading(): boolean {
     return this.missingControlLoading === true || this.loadingRelatedBackend === true || this.savingBackend === true || this.checkingDuplicatesBackend === true || this.canBeDeletedCheckBackend === true || this.deletingBackend === true;
   }
-  
+
   /** The form group for the entity being edited */
   abstract formGroup: FormGroup;
 
@@ -175,14 +176,17 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     private outputForwardingService?: GeboUIOutputForwardingService) {
 
   }
-  
+  getEntityName(): string {
+    return this.entityName;
+  }
+
   /**
    * Lifecycle hook that is called when the component is destroyed
    */
   ngOnDestroy(): void {
 
   }
-  
+
   /**
    * Updates the object reference based on the entity code and backend class name
    */
@@ -196,7 +200,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       this.objectReference = undefined;
     }
   }
-  
+
   /**
    * Hook method called when persistent data is loaded
    * Can be overridden by child classes to perform custom logic
@@ -206,7 +210,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   protected onLoadedPersistentData(actualValue: RecordType): void {
 
   }
-  
+
   /**
    * Hook method called when new data is loaded
    * Can be overridden by child classes to perform custom logic
@@ -216,7 +220,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   protected onNewData(actualValue: RecordType): void {
 
   }
-  
+
   /**
    * Updates the last operation status and user messages
    * 
@@ -226,7 +230,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     this.userMessages = opStatus?.messages as ToastMessageOptions[];
     this.lastOperationStatus = opStatus;
   }
-  
+
   /**
    * Periodically checks if the backend is processing the viewed data
    */
@@ -251,7 +255,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       });
     }
   }
-  
+
   /**
    * Sets up periodic form validation
    */
@@ -262,7 +266,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       this.pollValidation();
     }, 1500);
   }
-  
+
   /**
    * Registers the component as a guest with the output forwarding service
    */
@@ -290,7 +294,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       this.outputForwardingService.registerGuest(this, toBeNotified);
     }
   }
-  
+
   /**
    * Lifecycle hook that is called when the component is initialized
    */
@@ -320,7 +324,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     this.pollValidation();
 
   }
-  
+
   /**
    * Gets the current wizard step configuration
    * 
@@ -329,14 +333,14 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   public getActualWizardStep(): GeboAIEntitiesSettingWizardConfiguration | undefined {
     return this.actualWizardStepConfigrationId ? this.wizardStepsConfigurations?.find(x => x.id === this.actualWizardStepConfigrationId) : undefined;
   }
-  
+
   /**
    * Determines if the component is in wizard mode
    */
   public get isWizardMode(): boolean {
     return this.wizardStepsConfigurations ? true : false;
   }
-  
+
   /**
    * Determines if there is a next step in the wizard
    */
@@ -350,7 +354,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   public get hasPreviusStep(): boolean {
     return this.getActualWizardStep()?.previusStepNavigation ? true : false;
   }
-  
+
   /**
    * Gets the icon for the previous step button
    */
@@ -358,7 +362,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     const actualWizard = this.getActualWizardStep();
     return actualWizard?.previusStepIcon ? actualWizard.previusStepIcon : "pi pi-arrow-left";
   }
-  
+
   /**
    * Gets the icon for the next step button
    */
@@ -366,7 +370,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     const actualWizard = this.getActualWizardStep();
     return actualWizard?.nextStepIcon ? actualWizard.nextStepIcon : "pi pi-arrow-right";
   }
-  
+
   /**
    * Gets the label for the previous step button
    */
@@ -374,7 +378,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     const actualWizard = this.getActualWizardStep();
     return actualWizard?.previusStepLabel ? actualWizard.previusStepLabel : "Back";
   }
-  
+
   /**
    * Gets the label for the next step button
    */
@@ -382,7 +386,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     const actualWizard = this.getActualWizardStep();
     return actualWizard?.nextStepLabel ? actualWizard.nextStepLabel : "Forward";
   }
-  
+
   /**
    * Navigates to the next step in the wizard
    * Saves the current data before proceeding
@@ -411,7 +415,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
             next: (action: GeboUIActionRequest) => {
               let nextUIInputs: any = {};
               if (!action.onWizardActionPerformed) {
-                action.onWizardActionPerformed=this.onWizardActionPerformed;
+                action.onWizardActionPerformed = this.onWizardActionPerformed;
               }
               if (action.targetFormInputs) {
                 nextUIInputs = action.targetFormInputs;
@@ -441,7 +445,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     }
     this.doSave(successfulActionCallback);
   }
-  
+
   /**
    * Navigates to the previous step in the wizard
    */
@@ -468,7 +472,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
         next: (action: GeboUIActionRequest) => {
           let lastUIInputs: any = {};
           if (!action.onWizardActionPerformed) {
-            action.onWizardActionPerformed=this.onWizardActionPerformed;
+            action.onWizardActionPerformed = this.onWizardActionPerformed;
           }
           if (action.targetFormInputs) {
             lastUIInputs = action.targetFormInputs;
@@ -493,7 +497,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       })
     }
   }
-  
+
   /**
    * Lifecycle hook that is called when component inputs change
    * 
@@ -531,7 +535,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       }
     }
   }
-  
+
   /**
    * Checks whether to edit an existing entity or create a new one
    * based on whether the entity exists in the backend
@@ -564,7 +568,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       });
     }
   }
-  
+
   /**
    * Checks if the entity can be deleted and updates UI accordingly
    * 
@@ -590,7 +594,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
 
     });
   }
-  
+
   /**
    * Creates an artificial operation status for success scenarios
    * 
@@ -603,7 +607,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     };
     this.updateLastOperationStatus(ios);
   }
-  
+
   /**
    * Calls the update operation for an existing entity
    * 
@@ -652,7 +656,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       }
     })
   }
-  
+
   /**
    * Calls the insert operation for a new entity
    * 
@@ -701,7 +705,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       }
     })
   }
-  
+
   /**
    * Saves the entity (creates a new one or updates an existing one)
    * 
@@ -741,7 +745,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       this.callUpdate(value, successfulActionCallback);
     }
   }
-  
+
   /**
    * Deletes the entity after confirmation
    * 
@@ -803,7 +807,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     }
 
   }
-  
+
   /**
    * Finds an entity by its code
    * Must be implemented by child classes
@@ -812,7 +816,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    * @returns An Observable that resolves to the entity or null
    */
   abstract findByCode(code: string): Observable<RecordType | null>;
-  
+
   /**
    * Saves an existing entity
    * Must be implemented by child classes
@@ -821,7 +825,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    * @returns An Observable that resolves to the saved entity
    */
   abstract save(value: RecordType): Observable<RecordType>;
-  
+
   /**
    * Inserts a new entity
    * Must be implemented by child classes
@@ -830,7 +834,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    * @returns An Observable that resolves to the inserted entity
    */
   abstract insert(value: RecordType): Observable<RecordType>;
-  
+
   /**
    * Deletes an entity
    * Must be implemented by child classes
@@ -850,7 +854,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   protected checkBackendProcessing(reference: { className?: string, code?: string }): Observable<boolean> {
     return of(false);
   }
-  
+
   /**
    * Checks if an entity can be inserted
    * Can be overridden by child classes to implement custom validation
@@ -861,7 +865,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   canBeInserted(value: RecordType): Observable<{ canBeInserted: boolean, message: string }> {
     return of({ canBeInserted: true, message: "" })
   }
-  
+
   /**
    * Checks if an entity can be deleted
    * Must be implemented by child classes
@@ -870,7 +874,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    * @returns An Observable that resolves to an object indicating if deletion is allowed
    */
   abstract canBeDeleted(value: RecordType): Observable<{ canBeDeleted: boolean, message: string }>;
-  
+
   /**
    * Creates a reference to the backend object
    * 
@@ -883,7 +887,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     };
     return reference;
   }
-  
+
   /**
    * Reloads the entity data by its code
    */

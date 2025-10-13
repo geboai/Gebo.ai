@@ -14,26 +14,18 @@
                 <p-tabPanel header="General infos/contents settings">
                     <div class="geboDialogContent grid ">
                         <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="description">Description</label>
-                                <input pInputText id="description" formControlName="description" maxlength="120"
-                                    [required]="true" aria-describedby="description-help" />
-                                <small id="description-help">
-                                    Enter the description of this knowledge graph data extraction stage
-                                    configuration
-                                </small>
-                            </div>
+                            <gebo-ai-field id="description" label="Description" help="Enter the description of this knowledge graph data extraction stage
+                                    configuration" [required]="true">
+                                <input pInputText gebo-ai-field-element formControlName="description" maxlength="120" />
+                            </gebo-ai-field>
+
                         </div>
                         <div class="col-6">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="code">Unique Code</label>
-                                <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                    readonly="true" />
-                                <small id="code-help">
-                                    Automatically generated unique code of the knowledge graph data extraction
-                                    stage.
-                                </small>
-                            </div>
+                            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the knowledge graph data extraction
+                                    stage" [required]="true">
+                                <input pInputText formControlName="code" readonly="true" />
+                            </gebo-ai-field>
+
                         </div>
                         <div class="col-6">
                             <div class="flex flex-column gap-2"
@@ -68,8 +60,8 @@
                                 </div>
                             </div>
                             <div class="col-9" *ngIf="formGroup.controls['processEveryDocument'].value!==true">
-                                <gebo-ai-content-selection-filter-component
-                                    formControlName="contentSelectionFilter" title="File selection criterias for graphrag processing"></gebo-ai-content-selection-filter-component>
+                                <gebo-ai-content-selection-filter-component formControlName="contentSelectionFilter"
+                                    title="File selection criterias for graphrag processing"></gebo-ai-content-selection-filter-component>
                             </div>
                         </div>
                     </div>

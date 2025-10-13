@@ -1,0 +1,8 @@
+ <div class="flex flex-column gap-2">
+      <label [attr.for]="id"><span *ngIf="computedRequired" aria-hidden="true">*</span>{{ label }}</label>
+
+      
+      <ng-content></ng-content>
+
+      <small *ngIf="help" [id]="helpId">{{ help }}</small>
+    </div>
