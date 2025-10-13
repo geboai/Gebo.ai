@@ -22,46 +22,40 @@
                         </div>
                         <div class="col-6">
                             <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the knowledge graph data extraction
-                                    stage" [required]="true">
-                                <input pInputText formControlName="code" readonly="true" />
+                                    stage">
+                                <input pInputText formControlName="code" readonly="true" gebo-ai-field-element />
                             </gebo-ai-field>
 
                         </div>
                         <div class="col-6">
-                            <div class="flex flex-column gap-2"
-                                *ngIf="formGroup.controls['defaultConfiguration']?.value===true">
-                                <label for="graphRagAllSources">Apply graph rag to all data sources</label>
-                                <p-checkbox formControlName="graphRagAllSources" [trueValue]="true" [falseValue]="false"
-                                    [binary]="true" id="graphRagAllSources"
-                                    aria-describedby="graphRagAllSources-help"></p-checkbox>
-                                <small id="graphRagAllSources-help">
-                                    The graph rag algoritms will be applied to all data sources <b>this will enhance
+                            <gebo-ai-field id="graphRagAllSources" label="Apply graph rag to all data sources" help="The graph rag algoritms will be applied to all data sources this will enhance
                                         the details of
                                         analisys that the system is capable of but will high the cost and time
                                         required to process
-                                        documents</b>
-                                </small>
-                            </div>
+                                        documents">
+                                <p-checkbox formControlName="graphRagAllSources" [trueValue]="true" [falseValue]="false"
+                                    [binary]="true" gebo-ai-field-element></p-checkbox>
+                            </gebo-ai-field>
+
                         </div>
                         <div class="col-12 grid">
                             <div class="col-3">
-                                <div class="flex flex-column gap-2">
-                                    <label for="processEveryDocument">Apply graph rag to all files</label>
-                                    <p-checkbox formControlName="processEveryDocument" [trueValue]="true"
-                                        [falseValue]="false" [binary]="true" id="processEveryDocument"
-                                        aria-describedby="processEveryDocument-help"></p-checkbox>
-                                    <small id="processEveryDocument-help">
-                                        The graph rag algoritms will be applied to all file <b>this will enhance the
+                                <gebo-ai-field id="processEveryDocument" label="Apply graph rag to all files" help="The graph rag algoritms will be applied to all file this will enhance the
                                             details of
                                             analisys that the system is capable of but will high the cost and time
                                             required to process
-                                            documents</b>
-                                    </small>
-                                </div>
+                                            documents"><p-checkbox formControlName="processEveryDocument"
+                                        [trueValue]="true" [falseValue]="false" [binary]="true"
+                                        id="processEveryDocument" gebo-ai-field-element></p-checkbox></gebo-ai-field>
+
                             </div>
                             <div class="col-9" *ngIf="formGroup.controls['processEveryDocument'].value!==true">
-                                <gebo-ai-content-selection-filter-component formControlName="contentSelectionFilter"
-                                    title="File selection criterias for graphrag processing"></gebo-ai-content-selection-filter-component>
+                                <gebo-ai-field id="contentSelectionFilter"
+                                    label="File selection criterias for graphrag processing"
+                                    help="Edit criterias on file to send to information extraction pipeline for graphrag"><gebo-ai-content-selection-filter-component
+                                        gebo-ai-field-element formControlName="contentSelectionFilter"
+                                        title=""></gebo-ai-content-selection-filter-component></gebo-ai-field>
+
                             </div>
                         </div>
                     </div>
@@ -71,39 +65,30 @@
 
 
                         <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="usedModelConfiguration">LLM used for data extraction</label>
-                                <p-select styleClass="w-full" formControlName="usedModelConfiguration"
-                                    styleClass="w-full" id="usedModelConfiguration" [options]="chatModelsData"
-                                    optionLabel="description" aria-describedby="usedModelConfiguration-help"
-                                    placeholder="Select a chat model configuration"></p-select>
-                                <small id="usedModelConfiguration-help">
-                                    Specify large language model used for knowledge extraction, default one will be
+                            <gebo-ai-field id="usedModelConfiguration" label="LLM used for data extraction" help="Specify large language model used for knowledge extraction, default one will be
                                     used if none is
-                                    selected.
-                                </small>
-                            </div>
+                                    selected." placeholder="Select a chat model configuration">
+                                <p-select gebo-ai-field-element styleClass="w-full"
+                                    formControlName="usedModelConfiguration" styleClass="w-full"
+                                    id="usedModelConfiguration" [options]="chatModelsData"
+                                    optionLabel="description"></p-select>
+                            </gebo-ai-field>
+
                         </div>
                         <div class="col-6"
                             *ngIf="formGroup.controls['usedModelConfiguration']?.value?false:true && defaultChatModel">
-                            <div class="flex flex-column gap-2">
-                                <label for="defaultModel">Default large language model</label>
-                                <label id="defaultModel">{{defaultChatModel?.description}}</label>
-                                <small id="defaultModel-help">
-                                    The default large language model will be used for knowledge extraction
-                                </small>
-                            </div>
+                            <gebo-ai-field id="defaultModel" label="Default large language model"
+                                help="The default large language model will be used for knowledge extraction"><label
+                                    id="defaultModel">{{defaultChatModel?.description}}</label></gebo-ai-field>
+
                         </div>
                         <div class="col-12">
-                            <div class="flex flex-column gap-2">
-                                <label for="response">Information extraction prompt</label>
-                                <textarea rows="15" cols="250" pTextarea id="extractionPrompt"
-                                    formControlName="extractionPrompt" [required]="true"
-                                    aria-describedby="extractionPrompt-help"></textarea>
-                                <small id="extractionPrompt-help">
-                                    Large language model prompt for entity/events/relation and aliases extraction
-                                </small>
-                            </div>
+                            <gebo-ai-field id="extractionPrompt" label="Information extraction prompt"
+                                help="Large language model prompt for entity/events/relation and aliases extraction"
+                                [required]="true">
+                                <textarea rows="15" cols="250" pTextarea id="extractionPrompt" gebo-ai-field-element
+                                    formControlName="extractionPrompt" [required]="true"></textarea>
+                            </gebo-ai-field>
                         </div>
                     </div>
                 </p-tabPanel>
