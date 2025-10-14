@@ -25,7 +25,12 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     internalHelp!: string;
     computedRequired: boolean = false;
     constructor(private translationService: GeboAITranslationService, @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
-
+        if (this.host) {
+            if (Array.isArray(this.host)) {
+                const array=Array.from(this.host);
+                this.host=array.length?array[array.length-1]:undefined;
+            }
+        }
     }
     localizationSubject: Subject<{ label?: string, help?: string, placeholder?: string }> = new Subject();
     ngOnChanges(changes: SimpleChanges): void {

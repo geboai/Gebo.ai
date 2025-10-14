@@ -12,12 +12,20 @@ export class GeboAILabelDirective implements AfterContentInit {
         private el: ElementRef<HTMLElement>,
         private translationService: GeboAITranslationService,
         @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
+        if (this.host) {
+            if (Array.isArray(this.host)) {
+                const array = Array.from(this.host);
+                this.host = array.length ? array[array.length - 1] : undefined;
+            }
+        }
     }
-    private componentId?: string;
+    private componentId: string|undefined|null;
     private existingTexts: UIExistingText[] = [];
     ngAfterContentInit(): void {
+        this.componentId=this.el.nativeElement.getAttribute("id");
         this.checkLabelAttribute("label", "label");
         this.checkLabelAttribute("legend", "label");
+        this.checkLabelAttribute("header", "label");
         this.checkLabelAttribute("title", "help");
         this.checkLabelAttribute("placeholder", "placeholder");
         const substitutions = this.translationService.translateOnActualLanguage(this.existingTexts);

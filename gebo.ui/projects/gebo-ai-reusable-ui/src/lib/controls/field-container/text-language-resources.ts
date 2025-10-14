@@ -1,7 +1,7 @@
 export const DEFAULT_LANGUAGE: string = "en";
 export interface UIExistingText {
-    entityId?: string;
-    componentId?: string;
+    entityId?: string|null;
+    componentId?: string|null;
     key: string;
     fieldId: string;
     text: string;

@@ -6,14 +6,14 @@
             maxModificationAgeInDays: new FormControl()-->
 <div class="grid" *ngIf="fg" [formGroup]="fg">
     <div class="col-2">
-        <geboai-editable-listbox-component placeholder="File name filtering criteria" formControlName="nameFilterCriteria" [data]="filterFormCriterias">
+        <geboai-editable-listbox-component placeholder="File name filtering criteria" id="nameFilterCriteria" formControlName="nameFilterCriteria" [data]="filterFormCriterias" gebo-ai-label>
 
         </geboai-editable-listbox-component>
     </div>
-    <div class="col-4"><input pInputText formControlName="nameFilter" placeholder="File name" styleClass="w-full"></div>
-    <div class="col-2"><p-multiselect [options]="fileTypes"  optionLabel="description" optionValue="code" placeholder="Select file types"  styleClass="w-full md:w-80" /></div>
-    <div class="col-2"><p-input-number formControlName="maxFileSize" placeholder="Max file size in Bytes"
+    <div class="col-4"><input pInputText id="nameFilter" formControlName="nameFilter" placeholder="File name" styleClass="w-full" gebo-ai-label ></div>
+    <div class="col-2"><p-multiselect [options]="fileTypes" id="extensions"  optionLabel="description" optionValue="code" placeholder="Select file types" gebo-ai-label styleClass="w-full md:w-80" formControlName="extensions" /></div>
+    <div class="col-2"><p-input-number formControlName="maxFileSize" id="maxFileSize" placeholder="Max file size in Bytes" gebo-ai-label 
             styleClass="w-full"></p-input-number></div>
-    <div class="col-2"><p-input-number formControlName="maxModificationAgeInDays" placeholder="File last modification, days ago"
+    <div class="col-2"><p-input-number formControlName="maxModificationAgeInDays" id="maxModificationAgeInDays" placeholder="File last modification, days ago" gebo-ai-label
             styleClass="w-full"></p-input-number></div>
 </div>

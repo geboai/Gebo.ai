@@ -1,4 +1,4 @@
-<p-panel #graphRagConfigUI header="Graphrag/knowledge extraction configuration" [formGroup]="formGroup">
+<p-panel #graphRagConfigUI id="graphRagConfigUI" header="Graphrag/knowledge extraction configuration" [formGroup]="formGroup" gebo-ai-label >
     <p-blockUI [target]="graphRagConfigUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
@@ -11,7 +11,7 @@
         </div>
         <div class="col-12" style="vertical-align: top;">
             <p-tabView>
-                <p-tabPanel header="General infos/contents settings">
+                <p-tabPanel id="graphRagConfigUI_ContextSettings" header="General infos/contents settings" gebo-ai-label>
                     <div class="geboDialogContent grid ">
                         <div class="col-6">
                             <gebo-ai-field id="description" label="Description" help="Enter the description of this knowledge graph data extraction stage
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </p-tabPanel>
-                <p-tabPanel header="LLms settings">
+                <p-tabPanel id="graphRagConfigUI_LLMSSettings" header="LLms settings" gebo-ai-label>
                     <div class="geboDialogContent grid">
 
 
@@ -101,17 +101,17 @@
     <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
         <div class="grid">
             <div class="col-4">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                <p-button id="graphRagConfigUI_Save" [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" gebo-ai-label 
                     [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
                     styleClass="w-full"></p-button>
             </div>
 
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                <p-button id="graphRagConfigUI_Cancel"  [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" gebo-ai-label 
                     styleClass="w-full" />
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                <p-button id="graphRagConfigUI_Delete" [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" gebo-ai-label 
                     styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
             </div>
 
