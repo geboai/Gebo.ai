@@ -2,6 +2,8 @@ import { Component, Inject, Input, OnChanges, OnInit, Optional, SimpleChanges } 
 import { ControlContainer, FormGroupDirective } from "@angular/forms";
 import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { Subject } from "rxjs";
+import { findMatchingTranslation, UIExistingText } from "./text-language-resources";
+import { GeboAITranslationService } from "./gebo-translation.service";
 
 @Component({
     templateUrl: "field-container.component.html",
@@ -22,10 +24,10 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     internalPlaceholder!: string;
     internalHelp!: string;
     computedRequired: boolean = false;
-    constructor(@Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
+    constructor(private translationService: GeboAITranslationService, @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
 
     }
-    localizationSubject:Subject<{label?:string,help?:string,placeholder?:string}>=new Subject(); 
+    localizationSubject: Subject<{ label?: string, help?: string, placeholder?: string }> = new Subject();
     ngOnChanges(changes: SimpleChanges): void {
         if (!this.internalLabel && this.label && changes["label"]) {
             this.internalLabel = this.label;
@@ -38,7 +40,69 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         }
     }
     ngOnInit(): void {
-
+        const existingTexts: UIExistingText[] = [];
+        let label: UIExistingText | undefined = undefined;
+        let help: UIExistingText | undefined = undefined;
+        let placeholder: UIExistingText | undefined = undefined;
+        if (this.internalLabel) {
+            existingTexts.push(label = {
+                entityId: this.host?.getEntityName(),
+                componentId: this.id,
+                key: "label",
+                fieldId: "label",
+                text: this.internalLabel
+            });
+        }
+        if (this.internalHelp) {
+            existingTexts.push(help = {
+                entityId: this.host?.getEntityName(),
+                componentId: this.id,
+                key: "help",
+                fieldId: "help",
+                text: this.internalHelp
+            });
+        }
+        if (this.internalPlaceholder) {
+            existingTexts.push(placeholder = {
+                entityId: this.host?.getEntityName(),
+                componentId: this.id,
+                key: "placeholder",
+                fieldId: "placeholder",
+                text: this.internalHelp
+            });
+        }
+        const substitutions = this.translationService.translateOnActualLanguage(existingTexts);
+        if (substitutions) {
+            substitutions.subscribe({
+                next: (resources) => {
+                    if (resources && resources?.length) {
+                        if (label) {
+                            const labelTranslation = findMatchingTranslation(label, resources);
+                            if (labelTranslation && labelTranslation.translation) {
+                                this.internalLabel = labelTranslation.translation;
+                            }
+                        }
+                        if (help) {
+                            const helpTranslation = findMatchingTranslation(help, resources);
+                            if (helpTranslation && helpTranslation.translation) {
+                                this.internalHelp = helpTranslation.translation;
+                            }
+                        }
+                        if (placeholder) {
+                            const placeholderTranslation = findMatchingTranslation(placeholder, resources);
+                            if (placeholderTranslation && placeholderTranslation.translation) {
+                                this.internalPlaceholder = placeholderTranslation.translation;
+                            }
+                        }
+                        this.localizationSubject.next({
+                            label: this.internalLabel,
+                            help: this.internalHelp,
+                            placeholder: this.internalPlaceholder
+                        });
+                    }
+                }
+            });
+        }
     }
     get helpId(): string {
         return `${this.id}-help`;
