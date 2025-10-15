@@ -1,4 +1,5 @@
-<p-panel #graphRagConfigUI id="graphRagConfigUI" header="Graphrag/knowledge extraction configuration" [formGroup]="formGroup" gebo-ai-label >
+<p-panel #graphRagConfigUI id="graphRagConfigUI" header="Graphrag/knowledge extraction configuration"
+    [formGroup]="formGroup" gebo-ai-label>
     <p-blockUI [target]="graphRagConfigUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
@@ -11,8 +12,9 @@
         </div>
         <div class="col-12" style="vertical-align: top;">
             <p-tabView>
-                <p-tabPanel id="graphRagConfigUI_ContextSettings" header="General infos/contents settings" gebo-ai-label>
-                    <div class="geboDialogContent grid ">
+                <p-tabPanel id="graphRagConfigUI_ContextSettings" header="General infos/contents settings"
+                    gebo-ai-label>
+                    <div class="geboDialogMidContent grid ">
                         <div class="col-6">
                             <gebo-ai-field id="description" label="Description" help="Enter the description of this knowledge graph data extraction stage
                                     configuration" [required]="true">
@@ -27,41 +29,47 @@
                             </gebo-ai-field>
 
                         </div>
-                        <div class="col-6">
-                            <gebo-ai-field id="graphRagAllSources" label="Apply graph rag to all data sources" help="The graph rag algoritms will be applied to all data sources this will enhance
-                                        the details of
-                                        analisys that the system is capable of but will high the cost and time
-                                        required to process
-                                        documents">
+                        <div class="col-6" *ngIf="defaultConfiguration===true">
+                            <gebo-ai-field id="graphRagAllSources" label="Apply graph rag to all data sources"
+                                help="If true all the knowledge bases/project/data sources will be processed for knowldge extraction, otherwise only those specifically configured will be ">
                                 <p-checkbox formControlName="graphRagAllSources" [trueValue]="true" [falseValue]="false"
                                     [binary]="true" gebo-ai-field-element></p-checkbox>
                             </gebo-ai-field>
 
                         </div>
-                        <div class="col-12 grid">
-                            <div class="col-3">
-                                <gebo-ai-field id="processEveryDocument" label="Apply graph rag to all files" help="The graph rag algoritms will be applied to all file this will enhance the
+                        <div class="col-6"  *ngIf="defaultConfiguration===true"></div>
+                        <div class="col-12">
+                            <div class="grid"
+                                *ngIf="defaultConfiguration===false || (defaultConfiguration===true && graphRagAllSources===true)">
+                                <div class="col-3">
+                                    <gebo-ai-field id="processEveryDocument" label="Apply graph rag to all files" help="The graph rag algoritms will be applied to all file this will enhance the
                                             details of
                                             analisys that the system is capable of but will high the cost and time
                                             required to process
                                             documents"><p-checkbox formControlName="processEveryDocument"
-                                        [trueValue]="true" [falseValue]="false" [binary]="true"
-                                        id="processEveryDocument" gebo-ai-field-element></p-checkbox></gebo-ai-field>
+                                            [trueValue]="true" [falseValue]="false" [binary]="true"
+                                            id="processEveryDocument"
+                                            gebo-ai-field-element></p-checkbox></gebo-ai-field>
 
-                            </div>
-                            <div class="col-9" *ngIf="formGroup.controls['processEveryDocument'].value!==true">
-                                <gebo-ai-field id="contentSelectionFilter"
-                                    label="File selection criterias for graphrag processing"
-                                    help="Edit criterias on file to send to information extraction pipeline for graphrag"><gebo-ai-content-selection-filter-component
-                                        gebo-ai-field-element formControlName="contentSelectionFilter"
-                                        title=""></gebo-ai-content-selection-filter-component></gebo-ai-field>
+                                </div>
+                                <div class="col-9" *ngIf="processEveryDocument!==true">
+                                    <gebo-ai-field id="contentSelectionFilter"
+                                        label="File selection criterias for graphrag processing"
+                                        help="Edit criterias on file to send to information extraction pipeline for graphrag, select at least a file name and criteria and/or a file type and/or the maximum number of bytes of file size and/or the age of last modification in days"><gebo-ai-content-selection-filter-component
+                                            gebo-ai-field-element formControlName="contentSelectionFilter"
+                                            title=""></gebo-ai-content-selection-filter-component></gebo-ai-field>
 
+                                </div>
                             </div>
                         </div>
+
+
+
+                        <div class="col-12" style="height: 100%;"></div>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel id="graphRagConfigUI_LLMSSettings" header="LLms settings" gebo-ai-label>
-                    <div class="geboDialogContent grid">
+                    <div class="geboDialogMidContent grid">
 
 
                         <div class="col-6">
@@ -101,18 +109,20 @@
     <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
         <div class="grid">
             <div class="col-4">
-                <p-button id="graphRagConfigUI_Save" [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" gebo-ai-label 
+                <p-button id="graphRagConfigUI_Save" [outlined]="true" label="Save" (onClick)="doSave()"
+                    icon="pi pi-save" severity="success" gebo-ai-label
                     [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
                     styleClass="w-full"></p-button>
             </div>
 
             <div class="col-4">
-                <p-button id="graphRagConfigUI_Cancel"  [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" gebo-ai-label 
-                    styleClass="w-full" />
+                <p-button id="graphRagConfigUI_Cancel" [outlined]="true" label="Cancel" severity="contrast"
+                    (onClick)="cancelAction.emit(true)" gebo-ai-label styleClass="w-full" />
             </div>
             <div class="col-4">
-                <p-button id="graphRagConfigUI_Delete" [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" gebo-ai-label 
-                    styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
+                <p-button id="graphRagConfigUI_Delete" [outlined]="true" label="Delete" severity="danger"
+                    icon="pi pi-trash" (onClick)="doDelete()" gebo-ai-label styleClass="w-full"
+                    [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
             </div>
 
         </div>

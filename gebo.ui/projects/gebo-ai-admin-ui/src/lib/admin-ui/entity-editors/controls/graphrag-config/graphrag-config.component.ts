@@ -68,7 +68,10 @@ export class GeboAIGraphragConfigComponent implements OnInit, OnChanges {
         const config: GraphRagExtractionConfig = {
             endpoint: this.context?.reference,
             knowledgeBaseCode: this.context?.knowledgeBaseCode,
-            projectCode: this.context?.projectCode
+            projectCode: this.context?.projectCode,
+            defaultConfiguration: false,
+            contentSelectionFilter:undefined,
+            processEveryDocument: false
         };
         this.geboUIRouter.routeEvent({
             actionType: GeboActionType.NEW,

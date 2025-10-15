@@ -16,7 +16,8 @@ export class GeboAISelectionFilterCriteriaComponent implements GeboAIFieldHost {
 
     @Input() fg?: FormGroup;
     @Input() fileTypes: { code: string, description: string }[] = [];
-    protected filterFormCriterias: { code: string, description: string }[] = [
+    protected filterFormCriterias: { code?: string, description: string }[] = [
+        { code: undefined, description: "No operator" },
         { code: GContentSelectionFilterCriteria.NameFilterCriteriaEnum.CONTAINS, description: "Contains" },
         { code: GContentSelectionFilterCriteria.NameFilterCriteriaEnum.ENDSWITH, description: "Ends with" },
         { code: GContentSelectionFilterCriteria.NameFilterCriteriaEnum.STARTSWITH, description: "Starts with" }];

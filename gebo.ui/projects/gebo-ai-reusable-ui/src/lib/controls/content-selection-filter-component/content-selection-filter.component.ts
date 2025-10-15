@@ -1,6 +1,8 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from "@angular/forms";
-import { ContentMetaInfosControllerService, GContentSelectionFilter, GContentSelectionFilterCriteria, IngestionFileType, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from "@angular/forms";
+import { GContentSelectionFilter, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { validateCriteria } from "./validate-content-selection-filter-criteria";
+import { NonNullAssert } from "@angular/compiler";
 
 @Component({
     selector: "gebo-ai-content-selection-filter-component",
@@ -20,15 +22,15 @@ import { ContentMetaInfosControllerService, GContentSelectionFilter, GContentSel
     ]
 })
 export class GeboAIContentSelectionFilterComponent implements OnInit, OnChanges, ControlValueAccessor, Validator {
-    @Input() public title:string="File selection criterias";
+    @Input() public title: string = "File selection criterias";
     protected internalValue?: GContentSelectionFilter;
     protected formGroup: FormGroup = new FormGroup({
         criterias: new FormArray([])
     });
     protected loading: boolean = false;
-    protected fileTypes: {code:string,description:string}[] = [];
+    protected fileTypes: { code: string, description: string }[] = [];
     protected createNewCriteria(): FormGroup {
-        return new FormGroup({
+        const formG: FormGroup = new FormGroup({
             mimeContentTypes: new FormControl(),
             extensions: new FormControl(),
             nameFilter: new FormControl(),
@@ -37,41 +39,76 @@ export class GeboAIContentSelectionFilterComponent implements OnInit, OnChanges,
             maxTokenSize: new FormControl(),
             maxModificationAgeInDays: new FormControl()
         });
+        formG.addValidators((ctrl) => validateCriteria(ctrl.value));
+        
+        return formG;
     }
     constructor(private fileTypeLibraryControllerService: IngestionFileTypesLibraryControllerService) {
         this.adaptFormGroup(1);
+        this.formGroup.valueChanges.subscribe({
+            next:(data)=>{
+                this.changedValueNotification(data);
+            }
+        });
+    }
+    /*************************************************
+     * All empty conditions notifies undefined and all validated notifies all conditions
+     */
+    private changedValueNotification(value: GContentSelectionFilter) {
+        if (value?.criterias && value.criterias.length) {
+            const validatedArray = value.criterias.map(x => validateCriteria(x) ? false : true).filter(y => y === true);
+            if (validatedArray && validatedArray.length === value.criterias.length) {
+                this.onChange(value);
+            } else {
+                //if all attributes of all objects are null undefined will be notified onChange
+                const emptyObjects = value.criterias.filter(x => {
+                    const attributes = Object.values(x);
+                    return attributes && (attributes.length == 0 || attributes.filter(y => y ? true : false).length === 0);
+                });
+                if (value.criterias.length === emptyObjects.length) {
+                    this.onChange(undefined);
+                }
+            }
+        }
+
     }
     protected get criterias(): FormArray {
         return this.formGroup.controls["criterias"] as FormArray;
     }
-    protected criteriaAt(index:number):FormGroup {
+    protected criteriaAt(index: number): FormGroup {
         return this.criterias.at(index) as FormGroup;
     }
     private adaptFormGroup(size: number): void {
+        const noNotification = {
+            emitEvent: false,
+            onlySelf: true
+        };
         const actualValue = this.formGroup.value;
         const crit = this.criterias;
         while (crit.length > 0) {
-            crit.removeAt(0);
+            crit.removeAt(0, noNotification);
         }
 
         for (let i: number = 0; i < size; i++) {
-            crit.controls.push(this.createNewCriteria());
+            
+            crit.push(this.createNewCriteria(),noNotification);
         }
         if (actualValue && actualValue.criterias && actualValue.criterias.length)
-            this.formGroup.patchValue(actualValue);
+            this.formGroup.patchValue(actualValue, noNotification);
         else
-            this.formGroup.reset();
+            this.formGroup.reset(noNotification);
+        this.formGroup.updateValueAndValidity(noNotification);
     }
     ngOnInit(): void {
         this.loading = true;
 
         this.fileTypeLibraryControllerService.getAllFileTypes().subscribe({
             next: (fileTypes) => {
-                const files:{code:string,description:string}[]=[];
+                const files: { code: string, description: string }[] = [];
                 if (fileTypes) {
-                    fileTypes.forEach(ft=>{
-                        ft.extensions?.forEach(ext=>{
-                            files.push({code:ext,description:"("+ext+") "+ft.description});
+                    fileTypes.forEach(ft => {
+                        ft.extensions?.forEach(ext => {
+                            files.push({ code: ext, description: "(" + ext + ") " + ft.description });
                         })
                     });
                 }
@@ -105,7 +142,21 @@ export class GeboAIContentSelectionFilterComponent implements OnInit, OnChanges,
 
     }
     validate(control: AbstractControl): ValidationErrors | null {
-        return null;
+        const readValue: GContentSelectionFilter = control.value;
+        let out: ValidationErrors | null = null;
+        if (readValue?.criterias?.length) {
+            readValue.criterias.forEach(x => {
+                const validated = validateCriteria(x);
+                if (validated) {
+                    if (!out) out = {};
+                    out = {
+                        ...out,
+                        ...validated
+                    };
+                }
+            });
+        }
+        return out;
     }
     fn: () => void = () => { };
     registerOnValidatorChange?(fn: () => void): void {

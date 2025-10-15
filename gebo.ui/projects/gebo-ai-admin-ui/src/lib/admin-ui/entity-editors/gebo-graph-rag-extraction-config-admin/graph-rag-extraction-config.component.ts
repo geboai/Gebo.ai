@@ -1,5 +1,5 @@
 import { Component, forwardRef, Injector } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChatModelsControllerService, CompanySystemsControllerService, ConfigurationEntry, GKnowledgeBase, GObjectRef, GObjectRefGBaseModelConfig, GProject, GraphRagConfigurationControllerService, GraphRagExtractionConfig, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
@@ -41,7 +41,8 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
     protected project?: GProject;
     protected dataSource?: GObjectRef;
     protected defaultConfiguration: boolean = false;
-
+    protected graphRagAllSources:boolean=false;
+    protected processEveryDocument:boolean|undefined;
     /** The default chat model configuration */
     protected defaultChatModel?: { code?: string, description?: string };
     protected configurationLabel?: string;
@@ -59,8 +60,39 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         this.formGroup.controls["defaultConfiguration"].valueChanges.subscribe({
             next: (value) => {
                 this.defaultConfiguration = value === true;
+                if (this.defaultConfiguration===true) {
+                    this.formGroup.controls["graphRagAllSources"].enable();
+                }else {
+                    this.formGroup.controls["graphRagAllSources"].disable();
+                }
             }
         });
+        this.formGroup.controls["graphRagAllSources"].valueChanges.subscribe({
+            next: (value) => {
+                const actualValue:boolean=value === true
+                if (this.formGroup.controls["defaultConfiguration"].value===true) {
+                    if (this.graphRagAllSources===true && actualValue!==true) {
+                        this.formGroup.controls["processEveryDocument"].setValue(false);
+                        this.formGroup.controls["contentSelectionFilter"].setValue(undefined);
+                    }
+                }
+                this.graphRagAllSources = actualValue;
+            }
+        });
+        this.formGroup.controls["processEveryDocument"].valueChanges.subscribe({
+            next:(processEveryDocument:boolean|undefined)=>{
+                this.processEveryDocument=processEveryDocument;
+                if (processEveryDocument===true) {
+                    this.formGroup.controls["contentSelectionFilter"].clearValidators();
+                    this.formGroup.controls["contentSelectionFilter"].setValue(null);
+                }else {
+                    this.formGroup.controls["contentSelectionFilter"].clearValidators();
+                    this.formGroup.controls["contentSelectionFilter"].addValidators(Validators.required);
+                }
+                this.formGroup.updateValueAndValidity();
+            }
+        });
+        this.userMessages=[{summary:"Important disclaimer",detail:"Graph-rag processing improves chat responses quality, but increases data processing pipeline costs.",severity:"warn"}];
     }
 
     override ngOnInit(): void {
