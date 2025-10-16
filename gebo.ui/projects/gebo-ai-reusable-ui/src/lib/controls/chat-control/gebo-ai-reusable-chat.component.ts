@@ -20,15 +20,16 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, forwardRef, Inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, ModelProviderCapabilities, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { ScrollPanel } from "primeng/scrollpanel";
 import { forkJoin, Observable } from "rxjs";
-import { v4 as uuidv4, v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { IGeboChatMessage, ReactiveRagChatService } from "./reactive-chat.service";
+import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Interface representing a single chat interaction between the user and the AI,
@@ -65,10 +66,11 @@ interface GeboChatTemplatedResponse {
     selector: "gebo-ai-reusable-chat-component",
     templateUrl: "gebo-ai-reusable-chat.component.html",
     styleUrls: ["gebo-ai-reusable-chat.component.css"],
-    providers: [MessageService],
+    providers: [MessageService,{ provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIReusableChatComponent),
+            multi: true }],
     standalone: false
 })
-export class GeboAIReusableChatComponent implements OnInit, OnChanges {
+export class GeboAIReusableChatComponent implements OnInit, OnChanges,GeboAIFieldHost {
 
     /**
      * Stores the capabilities of the current model provider
@@ -286,6 +288,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges {
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
 
+    }
+    public getEntityName(): string {
+        return "GeboAIReusableChatComponent";
     }
 
     /**

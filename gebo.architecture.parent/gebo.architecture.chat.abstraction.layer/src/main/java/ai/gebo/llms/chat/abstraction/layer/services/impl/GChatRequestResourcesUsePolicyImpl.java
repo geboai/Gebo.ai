@@ -267,11 +267,16 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			// factual/entity/events based approach
 			if (availableTokensForDocuments > lrequest.getDocuments().getNToken()
 					&& this.knowledgeGraphSearch.isConfigured(null)) {
-				List<KnowledgeGraphSearchResult> graphRagResults = this.knowledgeGraphSearch
-						.knowledgeGraphSearch(request.getQuery(), visibleKnowledgeBaseCodes, topK);
-				mergeGraphRagResults(lrequest.getDocuments(), graphRagResults, availableTokensForDocuments);
+				try {
+					List<KnowledgeGraphSearchResult> graphRagResults = this.knowledgeGraphSearch
+							.knowledgeGraphSearch(request.getQuery(), visibleKnowledgeBaseCodes, topK);
+					mergeGraphRagResults(lrequest.getDocuments(), graphRagResults, availableTokensForDocuments);
+					lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
+				} catch (Throwable throwable) {
+					LOGGER.error("Error invoking graphrag", throwable);
+				}
 			}
-			lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
+			
 		}
 		stats = lrequest.getStats();
 		if (stats.availableNTokens < toolsTokensSpaceReservation) {

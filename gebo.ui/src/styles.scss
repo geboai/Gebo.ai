@@ -168,7 +168,7 @@ label {
 .p-calendar .p-inputtext,
 .p-inputnumber .p-inputtext,
 .p-textarea {
-  border: 0 !important;
+  //border: 0 !important;
   border-bottom: 1px solid var(--surface-400, #ced4da) !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -182,7 +182,7 @@ label {
 .p-calendar.p-invalid .p-inputtext,
 .p-inputnumber.p-invalid .p-inputtext,
 .p-textarea.p-invalid {
-  border: 0 !important;
+  //border: 0 !important;
   border-bottom: 2px solid var(--red-500, #ef4444) !important;
   box-shadow: none !important;
 }

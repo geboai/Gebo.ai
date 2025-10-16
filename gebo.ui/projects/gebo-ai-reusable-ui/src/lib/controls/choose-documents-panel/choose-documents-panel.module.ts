@@ -29,6 +29,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { GeboAIUserspaceFilesModule } from "../userspace-files-component/userspace-files.module";
 import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-selector.module";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
+import { GeboAIFieldContainerModule } from "../field-container/field-container.module";
 
 /**
  * AI generated comments
@@ -49,7 +50,7 @@ import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-vie
  * - GeboAIDocumentsListPanelComponent: Displays lists of selected documents
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, VFilesystemSelectorModule, PanelModule,  DialogModule, BlockUIModule, ButtonModule,TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule],
+    imports: [CommonModule, ReactiveFormsModule, VFilesystemSelectorModule, PanelModule,  DialogModule, BlockUIModule, ButtonModule,TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule,GeboAIFieldContainerModule],
     declarations: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
     exports: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent]
     

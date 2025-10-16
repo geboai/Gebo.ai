@@ -83,7 +83,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	@Autowired
 	protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
-	
 
 	/**
 	 * Inner class representing a system message containing document data.
@@ -382,6 +381,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			envelope.setContent(contentSegment.toString());
 			buffer.append(envelope.getContent());
 			return returned;
+		}).onErrorResume(exc -> {
+			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
+			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", exc);
+			return Flux.just(exceptionEnvelope);
 		}).filter(x -> {
 			return x.getContentObjectType() != null && x.getContent() != null && x.getContent() != null
 					&& x.getContent().toString().trim().length() > 0;

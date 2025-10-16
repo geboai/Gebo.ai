@@ -22,7 +22,7 @@ public class FastHashUtil {
 	public static String hash(String... data) {
 		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; data != null && i < data.length; i++) {
-			buffer.append(data[i]);
+			buffer.append(data[i].toLowerCase());
 			if (i < data.length - 1) {
 				buffer.append("|");
 			}

@@ -15,20 +15,20 @@
 <div class="card flex justify-center">
     <p-toast />
 </div>
-<p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title">
+<p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title" >
 
     <ng-template #icons name="icons" pTemplate="icons">
         <div #anchorPoint>
-            <p-button icon="pi pi-info-circle" *ngIf="chatInfo" [rounded]="true" [text]="true"
+            <p-button icon="pi pi-info-circle" id="chatConfigInfosBtn" *ngIf="chatInfo" [rounded]="true" [text]="true" gebo-ai-label 
                 title="Chat configuration infos" (onClick)="userInfoOverlayVisible=true"></p-button>
 
-            <p-button *ngIf="chatInfo" icon="pi pi-pencil" (onClick)="doChangeDescription();"
+            <p-button *ngIf="chatInfo" id="chatNameChangeBtn" icon="pi pi-pencil" (onClick)="doChangeDescription();" gebo-ai-label
                 title="Rename the chat session" [rounded]="true" [text]="true"
                 [disabled]="chatInfo.code?false:true"></p-button>
-            <p-button *ngIf="chatInfo" icon="pi pi-undo"
+            <p-button  id="chatReloadBtn" *ngIf="chatInfo" icon="pi pi-undo" gebo-ai-label 
                 [disabled]="!((chatInfo.code?true:false) && ((chatStreaming!==true) || isChatStreamingProbabilyFailing===true))"
                 [text]="true" [rounded]="true" (onClick)="loadChatHistory()"></p-button>
-            <p-button *ngIf="chatInfo" icon="pi pi-trash" severity="danger" (onClick)="doDeleteChat()" [rounded]="true"
+            <p-button  id="chaDeleteBtn" *ngIf="chatInfo" icon="pi pi-trash" severity="danger" (onClick)="doDeleteChat()" [rounded]="true" gebo-ai-label 
                 title="Delete this chat session" [text]="true"></p-button>
         </div>
         <p-overlay *ngIf="chatInfo" [(visible)]="userInfoOverlayVisible"
@@ -120,7 +120,8 @@
                 <gebo-ai-choose-documents-panel-component *ngIf="ragsystem && chatUserInfos?.knowledgeBases"
                     [interactionDisabled]="loading" [knowledgeBaseCodes]="knowledgeBaseCodes"
                     formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
-                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="col-12"
+                    
+                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="h-full"  gebo-ai-label  
                     placeholder="Write a message for the chat bot">
                 </textarea>
 
@@ -134,7 +135,7 @@
                     (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
                     [playAudioTrack]="currentAudioTrack"></gebo-ai-audio-component>
                 <div class="lg:col-3 xl:col-3 md:col-6 sm:col-6" style="text-align: right;">
-                    <p-button (onClick)="sendMessage()" label="Send" styleClass="w-full"
+                    <p-button (onClick)="sendMessage()" label="Send" styleClass="w-full"  gebo-ai-label  
                         [disabled]="formGroup.invalid || loading" [outlined]="true" icon="pi pi-microchip-ai" 
                         title="Sumbit your question to the chat bot"></p-button>
                 </div>

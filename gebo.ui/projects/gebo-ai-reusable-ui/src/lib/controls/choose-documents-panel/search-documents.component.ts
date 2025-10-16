@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -26,6 +26,7 @@ import { of } from "rxjs";
 import { EnrichedDocumentReferenceView, EnrichedDocumentReferenceViewRetrieveService } from "../content-viewer/enriched-document-reference-view.service";
 import { browsePathObservableCallback, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "../vfilesystem-selector/vfilesystem-types";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
+import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component that provides document searching functionality through multiple methods:
@@ -43,87 +44,90 @@ import { IOperationStatus } from "../base-entity-editing-component/operation-sta
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAISearchDocumentsComponent),
             multi: true
+        }, {
+            provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAISearchDocumentsComponent),
+            multi: true
         }
     ],
     standalone: false
 })
-export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
+export class GeboAISearchDocumentsComponent implements OnInit, OnChanges,GeboAIFieldHost {
 
     /** Knowledge base codes to search within */
     @Input() knowledgeBaseCodes?: string[];
-    
+
     /** Flag indicating if documents are currently being loaded */
     loadingDocuments: boolean = false;
-    
+
     /** Flag indicating if semantic search is currently running */
     runningSemanticSearch: boolean = false;
-    
+
     /** Flag indicating if filename search is currently running */
     runningFileNameSearch: boolean = false;
-    
+
     /** Observable callback to load root directories */
     loadRootsObservable: loadRootsObservableCallback = () => of({});
-    
+
     /** Observable callback to browse a specific path */
     browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => of({});
-    
+
     /** Observable callback to reconstruct navigation points */
     reconstructNavigationObservableCallback: reconstructNavigationObservableCallback = (navigationPoints: VFilesystemReference[]) => {
         const out: IOperationStatus<VirtualFilesystemNavigationTreeStatus[]> = {};
         return of(out);
     };
-    
+
     /** Form group for browsing documents */
     browseFormGroup: FormGroup = new FormGroup({
         choosenBrowsing: new FormControl()
     });
-    
+
     /** Form group for semantic search */
     semanticSearchFormGroup: FormGroup = new FormGroup({
         query: new FormControl(),
         knowledgeBaseCodes: new FormControl(),
         topK: new FormControl()
     });
-    
+
     /** Form group for filename search */
     fileNameSearchFormGroup: FormGroup = new FormGroup({
         filename: new FormControl(),
         knowledgeBaseCodes: new FormControl(),
     });
-    
+
     /** Form group for userspace files */
-    userspaceFilesFormGroup: FormGroup=new FormGroup({
-        userspaceFiles:new FormControl()
+    userspaceFilesFormGroup: FormGroup = new FormGroup({
+        userspaceFiles: new FormControl()
     });
-    
+
     /** Form group for output documents */
-    outFormGroup:FormGroup=new FormGroup({
-        choosedFiles:new FormControl()
+    outFormGroup: FormGroup = new FormGroup({
+        choosedFiles: new FormControl()
     });
-    
+
     /** Master list of all documents found from various search methods */
-    sourceDocuments:EnrichedDocumentReferenceView[] = [];
-    
+    sourceDocuments: EnrichedDocumentReferenceView[] = [];
+
     /** Documents found via filename search */
     searchByFileNameResultsDocuments: EnrichedDocumentReferenceView[] = [];
-    
+
     /** Documents found via semantic search */
     semanticSearchResultsDocuments: EnrichedDocumentReferenceView[] = [];
-    
+
     /** Documents found via directory browsing */
     browsingResultsDocuments: EnrichedDocumentReferenceView[] = [];
-    
+
     /** Documents found in user workspace */
     userspaceResultsDocuments: EnrichedDocumentReferenceView[] = [];
-    
+
     /** Final selected documents */
     outputDocuments: EnrichedDocumentReferenceView[] = [];
-    
+
     /** Event emitter for closing the component */
-    @Output() closeMe:EventEmitter<boolean>=new EventEmitter();
-    
+    @Output() closeMe: EventEmitter<boolean> = new EventEmitter();
+
     /** Event emitter for when document selection is confirmed */
-    @Output() confirmed:EventEmitter<boolean>=new EventEmitter();
+    @Output() confirmed: EventEmitter<boolean> = new EventEmitter();
 
     /**
      * Constructor initializes services needed for document searching
@@ -135,14 +139,16 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
         private userKnowledgeBaseBrowsing: UserKnowledgeBaseBrowsingControllerService,
         private enrichedDocumentsMetaInfosService: EnrichedDocumentReferenceViewRetrieveService) {
     }
-
+    getEntityName(): string {
+        return "GeboAISearchDocumentsComponent";
+    }
     /**
      * Determines if knowledge bases are available for searching
      * 
      * @returns True if knowledge bases are available, false otherwise
      */
-    public get hasKnowledgeBases():boolean {
-        return this.knowledgeBaseCodes && this.knowledgeBaseCodes.length?true:false;
+    public get hasKnowledgeBases(): boolean {
+        return this.knowledgeBaseCodes && this.knowledgeBaseCodes.length ? true : false;
     }
 
     /**
@@ -182,10 +188,10 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
 
     /** Function called when value changes */
     private onChange: (v: any) => void = (v: any) => { };
-    
+
     /** Function called when control is touched */
     private onTouch: (v: any) => void = (v: any) => { };
-    
+
     /**
      * Implements ControlValueAccessor.registerOnChange
      * 
@@ -245,8 +251,8 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
         });
         this.userspaceFilesFormGroup.controls["userspaceFiles"].valueChanges.subscribe(
             {
-                next:(filesList:string[])=>{
-                    this.loadingDocuments=true;
+                next: (filesList: string[]) => {
+                    this.loadingDocuments = true;
                     this.enrichedDocumentsMetaInfosService.findDocumentReferenceViewByCode(filesList).subscribe({
                         next: (documentList) => {
                             this.userspaceResultsDocuments = documentList;
@@ -258,7 +264,7 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
                     });
                 }
             }
-        ); 
+        );
     }
 
     /**
@@ -334,7 +340,7 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
         this.enrichedDocumentsMetaInfosService.searchByDocumentName(param).subscribe(
             {
                 next: (values) => {
-                    this.searchByFileNameResultsDocuments = values ? values: [];
+                    this.searchByFileNameResultsDocuments = values ? values : [];
                     this.addSourceDocuments(this.searchByFileNameResultsDocuments);
                 },
                 complete: () => {
@@ -343,7 +349,7 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
             }
         );
     }
-    
+
     /**
      * Adds documents to the source documents collection if they aren't already present
      * Ensures no duplicates are added
@@ -361,19 +367,19 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
                         additionalCodes.push(x.code);
                         additionalDocs.push(x);
                     }
-                }                
+                }
             });
             if (additionalCodes && additionalCodes.length) {
                 if (!this.sourceDocuments) {
                     //this.internalValue=[];
-                    this.sourceDocuments=[];
+                    this.sourceDocuments = [];
                 }
                 //this.internalValue=[...this.internalValue,...additionalCodes];
-                this.sourceDocuments=[...this.sourceDocuments,...additionalDocs];
+                this.sourceDocuments = [...this.sourceDocuments, ...additionalDocs];
                 if (!this.outputDocuments) {
-                    this.outputDocuments=[];                    
+                    this.outputDocuments = [];
                 }
-                this.outputDocuments=[...this.outputDocuments,...additionalDocs];
+                this.outputDocuments = [...this.outputDocuments, ...additionalDocs];
             }
         }
     }
@@ -384,7 +390,7 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
      * @param eventList List of selected documents
      */
     confirmDocuments(eventList: DocumentReferenceView[]) {
-        const docsList:string[]=eventList.map(x=>x.code) as string[];
+        const docsList: string[] = eventList.map(x => x.code) as string[];
         this.onChange(docsList);
         this.confirmed.emit(true);
     }
@@ -395,11 +401,11 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges {
      */
     confirmDocumentsPickList() {
         if (this.outputDocuments) {
-            const docsList:string[]=this.outputDocuments.map(x=>x.code) as string[];
-            this.internalValue=docsList;
+            const docsList: string[] = this.outputDocuments.map(x => x.code) as string[];
+            this.internalValue = docsList;
             this.onChange(docsList);
-        }else {
-            this.internalValue=[];
+        } else {
+            this.internalValue = [];
             this.onChange([]);
         }
         this.confirmed.emit(true);

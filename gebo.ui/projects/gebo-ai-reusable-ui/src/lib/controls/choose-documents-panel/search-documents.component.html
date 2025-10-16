@@ -8,9 +8,9 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <div class="grid">
     <div class="col-12" style="height: 250px;">
@@ -26,18 +26,14 @@
                     <form [formGroup]="browseFormGroup">
                         <div class="grid">
                             <div class="col-12">
-                                <div class="flex flex-column gap-2">
-                                    <label for="choosenBrowsing">Choose files browsing knowledge bases</label>
+                                <gebo-ai-field id="choosenBrowsing" label="Choose files browsing knowledge bases"
+                                    help="Choose files browsing company shared knowledge bases" [required]="true">
                                     <gebo-ai-vfilesystem-selector-component id="choosenBrowsing"
                                         [loadRootsObservable]="loadRootsObservable"
                                         [browsePathObservable]="browsePathObservable" [canChooseFiles]="true"
                                         [canChooseFolders]="false" selectionMode="multiple"
-                                        formControlName="choosenBrowsing"
-                                        [required]="true"></gebo-ai-vfilesystem-selector-component>
-                                    <small id="choosenBrowsing-help">
-                                        Choose files browsing company shared knowledge bases
-                                    </small>
-                                </div>
+                                        formControlName="choosenBrowsing"></gebo-ai-vfilesystem-selector-component>
+                                </gebo-ai-field>
                             </div>
                         </div>
 
@@ -47,30 +43,19 @@
                     <form [formGroup]="semanticSearchFormGroup">
                         <div class="grid">
                             <div class="col-12">
-                                <div class="flex flex-column gap-2">
-                                    <label for="query">Semantic search phrase</label>
-                                    <input pInputText id="query" formControlName="query" [required]="true"
+                                <gebo-ai-field id="query" label="Semantic search phrase"
+                                    help="Enter a meaningful phrase related to your search" [required]="true">
+                                    <input pInputText id="query" formControlName="query"
                                         aria-describedby="query-help" />
-                                    <small id="query-help">
-                                        Enter a meaningful phrase related to your search
-                                    </small>
-                                </div>
+                                </gebo-ai-field>
+
                             </div>
-                            <!-- 
-                            <div class="col-2">
-                                <div class="flex flex-column gap-2">
-                                    <label for="topK">Nr. of results</label>
-                                    <input pInputText id="topK" formControlName="topK" maxlength="2" aria-describedby="topK-help" />
-                                    <small id="topK-help">
-                                        Number of searched results
-                                    </small>
-                                </div>
-                            </div>
-                            -->
+
                         </div>
                         <div class="col-2">
-                            <p-button label="Search" icon="pi pi-search" [outlined]="true" styleClass="w-full"
-                                (onClick)="doSemanticSearch()" [disabled]="semanticSearchFormGroup.invalid"></p-button>
+                            <p-button id="semanticSearchBtn" gebo-ai-label label="Search" icon="pi pi-search"
+                                [outlined]="true" styleClass="w-full" (onClick)="doSemanticSearch()"
+                                [disabled]="semanticSearchFormGroup.invalid"></p-button>
                         </div>
                     </form>
                 </p-tabpanel>
@@ -78,20 +63,17 @@
                     <form [formGroup]="fileNameSearchFormGroup">
                         <div class="grid">
                             <div class="col-10">
-                                <div class="flex flex-column gap-2">
-                                    <label for="filename">Searched file name</label>
-                                    <input pInputText id="filename" formControlName="filename" [required]="true"
-                                        aria-describedby="filename-help" />
-                                    <small id="query-help">
-                                        Enter a filename part for your searched content
-                                    </small>
-                                </div>
+                                <gebo-ai-field id="filename" label="Searched file name"
+                                    help="Enter a filename part for your searched content" [required]="true">
+                                    <input pInputText id="filename" formControlName="filename" />
+                                </gebo-ai-field>
+
                             </div>
 
                         </div>
                         <div class="col-2">
-                            <p-button label="Search" icon="pi pi-search" [outlined]="true" styleClass="w-full"
-                                (onClick)="doSearchByFileName()"
+                            <p-button id="fileSearchBtn" gebo-ai-label label="Search" icon="pi pi-search"
+                                [outlined]="true" styleClass="w-full" (onClick)="doSearchByFileName()"
                                 [disabled]="fileNameSearchFormGroup.invalid"></p-button>
                         </div>
                     </form>
@@ -100,17 +82,13 @@
                     <form [formGroup]="userspaceFilesFormGroup">
                         <div class="grid">
                             <div class="col-12">
-                                <div class="flex flex-column gap-2">
-                                    <label for="userspaceBrowsing">Upload or choose your documents</label>
+                                <gebo-ai-field id="userspaceBrowsing" label="Upload or choose your documents"
+                                    help="Choose/upload documents from your user space">
                                     <gebo-ai-userspace-files-component formControlName="userspaceFiles"
                                         id="userspaceBrowsing"
                                         [knowledgeBaseCodes]="knowledgeBaseCodes?knowledgeBaseCodes:[]"
                                         [noKnowledgeBases]="knowledgeBaseCodes && knowledgeBaseCodes.length?false:true"></gebo-ai-userspace-files-component>
-                                    <small id="userspaceBrowsing-help">
-                                        Choose/upload documents from your user space
-                                    </small>
-                                </div>
-
+                                </gebo-ai-field>
                             </div>
                         </div>
                     </form>
@@ -131,7 +109,7 @@
         </p-picklist>
     </div>
     <div class="col-2">
-        <p-button label="Confirm" icon="pi pi-check" [outlined]="true" styleClass="w-full"
+        <p-button id="confirmBtn" gebo-ai-label label="Confirm" icon="pi pi-check" [outlined]="true" styleClass="w-full"
             (onClick)="confirmDocumentsPickList()"
             [disabled]="!outputDocuments || (outputDocuments.length?false:true)"></p-button>
     </div>

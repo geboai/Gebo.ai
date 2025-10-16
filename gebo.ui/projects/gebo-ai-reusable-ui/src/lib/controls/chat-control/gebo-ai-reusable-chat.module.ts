@@ -42,6 +42,7 @@ import { ToastModule } from "primeng/toast";
 import { GeboAIAudioRecorderModule } from "../audio-control/audio-control.module";
 import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choose-documents-panel.module";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
+import { GeboAIFieldContainerModule } from "../field-container/field-container.module";
 @NgModule({
   imports: [CommonModule, 
             ReactiveFormsModule, 
@@ -66,7 +67,7 @@ import { BrowseContentModule } from "../browse-content-component/browse-content.
             GeboAIContentViewerModule,  
             BrowseContentModule, 
             GeboAIViewTableModule, 
-            MarkdownModule.forChild()],
+            MarkdownModule.forChild(),GeboAIFieldContainerModule],
   providers: [
     ReactiveRagChatService,
     provideMarkdown({

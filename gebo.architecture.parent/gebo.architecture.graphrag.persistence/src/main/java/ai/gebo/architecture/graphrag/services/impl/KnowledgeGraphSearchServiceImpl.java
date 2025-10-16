@@ -58,6 +58,8 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 	}
 
 	// --- Pesi tunabili per il ranking ibrido ---
+	private static final double W_ENTITY = 1.1;
+	private static final double W_EVENT = 1.3;
 	private static final double W_ALIAS_ENTITY = 1.0;
 	private static final double W_ALIAS_EVENT = 0.9;
 	private static final double W_RELATION = 1.2;
@@ -71,12 +73,6 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 	public List<KnowledgeGraphSearchResult> knowledgeGraphSearch(LLMExtractionResult extraction, int topK,
 			List<String> knowledgeBasesCodes) {
 		GraphExtractionMatching matching = searchMatches(extraction);
-		Set<String> entityAliasIds = matching.getEntityAliases().stream().map(x -> x.getId()).filter(Objects::nonNull)
-				.collect(Collectors.toSet());
-		Set<String> eventAliasIds = matching.getEventAliases().stream().map(x -> x.getId()).filter(Objects::nonNull)
-				.collect(Collectors.toSet());
-		Set<String> relationIds = matching.getRelations().stream().map(x -> x.getId()).filter(Objects::nonNull)
-				.collect(Collectors.toSet());
 
 		// NB: se non c’è nulla, fai comunque un minimo di recall con 1-hop dai
 		// canonical (se presenti)
@@ -84,12 +80,21 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 				.collect(Collectors.toSet());
 		Set<String> eventIds = matching.getEvents().stream().map(x -> x.getId()).filter(Objects::nonNull)
 				.collect(Collectors.toSet());
-
+		Set<String> entityAliasIds = matching.getEntityAliases().stream().map(x -> x.getId()).filter(Objects::nonNull)
+				.collect(Collectors.toSet());
+		Set<String> eventAliasIds = matching.getEventAliases().stream().map(x -> x.getId()).filter(Objects::nonNull)
+				.collect(Collectors.toSet());
+		Set<String> relationIds = matching.getRelations().stream().map(x -> x.getId()).filter(Objects::nonNull)
+				.collect(Collectors.toSet());
 		// 2) Recall: prende i chunk candidati
 		// 2.a) Diretti sugli alias
-		List<ChunkHitRow> entityHits = CollectionUtils.isEmpty(entityAliasIds) ? List.of()
+		List<ChunkHitRow> entityHits = CollectionUtils.isEmpty(entityIds) ? List.of()
+				: entityInChunkRepository.findChunksByEntityIds(entityIds, knowledgeBasesCodes);
+		List<ChunkHitRow> eventHits = CollectionUtils.isEmpty(eventIds) ? List.of()
+				: eventInChunkRepository.findChunksByEventIds(eventIds, knowledgeBasesCodes);
+		List<ChunkHitRow> entityAliasHits = CollectionUtils.isEmpty(entityAliasIds) ? List.of()
 				: entityAliasChunkRepository.findChunksByEntityAliasIds(entityAliasIds, knowledgeBasesCodes);
-		List<ChunkHitRow> eventHits = CollectionUtils.isEmpty(eventAliasIds) ? List.of()
+		List<ChunkHitRow> eventAliasHits = CollectionUtils.isEmpty(eventAliasIds) ? List.of()
 				: eventAliasChunkRepository.findChunksByEventAliasIds(eventAliasIds, knowledgeBasesCodes);
 
 		// 2.b) Relazioni matchate
@@ -104,9 +109,12 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 
 		// 3) Aggrega features per chunk
 		Map<String, ScoredChunk> scored = new HashMap<>();
-		addHits(scored, entityHits, W_ALIAS_ENTITY, HitType.ENTITY_ALIAS);
-		addHits(scored, eventHits, W_ALIAS_EVENT, HitType.EVENT_ALIAS);
+		addHits(scored, entityHits, W_ENTITY, HitType.ENTITY);
+		addHits(scored, eventHits, W_EVENT, HitType.EVENT);
 		addHits(scored, relationHits, W_RELATION, HitType.RELATION);
+		addHits(scored, entityAliasHits, W_ALIAS_ENTITY, HitType.ENTITY_ALIAS);
+		addHits(scored, eventAliasHits, W_ALIAS_EVENT, HitType.EVENT_ALIAS);
+		
 		addNeighbors(scored, neighborHits, W_NEIGHBOR_1H);
 
 		// 4) Copertura anchor = quanti anchor dell’input coperti in quel chunk

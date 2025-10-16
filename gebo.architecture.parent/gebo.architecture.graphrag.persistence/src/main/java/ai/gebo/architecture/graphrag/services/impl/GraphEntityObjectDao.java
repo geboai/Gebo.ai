@@ -21,7 +21,6 @@ public class GraphEntityObjectDao
 	GraphEntityObject createCopyOf(EntityObject reconcyle) {
 		GraphEntityObject hit = null;
 		hit = new GraphEntityObject();
-		hit.setId(UUID.randomUUID().toString());
 		hit.setType(reconcyle.getType().toUpperCase());
 		hit.setName(reconcyle.getName().toUpperCase());
 		hit.setLongDescription(reconcyle.getLongDescription());

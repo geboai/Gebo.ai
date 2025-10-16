@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,9 +18,10 @@
  * select one or more documents, and emit the selection back to a parent component.
  */
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { DocumentReferenceView } from "@Gebo.ai/gebo-ai-rest-api";
+import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * A component that displays a list of documents and allows users to select from them.
@@ -30,21 +31,27 @@ import { DocumentReferenceView } from "@Gebo.ai/gebo-ai-rest-api";
 @Component({
     selector: "gebo-ai-documents-list-panel-component",
     templateUrl: "documents-list-panel.component.html",
-    standalone: false
+    standalone: false,
+    providers: [
+        {
+            provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIDocumentsListPanelComponent),
+            multi: true
+        }]
 })
-export class GeboAIDocumentsListPanelComponent implements OnChanges, OnInit {
+export class GeboAIDocumentsListPanelComponent implements OnChanges, OnInit, GeboAIFieldHost {
+
     /** List of documents to display and select from */
     @Input() documentsList: DocumentReferenceView[] = [];
-    
+
     /** Customizable title for the panel */
     @Input() title: string = "Select documents";
-    
+
     /** Indicates whether the document list is currently loading */
     @Input() loading: boolean = false;
-    
+
     /** Event emitter that sends the selected documents to parent components */
     @Output() documentsSelection: EventEmitter<DocumentReferenceView[]> = new EventEmitter();
-    
+
     /** Form group to handle document selection */
     formGroup: FormGroup = new FormGroup({
         choosenDocuments: new FormControl()
@@ -79,5 +86,8 @@ export class GeboAIDocumentsListPanelComponent implements OnChanges, OnInit {
         const vector: DocumentReferenceView[] = this.formGroup.controls["choosenDocuments"].value;
         this.documentsSelection.emit(vector);
         this.documentsList = [];
+    }
+    getEntityName(): string {
+        return "GeboAIDocumentsListPanelComponent";
     }
 }
