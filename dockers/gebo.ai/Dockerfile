@@ -2,7 +2,7 @@ FROM geboai/platform:2.2
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="0.9.9.8-SNAPSHOT"
+LABEL org.opencontainers.image.version="0.9.9.8"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -14,7 +14,7 @@ RUN mkdir -p /opt/gebo.ai/home
 RUN mkdir -p /opt/gebo.ai/config
 RUN mkdir -p /opt/gebo.ai/work
 RUN mkdir -p /opt/gebo.ai/shares
-COPY gebo.ai.app-0.9.9.8-SNAPSHOT-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-0.9.9.8-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 
@@ -31,4 +31,4 @@ ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 EXPOSE 12999
 WORKDIR /opt/gebo.ai
-ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-0.9.9.8-SNAPSHOT-bootable.jar
+ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-0.9.9.8-bootable.jar
