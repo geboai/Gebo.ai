@@ -82,7 +82,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
-		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).system(text);
+		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).user(text);
 
 		return clean(requestSpec.call().entity(LLMExtractionResult.class));
 	}

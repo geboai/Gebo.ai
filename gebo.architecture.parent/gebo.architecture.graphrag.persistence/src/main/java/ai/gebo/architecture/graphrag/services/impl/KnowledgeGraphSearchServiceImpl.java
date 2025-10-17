@@ -134,10 +134,6 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 		for (ScoredChunk c : scored.values()) {
 			ChunkMeta meta = metas.get(c.chunkId);
 			if (meta != null) {
-				// Recency: es. 0..1 in base all’età del documento
-				c.score += W_RECENCY * recencyBoost(meta.getDocumentEpochMillis());
-				// Penalità lunghezza (evita outlier troppo lunghi)
-				c.score -= PEN_LENGTH * lengthPenalty(meta.getTokenCount());
 				c.documentReferenceId = meta.getDocumentReferenceId();
 				c.knowledgebaseCode = meta.getKnowledgebaseCode();
 			}
