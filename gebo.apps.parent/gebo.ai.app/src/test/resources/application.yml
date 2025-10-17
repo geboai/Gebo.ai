@@ -1,3 +1,4 @@
+ai.gebo.neo4j.enabled: true
 spring:
   neo4j:
     uri: bolt://localhost:7687
