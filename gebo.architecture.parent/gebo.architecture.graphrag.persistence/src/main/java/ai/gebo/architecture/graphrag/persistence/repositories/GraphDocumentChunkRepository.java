@@ -3,6 +3,7 @@ package ai.gebo.architecture.graphrag.persistence.repositories;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import ai.gebo.architecture.graphrag.persistence.model.ChunkMeta;
 import ai.gebo.architecture.graphrag.persistence.model.ChunkNeighborRow;
 import ai.gebo.architecture.graphrag.persistence.model.GraphDocumentChunk;
 import jakarta.annotation.Nullable;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 public interface GraphDocumentChunkRepository extends Neo4jRepository<GraphDocumentChunk, String> {
 	public void deleteByDocumentCode(String code);
 

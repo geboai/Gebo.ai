@@ -1,12 +1,13 @@
 package ai.gebo.architecture.graphrag.services.impl;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEntityObject;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEntityAliasObjectRepository;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
 
 public class GraphEntityAliasObjectDao extends

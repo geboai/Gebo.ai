@@ -138,6 +138,7 @@ export * from './geboKnowledgeBaseSetupStatus';
 export * from './geboMediaDocumentFragment';
 export * from './geboModuleInfo';
 export * from './geboMongoVectorStoreConfig';
+export * from './geboNeo4jModuleConfig';
 export * from './geboOauth2SecretContent';
 export * from './geboRagRequestCustomConfig';
 export * from './geboSshKeySecretContent';

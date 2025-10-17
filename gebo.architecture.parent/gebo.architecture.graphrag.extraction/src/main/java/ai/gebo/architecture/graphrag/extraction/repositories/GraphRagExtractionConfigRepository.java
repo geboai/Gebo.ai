@@ -2,10 +2,12 @@ package ai.gebo.architecture.graphrag.extraction.repositories;
 
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+
 import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 public interface GraphRagExtractionConfigRepository extends IGBaseMongoDBRepository<GraphRagExtractionConfig> {
 	@Override
 	default Class<GraphRagExtractionConfig> getManagedType() {

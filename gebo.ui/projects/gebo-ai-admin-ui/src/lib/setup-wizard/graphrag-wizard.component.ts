@@ -1,11 +1,19 @@
 import { Component, Injectable } from "@angular/core";
-import { GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { map, Observable } from "rxjs";
-
+import { GeboNeo4jModuleSetupControllerService, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { AbstractInstalledModuleService, AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { concatMap, map, Observable, of } from "rxjs";
+@Injectable() 
+export class Neo4jModuleEnabledService extends AbstractInstalledModuleService {
+    public override getInstalledModule(): Observable<boolean> {
+        return this.geboNeo4jModuleService.getNeo4jModuleSetupConfig().pipe(map(data=>data?.enabled===true));
+    }
+    constructor(private geboNeo4jModuleService:GeboNeo4jModuleSetupControllerService) {
+        super()
+    }
+}
 @Injectable()
 export class GraphRagStatusService extends AbstractStatusService {
-    constructor(private graphRagConfigService: GraphRagConfigurationControllerService) {
+    constructor(private geboNeo4jModuleService:GeboNeo4jModuleSetupControllerService,private graphRagConfigService: GraphRagConfigurationControllerService) {
         super();
     }
 
@@ -14,7 +22,12 @@ export class GraphRagStatusService extends AbstractStatusService {
      * @returns Observable<boolean> - True if at least one default graph rag configuration exists
      */
     public override getBooleanStatus(): Observable<boolean> {
-        return this.graphRagConfigService.getDefaultGraphRagExtractionConfig().pipe(map(c => ((c && c.length > 0) ? true : false)));
+        return this.geboNeo4jModuleService.getNeo4jModuleSetupConfig().pipe(concatMap(moduleDef=>{
+            if ( moduleDef?.enabled===true) {
+                return this.graphRagConfigService.getDefaultGraphRagExtractionConfig().pipe(map(c => ((c && c.length > 0) ? true : false)));
+            }else return of(false);
+        }))
+        
     }
 }
 

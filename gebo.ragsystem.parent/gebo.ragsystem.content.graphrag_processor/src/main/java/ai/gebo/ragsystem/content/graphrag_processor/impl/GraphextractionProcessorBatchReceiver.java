@@ -1,5 +1,7 @@
 package ai.gebo.ragsystem.content.graphrag_processor.impl;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.IGBatchMessagesReceiver;
@@ -42,17 +45,23 @@ import ai.gebo.ragsystem.content.graphrag_processor.config.GeboGraphRagProcessor
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
-public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesReceiver {
-	private final IDocumentsChunkService chunkingService;
-	private final GeboGraphRagProcessorConfig staticConfig;
 
-	private final IWorkflowRouter workflowRouter;
-	private final IGraphRagProcessorMessagesReceiverFactoryComponent emitter;
-	private final IGMessageBroker broker;
-	private final IGraphDataExtractionService graphRagExtractionService;
-	private final IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
-	private final GeboGraphRagProcessorConfig processorConfig;
+public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesReceiver {
+	@Autowired
+	private IDocumentsChunkService chunkingService;
+	@Autowired
+	private GeboGraphRagProcessorConfig processorConfig;
+	@Autowired
+	private IWorkflowRouter workflowRouter;
+	@Autowired
+	private IGraphRagProcessorMessagesReceiverFactoryComponent emitter;
+	@Autowired
+	private IGMessageBroker broker;
+	@Autowired(required = false)
+	private IGraphDataExtractionService graphRagExtractionService;
+	@Autowired(required = false)
+	private IKnowledgeGraphPersistenceService knowledgeGraphPersistenceService;
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(GraphextractionProcessorBatchReceiver.class);
 
 	public void acceptSingleMessage(GMessageEnvelope envelope) {
@@ -74,8 +83,10 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 				data.setWorkflowStepId(envelope.getWorkflowStepId());
 				data.setBatchDocumentsInput(1);
 				// Best effort approach
-				boolean discardFile = this.staticConfig.getDiscardedExtensions() != null && this.staticConfig
-						.getDiscardedExtensions().contains(payload.getDocumentReference().getExtension());
+				boolean discardFile = this.processorConfig.getDiscardedExtensions() != null
+						&& this.processorConfig.getDiscardedExtensions()
+								.contains(payload.getDocumentReference().getExtension())
+						|| (graphRagExtractionService == null || knowledgeGraphPersistenceService == null);
 				if (!discardFile
 						&& graphRagExtractionService.isTreatedDocument(payload.getDocumentReference(), cache)) {
 					// delete the document and related data from the neo4j database
@@ -130,10 +141,10 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 													true);
 											updatesConsumer.accept(createExtractionEvent(extraction));
 										}
-										if (staticConfig.getGraphRagProcessorReceiverConfig()
+										if (processorConfig.getGraphRagProcessorReceiverConfig()
 												.getMinimumDelayBetweenRequests() > 0) {
 											long elapsedTime = System.currentTimeMillis() - startTime;
-											long delta = staticConfig.getGraphRagProcessorReceiverConfig()
+											long delta = processorConfig.getGraphRagProcessorReceiverConfig()
 													.getMinimumDelayBetweenRequests() - elapsedTime;
 											if (delta > 0) {
 												try {

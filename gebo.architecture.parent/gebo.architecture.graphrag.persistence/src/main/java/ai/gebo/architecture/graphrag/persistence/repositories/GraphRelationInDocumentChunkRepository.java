@@ -3,13 +3,14 @@ package ai.gebo.architecture.graphrag.persistence.repositories;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
 import ai.gebo.architecture.graphrag.persistence.model.ChunkHitRow;
 import ai.gebo.architecture.graphrag.persistence.model.GraphRelationInDocumentChunk;
 import jakarta.annotation.Nullable;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 public interface GraphRelationInDocumentChunkRepository
 		extends AbstractInDocumentChunkObjectRepository<GraphRelationInDocumentChunk> {
 	@Query("""

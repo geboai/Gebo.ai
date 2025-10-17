@@ -1,12 +1,13 @@
 package ai.gebo.architecture.graphrag.services.impl;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventAliasObject;
 import ai.gebo.architecture.graphrag.persistence.model.GraphEventObject;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasObjectRepository;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
 public class GraphEventAliasObjectDao extends
 		AbstractNeo4jKnowledgeGraphObjectDao<GraphEventAliasObject, GraphEventAliasObjectRepository, EventAliasObject> {

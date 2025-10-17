@@ -1,11 +1,12 @@
 package ai.gebo.architecture.graphrag.extraction.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import lombok.Data;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.graphrag")
 @Data

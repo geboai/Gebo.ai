@@ -13,6 +13,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.application.messaging.workflow.model.WorkflowContext;
@@ -37,7 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
 @AllArgsConstructor
 public class GraphDataExtractionServiceImpl implements IGraphDataExtractionService {

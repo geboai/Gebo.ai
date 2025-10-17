@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.ai.document.Document;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
@@ -37,7 +38,7 @@ import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import jakarta.annotation.Nullable;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
 public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceService
 		implements IKnowledgeGraphSearchService {

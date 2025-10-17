@@ -52,7 +52,7 @@ import { SharepointInstalledModuleService, SharepointStatusService, SharepointWi
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
 import { Oauth2SetupEnabledService, Oauth2SetupWizardService, Oauth2WizardComponent } from "./oauth2-wizard.component";
-import { GraphRagStatusService, GraphRagWizardComponent } from "./graphrag-wizard.component";
+import { GraphRagStatusService, GraphRagWizardComponent, Neo4jModuleEnabledService } from "./graphrag-wizard.component";
 
 /**
  * Setup section for administrator user account configuration.
@@ -109,7 +109,7 @@ const VectorStoreSetupSection: SetupWizardsSection = {
 
 const oauth2SetupSection: SetupWizardsSection = {
     orderEntry: 5,
-    label: "Signle signon, oauth2 authentication",
+    label: "Single signon, oauth2 authentication",
     description: "Oauth2 single signon authentication and oauth2 clients configuration",
     enabledService: Oauth2SetupEnabledService,
     setupCompletedService: Oauth2SetupWizardService,
@@ -138,7 +138,8 @@ const graphRagBaseSetupSection: SetupWizardsSection = {
     requredStepsIds: ["VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Graph rag/Knowledge extraction stup",
     description: "Configure graph rag and knowledge extraction subsystem",
-    enabledService: AlwaysTrueStatusService,
+    installedModule: Neo4jModuleEnabledService,
+    enabledService:AlwaysTrueStatusService,
     setupCompletedService: GraphRagStatusService,
     wizardComponent: GraphRagWizardComponent,
     wizardSectionId: "graphRagBaseSetupSection",
@@ -237,6 +238,7 @@ const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
     requredStepsIds: ["geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a knowledge base",
     description: "Configure at least a knowledge base to let your users enjoy the retrieve augmented generations services of Gebo.ai",
+    
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: KnowledgeBasePresentService,
     wizardComponent: KnowledgeBaseWizardComponent,
@@ -295,6 +297,7 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
         JiraInstalledModuleService,
         JiraStatusService,
         GraphRagStatusService,
+        Neo4jModuleEnabledService,
         { provide: WIZARD_SECTION, useValue: adminUserSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: geboWorkDirectorySetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: oauth2SetupSection, multi: true },

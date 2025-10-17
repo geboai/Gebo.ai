@@ -75,7 +75,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 	@Autowired
 	IGModelsLibraryDao modelsLibraryDao;
-	@Autowired
+	@Autowired(required = false)
 	IKnowledgeGraphSearchService knowledgeGraphSearch;
 
 	protected JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
@@ -262,7 +262,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		lrequest.setDocuments(new TokenLimitedContent<RagDocumentsCachedDaoResult>());
 		lrequest.getDocuments().setValue(extractedDocuments);
 		lrequest.getDocuments().setNToken((int) extractedDocuments.getNTokens());
-		if (!forcedChatWithDocuments) {
+		if (!forcedChatWithDocuments && this.knowledgeGraphSearch != null) {
 			// Run graph rag after semantic rag to provide context on more
 			// factual/entity/events based approach
 			if (availableTokensForDocuments > lrequest.getDocuments().getNToken()
@@ -276,7 +276,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 					LOGGER.error("Error invoking graphrag", throwable);
 				}
 			}
-			
+
 		}
 		stats = lrequest.getStats();
 		if (stats.availableNTokens < toolsTokensSpaceReservation) {

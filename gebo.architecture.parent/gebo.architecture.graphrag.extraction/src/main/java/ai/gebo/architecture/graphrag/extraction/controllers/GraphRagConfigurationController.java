@@ -3,6 +3,7 @@ package ai.gebo.architecture.graphrag.extraction.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("api/admin/GraphRagConfigurationController")

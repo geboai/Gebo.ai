@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +49,8 @@ import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
 
+@ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
-
 public class KnowledgeGraphPersistenceServiceImpl extends AbstractGraphPersistenceService
 		implements IKnowledgeGraphPersistenceService {
 

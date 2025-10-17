@@ -1,4 +1,4 @@
-<p-panel #graphRagSettingUI *ngIf="context?true:false">
+<p-panel #graphRagSettingUI *ngIf="neo4jEnabled===true && (context?true:false)">
     <p-blockUI [target]="graphRagSettingUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>

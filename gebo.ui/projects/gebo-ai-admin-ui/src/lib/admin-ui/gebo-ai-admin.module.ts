@@ -25,7 +25,7 @@
  * The module imports numerous Angular and PrimeNG modules for UI components and
  * declares all the admin components needed for the Gebo.ai administrative interface.
  */
-import { BrowseContentModule, EditableListboxModule, GeboAIContentReindexModule, GeboAIFileTypesModule, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAiRelationListModule, GeboAIReusableChatModel, GeboOauth2SecretModule, GeboUIArchitectureModule, ProjectAddContextMenuModule, GeboAIContentSelectionFilterModule, GeboAIFieldContainerModule } from "@Gebo.ai/reusable-ui";
+import { BrowseContentModule, EditableListboxModule, GeboAIContentReindexModule, GeboAIFileTypesModule, GeboAIModulesModule, GeboAiRelationListModule, GeboAIReusableChatModel, GeboOauth2SecretModule, GeboUIArchitectureModule, ProjectAddContextMenuModule, GeboAIContentSelectionFilterModule, GeboAIFieldContainerModule } from "@Gebo.ai/reusable-ui";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
