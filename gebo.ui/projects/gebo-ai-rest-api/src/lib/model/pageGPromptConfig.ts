@@ -14,14 +14,14 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageGPromptConfig { 
-    totalPages?: number;
     totalElements?: number;
-    size?: number;
-    content?: Array<GPromptConfig>;
-    number?: number;
+    totalPages?: number;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
+    size?: number;
+    content?: Array<GPromptConfig>;
+    number?: number;
     sort?: SortObject;
     pageable?: PageableObject;
     empty?: boolean;

@@ -200,3 +200,32 @@ label {
   border-bottom: 2px solid #f44336 !important;
   outline: none;
 }
+
+//READONLY
+.p-inputtext[readonly],
+.p-inputtextarea[readonly],
+input.p-inputtext:read-only,
+textarea.p-inputtextarea:read-only {
+  background: var(--p-content-background, #C0C0C0);
+  background-color: #C0C0C0;
+  color: var(--p-content-color, #666);
+  border-style: dashed;
+  cursor: default;
+}
+
+/* InputNumber renders an input with .p-inputtext too */
+.p-inputnumber input.p-inputtext[readonly] {
+  /* your styles */
+}
+
+/* Calendar when using [readonlyInput]="true" */
+.p-calendar input.p-inputtext[readonly] {
+  /* your styles */
+}
+
+/* If you use a wrapper and want to dim the whole control area */
+:has(> .p-inputtext[readonly]),
+:has(> .p-inputtextarea[readonly]) {
+  /* optional wrapper styling if your browser supports :has */
+  opacity: 0.8;
+}

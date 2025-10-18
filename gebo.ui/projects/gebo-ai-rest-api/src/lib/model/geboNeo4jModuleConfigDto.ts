@@ -10,6 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface GeboNeo4jModuleConfig { 
+export interface GeboNeo4jModuleConfigDto { 
     enabled?: boolean;
 }

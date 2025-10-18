@@ -17,7 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { GeboNeo4jModuleConfig } from '../model/geboNeo4jModuleConfig';
+import { GeboNeo4jModuleConfigDto } from '../model/geboNeo4jModuleConfigDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -61,9 +61,9 @@ export class GeboNeo4jModuleSetupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNeo4jModuleSetupConfig(observe?: 'body', reportProgress?: boolean): Observable<GeboNeo4jModuleConfig>;
-    public getNeo4jModuleSetupConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboNeo4jModuleConfig>>;
-    public getNeo4jModuleSetupConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboNeo4jModuleConfig>>;
+    public getNeo4jModuleSetupConfig(observe?: 'body', reportProgress?: boolean): Observable<GeboNeo4jModuleConfigDto>;
+    public getNeo4jModuleSetupConfig(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboNeo4jModuleConfigDto>>;
+    public getNeo4jModuleSetupConfig(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboNeo4jModuleConfigDto>>;
     public getNeo4jModuleSetupConfig(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -81,7 +81,7 @@ export class GeboNeo4jModuleSetupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GeboNeo4jModuleConfig>('get',`${this.basePath}/api/admin/GeboNeo4jModuleSetupController`,
+        return this.httpClient.request<GeboNeo4jModuleConfigDto>('get',`${this.basePath}/api/admin/GeboNeo4jModuleSetupController`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
