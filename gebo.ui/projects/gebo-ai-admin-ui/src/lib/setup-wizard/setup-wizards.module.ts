@@ -143,7 +143,8 @@ const graphRagBaseSetupSection: SetupWizardsSection = {
     setupCompletedService: GraphRagStatusService,
     wizardComponent: GraphRagWizardComponent,
     wizardSectionId: "graphRagBaseSetupSection",
-    mandatory: false
+    mandatory: false,
+    experimental:true
 };
 /**
  * Setup section for shared filesystem paths.

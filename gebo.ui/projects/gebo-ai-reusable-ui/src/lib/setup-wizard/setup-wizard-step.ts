@@ -110,6 +110,8 @@ export interface SetupWizardsSection {
     /** Instance of installed module service after initialization */
     installedModuleInstance?:AbstractInstalledModuleService;
     /** Whether this section must be completed to finish the wizard */
+
+    experimental?:boolean;
     mandatory?: boolean;
 }
 
@@ -134,6 +136,7 @@ export interface SetupWizardItem {
     alreadyCompleted: boolean;
     /** Component to render for this wizard item */
     wizardComponent: Type<BaseWizardSectionComponent>;
+    experimental?:boolean;
     /** Whether this item must be completed to finish the wizard */
     mandatory?: boolean;
 }

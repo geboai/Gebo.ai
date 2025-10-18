@@ -33,7 +33,7 @@
 
                 </div>
                 <div class="col-2"><b>{{entry.label}}</b></div>
-                <div class="col-9">{{entry.description}}</div>
+                <div class="col-9">{{entry.description}} <b style="color: orange" *ngIf="entry.experimental===true">(Preview feature)</b></div>
             </div>
 
 
