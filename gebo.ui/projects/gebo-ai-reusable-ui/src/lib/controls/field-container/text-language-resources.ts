@@ -1,5 +1,6 @@
 export const DEFAULT_LANGUAGE: string = "en";
 export interface UIExistingText {
+    moduleId?:string|null,
     entityId?: string|null;
     componentId?: string|null;
     key: string;

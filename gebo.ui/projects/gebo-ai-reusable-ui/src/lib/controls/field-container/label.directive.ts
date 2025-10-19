@@ -1,6 +1,6 @@
 import { AfterContentInit, Directive, ElementRef, Inject, Optional } from "@angular/core";
 import { findMatchingTranlations, findMatchingTranslation, UIExistingText } from "./text-language-resources";
-import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "./gebo-translation.service";
 
 @Directive({
@@ -11,12 +11,16 @@ export class GeboAILabelDirective implements AfterContentInit {
     constructor(
         private el: ElementRef<HTMLElement>,
         private translationService: GeboAITranslationService,
+        @Optional() @Inject(GEBO_AI_MODULE) private moduleId?:string,
         @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
         if (this.host) {
             if (Array.isArray(this.host)) {
                 const array = Array.from(this.host);
                 this.host = array.length ? array[array.length - 1] : undefined;
             }
+        }
+         if (this.moduleId && this.moduleId.length) {
+            this.moduleId=this.moduleId[this.moduleId.length-1];
         }
     }
     private componentId: string|undefined|null;
@@ -51,6 +55,7 @@ export class GeboAILabelDirective implements AfterContentInit {
         if (value && value.length > 0) {
             if (!this.existingTexts.find(x => x.fieldId === alias)) {
                 this.existingTexts.push({
+                    moduleId:this.moduleId,
                     entityId: this.host?.getEntityName(),
                     componentId: this.componentId,
                     key: labelFieldName,

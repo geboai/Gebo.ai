@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
 import { ControlContainer, FormGroupDirective } from "@angular/forms";
-import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { Subject } from "rxjs";
 import { findMatchingTranslation, UIExistingText } from "./text-language-resources";
 import { GeboAITranslationService } from "./gebo-translation.service";
@@ -24,12 +24,15 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     internalPlaceholder!: string;
     internalHelp!: string;
     computedRequired: boolean = false;
-    constructor(private translationService: GeboAITranslationService, @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
+    constructor(private translationService: GeboAITranslationService, @Optional() @Inject(GEBO_AI_MODULE) private moduleId?: string, @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
         if (this.host) {
             if (Array.isArray(this.host)) {
-                const array=Array.from(this.host);
-                this.host=array.length?array[array.length-1]:undefined;
+                const array = Array.from(this.host);
+                this.host = array.length ? array[array.length - 1] : undefined;
             }
+        }
+        if (this.moduleId && this.moduleId.length) {
+            this.moduleId = this.moduleId[this.moduleId.length - 1];
         }
     }
     localizationSubject: Subject<{ label?: string, help?: string, placeholder?: string }> = new Subject();
@@ -51,6 +54,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         let placeholder: UIExistingText | undefined = undefined;
         if (this.internalLabel) {
             existingTexts.push(label = {
+                moduleId:this.moduleId,
                 entityId: this.host?.getEntityName(),
                 componentId: this.id,
                 key: "label",
@@ -60,6 +64,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         }
         if (this.internalHelp) {
             existingTexts.push(help = {
+                moduleId:this.moduleId,
                 entityId: this.host?.getEntityName(),
                 componentId: this.id,
                 key: "help",
@@ -69,6 +74,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         }
         if (this.internalPlaceholder) {
             existingTexts.push(placeholder = {
+                moduleId:this.moduleId,
                 entityId: this.host?.getEntityName(),
                 componentId: this.id,
                 key: "placeholder",

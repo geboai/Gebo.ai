@@ -7,3 +7,4 @@ export interface GeboAIFieldHost {
   getEntityName(): string;
 }
 export const GEBO_AI_FIELD_HOST = new InjectionToken<GeboAIFieldHost>('GEBO_AI_FIELD_HOST');
+export const GEBO_AI_MODULE = new InjectionToken<string>("GEBO_AI_MODULE");
