@@ -84,7 +84,7 @@ export * from "./lib/controls/gebo-oauth2-secret-component/gebo-oauth2-secret.mo
 
 export * from "./lib/controls/content-selection-filter-component/content-selection-filter.module";
 
-export * from "./lib/controls/field-container/field-container.module";
+export * from "./lib/controls/field-translation-container/field-container.module";
 
 export * from "./lib/controls/field-host-component-iface/field-host-component-iface";
 

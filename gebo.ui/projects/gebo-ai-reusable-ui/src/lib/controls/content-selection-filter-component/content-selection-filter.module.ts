@@ -11,10 +11,10 @@ import { InputNumber } from "primeng/inputnumber";
 import { InputTextModule } from "primeng/inputtext";
 import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 import { MultiSelect } from "primeng/multiselect";
-import { GeboAIFieldContainerModule } from "@Gebo.ai/reusable-ui";
+import { GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, Fieldset, Button, InputNumber, InputTextModule, EditableListboxModule, MultiSelect,GeboAIFieldContainerModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, Fieldset, Button, InputNumber, InputTextModule, EditableListboxModule, MultiSelect,GeboAIFieldTransationContainerModule],
     declarations:[GeboAIContentSelectionFilterComponent,GeboAISelectionFilterCriteriaComponent],
     exports:[GeboAIContentSelectionFilterComponent]
 })

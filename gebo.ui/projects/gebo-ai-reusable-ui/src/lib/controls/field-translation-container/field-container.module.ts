@@ -13,4 +13,4 @@ import { GeboAITextDirective } from "./text.directive";
     exports:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective],
     providers:[GeboAITranslationService]
 })
-export class GeboAIFieldContainerModule {}
+export class GeboAIFieldTransationContainerModule {}
