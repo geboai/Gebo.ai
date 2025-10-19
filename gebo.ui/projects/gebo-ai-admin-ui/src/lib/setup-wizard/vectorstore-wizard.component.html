@@ -17,7 +17,7 @@
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     
-    <p-panel #vectorStoreUI header="Vector database configuration">
+    <p-panel id="MainPanel" gebo-ai-label  #vectorStoreUI header="Vector database configuration">
         <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
             search, please choose wich of the supported products you'ld like to use</p>
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />

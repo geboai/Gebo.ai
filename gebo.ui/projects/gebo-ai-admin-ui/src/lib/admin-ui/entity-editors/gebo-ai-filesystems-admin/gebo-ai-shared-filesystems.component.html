@@ -16,7 +16,7 @@
     [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
     header="Shared filesystem paths setting">
 
-    <p-panel #contentUI [showHeader]="false" *ngIf="visible">
+    <p-panel id="MainPanel" gebo-ai-label  #contentUI [showHeader]="false" *ngIf="visible">
         <p-blockUI [target]="contentUI" [blocked]="loading">
             <i class="pi pi-lock" style="font-size: 3rem"></i>
         </p-blockUI>

@@ -15,7 +15,7 @@
 <p-blockUI [target]="OllamaUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #OllamaUI header="Editing Ollama local (or lan) embedding model configuration" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #OllamaUI header="Editing Ollama local (or lan) embedding model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />       
 

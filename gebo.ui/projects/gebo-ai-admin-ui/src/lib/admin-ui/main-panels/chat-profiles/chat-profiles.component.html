@@ -19,7 +19,7 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel #ragProfilesUI header="Retrivial augmented generation chat profiles">
+<p-panel id="MainPanel" gebo-ai-label  #ragProfilesUI header="Retrivial augmented generation chat profiles">
     <p-table *ngIf="chatprofiles?.content?.length" [value]="(chatprofiles.content?chatprofiles.content:[])">
         <ng-template pTemplate="header">
             <tr>
@@ -45,7 +45,7 @@
     <p-button (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
 </p-panel>
 
-<p-panel #promptUI header="Prompts collection & default prompts">
+<p-panel id="MainPanel" gebo-ai-label  #promptUI header="Prompts collection & default prompts">
     <p-table *ngIf="prompts?.content?.length" [value]="(prompts.content?prompts.content:[])">
         <ng-template pTemplate="header">
             <tr>

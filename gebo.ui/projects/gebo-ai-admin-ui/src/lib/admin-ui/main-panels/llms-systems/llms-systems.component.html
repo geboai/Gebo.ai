@@ -15,7 +15,7 @@
 <p-blockUI [target]="llmSystems" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #llmSystems>
+<p-panel id="MainPanel" gebo-ai-label  #llmSystems>
     <div class="grid geboFullHeight">
         <div class="col-12 geboThirdHeight"><b *ngIf="chatModels && chatModels.length">Configured chat models</b>
             <p-table [value]="chatModels" *ngIf="chatModels && chatModels.length">

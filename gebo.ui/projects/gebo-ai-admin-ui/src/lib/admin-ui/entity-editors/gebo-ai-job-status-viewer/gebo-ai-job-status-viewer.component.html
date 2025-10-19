@@ -15,7 +15,7 @@
 <p-blockUI [target]="jobStatusView" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #jobStatusView [header]="jobTitle+entity?.code">
+<p-panel id="MainPanel" gebo-ai-label  #jobStatusView [header]="jobTitle+entity?.code">
   <div class="geboDialogContent">
     <div class="grid">
       <div class="col-4">

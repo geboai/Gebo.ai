@@ -15,7 +15,7 @@
 <p-blockUI [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #instModeUI header="Retrieve augmented generation (r.a.g.) chat profiles settings">
+<p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Retrieve augmented generation (r.a.g.) chat profiles settings">
     <div class="grid geboFullHeight">
         <div class="col-12">
             <p-fieldset legend="Existing R.A.G. chat profiles" *ngIf="rows.length">

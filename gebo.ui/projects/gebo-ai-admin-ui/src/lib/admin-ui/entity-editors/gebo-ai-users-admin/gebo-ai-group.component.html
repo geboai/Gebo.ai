@@ -15,7 +15,7 @@
 <p-blockUI [target]="groupUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #groupUI header="Editing user group" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #groupUI header="Editing user group" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
 

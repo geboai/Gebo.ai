@@ -15,7 +15,7 @@
 <p-blockUI [target]="chatProfileUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #chatProfileUI header="Editing prompt">
+<p-panel id="MainPanel" gebo-ai-label  #chatProfileUI header="Editing prompt">
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid" [formGroup]="formGroup">

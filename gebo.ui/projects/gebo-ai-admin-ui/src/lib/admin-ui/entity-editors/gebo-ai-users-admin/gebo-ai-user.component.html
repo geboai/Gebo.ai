@@ -19,7 +19,7 @@
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
 
-    <p-panel #userUI header="Editing user">
+    <p-panel id="MainPanel" gebo-ai-label  #userUI header="Editing user">
         <div class="geboDialogContent">
             <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
             <div class="grid" [formGroup]="formGroup">

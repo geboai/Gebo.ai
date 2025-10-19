@@ -15,7 +15,7 @@
 <p-blockUI [target]="openaiUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #openaiUI header="Editing OpenAI embedding model configuration" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #openaiUI header="Editing OpenAI embedding model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />        
 

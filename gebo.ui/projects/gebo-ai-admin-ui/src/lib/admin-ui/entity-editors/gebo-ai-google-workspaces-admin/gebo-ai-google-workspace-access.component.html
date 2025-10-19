@@ -15,7 +15,7 @@
 <p-blockUI [target]="gwHandshakeView" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #gwHandshakeView header="Access to google workspaces informations">
+<p-panel id="MainPanel" gebo-ai-label  #gwHandshakeView header="Access to google workspaces informations">
     <p-messages [value]="userMessages" [enableService]="false"></p-messages>
     
     <div class="grid" *ngIf="!handshakeData" [formGroup]="formGroup"> 

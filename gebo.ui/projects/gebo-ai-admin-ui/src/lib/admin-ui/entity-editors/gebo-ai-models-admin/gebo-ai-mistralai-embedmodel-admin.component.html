@@ -15,7 +15,7 @@
 <p-blockUI [target]="MistralAIUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #MistralAIUI header="Editing MistralAI embedding model configuration" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #MistralAIUI header="Editing MistralAI embedding model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />
         

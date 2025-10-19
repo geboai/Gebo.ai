@@ -15,11 +15,11 @@
 <p-blockUI [target]="anthropicUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #anthropicUI header="Editing Anthropic chat model configuration" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #anthropicUI header="Editing Anthropic chat model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />        
         <p-tabView class="standardTabDialogueHeight">
-            <p-tabPanel header="General infos">
+            <p-tabPanel  header="General infos">
 
                 <div class="grid">
                     <div class="col-6">

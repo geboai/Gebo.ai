@@ -15,7 +15,7 @@
 <p-blockUI [target]="endPointUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #endPointUI header="Editing google custom search api credentials" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing google custom search api credentials" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
 
