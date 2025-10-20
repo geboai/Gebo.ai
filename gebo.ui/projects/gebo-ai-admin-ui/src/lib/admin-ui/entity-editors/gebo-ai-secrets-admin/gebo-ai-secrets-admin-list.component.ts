@@ -6,13 +6,13 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 /**
  * AI generated comments
@@ -25,24 +25,27 @@ import { GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, Gebo
 @Component({
     selector: "gebo-ai-secrets-admin-list-component",
     templateUrl: "gebo-ai-secrets-admin-list.component.html",
-    standalone: false
+    standalone: false, providers: [{
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiSecretsAdminListComponent"),
+        multi: true
+    }]
 })
 export class GeboAiSecretsAdminListComponent implements OnChanges, OnInit {
     /** The context code for which secrets should be loaded */
     @Input() contextCode?: string;
-    
+
     /** Types of secrets that can be created in this component */
     @Input() allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.SSHKEY, SecretInfo.SecretTypeEnum.TOKEN, SecretInfo.SecretTypeEnum.USERNAMEPASSWORD];
-    
+
     /** Flag indicating whether secrets are currently being loaded */
     public loading: boolean = false;
-    
+
     /** Collection of secret information objects displayed in the list */
     secretsInfo: SecretInfo[] = [];
-    
+
     /** Event emitter that notifies parent components when the secrets list changes */
-    @Output() secretsListChange:EventEmitter<boolean>=new EventEmitter();
-    
+    @Output() secretsListChange: EventEmitter<boolean> = new EventEmitter();
+
     /**
      * Constructor initializes the required services
      * @param secretsControllerService Service for interacting with secrets API
@@ -51,14 +54,14 @@ export class GeboAiSecretsAdminListComponent implements OnChanges, OnInit {
     constructor(private secretsControllerService: SecretsControllerService, private geboUIActionRoutingService: GeboUIActionRoutingService) {
 
     }
-    
+
     /**
      * Fetches secrets from the API for the current context code
      * Sets loading state during API call and clears the secrets list
      * if no context code is provided
      */
     private loadSecrets(): void {
-       
+
         if (this.contextCode) {
             this.loading = true;
             this.secretsControllerService.getSecretsByContextCode(this.contextCode).subscribe(
@@ -73,11 +76,11 @@ export class GeboAiSecretsAdminListComponent implements OnChanges, OnInit {
                     }
                 }
             );
-        }else {
-            this.secretsInfo=[];
+        } else {
+            this.secretsInfo = [];
         }
     }
-    
+
     /**
      * Lifecycle hook that responds to input property changes
      * Reloads secrets when the context code changes
@@ -87,21 +90,21 @@ export class GeboAiSecretsAdminListComponent implements OnChanges, OnInit {
             this.loadSecrets();
         }
     }
-    
+
     /**
      * Lifecycle hook for component initialization
      */
     ngOnInit(): void {
 
     }
-    
+
     /**
      * Creates a new secret for the current context
      * Triggers a UI action to display the creation form and handles
      * the action performed event to reload the secrets list when complete
      */
     newSecret(): void {
-        const newSecret:{code?: string;description?: string;secretType?: SecretInfo.SecretTypeEnum;contextCode?:string}={
+        const newSecret: { code?: string; description?: string; secretType?: SecretInfo.SecretTypeEnum; contextCode?: string } = {
             contextCode: this.contextCode
         };
         const createAction: GeboUIActionRequest = {
@@ -110,10 +113,10 @@ export class GeboAiSecretsAdminListComponent implements OnChanges, OnInit {
             contextType: "SecretsList",
             target: newSecret,
             targetType: "Secret",
-            targetFormInputs: {allowedTypes:this.allowedTypes},
+            targetFormInputs: { allowedTypes: this.allowedTypes },
             onActionPerformed: (event: GeboActionPerformedEvent) => {
                 this.loadSecrets();
-                if (event.actionType===GeboActionPerformedType.DELETED || event.actionType===GeboActionPerformedType.INSERTED) {
+                if (event.actionType === GeboActionPerformedType.DELETED || event.actionType === GeboActionPerformedType.INSERTED) {
                     this.secretsListChange.emit(true);
                 }
             }

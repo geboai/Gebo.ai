@@ -8,64 +8,77 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="openaiUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label  #openaiUI [header]="'Editing ' + modelType?.description+' configuration'" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label #openaiUI [header]="'Editing chat model configuration'" [formGroup]="formGroup">
+
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <div class="grid">
+            <div class="col-12">
+                <h2><span id="TitleFragment" gebo-ai-text>Editing chat model provider:</span>{{modelType?.description}}
+                </h2>
+            </div>
+        </div>
         <p-tabView class="standardTabDialogueHeight">
             <p-tabPanel header="General infos">
 
                 <div class="grid">
                     <div class="col-6">
-                        <gebo-ai-field id="description" label="Description" help="Enter the description of the model configuration" [required]="true">
+                        <gebo-ai-field id="description" label="Description"
+                            help="Enter the description of the model configuration" [required]="true">
                             <input pInputText id="description" formControlName="description" maxlength="120"
                                 [required]="true" gebo-ai-field-element />
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the model configuration">
+                        <gebo-ai-field id="code" label="Unique Code"
+                            help="Automatically generated unique code of the model configuration">
                             <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="baseUrl" label="{{modelType?.description}} API base server address" help="Base address of {{modelType?.description}}." [required]="true">
-                            <input pInputText id="baseUrl" formControlName="baseUrl" 
+                        <gebo-ai-field id="baseUrl" label="Chat model  API base server address"
+                            help="Base address of Chat model ." [required]="true">
+                            <input pInputText id="baseUrl" formControlName="baseUrl"
                                 [readOnly]="modelType?.baseUrl?true:false" [required]="true" gebo-ai-field-element />
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="apiSecretCode" label="{{modelType?.description}} API token" help="Choose the {{modelType?.description}} API token to be used for this model (optional)">
+                        <gebo-ai-field id="apiSecretCode" label="Chat model  API token"
+                            help="Choose the Chat model  API token to be used for this model (optional)">
                             <geboai-editable-listbox-component formControlName="apiSecretCode"
-                                placeholder="Select a token" 
-                                [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction" 
-                                gebo-ai-field-element>
+                                placeholder="Select a token" [optionsObservable]="identitiesObservable"
+                                [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
                             </geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="choosedModel" label="{{modelType?.description}} chat model choice" help="Choose the {{modelType?.description}} chat model to work with." [required]="true">
-                            <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel" placeholder="Select a model"
-                                [required]="true" [options]="modelChoicesData" optionLabel="description"
-                                gebo-ai-field-element></p-select>
+                        <gebo-ai-field id="choosedModel" label="Chat model  chat model choice"
+                            help="Choose the Chat model  chat model to work with." [required]="true">
+                            <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
+                                placeholder="Select a model" [required]="true" [options]="modelChoicesData"
+                                optionLabel="description" gebo-ai-field-element></p-select>
                         </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <gebo-ai-field id="defaultModel" label="set this as default chat model" help="If true this will be used as default chat model where chat model is not indicated">
+                        <gebo-ai-field id="defaultModel" label="set this as default chat model"
+                            help="If true this will be used as default chat model where chat model is not indicated">
                             <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true"
                                 [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
                         </gebo-ai-field>
                     </div>
                 </div>
-                <gebo-ai-standard-chat-model-settings-component [formGroup]="formGroup"></gebo-ai-standard-chat-model-settings-component>
+                <gebo-ai-standard-chat-model-settings-component
+                    [formGroup]="formGroup"></gebo-ai-standard-chat-model-settings-component>
             </p-tabPanel>
             <p-tabPanel header="Advanced settings">
-                <gebo-advanced-chatmodel-group-component  [mode]="mode"  [entityDataLoaded]="entityDataLoaded"  
+                <gebo-advanced-chatmodel-group-component [mode]="mode" [entityDataLoaded]="entityDataLoaded"
                     [formGroup]="formGroup"></gebo-advanced-chatmodel-group-component>
             </p-tabPanel>
             <p-tabPanel header="Model access settings">
@@ -76,23 +89,24 @@
     </div>
 
 
-    
-        <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
-            <div class="col-3">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
-                    severity="success" [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
-            </div>
-            <div class="col-3">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
-            </div>
-            <div class="col-3">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
-                    [disabled]="canDelete===false" />
-            </div>
-            <div class="col-3">
-                <gebo-ai-test-chat-component [chatModelCode]="entity?.code"></gebo-ai-test-chat-component>
-            </div>
+
+    <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
+        <div class="col-3">
+            <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
         </div>
-    
+        <div class="col-3">
+            <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                styleClass="w-full" />
+        </div>
+        <div class="col-3">
+            <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                styleClass="w-full" [disabled]="canDelete===false" />
+        </div>
+        <div class="col-3">
+            <gebo-ai-test-chat-component [chatModelCode]="entity?.code"></gebo-ai-test-chat-component>
+        </div>
+    </div>
+
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

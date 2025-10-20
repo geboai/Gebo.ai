@@ -12,9 +12,9 @@
 
 export interface GUserChatInfo { 
     description?: string;
+    ragChat?: boolean;
     code?: string;
     chatCreationDateTime?: Date;
-    ragChat?: boolean;
     chatModelCode?: string;
     chatProfileCode?: string;
     username?: string;

@@ -1,7 +1,7 @@
-import { Component, Inject, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthProviderDto, BASE_PATH, OAuth2AdminControllerService, Oauth2ProviderModifiableData } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 const frontendRedirectRelativeUris: string[] = ["/ui/oauth2-land", "/ui/chat", "/"];
@@ -12,7 +12,10 @@ const backendRefererUris: string[] = ["/oauth2/authorization/{registrationId}"];
 @Component({
     selector: "gebo-ai-oauth2-registration-component",
     templateUrl: "gebo-ai-oauth2-registration.component.html",
-    standalone: false
+    standalone: false, providers: [{
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIOauth2RegistrationComponent),
+        multi: true
+    }]
 })
 export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponent<Oauth2ProviderModifiableData> {
     protected override entityName: string = "Oauth2ProviderRegistration";
@@ -58,7 +61,7 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         confirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
-        private oauth2ControllerService: OAuth2AdminControllerService) { 
+        private oauth2ControllerService: OAuth2AdminControllerService) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.valueChanges.subscribe((value: Oauth2ProviderModifiableData) => {
             this.readonly = (value as any)["readOnly"] === true;

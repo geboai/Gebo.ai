@@ -8,46 +8,68 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="openaiUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label  #openaiUI [header]="'Editing' + modelType?.description+' configuration'" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label #openaiUI [header]="'Editing embedding model configuration'"
+    [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />        
-        <div class="grid standardTabDialogueHeight" >
+        <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />
+        <div class="grid standardTabDialogueHeight">
+
+            <div class="col-12">
+                <h2><span id="TitleFragment" gebo-ai-text>Editing embedding model
+                        provider:</span>{{modelType?.description}}
+                </h2>
+            </div>
+
             <div class="col-6">
-                <gebo-ai-field id="description" label="Description" help="Enter the description of the {{modelType?.description}} configuration" [required]="true">
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+                <gebo-ai-field id="description" label="Description"
+                    help="Enter the description of the Embedding model  configuration" [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
+                        gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
             <div class="col-6">
-                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the {{modelType?.description}} configuration">
+                <gebo-ai-field id="code" label="Unique Code"
+                    help="Automatically generated unique code of the Embedding model  configuration">
                     <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
             <div class="col-6">
-                <gebo-ai-field id="baseUrl" label="{{modelType?.description}} API server address" help="Base address of the {{modelType?.description}} server." [required]="true">
-                    <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true" [readOnly]="modelType?.baseUrl?true:false" gebo-ai-field-element />
+                <gebo-ai-field id="baseUrl" label="Embedding model  API server address"
+                    help="Base address of the Embedding model  server." [required]="true">
+                    <input pInputText id="baseUrl" formControlName="baseUrl" [required]="true"
+                        [readOnly]="modelType?.baseUrl?true:false" gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
             <div class="col-6">
-                <gebo-ai-field id="apiSecretCode" label="{{modelType?.description}} API token" help="Choose the {{modelType?.description}} API token to be used for this model" [required]="modelType?.optionalAuthentication!==true">
-                    <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token" [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element />
+                <gebo-ai-field id="apiSecretCode" label="Embedding model  API token"
+                    help="Choose the Embedding model  API token to be used for this model"
+                    [required]="modelType?.optionalAuthentication!==true">
+                    <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
+                        [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
+                        gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
             <div class="col-6">
-                <gebo-ai-field id="choosedModel" label="{{modelType?.description}} embedding model choice" help="Choose the {{modelType?.description}} embedding model to work with." [required]="true">
-                    <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel" placeholder="Select a model" [required]="true" [options]="modelChoicesData" optionLabel="description" gebo-ai-field-element />
+                <gebo-ai-field id="choosedModel" label="Embedding model  embedding model choice"
+                    help="Choose the Embedding model  embedding model to work with." [required]="true">
+                    <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel"
+                        placeholder="Select a model" [required]="true" [options]="modelChoicesData"
+                        optionLabel="description" gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
 
             <div class="col-6">
-                <gebo-ai-field id="defaultModel" label="set this as default embedding model" help="If true this will be used as default embedding model where embedding model is not indicated">
-                    <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element />
+                <gebo-ai-field id="defaultModel" label="set this as default embedding model"
+                    help="If true this will be used as default embedding model where embedding model is not indicated">
+                    <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true"
+                        [falseValue]="false" gebo-ai-field-element />
                 </gebo-ai-field>
             </div>
         </div>

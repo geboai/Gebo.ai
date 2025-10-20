@@ -15,6 +15,6 @@ import { LLMSSetupModificationResult } from './lLMSSetupModificationResult';
 export interface OperationStatusLLMSSetupModificationResult { 
     result?: LLMSSetupModificationResult;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

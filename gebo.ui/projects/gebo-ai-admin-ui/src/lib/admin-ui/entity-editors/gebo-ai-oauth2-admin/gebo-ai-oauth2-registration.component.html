@@ -2,14 +2,14 @@
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <div class="grid geboDialogContent">
         <div class="col-6" *ngIf="redirectUrls?.length">
-            <p-fieldset legend="Redirect urls to enable on oauth2 provider">
+            <p-fieldset id="RedirectUrls"  gebo-ai-label   legend="Redirect urls to enable on oauth2 provider">
                 <ul>
                     <li *ngFor="let h of redirectUrls;">{{h}}</li>
                 </ul>
             </p-fieldset>
         </div>
         <div class="col-6" *ngIf="redirectUrls?.length">
-            <p-fieldset legend="Referer urls to enable on oauth2 provider">
+            <p-fieldset id="RefererUrls"  gebo-ai-label  legend="Referer urls to enable on oauth2 provider">
                 <ul>
                     <li *ngFor="let h of refererUrls;">{{h}}</li>
                 </ul>

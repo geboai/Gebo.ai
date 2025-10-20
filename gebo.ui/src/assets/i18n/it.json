@@ -1,0 +1,40 @@
+{
+  "GeboAIAdminModule": {
+    "GeboAIReusableChatComponent": {
+      "chatDeleteBtn": { "help": "Elimina questa chat" },
+      "chatConfigInfosBtn": { "help": "Informazioni sulla configurazione della chat" },
+      "chatNameChangeBtn": { "help": "Rinomina la chat" }
+    },
+    "GOpenAIChatModelConfig": {
+      "description": { "label": "Descrizione", "help": "Inserisci una descrizione per questa configurazione del modello" },
+      "code": { "label": "Codice univoco", "help": "Codice univoco generato automaticamente per la configurazione del modello" },
+      "apiSecretCode": { "label": "Token OpenAI", "help": "Seleziona il token OpenAI da utilizzare per questo modello" },
+      "choosedModel": { "label": "Modello Chat OpenAI", "help": "Scegli il modello di chat OpenAI da utilizzare" },
+      "defaultModel": { "label": "Imposta come modello chat predefinito", "help": "Se attivo, sarà usato di default quando non è specificato un altro modello" },
+      "MainPanel": { "label": "Modifica configurazione modello chat OpenAI" },
+      "temperature": { "label": "Temperatura", "help": "Casualità del modello da 0 a 1 (lascia vuoto se non sei sicuro)" },
+      "topP": { "label": "Top-P", "help": "Nucleus sampling da 0 a 1 (lascia vuoto se non sei sicuro)" },
+      "contextLength": { "label": "Lunghezza contesto (token)", "help": "Massimo testo considerabile dal modello (predefinito 128.000)" },
+      "enabledFunctions": { "label": "Funzioni abilitate", "help": "Funzioni che il modello può invocare" },
+      "defaultModelPrompt": { "label": "Prompt predefinito del modello", "help": "Modifica il prompt predefinito per questo modello di chat" },
+      "modelCode": { "label": "Modello chat per template", "help": "Scegli il modello di chat per generare il template del prompt" },
+      "query": { "label": "Richiesta template prompt", "help": "Descrivi l’obiettivo dell’utente in seconda persona" },
+      "response": { "label": "Template prompt suggerito", "help": "Testo del template generato (puoi modificarlo o rifinirlo)" },
+      "generatePrompt": { "label": "Genera prompt" },
+      "acceptPrompt": { "label": "Accetta prompt" },
+      "cancel": { "label": "Annulla" },
+      "promptWizardUI": { "label": "Assistente template prompt" },
+      "accessibleToAll": { "label": "Disponibile per tutti", "help": "Chiunque può usare questo modello" },
+      "accessibleGroups": { "label": "Gruppi autorizzati", "help": "Seleziona i gruppi che possono usare questo modello" },
+      "accessibleUsers": { "label": "Utenti autorizzati", "help": "Seleziona gli utenti che possono usare questo modello" }
+    },
+    "GOpenAIEmbeddingModelConfig": {
+      "code": { "label": "Codice univoco", "help": "Codice univoco generato automaticamente per la configurazione del modello di embedding" },
+      "description": { "label": "Descrizione", "help": "Inserisci la descrizione della configurazione del modello di embedding" },
+      "apiSecretCode": { "label": "Token OpenAI", "help": "Seleziona il token OpenAI da usare per questo modello" },
+      "defaultModel": { "label": "Imposta come modello embedding predefinito", "help": "Se attivo, sarà usato di default quando non è specificato un altro modello" },
+      "choosedModel": { "label": "Modello embedding OpenAI", "help": "Scegli il modello embedding OpenAI da utilizzare" },
+      "MainPanel": { "label": "Modifica configurazione modello embedding OpenAI" }
+    }
+  }
+}

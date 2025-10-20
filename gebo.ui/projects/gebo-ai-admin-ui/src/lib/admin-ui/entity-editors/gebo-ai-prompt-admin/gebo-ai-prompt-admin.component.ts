@@ -16,10 +16,10 @@
  * It extends BaseEntityEditingComponent to provide CRUD functionality for GPromptConfig entities.
  * The component handles form creation, validation, and interactions with backend services for prompt administration.
  */
-import { Component, Injector } from "@angular/core";
+import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, EmbeddingModelsControllersService, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
 
@@ -31,7 +31,10 @@ import { Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-prompt-admin-component",
     templateUrl: "gebo-ai-prompt-admin.component.html",
-    standalone: false
+    standalone: false, providers: [{
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIPromptAdminComponent),
+        multi: true
+    }]
 })
 export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GPromptConfig> {
     /**
