@@ -1,3 +1,4 @@
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -8,9 +9,6 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
 <p-blockUI [target]="kbUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -38,7 +36,6 @@
                         <td *ngIf="item.project">
                             <p-button icon="pi pi-list-check" [label]="item.project?.description" [outlined]="true" (onClick)="editProject(item)" title="open project form"></p-button>
                             
-
                         </td>
                         <td *ngIf="!item.project">
                             
@@ -76,3 +73,5 @@
         </div>
     </div>
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

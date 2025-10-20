@@ -9,9 +9,6 @@
  */
  -->
 
-
-
-
 <p-blockUI [target]="kbCompo" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
@@ -40,37 +37,19 @@
            -->
 
                     <div class="col-6">
-                        <div class="flex flex-column gap-2">
-                            <label for="description">Description</label>
-                            <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" aria-describedby="description-help" />
-                            <small id="description-help">
-                                Enter the description of the knowledge base.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="description" label="Description" help="Enter the description of the knowledge base." [required]="true">
+                            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="code">Unique Code</label>
-                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                readonly="true" />
-                            <small id="description-help">
-                                Automatically generated unique code of the knowledge base.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the knowledge base.">
+                            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="embeddingModelReferences">Used embedding models (leave empty to use system
-                                default)</label>
-                            <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource"
-                                formControlName="embeddingModelReferences" id="embeddingModelReferences"
-                                placeholder="Select embedding models" optionLabel="description" display="chip"
-                                [showClear]="true" aria-describedby="embeddingModelReferences-help" />
-                            <small id="embeddingModelReferences-help">
-                                Embedding models for the knowledge base, leave empty will use the default one.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="embeddingModelReferences" label="Used embedding models (leave empty to use system default)" help="Embedding models for the knowledge base, leave empty will use the default one.">
+                            <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource" formControlName="embeddingModelReferences" id="embeddingModelReferences" placeholder="Select embedding models" optionLabel="description" display="chip" [showClear]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6" *ngIf="graphRagContext">
                         <gebo-ai-graphrag-component [context]="graphRagContext"></gebo-ai-graphrag-component>
@@ -105,3 +84,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

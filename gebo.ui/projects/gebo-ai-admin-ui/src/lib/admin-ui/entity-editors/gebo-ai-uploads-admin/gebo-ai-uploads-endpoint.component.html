@@ -1,3 +1,4 @@
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -23,81 +24,90 @@
       <p-tabPanel header="Settings">
         <div class="grid">
           <div class="col-6">
-            <div class="flex flex-column gap-2">
-              <label for="description">Description</label>
-              <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                aria-describedby="description-help" />
-              <small id="description-help">
-                Enter the description of the uploaded content of filesystem entry.
-              </small>
-            </div>
+            <gebo-ai-field id="description" label="Description" help="Enter the description of the uploaded content of filesystem entry." [required]="true">
+              <input 
+                pInputText
+                id="description"
+                formControlName="description"
+                maxlength="120"
+                [required]="true"
+                gebo-ai-field-element
+              />
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="code">Unique Code</label>
-              <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-              <small id="code-help">
-                Automatically generated unique code of the contents.
-              </small>
-            </div>
+            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the contents.">
+              <input 
+                pInputText
+                id="code"
+                formControlName="code"
+                readonly="true"
+                gebo-ai-field-element
+              />
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="parentProjectCode">Project</label>
-              <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
-                [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject"
-                aria-describedby="parentProjectCode-help">
-
+            <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+              <geboai-editable-listbox-component 
+                formControlName="parentProjectCode"
+                placeholder="Select a project"
+                [required]="true"
+                [optionsObservable]="projectsObservable"
+                [readonly]="cantModifyProject"
+                gebo-ai-field-element
+              >
               </geboai-editable-listbox-component>
-              <small id="parentProjectCode-help">
-                Parent project reference.
-              </small>
-            </div>
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="openZips">Open zip files</label>
-              <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true"
-                [falseValue]="false" aria-describedby="openZips-help"></p-checkbox>
-              <small id="openZips-help">
-                Enable zip files opening and content extraction
-              </small>
-            </div>
+            <gebo-ai-field id="openZips" label="Open zip files" help="Enable zip files opening and content extraction">
+              <p-checkbox 
+                formControlName="openZips"
+                id="openZips"
+                [binary]="true"
+                [trueValue]="true"
+                [falseValue]="false"
+                gebo-ai-field-element
+              ></p-checkbox>
+            </gebo-ai-field>
           </div>
 
           <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-              <label for="upload">Upload contents</label>
-              <p-fileUpload mode="basic" name="files[]" chooseIcon="pi pi-upload"
-                *ngIf=" !entity?.uploadedContents?.length" [disabled]="formGroup.invalid || !handShakeCode"
+            <gebo-ai-field id="upload" label="Upload contents" help="Click the browse button and select zip files or other files">
+              <p-fileUpload 
+                mode="basic"
+                name="files[]"
+                chooseIcon="pi pi-upload"
+                *ngIf="!entity?.uploadedContents?.length"
+                [disabled]="formGroup.invalid || !handShakeCode"
                 [url]="baseUrl+'/api/admin/FileUploadController/upload/'+handShakeCode"
-                [accept]="filesExtensionsFlatList" maxFileSize="100000000" [multiple]="true" method="post"
-                (onBeforeUpload)="onBeforeUpload($event)" (onProgress)="onProgress($event)"
-                (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" id="upload"
-                aria-describedby="upload-help"></p-fileUpload>
-              <div id="upload" aria-describedby="upload-help" *ngIf="entity?.uploadedContents?.length">
+                [accept]="filesExtensionsFlatList"
+                maxFileSize="100000000"
+                [multiple]="true"
+                method="post"
+                (onBeforeUpload)="onBeforeUpload($event)"
+                (onProgress)="onProgress($event)"
+                (onUpload)="onBasicUploadAuto($event)"
+                [auto]="true"
+                chooseLabel="Browse"
+                id="upload"
+                gebo-ai-field-element
+              ></p-fileUpload>
+              <div id="upload" *ngIf="entity?.uploadedContents?.length">
                 <span *ngFor="let u of entity?.uploadedContents">{{u}}</span><span>&nbsp;</span>
               </div>
-              <small id="upload-help">
-                <span *ngIf=" !entity?.uploadedContents?.length">Click the browse button and select zip files or other
-                  files</span>
-                <span *ngIf="entity?.uploadedContents?.length">List of uploaded contents</span>
-
-              </small>
-            </div>
+            </gebo-ai-field>
           </div>
 
 
           <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-              <label for="buildSystemsRefs">Configure build systems</label>
-              <gebo-ai-build-systems-chooser id="buildSystemsRefs"
-                formControlName="buildSystemsRefs"></gebo-ai-build-systems-chooser>
-              <small id="buildSystemsRefs-help">
-                List of build/packaging systems to inspect for meta informations and additional artifacts infos
-                (leave empty if no software code is contained)
-              </small>
-            </div>
+            <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)">
+              <gebo-ai-build-systems-chooser 
+                id="buildSystemsRefs"
+                formControlName="buildSystemsRefs"
+                gebo-ai-field-element
+              ></gebo-ai-build-systems-chooser>
+            </gebo-ai-field>
           </div>
 
 
@@ -139,3 +149,5 @@
     </div>
   </div>
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

@@ -24,56 +24,31 @@
                 <p-tabPanel header="General infos">
                     <div class="grid standardTabDialogueHeight">
                         <div class="col-6">
-                            <div class="flex flex-column gap-2">
-                                <label for="description">Description</label>
+                            <gebo-ai-field id="description" label="Description" help="Enter chat profile description." [required]="true">
                                 <input pInputText id="description" formControlName="description" maxlength="120"
-                                    [required]="true" aria-describedby="description-help" />
-                                <small id="description-help">
-                                    Enter chat profile description.
-                                </small>
-                            </div>
+                                    [required]="true" gebo-ai-field-element/>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-6">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="code">Unique Code</label>
-                                <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                    readonly="true" />
-                                <small id="code-help">
-                                    Automatically generated unique code of the chat profile.
-                                </small>
-                            </div>
+                            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the chat profile.">
+                                <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element/>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-4">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="userChoosesKnowledgeBases">User chooses knowledge bases</label>
+                            <gebo-ai-field id="userChoosesKnowledgeBases" label="User chooses knowledge bases" help="User can choose from accessible knowledge bases and/or upload its own files.">
                                 <p-checkbox id="userChoosesKnowledgeBases" formControlName="userChoosesKnowledgeBases"
-                                    aria-describedby="userChoosesKnowledgeBases-help" [trueValue]="true"
-                                    [falseValue]="false" [binary]="true"></p-checkbox>
-                                <small id="userChoosesKnowledgeBases-help">
-                                    User can choose from accessible knowledge bases and/or upload its own files.
-                                </small>
-                            </div>
+                                    [trueValue]="true" [falseValue]="false" [binary]="true" gebo-ai-field-element></p-checkbox>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-8">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="knowledgeBaseCodes">Knowledge bases</label>
+                            <gebo-ai-field id="knowledgeBaseCodes" label="Knowledge bases" help="Knowledge bases to use for document retrivial.">
                                 <p-multiSelect styleClass="w-full" id="knowledgeBaseCodes"
-                                    formControlName="knowledgeBaseCodes" aria-describedby="knowledgeBaseCodes-help"
-                                    optionLabel="description" optionValue="code" dataKey="code"
+                                    formControlName="knowledgeBaseCodes" optionLabel="description" optionValue="code" dataKey="code"
                                     [options]="allKnowledgeBaseData" showClear="true" styleClass="w-full"
-                                    display="chip"></p-multiSelect>
-
-
-                                <small id="knowledgeBaseCodes-help">
-                                    Knowledge bases to use for document retrivial.
-                                </small>
-                            </div>
+                                    display="chip" gebo-ai-field-element></p-multiSelect>
+                            </gebo-ai-field>
                         </div>
-
-
-
                     </div>
-
                 </p-tabPanel>
                 <p-tabPanel header="Large language model & usable tools settings">
                     <div class="grid standardTabDialogueHeight">
@@ -100,10 +75,7 @@
                                             placeholder="Select a chat model configuration"></p-select>
                                     </div>
                                 </div>
-
                             </div>
-
-
                             <small id="defaultChatModel-help">
                                 Use system default chat model or specify one.
                             </small>
@@ -131,7 +103,6 @@
                                             styleClass="w-full"
                                             placeholder="Select an embedding model configuration"></p-select>
                                     </div>
-
                                 </div>
                                 <small id="defaultEmbeddingModel-help">
                                     Use system default embedding model or specify one.
@@ -139,91 +110,53 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="enabledFunctions">Enabled functions call for this RAG chat</label>
+                            <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this RAG chat" help="Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base">
                                 <gebo-ai-choose-llm-functions-component id="enabledFunctions"
-                                    formControlName="enabledFunctions" aria-describedby="enabledFunctions-help"
+                                    formControlName="enabledFunctions"
                                     [knowledgeBaseContext]="true" dataKey="code" optionLabel="description"
                                     optionValue="code" display="chip"
-                                    class="col-12"></gebo-ai-choose-llm-functions-component>
-
-                                <small id="enabledFunctions-help">
-                                    Functionalities that could be used by the llm model during the chat with the user
-                                    interacting also with the selected knowledge base
-                                </small>
-                            </div>
+                                    class="col-12" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+                            </gebo-ai-field>
                         </div>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="RAG settings">
                     <div class="grid standardTabDialogueHeight">
                         <div class="col-6">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="topK">Considered document fragments (TopK)</label>
-
-                                <p-inputNumber id="topK" formControlName="topK" aria-describedby="topK-help"
-                                    class="col-6" inputId="integeronly" [min]="4" [max]="100" />
-                                <small id="topK-help">
-                                    In the retrieve augmented generation, Top N found considered document fragments in semantic
-                                    search
-                                </small>
-                            </div>
+                            <gebo-ai-field id="topK" label="Considered document fragments (TopK)" help="In the retrieve augmented generation, Top N found considered document fragments in semantic search">
+                                <p-inputNumber id="topK" formControlName="topK"
+                                    class="col-6" inputId="integeronly" [min]="4" [max]="100" gebo-ai-field-element/>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-6">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="similaritySearchThreshold">Similarity threshold </label>
-
+                            <gebo-ai-field id="similaritySearchThreshold" label="Similarity threshold" help="Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75 Medium filtering, 0.80–0.85 Accurate">
                                 <p-inputNumber id="similaritySearchThreshold"
                                     formControlName="similaritySearchThreshold"
-                                    aria-describedby="similaritySearchThreshold-help" class="col-6"
+                                    class="col-6"
                                     inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
-                                    maxFractionDigits="2" minFractionDigits="2" />
-                                <small id="similaritySearchThreshold-help">
-                                    Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75
-                                    Medium
-                                    filtering, 0.80–0.85 Accurate
-                                </small>
-                            </div>
+                                    maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-6">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="disableMultiHopRag">Disable "Multi Hop" rag</label>
+                            <gebo-ai-field id="disableMultiHopRag" label="Disable 'Multi Hop' rag" help="Disable the 'multi hop rag' functionality. Multi hop search does a first semantic search and uses found documents as a context for the semantic search itself providing a larger context.">
                                 <p-checkbox id="disableMultiHopRag" formControlName="disableMultiHopRag"
-                                    [trueValue]="true" [falseValue]="false" [binary]="true"></p-checkbox>
-
-                                <small id="disableMultiHopRag-help">
-                                    Disable the "multi hop rag" functionality. Multi hop search does a first semantic
-                                    search and
-                                    uses found documents as a context for the semantic search itself providing a larger
-                                    context.
-                                </small>
-                            </div>
+                                    [trueValue]="true" [falseValue]="false" [binary]="true" gebo-ai-field-element></p-checkbox>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-6">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="otherSearchSimilarityThreshold">2nd "hop" similarity threshold </label>
-
+                            <gebo-ai-field id="otherSearchSimilarityThreshold" label="2nd 'hop' similarity threshold" help="Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75 Medium filtering, 0.80–0.85 Accurate used from the 2nd search of multi-hop rag">
                                 <p-inputNumber id="otherSearchSimilarityThreshold"
                                     formControlName="otherSearchSimilarityThreshold"
-                                    aria-describedby="otherSearchSimilarityThreshold-help" class="col-6"
+                                    class="col-6"
                                     inputId="integeronly" [min]="0.1" [max]="1.0" [allowEmpty]="true"
-                                    maxFractionDigits="2" minFractionDigits="2" />
-                                <small id="otherSearchSimilarityThreshold-help">
-                                    Similarity threshold for semantic searches, 0.60–0.65 Low filtering, 0.70-0.75
-                                    Medium
-                                    filtering, 0.80–0.85 Accurate used from the 2nd search of multi-hop rag
-                                </small>
-                            </div>
+                                    maxFractionDigits="2" minFractionDigits="2" gebo-ai-field-element/>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-12">
-                            <div class="flex flex-column gap-2 ">
-                                <label for="prompt">Prompt</label>
+                            <gebo-ai-field id="prompt" label="Prompt" help="Edit the prompt for the retrieve augmented generation sessions." [required]="true">
                                 <textarea rows="6" cols="250" [required]="true" pTextarea
-                                    formControlName="prompt"></textarea>
-                                <small id="prompt-help">
-                                    Edit the prompt for the retrieve augmented generation sessions.
-                                </small>
-                            </div>
+                                    formControlName="prompt" gebo-ai-field-element></textarea>
+                            </gebo-ai-field>
                         </div>
                         <div class="col-3">
                             <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup"
@@ -261,3 +194,4 @@
 
 
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

@@ -20,46 +20,62 @@
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid" [formGroup]="formGroup">
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter prompt description.
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter prompt description." [required]="true">
+                    <input pInputText
+                        id="description"
+                        formControlName="description"
+                        maxlength="120"
+                        [required]="true"
+                        gebo-ai-field-element
+                    />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="code">Unique Code</label>
-                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-                    <small id="code-help">
-                        Automatically generated unique code of the prompt.
-                    </small>
-                </div>
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the prompt.">
+                    <input pInputText
+                        id="code"
+                        formControlName="code"
+                        readonly="true"
+                        gebo-ai-field-element
+                    />
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="prompt">Prompt category</label>
-                    <p-select styleClass="w-full"  formControlName="promptCategory" placeholder="Enter or insert the prompt category"
-                        [options]="promptCategories" [editable]="true" [required]="true" class="col-12"></p-select>
-                    <small id="code-help">
-                        Select or insert the prompt category.
-                    </small>
-                </div>
+                <gebo-ai-field
+                    id="promptCategory"
+                    label="Prompt category"
+                    help="Select or insert the prompt category."
+                    [required]="true"
+                >
+                    <p-select
+                        styleClass="w-full"
+                        formControlName="promptCategory"
+                        placeholder="Enter or insert the prompt category"
+                        [options]="promptCategories"
+                        [editable]="true"
+                        [required]="true"
+                        class="col-12"
+                        gebo-ai-field-element
+                    ></p-select>
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="prompt">Prompt</label>
-                    <textarea rows="10" cols="250" [required]="true" pTextarea formControlName="prompt"></textarea>
-                    <small id="code-help">
-                        Edit the prompt for the chat, use &lbrace;query&rbrace; to indicate user question and
-                        &lbrace;context&rbrace; to indicate the
-                        documents/history context sent to the LLM.
-                    </small>
-                </div>
+                <gebo-ai-field
+                    id="prompt"
+                    label="Prompt"
+                    help="Edit the prompt for the chat, use {query} to indicate user question and {context} to indicate the documents/history context sent to the LLM."
+                    [required]="true"
+                >
+                    <textarea
+                        rows="10"
+                        cols="250"
+                        [required]="true"
+                        pTextarea
+                        formControlName="prompt"
+                        gebo-ai-field-element
+                    ></textarea>
+                </gebo-ai-field>
             </div>
-
         </div>
     </div>
     <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
@@ -77,3 +93,4 @@
             </div>
         </div>
     </div>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

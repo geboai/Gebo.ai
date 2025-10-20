@@ -8,9 +8,6 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
 <p-blockUI [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -55,33 +52,23 @@
 
         <div class="grid">
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="reference">Add a root folder of a shared filesystem</label>
+                <gebo-ai-field id="path" label="Add a root folder of a shared filesystem" help="Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository" [required]="true">
                     <gebo-ai-vfilesystem-selector-component
                         [loadRootsObservable]="loadRootsObservable"
                         [readonly]="settingEnabled!==true" formControlName="reference" selectionMode="single" id="path"
-                        aria-describedby="reference-help"
-                        [browsePathObservable]="browsePathObservable" [required]="true"
+                        [browsePathObservable]="browsePathObservable"
+                        gebo-ai-field-element
                         class="col-12"></gebo-ai-vfilesystem-selector-component>
-                    <small id="reference-help">
-                        Choose a server folder that is a root path for the shared filesystem used in your
-                        organization as a document repository
-                    </small>
-                </div>
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter filesystem entry description
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter filesystem entry description" [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120"
+                        gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
         </div>
         <div class="grid geboLargeButtonsBar">
-         
             <div class="col-6">
                 <p-button [outlined]="true" label="Add folder" (onClick)="saveNewPath()" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid"
@@ -90,3 +77,4 @@
         </div>
     </form>
 </p-dialog>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

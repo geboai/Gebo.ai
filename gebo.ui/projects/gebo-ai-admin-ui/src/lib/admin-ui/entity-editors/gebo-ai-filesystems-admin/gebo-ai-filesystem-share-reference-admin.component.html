@@ -22,36 +22,23 @@
         <div class="grid">
 
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the shared filesystem area of your organization" [required]="true">
                     <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of the shared filesystem area of your organization
-                    </small>
-                </div>
+                        gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="code">Unique Code</label>
-                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-                    <small id="code-help">
-                        Automatically generated unique code of the contents.
-                    </small>
-                </div>
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the contents.">
+                    <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="reference">Choosed shared filesystem folder</label>
+                <gebo-ai-field id="reference" label="Choosed shared filesystem folder" help="Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository" [required]="true">
                     <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
                         [readonly]="mode!=='NEW'" formControlName="reference" selectionMode="single" id="path"
-                        aria-describedby="reference-help" [browsePathObservable]="browsePathObservable" [reconstructNavigationCallback]="reconstructNavigationObservableCallback"
-                        [required]="true" class="col-12"></gebo-ai-vfilesystem-selector-component>
-                    <small id="reference-help">
-                        Choose a server folder that is a root path for the shared filesystem used in your
-                        organization as a document repository
-                    </small>
-                </div>
+                        [browsePathObservable]="browsePathObservable" [reconstructNavigationCallback]="reconstructNavigationObservableCallback"
+                        [required]="true" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
+                </gebo-ai-field>
             </div>
 
 
@@ -85,3 +72,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

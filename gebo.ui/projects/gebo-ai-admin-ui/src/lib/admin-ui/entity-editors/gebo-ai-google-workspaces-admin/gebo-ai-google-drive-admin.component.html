@@ -9,9 +9,6 @@
  */
  -->
  
- 
- 
-
 <p-blockUI [target]="driveSystemCtrl" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
@@ -22,40 +19,25 @@
           <p-tabPanel header="General settings">
               <div class="grid">
 
-
-
                   <div class="col-6">
-                      <div class="flex flex-column gap-2">
-                          <label for="description">Description</label>
+                      <gebo-ai-field id="description" label="Description" help="Enter the description of the google drive system." [required]="true">
                           <input pInputText id="description" formControlName="description" maxlength="120"
-                              [required]="true" aria-describedby="description-help" />
-                          <small id="description-help">
-                              Enter the description of the google drive system.
-                          </small>
-                      </div>
+                              [required]="true" gebo-ai-field-element />
+                      </gebo-ai-field>
                   </div>
                   <div class="col-6">
-                      <div class="flex flex-column gap-2 ">
-                          <label for="code">Unique Code</label>
-                          <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                              readonly="true" />
-                          <small id="description-help">
-                              Automatically generated unique code of the google drive system.
-                          </small>
-                      </div>
+                      <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the google drive system.">
+                          <input pInputText id="code" formControlName="code"
+                              readonly="true" gebo-ai-field-element />
+                      </gebo-ai-field>
                   </div>
                   <div class="col-6">
-                      <div class="flex flex-column gap-2 ">
-                          <label for="driveAccessSecret">Identity used</label>
+                      <gebo-ai-field id="driveAccessSecret" label="Identity used" help="Select or create the identity to access the google drive system" [required]="true">
                           <geboai-editable-listbox-component formControlName="driveAccessSecret" id="driveAccessSecret"
                               placeholder="Select an identity" [optionsObservable]="identitiesObservable"
-                              [required]="true" aria-describedby="driveAccessSecret-help" [createNewRecordRequest]="newSecretAction">
-
+                              [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
                           </geboai-editable-listbox-component>
-                          <small id="driveAccessSecret-help">
-                              Select or create the identity to access the google drive system
-                          </small>
-                      </div>
+                      </gebo-ai-field>
                   </div>
               </div>
           </p-tabPanel>
@@ -88,3 +70,4 @@
       </div>
   </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

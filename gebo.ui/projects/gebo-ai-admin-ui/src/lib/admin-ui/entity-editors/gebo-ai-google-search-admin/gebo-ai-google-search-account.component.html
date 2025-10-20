@@ -22,46 +22,27 @@
         <div class="grid">
 
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of google search api configuration.
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of google search api configuration." [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="code">Unique Code</label>
-                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-                    <small id="code-help">
-                        unique code of the google search api configuration.
-                    </small>
-                </div>
+                <gebo-ai-field id="code" label="Unique Code" help="unique code of the google search api configuration.">
+                    <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="secretCode">Google search api token</label>
+                <gebo-ai-field id="secretCode" label="Google search api token" help="Choose or insert the google search api token" [required]="true">
                     <geboai-editable-listbox-component formControlName="secretCode" placeholder="Select a token"
                         [required]="true" [optionsObservable]="identitiesObservable"
-                        [createNewRecordRequest]="newSecretAction" aria-describedby="secretCode-help">
+                        [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
-                    <small id="secretCode-help">
-                        Choose or insert the google search api token
-                    </small>
-                </div>
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="customSearchEngineId">Google search engine id</label>
-                    <input pInputText id="customSearchEngineId" formControlName="customSearchEngineId"
-                        aria-describedby="customSearchEngineId-help" />
-
-                    <small id="customSearchEngineId-help">
-                        Google search engine id
-                    </small>
-                </div>
+                <gebo-ai-field id="customSearchEngineId" label="Google search engine id" help="Google search engine id">
+                    <input pInputText id="customSearchEngineId" formControlName="customSearchEngineId" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-12"> <p>
                 For more informations on Google custom search API or getting your api key (for free) visit: <a href="https://developers.google.com/custom-search" target="_blank">https://developers.google.com/custom-search</a>
@@ -88,3 +69,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

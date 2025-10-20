@@ -22,68 +22,36 @@
         <div class="grid">
 
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" 
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of the confluence system.
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the confluence system.">
+                    <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="confluenceVersion">Confluence version</label>
-                    <geboai-editable-listbox-component id="confluenceVersion" formControlName="confluenceVersion"
-                         placeholder="Select a confluence version" class="col-12 required"
-                        aria-describedby="confluenceVersion-help" [data]="confluenceVersions">
-
+                <gebo-ai-field id="confluenceVersion" label="Confluence version" help="Confluence version">
+                    <geboai-editable-listbox-component id="confluenceVersion" formControlName="confluenceVersion" placeholder="Select a confluence version" class="col-12 required" [data]="confluenceVersions" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
-                    <small id="confluenceVersion-help">
-                        Confluence version
-                    </small>
-                </div>
+                </gebo-ai-field>
             </div>
 
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="baseUri">Base internet address</label>
-                    <input type="text" id="baseUri" pInputText formControlName="baseUri" 
-                        class="col-12 required" aria-describedby="baseUri-help" />
-                    <small id="baseUri-help">
-                        Url of the base confluence system address for onpremise installation or your organization base url for confluence cloud system 
-                    </small>
-                </div>
+                <gebo-ai-field id="baseUri" label="Base internet address" help="Url of the base confluence system address for onpremise installation or your organization base url for confluence cloud system">
+                    <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="username">Confluence username</label>
-                    <input pInputText id="username" formControlName="username" 
-                        aria-describedby="username-help" type="text" />
-                    <small id="username-help">
-                        Confluence user name
-                    </small>
-                </div>
+                <gebo-ai-field id="username" label="Confluence username" help="Confluence user name">
+                    <input pInputText id="username" formControlName="username" type="text" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6" *ngIf="currentConfluenceVersion==='ONPREMISE7X'">
-                <div class="flex flex-column gap-2 ">
-                    <label for="password">Confluence password</label>
-                    <input pInputText id="password" formControlName="password" type="password" 
-                        aria-describedby="password-help" />
-                    <small id="password-help">
-                        Confluence password
-                    </small>
-                </div>
+                <gebo-ai-field id="password" label="Confluence password" help="Confluence password">
+                    <input pInputText id="password" formControlName="password" type="password" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6" *ngIf="currentConfluenceVersion==='CLOUD'">
-                <div class="flex flex-column gap-2 ">
-                    <label for="token">Confluence cloud api key</label>
-                    <input pInputText id="token" formControlName="token" type="text" size="120" maxlength="1800000"
-                        aria-describedby="token-help" />
-                    <small id="token-help">
-                        Confluence CLOUD apikey acquired in the confluence backoffic, here "API Token for your Atlassian Account" have to be inserted.
-                    </small>
-                </div>
+                <gebo-ai-field id="token" label="Confluence cloud api key" help="Confluence CLOUD apikey acquired in the confluence backoffic, here &quot;API Token for your Atlassian Account&quot; have to be inserted.">
+                    <input pInputText id="token" formControlName="token" type="text" size="120" maxlength="1800000" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
         </div>
 
@@ -104,3 +72,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

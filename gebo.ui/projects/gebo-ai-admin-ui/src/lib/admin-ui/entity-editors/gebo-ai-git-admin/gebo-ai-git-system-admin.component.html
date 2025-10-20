@@ -23,79 +23,53 @@
                 <div class="grid">
                     
                     <div class="col-6">
-                        <div class="flex flex-column gap-2">
-                            <label for="description">Description</label>
+                        <gebo-ai-field id="description" label="Description" help="Enter the description of the git compatible system." [required]="true">
                             <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" aria-describedby="description-help" />
-                            <small id="description-help">
-                                Enter the description of the git compatible system.
-                            </small>
-                        </div>
+                                [required]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="code">Unique Code</label>
-                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                readonly="true" />
-                            <small id="description-help">
-                                Automatically generated unique code of the git compatible system.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the git compatible system.">
+                            <input pInputText id="code" formControlName="code" readonly="true"
+                                gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="contentManagementSystemType">Git driver</label>
+                        <gebo-ai-field id="contentManagementSystemType" label="Git driver" help="Git driver for cloning/pull of repos" [required]="true">
                             <geboai-editable-listbox-component id="contentManagementSystemType"
-                                formControlName="contentManagementSystemType" [required]="true"
+                                formControlName="contentManagementSystemType"
                                 [readonly]="cantModifyGitSystemReference" placeholder="Select a Git driver"
-                                class="col-12 required" aria-describedby="contentManagementSystemType-help"
-                                [optionsObservable]="contentManagementSystemTypeObservable">
-
+                                class="col-12 required"
+                                [optionsObservable]="contentManagementSystemTypeObservable"
+                                gebo-ai-field-element>
                             </geboai-editable-listbox-component>
-                            <small id="contentManagementSystemType-help">
-                                Git driver for cloning/pull of repos
-                            </small>
-                        </div>
+                        </gebo-ai-field>
                     </div>
 
                     <div class="col-12">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="baseUri">Base internet address</label>
+                        <gebo-ai-field id="baseUri" label="Base internet address" help="Complete url of the repository" [required]="true">
                             <input type="text" id="baseUri" pInputText formControlName="baseUri" [required]="true"
-                                class="col-12 required" aria-describedby="baseUri-help" />
-                            <small id="baseUri-help">
-                                Complete url of the repository
-                            </small>
-                        </div>
+                                class="col-12 required" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                 </div>
             </p-tabPanel>
             <p-tabPanel header="Security settings" [disabled]="mode!=='EDIT'">
                 <div class="grid">
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="publicAccess">Public access</label>
+                        <gebo-ai-field id="publicAccess" label="Public access" help="If true the system gives public access to everyone">
                             <p-checkbox id="publicAccess" formControlName="publicAccess" [binary]="true"
-                                inputId="binary" aria-describedby="publicAccess-help" />
-                            <small id="publicAccess-help">
-                                If true the system gives public access to everyone
-                            </small>
-                        </div>
+                                inputId="binary" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6" *ngIf="publicAccess===false && mode==='EDIT'">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="defaultIdentityCode">Default identity used</label>
+                        <gebo-ai-field id="defaultIdentityCode" label="Default identity used" help="Select the default identity to do clone/checkout on the system" [required]="publicAccess===false  && mode==='EDIT'">
                             <geboai-editable-listbox-component formControlName="defaultIdentityCode"
                                 id="defaultIdentityCode" placeholder="Select an identity"
                                 [optionsObservable]="identitiesObservable"
-                                [required]="publicAccess===false  && mode==='EDIT'"
-                                aria-describedby="defaultIdentityCode-help">
-
+                                gebo-ai-field-element>
                             </geboai-editable-listbox-component>
-                            <small id="defaultIdentityCode-help">
-                                Select the default identity to do clone/checkout on the system
-                            </small>
-                        </div>
+                        </gebo-ai-field>
                     </div>
                 </div>
                 <gebo-ai-secrets-admin-list-component *ngIf="publicAccess===false && mode==='EDIT'"
@@ -122,3 +96,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

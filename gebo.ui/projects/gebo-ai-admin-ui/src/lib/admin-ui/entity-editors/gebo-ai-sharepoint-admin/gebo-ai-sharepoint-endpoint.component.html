@@ -9,9 +9,6 @@
  */
  -->
  
- 
- 
-
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Sharing SharePoint/OneDrive contents" [formGroup]="formGroup">
   <p-blockUI [target]="endPointUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -24,114 +21,112 @@
         <div class="grid">
 
           <div class="col-6">
-            <div class="flex flex-column gap-2">
-              <label for="description">Description</label>
-              <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                aria-describedby="description-help" />
-              <small id="description-help">
-                Enter the description of SharePoint/OneDrive entries data sources.
-              </small>
-            </div>
+            <gebo-ai-field id="description" label="Description" help="Enter the description of SharePoint/OneDrive entries data sources." [required]="true">
+              <input 
+                pInputText 
+                id="description" 
+                formControlName="description" 
+                maxlength="120" 
+                [required]="true"
+                gebo-ai-field-element
+              />
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="code">Unique Code</label>
-              <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-              <small id="code-help">
-                Automatically generated unique code of the contents.
-              </small>
-            </div>
+            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the contents.">
+              <input 
+                pInputText 
+                id="code" 
+                formControlName="code" 
+                readonly="true" 
+                gebo-ai-field-element
+              />
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="parentProjectCode">Project</label>
-              <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
-                [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject"
-                aria-describedby="parentProjectCode-help">
-
-              </geboai-editable-listbox-component>
-              <small id="parentProjectCode-help">
-                Parent project reference.
-              </small>
-            </div>
+            <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+              <geboai-editable-listbox-component 
+                formControlName="parentProjectCode" 
+                placeholder="Select a project"
+                [required]="true" 
+                [optionsObservable]="projectsObservable" 
+                [readonly]="cantModifyProject"
+                gebo-ai-field-element
+              ></geboai-editable-listbox-component>
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="sharePointSystemCode">sharepoint system</label>
-              <geboai-editable-listbox-component formControlName="sharePointSystemCode" [required]="true"
-                placeholder="Select a sharepoint server" [data]="sharepointServersData"
-                aria-describedby="sharePointSystemCode-help" [readonly]="mode==='EDIT'"
-                [createNewRecordRequest]="newsharepointServerRequest">
-
-              </geboai-editable-listbox-component>
-
-              <small id="sharePointSystemCode-help">
-                Already configured SharePoint/OneDrive system reference.
-              </small>
-            </div>
+            <gebo-ai-field id="sharePointSystemCode" label="sharepoint system" help="Already configured SharePoint/OneDrive system reference." [required]="true">
+              <geboai-editable-listbox-component 
+                formControlName="sharePointSystemCode" 
+                [required]="true"
+                placeholder="Select a sharepoint server" 
+                [data]="sharepointServersData"
+                [readonly]="mode==='EDIT'"
+                [createNewRecordRequest]="newsharepointServerRequest"
+                gebo-ai-field-element
+              ></geboai-editable-listbox-component>
+            </gebo-ai-field>
           </div>
           <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-              <label for="tree">Choosed Sharepoint sites/pages/subpages or OneDrive drives/folder/files</label>
-              <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
-                [readonly]="mode==='EDIT'" formControlName="paths" selectionMode="multiple"
-                [browsePathObservable]="browsePathObservable" class="col-12"
-                [required]="true"></gebo-ai-vfilesystem-selector-component>
-
-              <small id="tree-help">
-                Shared sharepoint/OneDrive contents
-              </small>
-            </div>
+            <gebo-ai-field id="tree" label="Choosed Sharepoint sites/pages/subpages or OneDrive drives/folder/files" help="Shared sharepoint/OneDrive contents" [required]="true">
+              <gebo-ai-vfilesystem-selector-component 
+                [loadRootsObservable]="loadRootsObservable"
+                [readonly]="mode==='EDIT'" 
+                formControlName="paths" 
+                selectionMode="multiple"
+                [browsePathObservable]="browsePathObservable" 
+                class="col-12"
+                [required]="true"
+                gebo-ai-field-element
+              ></gebo-ai-vfilesystem-selector-component>
+            </gebo-ai-field>
           </div>
           <div class="col-2">
-            <div class="flex flex-column gap-2 ">
-              <label for="openZips">Open zip files</label>
-              <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true"
-                [falseValue]="false" aria-describedby="openZips-help"></p-checkbox>
-              <small id="openZips-help">
-                Enable zip files opening and content extraction
-              </small>
-            </div>
+            <gebo-ai-field id="openZips" label="Open zip files" help="Enable zip files opening and content extraction">
+              <p-checkbox 
+                formControlName="openZips" 
+                id="openZips" 
+                [binary]="true" 
+                [trueValue]="true"
+                [falseValue]="false" 
+                gebo-ai-field-element
+              ></p-checkbox>
+            </gebo-ai-field>
           </div>
 
           <div class="col-10">
-            <div class="flex flex-column gap-2 ">
-              <label for="catalogingCriteria">Spaces, pages and subpages organization criterias</label>
-              <textarea formControlName="catalogingCriteria" id="catalogingCriteria"
-                aria-describedby="catalogingCriteria-help" cols="200" rows="2"></textarea>
-              <small id="catalogingCriteria-help">
-                Please explain here how the spaces, pages and sub pages organization criteria has been done in the
-                sharepoint contents shared with Gebo.ai
-              </small>
-            </div>
+            <gebo-ai-field id="catalogingCriteria" label="Spaces, pages and subpages organization criterias" help="Please explain here how the spaces, pages and sub pages organization criteria has been done in the sharepoint contents shared with Gebo.ai">
+              <textarea 
+                formControlName="catalogingCriteria" 
+                id="catalogingCriteria"
+                cols="200" 
+                rows="2" 
+                gebo-ai-field-element
+              ></textarea>
+            </gebo-ai-field>
           </div>
           <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-              <label for="programmedTables">Contents updates checks schedule</label>
-              <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
-                aria-describedby="programmedTables-help"></gebo-ai-content-reindex-scheduler-component>
-              <small id="programmedTables-help">
-                Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated
-              </small>
-            </div>
+            <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated">
+              <gebo-ai-content-reindex-scheduler-component 
+                formControlName="programmedTables" 
+                id="programmedTables"
+                gebo-ai-field-element
+              ></gebo-ai-content-reindex-scheduler-component>
+            </gebo-ai-field>
           </div>
         </div>
-      </p-tabPanel><p-tabPanel header="Logs" [disabled]="!objectReference">
-        <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference"
-          title="This sharepoint configuration ingestion log"></gebo-ai-log-table-component>
-      </p-tabPanel></p-tabView>
+      </p-tabPanel>
+      <p-tabPanel header="Logs" [disabled]="!objectReference">
+        <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference" title="This sharepoint configuration ingestion log"></gebo-ai-log-table-component>
+      </p-tabPanel>
+    </p-tabView>
   </div>
-
-
-
-
 
   <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
     <div class="grid">
       <div class="col-3">
-        <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
-          [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
-          styleClass="w-full"></p-button>
+        <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full"></p-button>
       </div>
       <div class="col-3">
         <p-button [outlined]="true" label="Publish!"
@@ -139,7 +134,6 @@
           icon="pi pi-microchip-ai" (onClick)="doPublish()"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
           styleClass="w-full" />
-
       </div>
       <div class="col-3">
         <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
@@ -149,7 +143,7 @@
         <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
           styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
       </div>
-
     </div>
   </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

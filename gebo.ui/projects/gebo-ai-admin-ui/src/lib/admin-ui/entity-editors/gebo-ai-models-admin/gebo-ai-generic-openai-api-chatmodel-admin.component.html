@@ -23,74 +23,44 @@
 
                 <div class="grid">
                     <div class="col-6">
-                        <div class="flex flex-column gap-2">
-                            <label for="description">Description</label>
+                        <gebo-ai-field id="description" label="Description" help="Enter the description of the model configuration" [required]="true">
                             <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" aria-describedby="description-help" />
-                            <small id="description-help">
-                                Enter the description of the model configuration
-                            </small>
-                        </div>
+                                [required]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="code">Unique Code</label>
-                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                readonly="true" />
-                            <small id="code-help">
-                                Automatically generated unique code of the model configuration
-                            </small>
-                        </div>
+                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the model configuration">
+                            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="baseUrl"> {{modelType?.description}} API base server address</label>
-                            <input pInputText id="baseUrl" formControlName="baseUrl" aria-describedby="baseUrl-help" [readOnly]="modelType?.baseUrl?true:false"
-                                [required]="true" />
-                            <small id="baseUrl-help">
-                                Base address of {{modelType?.description}}.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="baseUrl" label="{{modelType?.description}} API base server address" help="Base address of {{modelType?.description}}." [required]="true">
+                            <input pInputText id="baseUrl" formControlName="baseUrl" 
+                                [readOnly]="modelType?.baseUrl?true:false" [required]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="apiSecretCode"> {{modelType?.description}} API token </label>
+                        <gebo-ai-field id="apiSecretCode" label="{{modelType?.description}} API token" help="Choose the {{modelType?.description}} API token to be used for this model (optional)">
                             <geboai-editable-listbox-component formControlName="apiSecretCode"
                                 placeholder="Select a token" 
                                 [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction" 
-                                aria-describedby="apiSecretCode-help">
+                                gebo-ai-field-element>
                             </geboai-editable-listbox-component>
-                            <small id="apiSecretCode-help">
-                                Choose the {{modelType?.description}} API token to be used for this model (optional)
-                            </small>
-                        </div>
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="choosedModel"> {{modelType?.description}} chat model choice</label>
-                            <p-select styleClass="w-full"  formControlName="choosedModel" id="choosedModel" placeholder="Select a model"
+                        <gebo-ai-field id="choosedModel" label="{{modelType?.description}} chat model choice" help="Choose the {{modelType?.description}} chat model to work with." [required]="true">
+                            <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel" placeholder="Select a model"
                                 [required]="true" [options]="modelChoicesData" optionLabel="description"
-                                aria-describedby="choosedModel-help"></p-select>
-
-
-                            <small id="modelCode-help">
-                                Choose the {{modelType?.description}} chat model to work with.
-                            </small>
-                        </div>
+                                gebo-ai-field-element></p-select>
+                        </gebo-ai-field>
                     </div>
-                   
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="defaultModel">set this as default chat model</label>
+                        <gebo-ai-field id="defaultModel" label="set this as default chat model" help="If true this will be used as default chat model where chat model is not indicated">
                             <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true"
-                                [trueValue]="true" [falseValue]="false"
-                                aria-describedby="defaultModel-help"></p-checkbox>
-                            <small id="defaultModel-help">
-                                If true this will be used as default chat model where chat model is not indicated
-                            </small>
-                        </div>
+                                [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                        </gebo-ai-field>
                     </div>
-
                 </div>
                 <gebo-ai-standard-chat-model-settings-component [formGroup]="formGroup"></gebo-ai-standard-chat-model-settings-component>
             </p-tabPanel>
@@ -125,3 +95,4 @@
         </div>
     
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

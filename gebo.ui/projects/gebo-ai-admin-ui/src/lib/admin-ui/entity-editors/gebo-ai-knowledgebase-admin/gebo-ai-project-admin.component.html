@@ -9,9 +9,6 @@
  */
  -->
 
-
-
-
 <p-blockUI [target]="pjCompo" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
@@ -21,49 +18,38 @@
         <div class="grid">
 
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the project." [required]="true">
                     <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of the project.
-                    </small>
-                </div>
+                        gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-6">
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the project.">
+                    <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                </gebo-ai-field>
+            </div>
+            <div class="col-6">
+                <gebo-ai-field id="rootKnowledgeBaseCode" label="knowledge base" help="knowledge base.">
+                    <geboai-editable-listbox-component id="rootKnowledgeBaseCode" formControlName="rootKnowledgeBaseCode"
+                        [optionsObservable]="knowledgeBases"
+                        [readonly]="editKnowledgebase!==true" gebo-ai-field-element>
+                    </geboai-editable-listbox-component>
+                </gebo-ai-field>
+            </div>
+            <!-- 
+            <div class="col-6">
                 <div class="flex flex-column gap-2 ">
-                    <label for="code">Unique Code</label>
-                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-                    <small id="code-help">
-                        Automatically generated unique code of the project.
+                    <label for="parentProjectCode">Parent project</label>
+                    <div id="parentProjectCode" *ngIf="parentProject">{{parentProject?.description}}</div>
+                    <div id="parentProjectCode" *ngIf="!parentProject">---None---</div>
+                    <small id="parentProjectCode-help">
+                        Parent project
                     </small>
                 </div>
+            </div> -->
+            <div class="col-6" *ngIf="graphRagContext">
+                <gebo-ai-graphrag-component [context]="graphRagContext"></gebo-ai-graphrag-component>
             </div>
-<div class="col-6">
-            <div class="flex flex-column gap-2 ">
-                <label for="rootKnowledgeBaseCode">knowledge base</label>
-                <geboai-editable-listbox-component id="rootKnowledgeBaseCode" formControlName="rootKnowledgeBaseCode"
-                    aria-describedby="rootKnowledgeBaseCode-help" [optionsObservable]="knowledgeBases"
-                    [readonly]="editKnowledgebase!==true"></geboai-editable-listbox-component>
-                <small id="rootKnowledgeBaseCode-help">
-                    knowledge base.
-                </small>
-            </div>
-        </div>
-        <!-- 
-        <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-                <label for="parentProjectCode">Parent project</label>
-                <div id="parentProjectCode" *ngIf="parentProject">{{parentProject?.description}}</div>
-                <div id="parentProjectCode" *ngIf="!parentProject">---None---</div>
-                <small id="parentProjectCode-help">
-                    Parent project
-                </small>
-            </div>
-        </div> -->
-        <div class="col-6" *ngIf="graphRagContext">
-            <gebo-ai-graphrag-component [context]="graphRagContext"></gebo-ai-graphrag-component>
-        </div>
         </div>
         
     </div>
@@ -88,3 +74,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

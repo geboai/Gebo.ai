@@ -9,9 +9,6 @@
  */
  -->
 
-
-
-
 <p-blockUI [target]="jobStatusView" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
@@ -43,18 +40,18 @@
       </div>
 
       <div class="col-3">
-        <div class="flex flex-column gap-2 ">
-          <label for="actualStatus">Status</label>
-          <div>
+        <gebo-ai-field id="actualStatus" label="Status" help="Status of the task, still running, finished or finished with errors.">
+          <div id="actualStatus" gebo-ai-field-element>
             
-            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true"  style="color: orange;"><i class="pi pi-spin pi-cog"></i>Not processed completely</span>
-            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true"  style="color: green;"><i class="pi pi-check"></i>Processed completely</span>
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true"  style="color: orange;">
+              <i class="pi pi-spin pi-cog"></i>Not processed completely
+            </span>
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true"  style="color: green;">
+              <i class="pi pi-check"></i>Processed completely
+            </span>
             
           </div>
-          <small id="actualStatus-help">
-            Status of the task, still running, finished or finished with errors.
-          </small>
-        </div>
+        </gebo-ai-field>
       </div>
       <div class="col-2">
         <div class="grid">
@@ -94,3 +91,4 @@
   </div>
 
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
