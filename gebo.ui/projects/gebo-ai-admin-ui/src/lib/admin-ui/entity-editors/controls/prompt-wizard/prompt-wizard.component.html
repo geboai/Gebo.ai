@@ -9,65 +9,71 @@
  */
  -->
  
- 
- 
-
 <p-button icon="pi pi-sparkles" label="Prompt wizard" [outlined]="true" title="Use this to use an LLM to generate the prompt for your objectives" (onClick)="dialogVisible=true"></p-button>
 <p-dialog  [maximizable]="true" [visible]="dialogVisible" [modal]="true" [style]="{width:'100%',height:'100%'}" (onHide)="closeModal($event)"
     [closable]="false" [showHeader]="false">
     <p-blockUI [target]="promptWizardUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-panel #promptWizardUI header="Prompt template generation wizard" [formGroup]="formGroup">
+    <p-panel  id="promptWizardUI" gebo-ai-label  #promptWizardUI header="Prompt template generation wizard" [formGroup]="formGroup">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid">
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="modelCode">Chat model to use</label>
-                    <geboai-editable-listbox-component formControlName="modelCode" placeholder="Select a chat model"
-                        [data]="chatModels" aria-describedby="modelCode-help" [required]="true">
-                    </geboai-editable-listbox-component>
-                    <small id="modelCode-help">
-                        Choose the chat model you whant to ask the prompt template generation
-                    </small>
-                </div>
-
+                <gebo-ai-field id="modelCode" label="Chat model to use" [required]="true" help="Choose the chat model you whant to ask the prompt template generation">
+                    <geboai-editable-listbox-component
+                        id="modelCode"
+                        formControlName="modelCode"
+                        placeholder="Select a chat model"
+                        [data]="chatModels"
+                        [required]="true"
+                        gebo-ai-field-element
+                    ></geboai-editable-listbox-component>
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="query">Prompt template request</label>
-                    <textarea rows="5" cols="250" [required]="true" pTextarea id="query" formControlName="query"
-                        aria-describedby="query-help"></textarea>
-                    <small id="query-help">
-                        Specify in 2nd person wich is the objective that the AI will support the user
-                    </small>
-                </div>
+                <gebo-ai-field id="query" label="Prompt template request" [required]="true" help="Specify in 2nd person wich is the objective that the AI will support the user">
+                    <textarea
+                        rows="5"
+                        cols="250"
+                        [required]="true"
+                        pTextarea
+                        id="query"
+                        formControlName="query"
+                        gebo-ai-field-element
+                    ></textarea>
+                </gebo-ai-field>
             </div>
             <div class="col-12" [formGroup]="responseFormGroup">
-                <div class="flex flex-column gap-2">
-                    <label for="response">Suggested prompt template</label>
-                    <textarea rows="5" cols="250" [readonly]="!lastResponse?.result?.response" pTextarea id="response" formControlName="response" [required]="true"
-                        aria-describedby="response-help"></textarea>
-                    <small id="response-help">
-                        Generated template text for your objective (you can change or correct/modify it)
-                    </small>
-                </div>
+                <gebo-ai-field id="response" label="Suggested prompt template" [required]="true" help="Generated template text for your objective (you can change or correct/modify it)">
+                    <textarea
+                        rows="5"
+                        cols="250"
+                        [readonly]="!lastResponse?.result?.response"
+                        pTextarea
+                        id="response"
+                        formControlName="response"
+                        [required]="true"
+                        gebo-ai-field-element
+                    ></textarea>
+                </gebo-ai-field>
             </div>
         </div>
         <div style="vertical-align: baseline;width: '500px';">
             <div class="grid">
                 <div class="col-3">
-                    <p-button [outlined]="true" label="Generate prompt" (onClick)="doGeneratePrompt()"
+                    <p-button  id="generatePrompt" gebo-ai-label  [outlined]="true" label="Generate prompt" (onClick)="doGeneratePrompt()"
                         icon="pi pi-microchip-ai"  [disabled]="formGroup.invalid"   styleClass="w-full" ></p-button>
                 </div>
-                <div class="col-3"><p-button [outlined]="true" label="Accept prompt" severity="success"   styleClass="w-full" 
+                <div class="col-3"><p-button  id="acceptPrompt" gebo-ai-label  [outlined]="true" label="Accept prompt" severity="success"   styleClass="w-full" 
                         icon="pi pi-check" (onClick)="doAcceptPrompt()"
                         [disabled]="(formGroup.invalid || !(lastResponse?.result?.response)) || responseFormGroup.invalid" /></div>
                 <div class="col-3">
-                    <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancelAction()"   styleClass="w-full"  />
+                    <p-button  id="cancel" gebo-ai-label  [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancelAction()"   styleClass="w-full"  />
                 </div>
             </div>
 
         </div>
     </p-panel>
 </p-dialog>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
