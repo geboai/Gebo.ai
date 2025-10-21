@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { Observable, take } from "rxjs";
-import { languages } from "../../../../../../dist/gebo-ai-ui/browser/assets/monaco/esm/metadata";
+
 
 @Component({
     selector: "gebo-ai-language-resource-download",

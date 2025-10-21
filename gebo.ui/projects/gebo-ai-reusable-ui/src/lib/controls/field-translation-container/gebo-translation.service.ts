@@ -19,18 +19,15 @@ export class GeboAITranslationService {
     constructor(private uiTextResourcesService: UiTextResourcesControllerService,
         private userController: UserControllerService,
         private translateService: TranslateService) {
-        this.userController.getCurrentUser().subscribe({
-            next: (identity) => {
-                const checkOnRegisteringMode: boolean = identity?.roles?.find(x => x === "ADMIN" || x === "ADMIN_ROLE") ? true : false;
-                if (checkOnRegisteringMode === true) {
-                    uiTextResourcesService.getUiTextResourcesModule().subscribe({
-                        next: (value) => {
-                            GeboAITranslationService.recordingOn = value?.enabled === true;
-                        }
-                    })
-                }
+
+        uiTextResourcesService.getUiTextResourcesModule().subscribe({
+            next: (value) => {
+                GeboAITranslationService.recordingOn = value?.enabled === true;
             }
         });
+
+
+
         this.translateService.addLangs(["en", "it", "zh", "ru"])
     }
 
