@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -17,10 +17,10 @@
  * interact with JIRA systems and browse JIRA content.
  */
 
-import { Component, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GConfluenceProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, GJiraProjectEndpoint, JiraSystemsControllerService, JiraBrowsingControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
@@ -37,7 +37,10 @@ import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo
 @Component({
     selector: "gebo-ai-jira-endpoint-component",
     templateUrl: "gebo-ai-jira-endpoint.component.html",
-    providers: [MessageService],
+    providers: [MessageService, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIJiraEndpointComponent),
+        multi: true
+    }],
     standalone: false
 })
 export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJiraProjectEndpoint> {
@@ -45,20 +48,20 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
      * The name of the entity type this component manages
      */
     protected override entityName: string = "GJiraProjectEndpoint";
-    
-    
+
+
 
     /**
      * Flag that determines if the project field can be modified
      * When true, the project field is read-only
      */
     @Input() cantModifyProject: boolean = true;
-    
+
     /**
      * Observable for loading available projects from the backend
      */
     projectsObservable: Observable<GProject[]> = this.projectsController.getProjects();
-    
+
     /**
      * Form group for managing the entity's editable fields
      */
@@ -82,17 +85,17 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
         openZips: new FormControl()
 
     });
-    
+
     /**
      * Flag indicating if the endpoint is published
      */
     published: boolean = false;
-    
+
     /**
      * Array of available Jira systems
      */
-    jiraServersObservable=this.jiraControllerService.getJiraSystems();
-    
+    jiraServersObservable = this.jiraControllerService.getJiraSystems();
+
     /**
      * Request object for creating a new Jira server
      */
@@ -103,47 +106,47 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
         targetType: "GJiraSystem",
         target: { contentManagementSystemType: "ATLASSIAN-JIRA" } as GConfluenceSystem
     };
-    
+
     /**
      * Identity context identifier for Jira systems
      */
     private actualIdentityContext: string = "ATLASSIAN-JIRA";
-    
+
     /**
      * Flag indicating if there are no accounts or systems configured
      */
     public noAccountsAndSystems: boolean = false;
-    
+
     /**
      * Stores the last selected Confluence system code to avoid redundant operations
      */
     private lastConfluenceSystemCode: string = "";
-    
+
     /**
      * Available identity/secret information for authentication
      */
     public identities: SecretInfo[] = [];
-    
+
     /**
      * Callback function for loading root elements from Jira
      */
     public loadRootsObservable: loadRootsObservableCallback = () => of({});
-    
+
     /**
      * Callback function for browsing Jira content by path
      */
-    public browsePathObservable: browsePathObservableCallback=(param:BrowseParam)=>of({});
-    
+    public browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => of({});
+
     /**
      * List of supported file types
      */
-    public fileTypesList: GeboAIFileType[]=[];
+    public fileTypesList: GeboAIFileType[] = [];
 
     /**
      * Constructor that initializes the component and sets up subscriptions
      * to form control changes and other initialization tasks.
      */
-    constructor(injector:Injector,geboFormGroupsService: GeboFormGroupsService,
+    constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
         private jiraControllerService: JiraSystemsControllerService,
         private jiraBrowsing: JiraBrowsingControllerService,
         private projectsController: ProjectsControllerService,
@@ -154,7 +157,7 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
         confirmService: ConfirmationService,
         outputForwardingService: GeboUIOutputForwardingService
     ) {
-        super(injector,geboFormGroupsService, confirmService,actionsRouter, outputForwardingService);
+        super(injector, geboFormGroupsService, confirmService, actionsRouter, outputForwardingService);
         this.formGroup.controls["published"].valueChanges.subscribe(published => {
             this.published = published;
         });
@@ -165,10 +168,10 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
                 this.loadRootsObservable = () => {
                     return this.jiraBrowsing.getJiraRoots(this.lastConfluenceSystemCode);
                 };
-                this.browsePathObservable=(param:BrowseParam)=>{
-                    return this.jiraBrowsing.browseJiraPath(param,this.lastConfluenceSystemCode);
+                this.browsePathObservable = (param: BrowseParam) => {
+                    return this.jiraBrowsing.browseJiraPath(param, this.lastConfluenceSystemCode);
                 };
-              
+
 
             }
         });
@@ -188,17 +191,17 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
      * the data-bound properties
      */
     override ngOnInit(): void {
-        super.ngOnInit();        
+        super.ngOnInit();
     }
 
-    
+
 
     /**
      * Handles initialization when creating a new entity
      * @param actualValue The new entity instance
      */
     protected override onNewData(actualValue: GConfluenceProjectEndpoint): void {
-        
+
     }
 
     /**
@@ -206,7 +209,7 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
      * @param actualValue The loaded entity instance
      */
     protected override onLoadedPersistentData(actualValue: GConfluenceProjectEndpoint): void {
-       
+
     }
 
     /**
@@ -254,7 +257,7 @@ export class GeboAIJiraEndpointComponent extends BaseEntityEditingComponent<GJir
         return of({ canBeDeleted: true, message: "" });
     }
 
-    
+
 
     /**
      * Combined save and publish operation

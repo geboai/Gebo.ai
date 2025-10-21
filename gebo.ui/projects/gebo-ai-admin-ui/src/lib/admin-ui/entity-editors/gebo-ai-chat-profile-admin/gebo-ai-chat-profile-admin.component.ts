@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -17,10 +17,10 @@
  * with support for configuring chat and embedding models, knowledge bases, and other settings.
  */
 
-import { Component, Injector } from "@angular/core";
+import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChatModelsControllerService, EmbeddingModelsControllersService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GKnowledgeBase, GPromptConfig, KnowledgeBaseControllerService, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 
@@ -73,12 +73,16 @@ function frontend2backend(model: ExtendedGChatProfileConfiguration): GChatProfil
 @Component({
     selector: "gebo-ai-chat-profile-admin-component",
     templateUrl: "gebo-ai-chat-profile-admin.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIChatProfileAdminComponent),
+        multi: true
+    }]
 })
 export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<ExtendedGChatProfileConfiguration> {
     /** The entity name used for internal identification */
     protected override entityName: string = "GChatProfileConfiguration";
-    
+
     /** Form group containing all editable fields for the chat profile */
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
@@ -99,25 +103,25 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
         disableMultiHopRag: new FormControl(),
         otherSearchSimilarityThreshold: new FormControl()
     });
-    
+
     /** Available chat models to choose from */
     chatModelsData: { code?: string, description?: string, className?: string }[] = [];
-    
+
     /** The default chat model configuration */
     defaultChatModel: any = {};
-    
+
     /** Available embedding models to choose from */
     embeddingModelsData: { code?: string, description?: string, className?: string }[] = [];
-    
+
     /** The default embedding model configuration */
     defaultEmbeddingModel: any = {};
-    
+
     /** All available knowledge bases */
     allKnowledgeBaseData: GKnowledgeBase[] = [];
-    
+
     /** Flag indicating if custom chat model selection is enabled */
     public isChooseChatModel: boolean = false;
-    
+
     /** Flag indicating if custom embedding model selection is enabled */
     public isChooseEmbeddingModel: boolean = false;
 
@@ -134,16 +138,16 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService);
-        
+
         // Disable otherSearchSimilarityThreshold when disableMultiHopRag is true
-        this.formGroup.controls["disableMultiHopRag"].valueChanges.subscribe((value?:boolean) => {
-                if (value===true) {
-                    this.formGroup.controls["otherSearchSimilarityThreshold"].disable();
-                }else {
-                    this.formGroup.controls["otherSearchSimilarityThreshold"].enable();
-                }
+        this.formGroup.controls["disableMultiHopRag"].valueChanges.subscribe((value?: boolean) => {
+            if (value === true) {
+                this.formGroup.controls["otherSearchSimilarityThreshold"].disable();
+            } else {
+                this.formGroup.controls["otherSearchSimilarityThreshold"].enable();
+            }
         });
-        
+
         // Clear and disable knowledgeBaseCodes when userChoosesKnowledgeBases is true
         this.formGroup.controls["userChoosesKnowledgeBases"].valueChanges.subscribe((value: boolean) => {
             const userChooses: boolean = value === true;
@@ -153,7 +157,7 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
             this.setControlEnabledAndRequired("knowledgeBaseCodes", userChooses === false);
 
         });
-        
+
         // Enable/disable chat model selection based on useDefaultChatModel value
         this.formGroup.controls["useDefaultChatModel"].valueChanges.subscribe(
             x => {
@@ -163,7 +167,7 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
                 }
             }
         );
-        
+
         // Enable/disable embedding model selection based on useDefaultEmbeddingModel value
         this.formGroup.controls["useDefaultEmbeddingModel"].valueChanges.subscribe(
             x => {

@@ -31,6 +31,12 @@
                         </gebo-ai-field>
 
                     </div>
+                    <div class="col-12">
+                        <gebo-ai-field id="langCode" label="Default system language" help="Default system language for this Gebo.ai installation" [required]="true">
+                            <gebo-ai-language-choice-component formControlName="lang" [required]="true"></gebo-ai-language-choice-component>
+                        </gebo-ai-field>
+
+                    </div>
                     <div class="col-3" *ngIf="!status?.result">
                         <gebo-ai-field id="password" label="Password" help="Password to login (at least 8 characters)">
                             <p-password formControlName="password" styleClass="w-full" [required]="true"></p-password>

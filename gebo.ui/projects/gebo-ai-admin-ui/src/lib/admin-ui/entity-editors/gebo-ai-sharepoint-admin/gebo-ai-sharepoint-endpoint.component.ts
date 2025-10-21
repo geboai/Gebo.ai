@@ -18,10 +18,10 @@
  * to provide editing functionality for SharePoint endpoints, including creating, updating, and deleting operations.
  */
 
-import { Component, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, SecretsControllerService, GSharepointProjectEndpoint, SharepointBrowsingControllerService, SharepointSystemsControllerService, GSharepointContentManagementSystem, AuthProviderDto } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -43,7 +43,10 @@ const sharepointCode: string = "sharepoint-module";
 @Component({
     selector: "gebo-ai-sharepoint-endpoint-component",
     templateUrl: "gebo-ai-sharepoint-endpoint.component.html",
-    providers: [MessageService, SharepointUrlService],
+    providers: [MessageService, SharepointUrlService, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAISharepointEndpointComponent),
+        multi: true
+    }],
     standalone: false
 })
 export class GeboAISharepointEndpointComponent extends BaseEntityEditingComponent<GSharepointProjectEndpoint> {

@@ -15,11 +15,11 @@
  * Module for managing and displaying job status information, including content reading and vectorization tasks.
  * This component provides visualization of job progress, task completion statistics, and log messages.
  */
-import { Component, Injector, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, Injector, SimpleChanges } from '@angular/core';
 
 import { FormControl, FormGroup } from "@angular/forms";
 import { CompanySystemsControllerService, DataPage, GJobStatus, JobLauncherControllerService, JobSummary, LogViewControllerService, PageGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -27,7 +27,10 @@ import { renderData, StatusRendering } from './graphic-rendering';
 
 @Component({
   selector: "gebo-ai-job-status-viewer-component", templateUrl: "gebo-ai-job-status-viewer.component.html",
-  standalone: false
+  standalone: false, providers: [{
+    provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIJobStatusViewerComponent),
+    multi: true
+  }]
 })
 /**
  * Component responsible for displaying and managing job status information.

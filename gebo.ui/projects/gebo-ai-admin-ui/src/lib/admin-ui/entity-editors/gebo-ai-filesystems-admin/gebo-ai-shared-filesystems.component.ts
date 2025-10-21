@@ -6,13 +6,13 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FileSystemSharesSettingControllerService, GFileSystemShareReference, SharedFilesystemUIConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 /**
  * AI generated comments
@@ -25,7 +25,11 @@ import { GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui
 @Component({
     selector: "gebo-ai-shared-filesystem-component",
     templateUrl: "gebo-ai-shared-filesystems.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{
+        provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAISharedFilesystemsComponent"),
+        multi: true
+    }]
 })
 export class GeboAISharedFilesystemsComponent implements OnInit, OnChanges {
     /** Flag to indicate if data is currently being loaded */
@@ -59,7 +63,7 @@ export class GeboAISharedFilesystemsComponent implements OnInit, OnChanges {
      * Handles the closing of the component and emits an event to the parent
      * @param e Event that triggered the close
      */
-    closeMe(e:any) {
+    closeMe(e: any) {
         this.closed.emit(true);
     }
 

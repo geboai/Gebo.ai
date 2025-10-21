@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -17,35 +17,38 @@
  * for Git project endpoints.
  */
 import { JobLauncherControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { Component, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GGitContentManagementSystem, GitSystemsControllerService, GProject, GGitProjectEndpoint, ProjectsControllerService, SecretsControllerService, SecretInfo, GJobStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { newSecretActionRequest } from '../utils/gebo-ai-create-secret-action-request-factory';
 
 @Component({
-    selector: "gebo-ai-git-endpoint-admin-component",
-    templateUrl: "gebo-ai-git-endpoint-admin.component.html",
-    standalone: false
+  selector: "gebo-ai-git-endpoint-admin-component",
+  templateUrl: "gebo-ai-git-endpoint-admin.component.html",
+  standalone: false, providers: [{
+    provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGitEndpointAdminComponent),
+    multi: true
+  }]
 })
 export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<GGitProjectEndpoint> {
   /**
    * Defines the entity name for this component as GGitProjectEndpoint
    */
   protected override entityName: string = "GGitProjectEndpoint";
-  
+
   /**
    * Input property to control whether the Git system can be modified
    */
   @Input() cantModifyGitSystem: boolean = false;
-  
+
   /**
    * Input property to control whether the project can be modified
    */
   @Input() cantModifyProject: boolean = false;
-  
+
   /**
    * Form group to manage all the input fields for the Git endpoint
    */
@@ -66,56 +69,56 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
     vectorizeOnlyExtensions: new FormControl(),
     programmedTables: new FormControl()
   });
-  
+
   /**
    * Observable to fetch and display available projects
    */
   projectsObservable: Observable<GProject[]> = this.projectsController.getProjects();
-  
+
   /**
    * Observable to fetch and display available Git systems
    */
   gitSystemsObservable: Observable<GGitContentManagementSystem[]> = this.gitSystemsController.getGitSystems();
-  
+
   /**
    * Context identifier for Git identity secrets
    */
   private actualIdentityContext: string = "git";
-  
+
   /**
    * Observable to fetch and display available identities for Git authentication
    */
   identitiesObservable: Observable<SecretInfo[]> = this.secretControllerService.getSecretsByContextCode(this.actualIdentityContext);
-  
+
   /**
    * Observable to fetch and display available Git branches
    */
   branchesObservable: Observable<{ code: string, description: string }[]> = of([]);
-  
+
   /**
    * Flag to track whether the repository has public access
    */
   publicAccess: boolean = false;
-  
+
   /**
    * Flag to track whether the endpoint is published
    */
   published: boolean = false;
-  
+
   /**
    * Action request for creating a new Git secret
    */
   public newSecretAction = newSecretActionRequest("git", this.entityName, this.entity, ['SSH_KEY', 'USERNAME_PASSWORD']);
-  
+
   /**
    * Stores the last values of the endpoint to detect changes
    */
   private lastValues?: GGitProjectEndpoint;
-  
+
   /**
    * List of file types supported by the system
    */
-  fileTypesList: GeboAIFileType[]=[];
+  fileTypesList: GeboAIFileType[] = [];
 
   /**
    * Constructor for the Git Endpoint Admin Component
@@ -150,7 +153,7 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
       this.published = published;
     });
     this.doPeriodicBackendProcessingCheck = true;
-    
+
   }
 
   /**
@@ -175,11 +178,11 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
           else return [];
         }));
       }
-      
+
     }
-    if (value.repositoryUri && value.publicAccess!==true && !value.identityCode) {
-      this.branchesObservable=of([]);
-   }
+    if (value.repositoryUri && value.publicAccess !== true && !value.identityCode) {
+      this.branchesObservable = of([]);
+    }
     this.lastValues = value;
   }
 
@@ -188,7 +191,7 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
    */
   onGitConnectivityChange() {
     console.log("onGitConnectivityChange() called");
-    const value: GGitProjectEndpoint=this.formGroup.value;
+    const value: GGitProjectEndpoint = this.formGroup.value;
     this.evaluateBranchesListReload(value);
   }
 
@@ -268,7 +271,7 @@ export class GeboAiGitEndpointAdminComponent extends BaseEntityEditingComponent<
   protected override onNewData(actualValue: GGitProjectEndpoint): void {
     this.evaluateBranchesListReload(actualValue);
   }
-  
+
   /**
    * Publishes the Git endpoint by creating a job in the backend
    * Saves the data first, then initiates the job and routes to the job status view

@@ -1,12 +1,17 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, forwardRef, OnInit } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
-import { ControlValueAccessor, FormControl, FormGroup, Validators } from "@angular/forms";
-interface Language {langCode: string, description: string };
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+interface Language { langCode: string, description: string };
 @Component({
     selector: "gebo-ai-language-choice-component",
     templateUrl: "language-choice.component.html",
     styleUrl: "language-choice.component.css",
-    standalone: false
+    standalone: false,
+    providers: [{
+        provide: NG_VALUE_ACCESSOR,
+        useExisting: forwardRef(() => GeboAILanguageChoiceComponent),
+        multi: true
+    }]
 })
 export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccessor {
     private currentLanguage: string = "en";
@@ -40,19 +45,26 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
         { "langCode": "th", "description": "ไทย" },
         { "langCode": "uk", "description": "Українська" }
     ];
-    protected choosableLanguages:Language[]=[];
-    protected formGroup:FormGroup=new FormGroup({
-        langCode:new FormControl()
+    protected choosableLanguages: Language[] = [];
+    protected formGroup: FormGroup = new FormGroup({
+        langCode: new FormControl()
     });
     constructor(private geboTranslationService: GeboAITranslationService) {
         this.formGroup.controls["langCode"].setValidators(Validators.required);
     }
     ngOnInit(): void {
-        const langs=this.geboTranslationService.getLanguages();
-        this.choosableLanguages=this.languages.filter(x=>langs.includes(x.langCode));
+        const langs = this.geboTranslationService.getLanguages();
+        this.choosableLanguages = this.languages.filter(x => langs.includes(x.langCode));
+        this.formGroup.controls["langCode"].valueChanges.subscribe({
+            next: (data) => {
+                if (data) {
+                    this.onChange(data);
+                }
+            }
+        });
     }
     writeValue(obj: any): void {
-        this.currentLanguage=obj;
+        this.currentLanguage = obj;
     }
     private onChange: (fn: any) => void = (fn: any) => { };
     registerOnChange(fn: any): void {

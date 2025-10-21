@@ -21,6 +21,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { SharepointUrlService } from "./confluence-url.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 
 /**
  * Component for rapid creation of Sharepoint system connections in the Gebo.ai platform.
@@ -32,7 +33,10 @@ import { SharepointUrlService } from "./confluence-url.service";
 @Component({
     selector: "gebo-ai-sharepoint-system-fast-component",
     templateUrl: "gebo-ai-sharepoint-system-fast.component.html",
-    providers: [SharepointUrlService],
+    providers: [SharepointUrlService, {
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent"),
+        multi: true
+    }],
     standalone: false
 })
 export class GeboAISharepointSystemFastComponent implements OnInit {
@@ -113,7 +117,7 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
      */
     doInsert(): void {
         const data: FastSharepointSystemInsertRequest = this.formGroup.value;
-        data.oauth2Credentials.providerName=AuthProviderDto.ProviderEnum.MicrosoftMultitenant;
+        data.oauth2Credentials.providerName = AuthProviderDto.ProviderEnum.MicrosoftMultitenant;
         this.loading = true;
         this.sharepointSystemsService.fastSharepointConfig(data).subscribe({
             next: (result) => {

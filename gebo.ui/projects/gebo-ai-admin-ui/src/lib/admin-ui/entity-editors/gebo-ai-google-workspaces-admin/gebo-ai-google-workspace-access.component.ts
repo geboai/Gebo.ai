@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -21,12 +21,16 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GGoogleDriveSystem, GoogleWorkspaceAccessHandshakeControllerService, StartGooglWorkspaceAccessRequest, StartGooglWorkspaceAccessRespose, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 @Component({
     selector: "gebo-ai-google-workspace-access-component",
     templateUrl: "gebo-ai-google-workspace-access.component.html",
-    standalone: false
+    standalone: false, providers: [{
+        provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent"),
+        multi: true
+    }]
 })
 export class GeboAIGoogleWorkspaceAccessComponent implements OnInit, OnChanges {
     /**
@@ -35,37 +39,37 @@ export class GeboAIGoogleWorkspaceAccessComponent implements OnInit, OnChanges {
     formGroup: FormGroup = new FormGroup({
         user: new FormControl(Validators.required)
     });
-    
+
     /**
      * Flag to indicate whether a loading process is active
      */
     loading: boolean = false;
-    
+
     /**
      * Stores the response data from the Google Workspace access handshake
      */
     handshakeData?: StartGooglWorkspaceAccessRespose;
-    
+
     /**
      * Flag to indicate whether the access authorization process has started
      */
     public accessStarted: boolean = false;
-    
+
     /**
      * URL to navigate to on successful handshake
      */
     @Input() uiSuccessForward: string = "";
-    
+
     /**
      * URL to navigate to on handshake failure
      */
     @Input() uiErrorForward: string = "";
-    
+
     /**
      * Event emitter triggered when user already has an existing Google account connected
      */
     @Output() alreadyExistingAccount: EventEmitter<true> = new EventEmitter();
-    
+
     /**
      * Collection of user-facing messages to display
      */
@@ -145,7 +149,7 @@ export class GeboAIGoogleWorkspaceAccessComponent implements OnInit, OnChanges {
                     }];
                     this.accessStarted = true;
                     if (handshakeStartData.forwardUrl) {
-                        document.location.href=(handshakeStartData.forwardUrl);
+                        document.location.href = (handshakeStartData.forwardUrl);
                     }
 
                 }

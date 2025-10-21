@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -16,10 +16,10 @@
  * It allows users to create, edit, delete, and publish Confluence endpoints that connect
  * projects to Confluence systems.
  */
-import { Component, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GConfluenceProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, ConfluenceSystemsControllerService, ConfluenceBrowsingControllerService, GConfluenceSystem } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
@@ -36,7 +36,10 @@ import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo
 @Component({
     selector: "gebo-ai-confluence-endpoint-component",
     templateUrl: "gebo-ai-confluence-endpoint.component.html",
-    providers: [MessageService],
+    providers: [MessageService, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIConfluenceEndpointComponent),
+        multi: true
+    }],
     standalone: false
 })
 export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponent<GConfluenceProjectEndpoint> {
@@ -73,7 +76,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
     /** Flag indicating whether the endpoint is published */
     published: boolean = false;
     /** List of available Confluence server systems */
-    confluenceServersObservable=this.confluenceControllerService.getConfluenceSystems();
+    confluenceServersObservable = this.confluenceControllerService.getConfluenceSystems();
     /** Action request for creating a new Confluence server */
     newConfluenceServerRequest: GeboUIActionRequest = {
         actionType: GeboActionType.NEW,
@@ -82,22 +85,22 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
         targetType: "GConfluenceSystem",
         target: { contentManagementSystemType: "ATLASSIAN-CONFLUENCE" } as GConfluenceSystem
     };
-    
+
     /** Tracks the last selected Confluence system code */
     private lastConfluenceSystemCode: string = "";
-   
+
     /** Observable callback for loading Confluence roots */
     public loadRootsObservable: loadRootsObservableCallback = () => of({});
     /** Observable callback for browsing Confluence paths */
-    public browsePathObservable: browsePathObservableCallback=(param:BrowseParam)=>of({});
+    public browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => of({});
     /** List of supported file types */
-    fileTypesList: GeboAIFileType[]=[];
+    fileTypesList: GeboAIFileType[] = [];
 
     /**
      * Creates an instance of GeboAIConfluenceEndpointComponent.
      * Initializes the component and sets up subscriptions for form control changes.
      */
-    constructor(injector:Injector,geboFormGroupsService: GeboFormGroupsService,
+    constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
         private confluenceControllerService: ConfluenceSystemsControllerService,
         private confluenceBrowsing: ConfluenceBrowsingControllerService,
         private projectsController: ProjectsControllerService,
@@ -108,7 +111,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
         confirmService: ConfirmationService,
         outputForwardingService: GeboUIOutputForwardingService
     ) {
-        super(injector,geboFormGroupsService, confirmService,actionsRouter, outputForwardingService);
+        super(injector, geboFormGroupsService, confirmService, actionsRouter, outputForwardingService);
         this.formGroup.controls["published"].valueChanges.subscribe(published => {
             this.published = published;
         });
@@ -119,10 +122,10 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
                 this.loadRootsObservable = () => {
                     return this.confluenceBrowsing.getConfluenceRoots(this.lastConfluenceSystemCode);
                 };
-                this.browsePathObservable=(param:BrowseParam)=>{
-                    return this.confluenceBrowsing.browseConfluencePath(param,this.lastConfluenceSystemCode);
+                this.browsePathObservable = (param: BrowseParam) => {
+                    return this.confluenceBrowsing.browseConfluencePath(param, this.lastConfluenceSystemCode);
                 };
-              
+
 
             }
         });
@@ -142,16 +145,16 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        
+
     }
 
-   
+
     /**
      * Handles initialization of a new entity
      * @param actualValue The new entity value
      */
     protected override onNewData(actualValue: GConfluenceProjectEndpoint): void {
-        
+
     }
 
     /**
@@ -159,7 +162,7 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
      * @param actualValue The loaded entity value
      */
     protected override onLoadedPersistentData(actualValue: GConfluenceProjectEndpoint): void {
-       
+
     }
 
     /**
@@ -260,6 +263,6 @@ export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponen
         this.doSave(callback);
     }
 
-       
+
 
 }
