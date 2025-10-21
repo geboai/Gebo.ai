@@ -14,15 +14,15 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageGLookupEntry { 
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Array<GLookupEntry>;
     number?: number;
-    sort?: SortObject;
     first?: boolean;
     last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

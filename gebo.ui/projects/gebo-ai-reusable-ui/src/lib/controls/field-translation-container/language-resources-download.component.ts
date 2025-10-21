@@ -5,7 +5,7 @@ import { languages } from "../../../../../../dist/gebo-ai-ui/browser/assets/mona
 
 @Component({
     selector: "gebo-ai-language-resource-download",
-    template: "<p-button icon='pi pi-language' (onClick)='download()' *ngIf='enabled' [rounded]='true' [text]='true' [raised]='true' severity='info'></p-button><p-button *ngFor='let lang of languages;' [label]='lang' (onClick)='changeLanguage(lang)'></p-button>",
+    template: "<p-button icon='pi pi-language' (onClick)='download()' *ngIf='enabled' [rounded]='true' [text]='true' [raised]='true' severity='info'></p-button>",
     standalone: false
 })
 export class GeboAILanguageResourcesDownloadComponent {

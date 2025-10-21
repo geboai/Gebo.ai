@@ -1,0 +1,17 @@
+<span [formGroup]="formGroup">
+    <p-select [options]="choosableLanguages" formControlName="langCode" placeholder="Choose Language"
+        class="w-full md:w-56">
+        <ng-template #selectedItem let-selectedOption>
+            <div class="flex items-center gap-2" *ngIf="selectedOption">
+                <i [ngClass]="'flag flag-' + selectedOption.langCode" style="width: 18px" ></i>
+                {{ selectedOption.description }}
+            </div>
+        </ng-template>
+        <ng-template let-item #item>
+            <div class="flex items-center">
+                <i [ngClass]="'flag flag-'+item.langCode"></i>
+                {{ item.description}}
+            </div>
+        </ng-template>
+    </p-select>
+</span>

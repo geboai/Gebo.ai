@@ -30,8 +30,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @RestController
-@PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("api/admin/UITextResourcesController")
+@RequestMapping("/public/UITextResourcesController")
 @AllArgsConstructor
 public class UITextResourcesController {
 	private final RCFolderConfig config;

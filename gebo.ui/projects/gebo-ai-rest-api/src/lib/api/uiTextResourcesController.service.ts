@@ -82,7 +82,7 @@ export class UiTextResourcesControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request('get',`${this.basePath}/api/admin/UITextResourcesController`,
+        return this.httpClient.request('get',`${this.basePath}/public/UITextResourcesController`,
             {
                 responseType: "blob",
                 withCredentials: this.configuration.withCredentials,
@@ -119,7 +119,7 @@ export class UiTextResourcesControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<UiTextResourcesModule>('get',`${this.basePath}/api/admin/UITextResourcesController/getUiTextResourcesModule`,
+        return this.httpClient.request<UiTextResourcesModule>('get',`${this.basePath}/public/UITextResourcesController/getUiTextResourcesModule`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -164,7 +164,7 @@ export class UiTextResourcesControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/api/admin/UITextResourcesController/updateUIExistingTexts`,
+        return this.httpClient.request<any>('post',`${this.basePath}/public/UITextResourcesController/updateUIExistingTexts`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

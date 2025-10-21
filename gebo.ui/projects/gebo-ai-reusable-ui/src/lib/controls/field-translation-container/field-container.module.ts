@@ -8,11 +8,13 @@ import { GeboAITranslationService } from "./gebo-translation.service";
 import { GeboAITextDirective } from "./text.directive";
 import { GeboAILanguageResourcesDownloadComponent } from "./language-resources-download.component";
 import { Button } from "primeng/button";
-
+import { GeboAILanguageChoiceComponent } from "./language-choice.component";
+import { SelectModule } from 'primeng/select';
+import { GeboAIMainLanguageChoiceComponent } from "./main-language-choice.component";
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, Button],
-    declarations:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective,GeboAILanguageResourcesDownloadComponent],
-    exports:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective,GeboAILanguageResourcesDownloadComponent],
+    imports: [CommonModule, ReactiveFormsModule, Button,SelectModule],
+    declarations:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective,GeboAILanguageResourcesDownloadComponent,GeboAILanguageChoiceComponent,GeboAIMainLanguageChoiceComponent],
+    exports:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective,GeboAILanguageResourcesDownloadComponent,GeboAILanguageChoiceComponent,GeboAIMainLanguageChoiceComponent],
     providers:[GeboAITranslationService]
 })
 export class GeboAIFieldTransationContainerModule {}
