@@ -42,7 +42,7 @@ export class GeboAITextDirective implements AfterContentInit {
             if (substitutions) {
                 substitutions.subscribe({
                     next: (resources) => {
-                        if (resources && resources?.length) {
+                        if (resources) {
                             if (this.existingTexts) {
                                 const labelTranslation = findMatchingTranslation(this.existingTexts, resources);
                                 if (labelTranslation && labelTranslation.translation) {

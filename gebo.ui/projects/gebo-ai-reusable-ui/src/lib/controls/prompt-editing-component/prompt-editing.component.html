@@ -1,3 +1,4 @@
+```html
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -9,18 +10,17 @@
  */
  -->
  
- 
- 
-
 <div class="grid" [formGroup]="formGroup">
     <div class="col-12">
-        <ngx-monaco-editor #monaco style='height: 250px;width: 100%'  [options]='options' formControlName='prompt' ></ngx-monaco-editor>
+        <ngx-monaco-editor #monaco style='height: 250px;width: 100%' [options]='options' formControlName='prompt'></ngx-monaco-editor>
         <!-- 
         <textarea [rows]="rows" [cols]="cols" pTextarea formControlName="prompt" [autoResize]="true">
             
         </textarea> -->
     </div>
     <div class="col-3">
-        <gebo-ai-prompt-wizard-control [deliveryFormGroup]="formGroup" deliveryPromptControlName="prompt" ></gebo-ai-prompt-wizard-control>
+        <gebo-ai-prompt-wizard-control [deliveryFormGroup]="formGroup" deliveryPromptControlName="prompt"></gebo-ai-prompt-wizard-control>
     </div>
 </div>
+```
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -22,6 +22,7 @@ import { UserspaceControllerService, UserspaceFileDto } from "@Gebo.ai/gebo-ai-r
 import { GeboAIUserspaceFolderComponent } from "./userspace-folder.component";
 import { GeboAIUserspaceKnowledgebaseComponent } from "./user-knowledgebase.component";
 import { GeboAIUserspaceFilesUploadComponent } from "./userspace-files-upload.component";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component that handles userspace files functionality in the Gebo.ai application.
@@ -35,6 +36,9 @@ import { GeboAIUserspaceFilesUploadComponent } from "./userspace-files-upload.co
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIUserpaceFilesComponent),
             multi: true
+        },
+        {
+            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserpaceFilesComponent"), multi: true
         }
     ],
     standalone: false
@@ -94,19 +98,19 @@ export class GeboAIUserpaceFilesComponent implements OnInit, OnChanges, ControlV
         if (this.codesList && this.codesList.length) {
             this.loading = true;
             this.userspaceControllerService.findUserspaceFileByCodes(this.codesList).subscribe({
-                next:(list)=>{
-                    this.userFiles=list;
+                next: (list) => {
+                    this.userFiles = list;
                     if (list) {
-                        this.codesList=list.map(x=>x.code) as string[];
+                        this.codesList = list.map(x => x.code) as string[];
                     }
-                },complete:()=>{
-                    this.loading=false;
+                }, complete: () => {
+                    this.loading = false;
                 }
             });
 
         } else {
             this.userFiles = [];
-            this.codesList=[];
+            this.codesList = [];
         }
     }
 
@@ -124,7 +128,7 @@ export class GeboAIUserpaceFilesComponent implements OnInit, OnChanges, ControlV
      * Updates the internal state and notifies form subscribers
      */
     public onConfirmed(): void {
-        this.codesList=this.editingFormGroup.controls["filesList"].value;
+        this.codesList = this.editingFormGroup.controls["filesList"].value;
         this.syncDisplay();
         this.onChange(this.codesList);
     }

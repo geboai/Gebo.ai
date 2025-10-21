@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -27,6 +27,7 @@ import { USERSPACE_UPLOADS_WIZARD } from "./userspace-wizard";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { sliceWizard } from "../base-entity-editing-component/entities-modification-wizard";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Interface representing an item in the userspace tree structure.
@@ -53,6 +54,8 @@ interface UserspaceTreeItem {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIUserspaceBrowseComponent),
             multi: true
+        }, {
+            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent"), multi: true
         }
     ],
     standalone: false
@@ -270,11 +273,11 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
      * @param node The node to refresh
      * @param evt The mouse event that triggered the refresh
      */
-    refreshThis(node: TreeNode<UserspaceTreeItem>,evt:MouseEvent): void {
+    refreshThis(node: TreeNode<UserspaceTreeItem>, evt: MouseEvent): void {
         if (node.parent) {
             const fakeEvent: TreeNodeExpandEvent = {
                 node: node.parent,
-                originalEvent:evt
+                originalEvent: evt
 
             };
             this.nodeExpand(fakeEvent);

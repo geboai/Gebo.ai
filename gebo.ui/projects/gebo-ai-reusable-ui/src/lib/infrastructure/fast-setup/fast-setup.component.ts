@@ -44,7 +44,8 @@ export class FastSetupComponent implements OnInit {
         username: new FormControl(),
         password: new FormControl(),
         passwordC: new FormControl(),
-        licenceAgreement:new FormControl()
+        licenceAgreement:new FormControl(),
+        lang:new FormControl()
     });
     
     /** Flag indicating if a setup operation is in progress */

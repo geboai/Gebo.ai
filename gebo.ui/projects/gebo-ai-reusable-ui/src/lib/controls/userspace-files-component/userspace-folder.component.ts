@@ -27,6 +27,7 @@ import { BaseEntityEditingComponent } from "../base-entity-editing-component/bas
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component responsible for editing and managing userspace folders.
@@ -36,7 +37,11 @@ import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output
 @Component({
     selector: "gebo-ai-userspace-edit-component",
     templateUrl: "userspace-folder.component.html",
-    standalone: false
+    standalone: false,
+    providers:[
+    {
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserspaceFolderComponent"), multi: true
+    }]
 })
 export class GeboAIUserspaceFolderComponent extends BaseEntityEditingComponent<UserspaceFolderDto> {
     /**

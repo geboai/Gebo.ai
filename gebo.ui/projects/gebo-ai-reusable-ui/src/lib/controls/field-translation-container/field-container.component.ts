@@ -86,7 +86,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         if (substitutions) {
             substitutions.subscribe({
                 next: (resources) => {
-                    if (resources && resources?.length) {
+                    if (resources ) {
                         if (label) {
                             const labelTranslation = findMatchingTranslation(label, resources);
                             if (labelTranslation && labelTranslation.translation) {

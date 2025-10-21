@@ -11,7 +11,7 @@ export class GeboAILabelDirective implements AfterContentInit {
     constructor(
         private el: ElementRef<HTMLElement>,
         private translationService: GeboAITranslationService,
-        @Optional() @Inject(GEBO_AI_MODULE) private moduleId?:string,
+        @Optional() @Inject(GEBO_AI_MODULE) private moduleId?: string,
         @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
         if (this.host) {
             if (Array.isArray(this.host)) {
@@ -19,14 +19,14 @@ export class GeboAILabelDirective implements AfterContentInit {
                 this.host = array.length ? array[array.length - 1] : undefined;
             }
         }
-         if (this.moduleId && this.moduleId.length) {
-            this.moduleId=this.moduleId[this.moduleId.length-1];
+        if (this.moduleId && this.moduleId.length) {
+            this.moduleId = this.moduleId[this.moduleId.length - 1];
         }
     }
-    private componentId: string|undefined|null;
+    private componentId: string | undefined | null;
     private existingTexts: UIExistingText[] = [];
     ngAfterContentInit(): void {
-        this.componentId=this.el.nativeElement.getAttribute("id");
+        this.componentId = this.el.nativeElement.getAttribute("id");
         this.checkLabelAttribute("label", "label");
         this.checkLabelAttribute("legend", "label");
         this.checkLabelAttribute("header", "label");
@@ -36,14 +36,14 @@ export class GeboAILabelDirective implements AfterContentInit {
         if (substitutions) {
             substitutions.subscribe({
                 next: (resources) => {
-                    const matching = findMatchingTranlations(this.existingTexts, resources);
-                    if (matching && matching.length) {
+                    if (resources) {
                         this.existingTexts.forEach(textRc => {
-                            const matchText = findMatchingTranslation(textRc, matching);
+                            const matchText = findMatchingTranslation(textRc, resources);
                             if (matchText && matchText.translation) {
                                 this.el.nativeElement.setAttribute(textRc.key, matchText.translation);
                             }
                         });
+
                     }
                 }
             });
@@ -55,7 +55,7 @@ export class GeboAILabelDirective implements AfterContentInit {
         if (value && value.length > 0) {
             if (!this.existingTexts.find(x => x.fieldId === alias)) {
                 this.existingTexts.push({
-                    moduleId:this.moduleId,
+                    moduleId: this.moduleId,
                     entityId: this.host?.getEntityName(),
                     componentId: this.componentId,
                     key: labelFieldName,
