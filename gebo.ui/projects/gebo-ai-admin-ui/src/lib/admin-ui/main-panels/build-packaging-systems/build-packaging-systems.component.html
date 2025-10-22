@@ -1,4 +1,4 @@
-
+$
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -10,13 +10,13 @@
  */
  -->
  
-<p-tabView>
-    <p-tabPanel *ngFor="let item of nodes" [header]="titleOf(item)">
-        <p-table [value]="item.configs" [tableStyle]="{ 'min-width': '50rem' }">
+<p-tabView gebo-ai-label>
+    <p-tabPanel gebo-ai-label *ngFor="let item of nodes" [header]="titleOf(item)">
+        <p-table gebo-ai-label [value]="item.configs" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Code</th>
-                    <th>Description</th>
+                    <th id="CodeHeader" gebo-ai-text>Code</th>
+                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
                     
                 </tr>
             </ng-template>
@@ -32,3 +32,4 @@
 </p-tabView>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

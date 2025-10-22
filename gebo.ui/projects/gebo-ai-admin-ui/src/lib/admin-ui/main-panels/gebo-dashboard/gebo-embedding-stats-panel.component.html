@@ -1,4 +1,4 @@
-
+$
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -14,10 +14,11 @@
 <div *ngFor="let entry of rootValue" class="grid">
     <div class="col-6" *ngFor="let item of entry.embeddingData">
         <gebo-ai-embedded-documents-piechart #thisEntry [item]="item" (drillDown)="drillDown(entry)"></gebo-ai-embedded-documents-piechart>
-        <p-dialog  [maximizable]="true" [visible]="(drilldownShowed && entry.drillDowns!==undefined)?true:false" [style]="{width:'95%'}" (visibleChange)="drilldownShowed=false">
+        <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="(drilldownShowed && entry.drillDowns!==undefined)?true:false" [style]="{width:'95%'}" (visibleChange)="drilldownShowed=false">
             <gebo-ai-embedding-stats-panel *ngIf="drilldownShowed===true && entry.drillDowns" [rootValue]="entry.drillDowns" [isRoot]="false" ></gebo-ai-embedding-stats-panel>
         </p-dialog>
     </div>
 </div>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

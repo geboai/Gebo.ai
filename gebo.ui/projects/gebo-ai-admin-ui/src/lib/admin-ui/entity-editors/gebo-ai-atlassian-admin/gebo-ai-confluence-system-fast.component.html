@@ -12,12 +12,12 @@
  
  
 
-<p-blockUI [target]="confluenceSystemCtrl" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="confluenceSystemCtrl" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #confluenceSystemCtrl header="Create confluence system configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
 
         <div class="grid">
 
@@ -62,14 +62,15 @@
     <div class="geboButtonsBar" style="vertical-align: baseline;">
         <div class="grid">
             <div class="col-4">
-                <p-button [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"   styleClass="w-full"
+                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"   styleClass="w-full"
                     [disabled]="this.formGroup.invalid"></p-button>
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full" />
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full" />
             </div>
 
         </div>
     </div>
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

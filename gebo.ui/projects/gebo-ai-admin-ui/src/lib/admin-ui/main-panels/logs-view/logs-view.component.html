@@ -18,9 +18,10 @@
     <p-tabPanel header="All logs">
         <gebo-ai-log-table-component  [jobType]="'CONTENTS_READING_VECTORIZING'"></gebo-ai-log-table-component>
     </p-tabPanel> -->
-    <p-tabPanel *ngFor="let tab of endpointTabs;" [header]="tab.label + ' logs'">
+    <p-tabPanel id="Tab" gebo-ai-label *ngFor="let tab of endpointTabs;" [header]="tab.label + ' logs'">
         <gebo-ai-log-table-component [className]="tab.className" [jobType]="'CONTENTS_READING_VECTORIZING'"></gebo-ai-log-table-component>
     </p-tabPanel>
 </p-tabView>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

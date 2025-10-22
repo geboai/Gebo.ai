@@ -2,14 +2,14 @@
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <div class="grid geboDialogContent">
         <div class="col-6" *ngIf="redirectUrls?.length">
-            <p-fieldset id="RedirectUrls"  gebo-ai-label   legend="Redirect urls to enable on oauth2 provider">
+            <p-fieldset id="RedirectUrls" gebo-ai-label legend="Redirect urls to enable on oauth2 provider">
                 <ul>
                     <li *ngFor="let h of redirectUrls;">{{h}}</li>
                 </ul>
             </p-fieldset>
         </div>
         <div class="col-6" *ngIf="redirectUrls?.length">
-            <p-fieldset id="RefererUrls"  gebo-ai-label  legend="Referer urls to enable on oauth2 provider">
+            <p-fieldset id="RefererUrls" gebo-ai-label legend="Referer urls to enable on oauth2 provider">
                 <ul>
                     <li *ngFor="let h of refererUrls;">{{h}}</li>
                 </ul>
@@ -66,7 +66,7 @@
             </gebo-ai-field>
         </div>
         <div class="col-12" formGroupName="providerConfiguration" [hidden]="currentProvider!=='oauth2_generic'" *ngIf="readonly!==true">
-            <p-fieldset legend="OAUTH2 provider URLS">
+            <p-fieldset id="Oauth2ProviderUrls" gebo-ai-label legend="OAUTH2 provider URLS">
                 <div class="grid">
                     <div class="col-6">
                         <gebo-ai-field id="issuerUri" label="Issuer Uri" help="Enter the OAUTH2 issuer URL of the provider">
@@ -155,6 +155,8 @@
         <div class="grid">
             <div class="col-4">
                 <p-button
+                    id="SaveBtn"
+                    gebo-ai-label
                     [outlined]="true"
                     label="Save"
                     (onClick)="doSave()"
@@ -165,10 +167,12 @@
             </div>
 
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
             </div>
             <div class="col-4">
                 <p-button
+                    id="DeleteBtn"
+                    gebo-ai-label
                     [outlined]="true"
                     label="Delete"
                     severity="danger"
@@ -182,3 +186,4 @@
     </div>
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

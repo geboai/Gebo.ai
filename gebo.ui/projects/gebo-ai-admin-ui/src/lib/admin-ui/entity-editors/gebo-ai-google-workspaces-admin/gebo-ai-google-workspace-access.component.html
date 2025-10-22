@@ -9,14 +9,11 @@
  */
  -->
 
-
-
-
-<p-blockUI [target]="gwHandshakeView" [blocked]="loading">
+<p-blockUI id="LockBlockUI" gebo-ai-label [target]="gwHandshakeView" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #gwHandshakeView header="Access to google workspaces informations">
-    <p-messages [value]="userMessages" [enableService]="false"></p-messages>
+    <p-messages id="Messages" gebo-ai-label [value]="userMessages" [enableService]="false"></p-messages>
 
     <div class="grid" *ngIf="!handshakeData" [formGroup]="formGroup">
         <div class="col-12">
@@ -28,13 +25,12 @@
             </gebo-ai-field>
         </div>
         <div class="col-3">
-
             <p-button id="ConfirmBtn" gebo-ai-label [outlined]="true" *ngIf="accessStarted===false"
                 (onClick)="doTryAccess()" [disabled]="formGroup.invalid" label="Confirm username"
                 icon="pi pi-google"></p-button>
-
         </div>
     </div>
 
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

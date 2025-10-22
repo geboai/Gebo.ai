@@ -1,9 +1,9 @@
 <form [formGroup]="formGroup">
     
-    <p-blockUI [target]="workFolderUI" [blocked]="loading">
+    <p-blockUI id="BlockUIComponent" gebo-ai-label [target]="workFolderUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-panel id="MainPanel" gebo-ai-label  #workFolderUI header="Gebo.ai work folder configuration">
+    <p-panel id="MainPanel" gebo-ai-label #workFolderUI header="Gebo.ai work folder configuration">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid">
             <div class="col-12">
@@ -26,10 +26,11 @@
         <div class="grid geboLargeButtonsBar">
             
             <div class="col-6">
-                <p-button [outlined]="true" label="Configure" (onClick)="saveWorkFolder()" icon="pi pi-save"
+                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="saveWorkFolder()" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid || isSetupCompleted" styleClass="w-full"></p-button>
             </div>
         </div>
     </p-panel>
 </form>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

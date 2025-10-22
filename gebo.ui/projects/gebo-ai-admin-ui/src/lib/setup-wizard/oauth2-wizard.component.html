@@ -1,18 +1,18 @@
 
-<p-blockUI [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUIComponent" gebo-ai-label [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
 <p-panel id="MainPanel" gebo-ai-label #instModeUI header="Oauth2 security settings">
 
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <p-messages id="MessagesComponent" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
 
-    <p-table [value]="providers" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table id="TableComponent" gebo-ai-label [value]="providers" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template #header pTemplate="header">
             <tr>
-                <th>Id</th>
-                <th>Provider name</th>
-                <th>Description</th>
+                <th id="IdHeader" gebo-ai-text>Id</th>
+                <th id="ProviderNameHeader" gebo-ai-text>Provider name</th>
+                <th id="DescriptionHeader" gebo-ai-text>Description</th>
                 <th></th>
             </tr>
         </ng-template>
@@ -22,7 +22,7 @@
                 <td>{{ item.providerName }}</td>
                 <td>{{ item.description }}</td>
                 <td>
-                    <p-button [outlined]="true" label="Modify" 
+                    <p-button id="ModifyBtn" gebo-ai-label [outlined]="true" label="Modify"
                         (onClick)="editOauth2(item)" icon="pi pi-pen-to-square"></p-button>
                 </td>
             </tr>
@@ -31,7 +31,7 @@
     <div class="grid geboLargeButtonsBar">
 
         <div class="col-6">
-            <p-button [outlined]="true" label="Oauth2 config" (onClick)="newOauth2()" icon="pi pi-plus"
+            <p-button id="Oauth2ConfigBtn" gebo-ai-label [outlined]="true" label="Oauth2 config" (onClick)="newOauth2()" icon="pi pi-plus"
                 styleClass="w-full"></p-button>
         </div>
     </div>
@@ -39,3 +39,4 @@
 </p-panel>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

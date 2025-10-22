@@ -10,7 +10,7 @@
  */
  -->
  
-<p-panel #chatModelAdvancedUI *ngIf="formGroup" [formGroup]="formGroup">
+<p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI *ngIf="formGroup" [formGroup]="formGroup">
     <p-blockUI [target]="chatModelAdvancedUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
@@ -35,6 +35,7 @@
                 rows="3"
                 cols="250"
                 pTextarea
+                id="TextArea1" gebo-ai-label
                 formControlName="defaultModelPrompt"
                 gebo-ai-field-element
             ></textarea>
@@ -47,3 +48,4 @@
 </p-panel>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

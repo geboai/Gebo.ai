@@ -1,17 +1,17 @@
-$<div class="grid" *ngIf="rendered">
+<div class="grid" *ngIf="rendered">
     <div class="col-12"><label ><i [ngClass]="(rendered.completed===true?'pi pi-check':'pi pi-spin pi-cog')"></i>{{rendered.description}} ({{rendered.completed===true?"Completed":"Executing"}})</label></div>
     <div class="col-3">
         <div class="card">
-            <p-chart type="pie" [data]="rendered.piechart" [options]="pieOptions" [height]="'170px'" />
+            <p-chart id="Chart" gebo-ai-label type="pie" [data]="rendered.piechart" [options]="pieOptions" [height]="'170px'" />
         </div>
     </div>
     <div class="col-9">
         <div class="grid">
             <div class="col-12" *ngIf="rendered.documentsChart">
-                <p-chart type="bar" [data]="rendered.documentsChart" [options]="pieOptions" [height]="'150px'" />
+                <p-chart id="Chart2" gebo-ai-label type="bar" [data]="rendered.documentsChart" [options]="pieOptions" [height]="'150px'" />
             </div>
             <div class="col-12" *ngIf="rendered.tokensChart">
-                <p-chart type="bar" [data]="rendered.tokensChart" [options]="pieOptions" [height]="'150px'" />
+                <p-chart id="Chart3" gebo-ai-label type="bar" [data]="rendered.tokensChart" [options]="pieOptions" [height]="'150px'" />
             </div>
         </div>
     </div>
@@ -21,3 +21,4 @@ $<div class="grid" *ngIf="rendered">
         [rendered]="entry"></gebo-ai-jobsummary-graphic-visualizer>
 </span>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

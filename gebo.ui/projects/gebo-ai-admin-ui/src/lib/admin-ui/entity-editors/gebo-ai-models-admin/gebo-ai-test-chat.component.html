@@ -1,4 +1,4 @@
-
+$
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -8,15 +8,12 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- -->
+-->
 
-<p-button [disabled]="chatModelCode?false:true" [outlined]="true" (onClick)="openWindow=true" label="Test chat"
-    icon="pi  pi-microchip-ai"></p-button>
-<p-dialog  [maximizable]="true" [visible]="openWindow" [modal]="true" [style]="{width:'95%',height:'95%'}" header="Testing model"
-    (onHide)="openWindow=false" [closable]="true" [showHeader]="true" (visibleChange)="openWindow=$event">
-    <gebo-ai-reusable-chat-component [chatInfo]="{chatModelCode:chatModelCode}"
-        [title]="'Chat model configuration:' + chatModelCode" [modelName]="chatModelCode?chatModelCode:''"
-        ></gebo-ai-reusable-chat-component>
+<p-button id="TestChatBtn" gebo-ai-label [disabled]="chatModelCode?false:true" [outlined]="true" (onClick)="openWindow=true" label="Test chat" icon="pi  pi-microchip-ai"></p-button>
+<p-dialog id="TestingModelDialog" gebo-ai-label [maximizable]="true" [visible]="openWindow" [modal]="true" [style]="{width:'95%',height:'95%'}" header="Testing model" (onHide)="openWindow=false" [closable]="true" [showHeader]="true" (visibleChange)="openWindow=$event">
+    <gebo-ai-reusable-chat-component [chatInfo]="{chatModelCode:chatModelCode}" [title]="'Chat model configuration:' + chatModelCode" [modelName]="chatModelCode?chatModelCode:''"></gebo-ai-reusable-chat-component>
 </p-dialog>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -9,12 +9,12 @@
  */
  -->
 
-<p-blockUI [target]="pjCompo" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="pjCompo" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #pjCompo header="Editing a project or item" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid">
 
             <div class="col-6">
@@ -56,22 +56,23 @@
     <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
         <div class="grid">
             <div class="col-3">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
                     [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
                     styleClass="w-full" />
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"
+                <p-button id="IndexBtn" gebo-ai-label [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"
                     title="Reindex contents" [disabled]="mode==='NEW'" styleClass="w-full"></p-button>
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
                     [disabled]="canDelete===false" styleClass="w-full" />
             </div>
         </div>
     </div>
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

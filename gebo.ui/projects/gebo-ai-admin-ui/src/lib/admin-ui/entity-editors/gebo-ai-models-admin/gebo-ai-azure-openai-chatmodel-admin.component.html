@@ -78,14 +78,14 @@
 
     <div class="grid geboVeryLargeButtonsBar" *ngIf="!isWizardMode">
         <div class="col-3">
-            <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
                 severity="success" [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
         </div>
         <div class="col-3">
-            <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full"  />
+            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full"  />
         </div>
         <div class="col-3">
-            <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" 
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full" 
                 [disabled]="canDelete===false" />
         </div>
         <div class="col-3">
@@ -95,3 +95,4 @@
 
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

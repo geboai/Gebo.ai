@@ -1,4 +1,4 @@
-
+$
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -9,19 +9,16 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-blockUI [target]="endPointUI" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="endPointUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing uploaded content" [formGroup]="formGroup">
   <div class="geboDialogContent">
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <p-toast />
-    <p-tabView class="standardTabDialogueHeight">
-      <p-tabPanel header="Settings">
+    <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <p-toast id="Toast" gebo-ai-label />
+    <p-tabView id="TabView" gebo-ai-label class="standardTabDialogueHeight">
+      <p-tabPanel id="SettingsTab" gebo-ai-label header="Settings">
         <div class="grid">
           <div class="col-6">
             <gebo-ai-field id="description" label="Description" help="Enter the description of the uploaded content of filesystem entry." [required]="true">
@@ -99,7 +96,6 @@
             </gebo-ai-field>
           </div>
 
-
           <div class="col-12">
             <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)">
               <gebo-ai-build-systems-chooser 
@@ -110,27 +106,22 @@
             </gebo-ai-field>
           </div>
 
-
         </div>
-      </p-tabPanel><p-tabPanel header="Logs" [disabled]="!objectReference">
+      </p-tabPanel><p-tabPanel id="LogsTab" gebo-ai-label header="Logs" [disabled]="!objectReference">
         <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference"
           title="This upload files ingestion log"></gebo-ai-log-table-component>
       </p-tabPanel></p-tabView>
   </div>
 
-
-
-
-
   <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
     <div class="grid">
       <div class="col-3">
-        <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
           styleClass="w-full"></p-button>
       </div>
       <div class="col-3">
-        <p-button [outlined]="true" label="Publish!"
+        <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
           title="Saves and let these contents being available in knowledge base to LLm's" severity="success"
           icon="pi pi-microchip-ai" (onClick)="doPublish()"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"
@@ -138,11 +129,11 @@
 
       </div>
       <div class="col-3">
-        <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
           styleClass="w-full" />
       </div>
       <div class="col-3">
-        <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
           styleClass="w-full" />
       </div>
 
@@ -151,3 +142,4 @@
 </p-panel>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

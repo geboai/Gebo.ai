@@ -1,4 +1,3 @@
-
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -11,15 +10,15 @@
  -->
  
 <p-panel #graphRagSettingUI *ngIf="neo4jEnabled===true && (context?true:false)" id="graphRagSettingUI">
-    <p-blockUI [target]="graphRagSettingUI" [blocked]="loading">
+    <p-blockUI id="LockBlockUI" gebo-ai-label [target]="graphRagSettingUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="grid" *ngIf="graphRagIsSetup===true">
         <div class="col-12">
             <div class="flex flex-column gap-2">
-                <label>Graphrag settings</label>
-                <p-button icon="pi pi-sitemap" *ngIf="graphRagConfig?true:false" label="Edit configuration" (onClick)="editConfiguration()"></p-button>
-                <p-button icon="pi pi-sitemap" *ngIf="graphRagConfig?false:true" label="Add configuration" (onClick)="newConfiguration()"></p-button>
+                <label id="GraphragSettingsLabel" gebo-ai-text>Graphrag settings</label>
+                <p-button id="EditConfigurationBtn" gebo-ai-label icon="pi pi-sitemap" *ngIf="graphRagConfig?true:false" label="Edit configuration" (onClick)="editConfiguration()"></p-button>
+                <p-button id="AddConfigurationBtn" gebo-ai-label icon="pi pi-sitemap" *ngIf="graphRagConfig?false:true" label="Add configuration" (onClick)="newConfiguration()"></p-button>
                 <small id="button-help" *ngIf="graphRagConfig?true:false">
                     Click here to view/modify information extraction configuration for graphrag 
                 </small>
@@ -30,8 +29,9 @@
         </div>
     </div>
     <div class="grid" *ngIf="graphRagIsSetup===false">
-        <label>Configure graphrag in the setup area if you want to use it in this section</label>
+        <label id="ConfigureGraphragLabel" gebo-ai-text>Configure graphrag in the setup area if you want to use it in this section</label>
     </div>
 </p-panel>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

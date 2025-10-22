@@ -9,13 +9,13 @@
  */
  -->
  
-<p-button icon="pi pi-sparkles" label="Prompt wizard" [outlined]="true" title="Use this to use an LLM to generate the prompt for your objectives" (onClick)="dialogVisible=true"></p-button>
-<p-dialog  [maximizable]="true" [visible]="dialogVisible" [modal]="true" [style]="{width:'100%',height:'100%'}" (onHide)="closeModal($event)"
+<p-button id="PromptWizardBtn" gebo-ai-label icon="pi pi-sparkles" label="Prompt wizard" [outlined]="true" title="Use this to use an LLM to generate the prompt for your objectives" (onClick)="dialogVisible=true"></p-button>
+<p-dialog [maximizable]="true" [visible]="dialogVisible" [modal]="true" [style]="{width:'100%',height:'100%'}" (onHide)="closeModal($event)"
     [closable]="false" [showHeader]="false">
     <p-blockUI [target]="promptWizardUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-panel  id="promptWizardUI" gebo-ai-label  #promptWizardUI header="Prompt template generation wizard" [formGroup]="formGroup">
+    <p-panel id="promptWizardUI" gebo-ai-label #promptWizardUI header="Prompt template generation wizard" [formGroup]="formGroup">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div class="grid">
             <div class="col-12">
@@ -61,14 +61,15 @@
         <div style="vertical-align: baseline;width: '500px';">
             <div class="grid">
                 <div class="col-3">
-                    <p-button  id="generatePrompt" gebo-ai-label  [outlined]="true" label="Generate prompt" (onClick)="doGeneratePrompt()"
-                        icon="pi pi-microchip-ai"  [disabled]="formGroup.invalid"   styleClass="w-full" ></p-button>
+                    <p-button id="generatePrompt" gebo-ai-label [outlined]="true" label="Generate prompt" (onClick)="doGeneratePrompt()"
+                        icon="pi pi-microchip-ai" [disabled]="formGroup.invalid" styleClass="w-full"></p-button>
                 </div>
-                <div class="col-3"><p-button  id="acceptPrompt" gebo-ai-label  [outlined]="true" label="Accept prompt" severity="success"   styleClass="w-full" 
+                <div class="col-3">
+                    <p-button id="acceptPrompt" gebo-ai-label [outlined]="true" label="Accept prompt" severity="success" styleClass="w-full" 
                         icon="pi pi-check" (onClick)="doAcceptPrompt()"
                         [disabled]="(formGroup.invalid || !(lastResponse?.result?.response)) || responseFormGroup.invalid" /></div>
                 <div class="col-3">
-                    <p-button  id="cancel" gebo-ai-label  [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancelAction()"   styleClass="w-full"  />
+                    <p-button id="cancel" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancelAction()" styleClass="w-full" />
                 </div>
             </div>
 
@@ -77,3 +78,4 @@
 </p-dialog>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

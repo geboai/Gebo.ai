@@ -20,10 +20,10 @@
         <p-table [value]="shares?shares:[]" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template #header pTemplate="header">
                 <tr>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Absolute path</th>
-                    <th>Delete</th>
+                    <th id="CodeHeader" gebo-ai-text>Code</th>
+                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                    <th id="AbsolutePathHeader" gebo-ai-text>Absolute path</th>
+                    <th id="DeleteHeader" gebo-ai-text>Delete</th>
 
                 </tr>
             </ng-template>
@@ -32,7 +32,7 @@
                     <td>{{ share.code }}</td>
                     <td>{{ share.description }}</td>
                     <td>{{ share.reference?.path?.absolutePath?share.reference?.path?.absolutePath:share.reference?.root?.absolutePath }}</td>
-                    <td><p-button [disabled]="share.readonly || share.notUsed!==true" (onClick)="deletePath(share)" label="Remove path"
+                    <td><p-button [disabled]="share.readonly || share.notUsed!==true" (onClick)="deletePath(share)" id="RemovePathBtn" gebo-ai-label label="Remove path"
                             icon="pi pi-trash" severity="danger" [text]="true"></p-button></td>
                 </tr>
             </ng-template>
@@ -40,7 +40,7 @@
         <div class="grid geboLargeButtonsBar">
             
             <div class="col-6">
-                <p-button [outlined]="true" label="Add folder" (onClick)="openAddFolderDialog()" icon="pi pi-plus"
+                <p-button [outlined]="true" label="Add folder" id="AddFolderBtn" gebo-ai-label (onClick)="openAddFolderDialog()" icon="pi pi-plus"
                      [disabled]="settingEnabled!==true"
                     styleClass="w-full"></p-button>
             </div>
@@ -70,7 +70,7 @@
         </div>
         <div class="grid geboLargeButtonsBar">
             <div class="col-6">
-                <p-button [outlined]="true" label="Add folder" (onClick)="saveNewPath()" icon="pi pi-save"
+                <p-button [outlined]="true" label="Add folder" id="AddFolderBtn2" gebo-ai-label (onClick)="saveNewPath()" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid"
                     styleClass="w-full"></p-button>
             </div>
@@ -78,3 +78,4 @@
     </form>
 </p-dialog>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

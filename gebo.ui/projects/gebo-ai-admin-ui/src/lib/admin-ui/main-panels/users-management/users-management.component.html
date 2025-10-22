@@ -23,11 +23,11 @@
                 [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>username</th>
-                        <th>name</th>
-                        <th>sourname</th>
-                        <th>roles</th>
-                        <th>disabled</th>
+                        <th id="UsernameHeader" gebo-ai-text>username</th>
+                        <th id="NameHeader" gebo-ai-text>name</th>
+                        <th id="SournameHeader" gebo-ai-text>sourname</th>
+                        <th id="RolesHeader" gebo-ai-text>roles</th>
+                        <th id="DisabledHeader" gebo-ai-text>disabled</th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -40,7 +40,7 @@
                         <td>{{ (user.disabled===true? 'YES':'NO')}}</td>
                         <td>
 
-                            <p-button [outlined]="true" label="Edit" (onClick)="editUser(user)"
+                            <p-button id="EditBtn" gebo-ai-label [outlined]="true" label="Edit" (onClick)="editUser(user)"
                                 icon="pi pi-user-edit"></p-button>
 
                         </td>
@@ -48,11 +48,11 @@
                 </ng-template>
 
             </p-table>
-            <p-paginator (onPageChange)="onUsersPageChange($event)" [first]="0" [rows]="usersPage.pageSize" *ngIf="usersPaged?.content?.length"
+            <p-paginator id="PaginatorUsers" gebo-ai-label (onPageChange)="onUsersPageChange($event)" [first]="0" [rows]="usersPage.pageSize" *ngIf="usersPaged?.content?.length"
     [totalRecords]="usersPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
         <div class="col-3">
-            <p-button [outlined]="true" label="new user" (onClick)="newUser()"
+            <p-button id="NewUserBtn" gebo-ai-label [outlined]="true" label="new user" (onClick)="newUser()"
                                 icon="pi pi-user-plus"></p-button>
         </div>
     </div>
@@ -68,9 +68,9 @@
                 [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>code</th>
-                        <th>description</th>
-                        <th>users</th>
+                        <th id="CodeHeader" gebo-ai-text>code</th>
+                        <th id="DescriptionHeader" gebo-ai-text>description</th>
+                        <th id="UsersHeader" gebo-ai-text>users</th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -81,7 +81,7 @@
                         <td>{{ grp.users }}</td>
                         <td>
 
-                            <p-button [outlined]="true" label="Edit" (onClick)="editGroup(grp)" 
+                            <p-button id="EditGroupBtn" gebo-ai-label [outlined]="true" label="Edit" (onClick)="editGroup(grp)" 
                                 icon="pi pi-users"></p-button>
 
                         </td>
@@ -89,14 +89,15 @@
                 </ng-template>
 
             </p-table>
-            <p-paginator (onPageChange)="onGroupsPageChange($event)" [first]="0" [rows]="groupsPage.pageSize" *ngIf="groupsPaged?.content?.length"
+            <p-paginator id="PaginatorGroups" gebo-ai-label (onPageChange)="onGroupsPageChange($event)" [first]="0" [rows]="groupsPage.pageSize" *ngIf="groupsPaged?.content?.length"
     [totalRecords]="groupsPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
         <div class="col-3">
-            <p-button [outlined]="true" label="new group" (onClick)="newGroup()"
+            <p-button id="NewGroupBtn" gebo-ai-label [outlined]="true" label="new group" (onClick)="newGroup()"
                                 icon="pi pi-users"></p-button>
         </div>
     </div>
     <gebo-ai-user-component [mode]="editedUserMode" [user]="editedUser" *ngIf="openUserEditing" (changedData)="editedUserChange($event)"></gebo-ai-user-component>
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

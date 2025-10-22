@@ -55,9 +55,9 @@
       </div>
       <div class="col-2">
         <div class="grid">
-          <div class="col-4"><p-button (onClick)="cancelAction.emit(true)" icon="pi pi-times" [outlined]="true"
+          <div class="col-4"><p-button id="CloseBtn" gebo-ai-label (onClick)="cancelAction.emit(true)" icon="pi pi-times" [outlined]="true"
               label="Close" severity="contrast"></p-button></div>
-          <div class="col-4"><p-button icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true"
+          <div class="col-4"><p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true"
               (onClick)="doDelete()"></p-button></div>
           <div class="col-4"></div>
         </div>
@@ -72,7 +72,7 @@
     <div class="col-12">
       <p-tabView>
 
-        <p-tabPanel header="Processes stats">
+        <p-tabPanel id="ProcessesStatsTab" gebo-ai-label header="Processes stats">
           <div class="grid" *ngIf="rootGraphicData">
             <div class="col-12">
               <gebo-ai-jobsummary-graphic-visualizer
@@ -81,9 +81,9 @@
             </div>
           </div>
         </p-tabPanel>
-        <p-tabPanel header="Publication log">
-          <p-messages [value]="logMessages" [enableService]="false" [closable]="false"></p-messages>
-          <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="actualPage.pageSize"
+        <p-tabPanel id="PublicationLogTab" gebo-ai-label header="Publication log">
+          <p-messages id="MessagesComponent" gebo-ai-label [value]="logMessages" [enableService]="false" [closable]="false"></p-messages>
+          <p-paginator id="PaginatorComponent" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0" [rows]="actualPage.pageSize"
             [totalRecords]="actualPageData?.totalElements" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
         </p-tabPanel>
       </p-tabView>
@@ -92,3 +92,4 @@
 
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

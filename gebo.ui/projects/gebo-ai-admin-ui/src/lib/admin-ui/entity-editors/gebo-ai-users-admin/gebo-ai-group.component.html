@@ -9,17 +9,12 @@
  */
  -->
  
- 
- 
-
-<p-blockUI [target]="groupUI" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="groupUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label  #groupUI header="Editing user group" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label #groupUI header="Editing user group" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-
-
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
 
         <div class="grid">
             <div class="col-6">
@@ -38,35 +33,28 @@
             </div>
             <div class="col-12">
                 <gebo-ai-field id="userIds" label="Users list" help="Select users partecipating the group" [required]="true">
-                    <p-multiSelect  styleClass="w-full"  id="userIds" formControlName="userIds"
+                    <p-multiSelect id="UserIds" gebo-ai-label styleClass="w-full" formControlName="userIds"
                         [required]="true" dataKey="username" optionLabel="username" optionValue="username" [options]="users"
                         placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element
                     ></p-multiSelect>
                 </gebo-ai-field>
             </div>
-
         </div>
-
     </div>
-
-
-
-
 
     <div class="grid geboButtonsBar" *ngIf="!isWizardMode">
         <div class="col-3">
-            <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+            <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
                 [disabled]="this.formGroup.invalid || canSave===false"></p-button>
         </div>
         <div class="col-3">
-            <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
+            <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" />
         </div>
         <div class="col-3">
-            <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
                 [disabled]="canDelete===false" />
         </div>
-
     </div>
-
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -1,20 +1,21 @@
+
 <form [formGroup]="formGroup">
-    <p-blockUI [target]="vectorStoreUI" [blocked]="loading">
+    <p-blockUI id="BlockUI" gebo-ai-label [target]="vectorStoreUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     
-    <p-panel id="MainPanel" gebo-ai-label  #vectorStoreUI header="Vector database configuration">
+    <p-panel id="MainPanel" gebo-ai-label #vectorStoreUI header="Vector database configuration">
         <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
             search, please choose wich of the supported products you'ld like to use</p>
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <div style="height: 500px;">
             <p *ngFor="let item of vectorStoreProducts;">
-                <p-radioButton formControlName="product" [value]="item.code" [required]="true"
+                <p-radioButton id="RadioButton" gebo-ai-label formControlName="product" [value]="item.code" [required]="true"
                     (ngModelChange)="productChange($event)" [inputId]="item.code"></p-radioButton>
                 <b>{{item.label}}:</b>
                 {{item.description}}
             </p>
-            <p-fieldset legend="Qdrant connection settings" *ngIf="product==='QDRANT'">
+            <p-fieldset id="QdrantConnectionFieldset" gebo-ai-label legend="Qdrant connection settings" *ngIf="product==='QDRANT'">
                 <div class="grid" formGroupName="qdrantConfig">
                     <div class="col-6">
                         <gebo-ai-field id="host" label="Qdrant host" help="Qdrant host name or ip address" [required]="true">
@@ -38,7 +39,7 @@
                     </div>
                 </div>
             </p-fieldset>
-            <p-fieldset legend="Redis connection settings" *ngIf="product==='REDIS'">
+            <p-fieldset id="RedisConnectionFieldset" gebo-ai-label legend="Redis connection settings" *ngIf="product==='REDIS'">
                 <div class="grid" formGroupName="redisConfig">
                     <div class="col-6">
                         <gebo-ai-field id="host" label="Redis host" help="Redis host name or ip address" [required]="true">
@@ -65,10 +66,12 @@
         </div>
         <div class="grid geboLargeButtonsBar">
             <div class="col-6">
-                <p-button [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
+                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid" styleClass="w-full"></p-button>
             </div>
         </div>
     </p-panel>
 </form>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

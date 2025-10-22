@@ -12,19 +12,19 @@
  
  
 
-<p-blockUI [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUILock" gebo-ai-label [target]="instModeUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Atlassian Confluence systems">
-  <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+  <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
   <div class=" grid">
 
-    <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
+    <div class="col-12"><p-table id="Table" gebo-ai-label [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template #header pTemplate="header">
           <tr>
-            <th>Config code</th>
-            <th>Description</th>
-            <th>System type</th>
+            <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+            <th id="SystemTypeHeader" gebo-ai-text>System type</th>
             <th></th>
 
           </tr>
@@ -34,7 +34,7 @@
             <td>{{ item.code }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.confluenceVersion}}</td>
-            <td><p-button label="Edit system" icon="pi pi-pencil" [outlined]="true"
+            <td><p-button id="EditSystemBtn" gebo-ai-label label="Edit system" icon="pi pi-pencil" [outlined]="true"
                 (onClick)="editConfluenceSystem(item)"></p-button></td>
           </tr>
         </ng-template>
@@ -44,13 +44,14 @@
   <div class="grid geboLargeButtonsBar">
 
     <div class="col-6">
-      <p-button icon="pi pi-plus" label="Confluence system" styleClass="w-full" [outlined]="true"
+      <p-button id="ConfluenceSystemBtn" gebo-ai-label icon="pi pi-plus" label="Confluence system" styleClass="w-full" [outlined]="true"
         (onClick)="createConfluenceSystem()"></p-button>
     </div>
   </div>
 </p-panel>
-<p-dialog  [maximizable]="true" [visible]="createConfluenceWindowOpen" [modal]="true"  (visibleChange)="closeDialog()">
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createConfluenceWindowOpen" [modal]="true"  (visibleChange)="closeDialog()">
 
   <gebo-ai-confluence-system-fast-component (cancelAction)="closeDialog()"
     (newConfluenceSystemEvent)="this.closeWizard()"></gebo-ai-confluence-system-fast-component>
 </p-dialog>
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

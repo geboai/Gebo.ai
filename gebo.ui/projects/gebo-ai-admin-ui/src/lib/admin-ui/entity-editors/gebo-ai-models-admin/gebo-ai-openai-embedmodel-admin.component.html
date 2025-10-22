@@ -8,16 +8,13 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
 
-<p-blockUI [target]="openaiUI" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="openaiUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #openaiUI header="Editing OpenAI embedding model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />        
-
+        <p-messages id="Messages" gebo-ai-label [value]="userMessages" [enableService]="false" [closable]="false" />
 
         <div class="grid standardTabDialogueHeight">
             <div class="col-6">
@@ -56,25 +53,20 @@
         </div>
     </div>
 
-
-
-
-
-    
         <div class="grid geboLargeButtonsBar" *ngIf="!isWizardMode">
             <div class="col-4">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
-                    severity="success" [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+                    severity="success" [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)" styleClass="w-full"></p-button>
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
-                    [disabled]="canDelete===false" />
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()" styleClass="w-full"
+                    [disabled]="canDelete===false"></p-button>
             </div>
-
         </div>
-    
+
 </p-panel>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
