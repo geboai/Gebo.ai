@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,7 +20,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboUIActionRoutingService, GeboActionType, SetupWizardService, SetupStatus, GeboAIModulesService, GeboAIModules, GeboAIPluggableModulesConfigService, GeboAIEnabledModulesConfig } from "@Gebo.ai/reusable-ui";
+import { GeboUIActionRoutingService, GeboActionType, SetupWizardService, SetupStatus, GeboAIModulesService, GeboAIModules, GeboAIPluggableModulesConfigService, GeboAIEnabledModulesConfig, GEBO_AI_FIELD_HOST, fieldHostComponentName } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "./main-panels/ancestor-panel/ancestor-admin-panel.component";
 import { Button } from "primeng/button";
 
@@ -46,13 +46,13 @@ interface LocalStorageSetupStatus {
 @Component({
   selector: "gebo-ai-admin-component",
   templateUrl: "gebo-ai-admin.component.html",
-  providers: [GeboUIActionRoutingService],
+  providers: [GeboUIActionRoutingService, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiAdminComponent") }],
   standalone: false
 })
 export class GeboAiAdminComponent implements OnInit {
   /** Indicates if the component is in a loading state */
   public loading: boolean = false;
-  
+
   /** References to the child ancestor panel components for controlling their behavior */
   @ViewChild("child1") child1?: AncestorPanelComponent;
   @ViewChild("child2") child2?: AncestorPanelComponent;
@@ -61,25 +61,25 @@ export class GeboAiAdminComponent implements OnInit {
   @ViewChild("child5") child5?: AncestorPanelComponent;
   @ViewChild("child6") child6?: AncestorPanelComponent;
   @ViewChild("child7") child7?: AncestorPanelComponent;
-  
+
   /** Current authenticated user information */
   user?: UserInfo;
-  
+
   /** Current setup status: complete, incomplete, or full */
   private setupStatus?: "complete" | "incomplete" | "full";
-  
+
   /** Flag indicating if the setup window has been opened */
   private setupWindowOpened: boolean = false;
-  
+
   /** Flag indicating if the setup window has been abandoned/dismissed */
   private setupWindowAbandoned: boolean = false;
-  
+
   /** Severity level for the setup button UI styling (danger for incomplete setup) */
   public setupButtonSeverity: any = "danger";
-  
+
   /** Configuration for enabled Gebo AI modules */
   geboConfig: GeboAIEnabledModulesConfig | undefined;
-  
+
   /**
    * Computed property that determines if the setup window should be visible
    * @returns true if the setup window should be displayed
