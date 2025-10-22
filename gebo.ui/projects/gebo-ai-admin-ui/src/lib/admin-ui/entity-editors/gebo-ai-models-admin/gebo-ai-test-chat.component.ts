@@ -18,11 +18,15 @@
  * in an open or closed state.
  */
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "gebo-ai-test-chat-component",
     templateUrl: "gebo-ai-test-chat.component.html",
-    standalone: false
+    standalone: false, providers: [{
+        provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAITestChatComponent"),
+        multi: true
+    }]
 })
 export class GeboAITestChatComponent implements OnInit, OnChanges {
     /**

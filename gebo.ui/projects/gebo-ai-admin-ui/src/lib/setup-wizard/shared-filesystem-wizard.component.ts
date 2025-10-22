@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,7 +18,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { BrowseParam, FileSystemSharesSettingControllerService, GFileSystemShareReference, PathInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ConfirmationService } from "primeng/api";
@@ -33,7 +33,7 @@ export class SharedFilesystemAlreadySetupService extends AbstractStatusService {
     constructor(private sharedFilesystemConfigService: FileSystemSharesSettingControllerService) {
         super();
     }
-    
+
     /**
      * Overrides the parent method to check if any shared filesystem references are configured.
      * Returns an Observable that emits true if at least one share is configured.
@@ -53,7 +53,7 @@ export class SharedFilesystemEnabledService extends AbstractStatusService {
     constructor(private sharedFilesystemConfigService: FileSystemSharesSettingControllerService) {
         super();
     }
-    
+
     /**
      * Overrides the parent method to check if shared filesystem feature is enabled.
      * @returns Observable<boolean> indicating whether the feature is enabled
@@ -79,39 +79,40 @@ interface ExtendedGFileSystemShareReference extends GFileSystemShareReference {
 @Component({
     selector: "gebo-shared-filesystem-wizard-component",
     templateUrl: "shared-filesystem-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("SharedFilesystemWizardComponent") }]
 })
 export class SharedFilesystemWizardComponent extends BaseWizardSectionComponent {
     /** Flag indicating if the shared filesystem setting is enabled */
     settingEnabled: boolean = false;
-    
+
     /** Collection of filesystem shares configured in the system */
     shares?: ExtendedGFileSystemShareReference[] = [];
-    
+
     /** Form for adding new filesystem shares */
     formGroup: FormGroup = new FormGroup({
         reference: new FormControl(),
         description: new FormControl()
     });
-    
+
     /**
      * Callback to load root filesystem nodes 
      * Used for browsing the filesystem hierarchy
      */
     public loadRootsObservable: loadRootsObservableCallback = () => this.sharedFilesystemConfigService.getRootGFileSystemNodes();
-    
+
     /**
      * Callback to browse filesystem paths
      * @param param Parameters for browsing a specific path
      */
     public browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => { return this.sharedFilesystemConfigService.getGFileSystemNodeChildrens(param) };
-    
-    constructor(setupWizardComunicationService: SetupWizardComunicationService, 
+
+    constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private sharedFilesystemConfigService: FileSystemSharesSettingControllerService,
         private confirmService: ConfirmationService) {
         super(setupWizardComunicationService);
     }
-    
+
     /**
      * Reloads the component data from the backend services.
      * Updates the settings status and fetches all configured filesystem shares.
@@ -145,7 +146,7 @@ export class SharedFilesystemWizardComponent extends BaseWizardSectionComponent 
             }
         });
     }
-    
+
     /**
      * Saves a new filesystem path reference to the configuration.
      * Takes the form values and sends them to the backend service.
@@ -157,24 +158,24 @@ export class SharedFilesystemWizardComponent extends BaseWizardSectionComponent 
         this.sharedFilesystemConfigService.insertFileSystemShareReference(_2set).subscribe({
             next: (value) => {
                 this.reloadData();
-                this.addFolderOpened=false;
+                this.addFolderOpened = false;
             },
             complete: () => {
                 this.loading = false;
             }
         });
     }
-    
+
     /** Flag to control the visibility of the add folder dialog */
     public addFolderOpened: boolean = false;
-    
+
     /**
      * Opens the dialog for adding a new folder reference
      */
     public openAddFolderDialog(): void {
         this.addFolderOpened = true;
     }
-    
+
     /**
      * Deletes a filesystem path reference from the configuration.
      * Shows a confirmation dialog before deletion.
@@ -182,18 +183,18 @@ export class SharedFilesystemWizardComponent extends BaseWizardSectionComponent 
      */
     public deletePath(share: ExtendedGFileSystemShareReference) {
         this.confirmService.confirm({
-            header:"Delete a shared filesystem reference configuration",
-            message:"Delete the shared filesystem reference to " + (share.reference.path?share.reference.path.absolutePath:share.reference.root.absolutePath),
-            accept:()=>{
-                const ref:ExtendedGFileSystemShareReference={...share};
-                ref.notUsed=undefined;
-                this.loading=true;
+            header: "Delete a shared filesystem reference configuration",
+            message: "Delete the shared filesystem reference to " + (share.reference.path ? share.reference.path.absolutePath : share.reference.root.absolutePath),
+            accept: () => {
+                const ref: ExtendedGFileSystemShareReference = { ...share };
+                ref.notUsed = undefined;
+                this.loading = true;
                 this.sharedFilesystemConfigService.deleteFileSystemShareReference(ref).subscribe({
-                    next:(value)=>{
+                    next: (value) => {
                         this.reloadData();
                     },
-                    complete:()=>{
-                        this.loading=false;
+                    complete: () => {
+                        this.loading = false;
                     }
                 });
             }

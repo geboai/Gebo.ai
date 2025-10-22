@@ -13,7 +13,7 @@
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { DataPage,  FunctionsLookupControllerService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptConfig, KnowledgeBaseControllerService, PageGChatProfileConfiguration, PromptTemplatesControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { forkJoin, map, Observable } from "rxjs";
 /**
@@ -52,7 +52,8 @@ export class ChatProfileStatusService extends AbstractStatusService {
 @Component({
     selector: "gebo-ai-chat-profile-wizard-component",
     templateUrl: "chat-profile-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers:[{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ChatProfileWizardComponent") }]
 })
 export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     /**

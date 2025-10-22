@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,23 +20,28 @@
 import { Component, OnInit } from "@angular/core";
 import { GeboCoreAnalisysControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { TotalHistogramBar, transformData } from "./graphics-data";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "gebo-ai-main-dashboard-component",
     templateUrl: "gebo-dashboard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIDashboardComponent"),
+        multi: true
+    }]
 })
 export class GeboAIDashboardComponent implements OnInit {
     /**
      * Indicates whether data is currently being loaded
      */
     public loading: boolean = false;
-    
+
     /**
      * Stores the root data for histogram visualization
      */
     public rootValue?: TotalHistogramBar;
-    
+
     /**
      * Configuration options for the chart display
      * Sets up the legend styling with appropriate color scheme
@@ -64,7 +69,7 @@ export class GeboAIDashboardComponent implements OnInit {
      * Used to perform initial data loading and setup
      */
     ngOnInit(): void {
-       
+
     }
-    
+
 }

@@ -19,6 +19,7 @@
 import { Component, OnInit } from "@angular/core";
 import { BuildSystemsControllerService, GBuildSystem,  GBuildSystemType } from "@Gebo.ai/gebo-ai-rest-api";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 
 /**
  * Interface representing a node in the build system hierarchy.
@@ -37,7 +38,9 @@ interface BuildSystemNode {
 @Component({
     selector: "build-packaging-systems-component",
     templateUrl: "build-packaging-systems.component.html",
-    standalone: false
+    standalone: false,
+    providers:[{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("BuildPackagingSystemsComponent"),
+            multi: true }]
 })
 export class BuildPackagingSystemsComponent extends AncestorPanelComponent  implements OnInit{
     /**

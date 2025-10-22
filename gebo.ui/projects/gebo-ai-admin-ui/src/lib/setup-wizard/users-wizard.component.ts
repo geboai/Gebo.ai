@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,7 +20,7 @@
 
 import { Component } from "@angular/core";
 import { UserInfos, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseWizardSectionComponent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 
 /**
  * Component responsible for managing users within the setup wizard.
@@ -31,7 +31,8 @@ import { BaseWizardSectionComponent, GeboActionType, GeboUIActionRequest, GeboUI
 @Component({
     selector: "gebo-ai-users-wizard-component",
     templateUrl: "users-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("UsersWizardComponent") }]
 })
 export class UsersWizardComponent extends BaseWizardSectionComponent {
     /**
@@ -57,13 +58,13 @@ export class UsersWizardComponent extends BaseWizardSectionComponent {
      * when data is received.
      */
     public override reloadData(): void {
-        this.loading=true;
+        this.loading = true;
         this.usersController.getAllUsers().subscribe({
             next: (users) => {
                 this.users = users;
             },
             complete: () => {
-                this.loading=false;
+                this.loading = false;
             }
         });
     }
@@ -72,16 +73,16 @@ export class UsersWizardComponent extends BaseWizardSectionComponent {
      * Triggers the edit functionality for an existing user.
      * @param ui The user information object to be edited
      */
-    public editUser(ui:UserInfos){
+    public editUser(ui: UserInfos) {
         this.openUserWindow(ui);
-    } 
+    }
 
     /**
      * Initiates the creation of a new user by opening the user edit window
      * with an empty user object.
      */
     public createUser() {
-        const user={
+        const user = {
 
         };
         this.openUserWindow(user);
@@ -95,14 +96,14 @@ export class UsersWizardComponent extends BaseWizardSectionComponent {
      * 
      * @param data The user data to be edited, or an empty object for a new user
      */
-    private openUserWindow(data:any) {
-        const action: GeboUIActionRequest={
-            actionType:data?.username?GeboActionType.OPEN:GeboActionType.NEW,
-            context:{},
-            contextType:"UsersWizardComponent",
-            target:data,
-            targetType:"EditableUser",
-            onActionPerformed:(e)=>{
+    private openUserWindow(data: any) {
+        const action: GeboUIActionRequest = {
+            actionType: data?.username ? GeboActionType.OPEN : GeboActionType.NEW,
+            context: {},
+            contextType: "UsersWizardComponent",
+            target: data,
+            targetType: "EditableUser",
+            onActionPerformed: (e) => {
                 this.reloadData();
             }
         };

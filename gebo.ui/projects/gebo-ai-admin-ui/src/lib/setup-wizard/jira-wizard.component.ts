@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,7 +18,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { ConfluenceSystemsControllerService, GConfluenceSystem, GeboModulesConfigControllerService, GJiraSystem, JiraSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, CONFLUENCE_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, CONFLUENCE_MODULE, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";
 
@@ -47,8 +47,8 @@ export class JiraStatusService extends AbstractStatusService {
  */
 @Injectable()
 export class JiraInstalledModuleService extends GeboRootInstalledModuleService {
-  protected override moduleCode: string=CONFLUENCE_MODULE;
-  
+  protected override moduleCode: string = CONFLUENCE_MODULE;
+
   constructor(geboModulesConfigService: GeboModulesConfigControllerService) {
     super(geboModulesConfigService);
   }
@@ -60,15 +60,16 @@ export class JiraInstalledModuleService extends GeboRootInstalledModuleService {
  * Allows users to create, view, and edit Jira system configurations.
  */
 @Component({
-    selector: "gebo-jira-wizard-component",
-    templateUrl: "jira-wizard.component.html",
-    standalone: false
+  selector: "gebo-jira-wizard-component",
+  templateUrl: "jira-wizard.component.html",
+  standalone: false,
+  providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("JiraWizardComponent") }]
 })
 export class JiraWizardComponent extends BaseWizardSectionComponent {
 
-  public createConfluenceWindowOpen:boolean=false;
+  public createConfluenceWindowOpen: boolean = false;
   public systems: GJiraSystem[] = [];
-  
+
   constructor(setupWizardComunicationService: SetupWizardComunicationService,
     private confluenceControllerService: JiraSystemsControllerService,
     private geboUIActionsRouter: GeboUIActionRoutingService
@@ -117,15 +118,15 @@ export class JiraWizardComponent extends BaseWizardSectionComponent {
    * Opens the dialog for creating a new Jira system.
    */
   createJiraSystem() {
-    this.createConfluenceWindowOpen=true;
-   
+    this.createConfluenceWindowOpen = true;
+
   }
 
   /**
    * Closes the create/edit dialog and refreshes the data.
    */
   closeDialog() {
-    this.createConfluenceWindowOpen=false;
+    this.createConfluenceWindowOpen = false;
     this.reloadData();
   }
 };

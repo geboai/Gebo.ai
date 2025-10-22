@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
@@ -16,6 +16,7 @@ import { Observable, of } from "rxjs";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
 import { ActivatedRoute } from "@angular/router";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 /* AI generated comments */
 /**
  * GeboAiChatSectionComponent is responsible for managing the chat interface section.
@@ -28,7 +29,8 @@ import { ActivatedRoute } from "@angular/router";
 @Component({
     selector: "gebo-ai-chat-section-component",
     templateUrl: "gebo-ai-rag-chat-section.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
 })
 export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
@@ -84,12 +86,12 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * @param geboChatModelsControllerService Service for accessing chat models
      */
     constructor(
-        private activatedRoute:ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
         private geboRagChatControllerService: GeboRagChatControllerService,
         private geboChatControllerService: GeboChatControllerService,
         private geboUserChatsControllerService: GeboUserChatsControllerService,
         private geboChatModelsControllerService: ChatModelsLookupControllerService) {
-       
+
     }
 
     /**
@@ -97,9 +99,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Sets up the current chat with profile information and transitions to RAG chat view
      */
     createRagChat(): void {
-        const value=this.formGroup.value;
+        const value = this.formGroup.value;
         this.currentChat = {
-            code:undefined,
+            code: undefined,
             chatProfileCode: value.chatProfileCode,
             description: "Chat with profile " + this.chatProfilesData?.find(x => x.code === value.chatProfileCode)?.description
         };
@@ -120,9 +122,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Sets up the current chat with model information and transitions to chat view
      */
     createChat(): void {
-        const value=this.chatFormGroup.value;
+        const value = this.chatFormGroup.value;
         this.currentChat = {
-            code:undefined,
+            code: undefined,
             chatProfileCode: undefined,
             chatModelCode: value.chatModelCode,
             description: "Chat with " + this.chatModelsData?.find(x => x.code === value.chatModelCode)?.description
@@ -145,7 +147,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      */
     public loadChatList(): void {
         this.chatsPageLoading = true;
-        if (this.page.page!==undefined && this.page.pageSize!==undefined) {
+        if (this.page.page !== undefined && this.page.pageSize !== undefined) {
             this.geboUserChatsControllerService.getMyChatsPaged(this.page.page, this.page.pageSize).subscribe({
                 next: (page) => {
                     this.chatsPage = page;
@@ -162,11 +164,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     /**
      * Closes the current chat, returns to the chat list view, and refreshes the chat history
      */
-    reloadChatsAndCloseChat():void{
-        this.chatsListAndOptionsVisible=true;
-        this.currentChat={};
-        this.openChat=false;
-        this.openRagChat=false;
+    reloadChatsAndCloseChat(): void {
+        this.chatsListAndOptionsVisible = true;
+        this.currentChat = {};
+        this.openChat = false;
+        this.openRagChat = false;
         this.loadChatList();
     }
 
@@ -174,8 +176,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Loads available chat profiles and models for selection
      * Updates form controls with default selections when data is loaded
      */
-    loadChatOptions():void {
-        this.chatsProfilesLoading=true;
+    loadChatOptions(): void {
+        this.chatsProfilesLoading = true;
         this.geboChatModelsControllerService.getRuntimeConfiguredChatModelsLookup().subscribe({
             next: (value) => {
                 this.chatModelsData = value;
@@ -183,11 +185,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     this.chatFormGroup.controls["chatModelCode"].setValue(this.chatModelsData[0].code);
                 }
             },
-            complete:()=>{
-                this.chatsProfilesLoading=false;
+            complete: () => {
+                this.chatsProfilesLoading = false;
             }
         });
-        this.chatsModelLoading=true;
+        this.chatsModelLoading = true;
         this.geboRagChatControllerService.getChatProfiles().subscribe({
             next: (value) => {
                 this.chatProfilesData = value;
@@ -195,8 +197,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
                     this.formGroup.controls["chatProfileCode"].setValue(this.chatProfilesData[0].code);
                 }
             },
-            complete:()=>{
-                this.chatsModelLoading=false;
+            complete: () => {
+                this.chatsModelLoading = false;
             }
         });
     }
@@ -206,11 +208,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Shows the chat list view and loads chat options and history
      */
     ngOnInit(): void {
-        
+
         this.chatsListAndOptionsVisible = true;
         this.loadChatOptions();
         this.loadChatList();
-        
+
     }
 
     /**

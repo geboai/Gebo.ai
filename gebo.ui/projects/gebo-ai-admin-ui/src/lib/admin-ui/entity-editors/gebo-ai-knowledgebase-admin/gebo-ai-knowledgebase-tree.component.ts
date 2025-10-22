@@ -6,13 +6,13 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { EnrichedChild, extractTargetType, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint } from "@Gebo.ai/reusable-ui";
+import { EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint } from "@Gebo.ai/reusable-ui";
 import { TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
 
@@ -29,7 +29,11 @@ import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
   {
     selector: "gebo-ai-knowledgebase-tree-component",
     templateUrl: "gebo-ai-knowledgebase-tree.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{
+      provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent"),
+      multi: true
+    }]
   }
 )
 export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {

@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,7 +18,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { ConfluenceSystemsControllerService, GConfluenceSystem, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, CONFLUENCE_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, CONFLUENCE_MODULE, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";
 
@@ -48,8 +48,8 @@ export class ConfuenceStatusService extends AbstractStatusService {
  */
 @Injectable()
 export class ConfluenceInstalledModuleService extends GeboRootInstalledModuleService {
-  protected override moduleCode: string=CONFLUENCE_MODULE;
-  
+  protected override moduleCode: string = CONFLUENCE_MODULE;
+
   constructor(geboModulesConfigService: GeboModulesConfigControllerService) {
     super(geboModulesConfigService);
   }
@@ -60,15 +60,16 @@ export class ConfluenceInstalledModuleService extends GeboRootInstalledModuleSer
  * Allows viewing existing Confluence systems, creating new ones, and editing existing ones.
  */
 @Component({
-    selector: "gebo-confluence-wizard-component",
-    templateUrl: "confluence-wizard.component.html",
-    standalone: false
+  selector: "gebo-confluence-wizard-component",
+  templateUrl: "confluence-wizard.component.html",
+  standalone: false,
+  providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ConfluenceWizardComponent") }]
 })
 export class ConfluenceWizardComponent extends BaseWizardSectionComponent {
 
-  public createConfluenceWindowOpen:boolean=false;
+  public createConfluenceWindowOpen: boolean = false;
   public systems: GConfluenceSystem[] = [];
-  
+
   constructor(setupWizardComunicationService: SetupWizardComunicationService,
     private confluenceControllerService: ConfluenceSystemsControllerService,
     private geboUIActionsRouter: GeboUIActionRoutingService
@@ -117,7 +118,7 @@ export class ConfluenceWizardComponent extends BaseWizardSectionComponent {
    * Sets the createConfluenceWindowOpen flag to true to trigger dialog display.
    */
   createConfluenceSystem() {
-    this.createConfluenceWindowOpen=true;
+    this.createConfluenceWindowOpen = true;
     /*
     const value: GConfluenceSystem = {};
     const action: GeboUIActionRequest = {
@@ -137,7 +138,7 @@ export class ConfluenceWizardComponent extends BaseWizardSectionComponent {
    * Closes the Confluence system creation dialog and reloads the data.
    */
   closeDialog() {
-    this.createConfluenceWindowOpen=false;
+    this.createConfluenceWindowOpen = false;
     this.reloadData();
   }
 };

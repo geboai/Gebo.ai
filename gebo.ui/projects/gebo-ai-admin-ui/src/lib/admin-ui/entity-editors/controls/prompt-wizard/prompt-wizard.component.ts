@@ -23,13 +23,15 @@
 import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardConfigs, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
 
 @Component({
     selector: "gebo-ai-prompt-wizard-component",
     templateUrl: "prompt-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIPromptWizardComponent") }]
 })
 export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /**

@@ -13,6 +13,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
  * This file defines a component for configuring standard chat model settings
@@ -34,7 +35,8 @@ const standardDefaultContextLength:number=4096;
 @Component({
     selector: "gebo-ai-standard-chat-model-settings-component",
     templateUrl: "standard-chat-model-settings.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }]
 })
 export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     // Form group to bind settings controls to

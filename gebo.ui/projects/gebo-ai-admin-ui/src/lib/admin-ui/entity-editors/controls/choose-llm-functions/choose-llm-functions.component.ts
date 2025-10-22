@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,7 +20,8 @@
  */
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import {  FunctionsLookupControllerService, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { FunctionsLookupControllerService, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 import { TreeNode } from "primeng/api";
 
 @Component({
@@ -31,7 +32,7 @@ import { TreeNode } from "primeng/api";
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIChooseLLMFunctionscomponent),
             multi: true
-        }
+        }, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChooseLLMFunctionscomponent") }
     ],
     standalone: false
 })
@@ -41,18 +42,18 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
      * which affects which functions are available for selection.
      */
     @Input() knowledgeBaseContext?: boolean;
-    
+
     /**
      * Flag to track if writeValue has been called to prevent premature onChange events
      * during initialization.
      */
     private writeValueHasBeenCalled: boolean = false;
-    
+
     /**
      * Stores the tree structure of functions that will be displayed in the UI.
      */
     root: TreeNode<any>[] = [];
-    
+
     /**
      * Form group that manages the selected functions in the tree component.
      */
@@ -67,12 +68,12 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
     constructor(private functionsLookupService: FunctionsLookupControllerService) {
 
     }
-    
+
     /**
      * Array of selected function names that serves as the component's value.
      */
     private functionsList: string[] = [];
-    
+
     /**
      * Flag to indicate when the component is loading data.
      */
@@ -160,9 +161,9 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
                     });
                 }
             });
-            this.formGroup.setValue({ selected: childs },{onlySelf:true,emitEvent:false});
+            this.formGroup.setValue({ selected: childs }, { onlySelf: true, emitEvent: false });
         } else {
-            this.formGroup.setValue({ selected: [] },{onlySelf:true,emitEvent:false});
+            this.formGroup.setValue({ selected: [] }, { onlySelf: true, emitEvent: false });
         }
     }
 
