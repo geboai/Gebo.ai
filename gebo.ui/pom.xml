@@ -14,10 +14,16 @@
 			${project.basedir}/Backoffice.Swagger/swagger.json</backoffice.swagger.file>
 		<generated-sources-path>
 			${project.basedir}/projects/gebo-ai-rest-api/src/lib</generated-sources-path>
-		<generated-sources-java-path>/projects/gebo-ai-rest-api/src/lib</generated-sources-java-path>		
+		<generated-sources-java-path>/projects/gebo-ai-rest-api/src/lib</generated-sources-java-path>
 	</properties>
 	<packaging>jar</packaging>
 	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.multilanguage.support</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 

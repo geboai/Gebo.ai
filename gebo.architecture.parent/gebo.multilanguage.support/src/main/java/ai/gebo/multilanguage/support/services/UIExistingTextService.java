@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -19,12 +20,25 @@ import ai.gebo.multilanguage.support.repository.UIExistingTextRepository;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
+
 public class UIExistingTextService {
 	private final UIExistingTextRepository repository;
+	private final IExistingBundledTextResourcesDao existingBundleDao;
+
+	public UIExistingTextService(@Autowired(required = false) IExistingBundledTextResourcesDao existingBundleDao,
+			UIExistingTextRepository repository) {
+		this.repository = repository;
+		this.existingBundleDao = existingBundleDao;
+	}
 
 	public LinkedHashMap getCurrentLanguageResources() {
 		final LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, String>>>> data = new LinkedHashMap<>();
+		if (this.existingBundleDao != null) {
+			LinkedHashMap bundle = this.existingBundleDao.getAllEnglishResources();
+			if (bundle != null) {
+				data.putAll(bundle);
+			}
+		}
 		Stream<UIExistingText> stream = repository.findAll().stream();
 		stream.forEach(text -> {
 			data.computeIfAbsent(text.getModuleId(), (String moduleId) -> new LinkedHashMap<>());

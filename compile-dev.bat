@@ -1,2 +1,2 @@
-mvn clean install -DskipTests -P bootables -P swagger-on -P under-development -P!angular-ui
+mvn clean install -DskipTests -P bootables,angular-ui -P swagger-on -P under-development 
 
