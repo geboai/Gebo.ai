@@ -1,40 +1,566 @@
 {
-  "GeboAIAdminModule": {
-    "GeboAIReusableChatComponent": {
-      "chatDeleteBtn": { "help": "Elimina questa chat" },
-      "chatConfigInfosBtn": { "help": "Informazioni sulla configurazione della chat" },
-      "chatNameChangeBtn": { "help": "Rinomina la chat" }
+    "GeboAIAdminModule": {
+        "GeboAiAdminComponent": {
+            "LLMSTab": {
+                "label": "LLM per chat e embedding"
+            },
+            "DashboardTab": {
+                "label": "Dashboard"
+            },
+            "UsersGroupTab": {
+                "label": "Utenti e gruppi"
+            },
+            "KnowledgeBaseTab": {
+                "label": "Basi di conoscenza e progetti"
+            },
+            "GeboModulesTab": {
+                "label": "Configurazione moduli Gebo.ai"
+            },
+            "RagChatConfigTab": {
+                "label": "Profili RAG chat / Prompt modelli"
+            },
+            "LogsTab": {
+                "label": "Log"
+            }
+        },
+        "LlmsSystemsComponent": {
+            "NewEmbeddingModelConfigurationBtn": {
+                "label": "Nuova configurazione modello embedding"
+            },
+            "NewChatModelConfigurationBtn": {
+                "label": "Nuova configurazione modello chat"
+            },
+            "CodeHeader": {
+                "label": "Codice"
+            },
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "ModelProviderHeader": {
+                "label": "Fornitore modello"
+            },
+            "ConfigureBtn": {
+                "label": "Configura"
+            },
+            "ModelHeader": {
+                "label": "Modello"
+            },
+            "CodeHeader2": {
+                "label": "Codice"
+            },
+            "DescriptionHeader2": {
+                "label": "Descrizione"
+            },
+            "ModelProviderHeader2": {
+                "label": "Fornitore modello"
+            },
+            "ModelHeader2": {
+                "label": "Modello"
+            },
+            "ConfigureBtn2": {
+                "label": "Configura"
+            }
+        },
+        "GeboAIUsersManagementComponent": {
+            "NewUserBtn": {
+                "label": "Nuovo utente"
+            },
+            "NewGroupBtn": {
+                "label": "Nuovo gruppo"
+            },
+            "UsersListPanel": {
+                "label": "Elenco utenti"
+            },
+            "GroupsListPanel": {
+                "label": "Elenco gruppi"
+            },
+            "NameHeader": {
+                "label": "Nome"
+            },
+            "UsernameHeader": {
+                "label": "Nome utente"
+            },
+            "SournameHeader": {
+                "label": "Cognome"
+            },
+            "RolesHeader": {
+                "label": "Ruoli"
+            },
+            "EditBtn": {
+                "label": "Modifica"
+            },
+            "DisabledHeader": {
+                "label": "Disabilitato"
+            }
+        },
+        "SystemsComponent": {
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "CodeHeader": {
+                "label": "Codice"
+            },
+            "ConfigureBtn": {
+                "label": "Configura"
+            },
+            "ConfigureBtn2": {
+                "label": "Configura"
+            }
+        },
+        "KnowledgeBasesComponent": {
+            "NewKnowledgeBaseBtn": {
+                "label": "Nuova base di conoscenza"
+            }
+        },
+        "ChatProfilesComponent": {
+            "NewChatProfileBtn": {
+                "label": "Nuovo profilo chat"
+            },
+            "MainPanel": {
+                "label": "Profili di chat RAG (Retrieval Augmented Generation)"
+            },
+            "PromptsPanel": {
+                "label": "Collezione prompt e prompt predefiniti"
+            },
+            "NewPromptConfigurationBtn": {
+                "label": "Nuova configurazione prompt"
+            },
+            "CodeHeader": {
+                "label": "Codice"
+            },
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "KnowledgeBasesHeader": {
+                "label": "Basi di conoscenza"
+            },
+            "ConfigureBtn1": {
+                "label": "Configura"
+            }
+        },
+        "GeboAITestChatComponent": {
+            "TestChatBtn": {
+                "label": "Prova chat"
+            },
+            "TestingModelDialog": {
+                "label": "Test del modello"
+            }
+        },
+        "GeboAIReusableChatComponent": {
+            "chatConfigInfosBtn": {
+                "help": "Informazioni configurazione chat"
+            },
+            "chatNameChangeBtn": {
+                "help": "Rinomina la sessione di chat"
+            },
+            "chaDeleteBtn": {
+                "help": "Elimina questa sessione di chat"
+            }
+        },
+        "LogTableComponent": {
+            "SelectHeader": {
+                "label": "Seleziona"
+            },
+            "DeleteBtn": {
+                "label": "Elimina"
+            },
+            "ReloadDataBtn": {
+                "label": "Ricarica dati"
+            },
+            "CodeHeader": {
+                "label": "Codice"
+            },
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "StartDateTimeHeader": {
+                "label": "Data/ora inizio"
+            },
+            "FinishedHeader": {
+                "label": "Completato"
+            },
+            "ProcessingHeader": {
+                "label": "In elaborazione"
+            },
+            "WithErrorHeader": {
+                "label": "Con errore"
+            },
+            "EndDateTimeHeader": {
+                "label": "Data/ora fine"
+            }
+        },
+        "GeboAIDashboardComponent": {
+            "MoreDetailsBtn": {
+                "label": "Dettagli"
+            },
+            "SpanEmbedding": {
+                "label": "Embedding rispetto al numero totale di documenti"
+            }
+        }
     },
-    "GOpenAIChatModelConfig": {
-      "description": { "label": "Descrizione", "help": "Inserisci una descrizione per questa configurazione del modello" },
-      "code": { "label": "Codice univoco", "help": "Codice univoco generato automaticamente per la configurazione del modello" },
-      "apiSecretCode": { "label": "Token OpenAI", "help": "Seleziona il token OpenAI da utilizzare per questo modello" },
-      "choosedModel": { "label": "Modello Chat OpenAI", "help": "Scegli il modello di chat OpenAI da utilizzare" },
-      "defaultModel": { "label": "Imposta come modello chat predefinito", "help": "Se attivo, sarà usato di default quando non è specificato un altro modello" },
-      "MainPanel": { "label": "Modifica configurazione modello chat OpenAI" },
-      "temperature": { "label": "Temperatura", "help": "Casualità del modello da 0 a 1 (lascia vuoto se non sei sicuro)" },
-      "topP": { "label": "Top-P", "help": "Nucleus sampling da 0 a 1 (lascia vuoto se non sei sicuro)" },
-      "contextLength": { "label": "Lunghezza contesto (token)", "help": "Massimo testo considerabile dal modello (predefinito 128.000)" },
-      "enabledFunctions": { "label": "Funzioni abilitate", "help": "Funzioni che il modello può invocare" },
-      "defaultModelPrompt": { "label": "Prompt predefinito del modello", "help": "Modifica il prompt predefinito per questo modello di chat" },
-      "modelCode": { "label": "Modello chat per template", "help": "Scegli il modello di chat per generare il template del prompt" },
-      "query": { "label": "Richiesta template prompt", "help": "Descrivi l’obiettivo dell’utente in seconda persona" },
-      "response": { "label": "Template prompt suggerito", "help": "Testo del template generato (puoi modificarlo o rifinirlo)" },
-      "generatePrompt": { "label": "Genera prompt" },
-      "acceptPrompt": { "label": "Accetta prompt" },
-      "cancel": { "label": "Annulla" },
-      "promptWizardUI": { "label": "Assistente template prompt" },
-      "accessibleToAll": { "label": "Disponibile per tutti", "help": "Chiunque può usare questo modello" },
-      "accessibleGroups": { "label": "Gruppi autorizzati", "help": "Seleziona i gruppi che possono usare questo modello" },
-      "accessibleUsers": { "label": "Utenti autorizzati", "help": "Seleziona gli utenti che possono usare questo modello" }
+    "GeboSetupWizardsModule": {
+        "SetupWizardsComponent": {
+            "WizardUi": {
+                "label": "Scegli una sezione di configurazione"
+            },
+            "WizardBackBtn": {
+                "label": "Torna alla pagina principale di configurazione"
+            }
+        },
+        "GeboAIUsersManagementComponent": {
+            "UsersListPanel": {
+                "label": "Elenco utenti"
+            },
+            "NewUserBtn": {
+                "label": "Nuovo utente"
+            },
+            "NewGroupBtn": {
+                "label": "Nuovo gruppo"
+            },
+            "GroupsListPanel": {
+                "label": "Elenco gruppi"
+            },
+            "SournameHeader": {
+                "label": "Cognome"
+            },
+            "EditBtn": {
+                "label": "Modifica"
+            },
+            "UsernameHeader": {
+                "label": "Nome utente"
+            },
+            "DisabledHeader": {
+                "label": "Disabilitato"
+            },
+            "NameHeader": {
+                "label": "Nome"
+            },
+            "RolesHeader": {
+                "label": "Ruoli"
+            }
+        },
+        "WorkFolderWizardComponent": {
+            "MainPanel": {
+                "label": "Configurazione della cartella di lavoro di Gebo.ai"
+            },
+            "ConfigureBtn": {
+                "label": "Configura"
+            },
+            "workDirectory": {
+                "label": "Scegli una cartella come directory di lavoro Gebo.ai",
+                "help": "Seleziona una cartella sul server che questa installazione userà per salvare configurazioni e contenuti."
+            }
+        },
+        "VectorStoreWizardComponent": {
+            "MainPanel": {
+                "label": "Configurazione del database vettoriale"
+            },
+            "ConfigureBtn": {
+                "label": "Configura"
+            },
+            "tls": {
+                "label": "Parametro TLS di Qdrant",
+                "help": "TLS"
+            },
+            "QdrantConnectionFieldset": {
+                "label": "Impostazioni di connessione Qdrant"
+            },
+            "port": {
+                "label": "Porta Qdrant",
+                "help": "Porta di comunicazione di Qdrant (6334 è quella standard)"
+            },
+            "host": {
+                "label": "Host Qdrant",
+                "help": "Nome host o indirizzo IP del server Qdrant"
+            },
+            "apiKey": {
+                "label": "Chiave API Qdrant",
+                "help": "Chiave API per l’autenticazione su Qdrant"
+            }
+        },
+        "Oauth2WizardComponent": {
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "Oauth2ConfigBtn": {
+                "label": "Configurazione Oauth2"
+            },
+            "ProviderNameHeader": {
+                "label": "Nome provider"
+            },
+            "MainPanel": {
+                "label": "Impostazioni di sicurezza Oauth2"
+            },
+            "IdHeader": {
+                "label": "ID"
+            }
+        },
+        "Oauth2ProviderRegistration": {
+            "authProvider": {
+                "label": "Provider",
+                "help": "Inserisci il provider dell’autenticazione OAUTH2"
+            },
+            "code": {
+                "label": "Codice",
+                "help": "Inserisci il codice di autenticazione/integrazione OAUTH2 (registrationId)."
+            },
+            "configurationType": {
+                "label": "Scopo della configurazione",
+                "help": "Scegli se queste impostazioni servono per autenticarsi su Gebo.ai o per permettere a Gebo.ai di connettersi come client a un sistema esterno."
+            },
+            "description": {
+                "label": "Descrizione",
+                "help": "Inserisci una descrizione per l’autenticazione/integrazione OAUTH2."
+            },
+            "issuerUri": {
+                "label": "URI emittente",
+                "help": "Inserisci l’URL dell’emittente OAUTH2 del provider"
+            },
+            "authorizationUri": {
+                "label": "URL autorizzazione",
+                "help": "Inserisci l’URL di autorizzazione OAUTH2 del provider"
+            },
+            "userInfoUri": {
+                "label": "URL informazioni utente",
+                "help": "Inserisci l’URL OAUTH2 per le informazioni utente del provider"
+            },
+            "tokenUri": {
+                "label": "URL token",
+                "help": "Inserisci l’URL del token OAUTH2 del provider"
+            },
+            "introspectionUri": {
+                "label": "URI introspezione",
+                "help": "Inserisci l’URL di introspezione OAUTH2 del provider"
+            },
+            "jwkSetUri": {
+                "label": "URI set JWK",
+                "help": "Inserisci l’URL del set JWK OAUTH2 del provider"
+            },
+            "secret": {
+                "label": "Chiave segreta",
+                "help": "Chiave client per il protocollo OAUTH2 (da ottenere dall’area amministrativa del software autenticato OAUTH2)"
+            },
+            "clientId": {
+                "label": "ID client",
+                "help": "Identificativo client per il protocollo OAUTH2 (da ottenere dall’area amministrativa del software autenticato OAUTH2)"
+            },
+            "Oauth2ProviderUrls": {
+                "label": "URL provider OAUTH2"
+            },
+            "SaveBtn": {
+                "label": "Salva"
+            },
+            "CancelBtn": {
+                "label": "Annulla"
+            },
+            "MainPanel": {
+                "label": "Inserisci nuove informazioni di autenticazione/integrazione OAUTH2"
+            },
+            "DeleteBtn": {
+                "label": "Elimina"
+            }
+        },
+        "LLMSetupWizardComponent": {
+            "provider": {
+                "label": "Fornitore del modello linguistico",
+                "help": "Scegli un fornitore tra OpenAI (ChatGPT), Google (Gemini) o Anthropic (Claude)"
+            },
+            "user": {
+                "label": "Utente",
+                "help": "Inserisci l’utente associato alla chiave API"
+            },
+            "ConfigureBtn": {
+                "label": "Configura"
+            },
+            "InstructionText": {
+                "label": "Fornisci una chiave API con credito disponibile. Se scegli OpenAI, aggiungi del credito specifico (10–30 $ bastano) al tuo piano abituale per l’uso delle API, altrimenti l’app non potrà usare i modelli LLM."
+            },
+            "apiKey": {
+                "label": "Chiave API",
+                "help": "La tua chiave API dei fornitori LLM da utilizzare"
+            },
+            "MainPanel": {
+                "label": "Configura Gebo.ai per accedere ai tuoi fornitori LLM tramite chiave API"
+            }
+        },
+        "GraphRagWizardComponent": {
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "MainPanel": {
+                "label": "Configura la modalità predefinita di Graph RAG e dell’estrazione di conoscenza"
+            },
+            "CreateGraphRagConfigBtn": {
+                "label": "Crea configurazione Graph RAG"
+            },
+            "ConfigCodeHeader": {
+                "label": "Codice configurazione"
+            }
+        },
+        "GraphRagExtractionConfig": {
+            "extractionPrompt": {
+                "label": "Prompt di estrazione informazioni",
+                "help": "Prompt del modello linguistico per l’estrazione di entità, eventi, relazioni e alias"
+            },
+            "usedModelConfiguration": {
+                "label": "Modello LLM usato per l’estrazione",
+                "help": "Specifica il modello linguistico usato per l’estrazione della conoscenza (se non selezionato verrà usato quello predefinito)."
+            },
+            "code": {
+                "label": "Codice univoco",
+                "help": "Codice univoco generato automaticamente per la fase di estrazione dei dati del grafo di conoscenza"
+            },
+            "description": {
+                "label": "Descrizione",
+                "help": "Inserisci la descrizione della configurazione di questa fase di estrazione del grafo di conoscenza"
+            },
+            "graphRagConfigUI_ContextSettings": {
+                "label": "Impostazioni generali/contenuti"
+            },
+            "graphRagAllSources": {
+                "label": "Applica Graph RAG a tutte le sorgenti dati",
+                "help": "Se attivo, tutte le basi di conoscenza e sorgenti dati saranno elaborate per l’estrazione, altrimenti solo quelle specificamente configurate."
+            },
+            "graphRagConfigUI_Save": {
+                "label": "Salva"
+            },
+            "graphRagConfigUI_Delete": {
+                "label": "Elimina"
+            },
+            "graphRagConfigUI_Cancel": {
+                "label": "Annulla"
+            },
+            "graphRagConfigUI_LLMSSettings": {
+                "label": "Impostazioni LLM"
+            },
+            "MainPanel": {
+                "label": "Configurazione estrazione conoscenza / GraphRAG"
+            },
+            "defaultModel": {
+                "label": "Modello linguistico predefinito",
+                "help": "Il modello linguistico predefinito verrà usato per l’estrazione della conoscenza"
+            }
+        },
+        "ConfluenceWizardComponent": {
+            "ConfigCodeHeader": {
+                "label": "Codice configurazione"
+            },
+            "ConfluenceSystemBtn": {
+                "label": "Sistema Confluence"
+            },
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            },
+            "MainPanel": {
+                "label": "Configura i sistemi Atlassian Confluence aziendali"
+            },
+            "SystemTypeHeader": {
+                "label": "Tipo di sistema"
+            }
+        },
+        "GeboAIConfluenceSystemFastComponent": {
+            "password": {
+                "label": "Password Confluence",
+                "help": "Password dell’utente Confluence"
+            },
+            "username": {
+                "label": "Nome utente Confluence",
+                "help": "Nome utente per l’accesso a Confluence"
+            },
+            "description": {
+                "label": "Descrizione",
+                "help": "Inserisci la descrizione del sistema Confluence."
+            },
+            "baseUri": {
+                "label": "Indirizzo base",
+                "help": "URL base del sistema Confluence (on-premise o cloud aziendale)"
+            },
+            "confluenceVersion": {
+                "label": "Versione Confluence",
+                "help": "Versione di Confluence"
+            },
+            "CancelBtn": {
+                "label": "Annulla"
+            },
+            "CreateBtn": {
+                "label": "Crea"
+            },
+            "MainPanel": {
+                "label": "Crea configurazione sistema Confluence"
+            }
+        },
+        "SharepointWizardComponent": {
+            "MainPanel": {
+                "label": "Configura i sistemi Microsoft SharePoint aziendali"
+            },
+            "SharepointSystemBtn": {
+                "label": "Sistema SharePoint"
+            },
+            "SystemTypeHeader": {
+                "label": "Tipo di sistema"
+            },
+            "ConfigCodeHeader": {
+                "label": "Codice configurazione"
+            },
+            "DescriptionHeader": {
+                "label": "Descrizione"
+            }
+        },
+        "GeboAISharepointSystemFastComponent": {
+            "secret": {
+                "label": "Chiave segreta",
+                "help": "Client secret Oauth2 dell’app registrata nel prodotto Microsoft “Entra” (recuperabile dalla console cloud Microsoft)"
+            },
+            "clientId": {
+                "label": "ID client",
+                "help": "Identificativo client Oauth2 dell’app registrata nel prodotto Microsoft “Entra” (recuperabile dalla console cloud Microsoft)"
+            },
+            "MicrosofOauth2Fieldset": {
+                "label": "Informazioni app Oauth2 Microsoft per Gebo.ai"
+            },
+            "tenantId": {
+                "label": "ID tenant",
+                "help": "Identificativo tenant Oauth2 dell’organizzazione nel prodotto Microsoft “Entra” (recuperabile dalla console cloud Microsoft)"
+            },
+            "sharepointVersion": {
+                "label": "Versione SharePoint",
+                "help": "Versione di SharePoint"
+            },
+            "description": {
+                "label": "Descrizione",
+                "help": "Inserisci la descrizione del sistema SharePoint/OneDrive."
+            },
+            "MainPanel": {
+                "label": "Crea configurazione sistema SharePoint/OneDrive"
+            },
+            "CancelBtn": {
+                "label": "Annulla"
+            },
+            "CreateBtn": {
+                "label": "Crea"
+            }
+        }
     },
-    "GOpenAIEmbeddingModelConfig": {
-      "code": { "label": "Codice univoco", "help": "Codice univoco generato automaticamente per la configurazione del modello di embedding" },
-      "description": { "label": "Descrizione", "help": "Inserisci la descrizione della configurazione del modello di embedding" },
-      "apiSecretCode": { "label": "Token OpenAI", "help": "Seleziona il token OpenAI da usare per questo modello" },
-      "defaultModel": { "label": "Imposta come modello embedding predefinito", "help": "Se attivo, sarà usato di default quando non è specificato un altro modello" },
-      "choosedModel": { "label": "Modello embedding OpenAI", "help": "Scegli il modello embedding OpenAI da utilizzare" },
-      "MainPanel": { "label": "Modifica configurazione modello embedding OpenAI" }
+    "VFilesystemSelectorModule": {
+        "VFilesystemSelectorComponent": {
+            "ChooseElementsArea": {
+                "label": "Scegli elementi"
+            },
+            "ChoosedElementsArea": {
+                "label": "Elementi scelti"
+            },
+            "VFileSystemSelector": {
+                "label": "Seleziona elementi"
+            },
+            "ChooseOk": {
+                "label": "OK"
+            },
+            "ChooseCancel": {
+                "label": "Annulla"
+            },
+            "EditBtn": {
+                "help": "Modifica selezionato"
+            }
+        }
     }
-  }
 }
