@@ -30,7 +30,7 @@ import { ToastMessageOptions } from "primeng/api";
     templateUrl: "gebo-ai-jira-system-fast.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAIJiraSystemFastComponent"),
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIJiraSystemFastComponent"),
         multi: true
     }]
 })

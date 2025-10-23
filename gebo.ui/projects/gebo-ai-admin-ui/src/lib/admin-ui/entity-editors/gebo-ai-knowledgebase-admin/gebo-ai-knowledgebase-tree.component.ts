@@ -31,7 +31,7 @@ import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
     templateUrl: "gebo-ai-knowledgebase-tree.component.html",
     standalone: false,
     providers: [{
-      provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent"),
+      provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent"),
       multi: true
     }]
   }

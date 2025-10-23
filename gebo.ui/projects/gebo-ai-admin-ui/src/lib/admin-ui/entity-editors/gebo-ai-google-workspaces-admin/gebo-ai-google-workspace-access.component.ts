@@ -28,7 +28,7 @@ import { ToastMessageOptions } from "primeng/api";
     selector: "gebo-ai-google-workspace-access-component",
     templateUrl: "gebo-ai-google-workspace-access.component.html",
     standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent"),
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent"),
         multi: true
     }]
 })

@@ -46,6 +46,6 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
     imports: [CommonModule, ReactiveFormsModule, ButtonModule, ContextMenuModule, GeboUIArchitectureModule, PanelModule, RadioButtonModule],
     declarations: [ProjectAddContextMenuComponent, GeboAIChooseDataSourceTypeComponent],
     exports: [ProjectAddContextMenuComponent, GeboAIChooseDataSourceTypeComponent],
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule" }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule",multi:true }]
 })
 export class ProjectAddContextMenuModule { }

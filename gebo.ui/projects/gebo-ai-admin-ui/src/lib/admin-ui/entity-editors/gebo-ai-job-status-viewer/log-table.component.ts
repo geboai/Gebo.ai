@@ -28,7 +28,7 @@ import { Observable } from "rxjs";
   selector: "gebo-ai-log-table-component",
   templateUrl: "log-table.component.html",
   standalone: false, providers: [{
-    provide: GEBO_AI_FIELD_HOST, useExisting: fieldHostComponentName("LogTableComponent"),
+    provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("LogTableComponent"),
     multi: true
   }]
 })
