@@ -30,6 +30,7 @@ import { GeboAIUserspaceFilesModule } from "../userspace-files-component/userspa
 import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-selector.module";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
+import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * AI generated comments
@@ -52,7 +53,8 @@ import { GeboAIFieldTransationContainerModule } from "../field-translation-conta
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, VFilesystemSelectorModule, PanelModule,  DialogModule, BlockUIModule, ButtonModule,TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule,GeboAIFieldTransationContainerModule],
     declarations: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
-    exports: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent]
+    exports: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
+    providers:[{provide: GEBO_AI_MODULE, useValue:"GeboAIChooseDocumentsPanelModule",multi: true}]
     
 })
 export class GeboAIChooseDocumentsPanelModule {

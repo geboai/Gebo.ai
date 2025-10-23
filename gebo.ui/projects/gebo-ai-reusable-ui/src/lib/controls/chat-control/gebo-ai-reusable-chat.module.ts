@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
@@ -43,34 +43,35 @@ import { GeboAIAudioRecorderModule } from "../audio-control/audio-control.module
 import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choose-documents-panel.module";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
 import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
+import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 @NgModule({
-  imports: [CommonModule, 
-            ReactiveFormsModule, 
-            FormsModule,
-            SkeletonModule, 
-            ScrollPanelModule, 
-            OverlayModule, 
-            TableModule, 
-            FieldsetModule, 
-            GeboAIAudioRecorderModule, 
-            ScrollTopModule, 
-            GeboAIChooseDocumentsPanelModule,
-            InputTextModule,
-            ProgressSpinnerModule, 
-            ToastModule, 
-            DialogModule, 
-            ButtonModule, 
-            PanelModule, 
-            BlockUIModule, 
-            TextareaModule, 
-            MessagesModule, 
-            GeboAIContentViewerModule,  
-            BrowseContentModule, 
-            GeboAIViewTableModule, 
-            MarkdownModule.forChild(),GeboAIFieldTransationContainerModule],
-  providers: [
+  imports: [CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SkeletonModule,
+    ScrollPanelModule,
+    OverlayModule,
+    TableModule,
+    FieldsetModule,
+    GeboAIAudioRecorderModule,
+    ScrollTopModule,
+    GeboAIChooseDocumentsPanelModule,
+    InputTextModule,
+    ProgressSpinnerModule,
+    ToastModule,
+    DialogModule,
+    ButtonModule,
+    PanelModule,
+    BlockUIModule,
+    TextareaModule,
+    MessagesModule,
+    GeboAIContentViewerModule,
+    BrowseContentModule,
+    GeboAIViewTableModule,
+    MarkdownModule.forChild(), GeboAIFieldTransationContainerModule],
+  providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: true },
     ReactiveRagChatService,
-    provideMarkdown({
+  provideMarkdown({
     sanitize: SecurityContext.NONE,
     clipboardOptions: {
       provide: CLIPBOARD_OPTIONS,

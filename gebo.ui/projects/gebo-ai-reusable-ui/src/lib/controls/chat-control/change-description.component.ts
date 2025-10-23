@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,34 +18,36 @@
  */
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "gebo-ai-chat-change-description",
     templateUrl: "change-description.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ChangeDescriptionComponent"), multi: true }]
 })
 export class ChangeDescriptionComponent {
-        /**
-         * Controls the visibility of the change description dialog
-         * True when the dialog should be visible, false otherwise
-         */
-        @Input() visible:boolean=false;
-        
-        /**
-         * Form group containing the form controls for the description edit
-         * Expected to be provided by the parent component
-         */
-        @Input() formGroup?:FormGroup;
-        
-        /**
-         * Event emitted when the user saves the description changes
-         * Emits a boolean value indicating the save action was performed
-         */
-        @Output() saveAction:EventEmitter<boolean>=new EventEmitter();
-        
-        /**
-         * Event emitted when the user cancels the description changes
-         * Emits a boolean value indicating the cancel action was performed
-         */
-        @Output() cancelAction:EventEmitter<boolean>=new EventEmitter();
+    /**
+     * Controls the visibility of the change description dialog
+     * True when the dialog should be visible, false otherwise
+     */
+    @Input() visible: boolean = false;
+
+    /**
+     * Form group containing the form controls for the description edit
+     * Expected to be provided by the parent component
+     */
+    @Input() formGroup?: FormGroup;
+
+    /**
+     * Event emitted when the user saves the description changes
+     * Emits a boolean value indicating the save action was performed
+     */
+    @Output() saveAction: EventEmitter<boolean> = new EventEmitter();
+
+    /**
+     * Event emitted when the user cancels the description changes
+     * Emits a boolean value indicating the cancel action was performed
+     */
+    @Output() cancelAction: EventEmitter<boolean> = new EventEmitter();
 }

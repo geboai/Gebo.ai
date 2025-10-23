@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,6 +19,7 @@
  */
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { GeboChatUserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Represents a component that displays chat user information.
@@ -28,18 +29,19 @@ import { GeboChatUserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 @Component({
     selector: "gebo-user-chat-info-component",
     templateUrl: "chat-info.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboChatUserInfoComponent"), multi: true }]
 })
 export class GeboChatUserInfoComponent {
     /**
      * Input property to receive user information data to be displayed
      * Expected to be of type GeboChatUserInfo from the Gebo.ai API
      */
-    @Input() data?:GeboChatUserInfo;
-    
+    @Input() data?: GeboChatUserInfo;
+
     /**
      * Output event emitter that fires when the user info display should be closed
      * Emits a boolean value (typically true) to signal closure
      */
-    @Output() close:EventEmitter<boolean>=new EventEmitter();
+    @Output() close: EventEmitter<boolean> = new EventEmitter();
 }
