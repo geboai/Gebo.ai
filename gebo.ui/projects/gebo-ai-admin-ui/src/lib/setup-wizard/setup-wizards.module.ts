@@ -312,7 +312,7 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: googleDriveWorkspacesSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
-        { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule",multi:true  }]
+        { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: true }]
 
 
 })

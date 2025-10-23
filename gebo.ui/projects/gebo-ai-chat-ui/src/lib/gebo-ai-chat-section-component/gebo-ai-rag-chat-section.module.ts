@@ -52,6 +52,6 @@ import { PanelModule } from "primeng/panel";
     imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModel, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTransationContainerModule],
     declarations: [GeboAiChatSectionComponent],
     exports: [GeboAiChatSectionComponent],
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule" }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: true }]
 })
 export class GeboAiChatModule { }
