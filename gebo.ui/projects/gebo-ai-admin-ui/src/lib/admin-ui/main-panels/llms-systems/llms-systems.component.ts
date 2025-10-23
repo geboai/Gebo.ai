@@ -29,8 +29,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     templateUrl: "llms-systems.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("LlmsSystemsComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("LlmsSystemsComponent")
     }]
 })
 export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {

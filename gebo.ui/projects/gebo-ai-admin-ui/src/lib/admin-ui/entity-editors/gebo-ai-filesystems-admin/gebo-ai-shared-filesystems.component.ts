@@ -27,8 +27,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActio
     templateUrl: "gebo-ai-shared-filesystems.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAISharedFilesystemsComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAISharedFilesystemsComponent")
     }]
 })
 export class GeboAISharedFilesystemsComponent implements OnInit, OnChanges {

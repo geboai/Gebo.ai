@@ -53,7 +53,7 @@ export class ChatProfileStatusService extends AbstractStatusService {
     selector: "gebo-ai-chat-profile-wizard-component",
     templateUrl: "chat-profile-wizard.component.html",
     standalone: false,
-    providers:[{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ChatProfileWizardComponent") }]
+    providers:[{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("ChatProfileWizardComponent") }]
 })
 export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     /**

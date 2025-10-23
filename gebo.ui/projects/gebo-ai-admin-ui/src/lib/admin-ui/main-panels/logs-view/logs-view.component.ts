@@ -27,8 +27,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     templateUrl: "logs-view.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiLogsViewComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiLogsViewComponent")
     }]
 })
 export class GeboAiLogsViewComponent extends AncestorPanelComponent implements OnInit {

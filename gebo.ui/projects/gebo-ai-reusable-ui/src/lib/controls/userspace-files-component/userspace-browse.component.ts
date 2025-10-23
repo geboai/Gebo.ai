@@ -55,7 +55,7 @@ interface UserspaceTreeItem {
             useExisting: forwardRef(() => GeboAIUserspaceBrowseComponent),
             multi: true
         }, {
-            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent"), multi: true
+            provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent")
         }
     ],
     standalone: false

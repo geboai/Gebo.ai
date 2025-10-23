@@ -46,7 +46,7 @@ interface LocalStorageSetupStatus {
 @Component({
   selector: "gebo-ai-admin-component",
   templateUrl: "gebo-ai-admin.component.html",
-  providers: [GeboUIActionRoutingService, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiAdminComponent") }],
+  providers: [GeboUIActionRoutingService, { provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiAdminComponent") }],
   standalone: false
 })
 export class GeboAiAdminComponent implements OnInit {

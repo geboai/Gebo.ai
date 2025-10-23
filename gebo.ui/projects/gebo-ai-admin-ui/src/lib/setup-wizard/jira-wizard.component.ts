@@ -63,7 +63,7 @@ export class JiraInstalledModuleService extends GeboRootInstalledModuleService {
   selector: "gebo-jira-wizard-component",
   templateUrl: "jira-wizard.component.html",
   standalone: false,
-  providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("JiraWizardComponent") }]
+  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("JiraWizardComponent") }]
 })
 export class JiraWizardComponent extends BaseWizardSectionComponent {
 

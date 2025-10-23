@@ -33,8 +33,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "chat-profiles-component",
     templateUrl: "chat-profiles.component.html",
     standalone: false,
-    providers:[{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ChatProfilesComponent"),
-                multi: true }]
+    providers:[{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("ChatProfilesComponent") }]
 })
 export class ChatProfilesComponent extends AncestorPanelComponent implements OnInit {
     /**

@@ -27,7 +27,7 @@ import { ActivatedRoute } from "@angular/router";
     selector: "gebo-setup-wizards",
     templateUrl: "setup-wizards.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("SetupWizardsComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("SetupWizardsComponent") }]
 })
 export class SetupWizardsComponent implements OnInit {
     /** Controls the visibility of the setup wizard */

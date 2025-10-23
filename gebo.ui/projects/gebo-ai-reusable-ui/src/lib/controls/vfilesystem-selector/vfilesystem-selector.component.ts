@@ -149,7 +149,7 @@ function findNode(x: EnrichedFilesystemReference, roots: TreeNode<EnrichedFilesy
             provide: GEBO_AI_MODULE, useValue: "VFilesystemSelectorModule", multi: true
         },
         {
-            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("VFilesystemSelectorComponent"), multi: true
+            provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("VFilesystemSelectorComponent")
         }
     ],
     standalone: false

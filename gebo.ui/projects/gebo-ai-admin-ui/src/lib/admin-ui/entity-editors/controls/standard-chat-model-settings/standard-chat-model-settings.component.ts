@@ -36,7 +36,7 @@ const standardDefaultContextLength:number=4096;
     selector: "gebo-ai-standard-chat-model-settings-component",
     templateUrl: "standard-chat-model-settings.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }]
 })
 export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     // Form group to bind settings controls to

@@ -26,8 +26,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, G
     selector: "gebo-ai-secrets-admin-list-component",
     templateUrl: "gebo-ai-secrets-admin-list.component.html",
     standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAiSecretsAdminListComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiSecretsAdminListComponent")
     }]
 })
 export class GeboAiSecretsAdminListComponent implements OnChanges, OnInit {

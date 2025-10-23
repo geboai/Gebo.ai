@@ -37,7 +37,7 @@ interface ExtendedBuildSystemRef extends BuildSystemRef {
       useExisting: forwardRef(() => BuildSystemsChooserComponent),
       multi: true
     },
-    { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("BuildSystemsChooserComponent") }
+    { provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("BuildSystemsChooserComponent") }
   ],
   standalone: false
 })

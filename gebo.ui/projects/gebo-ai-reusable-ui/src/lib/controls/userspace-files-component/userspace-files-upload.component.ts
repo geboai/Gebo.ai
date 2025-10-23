@@ -40,7 +40,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     selector: "gebo-ui-userspace-fileuploads-component",
     templateUrl: "userspace-files-upload.component.html",
     providers: [UserspaceFilesUploadModelService, {
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserspaceFilesUploadComponent"), multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceFilesUploadComponent")
     }],
     standalone: false
 })

@@ -55,7 +55,7 @@ export class KnowledgeBasePresentService extends AbstractStatusService {
     selector: "gebo-knowledge-base-wizard-component",
     templateUrl: "knowledge-base-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("KnowledgeBaseWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("KnowledgeBaseWizardComponent") }]
 })
 export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
     /**

@@ -34,8 +34,7 @@ import { forkJoin, Observable } from "rxjs";
     templateUrl: "systems.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("SystemsComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("SystemsComponent")
     }]
 })
 export class SystemsComponent extends AncestorPanelComponent implements OnInit {

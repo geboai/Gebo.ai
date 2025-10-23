@@ -34,8 +34,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui
     selector: "gebo-ai-sharepoint-system-fast-component",
     templateUrl: "gebo-ai-sharepoint-system-fast.component.html",
     providers: [SharepointUrlService, {
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent")
     }],
     standalone: false
 })

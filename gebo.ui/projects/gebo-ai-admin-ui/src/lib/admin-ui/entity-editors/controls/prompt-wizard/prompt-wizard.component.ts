@@ -31,7 +31,7 @@ import { forkJoin, Observable } from "rxjs";
     selector: "gebo-ai-prompt-wizard-component",
     templateUrl: "prompt-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIPromptWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIPromptWizardComponent") }]
 })
 export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /**

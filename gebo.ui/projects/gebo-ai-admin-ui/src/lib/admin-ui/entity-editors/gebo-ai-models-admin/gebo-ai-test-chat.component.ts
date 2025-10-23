@@ -24,8 +24,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui
     selector: "gebo-ai-test-chat-component",
     templateUrl: "gebo-ai-test-chat.component.html",
     standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAITestChatComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAITestChatComponent")
     }]
 })
 export class GeboAITestChatComponent implements OnInit, OnChanges {

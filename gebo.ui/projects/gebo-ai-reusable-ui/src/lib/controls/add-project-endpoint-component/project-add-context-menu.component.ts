@@ -46,7 +46,7 @@ const CONFLUENCE_MODULE = "confluence-module";
     selector: "project-add-context-menu",
     templateUrl: "project-add-context-menu.component.html",
     standalone: false,
-        providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ProjectAddContextMenuComponent"),multi:true }]
+        providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("ProjectAddContextMenuComponent")}]
 })
 export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
   /**

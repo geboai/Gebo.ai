@@ -80,7 +80,7 @@ interface ExtendedGFileSystemShareReference extends GFileSystemShareReference {
     selector: "gebo-shared-filesystem-wizard-component",
     templateUrl: "shared-filesystem-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("SharedFilesystemWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("SharedFilesystemWizardComponent") }]
 })
 export class SharedFilesystemWizardComponent extends BaseWizardSectionComponent {
     /** Flag indicating if the shared filesystem setting is enabled */

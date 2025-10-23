@@ -40,7 +40,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     standalone: false,
     providers:[
     {
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserspaceFolderComponent"), multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceFolderComponent")
     }]
 })
 export class GeboAIUserspaceFolderComponent extends BaseEntityEditingComponent<UserspaceFolderDto> {

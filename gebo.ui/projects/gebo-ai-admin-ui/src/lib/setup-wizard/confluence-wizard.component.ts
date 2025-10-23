@@ -63,7 +63,7 @@ export class ConfluenceInstalledModuleService extends GeboRootInstalledModuleSer
   selector: "gebo-confluence-wizard-component",
   templateUrl: "confluence-wizard.component.html",
   standalone: false,
-  providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ConfluenceWizardComponent") }]
+  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("ConfluenceWizardComponent") }]
 })
 export class ConfluenceWizardComponent extends BaseWizardSectionComponent {
 

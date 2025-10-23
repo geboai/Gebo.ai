@@ -56,7 +56,7 @@ const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
         provide: GEBO_AI_MODULE, useValue: "FastSetupModule", multi: true
     },
     {
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("FastSetupComponent"), multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("FastSetupComponent")
     }]
 })
 

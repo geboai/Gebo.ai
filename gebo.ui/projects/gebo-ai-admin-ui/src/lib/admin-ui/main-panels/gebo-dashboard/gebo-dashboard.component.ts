@@ -27,8 +27,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui
     templateUrl: "gebo-dashboard.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIDashboardComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIDashboardComponent")
     }]
 })
 export class GeboAIDashboardComponent implements OnInit {

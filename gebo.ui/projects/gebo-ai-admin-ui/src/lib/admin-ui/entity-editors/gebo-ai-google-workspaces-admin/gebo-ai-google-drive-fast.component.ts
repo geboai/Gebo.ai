@@ -49,8 +49,7 @@ const jsonValidator: ValidatorFn = (control: AbstractControl) => {
     selector: "gebo-ai-google-drive-fast-component",
     templateUrl: "gebo-ai-google-drive-fast.component.html",
     standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIGoogleDriveFastComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIGoogleDriveFastComponent")
     }]
 })
 export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {

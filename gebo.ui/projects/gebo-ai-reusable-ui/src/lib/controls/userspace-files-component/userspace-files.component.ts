@@ -38,7 +38,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
             multi: true
         },
         {
-            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserpaceFilesComponent"), multi: true
+            provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserpaceFilesComponent")
         }
     ],
     standalone: false

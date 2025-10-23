@@ -26,7 +26,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui
     selector: "gebo-advanced-chatmodel-group-component",
     templateUrl: "advanced-settings-chatmodel-group.component.html",
     standalone: false, 
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIAdvancedChatModelGroupComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIAdvancedChatModelGroupComponent") }]
 })
 export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges {
     /** Form group for managing the advanced chat model settings */

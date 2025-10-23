@@ -27,8 +27,8 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     templateUrl: "knowledge-bases.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("KnowledgeBasesComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("KnowledgeBasesComponent")
+       
     }]
 })
 export class KnowledgeBasesComponent extends AncestorPanelComponent implements OnInit {

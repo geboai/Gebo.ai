@@ -34,7 +34,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
         provide: GEBO_AI_MODULE, useValue: "PromptEditingModule", multi: true
     },
     {
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("PromptEditingComponent"), multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("PromptEditingComponent")
     }]
 })
 export class PromptEditingModule { }

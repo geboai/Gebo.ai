@@ -32,7 +32,7 @@ import { TreeNode } from "primeng/api";
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIChooseLLMFunctionscomponent),
             multi: true
-        }, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChooseLLMFunctionscomponent") }
+        }, { provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIChooseLLMFunctionscomponent") }
     ],
     standalone: false
 })

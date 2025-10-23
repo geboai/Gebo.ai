@@ -42,7 +42,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     selector: "gebo-ui-choose-data-source-type-component",
     templateUrl: "choose-data-source-type.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChooseDataSourceTypeComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIChooseDataSourceTypeComponent") }]
 })
 export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingComponent<ChooseDataSourceType> {
     /**

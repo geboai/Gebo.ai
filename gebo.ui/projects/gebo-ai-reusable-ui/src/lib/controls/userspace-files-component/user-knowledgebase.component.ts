@@ -35,7 +35,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     templateUrl: "user-knowledgebase.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserspaceKnowledgebaseComponent"), multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceKnowledgebaseComponent")
     }]
 })
 export class GeboAIUserspaceKnowledgebaseComponent extends BaseEntityEditingComponent<UserspaceKnowledgebaseDto> {

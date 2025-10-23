@@ -59,6 +59,9 @@ export class GeboAITranslationService {
         })
 
     }
+    public getActualLanguage():string {
+        return this.translateService.getCurrentLang();
+    }
     public download(): Observable<Blob> {
         return this.uiTextResourcesService.getI18n();
     }

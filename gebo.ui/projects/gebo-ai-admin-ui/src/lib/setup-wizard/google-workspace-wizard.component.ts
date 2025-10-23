@@ -66,7 +66,7 @@ export class GoogleWorkspacesInstalledModuleService extends GeboRootInstalledMod
   selector: "gebo-google-workspace-wizard-component",
   templateUrl: "google-workspace-wizard.component.html",
   standalone: false,
-  providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GoogleWorkspacesWizardComponent") }]
+  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GoogleWorkspacesWizardComponent") }]
 })
 export class GoogleWorkspacesWizardComponent extends BaseWizardSectionComponent {
 

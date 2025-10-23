@@ -28,8 +28,7 @@ import { ToastMessageOptions } from "primeng/api";
     selector: "gebo-ai-google-workspace-access-component",
     templateUrl: "gebo-ai-google-workspace-access.component.html",
     standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent")
     }]
 })
 export class GeboAIGoogleWorkspaceAccessComponent implements OnInit, OnChanges {

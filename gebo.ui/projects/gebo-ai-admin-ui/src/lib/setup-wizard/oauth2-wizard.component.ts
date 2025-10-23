@@ -25,7 +25,7 @@ export class Oauth2SetupEnabledService extends AbstractStatusService {
     selector: "oauth2-wizard-component",
     templateUrl: "oauth2-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("Oauth2WizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("Oauth2WizardComponent") }]
 })
 export class Oauth2WizardComponent extends BaseWizardSectionComponent {
     public providers: Oauth2ClientAuthorizativeInfo[] = [];

@@ -18,7 +18,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
         provide: GEBO_AI_MODULE, useValue: "GeboOauth2SecretModule", multi: true
     },
     {
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboOauth2SecretComponent"), multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboOauth2SecretComponent")
     }]
 })
 export class GeboOauth2SecretModule { }

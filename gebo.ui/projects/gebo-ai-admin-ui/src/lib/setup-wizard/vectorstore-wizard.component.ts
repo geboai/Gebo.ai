@@ -54,7 +54,7 @@ export class VectorStoreWizardService extends AbstractStatusService {
     selector: "gebo-vectorstore-wizard-component",
     templateUrl: "vectorstore-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("VectorStoreWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("VectorStoreWizardComponent") }]
 })
 export class VectorStoreWizardComponent extends BaseWizardSectionComponent {
     /**

@@ -31,8 +31,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     templateUrl: "users-management.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUsersManagementComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUsersManagementComponent")
     }]
 })
 export class GeboAIUsersManagementComponent extends AncestorPanelComponent implements OnInit, OnChanges {

@@ -39,8 +39,7 @@ interface BuildSystemNode {
     selector: "build-packaging-systems-component",
     templateUrl: "build-packaging-systems.component.html",
     standalone: false,
-    providers:[{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("BuildPackagingSystemsComponent"),
-            multi: true }]
+    providers:[{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("BuildPackagingSystemsComponent")}]
 })
 export class BuildPackagingSystemsComponent extends AncestorPanelComponent  implements OnInit{
     /**

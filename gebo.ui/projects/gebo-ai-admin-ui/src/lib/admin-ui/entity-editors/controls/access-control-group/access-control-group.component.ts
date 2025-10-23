@@ -38,7 +38,7 @@ const fixedControls: string[] = ["accessibleGroups", "accessibleUsers", "accessi
     selector: "gebo-ai-access-control",
     templateUrl: "access-control-group.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIAccessControlComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIAccessControlComponent") }]
 })
 export class GeboAIAccessControlComponent implements OnInit, OnChanges {
     /**

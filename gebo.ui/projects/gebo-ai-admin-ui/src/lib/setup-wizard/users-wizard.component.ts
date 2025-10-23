@@ -32,7 +32,7 @@ import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST,
     selector: "gebo-ai-users-wizard-component",
     templateUrl: "users-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("UsersWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("UsersWizardComponent") }]
 })
 export class UsersWizardComponent extends BaseWizardSectionComponent {
     /**

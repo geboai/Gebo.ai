@@ -31,8 +31,7 @@ import { ToastMessageOptions } from "primeng/api";
 
     standalone: false,
     providers:[{
-        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIConfluenceSystemFastComponent"),
-        multi: true
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIConfluenceSystemFastComponent")
     }]
 })
 export class GeboAIConfluenceSystemFastComponent implements OnInit {
