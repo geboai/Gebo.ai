@@ -19,10 +19,10 @@
                 <label id="GraphragSettingsLabel" gebo-ai-text>Graphrag settings</label>
                 <p-button id="EditConfigurationBtn" gebo-ai-label icon="pi pi-sitemap" *ngIf="graphRagConfig?true:false" label="Edit configuration" (onClick)="editConfiguration()"></p-button>
                 <p-button id="AddConfigurationBtn" gebo-ai-label icon="pi pi-sitemap" *ngIf="graphRagConfig?false:true" label="Add configuration" (onClick)="newConfiguration()"></p-button>
-                <small id="button-help" *ngIf="graphRagConfig?true:false">
+                <small id="button-help" *ngIf="graphRagConfig?true:false" gebo-ai-text>
                     Click here to view/modify information extraction configuration for graphrag 
                 </small>
-                <small id="button-help" *ngIf="graphRagConfig?false:true">
+                <small id="button-help" *ngIf="graphRagConfig?false:true" gebo-ai-text>
                     Click here to configure information extraction for graphrag  (actually not configured) 
                 </small>
             </div>

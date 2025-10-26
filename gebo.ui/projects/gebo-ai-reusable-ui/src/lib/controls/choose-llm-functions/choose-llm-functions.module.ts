@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * Module for handling LLM function selection in GeboAI.
@@ -26,6 +26,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
 import { TreeSelectModule } from 'primeng/treeselect';
+import { GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 /**
  * Module that encapsulates the GeboAIChooseLLMFunctionscomponent.
@@ -36,9 +37,10 @@ import { TreeSelectModule } from 'primeng/treeselect';
  * It declares and exports the GeboAIChooseLLMFunctionscomponent so it can be used in other modules.
  */
 @NgModule({
-    imports:[CommonModule,TreeSelectModule,FormsModule,ReactiveFormsModule,PanelModule,BlockUIModule],
-    declarations:[GeboAIChooseLLMFunctionscomponent],
-    exports:[GeboAIChooseLLMFunctionscomponent]
+    imports: [CommonModule, TreeSelectModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule],
+    declarations: [GeboAIChooseLLMFunctionscomponent],
+    exports: [GeboAIChooseLLMFunctionscomponent],
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChooseLLMFunctionsModule", multi: true }]
 
 })
-export class GeboAIChooseLLMFunctionsModule {}
+export class GeboAIChooseLLMFunctionsModule { }

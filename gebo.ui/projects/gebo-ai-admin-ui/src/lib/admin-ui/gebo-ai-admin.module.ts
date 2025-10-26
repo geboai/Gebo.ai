@@ -91,7 +91,7 @@ import { GeboAIContentViewerModule } from "@Gebo.ai/reusable-ui";
 import { MessageService } from "primeng/api";
 import { GeboAIAccessControlComponent } from "./entity-editors/controls/access-control-group/access-control-group.component";
 import { GeboAIAdvancedChatModelGroupComponent } from "./entity-editors/controls/advanced-settings-chatmodel-group/advanced-settings-chatmodel-group.component";
-import { GeboAIChooseLLMFunctionsModule } from "./entity-editors/controls/choose-llm-functions/choose-llm-functions.module";
+import { GeboAIChooseLLMFunctionsModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIPromptWizardComponent } from "./entity-editors/controls/prompt-wizard/prompt-wizard.component";
 import { GeboAIGFileSystemShareReferenceAdminComponent } from "./entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-share-reference-admin.component";
 import { GeboAISharedFilesystemsComponent } from "./entity-editors/gebo-ai-filesystems-admin/gebo-ai-shared-filesystems.component";

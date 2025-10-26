@@ -6,10 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
-
-
-
-
 /**
  * AI generated comments
  * 
