@@ -14,15 +14,15 @@ import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
 export interface PageDocumentReferenceView { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     size?: number;
     content?: Array<DocumentReferenceView>;
     number?: number;
+    sort?: SortObject;
+    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     pageable?: PageableObject;
-    sort?: SortObject;
     empty?: boolean;
 }
