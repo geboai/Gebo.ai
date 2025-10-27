@@ -54,7 +54,7 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
     imports: [CommonModule, ReactiveFormsModule, VFilesystemSelectorModule, PanelModule,  DialogModule, BlockUIModule, ButtonModule,TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule,GeboAIFieldTransationContainerModule],
     declarations: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
     exports: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
-    providers:[{provide: GEBO_AI_MODULE, useValue:"GeboAIChooseDocumentsPanelModule",multi: true}]
+    providers:[{provide: GEBO_AI_MODULE, useValue:"GeboAIChooseDocumentsPanelModule",multi: false}]
     
 })
 export class GeboAIChooseDocumentsPanelModule {

@@ -40,7 +40,7 @@ import { GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
     imports: [CommonModule, TreeSelectModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule],
     declarations: [GeboAIChooseLLMFunctionscomponent],
     exports: [GeboAIChooseLLMFunctionscomponent],
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChooseLLMFunctionsModule", multi: true }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChooseLLMFunctionsModule", multi: false }]
 
 })
 export class GeboAIChooseLLMFunctionsModule { }

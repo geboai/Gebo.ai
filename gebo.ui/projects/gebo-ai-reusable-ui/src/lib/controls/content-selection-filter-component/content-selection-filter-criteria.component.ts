@@ -8,7 +8,7 @@ const entityName: string = "SelectionFilterCriteria";
     templateUrl: "content-selection-filter-criteria.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: true
+        provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: false
     }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAISelectionFilterCriteriaComponent),
         multi: false

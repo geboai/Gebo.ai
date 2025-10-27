@@ -19,8 +19,9 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
                 this.host = array.length ? array[0] : undefined;
             }
         }
-        if (this.moduleId && this.moduleId.length) {
-            this.moduleId = this.moduleId[0];
+        if (Array.isArray(this.moduleId)) {
+            const modules=Array.from(this.moduleId);
+            this.moduleId = modules[0];
         }
     }
 

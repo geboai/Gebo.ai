@@ -20,7 +20,7 @@ import { GeboAIFieldTransationContainerModule } from "../field-translation-conta
     declarations: [GeboAIContentSelectionFilterComponent, GeboAISelectionFilterCriteriaComponent],
     exports: [GeboAIContentSelectionFilterComponent],
     providers: [{
-        provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: true
+        provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: false
     }, {
         provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentSelectionFilterComponent"), multi: false
     }]
