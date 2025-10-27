@@ -7,8 +7,8 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionT
     selector: "gebo-ai-graphrag-component",
     standalone: false,
     providers: [
-        { provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIGraphragConfigComponent") }, 
-        { provide: GEBO_AI_MODULE, useValue: "GeboAIGraphRagConfigModule", multi: true }]
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGraphragConfigComponent") }, 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIGraphRagConfigModule", multi: false }]
 })
 export class GeboAIGraphragConfigComponent implements OnInit, OnChanges {
     @Input() context?: { knowledgeBaseCode?: string, projectCode?: string, reference?: GObjectRef };

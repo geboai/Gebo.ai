@@ -19,7 +19,7 @@
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GConfluenceProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, ConfluenceSystemsControllerService, ConfluenceBrowsingControllerService, GConfluenceSystem } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
@@ -36,9 +36,9 @@ import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo
 @Component({
     selector: "gebo-ai-confluence-endpoint-component",
     templateUrl: "gebo-ai-confluence-endpoint.component.html",
-    providers: [MessageService, {
+    providers: [MessageService, { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIConfluenceEndpointComponent),
-        multi: true
+        multi: false
     }],
     standalone: false
 })

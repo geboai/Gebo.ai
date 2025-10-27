@@ -22,7 +22,7 @@ import { UserspaceControllerService, UserspaceFileDto } from "@Gebo.ai/gebo-ai-r
 import { GeboAIUserspaceFolderComponent } from "./userspace-folder.component";
 import { GeboAIUserspaceKnowledgebaseComponent } from "./user-knowledgebase.component";
 import { GeboAIUserspaceFilesUploadComponent } from "./userspace-files-upload.component";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component that handles userspace files functionality in the Gebo.ai application.
@@ -36,9 +36,11 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIUserpaceFilesComponent),
             multi: true
-        },
+        },{
+                provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
+            },
         {
-            provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserpaceFilesComponent")
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserpaceFilesComponent")
         }
     ],
     standalone: false

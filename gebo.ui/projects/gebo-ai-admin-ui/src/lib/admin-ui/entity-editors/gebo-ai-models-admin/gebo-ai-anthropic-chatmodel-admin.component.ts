@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -22,7 +22,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { FunctionsLookupControllerService, GBaseChatModelChoice, GLookupEntry, GAnthropicChatModelConfig, SecretInfo, SecretsControllerService, AnthropicChatModelsConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -36,9 +36,11 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 @Component({
     selector: "gebo-ai-anthropic-chat-model-admin-component",
     templateUrl: "gebo-ai-anthropic-chatmodel-admin.component.html",
-    standalone: false, providers: [{
+    standalone: false, providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
+        {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAnthropicChatModelAdminComponent),
-        multi: true
+        multi: false
     }]
 })
 export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingComponent<GAnthropicChatModelConfig> {
@@ -46,12 +48,12 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
      * Entity name used for form identification and processing
      */
     protected override entityName: string = "GAnthropicChatModelConfig";
-    
+
     /**
      * Allowed types of secrets that can be used with Anthropic models
      */
-    allowedTypes: SecretInfo.SecretTypeEnum[] = [ SecretInfo.SecretTypeEnum.TOKEN];
-    
+    allowedTypes: SecretInfo.SecretTypeEnum[] = [SecretInfo.SecretTypeEnum.TOKEN];
+
     /**
      * Form group containing all the configurable fields for an Anthropic chat model
      */
@@ -59,65 +61,65 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
         code: new FormControl(),
         description: new FormControl(),
         modelTypeCode: new FormControl(),
-        defaultModel:new FormControl(),
+        defaultModel: new FormControl(),
         choosedModel: new FormControl(),
         apiSecretCode: new FormControl(),
         temperature: new FormControl(),
         topP: new FormControl(),
         contextLength: new FormControl(),
-        accessibleGroups: new FormControl(), 
-        accessibleUsers: new FormControl(), 
+        accessibleGroups: new FormControl(),
+        accessibleUsers: new FormControl(),
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
-        defaultModelPrompt:new FormControl()
+        defaultModelPrompt: new FormControl()
     });
-    
+
     /**
      * Maintains the previous value of the form to detect changes
      */
-    private oldValue:any={};
-    
+    private oldValue: any = {};
+
     /**
      * List of available Anthropic models to choose from
      */
     modelChoicesData: GBaseChatModelChoice[] = [];
-    
+
     /**
      * Observable that provides the list of available secrets for Anthropic context
      */
     identitiesObservable = this.secretControllerService.getSecretsByContextCode("anthropic");
-    
+
     /**
      * Action request for creating a new secret
      */
-    public newSecretAction= newSecretActionRequest("anthropic",this.entityName,this.entity);
-    
+    public newSecretAction = newSecretActionRequest("anthropic", this.entityName, this.entity);
+
     /**
      * List of available functions that can be enabled for the model
      */
-    public functionsList:GLookupEntry[]=[];
+    public functionsList: GLookupEntry[] = [];
 
     /**
      * Constructor that initializes the component and sets up form change listeners
      */
-    constructor(injector:Injector,geboFormGroupsService: GeboFormGroupsService,
+    constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
         private anthropicChatModelConfigService: AnthropicChatModelsConfigurationControllerService,
-        private functionsLookupControllerService:FunctionsLookupControllerService,
+        private functionsLookupControllerService: FunctionsLookupControllerService,
         private secretControllerService: SecretsControllerService,
-        confirmService:ConfirmationService,
+        confirmService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService?: GeboUIOutputForwardingService) {
-        super(injector,geboFormGroupsService, confirmService,geboUIActionRoutingService,outputForwardingService);
-        this.formGroup.valueChanges.subscribe(newValue=>{
+        super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService);
+        this.formGroup.valueChanges.subscribe(newValue => {
             if (!newValue.baseUrl && !newValue.apiSecretCode) {
-                this.modelChoicesData=[];
-            }else if (newValue.baseUrl!==this.oldValue.baseUrl || newValue.apiSecretCode!==this.oldValue.apiSecretCode) {
+                this.modelChoicesData = [];
+            } else if (newValue.baseUrl !== this.oldValue.baseUrl || newValue.apiSecretCode !== this.oldValue.apiSecretCode) {
                 this.loadModels(newValue);
             }
-            this.oldValue=newValue;
+            this.oldValue = newValue;
 
-        }); 
-        this.manageOperationStatus=true;
+        });
+        this.manageOperationStatus = true;
     }
 
     /**
@@ -125,13 +127,13 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        this.loadingRelatedBackend=true;
+        this.loadingRelatedBackend = true;
         this.functionsLookupControllerService.getAllFunctions().subscribe({
-            next:(value)=>{
-                this.functionsList=value;
+            next: (value) => {
+                this.functionsList = value;
             },
-            complete:()=>{
-                this.loadingRelatedBackend=false;
+            complete: () => {
+                this.loadingRelatedBackend = false;
             }
         });
     }
@@ -147,8 +149,8 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
                 this.updateLastOperationStatus(r as any);
                 this.modelChoicesData = r.result ? r.result : []
             },
-            complete:()=>{
-                this.loadingRelatedBackend=false;
+            complete: () => {
+                this.loadingRelatedBackend = false;
             }
         });
     }

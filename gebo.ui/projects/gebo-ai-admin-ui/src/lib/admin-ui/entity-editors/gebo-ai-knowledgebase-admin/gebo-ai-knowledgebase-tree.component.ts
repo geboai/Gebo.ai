@@ -12,7 +12,7 @@
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint } from "@Gebo.ai/reusable-ui";
+import { EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint } from "@Gebo.ai/reusable-ui";
 import { TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
 
@@ -30,9 +30,10 @@ import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
     selector: "gebo-ai-knowledgebase-tree-component",
     templateUrl: "gebo-ai-knowledgebase-tree.component.html",
     standalone: false,
-    providers: [{
-      provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent")
-    }]
+    providers: [
+      { provide: GEBO_AI_MODULE, useValue: "GeboAiKnowledgeBaseModule", multi: false }, 
+      { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent")  }
+    ]
   }
 )
 export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {

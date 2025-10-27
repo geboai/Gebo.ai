@@ -21,14 +21,14 @@ import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GGitContentManagementSystem, GitSystemsControllerService, GProject, GGitProjectEndpoint, ProjectsControllerService, SecretsControllerService, SecretInfo, GJobStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { newSecretActionRequest } from '../utils/gebo-ai-create-secret-action-request-factory';
 
 @Component({
   selector: "gebo-ai-git-endpoint-admin-component",
   templateUrl: "gebo-ai-git-endpoint-admin.component.html",
-  standalone: false, providers: [{
+  standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiGitModule", multi: false }, {
     provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGitEndpointAdminComponent),
     multi: true
   }]

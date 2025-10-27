@@ -18,13 +18,13 @@
  */
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-chat-change-description",
     templateUrl: "change-description.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ChangeDescriptionComponent"), multi: true }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("ChangeDescriptionComponent"), multi: false }]
 })
 export class ChangeDescriptionComponent {
     /**

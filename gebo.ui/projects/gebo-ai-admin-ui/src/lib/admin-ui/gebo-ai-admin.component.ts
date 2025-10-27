@@ -20,7 +20,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboUIActionRoutingService, GeboActionType, SetupWizardService, SetupStatus, GeboAIModulesService, GeboAIModules, GeboAIPluggableModulesConfigService, GeboAIEnabledModulesConfig, GEBO_AI_FIELD_HOST, fieldHostComponentName } from "@Gebo.ai/reusable-ui";
+import { GeboUIActionRoutingService, GeboActionType, SetupWizardService, SetupStatus, GeboAIModulesService, GeboAIModules, GeboAIPluggableModulesConfigService, GeboAIEnabledModulesConfig, GEBO_AI_FIELD_HOST, fieldHostComponentName, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "./main-panels/ancestor-panel/ancestor-admin-panel.component";
 import { Button } from "primeng/button";
 
@@ -46,7 +46,10 @@ interface LocalStorageSetupStatus {
 @Component({
   selector: "gebo-ai-admin-component",
   templateUrl: "gebo-ai-admin.component.html",
-  providers: [GeboUIActionRoutingService, { provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiAdminComponent") }],
+  providers: [GeboUIActionRoutingService, 
+    { provide: GEBO_AI_MODULE, useValue: "GeboAiAdminPanelModule", multi: false }, 
+    { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiAdminComponent") }
+  ],
   standalone: false
 })
 export class GeboAiAdminComponent implements OnInit {

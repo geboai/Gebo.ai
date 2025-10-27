@@ -24,7 +24,7 @@ import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
 import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architecture/actions.model";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Constants defining different module types that can be added to a project
@@ -46,7 +46,7 @@ const CONFLUENCE_MODULE = "confluence-module";
     selector: "project-add-context-menu",
     templateUrl: "project-add-context-menu.component.html",
     standalone: false,
-        providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("ProjectAddContextMenuComponent")}]
+        providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProjectAddContextMenuComponent")}]
 })
 export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
   /**

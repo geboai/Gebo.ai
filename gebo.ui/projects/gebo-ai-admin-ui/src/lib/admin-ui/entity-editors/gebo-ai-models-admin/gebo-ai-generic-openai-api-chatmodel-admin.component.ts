@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { FunctionsLookupControllerService, GBaseChatModelChoice, GenericOpenAIAPIChatModelConfig, GenericOpenAiapiChatModelsConfigurationControllerService, GenericOpenAIChatModelTypeConfig, GLookupEntry, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -35,10 +35,10 @@ import { isValidUrl } from "../utils/url-ok";
 @Component({
     selector: "gebo-ai-generic-open-ai-api-chat-model-admin-component",
     templateUrl: "gebo-ai-generic-openai-api-chatmodel-admin.component.html",
-    standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGenericOpenAIAPIChatModelAdminComponent),
-        multi: true
-    }]
+    standalone: false, providers: [ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGenericOpenAIAPIChatModelAdminComponent),    multi: false  }
+    ]
 })
 export class GeboAIGenericOpenAIAPIChatModelAdminComponent extends BaseEntityEditingComponent<GenericOpenAIAPIChatModelConfig> {
     /**

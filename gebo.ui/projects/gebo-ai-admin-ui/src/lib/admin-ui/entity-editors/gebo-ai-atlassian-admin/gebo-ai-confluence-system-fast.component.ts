@@ -21,7 +21,7 @@
 import { Component, EventEmitter, forwardRef, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { ConfluenceSystemsControllerService, FastConfluenceSystemInsertRequest, GConfluenceSystem, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 
@@ -30,8 +30,10 @@ import { ToastMessageOptions } from "primeng/api";
     templateUrl: "gebo-ai-confluence-system-fast.component.html",
 
     standalone: false,
-    providers:[{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIConfluenceSystemFastComponent")
+    providers:[ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false },
+        {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIConfluenceSystemFastComponent")
     }]
 })
 export class GeboAIConfluenceSystemFastComponent implements OnInit {

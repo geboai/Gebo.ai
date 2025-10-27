@@ -68,7 +68,7 @@ export class SharepointInstalledModuleService extends GeboRootInstalledModuleSer
   selector: "gebo-sharepoint-wizard-component",
   templateUrl: "sharepoint-wizard.component.html",
   standalone: false,
-  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("SharepointWizardComponent") }]
+  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SharepointWizardComponent") }]
 
 })
 export class SharepointWizardComponent extends BaseWizardSectionComponent {

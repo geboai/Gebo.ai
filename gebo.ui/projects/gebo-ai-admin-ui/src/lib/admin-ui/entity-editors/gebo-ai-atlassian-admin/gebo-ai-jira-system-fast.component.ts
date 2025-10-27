@@ -21,7 +21,7 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { FastJiraSystemInsertRequest, GJiraSystem, JiraSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 
@@ -29,8 +29,10 @@ import { ToastMessageOptions } from "primeng/api";
     selector: "gebo-ai-jira-system-fast-component",
     templateUrl: "gebo-ai-jira-system-fast.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIJiraSystemFastComponent")
+    providers: [ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIJiraModule", multi: false }, 
+        {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIJiraSystemFastComponent")
     }]
 })
 export class GeboAIJiraSystemFastComponent implements OnInit {

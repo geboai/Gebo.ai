@@ -21,7 +21,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { DocumentReferenceView } from "@Gebo.ai/gebo-ai-rest-api";
-import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * A component that displays a list of documents and allows users to select from them.
@@ -32,10 +32,10 @@ import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-ifa
     selector: "gebo-ai-documents-list-panel-component",
     templateUrl: "documents-list-panel.component.html",
     standalone: false,
-    providers: [
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIDocumentsListPanelComponent),
-            multi: true
+            multi: false
         }]
 })
 export class GeboAIDocumentsListPanelComponent implements OnChanges, OnInit, GeboAIFieldHost {

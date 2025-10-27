@@ -20,13 +20,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { FunctionsLookupControllerService, GLookupEntry, GPromptConfig, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "gebo-advanced-chatmodel-group-component",
     templateUrl: "advanced-settings-chatmodel-group.component.html",
-    standalone: false, 
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIAdvancedChatModelGroupComponent") }]
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAdvancedChatModelModule", multi: false },
+    { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAdvancedChatModelGroupComponent") }]
 })
 export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges {
     /** Form group for managing the advanced chat model settings */

@@ -30,7 +30,7 @@ import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-ro
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
 import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architecture/actions.model";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 
 /**
@@ -42,7 +42,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     selector: "gebo-ui-choose-data-source-type-component",
     templateUrl: "choose-data-source-type.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIChooseDataSourceTypeComponent") }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIChooseDataSourceTypeComponent") }]
 })
 export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingComponent<ChooseDataSourceType> {
     /**

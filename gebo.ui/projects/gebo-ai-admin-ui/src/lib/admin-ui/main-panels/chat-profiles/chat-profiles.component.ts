@@ -19,7 +19,7 @@
  */
 import { Component, OnInit } from "@angular/core";
 import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig, PageGChatProfileConfiguration, PageGPromptConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
@@ -33,7 +33,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "chat-profiles-component",
     templateUrl: "chat-profiles.component.html",
     standalone: false,
-    providers:[{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("ChatProfilesComponent") }]
+    providers:[{ provide: GEBO_AI_MODULE, useValue: "ChatProfilesPanelModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ChatProfilesComponent") }]
 })
 export class ChatProfilesComponent extends AncestorPanelComponent implements OnInit {
     /**

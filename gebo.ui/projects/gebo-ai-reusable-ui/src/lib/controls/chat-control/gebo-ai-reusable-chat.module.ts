@@ -69,7 +69,7 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
     BrowseContentModule,
     GeboAIViewTableModule,
     MarkdownModule.forChild(), GeboAIFieldTransationContainerModule],
-  providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: true },
+  providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
     ReactiveRagChatService,
   provideMarkdown({
     sanitize: SecurityContext.NONE,

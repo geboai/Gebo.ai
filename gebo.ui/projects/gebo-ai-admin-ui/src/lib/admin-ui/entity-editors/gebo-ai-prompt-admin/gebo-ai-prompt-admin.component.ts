@@ -19,7 +19,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, EmbeddingModelsControllersService, GeboAdminChatProfilesConfigurationControllerService, GeboAdminPromptsControllerService, GPromptConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
 
@@ -31,10 +31,10 @@ import { Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-prompt-admin-component",
     templateUrl: "gebo-ai-prompt-admin.component.html",
-    standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIPromptAdminComponent),
-        multi: true
-    }]
+    standalone: false, providers: [  
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIPromptAdminModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIPromptAdminComponent), multi: false}
+    ]
 })
 export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GPromptConfig> {
     /**

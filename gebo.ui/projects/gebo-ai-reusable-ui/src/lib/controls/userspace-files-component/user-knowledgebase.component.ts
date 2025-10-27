@@ -19,7 +19,7 @@ import { BaseEntityEditingComponent } from "../base-entity-editing-component/bas
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 
 /**
@@ -35,7 +35,9 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     templateUrl: "user-knowledgebase.component.html",
     standalone: false,
     providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceKnowledgebaseComponent")
+        provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
+    },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceKnowledgebaseComponent")
     }]
 })
 export class GeboAIUserspaceKnowledgebaseComponent extends BaseEntityEditingComponent<UserspaceKnowledgebaseDto> {

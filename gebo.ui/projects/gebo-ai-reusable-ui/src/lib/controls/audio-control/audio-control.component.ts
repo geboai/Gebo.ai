@@ -19,11 +19,16 @@
  * to handle initialization, changes to inputs, and cleanup.
  */
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-audio-component",
     templateUrl: "audio-control.component.html",
-    standalone: false
+    standalone: false,
+     providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIAudioControlModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAudioControlComponent")}
+    ]
 })
 export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy {
 

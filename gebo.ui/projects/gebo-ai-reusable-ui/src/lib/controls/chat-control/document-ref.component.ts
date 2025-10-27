@@ -20,13 +20,13 @@
  */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-chat-docref",
     templateUrl: "document-ref.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("DocumentRefComponent"), multi: true }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("DocumentRefComponent"), multi: false }]
 })
 export class DocumentRefComponent implements OnInit, OnChanges {
     /**

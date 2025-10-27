@@ -12,7 +12,7 @@
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FileSystemSharesSettingControllerService, GFileSystemShareReference, SharedFilesystemUIConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 /**
  * AI generated comments
@@ -26,9 +26,11 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActio
     selector: "gebo-ai-shared-filesystem-component",
     templateUrl: "gebo-ai-shared-filesystems.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAISharedFilesystemsComponent")
-    }]
+    providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIFileSystemModule", multi: false },
+        {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAISharedFilesystemsComponent") }
+    ]
 })
 export class GeboAISharedFilesystemsComponent implements OnInit, OnChanges {
     /** Flag to indicate if data is currently being loaded */

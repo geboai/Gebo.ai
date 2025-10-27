@@ -21,11 +21,17 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn 
 import { ChangePasswordResponse, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { LoginService } from "../login/login.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 @Component({
   selector: "gebo-ai-change-password-component",
   templateUrl: "change-password.component.html",
-  standalone: false
+  standalone: false,
+  providers: [{
+    provide: GEBO_AI_MODULE, useValue: "GeboAIUserProfileModule", multi: false
+  }, {
+    provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIChangePasswordComponent")
+  }]
 })
 export class GeboAIChangePasswordComponent implements OnInit, OnChanges {
   /** The user information object */

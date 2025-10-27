@@ -21,16 +21,17 @@ import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GGitContentManagementSystem, GContentManagementSystemType, GitSystemsControllerService, SecretsControllerService, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 
 @Component({
     selector: "gebo-ai-git-system-admin-component",
     templateUrl: "gebo-ai-git-system-admin.component.html",
-    standalone: false, providers: [{
-    provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGitSystemAdminComponent),
-    multi: true
-  }]
+    standalone: false, 
+    providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiGitModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGitSystemAdminComponent),  multi: false  }
+    ]
 })
 export class GeboAiGitSystemAdminComponent extends BaseEntityEditingComponent<GGitContentManagementSystem> {
     /**

@@ -30,11 +30,6 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     imports: [CommonModule, ReactiveFormsModule, FormsModule, TextareaModule, PanelModule, DialogModule, ButtonModule, BlockUIModule, MessagesModule, EditableListboxModule, MonacoEditorModule, GeboAIFieldTransationContainerModule],
     declarations: [GeboAIPromptEditingComponent, GeboAIPromptWizardComponent],
     exports: [GeboAIPromptEditingComponent],
-    providers: [{
-        provide: GEBO_AI_MODULE, useValue: "PromptEditingModule", multi: true
-    },
-    {
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("PromptEditingComponent")
-    }]
+    providers: []
 })
 export class PromptEditingModule { }

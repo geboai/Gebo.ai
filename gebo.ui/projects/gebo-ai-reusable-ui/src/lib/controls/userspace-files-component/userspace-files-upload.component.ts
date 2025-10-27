@@ -29,7 +29,7 @@ import { BaseEntityEditingComponent } from "../base-entity-editing-component/bas
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component responsible for managing file uploads to user workspace.
@@ -40,7 +40,9 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     selector: "gebo-ui-userspace-fileuploads-component",
     templateUrl: "userspace-files-upload.component.html",
     providers: [UserspaceFilesUploadModelService, {
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceFilesUploadComponent")
+            provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
+        },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceFilesUploadComponent")
     }],
     standalone: false
 })

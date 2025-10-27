@@ -19,16 +19,17 @@
 import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable } from "rxjs";
 @Component({
     selector: "gebo-ai-user-component",
     templateUrl: "gebo-ai-user.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUserComponent),
-        multi: true
+    providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUserComponent),
+        multi: false
     }]
 })
 export class GeboAIUserComponent implements OnInit, OnChanges {

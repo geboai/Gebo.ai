@@ -21,15 +21,16 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GGoogleDriveSystem, GoogleWorkspaceAccessHandshakeControllerService, StartGooglWorkspaceAccessRequest, StartGooglWorkspaceAccessRespose, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 @Component({
     selector: "gebo-ai-google-workspace-access-component",
     templateUrl: "gebo-ai-google-workspace-access.component.html",
-    standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent")
-    }]
+    standalone: false, providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiGoogleWorkspacesModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent") }
+    ]
 })
 export class GeboAIGoogleWorkspaceAccessComponent implements OnInit, OnChanges {
     /**

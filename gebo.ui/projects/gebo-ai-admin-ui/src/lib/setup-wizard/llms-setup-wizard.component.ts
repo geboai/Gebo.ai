@@ -41,7 +41,7 @@ interface LLMSEntry {
     selector: "gebo-llms-wizard-component",
     templateUrl: "llms-setup-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("LLMSetupWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSetupWizardComponent") }]
 })
 export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     /**

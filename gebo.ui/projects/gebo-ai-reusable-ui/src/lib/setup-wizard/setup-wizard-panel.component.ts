@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Type } from "@angular/core";
 import { SetupWizardItem } from "./setup-wizard-step";
@@ -16,6 +16,7 @@ import { SetupStatus, SetupWizardService } from "./setup-wizard.service";
 import { BaseWizardSectionComponent } from "./base-wizard-section.component";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
 import { MenuItem, ToastMessageOptions, MessageService } from "primeng/api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 /**
  * AI generated comments
  * This module provides a setup wizard panel component for guiding users through a multi-step setup process
@@ -40,14 +41,19 @@ function filterNotContained<T>(v1: T[], v2: T[]): T[] {
 @Component({
     selector: "gebo-setup-wizard-panel-component",
     templateUrl: "setup-wizard-panel.component.html",
-    providers: [SetupWizardComunicationService, MessageService],
-    standalone: false
+    providers: [SetupWizardComunicationService, MessageService, {
+        provide: GEBO_AI_MODULE, useValue: "SetupWizardPanelModule", multi: false
+    }, {
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SetupWizardPanelComponent")
+        }],
+    standalone: false,
+
 })
 export class SetupWizardPanelComponent implements OnInit, OnChanges {
     /** Flag indicating if data is being loaded */
     public loading: boolean = false;
     /** Collection of messages to be displayed to the user */
-    public userMessages:ToastMessageOptions[]=[];
+    public userMessages: ToastMessageOptions[] = [];
     /** List of all wizard steps available to the user */
     public wizardsEntries: SetupWizardItem[] = [];
     /** Currently selected wizard item */
@@ -55,22 +61,22 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     /** Component type for the currently active wizard section */
     public wizardComponent?: Type<BaseWizardSectionComponent>;
     /** Current overall setup status */
-    public actualSetupStatus?:SetupStatus;
+    public actualSetupStatus?: SetupStatus;
     /** Breadcrumb navigation items */
-    public bcItems:MenuItem[]=[];
+    public bcItems: MenuItem[] = [];
     /** Home breadcrumb item with navigation back to main wizard */
-    public home:MenuItem={
-        label:"Setup home",
-        command:(item)=>{
+    public home: MenuItem = {
+        label: "Setup home",
+        command: (item) => {
             this.closeWizard();
         }
     };
     /** Title to display for the wizard panel */
     @Input() title: string = "Choose a setup section";
     /** ID of the step to display initially */
-    @Input() stepId?:string;
+    @Input() stepId?: string;
     /** Event emitter for notifying parent components about setup status changes */
-    @Output() setupStatusRefresh:EventEmitter<SetupStatus>=new EventEmitter();
+    @Output() setupStatusRefresh: EventEmitter<SetupStatus> = new EventEmitter();
 
     /**
      * Constructor initializes required services for the wizard panel
@@ -93,19 +99,19 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
         this.setupWizardService.getActualStatus().subscribe({
             next: (values) => {
                 this.wizardsEntries = values;
-                this.actualSetupStatus=this.setupWizardService.calculateSetupStatus(this.wizardsEntries);
+                this.actualSetupStatus = this.setupWizardService.calculateSetupStatus(this.wizardsEntries);
                 this.setupStatusRefresh.emit(this.actualSetupStatus);
                 this.viewSelectedStep(this.stepId);
-                switch(this.actualSetupStatus) {
-                    case "complete":{
-                        this.userMessages=[{summary:"Gebo.ai setup mandatory steps done...",detail:"Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software",severity:"warn"}];
-                    }break;
-                    case "incomplete":{
-                        this.userMessages=[{summary:"Gebo.ai setup is missing some mandatory step",detail:"Please review the red steps of the setup process",severity:"error"}];
-                    }break;
-                    case "full":{
-                        this.userMessages=[{summary:"Gebo.ai setup OK!",detail:"",severity:"success"}];
-                    }break;
+                switch (this.actualSetupStatus) {
+                    case "complete": {
+                        this.userMessages = [{ summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" }];
+                    } break;
+                    case "incomplete": {
+                        this.userMessages = [{ summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" }];
+                    } break;
+                    case "full": {
+                        this.userMessages = [{ summary: "Gebo.ai setup OK!", detail: "", severity: "success" }];
+                    } break;
                 }
             },
             complete: () => {
@@ -119,20 +125,20 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
      * Navigates to a specific step in the setup wizard by its ID
      * @param step The ID of the step to view, undefined will return to the main wizard view
      */
-    private viewSelectedStep(step?:string):void {
-            if (!step) {
-                this.actualItem = undefined;
-                this.stepId=undefined;
-                this.wizardComponent = undefined;
-                        
-            }else {
-                if (this.wizardsEntries && this.wizardsEntries.length) {
-                    const found=this.wizardsEntries.find(x=>x.wizardSectionId===step);
-                    if (found) {
-                        this.openWizard(found);
-                    }
+    private viewSelectedStep(step?: string): void {
+        if (!step) {
+            this.actualItem = undefined;
+            this.stepId = undefined;
+            this.wizardComponent = undefined;
+
+        } else {
+            if (this.wizardsEntries && this.wizardsEntries.length) {
+                const found = this.wizardsEntries.find(x => x.wizardSectionId === step);
+                if (found) {
+                    this.openWizard(found);
                 }
             }
+        }
     }
 
     /**
@@ -152,7 +158,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
             this.viewSelectedStep(this.stepId);
         }
         if (this.title && changes["title"]) {
-            this.home.label=this.title;
+            this.home.label = this.title;
         }
     }
 
@@ -170,13 +176,13 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
             item.requredStepsIds.forEach(stepId => {
                 const entry = this.wizardsEntries?.find(x => x.wizardSectionId === stepId);
                 if (entry) {
-                    if (entry.enabled === true && entry.alreadyCompleted !== true ) {
+                    if (entry.enabled === true && entry.alreadyCompleted !== true) {
                         ok = false;
                         nrKo++;
                         toBeSetList = toBeSetList + (nrKo > 0 ? "," : "") + entry.label;
                     }
-                    
-                    
+
+
                 } else {
                     console.error("Unknown step:" + stepId);
                 }
@@ -185,8 +191,8 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
         if (ok !== true) {
             result.messages = [{ severity: "warn", summary: "Missing setups before:" + item.label, detail: "Before setting the " + item.label + toBeSetList + " must be configured." }];
         }
-        
-        result.preconditionsOk=ok;
+
+        result.preconditionsOk = ok;
         return result;
     }
 
@@ -196,9 +202,9 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
      */
     public openWizard(item: SetupWizardItem) {
         const check = this.preconditionsCheck(item);
-        this.userMessages=check.messages;
+        this.userMessages = check.messages;
         if (check.preconditionsOk === true) {
-            this.bcItems=[{
+            this.bcItems = [{
                 label: item.label
             }];
             this.actualItem = item;
@@ -212,9 +218,9 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
      * Closes the current wizard step and returns to the main wizard view
      */
     public closeWizard(): void {
-        this.bcItems=[];
+        this.bcItems = [];
         this.actualItem = undefined;
-        this.stepId=undefined;
+        this.stepId = undefined;
         this.wizardComponent = undefined;
         this.reloadStatus();
     }

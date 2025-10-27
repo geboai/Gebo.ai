@@ -30,7 +30,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui
     selector: "gebo-ai-chat-section-component",
     templateUrl: "gebo-ai-rag-chat-section.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
 })
 export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 

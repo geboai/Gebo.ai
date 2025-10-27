@@ -79,7 +79,7 @@ export class WorkFolderWizardStatusService extends AbstractStatusService {
     selector: "gebo-work-folder-wizard-component",
     templateUrl: "work-folder-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("WorkFolderWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("WorkFolderWizardComponent") }]
 })
 export class WorkFolderWizardComponent extends BaseWizardSectionComponent {
     /**

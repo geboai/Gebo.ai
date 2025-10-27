@@ -20,7 +20,7 @@
 import { Component, Host, OnInit, Self } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { CompanySystemsControllerService, FileSystemSharesSettingControllerService, GContentManagementSystem, GGitContentManagementSystem, GGoogleSearchApiCredentials, SharedFilesystemUIConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { forkJoin, Observable } from "rxjs";
 
@@ -33,8 +33,8 @@ import { forkJoin, Observable } from "rxjs";
     selector: "systems-component",
     templateUrl: "systems.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("SystemsComponent")
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "SystemsPanelModule", multi: false },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SystemsComponent")
     }]
 })
 export class SystemsComponent extends AncestorPanelComponent implements OnInit {

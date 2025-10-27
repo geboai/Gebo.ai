@@ -14,11 +14,6 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, InputTextModule, EditableListboxModule, MultiSelectModule, FieldsetModule, GeboAIFieldTransationContainerModule],
     declarations: [GeboOauth2SecretComponent],
     exports: [GeboOauth2SecretComponent],
-    providers: [{
-        provide: GEBO_AI_MODULE, useValue: "GeboOauth2SecretModule", multi: true
-    },
-    {
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboOauth2SecretComponent")
-    }]
+    providers: []
 })
 export class GeboOauth2SecretModule { }

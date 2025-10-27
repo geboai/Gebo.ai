@@ -56,7 +56,7 @@ import { GeboAIFieldTransationContainerModule } from "../field-translation-conta
     imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, CalendarModule, InputNumberModule, FieldsetModule,GeboAIFieldTransationContainerModule],
     declarations: [GeboAIPeriodsSchedulingBaseComponent, TimeSetComponent, GeboAIContentReindexScheduleComponent],
     exports: [GeboAIContentReindexScheduleComponent],
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: true }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false }]
 
 })
 export class GeboAIContentReindexModule { }

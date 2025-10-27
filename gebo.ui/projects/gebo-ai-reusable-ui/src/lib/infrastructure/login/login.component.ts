@@ -25,10 +25,16 @@ import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
-  standalone: false
+  standalone: false,
+  providers: [{
+    provide: GEBO_AI_MODULE, useValue: "LoginModule", multi: false
+  }, {
+    provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LoginComponent")
+  }]
 })
 export class LoginComponent implements OnInit {
 
@@ -85,7 +91,7 @@ export class LoginComponent implements OnInit {
         this.loginService.getOauth2LoginOptions().subscribe({
           next: (providers) => {
             this.providers = providers;
-            
+
           },
           complete: () => {
             this.loading = false;
@@ -120,13 +126,13 @@ export class LoginComponent implements OnInit {
   }
   public onOauth2Click(clicked: Oauth2ClientAuthorizativeInfo) {
     if (clicked.registrationId) {
-      
+
       this.loginService.loginWithOauth2(clicked).subscribe({
-        next:(value)=>{
+        next: (value) => {
 
         },
-        complete:()=>{
-          
+        complete: () => {
+
         }
       });
     }

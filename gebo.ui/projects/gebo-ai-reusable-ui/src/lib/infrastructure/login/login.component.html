@@ -19,13 +19,13 @@
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <div class="grid">
         <div class="col-12">
-            <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login"> <input pInputText
-                    formControlName="username" class="col-12" [required]="true"></gebo-ai-field>
+            <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login" [required]="true"> <input pInputText
+                    formControlName="username" class="col-12" [required]="true" gebo-ai-field-element></gebo-ai-field>
         </div>
         <div class="col-12">
-            <gebo-ai-field id="password" label="Password" help="Password to login">
+            <gebo-ai-field id="password" label="Password" help="Password to login" [required]="true">
                 <p-password  formControlName="password" class="col-12" [required]="true"
-                     [feedback]="false"></p-password>
+                     [feedback]="false"  gebo-ai-field-element></p-password>
             </gebo-ai-field>
             
         </div>

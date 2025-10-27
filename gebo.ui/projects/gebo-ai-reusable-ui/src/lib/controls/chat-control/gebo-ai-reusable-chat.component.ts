@@ -29,7 +29,7 @@ import { ScrollPanel } from "primeng/scrollpanel";
 import { forkJoin, Observable } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { IGeboChatMessage, ReactiveRagChatService } from "./reactive-chat.service";
-import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Interface representing a single chat interaction between the user and the AI,
@@ -66,8 +66,11 @@ interface GeboChatTemplatedResponse {
     selector: "gebo-ai-reusable-chat-component",
     templateUrl: "gebo-ai-reusable-chat.component.html",
     styleUrls: ["gebo-ai-reusable-chat.component.css"],
-    providers: [MessageService,{ provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIReusableChatComponent),
-            multi: true }],
+    providers: [MessageService,
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIReusableChatComponent),
+            multi: false }
+    ],
     standalone: false
 })
 export class GeboAIReusableChatComponent implements OnInit, OnChanges,GeboAIFieldHost {

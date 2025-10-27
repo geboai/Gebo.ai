@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,6 +20,7 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { NgxEditorModel } from "ngx-monaco-editor-v2";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * A component for editing AI prompts using Monaco editor.
@@ -35,6 +36,12 @@ import { NgxEditorModel } from "ngx-monaco-editor-v2";
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIPromptEditingComponent),
             multi: true
+        },
+        {
+            provide: GEBO_AI_MODULE, useValue: "PromptEditingModule", multi: false
+        },
+        {
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("PromptEditingComponent")
         }
     ],
 })
@@ -43,7 +50,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
      * Stores the current prompt text value
      */
     private promptText?: string;
-    
+
     /**
      * Configuration options for the Monaco editor
      */
@@ -53,7 +60,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
 
 
     };
-    
+
     /**
      * Model configuration for the Monaco editor
      */
@@ -61,37 +68,37 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
         value: "",
         language: "java"
     };
-    
+
     /**
      * Number of rows to display in the editor
      */
     @Input() rows: number = 5;
-    
+
     /**
      * Number of columns to display in the editor
      */
     @Input() cols: number = 80;
-    
+
     /**
      * Placeholder definitions that can be used in the prompt
      * Each placeholder has a code, description, and required flag
      */
     @Input() placeHolders: { code: string, description: string, required: boolean }[] = [];
-    
+
     /**
      * Form group that contains the prompt control
      */
     formGroup: FormGroup = new FormGroup({
         prompt: new FormControl()
     });
-    
+
     /**
      * Initializes the component
      */
     ngOnInit(): void {
 
     }
-    
+
     /**
      * Handles changes to the component's input properties
      * @param changes The changes object containing all changed inputs
@@ -99,7 +106,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
     ngOnChanges(changes: SimpleChanges): void {
 
     }
-    
+
     /**
      * Writes a value to the editor from the form model
      * @param obj The value to write to the editor
@@ -112,12 +119,12 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
             }
         );
     }
-    
+
     /**
      * Function to call when the input value changes
      */
     private onChange: (d: any) => void = (d: any) => { };
-    
+
     /**
      * Registers a callback function that is called when the value changes
      * @param fn The callback function
@@ -125,12 +132,12 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
     registerOnChange(fn: any): void {
         this.onChange = fn;
     }
-    
+
     /**
      * Function to call when the input is touched
      */
     private onTouched: (d: any) => void = (d: any) => { };
-    
+
     /**
      * Registers a callback function that is called when the input is touched
      * @param fn The callback function
@@ -138,7 +145,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, OnCha
     registerOnTouched(fn: any): void {
         this.onTouched = fn;
     }
-    
+
     /**
      * Sets the disabled state of the editor
      * @param isDisabled Whether the editor should be disabled

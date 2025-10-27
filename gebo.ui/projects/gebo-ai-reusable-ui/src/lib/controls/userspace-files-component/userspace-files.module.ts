@@ -89,9 +89,7 @@ export class UserspaceFormsListService extends GeboUIEntityFormsLauncherService 
     exports: [GeboAIUserpaceFilesComponent],
     providers: [{
         provide: GeboUIEntityFormsLauncherService, useValue: UserspaceFormsListService
-    },
-    {
-        provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: true
-    }]
+    }
+    ]
 })
 export class GeboAIUserspaceFilesModule { }

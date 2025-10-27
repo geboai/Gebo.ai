@@ -19,7 +19,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { FunctionsLookupControllerService, GBaseChatModelChoice, GLookupEntry, SecretInfo, SecretsControllerService, GDeepseekChatModelConfig, DeepseekChatModelsConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -34,10 +34,10 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 @Component({
     selector: "gebo-ai-deepseek-chat-model-admin-component",
     templateUrl: "gebo-ai-deepseek-chatmodel-admin.component.html",
-    standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIDeepseekChatModelAdminComponent),
-        multi: true
-    }]
+    standalone: false, providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIDeepseekChatModelAdminComponent),  multi: false   }
+    ]
 })
 export class GeboAIDeepseekChatModelAdminComponent extends BaseEntityEditingComponent<GDeepseekChatModelConfig> {
     /**

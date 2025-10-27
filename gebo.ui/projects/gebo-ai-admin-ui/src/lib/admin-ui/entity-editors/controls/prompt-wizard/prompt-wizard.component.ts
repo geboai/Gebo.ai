@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -23,7 +23,7 @@
 import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardConfigs, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
 
@@ -31,49 +31,49 @@ import { forkJoin, Observable } from "rxjs";
     selector: "gebo-ai-prompt-wizard-component",
     templateUrl: "prompt-wizard.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIPromptWizardComponent") }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIPromptWizardModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIPromptWizardComponent") }]
 })
 export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /**
      * Name of the control in the parent form group where the generated prompt will be delivered
      */
     @Input() deliveryPromptControlName?: string;
-    
+
     /**
      * Parent form group that will receive the generated prompt
      */
     @Input() deliveryFormGroup?: FormGroup;
-    
+
     /**
      * Optional placeholder text for the prompt template input field
      */
     @Input() promptTemplatePlaceholderText?: string;
-    
+
     /**
      * Flag to determine if the wizard operates in RAG (Retrieval Augmented Generation) mode
      */
-    @Input() ragWizardMode:boolean=true;
-    
+    @Input() ragWizardMode: boolean = true;
+
     /**
      * Default placeholder text for prompt template when none is provided
      */
     public defaultTemplatePlaceHolderText?: string;
-    
+
     /**
      * Controls the visibility of the prompt wizard dialog
      */
     public dialogVisible: boolean = false;
-    
+
     /**
      * Messages to display to the user in the UI
      */
     public userMessages: ToastMessageOptions[] = [{ severity: "info", summary: "Ask AI to write a prompt template", detail: "With this screen AI will assist you on writing the correct template for your objectives" }];
-    
+
     /**
      * Flag to indicate when async operations are in progress
      */
     public loading: boolean = false;
-    
+
     /**
      * Form group for collecting user input including model selection and query
      */
@@ -81,24 +81,24 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
         modelCode: new FormControl(),
         query: new FormControl()
     });
-    
+
     /**
      * Form group for the generated prompt response
      */
     responseFormGroup: FormGroup = new FormGroup({
         response: new FormControl()
     });
-    
+
     /**
      * Stores the most recent response from the prompt generation service
      */
     lastResponse?: OperationStatusPromptTemplateResponse;
-    
+
     /**
      * Available chat models for prompt generation
      */
     chatModels?: GLookupEntry[];
-    
+
     /**
      * Configuration options for the prompt template wizard
      */

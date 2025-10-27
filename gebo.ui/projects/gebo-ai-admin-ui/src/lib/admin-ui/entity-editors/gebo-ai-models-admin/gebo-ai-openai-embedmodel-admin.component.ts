@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseChatModelChoice, GOpenAIEmbeddingModelConfig, OpenAiEmbeddingModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -29,9 +29,10 @@ import { isValidUrl } from "../utils/url-ok";
 @Component({
     selector: "gebo-ai-open-ai-embed-model-admin-component",
     templateUrl: "gebo-ai-openai-embedmodel-admin.component.html",
-    standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIOpenAIEmbedModelAdminComponent),
-        multi: true
+    standalone: false, providers: [ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIOpenAIEmbedModelAdminComponent),
+        multi: false
     }]
 
 })

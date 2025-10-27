@@ -35,7 +35,7 @@ export class GraphRagStatusService extends AbstractStatusService {
     templateUrl: "graphrag-wizard.component.html",
     selector: "gebo-ai-graphrag-setup-component",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GraphRagWizardComponent") }]
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GraphRagWizardComponent") }]
 })
 export class GraphRagWizardComponent extends BaseWizardSectionComponent {
 

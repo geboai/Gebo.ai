@@ -27,7 +27,7 @@ import { USERSPACE_UPLOADS_WIZARD } from "./userspace-wizard";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { sliceWizard } from "../base-entity-editing-component/entities-modification-wizard";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Interface representing an item in the userspace tree structure.
@@ -54,8 +54,10 @@ interface UserspaceTreeItem {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIUserspaceBrowseComponent),
             multi: true
-        }, {
-            provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent")
+        },{
+                provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
+            }, {
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent")
         }
     ],
     standalone: false

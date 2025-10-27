@@ -20,14 +20,14 @@
 import { Component, OnInit } from "@angular/core";
 import { GeboCoreAnalisysControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { TotalHistogramBar, transformData } from "./graphics-data";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "gebo-ai-main-dashboard-component",
     templateUrl: "gebo-dashboard.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIDashboardComponent")
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIDashboardPanelModule", multi: false },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIDashboardComponent")
     }]
 })
 export class GeboAIDashboardComponent implements OnInit {

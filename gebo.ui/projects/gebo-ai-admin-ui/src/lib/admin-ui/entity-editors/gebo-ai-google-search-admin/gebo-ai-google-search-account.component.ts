@@ -13,7 +13,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GGoogleSearchApiCredentials, GoogleSearchConfigurationControllerService, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -39,9 +39,11 @@ const googleSearchContextCode: string = "google-search";
 @Component({
     selector: "gebo-ai-google-search-account-component",
     templateUrl: "gebo-ai-google-search-account.component.html",
-    standalone: false, providers: [{
+    standalone: false, providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIGoogleSearchAccountModule", multi: false }, 
+        {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGoogleSearchAccountComponent),
-        multi: true
+        multi: false
     }]
 })
 export class GeboAIGoogleSearchAccountComponent extends BaseEntityEditingComponent<GGoogleSearchApiCredentials> {

@@ -19,7 +19,7 @@
  */
 import { Component, ElementRef, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../../controls/field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-licence-component",
@@ -30,9 +30,11 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../../controls/field
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAILicenceComponent),
             multi: true
+        }, {
+            provide: GEBO_AI_MODULE, useValue: "FastSetupModule", multi: false
         },
         {
-            provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("FastSetupComponent")
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("FastSetupComponent")
         }
     ],
     standalone: false

@@ -20,7 +20,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 
 /**
@@ -38,7 +38,8 @@ const fixedControls: string[] = ["accessibleGroups", "accessibleUsers", "accessi
     selector: "gebo-ai-access-control",
     templateUrl: "access-control-group.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIAccessControlComponent") }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAccessControlModule", multi: false },
+    { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAccessControlComponent") }]
 })
 export class GeboAIAccessControlComponent implements OnInit, OnChanges {
     /**

@@ -14,7 +14,7 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { ReindexingFrequencyOptionsControllerService, ReindexingProgrammedTable, ReindexingTime, ReindexTimeStructureMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Defines the time slots units based on the ReindexingTime array
@@ -61,9 +61,9 @@ const availPeriods: PeriodOption[] = [{ code: "DAILY", description: "Daily progr
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIContentReindexScheduleComponent),
             multi: true
-        },
+        }, { provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false },
         {
-            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentReindexScheduleComponent"), multi: true
+            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentReindexScheduleComponent"), multi: false
         }
     ],
     standalone: false

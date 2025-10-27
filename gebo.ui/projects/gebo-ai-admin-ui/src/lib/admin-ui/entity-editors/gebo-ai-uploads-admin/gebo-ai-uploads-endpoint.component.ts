@@ -21,7 +21,7 @@
 import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { FileBeforeUploadEvent, FileProgressEvent, UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
@@ -37,9 +37,9 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 @Component({
     selector: "gebo-ai-uploads-endpoint-component",
     templateUrl: "gebo-ai-uploads-endpoint.component.html",
-    providers: [MessageService, {
-        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUploadsEndpointComponent),
-        multi: true
+    providers: [MessageService, 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIUploadsModule", multi: false },   
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUploadsEndpointComponent), multi: true
     }],
     standalone: false
 })

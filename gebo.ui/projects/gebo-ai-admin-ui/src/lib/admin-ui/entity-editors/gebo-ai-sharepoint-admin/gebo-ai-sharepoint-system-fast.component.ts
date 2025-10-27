@@ -21,7 +21,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { SharepointUrlService } from "./confluence-url.service";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 /**
  * Component for rapid creation of Sharepoint system connections in the Gebo.ai platform.
@@ -33,10 +33,10 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui
 @Component({
     selector: "gebo-ai-sharepoint-system-fast-component",
     templateUrl: "gebo-ai-sharepoint-system-fast.component.html",
-    providers: [SharepointUrlService, {
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent")
-    }],
-    standalone: false
+    providers: [SharepointUrlService,
+        { provide: GEBO_AI_MODULE, useValue: "GeboAISharepointModule", multi: false },  
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent") }
+    ], standalone: false
 })
 export class GeboAISharepointSystemFastComponent implements OnInit {
     /** Flag to indicate if an API operation is in progress */

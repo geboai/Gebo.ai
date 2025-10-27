@@ -19,15 +19,15 @@
  */
 import { Component, OnInit } from "@angular/core";
 import { FormGroupMetaInfo, GeboAngularFormGroupMetaInfoControllerService, JobLauncherControllerService, LogViewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
 @Component({
     selector: "gebo-ai-logs-view-component",
     templateUrl: "logs-view.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAiLogsViewComponent")
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLogsViewPanelModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiLogsViewComponent")
     }]
 })
 export class GeboAiLogsViewComponent extends AncestorPanelComponent implements OnInit {

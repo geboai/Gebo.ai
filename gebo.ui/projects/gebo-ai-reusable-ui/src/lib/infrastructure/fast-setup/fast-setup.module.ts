@@ -52,9 +52,7 @@ const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
     imports: [CommonModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule, MessagesModule, InputTextModule, ButtonModule, PasswordModule, RouterModule.forRoot(routes), DropdownModule, EditableListboxModule, CheckboxModule, RadioButtonModule, ScrollPanelModule, SelectButtonModule, FieldsetModule, GeboAIFieldTransationContainerModule],
     declarations: [FastSetupComponent, GeboAILicenceComponent],
     exports: [FastSetupComponent],
-    providers: [{
-        provide: GEBO_AI_MODULE, useValue: "FastSetupModule", multi: true
-    }
+    providers: [
     ]
 })
 

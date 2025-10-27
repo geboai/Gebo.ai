@@ -13,7 +13,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
@@ -28,8 +28,8 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "llms-systems-component",
     templateUrl: "llms-systems.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("LlmsSystemsComponent")
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LlmsSystemsComponent")
     }]
 })
 export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {

@@ -19,7 +19,7 @@
 import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { FastGoogleDriveSystemInsert, GGoogleDriveSystem, GoogleDriveSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 /**
@@ -48,8 +48,8 @@ const jsonValidator: ValidatorFn = (control: AbstractControl) => {
 @Component({
     selector: "gebo-ai-google-drive-fast-component",
     templateUrl: "gebo-ai-google-drive-fast.component.html",
-    standalone: false, providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIGoogleDriveFastComponent")
+    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiGoogleWorkspacesModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGoogleDriveFastComponent")
     }]
 })
 export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {

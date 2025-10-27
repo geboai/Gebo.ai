@@ -18,7 +18,7 @@
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { DataPage, EditableUser, PageUserInfos, PageUsersGroup, User, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
@@ -30,8 +30,8 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "users-management-component",
     templateUrl: "users-management.component.html",
     standalone: false,
-    providers: [{
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("GeboAIUsersManagementComponent")
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupPanelModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUsersManagementComponent")
     }]
 })
 export class GeboAIUsersManagementComponent extends AncestorPanelComponent implements OnInit, OnChanges {

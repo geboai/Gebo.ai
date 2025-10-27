@@ -19,7 +19,7 @@
  */
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { GeboChatUserInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-component-iface/field-host-component-iface";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Represents a component that displays chat user information.
@@ -30,7 +30,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../field-host-compon
     selector: "gebo-user-chat-info-component",
     templateUrl: "chat-info.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboChatUserInfoComponent"), multi: true }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboChatUserInfoComponent"), multi: false }]
 })
 export class GeboChatUserInfoComponent {
     /**

@@ -37,9 +37,10 @@ import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-ho
             useExisting: forwardRef(() => GeboAIChooseDocumentsPanelComponent),
             multi: true
         },
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIChooseDocumentsPanelComponent),
-            multi: true
+            multi: false
         }
     ],
     standalone: false

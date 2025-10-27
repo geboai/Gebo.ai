@@ -3,6 +3,7 @@ import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGrou
 import { GContentSelectionFilter, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { validateCriteria } from "./validate-content-selection-filter-criteria";
 import { NonNullAssert } from "@angular/compiler";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-content-selection-filter-component",
@@ -18,6 +19,13 @@ import { NonNullAssert } from "@angular/compiler";
             provide: NG_VALIDATORS,
             useExisting: forwardRef(() => GeboAIContentSelectionFilterComponent),
             multi: true
+        },
+        {
+            provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: false
+        },
+        {
+            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentSelectionFilterComponent"),
+            multi: false
         }
     ]
 })
@@ -40,13 +48,13 @@ export class GeboAIContentSelectionFilterComponent implements OnInit, OnChanges,
             maxModificationAgeInDays: new FormControl()
         });
         formG.addValidators((ctrl) => validateCriteria(ctrl.value));
-        
+
         return formG;
     }
     constructor(private fileTypeLibraryControllerService: IngestionFileTypesLibraryControllerService) {
         this.adaptFormGroup(1);
         this.formGroup.valueChanges.subscribe({
-            next:(data)=>{
+            next: (data) => {
                 this.changedValueNotification(data);
             }
         });
@@ -90,8 +98,8 @@ export class GeboAIContentSelectionFilterComponent implements OnInit, OnChanges,
         }
 
         for (let i: number = 0; i < size; i++) {
-            
-            crit.push(this.createNewCriteria(),noNotification);
+
+            crit.push(this.createNewCriteria(), noNotification);
         }
         if (actualValue && actualValue.criterias && actualValue.criterias.length)
             this.formGroup.patchValue(actualValue, noNotification);
