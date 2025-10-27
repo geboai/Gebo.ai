@@ -115,7 +115,8 @@ const GeboAIPreset = definePreset(Aura, {
     }),
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
-    RouterModule.forRoot(routes), GeboAIFieldTransationContainerModule],
+    RouterModule.forRoot(routes), 
+    GeboAIFieldTransationContainerModule.forRoot()],
   providers: [
     GeboBackendListService,
     CookieService,

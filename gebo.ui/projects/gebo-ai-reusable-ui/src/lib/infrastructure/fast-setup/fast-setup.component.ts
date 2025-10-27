@@ -23,6 +23,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FastInstallationSetupData, GeboFastInstallationSetupControllerService, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { LoginService } from "../login/login.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 /**
  * Component responsible for the initial fast setup process of the Gebo.ai application.
@@ -32,8 +33,11 @@ import { LoginService } from "../login/login.service";
 @Component({
     selector: "gebo-ai-fast-setup",
     templateUrl: "fast-setup.component.html",
-    providers: [LoginService],
+    providers: [LoginService,{
+        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("FastSetupComponent")
+    }],
     standalone: false
+
 })
 export class FastSetupComponent implements OnInit {
     /**

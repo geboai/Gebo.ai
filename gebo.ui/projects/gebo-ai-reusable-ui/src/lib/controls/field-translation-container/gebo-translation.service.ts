@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { DEFAULT_LANGUAGE, findMatchingTranlations, UIExistingText, UILanguageResources } from "./text-language-resources";
+import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat } from "rxjs";
-import { UiTextResourcesControllerService, UserControllerService, UIExistingText as LibraryUIExistingText } from "@Gebo.ai/gebo-ai-rest-api";
+import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, TranslateService } from "@ngx-translate/core";
 
 /*******************************************************************************
@@ -15,22 +15,24 @@ import { InterpolatableTranslationObject, TranslateService } from "@ngx-translat
 export class GeboAITranslationService {
     private static actualLanguage: string = DEFAULT_LANGUAGE;
     public static recordingOn: boolean = false;
+    private static initialized: boolean = false;
     private static currentTextResources: UILanguageResources | undefined;
     constructor(private uiTextResourcesService: UiTextResourcesControllerService,
-        private userController: UserControllerService,
         private translateService: TranslateService) {
-
-        uiTextResourcesService.getUiTextResourcesModule().subscribe({
-            next: (value) => {
-                GeboAITranslationService.recordingOn = value?.enabled === true;
-            }
-        });
-
-
-
         this.translateService.addLangs(["en", "it", "zh", "ru"])
     }
+    public async tryInit() {
+        if (GeboAITranslationService.initialized !== true) {
+            try {
+                const moduleConfiguration = await this.uiTextResourcesService.getUiTextResourcesModule().toPromise();
+                GeboAITranslationService.recordingOn = moduleConfiguration?.enabled === true;
+            } catch (e) {
 
+            } finally {
+                GeboAITranslationService.initialized = true;
+            }
+        }
+    }
     public languageChanges: Subject<UILanguageResources | undefined> = new Subject();
     public translateOnActualLanguage(textResources: UIExistingText[]): Observable<UILanguageResources | undefined> {
         if (GeboAITranslationService.recordingOn === true && textResources && textResources.length) {
@@ -59,7 +61,7 @@ export class GeboAITranslationService {
         })
 
     }
-    public getActualLanguage():string {
+    public getActualLanguage(): string {
         return this.translateService.getCurrentLang();
     }
     public download(): Observable<Blob> {

@@ -31,7 +31,7 @@
                         <td>{{ model.configuration?.code }}</td>
                         <td>{{ model.configuration?.description }}</td>
                         <td>{{ model.configuration?.modelTypeCode }}</td>
-                        <td>{{ model.configuration?.modelCode }}</td>
+                        <td>{{ model.configuration?.choosedModel?.code }}</td>
                         <td>
                             <gebo-ai-test-chat-component
                                 [chatModelCode]="model.configuration.code"></gebo-ai-test-chat-component>
@@ -62,7 +62,7 @@
                         <td>{{ model.configuration?.code }}</td>
                         <td>{{ model.configuration?.description }}</td>
                         <td>{{ model.configuration?.modelTypeCode }}</td>
-                        <td>{{ model.configuration?.modelCode }}</td>
+                        <td>{{ model.configuration?.choosedModel?.code  }}</td>
                         <td>
 
                         </td>

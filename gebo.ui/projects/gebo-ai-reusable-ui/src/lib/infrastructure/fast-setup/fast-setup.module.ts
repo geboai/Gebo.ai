@@ -54,10 +54,8 @@ const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
     exports: [FastSetupComponent],
     providers: [{
         provide: GEBO_AI_MODULE, useValue: "FastSetupModule", multi: true
-    },
-    {
-        provide: GEBO_AI_FIELD_HOST, multi: true, useValue: fieldHostComponentName("FastSetupComponent")
-    }]
+    }
+    ]
 })
 
 export class FastSetupModule implements OnInit {

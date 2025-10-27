@@ -52,7 +52,8 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
     constructor(private geboTranslationService: GeboAITranslationService) {
         this.formGroup.controls["langCode"].setValidators(Validators.required);
     }
-    ngOnInit(): void {
+  async  ngOnInit(){
+        await this.geboTranslationService.tryInit();
         const langs = this.geboTranslationService.getLanguages();
         this.choosableLanguages = this.languages.filter(x => langs.includes(x.langCode));
         this.formGroup.controls["langCode"].valueChanges.subscribe({

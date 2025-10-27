@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
+import { ModuleWithProviders, NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { GeboAIFieldContainerComponent } from "./field-container.component";
 import { GeboAIFieldContainerDirective } from "./field-container.directive";
@@ -12,9 +12,16 @@ import { GeboAILanguageChoiceComponent } from "./language-choice.component";
 import { SelectModule } from 'primeng/select';
 import { GeboAIMainLanguageChoiceComponent } from "./main-language-choice.component";
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, Button,SelectModule],
-    declarations:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective,GeboAILanguageResourcesDownloadComponent,GeboAILanguageChoiceComponent,GeboAIMainLanguageChoiceComponent],
-    exports:[GeboAIFieldContainerComponent,GeboAIFieldContainerDirective,GeboAILabelDirective,GeboAITextDirective,GeboAILanguageResourcesDownloadComponent,GeboAILanguageChoiceComponent,GeboAIMainLanguageChoiceComponent],
-    providers:[GeboAITranslationService]
+    imports: [CommonModule, ReactiveFormsModule, Button, SelectModule],
+    declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],
+    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],
+    providers: [GeboAITranslationService]
 })
-export class GeboAIFieldTransationContainerModule {}
+export class GeboAIFieldTransationContainerModule {
+    static forRoot(): ModuleWithProviders<GeboAIFieldTransationContainerModule> {
+        return {
+            ngModule: GeboAIFieldTransationContainerModule,
+            providers: [GeboAITranslationService] 
+        };
+    }
+}
