@@ -202,6 +202,18 @@
             "Button2": {
                 "help": "open project form"
             }
+        },
+        "WorkFolderWizardComponent": {
+            "MainPanel": {
+                "label": "Gebo.ai work folder configuration"
+            },
+            "ConfigureBtn": {
+                "label": "Configure"
+            },
+            "workDirectory": {
+                "label": "Choose a folder as Gebo.ai work directory",
+                "help": "Choose a server folder that this installation will use as work folder for its configurations and contents storage."
+            }
         }
     },
     "GeboAIOauth2RegistrationModule": {
@@ -805,6 +817,19 @@
             "embeddingModelReferences": {
                 "label": "Used embedding models (leave empty to use system default)",
                 "help": "Embedding models for the knowledge base, leave empty will use the default one."
+            },
+            "SaveBtn": {
+                "label": "Save"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "IndexBtn": {
+                "label": "Index",
+                "help": "Reindex contents"
             }
         },
         "GProject": {
@@ -1831,6 +1856,52 @@
                 "label": "Configure build systems",
                 "help": "List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)"
             }
+        },
+        "GeboAISharedFilesystemsComponent": {
+            "NewFileShareAreaBtn": {
+                "label": "New file share area"
+            },
+            "AbsolutePathHeader": {
+                "label": "Absolute path"
+            },
+            "DbOrYmlFileConfigHeader": {
+                "label": "db or yml file config"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
+            },
+            "CodeHeader": {
+                "label": "Code"
+            },
+            "ModifyHeader": {
+                "label": "Modify"
+            }
+        },
+        "GFileSystemShareReference": {
+            "reference": {
+                "label": "Choosed shared filesystem folder",
+                "help": "Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of the shared filesystem area of your organization"
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "Automatically generated unique code of the contents."
+            },
+            "InsertBtn": {
+                "label": "Insert"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "MainPanel": {
+                "label": "Editing server shared file folder"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            }
         }
     },
     "GeboAiGitModule": {
@@ -2049,6 +2120,41 @@
             "newPassword1": {
                 "label": "Confirm new password",
                 "help": "Confirm new password"
+            }
+        }
+    },
+    "GeboAIGoogleSearchAccountModule": {
+        "GGoogleSearchApiCredentials": {
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "SaveBtn": {
+                "label": "Save"
+            },
+            "ForMoreInformations": {
+                "label": "For more informations on Google custom search API or getting your api key (for free) visit: https://developers.google.com/custom-search"
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "unique code of the google search api configuration."
+            },
+            "MainPanel": {
+                "label": "Editing google custom search api credentials"
+            },
+            "secretCode": {
+                "label": "Google search api token",
+                "help": "Choose or insert the google search api token"
+            },
+            "customSearchEngineId": {
+                "label": "Google search engine id",
+                "help": "Google search engine id"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of google search api configuration."
             }
         }
     }
