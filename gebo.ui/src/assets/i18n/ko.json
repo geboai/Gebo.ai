@@ -1,0 +1,2161 @@
+{
+    "FastSetupModule": {
+        "FastSetupComponent": {
+            "langCode": {
+                "label": "기본 시스템 언어",
+                "help": "이 Gebo.ai 설치의 기본 시스템 언어"
+            },
+            "username": {
+                "label": "이메일",
+                "help": "로그인 시 사용할 이메일"
+            },
+            "passwordC": {
+                "label": "비밀번호 확인",
+                "help": "비밀번호를 다시 입력하세요"
+            },
+            "password": {
+                "label": "비밀번호",
+                "help": "로그인 비밀번호 (8자 이상)"
+            },
+            "PasswordNotMatching": {
+                "label": " 비밀번호가 일치하지 않습니다 "
+            },
+            "LocalAdmin": {
+                "label": "로컬 관리자 계정 생성"
+            },
+            "LocalAdminExplanation": {
+                "label": "이 계정은 앞으로 소프트웨어 설정 및 관리를 위해 사용됩니다. 이 정보는 시스템에만 저장되며 네트워크로 전송되지 않습니다."
+            },
+            "EnterBtn": {
+                "label": "로그인 페이지로 이동"
+            },
+            "SetupPage": {
+                "label": "gebo.ai 설치 설정"
+            },
+            "CreateBtn": {
+                "label": "시스템 설정 생성"
+            },
+            "LicenceFieldSet": {
+                "label": "라이선스 읽고 동의하기"
+            },
+            "AcceptMark": {
+                "label": "약관에 동의합니다",
+                "help": "여기를 클릭하면 라이선스의 약관에 동의하게 됩니다"
+            }
+        }
+    },
+    "LoginModule": {
+        "LoginComponent": {
+            "username": {
+                "label": "이메일",
+                "help": "로그인할 이메일 주소"
+            },
+            "password": {
+                "label": "비밀번호",
+                "help": "로그인할 비밀번호"
+            }
+        }
+    },
+    "SetupWizardPanelModule": {
+        "Oauth2WizardComponent": {
+            "Oauth2ConfigBtn": {
+                "label": "Oauth2 구성"
+            },
+            "ProviderNameHeader": {
+                "label": "제공자 이름"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "MainPanel": {
+                "label": "Oauth2 보안 설정"
+            },
+            "IdHeader": {
+                "label": "ID"
+            }
+        },
+        "SetupWizardPanelComponent": {
+            "WizardBackBtn": {
+                "label": "설정 홈으로 돌아가기"
+            },
+            "WizardUi": {
+                "label": "설정 섹션 선택"
+            }
+        },
+        "ConfluenceWizardComponent": {
+            "MainPanel": {
+                "label": "회사 Atlassian Confluence 시스템 설정"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "SystemTypeHeader": {
+                "label": "시스템 유형"
+            },
+            "ConfigCodeHeader": {
+                "label": "설정 코드"
+            },
+            "ConfluenceSystemBtn": {
+                "label": "Confluence 시스템"
+            }
+        },
+        "JiraWizardComponent": {
+            "JiraSystemBtn": {
+                "label": "Jira 시스템"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "ConfigCodeHeader": {
+                "label": "설정 코드"
+            },
+            "MainPanel": {
+                "label": "회사 Atlassian Jira 시스템 설정"
+            },
+            "SystemTypeHeader": {
+                "label": "시스템 유형"
+            }
+        },
+        "SharepointWizardComponent": {
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "ConfigCodeHeader": {
+                "label": "설정 코드"
+            },
+            "MainPanel": {
+                "label": "회사 Microsoft Sharepoint 시스템 설정"
+            },
+            "SystemTypeHeader": {
+                "label": "시스템 유형"
+            },
+            "SharepointSystemBtn": {
+                "label": "Sharepoint 시스템"
+            }
+        },
+        "LLMSetupWizardComponent": {
+            "InstructionText": {
+                "label": "사용 가능한 크레딧이 포함된 api-key를 제공하세요. OpenAI를 선택하면 api 사용을 위해 기존 플랜에 일정 금액(10-30달러)의 크레딧을 별도로 추가해야 하며, 그렇지 않으면 이 애플리케이션에서 llms 트래픽을 사용할 수 없습니다."
+            },
+            "MainPanel": {
+                "label": "Gebo.ai llms 공급자 액세스를 본인의 api key로 설정"
+            },
+            "provider": {
+                "label": "대형 언어 모델 공급자",
+                "help": "OpenAI (chatgpt), Google (Gemini), Anthropic (Claude) 중에서 하나의 공급자를 선택하세요"
+            },
+            "user": {
+                "label": "사용자",
+                "help": "apiKey와 연결된 사용자를 입력하세요"
+            },
+            "ConfigureBtn": {
+                "label": "설정"
+            },
+            "apiKey": {
+                "label": "Api key",
+                "help": "사용할 LLMS 공급자의 api key를 입력하세요"
+            }
+        },
+        "GraphRagWizardComponent": {
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "CreateGraphRagConfigBtn": {
+                "label": "그래프 rag 구성 만들기"
+            },
+            "MainPanel": {
+                "label": "Graph Rag 및 지식 추출 기본 구성 설정"
+            },
+            "ConfigCodeHeader": {
+                "label": "설정 코드"
+            }
+        },
+        "KnowledgeBaseWizardComponent": {
+            "ProjectHeader": {
+                "label": "프로젝트"
+            },
+            "AddAKnowledgeBaseBtn": {
+                "label": "지식 베이스 추가"
+            },
+            "KnowledgeBaseHeader": {
+                "label": "지식 베이스"
+            },
+            "MainPanel": {
+                "label": "지식 베이스 및 콘텐츠 구성"
+            },
+            "ContentsSourceHeader": {
+                "label": "콘텐츠 소스"
+            },
+            "PublishedHeader": {
+                "label": "게시됨"
+            },
+            "NrOfDocumentsHeader": {
+                "label": "문서 수"
+            },
+            "AddAProjectItemBtn": {
+                "label": "프로젝트/항목 추가",
+                "help": "새 프로젝트 만들기"
+            },
+            "Button1": {
+                "help": "지식 베이스 열기"
+            },
+            "Button2": {
+                "help": "프로젝트 폼 열기"
+            }
+        },
+        "WorkFolderWizardComponent": {
+            "MainPanel": {
+                "label": "Gebo.ai 작업 폴더 구성"
+            },
+            "ConfigureBtn": {
+                "label": "설정"
+            },
+            "workDirectory": {
+                "label": "Gebo.ai 작업 폴더로 사용할 폴더 선택",
+                "help": "이 인스톨레이션이 설정 및 콘텐츠 저장소로 사용할 서버 폴더를 선택하세요."
+            }
+        }
+    },
+    "GeboAIOauth2RegistrationModule": {
+        "Oauth2ProviderRegistration": {
+            "code": {
+                "label": "코드",
+                "help": "OAUTH2 인증/통합 코드(등록 ID)의 설명을 입력하세요."
+            },
+            "description": {
+                "label": "설명",
+                "help": "OAUTH2 인증/통합 정보에 대한 설명을 입력하세요."
+            },
+            "configurationType": {
+                "label": "설정 목적",
+                "help": "이 설정이 Gebo.ai에서 인증에 사용될지, 또는 Gebo.ai가 타사 시스템에 클라이언트로 연결할 때 사용될지 선택하세요."
+            },
+            "authProvider": {
+                "label": "제공자",
+                "help": "OAUTH2 인증 제공자를 입력하세요."
+            },
+            "issuerUri": {
+                "label": "발급자 URI",
+                "help": "제공자의 OAUTH2 발급자 URL을 입력하세요."
+            },
+            "authorizationUri": {
+                "label": "인증 URL",
+                "help": "제공자의 OAUTH2 인증 URL을 입력하세요."
+            },
+            "jwkSetUri": {
+                "label": "Jwk 세트 URI",
+                "help": "제공자의 OAUTH2 Jwk 세트 URL을 입력하세요."
+            },
+            "userInfoUri": {
+                "label": "사용자 정보 URL",
+                "help": "제공자의 OAUTH2 사용자 정보 URL을 입력하세요."
+            },
+            "introspectionUri": {
+                "label": "인트로스펙션 URI",
+                "help": "제공자의 OAUTH2 인트로스펙션 URL을 입력하세요."
+            },
+            "tokenUri": {
+                "label": "토큰 URL",
+                "help": "제공자의 OAUTH2 토큰 URL을 입력하세요."
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "Oauth2ProviderUrls": {
+                "label": "OAUTH2 제공자 URL"
+            },
+            "MainPanel": {
+                "label": "새로운 OAUTH2 인증/통합 정보 입력"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            }
+        }
+    },
+    "GeboOauth2SecretModule": {
+        "GeboOauth2SecretComponent": {
+            "clientId": {
+                "label": "클라이언트 ID",
+                "help": "oauth2 프로토콜용 클라이언트 식별자(3자 소프트웨어 관리 영역에서 확인)"
+            },
+            "secret": {
+                "label": "비밀 키",
+                "help": "oauth2 프로토콜용 클라이언트 비밀 키(3자 소프트웨어 관리 영역에서 확인)"
+            }
+        }
+    },
+    "GeboAIConfluenceModule": {
+        "GeboAIConfluenceSystemFastComponent": {
+            "MainPanel": {
+                "label": "Confluence 시스템 구성 생성"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "description": {
+                "label": "설명",
+                "help": "Confluence 시스템에 대한 설명을 입력하세요."
+            },
+            "CreateBtn": {
+                "label": "생성"
+            },
+            "username": {
+                "label": "Confluence 사용자 이름",
+                "help": "Confluence 사용자 이름"
+            },
+            "confluenceVersion": {
+                "label": "Confluence 버전",
+                "help": "Confluence 버전"
+            },
+            "baseUri": {
+                "label": "기본 인터넷 주소",
+                "help": "온프레미스 설치의 경우 기본 Confluence 시스템 주소 또는 Confluence 클라우드 시스템용 조직의 기본 URL을 입력하세요."
+            },
+            "password": {
+                "label": "Confluence 비밀번호",
+                "help": "Confluence 비밀번호"
+            },
+            "token": {
+                "label": "Confluence 클라우드 API 키",
+                "help": "Confluence 백오피스에서 획득한 Confluence CLOUD API키를 입력하세요. 여기에는 \"API Token for your Atlassian Account\"를 입력해야 합니다."
+            }
+        },
+        "GConfluenceProjectEndpoint": {
+            "PublishBtn": {
+                "label": "게시하기!",
+                "help": "저장하고 이 콘텐츠가 LLm의 지식 베이스에 노출되도록 합니다."
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SettingsTab": {
+                "label": "설정"
+            },
+            "MainPanel": {
+                "label": "Confluence 콘텐츠 공유"
+            },
+            "LogsTab": {
+                "label": "로그"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "자동으로 생성된 콘텐츠의 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "업로드된 Confluence 항목의 콘텐츠 설명을 입력하세요."
+            },
+            "confluenceSystemCode": {
+                "label": "Confluence 시스템",
+                "help": "이미 구성된 Confluence 시스템 참조."
+            },
+            "parentProjectCode": {
+                "label": "프로젝트",
+                "help": "상위 프로젝트 참조."
+            },
+            "openZips": {
+                "label": "Zip 파일 열기",
+                "help": "Zip 파일 열기 및 콘텐츠 추출을 활성화합니다."
+            },
+            "tree": {
+                "label": "선택한 공간 또는 페이지/하위페이지",
+                "help": "공유된 Confluence 공간과 페이지 콘텐츠"
+            },
+            "programmedTables": {
+                "label": "콘텐츠 업데이트 확인 일정",
+                "help": "변경된 콘텐츠의 일정을 구성하여 검색 보강 생성 시스템을 최신 상태로 유지하세요."
+            },
+            "catalogingCriteria": {
+                "label": "공간, 페이지 및 하위페이지 조직 기준",
+                "help": "여기에서 Gebo.ai와 공유된 Confluence 콘텐츠의 공간, 페이지 및 하위페이지 조직 기준에 대해 설명하세요."
+            }
+        },
+        "GConfluenceSystem": {
+            "GeneralSettingsTab": {
+                "label": "일반 설정"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "MainPanel": {
+                "label": "Confluence 시스템 편집"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "baseUri": {
+                "label": "기본 인터넷 주소",
+                "help": "기본 Confluence 시스템 주소의 URL"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "자동으로 생성된 Confluence 시스템의 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "Confluence 시스템에 대한 설명을 입력하세요."
+            },
+            "confluenceVersion": {
+                "label": "Confluence 버전",
+                "help": "Confluence 버전"
+            },
+            "secretCode": {
+                "label": "사용된 아이덴티티",
+                "help": "Confluence 시스템에 접근할 아이덴티티를 선택하거나 생성하세요."
+            }
+        }
+    },
+    "GeboAIUsersGroupPanelModule": {
+        "GeboAIUsersManagementComponent": {
+            "NewGroupBtn": {
+                "label": "새 그룹"
+            },
+            "NewUserBtn": {
+                "label": "새 사용자"
+            },
+            "UsersListPanel": {
+                "label": "사용자 목록"
+            },
+            "GroupsListPanel": {
+                "label": "그룹 목록"
+            },
+            "SournameHeader": {
+                "label": "성"
+            },
+            "UsernameHeader": {
+                "label": "사용자 이름"
+            },
+            "RolesHeader": {
+                "label": "역할"
+            },
+            "NameHeader": {
+                "label": "이름"
+            },
+            "EditBtn": {
+                "label": "수정"
+            },
+            "DisabledHeader": {
+                "label": "비활성화됨"
+            }
+        }
+    },
+    "GeboAIUsersGroupModule": {
+        "UsersGroup": {
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "UserIds": {
+                "placeholder": "사용자 선택"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "MainPanel": {
+                "label": "사용자 그룹 편집"
+            },
+            "description": {
+                "label": "설명",
+                "help": "사용자 그룹의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "사용자 그룹의 코드를 입력하세요"
+            },
+            "userIds": {
+                "label": "사용자 목록",
+                "help": "그룹에 참여할 사용자를 선택하세요"
+            }
+        }
+    },
+    "GeboAIJiraModule": {
+        "GeboAIJiraSystemFastComponent": {
+            "CreateBtn": {
+                "label": "생성"
+            },
+            "description": {
+                "label": "설명",
+                "help": "jira 시스템에 대한 설명을 입력하세요."
+            },
+            "MainPanel": {
+                "label": "jira 시스템 설정 생성"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "username": {
+                "label": "jira 사용자 이름",
+                "help": "jira 사용자 이름"
+            },
+            "token": {
+                "label": "jira cloud api 키",
+                "help": "jira 백오피스에서 획득한 jira CLOUD apikey, 여기에는 \"API Token for your Atlassian Account\"를 입력해야 합니다."
+            },
+            "baseUri": {
+                "label": "기본 인터넷 주소",
+                "help": "온프레미스 설치용 jira 시스템 기본 주소 또는 jira cloud 시스템의 조직 기본 url"
+            }
+        },
+        "GJiraProjectEndpoint": {
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "PublishBtn": {
+                "label": "공개!",
+                "help": "저장 후 이 내용을 지식 베이스에서 LLm이 사용할 수 있게 합니다"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SettingsTab": {
+                "label": "설정"
+            },
+            "LogsTab": {
+                "label": "로그"
+            },
+            "MainPanel": {
+                "label": "jira 콘텐츠 공유"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "콘텐츠의 자동 생성 고유 코드입니다."
+            },
+            "jiraSystemCode": {
+                "label": "jira 시스템",
+                "help": "이미 구성된 jira 시스템 참조입니다."
+            },
+            "parentProjectCode": {
+                "label": "프로젝트",
+                "help": "상위 프로젝트 참조입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "업로드된 jira 항목의 콘텐츠 설명을 입력하세요."
+            },
+            "programmedTables": {
+                "label": "콘텐츠 업데이트 확인 일정",
+                "help": "변경된 콘텐츠를 자동으로 확인하여 RAG 시스템이 최신 상태로 유지되도록 예약을 설정하세요"
+            },
+            "openZips": {
+                "label": "ZIP 파일 열기",
+                "help": "ZIP 파일 열기 및 콘텐츠 추출을 활성화"
+            },
+            "tree": {
+                "label": "선택된 공간 또는 페이지/하위페이지",
+                "help": "공유된 jira 프로젝트와 티켓 계층 구조"
+            },
+            "catalogingCriteria": {
+                "label": "공간, 페이지 및 하위페이지 구성 기준",
+                "help": "Gebo.ai와 공유된 jira 콘텐츠에서 공간, 페이지 및 하위 페이지 구성 기준을 여기서 설명해 주세요"
+            }
+        },
+        "GJiraSystem": {
+            "description": {
+                "label": "설명",
+                "help": "jira 시스템에 대한 설명을 입력하세요."
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "MainPanel": {
+                "label": "jira 시스템 편집"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "baseUri": {
+                "label": "기본 인터넷 주소",
+                "help": "jira 시스템의 기본 주소"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "jira 시스템의 자동 생성 고유 코드입니다."
+            },
+            "secretCode": {
+                "label": "사용된 신원",
+                "help": "jira 시스템에 액세스할 신원을 선택하거나 새로 만드세요"
+            }
+        }
+    },
+    "GeboAISharepointModule": {
+        "GeboAISharepointSystemFastComponent": {
+            "description": {
+                "label": "설명",
+                "help": "SharPpoint/OneDrive 시스템의 설명을 입력하세요."
+            },
+            "sharepointVersion": {
+                "label": "Sharepoint 버전",
+                "help": "sharepoint 버전"
+            },
+            "secret": {
+                "label": "비밀 키",
+                "help": "microsoft \"entra\" 제품에 등록된 이 앱의 Oauth2 클라이언트 시크릿(마이크로소프트 클라우드 관리자 콘솔에서 확인)"
+            },
+            "clientId": {
+                "label": "클라이언트 ID",
+                "help": "microsoft \"entra\" 제품에 등록된 이 앱의 Oauth2 클라이언트 식별자(마이크로소프트 클라우드 관리자 콘솔에서 확인)"
+            },
+            "tenantId": {
+                "label": "테넌트 ID",
+                "help": "귀하의 조직 microsoft \"entra\" 제품의 Oauth2 테넌트 식별자(마이크로소프트 클라우드 관리자 콘솔에서 확인)"
+            },
+            "MicrosofOauth2Fieldset": {
+                "label": "Gebo.ai를 위한 Microsoft oauth2 앱 등록 정보"
+            },
+            "CreateBtn": {
+                "label": "생성"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "MainPanel": {
+                "label": "SharePoint/OneDrive 시스템 구성 생성"
+            }
+        },
+        "GSharepointProjectEndpoint": {
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "PublishBtn": {
+                "label": "공개하기!",
+                "help": "지식 기반에 이 콘텐츠가 공개되어 LLM이 사용할 수 있도록 저장합니다."
+            },
+            "SettingsTab": {
+                "label": "설정"
+            },
+            "MainPanel": {
+                "label": "SharePoint/OneDrive 콘텐츠 공유"
+            },
+            "LogsTab": {
+                "label": "로그"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "콘텐츠의 자동 생성 고유 코드입니다."
+            },
+            "parentProjectCode": {
+                "label": "프로젝트",
+                "help": "상위 프로젝트 참조입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "SharePoint/OneDrive 항목 데이터 소스의 설명을 입력하세요."
+            },
+            "sharePointSystemCode": {
+                "label": "sharepoint 시스템",
+                "help": "이미 구성된 SharePoint/OneDrive 시스템 참조입니다."
+            },
+            "openZips": {
+                "label": "zip 파일 열기",
+                "help": "zip 파일 열기 및 내용 추출 활성화"
+            },
+            "tree": {
+                "label": "선택한 Sharepoint 사이트/페이지/하위 페이지 또는 OneDrive 드라이브/폴더/파일",
+                "help": "공유된 sharepoint/OneDrive 콘텐츠"
+            },
+            "programmedTables": {
+                "label": "콘텐츠 업데이트 확인 일정",
+                "help": "변경된 콘텐츠 유지를 위한 가져오기 강화 생성 시스템 업데이트의 일정을 구성하세요"
+            },
+            "catalogingCriteria": {
+                "label": "공간, 페이지 및 하위 페이지 구성 기준",
+                "help": "여기서 Gebo.ai와 공유된 sharepoint 콘텐츠의 공간, 페이지 및 하위 페이지 구성 기준을 설명해 주세요."
+            }
+        },
+        "GSharepointContentManagementSystem": {
+            "MainPanel": {
+                "label": "sharepoint 시스템 편집"
+            },
+            "GeneralSettingsTab": {
+                "label": "일반 설정"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "secretCode": {
+                "label": "사용된 식별자",
+                "help": "sharepoint 시스템에 접근할 식별자를 선택하거나 생성하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "sharepoint 시스템의 자동 생성 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "sharepoint 시스템의 설명을 입력하세요."
+            },
+            "sharepointVersion": {
+                "label": "Sharepoint 버전",
+                "help": "sharepoint 버전"
+            }
+        }
+    },
+    "GeboAIGraphRagExtractionModule": {
+        "GraphRagExtractionConfig": {
+            "graphRagConfigUI_Delete": {
+                "label": "삭제"
+            },
+            "graphRagConfigUI_Save": {
+                "label": "저장"
+            },
+            "graphRagConfigUI_Cancel": {
+                "label": "취소"
+            },
+            "graphRagConfigUI_ContextSettings": {
+                "label": "일반 정보/콘텐츠 설정"
+            },
+            "graphRagConfigUI_LLMSSettings": {
+                "label": "LLms 설정"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "지식 그래프 데이터 추출 단계의 고유 코드는 자동으로 생성됩니다"
+            },
+            "MainPanel": {
+                "label": "Graphrag/지식 추출 설정"
+            },
+            "description": {
+                "label": "설명",
+                "help": "이 지식 그래프 데이터 추출 단계 설정의 설명을 입력하세요"
+            },
+            "extractionPrompt": {
+                "label": "정보 추출 프롬프트",
+                "help": "개체/이벤트/관계 및 별칭 추출을 위한 대형 언어 모델 프롬프트"
+            },
+            "usedModelConfiguration": {
+                "label": "데이터 추출에 사용된 LLM",
+                "help": "지식 추출에 사용할 대형 언어 모델을 지정하세요. 선택하지 않으면 기본 모델이 사용됩니다."
+            },
+            "graphRagAllSources": {
+                "label": "모든 데이터 소스에 그래프 랙 적용",
+                "help": "선택하면 모든 지식 베이스/프로젝트/데이터 소스가 지식 추출을 위해 처리됩니다. 그렇지 않으면 특정 설정된 항목만 처리됩니다."
+            },
+            "defaultModel": {
+                "label": "기본 대형 언어 모델",
+                "help": "지식 추출에 기본 대형 언어 모델이 사용됩니다"
+            },
+            "processEveryDocument": {
+                "label": "모든 파일에 그래프 랙 적용",
+                "help": "그래프 랙 알고리즘이 모든 파일에 적용되어 시스템의 분석 세부 정보가 향상되지만, 문서 처리에 소요되는 비용과 시간이 늘어납니다"
+            },
+            "contentSelectionFilter": {
+                "label": "Graphrag 처리를 위한 파일 선택 기준",
+                "help": "Graphrag 정보 추출 파이프라인에 보낼 파일에 대한 기준을 편집하세요. 파일 이름과 기준 또는 파일 유형, 최대 파일 크기(바이트) 또는 마지막 수정 날짜(일) 중 적어도 하나를 선택해야 합니다."
+            }
+        }
+    },
+    "GeboAIContentSelectionFilterModule": {
+        "SelectionFilterCriteria": {
+            "extensions": {
+                "placeholder": "파일 형식 선택"
+            },
+            "nameFilterCriteria": {
+                "placeholder": "파일 이름 필터 기준"
+            },
+            "maxModificationAgeInDays": {
+                "placeholder": "마지막 수정일(일 기준)"
+            },
+            "nameFilter": {
+                "placeholder": "파일 이름"
+            },
+            "maxFileSize": {
+                "placeholder": "최대 파일 크기(Byte 단위)"
+            }
+        }
+    },
+    "GeboAiKnowledgeBaseModule": {
+        "GKnowledgeBase": {
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "MainPanel": {
+                "label": "지식 베이스 편집"
+            },
+            "AccessSettingsTab": {
+                "label": "지식 베이스 접근 설정"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "자동 생성되는 지식 베이스의 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "지식 베이스에 대한 설명을 입력하세요."
+            },
+            "embeddingModelReferences": {
+                "label": "사용된 임베딩 모델 (비워두면 시스템 기본값 사용)",
+                "help": "지식 베이스에 대한 임베딩 모델입니다. 비워두면 기본 모델이 사용됩니다."
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "IndexBtn": {
+                "label": "색인",
+                "help": "콘텐츠를 다시 색인합니다"
+            }
+        },
+        "GProject": {
+            "MainPanel": {
+                "label": "프로젝트 또는 항목 편집"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "자동 생성되는 프로젝트의 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "프로젝트 설명을 입력하세요."
+            },
+            "rootKnowledgeBaseCode": {
+                "label": "지식 베이스",
+                "help": "지식 베이스입니다."
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "IndexBtn": {
+                "label": "색인",
+                "help": "콘텐츠를 다시 색인합니다"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            }
+        },
+        "GeboAiKnowledgeBaseTreeComponent": {
+            "addNewAnchor": {
+                "label": "+ 항목/프로젝트 추가",
+                "help": "새로 추가..."
+            }
+        }
+    },
+    "GeboAIAccessControlModule": {
+        "GeboAIAccessControlComponent": {
+            "accessibleToAll": {
+                "label": "모두 사용",
+                "help": "모든 사용자가 사용할 수 있습니다"
+            },
+            "accessibleGroups": {
+                "label": "그룹 목록",
+                "help": "허용된 그룹을 선택하세요"
+            },
+            "accessibleUsers": {
+                "label": "사용자 목록",
+                "help": "허용된 사용자를 선택하세요"
+            }
+        }
+    },
+    "GeboAiAdminPanelModule": {
+        "GeboAiAdminComponent": {
+            "DashboardTab": {
+                "label": "대시보드"
+            },
+            "LLMSTab": {
+                "label": "채팅 및 임베딩용 LLMs"
+            },
+            "RagChatConfigTab": {
+                "label": "Rag 채팅 프로필/모델 프롬프트"
+            },
+            "KnowledgeBaseTab": {
+                "label": "지식베이스 및 프로젝트"
+            },
+            "UsersGroupTab": {
+                "label": "사용자 및 그룹"
+            },
+            "GeboModulesTab": {
+                "label": "Gebo.ai 모듈 구성"
+            },
+            "LogsTab": {
+                "label": "로그"
+            }
+        }
+    },
+    "SystemsPanelModule": {
+        "SystemsComponent": {
+            "CodeHeader": {
+                "label": "코드"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "ConfigureBtn2": {
+                "label": "설정"
+            },
+            "ConfigureBtn": {
+                "label": "설정"
+            }
+        }
+    },
+    "ChatProfilesPanelModule": {
+        "ChatProfilesComponent": {
+            "NewPromptConfigurationBtn": {
+                "label": "새 프롬프트 구성"
+            },
+            "NewChatProfileBtn": {
+                "label": "새 채팅 프로필"
+            },
+            "MainPanel": {
+                "label": "검색 보강 생성 대화 프로필"
+            },
+            "PromptsPanel": {
+                "label": "프롬프트 모음 및 기본 프롬프트"
+            },
+            "KnowledgeBasesHeader": {
+                "label": "지식 베이스"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "ConfigureBtn1": {
+                "label": "설정"
+            },
+            "CodeHeader": {
+                "label": "코드"
+            }
+        }
+    },
+    "KnowledgeBasesPanelModule": {
+        "KnowledgeBasesComponent": {
+            "NewKnowledgeBaseBtn": {
+                "label": "새 지식 베이스"
+            }
+        }
+    },
+    "LlmsPanelModule": {
+        "LlmsSystemsComponent": {
+            "NewEmbeddingModelConfigurationBtn": {
+                "label": "새 임베딩 모델 구성"
+            },
+            "NewChatModelConfigurationBtn": {
+                "label": "새 챗 모델 구성"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "CodeHeader": {
+                "label": "코드"
+            },
+            "ModelHeader": {
+                "label": "모델 "
+            },
+            "ModelProviderHeader": {
+                "label": "모델 제공자"
+            },
+            "ConfigureBtn": {
+                "label": "구성"
+            },
+            "CodeHeader2": {
+                "label": "코드"
+            },
+            "DescriptionHeader2": {
+                "label": "설명"
+            },
+            "ModelProviderHeader2": {
+                "label": "모델 제공자"
+            },
+            "ConfigureBtn2": {
+                "label": "구성"
+            },
+            "ModelHeader2": {
+                "label": "모델 "
+            }
+        }
+    },
+    "GeboAiLargeLanguageModelsModule": {
+        "GeboAITestChatComponent": {
+            "TestingModelDialog": {
+                "label": "모델 테스트 중"
+            },
+            "TestChatBtn": {
+                "label": "채팅 테스트"
+            }
+        },
+        "GOpenAIChatModelConfig": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "apiSecretCode": {
+                "label": "OpenAI 토큰",
+                "help": "이 모델에 사용할 OpenAI 토큰을 선택하세요"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "choosedModel": {
+                "label": "OpenAI 채팅 모델 선택",
+                "help": "사용할 OpenAI 채팅 모델을 선택하세요."
+            },
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "AdvancedSettingsTab": {
+                "label": "고급 설정"
+            },
+            "MainPanel": {
+                "label": "OpenAI 채팅 모델 구성 편집"
+            },
+            "ModelAccessSettingsTab": {
+                "label": "모델 접근 설정"
+            }
+        },
+        "GOpenAIEmbeddingModelConfig": {
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "MainPanel": {
+                "label": "OpenAI 임베딩 모델 구성 편집"
+            },
+            "apiSecretCode": {
+                "label": "OpenAI 토큰",
+                "help": "이 모델에 사용할 OpenAI 토큰을 선택하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "임베딩 모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "description": {
+                "label": "설명",
+                "help": "임베딩 모델 구성의 설명을 입력하세요"
+            },
+            "choosedModel": {
+                "label": "OpenAI 임베딩 모델 선택",
+                "help": "사용할 OpenAI 임베딩 모델을 선택하세요."
+            },
+            "defaultModel": {
+                "label": "이 임베딩 모델을 기본값으로 설정",
+                "help": "선택 시 임베딩 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            }
+        },
+        "GOllamaChatModelConfig": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "baseUrl": {
+                "label": "기본 Ollama 서버 주소",
+                "help": "Ollama 로컬 또는 LAN 서버가 응답하는 기본 주소(예: http://servername:234/)."
+            },
+            "choosedModel": {
+                "label": "Ollama 채팅 모델 선택",
+                "help": "사용할 Ollama 채팅 모델을 선택하세요.",
+                "placeholder": "모델 선택"
+            },
+            "apiSecretCode": {
+                "label": "Ollama 토큰",
+                "help": "이 모델에 사용할 Ollama 토큰을 선택하세요 (선택사항)"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "MainPanel": {
+                "label": "Ollama 로컬(또는 LAN) 서버 채팅 모델 구성 편집"
+            }
+        },
+        "GAnthropicChatModelConfig": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "apiSecretCode": {
+                "label": "Anthropic 토큰",
+                "help": "이 모델에 사용할 Anthropic 토큰을 선택하세요"
+            },
+            "choosedModel": {
+                "label": "Anthropic 채팅 모델 선택",
+                "help": "사용할 Anthropic 채팅 모델을 선택하세요.",
+                "placeholder": "모델 선택"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "AdvancedSettingsTab": {
+                "label": "고급 설정"
+            },
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "ModelAccessSettingsTab": {
+                "label": "모델 접근 설정"
+            },
+            "MainPanel": {
+                "label": "Anthropic 채팅 모델 구성 편집"
+            }
+        },
+        "GMistralChatModelConfig": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "apiSecretCode": {
+                "label": "MistralAI 토큰",
+                "help": "이 모델에 사용할 MistralAI 토큰을 선택하세요"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "choosedModel": {
+                "label": "MistralAI 채팅 모델 선택",
+                "help": "사용할 MistralAI 채팅 모델을 선택하세요."
+            },
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "AdvancedSettingsTab": {
+                "label": "고급 설정"
+            },
+            "ModelAccessSettingsTab": {
+                "label": "모델 접근 설정"
+            },
+            "MainPanel": {
+                "label": "MistralAI 채팅 모델 구성 편집"
+            }
+        },
+        "GGoogleVertexChatModelConfig": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "choosedModel": {
+                "label": "Google Vertex AI 채팅 모델 선택",
+                "help": "사용할 Google Vertex AI 채팅 모델을 선택하세요."
+            },
+            "apiSecretCode": {
+                "label": "Google Vertex AI 토큰",
+                "help": "이 모델에 사용할 Google Vertex AI 토큰을 선택하세요"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "TabGeneralInfos": {
+                "label": "일반 정보"
+            },
+            "TabModelAccessSettings": {
+                "label": "모델 접근 설정"
+            },
+            "TabAdvancedSettings": {
+                "label": "고급 설정"
+            },
+            "MainPanel": {
+                "label": "Google Vertex AI 채팅 모델 구성 편집"
+            }
+        },
+        "GDeepseekChatModelConfig": {
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "apiSecretCode": {
+                "label": "Deepseek 토큰",
+                "help": "이 모델에 사용할 Deepseek 토큰을 선택하세요"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "choosedModel": {
+                "label": "Deepseek 채팅 모델 선택",
+                "help": "사용할 Deepseek 채팅 모델을 선택하세요.",
+                "placeholder": "모델 선택"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "AdvancedSettingsTab": {
+                "label": "고급 설정"
+            },
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "MainPanel": {
+                "label": "Deepseek 채팅 모델 구성 편집"
+            },
+            "ModelAccessSettingsTab": {
+                "label": "모델 접근 설정"
+            }
+        },
+        "GenericOpenAIAPIChatModelConfig": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "description": {
+                "label": "설명",
+                "help": "모델 구성의 설명을 입력하세요"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "baseUrl": {
+                "label": "채팅 모델 API 기본 서버 주소",
+                "help": "채팅 모델의 기본 서버 주소."
+            },
+            "apiSecretCode": {
+                "label": "채팅 모델 API 토큰",
+                "help": "이 모델에 사용할 채팅 모델 API 토큰을 선택하세요 (선택사항)"
+            },
+            "defaultModel": {
+                "label": "이 채팅 모델을 기본값으로 설정",
+                "help": "선택 시 채팅 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "choosedModel": {
+                "label": "채팅 모델 채팅 모델 선택",
+                "help": "사용할 채팅 모델 채팅 모델을 선택하세요."
+            },
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "TitleFragment": {
+                "label": "채팅 모델 제공자 편집:"
+            },
+            "AdvancedSettingsTab": {
+                "label": "고급 설정"
+            },
+            "ModelAccessSettingsTab": {
+                "label": "모델 접근 설정"
+            }
+        },
+        "GOllamaEmbeddingModelConfig": {
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "description": {
+                "label": "설명",
+                "help": "임베딩 모델 구성의 설명을 입력하세요"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "MainPanel": {
+                "label": "Ollama 로컬(또는 LAN) 임베딩 모델 구성 편집"
+            },
+            "apiSecretCode": {
+                "label": "Ollama 토큰",
+                "help": "이 모델에 사용할 Ollama 토큰을 선택하세요"
+            },
+            "choosedModel": {
+                "label": "Ollama 임베딩 모델 선택",
+                "help": "사용할 Ollama 임베딩 모델을 선택하세요."
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "임베딩 모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "defaultModel": {
+                "label": "이 임베딩 모델을 기본값으로 설정",
+                "help": "선택 시 임베딩 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "baseUrl": {
+                "label": "기본 Ollama 서버 주소",
+                "help": "Ollama 로컬 또는 LAN 서버가 응답하는 기본 주소(예: http://servername:234/)."
+            }
+        },
+        "GMistralEmbeddingModelConfig": {
+            "description": {
+                "label": "설명",
+                "help": "임베딩 모델 구성의 설명을 입력하세요"
+            },
+            "MainPanel": {
+                "label": "MistralAI 임베딩 모델 구성 편집"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "임베딩 모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "choosedModel": {
+                "label": "MistralAI 임베딩 모델 선택",
+                "help": "사용할 MistralAI 임베딩 모델을 선택하세요."
+            },
+            "defaultModel": {
+                "label": "이 임베딩 모델을 기본값으로 설정",
+                "help": "선택 시 임베딩 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "apiSecretCode": {
+                "label": "MistralAI 토큰",
+                "help": "이 모델에 사용할 MistralAI 토큰을 선택하세요"
+            }
+        },
+        "GGoogleVertexEmbeddingModelConfig": {
+            "MainPanel": {
+                "label": "Google Vertex AI 임베딩 모델 구성 편집"
+            },
+            "description": {
+                "label": "설명",
+                "help": "임베딩 모델 구성의 설명을 입력하세요"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "choosedModel": {
+                "label": "Google Vertex AI 임베딩 모델 선택",
+                "help": "사용할 Google Vertex AI 임베딩 모델을 선택하세요."
+            },
+            "defaultModel": {
+                "label": "이 임베딩 모델을 기본값으로 설정",
+                "help": "선택 시 임베딩 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "임베딩 모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "apiSecretCode": {
+                "label": "Google Vertex AI 토큰",
+                "help": "이 모델에 사용할 Google Vertex AI 토큰을 선택하세요"
+            }
+        },
+        "GenericOpenAIAPIEmbeddingModelConfig": {
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "TitleFragment": {
+                "label": "임베딩 모델 제공자 편집:"
+            },
+            "description": {
+                "label": "설명",
+                "help": "임베딩 모델 구성의 설명을 입력하세요"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "임베딩 모델 구성의 고유 코드가 자동으로 생성됩니다"
+            },
+            "choosedModel": {
+                "label": "임베딩 모델 임베딩 모델 선택",
+                "help": "사용할 임베딩 모델 임베딩 모델을 선택하세요."
+            },
+            "baseUrl": {
+                "label": "임베딩 모델 API 서버 주소",
+                "help": "임베딩 모델의 서버 기본 주소."
+            },
+            "defaultModel": {
+                "label": "이 임베딩 모델을 기본값으로 설정",
+                "help": "선택 시 임베딩 모델이 지정되지 않은 경우 이 모델이 기본값으로 사용됩니다"
+            },
+            "apiSecretCode": {
+                "label": "임베딩 모델 API 토큰",
+                "help": "이 모델에 사용할 임베딩 모델 API 토큰을 선택하세요"
+            }
+        }
+    },
+    "GeboAIChatControlModule": {
+        "GeboAIReusableChatComponent": {
+            "chatConfigInfosBtn": {
+                "help": "채팅 구성 정보"
+            },
+            "chaDeleteBtn": {
+                "help": "이 채팅 세션 삭제"
+            },
+            "chatNameChangeBtn": {
+                "help": "채팅 세션 이름 바꾸기"
+            }
+        },
+        "ChangeDescriptionComponent": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "description": {
+                "label": "채팅 설명",
+                "help": "채팅 세션의 설명을 입력하세요."
+            }
+        },
+        "GeboChatUserInfoComponent": {
+            "usedModel": {
+                "label": "사용된 모델",
+                "help": "모델 코드"
+            },
+            "providerId": {
+                "label": "채팅 모델 공급자",
+                "help": "LLms 공급자 드라이버"
+            },
+            "functions": {
+                "label": "채팅 모델 호출 함수",
+                "help": "채팅 모델에서 사용할 수 있는 함수 목록"
+            },
+            "NameCol": {
+                "label": "이름"
+            },
+            "DescriptionCol": {
+                "label": "설명"
+            }
+        }
+    },
+    "GeboAIAudioControlModule": {
+        "GeboAIAudioControlComponent": {
+            "RecordBtn": {
+                "label": "녹음",
+                "help": "오디오 트랙을 녹음하고 전송을 시작합니다"
+            }
+        }
+    },
+    "GeboAIJobStatusModule": {
+        "LogTableComponent": {
+            "ReloadDataBtn": {
+                "label": "데이터 다시 불러오기"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SelectHeader": {
+                "label": "선택"
+            },
+            "EndDateTimeHeader": {
+                "label": "종료 날짜/시간"
+            },
+            "StartDateTimeHeader": {
+                "label": "시작 날짜/시간"
+            },
+            "ProcessingHeader": {
+                "label": "처리 중"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "CodeHeader": {
+                "label": "코드"
+            },
+            "FinishedHeader": {
+                "label": "완료됨"
+            },
+            "WithErrorHeader": {
+                "label": "오류 포함"
+            },
+            "LogTableComponent": {
+                "help": "이 공유 파일 시스템 영역 수집 로그"
+            }
+        }
+    },
+    "GeboAIDashboardPanelModule": {
+        "GeboAIDashboardComponent": {
+            "SpanEmbedding": {
+                "label": "임베딩 대 전체 문서 수"
+            },
+            "MoreDetailsBtn": {
+                "label": "자세히 보기"
+            }
+        }
+    },
+    "GeboAIPromptWizardModule": {
+        "GeboAIPromptWizardComponent": {
+            "generatePrompt": {
+                "label": "프롬프트 생성"
+            },
+            "PromptWizardBtn": {
+                "label": "프롬프트 마법사",
+                "help": "목표에 맞는 프롬프트 생성을 위해 LLM을 사용할 수 있습니다"
+            },
+            "acceptPrompt": {
+                "label": "프롬프트 수락"
+            },
+            "promptWizardUI": {
+                "label": "프롬프트 템플릿 생성 마법사"
+            },
+            "cancel": {
+                "label": "취소"
+            },
+            "response": {
+                "label": "추천된 프롬프트 템플릿",
+                "help": "목표에 맞게 생성된 템플릿 텍스트입니다 (직접 수정하거나 변경할 수 있습니다)"
+            },
+            "modelCode": {
+                "label": "사용할 챗 모델",
+                "help": "프롬프트 템플릿 생성을 요청할 챗 모델을 선택하세요"
+            },
+            "query": {
+                "label": "프롬프트 템플릿 요청",
+                "help": "AI가 사용자를 지원할 목표를 2인칭 시점으로 명확히 지정하세요"
+            }
+        }
+    },
+    "GeboAIStandardChatModelModule": {
+        "GeboAIStandardChatModelSettings": {
+            "temperature": {
+                "label": "Temperature",
+                "help": "모델이 응답할 Temperature 값, 0에서 1 사이 (확실하지 않으면 비워 두세요)"
+            },
+            "contextLength": {
+                "label": "컨텍스트 길이 (토큰)",
+                "help": "AI 모델이 처리할 때 고려할 수 있는 텍스트 양 (설정하지 않으면 4096이 사용됩니다)"
+            },
+            "topP": {
+                "label": "TopP",
+                "help": "TopP 파라미터, 0에서 1 사이 (확실하지 않으면 비워 두세요)"
+            }
+        }
+    },
+    "GeboAIAdvancedChatModelModule": {
+        "GeboAIAdvancedChatModelGroupComponent": {
+            "enabledFunctions": {
+                "label": "이 모델에 대해 활성화된 기능 호출",
+                "help": "채팅 중에 모델이 사용할 수 있는 기능입니다."
+            },
+            "defaultModelPrompt": {
+                "label": "기본 모델 프롬프트",
+                "help": "채팅 모델의 기본 프롬프트를 편집하세요."
+            }
+        }
+    },
+    "GeboAiSecretsAdminModule": {
+        "SecretWrapper": {
+            "description": {
+                "label": "설명",
+                "help": "아이덴티티 설명을 입력하세요."
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "아이덴티티의 자동 생성 고유 코드입니다."
+            },
+            "secretType": {
+                "label": "아이덴티티 유형",
+                "help": "원격 시스템에 생성할 아이덴티티 유형을 선택하세요."
+            },
+            "InsertBtn": {
+                "label": "삽입"
+            },
+            "token": {
+                "label": "토큰",
+                "help": "토큰을 입력하세요."
+            },
+            "user": {
+                "label": "사용자",
+                "help": "토큰에 지정된 사용자를 입력하세요."
+            },
+            "MainPanel": {
+                "label": "아이덴티티 생성"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "username": {
+                "label": "사용자 이름",
+                "help": "사용자 이름을 입력하세요."
+            },
+            "password": {
+                "label": "비밀번호",
+                "help": "비밀번호를 입력하세요."
+            },
+            "email": {
+                "label": "이메일/사용자 이름",
+                "help": "ssh 키에 연결된 이메일 또는 사용자 이름을 입력하세요."
+            },
+            "key": {
+                "label": "비밀 키",
+                "help": "개인 키 파일을 열고 이 텍스트 영역에 복사하세요."
+            },
+            "passphrase": {
+                "label": "키 암호문",
+                "help": "키 암호문을 입력하세요."
+            },
+            "pub": {
+                "label": "공개 키",
+                "help": "공개 키 파일을 열고 이 텍스트 영역에 복사하세요."
+            }
+        }
+    },
+    "GeboAIUploadsModule": {
+        "GUploadsProjectEndpoint": {
+            "code": {
+                "label": "고유 코드",
+                "help": "자동으로 생성된 콘텐츠의 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "파일시스템 항목에 업로드된 콘텐츠에 대한 설명을 입력하세요."
+            },
+            "parentProjectCode": {
+                "label": "프로젝트",
+                "help": "상위 프로젝트 참조입니다."
+            },
+            "upload": {
+                "label": "콘텐츠 업로드",
+                "help": "찾아보기 버튼을 클릭하고 zip 파일 또는 다른 파일을 선택하세요"
+            },
+            "openZips": {
+                "label": "Zip 파일 열기",
+                "help": "zip 파일 열기 및 콘텐츠 추출을 활성화합니다"
+            },
+            "PublishBtn": {
+                "label": "게시하기!",
+                "help": "저장하고 이 콘텐츠가 지식 기반에서 LLm이 사용할 수 있도록 합니다"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "LogsTab": {
+                "label": "로그"
+            },
+            "MainPanel": {
+                "label": "업로드된 콘텐츠 편집"
+            },
+            "SettingsTab": {
+                "label": "설정"
+            },
+            "buildSystemsRefs": {
+                "label": "빌드 시스템 구성",
+                "help": "메타 정보와 추가 아티팩트 정보를 확인할 빌드/패키징 시스템 목록 (소프트웨어 코드가 포함되어 있지 않으면 비워두세요)"
+            }
+        }
+    },
+    "VFilesystemSelectorModule": {
+        "VFilesystemSelectorComponent": {
+            "ChoosedElementsArea": {
+                "label": "선택한 요소"
+            },
+            "ChooseOk": {
+                "label": "확인"
+            },
+            "ChooseCancel": {
+                "label": "취소"
+            },
+            "EditBtn": {
+                "help": "선택 항목 수정"
+            },
+            "ChooseElementsArea": {
+                "label": "요소 선택"
+            },
+            "VFileSystemSelector": {
+                "label": "요소 선택"
+            }
+        }
+    },
+    "GeboAIContentReindexModule": {
+        "GeboAIContentReindexScheduleComponent": {
+            "EditBtn": {
+                "help": "일정 편집"
+            },
+            "ConfirmBtn": {
+                "label": "확인"
+            },
+            "AddBtn": {
+                "label": "+추가"
+            }
+        }
+    },
+    "GeboAIFileSystemModule": {
+        "GFilesystemProjectEndpoint": {
+            "PublishBtn": {
+                "label": "발행하기!",
+                "help": "저장하고 이 내용을 지식 베이스에서 LLm이 사용할 수 있게 합니다."
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SettingsTab": {
+                "label": "설정"
+            },
+            "SourceCodeTreatmentTab": {
+                "label": "소스 코드 처리"
+            },
+            "LogsTab": {
+                "label": "로그"
+            },
+            "MainPanel": {
+                "label": "기존 파일 시스템 콘텐츠 편집"
+            },
+            "description": {
+                "label": "설명",
+                "help": "업로드된 파일 시스템 항목의 설명을 입력하세요."
+            },
+            "openZips": {
+                "label": "Zip 파일 열기",
+                "help": "Zip 파일 열기 및 콘텐츠 추출 활성화"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "콘텐츠의 자동 생성 고유 코드입니다."
+            },
+            "tree": {
+                "label": "선택한 파일 또는 폴더",
+                "help": "서버에 공유된 파일 시스템 파일 또는 폴더"
+            },
+            "parentProjectCode": {
+                "label": "프로젝트",
+                "help": "상위 프로젝트 참조입니다."
+            },
+            "programmedTables": {
+                "label": "콘텐츠 업데이트 확인 일정",
+                "help": "변경된 콘텐츠의 일정을 구성하여 검색 보강 생성 시스템을 최신 상태로 유지하세요."
+            },
+            "catalogingCriteria": {
+                "label": "폴더 구성 기준",
+                "help": "공유하는 파일 시스템 영역의 폴더 구성 기준에 대해 설명해 주세요. (Gebo.ai와 함께)"
+            },
+            "buildSystemsRefs": {
+                "label": "빌드 시스템 구성",
+                "help": "메타 정보와 추가 산출물 정보를 확인할 빌드/패키징 시스템 목록입니다. (소프트웨어 코드가 없을 경우 비워두세요.)"
+            }
+        },
+        "GeboAISharedFilesystemsComponent": {
+            "NewFileShareAreaBtn": {
+                "label": "새 파일 공유 영역"
+            },
+            "AbsolutePathHeader": {
+                "label": "절대 경로"
+            },
+            "DbOrYmlFileConfigHeader": {
+                "label": "db 또는 yml 파일 설정"
+            },
+            "DescriptionHeader": {
+                "label": "설명"
+            },
+            "CodeHeader": {
+                "label": "코드"
+            },
+            "ModifyHeader": {
+                "label": "수정"
+            }
+        },
+        "GFileSystemShareReference": {
+            "reference": {
+                "label": "선택한 공유 파일 시스템 폴더",
+                "help": "조직에서 문서 저장소로 사용하는 공유 파일 시스템의 루트 경로인 서버 폴더를 선택하세요."
+            },
+            "description": {
+                "label": "설명",
+                "help": "조직의 공유 파일 시스템 영역에 대한 설명을 입력하세요."
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "콘텐츠의 자동 생성 고유 코드입니다."
+            },
+            "InsertBtn": {
+                "label": "추가"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "MainPanel": {
+                "label": "서버 공유 파일 폴더 편집"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            }
+        }
+    },
+    "GeboAiGitModule": {
+        "GGitProjectEndpoint": {
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "PublishBtn": {
+                "label": "발행!",
+                "help": "저장하고 이 내용을 지식 베이스에서 LLm이 사용할 수 있도록 합니다."
+            },
+            "MainPanel": {
+                "label": "git 소스/문서 저장소 편집"
+            },
+            "description": {
+                "label": "설명",
+                "help": "git 저장소의 설명을 입력하세요."
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "git 저장소의 자동 생성 고유 코드입니다."
+            },
+            "parentProjectCode": {
+                "label": "프로젝트",
+                "help": "상위 프로젝트 참조."
+            },
+            "contentManagementSystem": {
+                "label": "Git 시스템",
+                "help": "이미 구성된 git 시스템 참조."
+            },
+            "branch": {
+                "label": "브랜치",
+                "help": "체크아웃할 브랜치 이름(일반적으로 master, main 또는 develop)"
+            },
+            "identityCode": {
+                "label": "사용된 식별자",
+                "help": "시스템에서 clone/checkout할 때 사용할 식별자를 선택하세요."
+            },
+            "repositoryUri": {
+                "label": "저장소 url/주소",
+                "help": "git 원격 저장소의 전체 주소(보통 http:, https:, ssh:로 시작)"
+            },
+            "publicAccess": {
+                "label": "공개",
+                "help": "참이면 저장소 접근에 인증이 필요하지 않습니다."
+            },
+            "openZips": {
+                "label": "zip 파일 열기",
+                "help": "zip 파일 열기 및 내용 추출 활성화"
+            },
+            "programmedTables": {
+                "label": "콘텐츠 업데이트 확인 일정",
+                "help": "변경된 콘텐츠의 스케줄을 구성하여 검색 기반 생성 시스템을 최신 상태로 유지합니다."
+            },
+            "buildSystemsRefs": {
+                "label": "빌드 시스템 구성",
+                "help": "메타 정보와 추가 산출물 정보를 검사할 빌드/패키징 시스템 목록"
+            }
+        }
+    },
+    "GeboAIChatProfileModule": {
+        "GChatProfileConfiguration": {
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "GeneralInfosTab": {
+                "label": "일반 정보"
+            },
+            "UseChatModelLabel": {
+                "label": "채팅 모델 사용"
+            },
+            "ChooseChatModelRadio": {
+                "label": "선택"
+            },
+            "ChatModelSelect": {
+                "placeholder": "채팅 모델 구성을 선택하세요"
+            },
+            "EmbeddingModelSelect": {
+                "placeholder": "임베딩 모델 구성을 선택하세요"
+            },
+            "ChooseEmbeddingModelRadio": {
+                "label": "선택"
+            },
+            "RagSettingsTab": {
+                "label": "RAG 설정"
+            },
+            "LanguageModelTab": {
+                "label": "대형 언어 모델 및 사용 가능한 도구 설정"
+            },
+            "UseEmbeddingModelLabel": {
+                "label": "임베딩 모델 사용"
+            },
+            "SecurityAccessSettingsTab": {
+                "label": "보안 접근 설정"
+            },
+            "MainPanel": {
+                "label": "Retrieve augmented generation 챗 프로필 편집"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "챗 프로필의 자동 생성되는 고유 코드입니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "챗 프로필 설명을 입력하세요."
+            },
+            "userChoosesKnowledgeBases": {
+                "label": "사용자가 지식 베이스 선택",
+                "help": "사용자는 접근 가능한 지식 베이스를 선택하거나 자체 파일을 업로드할 수 있습니다."
+            },
+            "knowledgeBaseCodes": {
+                "label": "지식 베이스",
+                "help": "문서 검색에 사용할 지식 베이스입니다."
+            },
+            "similaritySearchThreshold": {
+                "label": "유사도 임계값",
+                "help": "의미론적 검색을 위한 유사도 임계값, 0.60–0.65 낮은 필터링, 0.70-0.75 중간 필터링, 0.80–0.85 정확한 필터링"
+            },
+            "otherSearchSimilarityThreshold": {
+                "label": "2차 'hop' 유사도 임계값",
+                "help": "의미론적 검색을 위한 유사도 임계값, 0.60–0.65 낮은 필터링, 0.70-0.75 중간 필터링, 0.80–0.85 정확한 필터링, 다중 hop rag의 2번째 검색에서 사용"
+            },
+            "disableMultiHopRag": {
+                "label": "'Multi Hop' rag 비활성화",
+                "help": "'multi hop rag' 기능을 비활성화합니다. Multi hop 검색은 처음 의미론적 검색을 수행한 후, 찾은 문서를 맥락으로 사용해 의미론적 검색 자체를 확장하여 더 넓은 맥락을 제공합니다."
+            },
+            "topK": {
+                "label": "고려할 문서 조각 (TopK)",
+                "help": "Retrieve augmented generation에서 의미론적 검색 시 Top N개의 문서 조각을 고려합니다"
+            },
+            "enabledFunctions": {
+                "label": "이 RAG 챗에서 사용할 수 있는 함수 호출",
+                "help": "사용자와 상호 작용 시 선택한 지식 베이스와 함께 llm 모델이 사용할 수 있는 기능입니다"
+            },
+            "prompt": {
+                "label": "프롬프트",
+                "help": "Retrieve augmented generation 세션의 프롬프트를 편집하세요."
+            }
+        }
+    },
+    "GeboAIPromptAdminModule": {
+        "GPromptConfig": {
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "PromptCategorySelect": {
+                "placeholder": "프롬프트 카테고리를 입력하거나 삽입하세요"
+            },
+            "MainPanel": {
+                "label": "프롬프트 편집"
+            },
+            "promptCategory": {
+                "label": "프롬프트 카테고리",
+                "help": "프롬프트 카테고리를 선택하거나 삽입하세요."
+            },
+            "prompt": {
+                "label": "프롬프트",
+                "help": "채팅용 프롬프트를 편집하세요. {query}는 사용자 질문을, {context}는 LLM에 전달되는 문서/히스토리 맥락을 나타냅니다."
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "프롬프트의 고유 코드는 자동으로 생성됩니다."
+            },
+            "description": {
+                "label": "설명",
+                "help": "프롬프트 설명을 입력하세요."
+            }
+        }
+    },
+    "GeboAIUserProfileModule": {
+        "GeboAIUserProfileComponent": {
+            "ChangePasswdBtn": {
+                "label": "비밀번호 변경"
+            }
+        },
+        "GeboAIChangePasswordComponent": {
+            "oldPassword": {
+                "label": "현재 비밀번호",
+                "help": "로그인에 사용하는 기존 비밀번호"
+            },
+            "newPassword": {
+                "label": "새 비밀번호",
+                "help": "새로운 비밀번호"
+            },
+            "username": {
+                "label": "이메일",
+                "help": "로그인용 이메일"
+            },
+            "ChangePasswordUI": {
+                "label": "비밀번호 변경 양식"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "ChangePwdBtn": {
+                "label": "비밀번호 변경"
+            },
+            "newPassword1": {
+                "label": "새 비밀번호 확인",
+                "help": "새 비밀번호를 확인해 주세요"
+            }
+        }
+    },
+    "GeboAIGoogleSearchAccountModule": {
+        "GGoogleSearchApiCredentials": {
+            "DeleteBtn": {
+                "label": "삭제"
+            },
+            "CancelBtn": {
+                "label": "취소"
+            },
+            "SaveBtn": {
+                "label": "저장"
+            },
+            "ForMoreInformations": {
+                "label": "Google 커스텀 검색 API 또는 무료 API 키 얻기에 대한 자세한 내용은 다음을 방문하세요: https://developers.google.com/custom-search"
+            },
+            "code": {
+                "label": "고유 코드",
+                "help": "Google 검색 API 구성의 고유 코드입니다."
+            },
+            "MainPanel": {
+                "label": "Google 커스텀 검색 API 자격 증명 편집"
+            },
+            "secretCode": {
+                "label": "Google 검색 API 토큰",
+                "help": "Google 검색 API 토큰을 선택하거나 입력하세요."
+            },
+            "customSearchEngineId": {
+                "label": "Google 검색 엔진 ID",
+                "help": "Google 검색 엔진 ID"
+            },
+            "description": {
+                "label": "설명",
+                "help": "Google 검색 API 구성의 설명을 입력하세요."
+            }
+        }
+    }
+}
