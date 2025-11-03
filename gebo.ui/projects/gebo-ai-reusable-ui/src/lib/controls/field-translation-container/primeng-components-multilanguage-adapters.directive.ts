@@ -5,6 +5,7 @@ import {
   Inject,
   InjectionToken,
   Optional,
+  Self,
 } from '@angular/core';
 
 // PrimeNG component classes (importa solo quelli che usi davvero nel progetto)
@@ -15,6 +16,7 @@ import { Dialog } from 'primeng/dialog';
 import { Sidebar } from 'primeng/sidebar';
 import { Card } from 'primeng/card';
 import { TabView, TabPanel } from 'primeng/tabview';
+
 import { Accordion, AccordionTab } from 'primeng/accordion';
 import { Toolbar } from 'primeng/toolbar';
 import { Chip } from 'primeng/chip';
@@ -35,6 +37,7 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Steps } from 'primeng/steps';
 
 import { Galleria } from 'primeng/galleria';
+import { BaseComponent } from 'primeng/basecomponent';
 // Nota: i componenti *menu-based* (Menubar, Menu, TieredMenu, ContextMenu, MegaMenu, Steps) usano "model" con label dentro gli item;
 // li gestiamo più sotto in modo specifico.
 
@@ -45,14 +48,14 @@ export interface LabelTarget {
 export const GEBO_MULILANGUAGE_TARGET = new InjectionToken<LabelTarget>('GEBO_MULILANGUAGE_TARGET');
 
 // =========== Utilities ===========
-function safeSet(instance: any, key: string, value: any) {
+export function safeSet(instance: any, key: string, value: any) {
   try { instance[key] = value; } catch { }
   // best-effort change detection (molti componenti P* hanno cd o changeDetector)
   try { instance.cd?.markForCheck?.(); } catch { }
   try { instance.changeDetector?.markForCheck?.(); } catch { }
 }
 
-class LabelTargetParent implements LabelTarget {
+export class LabelTargetParent implements LabelTarget {
   constructor(private applied?: any) {
 
   }
@@ -94,8 +97,13 @@ export class PFieldSetLabelTarget extends LabelTargetParent {
   standalone: false
 })
 export class PPanelLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private pnl: Panel) { super(pnl); }
-
+  constructor(@Optional() @Self() private pnl: Panel) { super(pnl); }
+  override set(key: string, value: string): void {
+    super.set(key,value);
+    if (key==="header") {
+      super.set("_header",value);
+    }
+  }
 }
 
 // =========== Dialog ===========
@@ -140,7 +148,7 @@ export class PCardLabelTarget extends LabelTargetParent {
   standalone: false
 })
 export class PTabPanelLabelTarget extends LabelTargetParent {
-  constructor(@Optional() @Host() private tp: TabPanel) {
+  constructor(@Optional() @Self() private tp: TabPanel) {
     super(tp);
   }
 
@@ -380,3 +388,5 @@ export class PGalleriaLabelTarget extends LabelTargetParent {
   }
 
 }
+
+

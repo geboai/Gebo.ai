@@ -1,8 +1,9 @@
-import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Inject, OnInit, Optional, Self } from "@angular/core";
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Host, Inject, OnInit, Optional, Self } from "@angular/core";
 import { findMatchingTranlations, findMatchingTranslation, UIExistingText } from "./text-language-resources";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "./gebo-translation.service";
-import { GEBO_MULILANGUAGE_TARGET, LabelTarget } from "./primeng-components-multilanguage-adapters.directive";
+import { GEBO_MULILANGUAGE_TARGET, LabelTarget, safeSet } from "./primeng-components-multilanguage-adapters.directive";
+import { BaseComponent } from "primeng/basecomponent";
 
 @Directive({
     selector: '[gebo-ai-label]',
@@ -13,6 +14,7 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
         private el: ElementRef<HTMLElement>,
         private translationService: GeboAITranslationService,
         private changeDetectionRef: ChangeDetectorRef,
+        @Optional() @Host() private baseComponent: BaseComponent,
         @Optional() @Inject(GEBO_MULILANGUAGE_TARGET) private target?: LabelTarget,
         @Optional() @Inject(GEBO_AI_MODULE) private moduleId?: string,
         @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
