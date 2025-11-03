@@ -11,10 +11,11 @@ import { Button } from "primeng/button";
 import { GeboAILanguageChoiceComponent } from "./language-choice.component";
 import { SelectModule } from 'primeng/select';
 import { GeboAIMainLanguageChoiceComponent } from "./main-language-choice.component";
+import { PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget } from "./primeng-components-multilanguage-adapters.directive";
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, Button, SelectModule],
-    declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],
-    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],    
+    declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent,PButtonLabelTarget,PFieldSetLabelTarget,PPanelLabelTarget],
+    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent,PButtonLabelTarget,PFieldSetLabelTarget,PPanelLabelTarget],    
 })
 export class GeboAIFieldTransationContainerModule {
     static forRoot(): ModuleWithProviders<GeboAIFieldTransationContainerModule> {

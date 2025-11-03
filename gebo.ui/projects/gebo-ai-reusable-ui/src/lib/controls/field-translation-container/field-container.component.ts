@@ -12,7 +12,7 @@ import { GeboAITranslationService } from "./gebo-translation.service";
     providers: [
 
         { provide: ControlContainer, useExisting: FormGroupDirective }
-    ]
+    ]    
 })
 export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     @Input({ required: true }) id!: string;

@@ -1,7 +1,8 @@
-import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Inject, OnInit, Optional } from "@angular/core";
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Inject, OnInit, Optional, Self } from "@angular/core";
 import { findMatchingTranlations, findMatchingTranslation, UIExistingText } from "./text-language-resources";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "./gebo-translation.service";
+import { GEBO_MULILANGUAGE_TARGET, LabelTarget } from "./primeng-components-multilanguage-adapters.directive";
 
 @Directive({
     selector: '[gebo-ai-label]',
@@ -11,7 +12,8 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
     constructor(
         private el: ElementRef<HTMLElement>,
         private translationService: GeboAITranslationService,
-        private  changeDetectionRef: ChangeDetectorRef,
+        private changeDetectionRef: ChangeDetectorRef,
+        @Optional() @Inject(GEBO_MULILANGUAGE_TARGET) private target?: LabelTarget,
         @Optional() @Inject(GEBO_AI_MODULE) private moduleId?: string,
         @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
         if (this.host) {
@@ -21,8 +23,11 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
             }
         }
         if (Array.isArray(this.moduleId)) {
-            const modules=Array.from(this.moduleId);
+            const modules = Array.from(this.moduleId);
             this.moduleId = modules[0];
+        }
+        if (this.target) {
+            console.log("I have target => " + this.target);
         }
     }
 
@@ -43,15 +48,19 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
             substitutions.subscribe({
                 next: (resources) => {
                     if (resources) {
-                        const matchings=findMatchingTranlations(this.existingTexts,resources);
+                        const matchings = findMatchingTranlations(this.existingTexts, resources);
                         if (matchings && matchings.length) {
-                            matchings.forEach(matchText=>{
+                            matchings.forEach(matchText => {
                                 if (matchText && matchText.translation) {
                                     this.el.nativeElement.setAttribute(matchText.key, matchText.translation);
-                            }
+                                    if (this.target) {
+                                        this.target.set(matchText.key, matchText.translation);
+                                    }
+                                }
+
                             });
                             this.changeDetectionRef.detectChanges();
-                            
+
                         }
                         /*this.existingTexts.forEach(textRc => {
                             const matchText = findMatchingTranslation(textRc, resources);
