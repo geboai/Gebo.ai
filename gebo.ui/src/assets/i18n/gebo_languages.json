@@ -1,0 +1,266 @@
+[
+  {
+    "langCode": "en",
+    "description": "English"
+  },
+  {
+    "langCode": "es",
+    "description": "Spanish"
+  },
+  {
+    "langCode": "zh",
+    "description": "Chinese"
+  },
+  {
+    "langCode": "hi",
+    "description": "Hindi"
+  },
+  {
+    "langCode": "ar",
+    "description": "Arabic"
+  },
+  {
+    "langCode": "pt",
+    "description": "Portuguese"
+  },
+  {
+    "langCode": "fr",
+    "description": "French"
+  },
+  {
+    "langCode": "de",
+    "description": "German"
+  },
+  {
+    "langCode": "ru",
+    "description": "Russian"
+  },
+  {
+    "langCode": "ja",
+    "description": "Japanese"
+  },
+  {
+    "langCode": "ko",
+    "description": "Korean"
+  },
+  {
+    "langCode": "it",
+    "description": "Italian"
+  },
+  {
+    "langCode": "tr",
+    "description": "Turkish"
+  },
+  {
+    "langCode": "vi",
+    "description": "Vietnamese"
+  },
+  {
+    "langCode": "pl",
+    "description": "Polish"
+  },
+  {
+    "langCode": "nl",
+    "description": "Dutch"
+  },
+  {
+    "langCode": "id",
+    "description": "Indonesian"
+  },
+  {
+    "langCode": "th",
+    "description": "Thai"
+  },
+  {
+    "langCode": "fa",
+    "description": "Persian"
+  },
+  {
+    "langCode": "ur",
+    "description": "Urdu"
+  },
+  {
+    "langCode": "bn",
+    "description": "Bengali"
+  },
+  {
+    "langCode": "tl",
+    "description": "Tagalog"
+  },
+  {
+    "langCode": "uk",
+    "description": "Ukrainian"
+  },
+  {
+    "langCode": "ro",
+    "description": "Romanian"
+  },
+  {
+    "langCode": "el",
+    "description": "Greek"
+  },
+  {
+    "langCode": "cs",
+    "description": "Czech"
+  },
+  {
+    "langCode": "hu",
+    "description": "Hungarian"
+  },
+  {
+    "langCode": "sv",
+    "description": "Swedish"
+  },
+  {
+    "langCode": "da",
+    "description": "Danish"
+  },
+  {
+    "langCode": "no",
+    "description": "Norwegian"
+  },
+  {
+    "langCode": "fi",
+    "description": "Finnish"
+  },
+  {
+    "langCode": "he",
+    "description": "Hebrew"
+  },
+  {
+    "langCode": "bg",
+    "description": "Bulgarian"
+  },
+  {
+    "langCode": "sr",
+    "description": "Serbian"
+  },
+  {
+    "langCode": "hr",
+    "description": "Croatian"
+  },
+  {
+    "langCode": "sk",
+    "description": "Slovak"
+  },
+  {
+    "langCode": "lt",
+    "description": "Lithuanian"
+  },
+  {
+    "langCode": "lv",
+    "description": "Latvian"
+  },
+  {
+    "langCode": "et",
+    "description": "Estonian"
+  },
+  {
+    "langCode": "sl",
+    "description": "Slovenian"
+  },
+  {
+    "langCode": "ca",
+    "description": "Catalan"
+  },
+  {
+    "langCode": "ms",
+    "description": "Malay"
+  },
+  {
+    "langCode": "sw",
+    "description": "Swahili"
+  },
+  {
+    "langCode": "ta",
+    "description": "Tamil"
+  },
+  {
+    "langCode": "te",
+    "description": "Telugu"
+  },
+  {
+    "langCode": "mr",
+    "description": "Marathi"
+  },
+  {
+    "langCode": "gu",
+    "description": "Gujarati"
+  },
+  {
+    "langCode": "kn",
+    "description": "Kannada"
+  },
+  {
+    "langCode": "ml",
+    "description": "Malayalam"
+  },
+  {
+    "langCode": "pa",
+    "description": "Punjabi"
+  },
+  {
+    "langCode": "my",
+    "description": "Burmese"
+  },
+  {
+    "langCode": "km",
+    "description": "Khmer"
+  },
+  {
+    "langCode": "lo",
+    "description": "Lao"
+  },
+  {
+    "langCode": "ne",
+    "description": "Nepali"
+  },
+  {
+    "langCode": "am",
+    "description": "Amharic"
+  },
+  {
+    "langCode": "af",
+    "description": "Afrikaans"
+  },
+  {
+    "langCode": "az",
+    "description": "Azerbaijani"
+  },
+  {
+    "langCode": "hy",
+    "description": "Armenian"
+  },
+  {
+    "langCode": "ka",
+    "description": "Georgian"
+  },
+  {
+    "langCode": "sq",
+    "description": "Albanian"
+  },
+  {
+    "langCode": "bs",
+    "description": "Bosnian"
+  },
+  {
+    "langCode": "mk",
+    "description": "Macedonian"
+  },
+  {
+    "langCode": "be",
+    "description": "Belarusian"
+  },
+  {
+    "langCode": "is",
+    "description": "Icelandic"
+  },
+  {
+    "langCode": "ga",
+    "description": "Irish"
+  },
+  {
+    "langCode": "cy",
+    "description": "Welsh"
+  }
+]
