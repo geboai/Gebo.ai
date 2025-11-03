@@ -34,7 +34,7 @@
                             <i class="pi pi-lock" style="font-size: 3rem"></i>
                         </p-blockUI>
                         <div class="grid">
-                            <div class="col-12" *ngIf="chatProfilesData?.length">
+                            <div class="col-12" *ngIf="chatProfilesData?.length" [formGroup]="formGroup">
                                 <gebo-ai-field id="chatProfileCode" label="Chat with knowledge bases"
                                     help="Choose the company chat profile to interact with company (and your) documents and LLMs"
                                     placeholder="Select a chat profile">
@@ -49,7 +49,7 @@
                                     [disabled]="formGroup.invalid" styleClass="w-full" severity="success"
                                     [outlined]="true" icon="pi pi-microchip-ai"></p-button>
                             </div>
-                            <div class="col-12">
+                            <div class="col-12" [formGroup]="chatFormGroup">
                                 <gebo-ai-field id="chatModelCode" label="Chat without knowledge bases"
                                     help="Choose the LLMs for a chat session"
                                     placeholder="Select a chat model"><geboai-editable-listbox-component
