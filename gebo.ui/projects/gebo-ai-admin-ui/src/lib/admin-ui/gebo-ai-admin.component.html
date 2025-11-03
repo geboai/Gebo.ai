@@ -1,4 +1,3 @@
-
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -9,37 +8,32 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
-
 <p-tabView (activeIndexChange)="activatedIndex($event)" class="geboFullHeight">
-    
-    <p-tabPanel id="DashboardTab" gebo-ai-label header="Dashboard" >
+
+    <p-tabPanel id="DashboardTab" gebo-ai-label header="Dashboard">
         <gebo-ai-main-dashboard-component></gebo-ai-main-dashboard-component>
-    </p-tabPanel> 
-    <p-tabPanel  id="LLMSTab" gebo-ai-label  header="LLMs for chat & embedding" >
+    </p-tabPanel>
+    <p-tabPanel id="LLMSTab" gebo-ai-label header="LLMs for chat & embedding">
         <llms-systems-component id="childs" #child1></llms-systems-component>
     </p-tabPanel>
-    <p-tabPanel  id="UsersGroupTab" gebo-ai-label header="Users and groups">
+    <p-tabPanel id="UsersGroupTab" gebo-ai-label header="Users and groups">
         <users-management-component id="childs" #child2></users-management-component>
     </p-tabPanel>
-    <p-tabPanel id="GeboModulesTab"  gebo-ai-label header="Gebo.ai modules config">
+    <p-tabPanel id="GeboModulesTab" gebo-ai-label header="Gebo.ai modules config">
         <systems-component id="childs" #child3></systems-component>
     </p-tabPanel>
-    <p-tabPanel *ngIf="false" id="BuildPackageSystems"  gebo-ai-label header="Build/packaging systems">
+    <p-tabPanel *ngIf="false" id="BuildPackageSystems" gebo-ai-label header="Build/packaging systems">
         <build-packaging-systems-component id="childs" #child4></build-packaging-systems-component>
     </p-tabPanel>
     <p-tabPanel id="KnowledgeBaseTab" gebo-ai-label header="Knowledge bases & projects">
         <knowledge-bases-component id="childs" #child5></knowledge-bases-component>
     </p-tabPanel>
-    <!-- 
-    <p-tabPanel header="Content automations/agents" *ngIf="geboConfig?.configMap?['agentsModuleEnabled']===true">
-        <gebo-ai-content-robots-gprojectendpoint-component [viewAllContentRobots]="true"></gebo-ai-content-robots-gprojectendpoint-component>
-    </p-tabPanel>
-    -->
-    <p-tabPanel  id="RagChatConfigTab" gebo-ai-label  header="Rag chat profiles/Model prompts">
+
+    <p-tabPanel id="RagChatConfigTab" gebo-ai-label header="Rag chat profiles/Model prompts">
         <chat-profiles-component id="childs" #child6></chat-profiles-component>
     </p-tabPanel>
-    
-    <p-tabPanel  id="LogsTab" gebo-ai-label  header="Logs">
+
+    <p-tabPanel id="LogsTab" gebo-ai-label header="Logs">
         <gebo-ai-logs-view-component id="childs" #child7></gebo-ai-logs-view-component>
     </p-tabPanel>
 </p-tabView>

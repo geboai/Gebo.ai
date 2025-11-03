@@ -8,70 +8,76 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
+
 <p-blockUI id="BlockUI" gebo-ai-label [target]="llmSystems" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label  #llmSystems>
+<p-panel id="MainPanel" gebo-ai-label #llmSystems>
     <div class="grid geboFullHeight">
-        <div class="col-12 geboThirdHeight"><b *ngIf="chatModels && chatModels.length">Configured chat models</b>
-            <p-table id="Table" gebo-ai-label [value]="chatModels" *ngIf="chatModels && chatModels.length">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th id="CodeHeader" gebo-ai-text>Code</th>
-                        <th id="DescriptionHeader" gebo-ai-text>Description</th>
-                        <th id="ModelProviderHeader" gebo-ai-text>Model provider</th>
-                        <th id="ModelHeader" gebo-ai-text>Model </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-model>
-                    <tr>
-                        <td>{{ model.configuration?.code }}</td>
-                        <td>{{ model.configuration?.description }}</td>
-                        <td>{{ model.configuration?.modelTypeCode }}</td>
-                        <td>{{ model.configuration?.choosedModel?.code }}</td>
-                        <td>
-                            <gebo-ai-test-chat-component
-                                [chatModelCode]="model.configuration.code"></gebo-ai-test-chat-component>
-                        </td>
-                        <td>
-                            <p-button id="ConfigureBtn" gebo-ai-label (onClick)="editModel(model)" [outlined]="true" label="configure"
-                                icon="pi pi-wrench"></p-button>
-                        </td>
-                    </tr>
-                </ng-template>
+        <div class="col-12 geboThirdHeight">
+            <p-panel id="ChatmodelsZone" gebo-ai-label header="Configured chat models"
+                *ngIf="chatModels && chatModels.length">
+                <p-table [value]="chatModels">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th id="CodeHeader" gebo-ai-text>Code</th>
+                            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                            <th id="ModelProviderHeader" gebo-ai-text>Model provider</th>
+                            <th id="ModelHeader" gebo-ai-text>Model </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-model>
+                        <tr>
+                            <td>{{ model.configuration?.code }}</td>
+                            <td>{{ model.configuration?.description }}</td>
+                            <td>{{ model.configuration?.modelTypeCode }}</td>
+                            <td>{{ model.configuration?.choosedModel?.code }}</td>
+                            <td>
+                                <gebo-ai-test-chat-component
+                                    [chatModelCode]="model.configuration.code"></gebo-ai-test-chat-component>
+                            </td>
+                            <td>
+                                <p-button id="ConfigureBtn" gebo-ai-label (onClick)="editModel(model)" [outlined]="true"
+                                    label="configure" icon="pi pi-wrench"></p-button>
+                            </td>
+                        </tr>
+                    </ng-template>
 
-            </p-table>
+                </p-table>
+            </p-panel>
         </div>
-        <div class="col-12 geboThirdHeight"><b *ngIf="embeddingModels && embeddingModels.length">Configured embedding models</b>
-            <p-table id="EmbeddingTable" gebo-ai-label [value]="embeddingModels" *ngIf="embeddingModels && embeddingModels.length">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th id="CodeHeader2" gebo-ai-text>Code</th>
-                        <th id="DescriptionHeader2" gebo-ai-text>Description</th>
-                        <th id="ModelProviderHeader2" gebo-ai-text>Model provider</th>
-                        <th id="ModelHeader2" gebo-ai-text>Model </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-model>
-                    <tr>
-                        <td>{{ model.configuration?.code }}</td>
-                        <td>{{ model.configuration?.description }}</td>
-                        <td>{{ model.configuration?.modelTypeCode }}</td>
-                        <td>{{ model.configuration?.choosedModel?.code  }}</td>
-                        <td>
+        <div class="col-12 geboThirdHeight">
+            <p-panel id="EmneddingModelsZone" gebo-ai-label *ngIf="embeddingModels && embeddingModels.length"
+                header="Configured embedding models">
 
-                        </td>
-                        <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editEmbeddingModel(model)" [outlined]="true" label="configure"
-                                icon="pi pi-wrench"></p-button></td>
-                    </tr>
-                </ng-template>
+                <p-table [value]="embeddingModels" *ngIf="embeddingModels && embeddingModels.length">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th id="CodeHeader2" gebo-ai-text>Code</th>
+                            <th id="DescriptionHeader2" gebo-ai-text>Description</th>
+                            <th id="ModelProviderHeader2" gebo-ai-text>Model provider</th>
+                            <th id="ModelHeader2" gebo-ai-text>Model </th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-model>
+                        <tr>
+                            <td>{{ model.configuration?.code }}</td>
+                            <td>{{ model.configuration?.description }}</td>
+                            <td>{{ model.configuration?.modelTypeCode }}</td>
+                            <td>{{ model.configuration?.choosedModel?.code }}</td>
+                            <td>
 
-            </p-table>
+                            </td>
+                            <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editEmbeddingModel(model)"
+                                    [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                        </tr>
+                    </ng-template>
+
+                </p-table></p-panel>
         </div>
         <div class="col-12 geboThirdHeight">
             <div class="grid" [formGroup]="createChoices">
@@ -81,7 +87,8 @@
                     </geboai-editable-listbox-component>
                 </div>
                 <div class="col-3">
-                    <p-button id="NewChatModelConfigurationBtn" gebo-ai-label label="New chat model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+                    <p-button id="NewChatModelConfigurationBtn" gebo-ai-label label="New chat model configuration"
+                        [outlined]="true" icon="pi pi-microchip-ai"
                         [disabled]="createChoices.controls['chat'].value?false:true"
                         (onClick)="configureChatModel()"></p-button>
                 </div>
@@ -92,7 +99,8 @@
                     </geboai-editable-listbox-component>
                 </div>
                 <div class="col-3">
-                    <p-button id="NewEmbeddingModelConfigurationBtn" gebo-ai-label label="New embedding model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+                    <p-button id="NewEmbeddingModelConfigurationBtn" gebo-ai-label
+                        label="New embedding model configuration" [outlined]="true" icon="pi pi-microchip-ai"
                         [disabled]="createChoices.controls['embed'].value?false:true"
                         (onClick)="configureEmbeddingModel();"></p-button>
 

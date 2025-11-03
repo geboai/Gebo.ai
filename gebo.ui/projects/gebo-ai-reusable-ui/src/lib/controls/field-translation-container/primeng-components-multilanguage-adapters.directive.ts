@@ -101,7 +101,7 @@ export class PPanelLabelTarget extends LabelTargetParent {
   override set(key: string, value: string): void {
     super.set(key,value);
     if (key==="header") {
-      super.set("_header",value);
+      super.set("_header",value)
     }
   }
 }
@@ -143,7 +143,7 @@ export class PCardLabelTarget extends LabelTargetParent {
 
 // =========== TabView / TabPanel ===========
 @Directive({
-  selector: 'p-tabpanel[gebo-ai-label]',
+  selector: 'p-tabPanel[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PTabPanelLabelTarget }],
   standalone: false
 })

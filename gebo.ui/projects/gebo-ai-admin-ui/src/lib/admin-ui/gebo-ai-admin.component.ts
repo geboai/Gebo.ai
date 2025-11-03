@@ -202,7 +202,7 @@ export class GeboAiAdminComponent implements OnInit {
    * Reloads data for the activated child panel component
    * @param index The index of the activated panel
    */
-  public activatedIndex(index: number) {
+  public activatedIndex(index: number|string) {
     const child: AncestorPanelComponent = (this as any)["child" + index];
     if (child) {
       child.reloadViewedData();
