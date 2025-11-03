@@ -14,8 +14,7 @@ import { GeboAIMainLanguageChoiceComponent } from "./main-language-choice.compon
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, Button, SelectModule],
     declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],
-    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],
-    providers: [GeboAITranslationService]
+    exports: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent],    
 })
 export class GeboAIFieldTransationContainerModule {
     static forRoot(): ModuleWithProviders<GeboAIFieldTransationContainerModule> {

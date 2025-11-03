@@ -1,4 +1,4 @@
-import { AfterContentInit, Directive, ElementRef, Inject, OnInit, Optional } from "@angular/core";
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Inject, OnInit, Optional } from "@angular/core";
 import { findMatchingTranlations, findMatchingTranslation, UIExistingText } from "./text-language-resources";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "./gebo-translation.service";
@@ -11,6 +11,7 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
     constructor(
         private el: ElementRef<HTMLElement>,
         private translationService: GeboAITranslationService,
+        private  changeDetectionRef: ChangeDetectorRef,
         @Optional() @Inject(GEBO_AI_MODULE) private moduleId?: string,
         @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
         if (this.host) {
@@ -42,12 +43,22 @@ export class GeboAILabelDirective implements AfterContentInit, OnInit {
             substitutions.subscribe({
                 next: (resources) => {
                     if (resources) {
-                        this.existingTexts.forEach(textRc => {
+                        const matchings=findMatchingTranlations(this.existingTexts,resources);
+                        if (matchings && matchings.length) {
+                            matchings.forEach(matchText=>{
+                                if (matchText && matchText.translation) {
+                                    this.el.nativeElement.setAttribute(matchText.key, matchText.translation);
+                            }
+                            });
+                            this.changeDetectionRef.detectChanges();
+                            
+                        }
+                        /*this.existingTexts.forEach(textRc => {
                             const matchText = findMatchingTranslation(textRc, resources);
                             if (matchText && matchText.translation) {
                                 this.el.nativeElement.setAttribute(textRc.key, matchText.translation);
                             }
-                        });
+                        });*/
 
                     }
                 }
