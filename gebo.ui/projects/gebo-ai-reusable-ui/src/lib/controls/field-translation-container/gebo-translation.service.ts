@@ -19,7 +19,7 @@ export class GeboAITranslationService {
     private static currentTextResources: UILanguageResources | undefined;
     constructor(private uiTextResourcesService: UiTextResourcesControllerService,
         private translateService: TranslateService) {
-        this.translateService.addLangs(["en", "it", "zh", "ru"])
+        this.translateService.addLangs(["ar","cs","de","en","es","fi","fr","he","hi","it","js","ko","nl","no","pt","ro","ru","sv","th","tr","vi","zh"])
     }
     public async tryInit() {
         if (GeboAITranslationService.initialized !== true) {
