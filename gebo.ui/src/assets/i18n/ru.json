@@ -1,1 +1,2429 @@
-{"FastSetupModule":{"FastSetupComponent":{"langCode":{"label":"Язык системы по умолчанию","help":"Язык системы по умолчанию для этой установки Gebo.ai"},"username":{"label":"E-mail","help":"E-mail используется как имя пользователя для входа"},"passwordC":{"label":"Подтвердите пароль","help":"Подтвердите пароль"},"password":{"label":"Пароль","help":"Пароль для входа (не менее 8 символов)"},"PasswordNotMatching":{"label":" пароли не совпадают "},"LocalAdmin":{"label":"Создайте локальную учетную запись администратора"},"LocalAdminExplanation":{"label":"Эту учетную запись вы будете использовать для настройки и администрирования программы в будущем, данные учетной записи останутся на вашем устройстве и не будут отправляться по сети"},"EnterBtn":{"label":"Перейти на страницу входа"},"SetupPage":{"label":"Настройте установку gebo.ai"},"CreateBtn":{"label":"Создать систему"},"LicenceFieldSet":{"label":"Ознакомьтесь и примите лицензию"},"AcceptMark":{"label":"Я принимаю условия","help":"Нажимая здесь, вы принимаете условия лицензии"}}},"LoginModule":{"LoginComponent":{"username":{"label":"e-mail","help":"E-mail в качестве имени пользователя для входа"},"password":{"label":"Пароль","help":"Пароль для входа"}}},"SetupWizardPanelModule":{"Oauth2WizardComponent":{"Oauth2ConfigBtn":{"label":"Настройки Oauth2"},"ProviderNameHeader":{"label":"Имя провайдера"},"DescriptionHeader":{"label":"Описание"},"MainPanel":{"label":"Настройки безопасности Oauth2"},"IdHeader":{"label":"ID"}},"SetupWizardPanelComponent":{"WizardBackBtn":{"label":"Назад к главной странице настройки"},"WizardUi":{"label":"Выберите раздел настройки"}},"ConfluenceWizardComponent":{"MainPanel":{"label":"Настройка корпоративных систем Atlassian Confluence"},"DescriptionHeader":{"label":"Описание"},"SystemTypeHeader":{"label":"Тип системы"},"ConfigCodeHeader":{"label":"Код конфигурации"},"ConfluenceSystemBtn":{"label":"Система Confluence"}},"JiraWizardComponent":{"JiraSystemBtn":{"label":"Система Jira"},"DescriptionHeader":{"label":"Описание"},"ConfigCodeHeader":{"label":"Код конфигурации"},"MainPanel":{"label":"Настройка корпоративных систем Atlassian Jira"},"SystemTypeHeader":{"label":"Тип системы"}},"SharepointWizardComponent":{"DescriptionHeader":{"label":"Описание"},"ConfigCodeHeader":{"label":"Код конфигурации"},"MainPanel":{"label":"Настройка корпоративных систем Microsoft Sharepoint"},"SystemTypeHeader":{"label":"Тип системы"},"SharepointSystemBtn":{"label":"Система Sharepoint"}},"LLMSetupWizardComponent":{"InstructionText":{"label":"Укажите api-ключ с доступным кредитом. Если выбран OpenAI, добавьте необходимую сумму (10-30$ может быть достаточно) к вашему обычному тарифу для использования API, иначе доступ к трафику llms в этом приложении будет недоступен."},"MainPanel":{"label":"Настроить доступ к провайдерам llms Gebo.ai с помощью собственного api-ключа"},"provider":{"label":"Поставщик больших языковых моделей","help":"Выберите поставщика: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"},"user":{"label":"Пользователь","help":"Укажите пользователя, связанного с apiKey"},"ConfigureBtn":{"label":"Настроить"},"apiKey":{"label":"Api-ключ","help":"Ваш api-ключ от провайдера LLMS"}},"GraphRagWizardComponent":{"DescriptionHeader":{"label":"Описание"},"CreateGraphRagConfigBtn":{"label":"Создать конфигурацию graph rag"},"MainPanel":{"label":"Настройка конфигурации Graph Rag и извлечения знаний по умолчанию"},"ConfigCodeHeader":{"label":"Код конфигурации"}},"KnowledgeBaseWizardComponent":{"ProjectHeader":{"label":"Проект"},"AddAKnowledgeBaseBtn":{"label":"Добавить базу знаний"},"KnowledgeBaseHeader":{"label":"База знаний"},"MainPanel":{"label":"Конфигурации баз знаний и контента"},"ContentsSourceHeader":{"label":"Источник контента"},"PublishedHeader":{"label":"Опубликовано"},"NrOfDocumentsHeader":{"label":"Кол-во документов"},"AddAProjectItemBtn":{"label":"Добавить проект/элемент","help":"создать новый проект"},"Button1":{"help":"открыть базу знаний"},"Button2":{"help":"открыть форму проекта"}},"WorkFolderWizardComponent":{"MainPanel":{"label":"Конфигурация рабочей папки Gebo.ai"},"ConfigureBtn":{"label":"Настроить"},"workDirectory":{"label":"Выберите папку как рабочий каталог Gebo.ai","help":"Выберите серверную папку, которую эта установка будет использовать как рабочую папку для хранения конфигураций и данных."}}},"GeboAIOauth2RegistrationModule":{"Oauth2ProviderRegistration":{"code":{"label":"Код","help":"Введите описание кода аутентификации/интеграции OAUTH2 (registrationId)."},"description":{"label":"Описание","help":"Введите описание информации аутентификации/интеграции OAUTH2."},"configurationType":{"label":"Цель настройки","help":"Выберите, будет ли эта настройка использоваться для аутентификации в Gebo.ai или для обеспечения клиентского подключения Gebo.ai к сторонней системе."},"authProvider":{"label":"Провайдер","help":"Введите провайдера аутентификации OAUTH2"},"issuerUri":{"label":"Issuer Uri","help":"Введите URL Issuer OAUTH2 провайдера"},"authorizationUri":{"label":"URL авторизации","help":"Введите URL авторизации OAUTH2 провайдера"},"jwkSetUri":{"label":"Jwk Set Uri","help":"Введите URL Jwk Set OAUTH2 провайдера"},"userInfoUri":{"label":"URL пользовательской информации","help":"Введите URL пользовательской информации OAUTH2 провайдера"},"introspectionUri":{"label":"Introspection Uri","help":"Введите URL интроспекции OAUTH2 провайдера"},"tokenUri":{"label":"URL токена","help":"Введите URL токена OAUTH2 провайдера"},"SaveBtn":{"label":"Сохранить"},"Oauth2ProviderUrls":{"label":"URL-адреса провайдера OAUTH2"},"MainPanel":{"label":"Добавить новую информацию аутентификации/интеграции OAUTH2"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"}}},"GeboOauth2SecretModule":{"GeboOauth2SecretComponent":{"clientId":{"label":"Идентификатор клиента","help":"Идентификатор клиента для протокола oauth2 (получить в панели администратора аутентифицированного стороннего ПО с поддержкой oauth2)"},"secret":{"label":"Секретный ключ","help":"Секрет клиента для протокола oauth2 (получить в панели администратора аутентифицированного стороннего ПО с поддержкой oauth2)"}}},"GeboAIConfluenceModule":{"GeboAIConfluenceSystemFastComponent":{"MainPanel":{"label":"Создать конфигурацию системы confluence"},"CancelBtn":{"label":"Отмена"},"description":{"label":"Описание","help":"Введите описание системы confluence."},"CreateBtn":{"label":"Создать"},"username":{"label":"Имя пользователя Confluence","help":"Имя пользователя Confluence"},"confluenceVersion":{"label":"Версия Confluence","help":"Версия Confluence"},"baseUri":{"label":"Базовый интернет-адрес","help":"Url основного адреса системы confluence для локальной установки или основной url вашей организации для confluence cloud"},"password":{"label":"Пароль Confluence","help":"Пароль Confluence"},"token":{"label":"Confluence cloud api key","help":"CLOUD apikey Confluence, полученный в backoffice confluence. Сюда нужно вставить \"API Token for your Atlassian Account\"."}},"GConfluenceProjectEndpoint":{"PublishBtn":{"label":"Опубликовать!","help":"Сохранить и сделать эти материалы доступными в базе знаний для LLm"},"SaveBtn":{"label":"Сохранить"},"DeleteBtn":{"label":"Удалить"},"CancelBtn":{"label":"Отмена"},"SettingsTab":{"label":"Настройки"},"MainPanel":{"label":"Общий доступ к содержимому Confluence"},"LogsTab":{"label":"Журналы"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код для содержимого."},"description":{"label":"Описание","help":"Введите описание загруженного содержимого из записей Confluence."},"confluenceSystemCode":{"label":"Система Confluence","help":"Ранее сконфигурированная ссылка на систему confluence."},"parentProjectCode":{"label":"Проект","help":"Ссылка на родительский проект."},"openZips":{"label":"Открывать zip-файлы","help":"Включить открытие zip-файлов и извлечение содержимого"},"tree":{"label":"Выбранные пространства или страницы/подстраницы","help":"Доступное содержимое пространств и страниц Confluence"},"programmedTables":{"label":"График проверки обновлений содержимого","help":"Настройте график проверки измененного содержимого для поддержания актуальности системы генерации с расширенным доступом"},"catalogingCriteria":{"label":"Критерии организации пространств, страниц и подстраниц","help":"Поясните, по какому принципу были организованы пространства, страницы и подстраницы в содержимом Confluence, совместно используемом с Gebo.ai"}},"GConfluenceSystem":{"GeneralSettingsTab":{"label":"Общие настройки"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"MainPanel":{"label":"Редактирование системы confluence"},"SaveBtn":{"label":"Сохранить"},"baseUri":{"label":"Базовый интернет-адрес","help":"Url основного адреса системы confluence"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код для системы Confluence."},"description":{"label":"Описание","help":"Введите описание системы confluence."},"confluenceVersion":{"label":"Версия Confluence","help":"Версия Confluence"},"secretCode":{"label":"Используемая идентификация","help":"Выберите или создайте идентификацию для доступа к системе confluence"}}},"GeboAIUsersGroupPanelModule":{"GeboAIUsersManagementComponent":{"NewGroupBtn":{"label":"новая группа"},"NewUserBtn":{"label":"новый пользователь"},"UsersListPanel":{"label":"Список пользователей"},"GroupsListPanel":{"label":"Список групп"},"SournameHeader":{"label":"фамилия"},"UsernameHeader":{"label":"имя пользователя"},"RolesHeader":{"label":"роли"},"NameHeader":{"label":"имя"},"EditBtn":{"label":"Редактировать"},"DisabledHeader":{"label":"отключено"}}},"GeboAIUsersGroupModule":{"UsersGroup":{"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"UserIds":{"placeholder":"Выберите пользователей"},"CancelBtn":{"label":"Отмена"},"MainPanel":{"label":"Редактирование группы пользователей"},"description":{"label":"Описание","help":"Введите описание группы пользователей"},"code":{"label":"Уникальный код","help":"Введите код группы пользователей"},"userIds":{"label":"Список пользователей","help":"Выберите пользователей, участвующих в группе"}}},"GeboAIJiraModule":{"GeboAIJiraSystemFastComponent":{"CreateBtn":{"label":"Создать"},"description":{"label":"Описание","help":"Введите описание системы jira."},"MainPanel":{"label":"Создать конфигурацию системы jira"},"CancelBtn":{"label":"Отмена"},"username":{"label":"Имя пользователя jira","help":"Имя пользователя jira"},"token":{"label":"jira cloud api ключ","help":"jira CLOUD apikey, полученный в бэк-офисе jira, здесь необходимо вставить \"API Token for your Atlassian Account\"."},"baseUri":{"label":"Базовый интернет-адрес","help":"URL базового адреса системы jira для локальной установки или базовый URL вашей организации для jira cloud системы"}},"GJiraProjectEndpoint":{"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"PublishBtn":{"label":"Опубликовать!","help":"Сохраняет и делает эти данные доступными в базе знаний для LLm"},"CancelBtn":{"label":"Отмена"},"SettingsTab":{"label":"Настройки"},"LogsTab":{"label":"Логи"},"MainPanel":{"label":"Общий доступ к содержимому jira"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код для содержимого."},"jiraSystemCode":{"label":"jira система","help":"Ссылка на уже настроенную систему jira."},"parentProjectCode":{"label":"Проект","help":"Ссылка на родительский проект."},"description":{"label":"Описание","help":"Введите описание загружаемого содержимого записей jira."},"programmedTables":{"label":"График проверки обновлений содержимого","help":"Настройте расписание изменений данных, чтобы поддерживать актуальность системы retrieve augmented generation"},"openZips":{"label":"Открывать zip-файлы","help":"Включить открытие zip-файлов и извлечение содержимого"},"tree":{"label":"Выбранные пространства или страницы/подстраницы","help":"Иерархия содержимого выбранных проектов и тикетов jira"},"catalogingCriteria":{"label":"Критерии организации пространств, страниц и подстраниц","help":"Опишите здесь, по какому принципу организованы пространства, страницы и подстраницы в jira содержимом, которое было передано в Gebo.ai"}},"GJiraSystem":{"description":{"label":"Описание","help":"Введите описание системы jira."},"DeleteBtn":{"label":"Удалить"},"MainPanel":{"label":"Редактирование системы jira"},"CancelBtn":{"label":"Отмена"},"SaveBtn":{"label":"Сохранить"},"baseUri":{"label":"Базовый интернет-адрес","help":"URL базового адреса системы jira"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код системы jira."},"secretCode":{"label":"Используемая учетная запись","help":"Выберите или создайте учетную запись для доступа к системе jira"}}},"GeboAISharepointModule":{"GeboAISharepointSystemFastComponent":{"description":{"label":"Описание","help":"Введите описание системы SharPpoint/OneDrive."},"sharepointVersion":{"label":"Версия Sharepoint","help":"версия sharepoint"},"secret":{"label":"Секретный ключ","help":"Oauth2 client secret для этого приложения, зарегистрированного в продукте microsoft \"entra\" (получается в административной консоли microsoft cloud)"},"clientId":{"label":"ID клиента","help":"Oauth2 client ID для этого приложения, зарегистрированного в продукте microsoft \"entra\" (получается в административной консоли microsoft cloud)"},"tenantId":{"label":"ID арендатора","help":"Oauth2 tenant ID вашей организации продукта microsoft \"entra\" (получается в административной консоли microsoft cloud)"},"MicrosofOauth2Fieldset":{"label":"Информация о регистрации приложения Microsof oauth2 для Gebo.ai"},"CreateBtn":{"label":"Создать"},"CancelBtn":{"label":"Отмена"},"MainPanel":{"label":"Создать конфигурацию системы SharePoint/OneDrive"}},"GSharepointProjectEndpoint":{"CancelBtn":{"label":"Отмена"},"SaveBtn":{"label":"Сохранить"},"PublishBtn":{"label":"Опубликовать!","help":"Сохраняет и делает эти материалы доступными в базе знаний для LLm"},"SettingsTab":{"label":"Настройки"},"MainPanel":{"label":"Расшаривание содержимого SharePoint/OneDrive"},"LogsTab":{"label":"Логи"},"DeleteBtn":{"label":"Удалить"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код содержимого."},"parentProjectCode":{"label":"Проект","help":"Ссылка на родительский проект."},"description":{"label":"Описание","help":"Введите описание источников данных SharePoint/OneDrive."},"sharePointSystemCode":{"label":"система sharepoint","help":"Уже настроенная ссылка на систему SharePoint/OneDrive."},"openZips":{"label":"Открывать zip-файлы","help":"Включить открытие zip-файлов и извлечение содержимого"},"tree":{"label":"Выбранные сайты/страницы/subpages Sharepoint или диски/folder/file OneDrive","help":"Расшаренное содержимое sharepoint/OneDrive"},"programmedTables":{"label":"Расписание проверки обновлений содержимого","help":"Настройте расписание обновлений содержимого, чтобы поддерживать систему retrieve augmented generation в актуальном состоянии"},"catalogingCriteria":{"label":"Критерии организации пространств, страниц и подстраниц","help":"Поясните здесь, как проведена организация пространств, страниц и подстраниц в расшаренных с Gebo.ai содержимых sharepoint"}},"GSharepointContentManagementSystem":{"MainPanel":{"label":"Редактирование системы sharepoint"},"GeneralSettingsTab":{"label":"Общие настройки"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"secretCode":{"label":"Используемая учетная запись","help":"Выберите или создайте учетную запись для доступа к системе sharepoint"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код системы sharepoint."},"description":{"label":"Описание","help":"Введите описание системы sharepoint."},"sharepointVersion":{"label":"Версия Sharepoint","help":"версия sharepoint"}}},"GeboAIGraphRagExtractionModule":{"GraphRagExtractionConfig":{"graphRagConfigUI_Delete":{"label":"Удалить"},"graphRagConfigUI_Save":{"label":"Сохранить"},"graphRagConfigUI_Cancel":{"label":"Отмена"},"graphRagConfigUI_ContextSettings":{"label":"Общие настройки информации/контента"},"graphRagConfigUI_LLMSSettings":{"label":"Настройки LLms"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код этапа извлечения данных графа знаний"},"MainPanel":{"label":"Конфигурация извлечения знаний/Graphrag"},"description":{"label":"Описание","help":"Введите описание этой конфигурации этапа извлечения данных графа знаний"},"extractionPrompt":{"label":"Промпт для извлечения информации","help":"Промпт большой языковой модели для извлечения сущностей/событий/связей и псевдонимов"},"usedModelConfiguration":{"label":"LLM, используемая для извлечения данных","help":"Укажите большую языковую модель, используемую для извлечения знаний, по умолчанию будет использоваться выбранная по умолчанию, если другая не выбрана."},"graphRagAllSources":{"label":"Применять graph rag ко всем источникам данных","help":"Если включено, все базы знаний/проекты/источники данных будут обработаны для извлечения знаний, иначе только специально настроенные"},"defaultModel":{"label":"Модель большого языка по умолчанию","help":"Модель большого языка по умолчанию будет использоваться для извлечения знаний"},"processEveryDocument":{"label":"Применять graph rag ко всем файлам","help":"Алгоритмы graph rag будут применяться ко всем файлам, это повысит детализацию анализа, которую может сделать система, но увеличит стоимость и время обработки документов"},"contentSelectionFilter":{"label":"Критерии выбора файлов для обработки graphrag","help":"Отредактируйте критерии файлов для отправки в pipeline извлечения информации для graphrag, выберите как минимум имя файла и критерий и/или тип файла и/или максимальный размер файла в байтах и/или возраст последнего изменения в днях"}}},"GeboAIContentSelectionFilterModule":{"SelectionFilterCriteria":{"extensions":{"placeholder":"Выберите типы файлов"},"nameFilterCriteria":{"placeholder":"Критерии фильтрации имени файла"},"maxModificationAgeInDays":{"placeholder":"Последнее изменение файла, дней назад"},"nameFilter":{"placeholder":"Имя файла"},"maxFileSize":{"placeholder":"Максимальный размер файла в байтах"}}},"GeboAiKnowledgeBaseModule":{"GKnowledgeBase":{"GeneralInfosTab":{"label":"Общая информация"},"MainPanel":{"label":"Редактирование базы знаний"},"AccessSettingsTab":{"label":"Настройки доступа к базе знаний"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код базы знаний."},"description":{"label":"Описание","help":"Введите описание базы знаний."},"embeddingModelReferences":{"label":"Используемые embedding-модели (оставьте пустым для системной по умолчанию)","help":"Embedding-модели для базы знаний, если оставить пустым — будет использоваться модель по умолчанию."},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"IndexBtn":{"label":"Индексировать","help":"Переиндексировать содержимое"}},"GProject":{"MainPanel":{"label":"Редактирование проекта или элемента"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код проекта."},"description":{"label":"Описание","help":"Введите описание проекта."},"rootKnowledgeBaseCode":{"label":"база знаний","help":"база знаний."},"DeleteBtn":{"label":"Удалить"},"IndexBtn":{"label":"Индексировать","help":"Переиндексировать содержимое"},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"}},"GeboAiKnowledgeBaseTreeComponent":{"addNewAnchor":{"label":"+ Добавить элемент/проект","help":"добавить новое..."}}},"GeboAIAccessControlModule":{"GeboAIAccessControlComponent":{"accessibleToAll":{"label":"Всем доступно","help":"Все могут использовать"},"accessibleGroups":{"label":"Список групп","help":"Выберите разрешённые группы"},"accessibleUsers":{"label":"Список пользователей","help":"Выберите разрешённых пользователей"}}},"GeboAiAdminPanelModule":{"GeboAiAdminComponent":{"DashboardTab":{"label":"Панель управления"},"LLMSTab":{"label":"LLM для чата и встраивания"},"RagChatConfigTab":{"label":"Профили Rag-чата/Промпты моделей"},"KnowledgeBaseTab":{"label":"Базы знаний и проекты"},"UsersGroupTab":{"label":"Пользователи и группы"},"GeboModulesTab":{"label":"Настройка модулей Gebo.ai"},"LogsTab":{"label":"Журналы"}}},"SystemsPanelModule":{"SystemsComponent":{"CodeHeader":{"label":"Код"},"DescriptionHeader":{"label":"Описание"},"ConfigureBtn2":{"label":"Настроить"},"ConfigureBtn":{"label":"Настроить"}}},"ChatProfilesPanelModule":{"ChatProfilesComponent":{"NewPromptConfigurationBtn":{"label":"Новая конфигурация запроса"},"NewChatProfileBtn":{"label":"Новый профиль чата"},"MainPanel":{"label":"Чат-профили с дорасширением поиска"},"PromptsPanel":{"label":"Коллекция подсказок и подсказки по умолчанию"},"KnowledgeBasesHeader":{"label":"Базы знаний"},"DescriptionHeader":{"label":"Описание"},"ConfigureBtn1":{"label":"настроить"},"CodeHeader":{"label":"Код"}}},"KnowledgeBasesPanelModule":{"KnowledgeBasesComponent":{"NewKnowledgeBaseBtn":{"label":"Новая база знаний"}}},"LlmsPanelModule":{"LlmsSystemsComponent":{"NewEmbeddingModelConfigurationBtn":{"label":"Новая конфигурация модели встраивания"},"NewChatModelConfigurationBtn":{"label":"Новая конфигурация чат-модели"},"DescriptionHeader":{"label":"Описание"},"CodeHeader":{"label":"Код"},"ModelHeader":{"label":"Модель "},"ModelProviderHeader":{"label":"Поставщик модели"},"ConfigureBtn":{"label":"настроить"},"CodeHeader2":{"label":"Код"},"DescriptionHeader2":{"label":"Описание"},"ModelProviderHeader2":{"label":"Поставщик модели"},"ConfigureBtn2":{"label":"настроить"},"ModelHeader2":{"label":"Модель "}}},"GeboAiLargeLanguageModelsModule":{"GeboAITestChatComponent":{"TestingModelDialog":{"label":"Тестирование модели"},"TestChatBtn":{"label":"Тестировать чат"}},"GOpenAIChatModelConfig":{"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"apiSecretCode":{"label":"OpenAI токен","help":"Выберите токен OpenAI, который будет использоваться для этой модели"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если не указано иное"},"choosedModel":{"label":"Выбор OpenAI chat модели","help":"Выберите OpenAI chat модель для работы."},"GeneralInfosTab":{"label":"Общая информация"},"AdvancedSettingsTab":{"label":"Дополнительные настройки"},"MainPanel":{"label":"Редактирование конфигурации chat модели OpenAI"},"ModelAccessSettingsTab":{"label":"Настройки доступа к модели"}},"GOpenAIEmbeddingModelConfig":{"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"MainPanel":{"label":"Редактирование конфигурации модели встраивания OpenAI"},"apiSecretCode":{"label":"OpenAI токен","help":"Выберите токен OpenAI, который будет использоваться для этой модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели встраивания"},"description":{"label":"Описание","help":"Введите описание конфигурации модели встраивания"},"choosedModel":{"label":"Выбор OpenAI embedding модели","help":"Выберите OpenAI embedding модель для работы."},"defaultModel":{"label":"установить эту модель встраивания по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если embedding модель не указана"}},"GOllamaChatModelConfig":{"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"DeleteBtn":{"label":"Удалить"},"baseUrl":{"label":"Базовый адрес сервера ollama","help":"Базовый адрес (например, http://servername:234/), по которому отвечает локальный или lan сервер ollama."},"choosedModel":{"label":"Выбор Ollama chat модели","help":"Выберите Ollama chat модель для работы.","placeholder":"Выбрать модель"},"apiSecretCode":{"label":"Ollama токен","help":"Выберите Ollama токен для работы с этой моделью (необязательно)"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если chat модель не указана"},"MainPanel":{"label":"Редактирование конфигурации chat модели (локальный или lan сервер) Ollama"}},"GAnthropicChatModelConfig":{"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"apiSecretCode":{"label":"Anthropic токен","help":"Выберите Anthropic токен для этой модели"},"choosedModel":{"label":"Выбор Anthropic chat модели","help":"Выберите Anthropic chat модель для работы.","placeholder":"Выбрать модель"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если chat модель не указана"},"AdvancedSettingsTab":{"label":"Дополнительные настройки"},"GeneralInfosTab":{"label":"Общая информация"},"ModelAccessSettingsTab":{"label":"Настройки доступа к модели"},"MainPanel":{"label":"Редактирование конфигурации chat модели Anthropic"}},"GMistralChatModelConfig":{"SaveBtn":{"label":"Сохранить"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"DeleteBtn":{"label":"Удалить"},"CancelBtn":{"label":"Отмена"},"apiSecretCode":{"label":"MistralAI токен","help":"Выберите MistralAI токен для этой модели"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если chat модель не указана"},"choosedModel":{"label":"Выбор MistralAI chat модели","help":"Выберите MistralAI chat модель для работы."},"GeneralInfosTab":{"label":"Общая информация"},"AdvancedSettingsTab":{"label":"Дополнительные настройки"},"ModelAccessSettingsTab":{"label":"Настройки доступа к модели"},"MainPanel":{"label":"Редактирование конфигурации chat модели MistralAI"}},"GGoogleVertexChatModelConfig":{"SaveBtn":{"label":"Сохранить"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если chat модель не указана"},"choosedModel":{"label":"Выбор Google Vertex AI chat модели","help":"Выберите Google Vertex AI chat модель для работы."},"apiSecretCode":{"label":"Google Vertex AI токен","help":"Выберите Google Vertex AI токен для этой модели"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"DeleteBtn":{"label":"Удалить"},"CancelBtn":{"label":"Отмена"},"TabGeneralInfos":{"label":"Общая информация"},"TabModelAccessSettings":{"label":"Настройки доступа к модели"},"TabAdvancedSettings":{"label":"Дополнительные настройки"},"MainPanel":{"label":"Редактирование конфигурации chat модели Google Vertex AI"}},"GDeepseekChatModelConfig":{"DeleteBtn":{"label":"Удалить"},"CancelBtn":{"label":"Отмена"},"SaveBtn":{"label":"Сохранить"},"apiSecretCode":{"label":"Deepseek токен","help":"Выберите Deepseek токен для этой модели"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"choosedModel":{"label":"Выбор Deepseek chat модели","help":"Выберите Deepseek chat модель для работы.","placeholder":"Выбрать модель"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если chat модель не указана"},"AdvancedSettingsTab":{"label":"Дополнительные настройки"},"GeneralInfosTab":{"label":"Общая информация"},"MainPanel":{"label":"Редактирование конфигурации chat модели Deepseek"},"ModelAccessSettingsTab":{"label":"Настройки доступа к модели"}},"GenericOpenAIAPIChatModelConfig":{"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"description":{"label":"Описание","help":"Введите описание конфигурации модели"},"DeleteBtn":{"label":"Удалить"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации модели"},"baseUrl":{"label":"Базовый адрес сервера Chat модели","help":"Базовый адрес Chat модели."},"apiSecretCode":{"label":"Токен API Chat модели","help":"Выберите токен API Chat модели для этой модели (необязательно)"},"defaultModel":{"label":"установить эту модель чата по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если chat модель не указана"},"choosedModel":{"label":"Выбор Chat модели","help":"Выберите Chat модель для работы."},"GeneralInfosTab":{"label":"Общая информация"},"TitleFragment":{"label":"Редактирование провайдера chat модели:"},"AdvancedSettingsTab":{"label":"Дополнительные настройки"},"ModelAccessSettingsTab":{"label":"Настройки доступа к модели"}},"GOllamaEmbeddingModelConfig":{"CancelBtn":{"label":"Отмена"},"description":{"label":"Описание","help":"Введите описание конфигурации модели встраивания"},"SaveBtn":{"label":"Сохранить"},"DeleteBtn":{"label":"Удалить"},"MainPanel":{"label":"Редактирование конфигурации embedding модели Ollama (локальный или lan сервер)"},"apiSecretCode":{"label":"Ollama токен","help":"Выберите Ollama токен для этой модели"},"choosedModel":{"label":"Выбор Ollama embedding модели","help":"Выберите Ollama embedding модель для работы."},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации embedding модели"},"defaultModel":{"label":"установить эту модель встраивания по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если embedding модель не указана"},"baseUrl":{"label":"Базовый адрес сервера ollama","help":"Базовый адрес (например, http://servername:234/), по которому отвечает локальный или lan сервер ollama."}},"GMistralEmbeddingModelConfig":{"description":{"label":"Описание","help":"Введите описание конфигурации модели встраивания"},"MainPanel":{"label":"Редактирование конфигурации embedding модели MistralAI"},"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации embedding модели"},"choosedModel":{"label":"Выбор MistralAI embedding модели","help":"Выберите MistralAI embedding модель для работы."},"defaultModel":{"label":"установить эту модель встраивания по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если embedding модель не указана"},"apiSecretCode":{"label":"MistralAI токен","help":"Выберите MistralAI токен для этой модели"}},"GGoogleVertexEmbeddingModelConfig":{"MainPanel":{"label":"Редактирование конфигурации embedding модели Google Vertex AI"},"description":{"label":"Описание","help":"Введите описание конфигурации embedding модели"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"choosedModel":{"label":"Выбор Google Vertex AI embedding модели","help":"Выберите Google Vertex AI embedding модель для работы."},"defaultModel":{"label":"установить эту модель встраивания по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если embedding модель не указана"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации embedding модели"},"apiSecretCode":{"label":"Google Vertex AI токен","help":"Выберите Google Vertex AI токен для этой модели"}},"GenericOpenAIAPIEmbeddingModelConfig":{"CancelBtn":{"label":"Отмена"},"SaveBtn":{"label":"Сохранить"},"DeleteBtn":{"label":"Удалить"},"TitleFragment":{"label":"Редактирование провайдера embedding модели:"},"description":{"label":"Описание","help":"Введите описание конфигурации Embedding модели"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код конфигурации Embedding модели"},"choosedModel":{"label":"Выбор Embedding модели","help":"Выберите Embedding модель для работы."},"baseUrl":{"label":"Адрес сервера API Embedding модели","help":"Базовый адрес сервера Embedding модели."},"defaultModel":{"label":"установить эту модель встраивания по умолчанию","help":"Если включено, эта модель будет использоваться по умолчанию, если embedding модель не указана"},"apiSecretCode":{"label":"Токен API Embedding модели","help":"Выберите токен API Embedding модели для этой модели"}}},"GeboAIChatControlModule":{"GeboAIReusableChatComponent":{"chatConfigInfosBtn":{"help":"Информация о конфигурации чата"},"chaDeleteBtn":{"help":"Удалить этот чат"},"chatNameChangeBtn":{"help":"Переименовать чат"}},"ChangeDescriptionComponent":{"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"description":{"label":"Описание чата","help":"Введите описание этой сессии чата."}},"GeboChatUserInfoComponent":{"usedModel":{"label":"Используемая модель","help":"Код модели"},"providerId":{"label":"Провайдер модели чата","help":"Драйвер провайдера LLms"},"functions":{"label":"Функции, доступные чату","help":"Список функций, доступных для модели чата"},"NameCol":{"label":"Имя"},"DescriptionCol":{"label":"Описание"}}},"GeboAIAudioControlModule":{"GeboAIAudioControlComponent":{"RecordBtn":{"label":"Записать","help":"Начать запись аудиотрека и отправить его"}}},"GeboAIJobStatusModule":{"LogTableComponent":{"ReloadDataBtn":{"label":"перезагрузить данные"},"DeleteBtn":{"label":"Удалить"},"SelectHeader":{"label":"Выбрать"},"EndDateTimeHeader":{"label":"дата/время окончания"},"StartDateTimeHeader":{"label":"дата/время начала"},"ProcessingHeader":{"label":"обработка"},"DescriptionHeader":{"label":"Описание"},"CodeHeader":{"label":"Код"},"FinishedHeader":{"label":"завершено"},"WithErrorHeader":{"label":"с ошибкой"},"LogTableComponent":{"help":"Этот журнал загрузки общей файловой системы"}}},"GeboAIDashboardPanelModule":{"GeboAIDashboardComponent":{"SpanEmbedding":{"label":"эмбеддинги по сравнению с общим числом документов"},"MoreDetailsBtn":{"label":"Подробнее"}}},"GeboAIPromptWizardModule":{"GeboAIPromptWizardComponent":{"generatePrompt":{"label":"Сгенерировать подсказку"},"PromptWizardBtn":{"label":"Мастер подсказок","help":"Используйте это для генерации подсказки с помощью LLM для ваших задач"},"acceptPrompt":{"label":"Принять подсказку"},"promptWizardUI":{"label":"Мастер создания шаблона подсказки"},"cancel":{"label":"Отмена"},"response":{"label":"Предложенный шаблон подсказки","help":"Сгенерированный текст шаблона для вашей задачи (вы можете изменить или откорректировать его)"},"modelCode":{"label":"Модель чата для использования","help":"Выберите модель чата, к которой хотите обратиться для генерации шаблона подсказки"},"query":{"label":"Запрос на создание шаблона подсказки","help":"Уточните во 2-м лице, какую цель ИИ будет помогать пользователю достичь"}}},"GeboAIStandardChatModelModule":{"GeboAIStandardChatModelSettings":{"temperature":{"label":"Температура","help":"Температура, с которой будет отвечать модель, от 0 до 1 (если не уверены, оставьте пустым)"},"contextLength":{"label":"Длина контекста (токены)","help":"Объем текста, который AI-модель может учитывать при обработке (если не задано, будет использовано 4096)"},"topP":{"label":"TopP","help":"Параметр TopP, от 0 до 1 (если не уверены, оставьте пустым)"}}},"GeboAIAdvancedChatModelModule":{"GeboAIAdvancedChatModelGroupComponent":{"enabledFunctions":{"label":"Включённые функции вызова для этой модели","help":"Функции, которые могут использоваться моделью во время чата"},"defaultModelPrompt":{"label":"Стандартный запрос модели","help":"Изменить стандартный запрос для чат-модели."}}},"GeboAiSecretsAdminModule":{"SecretWrapper":{"description":{"label":"Описание","help":"Введите описание идентификатора."},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код идентификатора."},"secretType":{"label":"Тип идентификатора","help":"Выберите тип идентификатора для создания в удалённой системе"},"InsertBtn":{"label":"Вставить"},"token":{"label":"Токен","help":"Введите токен."},"user":{"label":"Пользователь","help":"Введите пользователя, указанного в токене."},"MainPanel":{"label":"Создание идентификатора"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"username":{"label":"Имя пользователя","help":"Введите имя пользователя."},"password":{"label":"Пароль","help":"Введите пароль."},"email":{"label":"E-mail/Имя пользователя","help":"Введите e-mail или имя пользователя, связанное с ssh-ключом."},"key":{"label":"Секретный ключ","help":"Откройте файл с приватным ключом и скопируйте его в это текстовое поле."},"passphrase":{"label":"Парольная фраза ключа","help":"Введите парольную фразу ключа."},"pub":{"label":"Публичный ключ","help":"Откройте файл с публичным ключом и скопируйте его в это текстовое поле."}}},"GeboAIUploadsModule":{"GUploadsProjectEndpoint":{"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код содержимого."},"description":{"label":"Описание","help":"Введите описание загруженного содержимого файловой системы."},"parentProjectCode":{"label":"Проект","help":"Ссылка на родительский проект."},"upload":{"label":"Загрузить содержимое","help":"Нажмите кнопку обзора и выберите zip-файлы или другие файлы"},"openZips":{"label":"Открывать zip-файлы","help":"Включить открытие zip-файлов и извлечение содержимого"},"PublishBtn":{"label":"Опубликовать!","help":"Сохраняет и делает это содержимое доступным в базе знаний для LLm"},"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"LogsTab":{"label":"Журналы"},"MainPanel":{"label":"Редактирование загруженного содержимого"},"SettingsTab":{"label":"Настройки"},"buildSystemsRefs":{"label":"Настроить системы сборки","help":"Список систем сборки/упаковки для анализа метаинформации и дополнительных сведений об артефактах (оставьте пустым, если программного кода нет)"}}},"VFilesystemSelectorModule":{"VFilesystemSelectorComponent":{"ChoosedElementsArea":{"label":"Выбранные элементы"},"ChooseOk":{"label":"ОК"},"ChooseCancel":{"label":"Отмена"},"EditBtn":{"help":"Изменить выбранное"},"ChooseElementsArea":{"label":"Выберите элементы"},"VFileSystemSelector":{"label":"Выберите элементы"}}},"GeboAIContentReindexModule":{"GeboAIContentReindexScheduleComponent":{"EditBtn":{"help":"Редактировать расписание"},"ConfirmBtn":{"label":"Подтвердить"},"AddBtn":{"label":"+Добавить"}}},"GeboAIFileSystemModule":{"GFilesystemProjectEndpoint":{"PublishBtn":{"label":"Опубликовать!","help":"Сохраняет и делает этот контент доступным в базе знаний для LLm's"},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"SettingsTab":{"label":"Настройки"},"SourceCodeTreatmentTab":{"label":"Обработка исходного кода"},"LogsTab":{"label":"Журналы"},"MainPanel":{"label":"Редактирование существующего содержимого файловой системы"},"description":{"label":"Описание","help":"Введите описание загруженного содержимого элемента файловой системы."},"openZips":{"label":"Открывать zip-файлы","help":"Включить открытие zip-файлов и извлечение содержимого"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код содержимого."},"tree":{"label":"Выбранные файлы или папки","help":"Файлы или каталоги общих файловых систем, доступные на сервере"},"parentProjectCode":{"label":"Проект","help":"Ссылка на родительский проект."},"programmedTables":{"label":"Расписание проверки обновлений содержимого","help":"Настройте расписание измененного содержимого, чтобы поддерживать систему retrieve augmented generation актуальной"},"catalogingCriteria":{"label":"Критерии организации папок","help":"Пожалуйста, опишите здесь, как были организованы папки в области файловой системы, которую вы делитесь с Gebo.ai"},"buildSystemsRefs":{"label":"Настроить системы сборки","help":"Список систем сборки/упаковки для проверки метаинформации и дополнительной информации об артефактах (оставьте пустым, если программного кода нет)"}},"GeboAISharedFilesystemsComponent":{"NewFileShareAreaBtn":{"label":"Новая область обмена файлами"},"AbsolutePathHeader":{"label":"Абсолютный путь"},"DbOrYmlFileConfigHeader":{"label":"db или yml файл конфигурации"},"DescriptionHeader":{"label":"Описание"},"CodeHeader":{"label":"Код"},"ModifyHeader":{"label":"Изменить"}},"GFileSystemShareReference":{"reference":{"label":"Выбранная общая папка файловой системы","help":"Выберите папку сервера, которая будет корневым путем для общей файловой системы, используемой в вашей организации как репозиторий документов"},"description":{"label":"Описание","help":"Введите описание общей области файловой системы вашей организации"},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код содержимого."},"InsertBtn":{"label":"Вставить"},"CancelBtn":{"label":"Отмена"},"MainPanel":{"label":"Редактирование общей серверной папки"},"DeleteBtn":{"label":"Удалить"}}},"GeboAiGitModule":{"GGitProjectEndpoint":{"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"DeleteBtn":{"label":"Удалить"},"PublishBtn":{"label":"Опубликовать!","help":"Сохраните и сделайте этот контент доступным в базе знаний для LLm's"},"MainPanel":{"label":"Редактирование репозитория исходного кода/документации git"},"description":{"label":"Описание","help":"Введите описание git-репозитория."},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код git-репозитория."},"parentProjectCode":{"label":"Проект","help":"Ссылка на родительский проект."},"contentManagementSystem":{"label":"Git система","help":"Ссылка на ранее настроенную git-систему."},"branch":{"label":"Ветка","help":"Имя ветки для проверки (обычно master, main или develop)"},"identityCode":{"label":"Используемая учетная запись","help":"Выберите учетную запись для клонирования/проверки в системе"},"repositoryUri":{"label":"URL адрес репозитория","help":"Полный адрес удаленного git-репозитория (обычно начинается с http:, https: или ssh:)"},"publicAccess":{"label":"публичный","help":"Если включено, доступ к репозиторию не требует аутентификации"},"openZips":{"label":"Открывать zip-файлы","help":"Включить открытие zip-файлов и извлечение содержимого"},"programmedTables":{"label":"План обновлений содержимого","help":"Настройте расписание проверки изменений для поддержания системы retrieve augmented generation обновленной"},"buildSystemsRefs":{"label":"Настроить build-системы","help":"Список build/packaging систем для поиска метаданных и дополнительной информации о файлах"}}},"GeboAIChatProfileModule":{"GChatProfileConfiguration":{"CancelBtn":{"label":"Отмена"},"SaveBtn":{"label":"Сохранить"},"DeleteBtn":{"label":"Удалить"},"GeneralInfosTab":{"label":"Основная информация"},"UseChatModelLabel":{"label":"Использовать чат-модель"},"ChooseChatModelRadio":{"label":"выбрать"},"ChatModelSelect":{"placeholder":"Выберите конфигурацию чат-модели"},"EmbeddingModelSelect":{"placeholder":"Выберите конфигурацию embedding-модели"},"ChooseEmbeddingModelRadio":{"label":"выбрать"},"RagSettingsTab":{"label":"Настройки RAG"},"LanguageModelTab":{"label":"Настройки языковой модели и доступных инструментов"},"UseEmbeddingModelLabel":{"label":"Использовать embedding-модель"},"SecurityAccessSettingsTab":{"label":"Настройки доступа и безопасности"},"MainPanel":{"label":"Редактирование профиля чата с расширенным поиском"},"code":{"label":"Уникальный код","help":"Уникальный код профиля чата, создается автоматически."},"description":{"label":"Описание","help":"Введите описание профиля чата."},"userChoosesKnowledgeBases":{"label":"Пользователь выбирает базы знаний","help":"Пользователь может выбирать доступные базы знаний и/или загружать свои файлы."},"knowledgeBaseCodes":{"label":"Базы знаний","help":"Базы знаний для поиска документов."},"similaritySearchThreshold":{"label":"Порог схожести","help":"Порог схожести для семантического поиска: 0.60–0.65 - низкая фильтрация, 0.70-0.75 - средняя фильтрация, 0.80–0.85 - точная"},"otherSearchSimilarityThreshold":{"label":"Порог схожести для второго 'шага'","help":"Порог схожести для семантического поиска: 0.60–0.65 - низкая фильтрация, 0.70-0.75 - средняя фильтрация, 0.80–0.85 - точная, применяется со второго поиска в multi-hop rag"},"disableMultiHopRag":{"label":"Отключить 'Multi Hop' rag","help":"Отключить функцию 'multi hop rag'. Многошаговый поиск сначала выполняет семантический поиск и использует найденные документы как контекст для следующего поиска, расширяя общий контекст."},"topK":{"label":"Учитываемые фрагменты документов (TopK)","help":"В расширенном поиске учитываются Top N найденных фрагментов документов при семантическом поиске"},"enabledFunctions":{"label":"Включить вызовы функций для этого RAG-чата","help":"Функции, доступные для использования llm моделью во время общения с пользователем и работы с выбранной базой знаний"},"prompt":{"label":"Промпт","help":"Редактируйте промпт для сессий retrieve augmented generation."}}},"GeboAIPromptAdminModule":{"GPromptConfig":{"DeleteBtn":{"label":"Удалить"},"SaveBtn":{"label":"Сохранить"},"CancelBtn":{"label":"Отмена"},"PromptCategorySelect":{"placeholder":"Введите или выберите категорию подсказки"},"MainPanel":{"label":"Редактирование подсказки"},"promptCategory":{"label":"Категория подсказки","help":"Выберите или введите категорию подсказки."},"prompt":{"label":"Подсказка","help":"Отредактируйте подсказку для чата, используйте {query} для обозначения вопроса пользователя и {context} для обозначения контекста документов/истории, отправляемых в LLM."},"code":{"label":"Уникальный код","help":"Автоматически сгенерированный уникальный код подсказки."},"description":{"label":"Описание","help":"Введите описание подсказки."}}},"GeboAIUserProfileModule":{"GeboAIUserProfileComponent":{"ChangePasswdBtn":{"label":"Сменить пароль"}},"GeboAIChangePasswordComponent":{"oldPassword":{"label":"Старый пароль","help":"Текущий пароль для входа"},"newPassword":{"label":"Новый пароль","help":"новый пароль"},"username":{"label":"E-mail","help":"E-mail используется как имя пользователя для входа"},"ChangePasswordUI":{"label":"Форма смены пароля"},"CancelBtn":{"label":"Отмена"},"ChangePwdBtn":{"label":"сменить пароль"},"newPassword1":{"label":"Подтвердите новый пароль","help":"Подтвердите новый пароль"}}},"GeboAIGoogleSearchAccountModule":{"GGoogleSearchApiCredentials":{"DeleteBtn":{"label":"Удалить"},"CancelBtn":{"label":"Отмена"},"SaveBtn":{"label":"Сохранить"},"ForMoreInformations":{"label":"Для получения дополнительной информации о Google custom search API или о получении вашего API-ключа (бесплатно) посетите: https://developers.google.com/custom-search"},"code":{"label":"Уникальный код","help":"уникальный код конфигурации google search api."},"MainPanel":{"label":"Редактирование учетных данных google custom search api"},"secretCode":{"label":"Токен google search api","help":"Выберите или введите токен google search api"},"customSearchEngineId":{"label":"Идентификатор поисковой системы google","help":"Идентификатор поисковой системы google"},"description":{"label":"Описание","help":"Введите описание конфигурации google search api."}}}}
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Язык системы по умолчанию",
+        "help" : "Язык системы по умолчанию для этой установки Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail в качестве имени пользователя для входа"
+      },
+      "passwordC" : {
+        "label" : "Подтвердите пароль",
+        "help" : "Подтвердите пароль"
+      },
+      "password" : {
+        "label" : "Пароль",
+        "help" : "Пароль для входа (не менее 8 символов)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " пароли не совпадают "
+      },
+      "LocalAdmin" : {
+        "label" : "Создайте свою учетную запись локального администратора"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Эта учетная запись понадобится для настройки и администрирования ПО в будущем, данные останутся на вашем устройстве и не будут переданы по сети"
+      },
+      "EnterBtn" : {
+        "label" : "Перейти на страницу входа"
+      },
+      "SetupPage" : {
+        "label" : "Настройте свою установку gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Создать настройку системы"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Ознакомьтесь и примите лицензию"
+      },
+      "AcceptMark" : {
+        "label" : "Я принимаю условия",
+        "help" : "Нажимая здесь, вы принимаете условия и положения лицензии"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail как имя пользователя для входа"
+      },
+      "password" : {
+        "label" : "Пароль",
+        "help" : "Пароль для входа"
+      },
+      "LoginPanel" : {
+        "label" : "Войти в gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Войти"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 конфигурация"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Имя провайдера"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "MainPanel" : {
+        "label" : "Настройки безопасности Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Идентификатор"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Назад на главную страницу настройки"
+      },
+      "WizardUi" : {
+        "label" : "Выберите раздел настройки"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Настройка администраторов и других учетных записей",
+        "description" : "Для правильного управления этой установкой gebo.ai требуется хотя бы одна учетная запись администратора. Добавьте других пользователей при необходимости."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Рабочая директория Gebo.ai",
+        "description" : "Настройте рабочую директорию — это будет папка для хранения всех конфигураций и рабочих файлов этой установки. Рекомендуется периодически делать резервное копирование."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Конфигурация векторной базы данных",
+        "description" : "Для предоставления сервисов retrieve augmented generation Gebo.ai необходимо настроить векторную базу данных. Выберите между локальной базой, Qdrant или Mongo Atlas."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Единая аутентификация, oauth2",
+        "description" : "Настройка единой аутентификации OAuth2 и клиентов oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Настройка моделей обработки языка",
+        "description" : "Настройте различные llms с облачной или локальной/lan инфраструктурой. Минимум одна модель для чата и одна для embedding должны быть настроены для корректной работы ПО."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Настройка graph rag/Извлечение знаний",
+        "description" : "Настройте подсистему graph rag и извлечения знаний"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Настройка путей общих файловых систем",
+        "description" : "Укажите пути общих файловых систем компании, которые будут использоваться как область документов retrieve augmented generation в различных базах знаний"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Интеграция с Atlassian confluence",
+        "description" : "Настройте Gebo.ai для доступа к вашим облачным или локальным установкам Atlassian Confluence"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Интеграция с Atlassian jira",
+        "description" : "Настройте Gebo.ai для доступа к вашим облачным установкам Atlassian jira"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Интеграция с Microsoft Sharepoint",
+        "description" : "Настройте Gebo.ai для доступа к вашим облачным или локальным установкам Microsoft Sharepoint"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Настройте хотя бы одну базу знаний",
+        "description" : "Настройте хотя бы одну базу знаний, чтобы пользователи могли использовать функции retrieve augmented generations Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Настройте хотя бы один профиль чата \"R.A.G.\"",
+        "description" : "Настройте хотя бы один профиль чата retrieve augmented для пользователей на основе одной из ваших баз знаний"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Настройка систем Atlassian Confluence компании"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Тип системы"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код конфигурации"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Система Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Система Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код конфигурации"
+      },
+      "MainPanel" : {
+        "label" : "Настройка систем Atlassian Jira компании"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Тип системы"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код конфигурации"
+      },
+      "MainPanel" : {
+        "label" : "Настройка систем Microsoft Sharepoint компании"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Тип системы"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Система Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Предоставьте API-ключ с достаточным балансом. Если выбран OpenAI, необходимо добавить отдельный кредит (10-30$ обычно достаточно) к вашему тарифному плану для использования API, иначе использование llms в этом приложении будет недоступно."
+      },
+      "MainPanel" : {
+        "label" : "Настройка доступа к поставщикам llms для Gebo.ai с вашим API-ключом"
+      },
+      "provider" : {
+        "label" : "Поставщик моделей обработки языка",
+        "help" : "Выберите одного из поставщиков: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Пользователь",
+        "help" : "Введите пользователя, связанного с apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Настроить"
+      },
+      "apiKey" : {
+        "label" : "Api ключ",
+        "help" : "Ваш api ключ для поставщиков LLMS"
+      },
+      "ProviderHeader" : {
+        "label" : "Провайдер"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Код конфигурации"
+      },
+      "ModelHeader" : {
+        "label" : "Модель"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Тип модели"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Модель по умолчанию"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Создать конфиг graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Настройка конфигурации по умолчанию для Graph Rag и извлечения знаний"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код конфигурации"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Проект"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Добавить базу знаний"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "База знаний"
+      },
+      "MainPanel" : {
+        "label" : "Конфигурации баз знаний и содержимого"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Источник содержимого"
+      },
+      "PublishedHeader" : {
+        "label" : "Опубликовано"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Количество документов"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Добавить проект/элемент",
+        "help" : "создать новый проект"
+      },
+      "Button1" : {
+        "help" : "открыть базу знаний"
+      },
+      "Button2" : {
+        "help" : "открыть форму проекта"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Конфигурация рабочей папки Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Настроить"
+      },
+      "workDirectory" : {
+        "label" : "Выберите папку в качестве рабочей директории Gebo.ai",
+        "help" : "Выберите папку на сервере, которую будет использовать эта установка для хранения конфигураций и содержимого."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Добавить папку"
+      },
+      "AddFolderBtn" : {
+        "label" : "Добавить папку"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "MainPanel" : {
+        "label" : "Пути общих файловых систем сервера"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Абсолютный путь"
+      },
+      "DeleteHeader" : {
+        "label" : "Удалить"
+      },
+      "path" : {
+        "label" : "Добавить корневую папку общей файловой системы",
+        "help" : "Выберите папку на сервере, которая является корневым путем общей файловой системы, используемой вашей организацией для хранения документов"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание записи файловой системы"
+      },
+      "RemovePathBtn" : {
+        "label" : "Удалить путь"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Настроить"
+      },
+      "MainPanel" : {
+        "label" : "Конфигурация векторной базы данных"
+      },
+      "host" : {
+        "label" : "Хост Qdrant",
+        "help" : "Имя хоста или IP-адрес Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Настройки подключения Qdrant"
+      },
+      "port" : {
+        "label" : "Порт Qdrant",
+        "help" : "Порт связи Qdrant (стандартно 6334)"
+      },
+      "apiKey" : {
+        "label" : "Api ключ Qdrant",
+        "help" : "Api ключ для аутентификации Qdrant"
+      },
+      "tls" : {
+        "label" : "Параметр TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Обязательные шаги настройки Gebo.ai выполнены...",
+        "detail" : "Обязательные шаги завершены, но некоторые пропущенные шаги не позволяют вашей организации в полной мере использовать этот продукт"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "В настройке Gebo.ai пропущены обязательные шаги",
+        "detail" : "Проверьте выделенные красным шаги процесса настройки"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Настройка Gebo.ai завершена!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Код",
+        "help" : "Введите описание кода OAUTH2 аутентификации/интеграции (registrationId)."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание информации OAUTH2 аутентификации/интеграции."
+      },
+      "configurationType" : {
+        "label" : "Цель конфигурации",
+        "help" : "Выберите, будет ли эта настройка использоваться для аутентификации в Gebo.ai или для обеспечения клиентского подключения Gebo.ai к сторонней системе."
+      },
+      "authProvider" : {
+        "label" : "Провайдер",
+        "help" : "Укажите провайдера OAUTH2 аутентификации"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Введите URL издателя OAUTH2 провайдера"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "Введите URL авторизации OAUTH2 провайдера"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Введите ссылку на набор JWK OAUTH2 провайдера"
+      },
+      "userInfoUri" : {
+        "label" : "User info URL",
+        "help" : "Введите URL информации о пользователе OAUTH2 провайдера"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Введите URL интроспекции OAUTH2 провайдера"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Введите URL токена OAUTH2 провайдера"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URL OAUTH2 провайдера"
+      },
+      "MainPanel" : {
+        "label" : "Добавить новую информацию OAUTH2 аутентификации/интеграции"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID клиента",
+        "help" : "Идентификатор клиента для протокола oauth2 (можно получить в разделе администрирования стороннего ПО с поддержкой oauth2)"
+      },
+      "secret" : {
+        "label" : "Секретный ключ",
+        "help" : "Секрет клиента для протокола oauth2 (можно получить в разделе администрирования стороннего ПО с поддержкой oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Создать конфигурацию системы confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание системы confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Создать"
+      },
+      "username" : {
+        "label" : "Имя пользователя Confluence",
+        "help" : "Имя пользователя Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Версия Confluence",
+        "help" : "Версия Confluence"
+      },
+      "baseUri" : {
+        "label" : "Базовый интернет-адрес",
+        "help" : "URL базового адреса системы confluence для установки onpremise или базовый URL вашей организации для облачной системы confluence"
+      },
+      "password" : {
+        "label" : "Пароль Confluence",
+        "help" : "Пароль Confluence"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD apikey, полученный в backoffice confluence, сюда необходимо вставить \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Опубликовать!",
+        "help" : "Сохраняет и делает этот контент доступным в базе знаний для LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SettingsTab" : {
+        "label" : "Настройки"
+      },
+      "MainPanel" : {
+        "label" : "Общие материалы confluence"
+      },
+      "LogsTab" : {
+        "label" : "Журнал"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код содержимого."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание загруженного контента из записей confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Система Confluence",
+        "help" : "Ссылка на уже сконфигурированную систему confluence."
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Ссылка на родительский проект."
+      },
+      "openZips" : {
+        "label" : "Открывать zip-файлы",
+        "help" : "Включить открытие zip-файлов и извлечение содержимого"
+      },
+      "tree" : {
+        "label" : "Выбранные пространства или страницы/подстраницы",
+        "help" : "Общие пространства и страницы confluence"
+      },
+      "programmedTables" : {
+        "label" : "График проверки обновлений контента",
+        "help" : "Настройте расписание проверки изменённого контента, чтобы поддерживать систему поиска актуальной"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критерии организации пространств, страниц и подстраниц",
+        "help" : "Поясните, как были организованы пространства, страницы и подстраницы в контенте confluence, которым вы поделились с Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Общие настройки"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование системы confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "baseUri" : {
+        "label" : "Базовый интернет-адрес",
+        "help" : "URL базового адреса системы confluence"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код системы confluence."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание системы confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Версия Confluence",
+        "help" : "Версия Confluence"
+      },
+      "secretCode" : {
+        "label" : "Используемая учетная запись",
+        "help" : "Выберите или создайте учетную запись для доступа к системе confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "новая группа"
+      },
+      "NewUserBtn" : {
+        "label" : "новый пользователь"
+      },
+      "UsersListPanel" : {
+        "label" : "Список пользователей"
+      },
+      "GroupsListPanel" : {
+        "label" : "Список групп"
+      },
+      "SournameHeader" : {
+        "label" : "фамилия"
+      },
+      "UsernameHeader" : {
+        "label" : "имя пользователя"
+      },
+      "RolesHeader" : {
+        "label" : "роли"
+      },
+      "NameHeader" : {
+        "label" : "имя"
+      },
+      "EditBtn" : {
+        "label" : "Редактировать"
+      },
+      "DisabledHeader" : {
+        "label" : "отключено"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "UserIds" : {
+        "placeholder" : "Выберите пользователей"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование группы пользователей"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание группы пользователей"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Введите код группы пользователей"
+      },
+      "userIds" : {
+        "label" : "Список пользователей",
+        "help" : "Выберите пользователей, участвующих в группе"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Создать"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание системы jira."
+      },
+      "MainPanel" : {
+        "label" : "Создание конфигурации системы jira"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "username" : {
+        "label" : "имя пользователя jira",
+        "help" : "имя пользователя jira"
+      },
+      "token" : {
+        "label" : "jira cloud api ключ",
+        "help" : "jira CLOUD apikey полученный в jira backoffice, здесь необходимо вставить \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Базовый интернет-адрес",
+        "help" : "Url базового адреса системы jira для onpremise установки или основной url вашей организации для jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "PublishBtn" : {
+        "label" : "Опубликовать!",
+        "help" : "Сохраняет и делает эти материалы доступными в базе знаний для LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SettingsTab" : {
+        "label" : "Настройки"
+      },
+      "LogsTab" : {
+        "label" : "Логи"
+      },
+      "MainPanel" : {
+        "label" : "Общий доступ к материалам jira"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код содержимого."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira система",
+        "help" : "Ссылка на уже настроенную систему jira."
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Ссылка на основной проект."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание загружаемого содержимого записей jira."
+      },
+      "programmedTables" : {
+        "label" : "Расписание проверки обновлений содержимого",
+        "help" : "Настройте расписание изменений, чтобы поддерживать систему retrieve augmented generation в актуальном состоянии"
+      },
+      "openZips" : {
+        "label" : "Открывать zip-файлы",
+        "help" : "Включить открытие zip-файлов и извлечение содержимого"
+      },
+      "tree" : {
+        "label" : "Выбранные пространства или страницы/подстраницы",
+        "help" : "Иерархия проектов и тикетов jira, доступных для совместного использования"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критерии организации пространств, страниц и подстраниц",
+        "help" : "Опишите, как была организована структура пространств, страниц и подстраниц в jira, которыми вы делитесь с Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание системы jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование системы jira"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "baseUri" : {
+        "label" : "Базовый интернет-адрес",
+        "help" : "Url базового адреса системы jira"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код системы jira."
+      },
+      "secretCode" : {
+        "label" : "Используемая идентификация",
+        "help" : "Выберите или создайте идентификацию для доступа к системе jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание системы SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Версия SharePoint",
+        "help" : "версия SharePoint"
+      },
+      "secret" : {
+        "label" : "Секретный ключ",
+        "help" : "Oauth2 клиентский секрет для этого приложения, зарегистрированного в продукте microsoft \"entra\" (получается в консоли администратора облака microsoft)"
+      },
+      "clientId" : {
+        "label" : "Идентификатор клиента",
+        "help" : "Oauth2 идентификатор клиента для этого приложения, зарегистрированного в продукте microsoft \"entra\" (получается в консоли администратора облака microsoft)"
+      },
+      "tenantId" : {
+        "label" : "ID арендатора",
+        "help" : "Oauth2 идентификатор арендатора для вашей организации в продукте microsoft \"entra\" (получается в консоли администратора облака microsoft)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Информация о регистрации приложения Microsof oauth2 для Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Создать"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "MainPanel" : {
+        "label" : "Создание конфигурации системы SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "PublishBtn" : {
+        "label" : "Опубликовать!",
+        "help" : "Сохраняет и делает этот контент доступным в базе знаний для LLm"
+      },
+      "SettingsTab" : {
+        "label" : "Настройки"
+      },
+      "MainPanel" : {
+        "label" : "Общий доступ к содержимому SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Журналы"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код содержимого."
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Ссылка на родительский проект."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание источников данных записей SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "система sharepoint",
+        "help" : "Ссылка на уже настроенную систему SharePoint/OneDrive."
+      },
+      "openZips" : {
+        "label" : "Открывать zip-файлы",
+        "help" : "Разрешить открытие zip-файлов и извлечение содержимого"
+      },
+      "tree" : {
+        "label" : "Выбранные сайты/страницы/subpages SharePoint или диски/папки/файлы OneDrive",
+        "help" : "Общий контент SharePoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "График проверки обновлений контента",
+        "help" : "Настройте расписание изменений контента для поддержания актуальности системы РАГ"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критерии организации пространств, страниц и подстраниц",
+        "help" : "Опишите здесь, как была организована структура пространств, страниц и подстраниц в содержимом SharePoint, предоставленном Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Редактирование системы SharePoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Общие настройки"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "secretCode" : {
+        "label" : "Используемая идентификация",
+        "help" : "Выберите или создайте идентификацию для доступа к системе SharePoint"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код системы SharePoint."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание системы SharePoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Версия SharePoint",
+        "help" : "версия SharePoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Удалить"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Сохранить"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Отмена"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Общие настройки информации/содержимого"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Настройки LLms"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код этапа извлечения данных графа знаний"
+      },
+      "MainPanel" : {
+        "label" : "Конфигурация Graphrag/извлечения знаний"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание этой конфигурации этапа извлечения данных графа знаний"
+      },
+      "extractionPrompt" : {
+        "label" : "Промпт для извлечения информации",
+        "help" : "Промпт для большой языковой модели для извлечения сущностей/событий/связей и алиасов"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM, используемая для извлечения данных",
+        "help" : "Укажите большую языковую модель, используемую для извлечения знаний, по умолчанию будет использована модель, если не выбрана конкретная."
+      },
+      "graphRagAllSources" : {
+        "label" : "Применять graph rag ко всем источникам данных",
+        "help" : "Если установлено значение true, все базы знаний/проекты/источники данных будут обработаны для извлечения знаний, в противном случае только специально настроенные."
+      },
+      "defaultModel" : {
+        "label" : "Модель большой языковой модели по умолчанию",
+        "help" : "Для извлечения знаний будет использоваться выбранная по умолчанию большая языковая модель"
+      },
+      "processEveryDocument" : {
+        "label" : "Применять graph rag ко всем файлам",
+        "help" : "Алгоритмы graph rag будут применяться ко всем файлам, что повысит детализацию анализа системы, но увеличит стоимость и время обработки документов"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Критерии выбора файлов для обработки graphrag",
+        "help" : "Измените критерии выбора файлов для отправки в конвейер извлечения информации для graphrag: выберите как минимум имя и критерий файла и/или тип файла, и/или максимальный размер файла в байтах, и/или количество дней с последнего изменения"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Выберите типы файлов"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Критерии фильтрации имен файлов"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Последнее изменение файла, дней назад"
+      },
+      "nameFilter" : {
+        "placeholder" : "Имя файла"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Максимальный размер файла в байтах"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Общая информация"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование базы знаний"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Настройки доступа к базе знаний"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код базы знаний."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание базы знаний."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Используемые модели эмбеддинга (оставьте пустым для системной по умолчанию)",
+        "help" : "Модели эмбеддинга для базы знаний, если оставить поле пустым, будет использована модель по умолчанию."
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "IndexBtn" : {
+        "label" : "Индексировать",
+        "help" : "Переиндексировать содержимое"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Редактирование проекта или элемента"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код проекта."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание проекта."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "база знаний",
+        "help" : "база знаний."
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "IndexBtn" : {
+        "label" : "Индексировать",
+        "help" : "Переиндексировать содержимое"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Добавить элемент/проект",
+        "help" : "добавить новый..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Доступно всем",
+        "help" : "Все могут использовать"
+      },
+      "accessibleGroups" : {
+        "label" : "Список групп",
+        "help" : "Выберите разрешённые группы"
+      },
+      "accessibleUsers" : {
+        "label" : "Список пользователей",
+        "help" : "Выберите разрешённых пользователей"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Панель управления"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs для чата и встраивания"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Профили Rag чата/Промпты моделей"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Базы знаний и проекты"
+      },
+      "UsersGroupTab" : {
+        "label" : "Пользователи и группы"
+      },
+      "GeboModulesTab" : {
+        "label" : "Конфигурация модулей Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Журналы"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Настроить"
+      },
+      "ConfigureBtn" : {
+        "label" : "Настроить"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Новая конфигурация подсказки"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Новый чат-профиль"
+      },
+      "MainPanel" : {
+        "label" : "Чат-профили генерации с расширенным поиском"
+      },
+      "PromptsPanel" : {
+        "label" : "Коллекция подсказок и стандартные подсказки"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Базы знаний"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "ConfigureBtn1" : {
+        "label" : "настроить"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Новая база знаний"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Новая конфигурация модели встраивания"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Новая конфигурация чат-модели"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ModelHeader" : {
+        "label" : "Модель "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Поставщик модели"
+      },
+      "ConfigureBtn" : {
+        "label" : "настроить"
+      },
+      "CodeHeader2" : {
+        "label" : "Код"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Описание"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Поставщик модели"
+      },
+      "ConfigureBtn2" : {
+        "label" : "настроить"
+      },
+      "ModelHeader2" : {
+        "label" : "Модель "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Настроенные чат-модели"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Настроенные модели встраивания"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Тестирование модели"
+      },
+      "TestChatBtn" : {
+        "label" : "Тестовый чат"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI токен",
+        "help" : "Выберите OpenAI токен для этой модели"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "choosedModel" : {
+        "label" : "Выбор OpenAI чат-модели",
+        "help" : "Выберите OpenAI чат-модель для работы."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Общая информация"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Дополнительные настройки"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации OpenAI чат-модели"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Настройки доступа к модели"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации OpenAI embedding-модели"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI токен",
+        "help" : "Выберите OpenAI токен для этой модели"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации embedding-модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации embedding-модели"
+      },
+      "choosedModel" : {
+        "label" : "Выбор OpenAI embedding-модели",
+        "help" : "Выберите OpenAI embedding-модель для работы."
+      },
+      "defaultModel" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если embedding-модель не указана"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "baseUrl" : {
+        "label" : "Базовый адрес сервера ollama",
+        "help" : "Базовый адрес (например, http://servername:234/), по которому отвечает локальный или lan сервер ollama."
+      },
+      "choosedModel" : {
+        "label" : "Выбор Ollama чат-модели",
+        "help" : "Выберите Ollama чат-модель для работы.",
+        "placeholder" : "Выберите модель"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama токен",
+        "help" : "Выберите Ollama токен для этой модели (необязательно)"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации Ollama локальной (или lan) серверной чат-модели"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic токен",
+        "help" : "Выберите Anthropic токен для этой модели"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Anthropic чат-модели",
+        "help" : "Выберите Anthropic чат-модель для работы.",
+        "placeholder" : "Выберите модель"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Дополнительные настройки"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Общая информация"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Настройки доступа к модели"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации Anthropic чат-модели"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI токен",
+        "help" : "Выберите MistralAI токен для этой модели"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "choosedModel" : {
+        "label" : "Выбор MistralAI чат-модели",
+        "help" : "Выберите MistralAI чат-модель для работы."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Общая информация"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Дополнительные настройки"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Настройки доступа к модели"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации MistralAI чат-модели"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Google Vertex AI чат-модели",
+        "help" : "Выберите Google Vertex AI чат-модель для работы."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI токен",
+        "help" : "Выберите Google Vertex AI токен для этой модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Общая информация"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Настройки доступа к модели"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Дополнительные настройки"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации Google Vertex AI чат-модели"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek токен",
+        "help" : "Выберите Deepseek токен для этой модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Deepseek чат-модели",
+        "help" : "Выберите Deepseek чат-модель для работы.",
+        "placeholder" : "Выберите модель"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Дополнительные настройки"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Общая информация"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации Deepseek чат-модели"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Настройки доступа к модели"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации модели"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации модели"
+      },
+      "baseUrl" : {
+        "label" : "Базовый адрес сервера Chat model API",
+        "help" : "Базовый адрес Chat model."
+      },
+      "apiSecretCode" : {
+        "label" : "Chat model API токен",
+        "help" : "Выберите токен Chat model API для этой модели (необязательно)"
+      },
+      "defaultModel" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если модель чата не указана"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Chat model чат-модели",
+        "help" : "Выберите Chat model чат-модель для работы."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Общая информация"
+      },
+      "TitleFragment" : {
+        "label" : "Редактирование провайдера чат-модели:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Дополнительные настройки"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Настройки доступа к модели"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации embedding-модели"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации Ollama локальной (или lan) embedding-модели"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama токен",
+        "help" : "Выберите Ollama токен для этой модели"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Ollama embedding-модели",
+        "help" : "Выберите Ollama embedding-модель для работы."
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации embedding-модели"
+      },
+      "defaultModel" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если embedding-модель не указана"
+      },
+      "baseUrl" : {
+        "label" : "Базовый адрес сервера ollama",
+        "help" : "Базовый адрес (например, http://servername:234/), по которому отвечает локальный или lan сервер ollama."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации embedding-модели"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации MistralAI embedding-модели"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации embedding-модели"
+      },
+      "choosedModel" : {
+        "label" : "Выбор MistralAI embedding-модели",
+        "help" : "Выберите MistralAI embedding-модель для работы."
+      },
+      "defaultModel" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если embedding-модель не указана"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI токен",
+        "help" : "Выберите MistralAI токен для этой модели"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Редактирование конфигурации Google Vertex AI embedding-модели"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации embedding-модели"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Google Vertex AI embedding-модели",
+        "help" : "Выберите Google Vertex AI embedding-модель для работы."
+      },
+      "defaultModel" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если embedding-модель не указана"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации embedding-модели"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI токен",
+        "help" : "Выберите Google Vertex AI токен для этой модели"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "TitleFragment" : {
+        "label" : "Редактирование провайдера embedding-модели:"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации Embedding model"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код конфигурации Embedding model"
+      },
+      "choosedModel" : {
+        "label" : "Выбор Embedding model embedding-модели",
+        "help" : "Выберите Embedding model embedding-модель для работы."
+      },
+      "baseUrl" : {
+        "label" : "Адрес сервера Embedding model API",
+        "help" : "Базовый адрес сервера Embedding model."
+      },
+      "defaultModel" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Если выбрано, эта модель будет использоваться по умолчанию, если embedding-модель не указана"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding model API токен",
+        "help" : "Выберите токен Embedding model API для этой модели"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Информация о настройках чата"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Удалить эту сессию чата"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Переименовать сессию чата"
+      },
+      "QueryControl" : {
+        "placeholder" : "Напишите сообщение для чат-бота"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "description" : {
+        "label" : "Описание чата",
+        "help" : "Введите описание сессии чата."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Используемая модель",
+        "help" : "Код модели"
+      },
+      "providerId" : {
+        "label" : "Провайдер модели чата",
+        "help" : "Драйвер поставщика LLms"
+      },
+      "functions" : {
+        "label" : "Вызваемые функции модели чата",
+        "help" : "Список функций, доступных для модели чата"
+      },
+      "NameCol" : {
+        "label" : "Имя"
+      },
+      "DescriptionCol" : {
+        "label" : "Описание"
+      },
+      "kbases" : {
+        "label" : "Доступные базы знаний",
+        "help" : "Список баз знаний, используемых в этом RAG-чате"
+      },
+      "CloseBtn" : {
+        "help" : "Закрыть"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Записать",
+        "help" : "Начать запись аудио и отправить"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "обновить данные"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SelectHeader" : {
+        "label" : "Выбрать"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "дата/время окончания"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "дата/время начала"
+      },
+      "ProcessingHeader" : {
+        "label" : "обработка"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "FinishedHeader" : {
+        "label" : "завершено"
+      },
+      "WithErrorHeader" : {
+        "label" : "с ошибкой"
+      },
+      "LogTableComponent" : {
+        "help" : "Журнал загрузки этой общей области файловой системы"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Статистика процессов"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "CloseBtn" : {
+        "label" : "Закрыть"
+      },
+      "PublicationLogTab" : {
+        "label" : "Журнал публикаций"
+      },
+      "MainPanel" : {
+        "label" : "Журнал публикаций"
+      },
+      "actualStatus" : {
+        "label" : "Статус",
+        "help" : "Статус задачи: выполняется, завершена или завершена с ошибками."
+      },
+      "publishingSystem" : {
+        "label" : "Конфигурация опубликованного контента",
+        "help" : "Информация о опубликованном контенте"
+      },
+      "startDateTime" : {
+        "label" : "Дата/время начала",
+        "help" : "Дата и время запуска задачи синхронизации контента"
+      },
+      "endDateTime" : {
+        "label" : "Дата/время окончания",
+        "help" : "Дата и время завершения задачи синхронизации контента"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Не полностью обработано"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Обработано полностью"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "встраивание по сравнению с общим количеством документов"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Подробнее"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Сгенерировать подсказку"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Мастер подсказок",
+        "help" : "Используйте это, чтобы использовать LLM для создания подсказки для ваших целей"
+      },
+      "acceptPrompt" : {
+        "label" : "Принять подсказку"
+      },
+      "promptWizardUI" : {
+        "label" : "Мастер создания шаблона подсказки"
+      },
+      "cancel" : {
+        "label" : "Отмена"
+      },
+      "response" : {
+        "label" : "Рекомендуемый шаблон подсказки",
+        "help" : "Сгенерированный текст шаблона для вашей цели (вы можете изменить или скорректировать его)"
+      },
+      "modelCode" : {
+        "label" : "Чат-модель для использования",
+        "help" : "Выберите чат-модель, которую хотите использовать для создания шаблона подсказки"
+      },
+      "query" : {
+        "label" : "Запрос шаблона подсказки",
+        "help" : "Укажите во втором лице цель, в которой ИИ будет помогать пользователю"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Температура",
+        "help" : "Температура, с которой модель будет отвечать, от 0 до 1 (если не уверены, оставьте пустым)"
+      },
+      "contextLength" : {
+        "label" : "Длина контекста (токены)",
+        "help" : "Объем текста, который AI-модель может учитывать при обработке (если не указано, будет использовано 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Параметр TopP, от 0 до 1 (если не уверены, оставьте пустым)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Включённые функции для этой модели",
+        "help" : "Функции, которые может использовать модель во время чата"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Стандартный запрос модели",
+        "help" : "Изменить стандартный запрос для чат-модели."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание идентификатора."
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код идентификатора."
+      },
+      "secretType" : {
+        "label" : "Тип идентификатора",
+        "help" : "Выберите тип идентификатора для создания в удалённой системе"
+      },
+      "InsertBtn" : {
+        "label" : "Вставить"
+      },
+      "token" : {
+        "label" : "Токен",
+        "help" : "Введите токен."
+      },
+      "user" : {
+        "label" : "Пользователь",
+        "help" : "Введите пользователя, указанного в токене."
+      },
+      "MainPanel" : {
+        "label" : "Создание идентификатора"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "username" : {
+        "label" : "Имя пользователя",
+        "help" : "Введите имя пользователя."
+      },
+      "password" : {
+        "label" : "Пароль",
+        "help" : "Введите пароль."
+      },
+      "email" : {
+        "label" : "E-mail/Имя пользователя",
+        "help" : "Введите e-mail или имя пользователя, связанное с ssh-ключом."
+      },
+      "key" : {
+        "label" : "Секретный ключ",
+        "help" : "Откройте файл приватного ключа и скопируйте содержимое в это поле."
+      },
+      "passphrase" : {
+        "label" : "Пароль к ключу",
+        "help" : "Введите пароль к ключу."
+      },
+      "pub" : {
+        "label" : "Публичный ключ",
+        "help" : "Откройте файл публичного ключа и скопируйте содержимое в это поле."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код содержимого."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание загруженного содержимого файловой системы."
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Ссылка на родительский проект."
+      },
+      "upload" : {
+        "label" : "Загрузить содержимое",
+        "help" : "Нажмите кнопку обзора и выберите zip-файлы или другие файлы"
+      },
+      "openZips" : {
+        "label" : "Открыть zip-файлы",
+        "help" : "Включить открытие zip-файлов и извлечение содержимого"
+      },
+      "PublishBtn" : {
+        "label" : "Опубликовать!",
+        "help" : "Сохраняет и делает это содержимое доступным в базе знаний для LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "LogsTab" : {
+        "label" : "Журналы"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование загруженного содержимого"
+      },
+      "SettingsTab" : {
+        "label" : "Настройки"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Настроить системы сборки",
+        "help" : "Список систем сборки/упаковки для поиска метаинформации и дополнительной информации о материалах (оставьте пустым, если программного кода нет)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Выбранные элементы"
+      },
+      "ChooseOk" : {
+        "label" : "ОК"
+      },
+      "ChooseCancel" : {
+        "label" : "Отмена"
+      },
+      "EditBtn" : {
+        "help" : "Изменить выбранные"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Выберите элементы"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Выберите элементы"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Редактировать расписание"
+      },
+      "ConfirmBtn" : {
+        "label" : "Подтвердить"
+      },
+      "AddBtn" : {
+        "label" : "+Добавить"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Опубликовать!",
+        "help" : "Сохраняет и делает этот контент доступным в базе знаний для LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SettingsTab" : {
+        "label" : "Настройки"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Обработка исходного кода"
+      },
+      "LogsTab" : {
+        "label" : "Журналы"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование существующего содержимого файловой системы"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание загруженного содержимого элемента файловой системы."
+      },
+      "openZips" : {
+        "label" : "Открыть zip-файлы",
+        "help" : "Включить открытие zip-файлов и извлечение содержимого"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код содержимого."
+      },
+      "tree" : {
+        "label" : "Выбранные файлы или папки",
+        "help" : "Доступные на сервере файлы или каталоги общей файловой системы"
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Ссылка на родительский проект."
+      },
+      "programmedTables" : {
+        "label" : "Расписание проверки обновлений содержимого",
+        "help" : "Настройте расписание изменения содержимого для актуальности системы генерации с дополнением поиска"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критерии организации папок",
+        "help" : "Объясните здесь, как были организованы папки в области файловой системы, которую вы делитесь с Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Настроить системы сборки",
+        "help" : "Список систем сборки/упаковки для проверки метаинформации и дополнительных данных артефактов (оставьте пустым, если исходного кода нет)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Новая область общего доступа к файлам"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Абсолютный путь"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db или yml файл конфигурации"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ModifyHeader" : {
+        "label" : "Изменить"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Выбранная папка общей файловой системы",
+        "help" : "Выберите папку на сервере, которая является корневым путем для общей файловой системы, используемой в вашей организации как репозиторий документов"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание области общей файловой системы вашей организации"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код содержимого."
+      },
+      "InsertBtn" : {
+        "label" : "Вставить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование папки общих файлов сервера"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "PublishBtn" : {
+        "label" : "Опубликовать!",
+        "help" : "Сохранить и сделать это содержимое доступным в базе знаний для LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование исходника/репозитория документации git"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание git репозитория."
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код git репозитория."
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Ссылка на родительский проект."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git система",
+        "help" : "Ссылка на уже настроенную git систему."
+      },
+      "branch" : {
+        "label" : "Ветка",
+        "help" : "Название ветки для перехода (обычно master, main или develop)"
+      },
+      "identityCode" : {
+        "label" : "Используемая идентификация",
+        "help" : "Выберите идентификацию для клонирования/перехода в системе"
+      },
+      "repositoryUri" : {
+        "label" : "Адрес/URL репозитория",
+        "help" : "Полный адрес git удаленного репозитория (обычно начинается с http: или https: или ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "публичный",
+        "help" : "Если истина, доступ к репозиторию не требует аутентификации"
+      },
+      "openZips" : {
+        "label" : "Открывать zip-файлы",
+        "help" : "Включить открытие zip-файлов и извлечение содержимого"
+      },
+      "programmedTables" : {
+        "label" : "Расписание проверки обновления содержимого",
+        "help" : "Настройте расписание проверки изменений для поддержания системы генерации с расширенным поиском в актуальном состоянии"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Настроить системы сборки",
+        "help" : "Список систем сборки/упаковки для поиска метаданных и дополнительной информации об артефактах"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Общие сведения"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Использовать модель чата"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "выбрать"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Выберите конфигурацию модели чата"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Выберите конфигурацию embedding-модели"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "выбрать"
+      },
+      "RagSettingsTab" : {
+        "label" : "Настройки RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Настройки большой языковой модели и доступных инструментов"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Использовать embedding-модель"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Настройки доступа и безопасности"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование профиля чата с расширенным поиском"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Уникальный код профиля чата, генерируется автоматически."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание профиля чата."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Пользователь выбирает базы знаний",
+        "help" : "Пользователь может выбрать доступные базы знаний и/или загрузить свои файлы."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Базы знаний",
+        "help" : "Базы знаний, используемые для поиска документов."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Порог похожести",
+        "help" : "Порог похожести для семантического поиска: 0.60–0.65 — низкая фильтрация, 0.70-0.75 — средняя, 0.80–0.85 — высокая точность"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Порог похожести для второго этапа поиска",
+        "help" : "Порог похожести для семантического поиска: 0.60–0.65 — низкая фильтрация, 0.70-0.75 — средняя, 0.80–0.85 — высокая точность применяется со второго этапа multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Отключить 'Multi Hop' rag",
+        "help" : "Отключить функцию 'multi hop rag'. Многошаговый поиск сначала делает семантический поиск, а затем использует найденные документы как контекст для следующего поиска, увеличивая объем контекста."
+      },
+      "topK" : {
+        "label" : "Учитываемые фрагменты документа (TopK)",
+        "help" : "В режиме RAG будут рассматриваться Top N найденных фрагментов документа при семантическом поиске"
+      },
+      "enabledFunctions" : {
+        "label" : "Включённые функции для этого RAG-чата",
+        "help" : "Функции, которыми может воспользоваться llm-модель во время диалога с пользователем с доступом к выбранной базе знаний"
+      },
+      "prompt" : {
+        "label" : "Промпт",
+        "help" : "Отредактируйте промпт для сессий с расширенным поиском."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Введите или выберите категорию запроса"
+      },
+      "MainPanel" : {
+        "label" : "Редактирование запроса"
+      },
+      "promptCategory" : {
+        "label" : "Категория запроса",
+        "help" : "Выберите или введите категорию запроса."
+      },
+      "prompt" : {
+        "label" : "Запрос",
+        "help" : "Отредактируйте запрос для чата, используйте {query} для обозначения вопроса пользователя и {context} для обозначения контекста документов/истории, передаваемых LLM."
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "Автоматически сгенерированный уникальный код запроса."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание запроса."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Сменить пароль"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Старый пароль",
+        "help" : "Текущий пароль для входа"
+      },
+      "newPassword" : {
+        "label" : "Новый пароль",
+        "help" : "новый пароль"
+      },
+      "username" : {
+        "label" : "Электронная почта",
+        "help" : "Электронная почта как имя пользователя для входа"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Форма смены пароля"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "ChangePwdBtn" : {
+        "label" : "сменить пароль"
+      },
+      "newPassword1" : {
+        "label" : "Подтвердите новый пароль",
+        "help" : "Подтвердите новый пароль"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Удалить"
+      },
+      "CancelBtn" : {
+        "label" : "Отмена"
+      },
+      "SaveBtn" : {
+        "label" : "Сохранить"
+      },
+      "ForMoreInformations" : {
+        "label" : "Для получения дополнительной информации о Google custom search API или получения вашего api-ключа (бесплатно) посетите: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Уникальный код",
+        "help" : "уникальный код конфигурации google search api."
+      },
+      "MainPanel" : {
+        "label" : "Редактирование учетных данных google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Токен Google search api",
+        "help" : "Выберите или введите токен google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID поисковой системы Google",
+        "help" : "ID поисковой системы Google"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Введите описание конфигурации google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Чат без баз знаний",
+        "help" : "Выберите LLM для чата",
+        "placeholder" : "Выберите LLM для чата"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Открыть раздел настроек чата"
+      },
+      "CreateChatBtn" : {
+        "label" : "Новый чат"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Новая сессия чата"
+      },
+      "chatProfileCode" : {
+        "label" : "Чат с базами знаний",
+        "help" : "Выберите корпоративный профиль чата для работы с корпоративными (и вашими) документами и LLM",
+        "placeholder" : "Выберите корпоративный профиль чата для работы с корпоративными (и вашими) документами и LLM"
+      },
+      "NewChatBtn" : {
+        "label" : "Новый чат"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Обсудить документы",
+        "help" : "Просматривайте, ищите и выбирайте документы для работы"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Выберите файлы для обсуждения"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Подтвердить"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Загрузите или выберите ваши документы",
+        "help" : "Выберите или загрузите документы из вашего пространства пользователя"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Изменить выбранные"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Выбрать файлы пользователей"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Отмена"
+      },
+      "okBtn" : {
+        "label" : "ОК"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Выбрать загруженный пользователем контент"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Базы знаний и файлы пользователей"
+      }
+    }
+  }
+}

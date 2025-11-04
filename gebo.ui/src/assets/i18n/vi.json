@@ -1,1 +1,2429 @@
-{"FastSetupModule":{"FastSetupComponent":{"langCode":{"label":"Ngôn ngữ hệ thống mặc định","help":"Ngôn ngữ hệ thống mặc định cho cài đặt Gebo.ai này"},"username":{"label":"E-mail","help":"E-mail dùng làm tên đăng nhập"},"passwordC":{"label":"Xác nhận mật khẩu","help":"Xác nhận mật khẩu"},"password":{"label":"Mật khẩu","help":"Mật khẩu để đăng nhập (ít nhất 8 ký tự)"},"PasswordNotMatching":{"label":" mật khẩu không khớp "},"LocalAdmin":{"label":"Tạo tài khoản quản trị viên cục bộ của bạn"},"LocalAdminExplanation":{"label":"Bạn sẽ sử dụng tài khoản này trong tương lai để thiết lập/quản lý phần mềm, dữ liệu này sẽ chỉ lưu trên hệ thống của bạn và không được gửi qua mạng"},"EnterBtn":{"label":"Đi tới trang đăng nhập"},"SetupPage":{"label":"Thiết lập cài đặt Gebo.ai của bạn"},"CreateBtn":{"label":"Tạo cấu hình hệ thống"},"LicenceFieldSet":{"label":"Đọc & chấp nhận điều khoản"},"AcceptMark":{"label":"Tôi chấp nhận các điều khoản","help":"Bằng cách nhấp vào đây, bạn chấp nhận các điều khoản & điều kiện trong giấy phép"}}},"LoginModule":{"LoginComponent":{"username":{"label":"e-mail","help":"E-mail làm tên đăng nhập"},"password":{"label":"Mật khẩu","help":"Mật khẩu để đăng nhập"}}},"SetupWizardPanelModule":{"Oauth2WizardComponent":{"Oauth2ConfigBtn":{"label":"Cấu hình Oauth2"},"ProviderNameHeader":{"label":"Tên nhà cung cấp"},"DescriptionHeader":{"label":"Mô tả"},"MainPanel":{"label":"Cài đặt bảo mật Oauth2"},"IdHeader":{"label":"Id"}},"SetupWizardPanelComponent":{"WizardBackBtn":{"label":"Quay lại trang chủ thiết lập"},"WizardUi":{"label":"Chọn mục thiết lập"}},"ConfluenceWizardComponent":{"MainPanel":{"label":"Thiết lập hệ thống Atlassian Confluence cho công ty"},"DescriptionHeader":{"label":"Mô tả"},"SystemTypeHeader":{"label":"Loại hệ thống"},"ConfigCodeHeader":{"label":"Mã cấu hình"},"ConfluenceSystemBtn":{"label":"Hệ thống Confluence"}},"JiraWizardComponent":{"JiraSystemBtn":{"label":"Hệ thống Jira"},"DescriptionHeader":{"label":"Mô tả"},"ConfigCodeHeader":{"label":"Mã cấu hình"},"MainPanel":{"label":"Thiết lập hệ thống Atlassian Jira cho công ty"},"SystemTypeHeader":{"label":"Loại hệ thống"}},"SharepointWizardComponent":{"DescriptionHeader":{"label":"Mô tả"},"ConfigCodeHeader":{"label":"Mã cấu hình"},"MainPanel":{"label":"Thiết lập hệ thống Microsoft Sharepoint cho công ty"},"SystemTypeHeader":{"label":"Loại hệ thống"},"SharepointSystemBtn":{"label":"Hệ thống Sharepoint"}},"LLMSetupWizardComponent":{"InstructionText":{"label":"Cung cấp api-key với đủ số dư tín dụng. Nếu chọn OpenAI, bạn phải nạp một khoản tín dụng riêng (10-30$ có thể đủ) cho gói thông thường của bạn để sử dụng api, nếu không sẽ không có lưu lượng llms khả dụng trong ứng dụng này."},"MainPanel":{"label":"Thiết lập quyền truy cập các nhà cung cấp llms Gebo.ai bằng api key của riêng bạn"},"provider":{"label":"Nhà cung cấp mô hình ngôn ngữ lớn","help":"Chọn một nhà cung cấp giữa OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)"},"user":{"label":"Người dùng","help":"Nhập tên người dùng gắn với apiKey"},"ConfigureBtn":{"label":"Cấu hình"},"apiKey":{"label":"Api key","help":"Api key của bạn từ nhà cung cấp LLMS để sử dụng"}},"GraphRagWizardComponent":{"DescriptionHeader":{"label":"Mô tả"},"CreateGraphRagConfigBtn":{"label":"Tạo cấu hình graph rag"},"MainPanel":{"label":"Thiết lập cấu hình mặc định Graph Rag & trích xuất tri thức"},"ConfigCodeHeader":{"label":"Mã cấu hình"}},"KnowledgeBaseWizardComponent":{"ProjectHeader":{"label":"Dự án"},"AddAKnowledgeBaseBtn":{"label":"Thêm kho kiến thức"},"KnowledgeBaseHeader":{"label":"Kho kiến thức"},"MainPanel":{"label":"Cấu hình kho kiến thức & nội dung"},"ContentsSourceHeader":{"label":"Nguồn nội dung"},"PublishedHeader":{"label":"Đã xuất bản"},"NrOfDocumentsHeader":{"label":"Số lượng tài liệu"},"AddAProjectItemBtn":{"label":"Thêm dự án/mục","help":"tạo dự án mới"},"Button1":{"help":"mở kho kiến thức"},"Button2":{"help":"mở biểu mẫu dự án"}},"WorkFolderWizardComponent":{"MainPanel":{"label":"Cấu hình thư mục làm việc Gebo.ai"},"ConfigureBtn":{"label":"Cấu hình"},"workDirectory":{"label":"Chọn thư mục làm thư mục làm việc Gebo.ai","help":"Chọn thư mục máy chủ sẽ được sử dụng làm thư mục làm việc để lưu trữ các cấu hình và nội dung."}}},"GeboAIOauth2RegistrationModule":{"Oauth2ProviderRegistration":{"code":{"label":"Mã","help":"Nhập mô tả về mã Xác thực/ Tích hợp OAUTH2 (registrationId)."},"description":{"label":"Mô tả","help":"Nhập mô tả về thông tin Xác thực/ Tích hợp OAUTH2."},"configurationType":{"label":"Mục đích cấu hình","help":"Chọn nếu thiết lập này sẽ được sử dụng để xác thực với Gebo.ai hoặc cho phép Gebo.ai kết nối với hệ thống bên thứ ba."},"authProvider":{"label":"Nhà cung cấp","help":"Nhập tên nhà cung cấp Xác thực OAUTH2"},"issuerUri":{"label":"Issuer Uri","help":"Nhập URL nhà phát hành OAUTH2 của nhà cung cấp"},"authorizationUri":{"label":"URL ủy quyền","help":"Nhập URL ủy quyền OAUTH2 của nhà cung cấp"},"jwkSetUri":{"label":"Jwk Set Uri","help":"Nhập URL Jwk Set OAUTH2 của nhà cung cấp"},"userInfoUri":{"label":"URL thông tin người dùng","help":"Nhập URL thông tin người dùng OAUTH2 của nhà cung cấp"},"introspectionUri":{"label":"Introspection Uri","help":"Nhập URL kiểm tra OAUTH2 của nhà cung cấp"},"tokenUri":{"label":"URL token","help":"Nhập URL token OAUTH2 của nhà cung cấp"},"SaveBtn":{"label":"Lưu"},"Oauth2ProviderUrls":{"label":"URL nhà cung cấp OAUTH2"},"MainPanel":{"label":"Thêm mới thông tin Xác thực/ Tích hợp OAUTH2"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"}}},"GeboOauth2SecretModule":{"GeboOauth2SecretComponent":{"clientId":{"label":"ID khách hàng","help":"Mã định danh khách hàng cho giao thức oauth2 (cần lấy trong khu vực quản trị phần mềm bên thứ ba đã xác thực oauth2)"},"secret":{"label":"Khóa bí mật","help":"Khóa bí mật khách hàng cho giao thức oauth2 (cần lấy trong khu vực quản trị phần mềm bên thứ ba đã xác thực oauth2)"}}},"GeboAIConfluenceModule":{"GeboAIConfluenceSystemFastComponent":{"MainPanel":{"label":"Tạo cấu hình hệ thống confluence"},"CancelBtn":{"label":"Hủy"},"description":{"label":"Mô tả","help":"Nhập mô tả cho hệ thống confluence."},"CreateBtn":{"label":"Tạo"},"username":{"label":"Tên đăng nhập Confluence","help":"Tên người dùng Confluence"},"confluenceVersion":{"label":"Phiên bản Confluence","help":"Phiên bản Confluence"},"baseUri":{"label":"Địa chỉ internet cơ bản","help":"Url địa chỉ hệ thống confluence cơ bản cho cài đặt onpremise hoặc url cơ bản tổ chức của bạn cho hệ thống confluence cloud"},"password":{"label":"Mật khẩu Confluence","help":"Mật khẩu Confluence"},"token":{"label":"Confluence cloud api key","help":"Confluence CLOUD apikey lấy từ backoffic confluence, nhập \"API Token for your Atlassian Account\" tại đây."}},"GConfluenceProjectEndpoint":{"PublishBtn":{"label":"Xuất bản!","help":"Lưu và cho phép những nội dung này hiển thị trong cơ sở tri thức cho LLm's"},"SaveBtn":{"label":"Lưu"},"DeleteBtn":{"label":"Xóa"},"CancelBtn":{"label":"Hủy"},"SettingsTab":{"label":"Cài đặt"},"MainPanel":{"label":"Chia sẻ nội dung confluence"},"LogsTab":{"label":"Nhật ký"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất tự động tạo cho nội dung."},"description":{"label":"Mô tả","help":"Nhập mô tả cho nội dung đã tải lên của các mục confluence."},"confluenceSystemCode":{"label":"Hệ thống Confluence","help":"Tham chiếu hệ thống confluence đã được cấu hình."},"parentProjectCode":{"label":"Dự án","help":"Tham chiếu dự án cha."},"openZips":{"label":"Mở các tệp zip","help":"Bật chức năng mở tệp zip và trích xuất nội dung"},"tree":{"label":"Không gian hoặc trang/phụ trang đã chọn","help":"Nội dung không gian và trang đã chia sẻ từ confluence"},"programmedTables":{"label":"Lịch kiểm tra cập nhật nội dung","help":"Cấu hình lịch kiểm tra nội dung đã thay đổi để duy trì hệ thống retrieval augmented generation được cập nhật"},"catalogingCriteria":{"label":"Tiêu chí tổ chức không gian, trang và phụ trang","help":"Vui lòng giải thích ở đây cách tiêu chí tổ chức các không gian, trang và phụ trang trong nội dung confluence đã chia sẻ với Gebo.ai"}},"GConfluenceSystem":{"GeneralSettingsTab":{"label":"Cài đặt chung"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"MainPanel":{"label":"Chỉnh sửa hệ thống confluence"},"SaveBtn":{"label":"Lưu"},"baseUri":{"label":"Địa chỉ internet cơ bản","help":"Url địa chỉ hệ thống confluence cơ bản"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất tự động tạo cho hệ thống confluence."},"description":{"label":"Mô tả","help":"Nhập mô tả cho hệ thống confluence."},"confluenceVersion":{"label":"Phiên bản Confluence","help":"Phiên bản Confluence"},"secretCode":{"label":"Định danh đã sử dụng","help":"Chọn hoặc tạo định danh để truy cập hệ thống confluence"}}},"GeboAIUsersGroupPanelModule":{"GeboAIUsersManagementComponent":{"NewGroupBtn":{"label":"nhóm mới"},"NewUserBtn":{"label":"người dùng mới"},"UsersListPanel":{"label":"Danh sách người dùng"},"GroupsListPanel":{"label":"Danh sách nhóm"},"SournameHeader":{"label":"họ"},"UsernameHeader":{"label":"tên đăng nhập"},"RolesHeader":{"label":"vai trò"},"NameHeader":{"label":"tên"},"EditBtn":{"label":"Chỉnh sửa"},"DisabledHeader":{"label":"vô hiệu hóa"}}},"GeboAIUsersGroupModule":{"UsersGroup":{"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"UserIds":{"placeholder":"Chọn người dùng"},"CancelBtn":{"label":"Hủy"},"MainPanel":{"label":"Chỉnh sửa nhóm người dùng"},"description":{"label":"Mô tả","help":"Nhập mô tả cho nhóm người dùng"},"code":{"label":"Mã duy nhất","help":"Nhập mã của nhóm người dùng"},"userIds":{"label":"Danh sách người dùng","help":"Chọn người dùng tham gia nhóm"}}},"GeboAIJiraModule":{"GeboAIJiraSystemFastComponent":{"CreateBtn":{"label":"Tạo mới"},"description":{"label":"Mô tả","help":"Nhập mô tả của hệ thống jira."},"MainPanel":{"label":"Tạo cấu hình hệ thống jira"},"CancelBtn":{"label":"Hủy"},"username":{"label":"tên người dùng jira","help":"Tên người dùng jira"},"token":{"label":"jira cloud api key","help":"jira CLOUD apikey lấy từ trang quản trị jira, ở đây cần nhập \"API Token for your Atlassian Account\"."},"baseUri":{"label":"Địa chỉ internet cơ sở","help":"Url địa chỉ hệ thống jira cơ sở cho cài đặt onpremise hoặc url cơ sở của tổ chức bạn cho hệ thống jira cloud"}},"GJiraProjectEndpoint":{"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"PublishBtn":{"label":"Xuất bản!","help":"Lưu và cho phép những nội dung này khả dụng trong kho tri thức cho LLm"},"CancelBtn":{"label":"Hủy"},"SettingsTab":{"label":"Cài đặt"},"LogsTab":{"label":"Nhật ký"},"MainPanel":{"label":"Chia sẻ nội dung jira"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất được tự động tạo cho các nội dung."},"jiraSystemCode":{"label":"jira system","help":"Tham chiếu hệ thống jira đã được cấu hình."},"parentProjectCode":{"label":"Dự án","help":"Tham chiếu dự án cha."},"description":{"label":"Mô tả","help":"Nhập mô tả cho nội dung đã tải lên từ các mục jira."},"programmedTables":{"label":"Lịch kiểm tra cập nhật nội dung","help":"Cấu hình lịch kiểm tra những nội dung thay đổi để giữ cho hệ thống truy xuất thông tin tăng cường luôn cập nhật"},"openZips":{"label":"Mở tệp zip","help":"Bật chức năng mở tệp zip và trích xuất nội dung"},"tree":{"label":"Không gian hoặc trang/mục con đã chọn","help":"Nội dung phân cấp dự án và ticket jira được chia sẻ"},"catalogingCriteria":{"label":"Tiêu chí tổ chức không gian, trang và trang con","help":"Vui lòng giải thích cách tổ chức không gian, trang và trang con trong nội dung jira đã chia sẻ với Gebo.ai"}},"GJiraSystem":{"description":{"label":"Mô tả","help":"Nhập mô tả của hệ thống jira."},"DeleteBtn":{"label":"Xóa"},"MainPanel":{"label":"Chỉnh sửa hệ thống jira"},"CancelBtn":{"label":"Hủy"},"SaveBtn":{"label":"Lưu"},"baseUri":{"label":"Địa chỉ internet cơ sở","help":"Url địa chỉ hệ thống jira cơ sở"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất được tự động tạo cho hệ thống jira."},"secretCode":{"label":"Danh tính sử dụng","help":"Chọn hoặc tạo danh tính để truy cập hệ thống jira"}}},"GeboAISharepointModule":{"GeboAISharepointSystemFastComponent":{"description":{"label":"Mô tả","help":"Nhập mô tả cho hệ thống SharPpoint/OneDrive."},"sharepointVersion":{"label":"Phiên bản Sharepoint","help":"Phiên bản sharepoint"},"secret":{"label":"Khóa bí mật","help":"Oauth2 client secret cho ứng dụng này đã đăng ký trong sản phẩm microsoft \"entra\" (lấy tại bảng điều khiển quản trị cloud của microsoft)"},"clientId":{"label":"Client ID","help":"Oauth2 client identifier cho ứng dụng này đã đăng ký trong sản phẩm microsoft \"entra\" (lấy tại bảng điều khiển quản trị cloud của microsoft)"},"tenantId":{"label":"Tenant ID","help":"Oauth2 tenant identifier cho sản phẩm microsoft \"entra\" của tổ chức bạn (lấy tại bảng điều khiển quản trị cloud của microsoft)"},"MicrosofOauth2Fieldset":{"label":"Thông tin đăng ký ứng dụng Microsof oauth2 cho Gebo.ai"},"CreateBtn":{"label":"Tạo mới"},"CancelBtn":{"label":"Hủy"},"MainPanel":{"label":"Tạo cấu hình hệ thống SharePoint/OneDrive"}},"GSharepointProjectEndpoint":{"CancelBtn":{"label":"Hủy"},"SaveBtn":{"label":"Lưu"},"PublishBtn":{"label":"Xuất bản!","help":"Lưu và cho phép các nội dung này sẵn sàng trong kho tri thức cho LLm"},"SettingsTab":{"label":"Cài đặt"},"MainPanel":{"label":"Chia sẻ nội dung SharePoint/OneDrive"},"LogsTab":{"label":"Nhật ký"},"DeleteBtn":{"label":"Xóa"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của nội dung được tạo tự động."},"parentProjectCode":{"label":"Dự án","help":"Tham chiếu dự án cha."},"description":{"label":"Mô tả","help":"Nhập mô tả nguồn dữ liệu mục nhập SharePoint/OneDrive."},"sharePointSystemCode":{"label":"Hệ thống sharepoint","help":"Tham chiếu hệ thống SharePoint/OneDrive đã cấu hình."},"openZips":{"label":"Mở tập tin zip","help":"Bật chức năng mở tập tin zip và trích xuất nội dung"},"tree":{"label":"Các site/trang/phụ trang Sharepoint hoặc ổ đĩa/thư mục/tập tin OneDrive đã chọn","help":"Nội dung Sharepoint/OneDrive đã chia sẻ"},"programmedTables":{"label":"Lịch kiểm tra cập nhật nội dung","help":"Cấu hình lịch trình cập nhật các nội dung đã thay đổi để đảm bảo hệ thống truy xuất tăng cường luôn cập nhật"},"catalogingCriteria":{"label":"Tiêu chí tổ chức không gian, trang và phụ trang","help":"Vui lòng mô tả cách tổ chức không gian, trang và phụ trang trong các nội dung sharepoint đã chia sẻ với Gebo.ai"}},"GSharepointContentManagementSystem":{"MainPanel":{"label":"Chỉnh sửa hệ thống sharepoint"},"GeneralSettingsTab":{"label":"Cài đặt chung"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"secretCode":{"label":"Danh tính sử dụng","help":"Chọn hoặc tạo danh tính để truy cập hệ thống sharepoint"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của hệ thống sharepoint được tự động tạo."},"description":{"label":"Mô tả","help":"Nhập mô tả cho hệ thống sharepoint."},"sharepointVersion":{"label":"Phiên bản Sharepoint","help":"Phiên bản sharepoint"}}},"GeboAIGraphRagExtractionModule":{"GraphRagExtractionConfig":{"graphRagConfigUI_Delete":{"label":"Xóa"},"graphRagConfigUI_Save":{"label":"Lưu"},"graphRagConfigUI_Cancel":{"label":"Hủy"},"graphRagConfigUI_ContextSettings":{"label":"Cài đặt thông tin/nội dung chung"},"graphRagConfigUI_LLMSSettings":{"label":"Cài đặt LLms"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất được tạo tự động cho giai đoạn trích xuất dữ liệu đồ thị tri thức"},"MainPanel":{"label":"Cấu hình trích xuất tri thức/graphrag"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình giai đoạn trích xuất dữ liệu đồ thị tri thức này"},"extractionPrompt":{"label":"Lời nhắc trích xuất thông tin","help":"Lời nhắc dành cho mô hình ngôn ngữ lớn để trích xuất thực thể/sự kiện/mối quan hệ và bí danh"},"usedModelConfiguration":{"label":"LLM được sử dụng để trích xuất dữ liệu","help":"Chỉ định mô hình ngôn ngữ lớn dùng để trích xuất tri thức, nếu không chọn sẽ sử dụng mô hình mặc định."},"graphRagAllSources":{"label":"Áp dụng graphrag cho tất cả nguồn dữ liệu","help":"Nếu bật, tất cả các cơ sở tri thức/dự án/nguồn dữ liệu sẽ được xử lý để trích xuất tri thức, nếu không chỉ những nguồn được cấu hình cụ thể mới được xử lý"},"defaultModel":{"label":"Mô hình ngôn ngữ lớn mặc định","help":"Mô hình ngôn ngữ lớn mặc định sẽ được sử dụng để trích xuất tri thức"},"processEveryDocument":{"label":"Áp dụng graphrag cho tất cả tệp","help":"Thuật toán graphrag sẽ được áp dụng cho tất cả các tệp, giúp nâng cao chi tiết phân tích nhưng sẽ tăng chi phí và thời gian xử lý tài liệu"},"contentSelectionFilter":{"label":"Tiêu chí chọn tệp để xử lý graphrag","help":"Chỉnh sửa tiêu chí trên tệp để gửi đến quy trình trích xuất tri thức cho graphrag, chọn ít nhất một tên tệp và tiêu chí và/hoặc loại tệp và/hoặc số byte tối đa của tệp và/hoặc số ngày kể từ khi chỉnh sửa lần cuối"}}},"GeboAIContentSelectionFilterModule":{"SelectionFilterCriteria":{"extensions":{"placeholder":"Chọn loại tệp"},"nameFilterCriteria":{"placeholder":"Tiêu chí lọc tên tệp"},"maxModificationAgeInDays":{"placeholder":"Tệp chỉnh sửa lần cuối, số ngày trước"},"nameFilter":{"placeholder":"Tên tệp"},"maxFileSize":{"placeholder":"Kích thước tệp tối đa (Bytes)"}}},"GeboAiKnowledgeBaseModule":{"GKnowledgeBase":{"GeneralInfosTab":{"label":"Thông tin chung"},"MainPanel":{"label":"Chỉnh sửa cơ sở tri thức"},"AccessSettingsTab":{"label":"Cài đặt quyền truy cập cơ sở tri thức"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cơ sở tri thức được tạo tự động."},"description":{"label":"Mô tả","help":"Nhập mô tả cho cơ sở tri thức."},"embeddingModelReferences":{"label":"Mô hình embedding sử dụng (để trống để dùng mặc định hệ thống)","help":"Mô hình embedding cho cơ sở tri thức, để trống sẽ sử dụng mặc định."},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"IndexBtn":{"label":"Lập chỉ mục","help":"Lập chỉ mục lại nội dung"}},"GProject":{"MainPanel":{"label":"Chỉnh sửa dự án hoặc mục"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của dự án được tạo tự động."},"description":{"label":"Mô tả","help":"Nhập mô tả cho dự án."},"rootKnowledgeBaseCode":{"label":"cơ sở tri thức","help":"cơ sở tri thức."},"DeleteBtn":{"label":"Xóa"},"IndexBtn":{"label":"Lập chỉ mục","help":"Lập chỉ mục lại nội dung"},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"}},"GeboAiKnowledgeBaseTreeComponent":{"addNewAnchor":{"label":"+ Thêm mục/dự án","help":"thêm mới..."}}},"GeboAIAccessControlModule":{"GeboAIAccessControlComponent":{"accessibleToAll":{"label":"Mọi người đều sử dụng","help":"Mọi người đều có thể sử dụng"},"accessibleGroups":{"label":"Danh sách nhóm","help":"Chọn các nhóm được phép"},"accessibleUsers":{"label":"Danh sách người dùng","help":"Chọn những người dùng được phép"}}},"GeboAiAdminPanelModule":{"GeboAiAdminComponent":{"DashboardTab":{"label":"Bảng điều khiển"},"LLMSTab":{"label":"LLMs cho trò chuyện & nhúng"},"RagChatConfigTab":{"label":"Hồ sơ trò chuyện Rag / Nhắc mô hình"},"KnowledgeBaseTab":{"label":"Cơ sở kiến thức & dự án"},"UsersGroupTab":{"label":"Người dùng và nhóm"},"GeboModulesTab":{"label":"Cấu hình modules Gebo.ai"},"LogsTab":{"label":"Nhật ký"}}},"SystemsPanelModule":{"SystemsComponent":{"CodeHeader":{"label":"Mã"},"DescriptionHeader":{"label":"Mô tả"},"ConfigureBtn2":{"label":"Cấu hình"},"ConfigureBtn":{"label":"Cấu hình"}}},"ChatProfilesPanelModule":{"ChatProfilesComponent":{"NewPromptConfigurationBtn":{"label":"Cấu hình nhắc mới"},"NewChatProfileBtn":{"label":"Hồ sơ chat mới"},"MainPanel":{"label":"Hồ sơ chat tăng cường truy xuất"},"PromptsPanel":{"label":"Bộ sưu tập nhắc & nhắc mặc định"},"KnowledgeBasesHeader":{"label":"Cơ sở kiến thức"},"DescriptionHeader":{"label":"Mô tả"},"ConfigureBtn1":{"label":"cấu hình"},"CodeHeader":{"label":"Mã"}}},"KnowledgeBasesPanelModule":{"KnowledgeBasesComponent":{"NewKnowledgeBaseBtn":{"label":"Kiến thức mới"}}},"LlmsPanelModule":{"LlmsSystemsComponent":{"NewEmbeddingModelConfigurationBtn":{"label":"Cấu hình mô hình nhúng mới"},"NewChatModelConfigurationBtn":{"label":"Cấu hình mô hình trò chuyện mới"},"DescriptionHeader":{"label":"Mô tả"},"CodeHeader":{"label":"Mã"},"ModelHeader":{"label":"Mô hình "},"ModelProviderHeader":{"label":"Nhà cung cấp mô hình"},"ConfigureBtn":{"label":"cấu hình"},"CodeHeader2":{"label":"Mã"},"DescriptionHeader2":{"label":"Mô tả"},"ModelProviderHeader2":{"label":"Nhà cung cấp mô hình"},"ConfigureBtn2":{"label":"cấu hình"},"ModelHeader2":{"label":"Mô hình "}}},"GeboAiLargeLanguageModelsModule":{"GeboAITestChatComponent":{"TestingModelDialog":{"label":"Đang kiểm tra mô hình"},"TestChatBtn":{"label":"Thử trò chuyện"}},"GOpenAIChatModelConfig":{"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"apiSecretCode":{"label":"OpenAI token","help":"Chọn OpenAI token sẽ được sử dụng cho mô hình này"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện OpenAI","help":"Chọn mô hình trò chuyện OpenAI để sử dụng."},"GeneralInfosTab":{"label":"Thông tin chung"},"AdvancedSettingsTab":{"label":"Cài đặt nâng cao"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình trò chuyện OpenAI"},"ModelAccessSettingsTab":{"label":"Cài đặt truy cập mô hình"}},"GOpenAIEmbeddingModelConfig":{"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình nhúng OpenAI"},"apiSecretCode":{"label":"OpenAI token","help":"Chọn OpenAI token sẽ được sử dụng cho mô hình này"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình nhúng được tạo tự động"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình nhúng"},"choosedModel":{"label":"Lựa chọn mô hình nhúng OpenAI","help":"Chọn mô hình nhúng OpenAI để sử dụng."},"defaultModel":{"label":"Đặt làm mô hình nhúng mặc định","help":"Nếu chọn, đây sẽ là mô hình nhúng mặc định khi không chỉ định mô hình nào"}},"GOllamaChatModelConfig":{"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"DeleteBtn":{"label":"Xóa"},"baseUrl":{"label":"Địa chỉ máy chủ ollama gốc","help":"Địa chỉ gốc (như http://servername:234/) máy chủ ollama cục bộ hay nội bộ mạng đáp ứng."},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện Ollama","help":"Chọn mô hình trò chuyện Ollama để sử dụng.","placeholder":"Chọn mô hình"},"apiSecretCode":{"label":"Ollama token","help":"Chọn Ollama token sẽ được sử dụng cho mô hình này (không bắt buộc)"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình trò chuyện máy chủ ollama cục bộ (hoặc nội bộ)"}},"GAnthropicChatModelConfig":{"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"apiSecretCode":{"label":"Anthropic token","help":"Chọn Anthropic token sẽ được sử dụng cho mô hình này"},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện Anthropic","help":"Chọn mô hình trò chuyện Anthropic để sử dụng.","placeholder":"Chọn mô hình"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"AdvancedSettingsTab":{"label":"Cài đặt nâng cao"},"GeneralInfosTab":{"label":"Thông tin chung"},"ModelAccessSettingsTab":{"label":"Cài đặt truy cập mô hình"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình trò chuyện Anthropic"}},"GMistralChatModelConfig":{"SaveBtn":{"label":"Lưu"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"DeleteBtn":{"label":"Xóa"},"CancelBtn":{"label":"Hủy"},"apiSecretCode":{"label":"MistralAI token","help":"Chọn MistralAI token sẽ được sử dụng cho mô hình này"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện MistralAI","help":"Chọn mô hình trò chuyện MistralAI để sử dụng."},"GeneralInfosTab":{"label":"Thông tin chung"},"AdvancedSettingsTab":{"label":"Cài đặt nâng cao"},"ModelAccessSettingsTab":{"label":"Cài đặt truy cập mô hình"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình trò chuyện MistralAI"}},"GGoogleVertexChatModelConfig":{"SaveBtn":{"label":"Lưu"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện Google Vertex AI","help":"Chọn mô hình trò chuyện Google Vertex AI để sử dụng."},"apiSecretCode":{"label":"Google Vertex AI token","help":"Chọn Google Vertex AI token sẽ được sử dụng cho mô hình này"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"DeleteBtn":{"label":"Xóa"},"CancelBtn":{"label":"Hủy"},"TabGeneralInfos":{"label":"Thông tin chung"},"TabModelAccessSettings":{"label":"Cài đặt truy cập mô hình"},"TabAdvancedSettings":{"label":"Cài đặt nâng cao"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình trò chuyện Google Vertex AI"}},"GDeepseekChatModelConfig":{"DeleteBtn":{"label":"Xóa"},"CancelBtn":{"label":"Hủy"},"SaveBtn":{"label":"Lưu"},"apiSecretCode":{"label":"Deepseek token","help":"Chọn Deepseek token sẽ được sử dụng cho mô hình này"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện Deepseek","help":"Chọn mô hình trò chuyện Deepseek để sử dụng.","placeholder":"Chọn mô hình"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"AdvancedSettingsTab":{"label":"Cài đặt nâng cao"},"GeneralInfosTab":{"label":"Thông tin chung"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình trò chuyện Deepseek"},"ModelAccessSettingsTab":{"label":"Cài đặt truy cập mô hình"}},"GenericOpenAIAPIChatModelConfig":{"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình"},"DeleteBtn":{"label":"Xóa"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình được tạo tự động"},"baseUrl":{"label":"Địa chỉ máy chủ gốc Chat model","help":"Địa chỉ gốc của Chat model."},"apiSecretCode":{"label":"Chat model API token","help":"Chọn Chat model API token sẽ được sử dụng cho mô hình này (không bắt buộc)"},"defaultModel":{"label":"Đặt làm mô hình trò chuyện mặc định","help":"Nếu chọn, đây sẽ là mô hình trò chuyện mặc định khi không chỉ định mô hình nào"},"choosedModel":{"label":"Lựa chọn mô hình trò chuyện Chat model","help":"Chọn mô hình trò chuyện Chat model để sử dụng."},"GeneralInfosTab":{"label":"Thông tin chung"},"TitleFragment":{"label":"Chỉnh sửa nhà cung cấp mô hình trò chuyện:"},"AdvancedSettingsTab":{"label":"Cài đặt nâng cao"},"ModelAccessSettingsTab":{"label":"Cài đặt truy cập mô hình"}},"GOllamaEmbeddingModelConfig":{"CancelBtn":{"label":"Hủy"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình nhúng"},"SaveBtn":{"label":"Lưu"},"DeleteBtn":{"label":"Xóa"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình nhúng ollama cục bộ (hoặc nội bộ)"},"apiSecretCode":{"label":"Ollama token","help":"Chọn Ollama token sẽ được sử dụng cho mô hình này"},"choosedModel":{"label":"Lựa chọn mô hình nhúng Ollama","help":"Chọn mô hình nhúng Ollama để sử dụng."},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình nhúng được tạo tự động"},"defaultModel":{"label":"Đặt làm mô hình nhúng mặc định","help":"Nếu chọn, đây sẽ là mô hình nhúng mặc định khi không chỉ định mô hình nào"},"baseUrl":{"label":"Địa chỉ máy chủ ollama gốc","help":"Địa chỉ gốc (như http://servername:234/) máy chủ ollama cục bộ hay nội bộ mạng đáp ứng."}},"GMistralEmbeddingModelConfig":{"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình nhúng"},"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình nhúng MistralAI"},"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình nhúng được tạo tự động"},"choosedModel":{"label":"Lựa chọn mô hình nhúng MistralAI","help":"Chọn mô hình nhúng MistralAI để sử dụng."},"defaultModel":{"label":"Đặt làm mô hình nhúng mặc định","help":"Nếu chọn, đây sẽ là mô hình nhúng mặc định khi không chỉ định mô hình nào"},"apiSecretCode":{"label":"MistralAI token","help":"Chọn MistralAI token sẽ được sử dụng cho mô hình này"}},"GGoogleVertexEmbeddingModelConfig":{"MainPanel":{"label":"Chỉnh sửa cấu hình mô hình nhúng Google Vertex AI"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình nhúng"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"choosedModel":{"label":"Lựa chọn mô hình nhúng Google Vertex AI","help":"Chọn mô hình nhúng Google Vertex AI để sử dụng."},"defaultModel":{"label":"Đặt làm mô hình nhúng mặc định","help":"Nếu chọn, đây sẽ là mô hình nhúng mặc định khi không chỉ định mô hình nào"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình nhúng được tạo tự động"},"apiSecretCode":{"label":"Google Vertex AI token","help":"Chọn Google Vertex AI token sẽ được sử dụng cho mô hình này"}},"GenericOpenAIAPIEmbeddingModelConfig":{"CancelBtn":{"label":"Hủy"},"SaveBtn":{"label":"Lưu"},"DeleteBtn":{"label":"Xóa"},"TitleFragment":{"label":"Chỉnh sửa nhà cung cấp mô hình nhúng:"},"description":{"label":"Mô tả","help":"Nhập mô tả cho cấu hình mô hình nhúng Embedding model"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của cấu hình mô hình nhúng Embedding model được tạo tự động"},"choosedModel":{"label":"Lựa chọn mô hình nhúng Embedding model","help":"Chọn mô hình nhúng Embedding model để sử dụng."},"baseUrl":{"label":"Địa chỉ máy chủ Embedding model API","help":"Địa chỉ máy chủ Embedding model."},"defaultModel":{"label":"Đặt làm mô hình nhúng mặc định","help":"Nếu chọn, đây sẽ là mô hình nhúng mặc định khi không chỉ định mô hình nào"},"apiSecretCode":{"label":"Embedding model API token","help":"Chọn Embedding model API token sẽ được sử dụng cho mô hình này"}}},"GeboAIChatControlModule":{"GeboAIReusableChatComponent":{"chatConfigInfosBtn":{"help":"Thông tin cấu hình chat"},"chaDeleteBtn":{"help":"Xóa phiên trò chuyện này"},"chatNameChangeBtn":{"help":"Đổi tên phiên trò chuyện"}},"ChangeDescriptionComponent":{"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"description":{"label":"Mô tả trò chuyện","help":"Nhập mô tả cho phiên trò chuyện."}},"GeboChatUserInfoComponent":{"usedModel":{"label":"Mô hình sử dụng","help":"Mã mô hình"},"providerId":{"label":"Nhà cung cấp mô hình chat","help":"Trình điều khiển nhà cung cấp LLms"},"functions":{"label":"Các chức năng có thể gọi của mô hình chat","help":"Danh sách các chức năng có thể sử dụng cho mô hình chat"},"NameCol":{"label":"Tên"},"DescriptionCol":{"label":"Mô tả"}}},"GeboAIAudioControlModule":{"GeboAIAudioControlComponent":{"RecordBtn":{"label":"Ghi âm","help":"Bắt đầu ghi âm một đoạn và gửi đi"}}},"GeboAIJobStatusModule":{"LogTableComponent":{"ReloadDataBtn":{"label":"tải lại dữ liệu"},"DeleteBtn":{"label":"Xóa"},"SelectHeader":{"label":"Chọn"},"EndDateTimeHeader":{"label":"ngày/giờ kết thúc"},"StartDateTimeHeader":{"label":"ngày/giờ bắt đầu"},"ProcessingHeader":{"label":"đang xử lý"},"DescriptionHeader":{"label":"Mô tả"},"CodeHeader":{"label":"Mã"},"FinishedHeader":{"label":"đã hoàn thành"},"WithErrorHeader":{"label":"có lỗi"},"LogTableComponent":{"help":"Nhật ký trích xuất khu vực hệ thống tập tin dùng chung này"}}},"GeboAIDashboardPanelModule":{"GeboAIDashboardComponent":{"SpanEmbedding":{"label":"nhúng vs tổng số tài liệu"},"MoreDetailsBtn":{"label":"Chi tiết hơn"}}},"GeboAIPromptWizardModule":{"GeboAIPromptWizardComponent":{"generatePrompt":{"label":"Tạo đề xuất"},"PromptWizardBtn":{"label":"Trình hướng dẫn đề xuất","help":"Sử dụng chức năng này để dùng LLM tạo đề xuất cho mục tiêu của bạn"},"acceptPrompt":{"label":"Chấp nhận đề xuất"},"promptWizardUI":{"label":"Trình hướng dẫn tạo mẫu đề xuất"},"cancel":{"label":"Hủy"},"response":{"label":"Mẫu đề xuất gợi ý","help":"Văn bản mẫu được tạo cho mục tiêu của bạn (bạn có thể thay đổi hoặc chỉnh sửa)"},"modelCode":{"label":"Mô hình trò chuyện sẽ dùng","help":"Chọn mô hình trò chuyện mà bạn muốn sử dụng để tạo mẫu đề xuất"},"query":{"label":"Yêu cầu mẫu đề xuất","help":"Chỉ định mục tiêu mà AI sẽ hỗ trợ bạn ở ngôi thứ hai"}}},"GeboAIStandardChatModelModule":{"GeboAIStandardChatModelSettings":{"temperature":{"label":"Nhiệt độ","help":"Nhiệt độ mà mô hình sẽ phản hồi, từ 0 đến 1 (nếu không chắc hãy để trống)"},"contextLength":{"label":"Độ dài ngữ cảnh (tokens)","help":"Lượng văn bản mà mô hình AI có thể xem xét khi xử lý (nếu không đặt sẽ dùng 4096)"},"topP":{"label":"TopP","help":"Tham số TopP, từ 0 đến 1 (nếu không chắc hãy để trống)"}}},"GeboAIAdvancedChatModelModule":{"GeboAIAdvancedChatModelGroupComponent":{"enabledFunctions":{"label":"Kích hoạt chức năng cho mô hình này","help":"Các chức năng có thể được sử dụng bởi mô hình trong cuộc trò chuyện"},"defaultModelPrompt":{"label":"Nhắc mặc định của mô hình","help":"Chỉnh sửa nhắc mặc định cho mô hình chat."}}},"GeboAiSecretsAdminModule":{"SecretWrapper":{"description":{"label":"Mô tả","help":"Nhập mô tả định danh."},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của định danh được tạo tự động."},"secretType":{"label":"Loại định danh","help":"Chọn loại định danh để tạo cho hệ thống từ xa"},"InsertBtn":{"label":"Chèn"},"token":{"label":"Token","help":"Nhập token."},"user":{"label":"Người dùng","help":"Nhập người dùng được chỉ định bởi token."},"MainPanel":{"label":"Tạo định danh"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"username":{"label":"Tên người dùng","help":"Nhập tên người dùng."},"password":{"label":"Mật khẩu","help":"Nhập mật khẩu."},"email":{"label":"E-mail/Tên người dùng","help":"Nhập e-mail hoặc tên người dùng liên kết với khóa ssh."},"key":{"label":"Khóa bí mật","help":"Mở file khóa riêng và sao chép vào vùng văn bản này."},"passphrase":{"label":"Cụm mật khẩu khóa","help":"Nhập cụm mật khẩu cho khóa."},"pub":{"label":"Khóa công khai","help":"Mở file khóa công khai và sao chép vào vùng văn bản này."}}},"GeboAIUploadsModule":{"GUploadsProjectEndpoint":{"code":{"label":"Mã duy nhất","help":"Mã duy nhất được tạo tự động của nội dung."},"description":{"label":"Mô tả","help":"Nhập mô tả về nội dung được tải lên từ mục hệ thống tập tin."},"parentProjectCode":{"label":"Dự án","help":"Tham chiếu dự án cha."},"upload":{"label":"Tải lên nội dung","help":"Nhấp nút duyệt và chọn các tập tin zip hoặc tập tin khác"},"openZips":{"label":"Mở tập tin zip","help":"Bật chức năng mở tập tin zip và trích xuất nội dung"},"PublishBtn":{"label":"Xuất bản!","help":"Lưu lại và cho phép những nội dung này xuất hiện trong cơ sở tri thức cho LLm's"},"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"LogsTab":{"label":"Nhật ký"},"MainPanel":{"label":"Chỉnh sửa nội dung đã tải lên"},"SettingsTab":{"label":"Cài đặt"},"buildSystemsRefs":{"label":"Cấu hình hệ thống build","help":"Danh sách các hệ thống build/đóng gói để kiểm tra thông tin meta và các thông tin bổ sung về artifact (để trống nếu không chứa mã phần mềm)"}}},"VFilesystemSelectorModule":{"VFilesystemSelectorComponent":{"ChoosedElementsArea":{"label":"Các phần tử đã chọn"},"ChooseOk":{"label":"OK"},"ChooseCancel":{"label":"Hủy"},"EditBtn":{"help":"Chỉnh sửa phần tử đã chọn"},"ChooseElementsArea":{"label":"Chọn phần tử"},"VFileSystemSelector":{"label":"Chọn phần tử"}}},"GeboAIContentReindexModule":{"GeboAIContentReindexScheduleComponent":{"EditBtn":{"help":"Chỉnh sửa lịch trình"},"ConfirmBtn":{"label":"Xác nhận"},"AddBtn":{"label":"+Thêm"}}},"GeboAIFileSystemModule":{"GFilesystemProjectEndpoint":{"PublishBtn":{"label":"Xuất bản!","help":"Lưu và cho phép các nội dung này có sẵn trong kho tri thức cho LLm's"},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"SettingsTab":{"label":"Cài đặt"},"SourceCodeTreatmentTab":{"label":"Xử lý mã nguồn"},"LogsTab":{"label":"Nhật ký"},"MainPanel":{"label":"Chỉnh sửa nội dung hệ thống tệp hiện có"},"description":{"label":"Mô tả","help":"Nhập mô tả cho nội dung đã tải lên của mục hệ thống tệp."},"openZips":{"label":"Mở tệp zip","help":"Cho phép mở và trích xuất nội dung của tệp zip"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất được tạo tự động cho nội dung."},"tree":{"label":"Tệp hoặc thư mục đã chọn","help":"Các tệp/thư mục hệ thống chia sẻ có trên máy chủ"},"parentProjectCode":{"label":"Dự án","help":"Tham chiếu dự án cha."},"programmedTables":{"label":"Lịch kiểm tra cập nhật nội dung","help":"Cấu hình lịch trình kiểm tra thay đổi nội dung để hệ thống retrieve augmented generation luôn được cập nhật"},"catalogingCriteria":{"label":"Tiêu chí tổ chức thư mục","help":"Vui lòng giải thích ở đây về cách tổ chức thư mục trong khu vực hệ thống tệp bạn đang chia sẻ với Gebo.ai"},"buildSystemsRefs":{"label":"Cấu hình hệ thống build","help":"Danh sách các hệ thống dựng/đóng gói để kiểm tra thông tin meta và thông tin bổ sung về các thành phần (để trống nếu không có mã phần mềm nào)"}},"GeboAISharedFilesystemsComponent":{"NewFileShareAreaBtn":{"label":"Khu vực chia sẻ tệp mới"},"AbsolutePathHeader":{"label":"Đường dẫn tuyệt đối"},"DbOrYmlFileConfigHeader":{"label":"Cấu hình tệp db hoặc yml"},"DescriptionHeader":{"label":"Mô tả"},"CodeHeader":{"label":"Mã"},"ModifyHeader":{"label":"Chỉnh sửa"}},"GFileSystemShareReference":{"reference":{"label":"Thư mục chia sẻ hệ thống tệp đã chọn","help":"Chọn một thư mục máy chủ là đường dẫn gốc cho hệ thống tệp chia sẻ dùng làm kho tài liệu của tổ chức bạn"},"description":{"label":"Mô tả","help":"Nhập mô tả cho khu vực hệ thống tệp chia sẻ của tổ chức bạn"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất được tạo tự động cho nội dung."},"InsertBtn":{"label":"Thêm"},"CancelBtn":{"label":"Hủy"},"MainPanel":{"label":"Chỉnh sửa thư mục tệp chia sẻ trên máy chủ"},"DeleteBtn":{"label":"Xóa"}}},"GeboAiGitModule":{"GGitProjectEndpoint":{"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"DeleteBtn":{"label":"Xóa"},"PublishBtn":{"label":"Xuất bản!","help":"Lưu và cho phép những nội dung này có sẵn trong kho tri thức cho LLm's"},"MainPanel":{"label":"Chỉnh sửa kho tài liệu/git nguồn"},"description":{"label":"Mô tả","help":"Nhập mô tả cho kho git."},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của kho git tự động tạo."},"parentProjectCode":{"label":"Dự án","help":"Tham chiếu dự án cha."},"contentManagementSystem":{"label":"Hệ thống Git","help":"Tham chiếu hệ thống git đã được cấu hình."},"branch":{"label":"Nhánh","help":"Tên nhánh để checkout (thường là master, main hoặc develop)"},"identityCode":{"label":"Danh tính sử dụng","help":"Chọn danh tính để thực hiện clone/checkout trên hệ thống"},"repositoryUri":{"label":"Địa chỉ url kho lưu trữ","help":"Địa chỉ đầy đủ của kho git từ xa (thường bắt đầu bằng http: hoặc https: hoặc ssh:)"},"publicAccess":{"label":"công khai","help":"Nếu chọn, quyền truy cập kho lưu trữ không cần xác thực"},"openZips":{"label":"Mở tập tin zip","help":"Bật tính năng mở tập tin zip và trích xuất nội dung"},"programmedTables":{"label":"Lịch kiểm tra cập nhật nội dung","help":"Cấu hình lịch trình kiểm tra nội dung thay đổi để duy trì hệ thống tạo nội dung tăng cường được cập nhật"},"buildSystemsRefs":{"label":"Cấu hình hệ thống build","help":"Danh sách các hệ thống build/đóng gói để kiểm tra thông tin meta và thông tin hiện vật bổ sung"}}},"GeboAIChatProfileModule":{"GChatProfileConfiguration":{"CancelBtn":{"label":"Hủy"},"SaveBtn":{"label":"Lưu"},"DeleteBtn":{"label":"Xóa"},"GeneralInfosTab":{"label":"Thông tin chung"},"UseChatModelLabel":{"label":"Sử dụng mô hình chat"},"ChooseChatModelRadio":{"label":"chọn"},"ChatModelSelect":{"placeholder":"Chọn cấu hình mô hình chat"},"EmbeddingModelSelect":{"placeholder":"Chọn cấu hình mô hình embedding"},"ChooseEmbeddingModelRadio":{"label":"chọn"},"RagSettingsTab":{"label":"Cài đặt RAG"},"LanguageModelTab":{"label":"Cài đặt mô hình ngôn ngữ lớn & công cụ sử dụng"},"UseEmbeddingModelLabel":{"label":"Sử dụng mô hình embedding"},"SecurityAccessSettingsTab":{"label":"Cài đặt truy cập bảo mật"},"MainPanel":{"label":"Chỉnh sửa hồ sơ chat truy xuất kết hợp (RAG)"},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của hồ sơ chat được tạo tự động."},"description":{"label":"Mô tả","help":"Nhập mô tả hồ sơ chat."},"userChoosesKnowledgeBases":{"label":"Người dùng chọn cơ sở tri thức","help":"Người dùng có thể chọn từ các cơ sở tri thức có quyền truy cập và/hoặc tải lên tệp riêng."},"knowledgeBaseCodes":{"label":"Cơ sở tri thức","help":"Cơ sở tri thức dùng cho việc truy xuất tài liệu."},"similaritySearchThreshold":{"label":"Ngưỡng tương đồng","help":"Ngưỡng tương đồng cho tìm kiếm ngữ nghĩa, 0.60–0.65 Lọc thấp, 0.70-0.75 Lọc trung bình, 0.80–0.85 Chính xác"},"otherSearchSimilarityThreshold":{"label":"Ngưỡng tương đồng 'hop' thứ 2","help":"Ngưỡng tương đồng cho tìm kiếm ngữ nghĩa, 0.60–0.65 Lọc thấp, 0.70-0.75 Lọc trung bình, 0.80–0.85 Chính xác dùng từ lần tìm kiếm thứ hai của multi-hop rag"},"disableMultiHopRag":{"label":"Tắt chức năng 'Multi Hop' rag","help":"Tắt chức năng 'multi hop rag'. Tìm kiếm nhiều lần thực hiện tìm kiếm ngữ nghĩa đầu tiên và sử dụng tài liệu tìm được làm ngữ cảnh cho chính việc tìm kiếm tiếp theo, cung cấp ngữ cảnh rộng hơn."},"topK":{"label":"Số đoạn tài liệu được xem xét (TopK)","help":"Trong truy xuất kết hợp, Top N đoạn tài liệu được tìm thấy sẽ được xem xét trong tìm kiếm ngữ nghĩa"},"enabledFunctions":{"label":"Gọi chức năng được bật cho RAG chat này","help":"Những chức năng có thể được mô hình llm sử dụng trong quá trình chat với người dùng và tương tác với cơ sở tri thức đã chọn"},"prompt":{"label":"Prompt","help":"Chỉnh sửa prompt cho các phiên truy xuất kết hợp."}}},"GeboAIPromptAdminModule":{"GPromptConfig":{"DeleteBtn":{"label":"Xóa"},"SaveBtn":{"label":"Lưu"},"CancelBtn":{"label":"Hủy"},"PromptCategorySelect":{"placeholder":"Nhập hoặc chọn danh mục prompt"},"MainPanel":{"label":"Chỉnh sửa prompt"},"promptCategory":{"label":"Danh mục prompt","help":"Chọn hoặc nhập danh mục prompt."},"prompt":{"label":"Prompt","help":"Chỉnh sửa prompt cho cuộc trò chuyện, sử dụng {query} để chỉ câu hỏi của người dùng và {context} để chỉ bối cảnh tài liệu/lịch sử được gửi đến LLM."},"code":{"label":"Mã duy nhất","help":"Mã duy nhất của prompt được tạo tự động."},"description":{"label":"Mô tả","help":"Nhập mô tả cho prompt."}}},"GeboAIUserProfileModule":{"GeboAIUserProfileComponent":{"ChangePasswdBtn":{"label":"Đổi mật khẩu"}},"GeboAIChangePasswordComponent":{"oldPassword":{"label":"Mật khẩu cũ","help":"Mật khẩu hiện tại để đăng nhập"},"newPassword":{"label":"Mật khẩu mới","help":"Mật khẩu mới"},"username":{"label":"E-mail","help":"E-mail làm tên đăng nhập"},"ChangePasswordUI":{"label":"Biểu mẫu đổi mật khẩu"},"CancelBtn":{"label":"Hủy"},"ChangePwdBtn":{"label":"Đổi mật khẩu"},"newPassword1":{"label":"Xác nhận mật khẩu mới","help":"Xác nhận mật khẩu mới"}}},"GeboAIGoogleSearchAccountModule":{"GGoogleSearchApiCredentials":{"DeleteBtn":{"label":"Xóa"},"CancelBtn":{"label":"Hủy"},"SaveBtn":{"label":"Lưu"},"ForMoreInformations":{"label":"Để biết thêm thông tin về Google custom search API hoặc lấy khóa API (miễn phí), hãy truy cập: https://developers.google.com/custom-search"},"code":{"label":"Mã duy nhất","help":"mã duy nhất của cấu hình google search api."},"MainPanel":{"label":"Chỉnh sửa thông tin xác thực google custom search api"},"secretCode":{"label":"Google search api token","help":"Chọn hoặc nhập google search api token"},"customSearchEngineId":{"label":"Google search engine id","help":"Google search engine id"},"description":{"label":"Mô tả","help":"Nhập mô tả cấu hình google search api."}}}}
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Ngôn ngữ hệ thống mặc định",
+        "help" : "Ngôn ngữ hệ thống mặc định cho cài đặt Gebo.ai này"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail dùng làm tên đăng nhập"
+      },
+      "passwordC" : {
+        "label" : "Xác nhận mật khẩu",
+        "help" : "Xác nhận mật khẩu"
+      },
+      "password" : {
+        "label" : "Mật khẩu",
+        "help" : "Mật khẩu để đăng nhập (ít nhất 8 ký tự)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " mật khẩu không khớp "
+      },
+      "LocalAdmin" : {
+        "label" : "Tạo tài khoản quản trị viên cục bộ của bạn"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Bạn sẽ sử dụng tài khoản này để cài đặt/quản trị phần mềm trong tương lai, dữ liệu này sẽ lưu trữ cục bộ trên hệ thống của bạn và không được gửi qua mạng"
+      },
+      "EnterBtn" : {
+        "label" : "Đến trang đăng nhập để vào"
+      },
+      "SetupPage" : {
+        "label" : "Cài đặt Gebo.ai của bạn"
+      },
+      "CreateBtn" : {
+        "label" : "Tạo cấu hình hệ thống"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Đọc & chấp nhận điều khoản sử dụng"
+      },
+      "AcceptMark" : {
+        "label" : "Tôi đồng ý với các điều khoản",
+        "help" : "Bằng cách nhấp vào đây, bạn đồng ý với các điều khoản & điều kiện trong giấy phép"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail để đăng nhập"
+      },
+      "password" : {
+        "label" : "Mật khẩu",
+        "help" : "Mật khẩu để đăng nhập"
+      },
+      "LoginPanel" : {
+        "label" : "Đăng nhập vào Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Đăng nhập"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Cấu hình Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Tên nhà cung cấp"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập bảo mật Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Quay lại trang chủ cài đặt"
+      },
+      "WizardUi" : {
+        "label" : "Chọn mục cấu hình"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Cài đặt tài khoản quản trị & khác",
+        "description" : "Cần ít nhất một tài khoản quản trị để đảm bảo Gebo.ai được quản lý đúng cách, thêm người dùng khác nếu cần thiết"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Thư mục làm việc Gebo.ai",
+        "description" : "Cấu hình một thư mục làm việc, đây là nơi sẽ lưu các thiết lập và tất cả file hoạt động của lần cài đặt này. Bạn cũng nên sao lưu thường xuyên."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Cấu hình cơ sở dữ liệu vector",
+        "description" : "Phải cấu hình một cơ sở dữ liệu vector để Gebo.ai cung cấp dịch vụ truy xuất tăng cường, bạn có thể chọn giữa vector database cục bộ, Qdrant hoặc Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Đăng nhập một lần, xác thực oauth2",
+        "description" : "Cấu hình xác thực đăng nhập một lần và khách hàng oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Cấu hình mô hình ngôn ngữ lớn",
+        "description" : "Cấu hình các LLMS sử dụng dịch vụ backend đám mây hoặc nội bộ, bạn cần có ít nhất một mô hình trò chuyện và một mô hình embedding để phần mềm hoạt động đúng."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Thiết lập graph rag/Trích xuất tri thức",
+        "description" : "Cấu hình hệ thống graph rag và trích xuất tri thức"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Cài đặt đường dẫn hệ thống file chia sẻ",
+        "description" : "Cấu hình các đường dẫn hệ thống file chia sẻ của công ty để dùng làm khu vực tài liệu cho các cơ sở tri thức"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Tích hợp Atlassian confluence",
+        "description" : "Cấu hình Gebo.ai truy cập vào cài đặt Atlassian Confluence đám mây hoặc tại chỗ của bạn"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Tích hợp Atlassian jira",
+        "description" : "Cấu hình Gebo.ai truy cập vào cài đặt Atlassian jira đám mây"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Tích hợp Microsoft Sharepoint",
+        "description" : "Cấu hình Gebo.ai truy cập vào cài đặt Microsoft Sharepoint đám mây hoặc tại chỗ của bạn"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Cấu hình ít nhất 1 cơ sở tri thức",
+        "description" : "Cấu hình ít nhất một cơ sở tri thức để người dùng sử dụng các dịch vụ truy xuất tăng cường của Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Cấu hình ít nhất một hồ sơ chat \"R.A.G.\"",
+        "description" : "Cấu hình ít nhất một hồ sơ chat truy xuất tăng cường dựa trên một trong các cơ sở tri thức đã cấu hình"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Thiết lập hệ thống Atlassian Confluence của công ty"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Loại hệ thống"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Hệ thống Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Hệ thống Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập hệ thống Atlassian Jira của công ty"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Loại hệ thống"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập hệ thống Microsoft Sharepoint của công ty"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Loại hệ thống"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Hệ thống Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Cung cấp api-key với đủ hạn mức tín dụng. Nếu chọn OpenAI bạn phải nạp một khoản tín dụng riêng (10-30$ là đủ) vào gói cũ để sử dụng api, nếu không lưu lượng llms sẽ không khả dụng trong ứng dụng này."
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập truy cập nhà cung cấp llms cho Gebo.ai với api key riêng"
+      },
+      "provider" : {
+        "label" : "Nhà cung cấp mô hình ngôn ngữ lớn",
+        "help" : "Chọn một nhà cung cấp giữa OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Người dùng",
+        "help" : "Nhập người dùng gắn với apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Cấu hình"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Api key của nhà cung cấp LLMS sẽ dùng"
+      },
+      "ProviderHeader" : {
+        "label" : "Nhà cung cấp"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "ModelHeader" : {
+        "label" : "Mô hình"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Loại mô hình"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Mô hình mặc định"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Tạo cấu hình graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Thiết lập cấu hình mặc định Graph Rag & trích xuất tri thức"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Dự án"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Thêm cơ sở tri thức"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Cơ sở tri thức"
+      },
+      "MainPanel" : {
+        "label" : "Cấu hình cơ sở tri thức & nội dung"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Nguồn nội dung"
+      },
+      "PublishedHeader" : {
+        "label" : "Đã xuất bản"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Số lượng tài liệu"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Thêm dự án/mục",
+        "help" : "tạo dự án mới"
+      },
+      "Button1" : {
+        "help" : "mở cơ sở tri thức"
+      },
+      "Button2" : {
+        "help" : "mở biểu mẫu dự án"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Cấu hình thư mục làm việc Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Cấu hình"
+      },
+      "workDirectory" : {
+        "label" : "Chọn thư mục làm thư mục làm việc Gebo.ai",
+        "help" : "Chọn thư mục server mà cài đặt này sẽ dùng để lưu trữ cấu hình và nội dung."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Thêm thư mục"
+      },
+      "AddFolderBtn" : {
+        "label" : "Thêm thư mục"
+      },
+      "CodeHeader" : {
+        "label" : "Mã"
+      },
+      "MainPanel" : {
+        "label" : "Đường dẫn hệ thống file chia sẻ server"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Đường dẫn tuyệt đối"
+      },
+      "DeleteHeader" : {
+        "label" : "Xóa"
+      },
+      "path" : {
+        "label" : "Thêm thư mục gốc của hệ thống file chia sẻ",
+        "help" : "Chọn thư mục máy chủ là đường dẫn gốc cho hệ thống file chia sẻ làm kho tài liệu của công ty"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả mục hệ thống file"
+      },
+      "RemovePathBtn" : {
+        "label" : "Xóa đường dẫn"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Cấu hình"
+      },
+      "MainPanel" : {
+        "label" : "Cấu hình cơ sở dữ liệu vector"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Tên host hoặc địa chỉ ip Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Cài đặt kết nối Qdrant"
+      },
+      "port" : {
+        "label" : "Cổng Qdrant",
+        "help" : "Cổng giao tiếp Qdrant (6334 là chuẩn)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Api key để xác thực Qdrant"
+      },
+      "tls" : {
+        "label" : "Tham số Qdrant TLS",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Đã hoàn thành các bước bắt buộc cài đặt Gebo.ai...",
+        "detail" : "Bạn đã hoàn thành các bước bắt buộc nhưng còn một số bước thiếu sẽ hạn chế trải nghiệm với phần mềm này"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Thiếu một số bước bắt buộc để cài đặt Gebo.ai",
+        "detail" : "Vui lòng kiểm tra lại các bước màu đỏ trong quá trình cài đặt"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Cài đặt Gebo.ai thành công!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Mã",
+        "help" : "Nhập mô tả mã xác thực/tích hợp OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả thông tin xác thực/tích hợp OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Mục đích cấu hình",
+        "help" : "Chọn nếu cài đặt này sẽ dùng để xác thực trong Gebo.ai hoặc để Gebo.ai có thể kết nối với hệ thống bên thứ ba."
+      },
+      "authProvider" : {
+        "label" : "Nhà cung cấp",
+        "help" : "Nhập tên nhà cung cấp xác thực OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Nhập URL issuer OAUTH2 của nhà cung cấp"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "Nhập Authorization URL OAUTH2 của nhà cung cấp"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Nhập Jwk Set url OAUTH2 của nhà cung cấp"
+      },
+      "userInfoUri" : {
+        "label" : "User info URL",
+        "help" : "Nhập User info Url OAUTH2 của nhà cung cấp"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Nhập introspection URL OAUTH2 của nhà cung cấp"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Nhập Token URL OAUTH2 của nhà cung cấp"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "Các URL nhà cung cấp OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Thêm thông tin xác thực/tích hợp OAUTH2 mới"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID khách hàng",
+        "help" : "Mã nhận diện khách hàng cho giao thức oauth2 (lấy trong khu vực quản trị của phần mềm bên thứ 3 đã xác thực oauth2)"
+      },
+      "secret" : {
+        "label" : "Khóa bí mật",
+        "help" : "Khóa bí mật khách hàng cho giao thức oauth2 (lấy trong khu vực quản trị của phần mềm bên thứ 3 đã xác thực oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Tạo cấu hình hệ thống confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Tạo"
+      },
+      "username" : {
+        "label" : "Tên người dùng Confluence",
+        "help" : "Tên người dùng Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Phiên bản Confluence",
+        "help" : "Phiên bản Confluence"
+      },
+      "baseUri" : {
+        "label" : "Địa chỉ internet gốc",
+        "help" : "Url địa chỉ hệ thống confluence gốc cho cài đặt tại chỗ hoặc url gốc của tổ chức bạn với hệ thống confluence cloud"
+      },
+      "password" : {
+        "label" : "Mật khẩu Confluence",
+        "help" : "Mật khẩu Confluence"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD apikey lấy trong phần backoffice của confluence, tại đây cần nhập \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu và cho phép các nội dung này có sẵn trong kho tri thức cho LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "SettingsTab" : {
+        "label" : "Cài đặt"
+      },
+      "MainPanel" : {
+        "label" : "Chia sẻ nội dung confluence"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của nội dung được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho nội dung đã tải lên của các mục confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Hệ thống Confluence",
+        "help" : "Tham chiếu hệ thống confluence đã được cấu hình."
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "openZips" : {
+        "label" : "Mở tập tin zip",
+        "help" : "Bật mở tập tin zip và trích xuất nội dung"
+      },
+      "tree" : {
+        "label" : "Không gian hoặc trang/phụ trang đã chọn",
+        "help" : "Nội dung không gian và trang confluence được chia sẻ"
+      },
+      "programmedTables" : {
+        "label" : "Lịch kiểm tra cập nhật nội dung",
+        "help" : "Cấu hình lịch trình cập nhật nội dung thay đổi để hệ thống tăng cường truy xuất luôn mới"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tiêu chí tổ chức không gian, trang và phụ trang",
+        "help" : "Vui lòng giải thích tiêu chí tổ chức không gian, trang và phụ trang đã áp dụng trong nội dung confluence được chia sẻ với Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Cài đặt chung"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa hệ thống confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "baseUri" : {
+        "label" : "Địa chỉ internet gốc",
+        "help" : "Url địa chỉ hệ thống confluence gốc"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của hệ thống confluence được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Phiên bản Confluence",
+        "help" : "Phiên bản Confluence"
+      },
+      "secretCode" : {
+        "label" : "Danh tính sử dụng",
+        "help" : "Chọn hoặc tạo danh tính để truy cập hệ thống confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nhóm mới"
+      },
+      "NewUserBtn" : {
+        "label" : "người dùng mới"
+      },
+      "UsersListPanel" : {
+        "label" : "Danh sách người dùng"
+      },
+      "GroupsListPanel" : {
+        "label" : "Danh sách nhóm"
+      },
+      "SournameHeader" : {
+        "label" : "họ"
+      },
+      "UsernameHeader" : {
+        "label" : "tên đăng nhập"
+      },
+      "RolesHeader" : {
+        "label" : "vai trò"
+      },
+      "NameHeader" : {
+        "label" : "tên"
+      },
+      "EditBtn" : {
+        "label" : "Chỉnh sửa"
+      },
+      "DisabledHeader" : {
+        "label" : "đã vô hiệu hóa"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "UserIds" : {
+        "placeholder" : "Chọn người dùng"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa nhóm người dùng"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho nhóm người dùng"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Nhập mã của nhóm người dùng"
+      },
+      "userIds" : {
+        "label" : "Danh sách người dùng",
+        "help" : "Chọn người dùng tham gia nhóm"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Tạo"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống jira."
+      },
+      "MainPanel" : {
+        "label" : "Tạo cấu hình hệ thống jira"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "username" : {
+        "label" : "jira username",
+        "help" : "Tên người dùng jira"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira CLOUD apikey lấy từ jira backoffice, tại đây cần nhập \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Địa chỉ internet cơ bản",
+        "help" : "Url địa chỉ hệ thống jira cơ bản cho cài đặt onpremise hoặc url tổ chức của bạn cho hệ thống jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu lại và cho phép các nội dung này được sử dụng trong kho tri thức cho LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "SettingsTab" : {
+        "label" : "Cài đặt"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      },
+      "MainPanel" : {
+        "label" : "Chia sẻ nội dung jira"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của nội dung được tạo tự động."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "Tham chiếu hệ thống jira đã được cấu hình."
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho nội dung tài liệu jira đã tải lên."
+      },
+      "programmedTables" : {
+        "label" : "Lịch kiểm tra cập nhật nội dung",
+        "help" : "Cấu hình lịch trình kiểm tra các nội dung thay đổi để giữ cho hệ thống sinh thông tin luôn được cập nhật"
+      },
+      "openZips" : {
+        "label" : "Mở file zip",
+        "help" : "Bật mở file zip và trích xuất nội dung"
+      },
+      "tree" : {
+        "label" : "Không gian hoặc trang/phụ trang đã chọn",
+        "help" : "Nội dung hệ thống phân cấp dự án và ticket jira được chia sẻ"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tiêu chí tổ chức không gian, trang và phụ trang",
+        "help" : "Vui lòng giải thích ở đây cách tiêu chí tổ chức không gian, trang và phụ trang được thực hiện trong các nội dung jira chia sẻ với Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa hệ thống jira"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "baseUri" : {
+        "label" : "Địa chỉ internet cơ bản",
+        "help" : "Url địa chỉ cơ bản của hệ thống jira"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của hệ thống jira được tạo tự động."
+      },
+      "secretCode" : {
+        "label" : "Định danh sử dụng",
+        "help" : "Chọn hoặc tạo định danh để truy cập hệ thống jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống SharePoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Phiên bản Sharepoint",
+        "help" : "phiên bản sharepoint"
+      },
+      "secret" : {
+        "label" : "Khóa bí mật",
+        "help" : "Mã bí mật Oauth2 client cho ứng dụng này đã đăng ký trong sản phẩm microsoft \"entra\" (lấy tại bảng điều khiển quản trị microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "ID khách hàng",
+        "help" : "Định danh Oauth2 client cho ứng dụng này đã đăng ký trong sản phẩm microsoft \"entra\" (lấy tại bảng điều khiển quản trị microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "ID đối tượng thuê",
+        "help" : "Định danh Oauth2 tenant cho sản phẩm microsoft \"entra\" tổ chức bạn (lấy tại bảng điều khiển quản trị microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Thông tin đăng ký ứng dụng Microsof oauth2 cho Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Tạo"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "MainPanel" : {
+        "label" : "Tạo cấu hình hệ thống SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu và cho phép những nội dung này khả dụng trong kho tri thức cho LLm"
+      },
+      "SettingsTab" : {
+        "label" : "Cài đặt"
+      },
+      "MainPanel" : {
+        "label" : "Chia sẻ nội dung SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của nội dung được tạo tự động."
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho các nguồn dữ liệu mục SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "hệ thống sharepoint",
+        "help" : "Tham chiếu hệ thống SharePoint/OneDrive đã cấu hình trước."
+      },
+      "openZips" : {
+        "label" : "Mở tệp zip",
+        "help" : "Bật mở tệp zip và trích xuất nội dung"
+      },
+      "tree" : {
+        "label" : "Chọn trang/trang con site SharePoint hoặc ổ/thư mục/tệp OneDrive",
+        "help" : "Các nội dung sharepoint/OneDrive đã chia sẻ"
+      },
+      "programmedTables" : {
+        "label" : "Lịch kiểm tra cập nhật nội dung",
+        "help" : "Cấu hình kiểm tra lịch thay đổi nội dung để giữ cho hệ thống thế hệ tăng cường truy hồi luôn cập nhật"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tiêu chí tổ chức không gian, trang và trang con",
+        "help" : "Vui lòng giải thích ở đây tiêu chí tổ chức không gian, trang và trang con đã được thực hiện với nội dung sharepoint chia sẻ với Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Chỉnh sửa hệ thống sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Cài đặt chung"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "secretCode" : {
+        "label" : "Danh tính đã dùng",
+        "help" : "Chọn hoặc tạo danh tính để truy cập hệ thống sharepoint"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của hệ thống sharepoint được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Phiên bản Sharepoint",
+        "help" : "phiên bản sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Xóa"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Lưu"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Hủy"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Cài đặt thông tin/nội dung chung"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Cài đặt LLms"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất được tạo tự động cho giai đoạn trích xuất dữ liệu đồ thị tri thức"
+      },
+      "MainPanel" : {
+        "label" : "Cấu hình trích xuất graphrag/tri thức"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình giai đoạn trích xuất dữ liệu đồ thị tri thức này"
+      },
+      "extractionPrompt" : {
+        "label" : "Lời nhắc trích xuất thông tin",
+        "help" : "Lời nhắc mô hình ngôn ngữ lớn để trích xuất thực thể/sự kiện/mối quan hệ và bí danh"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM sử dụng cho trích xuất dữ liệu",
+        "help" : "Chỉ định mô hình ngôn ngữ lớn dùng để trích xuất tri thức, nếu không chọn, sẽ sử dụng mặc định."
+      },
+      "graphRagAllSources" : {
+        "label" : "Áp dụng graph rag cho tất cả nguồn dữ liệu",
+        "help" : "Nếu bật, tất cả cơ sở tri thức/dự án/nguồn dữ liệu sẽ được xử lý để trích xuất tri thức, ngược lại chỉ những nguồn được cấu hình rõ mới được xử lý"
+      },
+      "defaultModel" : {
+        "label" : "Mô hình ngôn ngữ lớn mặc định",
+        "help" : "Mô hình ngôn ngữ lớn mặc định sẽ được dùng cho việc trích xuất tri thức"
+      },
+      "processEveryDocument" : {
+        "label" : "Áp dụng graph rag cho tất cả tệp",
+        "help" : "Thuật toán graph rag sẽ được áp dụng cho tất cả các tệp, giúp cải thiện chi tiết phân tích mà hệ thống có thể làm nhưng cũng sẽ tăng chi phí và thời gian xử lý tài liệu"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Tiêu chí chọn tệp cho xử lý graphrag",
+        "help" : "Chỉnh sửa các tiêu chí trên tệp gửi đến quy trình trích xuất thông tin cho graphrag, chọn ít nhất tên tệp và tiêu chí và/hoặc loại tệp và/hoặc số byte tối đa của kích thước tệp và/hoặc số ngày kể từ lần chỉnh sửa cuối"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Chọn loại tệp"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Tiêu chí lọc tên tệp"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Lần chỉnh sửa cuối, cách đây số ngày"
+      },
+      "nameFilter" : {
+        "placeholder" : "Tên tệp"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Kích thước tệp tối đa (Bytes)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa kho kiến thức"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập kho kiến thức"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của kho kiến thức được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho kho kiến thức."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Mô hình embedding được sử dụng (để trống để dùng mặc định hệ thống)",
+        "help" : "Mô hình embedding cho kho kiến thức, để trống sẽ sử dụng mặc định."
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "IndexBtn" : {
+        "label" : "Lập chỉ mục",
+        "help" : "Lập chỉ mục lại nội dung"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Chỉnh sửa dự án hoặc mục"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của dự án được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho dự án."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "kho kiến thức",
+        "help" : "kho kiến thức."
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "IndexBtn" : {
+        "label" : "Lập chỉ mục",
+        "help" : "Lập chỉ mục lại nội dung"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Thêm mục/dự án",
+        "help" : "thêm mới..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Mọi người đều sử dụng",
+        "help" : "Mọi người đều có thể sử dụng"
+      },
+      "accessibleGroups" : {
+        "label" : "Danh sách nhóm",
+        "help" : "Chọn các nhóm được phép"
+      },
+      "accessibleUsers" : {
+        "label" : "Danh sách người dùng",
+        "help" : "Chọn các người dùng được phép"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Bảng điều khiển"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs cho chat & nhúng"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Cấu hình chat Rag/Mẫu lệnh"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Kho tri thức & dự án"
+      },
+      "UsersGroupTab" : {
+        "label" : "Người dùng và nhóm"
+      },
+      "GeboModulesTab" : {
+        "label" : "Cấu hình modules Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Mã"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Cấu hình"
+      },
+      "ConfigureBtn" : {
+        "label" : "Cấu hình"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Cấu hình nhắc mới"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Hồ sơ trò chuyện mới"
+      },
+      "MainPanel" : {
+        "label" : "Hồ sơ trò chuyện truy xuất tăng cường"
+      },
+      "PromptsPanel" : {
+        "label" : "Bộ sưu tập nhắc & nhắc mặc định"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Kho kiến thức"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "ConfigureBtn1" : {
+        "label" : "cấu hình"
+      },
+      "CodeHeader" : {
+        "label" : "Mã"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Cơ sở tri thức mới"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Cấu hình mô hình nhúng mới"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Cấu hình mô hình chat mới"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "CodeHeader" : {
+        "label" : "Mã"
+      },
+      "ModelHeader" : {
+        "label" : "Mô hình"
+      },
+      "ModelProviderHeader" : {
+        "label" : "Nhà cung cấp mô hình"
+      },
+      "ConfigureBtn" : {
+        "label" : "cấu hình"
+      },
+      "CodeHeader2" : {
+        "label" : "Mã"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Mô tả"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Nhà cung cấp mô hình"
+      },
+      "ConfigureBtn2" : {
+        "label" : "cấu hình"
+      },
+      "ModelHeader2" : {
+        "label" : "Mô hình"
+      },
+      "ChatmodelsZone" : {
+        "label" : "Các mô hình chat đã cấu hình"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Các mô hình nhúng đã cấu hình"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Đang kiểm tra mô hình"
+      },
+      "TestChatBtn" : {
+        "label" : "Thử trò chuyện"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Chọn OpenAI token để sử dụng cho mô hình này"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện OpenAI",
+        "help" : "Chọn mô hình trò chuyện OpenAI muốn sử dụng."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Cài đặt nâng cao"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình trò chuyện OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập mô hình"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình embedding OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Chọn OpenAI token để sử dụng cho mô hình này"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình embedding được tạo tự động"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình embedding"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình embedding OpenAI",
+        "help" : "Chọn mô hình embedding OpenAI muốn sử dụng."
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình embedding"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "baseUrl" : {
+        "label" : "Địa chỉ máy chủ ollama cơ bản",
+        "help" : "Địa chỉ cơ bản (như http://servername:234/) máy chủ ollama local hoặc LAN phản hồi."
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện Ollama",
+        "help" : "Chọn mô hình trò chuyện Ollama muốn sử dụng.",
+        "placeholder" : "Chọn một mô hình"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Chọn Ollama token sử dụng cho mô hình này (không bắt buộc)"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình trò chuyện máy chủ Ollama local (hoặc LAN)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Chọn Anthropic token để sử dụng cho mô hình này"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện Anthropic",
+        "help" : "Chọn mô hình trò chuyện Anthropic muốn sử dụng.",
+        "placeholder" : "Chọn một mô hình"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Cài đặt nâng cao"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập mô hình"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình trò chuyện Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Chọn MistralAI token để sử dụng cho mô hình này"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện MistralAI",
+        "help" : "Chọn mô hình trò chuyện MistralAI muốn sử dụng."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Cài đặt nâng cao"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập mô hình"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình trò chuyện MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện Google Vertex AI",
+        "help" : "Chọn mô hình trò chuyện Google Vertex AI muốn sử dụng."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Chọn Google Vertex AI token để sử dụng cho mô hình này"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Thông tin chung"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Cài đặt quyền truy cập mô hình"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Cài đặt nâng cao"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình trò chuyện Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Chọn Deepseek token để sử dụng cho mô hình này"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện Deepseek",
+        "help" : "Chọn mô hình trò chuyện Deepseek muốn sử dụng.",
+        "placeholder" : "Chọn một mô hình"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Cài đặt nâng cao"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình trò chuyện Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập mô hình"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình được tạo tự động"
+      },
+      "baseUrl" : {
+        "label" : "Địa chỉ máy chủ API mô hình trò chuyện",
+        "help" : "Địa chỉ cơ bản của Chat model."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API mô hình trò chuyện",
+        "help" : "Chọn token API cho mô hình này (không bắt buộc)"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình trò chuyện mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình trò chuyện"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình trò chuyện Chat model",
+        "help" : "Chọn mô hình trò chuyện Chat model muốn sử dụng."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "TitleFragment" : {
+        "label" : "Chỉnh sửa nhà cung cấp mô hình trò chuyện:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Cài đặt nâng cao"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Cài đặt quyền truy cập mô hình"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình embedding"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình embedding Ollama local (hoặc LAN)"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Chọn Ollama token để sử dụng cho mô hình này"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình embedding Ollama",
+        "help" : "Chọn mô hình embedding Ollama muốn sử dụng."
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình embedding được tạo tự động"
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình embedding"
+      },
+      "baseUrl" : {
+        "label" : "Địa chỉ máy chủ ollama cơ bản",
+        "help" : "Địa chỉ cơ bản (như http://servername:234/) máy chủ ollama local hoặc LAN phản hồi."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình embedding"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình embedding MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình embedding được tạo tự động"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình embedding MistralAI",
+        "help" : "Chọn mô hình embedding MistralAI muốn sử dụng."
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình embedding"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Chọn MistralAI token để sử dụng cho mô hình này"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Chỉnh sửa cấu hình mô hình embedding Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình embedding"
+      },
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình embedding Google Vertex AI",
+        "help" : "Chọn mô hình embedding Google Vertex AI muốn sử dụng."
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình embedding"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình embedding được tạo tự động"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Chọn Google Vertex AI token để sử dụng cho mô hình này"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Huỷ"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "DeleteBtn" : {
+        "label" : "Xoá"
+      },
+      "TitleFragment" : {
+        "label" : "Chỉnh sửa nhà cung cấp mô hình embedding:"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình mô hình Embedding"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của cấu hình mô hình Embedding được tạo tự động"
+      },
+      "choosedModel" : {
+        "label" : "Chọn mô hình embedding Embedding model",
+        "help" : "Chọn mô hình embedding Embedding model muốn sử dụng."
+      },
+      "baseUrl" : {
+        "label" : "Địa chỉ máy chủ API mô hình embedding",
+        "help" : "Địa chỉ máy chủ của Embedding model."
+      },
+      "defaultModel" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Nếu chọn, mô hình này sẽ được dùng làm mặc định khi không chỉ định mô hình embedding"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API mô hình embedding",
+        "help" : "Chọn token API mô hình embedding để sử dụng cho mô hình này"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Thông tin cấu hình chat"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Xóa phiên trò chuyện này"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Đổi tên phiên trò chuyện"
+      },
+      "QueryControl" : {
+        "placeholder" : "Nhập tin nhắn cho chat bot"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "description" : {
+        "label" : "Mô tả chat",
+        "help" : "Nhập mô tả cho phiên trò chuyện."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Mô hình sử dụng",
+        "help" : "Mã mô hình"
+      },
+      "providerId" : {
+        "label" : "Nhà cung cấp mô hình chat",
+        "help" : "Trình điều khiển nhà cung cấp LLms"
+      },
+      "functions" : {
+        "label" : "Chức năng có thể gọi của mô hình chat",
+        "help" : "Danh sách chức năng mà mô hình chat có thể sử dụng"
+      },
+      "NameCol" : {
+        "label" : "Tên"
+      },
+      "DescriptionCol" : {
+        "label" : "Mô tả"
+      },
+      "kbases" : {
+        "label" : "Kho kiến thức khả dụng",
+        "help" : "Danh sách kho kiến thức sử dụng trong RAG chat này"
+      },
+      "CloseBtn" : {
+        "help" : "Đóng"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Ghi âm",
+        "help" : "Bắt đầu ghi âm một đoạn âm thanh và gửi đi"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "tải lại dữ liệu"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SelectHeader" : {
+        "label" : "Chọn"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "ngày/giờ kết thúc"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "ngày/giờ bắt đầu"
+      },
+      "ProcessingHeader" : {
+        "label" : "đang xử lý"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "CodeHeader" : {
+        "label" : "Mã"
+      },
+      "FinishedHeader" : {
+        "label" : "đã hoàn thành"
+      },
+      "WithErrorHeader" : {
+        "label" : "có lỗi"
+      },
+      "LogTableComponent" : {
+        "help" : "Nhật ký thu thập dữ liệu vùng hệ thống tệp chia sẻ này"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Thống kê tiến trình"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "CloseBtn" : {
+        "label" : "Đóng"
+      },
+      "PublicationLogTab" : {
+        "label" : "Nhật ký xuất bản"
+      },
+      "MainPanel" : {
+        "label" : "Nhật ký xuất bản"
+      },
+      "actualStatus" : {
+        "label" : "Trạng thái",
+        "help" : "Trạng thái của tác vụ: đang chạy, đã hoàn thành hoặc đã hoàn thành nhưng có lỗi."
+      },
+      "publishingSystem" : {
+        "label" : "Cấu hình nội dung đã xuất bản",
+        "help" : "Thông tin nội dung đã xuất bản"
+      },
+      "startDateTime" : {
+        "label" : "Ngày/giờ bắt đầu",
+        "help" : "Ngày và giờ bắt đầu tác vụ đồng bộ hóa nội dung"
+      },
+      "endDateTime" : {
+        "label" : "Ngày/giờ kết thúc",
+        "help" : "Ngày và giờ kết thúc tác vụ đồng bộ hóa nội dung"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Chưa được xử lý hoàn toàn"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Đã xử lý hoàn toàn"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding so với tổng số tài liệu"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Chi tiết hơn"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Tạo prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Trợ lý tạo prompt",
+        "help" : "Dùng chức năng này để nhờ một LLM tạo prompt cho mục tiêu của bạn"
+      },
+      "acceptPrompt" : {
+        "label" : "Chấp nhận prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Trình trợ lý tạo mẫu prompt"
+      },
+      "cancel" : {
+        "label" : "Hủy"
+      },
+      "response" : {
+        "label" : "Mẫu prompt được đề xuất",
+        "help" : "Đoạn mẫu được tạo cho mục tiêu của bạn (bạn có thể thay đổi hoặc chỉnh sửa)"
+      },
+      "modelCode" : {
+        "label" : "Chọn mô hình chat",
+        "help" : "Chọn mô hình chat bạn muốn sử dụng để tạo mẫu prompt"
+      },
+      "query" : {
+        "label" : "Yêu cầu mẫu prompt",
+        "help" : "Nêu rõ ở ngôi thứ hai mục tiêu mà AI sẽ hỗ trợ người dùng"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Nhiệt độ",
+        "help" : "Mức nhiệt độ mà mô hình sẽ phản hồi, từ 0 đến 1 (nếu không chắc, hãy để trống)"
+      },
+      "contextLength" : {
+        "label" : "Độ dài ngữ cảnh (tokens)",
+        "help" : "Số lượng văn bản mà mô hình AI có thể xem xét khi xử lý (nếu không đặt sẽ dùng 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Tham số TopP, từ 0 đến 1 (nếu không chắc, hãy để trống)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Các chức năng đã bật cho mô hình này",
+        "help" : "Các chức năng có thể được mô hình sử dụng trong cuộc trò chuyện"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Lời nhắc mặc định của mô hình",
+        "help" : "Chỉnh sửa lời nhắc mặc định cho mô hình trò chuyện."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả định danh."
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của định danh được tạo tự động."
+      },
+      "secretType" : {
+        "label" : "Loại định danh",
+        "help" : "Chọn loại định danh để tạo cho hệ thống từ xa"
+      },
+      "InsertBtn" : {
+        "label" : "Thêm"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Nhập token."
+      },
+      "user" : {
+        "label" : "Người dùng",
+        "help" : "Nhập người dùng được xác định bởi token."
+      },
+      "MainPanel" : {
+        "label" : "Tạo định danh"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "username" : {
+        "label" : "Tên người dùng",
+        "help" : "Nhập tên người dùng."
+      },
+      "password" : {
+        "label" : "Mật khẩu",
+        "help" : "Nhập mật khẩu."
+      },
+      "email" : {
+        "label" : "E-mail/Tên người dùng",
+        "help" : "Nhập e-mail hoặc tên người dùng liên kết với ssh key."
+      },
+      "key" : {
+        "label" : "Khóa bí mật",
+        "help" : "Mở tệp khóa riêng và sao chép vào vùng văn bản này."
+      },
+      "passphrase" : {
+        "label" : "Cụm mật khẩu khóa",
+        "help" : "Nhập cụm mật khẩu khóa."
+      },
+      "pub" : {
+        "label" : "Khóa công khai",
+        "help" : "Mở tệp khóa công khai và sao chép vào vùng văn bản này."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của nội dung được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho nội dung đã tải lên của mục trong hệ thống tệp."
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "upload" : {
+        "label" : "Tải nội dung lên",
+        "help" : "Nhấn nút duyệt và chọn tệp zip hoặc các tệp khác"
+      },
+      "openZips" : {
+        "label" : "Mở tệp zip",
+        "help" : "Bật chức năng mở tệp zip và trích xuất nội dung"
+      },
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu và cho phép nội dung này được sử dụng trong kho tri thức cho LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa nội dung đã tải lên"
+      },
+      "SettingsTab" : {
+        "label" : "Cài đặt"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Cấu hình hệ thống build",
+        "help" : "Danh sách các hệ thống build/đóng gói để kiểm tra thông tin meta và thông tin hiện vật bổ sung (để trống nếu không có mã phần mềm)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Các phần tử đã chọn"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Hủy"
+      },
+      "EditBtn" : {
+        "help" : "Chỉnh sửa đã chọn"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Chọn phần tử"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Chọn phần tử"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Chỉnh sửa lịch biểu"
+      },
+      "ConfirmBtn" : {
+        "label" : "Xác nhận"
+      },
+      "AddBtn" : {
+        "label" : "+Thêm"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu và cho phép nội dung này có sẵn trong kho kiến thức cho LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SettingsTab" : {
+        "label" : "Cài đặt"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Xử lý mã nguồn"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa nội dung hệ thống tệp đã có"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho nội dung đã tải lên của mục hệ thống tệp."
+      },
+      "openZips" : {
+        "label" : "Mở tập tin zip",
+        "help" : "Bật mở tập tin zip và trích xuất nội dung"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của nội dung được tạo tự động."
+      },
+      "tree" : {
+        "label" : "Các tập tin hoặc thư mục đã chọn",
+        "help" : "Các tập tin hoặc thư mục hệ thống tệp dùng chung có sẵn trên máy chủ"
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "programmedTables" : {
+        "label" : "Lịch kiểm tra cập nhật nội dung",
+        "help" : "Cấu hình lịch trình cập nhật nội dung để đảm bảo hệ thống truy xuất tăng cường luôn mới nhất"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tiêu chí tổ chức thư mục",
+        "help" : "Vui lòng giải thích tại đây về tiêu chí tổ chức thư mục đã áp dụng trong khu vực hệ thống tệp bạn đang chia sẻ với Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Cấu hình hệ thống build",
+        "help" : "Danh sách các hệ thống build/đóng gói để kiểm tra thông tin meta và các thông tin hiện vật bổ sung (để trống nếu không chứa mã phần mềm)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Khu vực chia sẻ tệp mới"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Đường dẫn tuyệt đối"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "Cấu hình file db hoặc yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "CodeHeader" : {
+        "label" : "Mã"
+      },
+      "ModifyHeader" : {
+        "label" : "Chỉnh sửa"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Thư mục hệ thống tệp chia sẻ đã chọn",
+        "help" : "Chọn một thư mục máy chủ là đường dẫn gốc cho hệ thống tệp chia sẻ được sử dụng trong tổ chức bạn làm kho tài liệu"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho vùng hệ thống tệp chia sẻ của tổ chức bạn"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của nội dung được tạo tự động."
+      },
+      "InsertBtn" : {
+        "label" : "Chèn"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa thư mục tệp chia sẻ trên máy chủ"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu và cho phép các nội dung này có sẵn trong cơ sở tri thức cho LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa kho tài liệu/git source"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho git repo."
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của git repo được tạo tự động."
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "contentManagementSystem" : {
+        "label" : "Hệ thống Git",
+        "help" : "Tham chiếu hệ thống git đã được cấu hình."
+      },
+      "branch" : {
+        "label" : "Nhánh",
+        "help" : "Tên nhánh để checkout (thông thường là master, main hoặc develop)"
+      },
+      "identityCode" : {
+        "label" : "Danh tính sử dụng",
+        "help" : "Chọn danh tính để thực hiện clone/checkout trên hệ thống"
+      },
+      "repositoryUri" : {
+        "label" : "Url/địa chỉ kho",
+        "help" : "Địa chỉ đầy đủ của kho git remote (thường bắt đầu với http: hoặc https: hoặc ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "công khai",
+        "help" : "Nếu đúng thì truy cập kho không cần xác thực"
+      },
+      "openZips" : {
+        "label" : "Mở tập tin zip",
+        "help" : "Bật chức năng mở tập tin zip và trích xuất nội dung"
+      },
+      "programmedTables" : {
+        "label" : "Lịch trình kiểm tra cập nhật nội dung",
+        "help" : "Cấu hình lịch kiểm tra các thay đổi nội dung để hệ thống tạo thế hệ tăng cường được cập nhật"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Cấu hình hệ thống build",
+        "help" : "Danh sách các hệ thống build/đóng gói để kiểm tra thông tin meta và thông tin hiện vật bổ sung"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Thông tin chung"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Sử dụng mô hình trò chuyện"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "chọn"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chọn cấu hình mô hình trò chuyện"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Chọn cấu hình mô hình nhúng"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "chọn"
+      },
+      "RagSettingsTab" : {
+        "label" : "Cài đặt RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Cài đặt mô hình ngôn ngữ lớn & công cụ sử dụng"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Sử dụng mô hình nhúng"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Cài đặt truy cập bảo mật"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa hồ sơ trò chuyện retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của hồ sơ trò chuyện được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả hồ sơ trò chuyện."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Người dùng chọn cơ sở tri thức",
+        "help" : "Người dùng có thể chọn từ các cơ sở tri thức có thể truy cập và/hoặc tải lên tệp riêng."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Cơ sở tri thức",
+        "help" : "Cơ sở tri thức để sử dụng cho việc truy xuất tài liệu."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Ngưỡng tương đồng",
+        "help" : "Ngưỡng tương đồng cho tìm kiếm ngữ nghĩa, 0.60–0.65 Lọc thấp, 0.70-0.75 Lọc trung bình, 0.80–0.85 Chính xác"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Ngưỡng tương đồng cho bước tìm kiếm thứ 2",
+        "help" : "Ngưỡng tương đồng cho tìm kiếm ngữ nghĩa, 0.60–0.65 Lọc thấp, 0.70-0.75 Lọc trung bình, 0.80–0.85 Chính xác dùng từ lần tìm kiếm thứ 2 của multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Tắt chức năng 'Multi Hop' rag",
+        "help" : "Tắt chức năng 'multi hop rag'. Tìm kiếm multi hop thực hiện tìm kiếm ngữ nghĩa đầu tiên và sử dụng tài liệu tìm được làm ngữ cảnh để tìm kiếm ngữ nghĩa mở rộng."
+      },
+      "topK" : {
+        "label" : "Số đoạn tài liệu được xét (TopK)",
+        "help" : "Trong retrieve augmented generation, Top N đoạn tài liệu được xét đến trong tìm kiếm ngữ nghĩa"
+      },
+      "enabledFunctions" : {
+        "label" : "Kích hoạt chức năng cho RAG chat này",
+        "help" : "Các chức năng có thể được mô hình llm sử dụng trong trò chuyện với người dùng và tương tác với cơ sở tri thức đã chọn"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Chỉnh sửa prompt cho các phiên retrieve augmented generation."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Nhập hoặc chọn danh mục prompt"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa prompt"
+      },
+      "promptCategory" : {
+        "label" : "Danh mục prompt",
+        "help" : "Chọn hoặc nhập danh mục prompt."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Chỉnh sửa prompt cho cuộc trò chuyện, sử dụng {query} để chỉ câu hỏi người dùng và {context} để chỉ nội dung tài liệu/lịch sử được gửi tới LLM."
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Mã duy nhất của prompt được tạo tự động."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho prompt."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Đổi mật khẩu"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Mật khẩu cũ",
+        "help" : "Mật khẩu hiện tại để đăng nhập"
+      },
+      "newPassword" : {
+        "label" : "Mật khẩu mới",
+        "help" : "mật khẩu mới"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail dùng làm tên đăng nhập"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Biểu mẫu đổi mật khẩu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "ChangePwdBtn" : {
+        "label" : "đổi mật khẩu"
+      },
+      "newPassword1" : {
+        "label" : "Xác nhận mật khẩu mới",
+        "help" : "Xác nhận mật khẩu mới"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "ForMoreInformations" : {
+        "label" : "Để biết thêm thông tin về Google custom search API hoặc cách lấy api key (miễn phí), truy cập: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "mã duy nhất của cấu hình google search api."
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa thông tin đăng nhập google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Token google search api",
+        "help" : "Chọn hoặc nhập token google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "Id công cụ tìm kiếm google",
+        "help" : "Id công cụ tìm kiếm google"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho cấu hình google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Trò chuyện không có cơ sở kiến thức",
+        "help" : "Chọn LLMs cho một phiên trò chuyện",
+        "placeholder" : "Chọn LLMs cho một phiên trò chuyện"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Mở phần tuỳ chọn trò chuyện"
+      },
+      "CreateChatBtn" : {
+        "label" : "Trò chuyện mới"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Phiên trò chuyện mới"
+      },
+      "chatProfileCode" : {
+        "label" : "Trò chuyện với cơ sở kiến thức",
+        "help" : "Chọn hồ sơ trò chuyện công ty để tương tác với tài liệu công ty (và của bạn) và LLMs",
+        "placeholder" : "Chọn hồ sơ trò chuyện công ty để tương tác với tài liệu công ty (và của bạn) và LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "Trò chuyện mới"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Trò chuyện với tài liệu",
+        "help" : "Duyệt hoặc tìm kiếm và chọn tài liệu để làm việc"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Chọn tệp để trò chuyện"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Xác nhận"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Tải lên hoặc chọn tài liệu của bạn",
+        "help" : "Chọn hoặc tải lên tài liệu từ không gian cá nhân của bạn"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Chỉnh sửa mục đã chọn"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Chọn tệp người dùng"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Hủy"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Chọn nội dung do người dùng tải lên"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Cơ sở kiến thức & tệp người dùng"
+      }
+    }
+  }
+}

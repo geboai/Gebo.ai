@@ -1,2161 +1,2429 @@
 {
-    "FastSetupModule": {
-        "FastSetupComponent": {
-            "langCode": {
-                "label": "Idioma padrão do sistema",
-                "help": "Idioma padrão do sistema para esta instalação do Gebo.ai"
-            },
-            "username": {
-                "label": "E-mail",
-                "help": "E-mail como nome de usuário para login"
-            },
-            "passwordC": {
-                "label": "Confirmar senha",
-                "help": "Confirme a senha"
-            },
-            "password": {
-                "label": "Senha",
-                "help": "Senha para login (no mínimo 8 caracteres)"
-            },
-            "PasswordNotMatching": {
-                "label": " as senhas não coincidem "
-            },
-            "LocalAdmin": {
-                "label": "Crie sua conta de administrador local"
-            },
-            "LocalAdminExplanation": {
-                "label": "Você usará esta conta futuramente para configurar/administrar o software. Estes dados permanecerão locais ao seu sistema e não serão enviados pela rede"
-            },
-            "EnterBtn": {
-                "label": "Ir para a página de login para entrar"
-            },
-            "SetupPage": {
-                "label": "Configure sua instalação do gebo.ai"
-            },
-            "CreateBtn": {
-                "label": "Criar configuração do sistema"
-            },
-            "LicenceFieldSet": {
-                "label": "Leia e aceite a licença"
-            },
-            "AcceptMark": {
-                "label": "Eu aceito os termos",
-                "help": "Ao clicar aqui, você aceita os termos e condições da licença"
-            }
-        }
-    },
-    "LoginModule": {
-        "LoginComponent": {
-            "username": {
-                "label": "e-mail",
-                "help": "E-mail como nome de usuário para entrar"
-            },
-            "password": {
-                "label": "Senha",
-                "help": "Senha para entrar"
-            }
-        }
-    },
-    "SetupWizardPanelModule": {
-        "Oauth2WizardComponent": {
-            "Oauth2ConfigBtn": {
-                "label": "Configuração Oauth2"
-            },
-            "ProviderNameHeader": {
-                "label": "Nome do provedor"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "MainPanel": {
-                "label": "Configurações de segurança Oauth2"
-            },
-            "IdHeader": {
-                "label": "Id"
-            }
-        },
-        "SetupWizardPanelComponent": {
-            "WizardBackBtn": {
-                "label": "Voltar para a página inicial de configuração"
-            },
-            "WizardUi": {
-                "label": "Escolha uma seção de configuração"
-            }
-        },
-        "ConfluenceWizardComponent": {
-            "MainPanel": {
-                "label": "Configurar sistemas Atlassian Confluence da empresa"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "SystemTypeHeader": {
-                "label": "Tipo de sistema"
-            },
-            "ConfigCodeHeader": {
-                "label": "Código de configuração"
-            },
-            "ConfluenceSystemBtn": {
-                "label": "Sistema Confluence"
-            }
-        },
-        "JiraWizardComponent": {
-            "JiraSystemBtn": {
-                "label": "Sistema Jira"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "ConfigCodeHeader": {
-                "label": "Código de configuração"
-            },
-            "MainPanel": {
-                "label": "Configurar sistemas Atlassian Jira da empresa"
-            },
-            "SystemTypeHeader": {
-                "label": "Tipo de sistema"
-            }
-        },
-        "SharepointWizardComponent": {
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "ConfigCodeHeader": {
-                "label": "Código de configuração"
-            },
-            "MainPanel": {
-                "label": "Configurar sistemas Microsoft Sharepoint da empresa"
-            },
-            "SystemTypeHeader": {
-                "label": "Tipo de sistema"
-            },
-            "SharepointSystemBtn": {
-                "label": "Sistema Sharepoint"
-            }
-        },
-        "LLMSetupWizardComponent": {
-            "InstructionText": {
-                "label": "Forneça uma chave de API com crédito disponível. Se escolher OpenAI, deve adicionar algum crédito específico (10-30$ pode ser suficiente) ao seu plano habitual para uso da API, caso contrário, nenhum tráfego de llms estará disponível neste aplicativo."
-            },
-            "MainPanel": {
-                "label": "Configurar acesso aos provedores de llms do Gebo.ai com sua própria chave de API"
-            },
-            "provider": {
-                "label": "Fornecedor do modelo de linguagem",
-                "help": "Escolha um fornecedor entre OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
-            },
-            "user": {
-                "label": "Usuário",
-                "help": "Digite o usuário associado à chave apiKey"
-            },
-            "ConfigureBtn": {
-                "label": "Configurar"
-            },
-            "apiKey": {
-                "label": "Chave da API",
-                "help": "Sua chave de API dos provedores de LLMS a serem usados"
-            }
-        },
-        "GraphRagWizardComponent": {
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "CreateGraphRagConfigBtn": {
-                "label": "Criar configuração graph rag"
-            },
-            "MainPanel": {
-                "label": "Configuração padrão do Graph Rag & extração de conhecimento"
-            },
-            "ConfigCodeHeader": {
-                "label": "Código de configuração"
-            }
-        },
-        "KnowledgeBaseWizardComponent": {
-            "ProjectHeader": {
-                "label": "Projeto"
-            },
-            "AddAKnowledgeBaseBtn": {
-                "label": "Adicionar uma base de conhecimento"
-            },
-            "KnowledgeBaseHeader": {
-                "label": "Base de conhecimento"
-            },
-            "MainPanel": {
-                "label": "Configurações de bases de conhecimento & conteúdos"
-            },
-            "ContentsSourceHeader": {
-                "label": "Fonte dos conteúdos"
-            },
-            "PublishedHeader": {
-                "label": "Publicado"
-            },
-            "NrOfDocumentsHeader": {
-                "label": "Nº de documentos"
-            },
-            "AddAProjectItemBtn": {
-                "label": "Adicionar um projeto/item",
-                "help": "criar novo projeto"
-            },
-            "Button1": {
-                "help": "abrir base de conhecimento"
-            },
-            "Button2": {
-                "help": "abrir formulário de projeto"
-            }
-        },
-        "WorkFolderWizardComponent": {
-            "MainPanel": {
-                "label": "Configuração da pasta de trabalho do Gebo.ai"
-            },
-            "ConfigureBtn": {
-                "label": "Configurar"
-            },
-            "workDirectory": {
-                "label": "Escolha uma pasta como diretório de trabalho do Gebo.ai",
-                "help": "Escolha uma pasta de servidor que esta instalação usará como pasta de trabalho para suas configurações e armazenamento de conteúdos."
-            }
-        }
-    },
-    "GeboAIOauth2RegistrationModule": {
-        "Oauth2ProviderRegistration": {
-            "code": {
-                "label": "Código",
-                "help": "Digite a descrição do código de autenticação/integração OAUTH2 (registrationId)."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição das informações de autenticação/integração OAUTH2."
-            },
-            "configurationType": {
-                "label": "Finalidade da configuração",
-                "help": "Escolha se esta configuração será usada para autenticar no Gebo.ai ou para permitir que o Gebo.ai tenha conectividade de cliente com um sistema de terceiros."
-            },
-            "authProvider": {
-                "label": "Provedor",
-                "help": "Digite o provedor da autenticação OAUTH2"
-            },
-            "issuerUri": {
-                "label": "Uri do emissor",
-                "help": "Digite a URL do emissor OAUTH2 do provedor"
-            },
-            "authorizationUri": {
-                "label": "URL de autorização",
-                "help": "Digite a URL de autorização OAUTH2 do provedor"
-            },
-            "jwkSetUri": {
-                "label": "Uri do conjunto Jwk",
-                "help": "Digite a URL do conjunto Jwk OAUTH2 do provedor"
-            },
-            "userInfoUri": {
-                "label": "URL de informações do usuário",
-                "help": "Digite a URL de informações do usuário OAUTH2 do provedor"
-            },
-            "introspectionUri": {
-                "label": "Uri de introspecção",
-                "help": "Digite a URL de introspecção OAUTH2 do provedor"
-            },
-            "tokenUri": {
-                "label": "URL do token",
-                "help": "Digite a URL do token OAUTH2 do provedor"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "Oauth2ProviderUrls": {
-                "label": "URLS do provedor OAUTH2"
-            },
-            "MainPanel": {
-                "label": "Inserir novas informações de autenticação/integração OAUTH2"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            }
-        }
-    },
-    "GeboOauth2SecretModule": {
-        "GeboOauth2SecretComponent": {
-            "clientId": {
-                "label": "ID do cliente",
-                "help": "Identificador do cliente para o protocolo oauth2 (deve ser obtido na área administrativa do software de terceiros autenticado via oauth2)"
-            },
-            "secret": {
-                "label": "Chave secreta",
-                "help": "Segredo do cliente para o protocolo oauth2 (deve ser obtido na área administrativa do software de terceiros autenticado via oauth2)"
-            }
-        }
-    },
-    "GeboAIConfluenceModule": {
-        "GeboAIConfluenceSystemFastComponent": {
-            "MainPanel": {
-                "label": "Criar configuração do sistema Confluence"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do sistema Confluence."
-            },
-            "CreateBtn": {
-                "label": "Criar"
-            },
-            "username": {
-                "label": "Nome de usuário Confluence",
-                "help": "Nome de usuário do Confluence"
-            },
-            "confluenceVersion": {
-                "label": "Versão do Confluence",
-                "help": "Versão do Confluence"
-            },
-            "baseUri": {
-                "label": "Endereço base da internet",
-                "help": "URL do endereço base do sistema Confluence para instalações locais ou o endereço base da sua organização para o Confluence Cloud"
-            },
-            "password": {
-                "label": "Senha do Confluence",
-                "help": "Senha do Confluence"
-            },
-            "token": {
-                "label": "Chave de API Confluence cloud",
-                "help": "Chave de API CLOUD Confluence obtida no backoffice do Confluence, aqui deve ser inserido \"API Token for your Atlassian Account\"."
-            }
-        },
-        "GConfluenceProjectEndpoint": {
-            "PublishBtn": {
-                "label": "Publicar!",
-                "help": "Salva e disponibiliza esses conteúdos na base de conhecimento para os LLm's"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SettingsTab": {
-                "label": "Configurações"
-            },
-            "MainPanel": {
-                "label": "Compartilhando conteúdos do Confluence"
-            },
-            "LogsTab": {
-                "label": "Registros"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código exclusivo dos conteúdos gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do conteúdo enviado das entradas do Confluence."
-            },
-            "confluenceSystemCode": {
-                "label": "Sistema Confluence",
-                "help": "Referência do sistema Confluence já configurado."
-            },
-            "parentProjectCode": {
-                "label": "Projeto",
-                "help": "Referência do projeto pai."
-            },
-            "openZips": {
-                "label": "Abrir arquivos zip",
-                "help": "Permitir abertura de arquivos zip e extração do conteúdo"
-            },
-            "tree": {
-                "label": "Espaços ou páginas/subpáginas escolhidos",
-                "help": "Conteúdo de espaços e páginas compartilhados do Confluence"
-            },
-            "programmedTables": {
-                "label": "Agenda de verificação de atualizações de conteúdo",
-                "help": "Configure o agendamento de verificação de conteúdos alterados para manter o sistema de geração aumentada atualizado"
-            },
-            "catalogingCriteria": {
-                "label": "Critérios de organização de espaços, páginas e subpáginas",
-                "help": "Explique aqui como foram organizados os espaços, páginas e subpáginas nos conteúdos do Confluence compartilhados com Gebo.ai"
-            }
-        },
-        "GConfluenceSystem": {
-            "GeneralSettingsTab": {
-                "label": "Configurações gerais"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "MainPanel": {
-                "label": "Editando sistema Confluence"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "baseUri": {
-                "label": "Endereço base da internet",
-                "help": "URL do endereço base do sistema Confluence"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código exclusivo do sistema Confluence gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do sistema Confluence."
-            },
-            "confluenceVersion": {
-                "label": "Versão do Confluence",
-                "help": "Versão do Confluence"
-            },
-            "secretCode": {
-                "label": "Identidade utilizada",
-                "help": "Selecione ou crie a identidade para acessar o sistema Confluence"
-            }
-        }
-    },
-    "GeboAIUsersGroupPanelModule": {
-        "GeboAIUsersManagementComponent": {
-            "NewGroupBtn": {
-                "label": "novo grupo"
-            },
-            "NewUserBtn": {
-                "label": "novo usuário"
-            },
-            "UsersListPanel": {
-                "label": "Lista de usuários"
-            },
-            "GroupsListPanel": {
-                "label": "Lista de grupos"
-            },
-            "SournameHeader": {
-                "label": "sobrenome"
-            },
-            "UsernameHeader": {
-                "label": "nome de usuário"
-            },
-            "RolesHeader": {
-                "label": "funções"
-            },
-            "NameHeader": {
-                "label": "nome"
-            },
-            "EditBtn": {
-                "label": "Editar"
-            },
-            "DisabledHeader": {
-                "label": "desativado"
-            }
-        }
-    },
-    "GeboAIUsersGroupModule": {
-        "UsersGroup": {
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "UserIds": {
-                "placeholder": "Selecione usuários"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "MainPanel": {
-                "label": "Editando grupo de usuários"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do grupo de usuários"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Insira o código do grupo de usuários"
-            },
-            "userIds": {
-                "label": "Lista de usuários",
-                "help": "Selecione os usuários que participam do grupo"
-            }
-        }
-    },
-    "GeboAIJiraModule": {
-        "GeboAIJiraSystemFastComponent": {
-            "CreateBtn": {
-                "label": "Criar"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do sistema jira."
-            },
-            "MainPanel": {
-                "label": "Criar configuração do sistema jira"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "username": {
-                "label": "nome de usuário jira",
-                "help": "Nome de usuário jira"
-            },
-            "token": {
-                "label": "chave da api cloud jira",
-                "help": "A chave da API CLOUD jira adquirida no backoffice do jira, aqui deve ser inserido \"API Token for your Atlassian Account\"."
-            },
-            "baseUri": {
-                "label": "Endereço base da internet",
-                "help": "URL do endereço base do sistema jira para instalação on premise ou a URL base da sua organização para o sistema jira cloud"
-            }
-        },
-        "GJiraProjectEndpoint": {
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "PublishBtn": {
-                "label": "Publicar!",
-                "help": "Salva e disponibiliza estes conteúdos na base de conhecimento para LLms"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SettingsTab": {
-                "label": "Configurações"
-            },
-            "LogsTab": {
-                "label": "Logs"
-            },
-            "MainPanel": {
-                "label": "Compartilhando conteúdos do jira"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente para os conteúdos."
-            },
-            "jiraSystemCode": {
-                "label": "sistema jira",
-                "help": "Referência do sistema jira já configurado."
-            },
-            "parentProjectCode": {
-                "label": "Projeto",
-                "help": "Referência do projeto pai."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do conteúdo carregado das entradas do jira."
-            },
-            "programmedTables": {
-                "label": "Agendamento de verificação de atualização de conteúdos",
-                "help": "Configurar o agendamento das alterações de conteúdos para manter o sistema de geração aumentada de recuperação atualizado"
-            },
-            "openZips": {
-                "label": "Abrir arquivos zip",
-                "help": "Permitir a abertura de arquivos zip e extração de conteúdo"
-            },
-            "tree": {
-                "label": "Espaços ou páginas/subpáginas selecionadas",
-                "help": "Hierarquia de conteúdos compartilhados de projetos e tickets jira"
-            },
-            "catalogingCriteria": {
-                "label": "Critérios de organização de espaços, páginas e subpáginas",
-                "help": "Por favor, explique aqui como foi feito o critério de organização dos espaços, páginas e subpáginas nos conteúdos jira compartilhados com Gebo.ai"
-            }
-        },
-        "GJiraSystem": {
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do sistema jira."
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "MainPanel": {
-                "label": "Editando sistema jira"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "baseUri": {
-                "label": "Endereço base da internet",
-                "help": "URL do endereço base do sistema jira"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente do sistema jira."
-            },
-            "secretCode": {
-                "label": "Identidade utilizada",
-                "help": "Selecione ou crie a identidade para acessar o sistema jira"
-            }
-        }
-    },
-    "GeboAISharepointModule": {
-        "GeboAISharepointSystemFastComponent": {
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição do sistema SharPpoint/OneDrive."
-            },
-            "sharepointVersion": {
-                "label": "Versão do Sharepoint",
-                "help": "versão do sharepoint"
-            },
-            "secret": {
-                "label": "Chave secreta",
-                "help": "Oauth2 client secret para este app registrado no produto microsoft \"entra\" (para ser recuperado no console de administração da nuvem microsoft)"
-            },
-            "clientId": {
-                "label": "ID do cliente",
-                "help": "Identificador oauth2 para este app registrado no produto microsoft \"entra\" (para ser recuperado no console de administração da nuvem microsoft)"
-            },
-            "tenantId": {
-                "label": "ID do locatário",
-                "help": "Identificador oauth2 do locatário para sua organização no produto microsoft \"entra\" (para ser recuperado no console de administração da nuvem microsoft)"
-            },
-            "MicrosofOauth2Fieldset": {
-                "label": "Informações de registro de aplicativo oauth2 Microsoft para Gebo.ai"
-            },
-            "CreateBtn": {
-                "label": "Criar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "MainPanel": {
-                "label": "Criar configuração do sistema SharePoint/OneDrive"
-            }
-        },
-        "GSharepointProjectEndpoint": {
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "PublishBtn": {
-                "label": "Publicar!",
-                "help": "Salva e disponibiliza esses conteúdos na base de conhecimento para os LLm's"
-            },
-            "SettingsTab": {
-                "label": "Configurações"
-            },
-            "MainPanel": {
-                "label": "Compartilhando conteúdos do SharePoint/OneDrive"
-            },
-            "LogsTab": {
-                "label": "Logs"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente para os conteúdos."
-            },
-            "parentProjectCode": {
-                "label": "Projeto",
-                "help": "Referência do projeto principal."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição das fontes de dados das entradas do SharePoint/OneDrive."
-            },
-            "sharePointSystemCode": {
-                "label": "sistema sharepoint",
-                "help": "Referência já configurada do sistema SharePoint/OneDrive."
-            },
-            "openZips": {
-                "label": "Abrir arquivos zip",
-                "help": "Ativar abertura de arquivos zip e extração de conteúdo"
-            },
-            "tree": {
-                "label": "Sites/páginas/subpáginas do Sharepoint ou unidades/pastas/arquivos do OneDrive escolhidos",
-                "help": "Conteúdos compartilhados do sharepoint/OneDrive"
-            },
-            "programmedTables": {
-                "label": "Cronograma de verificação de atualizações de conteúdos",
-                "help": "Configure a programação de verificação de conteúdos alterados para manter o sistema de geração aumentada de recuperação sempre atualizado"
-            },
-            "catalogingCriteria": {
-                "label": "Critérios de organização de espaços, páginas e subpáginas",
-                "help": "Explique aqui como foi realizada a organização de espaços, páginas e subpáginas nos conteúdos do sharepoint compartilhados com Gebo.ai"
-            }
-        },
-        "GSharepointContentManagementSystem": {
-            "MainPanel": {
-                "label": "Editando sistema sharepoint"
-            },
-            "GeneralSettingsTab": {
-                "label": "Configurações gerais"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "secretCode": {
-                "label": "Identidade usada",
-                "help": "Selecione ou crie a identidade para acessar o sistema sharepoint"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente para o sistema sharepoint."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição do sistema sharepoint."
-            },
-            "sharepointVersion": {
-                "label": "Versão do Sharepoint",
-                "help": "versão do sharepoint"
-            }
-        }
-    },
-    "GeboAIGraphRagExtractionModule": {
-        "GraphRagExtractionConfig": {
-            "graphRagConfigUI_Delete": {
-                "label": "Excluir"
-            },
-            "graphRagConfigUI_Save": {
-                "label": "Salvar"
-            },
-            "graphRagConfigUI_Cancel": {
-                "label": "Cancelar"
-            },
-            "graphRagConfigUI_ContextSettings": {
-                "label": "Configurações gerais de informações/conteúdo"
-            },
-            "graphRagConfigUI_LLMSSettings": {
-                "label": "Configurações de LLMs"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente para a etapa de extração de dados do grafo de conhecimento\n                                    "
-            },
-            "MainPanel": {
-                "label": "Configuração de extração de graphrag/conhecimento"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição desta configuração da etapa de extração de dados do grafo de conhecimento\n                                    "
-            },
-            "extractionPrompt": {
-                "label": "Prompt de extração de informações",
-                "help": "Prompt do modelo de linguagem para extração de entidades/eventos/relações e aliases"
-            },
-            "usedModelConfiguration": {
-                "label": "LLM utilizado para extração de dados",
-                "help": "Especifique o modelo de linguagem usado para extração de conhecimento, o padrão será usado se nenhum for\n                                    selecionado."
-            },
-            "graphRagAllSources": {
-                "label": "Aplicar graph rag a todas as fontes de dados",
-                "help": "Se verdadeiro, todas as bases de conhecimento/projetos/fontes de dados serão processadas para extração de conhecimento, caso contrário, apenas as configuradas especificamente serão "
-            },
-            "defaultModel": {
-                "label": "Modelo de linguagem padrão",
-                "help": "O modelo de linguagem padrão será usado para extração de conhecimento"
-            },
-            "processEveryDocument": {
-                "label": "Aplicar graph rag a todos os arquivos",
-                "help": "Os algoritmos de graph rag serão aplicados a todos os arquivos. Isso aumentará os detalhes da análise que o sistema é capaz de realizar, mas elevará o custo e o tempo\n                                            necessários para processar\n                                            documentos"
-            },
-            "contentSelectionFilter": {
-                "label": "Critérios de seleção de arquivos para processamento do graphrag",
-                "help": "Edite os critérios dos arquivos a serem enviados para o pipeline de extração de informação do graphrag. Selecione pelo menos um nome de arquivo e critério e/ou um tipo de arquivo e/ou o número máximo de bytes de tamanho do arquivo e/ou a idade da última modificação em dias"
-            }
-        }
-    },
-    "GeboAIContentSelectionFilterModule": {
-        "SelectionFilterCriteria": {
-            "extensions": {
-                "placeholder": "Selecione os tipos de arquivo"
-            },
-            "nameFilterCriteria": {
-                "placeholder": "Critério de filtragem do nome do arquivo"
-            },
-            "maxModificationAgeInDays": {
-                "placeholder": "Última modificação do arquivo, dias atrás"
-            },
-            "nameFilter": {
-                "placeholder": "Nome do arquivo"
-            },
-            "maxFileSize": {
-                "placeholder": "Tamanho máximo do arquivo em bytes"
-            }
-        }
-    },
-    "GeboAiKnowledgeBaseModule": {
-        "GKnowledgeBase": {
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "MainPanel": {
-                "label": "Editando uma base de conhecimento"
-            },
-            "AccessSettingsTab": {
-                "label": "Configurações de acesso à base de conhecimento"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da base de conhecimento gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição da base de conhecimento."
-            },
-            "embeddingModelReferences": {
-                "label": "Modelos de embedding usados (deixe em branco para usar o padrão do sistema)",
-                "help": "Modelos de embedding para a base de conhecimento, deixe em branco para usar o padrão."
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "IndexBtn": {
-                "label": "Indexar",
-                "help": "Reindexar conteúdos"
-            }
-        },
-        "GProject": {
-            "MainPanel": {
-                "label": "Editando um projeto ou item"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único do projeto gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição do projeto."
-            },
-            "rootKnowledgeBaseCode": {
-                "label": "base de conhecimento",
-                "help": "base de conhecimento."
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "IndexBtn": {
-                "label": "Indexar",
-                "help": "Reindexar conteúdos"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            }
-        },
-        "GeboAiKnowledgeBaseTreeComponent": {
-            "addNewAnchor": {
-                "label": "+ Adicionar item/projeto",
-                "help": "adicionar novo..."
-            }
-        }
-    },
-    "GeboAIAccessControlModule": {
-        "GeboAIAccessControlComponent": {
-            "accessibleToAll": {
-                "label": "Todos usam",
-                "help": "Todos podem usar"
-            },
-            "accessibleGroups": {
-                "label": "Lista de grupos",
-                "help": "Selecione os grupos permitidos"
-            },
-            "accessibleUsers": {
-                "label": "Lista de usuários",
-                "help": "Selecione os usuários permitidos"
-            }
-        }
-    },
-    "GeboAiAdminPanelModule": {
-        "GeboAiAdminComponent": {
-            "DashboardTab": {
-                "label": "Painel de controle"
-            },
-            "LLMSTab": {
-                "label": "LLMs para chat e embedding"
-            },
-            "RagChatConfigTab": {
-                "label": "Perfis de chat Rag/Prompts do modelo"
-            },
-            "KnowledgeBaseTab": {
-                "label": "Bases de conhecimento e projetos"
-            },
-            "UsersGroupTab": {
-                "label": "Usuários e grupos"
-            },
-            "GeboModulesTab": {
-                "label": "Configuração de módulos Gebo.ai"
-            },
-            "LogsTab": {
-                "label": "Logs"
-            }
-        }
-    },
-    "SystemsPanelModule": {
-        "SystemsComponent": {
-            "CodeHeader": {
-                "label": "Código"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "ConfigureBtn2": {
-                "label": "Configurar"
-            },
-            "ConfigureBtn": {
-                "label": "Configurar"
-            }
-        }
-    },
-    "ChatProfilesPanelModule": {
-        "ChatProfilesComponent": {
-            "NewPromptConfigurationBtn": {
-                "label": "Nova configuração de prompt"
-            },
-            "NewChatProfileBtn": {
-                "label": "Novo perfil de chat"
-            },
-            "MainPanel": {
-                "label": "Perfis de chat com geração aumentada por recuperação"
-            },
-            "PromptsPanel": {
-                "label": "Coleção de prompts e prompts padrão"
-            },
-            "KnowledgeBasesHeader": {
-                "label": "Bases de conhecimento"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "ConfigureBtn1": {
-                "label": "configurar"
-            },
-            "CodeHeader": {
-                "label": "Código"
-            }
-        }
-    },
-    "KnowledgeBasesPanelModule": {
-        "KnowledgeBasesComponent": {
-            "NewKnowledgeBaseBtn": {
-                "label": "Nova base de conhecimento"
-            }
-        }
-    },
-    "LlmsPanelModule": {
-        "LlmsSystemsComponent": {
-            "NewEmbeddingModelConfigurationBtn": {
-                "label": "Nova configuração de modelo de embedding"
-            },
-            "NewChatModelConfigurationBtn": {
-                "label": "Nova configuração de modelo de chat"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "CodeHeader": {
-                "label": "Código"
-            },
-            "ModelHeader": {
-                "label": "Modelo "
-            },
-            "ModelProviderHeader": {
-                "label": "Fornecedor do modelo"
-            },
-            "ConfigureBtn": {
-                "label": "configurar"
-            },
-            "CodeHeader2": {
-                "label": "Código"
-            },
-            "DescriptionHeader2": {
-                "label": "Descrição"
-            },
-            "ModelProviderHeader2": {
-                "label": "Fornecedor do modelo"
-            },
-            "ConfigureBtn2": {
-                "label": "configurar"
-            },
-            "ModelHeader2": {
-                "label": "Modelo "
-            }
-        }
-    },
-    "GeboAiLargeLanguageModelsModule": {
-        "GeboAITestChatComponent": {
-            "TestingModelDialog": {
-                "label": "Testando modelo"
-            },
-            "TestChatBtn": {
-                "label": "Testar chat"
-            }
-        },
-        "GOpenAIChatModelConfig": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "apiSecretCode": {
-                "label": "Token OpenAI",
-                "help": "Escolha o token OpenAI a ser usado para este modelo"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat OpenAI",
-                "help": "Escolha o modelo de chat OpenAI para trabalhar."
-            },
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "AdvancedSettingsTab": {
-                "label": "Configurações avançadas"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de chat OpenAI"
-            },
-            "ModelAccessSettingsTab": {
-                "label": "Configurações de acesso ao modelo"
-            }
-        },
-        "GOpenAIEmbeddingModelConfig": {
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de embedding OpenAI"
-            },
-            "apiSecretCode": {
-                "label": "Token OpenAI",
-                "help": "Escolha o token OpenAI a ser usado para este modelo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo de embedding gerado automaticamente"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo de embedding"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de embedding OpenAI",
-                "help": "Escolha o modelo de embedding OpenAI para trabalhar."
-            },
-            "defaultModel": {
-                "label": "definir como modelo de embedding padrão",
-                "help": "Se marcado, este será usado como modelo de embedding padrão quando nenhum modelo for indicado"
-            }
-        },
-        "GOllamaChatModelConfig": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "baseUrl": {
-                "label": "Endereço base do servidor Ollama",
-                "help": "Endereço base (ex: http://servername:234/) ao qual o servidor Ollama local ou da rede responde."
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat Ollama",
-                "help": "Escolha o modelo de chat Ollama para trabalhar.",
-                "placeholder": "Selecione um modelo"
-            },
-            "apiSecretCode": {
-                "label": "Token Ollama",
-                "help": "Escolha o token Ollama a ser usado para este modelo (opcional)"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de chat do servidor Ollama local (ou rede)"
-            }
-        },
-        "GAnthropicChatModelConfig": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "apiSecretCode": {
-                "label": "Token Anthropic",
-                "help": "Escolha o token Anthropic a ser usado para este modelo"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat Anthropic",
-                "help": "Escolha o modelo de chat Anthropic para trabalhar.",
-                "placeholder": "Selecione um modelo"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "AdvancedSettingsTab": {
-                "label": "Configurações avançadas"
-            },
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "ModelAccessSettingsTab": {
-                "label": "Configurações de acesso ao modelo"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de chat Anthropic"
-            }
-        },
-        "GMistralChatModelConfig": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "apiSecretCode": {
-                "label": "Token MistralAI",
-                "help": "Escolha o token MistralAI a ser usado para este modelo"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat MistralAI",
-                "help": "Escolha o modelo de chat MistralAI para trabalhar."
-            },
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "AdvancedSettingsTab": {
-                "label": "Configurações avançadas"
-            },
-            "ModelAccessSettingsTab": {
-                "label": "Configurações de acesso ao modelo"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de chat MistralAI"
-            }
-        },
-        "GGoogleVertexChatModelConfig": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat Google Vertex AI",
-                "help": "Escolha o modelo de chat Google Vertex AI para trabalhar."
-            },
-            "apiSecretCode": {
-                "label": "Token Google Vertex AI",
-                "help": "Escolha o token Google Vertex AI a ser usado para este modelo"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "TabGeneralInfos": {
-                "label": "Informações gerais"
-            },
-            "TabModelAccessSettings": {
-                "label": "Configurações de acesso ao modelo"
-            },
-            "TabAdvancedSettings": {
-                "label": "Configurações avançadas"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de chat Google Vertex AI"
-            }
-        },
-        "GDeepseekChatModelConfig": {
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "apiSecretCode": {
-                "label": "Token Deepseek",
-                "help": "Escolha o token Deepseek a ser usado para este modelo"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat Deepseek",
-                "help": "Escolha o modelo de chat Deepseek para trabalhar.",
-                "placeholder": "Selecione um modelo"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "AdvancedSettingsTab": {
-                "label": "Configurações avançadas"
-            },
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de chat Deepseek"
-            },
-            "ModelAccessSettingsTab": {
-                "label": "Configurações de acesso ao modelo"
-            }
-        },
-        "GenericOpenAIAPIChatModelConfig": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo gerado automaticamente"
-            },
-            "baseUrl": {
-                "label": "Endereço base do servidor da API do modelo de chat",
-                "help": "Endereço base do modelo de chat."
-            },
-            "apiSecretCode": {
-                "label": "Token da API do modelo de chat",
-                "help": "Escolha o token da API do modelo de chat a ser usado para este modelo (opcional)"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de chat padrão",
-                "help": "Se marcado, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de chat do Chat model ",
-                "help": "Escolha o modelo de chat do Chat model  para trabalhar."
-            },
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "TitleFragment": {
-                "label": "Editando provedor de modelo de chat:"
-            },
-            "AdvancedSettingsTab": {
-                "label": "Configurações avançadas"
-            },
-            "ModelAccessSettingsTab": {
-                "label": "Configurações de acesso ao modelo"
-            }
-        },
-        "GOllamaEmbeddingModelConfig": {
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo de embedding"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de embedding Ollama local (ou rede)"
-            },
-            "apiSecretCode": {
-                "label": "Token Ollama",
-                "help": "Escolha o token Ollama a ser usado para este modelo"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de embedding Ollama",
-                "help": "Escolha o modelo de embedding Ollama para trabalhar."
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo de embedding gerado automaticamente"
-            },
-            "defaultModel": {
-                "label": "definir como modelo de embedding padrão",
-                "help": "Se marcado, este será usado como modelo de embedding padrão quando nenhum modelo for indicado"
-            },
-            "baseUrl": {
-                "label": "Endereço base do servidor Ollama",
-                "help": "Endereço base (ex: http://servername:234/) ao qual o servidor Ollama local ou da rede responde."
-            }
-        },
-        "GMistralEmbeddingModelConfig": {
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo de embedding"
-            },
-            "MainPanel": {
-                "label": "Editando configuração do modelo de embedding MistralAI"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo de embedding gerado automaticamente"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de embedding MistralAI",
-                "help": "Escolha o modelo de embedding MistralAI para trabalhar."
-            },
-            "defaultModel": {
-                "label": "definir como modelo de embedding padrão",
-                "help": "Se marcado, este será usado como modelo de embedding padrão quando nenhum modelo for indicado"
-            },
-            "apiSecretCode": {
-                "label": "Token MistralAI",
-                "help": "Escolha o token MistralAI a ser usado para este modelo"
-            }
-        },
-        "GGoogleVertexEmbeddingModelConfig": {
-            "MainPanel": {
-                "label": "Editando configuração do modelo de embedding Google Vertex AI"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo de embedding"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de embedding Google Vertex AI",
-                "help": "Escolha o modelo de embedding Google Vertex AI para trabalhar."
-            },
-            "defaultModel": {
-                "label": "definir como modelo de embedding padrão",
-                "help": "Se marcado, este será usado como modelo de embedding padrão quando nenhum modelo for indicado"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo de embedding gerado automaticamente"
-            },
-            "apiSecretCode": {
-                "label": "Token Google Vertex AI",
-                "help": "Escolha o token Google Vertex AI a ser usado para este modelo"
-            }
-        },
-        "GenericOpenAIAPIEmbeddingModelConfig": {
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "TitleFragment": {
-                "label": "Editando provedor de modelo de embedding:"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração do modelo de Embedding"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração do modelo de Embedding gerado automaticamente"
-            },
-            "choosedModel": {
-                "label": "Escolha de modelo de embedding do Embedding model ",
-                "help": "Escolha o modelo de embedding do Embedding model  para trabalhar."
-            },
-            "baseUrl": {
-                "label": "Endereço do servidor da API do modelo de embedding",
-                "help": "Endereço base do servidor do Embedding model ."
-            },
-            "defaultModel": {
-                "label": "definir como modelo de embedding padrão",
-                "help": "Se marcado, este será usado como modelo de embedding padrão quando nenhum modelo for indicado"
-            },
-            "apiSecretCode": {
-                "label": "Token da API do modelo de Embedding",
-                "help": "Escolha o token da API do modelo de Embedding a ser usado para este modelo"
-            }
-        }
-    },
-    "GeboAIChatControlModule": {
-        "GeboAIReusableChatComponent": {
-            "chatConfigInfosBtn": {
-                "help": "Informações de configuração do chat"
-            },
-            "chaDeleteBtn": {
-                "help": "Excluir esta sessão de chat"
-            },
-            "chatNameChangeBtn": {
-                "help": "Renomear a sessão de chat"
-            }
-        },
-        "ChangeDescriptionComponent": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "description": {
-                "label": "Descrição do chat",
-                "help": "Digite a descrição da sessão de chat."
-            }
-        },
-        "GeboChatUserInfoComponent": {
-            "usedModel": {
-                "label": "Modelo utilizado",
-                "help": "Código do modelo"
-            },
-            "providerId": {
-                "label": "Fornecedor do modelo de chat",
-                "help": "Driver do provedor de LLMs"
-            },
-            "functions": {
-                "label": "Funções disponíveis do modelo de chat",
-                "help": "Lista de funções disponíveis para o modelo de chat"
-            },
-            "NameCol": {
-                "label": "Nome"
-            },
-            "DescriptionCol": {
-                "label": "Descrição"
-            }
-        }
-    },
-    "GeboAIAudioControlModule": {
-        "GeboAIAudioControlComponent": {
-            "RecordBtn": {
-                "label": "Gravar",
-                "help": "Comece a gravar um áudio e envie"
-            }
-        }
-    },
-    "GeboAIJobStatusModule": {
-        "LogTableComponent": {
-            "ReloadDataBtn": {
-                "label": "recarregar dados"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SelectHeader": {
-                "label": "Selecionar"
-            },
-            "EndDateTimeHeader": {
-                "label": "data/hora de término"
-            },
-            "StartDateTimeHeader": {
-                "label": "data/hora de início"
-            },
-            "ProcessingHeader": {
-                "label": "processando"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "CodeHeader": {
-                "label": "Código"
-            },
-            "FinishedHeader": {
-                "label": "finalizado"
-            },
-            "WithErrorHeader": {
-                "label": "com erro"
-            },
-            "LogTableComponent": {
-                "help": "Este é o log de ingestão da área compartilhada do sistema de arquivos"
-            }
-        }
-    },
-    "GeboAIDashboardPanelModule": {
-        "GeboAIDashboardComponent": {
-            "SpanEmbedding": {
-                "label": "embedding vs número total de documentos"
-            },
-            "MoreDetailsBtn": {
-                "label": "Mais detalhes"
-            }
-        }
-    },
-    "GeboAIPromptWizardModule": {
-        "GeboAIPromptWizardComponent": {
-            "generatePrompt": {
-                "label": "Gerar prompt"
-            },
-            "PromptWizardBtn": {
-                "label": "Assistente de prompt",
-                "help": "Use isto para utilizar um LLM para gerar o prompt para seus objetivos"
-            },
-            "acceptPrompt": {
-                "label": "Aceitar prompt"
-            },
-            "promptWizardUI": {
-                "label": "Assistente de geração de modelo de prompt"
-            },
-            "cancel": {
-                "label": "Cancelar"
-            },
-            "response": {
-                "label": "Modelo de prompt sugerido",
-                "help": "Texto de modelo gerado para seu objetivo (você pode alterar ou corrigir/modificar)"
-            },
-            "modelCode": {
-                "label": "Modelo de chat a utilizar",
-                "help": "Escolha o modelo de chat para o qual você deseja solicitar a geração do modelo de prompt"
-            },
-            "query": {
-                "label": "Pedido de modelo de prompt",
-                "help": "Especifique na 2ª pessoa qual é o objetivo que a IA irá auxiliar o usuário"
-            }
-        }
-    },
-    "GeboAIStandardChatModelModule": {
-        "GeboAIStandardChatModelSettings": {
-            "temperature": {
-                "label": "Temperatura",
-                "help": "Temperatura com que o modelo responderá, de 0 a 1 (se não tiver certeza, deixe em branco)"
-            },
-            "contextLength": {
-                "label": "Comprimento do contexto (tokens)",
-                "help": "Quantidade de texto que um modelo de IA pode considerar ao processar (se não definido, será usado 4096)"
-            },
-            "topP": {
-                "label": "TopP",
-                "help": "Parâmetro TopP, de 0 a 1 (se não tiver certeza, deixe em branco)"
-            }
-        }
-    },
-    "GeboAIAdvancedChatModelModule": {
-        "GeboAIAdvancedChatModelGroupComponent": {
-            "enabledFunctions": {
-                "label": "Funções habilitadas para este modelo",
-                "help": "Funcionalidades que podem ser usadas pelo modelo durante o chat"
-            },
-            "defaultModelPrompt": {
-                "label": "Prompt padrão do modelo",
-                "help": "Edite o prompt padrão para o modelo de chat."
-            }
-        }
-    },
-    "GeboAiSecretsAdminModule": {
-        "SecretWrapper": {
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da identidade."
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da identidade gerado automaticamente."
-            },
-            "secretType": {
-                "label": "Tipo de identidade",
-                "help": "Selecione o tipo de identidade a ser criado para o sistema remoto"
-            },
-            "InsertBtn": {
-                "label": "Inserir"
-            },
-            "token": {
-                "label": "Token",
-                "help": "Insira o token."
-            },
-            "user": {
-                "label": "Usuário",
-                "help": "Insira o usuário indicado pelo token."
-            },
-            "MainPanel": {
-                "label": "Criando identidade"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "username": {
-                "label": "Nome de usuário",
-                "help": "Insira o nome de usuário."
-            },
-            "password": {
-                "label": "Senha",
-                "help": "Insira a senha."
-            },
-            "email": {
-                "label": "E-mail/Nome de usuário",
-                "help": "Insira o e-mail ou nome de usuário associado à chave ssh."
-            },
-            "key": {
-                "label": "Chave secreta",
-                "help": "Abra o arquivo da chave privada e copie neste campo."
-            },
-            "passphrase": {
-                "label": "Senha da chave",
-                "help": "Insira a senha da chave."
-            },
-            "pub": {
-                "label": "Chave pública",
-                "help": "Abra o arquivo da chave pública e copie neste campo."
-            }
-        }
-    },
-    "GeboAIUploadsModule": {
-        "GUploadsProjectEndpoint": {
-            "code": {
-                "label": "Código único",
-                "help": "Código único do conteúdo gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do conteúdo carregado da entrada do sistema de arquivos."
-            },
-            "parentProjectCode": {
-                "label": "Projeto",
-                "help": "Referência do projeto pai."
-            },
-            "upload": {
-                "label": "Enviar conteúdos",
-                "help": "Clique no botão de procurar e selecione arquivos zip ou outros arquivos"
-            },
-            "openZips": {
-                "label": "Abrir arquivos zip",
-                "help": "Permitir abertura de arquivos zip e extração de conteúdo"
-            },
-            "PublishBtn": {
-                "label": "Publicar!",
-                "help": "Salva e disponibiliza esses conteúdos na base de conhecimento para LLm's"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "LogsTab": {
-                "label": "Logs"
-            },
-            "MainPanel": {
-                "label": "Editando conteúdo enviado"
-            },
-            "SettingsTab": {
-                "label": "Configurações"
-            },
-            "buildSystemsRefs": {
-                "label": "Configurar sistemas de build",
-                "help": "Lista de sistemas de build/empacotamento para inspecionar por metainformações e informações adicionais de artefatos (deixe vazio se não houver código de software incluso)"
-            }
-        }
-    },
-    "VFilesystemSelectorModule": {
-        "VFilesystemSelectorComponent": {
-            "ChoosedElementsArea": {
-                "label": "Elementos escolhidos"
-            },
-            "ChooseOk": {
-                "label": "OK"
-            },
-            "ChooseCancel": {
-                "label": "Cancelar"
-            },
-            "EditBtn": {
-                "help": "Modificar selecionado"
-            },
-            "ChooseElementsArea": {
-                "label": "Escolher elementos"
-            },
-            "VFileSystemSelector": {
-                "label": "Escolher elementos"
-            }
-        }
-    },
-    "GeboAIContentReindexModule": {
-        "GeboAIContentReindexScheduleComponent": {
-            "EditBtn": {
-                "help": "Editar agendamento"
-            },
-            "ConfirmBtn": {
-                "label": "Confirmar"
-            },
-            "AddBtn": {
-                "label": "+Adicionar"
-            }
-        }
-    },
-    "GeboAIFileSystemModule": {
-        "GFilesystemProjectEndpoint": {
-            "PublishBtn": {
-                "label": "Publicar!",
-                "help": "Salva e permite que esses conteúdos fiquem disponíveis na base de conhecimento para LLm's"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SettingsTab": {
-                "label": "Configurações"
-            },
-            "SourceCodeTreatmentTab": {
-                "label": "Tratamento de código-fonte"
-            },
-            "LogsTab": {
-                "label": "Registros"
-            },
-            "MainPanel": {
-                "label": "Editando conteúdo existente do sistema de arquivos"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do conteúdo enviado da entrada do sistema de arquivos."
-            },
-            "openZips": {
-                "label": "Abrir arquivos zip",
-                "help": "Permite abrir arquivos zip e extrair o conteúdo"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente dos conteúdos."
-            },
-            "tree": {
-                "label": "Arquivos ou pastas escolhidos",
-                "help": "Arquivos ou diretórios dos sistemas de arquivos compartilhados disponíveis no servidor"
-            },
-            "parentProjectCode": {
-                "label": "Projeto",
-                "help": "Referência do projeto pai."
-            },
-            "programmedTables": {
-                "label": "Agenda de verificação de atualizações de conteúdos",
-                "help": "Configure o agendamento das alterações de conteúdo para manter o sistema de geração aumentada de busca atualizado"
-            },
-            "catalogingCriteria": {
-                "label": "Critérios de organização das pastas",
-                "help": "Explique aqui como foi feita a organização das pastas na área do sistema de arquivos compartilhada com Gebo.ai"
-            },
-            "buildSystemsRefs": {
-                "label": "Configurar sistemas de build",
-                "help": "Lista de sistemas de build/empacotamento a inspecionar para obter metainformações e informações adicionais de artefatos (deixe em branco se não houver código de software)"
-            }
-        },
-        "GeboAISharedFilesystemsComponent": {
-            "NewFileShareAreaBtn": {
-                "label": "Nova área de compartilhamento de arquivos"
-            },
-            "AbsolutePathHeader": {
-                "label": "Caminho absoluto"
-            },
-            "DbOrYmlFileConfigHeader": {
-                "label": "configuração de arquivo db ou yml"
-            },
-            "DescriptionHeader": {
-                "label": "Descrição"
-            },
-            "CodeHeader": {
-                "label": "Código"
-            },
-            "ModifyHeader": {
-                "label": "Modificar"
-            }
-        },
-        "GFileSystemShareReference": {
-            "reference": {
-                "label": "Pasta compartilhada do sistema de arquivos escolhida",
-                "help": "Escolha uma pasta do servidor que seja caminho raiz para o sistema de arquivos compartilhado usado na sua organização como repositório de documentos"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da área do sistema de arquivos compartilhada da sua organização"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único gerado automaticamente dos conteúdos."
-            },
-            "InsertBtn": {
-                "label": "Inserir"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "MainPanel": {
-                "label": "Editando pasta de arquivos compartilhados do servidor"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            }
-        }
-    },
-    "GeboAiGitModule": {
-        "GGitProjectEndpoint": {
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "PublishBtn": {
-                "label": "Publicar!",
-                "help": "Salve e permita que esses conteúdos fiquem disponíveis na base de conhecimento para LLm's"
-            },
-            "MainPanel": {
-                "label": "Editando repositório de origem/documentação git"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do repositório git."
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único do repositório git gerado automaticamente."
-            },
-            "parentProjectCode": {
-                "label": "Projeto",
-                "help": "Referência do projeto pai."
-            },
-            "contentManagementSystem": {
-                "label": "Sistema Git",
-                "help": "Referência do sistema git já configurado."
-            },
-            "branch": {
-                "label": "Ramo",
-                "help": "Nome do ramo para checkout (normalmente master, main ou develop)"
-            },
-            "identityCode": {
-                "label": "Identidade usada",
-                "help": "Selecione a identidade para fazer o clone/checkout no sistema"
-            },
-            "repositoryUri": {
-                "label": "URL/endereço do repositório",
-                "help": "Endereço completo do repositório git remoto (geralmente começa com http:, https: ou ssh:)"
-            },
-            "publicAccess": {
-                "label": "público",
-                "help": "Se verdadeiro, o acesso ao repositório não requer autenticação"
-            },
-            "openZips": {
-                "label": "Abrir arquivos zip",
-                "help": "Permitir abertura de arquivos zip e extração de conteúdo"
-            },
-            "programmedTables": {
-                "label": "Agendamento de verificação de atualizações de conteúdo",
-                "help": "Configure o agendamento para manter o sistema de geração aumentada atualizado com as alterações de conteúdo"
-            },
-            "buildSystemsRefs": {
-                "label": "Configurar sistemas de build",
-                "help": "Lista de sistemas de build/empacotamento para inspecionar por informações meta e artefatos adicionais"
-            }
-        }
-    },
-    "GeboAIChatProfileModule": {
-        "GChatProfileConfiguration": {
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "GeneralInfosTab": {
-                "label": "Informações gerais"
-            },
-            "UseChatModelLabel": {
-                "label": "Usar modelo de chat"
-            },
-            "ChooseChatModelRadio": {
-                "label": "escolher"
-            },
-            "ChatModelSelect": {
-                "placeholder": "Selecione uma configuração de modelo de chat"
-            },
-            "EmbeddingModelSelect": {
-                "placeholder": "Selecione uma configuração de modelo de embedding"
-            },
-            "ChooseEmbeddingModelRadio": {
-                "label": "escolher"
-            },
-            "RagSettingsTab": {
-                "label": "Configurações RAG"
-            },
-            "LanguageModelTab": {
-                "label": "Configurações de modelo de linguagem grande e ferramentas utilizáveis"
-            },
-            "UseEmbeddingModelLabel": {
-                "label": "Usar modelo de embedding"
-            },
-            "SecurityAccessSettingsTab": {
-                "label": "Configurações de acesso e segurança"
-            },
-            "MainPanel": {
-                "label": "Editando o perfil de chat de geração aumentada de recuperação"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único do perfil de chat gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição do perfil de chat."
-            },
-            "userChoosesKnowledgeBases": {
-                "label": "Usuário escolhe bases de conhecimento",
-                "help": "O usuário pode escolher entre bases de conhecimento acessíveis e/ou enviar seus próprios arquivos."
-            },
-            "knowledgeBaseCodes": {
-                "label": "Bases de conhecimento",
-                "help": "Bases de conhecimento para usar na recuperação de documentos."
-            },
-            "similaritySearchThreshold": {
-                "label": "Limite de similaridade",
-                "help": "Limite de similaridade para buscas semânticas, 0.60–0.65 Filtragem baixa, 0.70-0.75 Filtragem média, 0.80–0.85 Preciso"
-            },
-            "otherSearchSimilarityThreshold": {
-                "label": "Limite de similaridade do 2º 'salto'",
-                "help": "Limite de similaridade para buscas semânticas, 0.60–0.65 Filtragem baixa, 0.70-0.75 Filtragem média, 0.80–0.85 Preciso usado a partir da segunda busca do RAG com múltiplos saltos"
-            },
-            "disableMultiHopRag": {
-                "label": "Desativar RAG 'Multi Hop'",
-                "help": "Desativa a funcionalidade 'multi hop rag'. A busca com múltiplos saltos faz uma primeira busca semântica e usa os documentos encontrados como contexto para a própria busca semântica, fornecendo um contexto maior."
-            },
-            "topK": {
-                "label": "Fragmentos de documentos considerados (TopK)",
-                "help": "Na geração aumentada de recuperação, Top N fragmentos de documento encontrados considerados na busca semântica"
-            },
-            "enabledFunctions": {
-                "label": "Funções habilitadas para este chat RAG",
-                "help": "Funcionalidades que podem ser usadas pelo modelo llm durante o chat com o usuário interagindo também com a base de conhecimento selecionada"
-            },
-            "prompt": {
-                "label": "Prompt",
-                "help": "Edite o prompt para as sessões de geração aumentada de recuperação."
-            }
-        }
-    },
-    "GeboAIPromptAdminModule": {
-        "GPromptConfig": {
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "PromptCategorySelect": {
-                "placeholder": "Digite ou insira a categoria do prompt"
-            },
-            "MainPanel": {
-                "label": "Editando prompt"
-            },
-            "promptCategory": {
-                "label": "Categoria do prompt",
-                "help": "Selecione ou insira a categoria do prompt."
-            },
-            "prompt": {
-                "label": "Prompt",
-                "help": "Edite o prompt para o chat, use {query} para indicar a pergunta do usuário e {context} para indicar o contexto dos documentos/histórico enviado ao LLM."
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único do prompt gerado automaticamente."
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Digite a descrição do prompt."
-            }
-        }
-    },
-    "GeboAIUserProfileModule": {
-        "GeboAIUserProfileComponent": {
-            "ChangePasswdBtn": {
-                "label": "Alterar senha"
-            }
-        },
-        "GeboAIChangePasswordComponent": {
-            "oldPassword": {
-                "label": "Senha antiga",
-                "help": "Senha atual para fazer login"
-            },
-            "newPassword": {
-                "label": "Nova senha",
-                "help": "Nova senha"
-            },
-            "username": {
-                "label": "E-mail",
-                "help": "E-mail como nome de usuário para login"
-            },
-            "ChangePasswordUI": {
-                "label": "Formulário para alterar senha"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "ChangePwdBtn": {
-                "label": "alterar senha"
-            },
-            "newPassword1": {
-                "label": "Confirmar nova senha",
-                "help": "Confirmar nova senha"
-            }
-        }
-    },
-    "GeboAIGoogleSearchAccountModule": {
-        "GGoogleSearchApiCredentials": {
-            "DeleteBtn": {
-                "label": "Excluir"
-            },
-            "CancelBtn": {
-                "label": "Cancelar"
-            },
-            "SaveBtn": {
-                "label": "Salvar"
-            },
-            "ForMoreInformations": {
-                "label": "Para mais informações sobre a API de pesquisa personalizada do Google ou para obter sua chave de API (gratuitamente), visite: https://developers.google.com/custom-search"
-            },
-            "code": {
-                "label": "Código único",
-                "help": "Código único da configuração da API de pesquisa do Google."
-            },
-            "MainPanel": {
-                "label": "Editando credenciais da API de pesquisa personalizada do Google"
-            },
-            "secretCode": {
-                "label": "Token da API de pesquisa do Google",
-                "help": "Escolha ou insira o token da API de pesquisa do Google"
-            },
-            "customSearchEngineId": {
-                "label": "ID do mecanismo de pesquisa do Google",
-                "help": "ID do mecanismo de pesquisa do Google"
-            },
-            "description": {
-                "label": "Descrição",
-                "help": "Insira a descrição da configuração da API de pesquisa do Google."
-            }
-        }
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Idioma padrão do sistema",
+        "help" : "Idioma padrão do sistema para esta instalação do Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail como usuário para login"
+      },
+      "passwordC" : {
+        "label" : "Confirmar senha",
+        "help" : "Confirmar senha"
+      },
+      "password" : {
+        "label" : "Senha",
+        "help" : "Senha para login (mínimo de 8 caracteres)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " as senhas não coincidem "
+      },
+      "LocalAdmin" : {
+        "label" : "Crie sua conta de administrador local"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Você usará esta conta futuramente para configurar/administrar o software; esses dados permanecerão locais e não serão enviados pela rede"
+      },
+      "EnterBtn" : {
+        "label" : "Ir para a página de login"
+      },
+      "SetupPage" : {
+        "label" : "Configure sua instalação do Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Criar configuração do sistema"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Leia e aceite a licença"
+      },
+      "AcceptMark" : {
+        "label" : "Eu aceito os termos",
+        "help" : "Clicando aqui você aceita os termos e condições da licença"
+      }
     }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail como nome de usuário para entrar"
+      },
+      "password" : {
+        "label" : "Senha",
+        "help" : "Senha para entrar"
+      },
+      "LoginPanel" : {
+        "label" : "Entrar no Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Entrar"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Configuração Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Nome do provedor"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "MainPanel" : {
+        "label" : "Configurações de segurança Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "ID"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Voltar para a página inicial de configuração"
+      },
+      "WizardUi" : {
+        "label" : "Escolha uma seção de configuração"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Configuração de conta de administrador e outros",
+        "description" : "Pelo menos uma conta de administração é necessária para garantir que esta instalação do Gebo.ai seja devidamente gerenciada, adicione outros usuários se necessário"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Diretório de trabalho Gebo.ai",
+        "description" : "Configure um diretório de trabalho, ele será a pasta onde as configurações e todos os arquivos de trabalho desta instalação serão armazenados. Também é uma ótima ideia fazer backup periodicamente."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Configuração do banco de dados vetorial",
+        "description" : "Um banco de dados vetorial precisa ser configurado para o Gebo.ai fornecer serviços de geração aumentada por recuperação. Você pode escolher entre um banco de dados vetorial local, Qdrant ou Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single signon, autenticação oauth2",
+        "description" : "Autenticação single signon Oauth2 e configuração de clientes oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Configuração de modelos de linguagem grande",
+        "description" : "Configure vários llms com serviços de backend em nuvem ou infraestrutura local/LAN, ao menos um modelo de chat e um modelo de embeddings devem ser configurados para que o software funcione corretamente."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Configuração de graph rag/extração de conhecimento",
+        "description" : "Configure graph rag e o subsistema de extração de conhecimento"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Configuração dos caminhos de sistemas de arquivos compartilhados",
+        "description" : "Configure os caminhos dos sistemas de arquivos compartilhados da empresa para serem usados como área de documentos de recuperação aumentada em diversas bases de conhecimento"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integração Atlassian Confluence",
+        "description" : "Configurar o Gebo.ai para acessar suas instalações Atlassian Confluence em nuvem ou locais"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integração Atlassian Jira",
+        "description" : "Configurar o Gebo.ai para acessar suas instalações Atlassian Jira em nuvem"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integração Microsoft Sharepoint",
+        "description" : "Configurar o Gebo.ai para acessar suas instalações Microsoft Sharepoint em nuvem ou locais"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Configure pelo menos uma base de conhecimento",
+        "description" : "Configure ao menos uma base de conhecimento para que seus usuários possam aproveitar os serviços de geração aumentada por recuperação do Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Configure pelo menos um perfil de chat \"R.A.G.\"",
+        "description" : "Configure ao menos um perfil de chat por recuperação aumentada para seus usuários, baseado em uma de suas bases de conhecimento configuradas"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configurar sistemas Atlassian Confluence da empresa"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tipo de sistema"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Código da configuração"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Sistema Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Sistema Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Código da configuração"
+      },
+      "MainPanel" : {
+        "label" : "Configurar sistemas Atlassian Jira da empresa"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tipo de sistema"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Código da configuração"
+      },
+      "MainPanel" : {
+        "label" : "Configurar sistemas Microsoft Sharepoint da empresa"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tipo de sistema"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sistema Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Forneça uma api-key com crédito disponível suficiente. Se OpenAI for escolhido, é preciso adicionar um crédito específico (10-30$ podem ser suficientes) ao seu plano habitual para uso da API, caso contrário nenhum tráfego llms ficará disponível neste aplicativo."
+      },
+      "MainPanel" : {
+        "label" : "Configurar acesso aos provedores llms do Gebo.ai com sua própria chave de API"
+      },
+      "provider" : {
+        "label" : "Fornecedor de modelo de linguagem grande",
+        "help" : "Escolha um fornecedor entre OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Usuário",
+        "help" : "Digite o usuário associado à apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configurar"
+      },
+      "apiKey" : {
+        "label" : "Chave de API",
+        "help" : "Sua chave de API dos provedores LLMS a ser usada"
+      },
+      "ProviderHeader" : {
+        "label" : "Provedor"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Código de configuração"
+      },
+      "ModelHeader" : {
+        "label" : "Modelo"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Tipo de modelo"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Modelo padrão"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Criar configuração de graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Configuração padrão de Graph Rag & extração de conhecimento"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Código de configuração"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projeto"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Adicionar base de conhecimento"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Base de conhecimento"
+      },
+      "MainPanel" : {
+        "label" : "Configurações de bases de conhecimento & conteúdos"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Fonte dos conteúdos"
+      },
+      "PublishedHeader" : {
+        "label" : "Publicado"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Nº de documentos"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Adicionar um projeto/item",
+        "help" : "criar novo projeto"
+      },
+      "Button1" : {
+        "help" : "abrir base de conhecimento"
+      },
+      "Button2" : {
+        "help" : "abrir formulário de projeto"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configuração da pasta de trabalho Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configurar"
+      },
+      "workDirectory" : {
+        "label" : "Escolha uma pasta como diretório de trabalho Gebo.ai",
+        "help" : "Escolha uma pasta do servidor que esta instalação usará como pasta de trabalho para configurações e armazenamento de conteúdos."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Adicionar pasta"
+      },
+      "AddFolderBtn" : {
+        "label" : "Adicionar pasta"
+      },
+      "CodeHeader" : {
+        "label" : "Código"
+      },
+      "MainPanel" : {
+        "label" : "Caminhos do sistema de arquivos compartilhado do servidor"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Caminho absoluto"
+      },
+      "DeleteHeader" : {
+        "label" : "Excluir"
+      },
+      "path" : {
+        "label" : "Adicionar uma pasta raiz de um sistema de arquivos compartilhado",
+        "help" : "Escolha uma pasta do servidor que seja o caminho raiz para o sistema de arquivos compartilhado usado como repositório de documentos na sua organização"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da entrada do sistema de arquivos"
+      },
+      "RemovePathBtn" : {
+        "label" : "Remover caminho"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Configurar"
+      },
+      "MainPanel" : {
+        "label" : "Configuração de banco de dados vetorial"
+      },
+      "host" : {
+        "label" : "Host Qdrant",
+        "help" : "Nome do host Qdrant ou endereço IP"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Configurações de conexão Qdrant"
+      },
+      "port" : {
+        "label" : "Porta Qdrant",
+        "help" : "Porta de comunicação Qdrant (6334 é o padrão)"
+      },
+      "apiKey" : {
+        "label" : "Chave de API Qdrant",
+        "help" : "Chave de API para autenticação Qdrant"
+      },
+      "tls" : {
+        "label" : "Parâmetro TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Etapas obrigatórias da configuração do Gebo.ai concluídas...",
+        "detail" : "As etapas obrigatórias da configuração foram concluídas, mas algumas etapas pendentes impedem que sua organização aproveite ao máximo este software"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Faltando alguma etapa obrigatória da configuração do Gebo.ai",
+        "detail" : "Revise as etapas em vermelho do processo de configuração"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Configuração Gebo.ai OK!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Código",
+        "help" : "Insira a descrição do código de autenticação/integração OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição das informações de autenticação/integração OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Finalidade da configuração",
+        "help" : "Escolha se estas configurações serão usadas para autenticar no Gebo.ai ou para permitir que o Gebo.ai tenha conectividade de cliente com um sistema de terceiros."
+      },
+      "authProvider" : {
+        "label" : "Provedor",
+        "help" : "Insira o provedor da autenticação OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "Uri do emissor",
+        "help" : "Insira a URL do emissor OAUTH2 do provedor"
+      },
+      "authorizationUri" : {
+        "label" : "URL de autorização",
+        "help" : "Insira a URL de autorização OAUTH2 do provedor"
+      },
+      "jwkSetUri" : {
+        "label" : "Uri do conjunto Jwk",
+        "help" : "Insira a url do conjunto Jwk OAUTH2 do provedor"
+      },
+      "userInfoUri" : {
+        "label" : "URL de informações do usuário",
+        "help" : "Insira a URL de informações do usuário OAUTH2 do provedor"
+      },
+      "introspectionUri" : {
+        "label" : "Uri de introspecção",
+        "help" : "Insira a URL de introspecção OAUTH2 do provedor"
+      },
+      "tokenUri" : {
+        "label" : "URL do token",
+        "help" : "Insira a URL do token OAUTH2 do provedor"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URLS do provedor OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Inserir novas informações de autenticação/integração OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID do cliente",
+        "help" : "Identificador do cliente para o protocolo oauth2 (recuperado na área administrativa do software autenticado via oauth2 de terceiros)"
+      },
+      "secret" : {
+        "label" : "Chave secreta",
+        "help" : "Segredo do cliente para o protocolo oauth2 (recuperado na área administrativa do software autenticado via oauth2 de terceiros)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Criar configuração do sistema Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do sistema Confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Criar"
+      },
+      "username" : {
+        "label" : "Nome de usuário Confluence",
+        "help" : "Nome do usuário Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Versão do Confluence",
+        "help" : "Versão do Confluence"
+      },
+      "baseUri" : {
+        "label" : "Endereço base da internet",
+        "help" : "Url do endereço base do sistema Confluence para instalação local ou o url base da sua organização para o sistema Confluence Cloud"
+      },
+      "password" : {
+        "label" : "Senha do Confluence",
+        "help" : "Senha do Confluence"
+      },
+      "token" : {
+        "label" : "Chave de API da nuvem Confluence",
+        "help" : "Chave de API da CONFLUENCE CLOUD adquirida no backoffice do Confluence, aqui deve ser inserido \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publicar!",
+        "help" : "Salva e disponibiliza estes conteúdos na base de conhecimento para os LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SettingsTab" : {
+        "label" : "Configurações"
+      },
+      "MainPanel" : {
+        "label" : "Compartilhando conteúdos do Confluence"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para os conteúdos."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do conteúdo carregado das entradas do Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Sistema Confluence",
+        "help" : "Referência ao sistema Confluence já configurado."
+      },
+      "parentProjectCode" : {
+        "label" : "Projeto",
+        "help" : "Referência do projeto principal."
+      },
+      "openZips" : {
+        "label" : "Abrir arquivos zip",
+        "help" : "Ativar abertura de arquivos zip e extração de conteúdo"
+      },
+      "tree" : {
+        "label" : "Espaços ou páginas/subpáginas escolhidas",
+        "help" : "Conteúdos compartilhados de espaços e páginas do Confluence"
+      },
+      "programmedTables" : {
+        "label" : "Agendamento de checagem de atualizações de conteúdos",
+        "help" : "Configurar o agendamento de conteúdos alterados para manter o sistema de geração aumentada de recuperação atualizado"
+      },
+      "catalogingCriteria" : {
+        "label" : "Critérios de organização de espaços, páginas e subpáginas",
+        "help" : "Por favor, explique aqui como foi feito o critério de organização dos espaços, páginas e subpáginas nos conteúdos do Confluence compartilhados com Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Configurações gerais"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "MainPanel" : {
+        "label" : "Editando sistema Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "baseUri" : {
+        "label" : "Endereço base da internet",
+        "help" : "Url do endereço base do sistema Confluence"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para o sistema Confluence."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do sistema Confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Versão do Confluence",
+        "help" : "Versão do Confluence"
+      },
+      "secretCode" : {
+        "label" : "Identidade utilizada",
+        "help" : "Selecione ou crie a identidade para acessar o sistema Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "novo grupo"
+      },
+      "NewUserBtn" : {
+        "label" : "novo usuário"
+      },
+      "UsersListPanel" : {
+        "label" : "Lista de usuários"
+      },
+      "GroupsListPanel" : {
+        "label" : "Lista de grupos"
+      },
+      "SournameHeader" : {
+        "label" : "sobrenome"
+      },
+      "UsernameHeader" : {
+        "label" : "nome de usuário"
+      },
+      "RolesHeader" : {
+        "label" : "funções"
+      },
+      "NameHeader" : {
+        "label" : "nome"
+      },
+      "EditBtn" : {
+        "label" : "Editar"
+      },
+      "DisabledHeader" : {
+        "label" : "desativado"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "UserIds" : {
+        "placeholder" : "Selecione usuários"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "MainPanel" : {
+        "label" : "Editando grupo de usuários"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do grupo de usuários"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Digite o código do grupo de usuários"
+      },
+      "userIds" : {
+        "label" : "Lista de usuários",
+        "help" : "Selecione os usuários que participam do grupo"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Criar"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do sistema jira."
+      },
+      "MainPanel" : {
+        "label" : "Criar configuração do sistema jira"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "username" : {
+        "label" : "nome de usuário jira",
+        "help" : "nome de usuário jira"
+      },
+      "token" : {
+        "label" : "chave da api cloud jira",
+        "help" : "chave da API CLOUD do jira adquirida no backoffice do jira, aqui deve ser inserido o \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Endereço base da internet",
+        "help" : "URL do endereço base do sistema jira para instalação on-premise ou a url base da sua organização para o sistema jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "PublishBtn" : {
+        "label" : "Publicar!",
+        "help" : "Salva e disponibiliza estes conteúdos na base de conhecimento para LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SettingsTab" : {
+        "label" : "Configurações"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "MainPanel" : {
+        "label" : "Compartilhando conteúdos do jira"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para os conteúdos."
+      },
+      "jiraSystemCode" : {
+        "label" : "sistema jira",
+        "help" : "Referência do sistema jira já configurado."
+      },
+      "parentProjectCode" : {
+        "label" : "Projeto",
+        "help" : "Referência do projeto pai."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do conteúdo enviado das entradas do jira."
+      },
+      "programmedTables" : {
+        "label" : "Agenda de verificações de atualização dos conteúdos",
+        "help" : "Configure o agendamento das alterações de conteúdo para manter o sistema de geração aumentada de recuperação atualizado"
+      },
+      "openZips" : {
+        "label" : "Abrir arquivos zip",
+        "help" : "Habilitar abertura de arquivos zip e extração de conteúdo"
+      },
+      "tree" : {
+        "label" : "Espaços ou páginas/subpáginas escolhidos",
+        "help" : "Hierarquia de projetos e tickets jira compartilhados"
+      },
+      "catalogingCriteria" : {
+        "label" : "Critérios de organização de espaços, páginas e subpáginas",
+        "help" : "Explique aqui como foi feito o critério de organização dos espaços, páginas e subpáginas nos conteúdos do jira compartilhados com Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do sistema jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "MainPanel" : {
+        "label" : "Editando sistema jira"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "baseUri" : {
+        "label" : "Endereço base da internet",
+        "help" : "URL do endereço base do sistema jira"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente do sistema jira."
+      },
+      "secretCode" : {
+        "label" : "Identidade usada",
+        "help" : "Selecione ou crie a identidade para acessar o sistema jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do sistema SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Versão do SharePoint",
+        "help" : "versão do SharePoint"
+      },
+      "secret" : {
+        "label" : "Chave secreta",
+        "help" : "Oauth2 client secret para este app registrado no produto microsoft \"entra\" (recuperar no console de administração da nuvem da microsoft)"
+      },
+      "clientId" : {
+        "label" : "ID do cliente",
+        "help" : "Oauth2 client identifier para este app registrado no produto microsoft \"entra\" (recuperar no console de administração da nuvem da microsoft)"
+      },
+      "tenantId" : {
+        "label" : "ID do tenant",
+        "help" : "Oauth2 tenant identifier para o produto microsoft \"entra\" da sua organização (recuperar no console de administração da nuvem da microsoft)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Informações de registro do app Microsoft oauth2 para Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Criar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "MainPanel" : {
+        "label" : "Criar configuração do sistema SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "PublishBtn" : {
+        "label" : "Publicar!",
+        "help" : "Salva e permite que esses conteúdos fiquem disponíveis na base de conhecimento para LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Configurações"
+      },
+      "MainPanel" : {
+        "label" : "Compartilhando conteúdos do SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Registros"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único dos conteúdos gerado automaticamente."
+      },
+      "parentProjectCode" : {
+        "label" : "Projeto",
+        "help" : "Referência do projeto pai."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição das fontes de dados de entradas do SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sistema SharePoint",
+        "help" : "Referência do sistema SharePoint/OneDrive já configurado."
+      },
+      "openZips" : {
+        "label" : "Abrir arquivos zip",
+        "help" : "Habilita abertura e extração de conteúdo de arquivos zip"
+      },
+      "tree" : {
+        "label" : "Sites/páginas/subpáginas do SharePoint ou unidades/pastas/arquivos do OneDrive selecionados",
+        "help" : "Conteúdos compartilhados do SharePoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Agendamento de verificação de atualizações de conteúdo",
+        "help" : "Configure o agendamento das alterações de conteúdo para manter o sistema de geração aumentada por recuperação atualizado"
+      },
+      "catalogingCriteria" : {
+        "label" : "Critérios de organização de espaços, páginas e subpáginas",
+        "help" : "Explique aqui como foi feito o critério de organização dos espaços, páginas e subpáginas nos conteúdos do SharePoint compartilhados com Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Editando sistema SharePoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Configurações gerais"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "secretCode" : {
+        "label" : "Identidade utilizada",
+        "help" : "Selecione ou crie a identidade para acessar o sistema SharePoint"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único do sistema SharePoint gerado automaticamente."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do sistema SharePoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Versão do SharePoint",
+        "help" : "versão do SharePoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Excluir"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Salvar"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Cancelar"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Configurações gerais de informações/conteúdos"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Configurações de LLms"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente da etapa de extração de dados do grafo de conhecimento"
+      },
+      "MainPanel" : {
+        "label" : "Configuração de extração de Graphrag/conhecimento"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição desta configuração de etapa de extração de dados do grafo de conhecimento"
+      },
+      "extractionPrompt" : {
+        "label" : "Prompt de extração de informações",
+        "help" : "Prompt para o modelo de linguagem para extração de entidades/eventos/relações e aliases"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM usado para extração de dados",
+        "help" : "Especifique o modelo de linguagem usado para extração de conhecimento, o padrão será utilizado se nenhum for selecionado."
+      },
+      "graphRagAllSources" : {
+        "label" : "Aplicar graph rag a todas as fontes de dados",
+        "help" : "Se verdadeiro, todas as bases de conhecimento/projetos/fontes de dados serão processados para extração de conhecimento, caso contrário apenas as especificamente configuradas serão"
+      },
+      "defaultModel" : {
+        "label" : "Modelo de linguagem padrão",
+        "help" : "O modelo de linguagem padrão será utilizado para extração de conhecimento"
+      },
+      "processEveryDocument" : {
+        "label" : "Aplicar graph rag a todos os arquivos",
+        "help" : "Os algoritmos graph rag serão aplicados a todos os arquivos, isso aumentará o nível de detalhe da análise que o sistema é capaz de realizar, mas também aumentará o custo e o tempo necessários para processar os documentos"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Critérios de seleção de arquivos para processamento graphrag",
+        "help" : "Edite os critérios para envio de arquivos para o pipeline de extração de informações com graphrag; selecione pelo menos um nome de arquivo e critério e/ou um tipo de arquivo e/ou o tamanho máximo do arquivo em bytes e/ou a idade da última modificação em dias"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Selecione tipos de arquivo"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Critério de filtro do nome do arquivo"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Última modificação do arquivo, dias atrás"
+      },
+      "nameFilter" : {
+        "placeholder" : "Nome do arquivo"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Tamanho máximo do arquivo em bytes"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "MainPanel" : {
+        "label" : "Editando uma base de conhecimento"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Configurações de acesso à base de conhecimento"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da base de conhecimento gerado automaticamente."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição da base de conhecimento."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Modelos de embedding usados (deixe vazio para usar o padrão do sistema)",
+        "help" : "Modelos de embedding para a base de conhecimento, deixar vazio usará o padrão."
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "IndexBtn" : {
+        "label" : "Indexar",
+        "help" : "Reindexar conteúdos"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Editando um projeto ou item"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único do projeto gerado automaticamente."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do projeto."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "base de conhecimento",
+        "help" : "base de conhecimento."
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "IndexBtn" : {
+        "label" : "Indexar",
+        "help" : "Reindexar conteúdos"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Adicionar item/projeto",
+        "help" : "adicionar novo..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Todos usam",
+        "help" : "Todos podem usar"
+      },
+      "accessibleGroups" : {
+        "label" : "Lista de grupos",
+        "help" : "Selecione os grupos permitidos"
+      },
+      "accessibleUsers" : {
+        "label" : "Lista de usuários",
+        "help" : "Selecione os usuários permitidos"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Painel"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs para chat e embedding"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Perfis de chat Rag/Prompts de modelo"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Bases de conhecimento e projetos"
+      },
+      "UsersGroupTab" : {
+        "label" : "Usuários e grupos"
+      },
+      "GeboModulesTab" : {
+        "label" : "Configuração de módulos Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Código"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Configurar"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configurar"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nova configuração de prompt"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Novo perfil de chat"
+      },
+      "MainPanel" : {
+        "label" : "Perfis de chat com geração aumentada por recuperação"
+      },
+      "PromptsPanel" : {
+        "label" : "Coleção de prompts e prompts padrão"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Bases de conhecimento"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "ConfigureBtn1" : {
+        "label" : "configurar"
+      },
+      "CodeHeader" : {
+        "label" : "Código"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nova base de conhecimento"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nova configuração de modelo de embedding"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nova configuração de modelo de chat"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "CodeHeader" : {
+        "label" : "Código"
+      },
+      "ModelHeader" : {
+        "label" : "Modelo "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Provedor do modelo"
+      },
+      "ConfigureBtn" : {
+        "label" : "configurar"
+      },
+      "CodeHeader2" : {
+        "label" : "Código"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Descrição"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Provedor do modelo"
+      },
+      "ConfigureBtn2" : {
+        "label" : "configurar"
+      },
+      "ModelHeader2" : {
+        "label" : "Modelo "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Modelos de chat configurados"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Modelos de embedding configurados"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Testando modelo"
+      },
+      "TestChatBtn" : {
+        "label" : "Testar chat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "apiSecretCode" : {
+        "label" : "Token OpenAI",
+        "help" : "Escolha o token OpenAI a ser usado para este modelo"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat OpenAI",
+        "help" : "Escolha o modelo de chat OpenAI para usar."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configurações avançadas"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de chat OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configurações de acesso ao modelo"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de embedding OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "Token OpenAI",
+        "help" : "Escolha o token OpenAI a ser usado para este modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo de embedding gerado automaticamente"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo de embedding"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de embedding OpenAI",
+        "help" : "Escolha o modelo de embedding OpenAI para usar."
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de embedding padrão quando nenhum modelo estiver indicado"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "baseUrl" : {
+        "label" : "Endereço base do servidor ollama",
+        "help" : "Endereço base (como http://servername:234/) do servidor local ou lan do ollama."
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat Ollama",
+        "help" : "Escolha o modelo de chat Ollama para usar.",
+        "placeholder" : "Selecione um modelo"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Ollama",
+        "help" : "Escolha o token Ollama a ser usado para este modelo (opcional)"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de chat do servidor local (ou lan) Ollama"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Anthropic",
+        "help" : "Escolha o token Anthropic a ser usado para este modelo"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat Anthropic",
+        "help" : "Escolha o modelo de chat Anthropic para usar.",
+        "placeholder" : "Selecione um modelo"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configurações avançadas"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configurações de acesso ao modelo"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de chat Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "apiSecretCode" : {
+        "label" : "Token MistralAI",
+        "help" : "Escolha o token MistralAI a ser usado para este modelo"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat MistralAI",
+        "help" : "Escolha o modelo de chat MistralAI para usar."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configurações avançadas"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configurações de acesso ao modelo"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de chat MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat Google Vertex AI",
+        "help" : "Escolha o modelo de chat Google Vertex AI para usar."
+      },
+      "apiSecretCode" : {
+        "label" : "Token Google Vertex AI",
+        "help" : "Escolha o token Google Vertex AI a ser usado para este modelo"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Informações gerais"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Configurações de acesso ao modelo"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Configurações avançadas"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de chat Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Deepseek",
+        "help" : "Escolha o token Deepseek a ser usado para este modelo"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat Deepseek",
+        "help" : "Escolha o modelo de chat Deepseek para usar.",
+        "placeholder" : "Selecione um modelo"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configurações avançadas"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de chat Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configurações de acesso ao modelo"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo gerado automaticamente"
+      },
+      "baseUrl" : {
+        "label" : "Endereço base do servidor de API do modelo de chat",
+        "help" : "Endereço base do modelo de chat."
+      },
+      "apiSecretCode" : {
+        "label" : "Token de API do modelo de chat",
+        "help" : "Escolha o token de API do modelo de chat a ser usado para este modelo (opcional)"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de chat padrão quando nenhum modelo for indicado"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de chat do modelo de chat",
+        "help" : "Escolha o modelo de chat do modelo de chat para usar."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "TitleFragment" : {
+        "label" : "Editando provedor de modelo de chat:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configurações avançadas"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configurações de acesso ao modelo"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo de embedding"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de embedding Ollama local (ou lan)"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Ollama",
+        "help" : "Escolha o token Ollama a ser usado para este modelo"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de embedding Ollama",
+        "help" : "Escolha o modelo de embedding Ollama para usar."
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo de embedding gerado automaticamente"
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de embedding padrão quando nenhum modelo estiver indicado"
+      },
+      "baseUrl" : {
+        "label" : "Endereço base do servidor ollama",
+        "help" : "Endereço base (como http://servername:234/) do servidor local ou lan do ollama."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo de embedding"
+      },
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de embedding MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo de embedding gerado automaticamente"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de embedding MistralAI",
+        "help" : "Escolha o modelo de embedding MistralAI para usar."
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de embedding padrão quando nenhum modelo estiver indicado"
+      },
+      "apiSecretCode" : {
+        "label" : "Token MistralAI",
+        "help" : "Escolha o token MistralAI a ser usado para este modelo"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Editando configuração do modelo de embedding Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo de embedding"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de embedding Google Vertex AI",
+        "help" : "Escolha o modelo de embedding Google Vertex AI para usar."
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de embedding padrão quando nenhum modelo estiver indicado"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo de embedding gerado automaticamente"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Google Vertex AI",
+        "help" : "Escolha o token Google Vertex AI a ser usado para este modelo"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "TitleFragment" : {
+        "label" : "Editando provedor de modelo de embedding:"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da configuração do modelo de embedding"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da configuração do modelo de embedding gerado automaticamente"
+      },
+      "choosedModel" : {
+        "label" : "Escolha do modelo de embedding do modelo de embedding",
+        "help" : "Escolha o modelo de embedding do modelo de embedding para usar."
+      },
+      "baseUrl" : {
+        "label" : "Endereço do servidor de API do modelo de embedding",
+        "help" : "Endereço base do servidor do modelo de embedding."
+      },
+      "defaultModel" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Se verdadeiro, este será usado como modelo de embedding padrão quando nenhum modelo estiver indicado"
+      },
+      "apiSecretCode" : {
+        "label" : "Token de API do modelo de embedding",
+        "help" : "Escolha o token de API do modelo de embedding a ser usado para este modelo"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Informações de configuração do chat"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Excluir esta sessão de chat"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Renomear a sessão de chat"
+      },
+      "QueryControl" : {
+        "placeholder" : "Escreva uma mensagem para o chatbot"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "description" : {
+        "label" : "Descrição do chat",
+        "help" : "Digite a descrição da sessão de chat."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Modelo utilizado",
+        "help" : "Código do modelo"
+      },
+      "providerId" : {
+        "label" : "Provedor do modelo de chat",
+        "help" : "Driver do provedor de LLms"
+      },
+      "functions" : {
+        "label" : "Funções disponíveis do modelo de chat",
+        "help" : "Lista de funções disponíveis para o modelo de chat"
+      },
+      "NameCol" : {
+        "label" : "Nome"
+      },
+      "DescriptionCol" : {
+        "label" : "Descrição"
+      },
+      "kbases" : {
+        "label" : "Bases de conhecimento disponíveis",
+        "help" : "Lista de bases de conhecimento utilizadas neste chat RAG"
+      },
+      "CloseBtn" : {
+        "help" : "Fechar"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Gravar",
+        "help" : "Comece a gravar um áudio e envie"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "recarregar dados"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SelectHeader" : {
+        "label" : "Selecionar"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "data/hora final"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "data/hora inicial"
+      },
+      "ProcessingHeader" : {
+        "label" : "processando"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "CodeHeader" : {
+        "label" : "Código"
+      },
+      "FinishedHeader" : {
+        "label" : "finalizado"
+      },
+      "WithErrorHeader" : {
+        "label" : "com erro"
+      },
+      "LogTableComponent" : {
+        "help" : "Este é o log de ingestão da área de sistema de arquivos compartilhados"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Estatísticas de processos"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "CloseBtn" : {
+        "label" : "Fechar"
+      },
+      "PublicationLogTab" : {
+        "label" : "Log de publicação"
+      },
+      "MainPanel" : {
+        "label" : "Log de publicação"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Status da tarefa: em andamento, finalizada ou finalizada com erros."
+      },
+      "publishingSystem" : {
+        "label" : "Configuração do conteúdo publicado",
+        "help" : "Informações do conteúdo publicado"
+      },
+      "startDateTime" : {
+        "label" : "Data/hora inicial",
+        "help" : "Data e hora de início da tarefa de sincronização de conteúdo"
+      },
+      "endDateTime" : {
+        "label" : "Data/hora final",
+        "help" : "Data e hora de término da tarefa de sincronização de conteúdo"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Não processado completamente"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Processado completamente"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding vs número total de documentos"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Mais detalhes"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Gerar sugestão"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Assistente de prompts",
+        "help" : "Use isto para utilizar um LLM para gerar o prompt para seus objetivos"
+      },
+      "acceptPrompt" : {
+        "label" : "Aceitar sugestão"
+      },
+      "promptWizardUI" : {
+        "label" : "Assistente de geração de templates de prompt"
+      },
+      "cancel" : {
+        "label" : "Cancelar"
+      },
+      "response" : {
+        "label" : "Template de prompt sugerido",
+        "help" : "Texto de template gerado para seu objetivo (você pode alterar ou corrigir/modificar)"
+      },
+      "modelCode" : {
+        "label" : "Modelo de chat a ser usado",
+        "help" : "Escolha o modelo de chat para solicitar a geração do template de prompt"
+      },
+      "query" : {
+        "label" : "Pedido de template de prompt",
+        "help" : "Especifique em 2ª pessoa qual é o objetivo que a IA dará suporte ao usuário"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura com que o modelo irá responder, de 0 a 1 (se não tiver certeza, deixe em branco)"
+      },
+      "contextLength" : {
+        "label" : "Comprimento do contexto (tokens)",
+        "help" : "Quantidade de texto que um modelo de IA pode considerar ao processar (se não definido, 1047576 será usado)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parâmetro TopP, de 0 a 1 (se não tiver certeza, deixe em branco)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Funções habilitadas para este modelo",
+        "help" : "Funcionalidades que podem ser usadas pelo modelo durante o chat"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Prompt padrão do modelo",
+        "help" : "Edite o prompt padrão para o modelo de chat."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição da identidade."
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único da identidade gerado automaticamente."
+      },
+      "secretType" : {
+        "label" : "Tipo de identidade",
+        "help" : "Selecione o tipo de identidade a ser criada para o sistema remoto"
+      },
+      "InsertBtn" : {
+        "label" : "Inserir"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Insira o token."
+      },
+      "user" : {
+        "label" : "Usuário",
+        "help" : "Insira o usuário indicado pelo token."
+      },
+      "MainPanel" : {
+        "label" : "Criando identidade"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "username" : {
+        "label" : "Nome de usuário",
+        "help" : "Insira o nome de usuário."
+      },
+      "password" : {
+        "label" : "Senha",
+        "help" : "Insira a senha."
+      },
+      "email" : {
+        "label" : "E-mail/Nome de usuário",
+        "help" : "Insira o e-mail ou nome de usuário associado à chave ssh."
+      },
+      "key" : {
+        "label" : "Chave secreta",
+        "help" : "Abra o arquivo da chave privada e copie neste campo de texto."
+      },
+      "passphrase" : {
+        "label" : "Senha da chave",
+        "help" : "Insira a senha da chave."
+      },
+      "pub" : {
+        "label" : "Chave pública",
+        "help" : "Abra o arquivo da chave pública e copie neste campo de texto."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para os conteúdos."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do conteúdo enviado da entrada do sistema de arquivos."
+      },
+      "parentProjectCode" : {
+        "label" : "Projeto",
+        "help" : "Referência do projeto principal."
+      },
+      "upload" : {
+        "label" : "Enviar conteúdos",
+        "help" : "Clique no botão de procurar e selecione arquivos zip ou outros arquivos"
+      },
+      "openZips" : {
+        "label" : "Abrir arquivos zip",
+        "help" : "Ativar abertura de arquivos zip e extração de conteúdo"
+      },
+      "PublishBtn" : {
+        "label" : "Publicar!",
+        "help" : "Salva e disponibiliza esses conteúdos na base de conhecimento para LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "MainPanel" : {
+        "label" : "Editando conteúdo enviado"
+      },
+      "SettingsTab" : {
+        "label" : "Configurações"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configurar sistemas de build",
+        "help" : "Lista de sistemas de build/empacotamento para inspecionar por metadados e informações adicionais de artefatos (deixe em branco se não houver código de software)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Elementos escolhidos"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Cancelar"
+      },
+      "EditBtn" : {
+        "help" : "Modificar selecionados"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Escolher elementos"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Escolher elementos"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Editar agendamento"
+      },
+      "ConfirmBtn" : {
+        "label" : "Confirmar"
+      },
+      "AddBtn" : {
+        "label" : "+Adicionar"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publicar!",
+        "help" : "Salva e disponibiliza estes conteúdos na base de conhecimento para LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SettingsTab" : {
+        "label" : "Configurações"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Tratamento de código-fonte"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "MainPanel" : {
+        "label" : "Editando conteúdo existente do sistema de arquivos"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do conteúdo enviado para a entrada do sistema de arquivos."
+      },
+      "openZips" : {
+        "label" : "Abrir arquivos zip",
+        "help" : "Habilite a abertura de arquivos zip e extração de conteúdo"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para o conteúdo."
+      },
+      "tree" : {
+        "label" : "Arquivos ou pastas selecionados",
+        "help" : "Arquivos ou diretórios dos sistemas de arquivos compartilhados disponíveis no servidor"
+      },
+      "parentProjectCode" : {
+        "label" : "Projeto",
+        "help" : "Referência do projeto pai."
+      },
+      "programmedTables" : {
+        "label" : "Agenda de verificações de atualizações",
+        "help" : "Configure o agendamento de conteúdos alterados para manter o sistema de recuperação aumentada atualizado"
+      },
+      "catalogingCriteria" : {
+        "label" : "Critérios de organização das pastas",
+        "help" : "Explique aqui como os critérios de organização das pastas foram definidos na área do sistema de arquivos que você está compartilhando com Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configurar sistemas de build",
+        "help" : "Lista de sistemas de build/empacotamento para inspecionar informações de meta e artefatos adicionais (deixe em branco se não houver código de software)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nova área de compartilhamento de arquivos"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Caminho absoluto"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "Configuração de arquivo db ou yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "CodeHeader" : {
+        "label" : "Código"
+      },
+      "ModifyHeader" : {
+        "label" : "Modificar"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Pasta compartilhada selecionada",
+        "help" : "Escolha uma pasta do servidor que seja um caminho raiz para o sistema de arquivos compartilhado usado por sua organização como repositório de documentos"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição da área do sistema de arquivos compartilhado de sua organização"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para o conteúdo."
+      },
+      "InsertBtn" : {
+        "label" : "Inserir"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "MainPanel" : {
+        "label" : "Editando pasta de arquivos compartilhada do servidor"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "PublishBtn" : {
+        "label" : "Publicar!",
+        "help" : "Salvar e disponibilizar esses conteúdos na base de conhecimento para LLm’s"
+      },
+      "MainPanel" : {
+        "label" : "Editando repositório de origem/documentação git"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do repositório git."
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único do repositório git gerado automaticamente."
+      },
+      "parentProjectCode" : {
+        "label" : "Projeto",
+        "help" : "Referência do projeto pai."
+      },
+      "contentManagementSystem" : {
+        "label" : "Sistema Git",
+        "help" : "Referência do sistema git já configurado."
+      },
+      "branch" : {
+        "label" : "Branch",
+        "help" : "Nome do branch para checkout (normalmente master, main ou develop)"
+      },
+      "identityCode" : {
+        "label" : "Identidade usada",
+        "help" : "Selecione a identidade para fazer clone/checkout no sistema"
+      },
+      "repositoryUri" : {
+        "label" : "URL/endereço do repositório",
+        "help" : "Endereço completo do repositório remoto git (geralmente começa com http:, https: ou ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "público",
+        "help" : "Se verdadeiro, o acesso ao repositório não requer autenticação"
+      },
+      "openZips" : {
+        "label" : "Abrir arquivos zip",
+        "help" : "Permitir abertura de arquivos zip e extração de conteúdo"
+      },
+      "programmedTables" : {
+        "label" : "Agendamento de verificação de atualizações de conteúdos",
+        "help" : "Configure o agendamento de conteúdos alterados para manter o sistema de geração aumentada por recuperação atualizado"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configurar sistemas de build",
+        "help" : "Lista de sistemas de build/empacotamento para inspecionar informações de meta e artefatos adicionais"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informações gerais"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Usar modelo de chat"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "escolher"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Selecione uma configuração de modelo de chat"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Selecione uma configuração de modelo de embedding"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "escolher"
+      },
+      "RagSettingsTab" : {
+        "label" : "Configurações RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Configurações do modelo de linguagem e ferramentas utilizáveis"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Usar modelo de embedding"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Configurações de acesso à segurança"
+      },
+      "MainPanel" : {
+        "label" : "Editando perfil de chat retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único gerado automaticamente para o perfil de chat."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Digite a descrição do perfil de chat."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Usuário escolhe bases de conhecimento",
+        "help" : "O usuário pode escolher entre bases de conhecimento acessíveis e/ou fazer upload dos próprios arquivos."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Bases de conhecimento",
+        "help" : "Bases de conhecimento para uso na recuperação de documentos."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Limite de similaridade",
+        "help" : "Limite de similaridade para buscas semânticas, 0,60–0,65 filtragem baixa, 0,70-0,75 filtragem média, 0,80–0,85 precisa"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Limite de similaridade do 2º 'passo'",
+        "help" : "Limite de similaridade para buscas semânticas, 0,60–0,65 filtragem baixa, 0,70-0,75 filtragem média, 0,80–0,85 precisa, usado a partir da segunda busca no multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Desativar 'Multi Hop' rag",
+        "help" : "Desativa a funcionalidade 'multi hop rag'. A busca multi hop faz uma primeira busca semântica e usa os documentos encontrados como contexto para a própria busca semântica, fornecendo um contexto maior."
+      },
+      "topK" : {
+        "label" : "Fragmentos de documento considerados (TopK)",
+        "help" : "Na retrieve augmented generation, principais N fragmentos de documentos encontrados e considerados na busca semântica"
+      },
+      "enabledFunctions" : {
+        "label" : "Funções ativadas para esse chat RAG",
+        "help" : "Funcionalidades que podem ser usadas pelo modelo llm durante o chat com o usuário, interagindo também com a base de conhecimento selecionada"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Edite o prompt para as sessões de retrieve augmented generation."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Digite ou insira a categoria do prompt"
+      },
+      "MainPanel" : {
+        "label" : "Editando prompt"
+      },
+      "promptCategory" : {
+        "label" : "Categoria do prompt",
+        "help" : "Selecione ou insira a categoria do prompt."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Edite o prompt para o chat, use {query} para indicar a pergunta do usuário e {context} para indicar o contexto de documentos/histórico enviado ao LLM."
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "Código único do prompt gerado automaticamente."
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição do prompt."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Alterar senha"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Senha atual",
+        "help" : "Senha atual para entrar"
+      },
+      "newPassword" : {
+        "label" : "Nova senha",
+        "help" : "nova senha"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail como nome de usuário para entrar"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Formulário de alteração de senha"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "ChangePwdBtn" : {
+        "label" : "alterar senha"
+      },
+      "newPassword1" : {
+        "label" : "Confirmar nova senha",
+        "help" : "Confirmar nova senha"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Excluir"
+      },
+      "CancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "SaveBtn" : {
+        "label" : "Salvar"
+      },
+      "ForMoreInformations" : {
+        "label" : "Para mais informações sobre a API de pesquisa personalizada do Google ou para obter sua chave de API (gratuita), acesse: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Código único",
+        "help" : "código único da configuração da API de pesquisa do Google."
+      },
+      "MainPanel" : {
+        "label" : "Editando credenciais da API de pesquisa personalizada do Google"
+      },
+      "secretCode" : {
+        "label" : "Token da API de pesquisa do Google",
+        "help" : "Escolha ou insira o token da API de pesquisa do Google"
+      },
+      "customSearchEngineId" : {
+        "label" : "ID do mecanismo de pesquisa do Google",
+        "help" : "ID do mecanismo de pesquisa do Google"
+      },
+      "description" : {
+        "label" : "Descrição",
+        "help" : "Insira a descrição da configuração da API de pesquisa do Google."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Chat sem bases de conhecimento",
+        "help" : "Escolha os LLMs para uma sessão de chat",
+        "placeholder" : "Escolha os LLMs para uma sessão de chat"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Abrir opções do chat"
+      },
+      "CreateChatBtn" : {
+        "label" : "Novo chat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nova sessão de chat"
+      },
+      "chatProfileCode" : {
+        "label" : "Chat com bases de conhecimento",
+        "help" : "Escolha o perfil de chat da empresa para interagir com documentos da empresa (e seus) e LLMs",
+        "placeholder" : "Escolha o perfil de chat da empresa para interagir com documentos da empresa (e seus) e LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "Novo chat"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Conversar com documentos",
+        "help" : "Navegue ou pesquise e selecione documentos para trabalhar"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Escolha arquivos para conversar"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Confirmar"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Envie ou escolha seus documentos",
+        "help" : "Escolha/envie documentos do seu espaço de usuário"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Modificar selecionado"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Escolher arquivos dos usuários"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Cancelar"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Escolher conteúdo enviado pelo usuário"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Bases de conhecimento e arquivos do usuário"
+      }
+    }
+  }
 }
