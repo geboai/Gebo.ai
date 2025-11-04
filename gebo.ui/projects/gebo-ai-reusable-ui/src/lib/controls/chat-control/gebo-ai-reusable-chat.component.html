@@ -90,7 +90,7 @@
                                         <li *ngFor="let f of interaction.response?.calledFunctions;"
                                             [title]="f.functionDescription">
                                             <i class="pi pi-bolt"></i>
-                                            {{f.functionName}} with params: {{f.paramsDescription}}
+                                            {{f.functionName}}<span id="WithParams" gebo-ai-text >with params:</span>{{f.paramsDescription}}
                                         </li>
                                     </ul>
                                 </li>
@@ -111,7 +111,7 @@
                     [interactionDisabled]="loading" [knowledgeBaseCodes]="knowledgeBaseCodes"
                     formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
                     
-                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="h-full"  gebo-ai-label  
+                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="h-full"  gebo-ai-label  id="QueryControl"
                     placeholder="Write a message for the chat bot">
                 </textarea>
 
