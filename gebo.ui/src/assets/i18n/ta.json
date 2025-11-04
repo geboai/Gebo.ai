@@ -1,0 +1,2429 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "இயல்புநிலை அமைப்பு மொழி",
+        "help" : "இந்த Gebo.ai நிறுவலுக்கான இயல்புநிலை அமைப்பு மொழி"
+      },
+      "username" : {
+        "label" : "மின்னஞ்சல்",
+        "help" : "உள்நுழைவதற்கான பயனர்பெயராக மின்னஞ்சல்"
+      },
+      "passwordC" : {
+        "label" : "கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+        "help" : "கடவுச்சொல்லை உறுதிப்படுத்தவும்"
+      },
+      "password" : {
+        "label" : "கடவுச்சொல்",
+        "help" : "உள்நுழைய கடவுச்சொல் (குறைந்தது 8 எழுத்துக்கள்)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " கடவுச்சொற்கள் பொருந்தவில்லை "
+      },
+      "LocalAdmin" : {
+        "label" : "உங்கள் உள்ளமை நிர்வாகி கணக்கை உருவாக்கவும்"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "முன்னதாக நீங்கள் இந்த கணக்கை அமைக்க/நிர்வகிப்பதற்கு பயன்படுத்துவீர்கள், இந்த தகவல் உங்கள் கணினியில் உள்ளே மட்டுமே இருக்கும் மற்றும் வலையமைப்பில் அனுப்பப்படவில்லை"
+      },
+      "EnterBtn" : {
+        "label" : "நுழைய உள்நுழைவு பக்கத்துக்கு செல்லவும்"
+      },
+      "SetupPage" : {
+        "label" : "உங்கள் Gebo.ai நிறுவலை அமைக்கவும்"
+      },
+      "CreateBtn" : {
+        "label" : "அமைப்பு உருவாக்கவும்"
+      },
+      "LicenceFieldSet" : {
+        "label" : "உரிமையைப் படித்து ஒப்புக்கொள்க"
+      },
+      "AcceptMark" : {
+        "label" : "நான் விதிமுறைகளை ஒப்புக்கொள்கிறேன்",
+        "help" : "இங்கே கிளிக் செய்வதன் மூலம் நீங்கள் உரிமையில் உள்ள விதிமுறைகள் மற்றும் நிபந்தனைகளை ஒப்புக்கொள்கிறீர்கள்"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "இமெயில்",
+        "help" : "உள்நுழைய இமெயிலை பயனர்பெயராக உள்ளிடவும்"
+      },
+      "password" : {
+        "label" : "கடவுச்சொல்",
+        "help" : "உள்நுழைய கடவுச்சொல்லை உள்ளிடவும்"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai-க்கு உள்நுழையவும்"
+      },
+      "LoginBtn" : {
+        "label" : "உள்நுழையவும்"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 அமைப்பு"
+      },
+      "ProviderNameHeader" : {
+        "label" : "வழங்குநர் பெயர்"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 பாதுகாப்பு அமைப்புகள்"
+      },
+      "IdHeader" : {
+        "label" : "அடையாளம்"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "அமைப்பு முகப்புக்குத் திரும்பவும்"
+      },
+      "WizardUi" : {
+        "label" : "ஒரு அமைப்பு பகுதியில் தேர்வு செய்யவும்"
+      },
+      "adminUserSetupSection" : {
+        "label" : "நிர்வாகி & மற்றக் கணக்கு அமைப்பு",
+        "description" : "இந்த gebo.ai நிறுவல் சரிவர நிர்வகிக்க குறைந்தபட்சம் ஒரு நிர்வாகக் கணக்கு தேவை, தேவையானால் மற்ற பயனர்களையும் சேர்க்கவும்"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai பணிக்கோப்புறை",
+        "description" : "பணிக்கோப்புறையை அமைக்கவும், இதில் இந்த நிறுவலுக்கான அமைப்புகள் மற்றும் அனைத்து வேலைக் கோப்புகளும் சேமிக்கப்படும். இதை தவணையாக காப்புப் பிரதி எடுப்பதும் நல்ல யோசனை."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "வெக்டர் தரவுத்தள அமைப்பு",
+        "description" : "Gebo.ai ரீட்ரீவ் ஆக்மென்டட் ஜெனரேஷன் சேவையை வழங்க வெக்டர் தரவுத்தளத்தை அமைக்க வேண்டும், நீங்கள் உள்ளூர் வெக்டர் தரவுத்தளம், Qdrant அல்லது Mongo Atlas ஆகியவற்றில் ஒன்றைத் தேர்வு செய்யலாம்"
+      },
+      "oauth2SetupSection" : {
+        "label" : "ஒற்றை உள்நுழைவு, oauth2 அங்கீகாரம்",
+        "description" : "Oauth2 ஒற்றை உள்நுழைவு அங்கீகாரம் மற்றும் oauth2 கிளைண்ட் அமைப்புகள்"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "பெரிய மொழி மாதிரிகள் அமைப்பு",
+        "description" : "வானவில் அல்லது உள்ளூர்/LAN பின்னணி சேவைகளுடன் பல்வேறு llms ஐ அமைக்கவும், குறைந்தது ஒரு உரையாடல் மாதிரி மற்றும் ஒரு எம்பெட்டிங் மாதிரி அமைக்கப்பட்டிருக்க வேண்டும்."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "வரைபட rag/அறிவை பிரித்தெடுக்கும் அமைப்பு",
+        "description" : "வரைபட rag மற்றும் அறிவு பிரித்தெடுக்கும் துணைமையமைப்பை அமைக்கவும்"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "பகிரப்பட்ட கோப்பு முறை பாதைகள் அமைவு",
+        "description" : "நிறுவனத்தின் பகிரப்பட்ட கோப்பு முறைகளின் பாதைகளை அமைக்கவும், இதுவே பல்வேறு அறிவு கருக்களில் ரீட்ரீவ் ஆக்மென்டட் ஜெனரேஷன் ஆவணப் பகுதியில் பயன்படுத்தப்படும்"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence ஒருங்கிணைப்பு",
+        "description" : "Gebo.ai உங்கள் Atlassian Confluence கிளவுட் அல்லது ஊடக அமைப்புகளுக்குப் பயன்பட வகையில் அமைக்கவும்"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira ஒருங்கிணைப்பு",
+        "description" : "Gebo.ai உங்கள் Atlassian jira கிளவுட் அமைப்புகளுக்கு அணுக அமைக்கவும்"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ஒருங்கிணைப்பு",
+        "description" : "Gebo.ai உங்கள் Microsoft Sharepoint கிளவுட் அல்லது ஊடக அமைப்புகளுக்கு அணுக அமைக்கவும்"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "குறைந்தபட்சம் ஒரு அறிவு கருவை அமைக்கவும்",
+        "description" : "உங்கள் பயனர்கள் Gebo.ai இன் ரீட்ரீவ் ஆக்மென்டட் ஜெனரேஷன் சேவைகளை அனுபவிக்க குறைந்தபட்சம் ஒரு அறிவு கருவை அமைக்கவும்"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "குறைந்தபட்சம் ஒரு \"R.A.G.\" உரையாடல் சுயவிவரத்தை அமைக்கவும்",
+        "description" : "உங்கள் அறிவு கருக்களில் ஒன்றை வைத்து குறைந்தபட்சம் ஒரு ரீட்ரீவ் ஆக்மென்டட் உரையாடல் சுயவிவரத்தை உங்கள் பயனர்களுக்காக அமைக்கவும்"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "நிறுவனத்தின் Atlassian Confluence அமைப்புகளை அமைக்கவும்"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "SystemTypeHeader" : {
+        "label" : "அமைப்பு வகை"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "அமைப்பு குறியீடு"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence அமைப்பு"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira அமைப்பு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "அமைப்பு குறியீடு"
+      },
+      "MainPanel" : {
+        "label" : "நிறுவனத்தின் Atlassian Jira அமைப்புகளை அமைக்கவும்"
+      },
+      "SystemTypeHeader" : {
+        "label" : "அமைப்பு வகை"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "அமைப்பு குறியீடு"
+      },
+      "MainPanel" : {
+        "label" : "நிறுவனத்தின் Microsoft Sharepoint அமைப்புகளை அமைக்கவும்"
+      },
+      "SystemTypeHeader" : {
+        "label" : "அமைப்பு வகை"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint அமைப்பு"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "சரியான கிரெடிட் உள்ள api-key ஐ வழங்கவும். OpenAI தெரிவுசெய்யப்பட்டால் உங்கள் பழக்க வழக்க திட்டத்தில் api பயன்பாட்டுக்காக சிறிது கிரெடிட் (10-30$ போதும்) சேர்க்க வேண்டும், இல்லையெனில் எந்த llms போக்குவரத்தும் கிடைக்காது."
+      },
+      "MainPanel" : {
+        "label" : "உங்கள் சொந்த api key உடன் Gebo.ai llms வழங்குநருக்கான அணுகலை அமைக்கவும்"
+      },
+      "provider" : {
+        "label" : "பெரிய மொழி மாதிரி வழங்குநர்",
+        "help" : "OpenAI (chatgpt), Google (Gemini),Anthropic (Claude) வழங்குநர்களில் ஒன்றை தேர்வு செய்யவும்"
+      },
+      "user" : {
+        "label" : "பயனர்",
+        "help" : "apiKey தொடர்புடைய பயனரை உள்ளிடவும்"
+      },
+      "ConfigureBtn" : {
+        "label" : "அமைக்கவும்"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "உங்கள் LLMS வழங்குநருக்கான api key"
+      },
+      "ProviderHeader" : {
+        "label" : "வழங்குநர்"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "அமைப்பு குறியீடு"
+      },
+      "ModelHeader" : {
+        "label" : "மாதிரி"
+      },
+      "ModelTypeHeader" : {
+        "label" : "மாதிரி வகை"
+      },
+      "DefaultModelHeader" : {
+        "label" : "பொது மாதிரி"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "வரைபட rag அமைப்பை உருவாக்கவும்"
+      },
+      "MainPanel" : {
+        "label" : "வரைபட Rag & அறிவு பிரித்தெடுக்கும் முன்னிருப்பு அமைப்பு"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "அமைப்பு குறியீடு"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "திட்டம்"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "ஒரு அறிவு கருவை சேர்க்கவும்"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "அறிவு கருக்கள்"
+      },
+      "MainPanel" : {
+        "label" : "அறிவு கரு & உள்ளடக்க அமைப்புகள்"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "உள்ளடக்க ஊற்று"
+      },
+      "PublishedHeader" : {
+        "label" : "வெளியிடப்பட்டது"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "ஆவணங்கள் எண்ணிக்கை"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "ஒரு திட்டம்/உருப்படியைச் சேர்க்கவும்",
+        "help" : "புதிய திட்டம் உருவாக்கவும்"
+      },
+      "Button1" : {
+        "help" : "அறிவு கருவைத் திறக்கவும்"
+      },
+      "Button2" : {
+        "help" : "திட்டப் படிவத்தைத் திறக்கவும்"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai வேலைக் கோப்புறை அமைப்பு"
+      },
+      "ConfigureBtn" : {
+        "label" : "அமைக்கவும்"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai பணிக்கோப்புறையை தேர்வு செய்யவும்",
+        "help" : "இந்த நிறுவல் வேலை கோப்புறையாகக் பயன்படுத்தும் சேவையக கோப்புறையைத் தேர்வு செய்யவும்."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "கோப்புறையைச் சேர்க்கவும்"
+      },
+      "AddFolderBtn" : {
+        "label" : "கோப்புறையைச் சேர்க்கவும்"
+      },
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      },
+      "MainPanel" : {
+        "label" : "சேவையக பகிரப்பட்ட கோப்பு முறை பாதைகள்"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "முழுப் பாதை"
+      },
+      "DeleteHeader" : {
+        "label" : "நீக்கவும்"
+      },
+      "path" : {
+        "label" : "பகிரப்பட்ட கோப்பு முறையின் ரூட் கோப்புறையைச் சேர்க்கவும்",
+        "help" : "உங்கள் நிறுவனத்தில் ஆவண களஞ்சியமாக பயன்படுத்தப்படும் பகிரப்பட்ட கோப்பு முறைக்கான சேவையக ரூட் கோப்புறையைத் தேர்வு செய்யவும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "கோப்பு முறை விவரத்தை உள்ளிடவும்"
+      },
+      "RemovePathBtn" : {
+        "label" : "பாதையை அகற்று"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "அமைக்கவும்"
+      },
+      "MainPanel" : {
+        "label" : "வெக்டர் தரவுத்தள அமைப்பு"
+      },
+      "host" : {
+        "label" : "Qdrant ஹோஸ்ட்",
+        "help" : "Qdrant ஹோஸ்ட் பெயர் அல்லது ip முகவரி"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant இணைப்பு அமைப்புகள்"
+      },
+      "port" : {
+        "label" : "Qdrant போர்ட்",
+        "help" : "Qdrant தொடர்புக்கான போர்ட் (6334 என்பது மற்றும’importe)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Qdrant அங்கீகாரம் பெற api key"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS அளவீடு",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai அமைப்பின் கட்டாய அடுக்குகள் முடிந்தது...",
+        "detail" : "கட்டாய அமைப்புகள் முடிந்தாலும் சில தவறவிட்ட நடைமுறைகள் உங்கள் நிறுவனத்தில் மென்பொருளை முழுமையாக அனுபவிப்பதைத் தடுக்கின்றன"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai அமைப்பில் சில கட்டாய நடைமுறைகள் குறைவாக உள்ளன",
+        "detail" : "சிவப்பு சதுரங்களில் உள்ள அமைப்பு நடவடிக்கைகளை மீண்டும் பார்க்கவும்"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai அமைப்பு சரி!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "குறியீடு",
+        "help" : "OAUTH2 உட்புகுதல்/ஒருங்கிணைப்பு குறியீடு (registrationId) விவரத்தை உள்ளிடவும்."
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "OAUTH2 உட்புகுதல்/ஒருங்கிணைப்பு தகவல்களின் விவரத்தை உள்ளிடவும்."
+      },
+      "configurationType" : {
+        "label" : "அமைப்பு நோக்கம்",
+        "help" : "இந்த அமைப்புகள் Gebo.ai இல் உறுதிப்படுத்த பயன்படுத்தப்படுமா அல்லது Gebo.ai ஒரு 3வது தரப்பு கணினியுடன் தொடர்பு கொள்ள அனுமதிக்கப்படுமா என்பதை தேர்ந்தெடுக்கவும்."
+      },
+      "authProvider" : {
+        "label" : "வழங்குநர்",
+        "help" : "OAUTH2 உட்புகுதல் வழங்குநரை உள்ளிடவும்"
+      },
+      "issuerUri" : {
+        "label" : "விளைவிப்பவர் Uri",
+        "help" : "வழங்குநரின் OAUTH2 விளைவிப்பவர் URL-ஐ உள்ளிடவும்"
+      },
+      "authorizationUri" : {
+        "label" : "அங்கீகார URL",
+        "help" : "வழங்குநரின் OAUTH2 அங்கீகார URL-ஐ உள்ளிடவும்"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk தொகுப்பு Uri",
+        "help" : "வழங்குநரின் OAUTH2 Jwk தொகுப்பு url-ஐ உள்ளிடவும்"
+      },
+      "userInfoUri" : {
+        "label" : "பயனர் தகவல் URL",
+        "help" : "வழங்குநரின் OAUTH2 பயனர் தகவல் Url URL-ஐ உள்ளிடவும்"
+      },
+      "introspectionUri" : {
+        "label" : "உள் பார்வை Uri",
+        "help" : "வழங்குநரின் OAUTH2 உள் பார்வை URL-ஐ உள்ளிடவும்"
+      },
+      "tokenUri" : {
+        "label" : "டோக்கன் URL",
+        "help" : "வழங்குநரின் OAUTH2 டோக்கன் URL-ஐ உள்ளிடவும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 வழங்குநர் URLகள்"
+      },
+      "MainPanel" : {
+        "label" : "புதிய OAUTH2 உட்புகுதல்/ஒருங்கிணைப்பு தகவல்களை உள்ளிடவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்யவும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "வாடிக்கையாளர் ஐடி",
+        "help" : "oauth2 நெறிமுறைக்கான வாடிக்கையாளர் அடையாளம் (oauth2 அங்கீகாரம் பெற்ற 3rd party மென்பொருள் நிர்வாக பகுதியில் பெற வேண்டும்) "
+      },
+      "secret" : {
+        "label" : "ரகசிய சாவி",
+        "help" : "oauth2 நெறிமுறைக்கான வாடிக்கையாளர் ரகசியம் (oauth2 அங்கீகாரம் பெற்ற 3rd party மென்பொருள் நிர்வாக பகுதியில் பெற வேண்டும்)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence அமைப்பு உள்ளமைவை உருவாக்குக"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்க"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "Confluence அமைப்பின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "CreateBtn" : {
+        "label" : "உருவாக்கு"
+      },
+      "username" : {
+        "label" : "Confluence பயனர்ப்பெயர்",
+        "help" : "Confluence பயனரின் பெயர்"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence பதிப்பு",
+        "help" : "Confluence பதிப்பு"
+      },
+      "baseUri" : {
+        "label" : "அடிப்படை இணைய முகவரி",
+        "help" : "Onpremise நிறுவலில் அல்லது உங்கள் நிறுவனத்தின் Confluence cloud அமைப்புக்கான அடிப்படை Confluence அமைப்பின் முகவரி Url"
+      },
+      "password" : {
+        "label" : "Confluence கடவுச்சொல்",
+        "help" : "Confluence கடவுச்சொல்"
+      },
+      "token" : {
+        "label" : "Confluence cloud api விசை",
+        "help" : "Confluence CLOUD apikey ஐ Confluence backoffice இல் பெறப்பட்டுள்ளதை இங்கு 'API Token for your Atlassian Account' என உள்ளிட வேண்டும்."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "பதிவுசெய்யவும்!",
+        "help" : "இவை சேமிக்கப்பட்டு LLm களுக்கான அறிவு தரவுத்தளத்தில் கிடைக்கக்கொடுக்கும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "DeleteBtn" : {
+        "label" : "நீக்கு"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்க"
+      },
+      "SettingsTab" : {
+        "label" : "அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "Confluence உள்ளடக்கங்களை பகிர்வு"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      },
+      "code" : {
+        "label" : "தனித்துவ குறியீடு",
+        "help" : "உள்ளடக்கங்களுக்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு."
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "ஏற்றப்பட்ட Confluence உள்ளடக்கங்களின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence அமைப்பு",
+        "help" : "ஏற்கனவே உள்ளமைக்கப்பட்ட Confluence அமைப்பின் குறிப்பு."
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "முதன்மை திட்டத்தின் குறிப்பு."
+      },
+      "openZips" : {
+        "label" : "Zip கோப்புகளை திற",
+        "help" : "Zip கோப்புகளை திறந்து உள்ளடக்கம் எடுக்க வழிமுறையை இயக்கவும்"
+      },
+      "tree" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட இடங்கள் அல்லது பக்கங்கள்/உப்பக்கங்கள்",
+        "help" : "பகிரப்பட்ட Confluence இடங்கள் மற்றும் பக்கங்களின் உள்ளடக்கம்"
+      },
+      "programmedTables" : {
+        "label" : "உள்ளடக்க புதுப்பிப்பு நிலைமைகள் திட்டம்",
+        "help" : "மாற்றப்பட்ட உள்ளடக்கங்களைத் திருத்திக்கொள்ள நிரல் திட்டப்பணிகளை அமைக்கவும்"
+      },
+      "catalogingCriteria" : {
+        "label" : "இடங்கள், பக்கங்கள் மற்றும் உப்பக்கங்களுக்கான அமைப்புமுறைகள்",
+        "help" : "Gebo.ai உடன் பகிரப்பட்ட Confluence உள்ளடக்கங்களில் இடங்கள், பக்கங்கள் மற்றும் உப்பக்கங்களின் அமைப்புமுறை பற்றி இங்கு விளக்கவும்"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "பொது அமைப்புகள்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்க"
+      },
+      "DeleteBtn" : {
+        "label" : "நீக்கு"
+      },
+      "MainPanel" : {
+        "label" : "Confluence அமைப்பை திருத்துதல்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "baseUri" : {
+        "label" : "அடிப்படை இணைய முகவரி",
+        "help" : "Confluence அமைப்புக்கான அடிப்படை முகவரி Url"
+      },
+      "code" : {
+        "label" : "தனித்துவ குறியீடு",
+        "help" : "Confluence அமைப்புக்கான தானாக உருவாக்கப்பட்ட தனித்துவ குறியீடு."
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "Confluence அமைப்பின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence பதிப்பு",
+        "help" : "Confluence பதிப்பு"
+      },
+      "secretCode" : {
+        "label" : "பயன்படுத்திய அடையாளம்",
+        "help" : "Confluence அமைப்பை அணுக தேர்வு செய்யவும் அல்லது புதிய அடையாளத்தை உருவாக்கவும்"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "புதிய குழு"
+      },
+      "NewUserBtn" : {
+        "label" : "புதிய பயனர்"
+      },
+      "UsersListPanel" : {
+        "label" : "பயனர் பட்டியல்"
+      },
+      "GroupsListPanel" : {
+        "label" : "குழு பட்டியல்"
+      },
+      "SournameHeader" : {
+        "label" : "வெளிப்பெயர்"
+      },
+      "UsernameHeader" : {
+        "label" : "பயனர் பெயர்"
+      },
+      "RolesHeader" : {
+        "label" : "பங்குகள்"
+      },
+      "NameHeader" : {
+        "label" : "பெயர்"
+      },
+      "EditBtn" : {
+        "label" : "தொகு"
+      },
+      "DisabledHeader" : {
+        "label" : "இயலாமல்"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "நீக்கு"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "UserIds" : {
+        "placeholder" : "பயனர்களை தேர்வு செய்க"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "MainPanel" : {
+        "label" : "பயனர் குழுவை திருத்துகிறது"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "பயனர் குழுவின் விளக்கத்தை درجு"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "பயனர் குழுவின் குறியீட்டை درجு"
+      },
+      "userIds" : {
+        "label" : "பயனர்கள் பட்டியல்",
+        "help" : "குழுவில் பங்கேற்கும் பயனர்களை தேர்வு செய்க"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "உருவாக்கவும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "jira அமைப்பின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "MainPanel" : {
+        "label" : "jira அமைப்பு உள்ளமைவு உருவாக்கு"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "username" : {
+        "label" : "jira பயனர் பெயர்",
+        "help" : "jira பயனர் பெயர்"
+      },
+      "token" : {
+        "label" : "jira cloud api விசை",
+        "help" : "jira backoffic-ல் பெறப்பட்ட jira CLOUD apikey, இங்கு \"API Token for your Atlassian Account\" ஐ பதிவு செய்ய வேண்டும்."
+      },
+      "baseUri" : {
+        "label" : "முதன்மை இணைய முகவரி",
+        "help" : "onpremise நிறுவலுக்கு jira அமைப்பின் முதன்மை முகவரி அல்லது உங்கள் நிறுவத்தின் jira cloud அமைப்புக்கான அடிப்படை url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "இந்தியை நீக்கவும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "PublishBtn" : {
+        "label" : "பதிப்பிடுக!",
+        "help" : "சேமிக்கும் மற்றும் இந்த உள்ளடக்கங்களை அறிவு அடிப்படையில் LLm-களுக்கு பயன்படுத்துமாறு அனுமதிக்கும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "SettingsTab" : {
+        "label" : "அமைப்புகள்"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      },
+      "MainPanel" : {
+        "label" : "jira உள்ளடக்கங்களை பகிருதல்"
+      },
+      "code" : {
+        "label" : "தனிச்சிறப்பு குறியீடு",
+        "help" : "உள்ளடக்கங்களுக்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira அமைப்பு",
+        "help" : "ஏற்கனே உள்ளமைக்கப்பட்ட jira அமைப்பின் குறிப்பிடப்பட்டுள்ளது."
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "மூல திட்ட குறிப்பு."
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "அப்லோட் செய்யப்பட்ட jira உள்ளடக்கங்களின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "programmedTables" : {
+        "label" : "உள்ளடக்க புதுப்பிப்பு ஆய்வுகள் அட்டவணை",
+        "help" : "மாற்றப்பட்ட உள்ளடக்கங்களுக்கு சமிக்ஞைகளை அமைத்து retrieve augmented generation அமைப்பை புதுப்பாக வைத்திருக்கவும்"
+      },
+      "openZips" : {
+        "label" : "zip கோப்புகளை திறந்திடு",
+        "help" : "zip கோப்புகளை திறந்து உள்ளடக்கங்களை பிரித்தெடுக்க அனுமதிக்கவும்"
+      },
+      "tree" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட நிலைகள் அல்லது பக்கங்கள்/உபப்பக்கங்கள்",
+        "help" : "பகிரப்பட்ட jira திட்டங்கள் மற்றும் டிக்கெட் கட்டமைப்பு உள்ளடக்கங்கள்"
+      },
+      "catalogingCriteria" : {
+        "label" : "இடங்கள், பக்கங்கள் மற்றும் உபப்பக்கங்களுக்கான வகைப்படுத்தும் அளவுகோல்கள்",
+        "help" : "Gebo.ai-இல் பகிரப்பட்ட jira உள்ளடக்கங்களில் இடங்கள், பக்கங்கள் மற்றும் உபப்பக்கங்களை எப்படி வகைப்படுத்தி அமைக்கப்பட்டுள்ளன என்பதை இங்கே விளக்கவும்"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "jira அமைப்பின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "DeleteBtn" : {
+        "label" : "இந்தியை நீக்கவும்"
+      },
+      "MainPanel" : {
+        "label" : "jira அமைப்பு திருத்துதல்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "baseUri" : {
+        "label" : "முதன்மை இணைய முகவரி",
+        "help" : "jira அமைப்புக்கான முதன்மை இணைய முகவரி url"
+      },
+      "code" : {
+        "label" : "தனிச்சிறப்பு குறியீடு",
+        "help" : "jira அமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு."
+      },
+      "secretCode" : {
+        "label" : "பயன்படும் அடையாளம்",
+        "help" : "jira அமைப்பிற்கான அணுகலை பெற அல்லது உருவாக்கும் அடையாளத்தை தேர்வு செய்யவும்"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "SharPpoint/OneDrive அமைப்பின் விவரத்தை உள்ளிடவும்."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint பதிப்பு",
+        "help" : "sharepoint பதிப்பு"
+      },
+      "secret" : {
+        "label" : "ரகசிய விசை",
+        "help" : "இந்த செயலிக்கு microsoft \"entra\" தயாரிப்பில் பதிவு செய்யப்பட்ட Oauth2 client உருவக ரகசியம் (microsoft cloud admin console-ல் பெறவும்)"
+      },
+      "clientId" : {
+        "label" : "வாடிக்கையாளர் ஐடி",
+        "help" : "இந்த செயலிக்கு microsoft \"entra\" தயாரிப்பில் பதிவு செய்யப்பட்ட Oauth2 client அடையாளம் (microsoft cloud admin console-ல் பெறவும்)"
+      },
+      "tenantId" : {
+        "label" : "டைனன்ட் ஐடி",
+        "help" : "உங்கள் நிறுவனம் microsoft \"entra\" தயாரிப்பில் பதிவு செய்யப்பட்ட Oauth2 டைனன்ட் அடையாளம் (microsoft cloud admin console-ல் பெறவும்)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai-க்கான Microsof oauth2 செயலிப் பதிவுகளின் விவரங்கள்"
+      },
+      "CreateBtn" : {
+        "label" : "செய்யவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்க"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive அமைப்பு கட்டமைப்பை உருவாக்கு"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "ரத்து செய்க"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "PublishBtn" : {
+        "label" : "பதிவேற்று!",
+        "help" : "சேமித்து இந்த உள்ளடக்கங்களை அறிவு குறிப்பு தளத்தில் LLm's-க்கு கிடைக்கலாம்"
+      },
+      "SettingsTab" : {
+        "label" : "அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive உள்ளடக்கங்களை பகிர்வது"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "உள்ளடக்கங்களுக்கு தானாக உருவாக்கப்படும் தனிப்பட்ட குறியீடு."
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "பெற்ற திட்ட குறிப்பு."
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "SharePoint/OneDrive உள்ளீட்டு தரவு மூலங்களின் விவரத்தை உள்ளிடவும்."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint அமைப்பு",
+        "help" : "ஏற்கனவே கட்டமைக்கப்பட்ட SharePoint/OneDrive அமைப்பின் குறிப்பு."
+      },
+      "openZips" : {
+        "label" : "zip கோப்புகளை திறக்கவும்",
+        "help" : "zip கோப்புகளை திறந்தலும் உள்ளடக்கம் பிரித்தெடுக்கவும் செயல்படுத்தவும்"
+      },
+      "tree" : {
+        "label" : "தெரிவு செய்யப்பட்ட Sharepoint தளங்கள்/பக்கங்கள்/உபபக்கங்கள் அல்லது OneDrive டிரைவுகள்/கோப்புறைகள்/கோப்புகள்",
+        "help" : "பகிரப்பட்ட sharepoint/OneDrive உள்ளடக்கங்கள்"
+      },
+      "programmedTables" : {
+        "label" : "உள்ளடக்கம் புதுப்பிப்பு சரிபார்ப்பு அட்டவணை",
+        "help" : "மாற்றப்பட்ட உள்ளடக்கங்களை மீண்டும் பெறும் பொது தலைமை உற்பத்தி அமைப்பு புதுப்பிக்க அமைப்படுத்தவும்"
+      },
+      "catalogingCriteria" : {
+        "label" : "வெளிப்புறங்கள், பக்கங்கள் மற்றும் உபபக்கங்கள் ஒழுங்கு விதிகள்",
+        "help" : "sharepoint உள்ளடக்கங்களில் Gebo.ai உடன் பகிரப்பட்ட வெளிப்புறங்கள், பக்கங்கள் மற்றும் உபபக்கங்கள் ஆகியவற்றை எப்படி ஒழுங்குப்படுத்தியுள்ளீர்கள் என்பதை இங்கே விளக்கவும்"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint அமைப்பை திருத்துகிறது"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "பொது அமைப்புகள்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்க"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "secretCode" : {
+        "label" : "பயன்படுத்தப்படும் அடையாளம்",
+        "help" : "sharepoint அமைப்பை அணுக தேர்வு செய்யவும் அல்லது உருவாக்கவும்"
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "sharepoint அமைப்பிற்கு தானாக உருவாக்கப்படும் தனிப்பட்ட குறியீடு."
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "sharepoint அமைப்பின் விவரத்தை உள்ளிடவும்."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint பதிப்பு",
+        "help" : "sharepoint பதிப்பு"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "அகற்று"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "சேமி"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "ரத்து செய்"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "பொதுவான தகவல்/உள்ளடக்க அமைப்புகள்"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms அமைப்புகள்"
+      },
+      "code" : {
+        "label" : "ஏகை குறியீடு",
+        "help" : "தானாக உருவாக்கப்படும் ஏகை குறியீடு இந்த அறிவு வரைபடத் தரவொசிப்பு கட்டத்தின்"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/அறிவு பெறும் கட்டமைப்பு"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "இந்த அறிவு வரைபட தரவொசிப்பு கட்டத்தின் விளக்கத்தை உள்ளிடு"
+      },
+      "extractionPrompt" : {
+        "label" : "தகவல் பெறும் தூண்டுதல்",
+        "help" : "அடையாளங்கள்/நிகழ்வுகள்/உறவுகள் மற்றும் மாற்றுப் பெயர்கள் பெறுவதற்கான பெரிய மொழி மாதிரி தூண்டுதல்"
+      },
+      "usedModelConfiguration" : {
+        "label" : "தரவொசிப்புக்கு பயன்படுத்தும் LLM",
+        "help" : "அறிவு பெற Big language model எது பயன்படுத்தப்படுகிறது என்று குறிப்பிடவும், ஏதும் தேர்ந்தெடுக்கப்படவில்லை என்றால் இயல்போடு எடுக்கப்படும்."
+      },
+      "graphRagAllSources" : {
+        "label" : "அனைத்து தரவு ஆதாரங்களிலும் graph rag பயன்படுத்தவும்",
+        "help" : "உண்மை என்றால் அனைத்து அறிவகங்கள்/திட்டங்கள்/தரவு ஆதாரங்கள் அறிவு பெற செயல்படுத்தப்படும், இல்லை என்றால் குறிப்பாக அமைக்கப்பட்டவைகள் மட்டுமே செயல்படும்"
+      },
+      "defaultModel" : {
+        "label" : "இயல்புநிலை பெரிய மொழி மாதிரி",
+        "help" : "இயல்புநிலை பெரிய மொழி மாதிரி அறிவு பெறுவதற்கு பயன்படுத்தப்படும்"
+      },
+      "processEveryDocument" : {
+        "label" : "அனைத்து கோப்புகளிலும் graph rag பயன்படுத்தவும்",
+        "help" : "Graph rag குறியீடுகள் அனைத்து கோப்புகளுக்கும் செயல்படுத்தப்படும், இது உங்கள் கணினியின் பகுப்பாய்வு விவரங்களை உயர்த்தும், ஆனால் செயல்பாடு செலவு மற்றும் நேரத்தை அதிகரிக்கும்"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag செயல்பாட்டுக்கு கோப்பு தேர்வு நெறிமுறைகள்",
+        "help" : "Graphrag தகவல் பெறும் வடிகட்டும் குழாய்க்கு அனுப்ப கோப்பில் நெறிமுறைகளைத் திருத்தவும். குறைந்தது ஒரு கோப்புப்பெயர் மற்றும் நெறிமுறை அல்லது கோப்பு வகை மற்றும்/அல்லது கோப்பின் அதிகபட்ச பைட் அளவு மற்றும்/அல்லது கடைசி திருத்தத்திற்கான நாட்கள் இலைக்கொள்"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "கோப்பு வகைகளைத் தேர்வு செய்யவும்"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "கோப்பு பெயர் வடிகட்டும் விதிகள்"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "கடைசியாக திருத்தப்பட்டது, நாட்களுக்கு முன்பு"
+      },
+      "nameFilter" : {
+        "placeholder" : "கோப்பு பெயர்"
+      },
+      "maxFileSize" : {
+        "placeholder" : "அதிகபட்ச கோப்பு அளவு (பைட்டுகளில்)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "பொதுவான தகவல்கள்"
+      },
+      "MainPanel" : {
+        "label" : "அறிவகத்தை திருத்துதல்"
+      },
+      "AccessSettingsTab" : {
+        "label" : "அறிவக அணுகல் அமைப்புகள்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "தானாக உருவாக்கப்படும் அறிவகத்தின் தனித்துவமான குறியீடு."
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "அறிவகத்தின் விவரத்தை உள்ளிடவும்."
+      },
+      "embeddingModelReferences" : {
+        "label" : "பயன்படுத்தப்படும் embedding மாதிரிகள் (கமையாக விடின் முறைமை இயல்பிருப்பு பயன் படைக்கும்)",
+        "help" : "அறிவகத்திற்கு embedding மாதிரிகள், காலியாக விட்டால் இயல்பிருப்பு பயன்படுத்தப்படும்."
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      },
+      "IndexBtn" : {
+        "label" : "சுட்டி",
+        "help" : "உள்ளடக்கங்களை மறுநிரலிடல்"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "திட்டம் அல்லது உருப்படியை திருத்துதல்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "தானாக உருவாக்கப்படும் திட்டத்தின் தனித்துவமான குறியீடு."
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "திட்டத்தின் விவரத்தை உள்ளிடவும்."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "அறிவகம்",
+        "help" : "அறிவகம்."
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      },
+      "IndexBtn" : {
+        "label" : "சுட்டி",
+        "help" : "உள்ளடக்கங்களை மறுநிரலிடல்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ உருப்பு/திட்டம் சேர்க்கவும்",
+        "help" : "புதியதை சேர்..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "எல்லோரும் பயன்படுத்தலாம்",
+        "help" : "எல்லோரும் பயன்படுத்த முடியும்"
+      },
+      "accessibleGroups" : {
+        "label" : "குழுக்களின் பட்டியல்",
+        "help" : "அனுமதிக்கப்பட்ட குழுக்களை தேர்வு செய்யவும்"
+      },
+      "accessibleUsers" : {
+        "label" : "பயனர்கள் பட்டியல்",
+        "help" : "அனுமதிக்கப்பட்ட பயனர்களை தேர்வு செய்யவும்"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "டாஷ்போர்ட்"
+      },
+      "LLMSTab" : {
+        "label" : "அரட்டை & embedding க்கு LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag அரட்டை சுயவிவரங்கள்/மாதிரி உந்துதல்"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "அறிவு தளங்கள் மற்றும் திட்டங்கள்"
+      },
+      "UsersGroupTab" : {
+        "label" : "பயனர்கள் மற்றும் குழுக்கள்"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai தொகுதி அமைப்புகள்"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விவரம்"
+      },
+      "ConfigureBtn2" : {
+        "label" : "இயங்காக்கு"
+      },
+      "ConfigureBtn" : {
+        "label" : "இயங்காக்கு"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "புதிய தூண்டுதல் கட்டமைப்பு"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "புதிய உரை சுயவிவரம்"
+      },
+      "MainPanel" : {
+        "label" : "மீட்பு மேம்படுத்தப்பட்ட உருவாக்க உரை சுயவிவரங்கள்"
+      },
+      "PromptsPanel" : {
+        "label" : "தூண்டுதல்கள் சேகரிப்பு & இயல்புநிலை தூண்டுதல்கள்"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "அறிவு தரவுத்தளங்கள்"
+      },
+      "DescriptionHeader" : {
+        "label" : "விவரணம்"
+      },
+      "ConfigureBtn1" : {
+        "label" : "அமைக்க"
+      },
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "புதிய அறிவுத்தளம்"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "புதிய இறக்குமதி மாதிரி உள்ளமைவு"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "புதிய உரையாடல் மாதிரி உள்ளமைவு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
+      },
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      },
+      "ModelHeader" : {
+        "label" : "மாதிரி "
+      },
+      "ModelProviderHeader" : {
+        "label" : "மாதிரி வழங்குநர்"
+      },
+      "ConfigureBtn" : {
+        "label" : "உள்ளமை"
+      },
+      "CodeHeader2" : {
+        "label" : "குறியீடு"
+      },
+      "DescriptionHeader2" : {
+        "label" : "விளக்கம்"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "மாதிரி வழங்குநர்"
+      },
+      "ConfigureBtn2" : {
+        "label" : "உள்ளமை"
+      },
+      "ModelHeader2" : {
+        "label" : "மாதிரி "
+      },
+      "ChatmodelsZone" : {
+        "label" : "உள்ளமைக்கப்பட்ட உரையாடல் மாதிரிகள்"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "உள்ளமைக்கப்பட்ட இறக்குமதி மாதிரிகள்"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "மாதிரியை சோதனை செய்யும்"
+      },
+      "TestChatBtn" : {
+        "label" : "சட்டத்தை சோதனை செய்யவும்"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான OpenAI டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI சட்ட மாதிரி தேர்வு",
+        "help" : "பணியாற்ற OpenAI சட்ட மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொதுத் தகவல்கள்"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "மேம்பட்ட அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI சட்ட மாதிரி கட்டமைப்பை திருத்துதல்"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "மாதிரி அணுகல் அமைப்புகள்"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding மாதிரி கட்டமைப்பை திருத்துதல்"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான OpenAI டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "embedding மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "embedding மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding மாதிரி தேர்வு",
+        "help" : "பணியாற்ற OpenAI embedding மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை embedding மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு embedding மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை embedding மாதிரியாக பயன்படுத்தப்படும்"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "baseUrl" : {
+        "label" : "அடிப்படை ollama சேவையகம் முகவரி",
+        "help" : "அடிப்படை முகவரி (உது: http://servername:234/) ollama உள்ளூர் அல்லது lan சேவையகம் பதில் தரும்."
+      },
+      "choosedModel" : {
+        "label" : "Ollama சட்ட மாதிரி தேர்வு",
+        "help" : "Ollama சட்ட மாதிரியைப் பயன்படுத்த தேர்ந்தெடுக்கவும்.",
+        "placeholder" : "மாதிரியை தேர்வு செய்யவும்"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Ollama டோக்கனைத் தேர்ந்தெடுக்கவும் (விருப்பத்தேர்வு)"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "MainPanel" : {
+        "label" : "Ollama உள்ளூர் (அல்லது lan) சேவையக சட்ட மாதிரி கட்டமைப்பை திருத்துதல்"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Anthropic டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic சட்ட மாதிரி தேர்வு",
+        "help" : "Anthropic சட்ட மாதிரியைத் தேர்ந்தெடுக்கவும்.",
+        "placeholder" : "மாதிரியை தேர்வு செய்யவும்"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "மேம்பட்ட அமைப்புகள்"
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொதுத் தகவல்கள்"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "மாதிரி அணுகல் அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic சட்ட மாதிரி கட்டமைப்பை திருத்துதல்"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான MistralAI டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI சட்ட மாதிரி தேர்வு",
+        "help" : "MistralAI சட்ட மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொதுத் தகவல்கள்"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "மேம்பட்ட அமைப்புகள்"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "மாதிரி அணுகல் அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI சட்ட மாதிரி கட்டமைப்பை திருத்துதல்"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI சட்ட மாதிரி தேர்வு",
+        "help" : "Google Vertex AI சட்ட மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Google Vertex AI டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "TabGeneralInfos" : {
+        "label" : "பொதுத் தகவல்கள்"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "மாதிரி அணுகல் அமைப்புகள்"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "மேம்பட்ட அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI சட்ட மாதிரி கட்டமைப்பை திருத்துதல்"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Deepseek டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek சட்ட மாதிரி தேர்வு",
+        "help" : "Deepseek சட்ட மாதிரியைத் தேர்ந்தெடுக்கவும்.",
+        "placeholder" : "மாதிரியை தேர்வு செய்யவும்"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "மேம்பட்ட அமைப்புகள்"
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொதுத் தகவல்கள்"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek சட்ட மாதிரி கட்டமைப்பை திருத்துதல்"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "மாதிரி அணுகல் அமைப்புகள்"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "baseUrl" : {
+        "label" : "சட்ட மாதிரி API அடிப்படை சேவையக முகவரி",
+        "help" : "சட்ட மாதிரியின் அடிப்படை முகவரி."
+      },
+      "apiSecretCode" : {
+        "label" : "சட்ட மாதிரி API டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான சட்ட மாதிரி API டோக்கனைத் தேர்ந்தெடுக்கவும் (விருப்பத்தேர்வு)"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை சட்ட மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு சட்ட மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை சட்ட மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "choosedModel" : {
+        "label" : "சட்ட மாதிரி சட்ட மாதிரி தேர்வு",
+        "help" : "சட்ட மாதிரியின் சட்ட மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொதுத் தகவல்கள்"
+      },
+      "TitleFragment" : {
+        "label" : "சட்ட மாதிரி வழங்குநரை திருத்துதல்:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "மேம்பட்ட அமைப்புகள்"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "மாதிரி அணுகல் அமைப்புகள்"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "embedding மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "MainPanel" : {
+        "label" : "Ollama உள்ளூர் (அல்லது lan) embedding மாதிரி கட்டமைப்பை திருத்துதல்"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Ollama டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding மாதிரி தேர்வு",
+        "help" : "Ollama embedding மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "embedding மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை embedding மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு embedding மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை embedding மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "baseUrl" : {
+        "label" : "அடிப்படை ollama சேவையகம் முகவரி",
+        "help" : "அடிப்படை முகவரி (உது: http://servername:234/) ollama உள்ளூர் அல்லது lan சேவையகம் பதில் தரும்."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "embedding மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding மாதிரி கட்டமைப்பை திருத்துதல்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "embedding மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding மாதிரி தேர்வு",
+        "help" : "MistralAI embedding மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை embedding மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு embedding மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை embedding மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான MistralAI டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding மாதிரி கட்டமைப்பை திருத்துதல்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "embedding மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding மாதிரி தேர்வு",
+        "help" : "Google Vertex AI embedding மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை embedding மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு embedding மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை embedding மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "embedding மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Google Vertex AI டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ரத்து செய்யும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "TitleFragment" : {
+        "label" : "embedding மாதிரி வழங்குநரை திருத்துதல்:"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "Embedding மாதிரி கட்டமைப்பின் விளக்கத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறியீடு",
+        "help" : "Embedding மாதிரி கட்டமைப்பிற்கான தானாக உருவாக்கப்பட்ட தனித்துவமான குறியீடு"
+      },
+      "choosedModel" : {
+        "label" : "Embedding மாதிரி embedding மாதிரி தேர்வு",
+        "help" : "Embedding மாதிரியில்தான் embedding மாதிரியைத் தேர்ந்தெடுக்கவும்."
+      },
+      "baseUrl" : {
+        "label" : "Embedding மாதிரி API சேவையக முகவரி",
+        "help" : "Embedding மாதிரி சேவையகத்தின் அடிப்படை முகவரி."
+      },
+      "defaultModel" : {
+        "label" : "இதை இயல்புநிலை embedding மாதிரியாக அமைக்கவும்",
+        "help" : "சரியானால், இங்கு embedding மாதிரி குறிப்பிடப்படாத இடங்களில் இது இயல்புநிலை embedding மாதிரியாக பயன்படுத்தப்படும்"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding மாதிரி API டோக்கன்",
+        "help" : "இந்த மாதிரிக்கான Embedding மாதிரி API டோக்கனைத் தேர்ந்தெடுக்கவும்"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "அரட்டை உருவாக்க அமைப்புகள் माहिती"
+      },
+      "chaDeleteBtn" : {
+        "help" : "இந்த அரட்டை அமர்வை நீக்கு"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "அரட்டை அமர்வை மறுபெயரிடு"
+      },
+      "QueryControl" : {
+        "placeholder" : "அரட்டை பாட்டிற்கு ஒரு செய்தி எழுதுங்கள்"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "description" : {
+        "label" : "அரட்டை விளக்கம்",
+        "help" : "அரட்டை அமர்வுக்கான விளக்கத்தை உள்ளிடவும்."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "பயன்பட்ட மாதிரி",
+        "help" : "மாதிரி குறியீடு"
+      },
+      "providerId" : {
+        "label" : "அரட்டை மாதிரி வழங்குனர்",
+        "help" : "LLms வழங்குனர் இயக்கி"
+      },
+      "functions" : {
+        "label" : "அரட்டை மாதிரி அழைக்கக்கூடிய செயல்கள்",
+        "help" : "இந்த அரட்டை மாதிரிக்கு கிடைக்கும் செயல்களின் பட்டியல்"
+      },
+      "NameCol" : {
+        "label" : "பெயர்"
+      },
+      "DescriptionCol" : {
+        "label" : "விளக்கம்"
+      },
+      "kbases" : {
+        "label" : "உபல்பாடான அறிவு களஞ்சியங்கள்",
+        "help" : "இந்த RAG அரட்டையில் பயன்படுத்தப்படும் அறிவு களஞ்சியங்களின் பட்டியல்"
+      },
+      "CloseBtn" : {
+        "help" : "மூடு"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "பதிவு செய்",
+        "help" : "ஒரு ஒலி தொடரை பதிவு செய்து அனுப்ப தொடங்கு"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "தரவை மீண்டும் ஏற்று"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SelectHeader" : {
+        "label" : "தேர்ந்தெடு"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "முடிவு தேதி/நேரம்"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "ஆரம்ப தேதி/நேரம்"
+      },
+      "ProcessingHeader" : {
+        "label" : "செயலாக்கம்"
+      },
+      "DescriptionHeader" : {
+        "label" : "விவரிப்பு"
+      },
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      },
+      "FinishedHeader" : {
+        "label" : "முடிந்தது"
+      },
+      "WithErrorHeader" : {
+        "label" : "பிழையுடன்"
+      },
+      "LogTableComponent" : {
+        "help" : "இந்த பகிரும் கோப்பமைப்புகளுக்கான அறிவை பதிவேடு"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "செயல்முறை புள்ளிவிவரம்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "CloseBtn" : {
+        "label" : "மூடு"
+      },
+      "PublicationLogTab" : {
+        "label" : "பதிவுகளின் பதிவு"
+      },
+      "MainPanel" : {
+        "label" : "பதிவதற்கான பதிவு"
+      },
+      "actualStatus" : {
+        "label" : "நிலை",
+        "help" : "பணியின் நிலை, இன்னும் இயங்குகிறது, முடிந்தது அல்லது பிழையுடன் முடிந்தது."
+      },
+      "publishingSystem" : {
+        "label" : "பதிவுத்தள உள்ளடக்க அமைப்பு",
+        "help" : "பதிவுத்தள உள்ளடக்க விவரம்"
+      },
+      "startDateTime" : {
+        "label" : "ஆரம்ப தேதி/நேரம்",
+        "help" : "உள்ளடக்க ஒத்திசைவு பணியின் தொடக்க தேதி மற்றும் நேரம்"
+      },
+      "endDateTime" : {
+        "label" : "முடிவு தேதி/நேரம்",
+        "help" : "உள்ளடக்க ஒத்திசைவு பணியின் முடிவு தேதி மற்றும் நேரம்"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "முழுமையாக செயலாக்கப்படவில்லை"
+      },
+      "ProcessedCompletely" : {
+        "label" : "முழுமையாக செயலாக்கப்பட்டது"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "எம்பெட்டிங் மற்றும் ஆவணங்களின் மொத்த எண்ணிக்கை"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "மேலும் விவரங்கள்"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "ப்ராம்ட் உருவாக்கு"
+      },
+      "PromptWizardBtn" : {
+        "label" : "ப்ராம்ட் வழிகாட்டி",
+        "help" : "உங்கள் குறிக்கோளுக்கு ப்ராம்ட் உருவாக்க LLM ஐ பயன்படுத்த இதைப் பயன்படுத்தவும்"
+      },
+      "acceptPrompt" : {
+        "label" : "ப்ராம்ட் ஏற்கவும்"
+      },
+      "promptWizardUI" : {
+        "label" : "ப்ராம்ட் வார்ப்புரு உருவாக்கும் வழிகாட்டி"
+      },
+      "cancel" : {
+        "label" : "ரத்து செய்"
+      },
+      "response" : {
+        "label" : "பரிந்துரைக்கப்பட்ட ப்ராம்ட் வார்ப்புரு",
+        "help" : "உங்கள் குறிக்கோளுக்கான உருவாக்கப்பட்ட வார்ப்புரு உரை (நீங்கள் அதை மாற்றலாம் அல்லது திருத்தலாம்/மாற்றலாம்)"
+      },
+      "modelCode" : {
+        "label" : "பயன்படுத்த வேண்டிய சாட் மாடல்",
+        "help" : "ப்ராம்ட் வார்ப்புரு உருவாக்க கோர விரும்பும் சாட் மாடலைத் தேர்ந்தெடுக்கவும்"
+      },
+      "query" : {
+        "label" : "ப்ராம்ட் வார்ப்புரு கோரிக்கை",
+        "help" : "AI பயனரை ஆதரிக்கும் குறிக்கோள் என்ன என்பதை இரண்டாம் நபர் முகத்தில் குறிப்பிடவும்"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "வெப்பநிலை",
+        "help" : "மாதிரி பதிலளிக்கும் வெப்பநிலை, 0 முதல் 1 வரை (உறுதியாக இல்லை என்றால் காலியாக விடவும்)"
+      },
+      "contextLength" : {
+        "label" : "சூழல் நீளம் (டோக்கன்கள்)",
+        "help" : "AI மாதிரி செயலாக்கும் போது பரிசீலிக்க முடியும் உரையின் அளவு (அமைக்காவிட்டால் 1047576 பயன்படுத்தப்படும்)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP அளவுரு, 0 முதல் 1 வரை (உறுதியாக இல்லை என்றால் காலியாக விடவும்)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "இந்த மாதிரிக்கு செயல்படுத்தப்பட்ட செயல்பாடுகள்",
+        "help" : "உரையாடலின் போது மாதிரி பயன்படுத்தக்கூடிய செயல்பாடுகள்"
+      },
+      "defaultModelPrompt" : {
+        "label" : "இயல்புநிலை மாதிரி தூண்டுகூற்று",
+        "help" : "உரையாடல் மாதிரிக்கான இயல்புநிலை தூண்டுகூற்றைத் திருத்தவும்."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "அடையாள விளக்கத்தை உள்ளிடவும்."
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியம்",
+        "help" : "அடையாளத்திற்கான தானாக உருவாகும் தனிப்பட்ட குறியம்."
+      },
+      "secretType" : {
+        "label" : "அடையாள வகை",
+        "help" : "தொலைநிலை அமைப்பிற்கு உருவாக்க வேண்டிய அடையாள வகையை தேர்ந்தெடுக்கவும்"
+      },
+      "InsertBtn" : {
+        "label" : "நுழைக்க"
+      },
+      "token" : {
+        "label" : "டோக்கன்",
+        "help" : "டோக்கனைக் உள்ளிடவும்."
+      },
+      "user" : {
+        "label" : "பயனர்",
+        "help" : "டோக்கனால் குறிக்கப்பட்ட பயனரை உள்ளிடவும்."
+      },
+      "MainPanel" : {
+        "label" : "அடையாளத்தை உருவாக்குகிறது"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்க"
+      },
+      "username" : {
+        "label" : "பயனர் பெயர்",
+        "help" : "பயனர் பெயர் உள்ளிடவும்."
+      },
+      "password" : {
+        "label" : "கடவுச்சொல்",
+        "help" : "கடவுச்சொல்லை உள்ளிடவும்."
+      },
+      "email" : {
+        "label" : "மின்னஞ்சல்/பயனர் பெயர்",
+        "help" : "ssh விசைக்கு தொடர்புடைய மின்னஞ்சல் அல்லது பயனர் பெயரை உள்ளிடவும்."
+      },
+      "key" : {
+        "label" : "ரகசிய விசை",
+        "help" : "தனிப்பட்ட விசைப் கோப்பைத் திறந்து இந்த உரைப்பகுதியில் நகலெடுத்து ஒட்டவும்."
+      },
+      "passphrase" : {
+        "label" : "விசை கடவுச்சொல்",
+        "help" : "விசை கடவுச்சொல்லை உள்ளிடவும்."
+      },
+      "pub" : {
+        "label" : "பொது விசை",
+        "help" : "பொது விசைப் கோப்பைத் திறந்து இந்த உரைப்பகுதியில் நகலெடுத்து ஒட்டவும்."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "உள்ளடக்கங்களுக்கான தானாக உருவாக்கப்பட்ட தனிப்பட்ட குறியீடு."
+      },
+      "description" : {
+        "label" : "விவரணம்",
+        "help" : "கோப்பு அமைப்பு பதிவில் பதிவேற்றப்பட்ட உள்ளடக்கத்தைக் குறிப்பிடவும்."
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "மூல திட்டத்தின் குறிப்பை உள்ளிடவும்."
+      },
+      "upload" : {
+        "label" : "உள்ளடக்கங்களை பதிவேற்று",
+        "help" : "உலகாவிய முகவரிப் பட்டனை அழுத்தி zip கோப்புகள் அல்லது பிற கோப்புகளைத் தேர்ந்தெடுக்கவும்"
+      },
+      "openZips" : {
+        "label" : "Zip கோப்புகளை திறக்கவும்",
+        "help" : "Zip கோப்புகளை திறத்தலும் உள்ளடக்கத்தை பிரித்தெடுத்தலும் இயக்கவும்"
+      },
+      "PublishBtn" : {
+        "label" : "பதிவிடு!",
+        "help" : "சேமித்து, இந்த உள்ளடக்கங்களை அறிவு களத்தில் LLm-க்கு கிடைக்கும் பணியிடுங்கள்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      },
+      "MainPanel" : {
+        "label" : "பதிவேற்றிய உள்ளடக்கங்களைத் தொகுத்தல்"
+      },
+      "SettingsTab" : {
+        "label" : "அமைப்புகள்"
+      },
+      "buildSystemsRefs" : {
+        "label" : "பில்டு அமைப்புகளை அமைக்கவும்",
+        "help" : "மெட்டா தகவல்கள் மற்றும் கூடுதல் தகவல்களுக்காக ஆய்வு செய்ய வேண்டிய பில்டு/பேக்கேஜிங் அமைப்புகளின் பட்டியல் (சாப்ட்வேர் குறியீடு இல்லையெனில் காலியாக விடவும்)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட உருப்படிகள்"
+      },
+      "ChooseOk" : {
+        "label" : "சரி"
+      },
+      "ChooseCancel" : {
+        "label" : "ரத்து"
+      },
+      "EditBtn" : {
+        "help" : "தேர்ந்தெடுத்ததை மாற்று"
+      },
+      "ChooseElementsArea" : {
+        "label" : "உருப்படிகளைத் தேர்ந்தெடு"
+      },
+      "VFileSystemSelector" : {
+        "label" : "உருப்படிகளைத் தேர்ந்தெடு"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "அட்டவணையை திருத்து"
+      },
+      "ConfirmBtn" : {
+        "label" : "உறுதி செய்"
+      },
+      "AddBtn" : {
+        "label" : "+சேர்"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "பதிவிடும்!",
+        "help" : "சேமிக்கும் மற்றும் இந்த உள்ளடக்கங்களை அறிவாற்றல் அடிப்படையில் LLm க்களுக்கு கிடைக்கச் செய்யும்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SettingsTab" : {
+        "label" : "அமைப்புகள்"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "மூலக் குறியீட்டுத் தீர்வு"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      },
+      "MainPanel" : {
+        "label" : "உள்ளமைப்பு கோப்பக உள்ளடக்கங்களை தொகுத்தல்"
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "பதிவேற்றிய உள்ளடக்கத்தின் விவரத்தை பதிவுசெய்யுங்கள்."
+      },
+      "openZips" : {
+        "label" : "zip கோப்புகளை திற",
+        "help" : "zip கோப்புகளைத் திறக்கவும், உள்ளடக்கங்களை எடுக்கவும்"
+      },
+      "code" : {
+        "label" : "ஏகைப்பாட்டு குறியீடு",
+        "help" : "தானாக உருவாக்கப்பட்ட ஏகைப்பாட்டு குறியீடு."
+      },
+      "tree" : {
+        "label" : "தேர்ந்த கோப்புகள் அல்லது கோப்பகங்கள்",
+        "help" : "பகிரப்பட்ட கோப்பகக்கோப்புகள் அல்லது இயக்கி கிடைக்கும் அடைவுகள்"
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "மூல திட்டத்துடன் இணைப்பு."
+      },
+      "programmedTables" : {
+        "label" : "உள்ளடக்க புதுப்பிப்பு திட்டங்கள் சரிபார்ப்பு",
+        "help" : "மாற்றப்பட்ட உள்ளடக்கங்களை புதுப்பிக்க திட்டமிடலை வடிவமைக்கவும்"
+      },
+      "catalogingCriteria" : {
+        "label" : "கோப்பகங்கள் அமைப்புக்கான அளவுகோல்கள்",
+        "help" : "நீங்கள் Gebo.ai உடன் பகிரும் கோப்பக அமைப்பின் விதிகளை இங்கே விளக்கவும்"
+      },
+      "buildSystemsRefs" : {
+        "label" : "உருவாக்க அமைப்புகளை வடிவமைக்கவும்",
+        "help" : "மெட்டா தகவலும் கூடுதல் வடிவமைப்பு பொருள்கள் பற்றிய பட்டியல் (மென்பொருள் குறியீடு இல்லை என்றால் காலியாகவிடுங்கள்)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "புதிய கோப்பு பகிரும் பகுதி"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "முழு பாதை"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db அல்லது yml கோப்பு அமைப்பு"
+      },
+      "DescriptionHeader" : {
+        "label" : "விவரம்"
+      },
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      },
+      "ModifyHeader" : {
+        "label" : "திருத்தவும்"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "தேர்ந்த பகிரப்பட்ட கோப்பக அடைவு",
+        "help" : "உங்கள் நிறுவனத்திற்கான ஆவணக் களஞ்சியமாக இருப்பதற்குத் தேவையான பகிரப்பட்ட கோப்பகத்தின் அடிப்படை பாதையைத் தேர்வு செய்யவும்"
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "உங்கள் நிறுவனத்தின் பகிரப்பட்ட கோப்பகப் பகுதியில் உள்ள விவரத்தை உள்ளிடவும்"
+      },
+      "code" : {
+        "label" : "ஏகைப்பாட்டு குறியீடு",
+        "help" : "தானாக உருவாக்கப்பட்ட ஏகைப்பாட்டு குறியீடு."
+      },
+      "InsertBtn" : {
+        "label" : "உள்ளிடு"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "MainPanel" : {
+        "label" : "உயர்நிலை பகிரப்பட்ட கோப்பகத்தை தொகுத்தல்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      },
+      "PublishBtn" : {
+        "label" : "பதிவிடு!",
+        "help" : "சேமித்து, இந்த உள்ளடக்கங்களை அறிவுத்தளத்தில் LLm களுக்காக கிடைக்கும் வகையில் அமைக்கவும்"
+      },
+      "MainPanel" : {
+        "label" : "git மூலம்/ஆவணக் களஞ்சியத்தை தொகுத்தல்"
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "git repo-வின் விவரத்தை உள்ளிடவும்."
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "git repo-வின் தானாக உருவாக்கப்படும் தனிப்பட்ட குறியீடு."
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "மூலத்திட்ட குறிப்பு."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git முறைமை",
+        "help" : "ஏற்கனவே அமைக்கப்பட்ட git முறைமை குறிப்பு."
+      },
+      "branch" : {
+        "label" : "கிளை",
+        "help" : "ஆகும் கிளையின் பெயர் (பொதுவாக master, main அல்லது develop)"
+      },
+      "identityCode" : {
+        "label" : "பயன்படுத்தும் அடையாளம்",
+        "help" : "அணுகல்/சரிபார்ப்பு செய்கையில் பயன்படுத்தும் அடையாளத்தை தேர்வு செய்யவும்"
+      },
+      "repositoryUri" : {
+        "label" : "களஞ்சிய முகவரி/URL",
+        "help" : "git ரிமோட் களஞ்சியத்தின் முழுமையான முகவரி (பொதுவாக http:, https: அல்லது ssh: இல் தொடங்கும்)"
+      },
+      "publicAccess" : {
+        "label" : "பொது",
+        "help" : "உண்மை என்றால் இந்த களஞ்சியத்தை அணுக அனுமதிக்க தேவையில்லை"
+      },
+      "openZips" : {
+        "label" : "zip கோப்புகளை திறக்கவும்",
+        "help" : "zip கோப்புகளை திறந்து உள்ளடக்கங்களை பெறுவதை இயக்கு"
+      },
+      "programmedTables" : {
+        "label" : "உள்ளடக்க புதுப்பிப்புத் திட்டமிடல்",
+        "help" : "மாற்றப்பட்ட உள்ளடக்கங்களை தடங்கல் அதிகப்படுத்தும் தயாரிப்பு முறையை புதுப்பிக்க திட்டமிடலை அமைக்கவும்"
+      },
+      "buildSystemsRefs" : {
+        "label" : "பில்ட் முறைமைகளை கட்டமைக்கவும்",
+        "help" : "மெட்டா தகவல்களுக்கு மற்றும் கூடுதல் துணைத் தகவல்களுக்கு பார்வையிட build/packaging முறைமைகளின் பட்டியல்"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "GeneralInfosTab" : {
+        "label" : "பொது தகவல்கள்"
+      },
+      "UseChatModelLabel" : {
+        "label" : "அரட்டை மாதிரியை பயன்படுத்தவும்"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "தேர்வு செய்க"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "அரட்டை மாதிரி உள்ளமைவை தேர்ந்தெடுக்கவும்"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "எம்பெடிங் மாதிரி உள்ளமைவை தேர்ந்தெடுக்கவும்"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "தேர்வு செய்க"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG அமைப்புகள்"
+      },
+      "LanguageModelTab" : {
+        "label" : "பெரிய மொழி மாதிரி மற்றும் பயன்படுத்தக்கூடிய கருவி அமைப்புகள்"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "எம்பெடிங் மாதிரியை பயன்படுத்தவும்"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "பாதுகாப்பு அணுகல் அமைப்புகள்"
+      },
+      "MainPanel" : {
+        "label" : "மேம்படுத்தப்பட்ட பெறுதல் உருவாக்கும் அரட்டை சுயவிவரத்தை திருத்துகிறது"
+      },
+      "code" : {
+        "label" : "தனித்துவமான குறி",
+        "help" : "அரட்டை சுயவிவரத்திற்கான தானாக உருவாக்கப்படும் தனித்துவமான குறி."
+      },
+      "description" : {
+        "label" : "விபரணம்",
+        "help" : "அரட்டை சுயவிவர விவரணத்தை உள்ளிடவும்."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "பயனர் அறிவு அடித்தளங்களை தேர்வு செய்கிறார்",
+        "help" : "அணுகக்கூடிய அறிவு அடித்தளங்களில் இருந்து பயனர் தேர்வு செய்யலாம் அல்லது தனிப்பட்ட கோப்புகளை பதிவேற்றலாம்."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "அறிவு அடித்தளங்கள்",
+        "help" : "ஆவணங்களை பெறும் அறிவு அடித்தளங்கள்."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "சமமான தேடலுக்கான வரம்பு",
+        "help" : "செமாண்டிக் தேடலுக்கான சமமான வரம்பு, 0.60–0.65 குறைந்த வடிகட்டி, 0.70–0.75 நடுத்தர வடிகட்டி, 0.80–0.85 துல்லியமான"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2வது 'ஹாப்' சமமான தேடல் வரம்பு",
+        "help" : "செமாண்டிக் தேடலுக்கான சமமான வரம்பு, 0.60–0.65 குறைந்த வடிகட்டி, 0.70–0.75 நடுத்தர வடிகட்டி, 0.80–0.85 துல்லியமானது, இது பன்மடங்கு ஹாப் RAG-ல் 2வது தேடலிலிருந்து பயன்படுத்தப்படுகிறது"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'மறுபடி ஹாப்' RAG-ஐ முடக்கு",
+        "help" : "'மறுபடி ஹாப் RAG' செயல்பாட்டை முடக்கு. பன்மடங்கு ஹாப் தேடல் முதலில் ஒரு செமாண்டிக் தேடலைச் செய்து, கிடைத்த ஆவணங்களை செமாண்டிக் தேடலுக்கான உள்ளடக்கமாக பயன்படுத்துகிறது, இதனால் பெரிதும் உள்ளடக்கம் கிடைக்கும்."
+      },
+      "topK" : {
+        "label" : "கருத்திலுள்ள ஆவண துண்டுகள் (TopK)",
+        "help" : "பெருத்து-உருவாக்கும் பெறுதலில், செமாண்டிக் தேடலில் கிடைத்த முதன்மை N ஆவண துண்டுகள்"
+      },
+      "enabledFunctions" : {
+        "label" : "இந்த RAG அரட்டைக்கான இயக்கப் செய்யப்பட்ட செயல்பாடுகள் அழைப்பு",
+        "help" : "பயனர் தொடர்பு கொண்டிருக்கும் போது தேர்ந்தெடுத்த அறிவு அடித்தளத்துடன் LLM மாதிரியின் மூலம் பயன்படுத்தக்கூடிய செயல்பாடுகள்"
+      },
+      "prompt" : {
+        "label" : "உந்துதல்",
+        "help" : "பெறுதல் மேம்படுத்தப்பட்ட உருவாக்கம் அமர்வுகளுக்கான உந்துதலை திருத்தவும்."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "ப்ரொம்ப்ட் வகையை எழுதவும் அல்லது சேர்க்கவும்"
+      },
+      "MainPanel" : {
+        "label" : "ப்ரொம்ப்டை திருத்துதல்"
+      },
+      "promptCategory" : {
+        "label" : "ப்ரொம்ப்ட் வகை",
+        "help" : "ப்ரொம்ப்ட் வகையைத் தேர்ந்தெடுக்கவும் அல்லது சேர்க்கவும்."
+      },
+      "prompt" : {
+        "label" : "ப்ரொம்ப்ட்",
+        "help" : "அரட்டைக்கான ப்ரொம்ப்டை திருத்தவும், பயனர் கேள்விக்காக {query} என்பதையும், LLM-க்கு அனுப்பப்படும் ஆவணங்கள்/வரலாறு சூழலுக்காக {context} என்பதையும் பயன்படுத்தவும்."
+      },
+      "code" : {
+        "label" : "ஐக்கிய குறியீடு",
+        "help" : "ப்ரொம்ப்டுக்கான தானாக உருவாக்கப்படும் ஐக்கிய குறியீடு."
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "ப்ரொம்ப்ட் விளக்கம் பதிவு செய்யவும்."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "கடவுச்சொல்லை மாற்றவும்"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "பழைய கடவுச்சொல்",
+        "help" : "உள்நுழைய தற்போதைய கடவுச்சொல்"
+      },
+      "newPassword" : {
+        "label" : "புதிய கடவுச்சொல்",
+        "help" : "புதிய கடவுச்சொல்"
+      },
+      "username" : {
+        "label" : "மின்னஞ்சல்",
+        "help" : "உள்நுழைய மின்னஞ்சல் பயனராக"
+      },
+      "ChangePasswordUI" : {
+        "label" : "கடவுச்சொல் மாற்றும் படிவம்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "ChangePwdBtn" : {
+        "label" : "கடவுச்சொல்லை மாற்றவும்"
+      },
+      "newPassword1" : {
+        "label" : "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்",
+        "help" : "புதிய கடவுச்சொல்லை உறுதிப்படுத்தவும்"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "அழிக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "SaveBtn" : {
+        "label" : "சேமிக்கவும்"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google custom search API மற்றும் உங்கள் api key (இலவசமாக) பெறுவதற்கான மேலதிக தகவல்களுக்கு: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியீடு",
+        "help" : "google search api உள்ளமைவடிவத்தின் தனிப்பட்ட குறியீடு."
+      },
+      "MainPanel" : {
+        "label" : "google custom search api சான்றுகளை திருத்துதல்"
+      },
+      "secretCode" : {
+        "label" : "Google search api குறியீடு",
+        "help" : "Google search api குறியீட்டை தேர்ந்தெடுக்கவும் அல்லது உள்ளிடவும்"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google serch engine ஐடி",
+        "help" : "Google search engine ஐடி"
+      },
+      "description" : {
+        "label" : "விவரம்",
+        "help" : "google search api உள்ளமைவடிவத்தின் விவரத்தை உள்ளிடவும்."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "அறிகுறி தரவுத்தளங்கள் இல்லாமல் அரட்டையடிக்கவும்",
+        "help" : "ஒரு அரட்டை அமரவுக்கு LLMக்களைத் தேர்ந்தெடுக்கவும்",
+        "placeholder" : "ஒரு அரட்டை அமரவுக்கு LLMக்களைத் தேர்ந்தெடுக்கவும்"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "அரட்டை விருப்பங்கள் பகுதியை திறக்கவும்"
+      },
+      "CreateChatBtn" : {
+        "label" : "புதிய அரட்டை"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "புதிய அரட்டை அமர்வு"
+      },
+      "chatProfileCode" : {
+        "label" : "அறிகுறி தரவுத்தளங்களுடன் அரட்டையடிக்கவும்",
+        "help" : "நிறுவன (மற்றும் உங்கள்) ஆவணங்கள் மற்றும் LLMகளை பயன்படுத்த நிறுவன அரட்டை சுயவிவரத்தைத் தேர்ந்தெடுக்கவும்",
+        "placeholder" : "நிறுவன (மற்றும் உங்கள்) ஆவணங்கள் மற்றும் LLMகளை பயன்படுத்த நிறுவன அரட்டை சுயவிவரத்தைத் தேர்ந்தெடுக்கவும்"
+      },
+      "NewChatBtn" : {
+        "label" : "புதிய அரட்டை"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "பதிவுகளுடன் அரட்டை",
+        "help" : "உலாவுக அல்லது தேடி, பணியாற்ற வேண்டிய பதிவுகளைத் தேர்ந்தெடுக்கவும்"
+      },
+      "chooseFilesDialog" : {
+        "label" : "அரட்டைக்கு கோப்புகளைத் தேர்ந்தெடுக்கவும்"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "உறுதிப்படுத்து"
+      },
+      "userspaceBrowsing" : {
+        "label" : "உங்கள் ஆவணங்களைப் பதிவேற்று அல்லது தேர்ந்தெடுக்கவும்",
+        "help" : "உங்கள் பயனர் இடைவெளியிலிருந்து ஆவணங்களை தேர்வு/பதிவேற்றவும்"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "தேர்ந்தெடுத்தவற்றை மாற்று"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "பயனர் கோப்புகளை தேர்வு செய்யவும்"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "ரத்து செய்"
+      },
+      "okBtn" : {
+        "label" : "சரி"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "பயனர் பதிவேற்றிய உள்ளடக்கத்தை தேர்வு செய்யவும்"
+      },
+      "UserspaceBrowser" : {
+        "label" : "அறிவுத் தளங்கள் மற்றும் பயனர் கோப்புகள்"
+      }
+    }
+  }
+}
