@@ -1,0 +1,2429 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Alapértelmezett rendszer nyelv",
+        "help" : "Alapértelmezett rendszer nyelv ehhez a Gebo.ai telepítéshez"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail felhasználónévként a bejelentkezéshez"
+      },
+      "passwordC" : {
+        "label" : "Jelszó megerősítése",
+        "help" : "Jelszó megerősítése"
+      },
+      "password" : {
+        "label" : "Jelszó",
+        "help" : "Jelszó a bejelentkezéshez (legalább 8 karakter)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " a jelszavak nem egyeznek "
+      },
+      "LocalAdmin" : {
+        "label" : "Hozza létre helyi adminisztrátori fiókját"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Ezt a fiókot a jövőben a szoftver beállításához/üzemeltetéséhez fogja használni, ezek az adatok helyben maradnak a rendszerén, és nem kerülnek továbbításra a hálózaton keresztül"
+      },
+      "EnterBtn" : {
+        "label" : "Tovább a bejelentkezési oldalra"
+      },
+      "SetupPage" : {
+        "label" : "Állítsa be a gebo.ai telepítést"
+      },
+      "CreateBtn" : {
+        "label" : "Rendszer beállítása létrehozása"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Licenc elolvasása és elfogadása"
+      },
+      "AcceptMark" : {
+        "label" : "Elfogadom a feltételeket",
+        "help" : "A kijelöléssel elfogadja a licenc feltételeit"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail cím felhasználónévként a bejelentkezéshez"
+      },
+      "password" : {
+        "label" : "Jelszó",
+        "help" : "Jelszó a bejelentkezéshez"
+      },
+      "LoginPanel" : {
+        "label" : "Bejelentkezés a Gebo.ai-hez"
+      },
+      "LoginBtn" : {
+        "label" : "Bejelentkezés"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 konfiguráció"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Szolgáltató neve"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 biztonsági beállítások"
+      },
+      "IdHeader" : {
+        "label" : "Azonosító"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Vissza a beállítások főoldalára"
+      },
+      "WizardUi" : {
+        "label" : "Válasszon egy beállítási részt"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Adminisztrátor és egyéb fiók beállítása",
+        "description" : "Legalább egy rendszergazda fiókra szükség van, hogy ez a Gebo.ai telepítés megfelelően kezelhető legyen, szükség esetén vegyen fel további felhasználókat"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai munkakönyvtár",
+        "description" : "Állítson be egy munkakönyvtárat, ebben a mappában lesznek tárolva az összes konfigurációs és működési fájl. Jó ötlet rendszeresen biztonsági mentést készíteni róla."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektordatabase konfiguráció",
+        "description" : "A Gebo.ai szolgáltatásokhoz konfigurálnia kell egy vektordatabase-t; választhat helyi vektordatabase, Qdrant vagy Mongo Atlas közül"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Egységes bejelentkezés, oauth2 hitelesítés",
+        "description" : "Oauth2 egységes bejelentkezés és oauth2 kliens konfiguráció"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Nagy nyelvi modellek beállítása",
+        "description" : "Állítson be különböző llms-eket felhőalapú vagy helyi/lan infrastruktúrával, legalább egy csevegőmodellt és egy embedding modellt szükséges konfigurálni, hogy a szoftver megfelelően működjön."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graph rag/Tudáskinyerés beállítása",
+        "description" : "Állítsa be a graph rag és tudás-kinyerő alrendszert"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Megosztott fájlrendszer útvonalainak beállítása",
+        "description" : "Konfigurálja a vállalat megosztott fájlrendszereit, hogy különböző tudásbázisok számára elérhetőek legyenek a retrieve augmented generációs dokumentum-területek"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence integráció",
+        "description" : "Állítsa be a Gebo.ai-t az Atlassian Confluence felhő vagy helyszíni telepítés eléréséhez"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira integráció",
+        "description" : "Állítsa be a Gebo.ai-t az Atlassian jira felhő telepítés eléréséhez"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint integráció",
+        "description" : "Állítsa be a Gebo.ai-t a Microsoft Sharepoint felhő vagy helyszíni telepítés eléréséhez"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Legalább egy tudásbázis beállítása",
+        "description" : "Állítson be legalább egy tudásbázist, hogy a felhasználók élvezhessék a retrieve augmented generációs szolgáltatásokat a Gebo.ai-ban"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Legalább egy \"R.A.G.\" chat profil beállítása",
+        "description" : "Állítson be legalább egy retrieve augmented chat profilt felhasználói számára valamelyik beállított tudásbázison alapulva"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Vállalati Atlassian Confluence rendszerek beállítása"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Rendszer típusa"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence rendszer"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira rendszer"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "MainPanel" : {
+        "label" : "Vállalati Atlassian Jira rendszerek beállítása"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Rendszer típusa"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "MainPanel" : {
+        "label" : "Vállalati Microsoft Sharepoint rendszerek beállítása"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Rendszer típusa"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint rendszer"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Adjon meg egy api-kulcsot, amelyen megfelelő kredit áll rendelkezésre. Ha OpenAI-t választja, külön kredit szükséges (10-30$ általában elegendő) a megszokott tervén túl az api használatához, különben ebben az alkalmazásban nem lesz elérhető llms forgalom."
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai llms szolgáltatók elérésének beállítása a saját api kulcsával"
+      },
+      "provider" : {
+        "label" : "Nagy nyelvi modell szolgáltató",
+        "help" : "Válasszon egy szolgáltatót az OpenAI (chatgpt), Google (Gemini), Anthropic (Claude) közül"
+      },
+      "user" : {
+        "label" : "Felhasználó",
+        "help" : "Adja meg az apiKey-hez tartozó felhasználót"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurál"
+      },
+      "apiKey" : {
+        "label" : "Api kulcs",
+        "help" : "A használni kívánt LLMS szolgáltató api kulcsa"
+      },
+      "ProviderHeader" : {
+        "label" : "Szolgáltató"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "ModelHeader" : {
+        "label" : "Modell"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Modell típusa"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Alapértelmezett modell"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Graph rag konfiguráció létrehozása"
+      },
+      "MainPanel" : {
+        "label" : "Graph Rag és tudáskinyerés alapértelmezett konfigurációjának beállítása"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Tudásbázis hozzáadása"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Tudásbázis"
+      },
+      "MainPanel" : {
+        "label" : "Tudásbázisok és tartalom konfigurációk"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Tartalom forrása"
+      },
+      "PublishedHeader" : {
+        "label" : "Publikálva"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Dokumentumok száma"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Projekt/elem hozzáadása",
+        "help" : "új projekt létrehozása"
+      },
+      "Button1" : {
+        "help" : "tudásbázis megnyitása"
+      },
+      "Button2" : {
+        "help" : "projekt űrlap megnyitása"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai munkafiók konfigurációja"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurál"
+      },
+      "workDirectory" : {
+        "label" : "Válasszon mappát a Gebo.ai munkakönyvtárhoz",
+        "help" : "Válasszon egy kiszolgáló mappát, amelyet ez a telepítés munkafiókként használ majd konfigurációk és tartalmak tárolásához."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Mappa hozzáadása"
+      },
+      "AddFolderBtn" : {
+        "label" : "Mappa hozzáadása"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "MainPanel" : {
+        "label" : "Kiszolgáló megosztott fájlrendszer útvonalai"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Abszolút elérési út"
+      },
+      "DeleteHeader" : {
+        "label" : "Törlés"
+      },
+      "path" : {
+        "label" : "Vegyen fel egy megosztott fájlrendszer gyökérmappát",
+        "help" : "Válasszon egy kiszolgáló mappát, amely a vállalat megosztott fájlrendszerének gyökérelérési útja dokumentumtárként használva"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a fájlrendszer elem leírását"
+      },
+      "RemovePathBtn" : {
+        "label" : "Útvonal eltávolítása"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigurál"
+      },
+      "MainPanel" : {
+        "label" : "Vektordatabase konfiguráció"
+      },
+      "host" : {
+        "label" : "Qdrant kiszolgáló",
+        "help" : "Qdrant kiszolgáló neve vagy ip címe"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant kapcsolati beállítások"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant kapcsolat portja (alapértelmezett: 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api kulcs",
+        "help" : "Qdrant hitelesítéshez szükséges api kulcs"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS paraméter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "A Gebo.ai kötelező beállításai készen vannak...",
+        "detail" : "A kötelező lépések befejeződtek, azonban néhány hiányzó lépés megakadályozza, hogy a legtöbbet hozza ki ebből a szoftverből"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "A Gebo.ai beállításból hiányzik egy kötelező lépés",
+        "detail" : "Kérjük, nézze át a beállítási folyamat piros lépéseit"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai beállítás rendben!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kód",
+        "help" : "Adja meg az OAUTH2 hitelesítési/integrációs kód (registrationId) leírását."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg az OAUTH2 hitelesítési/integrációs információk leírását."
+      },
+      "configurationType" : {
+        "label" : "Konfiguráció célja",
+        "help" : "Válassza ki, hogy ezt a beállítást Gebo.ai hitelesítéshez vagy Gebo.ai kliens kapcsolathoz használja egy külső rendszerhez."
+      },
+      "authProvider" : {
+        "label" : "Szolgáltató",
+        "help" : "Adja meg az OAUTH2 hitelesítési szolgáltatót"
+      },
+      "issuerUri" : {
+        "label" : "Kibocsátó URI",
+        "help" : "Adja meg a szolgáltató OAUTH2 kibocsátójának URL-jét"
+      },
+      "authorizationUri" : {
+        "label" : "Engedélyezési URL",
+        "help" : "Adja meg a szolgáltató OAUTH2 engedélyezési URL-jét"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set URI",
+        "help" : "Adja meg a szolgáltató OAUTH2 Jwk Set url-jét"
+      },
+      "userInfoUri" : {
+        "label" : "Felhasználói információk URL-je",
+        "help" : "Adja meg a szolgáltató OAUTH2 felhasználói információk URL-jét"
+      },
+      "introspectionUri" : {
+        "label" : "Introspekciós URI",
+        "help" : "Adja meg a szolgáltató OAUTH2 introspekciós URL-jét"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Adja meg a szolgáltató OAUTH2 Token URL-jét"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 szolgáltató URL-ek"
+      },
+      "MainPanel" : {
+        "label" : "Új OAUTH2 hitelesítési/integrációs információk hozzáadása"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Kliensazonosító",
+        "help" : "Kliensazonosító az oauth2 protokollhoz (az oauth2-höz hitelesített 3. fél szoftver adminisztrációs felületén szerezhető meg)"
+      },
+      "secret" : {
+        "label" : "Titkos kulcs",
+        "help" : "Kliens titkos kulcsa az oauth2 protokollhoz (az oauth2-höz hitelesített 3. fél szoftver adminisztrációs felületén szerezhető meg)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence rendszer konfiguráció létrehozása"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a confluence rendszer leírását."
+      },
+      "CreateBtn" : {
+        "label" : "Létrehozás"
+      },
+      "username" : {
+        "label" : "Confluence felhasználónév",
+        "help" : "Confluence felhasználónév"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence verzió",
+        "help" : "Confluence verzió"
+      },
+      "baseUri" : {
+        "label" : "Alap internetes cím",
+        "help" : "Az onpremise telepítéshez tartozó confluence rendszer alapcímének URL-je vagy a szervezet confluence cloud rendszerének alap URL-je"
+      },
+      "password" : {
+        "label" : "Confluence jelszó",
+        "help" : "Confluence jelszó"
+      },
+      "token" : {
+        "label" : "Confluence cloud api kulcs",
+        "help" : "A confluence backoffice-ban megszerzett Confluence CLOUD apikulcs, ide kell beilleszteni az \"API Token for your Atlassian Account\" értéket."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Mentés és ezek a tartalmak elérhetők lesznek a tudásbázisban az LLm-ek számára"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SettingsTab" : {
+        "label" : "Beállítások"
+      },
+      "MainPanel" : {
+        "label" : "Confluence tartalmak megosztása"
+      },
+      "LogsTab" : {
+        "label" : "Naplók"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tartalmak automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a feltöltött confluence tartalmak leírását."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence rendszer",
+        "help" : "Már beállított confluence rendszer hivatkozás."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozás."
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Zip fájlok megnyitásának és tartalom kinyerésének engedélyezése"
+      },
+      "tree" : {
+        "label" : "Kiválasztott terek vagy oldalak/aldalak",
+        "help" : "Megosztott confluence terek és oldalak tartalmai"
+      },
+      "programmedTables" : {
+        "label" : "Tartalomfrissítések ellenőrzésének ütemezése",
+        "help" : "Állítsd be a változó tartalmak ütemezését, hogy a retrieve augmented generation rendszer naprakész maradjon"
+      },
+      "catalogingCriteria" : {
+        "label" : "Terek, oldalak és aldoldalak szervezési elvei",
+        "help" : "Kérjük, itt fejtsd ki, milyen elvek szerint történt a terek, oldalak és aldoldalak szervezése a Gebo.ai-vel megosztott confluence tartalmakban"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Általános beállítások"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "MainPanel" : {
+        "label" : "Confluence rendszer szerkesztése"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "baseUri" : {
+        "label" : "Alap internetes cím",
+        "help" : "A confluence rendszer alapcímének URL-je"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A confluence rendszer automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a confluence rendszer leírását."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence verzió",
+        "help" : "Confluence verzió"
+      },
+      "secretCode" : {
+        "label" : "Felhasznált azonosító",
+        "help" : "Válassz ki vagy hozz létre azonosítót a confluence rendszer eléréséhez"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "új csoport"
+      },
+      "NewUserBtn" : {
+        "label" : "új felhasználó"
+      },
+      "UsersListPanel" : {
+        "label" : "Felhasználók listája"
+      },
+      "GroupsListPanel" : {
+        "label" : "Csoportok listája"
+      },
+      "SournameHeader" : {
+        "label" : "vezetéknév"
+      },
+      "UsernameHeader" : {
+        "label" : "felhasználónév"
+      },
+      "RolesHeader" : {
+        "label" : "szerepkörök"
+      },
+      "NameHeader" : {
+        "label" : "név"
+      },
+      "EditBtn" : {
+        "label" : "Szerkesztés"
+      },
+      "DisabledHeader" : {
+        "label" : "letiltva"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "UserIds" : {
+        "placeholder" : "Felhasználók kiválasztása"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "MainPanel" : {
+        "label" : "Felhasználói csoport szerkesztése"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a felhasználói csoport leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "Add meg a felhasználói csoport kódját"
+      },
+      "userIds" : {
+        "label" : "Felhasználók listája",
+        "help" : "Válaszd ki a csoportban részt vevő felhasználókat"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Létrehozás"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a jira rendszer leírását."
+      },
+      "MainPanel" : {
+        "label" : "Jira rendszer konfiguráció létrehozása"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "username" : {
+        "label" : "jira felhasználónév",
+        "help" : "jira felhasználónév"
+      },
+      "token" : {
+        "label" : "jira cloud api kulcs",
+        "help" : "jira CLOUD apikulcs, amelyet a jira backoffice-ban szereztél, ide az \"API Token for your Atlassian Account\" kerüljön."
+      },
+      "baseUri" : {
+        "label" : "Alap internetes cím",
+        "help" : "Az on-premise jira rendszer alap URL-je vagy a szervezet jira cloud rendszerének alap URL-je"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Elmenti és elérhetővé teszi ezeket a tartalmakat a tudásbázisban az LLm számára"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SettingsTab" : {
+        "label" : "Beállítások"
+      },
+      "LogsTab" : {
+        "label" : "Naplók"
+      },
+      "MainPanel" : {
+        "label" : "Jira tartalmak megosztása"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tartalmak automatikusan generált egyedi kódja."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira rendszer",
+        "help" : "Már konfigurált jira rendszer hivatkozás."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozás."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a feltöltött jira tartalom leírását."
+      },
+      "programmedTables" : {
+        "label" : "Tartalomfrissítés ütemezése",
+        "help" : "Állítsd be a változott tartalmak frissítésének ütemezését, hogy a keresési rendszer naprakész maradjon"
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Engedélyezi a zip fájlok megnyitását és a tartalom kibontását"
+      },
+      "tree" : {
+        "label" : "Kiválasztott terek vagy oldalak/alkoldalak",
+        "help" : "Megosztott jira projektek és jegyek hierarchia tartalom"
+      },
+      "catalogingCriteria" : {
+        "label" : "Terek, oldalak és alkoldalak rendezési elvei",
+        "help" : "Írd le itt, hogyan lett megszervezve a terek, oldalak és alkoldalak rendszere a Gebo.ai-nal megosztott jira tartalmaknál"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a jira rendszer leírását."
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "MainPanel" : {
+        "label" : "Jira rendszer szerkesztése"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "baseUri" : {
+        "label" : "Alap internetes cím",
+        "help" : "A jira rendszer alap URL-je"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A jira rendszer automatikusan generált egyedi kódja."
+      },
+      "secretCode" : {
+        "label" : "Használt azonosító",
+        "help" : "Válaszd ki vagy hozd létre az azonosítót a jira rendszerhez való hozzáféréshez"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a SharPpoint/OneDrive rendszer leírását."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint verzió",
+        "help" : "sharepoint verzió"
+      },
+      "secret" : {
+        "label" : "Titkos kulcs",
+        "help" : "Oauth2 kliens titkos kulcs ehhez az alkalmazáshoz a microsoft \"entra\" termékben (a microsoft cloud admin konzolból szerezhető be)"
+      },
+      "clientId" : {
+        "label" : "Kliensazonosító",
+        "help" : "Oauth2 kliensazonosító ehhez az alkalmazáshoz a microsoft \"entra\" termékben (a microsoft cloud admin konzolból szerezhető be)"
+      },
+      "tenantId" : {
+        "label" : "Bérlőazonosító",
+        "help" : "Oauth2 bérlőazonosító az Ön szervezetéhez tartozó microsoft \"entra\" termékben (a microsoft cloud admin konzolból szerezhető be)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 alkalmazás regisztrációs adatok Gebo.ai-hoz"
+      },
+      "CreateBtn" : {
+        "label" : "Létrehozás"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive rendszer konfiguráció létrehozása"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Elmenti és elérhetővé teszi ezeket a tartalmakat a tudásbázisban az LLm-ek számára"
+      },
+      "SettingsTab" : {
+        "label" : "Beállítások"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive tartalmak megosztása"
+      },
+      "LogsTab" : {
+        "label" : "Naplók"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "Automatikusan generált egyedi kód a tartalmakhoz."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozás."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a SharePoint/OneDrive bejegyzések adatforrásainak leírását."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint rendszer",
+        "help" : "Már konfigurált SharePoint/OneDrive rendszer hivatkozás."
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Zip fájlok megnyitásának és tartalom kinyerésének engedélyezése"
+      },
+      "tree" : {
+        "label" : "Kiválasztott Sharepoint webhelyek/oldalak/aloldalak vagy OneDrive meghajtók/mappák/fájlok",
+        "help" : "Megosztott sharepoint/OneDrive tartalmak"
+      },
+      "programmedTables" : {
+        "label" : "Tartalomfrissítések ütemezésének ellenőrzése",
+        "help" : "Állítsa be a változott tartalmak ütemezését, hogy a lekérdezést támogató rendszer naprakész maradjon"
+      },
+      "catalogingCriteria" : {
+        "label" : "Terek, oldalak és aloldalak szervezési elvei",
+        "help" : "Írja le, hogyan került sor a terek, oldalak és aloldalak szervezésére a sharepoint tartalmakban, amelyeket Gebo.ai-val osztottak meg"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Sharepoint rendszer szerkesztése"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Általános beállítások"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "secretCode" : {
+        "label" : "Használt azonosító",
+        "help" : "Válassza ki vagy hozzon létre azonosítót a sharepoint rendszerhez való hozzáféréshez"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "Automatikusan generált egyedi kód a sharepoint rendszerhez."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a sharepoint rendszer leírását."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint verzió",
+        "help" : "sharepoint verzió"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Törlés"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Mentés"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Mégse"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Általános információk/tartalmi beállítások"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLm beállítások"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "Automatikusan generált egyedi kód a tudásgráf adatkinyerési szakaszhoz"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/tudáskinyerési konfiguráció"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg ennek a tudásgráf adatkinyerési szakasz konfigurációjának leírását"
+      },
+      "extractionPrompt" : {
+        "label" : "Információ kinyerési prompt",
+        "help" : "Nagy nyelvi modell prompt entitások/események/kapcsolatok és aliasok kinyeréséhez"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM az adatkinyeréshez",
+        "help" : "Adja meg a tudáskinyeréshez használt nagy nyelvi modellt, ha nincs kiválasztva, az alapértelmezett lesz használva."
+      },
+      "graphRagAllSources" : {
+        "label" : "Graph rag alkalmazása minden adatforrásra",
+        "help" : "Ha igaz, minden tudásbázis/projekt/adatforrás feldolgozásra kerül tudáskinyeréshez, különben csak a kifejezetten konfiguráltak."
+      },
+      "defaultModel" : {
+        "label" : "Alapértelmezett nagy nyelvi modell",
+        "help" : "Az alapértelmezett nagy nyelvi modell lesz használva tudáskinyeréshez"
+      },
+      "processEveryDocument" : {
+        "label" : "Graph rag alkalmazása minden fájlra",
+        "help" : "A graph rag algoritmus minden fájlra alkalmazva lesz, ami javítja a rendszer elemzési részletességét, de növeli a feldolgozás költségét és idejét."
+      },
+      "contentSelectionFilter" : {
+        "label" : "Fájl kiválasztási feltételek graphrag feldolgozáshoz",
+        "help" : "Szerkessze a feltételeket a graphrag információkinyerési folyamatba küldendő fájlokra—válasszon legalább egy fájlnevet és feltételt és/vagy fájltípust és/vagy maximális fájlméretet bájtban és/vagy utolsó módosítás korát napokban."
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Fájltípusok kiválasztása"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Fájlnév szűrési feltétel"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Fájl utolsó módosítása, napokban"
+      },
+      "nameFilter" : {
+        "placeholder" : "Fájlnév"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maximális fájlméret bájtban"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Általános információk"
+      },
+      "MainPanel" : {
+        "label" : "Tudásbázis szerkesztése"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Tudásbázis hozzáférési beállításai"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tudásbázis automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Írja be a tudásbázis leírását."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Használt beágyazási modellek (hagyja üresen az alapértelmezett használatához)",
+        "help" : "A tudásbázis beágyazási modelljei, üresen hagyva az alapértelmezett lesz használva."
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "IndexBtn" : {
+        "label" : "Index",
+        "help" : "Tartalom újraindexelése"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Projekt vagy elem szerkesztése"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A projekt automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Írja be a projekt leírását."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "tudásbázis",
+        "help" : "tudásbázis."
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "IndexBtn" : {
+        "label" : "Index",
+        "help" : "Tartalom újraindexelése"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Új elem/projekt hozzáadása",
+        "help" : "új hozzáadása..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Mindenki használja",
+        "help" : "Mindenki használhatja"
+      },
+      "accessibleGroups" : {
+        "label" : "Csoportok listája",
+        "help" : "Válaszd ki az engedélyezett csoportokat"
+      },
+      "accessibleUsers" : {
+        "label" : "Felhasználók listája",
+        "help" : "Válaszd ki az engedélyezett felhasználókat"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Irányítópult"
+      },
+      "LLMSTab" : {
+        "label" : "LLM-ek csevegéshez és beágyazáshoz"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag csevegési profilok/Modell promptok"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Tudásbázisok és projektek"
+      },
+      "UsersGroupTab" : {
+        "label" : "Felhasználók és csoportok"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai modulok konfigurációja"
+      },
+      "LogsTab" : {
+        "label" : "Naplók"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Beállítás"
+      },
+      "ConfigureBtn" : {
+        "label" : "Beállítás"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Új prompt konfiguráció"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Új csevegőprofil"
+      },
+      "MainPanel" : {
+        "label" : "Visszakeresést bővítő generációs csevegőprofilok"
+      },
+      "PromptsPanel" : {
+        "label" : "Promptgyűjtemény és alapértelmezett promtok"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Tudásbázisok"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "ConfigureBtn1" : {
+        "label" : "beállítás"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Új tudásbázis"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Új beágyazási modell konfiguráció"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Új csevegőmodell konfiguráció"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ModelHeader" : {
+        "label" : "Modell "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Modellszolgáltató"
+      },
+      "ConfigureBtn" : {
+        "label" : "beállítás"
+      },
+      "CodeHeader2" : {
+        "label" : "Kód"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Leírás"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Modellszolgáltató"
+      },
+      "ConfigureBtn2" : {
+        "label" : "beállítás"
+      },
+      "ModelHeader2" : {
+        "label" : "Modell "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Konfigurált csevegőmodellek"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Konfigurált beágyazási modellek"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Modell tesztelése"
+      },
+      "TestChatBtn" : {
+        "label" : "Chat tesztelése"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó OpenAI tokent"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI chat modell választása",
+        "help" : "Válaszd ki, melyik OpenAI chat modellel szeretnél dolgozni."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Általános információk"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Speciális beállítások"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI chat modell konfiguráció szerkesztése"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modell elérhetőségi beállításai"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI beágyazási modell konfiguráció szerkesztése"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó OpenAI tokent"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A beágyazási modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a beágyazási modell konfiguráció leírását"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI beágyazási modell választása",
+        "help" : "Válaszd ki, melyik OpenAI beágyazási modellel szeretnél dolgozni."
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett beágyazási modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "baseUrl" : {
+        "label" : "Ollama szerver alapcím",
+        "help" : "Az alapcím (pl. http://szervernev:234/), amelyen az ollama helyi vagy hálózati szerver válaszol."
+      },
+      "choosedModel" : {
+        "label" : "Ollama chat modell választása",
+        "help" : "Válaszd ki, melyik Ollama chat modellel szeretnél dolgozni.",
+        "placeholder" : "Modell kiválasztása"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó Ollama tokent (opcionális)"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "MainPanel" : {
+        "label" : "Ollama helyi (vagy hálózati) szerver chat modell konfiguráció szerkesztése"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó Anthropic tokent"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic chat modell választása",
+        "help" : "Válaszd ki, melyik Anthropic chat modellel szeretnél dolgozni.",
+        "placeholder" : "Modell kiválasztása"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Speciális beállítások"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Általános információk"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modell elérhetőségi beállításai"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic chat modell konfiguráció szerkesztése"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó MistralAI tokent"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI chat modell választása",
+        "help" : "Válaszd ki, melyik MistralAI chat modellel szeretnél dolgozni."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Általános információk"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Speciális beállítások"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modell elérhetőségi beállításai"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI chat modell konfiguráció szerkesztése"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI chat modell választása",
+        "help" : "Válaszd ki, melyik Google Vertex AI chat modellel szeretnél dolgozni."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó Google Vertex AI tokent"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Általános információk"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Modell elérhetőségi beállításai"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Speciális beállítások"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI chat modell konfiguráció szerkesztése"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó Deepseek tokent"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek chat modell választása",
+        "help" : "Válaszd ki, melyik Deepseek chat modellel szeretnél dolgozni.",
+        "placeholder" : "Modell kiválasztása"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Speciális beállítások"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Általános információk"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek chat modell konfiguráció szerkesztése"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modell elérhetőségi beállításai"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a modell konfiguráció leírását"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "baseUrl" : {
+        "label" : "Chat modell API kiszolgáló alapcíme",
+        "help" : "A chat modell kiszolgáló alapcíme."
+      },
+      "apiSecretCode" : {
+        "label" : "Chat modell API token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó chat modell API tokent (opcionális)"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett chat modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett chat modelként használni, ahol nincs megadva chat modell"
+      },
+      "choosedModel" : {
+        "label" : "Chat modell chat modell választása",
+        "help" : "Válaszd ki, melyik chat modellel szeretnél dolgozni."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Általános információk"
+      },
+      "TitleFragment" : {
+        "label" : "Chat modell szolgáltató szerkesztése:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Speciális beállítások"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modell elérhetőségi beállításai"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a beágyazási modell konfiguráció leírását"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "MainPanel" : {
+        "label" : "Ollama helyi (vagy hálózati) beágyazási modell konfiguráció szerkesztése"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó Ollama tokent"
+      },
+      "choosedModel" : {
+        "label" : "Ollama beágyazási modell választása",
+        "help" : "Válaszd ki, melyik Ollama beágyazási modellel szeretnél dolgozni."
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A beágyazási modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett beágyazási modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      },
+      "baseUrl" : {
+        "label" : "Ollama szerver alapcím",
+        "help" : "Az alapcím (pl. http://szervernev:234/), amelyen az ollama helyi vagy hálózati szerver válaszol."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a beágyazási modell konfiguráció leírását"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI beágyazási modell konfiguráció szerkesztése"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A beágyazási modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI beágyazási modell választása",
+        "help" : "Válaszd ki, melyik MistralAI beágyazási modellel szeretnél dolgozni."
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett beágyazási modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó MistralAI tokent"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI beágyazási modell konfiguráció szerkesztése"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a beágyazási modell konfiguráció leírását"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI beágyazási modell választása",
+        "help" : "Válaszd ki, melyik Google Vertex AI beágyazási modellel szeretnél dolgozni."
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett beágyazási modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A beágyazási modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó Google Vertex AI tokent"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "TitleFragment" : {
+        "label" : "Beágyazási modell szolgáltató szerkesztése:"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a beágyazási modell konfiguráció leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A beágyazási modell konfiguráció automatikusan generált egyedi kódja"
+      },
+      "choosedModel" : {
+        "label" : "Beágyazási modell beágyazási modell választása",
+        "help" : "Válaszd ki, melyik beágyazási modellel szeretnél dolgozni."
+      },
+      "baseUrl" : {
+        "label" : "Beágyazási modell API szerver címe",
+        "help" : "A beágyazási modell kiszolgáló alapcíme."
+      },
+      "defaultModel" : {
+        "label" : "állítsd be alapértelmezett beágyazási modellként",
+        "help" : "Ha igaz, ezt fogja alapértelmezett beágyazási modelként használni, ahol nincs megadva beágyazási modell"
+      },
+      "apiSecretCode" : {
+        "label" : "Beágyazási modell API token",
+        "help" : "Válaszd ki az ehhez a modellhez használandó beágyazási modell API tokent"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Chat konfigurációs adatok"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Ez a beszélgetés törlése"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Beszélgetés átnevezése"
+      },
+      "QueryControl" : {
+        "placeholder" : "Írjon üzenetet a csevegőrobotnak"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "description" : {
+        "label" : "Csevegés leírása",
+        "help" : "Adja meg a beszélgetés leírását."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Használt modell",
+        "help" : "Modellkód"
+      },
+      "providerId" : {
+        "label" : "Chat modell szolgáltató",
+        "help" : "LLms szolgáltató meghajtó"
+      },
+      "functions" : {
+        "label" : "Chat modell által hívható funkciók",
+        "help" : "A chat modell számára elérhető funkciók listája"
+      },
+      "NameCol" : {
+        "label" : "Név"
+      },
+      "DescriptionCol" : {
+        "label" : "Leírás"
+      },
+      "kbases" : {
+        "label" : "Elérhető tudásbázisok",
+        "help" : "Ebben a RAG chatben használt tudásbázisok listája"
+      },
+      "CloseBtn" : {
+        "help" : "Bezárás"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Felvétel",
+        "help" : "Hangfelvétel indítása és elküldése"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "adatok frissítése"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SelectHeader" : {
+        "label" : "Kiválasztás"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "befejezési dátum/idő"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "kezdési dátum/idő"
+      },
+      "ProcessingHeader" : {
+        "label" : "feldolgozás"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "FinishedHeader" : {
+        "label" : "befejezett"
+      },
+      "WithErrorHeader" : {
+        "label" : "hibával"
+      },
+      "LogTableComponent" : {
+        "help" : "Ez a megosztott fájlrendszer terület betöltési naplója"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Folyamatstatisztikák"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "CloseBtn" : {
+        "label" : "Bezárás"
+      },
+      "PublicationLogTab" : {
+        "label" : "Kiadási napló"
+      },
+      "MainPanel" : {
+        "label" : "Kiadási napló"
+      },
+      "actualStatus" : {
+        "label" : "Állapot",
+        "help" : "A feladat állapota: folyamatban, befejezett vagy hibával befejezett."
+      },
+      "publishingSystem" : {
+        "label" : "Közzétett tartalom konfigurációja",
+        "help" : "Közzétett tartalom információi"
+      },
+      "startDateTime" : {
+        "label" : "Kezdési dátum/idő",
+        "help" : "A tartalomszinkronizációs feladat kezdési dátuma és ideje"
+      },
+      "endDateTime" : {
+        "label" : "Befejezési dátum/idő",
+        "help" : "A tartalomszinkronizációs feladat befejezési dátuma és ideje"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Nem teljesen feldolgozva"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Teljesen feldolgozva"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "beágyazás a dokumentumok teljes számához viszonyítva"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "További részletek"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Prompt generálása"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Prompt varázsló",
+        "help" : "Használd ezt, hogy egy LLM generálja a promptot a céljaidhoz"
+      },
+      "acceptPrompt" : {
+        "label" : "Prompt elfogadása"
+      },
+      "promptWizardUI" : {
+        "label" : "Prompt sablon generáló varázsló"
+      },
+      "cancel" : {
+        "label" : "Mégse"
+      },
+      "response" : {
+        "label" : "Javasolt prompt sablon",
+        "help" : "A célodhoz generált sablon szöveg (módosíthatod vagy javíthatod)"
+      },
+      "modelCode" : {
+        "label" : "Használandó csevegőmodell",
+        "help" : "Válaszd ki, melyik csevegőmodellt kérdezd meg a prompt sablon generálására"
+      },
+      "query" : {
+        "label" : "Prompt sablon kérése",
+        "help" : "Add meg második személyben, mi az a cél, amiben az AI támogatja a felhasználót"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Hőmérséklet",
+        "help" : "A modell válaszadási hőmérséklete 0 és 1 között (ha nem biztos, hagyja üresen)"
+      },
+      "contextLength" : {
+        "label" : "Kontextus hossza (tokenek)",
+        "help" : "Az a szövegmennyiség, amelyet az AI modell feldolgozáskor figyelembe tud venni (ha nincs megadva, az alapértelmezett 1047576 lesz használva)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP paraméter, 0 és 1 között (ha nem biztos, hagyja üresen)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Engedélyezett funkcióhívások ehhez a modellhez",
+        "help" : "Azok a funkciók, amelyeket a modell a csevegés során használhat"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Alapértelmezett modell prompt",
+        "help" : "Szerkeszd a chat modell alapértelmezett promptját."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg az identitás leírását."
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "Az identitás automatikusan generált egyedi kódja."
+      },
+      "secretType" : {
+        "label" : "Identitás típusa",
+        "help" : "Válassza ki a távoli rendszerhez létrehozandó identitás típusát"
+      },
+      "InsertBtn" : {
+        "label" : "Hozzáadás"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Adja meg a tokent."
+      },
+      "user" : {
+        "label" : "Felhasználó",
+        "help" : "Adja meg a token által jelzett felhasználót."
+      },
+      "MainPanel" : {
+        "label" : "Identitás létrehozása"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "username" : {
+        "label" : "Felhasználónév",
+        "help" : "Adja meg a felhasználónevet."
+      },
+      "password" : {
+        "label" : "Jelszó",
+        "help" : "Adja meg a jelszót."
+      },
+      "email" : {
+        "label" : "E-mail/Felhasználónév",
+        "help" : "Adja meg az SSH kulcshoz tartozó e-mail címet vagy felhasználónevet."
+      },
+      "key" : {
+        "label" : "Titkos kulcs",
+        "help" : "Nyissa meg a privát kulcs fájlt és másolja be ebbe a mezőbe."
+      },
+      "passphrase" : {
+        "label" : "Kulcs jelszava",
+        "help" : "Adja meg a kulcs jelszavát."
+      },
+      "pub" : {
+        "label" : "Nyilvános kulcs",
+        "help" : "Nyissa meg a nyilvános kulcs fájlt és másolja be ebbe a mezőbe."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tartalom automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a feltöltött fájlrendszeri tartalom leírását."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozása."
+      },
+      "upload" : {
+        "label" : "Tartalom feltöltése",
+        "help" : "Kattints a böngészés gombra és válassz zip vagy más fájlokat"
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Zip fájlok megnyitásának és tartalom kicsomagolásának engedélyezése"
+      },
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Elmenti, és elérhetővé teszi ezeket a tartalmakat a tudásbázisban az LLm-ek számára"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "LogsTab" : {
+        "label" : "Naplók"
+      },
+      "MainPanel" : {
+        "label" : "Feltöltött tartalom szerkesztése"
+      },
+      "SettingsTab" : {
+        "label" : "Beállítások"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Build rendszerek konfigurálása",
+        "help" : "Azoknak a build/csomagoló rendszereknek a listája, melyeket metaadatok és további artefakt információk keresésére használhatsz (hagyd üresen, ha nem tartalmaz szoftverkódot)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Kiválasztott elemek"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Mégse"
+      },
+      "EditBtn" : {
+        "help" : "Kijelölt módosítása"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Elemek kiválasztása"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Elemek kiválasztása"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Ütemezés szerkesztése"
+      },
+      "ConfirmBtn" : {
+        "label" : "Megerősítés"
+      },
+      "AddBtn" : {
+        "label" : "+Hozzáadás"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Mentés és az LLM-ek tudásbázisában elérhető tartalmak biztosítása"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SettingsTab" : {
+        "label" : "Beállítások"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Forráskód kezelése"
+      },
+      "LogsTab" : {
+        "label" : "Naplók"
+      },
+      "MainPanel" : {
+        "label" : "Meglévő fájlrendszer tartalom szerkesztése"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Írja be a feltöltött fájlrendszer tartalom leírását."
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Zip fájlok megnyitásának és tartalom kibontásának engedélyezése"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tartalom automatikusan generált egyedi kódja."
+      },
+      "tree" : {
+        "label" : "Kiválasztott fájlok vagy mappák",
+        "help" : "A szerveren elérhető megosztott fájlrendszer fájlok vagy könyvtárak"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozás."
+      },
+      "programmedTables" : {
+        "label" : "Tartalom frissítések ütemezése",
+        "help" : "Állítsa be a módosított tartalmak ütemezését a lekérdezés-kiegészítő generáló rendszer naprakészen tartásához"
+      },
+      "catalogingCriteria" : {
+        "label" : "Mappák szervezésének szempontjai",
+        "help" : "Írja le itt, hogyan történt a mappák szervezése abban a fájlrendszer területen, amit megoszt a Gebo.ai-jal"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Build rendszerek beállítása",
+        "help" : "Az ellenőrizendő build/csomagoló rendszerek listája metaadatokhoz és további artefaktum információkhoz (hagyja üresen, ha nincs szoftverkód)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Új megosztott terület"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Abszolút elérési út"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db vagy yml fájl beállítás"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ModifyHeader" : {
+        "label" : "Módosítás"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Kiválasztott megosztott fájlrendszer mappa",
+        "help" : "Válasszon egy szerver mappát, amely a megosztott fájlrendszer gyökérútvonala a szervezet dokumentumtárához"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Írja be a szervezet megosztott fájlrendszerének leírását"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tartalom automatikusan generált egyedi kódja."
+      },
+      "InsertBtn" : {
+        "label" : "Beszúrás"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "MainPanel" : {
+        "label" : "Szerver megosztott mappa szerkesztése"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Mentés és a tartalom elérhetővé tétele a tudásbázisban a LLm-ek számára"
+      },
+      "MainPanel" : {
+        "label" : "Git forrás/dokumentációs tár szerkesztése"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a git tároló leírását."
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A git tároló automatikusan generált egyedi kódja."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozás."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git rendszer",
+        "help" : "Már beállított git rendszer hivatkozás."
+      },
+      "branch" : {
+        "label" : "Ág",
+        "help" : "Kicsekkolni kívánt ág neve (általában master, main vagy develop)"
+      },
+      "identityCode" : {
+        "label" : "Használt identitás",
+        "help" : "Válassza ki, melyik identitással történjen a klónozás/kicsekkolás a rendszeren"
+      },
+      "repositoryUri" : {
+        "label" : "Tároló url/cím",
+        "help" : "A git távoli tár teljes címe (általában http:, https: vagy ssh: kezdetű)"
+      },
+      "publicAccess" : {
+        "label" : "nyilvános",
+        "help" : "Ha igaz, a tár eléréséhez nem szükséges hitelesítés"
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Zip fájlok megnyitásának és tartalom kinyerésének engedélyezése"
+      },
+      "programmedTables" : {
+        "label" : "Tartalomfrissítés ütemezése",
+        "help" : "A módosított tartalmak ütemezésének beállítása, hogy a kibővített generálási rendszer naprakész legyen"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Build rendszerek beállítása",
+        "help" : "Az ellenőrizendő build/csomagoló rendszerek listája metaadatok és további artefaktum információk lekérdezéséhez"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Általános adatok"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Csevegőmodell használata"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "választás"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Válasszon csevegőmodell konfigurációt"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Válasszon beágyazási modell konfigurációt"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "választás"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG beállítások"
+      },
+      "LanguageModelTab" : {
+        "label" : "Nagy nyelvi modell és használható eszközök beállításai"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Beágyazási modell használata"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Biztonsági hozzáférési beállítások"
+      },
+      "MainPanel" : {
+        "label" : "Retrieve Augmented Generation chat profil szerkesztése"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A chat profil automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a chat profil leírását."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "A felhasználó választ tudásbázist",
+        "help" : "A felhasználó választhat az elérhető tudásbázisok közül és/vagy feltöltheti a saját fájljait."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Tudásbázisok",
+        "help" : "A dokumentumkereséshez használt tudásbázisok."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Hasonlósági küszöbérték",
+        "help" : "A szemantikus keresés hasonlósági küszöbértéke, 0,60–0,65 Alacsony szűrés, 0,70–0,75 Közepes szűrés, 0,80–0,85 Pontos"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2. 'ugrás' hasonlósági küszöbértéke",
+        "help" : "A szemantikus keresés hasonlósági küszöbértéke, 0,60–0,65 Alacsony szűrés, 0,70–0,75 Közepes szűrés, 0,80–0,85 Pontos – a többugrásos rag második keresésétől használva"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'Többugrásos' rag letiltása",
+        "help" : "A 'többugrásos rag' funkció letiltása. A többugrásos keresés először egy szemantikus keresést hajt végre, majd a talált dokumentumokat használja fel a további szemantikus keresés kontextusaként, nagyobb kontextust biztosítva."
+      },
+      "topK" : {
+        "label" : "Figyelembe vett dokumentumrészletek (TopK)",
+        "help" : "A retrieve augmented generation során a szemantikus keresésben megtalált Top N dokumentumrészlet"
+      },
+      "enabledFunctions" : {
+        "label" : "Engedélyezett funkcióhívások ehhez a RAG chathez",
+        "help" : "Azokat a funkciókat tartalmazza, amelyeket az llm modell használhat a felhasználóval folytatott csevegés során, az adott tudásbázissal közösen"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Szerkessze a retrieve augmented generation folyamat promtját."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Add meg vagy válaszd ki a prompt kategóriát"
+      },
+      "MainPanel" : {
+        "label" : "Prompt szerkesztése"
+      },
+      "promptCategory" : {
+        "label" : "Prompt kategória",
+        "help" : "Válaszd ki vagy add meg a prompt kategóriát."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Szerkeszd a chat promptját, a {query} helyre kerül a felhasználó kérdése, a {context} helyre pedig a dokumentumok/előzmények szövege az LLM-nek."
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A prompt automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a prompt rövid leírását."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Jelszó megváltoztatása"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Régi jelszó",
+        "help" : "Jelenlegi jelszó a bejelentkezéshez"
+      },
+      "newPassword" : {
+        "label" : "Új jelszó",
+        "help" : "új jelszó"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail mint felhasználónév a bejelentkezéshez"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Jelszócsere űrlap"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "ChangePwdBtn" : {
+        "label" : "jelszó megváltoztatása"
+      },
+      "newPassword1" : {
+        "label" : "Új jelszó megerősítése",
+        "help" : "Új jelszó megerősítése"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "ForMoreInformations" : {
+        "label" : "További információkért a Google egyéni kereső API-ról vagy az ingyenes API kulcs beszerzéséről látogass el ide: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A Google kereső API konfiguráció egyedi kódja."
+      },
+      "MainPanel" : {
+        "label" : "Google egyéni kereső API hitelesítő adatainak szerkesztése"
+      },
+      "secretCode" : {
+        "label" : "Google kereső API token",
+        "help" : "Válaszd ki vagy írd be a Google kereső API tokent"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google keresőmotor azonosító",
+        "help" : "Google keresőmotor azonosító"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Add meg a Google kereső API konfigurációjának leírását."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Csevegés tudásbázisok nélkül",
+        "help" : "Válassz LLM-et egy csevegéshez",
+        "placeholder" : "Válassz LLM-et egy csevegéshez"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Csevegési beállítások megnyitása"
+      },
+      "CreateChatBtn" : {
+        "label" : "Új csevegés"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Új csevegési munkamenet"
+      },
+      "chatProfileCode" : {
+        "label" : "Csevegés tudásbázisokkal",
+        "help" : "Válaszd ki a vállalati csevegési profilt a céges (és saját) dokumentumokhoz és LLM-ekhez",
+        "placeholder" : "Válaszd ki a vállalati csevegési profilt a céges (és saját) dokumentumokhoz és LLM-ekhez"
+      },
+      "NewChatBtn" : {
+        "label" : "Új csevegés"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Csevegés a dokumentumokkal",
+        "help" : "Böngésszen vagy keressen, és válassza ki a kívánt dokumentumokat"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Válassza ki a dokumentumokat a csevegéshez"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Megerősítés"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Dokumentumok feltöltése vagy kiválasztása",
+        "help" : "Válasszon vagy töltsön fel dokumentumokat a saját tárhelyéről"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Kijelöltek módosítása"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Felhasználói fájlok kiválasztása"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Mégse"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Felhasználó által feltöltött tartalom kiválasztása"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Tudásbázisok és felhasználói fájlok"
+      }
+    }
+  }
+}
