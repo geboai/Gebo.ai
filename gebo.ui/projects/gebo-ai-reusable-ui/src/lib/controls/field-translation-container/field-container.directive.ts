@@ -10,9 +10,10 @@ import { merge, startWith } from 'rxjs';
 export class GeboAIFieldContainerDirective implements AfterContentInit {
     constructor(
         private el: ElementRef<HTMLElement>,
-        private ngControl: NgControl,
+
         private renderer: Renderer2,
-        @Optional() @Inject(GeboAIFieldContainerComponent) private wrapper: GeboAIFieldContainerComponent | null
+        @Optional() @Inject(GeboAIFieldContainerComponent) private wrapper: GeboAIFieldContainerComponent | null,
+        @Optional() private ngControl?: NgControl
     ) { }
 
     ngAfterContentInit(): void {
@@ -33,30 +34,32 @@ export class GeboAIFieldContainerDirective implements AfterContentInit {
         if (this.wrapper.placeholder) {
             this.renderer.setAttribute(this.el.nativeElement, "placeholder", this.wrapper.placeholder);
         }
-        const ctrl = this.ngControl.control;
-        if (ctrl) {
-            const hasRequired = typeof (ctrl as any).hasValidator === 'function'
-                ? (ctrl as any).hasValidator(Validators.required)
-                : false;
+        if (this.ngControl) {
+            const ctrl = this.ngControl.control;
+            if (ctrl) {
+                const hasRequired = typeof (ctrl as any).hasValidator === 'function'
+                    ? (ctrl as any).hasValidator(Validators.required)
+                    : false;
 
-            this.wrapper.setRequiredFromControl(hasRequired);
-            if (this.wrapper.computedRequired) {
-                this.renderer.setAttribute(this.el.nativeElement, 'required', '');
-                this.renderer.setAttribute(this.el.nativeElement, 'aria-required', 'true');
-            }
-            const updateInvalidState = () => {
-                const invalid = ctrl.invalid && (ctrl.dirty || ctrl.touched);
-                if (invalid) {
-                    this.renderer.addClass(this.el.nativeElement, 'gebo-ai-invalid-underline');
-                    this.renderer.setAttribute(this.el.nativeElement, 'aria-invalid', 'true');
-                } else {
-                    this.renderer.removeClass(this.el.nativeElement, 'gebo-ai-invalid-underline');
-                    this.renderer.removeAttribute(this.el.nativeElement, 'aria-invalid');
+                this.wrapper.setRequiredFromControl(hasRequired);
+                if (this.wrapper.computedRequired) {
+                    this.renderer.setAttribute(this.el.nativeElement, 'required', '');
+                    this.renderer.setAttribute(this.el.nativeElement, 'aria-required', 'true');
                 }
-            };
+                const updateInvalidState = () => {
+                    const invalid = ctrl.invalid && (ctrl.dirty || ctrl.touched);
+                    if (invalid) {
+                        this.renderer.addClass(this.el.nativeElement, 'gebo-ai-invalid-underline');
+                        this.renderer.setAttribute(this.el.nativeElement, 'aria-invalid', 'true');
+                    } else {
+                        this.renderer.removeClass(this.el.nativeElement, 'gebo-ai-invalid-underline');
+                        this.renderer.removeAttribute(this.el.nativeElement, 'aria-invalid');
+                    }
+                };
 
-            // iniziale + on changes
-            merge(ctrl.statusChanges!, ctrl.valueChanges!).pipe(startWith(null)).subscribe(updateInvalidState);
+                // iniziale + on changes
+                merge(ctrl.statusChanges!, ctrl.valueChanges!).pipe(startWith(null)).subscribe(updateInvalidState);
+            }
         }
     }
 }

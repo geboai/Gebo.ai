@@ -17,6 +17,9 @@ import { BaseWizardSectionComponent } from "./base-wizard-section.component";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
 import { MenuItem, ToastMessageOptions, MessageService } from "primeng/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
+import { map, Observable, of, Subscription } from "rxjs";
+import { findMatchingTranlations, UIExistingText } from "../controls/field-translation-container/text-language-resources";
 /**
  * AI generated comments
  * This module provides a setup wizard panel component for guiding users through a multi-step setup process
@@ -32,7 +35,8 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../c
 function filterNotContained<T>(v1: T[], v2: T[]): T[] {
     return v1?.filter(c => v2.find(x => x === c));
 }
-
+const moduleId: string = "SetupWizardPanelModule";
+const fieldHostId: string = "SetupWizardPanelComponent";
 /**
  * Component that renders a wizard panel to guide users through a sequence of setup steps.
  * This component manages the navigation, state, and validation of a multi-step setup process.
@@ -87,32 +91,101 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     constructor(
         private setupWizardService: SetupWizardService,
         private setupWizardComunicationService: SetupWizardComunicationService,
+        private geboLanguageService: GeboAITranslationService,
         private messagesService: MessageService) {
     }
-
+    private actualLanguage(items: SetupWizardItem[]): Observable<SetupWizardItem[] | undefined> {
+        const texts: UIExistingText[] = [];
+        items.forEach(item => {
+            if (item.wizardSectionId)
+                texts.push({
+                    moduleId: "SetupWizardPanelModule",
+                    componentId: item.wizardSectionId,
+                    entityId: "SetupWizardPanelComponent",
+                    fieldId: "label",
+                    key: "label",
+                    text: item.label
+                });
+            texts.push({
+                moduleId: "SetupWizardPanelModule",
+                componentId: item.wizardSectionId,
+                entityId: "SetupWizardPanelComponent",
+                fieldId: "description",
+                key: "description",
+                text: item.description
+            });
+        });
+        return this.geboLanguageService.translateOnActualLanguage(texts).pipe(map(resources => {
+            const outVector: SetupWizardItem[] = [];
+            items.forEach(x => {
+                outVector.push({ ...x });
+            });
+            if (resources) {
+                const found = findMatchingTranlations(texts, resources);
+                if (found && found.length) {
+                    outVector.forEach(setupItem => {
+                        found.filter(entry => entry.componentId === setupItem.wizardSectionId)?.forEach(item => {
+                            if (item.translation) {
+                                (setupItem as any)[item.fieldId] = item.translation;
+                            }
+                        });
+                    });
+                }
+            }
+            return outVector;
+        }));
+    }
+    private subscription?: Subscription;
     /**
      * Reloads the current setup status from the service and updates the UI accordingly.
      * Sets appropriate messages based on completion status.
      */
     public reloadStatus(): void {
         this.loading = true;
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = undefined;
+        }
         this.setupWizardService.getActualStatus().subscribe({
             next: (values) => {
                 this.wizardsEntries = values;
+                this.subscription = this.actualLanguage(this.wizardsEntries).subscribe({
+                    next: (entries) => {
+                        if (entries) {
+                            this.wizardsEntries = entries;
+                        }
+                    }
+                });
                 this.actualSetupStatus = this.setupWizardService.calculateSetupStatus(this.wizardsEntries);
                 this.setupStatusRefresh.emit(this.actualSetupStatus);
+                let messageObservable: Observable<ToastMessageOptions | undefined> | undefined = undefined;
+                const completeMessage: ToastMessageOptions = { summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" };
+                const completeMessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId + "-mandatory-done", completeMessage);
+                const incompleteMessage: ToastMessageOptions = { summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" };
+                const incompletemessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId + "-mandatory-missing", incompleteMessage);
+                const okMessage: ToastMessageOptions = { summary: "Gebo.ai setup OK!", detail: "", severity: "success" };
+                const okmessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId + "-setup-ok", okMessage);
                 this.viewSelectedStep(this.stepId);
                 switch (this.actualSetupStatus) {
                     case "complete": {
-                        this.userMessages = [{ summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" }];
+                        messageObservable = completeMessageObservable;
+
                     } break;
                     case "incomplete": {
-                        this.userMessages = [{ summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" }];
+                        messageObservable = incompletemessageObservable;
+
                     } break;
                     case "full": {
-                        this.userMessages = [{ summary: "Gebo.ai setup OK!", detail: "", severity: "success" }];
+                        messageObservable = okmessageObservable;
+
                     } break;
                 }
+                if (messageObservable)
+                    this.subscription = messageObservable.subscribe({
+                        next: (message) => {
+                            this.userMessages = message ? [message] : [];
+                        }
+                    });
             },
             complete: () => {
                 this.loading = false;

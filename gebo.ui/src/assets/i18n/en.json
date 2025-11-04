@@ -53,6 +53,12 @@
             "password": {
                 "label": "Password",
                 "help": "Password to login"
+            },
+            "LoginPanel": {
+                "label": "Login to gebo.ai"
+            },
+            "LoginBtn": {
+                "label": "Login"
             }
         }
     },
@@ -80,6 +86,54 @@
             },
             "WizardUi": {
                 "label": "Choose a setup section"
+            },
+            "adminUserSetupSection": {
+                "label": "Administrator & others account setup",
+                "description": "At least an administration account is required to grant that this gebo.ai installation is properly managed, add other users if necessary"
+            },
+            "geboWorkDirectorySetupSection": {
+                "label": "Gebo.ai work directory",
+                "description": "Configure a work directory, it will be the folder where configurations and all working files of this installation will be stored. It's also a great idea to backup it periodically."
+            },
+            "VectorStoreSetupSection": {
+                "label": "Vector database configuration",
+                "description": "A vector database have to be configured for Gebo.ai to provide retrieve augmented generation services, you can choose between a local vector database, Qdrant or Mongo Atlas"
+            },
+            "oauth2SetupSection": {
+                "label": "Single signon, oauth2 authentication",
+                "description": "Oauth2 single signon authentication and oauth2 clients configuration"
+            },
+            "adminLLMSSetupSection": {
+                "label": "Large language models setup",
+                "description": "Configure various llms with cloud or local/lan infrastructure backend services, at least one chat model and one embedding models are to be configured to let the software work properly."
+            },
+            "graphRagBaseSetupSection": {
+                "label": "Graph rag/Knowledge extraction stup",
+                "description": "Configure graph rag and knowledge extraction subsystem"
+            },
+            "sharedFileSystemSetupSection": {
+                "label": "Shared filesystems paths setup",
+                "description": "Configure the company shared filesystems paths to be used as retrieve augmented generation documents area in various knowledge bases"
+            },
+            "atlassianConfluenceSystemSetupSection": {
+                "label": "Atlassian confluence integration",
+                "description": "Configure Gebo.ai to access your Atlassian Confluence cloud or on premise installations"
+            },
+            "atlassianJiraSystemSetupSection": {
+                "label": "Atlassian jira integration",
+                "description": "Configure Gebo.ai to access your Atlassian jira cloud installations"
+            },
+            "microsoftSharepointSystemSetupSection": {
+                "label": "Microsoft Sharepoint integration",
+                "description": "Configure Gebo.ai to access your Microsoft Sharepoint cloud or on premise installations"
+            },
+            "firstKnowledgeBaseSetupSection": {
+                "label": "Configure at least a knowledge base",
+                "description": "Configure at least a knowledge base to let your users enjoy the retrieve augmented generations services of Gebo.ai"
+            },
+            "firstChatProfileBaseSetupSection": {
+                "label": "Configure at least a \"R.A.G.\" chat profile",
+                "description": "Configure at least a retrieve augmented chat profile for your users based on one of your configured knowledge bases"
             }
         },
         "ConfluenceWizardComponent": {
@@ -154,6 +208,21 @@
             "apiKey": {
                 "label": "Api key",
                 "help": "Your api key of the LLMS providers to be used"
+            },
+            "ProviderHeader": {
+                "label": "Provider"
+            },
+            "ConfigurationCodeHeader": {
+                "label": "Configuration code"
+            },
+            "ModelHeader": {
+                "label": "Model"
+            },
+            "ModelTypeHeader": {
+                "label": "Model type"
+            },
+            "DefaultModelHeader": {
+                "label": "Default model"
             }
         },
         "GraphRagWizardComponent": {
@@ -213,6 +282,80 @@
             "workDirectory": {
                 "label": "Choose a folder as Gebo.ai work directory",
                 "help": "Choose a server folder that this installation will use as work folder for its configurations and contents storage."
+            }
+        },
+        "SharedFilesystemWizardComponent": {
+            "AddFolderBtn2": {
+                "label": "Add folder"
+            },
+            "AddFolderBtn": {
+                "label": "Add folder"
+            },
+            "CodeHeader": {
+                "label": "Code"
+            },
+            "MainPanel": {
+                "label": "Server shared filesystem paths"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
+            },
+            "AbsolutePathHeader": {
+                "label": "Absolute path"
+            },
+            "DeleteHeader": {
+                "label": "Delete"
+            },
+            "path": {
+                "label": "Add a root folder of a shared filesystem",
+                "help": "Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter filesystem entry description"
+            },
+            "RemovePathBtn": {
+                "label": "Remove path"
+            }
+        },
+        "VectorStoreWizardComponent": {
+            "ConfigureBtn": {
+                "label": "Configure"
+            },
+            "MainPanel": {
+                "label": "Vector database configuration"
+            },
+            "host": {
+                "label": "Qdrant host",
+                "help": "Qdrant host name or ip address"
+            },
+            "QdrantConnectionFieldset": {
+                "label": "Qdrant connection settings"
+            },
+            "port": {
+                "label": "Qdrant port",
+                "help": "Qdrant comunication port (6334 is the standard)"
+            },
+            "apiKey": {
+                "label": "Qdrant api key",
+                "help": "Api key for Qdrant authentication"
+            },
+            "tls": {
+                "label": "Qdrant TLS parameter",
+                "help": "TLS"
+            }
+        },
+        "message": {
+            "SetupWizardPanelComponent-mandatory-done": {
+                "summary": "Gebo.ai setup mandatory steps done...",
+                "detail": "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software"
+            },
+            "SetupWizardPanelComponent-mandatory-missing": {
+                "summary": "Gebo.ai setup is missing some mandatory step",
+                "detail": "Please review the red steps of the setup process"
+            },
+            "SetupWizardPanelComponent-setup-ok": {
+                "summary": "Gebo.ai setup OK!"
             }
         }
     },
@@ -998,6 +1141,12 @@
             },
             "ModelHeader2": {
                 "label": "Model "
+            },
+            "ChatmodelsZone": {
+                "label": "Configured chat models"
+            },
+            "EmneddingModelsZone": {
+                "label": "Configured embedding models"
             }
         }
     },
@@ -1502,6 +1651,9 @@
             },
             "chatNameChangeBtn": {
                 "help": "Rename the chat session"
+            },
+            "QueryControl": {
+                "placeholder": "Write a message for the chat bot"
             }
         },
         "ChangeDescriptionComponent": {
@@ -1534,6 +1686,13 @@
             },
             "DescriptionCol": {
                 "label": "Description"
+            },
+            "kbases": {
+                "label": "Available knowledge bases",
+                "help": "List of knowledge bases used in this RAG chat"
+            },
+            "CloseBtn": {
+                "help": "Close"
             }
         }
     },
@@ -1579,6 +1738,45 @@
             },
             "LogTableComponent": {
                 "help": "This shared filesystem area ingestion log"
+            }
+        },
+        "GJobStatus": {
+            "ProcessesStatsTab": {
+                "label": "Processes stats"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "CloseBtn": {
+                "label": "Close"
+            },
+            "PublicationLogTab": {
+                "label": "Publication log"
+            },
+            "MainPanel": {
+                "label": "Publishing log"
+            },
+            "actualStatus": {
+                "label": "Status",
+                "help": "Status of the task, still running, finished or finished with errors."
+            },
+            "publishingSystem": {
+                "label": "Published content configuration",
+                "help": "Published content info"
+            },
+            "startDateTime": {
+                "label": "Start date/time",
+                "help": "Start date and time of the content synchronization task"
+            },
+            "endDateTime": {
+                "label": "End date/time",
+                "help": "End date and time of the content synchronization task"
+            },
+            "NotProcessedCompletely": {
+                "label": "Not processed completely"
+            },
+            "ProcessedCompletely": {
+                "label": "Processed completely"
             }
         }
     },
@@ -1632,7 +1830,7 @@
             },
             "contextLength": {
                 "label": "Context length (tokens)",
-                "help": "Amount of text an AI model can consider when processing (if not set 4096 will be used)"
+                "help": "Amount of text an AI model can consider when processing (if not set 1047576 will be used)"
             },
             "topP": {
                 "label": "TopP",
@@ -2155,6 +2353,76 @@
             "description": {
                 "label": "Description",
                 "help": "Enter the description of google search api configuration."
+            }
+        }
+    },
+    "GeboAiChatModule": {
+        "GeboAiChatSectionComponent": {
+            "chatModelCode": {
+                "label": "Chat without knowledge bases",
+                "help": "Choose the LLMs for a chat session",
+                "placeholder": "Choose the LLMs for a chat session"
+            },
+            "ChevronLeftBtn": {
+                "help": "Open chat options section"
+            },
+            "CreateChatBtn": {
+                "label": "New chat"
+            },
+            "NewChatSessionPanel": {
+                "label": "New chat session"
+            },
+            "chatProfileCode": {
+                "label": "Chat with knowledge bases",
+                "help": "Choose the company chat profile to interact with company (and your) documents and LLMs",
+                "placeholder": "Choose the company chat profile to interact with company (and your) documents and LLMs"
+            },
+            "NewChatBtn": {
+                "label": "New chat"
+            }
+        }
+    },
+    "GeboAIChooseDocumentsPanelModule": {
+        "GeboAIChooseDocumentsPanelComponent": {
+            "ChatWithDocsBtn": {
+                "label": "Chat with docs",
+                "help": "Browse or search and select documents to work with"
+            },
+            "chooseFilesDialog": {
+                "label": "Choose files to chat with"
+            }
+        },
+        "GeboAISearchDocumentsComponent": {
+            "confirmBtn": {
+                "label": "Confirm"
+            },
+            "userspaceBrowsing": {
+                "label": "Upload or choose your documents",
+                "help": "Choose/upload documents from your user space"
+            }
+        }
+    },
+    "UserSpaceFilesModule": {
+        "GeboAIUserpaceFilesComponent": {
+            "ModifySelectedBtn": {
+                "help": "Modify selected"
+            },
+            "ChooseUserFilesDialog": {
+                "label": "Choose users files"
+            }
+        },
+        "GeboAIUserspaceBrowseComponent": {
+            "cancelBtn": {
+                "label": "Cancel"
+            },
+            "okBtn": {
+                "label": "OK"
+            },
+            "chooseUserUploadedContent": {
+                "label": "Choose user uploaded content"
+            },
+            "UserspaceBrowser": {
+                "label": "Knowledge bases & user files"
             }
         }
     }
