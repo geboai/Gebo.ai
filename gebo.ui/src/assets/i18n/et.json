@@ -1,0 +1,2429 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Vaikimisi süsteemi keel",
+        "help" : "Vaikimisi süsteemi keel selle Gebo.ai paigalduse jaoks"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail kasutajanimeks sisselogimisel"
+      },
+      "passwordC" : {
+        "label" : "Kinnita parool",
+        "help" : "Kinnita parool"
+      },
+      "password" : {
+        "label" : "Parool",
+        "help" : "Parool sisselogimiseks (vähemalt 8 tähemärki)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " paroolid ei ühti "
+      },
+      "LocalAdmin" : {
+        "label" : "Loo oma kohalik administraatori konto"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Kasutad seda kontot tarkvara seadistamiseks ja haldamiseks tulevikus, see info jääb sinu süsteemi ning ei saadeta üle võrgu"
+      },
+      "EnterBtn" : {
+        "label" : "Mine sisselogimislehele"
+      },
+      "SetupPage" : {
+        "label" : "Seadista oma Gebo.ai paigaldus"
+      },
+      "CreateBtn" : {
+        "label" : "Loo süsteemi seadistus"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Loe ja nõustu litsentsiga"
+      },
+      "AcceptMark" : {
+        "label" : "Nõustun tingimustega",
+        "help" : "Klikkides siin, nõustud litsentsi tingimustega"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-post",
+        "help" : "E-post kasutajanimeks sisselogimisel"
+      },
+      "password" : {
+        "label" : "Parool",
+        "help" : "Parool sisselogimiseks"
+      },
+      "LoginPanel" : {
+        "label" : "Logi sisse gebo.ai-sse"
+      },
+      "LoginBtn" : {
+        "label" : "Logi sisse"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 seadistamine"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Teenusepakkuja nimi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 turvaseaded"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Tagasi seadistamise avalehele"
+      },
+      "WizardUi" : {
+        "label" : "Vali seadistamise jaotis"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administraatori ja teiste kasutajakontode seadistamine",
+        "description" : "Vähemalt üks administraatori konto peab olema seadistatud, et see Gebo.ai paigaldus oleks korrektselt hallatud; vajadusel lisa teisi kasutajaid"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai töökaust",
+        "description" : "Seadista töökaust; see on kaust, kuhu salvestatakse selle paigalduse konfiguratsioonid ja kõik töödokumendid. Kausta on soovitatav regulaarselt varundada."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektorbüüsi seadistamine",
+        "description" : "Gebo.ai vajab vektorbüüsit, et pakkuda retrieve augmented generation teenuseid. Saad valida kohaliku vektorbüüsi, Qdrant või Mongo Atlase vahel"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Ühtne sisselogimine, oauth2 autentimine",
+        "description" : "Oauth2 ühtse sisselogimise autentimine ja oauth2 klientide seadistamine"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Suure keelemudeli seadistamine",
+        "description" : "Seadista erinevad llm-id pilves või kohaliku/LAN taustateenusega; vähemalt üks chat-mudel ja üks embedding-mudel peavad olema töökorras, et tarkvara korrektselt töötaks."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graaf rag / Teadmiste ekstraktsiooni seadistamine",
+        "description" : "Seadista graaf rag ja teadmiste ekstraktsiooni alamsüsteem"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Jagatud failisüsteemi radade seadistamine",
+        "description" : "Seadista ettevõtte jagatud failisüsteemi rajad, mida kasutatakse retrieve augmented generation dokumentide aladena erinevates teadmistebaasides"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian Confluence'i integratsioon",
+        "description" : "Seadista Gebo.ai ligipääsuks sinu Atlassian Confluence'i pilve- või kohapealsetele paigaldustele"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian Jira integratsioon",
+        "description" : "Seadista Gebo.ai ligipääsuks sinu Atlassian Jira pilveinstallatsioonidele"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft SharePointi integratsioon",
+        "description" : "Seadista Gebo.ai ligipääsuks sinu Microsoft SharePointi pilve- või kohapealsetele paigaldustele"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Seadista vähemalt üks teadmistebaas",
+        "description" : "Seadista vähemalt üks teadmistebaas, et võimaldada kasutajatele Gebo.ai retrieve augmented generation teenuseid"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Seadista vähemalt üks \"R.A.G.\" vestlusprofiil",
+        "description" : "Seadista vähemalt üks retrieve augmented vestlusprofiil oma kasutajatele, tuginedes ühelegi juba seadistatud teadmistebaasile"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Ettevõtte Atlassian Confluence'i süsteemide seadistamine"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Süsteemi tüüp"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguratsiooni kood"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence'i süsteem"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira süsteem"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguratsiooni kood"
+      },
+      "MainPanel" : {
+        "label" : "Ettevõtte Atlassian Jira süsteemide seadistamine"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Süsteemi tüüp"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguratsiooni kood"
+      },
+      "MainPanel" : {
+        "label" : "Ettevõtte Microsoft SharePointi süsteemide seadistamine"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Süsteemi tüüp"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "SharePointi süsteem"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Sisesta API-võti, millel on piisavalt krediiti. Kui valid OpenAI, pead oma tavaplaanile lisama eraldi vahendid API kasutuse jaoks (10-30$ võib piisata), vastasel juhul pole rakenduses llm-liiklust saadaval."
+      },
+      "MainPanel" : {
+        "label" : "Seadista Gebo.ai llm-pakkujate ligipääs oma API võtmega"
+      },
+      "provider" : {
+        "label" : "Suure keelemudeli pakkuja",
+        "help" : "Vali üks pakkujatest: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Kasutaja",
+        "help" : "Sisesta API võtmega seotud kasutaja"
+      },
+      "ConfigureBtn" : {
+        "label" : "Seadista"
+      },
+      "apiKey" : {
+        "label" : "API võti",
+        "help" : "LLM-teenusepakkuja API võti kasutamiseks"
+      },
+      "ProviderHeader" : {
+        "label" : "Pakkuja"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfiguratsiooni kood"
+      },
+      "ModelHeader" : {
+        "label" : "Mudel"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Mudeli tüüp"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Vaikimisi mudel"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Loo graaf rag konfiguratsioon"
+      },
+      "MainPanel" : {
+        "label" : "Seadista Graaf Rag ja teadmiste ekstraktsiooni vaikekonfiguratsioon"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguratsiooni kood"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Lisa teadmistebaas"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Teadmistebaas"
+      },
+      "MainPanel" : {
+        "label" : "Teadmistebaasid ja sisu seadistused"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Sisu allikas"
+      },
+      "PublishedHeader" : {
+        "label" : "Avaldatud"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Dokumentide arv"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Lisa projekt/üksus",
+        "help" : "loo uus projekt"
+      },
+      "Button1" : {
+        "help" : "ava teadmistebaas"
+      },
+      "Button2" : {
+        "help" : "ava projektivorm"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai töökausta seadistus"
+      },
+      "ConfigureBtn" : {
+        "label" : "Seadista"
+      },
+      "workDirectory" : {
+        "label" : "Vali kaust Gebo.ai töökaustaks",
+        "help" : "Vali serveri kaust, mida see paigaldus kasutab töökaustana konfiguratsioonide ja sisu talletamiseks."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Lisa kaust"
+      },
+      "AddFolderBtn" : {
+        "label" : "Lisa kaust"
+      },
+      "CodeHeader" : {
+        "label" : "Kood"
+      },
+      "MainPanel" : {
+        "label" : "Serveri jagatud failisüsteemi rajad"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoluutne tee"
+      },
+      "DeleteHeader" : {
+        "label" : "Kustuta"
+      },
+      "path" : {
+        "label" : "Lisa jagatud failisüsteemi juurkaust",
+        "help" : "Vali serveri kaust, mis on sinu organisatsioonis jagatud failisüsteemi dokumentide hoidla juurtee"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta failisüsteemi sissekande kirjeldus"
+      },
+      "RemovePathBtn" : {
+        "label" : "Eemalda tee"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Seadista"
+      },
+      "MainPanel" : {
+        "label" : "Vektorbüüsi seadistamine"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Qdrant serveri nimi või IP aadress"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant ühenduse seaded"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant suhtlusport (vaikimisi 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant API võti",
+        "help" : "API võti Qdrant autentimiseks"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parameeter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai seadistuse kohustuslikud sammud on tehtud...",
+        "detail" : "Kohustuslikud seadistamise sammud on lõpule viidud, kuid mõned puuduvad sammud takistavad tarkvarast täielikku kasu saamist."
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai seadistusest on kohustuslikud sammud puudu",
+        "detail" : "Palun vaata üle seadistusprotsessi punased sammud"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai seadistus on korras!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kood",
+        "help" : "Sisesta OAUTH2 autentimise/integratsiooni koodi (registrationId) kirjeldus."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta OAUTH2 autentimise/integratsiooni info kirjeldus."
+      },
+      "configurationType" : {
+        "label" : "Konfiguratsiooni eesmärk",
+        "help" : "Vali, kas seda seadet kasutatakse autentimiseks Gebo.ai-s või et võimaldada Gebo.ai-l ligipääsu kolmanda osapoole süsteemile."
+      },
+      "authProvider" : {
+        "label" : "Pakkuja",
+        "help" : "Sisesta OAUTH2 autentimise pakkuja"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Sisesta pakkuja OAUTH2 issuer URL"
+      },
+      "authorizationUri" : {
+        "label" : "Autoriseerimise URL",
+        "help" : "Sisesta pakkuja OAUTH2 autoriseerimise URL"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Sisesta pakkuja OAUTH2 Jwk Set URL"
+      },
+      "userInfoUri" : {
+        "label" : "Kasutajainfo URL",
+        "help" : "Sisesta pakkuja OAUTH2 kasutajainfo URL"
+      },
+      "introspectionUri" : {
+        "label" : "Introspektsiooni Uri",
+        "help" : "Sisesta pakkuja OAUTH2 introspektsiooni URL"
+      },
+      "tokenUri" : {
+        "label" : "Tokeni URL",
+        "help" : "Sisesta pakkuja OAUTH2 tokeni URL"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 pakkuja URL-id"
+      },
+      "MainPanel" : {
+        "label" : "Sisesta uue OAUTH2 autentimise/integratsiooni info"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Kliendi ID",
+        "help" : "Kliendi identifikaator oauth2 protokolli jaoks (leitav oauth2 autentitud 3. osapoole tarkvara haldusalas)"
+      },
+      "secret" : {
+        "label" : "Salajane võti",
+        "help" : "Kliendi saladus oauth2 protokolli jaoks (leitav oauth2 autentitud 3. osapoole tarkvara haldusalas)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Loo Confluence'i süsteemi seadistus"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta Confluence'i süsteemi kirjeldus."
+      },
+      "CreateBtn" : {
+        "label" : "Loo"
+      },
+      "username" : {
+        "label" : "Confluence'i kasutajanimi",
+        "help" : "Confluence'i kasutajanimi"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence'i versioon",
+        "help" : "Confluence'i versioon"
+      },
+      "baseUri" : {
+        "label" : "Põhiaadress internetis",
+        "help" : "On-premise paigaldusel Confluence'i põhiaadressi url või Confluence cloud süsteemi sinu organisatsiooni põhiaadressi url"
+      },
+      "password" : {
+        "label" : "Confluence'i parool",
+        "help" : "Confluence'i parool"
+      },
+      "token" : {
+        "label" : "Confluence'i cloud API võti",
+        "help" : "Confluence CLOUD api võti, mis on saadud Confluence'i backofficest. Siia tuleb sisestada \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvestab ja teeb need sisud teadmiste baasis LLM-idele kättesaadavaks"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SettingsTab" : {
+        "label" : "Seaded"
+      },
+      "MainPanel" : {
+        "label" : "Confluence'i sisu jagamine"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Sisu jaoks automaatselt genereeritud unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta üleslaetud Confluence'i sisu kirjeldus."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence'i süsteem",
+        "help" : "Juba seadistatud Confluence'i süsteemi viide."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ülemprojekti viide."
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Luba zip-failide avamine ja sisu väljavõte"
+      },
+      "tree" : {
+        "label" : "Valitud ruumid või lehed/alalehed",
+        "help" : "Jagatud Confluence'i ruumid ja lehekülgede sisu"
+      },
+      "programmedTables" : {
+        "label" : "Sisu uuenduste kontrollimise ajakava",
+        "help" : "Seadista ajakava muutunud sisu kontrollimiseks, et hoida andmete uuendamise süsteemi ajakohasena"
+      },
+      "catalogingCriteria" : {
+        "label" : "Ruumide, lehekülgede ja alalehtede korraldamise kriteeriumid",
+        "help" : "Selgita siin, kuidas ruumide, lehekülgede ja alalehtede korraldamise kriteeriumid Confluence'i sisu jagamisel Gebo.ai-ga on loodud"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Üldised seaded"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "MainPanel" : {
+        "label" : "Confluence'i süsteemi muutmine"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "baseUri" : {
+        "label" : "Põhiaadress internetis",
+        "help" : "Confluence'i süsteemi põhiaadressi url"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Confluence'i süsteemi jaoks automaatselt genereeritud unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta Confluence'i süsteemi kirjeldus."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence'i versioon",
+        "help" : "Confluence'i versioon"
+      },
+      "secretCode" : {
+        "label" : "Kasutatav identiteet",
+        "help" : "Vali või loo identiteet Confluence'i süsteemi pääsemiseks"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "uus grupp"
+      },
+      "NewUserBtn" : {
+        "label" : "uus kasutaja"
+      },
+      "UsersListPanel" : {
+        "label" : "Kasutajate nimekiri"
+      },
+      "GroupsListPanel" : {
+        "label" : "Gruppide nimekiri"
+      },
+      "SournameHeader" : {
+        "label" : "perekonnanimi"
+      },
+      "UsernameHeader" : {
+        "label" : "kasutajanimi"
+      },
+      "RolesHeader" : {
+        "label" : "rollid"
+      },
+      "NameHeader" : {
+        "label" : "eesnimi"
+      },
+      "EditBtn" : {
+        "label" : "Muuda"
+      },
+      "DisabledHeader" : {
+        "label" : "keelatud"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "UserIds" : {
+        "placeholder" : "Vali kasutajad"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "MainPanel" : {
+        "label" : "Kasutajagrupi muutmine"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta kasutajagrupi kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Sisesta kasutajagrupi kood"
+      },
+      "userIds" : {
+        "label" : "Kasutajate loend",
+        "help" : "Vali grupis osalevad kasutajad"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Loo"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta jira süsteemi kirjeldus."
+      },
+      "MainPanel" : {
+        "label" : "Loo jira süsteemi seadistus"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "username" : {
+        "label" : "jira kasutajanimi",
+        "help" : "jira kasutaja nimi"
+      },
+      "token" : {
+        "label" : "jira cloud api võti",
+        "help" : "jira CLOUD apikey, mis on saadud jira backoffice’is, siia tuleb sisestada \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Baasinternetiaadress",
+        "help" : "Jira süsteemi baas-aadressi url onpremise installatsiooni jaoks või sinu organisatsiooni jira cloud süsteemi baas-URL"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvestab ja võimaldab nende sisude jagamist teadmistebaasi LLm-idega"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SettingsTab" : {
+        "label" : "Seaded"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      },
+      "MainPanel" : {
+        "label" : "Jira sisu jagamine"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatne sisude unikaalne kood."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira süsteem",
+        "help" : "Juba seadistatud jira süsteemi viide."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ülemprojekti viide."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta kirjeldus üleslaetud jira keelmete kohta."
+      },
+      "programmedTables" : {
+        "label" : "Sisude uuenduste kontrolli ajakava",
+        "help" : "Sea ajakava, millega hoitakse uuendatud sisu Retrieve Augmented Generation süsteemi jaoks"
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Luba zip-failide avamine ja sisu ekstraktimine"
+      },
+      "tree" : {
+        "label" : "Valitud ruumid või lehed/alalehed",
+        "help" : "Jagatud jira projektide ja piletite hierarhia sisu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Ruumide, lehtede ja alalehtede organiseerimise kriteeriumid",
+        "help" : "Kirjuta siia, kuidas jagatud jira sisude ruumide, lehtede ja alalehtede organiseerimise põhimõtted on määratud Gebo.ai jaoks"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta jira süsteemi kirjeldus."
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "MainPanel" : {
+        "label" : "Jira süsteemi muutmine"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "baseUri" : {
+        "label" : "Baasinternetiaadress",
+        "help" : "Jira süsteemi baas-aadressi url"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Jira süsteemi automaatselt loodud unikaalne kood."
+      },
+      "secretCode" : {
+        "label" : "Kasutatav identiteet",
+        "help" : "Vali või loo identiteet jira süsteemile ligipääsuks"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta SharPpoint/OneDrive süsteemi kirjeldus."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePointi versioon",
+        "help" : "sharepointi versioon"
+      },
+      "secret" : {
+        "label" : "Salajane võti",
+        "help" : "Oauth2 kliendi saladus sellele rakendusele, mis registreeritud Microsofti \"entra\" tootes (leitav microsoft cloud admin konsoolis)"
+      },
+      "clientId" : {
+        "label" : "Klient ID",
+        "help" : "Oauth2 kliendi identifikaator sellele rakendusele, mis registreeritud Microsofti \"entra\" tootes (leitav microsoft cloud admin konsoolis)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID",
+        "help" : "Oauth2 tenant'i identifikaator teie organisatsiooni Microsoft \"entra\" toote jaoks (leitav microsoft cloud admin konsoolis)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsoft oauth2 rakenduse registreerimise info Gebo.ai jaoks"
+      },
+      "CreateBtn" : {
+        "label" : "Loo"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "MainPanel" : {
+        "label" : "Loo SharePoint/OneDrive süsteemi seadistus"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvesta ja tee need sisuallikad LLm teadmistebaasis kättesaadavaks"
+      },
+      "SettingsTab" : {
+        "label" : "Seaded"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive sisu jagamine"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatselt genereeritud sisuallika unikaalne kood."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ema projekti viide."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta SharePoint/OneDrive kirje andmeallikate kirjeldus."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint süsteem",
+        "help" : "Juba seadistatud SharePoint/OneDrive süsteemi viide."
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Luba zip-failide avamine ja sisu eraldamine"
+      },
+      "tree" : {
+        "label" : "Valitud SharePoint saidid/lehed/alalehed või OneDrive kettad/kaustad/failid",
+        "help" : "Jagatud SharePoint/OneDrive sisu"
+      },
+      "programmedTables" : {
+        "label" : "Sisu uuenduste kontrolli ajastus",
+        "help" : "Seadista muutunud sisu kontrollimise ajastus, et hoida päringu täiustatud genereerimise süsteemi ajakohasena"
+      },
+      "catalogingCriteria" : {
+        "label" : "Ruumide, lehtede ja alalehtede organiseerimise kriteeriumid",
+        "help" : "Palun selgita siin, kuidas on ruumide, lehtede ja alalehtede organiseerimise kriteeriumid rakendatud SharePointi sisule, mida jagati Gebo.ai-ga"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "SharePointi süsteemi muutmine"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Üldseaded"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "secretCode" : {
+        "label" : "Kasutatav identiteet",
+        "help" : "Vali või loo identiteet SharePointi süsteemile ligipääsuks"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatselt genereeritud SharePointi süsteemi unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta SharePointi süsteemi kirjeldus."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePointi versioon",
+        "help" : "sharepointi versioon"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Kustuta"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Salvesta"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Tühista"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Üldised info/sisu seaded"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms seaded"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Teadmiste graafiku andmete ekstraktsiooni etapi automaatselt genereeritud unikaalne kood"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/teadmiste ekstraktsiooni seadistus"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta selle teadmiste graafiku andmete ekstraktsiooni etapi seadistuse kirjeldus"
+      },
+      "extractionPrompt" : {
+        "label" : "Infotõmbamise juhis",
+        "help" : "Suure keelemudeli juhis üksuste/sündmuste/suhete ja aliasede tuvastamiseks"
+      },
+      "usedModelConfiguration" : {
+        "label" : "Andmete ekstraktsioonil kasutatav LLM",
+        "help" : "Määra teadmiste ekstraktsiooniks kasutatav suur keelemudel, vaikimisi kasutatakse, kui ühtegi pole valitud."
+      },
+      "graphRagAllSources" : {
+        "label" : "Rakenda graph rag kõikidele andmeallikatele",
+        "help" : "Kui valitud, töödeldakse kõik teadmistebaasid/projektid/andmeallikad teadmiste ekstraktsiooniks, vastasel juhul ainult need, mis on spetsiaalselt seadistatud."
+      },
+      "defaultModel" : {
+        "label" : "Vaikimisi suur keelemudel",
+        "help" : "Teadmiste ekstraktsiooniks kasutatakse vaikimisi suurt keelemudelit"
+      },
+      "processEveryDocument" : {
+        "label" : "Rakenda graph rag kõikidele failidele",
+        "help" : "Graph rag algoritmid rakendatakse kõigile failidele, see parandab süsteemi analüüsivõimet, kuid suurendab töötlemiseks vajalikku aega ja kulu"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Faili valimise kriteeriumid graphrag töötlemiseks",
+        "help" : "Muuda failide valimise kriteeriume infotõmbamise torujuhtmesse saatmiseks graphragi jaoks, vali vähemalt failinimi ja kriteerium ja/või failitüüp ja/või maksimaalne faili suurus baitides ja/või viimase muutmise vanus päevades"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Vali failitüübid"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Failinime filtreerimise kriteeriumid"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Viimane faili muutmine, päevad tagasi"
+      },
+      "nameFilter" : {
+        "placeholder" : "Faili nimi"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maksimaalne faili suurus baitides"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "MainPanel" : {
+        "label" : "Teadmistebaasi muutmine"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Teadmistebaasi ligipääsu seaded"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Teadmistebaasi automaatselt loodud unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta teadmistebaasi kirjeldus."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Kasutatavad sidustusmudelid (vaikimisi kasutamiseks jäta tühjaks)",
+        "help" : "Teadmistebaasi sidustusmudelid, tühjaks jätmisel kasutatakse vaikimisi mudelit."
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "IndexBtn" : {
+        "label" : "Indekseeri",
+        "help" : "Sisu indekseerimine uuesti"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Projekti või üksuse muutmine"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatne unikaalne projekti kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta projekti kirjeldus."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "teadmistebaas",
+        "help" : "teadmistebaas."
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "IndexBtn" : {
+        "label" : "Indekseeri",
+        "help" : "Sisu indekseerimine uuesti"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Lisa üksus/projekt",
+        "help" : "lisa uus..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Kõik kasutavad",
+        "help" : "Kõik saavad kasutada"
+      },
+      "accessibleGroups" : {
+        "label" : "Gruppide loend",
+        "help" : "Vali lubatud grupid"
+      },
+      "accessibleUsers" : {
+        "label" : "Kasutajate loend",
+        "help" : "Vali lubatud kasutajad"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Töölaud"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs vestluseks ja sisendamiseks"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag vestlusprofiilid / mudeli viited"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Teadmistebaasid ja projektid"
+      },
+      "UsersGroupTab" : {
+        "label" : "Kasutajad ja grupid"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai moodulite seadistus"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kood"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Seadista"
+      },
+      "ConfigureBtn" : {
+        "label" : "Seadista"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Uus käsu seadistus"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Uus vestlusprofiil"
+      },
+      "MainPanel" : {
+        "label" : "Retrievaaliga täiendatud vestlusprofiilid"
+      },
+      "PromptsPanel" : {
+        "label" : "Käskude kogu ja vaikimisi käsud"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Teadmusbaasid"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "ConfigureBtn1" : {
+        "label" : "seadista"
+      },
+      "CodeHeader" : {
+        "label" : "Kood"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Uus teadmistebaas"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Uus sisestusmudeli konfiguratsioon"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Uus jutumudeli konfiguratsioon"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "CodeHeader" : {
+        "label" : "Kood"
+      },
+      "ModelHeader" : {
+        "label" : "Mudel"
+      },
+      "ModelProviderHeader" : {
+        "label" : "Mudeli pakkuja"
+      },
+      "ConfigureBtn" : {
+        "label" : "seadista"
+      },
+      "CodeHeader2" : {
+        "label" : "Kood"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Kirjeldus"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Mudeli pakkuja"
+      },
+      "ConfigureBtn2" : {
+        "label" : "seadista"
+      },
+      "ModelHeader2" : {
+        "label" : "Mudel"
+      },
+      "ChatmodelsZone" : {
+        "label" : "Seadistatud jutumudelid"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Seadistatud sisestusmudelid"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Testin mudelit"
+      },
+      "TestChatBtn" : {
+        "label" : "Testi vestlust"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Vali selle mudeli jaoks kasutatav OpenAI token"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI vestlusmudeli valik",
+        "help" : "Vali OpenAI vestlusmudel, millega töötada."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Täpsemad seaded"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI vestlusmudeli seadistuse muutmine"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mudeli ligipääsu seaded"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding mudeli seadistuse muutmine"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Vali selle mudeli jaoks kasutatav OpenAI token"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Embedding mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta embedding mudeli seadistuse kirjeldus"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding mudeli valik",
+        "help" : "Vali OpenAI embedding mudel, millega töötada."
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi embedding mudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "baseUrl" : {
+        "label" : "Ollama põhiserveri aadress",
+        "help" : "Põhiaadress (nt http://servername:234/), kus vastab ollama kohalik või võrguserver."
+      },
+      "choosedModel" : {
+        "label" : "Ollama vestlusmudeli valik",
+        "help" : "Vali Ollama vestlusmudel, millega töötada.",
+        "placeholder" : "Vali mudel"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Vali selle mudeli jaoks kasutatav Ollama token (valikuline)"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "MainPanel" : {
+        "label" : "Ollama kohaliku (või võrgus) vestlusmudeli seadistuse muutmine"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Vali selle mudeli jaoks kasutatav Anthropic token"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic vestlusmudeli valik",
+        "help" : "Vali Anthropic vestlusmudel, millega töötada.",
+        "placeholder" : "Vali mudel"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Täpsemad seaded"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mudeli ligipääsu seaded"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic vestlusmudeli seadistuse muutmine"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Vali selle mudeli jaoks kasutatav MistralAI token"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI vestlusmudeli valik",
+        "help" : "Vali MistralAI vestlusmudel, millega töötada."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Täpsemad seaded"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mudeli ligipääsu seaded"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI vestlusmudeli seadistuse muutmine"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI vestlusmudeli valik",
+        "help" : "Vali Google Vertex AI vestlusmudel, millega töötada."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Vali selle mudeli jaoks kasutatav Google Vertex AI token"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Üldinfo"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Mudeli ligipääsu seaded"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Täpsemad seaded"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI vestlusmudeli seadistuse muutmine"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Vali selle mudeli jaoks kasutatav Deepseek token"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek vestlusmudeli valik",
+        "help" : "Vali Deepseek vestlusmudel, millega töötada.",
+        "placeholder" : "Vali mudel"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Täpsemad seaded"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek vestlusmudeli seadistuse muutmine"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mudeli ligipääsu seaded"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta mudeli seadistuse kirjeldus"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "baseUrl" : {
+        "label" : "Vestlusmudeli API serveri põhiaadress",
+        "help" : "Vestlusmudeli põhiaadress."
+      },
+      "apiSecretCode" : {
+        "label" : "Vestlusmudeli API token",
+        "help" : "Vali selle mudeli jaoks kasutatav vestlusmudeli API token (valikuline)"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi vestlusmudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi vestlusmudelina kui mudelit pole määratud"
+      },
+      "choosedModel" : {
+        "label" : "Vestlusmudeli valik",
+        "help" : "Vali vestlusmudel, millega töötada."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "TitleFragment" : {
+        "label" : "Vestlusmudeli pakkuja muutmine:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Täpsemad seaded"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mudeli ligipääsu seaded"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta embedding mudeli seadistuse kirjeldus"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "MainPanel" : {
+        "label" : "Ollama kohaliku (või võrgus) embedding mudeli seadistuse muutmine"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Vali selle mudeli jaoks kasutatav Ollama token"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding mudeli valik",
+        "help" : "Vali Ollama embedding mudel, millega töötada."
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Embedding mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi embedding mudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      },
+      "baseUrl" : {
+        "label" : "Ollama põhiserveri aadress",
+        "help" : "Põhiaadress (nt http://servername:234/), kus vastab ollama kohalik või võrguserver."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta embedding mudeli seadistuse kirjeldus"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding mudeli seadistuse muutmine"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Embedding mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding mudeli valik",
+        "help" : "Vali MistralAI embedding mudel, millega töötada."
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi embedding mudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Vali selle mudeli jaoks kasutatav MistralAI token"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding mudeli seadistuse muutmine"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta embedding mudeli seadistuse kirjeldus"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding mudeli valik",
+        "help" : "Vali Google Vertex AI embedding mudel, millega töötada."
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi embedding mudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Embedding mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Vali selle mudeli jaoks kasutatav Google Vertex AI token"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "TitleFragment" : {
+        "label" : "Embedding mudeli pakkuja muutmine:"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta embedding mudeli seadistuse kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Embedding mudeli seadistuse automaatselt genereeritud unikaalne kood"
+      },
+      "choosedModel" : {
+        "label" : "Embedding mudeli valik",
+        "help" : "Vali embedding mudel, millega töötada."
+      },
+      "baseUrl" : {
+        "label" : "Embedding mudeli API serveri aadress",
+        "help" : "Embedding mudeli serveri põhiaadress."
+      },
+      "defaultModel" : {
+        "label" : "seadista see vaikimisi embedding mudeliks",
+        "help" : "Kui tõene, kasutatakse seda vaikimisi embedding mudelina kui mudelit pole määratud"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding mudeli API token",
+        "help" : "Vali selle mudeli jaoks kasutatav embedding mudeli API token"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Vestluse seadistuse info"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Kustuta see vestlus"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Nimeta vestlus ümber"
+      },
+      "QueryControl" : {
+        "placeholder" : "Kirjuta sõnum vestlusrobotile"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "description" : {
+        "label" : "Vestluse kirjeldus",
+        "help" : "Sisesta vestluse kirjeldus."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Kasutatud mudel",
+        "help" : "Mudeli kood"
+      },
+      "providerId" : {
+        "label" : "Vestlusmudeli pakkuja",
+        "help" : "LLms pakkuja driver"
+      },
+      "functions" : {
+        "label" : "Vestlusmudeli funktsioonid",
+        "help" : "Vestlusmudeli kasutatavate funktsioonide loend"
+      },
+      "NameCol" : {
+        "label" : "Nimi"
+      },
+      "DescriptionCol" : {
+        "label" : "Kirjeldus"
+      },
+      "kbases" : {
+        "label" : "Saadaolevad teadmistebaasid",
+        "help" : "Loend RAG vestluses kasutatavatest teadmistebaasidest"
+      },
+      "CloseBtn" : {
+        "help" : "Sulge"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Salvesta",
+        "help" : "Alusta heliriba salvestamist ja saada see"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "laadi andmed uuesti"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SelectHeader" : {
+        "label" : "Vali"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "lõpp kuupäev/kellaaeg"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "algus kuupäev/kellaaeg"
+      },
+      "ProcessingHeader" : {
+        "label" : "töötlemine"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "CodeHeader" : {
+        "label" : "Kood"
+      },
+      "FinishedHeader" : {
+        "label" : "lõpetatud"
+      },
+      "WithErrorHeader" : {
+        "label" : "veaga"
+      },
+      "LogTableComponent" : {
+        "help" : "Selle jagatud failisüsteemi ala ingesti logi"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Protsesside statistika"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "CloseBtn" : {
+        "label" : "Sulge"
+      },
+      "PublicationLogTab" : {
+        "label" : "Avaldamise logi"
+      },
+      "MainPanel" : {
+        "label" : "Avaldamise logi"
+      },
+      "actualStatus" : {
+        "label" : "Olek",
+        "help" : "Ülesande olek, kas töötab, lõpetatud või lõpetatud vigadega."
+      },
+      "publishingSystem" : {
+        "label" : "Avaldatud sisu seadistus",
+        "help" : "Avaldatud sisu info"
+      },
+      "startDateTime" : {
+        "label" : "Alguse kuupäev/kellaaeg",
+        "help" : "Sisu sünkroonimise ülesande alguse kuupäev ja kellaaeg"
+      },
+      "endDateTime" : {
+        "label" : "Lõpu kuupäev/kellaaeg",
+        "help" : "Sisu sünkroonimise ülesande lõpu kuupäev ja kellaaeg"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Pole täielikult töödeldud"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Täielikult töödeldud"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding vs dokumentide koguarv"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Rohkem detaile"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Loo juhend"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Juhendi nõustaja",
+        "help" : "Kasuta seda, et suurte keelemudelite abil koostada oma eesmärkide jaoks juhend"
+      },
+      "acceptPrompt" : {
+        "label" : "Nõustu juhendiga"
+      },
+      "promptWizardUI" : {
+        "label" : "Juhendimalli loomise nõustaja"
+      },
+      "cancel" : {
+        "label" : "Tühista"
+      },
+      "response" : {
+        "label" : "Soovitatud juhendimall",
+        "help" : "Loodud mallitekst sinu eesmärgile (saad seda muuta või parandada)"
+      },
+      "modelCode" : {
+        "label" : "Kasutatav vestlusmudel",
+        "help" : "Vali vestlusmudel, millelt soovid juhendimalli koostamist küsida"
+      },
+      "query" : {
+        "label" : "Juhendimalli päring",
+        "help" : "Kirjelda teises isikus, millist eesmärki AI kasutajat toetab"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatuur",
+        "help" : "Temperatuur, millega mudel vastab, vahemikus 0 kuni 1 (kui pole kindel, jäta tühjaks)"
+      },
+      "contextLength" : {
+        "label" : "Konteksti pikkus (tokenid)",
+        "help" : "Teksti hulk, mida AI mudel saab töötlemisel arvesse võtta (kui pole määratud, kasutatakse väärtust 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parameeter, vahemikus 0 kuni 1 (kui pole kindel, jäta tühjaks)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Selle mudeli lubatud funktsioonide kasutus",
+        "help" : "Funktsioonid, mida mudel saab vestluse ajal kasutada"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Vaikimisi mudeli küsimus",
+        "help" : "Muuda vestlusmudeli vaikimisi küsimust."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta identiteedi kirjeldus."
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatne identiteedi unikaalne kood."
+      },
+      "secretType" : {
+        "label" : "Identiteedi tüüp",
+        "help" : "Vali loodava identiteedi tüüp kaug­süsteemi jaoks"
+      },
+      "InsertBtn" : {
+        "label" : "Sisesta"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Sisesta token."
+      },
+      "user" : {
+        "label" : "Kasutaja",
+        "help" : "Sisesta tokeniga viidatud kasutaja."
+      },
+      "MainPanel" : {
+        "label" : "Identiteedi loomine"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "username" : {
+        "label" : "Kasutajanimi",
+        "help" : "Sisesta kasutajanimi."
+      },
+      "password" : {
+        "label" : "Parool",
+        "help" : "Sisesta parool."
+      },
+      "email" : {
+        "label" : "E-post/kasutajanimi",
+        "help" : "Sisesta ssh-võtmega seotud e-post või kasutajanimi."
+      },
+      "key" : {
+        "label" : "Salajane võti",
+        "help" : "Ava privaatvõtme fail ja kopeeri see tekstiväljale."
+      },
+      "passphrase" : {
+        "label" : "Võtme paroolifraas",
+        "help" : "Sisesta võtme paroolifraas."
+      },
+      "pub" : {
+        "label" : "Avalik võti",
+        "help" : "Ava avaliku võtme fail ja kopeeri see tekstiväljale."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Sisu automaatselt genereeritud unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta üleslaetud failisüsteemi kirje kirjeldus."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ülemprojekti viide."
+      },
+      "upload" : {
+        "label" : "Laadi sisu üles",
+        "help" : "Klõpsa nuppu sirvimiseks ja vali zip-failid või muud failid"
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Luba zip-failide avamine ja sisu väljavõte"
+      },
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvestab ja teeb sisu kättesaadavaks teadmistebaasis LLmidele"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      },
+      "MainPanel" : {
+        "label" : "Üleslaetud sisu muutmine"
+      },
+      "SettingsTab" : {
+        "label" : "Seaded"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Seadista ehitussüsteemid",
+        "help" : "Ehitamis-/pakendamissüsteemide loetelu metainfo ja lisaartefaktide info tuvastamiseks (jäta tühjaks, kui tarkvarakoodi pole)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Valitud elemendid"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Tühista"
+      },
+      "EditBtn" : {
+        "help" : "Muuda valituid"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Vali elemendid"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Vali elemendid"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Muuda ajastust"
+      },
+      "ConfirmBtn" : {
+        "label" : "Kinnita"
+      },
+      "AddBtn" : {
+        "label" : "+Lisa"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvestab ja muudab selle sisu teadmistebaasis LLm-idele kättesaadavaks"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SettingsTab" : {
+        "label" : "Seaded"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Lähtekoodi töötlemine"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      },
+      "MainPanel" : {
+        "label" : "Olemasoleva failisüsteemi sisu muutmine"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta üleslaetud failisüsteemi kirje sisu kirjeldus."
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Luba zip-failide avamine ja sisu ekstraktimine"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Sisu automaatselt loodud unikaalne kood."
+      },
+      "tree" : {
+        "label" : "Valitud failid või kaustad",
+        "help" : "Serveris saadaolevad jagatud failisüsteemi failid või kaustad"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ülemprojekti viide."
+      },
+      "programmedTables" : {
+        "label" : "Sisu uuenduste kontrolli ajakava",
+        "help" : "Konfigureeri muudetud sisu ajakava, et hoida päringupõhist generatsioonisüsteemi ajakohasena"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kaustade organiseerimise kriteeriumid",
+        "help" : "Selgita siin, milliseid kaustade organiseerimise kriteeriume kasutati failisüsteemi alas, mida jagad Gebo.ai-ga"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Seadista ehitussüsteemid",
+        "help" : "Nimekiri ehitus-/pakendamissüsteemidest metaandmete ja täiendava artefaktiinfo kontrollimiseks (jäta tühjaks, kui tarkvarakoodi pole)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Uus failide jagamisala"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoluutne tee"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db või yml faili seadistus"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "CodeHeader" : {
+        "label" : "Kood"
+      },
+      "ModifyHeader" : {
+        "label" : "Muuda"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Valitud jagatud failisüsteemi kaust",
+        "help" : "Vali serveri kaust, mis on sinu organisatsiooni jagatud failisüsteemi juurteeks dokumendirepositooriumina"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta oma organisatsiooni jagatud failisüsteemi ala kirjeldus"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Sisu automaatselt loodud unikaalne kood."
+      },
+      "InsertBtn" : {
+        "label" : "Lisa"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "MainPanel" : {
+        "label" : "Serveri jagatud failikausta muutmine"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvesta ja tee see sisu kättesaadavaks teadmistebaasis LLmidele"
+      },
+      "MainPanel" : {
+        "label" : "Git allika/dokumentatsiooni hoidla redigeerimine"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisestage git-hoidla kirjeldus."
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatne unikaalne git-hoidla kood."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ülemprojekti viide."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git süsteem",
+        "help" : "Juba seadistatud git süsteemi viide."
+      },
+      "branch" : {
+        "label" : "Haru",
+        "help" : "Välja registreeritava haru nimi (tavaliselt master, main või develop)"
+      },
+      "identityCode" : {
+        "label" : "Kasutatav identiteet",
+        "help" : "Vali identiteet süsteemis kloonimise või välja registreerimise jaoks"
+      },
+      "repositoryUri" : {
+        "label" : "Hoidla url/aadress",
+        "help" : "Täielik kaugside git-hoidla aadress (tavaliselt algab http:, https: või ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "avalik",
+        "help" : "Kui tõene, siis hoidla kasutamiseks autentimist ei vajata"
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Võimalda zip-failide avamine ja sisu väljavõte"
+      },
+      "programmedTables" : {
+        "label" : "Sisu värskenduste kontrolli ajakava",
+        "help" : "Seadista muutunud sisu ajastamine, et hoida täiustatud genereerimissüsteem ajakohasena"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Seadista build-süsteemid",
+        "help" : "Metaandmete ja täiendava artefaktide info kontrollimiseks jälgitavate build/pakendamissüsteemide loetelu"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Üldinfo"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Kasuta vestlusmudelit"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "vali"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Vali vestlusmudeli konfiguratsioon"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Vali embedding-mudeli konfiguratsioon"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "vali"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG-i seaded"
+      },
+      "LanguageModelTab" : {
+        "label" : "Keelemudeli ja tööriistade seaded"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Kasuta embedding-mudelit"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Turvalisuse juhtelemendid"
+      },
+      "MainPanel" : {
+        "label" : "Retrieva täiendatud genereerimise profiili muutmine"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Automaatselt genereeritud vestlusprofiili unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta vestlusprofiili kirjeldus."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Kasutaja valib teadmistebaasid",
+        "help" : "Kasutaja saab valida ligipääsetavate teadmistebaaside vahel ja/või üles laadida enda faile."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Teadmistebaasid",
+        "help" : "Teadmistebaasid, mida kasutatakse dokumentide otsimisel."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Sarnasuse lävi",
+        "help" : "Semantiliste otsingute sarnasuse piir: 0.60–0.65 Madal filtreerimine, 0.70–0.75 Keskmine filtreerimine, 0.80–0.85 Täpne"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2. \"hüpe\" sarnasuse lävi",
+        "help" : "Semantiliste otsingute sarnasuse piir: 0.60–0.65 Madal filtreerimine, 0.70–0.75 Keskmine filtreerimine, 0.80–0.85 Täpne, mida kasutatakse alates teisest multi-hop rag otsingust"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Keela 'multi hop' RAG",
+        "help" : "Keela 'multi hop rag' funktsionaalsus. Multi hop otsing teeb esmase semantilise otsingu ning kasutab leitud dokumente järgmise semantilise otsingu kontekstina, pakkudes laiemat konteksti."
+      },
+      "topK" : {
+        "label" : "Arvestatavad dokumendikillud (TopK)",
+        "help" : "Retrieve augmented generation puhul arvestatakse semantilises otsingus Top N leitud dokumendikillud"
+      },
+      "enabledFunctions" : {
+        "label" : "Lubatud funktsioonide väljakutsed selles RAG vestluses",
+        "help" : "Funktsioonid, mida llm-mudel võib kasutada vestluse ajal, suheldes ka valitud teadmistebaasiga"
+      },
+      "prompt" : {
+        "label" : "Käivitus",
+        "help" : "Muuda retrieve augmented generation seansside käivitusvälja."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Sisesta või vali vihje kategooria"
+      },
+      "MainPanel" : {
+        "label" : "Vihje muutmine"
+      },
+      "promptCategory" : {
+        "label" : "Vihje kategooria",
+        "help" : "Vali või sisesta vihje kategooria."
+      },
+      "prompt" : {
+        "label" : "Vihje",
+        "help" : "Redigeeri vestluse vihjet, kasuta {query} kasutaja küsimuse tähistamiseks ja {context} dokumentide/ajaloo konteksti tähistamiseks, mis saadetakse LLM-ile."
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Vihje automaatselt genereeritud unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta vihje kirjeldus."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Muuda parooli"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Vana parool",
+        "help" : "Praegune parool sisselogimiseks"
+      },
+      "newPassword" : {
+        "label" : "Uus parool",
+        "help" : "uus parool"
+      },
+      "username" : {
+        "label" : "E-post",
+        "help" : "E-posti aadress kasutajanimeks sisselogimisel"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Parooli muutmise vorm"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "ChangePwdBtn" : {
+        "label" : "muuda parool"
+      },
+      "newPassword1" : {
+        "label" : "Kinnita uus parool",
+        "help" : "Kinnita uus parool"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "ForMoreInformations" : {
+        "label" : "Lisateabe saamiseks Google kohandatud otsingu API kohta või oma API võtme saamiseks (tasuta) külasta: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "google otsingu API seadistuse unikaalne kood."
+      },
+      "MainPanel" : {
+        "label" : "Google kohandatud otsingu API mandaadi muutmine"
+      },
+      "secretCode" : {
+        "label" : "Google otsingu API token",
+        "help" : "Vali või sisesta Google otsingu API token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google otsingumootori ID",
+        "help" : "Google otsingumootori ID"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta google otsingu API seadistuse kirjeldus."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Vestlus ilma teadmistebaasideta",
+        "help" : "Vali LLM-id vestlusseansi jaoks",
+        "placeholder" : "Vali LLM-id vestlusseansi jaoks"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Ava vestluse valikute sektsioon"
+      },
+      "CreateChatBtn" : {
+        "label" : "Uus vestlus"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Uus vestlusseanss"
+      },
+      "chatProfileCode" : {
+        "label" : "Vestlus teadmistebaasidega",
+        "help" : "Vali ettevõtte vestlusprofiil, et suhelda ettevõtte (ja sinu) dokumentide ning LLM-idega",
+        "placeholder" : "Vali ettevõtte vestlusprofiil, et suhelda ettevõtte (ja sinu) dokumentide ning LLM-idega"
+      },
+      "NewChatBtn" : {
+        "label" : "Uus vestlus"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Vestle dokumentidega",
+        "help" : "Sirvi või otsi ja vali dokumendid, millega töötada"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vali failid vestluseks"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Kinnita"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Laadi üles või vali oma dokumendid",
+        "help" : "Vali/laadi üles dokumendid oma kasutajaruumist"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Muuda valitud"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Vali kasutajate failid"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Tühista"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Vali kasutaja üles laaditud sisu"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Teadmistebaasid ja kasutajate failid"
+      }
+    }
+  }
+}
