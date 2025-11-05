@@ -1,3 +1,4 @@
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -9,15 +10,13 @@
  */
  -->
  
- 
- 
-
 <div class="grid" style="width: 100%; border: solid #C0C0C0 1px;">
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <div class="col-1"><p-button (onClick)="openUserSpaceBrowseWindow()" icon="pi pi-pen-to-square"
-            title="Modify selected" [outlined]="true"></p-button></div>
+    <div class="col-1">
+        <p-button id="ModifySelectedBtn" gebo-ai-label (onClick)="openUserSpaceBrowseWindow()" icon="pi pi-pen-to-square" title="Modify selected" [outlined]="true"></p-button>
+    </div>
     <div class="col-11">
         <span *ngFor="let doc of userFiles" style="list-style: none;break-after: avoid;">
             <p-button icon="pi pi-times-circle" [text]="true" (onClick)="doRemoveFile(doc)"></p-button>
@@ -27,12 +26,9 @@
             {{doc.name}}
         </span>
     </div>
-
-
 </div>
 
-
-<p-dialog  [maximizable]="true" [visible]="openedUserspaceBrowseWindow" [modal]="true" [style]="{width:'95%',height:'95%'}" [closable]="true"
+<p-dialog id="ChooseUserFilesDialog" gebo-ai-label  [maximizable]="true" [visible]="openedUserspaceBrowseWindow" [modal]="true" [style]="{width:'95%',height:'95%'}" [closable]="true"
     header="Choose users files" [showHeader]="true" (onHide)="this.openedUserspaceBrowseWindow=false;"
     (visibleChange)="this.openedUserspaceBrowseWindow=false;">
     <form [formGroup]="editingFormGroup">
@@ -43,4 +39,5 @@
 <gebo-ui-modal-opener [componentType]="userspaceFolderComponent" targetType="UserspaceFolderDto"></gebo-ui-modal-opener>
 <gebo-ui-modal-opener [componentType]="userspaceKnowledgebaseComponent"
     targetType="UserspaceKnowledgebaseDto"></gebo-ui-modal-opener>
-<gebo-ui-modal-opener [componentType]="userspaceFilesUploadComponent"    targetType="UserspaceFilesUploadModel"></gebo-ui-modal-opener>
+<gebo-ui-modal-opener [componentType]="userspaceFilesUploadComponent" targetType="UserspaceFilesUploadModel"></gebo-ui-modal-opener>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

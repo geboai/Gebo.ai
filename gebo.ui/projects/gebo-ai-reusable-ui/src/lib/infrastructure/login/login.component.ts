@@ -25,10 +25,18 @@ import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
-
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
+import { Subscription } from "rxjs";
+import { GeboAITranslationService } from "../../controls/field-translation-container/gebo-translation.service";
+const welcomeMessage: ToastMessageOptions = { summary: "Welcome to gebo.ai", detail: "Enter your username and password to login", severity: "success" };
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
-  standalone: false
+  standalone: false,
+  providers: [{
+    provide: GEBO_AI_MODULE, useValue: "LoginModule", multi: false
+  }, {
+    provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LoginComponent")
+  }]
 })
 export class LoginComponent implements OnInit {
 
@@ -53,7 +61,8 @@ export class LoginComponent implements OnInit {
   /**
    * Collection of toast messages to display to the user
    */
-  userMessages: ToastMessageOptions[] = [{ summary: "Welcome to gebo.ai", detail: "Enter your username and password to login", severity: "success" }];
+  userMessages: ToastMessageOptions[] = [welcomeMessage];
+  private subscription?: Subscription;
   providers: Oauth2ClientAuthorizativeInfo[] = [];
 
   /**
@@ -66,7 +75,7 @@ export class LoginComponent implements OnInit {
    */
   public constructor(public loginService: LoginService,
     private geboFastSetupControllerService: GeboFastInstallationSetupControllerService,
-
+    private geboTranslationService: GeboAITranslationService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
 
@@ -85,7 +94,7 @@ export class LoginComponent implements OnInit {
         this.loginService.getOauth2LoginOptions().subscribe({
           next: (providers) => {
             this.providers = providers;
-            
+
           },
           complete: () => {
             this.loading = false;
@@ -99,9 +108,18 @@ export class LoginComponent implements OnInit {
    * Lifecycle hook that runs when the component initializes
    * Checks if the system is properly set up before allowing login
    */
-  ngOnInit(): void {
+  async ngOnInit() {
     this.checkSystemSetup();
-
+    await this.geboTranslationService.tryInit();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = undefined;
+    }
+    this.subscription = this.geboTranslationService.translateMessage("LoginModule", "LoginComponent", welcomeMessage).subscribe({
+      next: (message) => {
+        if (message) this.userMessages = [message];
+      }
+    });
   }
 
   /**
@@ -113,6 +131,18 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.loginService.login(this.formGroup.value).subscribe(x => {
       this.userMessages = x.messages;
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+        this.subscription = undefined;
+      }
+      if (this.userMessages && this.userMessages.length) {
+        this.subscription = this.geboTranslationService.translateMessage("LoginModule", "LoginComponent", this.userMessages[0]).subscribe({
+          next: (message) => {
+            if (message) this.userMessages = [message];
+          }
+        });
+      }
+
       if (x.userInfo) {
         this.router.navigate(["..", "reloader"], { relativeTo: this.activatedRoute, state: { forceReload: true } });
       }
@@ -120,13 +150,13 @@ export class LoginComponent implements OnInit {
   }
   public onOauth2Click(clicked: Oauth2ClientAuthorizativeInfo) {
     if (clicked.registrationId) {
-      
+
       this.loginService.loginWithOauth2(clicked).subscribe({
-        next:(value)=>{
+        next: (value) => {
 
         },
-        complete:()=>{
-          
+        complete: () => {
+
         }
       });
     }

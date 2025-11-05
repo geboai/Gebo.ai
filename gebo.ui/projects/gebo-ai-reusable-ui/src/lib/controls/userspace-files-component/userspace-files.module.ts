@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -41,6 +41,8 @@ import { FieldsetModule } from "primeng/fieldset";
 import { GeboUIEntityFormConfig } from "../../architecture/gebo-ui-entity-form-config";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
 
 /**
  * Configuration object for the UserspaceFolderDto entity.
@@ -71,7 +73,7 @@ export class UserspaceFormsListService extends GeboUIEntityFormsLauncherService 
      * @returns An array of GeboUIEntityFormConfig objects for userspace entities
      */
     public override getCurrentConfigurations(): GeboUIEntityFormConfig[] {
-        const vector:GeboUIEntityFormConfig[]=[userspaceFolderDtoConfig,userspaceKnowledgebaseDtoConfig];
+        const vector: GeboUIEntityFormConfig[] = [userspaceFolderDtoConfig, userspaceKnowledgebaseDtoConfig];
         return vector;
     }
 };
@@ -82,11 +84,12 @@ export class UserspaceFormsListService extends GeboUIEntityFormsLauncherService 
  * declares components related to userspace file management.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, PanelModule, DialogModule, TreeModule, BlockUIModule, ButtonModule, GeboAIContentViewerModule, TreeModule, CheckboxModule, FileUploadModule, GeboUIArchitectureModule,InputTextModule,MultiSelectModule,ChipModule,FieldsetModule],
-    declarations: [GeboAIUserpaceFilesComponent, GeboAIUserspaceFolderComponent, GeboAIUserspaceKnowledgebaseComponent, GeboAIUserspaceBrowseComponent,GeboAIUserspaceFilesUploadComponent],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, PanelModule, DialogModule, TreeModule, BlockUIModule, ButtonModule, GeboAIContentViewerModule, TreeModule, CheckboxModule, FileUploadModule, GeboUIArchitectureModule, InputTextModule, MultiSelectModule, ChipModule, FieldsetModule, GeboAIFieldTransationContainerModule],
+    declarations: [GeboAIUserpaceFilesComponent, GeboAIUserspaceFolderComponent, GeboAIUserspaceKnowledgebaseComponent, GeboAIUserspaceBrowseComponent, GeboAIUserspaceFilesUploadComponent],
     exports: [GeboAIUserpaceFilesComponent],
-    providers:[{
-        provide : GeboUIEntityFormsLauncherService , useValue: UserspaceFormsListService
-    }]
+    providers: [{
+        provide: GeboUIEntityFormsLauncherService, useValue: UserspaceFormsListService
+    }
+    ]
 })
 export class GeboAIUserspaceFilesModule { }

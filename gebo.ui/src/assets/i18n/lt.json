@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Numatytoji sistemos kalba",
+        "help" : "Numatytoji sistemos kalba šiai Gebo.ai instaliacijai"
+      },
+      "username" : {
+        "label" : "El. paštas",
+        "help" : "El. paštas kaip naudotojo vardas prisijungimui"
+      },
+      "passwordC" : {
+        "label" : "Patvirtinti slaptažodį",
+        "help" : "Patvirtinkite slaptažodį"
+      },
+      "password" : {
+        "label" : "Slaptažodis",
+        "help" : "Slaptažodis prisijungimui (ne trumpesnis nei 8 simboliai)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " slaptažodžiai nesutampa "
+      },
+      "LocalAdmin" : {
+        "label" : "Sukurkite vietinio administratoriaus paskyrą"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Naudosite šią paskyrą būsimam programinės įrangos diegimui/administravimui, ši informacija liks tik jūsų sistemoje ir nebus siunčiama per tinklą"
+      },
+      "EnterBtn" : {
+        "label" : "Eiti į prisijungimo puslapį"
+      },
+      "SetupPage" : {
+        "label" : "Nustatykite savo Gebo.ai įdiegimą"
+      },
+      "CreateBtn" : {
+        "label" : "Sukurti sistemos nustatymus"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Perskaitykite ir sutikite su licencija"
+      },
+      "AcceptMark" : {
+        "label" : "Sutinku su sąlygomis",
+        "help" : "Spausdami čia, sutinkate su licencijos sąlygomis"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "el. paštas",
+        "help" : "Naudokite el. paštą kaip prisijungimo vardą"
+      },
+      "password" : {
+        "label" : "Slaptažodis",
+        "help" : "Slaptažodis prisijungimui"
+      },
+      "LoginPanel" : {
+        "label" : "Prisijunkite prie Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Prisijungti"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Gerai!",
+        "detail" : "Operacija sėkmingai atlikta"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 konfigūracija"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Teikėjo pavadinimas"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 saugumo nustatymai"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Grįžti į pradžios puslapį"
+      },
+      "WizardUi" : {
+        "label" : "Pasirinkite nustatymo sekciją"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administratoriaus ir kitų paskyrų nustatymai",
+        "description" : "Būtina įtraukti administratoriaus paskyrą, kad ši Gebo.ai instaliacija būtų tinkamai valdoma. Prireikus pridėkite kitų naudotojų."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai darbo katalogas",
+        "description" : "Nustatykite darbo katalogą – čia bus saugomi šios instaliacijos konfigūracijos ir visi darbiniai failai. Rekomenduojama periodiškai kurti atsargines kopijas."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektorinės duomenų bazės konfigūracija",
+        "description" : "Gebo.ai darbui būtina sukonfigūruoti vektorinę duomenų bazę. Galite pasirinkti vietinę vektorinę duomenų bazę, Qdrant arba Mongo Atlas."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Vienkartinis prisijungimas, oauth2 autentifikavimas",
+        "description" : "Oauth2 vienkartinio prisijungimo autentifikavimas ir oauth2 klientų konfigūracija"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Didžiųjų kalbos modelių nustatymas",
+        "description" : "Konfigūruokite įvairius llms su debesų arba vietinės/LAN infrastruktūra. Būtina sukonfigūruoti bent vieną pokalbių modelį ir vieną įterpimų modelį, kad programinė įranga veiktų tinkamai."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Grafų rag/Žinių išgavimo nustatymai",
+        "description" : "Konfigūruokite grafų rag ir žinių išgavimo posistemį"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Bendrinamų failų sistemų nustatymai",
+        "description" : "Nustatykite įmonės bendrinamų failų sistemų kelius, kurie bus naudojami dokumentų sričiai įvairiose žinių bazėse"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence integracija",
+        "description" : "Nustatykite Gebo.ai prieigą prie savo Atlassian Confluence debesijos ar vietinių instaliacijų"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira integracija",
+        "description" : "Nustatykite Gebo.ai prieigą prie savo Atlassian jira debesijos instaliacijų"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint integracija",
+        "description" : "Nustatykite Gebo.ai prieigą prie savo Microsoft Sharepoint debesijos ar vietinių instaliacijų"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Nustatykite bent vieną žinių bazę",
+        "description" : "Nustatykite bent vieną žinių bazę, kad naudotojai galėtų pasinaudoti Gebo.ai paslaugomis"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Nustatykite bent vieną „R.A.G.“ pokalbio profilį",
+        "description" : "Nustatykite bent vieną papildytą paieška pagrįstą pokalbio profilį naudotojams pagal pasirinktą žinių bazę"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Įmonės Atlassian Confluence sistemų nustatymai"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistemos tipas"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence sistema"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira sistema"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      },
+      "MainPanel" : {
+        "label" : "Įmonės Atlassian Jira sistemų nustatymai"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistemos tipas"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      },
+      "MainPanel" : {
+        "label" : "Įmonės Microsoft Sharepoint sistemų nustatymai"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistemos tipas"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint sistema"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Pateikite api-raktą su pakankamu kreditu. Jei pasirinkote OpenAI, turite į savo planą pridėti specifinį kreditą (10-30 $ gali būti pakankamai) api naudojimui, kitaip ši programėlė neturės prieigos prie llms eismo."
+      },
+      "MainPanel" : {
+        "label" : "Suteikite Gebo.ai llms teikėjų prieigą naudodami savo api raktą"
+      },
+      "provider" : {
+        "label" : "Didžiausių kalbos modelių tiekėjas",
+        "help" : "Pasirinkite vieną tiekėją iš OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Naudotojas",
+        "help" : "Įveskite apiKey susietą naudotoją"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigūruoti"
+      },
+      "apiKey" : {
+        "label" : "Api raktas",
+        "help" : "Jūsų LLMS teikėjų api raktas"
+      },
+      "ProviderHeader" : {
+        "label" : "Teikėjas"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      },
+      "ModelHeader" : {
+        "label" : "Modelis"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Modelio tipas"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Numatytas modelis"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Kurti grafų rag konfigūraciją"
+      },
+      "MainPanel" : {
+        "label" : "Nustatykite grafų rag ir žinių išgavimo numatytuosius parametrus"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projektas"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Pridėti žinių bazę"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Žinių bazė"
+      },
+      "MainPanel" : {
+        "label" : "Žinių bazės ir turinio konfigūracijos"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Turinio šaltinis"
+      },
+      "PublishedHeader" : {
+        "label" : "Paskelbta"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Dokumentų skaičius"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Pridėti projektą/elementą",
+        "help" : "sukurti naują projektą"
+      },
+      "Button1" : {
+        "help" : "atidaryti žinių bazę"
+      },
+      "Button2" : {
+        "help" : "atidaryti projekto formą"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai darbo aplanko konfigūracija"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigūruoti"
+      },
+      "workDirectory" : {
+        "label" : "Pasirinkite aplanką kaip Gebo.ai darbo katalogą",
+        "help" : "Pasirinkite serverio aplanką, kuris bus naudojamas kaip darbo aplankas šios instaliacijos konfigūracijoms ir turinio saugojimui."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Pridėti aplanką"
+      },
+      "AddFolderBtn" : {
+        "label" : "Pridėti aplanką"
+      },
+      "CodeHeader" : {
+        "label" : "Kodas"
+      },
+      "MainPanel" : {
+        "label" : "Serverio bendrinamų failų sistemų keliai"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoliutus kelias"
+      },
+      "DeleteHeader" : {
+        "label" : "Ištrinti"
+      },
+      "path" : {
+        "label" : "Pridėti bendrinamos failų sistemos šakninį aplanką",
+        "help" : "Pasirinkite serverio aplanką, kuris yra šakninio kelio pradžia bendrinamai failų sistemai, naudojamai jūsų organizacijoje kaip dokumentų saugykla"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite failų sistemos įrašo aprašymą"
+      },
+      "RemovePathBtn" : {
+        "label" : "Pašalinti kelią"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigūruoti"
+      },
+      "MainPanel" : {
+        "label" : "Vektorinės duomenų bazės konfigūracija"
+      },
+      "host" : {
+        "label" : "Qdrant serveris",
+        "help" : "Qdrant serverio vardas arba IP adresas"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant prisijungimo nustatymai"
+      },
+      "port" : {
+        "label" : "Qdrant prievadas",
+        "help" : "Qdrant komunikacijos prievadas (standartinis yra 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api raktas",
+        "help" : "Api raktas Qdrant autentifikavimui"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parametras",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai būtinų žingsnių nustatymai baigti...",
+        "detail" : "Būtini nustatymo žingsniai atlikti, tačiau trūkstami žingsniai gali apriboti visapusišką šios programos galimybių išnaudojimą"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai nustatymuose trūksta būtino žingsnio",
+        "detail" : "Patikrinkite raudona spalva pažymėtus nustatymų žingsnius"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai nustatymai OK!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kodas",
+        "help" : "Įveskite OAUTH2 autentifikavimo/integracijos kodo (registrationId) aprašymą."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite OAUTH2 autentifikavimo/integracijos informacijos aprašymą."
+      },
+      "configurationType" : {
+        "label" : "Konfigūracijos paskirtis",
+        "help" : "Pasirinkite, ar šie nustatymai bus naudojami autentifikuotis Gebo.ai, ar Gebo.ai klientų jungtims su trečiosios šalies sistema."
+      },
+      "authProvider" : {
+        "label" : "Tiekėjas",
+        "help" : "Įveskite OAUTH2 autentifikavimo tiekėją"
+      },
+      "issuerUri" : {
+        "label" : "Leidėjo URI",
+        "help" : "Įveskite tiekėjo OAUTH2 leidėjo URL"
+      },
+      "authorizationUri" : {
+        "label" : "Autorizacijos URL",
+        "help" : "Įveskite tiekėjo OAUTH2 autorizacijos URL"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set URI",
+        "help" : "Įveskite tiekėjo OAUTH2 Jwk Set URL"
+      },
+      "userInfoUri" : {
+        "label" : "Vartotojo informacijos URL",
+        "help" : "Įveskite tiekėjo OAUTH2 vartotojo informacijos URL"
+      },
+      "introspectionUri" : {
+        "label" : "Introspekcijos URI",
+        "help" : "Įveskite tiekėjo OAUTH2 introspekcijos URL"
+      },
+      "tokenUri" : {
+        "label" : "Žetono URL",
+        "help" : "Įveskite tiekėjo OAUTH2 žetono URL"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 tiekėjo URL"
+      },
+      "MainPanel" : {
+        "label" : "Įveskite naują OAUTH2 autentifikavimo/integracijos informaciją"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Kliento ID",
+        "help" : "Kliento identifikatorius oauth2 protokolui (jį galima gauti prisijungus prie oauth2 autentifikuotos trečiosios šalies programinės įrangos administravimo srities)"
+      },
+      "secret" : {
+        "label" : "Slaptas raktas",
+        "help" : "Kliento slaptas raktas oauth2 protokolui (jį galima gauti prisijungus prie oauth2 autentifikuotos trečiosios šalies programinės įrangos administravimo srities)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Sukurti confluence sistemos konfigūraciją"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite confluence sistemos aprašymą."
+      },
+      "CreateBtn" : {
+        "label" : "Sukurti"
+      },
+      "username" : {
+        "label" : "Confluence naudotojo vardas",
+        "help" : "Confluence naudotojo vardas"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence versija",
+        "help" : "Confluence versija"
+      },
+      "baseUri" : {
+        "label" : "Pagrindinis interneto adresas",
+        "help" : "Bazinis confluence sistemos adresas vietinei diegčiai arba jūsų organizacijos pagrindinis adresas confluence debesų sistemai"
+      },
+      "password" : {
+        "label" : "Confluence slaptažodis",
+        "help" : "Confluence slaptažodis"
+      },
+      "token" : {
+        "label" : "Confluence cloud api raktas",
+        "help" : "Confluence CLOUD API raktas, gautas confluence administravimo aplinkoje, čia reikia įvesti „API Token for your Atlassian Account“."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugo ir leidžia šį turinį pasiekti žinių bazei LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SettingsTab" : {
+        "label" : "Nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "Confluence turinio dalijimasis"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas unikalus turinio kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite įkelto confluence turinio aprašymą."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence sistema",
+        "help" : "Jau sukonfigūruotos confluence sistemos nuoroda."
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pirminio projekto nuoroda."
+      },
+      "openZips" : {
+        "label" : "Atverti zip failus",
+        "help" : "Leisti atverti zip failus ir išgauti turinį"
+      },
+      "tree" : {
+        "label" : "Pasirinktos erdvės ar puslapiai/puslapiai po puslapiu",
+        "help" : "Bendrinamų confluence erdvių ir puslapių turinys"
+      },
+      "programmedTables" : {
+        "label" : "Turinio atnaujinimų patikrinimų tvarkaraštis",
+        "help" : "Nustatykite, kaip bus tikrinami pasikeitę turiniai, kad papildytumėte sistemą nauja informacija"
+      },
+      "catalogingCriteria" : {
+        "label" : "Erdvių, puslapių ir po-puslapių organizavimo kriterijai",
+        "help" : "Paaiškinkite čia, kaip buvo atliktas erdvių, puslapių ir po-puslapių organizavimo kriterijų taikymas confluence turiniui, dalinamam su Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Bendrieji nustatymai"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "MainPanel" : {
+        "label" : "Confluence sistemos redagavimas"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "baseUri" : {
+        "label" : "Pagrindinis interneto adresas",
+        "help" : "Bazinis confluence sistemos adresas"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas confluence sistemos unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite confluence sistemos aprašymą."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence versija",
+        "help" : "Confluence versija"
+      },
+      "secretCode" : {
+        "label" : "Naudojama tapatybė",
+        "help" : "Pasirinkite arba sukurkite tapatybę prisijungti prie confluence sistemos"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nauja grupė"
+      },
+      "NewUserBtn" : {
+        "label" : "naujas vartotojas"
+      },
+      "UsersListPanel" : {
+        "label" : "Vartotojų sąrašas"
+      },
+      "GroupsListPanel" : {
+        "label" : "Grupių sąrašas"
+      },
+      "SournameHeader" : {
+        "label" : "pavardė"
+      },
+      "UsernameHeader" : {
+        "label" : "vartotojo vardas"
+      },
+      "RolesHeader" : {
+        "label" : "vaidmenys"
+      },
+      "NameHeader" : {
+        "label" : "vardas"
+      },
+      "EditBtn" : {
+        "label" : "Redaguoti"
+      },
+      "DisabledHeader" : {
+        "label" : "išjungtas"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "UserIds" : {
+        "placeholder" : "Pasirinkite vartotojus"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "MainPanel" : {
+        "label" : "Vartotojų grupės redagavimas"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite vartotojų grupės aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Įveskite vartotojų grupės kodą"
+      },
+      "userIds" : {
+        "label" : "Vartotojų sąrašas",
+        "help" : "Pasirinkite naudotojus, dalyvaujančius grupėje"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Sukurti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite jira sistemos aprašymą."
+      },
+      "MainPanel" : {
+        "label" : "Sukurti jira sistemos konfigūraciją"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "username" : {
+        "label" : "jira naudotojo vardas",
+        "help" : "jira naudotojo vardas"
+      },
+      "token" : {
+        "label" : "jira cloud API raktas",
+        "help" : "jira CLOUD API raktas, gautas jira backoffice, čia reikia įvesti „API Token for your Atlassian Account“."
+      },
+      "baseUri" : {
+        "label" : "Pagrindinis interneto adresas",
+        "help" : "Pagrindinis jira sistemos adresas vietinei instaliacijai arba jūsų organizacijos pagrindinis adresas jira cloud sistemai"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugo ir leidžia šį turinį pasiekti žinių bazėje LLM'ams"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SettingsTab" : {
+        "label" : "Nustatymai"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      },
+      "MainPanel" : {
+        "label" : "Dalijimasis jira turiniu"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas turinio unikalus kodas."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira sistema",
+        "help" : "Jau sukonfigūruotos jira sistemos nuoroda."
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pagrindinio projekto nuoroda."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite įkelto jira įrašų turinio aprašymą."
+      },
+      "programmedTables" : {
+        "label" : "Turinio atnaujinimų tikrinimo tvarkaraštis",
+        "help" : "Konfigūruokite pakeisto turinio tikrinimo tvarkaraštį, kad lygintu ir atnaujintų turinio gavimo sistemą"
+      },
+      "openZips" : {
+        "label" : "Atverti zip failus",
+        "help" : "Įgalina zip failų atvėrimą ir turinio išgavimą"
+      },
+      "tree" : {
+        "label" : "Pasirinktos erdvės arba puslapiai/puslapiai",
+        "help" : "Bendrintų jira projektų ir bilietų hierarchija"
+      },
+      "catalogingCriteria" : {
+        "label" : "Erdvių, puslapių ir poskyrių organizavimo kriterijai",
+        "help" : "Paaiškinkite, kaip buvo organizuojama erdvės, puslapiai ir poskyriai jira turinyje bendrintame su Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite jira sistemos aprašymą."
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojama jira sistema"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "baseUri" : {
+        "label" : "Pagrindinis interneto adresas",
+        "help" : "Jira sistemos pagrindinio adreso URL"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas jira sistemos unikalus kodas."
+      },
+      "secretCode" : {
+        "label" : "Naudota tapatybė",
+        "help" : "Pasirinkite arba sukurkite tapatybę jira sistemai pasiekti"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite SharPpoint/OneDrive sistemos aprašymą."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint versija",
+        "help" : "sharepoint versija"
+      },
+      "secret" : {
+        "label" : "Slaptas raktas",
+        "help" : "Oauth2 kliento slaptas raktas šiai programai, registruotai microsoft „entra“ produkte (gali būti surandamas microsoft cloud administravimo konsolėje)"
+      },
+      "clientId" : {
+        "label" : "Kliento ID",
+        "help" : "Oauth2 kliento identifikatorius šiai programai, registruotai microsoft „entra“ produkte (gali būti surandamas microsoft cloud administravimo konsolėje)"
+      },
+      "tenantId" : {
+        "label" : "Nuomininko ID",
+        "help" : "Oauth2 nuomininko identifikatorius jūsų organizacijos microsoft „entra“ produktui (gali būti surandamas microsoft cloud administravimo konsolėje)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 programos registracijos informacija Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Sukurti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "MainPanel" : {
+        "label" : "Kurti SharePoint/OneDrive sistemos konfigūraciją"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugo ir leidžia šiam turiniui būti prieinamam žinių bazėje LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "Dalijimasis SharePoint/OneDrive turiniu"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas turinio unikalus kodas."
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pagrindinio projekto nuoroda."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite SharePoint/OneDrive įrašų duomenų šaltinių aprašymą."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint sistema",
+        "help" : "Jau sukonfigūruotos SharePoint/OneDrive sistemos nuoroda."
+      },
+      "openZips" : {
+        "label" : "Atverti zip failus",
+        "help" : "Įjungti zip failų atvėrimą ir turinio išgavimą"
+      },
+      "tree" : {
+        "label" : "Pasirinktos Sharepoint svetainės/puslapiai/puslapiai arba OneDrive diskai/aplankai/failai",
+        "help" : "Bendrinamas sharepoint/OneDrive turinys"
+      },
+      "programmedTables" : {
+        "label" : "Turinio atnaujinimų tikrinimo grafikas",
+        "help" : "Konfigūruokite pakeisto turinio tikrinimų grafiką, kad išlaikytumėte atnaujintą papildomos generacijos sistemą"
+      },
+      "catalogingCriteria" : {
+        "label" : "Erdvių, puslapių ir subpuslapių organizavimo kriterijai",
+        "help" : "Paaiškinkite čia, kaip buvo organizuotas erdvių, puslapių ir subpuslapių kriterijus sharepoint turinyje, bendrintame su Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Sharepoint sistemos redagavimas"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Bendrieji nustatymai"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "secretCode" : {
+        "label" : "Naudojama tapatybė",
+        "help" : "Pasirinkite arba sukurkite tapatybę, kad pasiektumėte sharepoint sistemą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas sharepoint sistemos unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite sharepoint sistemos aprašymą."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint versija",
+        "help" : "sharepoint versija"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Ištrinti"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Išsaugoti"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Atšaukti"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Bendrieji informacijos/turinio nustatymai"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms nustatymai"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas unikalus žinių grafo duomenų ištraukimo\n                                    etapo kodas"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/žinių ištraukimo konfigūracija"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite šio žinių grafo duomenų ištraukimo etapo\n                                    konfigūracijos aprašymą"
+      },
+      "extractionPrompt" : {
+        "label" : "Informacijos ištraukimo užklausa",
+        "help" : "Užklausa dideliam kalbiniam modeliui subjektų/įvykių/sąsajų ir alternatyvių pavadinimų ištraukimui"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM, naudojamas duomenų ištraukimui",
+        "help" : "Nurodykite didelį kalbinį modelį, naudojamą žinių ištraukimui, jei nepasirinksite, bus naudojamas numatytasis."
+      },
+      "graphRagAllSources" : {
+        "label" : "Taikyti graph rag visiems duomenų šaltiniams",
+        "help" : "Jei tiesa, visi žinių pagrindai/projektai/duomenų šaltiniai bus apdoroti žinių ištraukimui, kitaip tik tie, kurie bus pasirinkti atskirai."
+      },
+      "defaultModel" : {
+        "label" : "Numatytasis didelis kalbinis modelis",
+        "help" : "Numatytasis didelis kalbinis modelis bus naudojamas žinių ištraukimui"
+      },
+      "processEveryDocument" : {
+        "label" : "Taikyti graph rag visiems failams",
+        "help" : "Graph rag algoritmai bus taikomi visiems failams, tai pagerins\n                                            analizės detalumą,\n                                            kurį sistema gali pasiekti, bet padidins kaštus ir laiką,\n                                            kurio reikia dokumentų apdorojimui"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Failų atrankos kriterijai graphrag apdorojimui",
+        "help" : "Redaguokite failų siuntimo į informacijos ištraukimo procesą graphrag kriterijus: pasirinkite bent pavadinimą ir kriterijų ir/ar failo tipą ir/ar maksimalų failo dydį baitais ir/ar paskutinio pakeitimo amžių dienomis"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Pasirinkite failo tipus"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Failo pavadinimo filtravimo kriterijai"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Failo paskutinis keitimas, prieš dienų"
+      },
+      "nameFilter" : {
+        "placeholder" : "Failo pavadinimas"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maksimalus failo dydis baitais"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Bendra informacija"
+      },
+      "MainPanel" : {
+        "label" : "Žinių bazės redagavimas"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Žinių bazės prieigos nustatymai"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas žinių bazės unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite žinių bazės aprašymą."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Naudojami įterpimo modeliai (palikite tuščią, jei norite naudoti sistemos numatytąjį)",
+        "help" : "Žinių bazės įterpimo modeliai, jei paliksite tuščią, bus naudojamas numatytasis modelis."
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksuoti",
+        "help" : "Perindeksuoti turinį"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Projekto ar elemento redagavimas"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas projekto unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite projekto aprašymą."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "žinių bazė",
+        "help" : "žinių bazė."
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksuoti",
+        "help" : "Perindeksuoti turinį"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Pridėti elementą/projektą",
+        "help" : "pridėti naują..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Visi naudoja",
+        "help" : "Visi gali naudoti"
+      },
+      "accessibleGroups" : {
+        "label" : "Grupių sąrašas",
+        "help" : "Pasirinkite leistinas grupes"
+      },
+      "accessibleUsers" : {
+        "label" : "Vartotojų sąrašas",
+        "help" : "Pasirinkite leistinus vartotojus"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Prietaisų skydas"
+      },
+      "LLMSTab" : {
+        "label" : "LLM pokalbiams ir įterpimui"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag pokalbių profiliai/Modelio užklausos"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Žinių bazės ir projektai"
+      },
+      "UsersGroupTab" : {
+        "label" : "Naudotojai ir grupės"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai modulių konfigūravimas"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kodas"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfigūruoti"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigūruoti"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nauja užklausos konfigūracija"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Naujas pokalbio profilis"
+      },
+      "MainPanel" : {
+        "label" : "Ieškomųjų duomenų generavimo pokalbių profiliai"
+      },
+      "PromptsPanel" : {
+        "label" : "Užklausų rinkinys ir numatytosios užklausos"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Žinių bazės"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfigūruoti"
+      },
+      "CodeHeader" : {
+        "label" : "Kodas"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nauja žinių bazė"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nauja įterpimo modelio konfigūracija"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nauja pokalbių modelio konfigūracija"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "CodeHeader" : {
+        "label" : "Kodas"
+      },
+      "ModelHeader" : {
+        "label" : "Modelis "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Modelio tiekėjas"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfigūruoti"
+      },
+      "CodeHeader2" : {
+        "label" : "Kodas"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Aprašymas"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Modelio tiekėjas"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfigūruoti"
+      },
+      "ModelHeader2" : {
+        "label" : "Modelis "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Konfigūruoti pokalbių modeliai"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Konfigūruoti įterpimo modeliai"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Modelio testavimas"
+      },
+      "TestChatBtn" : {
+        "label" : "Išbandyti pokalbį"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI žetonas",
+        "help" : "Pasirinkite OpenAI žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite OpenAI pokalbio modelį darbui."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pagrindinė informacija"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Išplėstiniai nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI pokalbio modelio konfigūracijos redagavimas"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelio prieigos nustatymai"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding modelio konfigūracijos redagavimas"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI žetonas",
+        "help" : "Pasirinkite OpenAI žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas embedding modelio konfigūracijos unikalus kodas"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite embedding modelio konfigūracijos aprašymą"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding modelio pasirinkimas",
+        "help" : "Pasirinkite OpenAI embedding modelį darbui."
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis embedding modelis, kai nenurodytas kitas modelis"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "baseUrl" : {
+        "label" : "Pagrindinis ollama serverio adresas",
+        "help" : "Pagrindinis adresas (pvz. http://servername:234/), kuriuo atsako ollama vietinis arba LAN serveris."
+      },
+      "choosedModel" : {
+        "label" : "Ollama pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite Ollama pokalbio modelį darbui.",
+        "placeholder" : "Pasirinkite modelį"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama žetonas",
+        "help" : "Pasirinkite Ollama žetoną, kuris bus naudojamas šiam modeliui (neprivaloma)"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "MainPanel" : {
+        "label" : "Ollama vietinio (arba LAN) pokalbio modelio konfigūracijos redagavimas"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic žetonas",
+        "help" : "Pasirinkite Anthropic žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite Anthropic pokalbio modelį darbui.",
+        "placeholder" : "Pasirinkite modelį"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Išplėstiniai nustatymai"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pagrindinė informacija"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelio prieigos nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic pokalbio modelio konfigūracijos redagavimas"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI žetonas",
+        "help" : "Pasirinkite MistralAI žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite MistralAI pokalbio modelį darbui."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pagrindinė informacija"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Išplėstiniai nustatymai"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelio prieigos nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI pokalbio modelio konfigūracijos redagavimas"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite Google Vertex AI pokalbio modelį darbui."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI žetonas",
+        "help" : "Pasirinkite Google Vertex AI žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Pagrindinė informacija"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Modelio prieigos nustatymai"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Išplėstiniai nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI pokalbio modelio konfigūracijos redagavimas"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek žetonas",
+        "help" : "Pasirinkite Deepseek žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite Deepseek pokalbio modelį darbui.",
+        "placeholder" : "Pasirinkite modelį"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Išplėstiniai nustatymai"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pagrindinė informacija"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek pokalbio modelio konfigūracijos redagavimas"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelio prieigos nustatymai"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite modelio konfigūracijos aprašymą"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas modelio konfigūracijos unikalus kodas"
+      },
+      "baseUrl" : {
+        "label" : "Pokalbio modelio API bazinis serverio adresas",
+        "help" : "Pokalbio modelio bazinis adresas."
+      },
+      "apiSecretCode" : {
+        "label" : "Pokalbio modelio API žetonas",
+        "help" : "Pasirinkite pokalbio modelio API žetoną, kuris bus naudojamas šiam modeliui (neprivaloma)"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis, kai nenurodytas kitas modelis"
+      },
+      "choosedModel" : {
+        "label" : "Pokalbio modelio pasirinkimas",
+        "help" : "Pasirinkite pokalbio modelį darbui."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pagrindinė informacija"
+      },
+      "TitleFragment" : {
+        "label" : "Redaguojamas pokalbio modelio tiekėjas:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Išplėstiniai nustatymai"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modelio prieigos nustatymai"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite embedding modelio konfigūracijos aprašymą"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "MainPanel" : {
+        "label" : "Ollama vietinio (arba LAN) embedding modelio konfigūracijos redagavimas"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama žetonas",
+        "help" : "Pasirinkite Ollama žetoną, kuris bus naudojamas šiam modeliui"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding modelio pasirinkimas",
+        "help" : "Pasirinkite Ollama embedding modelį darbui."
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas embedding modelio konfigūracijos unikalus kodas"
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis embedding modelis, kai nenurodytas kitas modelis"
+      },
+      "baseUrl" : {
+        "label" : "Pagrindinis ollama serverio adresas",
+        "help" : "Pagrindinis adresas (pvz. http://servername:234/), kuriuo atsako ollama vietinis arba LAN serveris."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite embedding modelio konfigūracijos aprašymą"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding modelio konfigūracijos redagavimas"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas embedding modelio konfigūracijos unikalus kodas"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding modelio pasirinkimas",
+        "help" : "Pasirinkite MistralAI embedding modelį darbui."
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis embedding modelis, kai nenurodytas kitas modelis"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI žetonas",
+        "help" : "Pasirinkite MistralAI žetoną, kuris bus naudojamas šiam modeliui"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding modelio konfigūracijos redagavimas"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite embedding modelio konfigūracijos aprašymą"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding modelio pasirinkimas",
+        "help" : "Pasirinkite Google Vertex AI embedding modelį darbui."
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis embedding modelis, kai nenurodytas kitas modelis"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas embedding modelio konfigūracijos unikalus kodas"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI žetonas",
+        "help" : "Pasirinkite Google Vertex AI žetoną, kuris bus naudojamas šiam modeliui"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "TitleFragment" : {
+        "label" : "Embedding modelio tiekėjo redagavimas:"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite embedding modelio konfigūracijos aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas embedding modelio konfigūracijos unikalus kodas"
+      },
+      "choosedModel" : {
+        "label" : "Embedding modelio pasirinkimas",
+        "help" : "Pasirinkite embedding modelį darbui."
+      },
+      "baseUrl" : {
+        "label" : "Embedding modelio API serverio adresas",
+        "help" : "Embedding modelio serverio bazinis adresas."
+      },
+      "defaultModel" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Jei tiesa, šis modelis bus naudojamas kaip numatytasis embedding modelis, kai nenurodytas kitas modelis"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding modelio API žetonas",
+        "help" : "Pasirinkite embedding modelio API žetoną, kuris bus naudojamas šiam modeliui"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Pokalbio konfigūracijos informacija"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Ištrinti šį pokalbio seansą"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Pervadinti pokalbio seansą"
+      },
+      "QueryControl" : {
+        "placeholder" : "Parašykite žinutę pokalbių botui"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "description" : {
+        "label" : "Pokalbio aprašymas",
+        "help" : "Įveskite pokalbio seanso aprašymą."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Naudojamas modelis",
+        "help" : "Modelio kodas"
+      },
+      "providerId" : {
+        "label" : "Pokalbio modelio tiekėjas",
+        "help" : "LLms tiekėjo tvarkyklė"
+      },
+      "functions" : {
+        "label" : "Iškviečiamos pokalbio modelio funkcijos",
+        "help" : "Funkcijų, kurias galima naudoti pokalbio modelyje, sąrašas"
+      },
+      "NameCol" : {
+        "label" : "Pavadinimas"
+      },
+      "DescriptionCol" : {
+        "label" : "Aprašymas"
+      },
+      "kbases" : {
+        "label" : "Galimos žinių bazės",
+        "help" : "Žinių bazių, naudojamų šiame RAG pokalbyje, sąrašas"
+      },
+      "CloseBtn" : {
+        "help" : "Uždaryti"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Įrašyti",
+        "help" : "Pradėti garso takelio įrašymą ir išsiųsti"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "įkelti duomenis iš naujo"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SelectHeader" : {
+        "label" : "Pasirinkti"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "pabaigos data/laikas"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "pradžios data/laikas"
+      },
+      "ProcessingHeader" : {
+        "label" : "apdorojama"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "CodeHeader" : {
+        "label" : "Kodas"
+      },
+      "FinishedHeader" : {
+        "label" : "baigta"
+      },
+      "WithErrorHeader" : {
+        "label" : "su klaida"
+      },
+      "LogTableComponent" : {
+        "help" : "Šis bendro failų sistemos srities įkėlimo žurnalas"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Procesų statistika"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "CloseBtn" : {
+        "label" : "Uždaryti"
+      },
+      "PublicationLogTab" : {
+        "label" : "Publikavimo žurnalas"
+      },
+      "MainPanel" : {
+        "label" : "Publikavimo žurnalas"
+      },
+      "actualStatus" : {
+        "label" : "Būsena",
+        "help" : "Užduoties būsena: vykdoma, baigta arba baigta su klaidomis."
+      },
+      "publishingSystem" : {
+        "label" : "Publikuoto turinio konfigūracija",
+        "help" : "Publikuojamo turinio informacija"
+      },
+      "startDateTime" : {
+        "label" : "Pradžios data/laikas",
+        "help" : "Turinio sinchronizavimo užduoties pradžios data ir laikas"
+      },
+      "endDateTime" : {
+        "label" : "Pabaigos data/laikas",
+        "help" : "Turinio sinchronizavimo užduoties pabaigos data ir laikas"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Ne visiškai apdorota"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Pilnai apdorota"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding ir bendras dokumentų skaičius"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Daugiau informacijos"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Generuoti užklausą"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Užklausos vedlys",
+        "help" : "Naudokite tai, jei norite, kad LLM sukurtų jūsų tikslams skirtą užklausą"
+      },
+      "acceptPrompt" : {
+        "label" : "Priimti užklausą"
+      },
+      "promptWizardUI" : {
+        "label" : "Užklausos šablono generavimo vedlys"
+      },
+      "cancel" : {
+        "label" : "Atšaukti"
+      },
+      "response" : {
+        "label" : "Siūlomas užklausos šablonas",
+        "help" : "Sukurtas šablono tekstas jūsų tikslui (galite jį keisti arba pakoreguoti)"
+      },
+      "modelCode" : {
+        "label" : "Naudojamas pokalbio modelis",
+        "help" : "Pasirinkite pokalbio modelį, kurio norite paprašyti užklausos šablono generavimo"
+      },
+      "query" : {
+        "label" : "Užklausos šablono užklausa",
+        "help" : "Nurodykite antruoju asmeniu, koks yra tikslas, kuriame AI padės naudotojui"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatūra",
+        "help" : "Temperatūra, kuria modelis atsakys, nuo 0 iki 1 (jei nesate tikri, palikite tuščią)"
+      },
+      "contextLength" : {
+        "label" : "Konteksto ilgis (ženklai)",
+        "help" : "Teksto kiekis, kurį AI modelis gali apdoroti (jei nenustatyta, bus naudojama 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametras, nuo 0 iki 1 (jei nesate tikri, palikite tuščią)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Aktyvuotos šio modelio funkcijos",
+        "help" : "Funkcijos, kurias modelis gali naudoti pokalbio metu"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Numatytasis modelio pateikimas",
+        "help" : "Redaguokite numatytąjį pokalbio modelio užklausą."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite identiteto aprašymą."
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas identiteto unikalus kodas."
+      },
+      "secretType" : {
+        "label" : "Identiteto tipas",
+        "help" : "Pasirinkite nuotolinei sistemai kuriamą identiteto tipą"
+      },
+      "InsertBtn" : {
+        "label" : "Įterpti"
+      },
+      "token" : {
+        "label" : "Raktas",
+        "help" : "Įveskite raktą."
+      },
+      "user" : {
+        "label" : "Vartotojas",
+        "help" : "Įveskite vartotoją, nurodytą rakto."
+      },
+      "MainPanel" : {
+        "label" : "Kuriamas identitetas"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "username" : {
+        "label" : "Vartotojo vardas",
+        "help" : "Įveskite vartotojo vardą."
+      },
+      "password" : {
+        "label" : "Slaptažodis",
+        "help" : "Įveskite slaptažodį."
+      },
+      "email" : {
+        "label" : "El. paštas / vartotojo vardas",
+        "help" : "Įveskite SSH raktui priskirtą el. paštą ar vartotojo vardą."
+      },
+      "key" : {
+        "label" : "Slaptas raktas",
+        "help" : "Atidarykite privatų rakto failą ir nukopijuokite šį tekstą čia."
+      },
+      "passphrase" : {
+        "label" : "Rakto slaptafraze",
+        "help" : "Įveskite rakto slaptažodį."
+      },
+      "pub" : {
+        "label" : "Viešasis raktas",
+        "help" : "Atidarykite viešojo rakto failą ir nukopijuokite šį tekstą čia."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas turinio unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite įkelto turinio arba failų sistemos įrašo aprašymą."
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pirminio projekto nuoroda."
+      },
+      "upload" : {
+        "label" : "Įkelti turinį",
+        "help" : "Paspauskite naršymo mygtuką ir pasirinkite zip arba kitus failus"
+      },
+      "openZips" : {
+        "label" : "Atverti zip failus",
+        "help" : "Įjungti zip failų atvėrimą ir turinio išgavimą"
+      },
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugoma ir leidžiama turinį pasiekti žinių bazei LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      },
+      "MainPanel" : {
+        "label" : "Įkelto turinio redagavimas"
+      },
+      "SettingsTab" : {
+        "label" : "Nustatymai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigūruoti kūrimo sistemas",
+        "help" : "Kūrimo/pakavimų sistemų sąrašas, skirtas patikrinti meta informaciją ir papildomą artefaktų informaciją (palikite tuščią, jei nėra programinės įrangos kodo)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Pasirinkti elementai"
+      },
+      "ChooseOk" : {
+        "label" : "Gerai"
+      },
+      "ChooseCancel" : {
+        "label" : "Atšaukti"
+      },
+      "EditBtn" : {
+        "help" : "Redaguoti pasirinktus"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Pasirinkite elementus"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Pasirinkite elementus"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Redaguoti planavimą"
+      },
+      "ConfirmBtn" : {
+        "label" : "Patvirtinti"
+      },
+      "AddBtn" : {
+        "label" : "+Pridėti"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugo ir leidžia šį turinį padaryti prieinamą žinių bazei LLm'ams"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SettingsTab" : {
+        "label" : "Nustatymai"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Programinio kodo apdorojimas"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojamas esamas failų sistemos turinys"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite įkeltų failų sistemos įrašo turinio aprašymą."
+      },
+      "openZips" : {
+        "label" : "Atidaryti zip failus",
+        "help" : "Įjungti zip failų atidarymą ir turinio išskleidimą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas unikalus turinio kodas."
+      },
+      "tree" : {
+        "label" : "Pasirinkti failai ar aplankai",
+        "help" : "Bendrinamos failų sistemos failai ar katalogai prieinami serveryje"
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pirminio projekto nuoroda."
+      },
+      "programmedTables" : {
+        "label" : "Turinio atnaujinimo tikrinimo tvarkaraštis",
+        "help" : "Nustatykite pakeisto turinio tikrinimo laiką, kad būtų atnaujinta išplėstinio sugeneravimo sistema"
+      },
+      "catalogingCriteria" : {
+        "label" : "Aplankų organizavimo kriterijai",
+        "help" : "Paaiškinkite čia, kaip buvo organizuoti aplankai failų sistemos srityje, kurią dalijatės su Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigūruoti komponavimo sistemas",
+        "help" : "Komponavimo/pakavimo sistemų, kurios turi būti tikrinamos dėl meta informacijos ir papildomos artefaktų informacijos, sąrašas (palikite tuščią, jei nėra programinio kodo)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nauja bendrinama failų sritis"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoliutus kelias"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db arba yml failo konfigūracija"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "CodeHeader" : {
+        "label" : "Kodas"
+      },
+      "ModifyHeader" : {
+        "label" : "Keisti"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Pasirinktas bendrintas failų sistemos aplankas",
+        "help" : "Pasirinkite serverio aplanką, kuris yra bendrinamos failų sistemos šaknis, naudojamos jūsų organizacijoje kaip dokumentų saugykla"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite savo organizacijos bendrinamos failų sistemos srities aprašymą"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas unikalus turinio kodas."
+      },
+      "InsertBtn" : {
+        "label" : "Įterpti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojamas serverio bendrinamas failų aplankas"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugokite ir leiskite šiam turiniui būti prieinamam žinių bazėje LLm'ams"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojamas git šaltinio/dokumentacijos saugykla"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite git repozitorijos aprašymą."
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas unikalus git repozitorijos kodas."
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pirminio projekto nuoroda."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git sistema",
+        "help" : "Jau sukonfigūruota git sistemos nuoroda."
+      },
+      "branch" : {
+        "label" : "Šaka",
+        "help" : "Šakos pavadinimas, kurią reikia pasirinkti (dažniausiai master, main arba develop)"
+      },
+      "identityCode" : {
+        "label" : "Naudojama tapatybė",
+        "help" : "Pasirinkite tapatybę klonavimui/patikrinimui sistemoje"
+      },
+      "repositoryUri" : {
+        "label" : "Saugyklos URL/adresas",
+        "help" : "Pilnas nuotolinės git saugyklos adresas (dažniausiai prasideda http:, https: arba ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "vieša",
+        "help" : "Jeigu tiesa, prieigai prie saugyklos nereikia autentifikacijos"
+      },
+      "openZips" : {
+        "label" : "Atidaryti zip failus",
+        "help" : "Įjungti zip failų atidarymą ir turinio išgavimą"
+      },
+      "programmedTables" : {
+        "label" : "Turinio atnaujinimo patikrinimų tvarkaraštis",
+        "help" : "Sukonfigūruokite pakeistų turinių tvarkaraštį, kad išlaikytumėte atnaujintą retrieve augmented generation sistemą"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigūruoti build sistemas",
+        "help" : "Build/pakavimų sistemų sąrašas, kurį reikia tikrinti dėl metainformacijos ir papildomos artefaktų informacijos"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Bendra informacija"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Naudoti pokalbių modelį"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "pasirinkti"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Pasirinkite pokalbių modelio konfigūraciją"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Pasirinkite įterpimo modelio konfigūraciją"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "pasirinkti"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG nustatymai"
+      },
+      "LanguageModelTab" : {
+        "label" : "Didžiojo kalbos modelio ir įrankių nustatymai"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Naudoti įterpimo modelį"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Saugumo prieigos nustatymai"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojamas retrieve augmented generation pokalbio profilis"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas pokalbio profilio unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite pokalbio profilio aprašymą."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Vartotojas pasirenka žinių bazes",
+        "help" : "Vartotojas gali pasirinkti iš prieinamų žinių bazių ir/arba įkelti savo failus."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Žinių bazės",
+        "help" : "Žinių bazės, naudojamos dokumentų paieškai."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Panašumo riba",
+        "help" : "Panašumo riba semantinėse paieškose, 0.60–0.65 Mažas filtravimas, 0.70-0.75 Vidutinis filtravimas, 0.80–0.85 Tikslus filtravimas"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Antro žingsnio panašumo riba",
+        "help" : "Panašumo riba semantinėse paieškose, 0.60–0.65 Mažas filtravimas, 0.70-0.75 Vidutinis filtravimas, 0.80–0.85 Tikslus filtravimas, naudojama nuo antros paieškos multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Išjungti „Multi Hop“ rag",
+        "help" : "Išjungti „multi hop rag“ funkcionalumą. Multi hop paieška atlieka pirmąją semantinę paiešką ir surastus dokumentus naudoja kaip kontekstą tolimesnei semantinei paieškai, suteikiant platesnį kontekstą."
+      },
+      "topK" : {
+        "label" : "Aptikti dokumentų fragmentai (TopK)",
+        "help" : "Retrieve augmented generation metu semantinėje paieškoje laikoma Top N surastų dokumentų fragmentų"
+      },
+      "enabledFunctions" : {
+        "label" : "Įjungtos šio RAG pokalbio funkcijos",
+        "help" : "Funkcionalumai, kuriuos llm modelis gali naudoti pokalbyje su vartotoju, taip pat dirbant su pasirinkta žinių baze"
+      },
+      "prompt" : {
+        "label" : "Raginimas",
+        "help" : "Redaguokite raginimą retrieve augmented generation sesijoms."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Įveskite arba pasirinkite raginimo kategoriją"
+      },
+      "MainPanel" : {
+        "label" : "Raginimo redagavimas"
+      },
+      "promptCategory" : {
+        "label" : "Raginimo kategorija",
+        "help" : "Pasirinkite arba įveskite raginimo kategoriją."
+      },
+      "prompt" : {
+        "label" : "Raginimas",
+        "help" : "Redaguokite raginimą pokalbiui, naudokite {query} vartotojo klausimui ir {context} dokumentų/istorijos kontekstui, siunčiamam LLM, nurodyti."
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas raginimo unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite raginimo aprašymą."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Keisti slaptažodį"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Senas slaptažodis",
+        "help" : "Dabartinis slaptažodis prisijungimui"
+      },
+      "newPassword" : {
+        "label" : "Naujas slaptažodis",
+        "help" : "Naujas slaptažodis"
+      },
+      "username" : {
+        "label" : "El. paštas",
+        "help" : "El. paštas kaip vartotojo vardas prisijungimui"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Slaptažodžio keitimo forma"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "ChangePwdBtn" : {
+        "label" : "Keisti slaptažodį"
+      },
+      "newPassword1" : {
+        "label" : "Patvirtinti naują slaptažodį",
+        "help" : "Patvirtinkite naują slaptažodį"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "ForMoreInformations" : {
+        "label" : "Daugiau informacijos apie Google custom search API arba kaip gauti savo API raktą (nemokamai) rasite čia: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "google search api konfigūracijos unikalus kodas."
+      },
+      "MainPanel" : {
+        "label" : "Redaguojami google custom search api prisijungimo duomenys"
+      },
+      "secretCode" : {
+        "label" : "Google search api raktas",
+        "help" : "Pasirinkite arba įveskite google search api raktą"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite google search api konfigūracijos aprašymą."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Pokalbis be žinių bazių",
+        "help" : "Pasirinkite LLM pokalbio sesijai",
+        "placeholder" : "Pasirinkite LLM pokalbio sesijai"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Atidaryti pokalbio parinkčių sekciją"
+      },
+      "CreateChatBtn" : {
+        "label" : "Naujas pokalbis"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nauja pokalbio sesija"
+      },
+      "chatProfileCode" : {
+        "label" : "Pokalbis su žinių bazėmis",
+        "help" : "Pasirinkite įmonės pokalbio profilį, kad galėtumėte naudotis įmonės (ir savo) dokumentais bei LLM",
+        "placeholder" : "Pasirinkite įmonės pokalbio profilį, kad galėtumėte naudotis įmonės (ir savo) dokumentais bei LLM"
+      },
+      "NewChatBtn" : {
+        "label" : "Naujas pokalbis"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Bendrauti su dokumentais",
+        "help" : "Naršykite arba ieškokite ir pasirinkite dokumentus darbui"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Pasirinkite failus pokalbiui"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Patvirtinti"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Įkelkite arba pasirinkite savo dokumentus",
+        "help" : "Pasirinkite/įkelkite dokumentus iš savo vartotojo erdvės"
+      },
+      "fileSearchBtn" : {
+        "label" : "Ieškoti"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Ieškoti"
+      },
+      "query" : {
+        "label" : "Semantinė paieškos frazė",
+        "help" : "Įveskite prasmingą frazę, susijusią su jūsų paieška"
+      },
+      "choosenBrowsing" : {
+        "label" : "Pasirinkite failus naršydami žinių bazes",
+        "help" : "Pasirinkite failus naršydami bendrąsias įmonės žinių bazes"
+      },
+      "filename" : {
+        "label" : "Ieškomo failo pavadinimas",
+        "help" : "Įveskite failo pavadinimo dalį, kurią norite rasti"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Keisti pasirinktus"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Pasirinkite naudotojų failus"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "okBtn" : {
+        "label" : "Gerai"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Pasirinkite naudotojo įkeltą turinį"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Žinių bazės ir naudotojų failai"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojektas arba elementas",
+        "help" : "pridėti subprojektą ar elementą"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+įkelti failus",
+        "help" : "pridėti įkeltų failų duomenų šaltinį"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "pridėti Microsoft SharePoint/OneDrive duomenų šaltinį"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "pridėti Atlassian Confluence duomenų šaltinį"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+failų sistema",
+        "help" : "pridėti bendros failų sistemos duomenų šaltinį"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "pridėti Atlassian Jira duomenų šaltinį"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repozitorija",
+        "help" : "pridėti git saugyklos duomenų šaltinį, pvz., bitbucket, github ar kitus"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai pokalbis"
+      },
+      "setup" : {
+        "label" : "Nustatymai"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administravimas"
+      },
+      "currentProfile" : {
+        "label" : "mano profilis"
+      },
+      "logout" : {
+        "label" : "atsijungti"
+      }
+    }
+  }
+}

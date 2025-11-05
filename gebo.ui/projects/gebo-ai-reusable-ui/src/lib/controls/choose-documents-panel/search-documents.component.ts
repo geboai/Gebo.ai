@@ -26,7 +26,7 @@ import { of } from "rxjs";
 import { EnrichedDocumentReferenceView, EnrichedDocumentReferenceViewRetrieveService } from "../content-viewer/enriched-document-reference-view.service";
 import { browsePathObservableCallback, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "../vfilesystem-selector/vfilesystem-types";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
-import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component that provides document searching functionality through multiple methods:
@@ -44,14 +44,14 @@ import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-ifa
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAISearchDocumentsComponent),
             multi: true
-        }, {
+        }, { provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false }, {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAISearchDocumentsComponent),
-            multi: true
+            multi: false
         }
     ],
     standalone: false
 })
-export class GeboAISearchDocumentsComponent implements OnInit, OnChanges,GeboAIFieldHost {
+export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAIFieldHost {
 
     /** Knowledge base codes to search within */
     @Input() knowledgeBaseCodes?: string[];

@@ -1,23 +1,37 @@
-<p-panel #graphRagSettingUI *ngIf="neo4jEnabled===true && (context?true:false)">
-    <p-blockUI [target]="graphRagSettingUI" [blocked]="loading">
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+<p-panel #graphRagSettingUI *ngIf="neo4jEnabled===true && (context?true:false)" id="graphRagSettingUI">
+    <p-blockUI id="LockBlockUI" gebo-ai-label [target]="graphRagSettingUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="grid" *ngIf="graphRagIsSetup===true">
         <div class="col-12">
             <div class="flex flex-column gap-2">
-                <label >Graphrag settings</label>
-                <p-button icon="pi pi-sitemap" *ngIf="graphRagConfig?true:false" label="Edit configuration" (onClick)="editConfiguration()"></p-button>
-                <p-button icon="pi pi-sitemap" *ngIf="graphRagConfig?false:true" label="Add configuration" (onClick)="newConfiguration()"></p-button>
-                <small id="button-help" *ngIf="graphRagConfig?true:false">
+                <label id="GraphragSettingsLabel" gebo-ai-text>Graphrag settings</label>
+                <p-button id="EditConfigurationBtn" gebo-ai-label icon="pi pi-sitemap" *ngIf="graphRagConfig?true:false" label="Edit configuration" (onClick)="editConfiguration()"></p-button>
+                <p-button id="AddConfigurationBtn" gebo-ai-label icon="pi pi-sitemap" *ngIf="graphRagConfig?false:true" label="Add configuration" (onClick)="newConfiguration()"></p-button>
+                <small id="button-help" *ngIf="graphRagConfig?true:false" gebo-ai-text>
                     Click here to view/modify information extraction configuration for graphrag 
                 </small>
-                <small id="button-help" *ngIf="graphRagConfig?false:true">
+                <small id="button-help" *ngIf="graphRagConfig?false:true" gebo-ai-text>
                     Click here to configure information extraction for graphrag  (actually not configured) 
                 </small>
             </div>
         </div>
     </div>
     <div class="grid" *ngIf="graphRagIsSetup===false">
-        <label>Configure graphrag in the setup area if you want to use it in this section</label>
+        <label id="ConfigureGraphragLabel" gebo-ai-text>Configure graphrag in the setup area if you want to use it in this section</label>
     </div>
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

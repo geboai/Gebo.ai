@@ -6,15 +6,13 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, OnInit } from "@angular/core";
 import { GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
-import { EnrichedChild } from "../../../../../../gebo-ai-reusable-ui/src/lib/services/enriched-child";
-import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../../../../../gebo-ai-reusable-ui/src/lib/services/pluggable-knowledge-base-admin-tree-search.service";
+import { EnrichedChild, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
 /**
@@ -27,9 +25,13 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
 @Component({
     selector: "knowledge-bases-component",
     templateUrl: "knowledge-bases.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "KnowledgeBasesPanelModule", multi: false },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("KnowledgeBasesComponent")
+       
+    }]
 })
-export class KnowledgeBasesComponent  extends AncestorPanelComponent   implements OnInit {
+export class KnowledgeBasesComponent extends AncestorPanelComponent implements OnInit {
     /**
      * Overrides the parent method to reload the viewed data.
      * This method is called when the view needs to refresh its data.
@@ -37,14 +39,14 @@ export class KnowledgeBasesComponent  extends AncestorPanelComponent   implement
     public override reloadViewedData(): void {
         this.reloadData();
     }
-    
-    
+
+
     /**
      * Array to store the knowledge bases with additional metadata through the EnrichedChild interface.
      */
-    public knowledgeBases:EnrichedChild[]=[];
-    
-    
+    public knowledgeBases: EnrichedChild[] = [];
+
+
     /**
      * Constructor initializes the component with required services.
      * 
@@ -54,31 +56,31 @@ export class KnowledgeBasesComponent  extends AncestorPanelComponent   implement
      * @param actionServices Service for routing UI actions
      */
     constructor(
-        private treeService:GeboAIPluggableKnowledgeAdminBaseTreeSearchService,
-        private knowledgeBaseControllerService: KnowledgeBaseControllerService, 
+        private treeService: GeboAIPluggableKnowledgeAdminBaseTreeSearchService,
+        private knowledgeBaseControllerService: KnowledgeBaseControllerService,
         private projectsService: ProjectsControllerService,
-         private  actionServices: GeboUIActionRoutingService) {
-            super()
+        private actionServices: GeboUIActionRoutingService) {
+        super()
     }
-    
+
     /**
      * Handles opening a project by routing the open action through the action service.
      * 
      * @param data The project to be opened
      */
-    openProject(data:GProject) {
+    openProject(data: GProject) {
         this.actionServices.routeEvent({
-            actionType:GeboActionType.OPEN,
-            context:{},
-            contextType:"GKnowledgeBase",
-            target:data,
-            targetType:"GProject",
-            onActionPerformed:()=>{
+            actionType: GeboActionType.OPEN,
+            context: {},
+            contextType: "GKnowledgeBase",
+            target: data,
+            targetType: "GProject",
+            onActionPerformed: () => {
                 this.reloadData();
             }
         });
     }
-    
+
     /**
      * Loads knowledge bases from the service and updates the component state.
      * This method is called during initialization and when the data needs to be refreshed.
@@ -87,7 +89,7 @@ export class KnowledgeBasesComponent  extends AncestorPanelComponent   implement
         this.treeService.loadKnowledgeBases().subscribe({
             next: (knowledges) => {
                 if (knowledges) {
-                    this.knowledgeBases=knowledges;
+                    this.knowledgeBases = knowledges;
                 }
             }
         });
@@ -99,7 +101,7 @@ export class KnowledgeBasesComponent  extends AncestorPanelComponent   implement
     ngOnInit(): void {
         this.reloadData();
     }
-    
+
     /**
      * Handles node collapse events in the tree view.
      * Currently implemented as an empty method.
@@ -107,27 +109,27 @@ export class KnowledgeBasesComponent  extends AncestorPanelComponent   implement
      * @param node The node that was collapsed
      */
     nodeCollapse(node: any) { }
-    
-    
-    
+
+
+
     /**
      * Creates a new knowledge base by routing a new action through the action service.
      * Initializes a new knowledge base with default settings (accessible to all).
      */
     newKnowledgeBase() {
-        const newKb:GKnowledgeBase={
-            accessibleToAll:true
+        const newKb: GKnowledgeBase = {
+            accessibleToAll: true
         };
         this.actionServices.routeEvent({
-            actionType:GeboActionType.NEW,
-            context:{},
-            contextType:"GKnowledgeBase",
-            target:newKb,
-            targetType:"GKnowledgeBase",
-            onActionPerformed:()=>{
+            actionType: GeboActionType.NEW,
+            context: {},
+            contextType: "GKnowledgeBase",
+            target: newKb,
+            targetType: "GKnowledgeBase",
+            onActionPerformed: () => {
                 this.reloadData();
             }
         });
     }
-    
+
 }

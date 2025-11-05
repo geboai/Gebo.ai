@@ -7,54 +7,41 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- -->
+-->
  
- 
- 
-
-<p-blockUI [target]="confluenceSystemCtrl" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="confluenceSystemCtrl" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #confluenceSystemCtrl header="Create Google Drive/Workspace connection" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label #confluenceSystemCtrl header="Create Google Drive/Workspace connection" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
 
         <div class="grid">
 
             <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of the Google Drive system.
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the Google Drive system.">
+                    <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="jsonContent">Google credentials json content</label>
-                    <textarea pTextarea  id="jsonContent" formControlName="jsonContent" rows="10" cols="80"
-                        aria-describedby="jsonContent-help" >
-                    </textarea>
-                    <small id="jsonContent-help">
-                        Create Google Credentials with your workspace/team drives access in the Google Console Cloud and
-                        paste here the downloaded json file content (https://console.cloud.google.com/).
-                    </small>
-                </div>
+                <gebo-ai-field id="jsonContent" label="Google credentials json content" help="Create Google Credentials with your workspace/team drives access in the Google Console Cloud and paste here the downloaded json file content (https://console.cloud.google.com/).">
+                    <textarea pTextarea id="jsonContent" formControlName="jsonContent" rows="10" cols="80" gebo-ai-field-element></textarea>
+                </gebo-ai-field>
             </div>
         </div>
     </div>
     <div class="geboButtonsBar" style="vertical-align: baseline;">
         <div class="grid">
             <div class="col-4">
-                <p-button [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"   styleClass="w-full"
+                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success" styleClass="w-full"
                     [disabled]="this.formGroup.invalid"></p-button>
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancel()"   styleClass="w-full" />
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="doCancel()" styleClass="w-full" />
             </div>
 
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

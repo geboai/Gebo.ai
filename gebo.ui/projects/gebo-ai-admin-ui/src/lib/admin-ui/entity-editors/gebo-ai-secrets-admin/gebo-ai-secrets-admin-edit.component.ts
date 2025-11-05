@@ -10,8 +10,8 @@
 
 
 
-import { Component, Injector, Input, SimpleChanges } from "@angular/core";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { Component, forwardRef, Injector, Input, SimpleChanges } from "@angular/core";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent } from "@Gebo.ai/gebo-ai-rest-api"
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { map, Observable, of } from "rxjs";
@@ -49,7 +49,10 @@ export interface SecretWrapper {
 @Component({
     selector: "gebo-ai-secrets-admin-edit-component",
     templateUrl: "gebo-ai-secrets-admin-edit.component.html",
-    standalone: false
+    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiSecretsAdminModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiSecretsAdminEditComponent),
+        multi: false
+    }]
 })
 export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<SecretWrapper> {
     /** Identifies the entity type being managed by this component */

@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,6 +19,7 @@
 import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { FastGoogleDriveSystemInsert, GGoogleDriveSystem, GoogleDriveSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 /**
@@ -47,27 +48,29 @@ const jsonValidator: ValidatorFn = (control: AbstractControl) => {
 @Component({
     selector: "gebo-ai-google-drive-fast-component",
     templateUrl: "gebo-ai-google-drive-fast.component.html",
-    standalone: false
+    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiGoogleWorkspacesModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGoogleDriveFastComponent")
+    }]
 })
 export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {
     /** Flag to indicate if an API operation is in progress */
     public loading: boolean = false;
-    
+
     /** Collection of messages to display to the user */
     public userMessages: ToastMessageOptions[] = [];
-    
+
     /** Event emitter that triggers when the user cancels the operation */
-    @Output() public  cancelAction: EventEmitter<boolean> = new EventEmitter();
-    
+    @Output() public cancelAction: EventEmitter<boolean> = new EventEmitter();
+
     /** Event emitter that triggers when a new Google Drive system is successfully created */
     @Output() public insertedGoogleDriveSystemEvent: EventEmitter<GGoogleDriveSystem> = new EventEmitter();
-    
+
     /** Form group containing the description and JSON content fields */
     public formGroup: FormGroup = new FormGroup({
         description: new FormControl(null, [Validators.required]),
         jsonContent: new FormControl(null, [Validators.required, jsonValidator])
     });
-    
+
     /**
      * Constructor that injects the Google Drive systems controller service
      * @param googleDriveController Service for interacting with Google Drive API
@@ -75,14 +78,14 @@ export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {
     constructor(private googleDriveController: GoogleDriveSystemsControllerService) {
 
     }
-    
+
     /**
      * Lifecycle hook that runs when the component is initialized
      */
     ngOnInit(): void {
 
     }
-    
+
     /**
      * Lifecycle hook that runs when component inputs change
      * @param changes Simple changes object containing current and previous values
@@ -90,14 +93,14 @@ export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
 
     }
-    
+
     /**
      * Handles the cancel action by emitting a cancel event
      */
-    doCancel():void {
+    doCancel(): void {
         this.cancelAction.emit(true);
     }
-    
+
     /**
      * Handles form submission by preparing and sending the Google Drive system 
      * configuration data to the API, then emitting the result if successful

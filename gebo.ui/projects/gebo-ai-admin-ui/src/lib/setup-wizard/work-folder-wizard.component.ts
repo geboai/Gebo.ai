@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,7 +20,7 @@
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, ComponentEnabledStatus, FastWorkDirectorySetupData, FileSystemSharesSettingControllerService, GeboFastWorkFolderSetupControllerService, WorkFolderSetupStatus } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 
@@ -78,24 +78,25 @@ export class WorkFolderWizardStatusService extends AbstractStatusService {
 @Component({
     selector: "gebo-work-folder-wizard-component",
     templateUrl: "work-folder-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("WorkFolderWizardComponent") }]
 })
 export class WorkFolderWizardComponent extends BaseWizardSectionComponent {
     /**
      * Flag indicating if the work folder configuration is enabled
      */
     public enabled: boolean = false;
-    
+
     /**
      * Form group for capturing the work directory path
      */
     formGroup: FormGroup = new FormGroup({ workDirectory: new FormControl() });
-    
+
     /**
      * Observable callback for loading root filesystem nodes
      */
     public loadRootsObservable: loadRootsObservableCallback = () => of({});
-    
+
     /**
      * Observable callback for browsing filesystem paths
      */
@@ -126,7 +127,7 @@ export class WorkFolderWizardComponent extends BaseWizardSectionComponent {
             next: (values) => {
                 this.enabled = values[0]?.isEnabled === true;
                 this.isSetupCompleted = values[1]?.isSetup === true;
-                
+
                 this.formGroup.patchValue({
                     workDirectory: values[1]?.workDirectory
                 });

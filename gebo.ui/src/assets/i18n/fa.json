@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "زبان پیش‌فرض سیستم",
+        "help" : "زبان پیش‌فرض سیستم برای این نصب Gebo.ai"
+      },
+      "username" : {
+        "label" : "ایمیل",
+        "help" : "ایمیل به عنوان نام کاربری برای ورود"
+      },
+      "passwordC" : {
+        "label" : "تأیید گذرواژه",
+        "help" : "تأیید گذرواژه"
+      },
+      "password" : {
+        "label" : "گذرواژه",
+        "help" : "گذرواژه برای ورود (حداقل ۸ کاراکتر)"
+      },
+      "PasswordNotMatching" : {
+        "label" : "گذرواژه‌ها مطابقت ندارند"
+      },
+      "LocalAdmin" : {
+        "label" : "ایجاد حساب مدیر محلی خودتان"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "شما از این حساب در آینده برای تنظیم و مدیریت نرم‌افزار استفاده خواهید کرد، این داده‌ها فقط در سیستم شما باقی می‌ماند و از طریق شبکه ارسال نمی‌شود"
+      },
+      "EnterBtn" : {
+        "label" : "رفتن به صفحه ورود"
+      },
+      "SetupPage" : {
+        "label" : "نصب Gebo.ai خود را راه‌اندازی کنید"
+      },
+      "CreateBtn" : {
+        "label" : "ایجاد تنظیمات سیستم"
+      },
+      "LicenceFieldSet" : {
+        "label" : "مطالعه و پذیرش مجوز"
+      },
+      "AcceptMark" : {
+        "label" : "شرایط را می‌پذیرم",
+        "help" : "با کلیک اینجا، شرایط و ضوابط مجوز را می‌پذیرید"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ایمیل",
+        "help" : "ایمیل را به عنوان نام کاربری برای ورود وارد کنید"
+      },
+      "password" : {
+        "label" : "رمز عبور",
+        "help" : "رمز عبور برای ورود"
+      },
+      "LoginPanel" : {
+        "label" : "ورود به gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "ورود"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "باشه!",
+        "detail" : "عملیات با موفقیت انجام شد"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "پیکربندی Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "نام ارائه‌دهنده"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "MainPanel" : {
+        "label" : "تنظیمات امنیتی Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "شناسه"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "بازگشت به صفحه اصلی راه‌اندازی"
+      },
+      "WizardUi" : {
+        "label" : "یک بخش برای راه‌اندازی انتخاب کنید"
+      },
+      "adminUserSetupSection" : {
+        "label" : "راه‌اندازی حساب مدیر و سایر افراد",
+        "description" : "حداقل به یک حساب مدیریتی نیاز است تا نصب Gebo.ai به‌درستی مدیریت شود، در صورت نیاز کاربران دیگر را اضافه کنید"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "پوشه کاری Gebo.ai",
+        "description" : "یک پوشه کاری پیکربندی کنید، تمام تنظیمات و فایل‌های کاری نصب در این پوشه ذخیره می‌شود. همچنین ایده خوبی است که به طور دوره‌ای از آن پشتیبان تهیه کنید."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "پیکربندی پایگاه داده برداری",
+        "description" : "برای ارائه سرویس‌های بازیابی مبتنی بر بردار نیاز است که یک پایگاه داده برداری برای Gebo.ai پیکربندی شود، می‌توانید یک پایگاه داده محلی، Qdrant یا Mongo Atlas انتخاب کنید"
+      },
+      "oauth2SetupSection" : {
+        "label" : "ورود یکپارچه، احراز هویت oauth2",
+        "description" : "احراز هویت ورود یکپارچه Oauth2 و پیکربندی کلاینت‌های Oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "پیکربندی مدل‌زبان بزرگ",
+        "description" : "مدل‌های مختلف LLM را با زیرساخت ابری یا محلی پیکربندی کنید، حداقل یک مدل چت و یک مدل تعبیه باید تنظیم شود تا نرم‌افزار به‌درستی کار کند."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "پیکربندی استخراج دانش/Graph rag",
+        "description" : "سیستم استخراج دانش و Graph rag را پیکربندی کنید"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "پیکربندی مسیرهای فایل سیستم اشتراکی",
+        "description" : "مسیرهای فایل سیستم اشتراکی شرکت را به عنوان منطقه اسناد بازیابی شده در پایگاه‌دانش‌های مختلف تنظیم کنید"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "یکپارچه‌سازی Atlassian Confluence",
+        "description" : "Gebo.ai را برای دسترسی به نصب‌های ابری یا محلی Atlassian Confluence پیکربندی کنید"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "یکپارچه‌سازی Atlassian Jira",
+        "description" : "Gebo.ai را برای دسترسی به نصب‌های ابری Atlassian Jira پیکربندی کنید"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "یکپارچه‌سازی Microsoft Sharepoint",
+        "description" : "Gebo.ai را برای دسترسی به نصب‌های ابری یا محلی Microsoft Sharepoint پیکربندی کنید"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "حداقل یک پایگاه‌دانش را پیکربندی کنید",
+        "description" : "برای اینکه کاربران شما بتوانند از سرویس‌های بازیابی Gebo.ai استفاده کنند، حداقل یک پایگاه‌دانش را پیکربندی نمایید"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "حداقل یک پروفایل چت \"R.A.G.\" را پیکربندی کنید",
+        "description" : "برای کاربران‌تان حداقل یک پروفایل چت بازیابی بر اساس یکی از پایگاه‌دانش‌های پیکربندی‌شده خود ایجاد کنید"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "راه‌اندازی سیستم‌های Atlassian Confluence شرکت"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "SystemTypeHeader" : {
+        "label" : "نوع سیستم"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "سیستم Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "سیستم Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "MainPanel" : {
+        "label" : "راه‌اندازی سیستم‌های Atlassian Jira شرکت"
+      },
+      "SystemTypeHeader" : {
+        "label" : "نوع سیستم"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "MainPanel" : {
+        "label" : "راه‌اندازی سیستم‌های Microsoft Sharepoint شرکت"
+      },
+      "SystemTypeHeader" : {
+        "label" : "نوع سیستم"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "سیستم Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "کلید api با اعتبار کافی وارد کنید. اگر OpenAI را انتخاب می‌کنید باید اعتبار مشخصی (۱۰ تا ۳۰ دلار معمولا کافیست) برای استفاده از api به طرح خود اضافه نمایید، در غیر این صورت امکان استفاده از LLM‌ها در این برنامه وجود نخواهد داشت."
+      },
+      "MainPanel" : {
+        "label" : "دسترسی به تأمین‌کننده‌های llms Gebo.ai با کلید api خودتان"
+      },
+      "provider" : {
+        "label" : "تأمین‌کننده مدل زبانی بزرگ",
+        "help" : "یکی از تأمین‌کننده‌ها را انتخاب کنید: OpenAI (chatgpt)، Google (Gemini)، Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "کاربر",
+        "help" : "کاربری که کلید api به آن تعلق دارد را وارد کنید"
+      },
+      "ConfigureBtn" : {
+        "label" : "پیکربندی"
+      },
+      "apiKey" : {
+        "label" : "کلید api",
+        "help" : "کلید api تأمین‌کننده LLMS مورد استفاده"
+      },
+      "ProviderHeader" : {
+        "label" : "ارائه‌دهنده"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "ModelHeader" : {
+        "label" : "مدل"
+      },
+      "ModelTypeHeader" : {
+        "label" : "نوع مدل"
+      },
+      "DefaultModelHeader" : {
+        "label" : "مدل پیش‌فرض"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "ایجاد پیکربندی graph rag"
+      },
+      "MainPanel" : {
+        "label" : "راه‌اندازی پیکربندی پیش‌فرض Graph Rag و استخراج دانش"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "پروژه"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "افزودن پایگاه‌دانش"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "پایگاه‌دانش"
+      },
+      "MainPanel" : {
+        "label" : "پیکربندی‌های پایگاه‌دانش و محتواها"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "منبع محتوا"
+      },
+      "PublishedHeader" : {
+        "label" : "منتشر شده"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "تعداد اسناد"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "افزودن پروژه/آیتم",
+        "help" : "پروژه جدید ایجاد کنید"
+      },
+      "Button1" : {
+        "help" : "باز کردن پایگاه‌دانش"
+      },
+      "Button2" : {
+        "help" : "باز کردن فرم پروژه"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "پیکربندی پوشه کاری Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "پیکربندی"
+      },
+      "workDirectory" : {
+        "label" : "انتخاب یک پوشه به عنوان پوشه کاری Gebo.ai",
+        "help" : "یک پوشه روی سرور انتخاب کنید تا این نصب از آن برای ذخیره تنظیمات و محتواها استفاده کند."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "افزودن پوشه"
+      },
+      "AddFolderBtn" : {
+        "label" : "افزودن پوشه"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "MainPanel" : {
+        "label" : "مسیرهای فایل سیستم اشتراکی سرور"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "مسیر مطلق"
+      },
+      "DeleteHeader" : {
+        "label" : "حذف"
+      },
+      "path" : {
+        "label" : "افزودن پوشه ریشه فایل سیستم اشتراکی",
+        "help" : "یک پوشه روی سرور انتخاب کنید که به عنوان مسیر ریشه فایل سیستم اشتراکی در سازمان شما برای مخزن اسناد استفاده می‌شود"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیح ورودی فایل سیستم را وارد کنید"
+      },
+      "RemovePathBtn" : {
+        "label" : "حذف مسیر"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "پیکربندی"
+      },
+      "MainPanel" : {
+        "label" : "پیکربندی پایگاه داده برداری"
+      },
+      "host" : {
+        "label" : "میزبان Qdrant",
+        "help" : "نام میزبان یا آدرس ip Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "تنظیمات اتصال Qdrant"
+      },
+      "port" : {
+        "label" : "پورت Qdrant",
+        "help" : "پورت ارتباطی Qdrant (پیش‌فرض 6334)"
+      },
+      "apiKey" : {
+        "label" : "کلید api Qdrant",
+        "help" : "کلید api برای احراز هویت Qdrant"
+      },
+      "tls" : {
+        "label" : "پارامتر TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "مراحل ضروری راه‌اندازی Gebo.ai انجام شد...",
+        "detail" : "مراحل ضروری راه‌اندازی تکمیل شده است ولی برخی مراحل باقی مانده مانع استفاده کامل از این نرم‌افزار در سازمان شما می‌شود"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "برخی مراحل ضروری راه‌اندازی Gebo.ai انجام نشده است",
+        "detail" : "لطفاً مراحل قرمز شده در پروسه راه‌اندازی را بررسی کنید"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "راه‌اندازی Gebo.ai با موفقیت انجام شد!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "کد",
+        "help" : "توضیحات کد احراز هویت/یکپارچه‌سازی OAUTH2 (registrationId) را وارد کنید."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات اطلاعات احراز هویت/یکپارچه‌سازی OAUTH2 را وارد کنید."
+      },
+      "configurationType" : {
+        "label" : "هدف پیکربندی",
+        "help" : "انتخاب کنید که این تنظیمات برای احراز هویت در Gebo.ai یا برای اتصال کلاینت Gebo.ai به یک سیستم ثالث استفاده می‌شود."
+      },
+      "authProvider" : {
+        "label" : "ارائه‌دهنده",
+        "help" : "ارائه‌دهنده احراز هویت OAUTH2 را وارد کنید"
+      },
+      "issuerUri" : {
+        "label" : "آدرس ناشر",
+        "help" : "آدرس ناشر OAUTH2 ارائه‌دهنده را وارد کنید"
+      },
+      "authorizationUri" : {
+        "label" : "آدرس تأیید اعتبار",
+        "help" : "آدرس تأیید اعتبار OAUTH2 ارائه‌دهنده را وارد کنید"
+      },
+      "jwkSetUri" : {
+        "label" : "آدرس ست Jwk",
+        "help" : "آدرس ست Jwk OAUTH2 ارائه‌دهنده را وارد کنید"
+      },
+      "userInfoUri" : {
+        "label" : "آدرس اطلاعات کاربر",
+        "help" : "آدرس اطلاعات کاربر OAUTH2 ارائه‌دهنده را وارد کنید"
+      },
+      "introspectionUri" : {
+        "label" : "آدرس بررسی توکن",
+        "help" : "آدرس بررسی توکن OAUTH2 ارائه‌دهنده را وارد کنید"
+      },
+      "tokenUri" : {
+        "label" : "آدرس توکن",
+        "help" : "آدرس توکن OAUTH2 ارائه‌دهنده را وارد کنید"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "آدرس‌های ارائه‌دهنده OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "افزودن اطلاعات جدید احراز هویت/یکپارچه‌سازی OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "شناسه کلاینت",
+        "help" : "شناسه کلاینت برای پروتکل oauth2 (برای دریافت در بخش مدیریت نرم‌افزار شخص ثالث تأیید شده با oauth2)"
+      },
+      "secret" : {
+        "label" : "کلید محرمانه",
+        "help" : "کلید محرمانه کلاینت برای پروتکل oauth2 (برای دریافت در بخش مدیریت نرم‌افزار شخص ثالث تأیید شده با oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "ایجاد پیکربندی سیستم Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحی برای سیستم Confluence وارد کنید."
+      },
+      "CreateBtn" : {
+        "label" : "ایجاد"
+      },
+      "username" : {
+        "label" : "نام کاربری Confluence",
+        "help" : "نام کاربری Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "نسخه Confluence",
+        "help" : "نسخه Confluence"
+      },
+      "baseUri" : {
+        "label" : "آدرس اینترنتی پایه",
+        "help" : "نشانی اینترنتی سیستم پایه Confluence برای نصب داخلی یا آدرس پایه سازمان شما برای سیستم ابری Confluence"
+      },
+      "password" : {
+        "label" : "رمز عبور Confluence",
+        "help" : "رمز عبور Confluence"
+      },
+      "token" : {
+        "label" : "کلید API ابری Confluence",
+        "help" : "کلید API CLOUD Confluence که در محیط مدیریتی Confluence دریافت شده است، اینجا «API Token for your Atlassian Account» را وارد کنید."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "انتشار!",
+        "help" : "ذخیره و در دسترس قرار دادن این محتوا در پایگاه دانش برای مدل‌های زبانی"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "SettingsTab" : {
+        "label" : "تنظیمات"
+      },
+      "MainPanel" : {
+        "label" : "اشتراک‌گذاری محتواهای Confluence"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای تولیدشده برای محتوا به صورت خودکار."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحی برای محتوای بارگذاری شده Confluence وارد کنید."
+      },
+      "confluenceSystemCode" : {
+        "label" : "سیستم Confluence",
+        "help" : "ارجاع به سیستم Confluence که از قبل پیکربندی شده است."
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "ارجاع به پروژه والد."
+      },
+      "openZips" : {
+        "label" : "باز کردن فایل‌های zip",
+        "help" : "فعال‌سازی باز کردن و استخراج محتوای فایل‌های zip"
+      },
+      "tree" : {
+        "label" : "فضاها یا صفحات/زیرصفحات انتخاب شده",
+        "help" : "محتوای فضاها و صفحات Confluence به اشتراک گذاشته شده"
+      },
+      "programmedTables" : {
+        "label" : "برنامه‌زمان‌بندی بررسی بروزرسانی محتوا",
+        "help" : "زمان‌بندی بروزرسانی محتوا جهت بروز نگه‌داشتن سیستم تولید افزوده اطلاعات را پیکربندی کنید"
+      },
+      "catalogingCriteria" : {
+        "label" : "معیارهای سازماندهی فضاها، صفحات و زیرصفحات",
+        "help" : "لطفاً در اینجا توضیح دهید که معیار سازماندهی فضا، صفحه و زیرصفحه‌ها در محتوای Confluence که با Gebo.ai به اشتراک گذاشته شده چگونه انجام شده است"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "تنظیمات کلی"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش سیستم Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "baseUri" : {
+        "label" : "آدرس اینترنتی پایه",
+        "help" : "نشانی اینترنتی سیستم پایه Confluence"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای تولیدشده برای سیستم Confluence به صورت خودکار."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحی برای سیستم Confluence وارد کنید."
+      },
+      "confluenceVersion" : {
+        "label" : "نسخه Confluence",
+        "help" : "نسخه Confluence"
+      },
+      "secretCode" : {
+        "label" : "هویت استفاده شده",
+        "help" : "هویت مورد استفاده برای دسترسی به سیستم Confluence را انتخاب یا ایجاد کنید"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "گروه جدید"
+      },
+      "NewUserBtn" : {
+        "label" : "کاربر جدید"
+      },
+      "UsersListPanel" : {
+        "label" : "لیست کاربران"
+      },
+      "GroupsListPanel" : {
+        "label" : "لیست گروه‌ها"
+      },
+      "SournameHeader" : {
+        "label" : "نام خانوادگی"
+      },
+      "UsernameHeader" : {
+        "label" : "نام کاربری"
+      },
+      "RolesHeader" : {
+        "label" : "نقش‌ها"
+      },
+      "NameHeader" : {
+        "label" : "نام"
+      },
+      "EditBtn" : {
+        "label" : "ویرایش"
+      },
+      "DisabledHeader" : {
+        "label" : "غیرفعال"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "UserIds" : {
+        "placeholder" : "انتخاب کاربران"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش گروه کاربری"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات گروه کاربری را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد گروه کاربری را وارد کنید"
+      },
+      "userIds" : {
+        "label" : "لیست کاربران",
+        "help" : "کاربرانی که در گروه هستند را انتخاب کنید"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ایجاد"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به سیستم jira را وارد کنید."
+      },
+      "MainPanel" : {
+        "label" : "ایجاد پیکربندی سیستم jira"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "username" : {
+        "label" : "نام کاربری jira",
+        "help" : "نام کاربری jira"
+      },
+      "token" : {
+        "label" : "کلید api ابر jira",
+        "help" : "کلید api CLOUD jira که در بخش پشتیبان jira تهیه شده است، اینجا باید \"API Token for your Atlassian Account\" وارد شود."
+      },
+      "baseUri" : {
+        "label" : "آدرس اینترنتی پایه",
+        "help" : "آدرس url سیستم اصلی jira برای نصب داخلی یا آدرس پایه سازمان برای سیستم ابری jira"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "PublishBtn" : {
+        "label" : "انتشار!",
+        "help" : "ذخیره و در دسترس قرار دادن این محتواها در پایگاه دانش برای LLm"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "SettingsTab" : {
+        "label" : "تنظیمات"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      },
+      "MainPanel" : {
+        "label" : "اشتراک‌گذاری محتوای jira"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای محتوا به طور خودکار تولید شده است."
+      },
+      "jiraSystemCode" : {
+        "label" : "سیستم jira",
+        "help" : "مرجع سیستم jira که قبلاً پیکربندی شده است."
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "مرجع پروژه والد."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به محتوای بارگذاری‌شده jira را وارد کنید."
+      },
+      "programmedTables" : {
+        "label" : "برنامه زمان‌بندی بررسی به‌روزرسانی محتوا",
+        "help" : "برنامه‌ریزی به‌روزرسانی محتواهای تغییر یافته برای نگه‌داشتن سیستم تقویت‌شده واکشی اطلاعات"
+      },
+      "openZips" : {
+        "label" : "باز کردن فایل‌های zip",
+        "help" : "فعالسازی باز کردن فایل‌های zip و استخراج محتوا"
+      },
+      "tree" : {
+        "label" : "فضاها یا صفحات/زیرصفحات انتخاب‌شده",
+        "help" : "ساختار پروژه‌ها و تیکت‌های اشتراک‌گذاری‌شده jira"
+      },
+      "catalogingCriteria" : {
+        "label" : "معیارهای سازمان‌دهی فضاها، صفحات و زیرصفحات",
+        "help" : "اینجا شرح دهید که معیار سازمان‌دهی فضاها، صفحات و زیرصفحات در محتواهای jira که با Gebo.ai به اشتراک گذاشته شده چگونه انجام شده است"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به سیستم jira را وارد کنید."
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش سیستم jira"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "baseUri" : {
+        "label" : "آدرس اینترنتی پایه",
+        "help" : "آدرس url سیستم اصلی jira"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای سیستم jira به طور خودکار تولید شده است."
+      },
+      "secretCode" : {
+        "label" : "هویت استفاده‌شده",
+        "help" : "یک هویت را جهت دسترسی به سیستم jira انتخاب یا ایجاد کنید"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات سیستم SharePoint/OneDrive را وارد کنید."
+      },
+      "sharepointVersion" : {
+        "label" : "نسخه SharePoint",
+        "help" : "نسخه sharepoint"
+      },
+      "secret" : {
+        "label" : "کلید مخفی",
+        "help" : "کلید مخفی Oauth2 برای این برنامه که در محصول \"entra\" مایکروسافت ثبت شده است (از کنسول مدیریت فضای ابری مایکروسافت قابل دریافت است)"
+      },
+      "clientId" : {
+        "label" : "شناسه کاربر",
+        "help" : "شناسه کاربر Oauth2 برای این برنامه که در محصول \"entra\" مایکروسافت ثبت شده است (از کنسول مدیریت فضای ابری مایکروسافت قابل دریافت است)"
+      },
+      "tenantId" : {
+        "label" : "شناسه اجاره‌دهنده",
+        "help" : "شناسه اجاره‌دهنده Oauth2 برای محصول \"entra\" سازمان شما در مایکروسافت (از کنسول مدیریت فضای ابری مایکروسافت قابل دریافت است)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "اطلاعات ثبت برنامه Microsof oauth2 برای Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "ایجاد"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "MainPanel" : {
+        "label" : "پیکربندی سیستم SharePoint/OneDrive را ایجاد کنید"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "PublishBtn" : {
+        "label" : "منتشر کردن!",
+        "help" : "ذخیره می‌کند و این محتوا را برای پایگاه دانش LLM‌ها در دسترس قرار می‌دهد"
+      },
+      "SettingsTab" : {
+        "label" : "تنظیمات"
+      },
+      "MainPanel" : {
+        "label" : "اشتراک‌گذاری محتوای SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتایی که به طور خودکار برای محتوا تولید شده است."
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "ارجاع به پروژه اصلی."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات منابع داده‌ی ورودی SharePoint/OneDrive را وارد کنید."
+      },
+      "sharePointSystemCode" : {
+        "label" : "سیستم sharepoint",
+        "help" : "ارجاع به سیستم SharePoint/OneDrive که قبلاً پیکربندی شده است."
+      },
+      "openZips" : {
+        "label" : "باز کردن فایل‌های zip",
+        "help" : "فعال‌سازی باز کردن فایل‌های zip و استخراج محتوا"
+      },
+      "tree" : {
+        "label" : "سایت‌ها/صفحات/زیرصفحات انتخاب شده Sharepoint یا درایو/پوشه/فایل‌های OneDrive",
+        "help" : "محتوای به اشتراک گذاشته شده sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "برنامه بررسی به‌روزرسانی محتوا",
+        "help" : "برنامه‌ریزی زمان‌بندی برای بررسی تغییرات محتوا جهت به‌روزرسانی سامانه تولید افزوده شده را پیکربندی کنید"
+      },
+      "catalogingCriteria" : {
+        "label" : "معیارهای سازمان‌دهی فضاها، صفحات و زیرصفحات",
+        "help" : "لطفاً در اینجا شرح دهید که معیار سازمان‌دهی فضاها، صفحات و زیرصفحات در محتوای sharepoint که با Gebo.ai به اشتراک گذاشته شده است، چگونه انجام شده است"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "ویرایش سیستم sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "تنظیمات عمومی"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "secretCode" : {
+        "label" : "هویت استفاده شده",
+        "help" : "هویت مورد نظر را برای دسترسی به سیستم sharepoint انتخاب یا ایجاد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتایی که به طور خودکار برای سیستم sharepoint تولید شده است."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات سیستم sharepoint را وارد کنید."
+      },
+      "sharepointVersion" : {
+        "label" : "نسخه Sharepoint",
+        "help" : "نسخه sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "حذف"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "ذخیره"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "لغو"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "تنظیمات کلی اطلاعات/محتوا"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "تنظیمات LLms"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای مرحله استخراج داده گراف دانش به صورت خودکار تولید می‌شود"
+      },
+      "MainPanel" : {
+        "label" : "پیکربندی استخراج Graphrag/دانش"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به پیکربندی مرحله استخراج داده گراف دانش را وارد کنید"
+      },
+      "extractionPrompt" : {
+        "label" : "پرامپت استخراج اطلاعات",
+        "help" : "پرامپت مدل زبان بزرگ برای استخراج موجودیت‌ها/رویدادها/روابط و نام‌های جایگزین"
+      },
+      "usedModelConfiguration" : {
+        "label" : "مدل LLM مورد استفاده برای استخراج داده",
+        "help" : "مدل زبان بزرگ مورد استفاده برای استخراج دانش را مشخص کنید، اگر انتخابی نشود مدل پیش‌فرض استفاده خواهد شد."
+      },
+      "graphRagAllSources" : {
+        "label" : "اجرای graph rag روی همه منابع داده",
+        "help" : "اگر فعال باشد، تمام پایگاه‌های دانش/پروژه‌ها/منابع داده برای استخراج دانش پردازش می‌شوند، در غیر این صورت فقط مواردی که به صورت خاص پیکربندی شده‌اند."
+      },
+      "defaultModel" : {
+        "label" : "مدل زبان بزرگ پیش‌فرض",
+        "help" : "مدل زبان بزرگ پیش‌فرض برای استخراج دانش استفاده خواهد شد"
+      },
+      "processEveryDocument" : {
+        "label" : "اجرای graph rag روی همه فایل‌ها",
+        "help" : "الگوریتم‌های graph rag روی همه فایل‌ها اجرا می‌شوند که جزئیات تحلیل را تقویت می‌کند اما هزینه و زمان پردازش اسناد را افزایش می‌دهد"
+      },
+      "contentSelectionFilter" : {
+        "label" : "معیارهای انتخاب فایل برای پردازش graphrag",
+        "help" : "معیارهای فایل ارسالی به خط استخراج اطلاعات برای graphrag را ویرایش کنید. حداقل یک نام و معیار فایل و/یا نوع فایل و/یا حداکثر حجم فایل بر حسب بایت و/یا سن آخرین ویرایش بر حسب روز را انتخاب نمایید"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "انتخاب نوع فایل‌ها"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "معیار فیلتر نام فایل"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "آخرین ویرایش فایل، چند روز پیش"
+      },
+      "nameFilter" : {
+        "placeholder" : "نام فایل"
+      },
+      "maxFileSize" : {
+        "placeholder" : "حداکثر اندازه فایل (بایت)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات کلی"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پایگاه دانش"
+      },
+      "AccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی پایگاه دانش"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پایگاه دانش به صورت خودکار تولید می‌شود."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به پایگاه دانش را وارد کنید."
+      },
+      "embeddingModelReferences" : {
+        "label" : "مدل‌های embedding مورد استفاده (در صورت خالی بودن از تنظیمات پیش‌فرض استفاده می‌شود)",
+        "help" : "مدل‌های embedding برای پایگاه دانش، اگر خالی باشد مدل پیش‌فرض انتخاب می‌شود."
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "IndexBtn" : {
+        "label" : "ایندکس",
+        "help" : "بازایندکس کردن محتوا"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "ویرایش پروژه یا مورد"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پروژه به صورت خودکار تولید می‌شود."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به پروژه را وارد کنید."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "پایگاه دانش",
+        "help" : "پایگاه دانش."
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "IndexBtn" : {
+        "label" : "ایندکس",
+        "help" : "بازایندکس کردن محتوا"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ افزودن مورد/پروژه",
+        "help" : "افزودن جدید..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "همه استفاده می‌کنند",
+        "help" : "همه می‌توانند استفاده کنند"
+      },
+      "accessibleGroups" : {
+        "label" : "فهرست گروه‌ها",
+        "help" : "گروه‌های مجاز را انتخاب کنید"
+      },
+      "accessibleUsers" : {
+        "label" : "فهرست کاربران",
+        "help" : "کاربران مجاز را انتخاب کنید"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "داشبورد"
+      },
+      "LLMSTab" : {
+        "label" : "مدل‌های زبانی برای گفتگو و تعبیه"
+      },
+      "RagChatConfigTab" : {
+        "label" : "پروفایل‌های چت Rag / پرامپت مدل‌ها"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "پایگاه‌های دانش و پروژه‌ها"
+      },
+      "UsersGroupTab" : {
+        "label" : "کاربران و گروه‌ها"
+      },
+      "GeboModulesTab" : {
+        "label" : "تنظیمات ماژول‌های Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "ConfigureBtn2" : {
+        "label" : "پیکربندی"
+      },
+      "ConfigureBtn" : {
+        "label" : "پیکربندی"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "پیکربندی دستور جدید"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "پروفایل گفتگوی جدید"
+      },
+      "MainPanel" : {
+        "label" : "پروفایل‌های گفتگو با تولید تقویت‌شده بازیابی"
+      },
+      "PromptsPanel" : {
+        "label" : "مجموعه دستورات و دستورات پیش‌فرض"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "پایگاه‌های دانش"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "ConfigureBtn1" : {
+        "label" : "پیکربندی"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "پایگاه دانش جدید"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "پیکربندی مدل تعبیه‌سازی جدید"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "پیکربندی مدل گفتگو جدید"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "ModelHeader" : {
+        "label" : "مدل "
+      },
+      "ModelProviderHeader" : {
+        "label" : "ارائه‌دهنده مدل"
+      },
+      "ConfigureBtn" : {
+        "label" : "پیکربندی"
+      },
+      "CodeHeader2" : {
+        "label" : "کد"
+      },
+      "DescriptionHeader2" : {
+        "label" : "توضیحات"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "ارائه‌دهنده مدل"
+      },
+      "ConfigureBtn2" : {
+        "label" : "پیکربندی"
+      },
+      "ModelHeader2" : {
+        "label" : "مدل "
+      },
+      "ChatmodelsZone" : {
+        "label" : "مدل‌های گفتگو پیکربندی شده"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "مدل‌های تعبیه‌سازی پیکربندی شده"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "تست مدل"
+      },
+      "TestChatBtn" : {
+        "label" : "تست چت"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "OpenAI token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت OpenAI",
+        "help" : "مدل چت OpenAI مورد نظر برای کار را انتخاب کنید."
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات عمومی"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "تنظیمات پیشرفته"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل چت OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی مدل"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل تعبیه OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "OpenAI token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل تعبیه به صورت خودکار تولید می‌شود"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل تعبیه را وارد کنید"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل تعبیه OpenAI",
+        "help" : "مدل تعبیه OpenAI مورد نظر برای کار را انتخاب کنید."
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل تعبیه پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل تعبیه پیش‌فرض استفاده می‌شود وقتی مدل تعبیه مشخص نشده باشد"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "baseUrl" : {
+        "label" : "آدرس پایه سرور ollama",
+        "help" : "آدرس پایه (مانند http://servername:234/) که سرور local یا lan ollama پاسخ می‌دهد."
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت Ollama",
+        "help" : "مدل چت Ollama مورد نظر برای کار را انتخاب کنید.",
+        "placeholder" : "یک مدل را انتخاب کنید"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Ollama token مورد نظر را برای این مدل انتخاب کنید (اختیاری)"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل چت سرور Ollama (لوکال یا lan)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Anthropic token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت Anthropic",
+        "help" : "مدل چت Anthropic مورد نظر برای کار را انتخاب کنید.",
+        "placeholder" : "یک مدل را انتخاب کنید"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "تنظیمات پیشرفته"
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات عمومی"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی مدل"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل چت Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "MistralAI token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت MistralAI",
+        "help" : "مدل چت MistralAI مورد نظر برای کار را انتخاب کنید."
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات عمومی"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "تنظیمات پیشرفته"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی مدل"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل چت MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت Google Vertex AI",
+        "help" : "مدل چت Google Vertex AI مورد نظر برای کار را انتخاب کنید."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Google Vertex AI token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "TabGeneralInfos" : {
+        "label" : "اطلاعات عمومی"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "تنظیمات دسترسی مدل"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "تنظیمات پیشرفته"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل چت Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Deepseek token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت Deepseek",
+        "help" : "مدل چت Deepseek مورد نظر برای کار را انتخاب کنید.",
+        "placeholder" : "یک مدل را انتخاب کنید"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "تنظیمات پیشرفته"
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات عمومی"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل چت Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی مدل"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل را وارد کنید"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل به صورت خودکار تولید می‌شود"
+      },
+      "baseUrl" : {
+        "label" : "آدرس سرور پایه API مدل چت",
+        "help" : "آدرس پایه مدل چت."
+      },
+      "apiSecretCode" : {
+        "label" : "توکن API مدل چت",
+        "help" : "توکن API مدل چت مورد نظر برای این مدل را انتخاب کنید (اختیاری)"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل چت پیش‌فرض استفاده می‌شود وقتی مدل چت مشخص نشده باشد"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل چت مدل چت",
+        "help" : "مدل چت مدل چت مورد نظر برای کار را انتخاب کنید."
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات عمومی"
+      },
+      "TitleFragment" : {
+        "label" : "در حال ویرایش ارائه‌دهنده مدل چت:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "تنظیمات پیشرفته"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی مدل"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل تعبیه را وارد کنید"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل تعبیه سرور Ollama (لوکال یا lan)"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Ollama token مورد نظر برای این مدل را انتخاب کنید"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل تعبیه Ollama",
+        "help" : "مدل تعبیه Ollama مورد نظر برای کار را انتخاب کنید."
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل تعبیه به صورت خودکار تولید می‌شود"
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل تعبیه پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل تعبیه پیش‌فرض استفاده می‌شود وقتی مدل تعبیه مشخص نشده باشد"
+      },
+      "baseUrl" : {
+        "label" : "آدرس پایه سرور ollama",
+        "help" : "آدرس پایه (مانند http://servername:234/) که سرور local یا lan ollama پاسخ می‌دهد."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل تعبیه را وارد کنید"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل تعبیه MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل تعبیه به صورت خودکار تولید می‌شود"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل تعبیه MistralAI",
+        "help" : "مدل تعبیه MistralAI مورد نظر برای کار را انتخاب کنید."
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل تعبیه پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل تعبیه پیش‌فرض استفاده می‌شود وقتی مدل تعبیه مشخص نشده باشد"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "MistralAI token مورد نظر برای این مدل را انتخاب کنید"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "ویرایش پیکربندی مدل تعبیه Google Vertex AI"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل تعبیه را وارد کنید"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل تعبیه Google Vertex AI",
+        "help" : "مدل تعبیه Google Vertex AI مورد نظر برای کار را انتخاب کنید."
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل تعبیه پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل تعبیه پیش‌فرض استفاده می‌شود وقتی مدل تعبیه مشخص نشده باشد"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل تعبیه به صورت خودکار تولید می‌شود"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Google Vertex AI token مورد نظر برای این مدل را انتخاب کنید"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "TitleFragment" : {
+        "label" : "در حال ویرایش ارائه‌دهنده مدل تعبیه:"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی مدل Embedding را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی مدل Embedding به صورت خودکار تولید می‌شود"
+      },
+      "choosedModel" : {
+        "label" : "انتخاب مدل تعبیه مدل تعبیه",
+        "help" : "مدل تعبیه مدل تعبیه مورد نظر برای کار را انتخاب کنید."
+      },
+      "baseUrl" : {
+        "label" : "آدرس سرور API مدل تعبیه",
+        "help" : "آدرس پایه سرور مدل تعبیه."
+      },
+      "defaultModel" : {
+        "label" : "تنظیم به عنوان مدل تعبیه پیش‌فرض",
+        "help" : "در صورت فعال بودن، این مدل به عنوان مدل تعبیه پیش‌فرض استفاده می‌شود وقتی مدل تعبیه مشخص نشده باشد"
+      },
+      "apiSecretCode" : {
+        "label" : "توکن API مدل تعبیه",
+        "help" : "توکن API مدل تعبیه مورد نظر برای این مدل را انتخاب کنید"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "اطلاعات پیکربندی چت"
+      },
+      "chaDeleteBtn" : {
+        "help" : "حذف این جلسه چت"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "تغییر نام جلسه چت"
+      },
+      "QueryControl" : {
+        "placeholder" : "یک پیام برای چت‌بات بنویسید"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "description" : {
+        "label" : "توضیحات چت",
+        "help" : "توضیحی برای جلسه چت وارد کنید."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "مدل استفاده‌شده",
+        "help" : "کد مدل"
+      },
+      "providerId" : {
+        "label" : "ارائه‌دهنده مدل چت",
+        "help" : "درایور ارائه‌دهنده LLMs"
+      },
+      "functions" : {
+        "label" : "توابع قابل فراخوانی مدل چت",
+        "help" : "فهرست توابع در دسترس برای مدل چت"
+      },
+      "NameCol" : {
+        "label" : "نام"
+      },
+      "DescriptionCol" : {
+        "label" : "توضیحات"
+      },
+      "kbases" : {
+        "label" : "پایگاه‌های دانش قابل‌دسترسی",
+        "help" : "لیست پایگاه‌های دانشی که در این چت RAG استفاده شده‌اند"
+      },
+      "CloseBtn" : {
+        "help" : "بستن"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "ضبط",
+        "help" : "ضبط یک قطعه صوتی را شروع کنید و ارسال نمایید"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "بارگذاری مجدد داده‌ها"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SelectHeader" : {
+        "label" : "انتخاب"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "تاریخ/زمان پایان"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "تاریخ/زمان شروع"
+      },
+      "ProcessingHeader" : {
+        "label" : "در حال پردازش"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "FinishedHeader" : {
+        "label" : "اتمام یافته"
+      },
+      "WithErrorHeader" : {
+        "label" : "با خطا"
+      },
+      "LogTableComponent" : {
+        "help" : "گزارش ورود این قسمت اشتراکی فایل سیستم"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "آمار فرآیندها"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CloseBtn" : {
+        "label" : "بستن"
+      },
+      "PublicationLogTab" : {
+        "label" : "گزارش انتشار"
+      },
+      "MainPanel" : {
+        "label" : "گزارش انتشار"
+      },
+      "actualStatus" : {
+        "label" : "وضعیت",
+        "help" : "وضعیت وظیفه: در حال اجرا، تمام شده یا تمام شده با خطا."
+      },
+      "publishingSystem" : {
+        "label" : "پیکربندی محتوای منتشر شده",
+        "help" : "اطلاعات محتوای منتشر شده"
+      },
+      "startDateTime" : {
+        "label" : "تاریخ/زمان شروع",
+        "help" : "تاریخ و زمان شروع وظیفه همگام‌سازی محتوا"
+      },
+      "endDateTime" : {
+        "label" : "تاریخ/زمان پایان",
+        "help" : "تاریخ و زمان پایان وظیفه همگام‌سازی محتوا"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "کامل پردازش نشده"
+      },
+      "ProcessedCompletely" : {
+        "label" : "کامل پردازش شده"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "تبدیل به embedding در مقابل تعداد کل اسناد"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "جزئیات بیشتر"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "تولید پرامپت"
+      },
+      "PromptWizardBtn" : {
+        "label" : "جادوگر پرامپت",
+        "help" : "برای تولید پرامپت اهداف خود با استفاده از یک LLM از این استفاده کنید"
+      },
+      "acceptPrompt" : {
+        "label" : "تایید پرامپت"
+      },
+      "promptWizardUI" : {
+        "label" : "جادوگر تولید قالب پرامپت"
+      },
+      "cancel" : {
+        "label" : "انصراف"
+      },
+      "response" : {
+        "label" : "قالب پرامپت پیشنهادی",
+        "help" : "متن قالب تولید شده برای هدف شما (می‌توانید آن را تغییر یا اصلاح کنید)"
+      },
+      "modelCode" : {
+        "label" : "مدل گفتگویی برای استفاده",
+        "help" : "مدل گفتگویی را انتخاب کنید که می‌خواهید برای تولید قالب پرامپت از آن درخواست کنید"
+      },
+      "query" : {
+        "label" : "درخواست قالب پرامپت",
+        "help" : "هدف کاربری که AI قرار است به او کمک کند را به صورت دوم شخص مشخص کنید"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "دمای مدل",
+        "help" : "میزان دمای پاسخ‌دهی مدل، از ۰ تا ۱ (در صورت عدم اطمینان خالی بگذارید)"
+      },
+      "contextLength" : {
+        "label" : "طول متن (تعداد توکن)",
+        "help" : "مقدار متنی که مدل هوش مصنوعی در پردازش در نظر می‌گیرد (اگر تعیین نشود مقدار ۱۰۴۷۵۷۶ استفاده می‌شود)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "پارامتر TopP، از ۰ تا ۱ (در صورت عدم اطمینان خالی بگذارید)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "توابع فعال شده برای این مدل",
+        "help" : "قابلیت‌هایی که می‌توانند در طول گفتگو توسط مدل استفاده شوند"
+      },
+      "defaultModelPrompt" : {
+        "label" : "پرامپت پیش‌فرض مدل",
+        "help" : "پرامپت پیش‌فرض برای مدل گفتگو را ویرایش کنید."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات هویت را وارد کنید."
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای هویت به صورت خودکار تولید شده است."
+      },
+      "secretType" : {
+        "label" : "نوع هویت",
+        "help" : "نوع هویت مورد نظر برای ساخت در سیستم راه دور را انتخاب کنید"
+      },
+      "InsertBtn" : {
+        "label" : "افزودن"
+      },
+      "token" : {
+        "label" : "توکن",
+        "help" : "توکن را وارد کنید."
+      },
+      "user" : {
+        "label" : "کاربر",
+        "help" : "کاربری را که توسط توکن مشخص شده وارد کنید."
+      },
+      "MainPanel" : {
+        "label" : "در حال ایجاد هویت"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "username" : {
+        "label" : "نام کاربری",
+        "help" : "نام کاربری را وارد کنید."
+      },
+      "password" : {
+        "label" : "گذرواژه",
+        "help" : "گذرواژه را وارد کنید."
+      },
+      "email" : {
+        "label" : "ایمیل/نام کاربری",
+        "help" : "ایمیل یا نام کاربری مرتبط با کلید ssh را وارد کنید."
+      },
+      "key" : {
+        "label" : "کلید محرمانه",
+        "help" : "فایل کلید خصوصی را باز کنید و در این قسمت کپی کنید."
+      },
+      "passphrase" : {
+        "label" : "عبارت عبور کلید",
+        "help" : "عبارت عبور کلید را وارد کنید."
+      },
+      "pub" : {
+        "label" : "کلید عمومی",
+        "help" : "فایل کلید عمومی را باز کنید و در این قسمت کپی کنید."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای تولیدشده به‌صورت خودکار برای محتوا."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات محتوای آپلودشده از ورودی فایل سیستم را وارد کنید."
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "ارجاع به پروژه والد."
+      },
+      "upload" : {
+        "label" : "آپلود محتوا",
+        "help" : "روی دکمه مرور کلیک کنید و فایل‌های زیپ یا سایر فایل‌ها را انتخاب کنید"
+      },
+      "openZips" : {
+        "label" : "باز کردن فایل‌های zip",
+        "help" : "باز کردن و استخراج محتوای فایل‌های زیپ را فعال کنید"
+      },
+      "PublishBtn" : {
+        "label" : "انتشار!",
+        "help" : "ذخیره و در دسترس قرار دادن این محتوا در پایگاه دانش برای LLmها"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش محتوای آپلودشده"
+      },
+      "SettingsTab" : {
+        "label" : "تنظیمات"
+      },
+      "buildSystemsRefs" : {
+        "label" : "پیکربندی سیستم‌های ساخت",
+        "help" : "فهرست سیستم‌های ساخت/بسته‌بندی برای بررسی اطلاعات متادیتا و اطلاعات آثار اضافی (اگر کد نرم‌افزاری وجود ندارد خالی بگذارید)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "موارد انتخاب‌شده"
+      },
+      "ChooseOk" : {
+        "label" : "تأیید"
+      },
+      "ChooseCancel" : {
+        "label" : "لغو"
+      },
+      "EditBtn" : {
+        "help" : "ویرایش انتخاب‌ها"
+      },
+      "ChooseElementsArea" : {
+        "label" : "انتخاب موارد"
+      },
+      "VFileSystemSelector" : {
+        "label" : "انتخاب موارد"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "ویرایش برنامه‌ریزی"
+      },
+      "ConfirmBtn" : {
+        "label" : "تایید"
+      },
+      "AddBtn" : {
+        "label" : "+افزودن"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "انتشار!",
+        "help" : "ذخیره می‌کند و این محتواها را در پایگاه دانش برای LLm‌ها در دسترس قرار می‌دهد"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SettingsTab" : {
+        "label" : "تنظیمات"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "پردازش کد منبع"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش محتوای فایل سیستم موجود"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به محتوای بارگذاری‌شده فایل سیستم را وارد کنید."
+      },
+      "openZips" : {
+        "label" : "باز کردن فایل‌های zip",
+        "help" : "فعال کردن باز کردن فایل‌های zip و استخراج محتوا"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای محتوا به صورت خودکار تولید می‌شود."
+      },
+      "tree" : {
+        "label" : "فایل‌ها یا پوشه‌های انتخاب شده",
+        "help" : "فایل‌ها یا دایرکتوری‌های فایل‌سیستم به اشتراک گذاشته‌شده که روی سرور موجود هستند"
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "ارجاع پروژه والد."
+      },
+      "programmedTables" : {
+        "label" : "برنامه زمانبندی بررسی بروزرسانی محتوا",
+        "help" : "جدول‌بندی زمانبندی تغییرات محتوا جهت بروزرسانی سیستم ایجاد بهبود یافته واکشی را تنظیم کنید"
+      },
+      "catalogingCriteria" : {
+        "label" : "معیارهای سازمان‌دهی پوشه‌ها",
+        "help" : "لطفاً در اینجا توضیح دهید معیارهای سازمان‌دهی پوشه‌ها در ناحیه فایل سیستمی که با Gebo.ai به اشتراک گذاشته‌اید چگونه انجام شده است"
+      },
+      "buildSystemsRefs" : {
+        "label" : "پیکربندی سیستم‌های Build",
+        "help" : "لیستی از سیستم‌های ساخت/بسته‌بندی برای بررسی اطلاعات فرا داده و اطلاعات اضافی آثار (خالی بگذارید اگر هیچ کد نرم‌افزاری شامل نشده است)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "ایجاد ناحیه به اشتراک‌گذاری فایل جدید"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "مسیر مطلق"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "تنظیمات فایل db یا yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "ModifyHeader" : {
+        "label" : "ویرایش"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "پوشه فایل‌سیستم به اشتراک گذاشته شده انتخاب‌شده",
+        "help" : "یک پوشه سرور انتخاب کنید که مسیر ریشه فایل‌سیستم اشتراکی مورد استفاده در سازمان شما به عنوان مخزن اسناد باشد"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات ناحیه فایل‌سیستم اشتراکی سازمان خود را وارد کنید"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای محتوا به صورت خودکار تولید می‌شود."
+      },
+      "InsertBtn" : {
+        "label" : "درج"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پوشه فایل سرور مشترک"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "انصراف"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "PublishBtn" : {
+        "label" : "منتشر کن!",
+        "help" : "ذخیره و در دسترس قرار دادن این محتواها در پایگاه دانش برای LLm ها"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش مخزن مرجع/مستندات git"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به مخزن git را وارد کنید."
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای مخزن git که به صورت خودکار تولید می‌شود."
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "مرجع پروژه والد."
+      },
+      "contentManagementSystem" : {
+        "label" : "سیستم Git",
+        "help" : "مرجع سیستم git که قبلاً پیکربندی شده است."
+      },
+      "branch" : {
+        "label" : "شاخه",
+        "help" : "نام شاخه‌ای که می‌خواهید خارج‌سازی کنید (معمولاً master، main یا develop)"
+      },
+      "identityCode" : {
+        "label" : "هویت مورد استفاده",
+        "help" : "هویتی را برای clone/checkout در سیستم انتخاب کنید"
+      },
+      "repositoryUri" : {
+        "label" : "آدرس/نشانی مخزن",
+        "help" : "نشانی کامل مخزن git remote (معمولاً با http: یا https: یا ssh: شروع می‌شود)"
+      },
+      "publicAccess" : {
+        "label" : "عمومی",
+        "help" : "اگر انتخاب شود، دسترسی به مخزن نیازی به احراز هویت ندارد"
+      },
+      "openZips" : {
+        "label" : "بازکردن فایل‌های zip",
+        "help" : "بازکردن فایل‌های zip و استخراج محتوا را فعال کنید"
+      },
+      "programmedTables" : {
+        "label" : "برنامه‌ریزی بررسی به‌روزرسانی محتوا",
+        "help" : "زمان‌بندی بررسی تغییر محتوا را برای به‌روز نگه داشتن سیستم تولید خودکار اطلاعات تنظیم کنید"
+      },
+      "buildSystemsRefs" : {
+        "label" : "پیکربندی سیستم‌های بیلد",
+        "help" : "فهرست سیستم‌های بیلد/بسته‌بندی برای بررسی اطلاعات متا و اطلاعات آثار اضافی"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "GeneralInfosTab" : {
+        "label" : "اطلاعات کلی"
+      },
+      "UseChatModelLabel" : {
+        "label" : "استفاده از مدل چت"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "انتخاب"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "یک پیکربندی مدل چت انتخاب کنید"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "یک پیکربندی مدل embedding انتخاب کنید"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "انتخاب"
+      },
+      "RagSettingsTab" : {
+        "label" : "تنظیمات RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "تنظیمات مدل زبان بزرگ و ابزارهای قابل استفاده"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "استفاده از مدل embedding"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "تنظیمات دسترسی امنیتی"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پروفایل چت بازیابی تقویت‌شده"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پروفایل چت به طور خودکار تولید می‌شود."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پروفایل چت را وارد کنید."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "کاربر پایگاه دانش را انتخاب می‌کند",
+        "help" : "کاربر می‌تواند از پایگاه‌های دانش در دسترس انتخاب کند یا فایل خود را بارگذاری نماید."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "پایگاه‌های دانش",
+        "help" : "پایگاه‌های دانشی که برای بازیابی اسناد استفاده می‌شوند."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "آستانه شباهت",
+        "help" : "آستانه شباهت برای جستجوی معنایی، ۰.۶۰–۰.۶۵ فیلتر پایین، ۰.۷۰–۰.۷۵ فیلتر متوسط، ۰.۸۰–۰.۸۵ دقیق"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "آستانه شباهت جهش دوم",
+        "help" : "آستانه شباهت برای جستجوی معنایی، ۰.۶۰–۰.۶۵ فیلتر پایین، ۰.۷۰–۰.۷۵ فیلتر متوسط، ۰.۸۰–۰.۸۵ دقیق برای جستجوی دوم در multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "غیرفعال‌سازی rag 'چند جهشی'",
+        "help" : "عملکرد rag چند جهشی را غیرفعال کنید. جستجوی چند جهشی ابتدا یک جستجوی معنایی انجام داده و اسناد پیدا شده را به‌عنوان زمینه برای جستجوی معناشناسی بعدی استفاده می‌کند تا زمینه گسترده‌تری ارائه دهد."
+      },
+      "topK" : {
+        "label" : "قطعات اسناد در نظر گرفته شده (TopK)",
+        "help" : "در بازیابی تقویت‌شده، N قطعه سند یافته شده در جستجوی معنایی استفاده می‌شود"
+      },
+      "enabledFunctions" : {
+        "label" : "قابلیت‌های فعال برای این چت RAG",
+        "help" : "قابلیت‌هایی که مدل llm می‌تواند هنگام گفت‌وگو با کاربر و تعامل با پایگاه دانش انتخاب شده استفاده کند"
+      },
+      "prompt" : {
+        "label" : "پرامپت",
+        "help" : "پرامپت را برای جلسات بازیابی تقویت‌شده ویرایش کنید."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "دسته‌بندی پرامپت را وارد یا انتخاب کنید"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش پرامپت"
+      },
+      "promptCategory" : {
+        "label" : "دسته‌بندی پرامپت",
+        "help" : "دسته‌بندی پرامپت را انتخاب یا وارد کنید."
+      },
+      "prompt" : {
+        "label" : "پرامپت",
+        "help" : "پرامپت چت را ویرایش کنید، برای نمایش سؤال کاربر از {query} و برای نمایش متن/تاریخچه سندها از {context} استفاده کنید."
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پرامپت به صورت خودکار تولید می‌شود."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پرامپت را وارد کنید."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "تغییر گذرواژه"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "گذرواژه قبلی",
+        "help" : "گذرواژه فعلی برای ورود"
+      },
+      "newPassword" : {
+        "label" : "گذرواژه جدید",
+        "help" : "گذرواژه جدید"
+      },
+      "username" : {
+        "label" : "ایمیل",
+        "help" : "ایمیل به عنوان نام کاربری برای ورود"
+      },
+      "ChangePasswordUI" : {
+        "label" : "فرم تغییر گذرواژه"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "ChangePwdBtn" : {
+        "label" : "تغییر گذرواژه"
+      },
+      "newPassword1" : {
+        "label" : "تأیید گذرواژه جدید",
+        "help" : "تأیید گذرواژه جدید"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "ForMoreInformations" : {
+        "label" : "برای اطلاعات بیشتر درباره Google custom search API یا دریافت کلید API (رایگان) به این صفحه مراجعه کنید: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "کد یکتا",
+        "help" : "کد یکتای پیکربندی Google search API."
+      },
+      "MainPanel" : {
+        "label" : "ویرایش اعتبارات google custom search api"
+      },
+      "secretCode" : {
+        "label" : "توکن Google search API",
+        "help" : "توکن Google search API را انتخاب یا وارد کنید"
+      },
+      "customSearchEngineId" : {
+        "label" : "شناسه Google search engine",
+        "help" : "شناسه Google search engine"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات پیکربندی Google search API را وارد کنید."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "گفتگو بدون پایگاه دانش",
+        "help" : "مدل‌های LLM را برای جلسه گفتگو انتخاب کنید",
+        "placeholder" : "مدل‌های LLM را برای جلسه گفتگو انتخاب کنید"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "باز کردن بخش گزینه‌های گفتگو"
+      },
+      "CreateChatBtn" : {
+        "label" : "گفتگوی جدید"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "جلسه گفتگوی جدید"
+      },
+      "chatProfileCode" : {
+        "label" : "گفتگو با پایگاه‌های دانش",
+        "help" : "پروفایل گفتگوی شرکت را برای کار با اسناد شرکت (و اسناد خودتان) و مدل‌های LLM انتخاب کنید",
+        "placeholder" : "پروفایل گفتگوی شرکت را برای کار با اسناد شرکت (و اسناد خودتان) و مدل‌های LLM انتخاب کنید"
+      },
+      "NewChatBtn" : {
+        "label" : "گفتگوی جدید"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "گفتگو با اسناد",
+        "help" : "مرور کنید یا جستجو و انتخاب اسنادی که می‌خواهید با آن‌ها کار کنید"
+      },
+      "chooseFilesDialog" : {
+        "label" : "انتخاب فایل‌ها برای گفتگو"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "تایید"
+      },
+      "userspaceBrowsing" : {
+        "label" : "فایل‌های خود را بارگذاری یا انتخاب کنید",
+        "help" : "بارگذاری یا انتخاب اسناد از فضای کاربری شما"
+      },
+      "fileSearchBtn" : {
+        "label" : "جستجو"
+      },
+      "semanticSearchBtn" : {
+        "label" : "جستجو"
+      },
+      "query" : {
+        "label" : "عبارت جستجوی معنایی",
+        "help" : "یک عبارت مرتبط و معنی‌دار برای جستجو وارد کنید"
+      },
+      "choosenBrowsing" : {
+        "label" : "انتخاب فایل‌ها از پایگاه‌های دانش",
+        "help" : "فایل‌ها را از پایگاه‌های دانش اشتراکی شرکت انتخاب کنید"
+      },
+      "filename" : {
+        "label" : "نام فایل جستجو شده",
+        "help" : "بخشی از نام فایل مورد نظر خود را وارد کنید"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "ویرایش موارد انتخاب‌شده"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "انتخاب فایل‌های کاربران"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "انصراف"
+      },
+      "okBtn" : {
+        "label" : "تأیید"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "انتخاب محتوای بارگذاری‌شده توسط کاربر"
+      },
+      "UserspaceBrowser" : {
+        "label" : "پایگاه‌های دانش و فایل‌های کاربر"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+زیرپروژه یا مورد",
+        "help" : "اضافه کردن زیرپروژه یا مورد"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+بارگذاری فایل",
+        "help" : "افزودن منبع داده فایل‌های بارگذاری‌شده"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "افزودن یک منبع داده Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "افزودن منبع داده Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+فایل‌سیستم",
+        "help" : "افزودن منبع داده فایل‌سیستم اشتراکی"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "افزودن منبع داده Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+مخزن git",
+        "help" : "افزودن منبع داده مخزن git مانند bitbucket، github یا دیگران"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai گفت‌وگو"
+      },
+      "setup" : {
+        "label" : "راه‌اندازی"
+      },
+      "admin" : {
+        "label" : "مدیریت Gebo.ai"
+      },
+      "currentProfile" : {
+        "label" : "پروفایل من"
+      },
+      "logout" : {
+        "label" : "خروج"
+      }
+    }
+  }
+}

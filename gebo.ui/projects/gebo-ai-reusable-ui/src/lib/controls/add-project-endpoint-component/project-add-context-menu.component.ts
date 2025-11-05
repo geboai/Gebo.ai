@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /*
  * AI generated comments
@@ -24,6 +24,8 @@ import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
 import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architecture/actions.model";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { Subscription } from "rxjs";
 
 /**
  * Constants defining different module types that can be added to a project
@@ -42,41 +44,42 @@ const CONFLUENCE_MODULE = "confluence-module";
  * It handles the generation of menu items based on the project data and available modules.
  */
 @Component({
-    selector: "project-add-context-menu",
-    templateUrl: "project-add-context-menu.component.html",
-    standalone: false
+  selector: "project-add-context-menu",
+  templateUrl: "project-add-context-menu.component.html",
+  standalone: false,
+  providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProjectAddContextMenuComponent") }]
 })
 export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
   /**
    * The project data to which items will be added
    */
   @Input() data?: GProject;
-  
+
   /**
    * Flag to determine if options should be displayed as buttons instead of menu items
    */
   @Input() showAsButtons: boolean = false;
-  
+
   /**
    * Flag to enable/disable sub-project addition functionality
    */
   @Input() subProjectAddEnabled: boolean = true;
-  
+
   /**
    * Flag to display the menu as a full page rather than a dropdown
    */
   @Input() showAsPage: boolean = false;
-  
+
   /**
    * Configuration for wizard steps if this is part of a multi-step wizard
    */
   @Input() wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[];
-  
+
   /**
    * The ID of the current wizard step configuration
    */
   @Input() actualWizardStepConfigrationId?: string;
-  
+
   /**
    * Event emitter that triggers when the UI needs to be refreshed after an action
    */
@@ -86,7 +89,8 @@ export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
    * Array of menu items to be displayed in the context menu
    */
   public items: MenuItem[] = [];
-  
+  private subscription?: Subscription;
+
   /**
    * Constructor initializes the required services for action routing and menu generation
    */
@@ -95,7 +99,7 @@ export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
     private kbTreeSearchService: GeboAIPluggableKnowledgeAdminBaseTreeSearchService) {
 
   }
-  
+
   /**
    * Lifecycle hook that responds to input changes, specifically when project data changes
    */
@@ -104,7 +108,7 @@ export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
       this.refreshUI();
     }
   }
-  
+
   /**
    * Refreshes the UI by generating the menu items based on the current project data
    * Uses the knowledge tree search service to generate appropriate menu options
@@ -117,10 +121,21 @@ export class ProjectAddContextMenuComponent implements OnInit, OnChanges {
       this.refreshUIEvent.emit(event)
     };
     if (this.data) {
-      this.items = this.kbTreeSearchService.generateAddToProjectMenu(this.subProjectAddEnabled, this.data, actionConsumer, callBack, this.wizardStepsConfigurations, this.actualWizardStepConfigrationId);
+      if (this.subscription) {
+        this.subscription.unsubscribe();
+        this.subscription = undefined;
+      }
+      this.items = this.kbTreeSearchService.generateAddToProjectMenuEnglish(this.subProjectAddEnabled, this.data, actionConsumer, callBack, this.wizardStepsConfigurations, this.actualWizardStepConfigrationId);
+      this.subscription = this.kbTreeSearchService.generateAddToProjectMenu(this.subProjectAddEnabled, this.data, actionConsumer, callBack, this.wizardStepsConfigurations, this.actualWizardStepConfigrationId).subscribe({
+        next: (menuItems) => {
+          if (menuItems) {
+            this.items = menuItems;
+          }
+        }
+      });
     }
   }
-  
+
   /**
    * Lifecycle hook for component initialization
    */

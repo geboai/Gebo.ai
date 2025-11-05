@@ -1,3 +1,4 @@
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -9,38 +10,42 @@
  */
  -->
  
- 
- 
-
-<p-panel #chatModelAdvancedUI *ngIf="formGroup" [formGroup]="formGroup">
+<p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI *ngIf="formGroup" [formGroup]="formGroup">
     <p-blockUI [target]="chatModelAdvancedUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="col-12">
-        <div class="flex flex-column gap-2 ">
-            <label for="enabledFunctions">Enabled functions call for this model</label>
-            <gebo-ai-choose-llm-functions-component id="enabledFunctions" formControlName="enabledFunctions"
-            aria-describedby="enabledFunctions-help" [knowledgeBaseContext]="false" dataKey="code"
-            optionLabel="description" optionValue="code" display="chip" 
-            class="col-12"></gebo-ai-choose-llm-functions-component>
-             
-            <small id="enabledFunctions-help">
-                Functionalities that could be used by the model during the chat
-            </small>
-        </div>
+        <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this model" help="Functionalities that could be used by the model during the chat">
+            <gebo-ai-choose-llm-functions-component
+                id="enabledFunctions"
+                formControlName="enabledFunctions"
+                [knowledgeBaseContext]="false"
+                dataKey="code"
+                optionLabel="description"
+                optionValue="code"
+                display="chip"
+                class="col-12"
+                gebo-ai-field-element
+            /> 
+        </gebo-ai-field>
     </div>
     <div class="col-12">
-        <div class="flex flex-column gap-2 ">
-            <label for="defaultModelPrompt">Default model prompt</label>
-            <textarea rows="3" cols="250" pTextarea formControlName="defaultModelPrompt"
-                aria-describedby="defaultModelPrompt-help"></textarea>
-            <small id="defaultModelPrompt-help">
-                Edit the default prompt for the chat model.
-            </small>
-        </div>
+        <gebo-ai-field id="defaultModelPrompt" label="Default model prompt" help="Edit the default prompt for the chat model.">
+            <textarea
+                rows="3"
+                cols="250"
+                pTextarea
+                id="TextArea1" gebo-ai-label
+                formControlName="defaultModelPrompt"
+                gebo-ai-field-element
+            ></textarea>
+        </gebo-ai-field>
     </div>
     <div class="col-3">
         <gebo-ai-prompt-wizard-component [deliveryFormGroup]="formGroup" deliveryPromptControlName="defaultModelPrompt"
             [ragWizardMode]="false"></gebo-ai-prompt-wizard-component>
     </div>
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

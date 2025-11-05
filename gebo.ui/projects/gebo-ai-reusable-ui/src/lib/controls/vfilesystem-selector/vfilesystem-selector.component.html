@@ -12,7 +12,7 @@
  
  
 
-<p-dialog  [maximizable]="true" [visible]="openEditWindow" [modal]="true" [style]="{width:'95%',height:'800px'}" [closable]="true"
+<p-dialog id="VFileSystemSelector" gebo-ai-label [maximizable]="true" [visible]="openEditWindow" [modal]="true" [style]="{width:'95%',height:'800px'}" [closable]="true"
     header="Choose elements" [showHeader]="true" (onHide)="this.openEditWindow=false;"
     (visibleChange)="this.openEditWindow=false;">
     <p-panel #window [showHeader]="false">
@@ -23,15 +23,15 @@
 
         <div class="grid" style="width:240px;">
             <div class="col-6">
-                <p-button label="OK" [outlined]="true" icon="pi pi-check" (onClick)="confirmEditing()"
+                <p-button id="ChooseOk" gebo-ai-label label="OK" [outlined]="true" icon="pi pi-check" (onClick)="confirmEditing()"
                     severity="success"></p-button>
             </div>
             <div class="col-6">
-                <p-button label="Cancel" [outlined]="true" icon="pi pi-cancel" (onClick)="openEditWindow=false;"
+                <p-button  id="ChooseCancel" gebo-ai-label  label="Cancel" [outlined]="true" icon="pi pi-cancel" (onClick)="openEditWindow=false;"
                     severity="secondary"></p-button>
             </div>
         </div>
-        <p-fieldset legend="Choosed elements">
+        <p-fieldset id="ChoosedElementsArea" gebo-ai-label legend="Choosed elements">
             <div style="width: 100%; border: solid #C0C0C0 1px;">
 
                 <p-chip *ngFor="let p of editingNodeValues;" [label]="(p.path?''+p.path.name:p.root.description)"
@@ -40,7 +40,7 @@
 
             </div>
         </p-fieldset>
-        <p-fieldset legend="Choose elements">
+        <p-fieldset  id="ChooseElementsArea" gebo-ai-label  legend="Choose elements">
             <p-tree class="md:w-20rem w-full col-12" [value]="roots" (onNodeExpand)="nodeExpand($event)"
             (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
             (onNodeUnselect)="nodeUnselect($event)" [selectionMode]="selectionMode"
@@ -61,7 +61,7 @@
 </p-dialog>
 
 <div style="width: 100%; border: solid #C0C0C0 1px;">
-    <p-button [disabled]="readonly" (onClick)="openEditMode()" icon="pi pi-pen-to-square" title="Modify selected"
+    <p-button  id="EditBtn" gebo-ai-label  [disabled]="readonly" (onClick)="openEditMode()" icon="pi pi-pen-to-square" title="Modify selected"
         [outlined]="true"></p-button>
     <p-chip *ngFor="let p of internalValue;" [label]="(p.path?''+p.path.name:p.root.description)"
         [removable]="readonly===false" (onRemove)="removeFromMainPanel(p)"

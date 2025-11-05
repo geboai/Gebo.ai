@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,10 +18,10 @@
  * and provides functionality for file uploads, project selection, and publishing.
  */
 
-import { Component, Inject, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, FileUploadControllerService, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { FileBeforeUploadEvent, FileProgressEvent, UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
@@ -37,26 +37,29 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 @Component({
     selector: "gebo-ai-uploads-endpoint-component",
     templateUrl: "gebo-ai-uploads-endpoint.component.html",
-    providers: [MessageService],
+    providers: [MessageService, 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIUploadsModule", multi: false },   
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUploadsEndpointComponent), multi: true
+    }],
     standalone: false
 })
 export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<GUploadsProjectEndpoint> {
 
     /** Name of the entity type being managed */
     protected override entityName: string = "GUploadsProjectEndpoint";
-    
+
     /** Authentication token for upload operations */
     public handShakeCode?: string;
-    
+
     /** Base URL for API endpoints */
     public baseUrl: string = "";
-    
+
     /** Flag controlling whether project can be modified */
     @Input() cantModifyProject: boolean = true;
-    
+
     /** Observable of available projects to select from */
     projectsObservable: Observable<GProject[]> = this.projectsController.getProjects();
-    
+
     /** Form group containing all form controls for the entity */
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
@@ -73,18 +76,18 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         uploadedContents: new FormControl(),
         contentManagementSystem: new FormControl()
     });
-    
+
     /** Flag indicating if the endpoint is published */
     published: boolean = false;
-    
+
     /** List of allowed file extensions for upload */
     filesExtensionsList: String[] = [".zip"];
-    
+
     /** Flat string representation of allowed file extensions */
     filesExtensionsFlatList: string = ".zip";
-    
+
     /** List of allowed file types for upload */
-    fileTypesList: GeboAIFileType[]=[];
+    fileTypesList: GeboAIFileType[] = [];
 
     /**
      * Constructor initializes services and sets up subscriptions
@@ -101,7 +104,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      * @param path Base API path
      * @param outputForwardingService Service for forwarding outputs
      */
-    constructor(injector:Injector,
+    constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         private uploadsControllerService: FileUploadsControllerService,
         private projectsController: ProjectsControllerService,
@@ -109,12 +112,12 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         private actionsRouter: GeboUIActionRoutingService,
         private messageService: MessageService,
         private uploadControllerService: FileUploadControllerService,
-        
+
         confirmService: ConfirmationService,
         @Inject(BASE_PATH) path: string,
         outputForwardingService?: GeboUIOutputForwardingService
     ) {
-        super(injector,geboFormGroupsService, confirmService,actionsRouter, outputForwardingService);
+        super(injector, geboFormGroupsService, confirmService, actionsRouter, outputForwardingService);
         this.formGroup.controls["published"].valueChanges.subscribe(published => {
             this.published = published;
         });
@@ -247,7 +250,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
         this.formGroup.controls["uploadHandshakeCode"].setValue(this.handShakeCode);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded with success' });
         console.log("onBasicUploadAuto");
-        this.loadingRelatedBackend=false;
+        this.loadingRelatedBackend = false;
     }
 
     /**
@@ -267,7 +270,7 @@ export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<G
      */
     onProgress(event: FileProgressEvent) {
         //throw new Error('Method not implemented.');
-        this.loadingRelatedBackend=true;
+        this.loadingRelatedBackend = true;
     }
 
     /**

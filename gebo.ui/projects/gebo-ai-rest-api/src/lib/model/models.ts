@@ -306,6 +306,8 @@ export * from './toolReference';
 export * from './toolsCategory';
 export * from './transcriptResponse';
 export * from './uIComponent';
+export * from './uIExistingText';
+export * from './uiTextResourcesModule';
 export * from './uploadHandShakeCodeBody';
 export * from './uploadUserspaceFolderCodeBody';
 export * from './user';

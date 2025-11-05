@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "デフォルトのシステム言語",
+        "help" : "このGebo.aiインストールのデフォルトシステム言語"
+      },
+      "username" : {
+        "label" : "Eメール",
+        "help" : "ログイン用のEメール（ユーザー名）"
+      },
+      "passwordC" : {
+        "label" : "パスワードの確認",
+        "help" : "パスワードを確認してください"
+      },
+      "password" : {
+        "label" : "パスワード",
+        "help" : "ログイン用パスワード（8文字以上）"
+      },
+      "PasswordNotMatching" : {
+        "label" : "パスワードが一致しません"
+      },
+      "LocalAdmin" : {
+        "label" : "ローカル管理者アカウントを作成"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "今後このアカウントでソフトウェアのセットアップや管理を行います。このデータはお使いのシステムにのみ保存され、ネットワーク経由で送信されません。"
+      },
+      "EnterBtn" : {
+        "label" : "ログインページへ移動"
+      },
+      "SetupPage" : {
+        "label" : "Gebo.aiのインストールをセットアップ"
+      },
+      "CreateBtn" : {
+        "label" : "システムセットアップを作成"
+      },
+      "LicenceFieldSet" : {
+        "label" : "ライセンスを読み、同意してください"
+      },
+      "AcceptMark" : {
+        "label" : "利用規約に同意します",
+        "help" : "ここをクリックするとライセンスの利用規約に同意したことになります"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "メールアドレス",
+        "help" : "ログイン用のメールアドレスを入力してください"
+      },
+      "password" : {
+        "label" : "パスワード",
+        "help" : "ログイン用のパスワードを入力してください"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai にログイン"
+      },
+      "LoginBtn" : {
+        "label" : "ログイン"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 設定"
+      },
+      "ProviderNameHeader" : {
+        "label" : "プロバイダー名"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 セキュリティ設定"
+      },
+      "IdHeader" : {
+        "label" : "ID"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "セットアップホームに戻る"
+      },
+      "WizardUi" : {
+        "label" : "セットアップセクションを選択"
+      },
+      "adminUserSetupSection" : {
+        "label" : "管理者とその他アカウントの設定",
+        "description" : "この gebo.ai インストールを適切に管理するために管理者アカウントが最低1つ必要です。必要に応じて他のユーザーも追加してください。"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai作業ディレクトリ",
+        "description" : "作業ディレクトリを設定します。このインストールの設定や作業ファイルを保存するフォルダーです。定期的なバックアップをおすすめします。"
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "ベクトルデータベースの設定",
+        "description" : "Gebo.aiで検索拡張生成サービスを利用するにはベクトルデータベースの設定が必要です。ローカルベクトルデータベース、Qdrant、Mongo Atlas のいずれかを選択できます。"
+      },
+      "oauth2SetupSection" : {
+        "label" : "シングルサインオン、oauth2認証",
+        "description" : "Oauth2シングルサインオン認証およびoauth2クライアント設定"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "大規模言語モデルの設定",
+        "description" : "様々なLLMをクラウドまたはローカル/LANインフラストラクチャのバックエンドサービスで設定します。チャットモデルと埋め込みモデルをそれぞれ1つ以上設定してください。"
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "グラフRAG／ナレッジ抽出設定",
+        "description" : "グラフRAGおよびナレッジ抽出サブシステムを設定します"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "共有ファイルシステムパス設定",
+        "description" : "会社で使用する共有ファイルシステムのパスを設定し、さまざまなナレッジベースの検索拡張生成ドキュメントエリアとして利用します"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence連携",
+        "description" : "Gebo.aiからAtlassian Confluenceクラウドまたはオンプレミスインストールにアクセスできるように設定します"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira連携",
+        "description" : "Gebo.aiからAtlassian jiraクラウドインストールにアクセスできるように設定します"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint連携",
+        "description" : "Gebo.aiからMicrosoft Sharepointクラウドまたはオンプレミスインストールにアクセスできるように設定します"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "少なくとも1つのナレッジベースを設定",
+        "description" : "Gebo.aiの検索拡張生成サービスを利用するには、少なくとも1つのナレッジベースを設定してください"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "少なくとも1つの「R.A.G.」チャットプロファイルを設定",
+        "description" : "設定済みのナレッジベースを使ってユーザー向けに少なくとも1つの検索拡張チャットプロファイルを設定してください"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "会社のAtlassian Confluenceシステム設定"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "SystemTypeHeader" : {
+        "label" : "システム種別"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "設定コード"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluenceシステム"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jiraシステム"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "設定コード"
+      },
+      "MainPanel" : {
+        "label" : "会社のAtlassian Jiraシステム設定"
+      },
+      "SystemTypeHeader" : {
+        "label" : "システム種別"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "設定コード"
+      },
+      "MainPanel" : {
+        "label" : "会社のMicrosoft Sharepointシステム設定"
+      },
+      "SystemTypeHeader" : {
+        "label" : "システム種別"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepointシステム"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "十分な利用可能クレジットを持つAPIキーを入力してください。OpenAIを選択した場合、API使用のために従来のプランに少額（10～30ドル程度）のクレジットが必要です。これがないと本アプリでLLM通信はご利用いただけません。"
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai LLMプロバイダーへのAPIキーアクセス設定"
+      },
+      "provider" : {
+        "label" : "大規模言語モデルの提供元",
+        "help" : "OpenAI（chatgpt）、Google（Gemini）、Anthropic（Claude）の中から1社を選んでください"
+      },
+      "user" : {
+        "label" : "ユーザー",
+        "help" : "APIキーに紐づくユーザーを入力してください"
+      },
+      "ConfigureBtn" : {
+        "label" : "設定"
+      },
+      "apiKey" : {
+        "label" : "APIキー",
+        "help" : "利用するLLMプロバイダーのAPIキー"
+      },
+      "ProviderHeader" : {
+        "label" : "プロバイダー"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "設定コード"
+      },
+      "ModelHeader" : {
+        "label" : "モデル"
+      },
+      "ModelTypeHeader" : {
+        "label" : "モデルタイプ"
+      },
+      "DefaultModelHeader" : {
+        "label" : "デフォルトモデル"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "グラフRAG設定を作成"
+      },
+      "MainPanel" : {
+        "label" : "Graph RAG & ナレッジ抽出のデフォルト設定"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "設定コード"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "プロジェクト"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "ナレッジベースを追加"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "ナレッジベース"
+      },
+      "MainPanel" : {
+        "label" : "ナレッジベースとコンテンツの設定"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "コンテンツソース"
+      },
+      "PublishedHeader" : {
+        "label" : "公開済み"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "ドキュメント数"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "プロジェクト／項目を追加",
+        "help" : "新規プロジェクト作成"
+      },
+      "Button1" : {
+        "help" : "ナレッジベースを開く"
+      },
+      "Button2" : {
+        "help" : "プロジェクトフォームを開く"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai作業フォルダー設定"
+      },
+      "ConfigureBtn" : {
+        "label" : "設定"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai作業ディレクトリを選択",
+        "help" : "このインストールの設定やコンテンツ保存用に使用するサーバーフォルダーを選択してください。"
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "フォルダー追加"
+      },
+      "AddFolderBtn" : {
+        "label" : "フォルダー追加"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "MainPanel" : {
+        "label" : "サーバー共有ファイルシステムパス"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "絶対パス"
+      },
+      "DeleteHeader" : {
+        "label" : "削除"
+      },
+      "path" : {
+        "label" : "共有ファイルシステムのルートフォルダを追加",
+        "help" : "ドキュメントリポジトリとして組織で使用する共有ファイルシステムのルートパスとなるサーバーフォルダーを選択してください"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "ファイルシステムエントリの説明を入力"
+      },
+      "RemovePathBtn" : {
+        "label" : "パスを削除"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "設定"
+      },
+      "MainPanel" : {
+        "label" : "ベクトルデータベースの設定"
+      },
+      "host" : {
+        "label" : "Qdrantホスト",
+        "help" : "Qdrantのホスト名またはIPアドレス"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant接続設定"
+      },
+      "port" : {
+        "label" : "Qdrantポート",
+        "help" : "Qdrantの通信ポート（標準：6334）"
+      },
+      "apiKey" : {
+        "label" : "Qdrant APIキー",
+        "help" : "Qdrant認証用のAPIキー"
+      },
+      "tls" : {
+        "label" : "Qdrant TLSパラメーター",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.aiの必須セットアップは完了しました...",
+        "detail" : "必須セットアップ項目は完了しましたが、未設定の項目があるため、すべての機能を充分に利用できません"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.aiの必須セットアップが未完了です",
+        "detail" : "セットアップ手順で赤色表示の項目を確認してください"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.aiセットアップ完了！"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "コード",
+        "help" : "OAUTH2認証／統合コード（registrationId）の説明を入力してください。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "OAUTH2認証／統合情報の説明を入力してください。"
+      },
+      "configurationType" : {
+        "label" : "設定の目的",
+        "help" : "この設定をGebo.aiで認証に使うのか、それともGebo.aiがサードパーティシステムに接続できるようにするのか選択してください。"
+      },
+      "authProvider" : {
+        "label" : "プロバイダー",
+        "help" : "OAUTH2認証のプロバイダーを入力してください。"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "プロバイダーのOAUTH2発行者URLを入力してください。"
+      },
+      "authorizationUri" : {
+        "label" : "認可URL",
+        "help" : "プロバイダーのOAUTH2認可URLを入力してください。"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "プロバイダーのOAUTH2 Jwk Set URLを入力してください。"
+      },
+      "userInfoUri" : {
+        "label" : "ユーザー情報URL",
+        "help" : "プロバイダーのOAUTH2ユーザー情報URLを入力してください。"
+      },
+      "introspectionUri" : {
+        "label" : "インスペクションUri",
+        "help" : "プロバイダーのOAUTH2インスペクションURLを入力してください。"
+      },
+      "tokenUri" : {
+        "label" : "トークンURL",
+        "help" : "プロバイダーのOAUTH2トークンURLを入力してください。"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2プロバイダーURL"
+      },
+      "MainPanel" : {
+        "label" : "新しいOAUTH2認証／統合情報を入力してください"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "クライアントID",
+        "help" : "oauth2プロトコル用のクライアント識別子（oauth2で認証されたサードパーティソフトウェアの管理画面で取得してください）"
+      },
+      "secret" : {
+        "label" : "シークレットキー",
+        "help" : "oauth2プロトコル用のクライアントシークレット（oauth2で認証されたサードパーティソフトウェアの管理画面で取得してください）"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence システム設定を作成"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "Confluence システムの説明を入力してください。"
+      },
+      "CreateBtn" : {
+        "label" : "作成"
+      },
+      "username" : {
+        "label" : "Confluence ユーザー名",
+        "help" : "Confluence ユーザー名"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence バージョン",
+        "help" : "Confluence バージョン"
+      },
+      "baseUri" : {
+        "label" : "ベースインターネットアドレス",
+        "help" : "オンプレミスインストールの場合の Confluence システムのベースアドレス、またはクラウドシステム用の組織のベースURLです。"
+      },
+      "password" : {
+        "label" : "Confluence パスワード",
+        "help" : "Confluence パスワード"
+      },
+      "token" : {
+        "label" : "Confluence クラウドAPIキー",
+        "help" : "Confluence バックオフィスで取得した Confluence CLOUD apikey をここに入力してください。「Atlassian アカウントの API トークン」を入力する必要があります。"
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "公開！",
+        "help" : "保存し、ナレッジベースでLLMがこの内容を利用できるようにします"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SettingsTab" : {
+        "label" : "設定"
+      },
+      "MainPanel" : {
+        "label" : "Confluence コンテンツを共有"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      },
+      "code" : {
+        "label" : "一意のコード",
+        "help" : "自動生成されるコンテンツの一意のコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "アップロードされた Confluence エントリー内容の説明を入力してください。"
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence システム",
+        "help" : "すでに設定済みの Confluence システム参照です。"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクトの参照です。"
+      },
+      "openZips" : {
+        "label" : "ZIP ファイルを開く",
+        "help" : "ZIP ファイルを開いて内容を抽出できるようにします"
+      },
+      "tree" : {
+        "label" : "選択済みスペースやページ/サブページ",
+        "help" : "共有済み Confluence スペースやページの内容"
+      },
+      "programmedTables" : {
+        "label" : "コンテンツ更新チェックのスケジュール",
+        "help" : "取得拡張生成システムを最新に保つために、変更されたコンテンツのスケジューリングを設定します"
+      },
+      "catalogingCriteria" : {
+        "label" : "スペース、ページ、サブページの整理基準",
+        "help" : "Gebo.ai で共有された Confluence コンテンツのスペース、ページ、サブページの整理基準についてご説明ください"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "一般設定"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "MainPanel" : {
+        "label" : "Confluence システムを編集"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "baseUri" : {
+        "label" : "ベースインターネットアドレス",
+        "help" : "Confluence システムアドレスのURL"
+      },
+      "code" : {
+        "label" : "一意のコード",
+        "help" : "Confluence システムの自動生成された一意のコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "Confluence システムの説明を入力してください。"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence バージョン",
+        "help" : "Confluence バージョン"
+      },
+      "secretCode" : {
+        "label" : "使用するID",
+        "help" : "Confluence システムにアクセスするIDを選択または作成してください"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "新しいグループ"
+      },
+      "NewUserBtn" : {
+        "label" : "新しいユーザー"
+      },
+      "UsersListPanel" : {
+        "label" : "ユーザー一覧"
+      },
+      "GroupsListPanel" : {
+        "label" : "グループ一覧"
+      },
+      "SournameHeader" : {
+        "label" : "姓"
+      },
+      "UsernameHeader" : {
+        "label" : "ユーザー名"
+      },
+      "RolesHeader" : {
+        "label" : "ロール"
+      },
+      "NameHeader" : {
+        "label" : "名前"
+      },
+      "EditBtn" : {
+        "label" : "編集"
+      },
+      "DisabledHeader" : {
+        "label" : "無効"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "UserIds" : {
+        "placeholder" : "ユーザーを選択"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "MainPanel" : {
+        "label" : "ユーザーグループの編集"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "ユーザーグループの説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "ユーザーグループのコードを入力してください"
+      },
+      "userIds" : {
+        "label" : "ユーザー一覧",
+        "help" : "グループに参加するユーザーを選択してください"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "作成"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "jiraシステムの説明を入力してください。"
+      },
+      "MainPanel" : {
+        "label" : "jiraシステム設定の作成"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "username" : {
+        "label" : "jiraユーザー名",
+        "help" : "jiraユーザー名"
+      },
+      "token" : {
+        "label" : "jiraクラウドAPIキー",
+        "help" : "jiraバックオフィスで取得したjira CLOUD apikeyをこちらに入力してください。「Atlassianアカウント用APIトークン」を挿入してください。"
+      },
+      "baseUri" : {
+        "label" : "ベースインターネットアドレス",
+        "help" : "オンプレミス環境用jiraシステムアドレスのURL、またはjiraクラウドシステム用に組織のベースURLを入力してください"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "PublishBtn" : {
+        "label" : "公開！",
+        "help" : "保存して、これらの内容をナレッジベースでLLmが利用できるようにします"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SettingsTab" : {
+        "label" : "設定"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      },
+      "MainPanel" : {
+        "label" : "jiraコンテンツの共有"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "コンテンツの自動生成されたユニークコードです。"
+      },
+      "jiraSystemCode" : {
+        "label" : "jiraシステム",
+        "help" : "既に設定済みのjiraシステム参照。"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクト参照。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "アップロードされたjiraエントリーの内容説明を入力してください。"
+      },
+      "programmedTables" : {
+        "label" : "コンテンツ更新チェックのスケジュール",
+        "help" : "変更コンテンツのスケジューリングを構成し、情報取得と拡張生成システムを最新に保ちます"
+      },
+      "openZips" : {
+        "label" : "Zipファイルを開く",
+        "help" : "zipファイルの展開と内容抽出を有効にする"
+      },
+      "tree" : {
+        "label" : "選択されたスペースまたはページ/サブページ",
+        "help" : "共有されたjiraプロジェクトおよびチケットの階層コンテンツ"
+      },
+      "catalogingCriteria" : {
+        "label" : "スペース・ページ・サブページの整理基準",
+        "help" : "Gebo.aiで共有したjiraコンテンツにおけるスペース、ページ、サブページの整理基準についてご説明ください"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "説明",
+        "help" : "jiraシステムの説明を入力してください。"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "MainPanel" : {
+        "label" : "jiraシステムの編集"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "baseUri" : {
+        "label" : "ベースインターネットアドレス",
+        "help" : "jiraシステムベースアドレスのURL"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "jiraシステムの自動生成されたユニークコードです。"
+      },
+      "secretCode" : {
+        "label" : "使用するID",
+        "help" : "jiraシステムにアクセスするためのIDを選択または作成してください"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "説明",
+        "help" : "SharPpoint/OneDrive システムの説明を入力してください。"
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint バージョン",
+        "help" : "sharepoint バージョン"
+      },
+      "secret" : {
+        "label" : "シークレットキー",
+        "help" : "microsoft「entra」製品に登録されたこのアプリ用のOauth2 クライアントシークレット（microsoft クラウド管理コンソールで取得）"
+      },
+      "clientId" : {
+        "label" : "クライアントID",
+        "help" : "microsoft「entra」製品に登録されたこのアプリ用のOauth2 クライアント識別子（microsoft クラウド管理コンソールで取得）"
+      },
+      "tenantId" : {
+        "label" : "テナントID",
+        "help" : "あなたの組織の microsoft「entra」製品用 Oauth2 テナント識別子（microsoft クラウド管理コンソールで取得）"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai 用 Microsoft oauth2 アプリ登録情報"
+      },
+      "CreateBtn" : {
+        "label" : "作成"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive システム設定の作成"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "PublishBtn" : {
+        "label" : "公開！",
+        "help" : "保存してナレッジベースからLLmが利用できるようになります"
+      },
+      "SettingsTab" : {
+        "label" : "設定"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive コンテンツの共有"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "コンテンツの自動生成されたユニークコードです。"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクトの参照。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "SharePoint/OneDrive エントリのデータソースの説明を入力してください。"
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint システム",
+        "help" : "すでに設定された SharePoint/OneDrive システムの参照。"
+      },
+      "openZips" : {
+        "label" : "Zipファイルを開く",
+        "help" : "Zipファイルの解凍および内容抽出を有効にする"
+      },
+      "tree" : {
+        "label" : "選択した Sharepoint サイト/ページ/サブページまたは OneDrive ドライブ/フォルダ/ファイル",
+        "help" : "共有されている sharepoint/OneDrive コンテンツ"
+      },
+      "programmedTables" : {
+        "label" : "コンテンツ更新チェックのスケジュール",
+        "help" : "変更されたコンテンツのスケジューリングを設定し、リトリーブ拡張生成システムを最新に保ちます"
+      },
+      "catalogingCriteria" : {
+        "label" : "スペース、ページ、サブページの整理基準",
+        "help" : "Gebo.ai に共有されている sharepoint コンテンツ内でどのようにスペース・ページ・サブページが整理されているか説明してください"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint システムの編集"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "一般設定"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "secretCode" : {
+        "label" : "使用するID",
+        "help" : "sharepoint システムへのアクセスに使用するIDを選択または作成してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "sharepoint システムの自動生成されたユニークコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "sharepoint システムの説明を入力してください。"
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint バージョン",
+        "help" : "sharepoint バージョン"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "削除"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "保存"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "キャンセル"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "一般情報・コンテンツ設定"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms設定"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "ナレッジグラフデータ抽出の段階で自動生成されたユニークコード"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag／知識抽出設定"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "このナレッジグラフデータ抽出設定の説明を入力してください"
+      },
+      "extractionPrompt" : {
+        "label" : "情報抽出プロンプト",
+        "help" : "エンティティ／イベント／関連性とエイリアス抽出のための大規模言語モデル用プロンプト"
+      },
+      "usedModelConfiguration" : {
+        "label" : "データ抽出に使用されるLLM",
+        "help" : "知識抽出に利用する大規模言語モデルを指定します。選択しない場合はデフォルトが使われます。"
+      },
+      "graphRagAllSources" : {
+        "label" : "すべてのデータソースにGraph ragを適用",
+        "help" : "有効にすると、全てのナレッジベース／プロジェクト／データソースで知識抽出が行われます。オフの場合は個別設定されたものだけ対象になります。"
+      },
+      "defaultModel" : {
+        "label" : "デフォルト大規模言語モデル",
+        "help" : "知識抽出にはデフォルトの大規模言語モデルが使われます"
+      },
+      "processEveryDocument" : {
+        "label" : "すべてのファイルにGraph ragを適用",
+        "help" : "すべてのファイルにGraph ragアルゴリズムを適用します。これによりシステムが分析できる詳細度が向上しますが、処理コストと時間が増えます。"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag処理用ファイル選択条件",
+        "help" : "Graphragの情報抽出パイプラインに送るファイルの条件を編集してください。ファイル名と条件、および／またはファイルタイプ、最大ファイルサイズ（バイト単位）、最終更新日（経過日数）のいずれかを必ず選択してください。"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "ファイルタイプを選択"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ファイル名のフィルター基準"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "最終更新日（何日前か）"
+      },
+      "nameFilter" : {
+        "placeholder" : "ファイル名"
+      },
+      "maxFileSize" : {
+        "placeholder" : "最大ファイルサイズ（バイト）"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "MainPanel" : {
+        "label" : "ナレッジベースの編集"
+      },
+      "AccessSettingsTab" : {
+        "label" : "ナレッジベースのアクセス設定"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "ナレッジベースの自動生成ユニークコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "ナレッジベースの説明を入力してください。"
+      },
+      "embeddingModelReferences" : {
+        "label" : "使用する埋め込みモデル（空の場合はシステムデフォルトを使用）",
+        "help" : "ナレッジベース用の埋め込みモデル、空の場合はデフォルトを使用します。"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "IndexBtn" : {
+        "label" : "インデックス",
+        "help" : "内容を再インデックスする"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "プロジェクトまたはアイテムの編集"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "プロジェクトの自動生成ユニークコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "プロジェクトの説明を入力してください。"
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "ナレッジベース",
+        "help" : "ナレッジベースです。"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "IndexBtn" : {
+        "label" : "インデックス",
+        "help" : "内容を再インデックスする"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ アイテム／プロジェクトを追加",
+        "help" : "新規追加..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "全員が利用できます",
+        "help" : "全員が利用可能です"
+      },
+      "accessibleGroups" : {
+        "label" : "グループ一覧",
+        "help" : "許可するグループを選択してください"
+      },
+      "accessibleUsers" : {
+        "label" : "ユーザー一覧",
+        "help" : "許可するユーザーを選択してください"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "ダッシュボード"
+      },
+      "LLMSTab" : {
+        "label" : "チャット＆埋め込み用LLM"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Ragチャットプロファイル／モデルプロンプト"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "ナレッジベースとプロジェクト"
+      },
+      "UsersGroupTab" : {
+        "label" : "ユーザーとグループ"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.aiモジュール設定"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "ConfigureBtn2" : {
+        "label" : "設定"
+      },
+      "ConfigureBtn" : {
+        "label" : "設定"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "新しいプロンプト設定"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "新しいチャットプロファイル"
+      },
+      "MainPanel" : {
+        "label" : "検索拡張生成チャットプロファイル"
+      },
+      "PromptsPanel" : {
+        "label" : "プロンプトコレクションとデフォルトプロンプト"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "ナレッジベース"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "ConfigureBtn1" : {
+        "label" : "設定"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "新しいナレッジベース"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "新しい埋め込みモデル設定"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "新しいチャットモデル設定"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "ModelHeader" : {
+        "label" : "モデル "
+      },
+      "ModelProviderHeader" : {
+        "label" : "モデルプロバイダー"
+      },
+      "ConfigureBtn" : {
+        "label" : "設定"
+      },
+      "CodeHeader2" : {
+        "label" : "コード"
+      },
+      "DescriptionHeader2" : {
+        "label" : "説明"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "モデルプロバイダー"
+      },
+      "ConfigureBtn2" : {
+        "label" : "設定"
+      },
+      "ModelHeader2" : {
+        "label" : "モデル "
+      },
+      "ChatmodelsZone" : {
+        "label" : "設定済みチャットモデル"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "設定済み埋め込みモデル"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "モデルのテスト"
+      },
+      "TestChatBtn" : {
+        "label" : "チャットをテスト"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAIトークン",
+        "help" : "このモデルで使用するOpenAIトークンを選択してください"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "choosedModel" : {
+        "label" : "OpenAIチャットモデルの選択",
+        "help" : "使用するOpenAIチャットモデルを選択してください。"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "詳細設定"
+      },
+      "MainPanel" : {
+        "label" : "OpenAIチャットモデル設定の編集"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "モデルアクセス設定"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI埋め込みモデル設定の編集"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAIトークン",
+        "help" : "このモデルで使用するOpenAIトークンを選択してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "埋め込みモデル設定の自動生成されたユニークコード"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "埋め込みモデル設定の説明を入力してください"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI埋め込みモデルの選択",
+        "help" : "使用するOpenAI埋め込みモデルを選択してください。"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルト埋め込みモデルに設定",
+        "help" : "有効にすると、埋め込みモデルが指定されていない場所でデフォルトの埋め込みモデルとして使用されます"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "baseUrl" : {
+        "label" : "Ollamaサーバーのベースアドレス",
+        "help" : "OllamaローカルまたはLANサーバーが応答するベースアドレス（例：http://servername:234/）"
+      },
+      "choosedModel" : {
+        "label" : "Ollamaチャットモデルの選択",
+        "help" : "使用するOllamaチャットモデルを選択してください。",
+        "placeholder" : "モデルを選択"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollamaトークン",
+        "help" : "このモデルで使用するOllamaトークンを選択してください（オプション）"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "MainPanel" : {
+        "label" : "Ollamaローカル（またはLAN）サーバーチャットモデル設定の編集"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropicトークン",
+        "help" : "このモデルで使用するAnthropicトークンを選択してください"
+      },
+      "choosedModel" : {
+        "label" : "Anthropicチャットモデルの選択",
+        "help" : "使用するAnthropicチャットモデルを選択してください。",
+        "placeholder" : "モデルを選択"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "詳細設定"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "モデルアクセス設定"
+      },
+      "MainPanel" : {
+        "label" : "Anthropicチャットモデル設定の編集"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAIトークン",
+        "help" : "このモデルで使用するMistralAIトークンを選択してください"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "choosedModel" : {
+        "label" : "MistralAIチャットモデルの選択",
+        "help" : "使用するMistralAIチャットモデルを選択してください。"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "詳細設定"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "モデルアクセス設定"
+      },
+      "MainPanel" : {
+        "label" : "MistralAIチャットモデル設定の編集"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AIチャットモデルの選択",
+        "help" : "使用するGoogle Vertex AIチャットモデルを選択してください。"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AIトークン",
+        "help" : "このモデルで使用するGoogle Vertex AIトークンを選択してください"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "TabGeneralInfos" : {
+        "label" : "一般情報"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "モデルアクセス設定"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "詳細設定"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AIチャットモデル設定の編集"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseekトークン",
+        "help" : "このモデルで使用するDeepseekトークンを選択してください"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "choosedModel" : {
+        "label" : "Deepseekチャットモデルの選択",
+        "help" : "使用するDeepseekチャットモデルを選択してください。",
+        "placeholder" : "モデルを選択"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "詳細設定"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "MainPanel" : {
+        "label" : "Deepseekチャットモデル設定の編集"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "モデルアクセス設定"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "モデル設定の説明を入力してください"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "モデル設定の自動生成されたユニークコード"
+      },
+      "baseUrl" : {
+        "label" : "チャットモデルAPIベースサーバーアドレス",
+        "help" : "チャットモデルのベースアドレスです。"
+      },
+      "apiSecretCode" : {
+        "label" : "チャットモデルAPIトークン",
+        "help" : "このモデルで使用するチャットモデルAPIトークンを選択してください（オプション）"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルトのチャットモデルに設定",
+        "help" : "有効にすると、チャットモデルが指定されていない場所でデフォルトのチャットモデルとして使用されます"
+      },
+      "choosedModel" : {
+        "label" : "チャットモデルの選択",
+        "help" : "使用するチャットモデルを選択してください。"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "TitleFragment" : {
+        "label" : "チャットモデルプロバイダの編集："
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "詳細設定"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "モデルアクセス設定"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "埋め込みモデル設定の説明を入力してください"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "MainPanel" : {
+        "label" : "Ollamaローカル（またはLAN）埋め込みモデル設定の編集"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollamaトークン",
+        "help" : "このモデルで使用するOllamaトークンを選択してください"
+      },
+      "choosedModel" : {
+        "label" : "Ollama埋め込みモデルの選択",
+        "help" : "使用するOllama埋め込みモデルを選択してください。"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "埋め込みモデル設定の自動生成されたユニークコード"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルト埋め込みモデルに設定",
+        "help" : "有効にすると、埋め込みモデルが指定されていない場所でデフォルトの埋め込みモデルとして使用されます"
+      },
+      "baseUrl" : {
+        "label" : "Ollamaサーバーのベースアドレス",
+        "help" : "OllamaローカルまたはLANサーバーが応答するベースアドレス（例：http://servername:234/）"
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "説明",
+        "help" : "埋め込みモデル設定の説明を入力してください"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI埋め込みモデル設定の編集"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "埋め込みモデル設定の自動生成されたユニークコード"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI埋め込みモデルの選択",
+        "help" : "使用するMistralAI埋め込みモデルを選択してください。"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルト埋め込みモデルに設定",
+        "help" : "有効にすると、埋め込みモデルが指定されていない場所でデフォルトの埋め込みモデルとして使用されます"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAIトークン",
+        "help" : "このモデルで使用するMistralAIトークンを選択してください"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI埋め込みモデル設定の編集"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "埋め込みモデル設定の説明を入力してください"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI埋め込みモデルの選択",
+        "help" : "使用するGoogle Vertex AI埋め込みモデルを選択してください。"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルト埋め込みモデルに設定",
+        "help" : "有効にすると、埋め込みモデルが指定されていない場所でデフォルトの埋め込みモデルとして使用されます"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "埋め込みモデル設定の自動生成されたユニークコード"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AIトークン",
+        "help" : "このモデルで使用するGoogle Vertex AIトークンを選択してください"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "TitleFragment" : {
+        "label" : "埋め込みモデルプロバイダの編集："
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "埋め込みモデル設定の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "埋め込みモデル設定の自動生成されたユニークコード"
+      },
+      "choosedModel" : {
+        "label" : "埋め込みモデルの選択",
+        "help" : "使用する埋め込みモデルを選択してください。"
+      },
+      "baseUrl" : {
+        "label" : "埋め込みモデルAPIサーバーアドレス",
+        "help" : "埋め込みモデルサーバーのベースアドレスです。"
+      },
+      "defaultModel" : {
+        "label" : "これをデフォルト埋め込みモデルに設定",
+        "help" : "有効にすると、埋め込みモデルが指定されていない場所でデフォルトの埋め込みモデルとして使用されます"
+      },
+      "apiSecretCode" : {
+        "label" : "埋め込みモデルAPIトークン",
+        "help" : "このモデルで使用する埋め込みモデルAPIトークンを選択してください"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "チャット設定情報"
+      },
+      "chaDeleteBtn" : {
+        "help" : "このチャットセッションを削除"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "チャットセッションの名前を変更"
+      },
+      "QueryControl" : {
+        "placeholder" : "チャットボットへのメッセージを入力してください"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "description" : {
+        "label" : "チャットの説明",
+        "help" : "チャットセッションの説明を入力してください。"
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "使用モデル",
+        "help" : "モデルコード"
+      },
+      "providerId" : {
+        "label" : "チャットモデルプロバイダー",
+        "help" : "LLmsプロバイダードライバー"
+      },
+      "functions" : {
+        "label" : "チャットモデルで利用可能な関数",
+        "help" : "チャットモデルで利用できる関数一覧"
+      },
+      "NameCol" : {
+        "label" : "名前"
+      },
+      "DescriptionCol" : {
+        "label" : "説明"
+      },
+      "kbases" : {
+        "label" : "利用可能なナレッジベース",
+        "help" : "このRAGチャットで使用されるナレッジベースの一覧"
+      },
+      "CloseBtn" : {
+        "help" : "閉じる"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "録音",
+        "help" : "音声トラックの録音を開始して送信します"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "データを再読み込み"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SelectHeader" : {
+        "label" : "選択"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "終了日時"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "開始日時"
+      },
+      "ProcessingHeader" : {
+        "label" : "処理中"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "FinishedHeader" : {
+        "label" : "完了"
+      },
+      "WithErrorHeader" : {
+        "label" : "エラーあり"
+      },
+      "LogTableComponent" : {
+        "help" : "この共有ファイルシステム領域の取り込みログ"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "処理統計"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "CloseBtn" : {
+        "label" : "閉じる"
+      },
+      "PublicationLogTab" : {
+        "label" : "公開ログ"
+      },
+      "MainPanel" : {
+        "label" : "公開ログ"
+      },
+      "actualStatus" : {
+        "label" : "ステータス",
+        "help" : "タスクの状態。実行中、完了、またはエラー完了のいずれかです。"
+      },
+      "publishingSystem" : {
+        "label" : "公開コンテンツ構成",
+        "help" : "公開コンテンツ情報"
+      },
+      "startDateTime" : {
+        "label" : "開始日時",
+        "help" : "コンテンツ同期タスクの開始日時"
+      },
+      "endDateTime" : {
+        "label" : "終了日時",
+        "help" : "コンテンツ同期タスクの終了日時"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "未完了"
+      },
+      "ProcessedCompletely" : {
+        "label" : "完全に処理済み"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "埋め込みと総ドキュメント数の比較"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "詳細を見る"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "プロンプトを生成"
+      },
+      "PromptWizardBtn" : {
+        "label" : "プロンプトウィザード",
+        "help" : "これを使って、LLMに目標のためのプロンプトを生成させましょう"
+      },
+      "acceptPrompt" : {
+        "label" : "プロンプトを受け入れる"
+      },
+      "promptWizardUI" : {
+        "label" : "プロンプトテンプレート生成ウィザード"
+      },
+      "cancel" : {
+        "label" : "キャンセル"
+      },
+      "response" : {
+        "label" : "提案されたプロンプトテンプレート",
+        "help" : "目標のために生成されたテンプレートテキスト（変更や修正が可能です）"
+      },
+      "modelCode" : {
+        "label" : "使用するチャットモデル",
+        "help" : "プロンプトテンプレート生成を依頼するチャットモデルを選んでください"
+      },
+      "query" : {
+        "label" : "プロンプトテンプレートリクエスト",
+        "help" : "ユーザーをサポートするAIの目的が何かを2人称で指定してください"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "温度",
+        "help" : "モデルが応答する温度（0〜1、わからない場合は空欄のまま）"
+      },
+      "contextLength" : {
+        "label" : "コンテキスト長（トークン）",
+        "help" : "AIモデルが処理時に考慮できるテキスト量（未設定の場合は1047576が使用されます）"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopPパラメータ（0〜1、わからない場合は空欄のまま）"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "このモデルで有効な関数呼び出し",
+        "help" : "チャット時にモデルが使用できる機能"
+      },
+      "defaultModelPrompt" : {
+        "label" : "デフォルトモデルプロンプト",
+        "help" : "チャットモデルのデフォルトプロンプトを編集します。"
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "説明",
+        "help" : "識別子の説明を入力してください。"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "識別子の自動生成されたユニークコードです。"
+      },
+      "secretType" : {
+        "label" : "識別子タイプ",
+        "help" : "リモートシステム用に作成する識別子タイプを選択してください"
+      },
+      "InsertBtn" : {
+        "label" : "挿入"
+      },
+      "token" : {
+        "label" : "トークン",
+        "help" : "トークンを入力してください。"
+      },
+      "user" : {
+        "label" : "ユーザー",
+        "help" : "トークンで指定されたユーザーを入力してください。"
+      },
+      "MainPanel" : {
+        "label" : "識別子を作成中"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "username" : {
+        "label" : "ユーザー名",
+        "help" : "ユーザー名を入力してください。"
+      },
+      "password" : {
+        "label" : "パスワード",
+        "help" : "パスワードを入力してください。"
+      },
+      "email" : {
+        "label" : "Eメール／ユーザー名",
+        "help" : "sshキーに関連付けられているEメールまたはユーザー名を入力してください。"
+      },
+      "key" : {
+        "label" : "秘密キー",
+        "help" : "秘密鍵ファイルを開き、このテキストエリアにコピーしてください。"
+      },
+      "passphrase" : {
+        "label" : "キーパスフレーズ",
+        "help" : "キーパスフレーズを入力してください。"
+      },
+      "pub" : {
+        "label" : "公開キー",
+        "help" : "公開鍵ファイルを開き、このテキストエリアにコピーしてください。"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "自動生成されたコンテンツの一意のコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "ファイルシステムエントリのアップロードされたコンテンツの説明を入力してください。"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクトの参照。"
+      },
+      "upload" : {
+        "label" : "コンテンツをアップロード",
+        "help" : "参照ボタンをクリックし、zipファイルまたは他のファイルを選択してください"
+      },
+      "openZips" : {
+        "label" : "Zipファイルを開く",
+        "help" : "Zipファイルのオープンと内容の抽出を有効にします"
+      },
+      "PublishBtn" : {
+        "label" : "公開！",
+        "help" : "保存して、これらのコンテンツを知識ベースでLLmに利用可能にします"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      },
+      "MainPanel" : {
+        "label" : "アップロードコンテンツの編集"
+      },
+      "SettingsTab" : {
+        "label" : "設定"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ビルドシステムの設定",
+        "help" : "メタ情報や追加のアーティファクト情報を確認するためのビルド/パッケージングシステムの一覧（ソフトウェアコードが含まれていない場合は空のままにしてください）"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "選択した項目"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "キャンセル"
+      },
+      "EditBtn" : {
+        "help" : "選択内容を編集"
+      },
+      "ChooseElementsArea" : {
+        "label" : "項目を選択"
+      },
+      "VFileSystemSelector" : {
+        "label" : "項目を選択"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "スケジュールを編集"
+      },
+      "ConfirmBtn" : {
+        "label" : "確認"
+      },
+      "AddBtn" : {
+        "label" : "+追加"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "公開する！",
+        "help" : "保存して、これらのコンテンツをナレッジベースでLLmに利用できるようにします"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SettingsTab" : {
+        "label" : "設定"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "ソースコード処理"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      },
+      "MainPanel" : {
+        "label" : "既存ファイルシステムコンテンツの編集"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "アップロードしたファイルシステムエントリの説明を入力してください。"
+      },
+      "openZips" : {
+        "label" : "ZIPファイルを開く",
+        "help" : "ZIPファイルの展開と内容抽出を有効にする"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "コンテンツの自動生成されたユニークコードです。"
+      },
+      "tree" : {
+        "label" : "選択されたファイルまたはフォルダー",
+        "help" : "サーバーで利用可能な共有ファイルシステムのファイルやディレクトリ"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクトの参照。"
+      },
+      "programmedTables" : {
+        "label" : "コンテンツ更新チェックのスケジュール",
+        "help" : "変更されたコンテンツのスケジューリングを設定して、検索拡張生成システムを最新に維持します"
+      },
+      "catalogingCriteria" : {
+        "label" : "フォルダー整理基準",
+        "help" : "Gebo.aiと共有しているファイルシステム領域でのフォルダーの整理基準についてここに説明してください"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ビルドシステムの構成",
+        "help" : "メタ情報や追加アーティファクト情報を調査するビルド/パッケージングシステムの一覧（ソフトウェアコードが含まれていない場合は空欄）"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "新しいファイル共有エリア"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "絶対パス"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db または yml ファイル設定"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "ModifyHeader" : {
+        "label" : "編集"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "選択された共有ファイルシステムフォルダー",
+        "help" : "組織内で文書リポジトリとして使用する共有ファイルシステムのルートパスとなるサーバーフォルダーを選択してください"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "組織の共有ファイルシステム領域の説明を入力してください"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "コンテンツの自動生成されたユニークコードです。"
+      },
+      "InsertBtn" : {
+        "label" : "挿入"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "MainPanel" : {
+        "label" : "サーバー共有ファイルフォルダーの編集"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "PublishBtn" : {
+        "label" : "公開！",
+        "help" : "保存して、これらのコンテンツをナレッジベースでLLmが利用できるようにします"
+      },
+      "MainPanel" : {
+        "label" : "gitソース／ドキュメントリポジトリの編集"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "gitリポジトリの説明を入力してください。"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "自動生成されたgitリポジトリのユニークコード。"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクトの参照。"
+      },
+      "contentManagementSystem" : {
+        "label" : "Gitシステム",
+        "help" : "すでに設定済みのgitシステム参照。"
+      },
+      "branch" : {
+        "label" : "ブランチ",
+        "help" : "チェックアウトするブランチ名（通常はmaster、main、またはdevelop）"
+      },
+      "identityCode" : {
+        "label" : "使用するID",
+        "help" : "クローンやチェックアウトに使用するIDを選択してください"
+      },
+      "repositoryUri" : {
+        "label" : "リポジトリURL／アドレス",
+        "help" : "gitリモートリポジトリの完全なアドレス（通常はhttp:、https:、またはssh:で始まります）"
+      },
+      "publicAccess" : {
+        "label" : "公開",
+        "help" : "trueの場合、リポジトリのアクセスに認証は不要です"
+      },
+      "openZips" : {
+        "label" : "Zipファイルを開く",
+        "help" : "Zipファイルの展開と内容抽出を有効にします"
+      },
+      "programmedTables" : {
+        "label" : "コンテンツ更新チェックのスケジュール",
+        "help" : "変更されたコンテンツのスケジュール設定で、検索拡張生成システムを常に最新に保ちます"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ビルドシステムの設定",
+        "help" : "メタ情報や追加成果物情報を調査するためのビルド／パッケージングシステムの一覧"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "GeneralInfosTab" : {
+        "label" : "一般情報"
+      },
+      "UseChatModelLabel" : {
+        "label" : "チャットモデルを使用"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "選択"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "チャットモデル設定を選択"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "埋め込みモデル設定を選択"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "選択"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG設定"
+      },
+      "LanguageModelTab" : {
+        "label" : "大規模言語モデル & 利用可能ツール設定"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "埋め込みモデルを使用"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "セキュリティアクセス設定"
+      },
+      "MainPanel" : {
+        "label" : "リトリーブ強化生成チャットプロファイルを編集中"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "チャットプロファイルの自動生成されたユニークコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "チャットプロファイルの説明を入力してください。"
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "ユーザーがナレッジベースを選択",
+        "help" : "ユーザーはアクセス可能なナレッジベースから選択したり、独自のファイルをアップロードできます。"
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "ナレッジベース",
+        "help" : "ドキュメント検索に使用するナレッジベース。"
+      },
+      "similaritySearchThreshold" : {
+        "label" : "類似度のしきい値",
+        "help" : "セマンティック検索のしきい値です。0.60–0.65 低いフィルタリング、0.70–0.75 中程度、0.80–0.85 高精度"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2回目の「ホップ」類似度しきい値",
+        "help" : "セマンティック検索のためのしきい値です。0.60–0.65 低いフィルタリング、0.70–0.75 中程度、0.80–0.85 高精度。マルチホップRAGの2回目の検索から使用します。"
+      },
+      "disableMultiHopRag" : {
+        "label" : "「マルチホップ」RAGを無効化",
+        "help" : "「マルチホップRAG」機能を無効にします。マルチホップ検索は、最初にセマンティック検索を行い、見つかったドキュメントを文脈として次のセマンティック検索に利用し、より広い文脈を提供します。"
+      },
+      "topK" : {
+        "label" : "考慮する文書断片数（TopK）",
+        "help" : "リトリーブ強化生成では、セマンティック検索で見つかったTop N件の文書断片を考慮します"
+      },
+      "enabledFunctions" : {
+        "label" : "このRAGチャットで有効な関数コール",
+        "help" : "ユーザーとのチャット中にllmモデルが選択したナレッジベースとも連携し利用できる機能です"
+      },
+      "prompt" : {
+        "label" : "プロンプト",
+        "help" : "リトリーブ強化生成セッション用のプロンプトを編集します。"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "プロンプトカテゴリを入力または挿入してください"
+      },
+      "MainPanel" : {
+        "label" : "プロンプトの編集"
+      },
+      "promptCategory" : {
+        "label" : "プロンプトカテゴリ",
+        "help" : "プロンプトカテゴリを選択または挿入してください。"
+      },
+      "prompt" : {
+        "label" : "プロンプト",
+        "help" : "チャット用のプロンプトを編集してください。ユーザーの質問を示すには{query}、送信するドキュメントや履歴のコンテキストを示すには{context}を使用します。"
+      },
+      "code" : {
+        "label" : "一意のコード",
+        "help" : "プロンプトの自動生成された一意のコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "プロンプトの説明を入力してください。"
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "パスワードを変更する"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "現在のパスワード",
+        "help" : "ログインに使う現在のパスワード"
+      },
+      "newPassword" : {
+        "label" : "新しいパスワード",
+        "help" : "新しいパスワード"
+      },
+      "username" : {
+        "label" : "Eメール",
+        "help" : "ログイン用のEメール"
+      },
+      "ChangePasswordUI" : {
+        "label" : "パスワード変更フォーム"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "ChangePwdBtn" : {
+        "label" : "パスワードを変更"
+      },
+      "newPassword1" : {
+        "label" : "新しいパスワードの確認",
+        "help" : "新しいパスワードを確認してください"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google カスタムサーチ API や API キーの取得（無料）について詳しくは、https://developers.google.com/custom-search をご覧ください。"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "Google 検索 API 設定のユニークコードです。"
+      },
+      "MainPanel" : {
+        "label" : "Google カスタムサーチ API 資格情報を編集"
+      },
+      "secretCode" : {
+        "label" : "Google 検索 API トークン",
+        "help" : "Google 検索 API トークンを選択または入力してください"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google 検索エンジン ID",
+        "help" : "Google 検索エンジン ID"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "Google 検索 API 設定の説明を入力してください。"
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "ナレッジベースなしでチャット",
+        "help" : "チャットセッション用のLLMを選択してください",
+        "placeholder" : "チャットセッション用のLLMを選択してください"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "チャットオプションセクションを開く"
+      },
+      "CreateChatBtn" : {
+        "label" : "新しいチャット"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "新しいチャットセッション"
+      },
+      "chatProfileCode" : {
+        "label" : "ナレッジベースとチャット",
+        "help" : "会社やあなたのドキュメント・LLMとやりとりするチャットプロファイルを選択してください",
+        "placeholder" : "会社やあなたのドキュメント・LLMとやりとりするチャットプロファイルを選択してください"
+      },
+      "NewChatBtn" : {
+        "label" : "新しいチャット"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "ドキュメントとチャットする",
+        "help" : "閲覧または検索して作業するドキュメントを選択してください"
+      },
+      "chooseFilesDialog" : {
+        "label" : "チャットするファイルを選択"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "確認"
+      },
+      "userspaceBrowsing" : {
+        "label" : "ドキュメントをアップロードまたは選択",
+        "help" : "ユーザースペースからドキュメントを選択またはアップロードしてください"
+      },
+      "fileSearchBtn" : {
+        "label" : "検索"
+      },
+      "semanticSearchBtn" : {
+        "label" : "検索"
+      },
+      "query" : {
+        "label" : "セマンティック検索フレーズ",
+        "help" : "検索に関連する意味のあるフレーズを入力してください"
+      },
+      "choosenBrowsing" : {
+        "label" : "ナレッジベースからファイルを選択",
+        "help" : "会社の共有ナレッジベースを閲覧してファイルを選択してください"
+      },
+      "filename" : {
+        "label" : "検索したファイル名",
+        "help" : "検索するコンテンツのファイル名の一部を入力してください"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "選択した項目を変更"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "ユーザーのファイルを選択"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "ユーザーがアップロードしたコンテンツを選択"
+      },
+      "UserspaceBrowser" : {
+        "label" : "ナレッジベースとユーザーファイル"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+サブプロジェクトまたは項目",
+        "help" : "サブプロジェクトまたは項目を追加"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ファイルをアップロード",
+        "help" : "アップロードファイルのデータソースを追加"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive データソースを追加"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence データソースを追加"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ファイルシステム",
+        "help" : "共有ファイルシステムのデータソースを追加"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira データソースを追加"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git リポジトリ",
+        "help" : "bitbucket、github などの git リポジトリのデータソースを追加"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai チャット"
+      },
+      "setup" : {
+        "label" : "設定"
+      },
+      "admin" : {
+        "label" : "Gebo.ai 管理"
+      },
+      "currentProfile" : {
+        "label" : "マイプロフィール"
+      },
+      "logout" : {
+        "label" : "ログアウト"
+      }
+    }
+  }
+}

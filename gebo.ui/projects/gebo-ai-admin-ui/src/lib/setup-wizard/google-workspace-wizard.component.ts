@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,7 +18,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { GeboModulesConfigControllerService, GGoogleDriveSystem, GoogleDriveSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, GOOGLEDRIVE_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, GOOGLEDRIVE_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";
 
@@ -39,7 +39,7 @@ export class GoogleWorkspacesStatusService extends AbstractStatusService {
    * @returns Observable<boolean> - True if at least one Google Drive system exists
    */
   public override getBooleanStatus(): Observable<boolean> {
-    return this.googleDriveControllerService.getGoogleDriveSystems().pipe(map(c => ((c && c.length > 0)?true:false)));
+    return this.googleDriveControllerService.getGoogleDriveSystems().pipe(map(c => ((c && c.length > 0) ? true : false)));
   }
 }
 
@@ -50,8 +50,8 @@ export class GoogleWorkspacesStatusService extends AbstractStatusService {
  */
 @Injectable()
 export class GoogleWorkspacesInstalledModuleService extends GeboRootInstalledModuleService {
-  protected override moduleCode: string=GOOGLEDRIVE_MODULE;
-  
+  protected override moduleCode: string = GOOGLEDRIVE_MODULE;
+
   constructor(geboModulesConfigService: GeboModulesConfigControllerService) {
     super(geboModulesConfigService);
   }
@@ -63,15 +63,16 @@ export class GoogleWorkspacesInstalledModuleService extends GeboRootInstalledMod
  * It extends BaseWizardSectionComponent to integrate with the overall setup wizard flow.
  */
 @Component({
-    selector: "gebo-google-workspace-wizard-component",
-    templateUrl: "google-workspace-wizard.component.html",
-    standalone: false
+  selector: "gebo-google-workspace-wizard-component",
+  templateUrl: "google-workspace-wizard.component.html",
+  standalone: false,
+  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GoogleWorkspacesWizardComponent") }]
 })
 export class GoogleWorkspacesWizardComponent extends BaseWizardSectionComponent {
 
   public createGoogleDriveWorkspacesWindowOpen: boolean = false;
   public systems: GGoogleDriveSystem[] = [];
-  
+
   constructor(setupWizardComunicationService: SetupWizardComunicationService,
     private googleDriveControllerService: GoogleDriveSystemsControllerService,
     private geboUIActionsRouter: GeboUIActionRoutingService
@@ -122,7 +123,7 @@ export class GoogleWorkspacesWizardComponent extends BaseWizardSectionComponent 
    */
   createSystem() {
     this.createGoogleDriveWorkspacesWindowOpen = true;
-    
+
   }
 
   /**

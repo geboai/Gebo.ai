@@ -6,15 +6,16 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry, OperationStatusPromptTemplateResponse, PromptTemplateWizardConfigs, PromptTemplateWizardControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 /**
  * AI generated comments
  * 
@@ -26,7 +27,14 @@ import { forkJoin, Observable } from "rxjs";
 @Component({
     selector: "gebo-ai-prompt-wizard-control",
     templateUrl: "prompt-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [
+        {
+            provide: GEBO_AI_MODULE, useValue: "PromptEditingModule", multi: false
+        },
+        {
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIPromptWizardComponent")
+        }]
 })
 export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /** Name of the form control in the parent form group where the prompt template will be delivered */
@@ -36,7 +44,7 @@ export class GeboAIPromptWizardComponent implements OnInit, OnChanges {
     /** Initial placeholder text for the prompt template input */
     @Input() promptTemplatePlaceholderText?: string;
     /** Flag to determine if the wizard is operating in RAG mode */
-    @Input() ragWizardMode:boolean=true;
+    @Input() ragWizardMode: boolean = true;
     /** Default placeholder text for the prompt template */
     public defaultTemplatePlaceHolderText?: string;
     /** Controls visibility of the prompt wizard dialog */

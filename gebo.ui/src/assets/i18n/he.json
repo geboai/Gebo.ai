@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "שפת מערכת ברירת מחדל",
+        "help" : "שפת מערכת ברירת מחדל להתקנת Gebo.ai זו"
+      },
+      "username" : {
+        "label" : "אימייל",
+        "help" : "האימייל לשימוש כשם משתמש להתחברות"
+      },
+      "passwordC" : {
+        "label" : "אשר סיסמה",
+        "help" : "אשר את הסיסמה"
+      },
+      "password" : {
+        "label" : "סיסמה",
+        "help" : "סיסמה להתחברות (לפחות 8 תווים)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " הסיסמאות אינן תואמות "
+      },
+      "LocalAdmin" : {
+        "label" : "צור חשבון מנהל מקומי"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "תשתמש בחשבון זה בעתיד כדי להגדיר/לנהל את התוכנה, הנתונים יישארו מקומית למערכת שלך ולא יישלחו ברשת"
+      },
+      "EnterBtn" : {
+        "label" : "עבור לדף ההתחברות"
+      },
+      "SetupPage" : {
+        "label" : "הגדר את התקנת Gebo.ai שלך"
+      },
+      "CreateBtn" : {
+        "label" : "צור הגדרת מערכת"
+      },
+      "LicenceFieldSet" : {
+        "label" : "קרא ואשר את הרישיון"
+      },
+      "AcceptMark" : {
+        "label" : "אני מקבל את התנאים",
+        "help" : "בלחיצה כאן אתה מאשר את התנאים ברישיון"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "דוא\"ל",
+        "help" : "הזן דוא\"ל כשם משתמש להתחברות"
+      },
+      "password" : {
+        "label" : "סיסמה",
+        "help" : "הזן סיסמה להתחברות"
+      },
+      "LoginPanel" : {
+        "label" : "התחברות ל-gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "התחבר"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "בסדר!",
+        "detail" : "הפעולה הושלמה בהצלחה"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "הגדרות Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "שם ספק"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "MainPanel" : {
+        "label" : "הגדרות אבטחת Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "מזהה"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "חזרה לדף הבית של ההגדרות"
+      },
+      "WizardUi" : {
+        "label" : "בחר מקטע התקנה"
+      },
+      "adminUserSetupSection" : {
+        "label" : "הגדרת חשבון מנהל ומשתמשים נוספים",
+        "description" : "נדרש לפחות חשבון ניהול כדי להבטיח שניהול התקנת Gebo.ai יתבצע כראוי, הוסף משתמשים נוספים במידת הצורך"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "תיקיית עבודה של Gebo.ai",
+        "description" : "הגדר תיקיית עבודה. זו תהיה התיקייה בה יאוחסנו קבצי ההגדרות וכל הקבצים של התקנה זו. מומלץ גם לגבות אותה בקביעות."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "הגדרת מסד נתונים וקטורי",
+        "description" : "יש להגדיר מסד נתונים וקטורי עבור Gebo.ai בשביל שירותי רטריב אוגמנטד ג'נריישן, ניתן לבחור בין מסד נתונים מקומי, Qdrant או Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "אימות SSO, Oauth2",
+        "description" : "הגדרת אימות SSO בפרוטוקול Oauth2 והגדרת לקוחות Oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "הגדרת מודלים גדולים לשפה",
+        "description" : "הגדר מגוון מודלים עם שירותי backend בענן או בחיבור מקומי, חובה להגדיר לפחות מודל שיחה אחד ומודל הטמעה אחד כדי לוודא שהתוכנה תפעל תקין."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "הגדרת Graph rag/שליפת ידע",
+        "description" : "הגדר את מערכת graph rag ותת-המערכת לשליפת ידע"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "הגדרת נתיבי מערכות קבצים משותפות",
+        "description" : "הגדר נתיבי מערכות קבצים משותפות לאזורי מסמכים עבור שירותי רטריב אוגמנטד ג'נריישן במאגרים שונים"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "אינטגרציה עם Atlassian Confluence",
+        "description" : "הגדר את Gebo.ai לגישה למערכות Atlassian Confluence בענן או מקומיות"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "אינטגרציה עם Atlassian Jira",
+        "description" : "הגדר את Gebo.ai לגישה לענן Atlassian Jira"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "אינטגרציה עם Microsoft Sharepoint",
+        "description" : "הגדר את Gebo.ai לגישה לענן או למערכות Microsoft Sharepoint מקומיות"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "הגדר לפחות מאגר ידע אחד",
+        "description" : "הגדר לפחות מאגר ידע כדי שלמשתמשים שלך תהיה חוויית שירותי רטריב אוגמנטד ג'נריישן של Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "הגדר לפחות פרופיל צ'אט \"R.A.G.\" אחד",
+        "description" : "הגדר לפחות פרופיל צ'אט רטריב אוגמנטד למשתמשים שלך בהתבסס על אחד ממאגרים שהגדרת"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "הגדרת מערכות Atlassian Confluence בארגון"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "SystemTypeHeader" : {
+        "label" : "סוג מערכת"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד הגדרה"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "מערכת Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "מערכת Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד הגדרה"
+      },
+      "MainPanel" : {
+        "label" : "הגדרת מערכות Atlassian Jira בארגון"
+      },
+      "SystemTypeHeader" : {
+        "label" : "סוג מערכת"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד הגדרה"
+      },
+      "MainPanel" : {
+        "label" : "הגדרת מערכות Microsoft Sharepoint בארגון"
+      },
+      "SystemTypeHeader" : {
+        "label" : "סוג מערכת"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "מערכת Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "יש לספק api-key עם קרדיט מתאים. אם בוחרים ב-OpenAI יש להטעין קרדיט מתאים (10-30 דולר מספיקים בד\"כ) לתוכנית למטרה זו, אחרת לא יימצא תעבורת llms זמינה ביישום זה."
+      },
+      "MainPanel" : {
+        "label" : "הגדר את הגישה לספקי llms של Gebo.ai עם מפתח api משלך"
+      },
+      "provider" : {
+        "label" : "ספק מודל שפה גדול",
+        "help" : "בחר ספק בין OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "משתמש",
+        "help" : "הזן את המשתמש המשויך למפתח ה-api"
+      },
+      "ConfigureBtn" : {
+        "label" : "הגדר"
+      },
+      "apiKey" : {
+        "label" : "מפתח api",
+        "help" : "מפתח ה-api של ספקי ה-LLMS לשימוש"
+      },
+      "ProviderHeader" : {
+        "label" : "ספק"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "קוד הגדרה"
+      },
+      "ModelHeader" : {
+        "label" : "מודל"
+      },
+      "ModelTypeHeader" : {
+        "label" : "סוג מודל"
+      },
+      "DefaultModelHeader" : {
+        "label" : "מודל ברירת מחדל"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "צור הגדרת graph rag"
+      },
+      "MainPanel" : {
+        "label" : "הגדרות ברירת מחדל ל-Graph Rag ושליפת ידע"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד הגדרה"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "פרויקט"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "הוסף מאגר ידע"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "מאגר ידע"
+      },
+      "MainPanel" : {
+        "label" : "הגדרת מאגרי ידע ותכנים"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "מקור תוכן"
+      },
+      "PublishedHeader" : {
+        "label" : "פורסם"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "מס' מסמכים"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "הוסף פרויקט/פריט",
+        "help" : "צור פרויקט חדש"
+      },
+      "Button1" : {
+        "help" : "פתח מאגר ידע"
+      },
+      "Button2" : {
+        "help" : "פתח טופס פרויקט"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "הגדרת תיקיית עבודה של Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "הגדר"
+      },
+      "workDirectory" : {
+        "label" : "בחר תיקייה לעבודת Gebo.ai",
+        "help" : "בחר תיקיית שרת שתשמש כהתיקייה הראשית לאחסון הגדרות והתוכן של ההתקנה."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "הוסף תיקייה"
+      },
+      "AddFolderBtn" : {
+        "label" : "הוסף תיקייה"
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "MainPanel" : {
+        "label" : "נתיבי מערכת קבצים משותפת בשרת"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "נתיב מוחלט"
+      },
+      "DeleteHeader" : {
+        "label" : "מחק"
+      },
+      "path" : {
+        "label" : "הוסף תיקיית שורש של מערכת קבצים משותפת",
+        "help" : "בחר תיקיית שרת שהיא נתיב שורש למערכת הקבצים המשותפת שמשמשת בארגון לאחסון מסמכים"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור ערך מערכת הקבצים"
+      },
+      "RemovePathBtn" : {
+        "label" : "הסר נתיב"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "הגדר"
+      },
+      "MainPanel" : {
+        "label" : "הגדרת מסד נתונים וקטורי"
+      },
+      "host" : {
+        "label" : "שרת Qdrant",
+        "help" : "שם שרת Qdrant או כתובת ip"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "הגדרות חיבור Qdrant"
+      },
+      "port" : {
+        "label" : "פורט Qdrant",
+        "help" : "יציאת התקשורת של Qdrant (6334 היא ברירת המחדל)"
+      },
+      "apiKey" : {
+        "label" : "מפתח api Qdrant",
+        "help" : "מפתח api לאימות Qdrant"
+      },
+      "tls" : {
+        "label" : "פרמטר TLS של Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "השלמת שלבים חובה בהתקנת Gebo.ai...",
+        "detail" : "השלבים החיוניים הושלמו אך ישנם שלבים חסרים שמונעים מהארגון להנות מכל האפשרויות שבתוכנה"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "חסרים שלבים בהגדרה החיונית של Gebo.ai",
+        "detail" : "אנא עיין בשלבים האדומים בתהליך ההתקנה"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "הגדרת Gebo.ai הושלמה בהצלחה!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "קוד",
+        "help" : "הזן את התיאור של קוד אימות/אינטגרציה OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של פרטי אימות/אינטגרציה OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "מטרה של ההגדרה",
+        "help" : "בחר אם הגדרות אלו ישמשו לאימות ב-Gebo.ai או כדי לאפשר ל-Gebo.ai חיבור כלקוח למערכת צד שלישי."
+      },
+      "authProvider" : {
+        "label" : "ספק",
+        "help" : "הזן את ספק האימות של OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "כתובת מנפיק",
+        "help" : "הזן את כתובת ה-URL של מנפיק ה-OAUTH2 של הספק"
+      },
+      "authorizationUri" : {
+        "label" : "כתובת אישור",
+        "help" : "הזן את כתובת ה-URL של אישור OAUTH2 של הספק"
+      },
+      "jwkSetUri" : {
+        "label" : "כתובת סט Jwk",
+        "help" : "הזן את כתובת סט ה-Jwk של OAUTH2 של הספק"
+      },
+      "userInfoUri" : {
+        "label" : "כתובת פרטי משתמש",
+        "help" : "הזן את כתובת פרטי המשתמש OAUTH2 של הספק"
+      },
+      "introspectionUri" : {
+        "label" : "כתובת אינטרוספקציה",
+        "help" : "הזן את כתובת האינטרוספקציה של OAUTH2 של הספק"
+      },
+      "tokenUri" : {
+        "label" : "כתובת טוקן",
+        "help" : "הזן את כתובת ה-URL של הטוקן של OAUTH2 של הספק"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "כתובות ספק OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "הכנס פרטי אימות/אינטגרציה OAUTH2 חדשים"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "מזהה לקוח",
+        "help" : "מזהה הלקוח לפרוטוקול oauth2 (יש לאסוף מאזור הניהול של תוכנת צד שלישי שמאומתת עם oauth2)"
+      },
+      "secret" : {
+        "label" : "מפתח סודי",
+        "help" : "סוד הלקוח לפרוטוקול oauth2 (יש לאסוף מאזור הניהול של תוכנת צד שלישי שמאומתת עם oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "צור תצורת מערכת Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת Confluence."
+      },
+      "CreateBtn" : {
+        "label" : "צור"
+      },
+      "username" : {
+        "label" : "שם משתמש Confluence",
+        "help" : "שם המשתמש של Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "גרסת Confluence",
+        "help" : "גרסת Confluence"
+      },
+      "baseUri" : {
+        "label" : "כתובת אינטרנט בסיסית",
+        "help" : "כתובת ה-URL של מערכת Confluence להתקנה מקומית, או כתובת הארגון שלך עבור Confluence בענן"
+      },
+      "password" : {
+        "label" : "סיסמת Confluence",
+        "help" : "סיסמת Confluence"
+      },
+      "token" : {
+        "label" : "מפתח api של Confluence cloud",
+        "help" : "יש להזין כאן את \"API Token for your Atlassian Account\" שנלקח מ-Confluence backoffic."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שומר ומאפשר לתוכן הזה להימצא במאגר הידע עבור LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SettingsTab" : {
+        "label" : "הגדרות"
+      },
+      "MainPanel" : {
+        "label" : "שיתוף תכני Confluence"
+      },
+      "LogsTab" : {
+        "label" : "יומנים"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התוכן."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור לתוכן שהועלה מ-Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "מערכת Confluence",
+        "help" : "הפניה למערכת Confluence שכבר הוגדרה."
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "הפניה לפרויקט האב."
+      },
+      "openZips" : {
+        "label" : "פתח קבצי ZIP",
+        "help" : "אפשר פתיחה וחילוץ תוכן מקבצי ZIP"
+      },
+      "tree" : {
+        "label" : "מרחבים או עמודים שנבחרו",
+        "help" : "תוכן מרחבים ועמודים משותפים ב-Confluence"
+      },
+      "programmedTables" : {
+        "label" : "לוח זמנים לבדיקות עדכון תוכן",
+        "help" : "הגדר את לוח הזמנים לעדכון תוכן כדי לשמור על עדכניות מערכת ה-augmented generation"
+      },
+      "catalogingCriteria" : {
+        "label" : "קריטריונים לארגון מרחבים, עמודים ותתי עמודים",
+        "help" : "הסבר כאן כיצד בוצעה חלוקת המרחבים, העמודים ותתי-העמודים בתוכן Confluence ששיתפת עם Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "הגדרות כלליות"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "MainPanel" : {
+        "label" : "עריכת מערכת Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "baseUri" : {
+        "label" : "כתובת אינטרנט בסיסית",
+        "help" : "כתובת ה-URL של מערכת Confluence הבסיסית"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור מערכת Confluence."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת Confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "גרסת Confluence",
+        "help" : "גרסת Confluence"
+      },
+      "secretCode" : {
+        "label" : "זהות בשימוש",
+        "help" : "בחר או צור זהות חדשה כדי לגשת למערכת Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "קבוצה חדשה"
+      },
+      "NewUserBtn" : {
+        "label" : "משתמש חדש"
+      },
+      "UsersListPanel" : {
+        "label" : "רשימת משתמשים"
+      },
+      "GroupsListPanel" : {
+        "label" : "רשימת קבוצות"
+      },
+      "SournameHeader" : {
+        "label" : "שם משפחה"
+      },
+      "UsernameHeader" : {
+        "label" : "שם משתמש"
+      },
+      "RolesHeader" : {
+        "label" : "תפקידים"
+      },
+      "NameHeader" : {
+        "label" : "שם"
+      },
+      "EditBtn" : {
+        "label" : "עריכה"
+      },
+      "DisabledHeader" : {
+        "label" : "מושבת"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "UserIds" : {
+        "placeholder" : "בחר משתמשים"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "MainPanel" : {
+        "label" : "עריכת קבוצת משתמשים"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את תיאור קבוצת המשתמשים"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "הזן את קוד קבוצת המשתמשים"
+      },
+      "userIds" : {
+        "label" : "רשימת משתמשים",
+        "help" : "בחר משתמשים המשתתפים בקבוצה"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "צור"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת jira."
+      },
+      "MainPanel" : {
+        "label" : "יצירת תצורת מערכת jira"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "username" : {
+        "label" : "שם משתמש jira",
+        "help" : "שם המשתמש של jira"
+      },
+      "token" : {
+        "label" : "מפתח api של jira cloud",
+        "help" : "יש להכניס כאן את 'API Token for your Atlassian Account' שהתקבל ב-backoffic של jira CLOUD."
+      },
+      "baseUri" : {
+        "label" : "כתובת אינטרנט בסיסית",
+        "help" : "ה-URL של כתובת מערכת jira להתקנה מקומית או כתובת הבסיס של הארגון שלך למערכת jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שומר ומאפשר לתכנים הללו להיכלל בבסיס הידע של ה-LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SettingsTab" : {
+        "label" : "הגדרות"
+      },
+      "LogsTab" : {
+        "label" : "יומנים"
+      },
+      "MainPanel" : {
+        "label" : "שיתוף תכנים מ-jira"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התוכן."
+      },
+      "jiraSystemCode" : {
+        "label" : "מערכת jira",
+        "help" : "הפניה למערכת jira שכבר הוגדרה."
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "הפניה לפרויקט האב."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של התוכן שהועלה מרשומות jira."
+      },
+      "programmedTables" : {
+        "label" : "לוח זמנים לבדיקות עדכון תוכן",
+        "help" : "הגדר את התזמון של תכנים ששונו כדי לשמור על עדכניות מערכת הדור ההשבה המועצמת"
+      },
+      "openZips" : {
+        "label" : "פתח קבצי zip",
+        "help" : "אפשר פתיחת קבצי zip וחילוץ תוכן"
+      },
+      "tree" : {
+        "label" : "מרחבים או עמודים/תתי-עמודים שנבחרו",
+        "help" : "היררכיית פרויקטים וכרטיסי jira משותפים"
+      },
+      "catalogingCriteria" : {
+        "label" : "קריטריונים לארגון מרחבים, עמודים ותתי עמודים",
+        "help" : "נא פרט כאן כיצד בוצע הארגון של המרחבים, עמודים ותתי-העמודים בתכני jira שחולקו עם Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת jira."
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "MainPanel" : {
+        "label" : "עריכת מערכת jira"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "baseUri" : {
+        "label" : "כתובת אינטרנט בסיסית",
+        "help" : "URL של כתובת המערכת jira"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור מערכת jira."
+      },
+      "secretCode" : {
+        "label" : "זהות בשימוש",
+        "help" : "בחר או צור זהות לגישה למערכת jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "גרסת Sharepoint",
+        "help" : "גרסת sharepoint"
+      },
+      "secret" : {
+        "label" : "מפתח סודי",
+        "help" : "Oauth2 client secret לאפליקציה הזו שרשומה במוצר microsoft \"entra\" (יש לאחזר בקונסולת הניהול של microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "מזהה לקוח",
+        "help" : "Oauth2 client identifier לאפליקציה הזו שרשומה במוצר microsoft \"entra\" (יש לאחזר בקונסולת הניהול של microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "מזהה דייר",
+        "help" : "Oauth2 tenant identifier לארגון שלך במוצר microsoft \"entra\" (יש לאחזר בקונסולת הניהול של microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "מידע רישום אפליקציית Microsof oauth2 עבור Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "צור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "MainPanel" : {
+        "label" : "צור הגדרת מערכת SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שומר ומאפשר לתכנים להיות זמינים במאגר הידע עבור LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "הגדרות"
+      },
+      "MainPanel" : {
+        "label" : "שיתוף תכני SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "יומנים"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התוכן."
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "הפניה לפרויקט הראשי."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מקורות נתוני פריטי SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "מערכת sharepoint",
+        "help" : "הפניה למערכת SharePoint/OneDrive שכבר הוגדרה."
+      },
+      "openZips" : {
+        "label" : "פתח קבצי zip",
+        "help" : "הפעל פתיחת קבצי zip וחילוץ תכנים"
+      },
+      "tree" : {
+        "label" : "אתרי/דפי/תתי דפי Sharepoint או כונני/תיקיות/קבצי OneDrive שנבחרו",
+        "help" : "תכנים משותפים של sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "לוח זמנים לבדיקה ועדכון תכנים",
+        "help" : "הגדר לוח זמנים לעדכון תכנים שהשתנו, כדי לשמור על מערכת איסוף ידע עדכנית"
+      },
+      "catalogingCriteria" : {
+        "label" : "קריטריונים לארגון מרחבים, דפים ותתי דפים",
+        "help" : "הסבר כאן כיצד בוצע הארגון של המרחבים, דפים ותתי דפים בתכנים שחולקו ב-Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "עריכת מערכת sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "הגדרות כלליות"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "secretCode" : {
+        "label" : "זהות בשימוש",
+        "help" : "בחר או צור זהות לגישה למערכת sharepoint"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור מערכת ה-sharepoint."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת ה-sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "גרסת Sharepoint",
+        "help" : "גרסת sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "מחק"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "שמור"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "בטל"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "הגדרות מידע/תוכן כלליות"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "הגדרות LLms"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית של שלב חילוץ הנתונים של גרף הידע"
+      },
+      "MainPanel" : {
+        "label" : "הגדרת חילוץ Graphrag/ידע"
+      },
+      "description" : {
+        "label" : "תאור",
+        "help" : "הזן את התיאור של שלב הגדרת חילוץ נתוני גרף הידע הזה"
+      },
+      "extractionPrompt" : {
+        "label" : "הנחיית חילוץ מידע",
+        "help" : "הנחיה של מודל שפה גדול לחילוץ ישויות/אירועים/יחסים וכינויים"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM ששימש לחילוץ נתונים",
+        "help" : "ציין את מודל השפה הגדול בו נעשה שימוש לחילוץ ידע, ברירת המחדל תיבחר אם לא נבחר."
+      },
+      "graphRagAllSources" : {
+        "label" : "החל Graph rag על כל מקורות הנתונים",
+        "help" : "אם פעיל, כל המאגרים/פרויקטים/מקורות הנתונים יעובדו לצורך חילוץ ידע, אחרת יעובדו רק אלה שהוגדרו במיוחד"
+      },
+      "defaultModel" : {
+        "label" : "מודל שפה גדול ברירת מחדל",
+        "help" : "מודל השפה הגדול שבברירת מחדל ישמש עבור חילוץ ידע"
+      },
+      "processEveryDocument" : {
+        "label" : "החל Graph rag על כל הקבצים",
+        "help" : "האלגוריתמים של Graph rag יוחלו על כל קובץ, מה שישפר את רמת הפרטים של הניתוח שהמערכת מסוגלת לבצע, אך יגדיל את העלות והזמן הנדרש לעיבוד המסמכים"
+      },
+      "contentSelectionFilter" : {
+        "label" : "קריטריוני בחירת קבצים לעיבוד Graphrag",
+        "help" : "ערוך קריטריונים על הקובץ שישלח לצנרת חילוץ המידע של Graphrag, יש לבחור לפחות שם קובץ ואחד הקריטריונים ו/או סוג הקובץ ו/או מספר הבייטים המקסימלי ו/או גיל אחרון שינוי בימים"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "בחר סוגי קבצים"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "קריטריוני סינון שם קובץ"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "הקובץ עודכן לאחרונה, לפני מספר ימים"
+      },
+      "nameFilter" : {
+        "placeholder" : "שם קובץ"
+      },
+      "maxFileSize" : {
+        "placeholder" : "גודל קובץ מקסימלי בבתים"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "MainPanel" : {
+        "label" : "עריכת מאגר ידע"
+      },
+      "AccessSettingsTab" : {
+        "label" : "הגדרות גישה למאגר הידע"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית למאגר הידע."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מאגר הידע."
+      },
+      "embeddingModelReferences" : {
+        "label" : "מודלי הטמעה בשימוש (השאר ריק לשימוש בברירת המחדל)",
+        "help" : "מודלי הטמעה עבור מאגר הידע, השאר ריק יבחר את ברירת המחדל."
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "IndexBtn" : {
+        "label" : "אינדקס",
+        "help" : "אנדקס מחדש תכנים"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "עריכת פרויקט או פריט"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית לפרויקט."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של הפרויקט."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "מאגר ידע",
+        "help" : "מאגר ידע."
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "IndexBtn" : {
+        "label" : "אינדקס",
+        "help" : "אנדקס מחדש תכנים"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ הוסף פריט/פרויקט",
+        "help" : "הוסף חדש..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "כולם משתמשים",
+        "help" : "כולם יכולים להשתמש"
+      },
+      "accessibleGroups" : {
+        "label" : "רשימת קבוצות",
+        "help" : "בחר קבוצות מורשות"
+      },
+      "accessibleUsers" : {
+        "label" : "רשימת משתמשים",
+        "help" : "בחר משתמשים מורשים"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "לוח מחוונים"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs לצ'אט והטמעה"
+      },
+      "RagChatConfigTab" : {
+        "label" : "פרופילי צ'אט Rag / הנחיות למודל"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "מאגרי ידע ופרויקטים"
+      },
+      "UsersGroupTab" : {
+        "label" : "משתמשים וקבוצות"
+      },
+      "GeboModulesTab" : {
+        "label" : "תצורת מודולים של Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "יומני רישום"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "ConfigureBtn2" : {
+        "label" : "הגדר"
+      },
+      "ConfigureBtn" : {
+        "label" : "הגדר"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "הגדרת פרומפט חדשה"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "פרופיל צ'אט חדש"
+      },
+      "MainPanel" : {
+        "label" : "פרופילי צ'אט עם הפקת מידע מורחבת"
+      },
+      "PromptsPanel" : {
+        "label" : "אוסף פרומפטים & פרומפטים ברירת מחדל"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "מקורות ידע"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "ConfigureBtn1" : {
+        "label" : "הגדר"
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "בסיס ידע חדש"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "הגדרת מודל הטמעה חדשה"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "הגדרת מודל צ'אט חדשה"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "ModelHeader" : {
+        "label" : "מודל "
+      },
+      "ModelProviderHeader" : {
+        "label" : "ספק המודל"
+      },
+      "ConfigureBtn" : {
+        "label" : "הגדר"
+      },
+      "CodeHeader2" : {
+        "label" : "קוד"
+      },
+      "DescriptionHeader2" : {
+        "label" : "תיאור"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "ספק המודל"
+      },
+      "ConfigureBtn2" : {
+        "label" : "הגדר"
+      },
+      "ModelHeader2" : {
+        "label" : "מודל "
+      },
+      "ChatmodelsZone" : {
+        "label" : "מודלי צ'אט מוגדרים"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "מודלי הטמעה מוגדרים"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "בדיקת מודל"
+      },
+      "TestChatBtn" : {
+        "label" : "בדוק שיחה"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון OpenAI",
+        "help" : "בחר את אסימון ה-OpenAI בו יש להשתמש עבור מודל זה"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל השיחה של OpenAI",
+        "help" : "בחר את מודל השיחה של OpenAI לעבודה איתו."
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "הגדרות מתקדמות"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל השיחה של OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "הגדרות גישה למודל"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל ההטמעה של OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון OpenAI",
+        "help" : "בחר את אסימון ה-OpenAI בו יש להשתמש עבור מודל זה"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת מודל ההטמעה"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת מודל ההטמעה"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל ההטמעה של OpenAI",
+        "help" : "בחר את מודל ההטמעה של OpenAI לעבודה איתו."
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל ההטמעה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל ההטמעה ברירת מחדל כאשר מודל ההטמעה לא צוין"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "baseUrl" : {
+        "label" : "כתובת שרת ollama בסיסית",
+        "help" : "כתובת בסיס (כגון http://servername:234/) שהשרת המקומי או ברשת של ollama עונה אליו."
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל שיחה של Ollama",
+        "help" : "בחר את מודל השיחה של Ollama לעבודה איתו.",
+        "placeholder" : "בחר מודל"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון Ollama",
+        "help" : "בחר את אסימון Ollama בו יש להשתמש עבור מודל זה (לא חובה)"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל שיחה של שרת Ollama מקומי (או ברשת)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון Anthropic",
+        "help" : "בחר את אסימון ה-Anthropic בו יש להשתמש עבור מודל זה"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל שיחה של Anthropic",
+        "help" : "בחר את מודל השיחה של Anthropic לעבודה איתו.",
+        "placeholder" : "בחר מודל"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "הגדרות מתקדמות"
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "הגדרות גישה למודל"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל שיחה של Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון MistralAI",
+        "help" : "בחר את אסימון ה-MistralAI בו יש להשתמש עבור מודל זה"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל שיחה של MistralAI",
+        "help" : "בחר את מודל השיחה של MistralAI לעבודה איתו."
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "הגדרות מתקדמות"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "הגדרות גישה למודל"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל שיחה של MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל שיחה של Google Vertex AI",
+        "help" : "בחר את מודל השיחה של Google Vertex AI לעבודה איתו."
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון Google Vertex AI",
+        "help" : "בחר את אסימון ה-Google Vertex AI בו יש להשתמש עבור מודל זה"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "TabGeneralInfos" : {
+        "label" : "מידע כללי"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "הגדרות גישה למודל"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "הגדרות מתקדמות"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל שיחה של Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון Deepseek",
+        "help" : "בחר את אסימון ה-Deepseek בו יש להשתמש עבור מודל זה"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל שיחה של Deepseek",
+        "help" : "בחר את מודל השיחה של Deepseek לעבודה איתו.",
+        "placeholder" : "בחר מודל"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "הגדרות מתקדמות"
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל שיחה של Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "הגדרות גישה למודל"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת המודל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת המודל"
+      },
+      "baseUrl" : {
+        "label" : "כתובת שרת בסיסית של API של מודל שיחה",
+        "help" : "כתובת הבסיס של מודל השיחה."
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון API של מודל שיחה",
+        "help" : "בחר את אסימון ה-API של מודל השיחה בו יש להשתמש עבור מודל זה (לא חובה)"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל השיחה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל השיחה ברירת מחדל כאשר מודל שיחה לא צוין"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל שיחה של מודל שיחה",
+        "help" : "בחר את מודל השיחה של מודל שיחה לעבודה איתו."
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "TitleFragment" : {
+        "label" : "עריכת ספק מודל שיחה:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "הגדרות מתקדמות"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "הגדרות גישה למודל"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת מודל ההטמעה"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל ההטמעה של Ollama מקומי (או ברשת)"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון Ollama",
+        "help" : "בחר את אסימון Ollama בו יש להשתמש עבור מודל זה"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל ההטמעה של Ollama",
+        "help" : "בחר את מודל ההטמעה של Ollama לעבודה איתו."
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת מודל ההטמעה"
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל ההטמעה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל ההטמעה ברירת מחדל כאשר מודל ההטמעה לא צוין"
+      },
+      "baseUrl" : {
+        "label" : "כתובת שרת ollama בסיסית",
+        "help" : "כתובת בסיס (כגון http://servername:234/) שהשרת המקומי או ברשת של ollama עונה אליו."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת מודל ההטמעה"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל ההטמעה של MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת מודל ההטמעה"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל ההטמעה של MistralAI",
+        "help" : "בחר את מודל ההטמעה של MistralAI לעבודה איתו."
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל ההטמעה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל ההטמעה ברירת מחדל כאשר מודל ההטמעה לא צוין"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון MistralAI",
+        "help" : "בחר את אסימון ה-MistralAI בו יש להשתמש עבור מודל זה"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "עריכת תצורת מודל ההטמעה של Google Vertex AI"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת מודל ההטמעה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל ההטמעה של Google Vertex AI",
+        "help" : "בחר את מודל ההטמעה של Google Vertex AI לעבודה איתו."
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל ההטמעה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל ההטמעה ברירת מחדל כאשר מודל ההטמעה לא צוין"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת מודל ההטמעה"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון Google Vertex AI",
+        "help" : "בחר את אסימון ה-Google Vertex AI בו יש להשתמש עבור מודל זה"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "TitleFragment" : {
+        "label" : "עריכת ספק מודל הטמעה:"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור תצורת מודל ההטמעה"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור תצורת מודל ההטמעה"
+      },
+      "choosedModel" : {
+        "label" : "בחירת מודל הטמעה של מודל הטמעה",
+        "help" : "בחר את מודל הטמעה של מודל הטמעה לעבודה איתו."
+      },
+      "baseUrl" : {
+        "label" : "כתובת שרת API של מודל הטמעה",
+        "help" : "כתובת הבסיס של שרת מודל ההטמעה."
+      },
+      "defaultModel" : {
+        "label" : "הגדר כמודל הטמעה ברירת מחדל",
+        "help" : "אם מאופשר, זה ישמש כמודל הטמעה ברירת מחדל כאשר מודל הטמעה לא צוין"
+      },
+      "apiSecretCode" : {
+        "label" : "אסימון API של מודל הטמעה",
+        "help" : "בחר את אסימון ה-API של מודל ההטמעה בו יש להשתמש עבור מודל זה"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "הגדרות שיחה"
+      },
+      "chaDeleteBtn" : {
+        "help" : "מחיקת שיחה זו"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "שינוי שם השיחה"
+      },
+      "QueryControl" : {
+        "placeholder" : "כתוב הודעה לבוט השיחה"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "description" : {
+        "label" : "תיאור השיחה",
+        "help" : "הזן את תיאור השיחה."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "מודל בשימוש",
+        "help" : "קוד המודל"
+      },
+      "providerId" : {
+        "label" : "ספק מודל שיחה",
+        "help" : "דרייבר ספק LLMs"
+      },
+      "functions" : {
+        "label" : "פונקציות זמינות במודל השיחה",
+        "help" : "רשימת פונקציות הזמינות למודל השיחה"
+      },
+      "NameCol" : {
+        "label" : "שם"
+      },
+      "DescriptionCol" : {
+        "label" : "תיאור"
+      },
+      "kbases" : {
+        "label" : "מאגרי ידע זמינים",
+        "help" : "רשימת מאגרי הידע בשימוש בשיחת RAG זו"
+      },
+      "CloseBtn" : {
+        "help" : "סגור"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "הקלט",
+        "help" : "התחל להקליט רצועת אודיו ושלח אותה"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "טען נתונים מחדש"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "SelectHeader" : {
+        "label" : "בחר"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "תאריך/שעה סיום"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "תאריך/שעה תחילה"
+      },
+      "ProcessingHeader" : {
+        "label" : "מעבד"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "FinishedHeader" : {
+        "label" : "הסתיים"
+      },
+      "WithErrorHeader" : {
+        "label" : "עם שגיאה"
+      },
+      "LogTableComponent" : {
+        "help" : "יומן טעינת אזור קבצים משותף זה"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "סטטיסטיקות תהליכים"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "CloseBtn" : {
+        "label" : "סגור"
+      },
+      "PublicationLogTab" : {
+        "label" : "יומן פרסום"
+      },
+      "MainPanel" : {
+        "label" : "יומן פרסום"
+      },
+      "actualStatus" : {
+        "label" : "מצב",
+        "help" : "מצב המשימה: פועל, הסתיים או הסתיים עם שגיאות."
+      },
+      "publishingSystem" : {
+        "label" : "הגדרות תוכן שפורסם",
+        "help" : "מידע על תוכן שפורסם"
+      },
+      "startDateTime" : {
+        "label" : "תאריך/שעה התחלה",
+        "help" : "תאריך ושעה לתחילת משימת סנכרון התוכן"
+      },
+      "endDateTime" : {
+        "label" : "תאריך/שעה סיום",
+        "help" : "תאריך ושעה לסיום משימת סנכרון התוכן"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "לא עובד במלואו"
+      },
+      "ProcessedCompletely" : {
+        "label" : "עובד במלואו"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "הטמעה לעומת מספר המסמכים הכולל"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "פרטים נוספים"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "צור הוראה"
+      },
+      "PromptWizardBtn" : {
+        "label" : "אשף הוראות",
+        "help" : "השתמש בזה כדי להיעזר ב-LLM ליצירת הוראה עבור המטרות שלך"
+      },
+      "acceptPrompt" : {
+        "label" : "אשר הוראה"
+      },
+      "promptWizardUI" : {
+        "label" : "אשף יצירת תבנית הוראה"
+      },
+      "cancel" : {
+        "label" : "ביטול"
+      },
+      "response" : {
+        "label" : "תבנית הוראה מוצעת",
+        "help" : "טקסט התבנית שנוצר עבור המטרה שלך (ניתן לשנות או לערוך)"
+      },
+      "modelCode" : {
+        "label" : "מודל שיחה לשימוש",
+        "help" : "בחר את מודל הצ'אט שבו תרצה להשתמש ליצירת התבנית"
+      },
+      "query" : {
+        "label" : "בקשת תבנית הוראה",
+        "help" : "ציין בגוף שני מהי המטרה בה AI יסייע למשתמש"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "טמפרטורה",
+        "help" : "רמת הטמפרטורה שבה המודל יגיב, בין 0 ל-1 (אם אינך בטוח, השאר ריק)"
+      },
+      "contextLength" : {
+        "label" : "אורך הקשר (טוקנים)",
+        "help" : "כמות הטקסט שמודל ה-AI יכול להתחשב בו כשהוא מעבד (אם לא הוגדר, ישמש 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "פרמטר TopP, בין 0 ל-1 (אם אינך בטוח, השאר ריק)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "פונקציות מופעלות למודל זה",
+        "help" : "פונקציות שהמודל יכול להשתמש בהן במהלך הצ'אט"
+      },
+      "defaultModelPrompt" : {
+        "label" : "הנחיית ברירת מחדל למודל",
+        "help" : "ערוך את הנחיית ברירת המחדל למודל הצ'אט."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור זהות."
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי של הזהות שנוצר אוטומטית."
+      },
+      "secretType" : {
+        "label" : "סוג זהות",
+        "help" : "בחר את סוג הזהות שברצונך ליצור עבור המערכת המרוחקת"
+      },
+      "InsertBtn" : {
+        "label" : "הוספה"
+      },
+      "token" : {
+        "label" : "אסימון",
+        "help" : "הזן את האסימון."
+      },
+      "user" : {
+        "label" : "משתמש",
+        "help" : "הזן את המשתמש שמצוין על ידי האסימון."
+      },
+      "MainPanel" : {
+        "label" : "יצירת זהות"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "username" : {
+        "label" : "שם משתמש",
+        "help" : "הזן את שם המשתמש."
+      },
+      "password" : {
+        "label" : "סיסמה",
+        "help" : "הזן את הסיסמה."
+      },
+      "email" : {
+        "label" : "דוא\"ל/שם משתמש",
+        "help" : "הזן את הדוא\"ל או שם המשתמש המשויך למפתח ה-ssh."
+      },
+      "key" : {
+        "label" : "מפתח סודי",
+        "help" : "פתח את קובץ המפתח הפרטי והעתק לאזור הטקסט הזה."
+      },
+      "passphrase" : {
+        "label" : "סיסמת מפתח",
+        "help" : "הזן את סיסמת המפתח."
+      },
+      "pub" : {
+        "label" : "מפתח ציבורי",
+        "help" : "פתח את קובץ המפתח הציבורי והעתק לאזור הטקסט הזה."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התוכן."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את תיאור התוכן שהועלה של ערך מערכת הקבצים."
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "ייחוס לפרויקט ההורה."
+      },
+      "upload" : {
+        "label" : "העלה תכנים",
+        "help" : "לחץ על כפתור עיון ובחר קבצי zip או קבצים אחרים"
+      },
+      "openZips" : {
+        "label" : "פתח קבצי zip",
+        "help" : "אפשר פתיחה וחילוץ תוכן מקבצי zip"
+      },
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שומר ומאפשר לתכנים להיות זמינים בבסיס הידע ל־LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "LogsTab" : {
+        "label" : "לוגים"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תוכן שהועלה"
+      },
+      "SettingsTab" : {
+        "label" : "הגדרות"
+      },
+      "buildSystemsRefs" : {
+        "label" : "הגדר מערכות בנייה",
+        "help" : "רשימת מערכות בנייה/אריזה לבדיקה עבור מידע מטה ופרטי חפצים נוספים (השאר ריק אם לא קיים קוד תוכנה)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "אלמנטים שנבחרו"
+      },
+      "ChooseOk" : {
+        "label" : "אישור"
+      },
+      "ChooseCancel" : {
+        "label" : "ביטול"
+      },
+      "EditBtn" : {
+        "help" : "ערוך את הנבחרים"
+      },
+      "ChooseElementsArea" : {
+        "label" : "בחר אלמנטים"
+      },
+      "VFileSystemSelector" : {
+        "label" : "בחר אלמנטים"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "ערוך תזמון"
+      },
+      "ConfirmBtn" : {
+        "label" : "אישור"
+      },
+      "AddBtn" : {
+        "label" : "+הוסף"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שומר ומאפשר לתוכן הזה להיות זמין במאגר הידע עבור מודלי שפה"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "SettingsTab" : {
+        "label" : "הגדרות"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "עיבוד קוד מקור"
+      },
+      "LogsTab" : {
+        "label" : "יומנים"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תוכן מערכת קבצים קיים"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את תיאור התוכן שהועלה ברשומת מערכת הקבצים."
+      },
+      "openZips" : {
+        "label" : "פתח קבצי zip",
+        "help" : "אפשר פתיחה וחילוץ תוכן של קבצי zip"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התוכן."
+      },
+      "tree" : {
+        "label" : "קבצים או תיקיות שנבחרו",
+        "help" : "קבצים או תיקיות משותפות של המערכת זמינים בשרת"
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "הפניה לפרויקט האב."
+      },
+      "programmedTables" : {
+        "label" : "לו״ז בדיקת עדכונים לתוכן",
+        "help" : "הגדר מועד בדיקה לעדכון תוכן כדי לשמור על מערכת ההשלמה המורחבת מעודכנת"
+      },
+      "catalogingCriteria" : {
+        "label" : "קריטריוני ארגון תיקיות",
+        "help" : "נא פרט כאן איך סודרו התיקיות באזור מערכת הקבצים שאתה משתף עם Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "הגדר מערכות בנייה",
+        "help" : "רשימת מערכות בנייה/אריזה לבדיקה עבור מידע מטא ודיווחי ארטיפקטים נוספים (השאר ריק אם לא נמצא קוד תוכנה)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "אזור שיתוף קבצים חדש"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "נתיב מלא"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db או קובץ הגדרות yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "ModifyHeader" : {
+        "label" : "ערוך"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "תיקיית מערכת קבצים משותפת שנבחרה",
+        "help" : "בחר תיקיה בשרת שהיא נתיב שורש עבור מערכת הקבצים המשותפת שמשמשת בארגון שלך כמאגר מסמכים"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור לאזור מערכת הקבצים המשותפת של הארגון שלך"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התוכן."
+      },
+      "InsertBtn" : {
+        "label" : "הוסף"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "MainPanel" : {
+        "label" : "עריכת תיקיית קבצים משותפת בשרת"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "בטל"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שמור והפוך את התוכן הזה לזמין במאגר הידע עבור LLm's"
+      },
+      "MainPanel" : {
+        "label" : "עריכת מאגר מקור/תיעוד git"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מאגר ה-git."
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור מאגר ה-git."
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "ייחוס לפרויקט האב."
+      },
+      "contentManagementSystem" : {
+        "label" : "מערכת git",
+        "help" : "ייחוס למערכת git שכבר הוגדרה."
+      },
+      "branch" : {
+        "label" : "ענף",
+        "help" : "שם הענף למשיכה (בדרך כלל master, main או develop)"
+      },
+      "identityCode" : {
+        "label" : "זהות בשימוש",
+        "help" : "בחר את הזהות לביצוע שיבוט/משיכה במערכת"
+      },
+      "repositoryUri" : {
+        "label" : "כתובת/URL של המאגר",
+        "help" : "כתובת מלאה של מאגר ה-git מרחוק (בדרך כלל מתחיל ב-http:, https: או ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "ציבורי",
+        "help" : "אם אמת, הגישה למאגר אינה דורשת אימות"
+      },
+      "openZips" : {
+        "label" : "פתח קבצי zip",
+        "help" : "אפשר פתיחת קבצי zip וחילוץ תוכן"
+      },
+      "programmedTables" : {
+        "label" : "לוח זמנים לבדוק עדכוני תכנים",
+        "help" : "קבע את לוח הזמנים לעדכון תכנים כך שמערכת אחזור ההפקה תישאר מעודכנת"
+      },
+      "buildSystemsRefs" : {
+        "label" : "הגדר מערכות build",
+        "help" : "רשימת מערכות build/packaging לבדיקה עבור מידע מטה ופרטי חפצים נוספים"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SaveBtn" : {
+        "label" : "שמירה"
+      },
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "GeneralInfosTab" : {
+        "label" : "מידע כללי"
+      },
+      "UseChatModelLabel" : {
+        "label" : "השתמש במודל שיחה"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "בחר"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "בחר הגדרת מודל שיחה"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "בחר הגדרת מודל הטמעה"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "בחר"
+      },
+      "RagSettingsTab" : {
+        "label" : "הגדרות RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "הגדרות מודל שפה גדול וכלי עזר"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "השתמש במודל הטמעה"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "הגדרות גישת אבטחה"
+      },
+      "MainPanel" : {
+        "label" : "עריכת פרופיל שיחה עם הפקת ידע מורחבת"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית לפרופיל השיחה."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור לפרופיל השיחה."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "המשתמש בוחר מאגרי מידע",
+        "help" : "המשתמש יכול לבחור ממאגרים זמינים ו/או להעלות קבצים משלו."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "מאגרי מידע",
+        "help" : "מאגרי מידע לשימוש באחזור מסמכים."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "סף דמיון",
+        "help" : "סף דמיון לחיפושים סמנטיים, 0.60–0.65 סינון נמוך, 0.70-0.75 סינון בינוני, 0.80–0.85 מדויק"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "סף דמיון 'קפיצה שנייה'",
+        "help" : "סף דמיון לחיפושים סמנטיים, 0.60–0.65 סינון נמוך, 0.70-0.75 סינון בינוני, 0.80–0.85 מדויק בשימוש מהחיפוש השני במולטי הופ RAG"
+      },
+      "disableMultiHopRag" : {
+        "label" : "השבת 'Multi Hop' RAG",
+        "help" : "השבת את פונקציית ה-'multi hop rag'. חיפוש Multi hop עושה חיפוש סמנטי ראשון ומשתמש במסמכים שנמצאו כהקשר עבור חיפוש הסמנטי להרחבת ההקשר."
+      },
+      "topK" : {
+        "label" : "מקטעי מסמך נבחרים (TopK)",
+        "help" : "ב-'הפקת ידע מורחבת', N המקטעים שנמצאו יילקחו בחשבון בחיפוש הסמנטי"
+      },
+      "enabledFunctions" : {
+        "label" : "פונקציות מופעלות לצ'אט RAG זה",
+        "help" : "פונקציות שמודל ה-llm יכול להשתמש בהן במהלך שיחה עם המשתמש וגם מול מאגר המידע הנבחר"
+      },
+      "prompt" : {
+        "label" : "הנחיה",
+        "help" : "ערוך את ההנחיה לסשנים של הפקת ידע מורחבת."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "מחיקה"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "הזן או בחר קטגוריית פקודות"
+      },
+      "MainPanel" : {
+        "label" : "עריכת פקודה"
+      },
+      "promptCategory" : {
+        "label" : "קטגוריית פקודות",
+        "help" : "בחר או הוסף קטגוריית פקודות."
+      },
+      "prompt" : {
+        "label" : "פקודה",
+        "help" : "ערוך את הפקודה לצ'אט, השתמש ב־{query} כדי לציין את שאלת המשתמש וב־{context} כדי לציין את הקשר המסמכים/היסטוריה הנשלח ל־LLM."
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור הפקודה."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור לפקודה."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "החלפת סיסמה"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "סיסמה נוכחית",
+        "help" : "הסיסמה שבאמצעותה נכנסת"
+      },
+      "newPassword" : {
+        "label" : "סיסמה חדשה",
+        "help" : "סיסמה חדשה"
+      },
+      "username" : {
+        "label" : "אימייל",
+        "help" : "אימייל (שם משתמש) להתחברות"
+      },
+      "ChangePasswordUI" : {
+        "label" : "טופס החלפת סיסמה"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "ChangePwdBtn" : {
+        "label" : "החלף סיסמה"
+      },
+      "newPassword1" : {
+        "label" : "אישור סיסמה חדשה",
+        "help" : "אשר את הסיסמה החדשה"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "ForMoreInformations" : {
+        "label" : "למידע נוסף על Google custom search API או קבלת מפתח API (בחינם) בקרו בכתובת: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי של הגדרת google search api."
+      },
+      "MainPanel" : {
+        "label" : "עריכת פרטי הגישה של google custom search api"
+      },
+      "secretCode" : {
+        "label" : "אסימון Google search api",
+        "help" : "בחרו או הזינו את אסימון Google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "מזהה Google search engine",
+        "help" : "מזהה Google search engine"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הכנסו תיאור להגדרת google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "צ'אט ללא בסיסי ידע",
+        "help" : "בחר את ה-LLMs למפגש צ'אט",
+        "placeholder" : "בחר את ה-LLMs למפגש צ'אט"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "פתיחת אפשרויות הצ'אט"
+      },
+      "CreateChatBtn" : {
+        "label" : "צ'אט חדש"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "מפגש צ'אט חדש"
+      },
+      "chatProfileCode" : {
+        "label" : "צ'אט עם בסיסי ידע",
+        "help" : "בחר את פרופיל הצ'אט של החברה כדי לעבוד עם מסמכי החברה (ושלך) ו-LLMs",
+        "placeholder" : "בחר את פרופיל הצ'אט של החברה כדי לעבוד עם מסמכי החברה (ושלך) ו-LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "צ'אט חדש"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "שיחה עם מסמכים",
+        "help" : "עיין או חפש ובחר מסמכים לעבודה משותפת"
+      },
+      "chooseFilesDialog" : {
+        "label" : "בחר קבצים לשוחח איתם"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "אישור"
+      },
+      "userspaceBrowsing" : {
+        "label" : "העלה או בחר את המסמכים שלך",
+        "help" : "בחר/העלה מסמכים מהמרחב האישי שלך"
+      },
+      "fileSearchBtn" : {
+        "label" : "חיפוש"
+      },
+      "semanticSearchBtn" : {
+        "label" : "חיפוש"
+      },
+      "query" : {
+        "label" : "ביטוי חיפוש סמנטי",
+        "help" : "הזן ביטוי משמעותי שקשור לחיפוש שלך"
+      },
+      "choosenBrowsing" : {
+        "label" : "בחר קבצים לדפדוף במאגרי ידע",
+        "help" : "בחר קבצים לדפדוף במאגרי הידע השיתופיים של החברה"
+      },
+      "filename" : {
+        "label" : "שם הקובץ שחיפשת",
+        "help" : "הזן חלק משם הקובץ שאתה מחפש"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "שנה את הבחירה"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "בחר קבצים של משתמשים"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "ביטול"
+      },
+      "okBtn" : {
+        "label" : "אישור"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "בחר תוכן שהועלה על ידי משתמש"
+      },
+      "UserspaceBrowser" : {
+        "label" : "מאגרי ידע וקבצי משתמש"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+תת-פרויקט או פריט",
+        "help" : "הוסף תת-פרויקט או פריט"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+העלה קבצים",
+        "help" : "הוסף מקור נתונים של קבצים שהועלו"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "הוסף מקור נתונים של Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "הוסף מקור נתונים של Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+מערכת קבצים",
+        "help" : "הוסף מקור נתונים של מערכת קבצים משותפת"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "הוסף מקור נתונים של Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+מאגר git",
+        "help" : "הוסף מקור נתונים של מאגר git כמו bitbucket, github או אחרים"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai צ'אט"
+      },
+      "setup" : {
+        "label" : "הגדרות"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ניהול"
+      },
+      "currentProfile" : {
+        "label" : "הפרופיל שלי"
+      },
+      "logout" : {
+        "label" : "התנתקות"
+      }
+    }
+  }
+}

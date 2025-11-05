@@ -6,13 +6,14 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
  * This file defines a component for configuring standard chat model settings
@@ -21,7 +22,7 @@ import { ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
  */
 
 // Standard default context length for language models when not otherwise specified
-const standardDefaultContextLength:number=4096;
+const standardDefaultContextLength: number = 4096;
 
 /**
  * @Component GeboAIStandardChatModelSettings
@@ -34,31 +35,35 @@ const standardDefaultContextLength:number=4096;
 @Component({
     selector: "gebo-ai-standard-chat-model-settings-component",
     templateUrl: "standard-chat-model-settings.component.html",
-    standalone: false
+    standalone: false,
+    providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIStandardChatModelModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }
+    ]
 })
 export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     // Form group to bind settings controls to
     @Input() formGroup?: FormGroup;
-    
+
     // Input bounds for temperature parameter
     @Input() minTemperature: number = 0;
     @Input() maxTemperature: number = 1.0;
     @Input() maxTemperatureDigits: number = 2;
-    
+
     // Input bounds for top-p sampling parameter
     @Input() minTopP: number = 0;
     @Input() maxTopP: number = 1.0;
     @Input() maxTopPDigits: number = 2;
-    
+
     // Input bounds for context length parameter
     @Input() minContextLength: number = 1024;
     @Input() maxContextLength: number = 2000000;
-    
+
     // The default context length for the selected model
     public defaultContextLength?: number;
-    
+
     // Flag indicating if the model has its own context window settings
-    public modelHaveNativeContextWindowSettings:boolean=false;
+    public modelHaveNativeContextWindowSettings: boolean = false;
 
     /**
      * Lifecycle hook that is called after data-bound properties are initialized
@@ -76,14 +81,14 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
      */
     private notifyChoosedModelChange(choosed?: { contextLength?: number, metaInfos?: ModelMetaInfo }) {
         this.defaultContextLength = standardDefaultContextLength;
-        this.modelHaveNativeContextWindowSettings=false;
+        this.modelHaveNativeContextWindowSettings = false;
         if (choosed) {
             if (choosed.contextLength) {
-                this.modelHaveNativeContextWindowSettings=true;
+                this.modelHaveNativeContextWindowSettings = true;
                 this.defaultContextLength = choosed.contextLength;
             } else if (choosed?.metaInfos?.contextLength) {
                 this.defaultContextLength = choosed.metaInfos.contextLength;
-                this.modelHaveNativeContextWindowSettings=true;
+                this.modelHaveNativeContextWindowSettings = true;
             }
         }
     }

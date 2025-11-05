@@ -8,11 +8,11 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-fieldset legend="Read & accept the licence" class="blueArea">
+
+
+
+<p-fieldset id="LicenceFieldSet" gebo-ai-label legend="Read & accept the licence" class="blueArea">
     <div class="grid">
         <div class="col-12">
             <p-scrollPanel [style]="{height: '250px'}">
@@ -94,15 +94,17 @@
                     <hr>
 
                     <p><strong>NOTE:</strong><br>
-                        For white-label licensing, closed-source distribution, or OEM agreements, please contact: <b [innerHtml]="'paolo.zavalloni@gebo.ai'"></b> .<br>
+                        For white-label licensing, closed-source distribution, or OEM agreements, please contact: <b
+                            [innerHtml]="'paolo.zavalloni@gebo.ai'"></b> .<br>
                         These commercial licenses are available outside the MPL and subject to separate agreement.</p>
                 </div>
 
             </p-scrollPanel>
         </div>
         <div class="col-12" [formGroup]="internalFormGroup">
-            <p-checkbox formControlName="acceptMark" [binary]="true" label="I accept the terms" [trueValue]="true"
-                [falseValue]="false" />
+            <p-checkbox id="AcceptMark" gebo-ai-label formControlName="acceptMark" [binary]="true"
+                label="I accept the terms" [trueValue]="true"
+                title="By clicking here you accept the term & conditions in the licence" [falseValue]="false" />
         </div>
 
     </div>

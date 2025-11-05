@@ -13,12 +13,14 @@
 package ai.gebo.fastsetup.model;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 /**
  * AI generated comments
  * Represents the setup data required for a fast installation process,
  * including user credentials and licence agreement acceptance.
  */
+@Data
 public class FastInstallationSetupData {
 
     // Username for the setup process, must not be null
@@ -35,84 +37,9 @@ public class FastInstallationSetupData {
     // Licence agreement acceptance, must not be null
     @NotNull
     private String licenceAgreement = null;
+    
+    @NotNull
+    private String lang=null;
 
-    /**
-     * Default constructor for the FastInstallationSetupData class.
-     */
-    public FastInstallationSetupData() {
-
-    }
-
-    /**
-     * Gets the username required for setup.
-     * 
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Sets the username required for setup.
-     * 
-     * @param email the username to set
-     */
-    public void setUsername(String email) {
-        this.username = email;
-    }
-
-    /**
-     * Gets the password required for setup.
-     * 
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the password required for setup.
-     * 
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * Gets the confirmation password.
-     * 
-     * @return the confirmation password
-     */
-    public String getPasswordC() {
-        return passwordC;
-    }
-
-    /**
-     * Sets the confirmation password.
-     * 
-     * @param passwordC the confirmation password to set
-     */
-    public void setPasswordC(String passwordC) {
-        this.passwordC = passwordC;
-    }
-
-    /**
-     * Gets the licence agreement acceptance.
-     * 
-     * @return the licence agreement
-     */
-    public String getLicenceAgreement() {
-        return licenceAgreement;
-    }
-
-    /**
-     * Sets the licence agreement acceptance.
-     * 
-     * @param licenceAgreement the licence agreement to set
-     */
-    public void setLicenceAgreement(String licenceAgreement) {
-        this.licenceAgreement = licenceAgreement;
-    }
-
+  
 }

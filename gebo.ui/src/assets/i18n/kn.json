@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "ಪೂರ್ವನಿಯೋಜಿತ ಗಣಕ ಯಂತ್ರ ಭಾಷೆ",
+        "help" : "ಈ Gebo.ai ಅನುಸ್ಥಾಪನೆಗೆ ಪೂರ್ವನಿಯೋಜಿತ ಗಣಕಯಂತ್ರ ಭಾಷೆ"
+      },
+      "username" : {
+        "label" : "ಇ-ಮೇಲ್",
+        "help" : "ಲಾಗಿನ್ ಮಾಡಲು ಬಳಸುವ ಇ-ಮೇಲ್"
+      },
+      "passwordC" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+        "help" : "ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಿಸಿ"
+      },
+      "password" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್",
+        "help" : "ಲಾಗಿನ್ ಮಾಡಲು ಪಾಸ್ವರ್ಡ್ (ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳು)"
+      },
+      "PasswordNotMatching" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್‌ಗಳು ತಾಳಕ್ಕೇಳುವುದಿಲ್ಲ"
+      },
+      "LocalAdmin" : {
+        "label" : "ನಿಮ್ಮ ಸ್ಥಳೀಯ ಆಡಳಿತ ಖಾತೆಯನ್ನು ರಚಿಸಿ"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "ನೀವು ಭವಿಷ್ಯದಲ್ಲಿ ಈ ಖಾತೆಯನ್ನು ಸಾಫ್ಟ್‌ವೇರ್ ಅನ್ನು ಸಿದ್ಧಪಡಿಸಲು/ನಿರ್ವಹಿಸಲು ಬಳಸುತ್ತೀರಾ, ಈ ಮಾಹಿತಿಯು ನಿಮ್ಮ ಗಣಕದಲ್ಲಿ ಮಾತ್ರ ಉಳಿಯುತ್ತದೆ ಮತ್ತು ಜಾಲಕದಲ್ಲಿ ಕಳುಹಿಸಲಾಗುವುದಿಲ್ಲ"
+      },
+      "EnterBtn" : {
+        "label" : "ಲಾಗಿನ್ ಪುಟಕ್ಕೆ ಹೋಗಿ ಪ್ರವೇಶಿಸಿ"
+      },
+      "SetupPage" : {
+        "label" : "ನಿಮ್ಮ gebo.ai ಅನುಸ್ಥಾಪನೆಯನ್ನು ಸಿದ್ಧಪಡಿಸಿ"
+      },
+      "CreateBtn" : {
+        "label" : "ಗಣಕ ವ್ಯವಸ್ಥೆ ಸಿದ್ಧಪಡಿಸಿ"
+      },
+      "LicenceFieldSet" : {
+        "label" : " ಪರವಾನಗಿ ಓದಿ ಮತ್ತು ಅಂಗೀಕರಿಸಿ "
+      },
+      "AcceptMark" : {
+        "label" : "ನಾನು ನಿಬಂಧನೆಗಳನ್ನು ಅಂಗೀಕರಿಸುತ್ತೇನೆ",
+        "help" : "ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡುವ ಮೂಲಕ ನೀವು ಪರವಾನಗಿ ನಿಬಂಧನೆಗಳನ್ನು ಅಂಗೀಕರಿಸುತ್ತೀರಿ"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ಇ-ಮೇಲ್",
+        "help" : "ಲಾಗಿನ್ ಮಾಡಲು ಬಳಕೆದಾರಹೆಸರಾಗಿ ಇ-ಮೇಲ್ ಬಳಸಿ"
+      },
+      "password" : {
+        "label" : "ಗುಪ್ತಪದ",
+        "help" : "ಲಾಗಿನ್ ಮಾಡಲು ಗುಪ್ತಪದ"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai ಗೆ ಲಾಗಿನ್ ಮಾಡಿ"
+      },
+      "LoginBtn" : {
+        "label" : "ಲಾಗಿನ್"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ಸರಿ!",
+        "detail" : "ಕಾರ್ಯಾಚರಣೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 ಸಂಯೋಜನೆ"
+      },
+      "ProviderNameHeader" : {
+        "label" : "ಪೂರೈಕೆದಾರರ ಹೆಸರು"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 ಭದ್ರತಾ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "IdHeader" : {
+        "label" : "ಐಡಿ"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "ಸೆಟಪ್ ಹೋಮ್ ಪೇಜ್ಗೆ ಹಿಂತಿರುಗಿ"
+      },
+      "WizardUi" : {
+        "label" : "ಒಂದು ಸೆಟಪ್ ವಿಭಾಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "adminUserSetupSection" : {
+        "label" : "ನಿರ್ವಹಣಾಧಿಕಾರಿ ಮತ್ತು ಇತರ ಖಾತೆ ಸೆಟಪ್",
+        "description" : "ಈ Gebo.ai ಇನ್‌ಸ್ಟಾಲೇಶನ್ ಸರಿಯಾಗಿ ನಿರ್ವಹಣೆಗೆ ಕನಿಷ್ಠ ಒಂದು ಆಡ್ಮಿನಿಸ್ಟ್ರೇಶನ್ ಖಾತೆ ಅಗತ್ಯ ಇದೆ, ಅಗತ್ಯವಿದ್ದರೆ ಇತರ ಬಳಕೆದಾರರನ್ನು ಸೇರ್ಸಿ"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai ವರ್ಕ್ ಡೈರೆಕ್ಟರಿ",
+        "description" : "ವರ್ಕ್ ಡೈರೆಕ್ಟರಿ ಸಂಯೋಜಿಸಿ, ಇದು ಕಾನ್ಫಿಗರೇಶನ್‌ಗಳು ಮತ್ತು ಈ ಇನ್‌ಸ್ಟಾಲೇಶನ್‌ನ ಎಲ್ಲಾ ವರ್ಕಿಂಗ್ ಫೈಲ್‌ಗಳನ್ನು ಸಂಗ್ರಹಿಸುವ ಫೋಲ್ಡರ್ ಆಗಿರುತ್ತದೆ. ಅವರ್ಧಿತವಾಗಿ ಬ್ಯಾಕಪ್ ಮಾಡುವುದು ಉತ್ತಮ."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "ವೆಕ್ಟರ್ ಡೇಟಾಬೇಸ್ ಸಂಯೋಜನೆ",
+        "description" : "Gebo.ai ರಿಟ್ರೀವ್ ಆಗ್ಮೆಂಟೆಡ್ ಜನರೇಶನ್ ಸೇವೆಗಳನ್ನು ಒದಗಿಸಲು ವೆಕ್ಟರ್ ಡೇಟಾಬೇಸ್ ಅಗತ್ಯವಿದೆ, ನೀವು ಸ್ಥಳೀಯ ವೆಕ್ಟರ್ ಡೇಟಾಬೇಸ್, Qdrant ಅಥವಾ Mongo Atlas ನಡುವೆ ಆಯ್ಕೆಮಾಡಬಹುದು"
+      },
+      "oauth2SetupSection" : {
+        "label" : "ಸಿಂಗಲ್ ಸೈನ್‌ಆನ್, oauth2 ದೃಢೀಕರಣ",
+        "description" : "Oauth2 ಸಿಂಗಲ್ ಸೈನ್‌ಆನ್ ದೃಢೀಕರಣ ಮತ್ತು oauth2 ಕ್ಲೈಂಟ್‌ಗಳ ಸಂಯೋಜನೆ"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "ಲಾರ್ಜ್ ಲ್ಯಾಂಗ್ವೇಜ್ ಮಾದರಿ ಸೆಟಪ್",
+        "description" : "ವಿಭಿನ್ನ llmsಗಳನ್ನು ಕ್ಲೌಡ್ ಅಥವಾ ಸ್ಥಳೀಯ/ಲಾನ್ ಇಂಡ್ರಾ ಸರ್ವಿಸ್‌ಗಳೊಂದಿಗೆ ಸಂಯೋಜಿಸಿ, ಕನಿಷ್ಠ ಒಂದು ಚಾಟ್ ಮಾದರಿ ಮತ್ತು ಒಂದು ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸರಿಯಾಗಿ ಕೆಲಸ ಮಾಡಲು ಅಗತ್ಯವಿದೆ."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "ಗ್ರಾಫ್ ರಾಗ್/ಜ್ಞಾನ ಅಮೆರಿಕನ್ ಸೆಟಪ್",
+        "description" : "ಗ್ರಾಫ್ ರಾಗ್ ಮತ್ತು ಜ್ಞಾನ ಅಮೆರಿಕನ್ ಉಪವ್ಯವಸ್ಥೆಯನ್ನು ಸಂಯೋಜಿಸಿ"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "ಹಂಚಿದ ಫೈಲ್‌ಸಿಸ್ಟಂ ಮಾರ್ಗಗಳ ಸೆಟಪ್",
+        "description" : "ಕಂಪನಿಯ ಹಂಚಿದ ಫೈಲ್‌ಸಿಸ್ಟಂ ಮಾರ್ಗಗಳನ್ನು ಸಂಯೋಜಿಸಿ, ವಿವಿಧ ಜ್ಞಾನ ಅವಧಿಗಳಲ್ಲಿ ರಿಟ್ರೀವ್ ಆಗ್ಮೆಂಟೆಡ್ ಜನರೇಶನ್ ಡಾಕ್ಯುಮೆಂಟ್ ಪ್ರದೇಶವಾಗಿ ಬಳಸಲು"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "ಅಟ್ಲಾಸಿಯನ್ ಕಾನ್‌ಫ್ಲುವೆನ್ಸ್ ಇಂಟಿಗ್ರೇಶನ್",
+        "description" : "Gebo.ai ನ್ನು ನಿಮ್ಮ Atlassian Confluence ಕ್ಲೌಡ್ ಅಥವಾ ಆನ್-ಪ್ರೆಮಿಸ್ ಇನ್‌ಸ್ಟಾಲೇಶನ್‌ಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಸಂಯೋಜಿಸಿ"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "ಅಟ್ಲಾಸಿಯನ್ ಜೀರಾ ಇಂಟಿಗ್ರೇಶನ್",
+        "description" : "Gebo.ai ನ್ನು ನಿಮ್ಮ Atlassian jira ಕ್ಲೌಡ್ ಇನ್‌ಸ್ಟಾಲೇಶನ್‌ಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಸಂಯೋಜಿಸಿ"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ಸಂಯೋಜನೆ",
+        "description" : "Gebo.ai ನ್ನು ನಿಮ್ಮ Microsoft Sharepoint ಕ್ಲೌಡ್ ಅಥವಾ ಆನ್-ಪ್ರೆಮಿಸ್ ಇನ್‌ಸ್ಟಾಲೇಶನ್‌ಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಸಂಯೋಜಿಸಿ"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "ಕನಿಷ್ಠ ಒಂದು ಜ್ಞಾನ ಆಧಾರದ ಸ್ಥಾಪನೆ",
+        "description" : "ಕನಿಷ್ಠ ಒಂದು ಜ್ಞಾನ ಆಧಾರವನ್ನು ಸ್ಥಾಪಿಸಿ ನಿಮ್ಮ ಬಳಕೆದಾರರು Gebo.ai ನ ರಿಟ್ರೀವ್ ಆಗ್ಮೆಂಟೆಡ್ ಜನರೇಶನ್ ಸೇವೆಯನ್ನು ಅನುಭವಿಸಲು"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "ಕನಿಷ್ಠ ಒಂದು \"R.A.G.\" ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸೆಟಪ್ ಮಾಡಿ",
+        "description" : "ನೀವು ಸಂಯೋಜಿಸಿರುವ ಜ್ಞಾನ ಆಧಾರಗಳಲ್ಲಿ ಒಂದನ್ನು ಆಧರಿಸಿ ಕನಿಷ್ಠ ಒಂದು ರಿಟ್ರೀವ್ ಆಗ್ಮೆಂಟೆಡ್ ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಅನ್ನು ನಿಮ್ಮ ಬಳಕೆದಾರರಿಗಾಗಿ ಸ್ಥಾಪಿಸಿ"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ಕಂಪನಿ Atlassian Confluence ವ್ಯವಸ್ಥೆಗಳ ಸೆಟಪ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ವ್ಯವಸ್ಥೆಯ ಪ್ರಕಾರ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence ವ್ಯವಸ್ಥೆ"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira ವ್ಯವಸ್ಥೆ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "MainPanel" : {
+        "label" : "ಕಂಪನಿ Atlassian Jira ವ್ಯವಸ್ಥೆಗಳ ಸೆಟಪ್"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ವ್ಯವಸ್ಥೆಯ ಪ್ರಕಾರ"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "MainPanel" : {
+        "label" : "ಕಂಪನಿ Microsoft Sharepoint ವ್ಯವಸ್ಥೆಗಳ ಸೆಟಪ್"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ವ್ಯವಸ್ಥೆಯ ಪ್ರಕಾರ"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint ವ್ಯವಸ್ಥೆ"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "ಸರಿಯಾದ ಕ್ರೆಡಿಟ್‌ ಇರುವ api-key ಅನ್ನು ಒದಗಿಸಿ. OpenAI ಆಯ್ಕೆಮಾಡಿದರೆ ನಿಮ್ಮ ಎಲ್ಲಾ api ಬಳಕೆಗೆ ವಿಶಿಷ್ಟ ಕ್ರೆಡಿಟ್ (10-30$ ಸಾಕಷ್ಟಾಗಬಹುದು) ಸೇರಿಸಬೇಕು, ಇಲ್ಲವಾದರೆ ಈ ಆ್ಯಪ್‌ನಲ್ಲಿ ಯಾವುದೇ llms ಟ್ರಾಫಿಕ್ ಲಭ್ಯವಿರುವುದಿಲ್ಲ."
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai llms ಪೂರೈಕೆದಾರರ ಪ್ರವೇಶವನ್ನು ನಿಮ್ಮ ಸ್ವಂತ api ಕೀ ಮೂಲಕ ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "provider" : {
+        "label" : "ಲಾರ್ಜ್ ಲ್ಯಾಂಗ್ವೇಜ್ ಮಾದರಿ ಪೂರೈಕೆದಾರ",
+        "help" : "OpenAI (chatgpt), Google (Gemini),Anthropic (Claude) ಇವರಲ್ಲಿ ಒಬ್ಬ ಪೂರೈಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "user" : {
+        "label" : "ಬಳಕೆದಾರ",
+        "help" : "apiKey ಗೆ ಸಂಬಂಧಿಸಿದ ಬಳಕೆದಾರರ ಹೆಸರನ್ನು ನಮೂದಿಸಿ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ಸಂಯೋಜಿಸಿ"
+      },
+      "apiKey" : {
+        "label" : "Api ಕೀ",
+        "help" : "ಬಳಸದಿರುವ LLMS ಪೂರೈಕೆದಾರರ api ಕೀ"
+      },
+      "ProviderHeader" : {
+        "label" : "ಪೂರೈಕೆದಾರ"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "ಸಂಯೋಜನಾ ಕೋಡ್"
+      },
+      "ModelHeader" : {
+        "label" : "ಮಾದರಿ"
+      },
+      "ModelTypeHeader" : {
+        "label" : "ಮಾದರಿಯ ಪ್ರಕಾರ"
+      },
+      "DefaultModelHeader" : {
+        "label" : "ಡೀಫಾಲ್ಟ್ ಮಾದರಿ"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "ಗ್ರಾಫ್ ರಾಗ್ ಸಂಯೋಜನೆ ರೂಪಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "ಗ್ರಾಫ್ ರಾಗ್ ಮತ್ತು ಜ್ಞಾನ ಹಿಂಪಡೆಯುವ ಡೀಫಾಲ್ಟ್ ಸಂಯೋಜನೆ ಸೆಟಪ್ ಮಾಡಿ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರವನ್ನು ಸೇರಿಸಿ"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರ"
+      },
+      "MainPanel" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರಗಳು ಮತ್ತು ವಿಷಯದ ಸಂಯೋಜನೆಗಳು"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "ವಿಷಯ ಮೂಲ"
+      },
+      "PublishedHeader" : {
+        "label" : "ಪ್ರಚುರಪಡಿಸಲಾಗಿದೆ"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳ ಸಂಖ್ಯೆ"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್/ಐಟಂ ಸೇರಿಸಿ",
+        "help" : "ಹೊಸದಾಗಿ ಪ್ರಾಜೆಕ್ಟ್ ರಚಿಸಿ"
+      },
+      "Button1" : {
+        "help" : "ಜ್ಞಾನ ಆಧಾರವನ್ನು ತೆರೆಯಿರಿ"
+      },
+      "Button2" : {
+        "help" : "ಪ್ರಾಜೆಕ್ಟ್ ಫಾರ್ಮ್ ತೆರೆಯಿರಿ"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai ವರ್ಕ್ ಫೋಲ್ಡರ್ ಸಂಯೋಜನೆ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ಸಂಯೋಜಿಸಿ"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai ಯ ವರ್ಕ್ ಡೈರೆಕ್ಟರಿ ಆಗಿ ಫೋಲ್ಡರ್ ಆಯ್ಕೆ ಮಾಡಿ",
+        "help" : "ಈ ಇನ್‌ಸ್ಟಾಲೇಷನ್ ತನ್ನ ಸಂಯೋಜನೆಗಳು ಮತ್ತು ವಿಷಯಗಳ ಸಂಗ್ರಹಕ್ಕಾಗಿ ಬಳಸುವ ಸರ್ವರ್ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "ಫೋಲ್ಡರ್ ಸೇರಿಸಿ"
+      },
+      "AddFolderBtn" : {
+        "label" : "ಫೋಲ್ಡರ್ ಸೇರಿಸಿ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "MainPanel" : {
+        "label" : "ಸರ್ವರ್ ಹಂಚಿದ ಫೈಲ್‌ಸಿಸ್ಟಂ ಮಾರ್ಗಗಳು"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "ಸಂಪೂರ್ಣ ಮಾರ್ಗ"
+      },
+      "DeleteHeader" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "path" : {
+        "label" : "ಹಂಚಿದ ಫೈಲ್‌ಸಿಸ್ಟಂಗೆ ಮೂಲ ಫೋಲ್ಡರ್ ಸೇರಿಸಿ",
+        "help" : "ನಿಮ್ಮ ಸಂಸ್ಥೆಯಲ್ಲಿ ಡಾಕ್ಯುಮೆಂಟ್ ಸಂಗ್ರಹಕ್ಕೆ ಬಳಸುವ ಹಂಚಿದ ಫೈಲ್‌ಸಿಸ್ಟಂಗೆ ಮೂಲ ಮಾರ್ಗವಾದ ಸರ್ವರ್ ಫೋಲ್ಡರ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಫೈಲ್‌ಸಿಸ್ಟಂ ಎಂಟ್ರಿಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "RemovePathBtn" : {
+        "label" : "ಮಾರ್ಗ ತೆಗೆದುಹಾಕಿ"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "ಸಂಯೋಜಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "ವೆಕ್ಟರ್ ಡೇಟಾಬೇಸ್ ಸಂಯೋಜನೆ"
+      },
+      "host" : {
+        "label" : "Qdrant ಹೋಸ್ಟ್",
+        "help" : "Qdrant ಹೋಸ್ಟ್ ಹೆಸರು ಅಥವಾ ಐಪಿ ವಿಳಾಸ"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant ಸಂಪರ್ಕ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "port" : {
+        "label" : "Qdrant ಪೋರ್ಟ್",
+        "help" : "Qdrant ಸಂವಹನ ಪೋರ್ಟ್ (6334 ಹಿಸ್ಟಾಂಡರ್ಡ್)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api ಕೀ",
+        "help" : "Qdrant ದೃಢೀಕರಣಕ್ಕೆ api ಕೀ"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS ಪರಾಮಿತಿ",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ ಅಗತ್ಯ ಕ್ರಮಗಳು ಸಂಪೂರ್ಣಗೊಂಡಿವೆ...",
+        "detail" : "ಅಗತ್ಯ ಸೆಟಪ್ ಕ್ರಮಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ ಆದರೆ ಕೆಲವು ಕೊರತೆಯಿರುವ ಹಂತಗಳು ನಿಮ್ಮ ಸಂಸ್ಥೆಗೆ ಸಾಫ್ಟ್‌ವೇರ್‌ನ ಉತ್ತಮ ಅನುಭವವನ್ನು ತಡೆಯುತ್ತಿವೆ"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್‌ಗೆ ಇನ್ನೂ ಕೆಲವು ಅಗತ್ಯ ಹಂತಗಳು ಬೇಕು",
+        "detail" : "ದಯವಿಟ್ಟು ಸೆಟಪ್ ಪ್ರಕ್ರಿಯೆಯ ಕೆಂಪು ಹಂತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ ಒಕೆ!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "ಕೋಡ್",
+        "help" : "OAUTH2 ಪ್ರಾಮಾಣೀಕರಣ/ಒಗ್ಗೂಡುವಿಕೆ ಕೋಡ್ (registrationId) ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "OAUTH2 ಪ್ರಾಮಾಣೀಕರಣ/ಒಗ್ಗೂಡುವಿಕೆ ಮಾಹಿತಿಗಳ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "configurationType" : {
+        "label" : "ಸಂರಚನೆಯ ಉದ್ದೇಶ",
+        "help" : "ಈ ಸೆಟ್ಟಿಂಗ್‌ಗಳು Gebo.ai ನಲ್ಲಿ ಪ್ರಾಮಾಣೀಕರಣಕ್ಕಾಗಿ ಅಥವಾ Gebo.ai ಗೆ 3 ನೇ ಪಕ್ಷದ ವ್ಯವಸ್ಥೆಗೆ ಕ್ಲೈಂಟ್ ಸಂಪರ್ಕಕ್ಕಾಗಿ ಬಳಸಲಾಗುತ್ತದೆಯೇ ಎಂದು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "authProvider" : {
+        "label" : "ಪ್ರೊವೈಡರ್",
+        "help" : "OAUTH2 ಪ್ರಾಮಾಣೀಕರಣದ ಪ್ರೊವೈಡರ್ ಅನ್ನು ನಮೂದಿಸಿ"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "ಪ್ರೊವೈಡರ್‌ನ OAUTH2 issuer URL ಅನ್ನು ನಮೂದಿಸಿ"
+      },
+      "authorizationUri" : {
+        "label" : "ಪ್ರಾಧಿಕರಣ URL",
+        "help" : "ಪ್ರೊವೈಡರ್‌ನ OAUTH2 ಪ್ರಾಧಿಕರಣ URL ಅನ್ನು ನಮೂದಿಸಿ"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "OAUTH2 Jwk Set url ಅನ್ನು ಪ್ರೊವೈಡರ್‌ನಿಂದ ನಮೂದಿಸಿ"
+      },
+      "userInfoUri" : {
+        "label" : "ಬಳಕೆದಾರ ಮಾಹಿತಿ URL",
+        "help" : "OAUTH2 ಬಳಕೆದಾರ ಮಾಹಿತಿ URL ಅನ್ನು ಪ್ರೊವೈಡರ್‌ನಿಂದ ನಮೂದಿಸಿ"
+      },
+      "introspectionUri" : {
+        "label" : "ಇಂಟ್ರೋಸ್ಪೆಕ್ಷನ್ Uri",
+        "help" : "OAUTH2 introspection URL ಅನ್ನು ಪ್ರೊವೈಡರ್‌ನಿಂದ ನಮೂದಿಸಿ"
+      },
+      "tokenUri" : {
+        "label" : "ಟೋಕನ್ URL",
+        "help" : "OAUTH2 ಟೋಕನ್ URL ಅನ್ನು ಪ್ರೊವೈಡರ್‌ನಿಂದ ನಮೂದಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 ಪ್ರೊವೈಡರ್ URL ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "ಹೊಸದಾಗಿ OAUTH2 ಪ್ರಾಮಾಣೀಕರಣ/ಒಗ್ಗೂಡುವಿಕೆ ಮಾಹಿತಿಗಳನ್ನು ಸೇರಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ಕ್ಲೈಂಟ್ ಐಡಿ",
+        "help" : "oauth2 ಪ್ರೋಟೋಕಾಲ್‌ಗೆ ಕ್ಲೈಂಟ್ ಗುರುತು (oauth2 ದೃಢೀಕರಿಸಿದ 3ನೇ ಪಕ್ಷ ಸಾಫ್ಟ್‌ವೇರ್ ನಿರ್ವಾಹಕ ಪ್ರದೇಶದಲ್ಲಿ ಪಡೆಯಬೇಕಾಗಿದೆ)"
+      },
+      "secret" : {
+        "label" : "ಸೀಕ್ರೆಟ್ ಕೀ",
+        "help" : "oauth2 ಪ್ರೋಟೋಕಾಲ್‌ಗೆ ಕ್ಲೈಂಟ್ ಡಿರ್ಹಿತ ಗುಪ್ತವಚನ (oauth2 ದೃಢೀಕರಿಸಿದ 3ನೇ ಪಕ್ಷ ಸಾಫ್ಟ್‌ವೇರ್ ನಿರ್ವಾಹಕ ಪ್ರದೇಶದಲ್ಲಿ ಪಡೆಯಬೇಕಾಗಿದೆ)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence ವ್ಯವಸ್ಥೆ ಸಂರಚನೆ ರಚಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Confluence ವ್ಯವಸ್ಥೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "CreateBtn" : {
+        "label" : "ರಚಿಸಿ"
+      },
+      "username" : {
+        "label" : "Confluence ಬಳಕೆದಾರ ಹೆಸರು",
+        "help" : "Confluence ಬಳಕೆದಾರರ ಹೆಸರು"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ಆವೃತ್ತಿ",
+        "help" : "Confluence ಆವೃತ್ತಿ"
+      },
+      "baseUri" : {
+        "label" : "ಮೂಲ ಇಂಟರ್ನೆಟ್ ವಿಳಾಸ",
+        "help" : "ಒನ್-ಪ್ರೆಮೈಸ್ ಸ್ಥಾಪನೆಗೆ ಮೂಲ Confluence ವ್ಯವಸ್ಥೆಯ ವಿಳಾಸ ಅಥವಾ ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಮೂಲ url ಅನ್ನು ನಮೂದಿಸಿ (Confluence cloud ವ್ಯವಸ್ಥೆಗೆ)."
+      },
+      "password" : {
+        "label" : "Confluence ಪಾಸ್‌ವರ್ಡ್",
+        "help" : "Confluence ಪಾಸ್‌ವರ್ಡ್"
+      },
+      "token" : {
+        "label" : "Confluence cloud api ಕೀ",
+        "help" : "Confluence CLOUD apikey ಅನ್ನು confluence backoffic ನಲ್ಲಿ ಪಡೆದಿರಬೇಕು, ಇಲ್ಲಿ \"API Token for your Atlassian Account\" ಅನ್ನು ಸೇರಿಸಬೇಕು."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ಪ್ರಕಟಿಸಿ!",
+        "help" : "ಶೇಖರಿಸಿ ಮತ್ತು ಈ ವಿಷಯಗಳನ್ನು ಜ್ಞಾನ ಕೋಶದಲ್ಲಿ LLm ಗಳಿಗೆ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SettingsTab" : {
+        "label" : "ಸಂಯೋಜನೆಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "Confluence ವಿಷಯಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳುವುದು"
+      },
+      "LogsTab" : {
+        "label" : "ಲಾಗ್‌ಗಳು"
+      },
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂ ಸೃಷ್ಟಿಯಾದ ವಿಶಿಷ್ಟ ವಿಷಯಗಳ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಅಪ್ಲೋಡ್ ಮಾಡಿದ Confluence ವಿಷಯಗಳ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence ವ್ಯವಸ್ಥೆ",
+        "help" : "ಈಗಾಗಲೆ ಸಂರಚಿತವಾದ Confluence ವ್ಯವಸ್ಥೆಯ ಉಲ್ಲೇಖ."
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಪೋಷಕ ಯೋಜನೆಯ ಉಲ್ಲೇಖ."
+      },
+      "openZips" : {
+        "label" : "Zip ಕಡತಗಳನ್ನು ತೆರೆಯಿರಿ",
+        "help" : "Zip ಕಡತಗಳನ್ನು ತೆರೆಯಲು ಮತ್ತು ವಿಷಯವನ್ನು ಪಡೆಯಲು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "tree" : {
+        "label" : "ಆಯ್ಕೆ ಮಾಡಿದ ಪ್ರದೇಶಗಳು ಅಥವಾ ಪುಟಗಳು/ಉಪಪುಟಗಳು",
+        "help" : "ಹಂಚಿಕೊಳ್ಳುವ Confluence ಪ್ರದೇಶಗಳು ಮತ್ತು ಪುಟಗಳ ವಿಷಯಗಳು"
+      },
+      "programmedTables" : {
+        "label" : "ವಿಷಯಗಳ ನವೀಕರಣಗಳ ಪರಿಶೀಲನಾ ವೇಳಾಪಟ್ಟಿ",
+        "help" : "ಬದಲಾದ ವಿಷಯಗಳನ್ನು ಶೆಡ್ಯೂಲ್ ಮಾಡಿ, retrieve augmented generation ವ್ಯವಸ್ಥೆಯನ್ನು ನವೀಕರಿಸಲು"
+      },
+      "catalogingCriteria" : {
+        "label" : "ಪ್ರದೇಶಗಳು, ಪುಟಗಳು ಮತ್ತು ಉಪಪುಟಗಳನ್ನು ಆಯೋಜಿಸುವ ಮಾನದಂಡಗಳು",
+        "help" : "Gebo.ai ಜೊತೆಗೆ ಹಂಚಿಕೊಳ್ಳಲಾದ Confluence ವಿಷಯಗಳಲ್ಲಿ ಪ್ರದೇಶಗಳು, ಪುಟಗಳು ಮತ್ತು ಉಪಪುಟಗಳನ್ನು ಹೇಗೆ ಆಯೋಜಿಸಲಾಗಿದೆ ಎಂಬುದನ್ನು ಇಲ್ಲಿ ವಿವರಿಸಿ"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಸಂಯೋಜನೆಗಳು"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "Confluence ವ್ಯವಸ್ಥೆಯನ್ನು ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "baseUri" : {
+        "label" : "ಮೂಲ ಇಂಟರ್ನೆಟ್ ವಿಳಾಸ",
+        "help" : "Confluence ವ್ಯವಸ್ಥೆಯ ಮೂಲ ವಿಳಾಸದ Url"
+      },
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "Confluence ವ್ಯವಸ್ಥೆಯ ಸ್ವಯಂ ಸೃಷ್ಟಿಯಾದ ವಿಶಿಷ್ಟ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Confluence ವ್ಯವಸ್ಥೆಯ ವಿವರವನ್ನು ನಮೂದಿಸಿ."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ಆವೃತ್ತಿ",
+        "help" : "Confluence ಆವೃತ್ತಿ"
+      },
+      "secretCode" : {
+        "label" : "ಬಳಸಿದ ಗುರುತಿನ ಸೂಚನೆ",
+        "help" : "Confluence ವ್ಯವಸ್ಥೆಗೆ ಪ್ರವೇಶಿಸಲು ಗುರುತನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ರಚಿಸಿ"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "ಹೊಸ ಗುಂಪು"
+      },
+      "NewUserBtn" : {
+        "label" : "ಹೊಸ ಬಳಕೆದಾರ"
+      },
+      "UsersListPanel" : {
+        "label" : "ಬಳಕೆದಾರರ ಪಟ್ಟಿಯನ್ನು"
+      },
+      "GroupsListPanel" : {
+        "label" : "ಗುಂಪುಗಳ ಪಟ್ಟಿಯನ್ನು"
+      },
+      "SournameHeader" : {
+        "label" : "ಕೊನೆಯ ಹೆಸರು"
+      },
+      "UsernameHeader" : {
+        "label" : "ಬಳಕೆದಾರರ ಹೆಸರು"
+      },
+      "RolesHeader" : {
+        "label" : "ಪಾತ್ರಗಳು"
+      },
+      "NameHeader" : {
+        "label" : "ಹೆಸರು"
+      },
+      "EditBtn" : {
+        "label" : "ತಿದ್ದು"
+      },
+      "DisabledHeader" : {
+        "label" : "ನಿಷ್ಕ್ರಿಯಗೊಂಡಿದೆ"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "UserIds" : {
+        "placeholder" : "ಬಳಕೆದಾರರನ್ನು ಆಯ್ಕೆ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "MainPanel" : {
+        "label" : "ಬಳಕೆದಾರ ಗುಂಪಿನ ಸಂಪಾದನೆ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಬಳಕೆದಾರ ಗುಂಪಿನ ವಿವರವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "ಬಳಕೆದಾರ ಗುಂಪಿನ ಕೋಡ್ ನಮೂದಿಸಿ"
+      },
+      "userIds" : {
+        "label" : "ಬಳಕೆದಾರರ ಪಟ್ಟಿ",
+        "help" : "ಗುಂಪಿನಲ್ಲಿ ಭಾಗವಹಿಸುವ ಬಳಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ಸೃಷ್ಟಿಸಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Jira ಸಿಸ್ಟಮ್‌ನ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "MainPanel" : {
+        "label" : "Jira ಸಿಸ್ಟಮ್ ಸಂರಚನೆ ಸೃಷ್ಟಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "username" : {
+        "label" : "jira ಬಳಕೆದಾರಹೆಸರು",
+        "help" : "jira ಬಳಕೆದಾರ ಹೆಸರು"
+      },
+      "token" : {
+        "label" : "jira cloud api ಕೀ",
+        "help" : "jira CLOUD apikeyನ್ನು jira backofficನಲ್ಲಿ ಪಡೆದುಕೊಳ್ಳಿರಿ, ಇಲ್ಲಿ \"API Token for your Atlassian Account\" ಅನ್ನು ಸೇರಿಸಬೇಕು."
+      },
+      "baseUri" : {
+        "label" : "ಮೂಲ ಇಂಟರ್ನೆಟ್ ವಿಳಾಸ",
+        "help" : "onpremise ಇನ್‌ಸ್ಟಾಲೇಶನ್‌ಗಾಗಿ jira ಸಿಸ್ಟಮ್ ಮೂಲ ವಿಳಾಸ ಅಥವಾ jira cloud systemಗಾಗಿ ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಮೂಲ url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "PublishBtn" : {
+        "label" : "ಪ್ರಸಿದ್ಧಪಡಿಸಿ!",
+        "help" : "ಉಳಿಸಿ ಮತ್ತು ಈ ವಿಷಯಗಳನ್ನು ಇಂದುledge base ಗೆ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡಿ LLm's ಗೆ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SettingsTab" : {
+        "label" : "ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "LogsTab" : {
+        "label" : "ಲಾಗ್‌ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "Jira ವಿಷಯಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳು"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "ವಿಷಯಗಳಿಗಾಗಿ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira ಸಿಸ್ಟಮ್",
+        "help" : "ಈಗಾಗಲೇ ಸಂರಚಿತ jira ಸಿಸ್ಟಮ್ ರೆಫರೆನ್ಸ್."
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಮುಖ್ಯ ಪ್ರಾಜೆಕ್ಟ್ ರೆಫರೆನ್ಸ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Jira ಎಂಟ್ರಿಗಳ ಅಪ್ಲೋಡ್ ಮಾಡಲಾದ ವಿಷಯದ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "programmedTables" : {
+        "label" : "ವಿಷಯ ಅಪ್ಡೇಟ್ ಪರಿಶೀಲನೆಗಳ ವೇಳಾಪಟ್ಟಿಗೆ",
+        "help" : "ಬದಲಾದ ವಿಷಯಗಳನ್ನು ಪಾಲಿಸಲು ಟ್ರೀವ್ ಆಗ್ಮೆಂಟೆಡ್ ಜನರೇಷನ್ ಸಿಸ್ಟಮ್ ಅಪ್‌ಡೇಟ್ ಹೊಂದಿಸಲು ವೇಳಾಪಟ್ಟಿಯನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ"
+      },
+      "openZips" : {
+        "label" : "Zip ಫೈಲ್‌ಗಳನ್ನು ತೆರೆಯಿ",
+        "help" : "zip ಫೈಲ್‌ ತೆರೆಯುವಿಕೆ ಮತ್ತು ವಿಷಯ ಹೊರತೆಗೆದುಕೊಳ್ಳುವುದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "tree" : {
+        "label" : "ಆಯ್ಕೆ ಮಾಡಿದ ಜಾಗಗಳು ಅಥವಾ ಪುಟ/ಉಪಪುಟಗಳು",
+        "help" : "ಹಂಚಲಾದ jira ಪ್ರಾಜೆಕ್ಟ್‌ಗಳು ಮತ್ತು ಟಿಕೆಟ್‌ಗಳ ವ್ಯವಸ್ಥೆಯ ವಿಷಯಗಳು"
+      },
+      "catalogingCriteria" : {
+        "label" : "ಜಾಗಗಳು, ಪುಟಗಳು ಮತ್ತು ಉಪಪುಟಗಳ ಆಯೋಜನೆ ಮಾನದಂಡಗಳು",
+        "help" : "Gebo.ai ಜತೆ ಹಂಚಿದ jira ವಿಷಯಗಳಲ್ಲಿ ಜಾಗಗಳು, ಪುಟಗಳು ಮತ್ತು ಉಪಪುಟಗಳ ಆಯೋಜನಾ ಮಾನದಂಡವನ್ನು ಇಲ್ಲಿ ವಿವರಿಸಿ"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Jira ಸಿಸ್ಟಮ್‌ನ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "Jira ಸಿಸ್ಟಮ್ ಸಂಪಾದನೆ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "baseUri" : {
+        "label" : "ಮೂಲ ಇಂಟರ್ನೆಟ್ ವಿಳಾಸ",
+        "help" : "Jira ಸಿಸ್ಟಮ್‌ನ ಮೂಲ ವಿಳಾಸ"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "Jira ಸಿಸ್ಟಮ್ಗಾಗಿ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "secretCode" : {
+        "label" : "ಬಳಸಿದ ಗುರುತು",
+        "help" : "Jira ಸಿಸ್ಟಮ್‌ ಪ್ರವೇಶಿಸಲು ಗುರುತು ಆಯ್ಕೆ ಮಾಡಿರಿ ಅಥವಾ ಹೊಸದನ್ನು ರಚಿಸಿ"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "SharPoint/OneDrive ವ್ಯವಸ್ಥೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint ಆವೃತ್ತಿ",
+        "help" : "sharepoint ಆವೃತ್ತಿ"
+      },
+      "secret" : {
+        "label" : "ಗೋಪ್ಯ ಕೀ",
+        "help" : "ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ microsoft \"entra\" ಉತ್ಪನ್ನದಲ್ಲಿ ನೊಂದಾಯಿಸಲಾದ Oauth2 ಕ್ಲೈಂಟ್ ಗೋಪ್ಯ ಕೀ (microsoft cloud admin console ನಲ್ಲಿ ಪಡೆಯಬಹುದು)"
+      },
+      "clientId" : {
+        "label" : "ಕ್ಲೈಂಟ್ ಐಡಿ",
+        "help" : "ಈ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ microsoft \"entra\" ಉತ್ಪನ್ನದಲ್ಲಿ ನೊಂದಾಯಿಸಲಾದ Oauth2 ಕ್ಲೈಂಟ್ ಗುರುತಿನ ಚಿಹ್ನೆ (microsoft cloud admin console ನಲ್ಲಿ ಪಡೆಯಬಹುದು)"
+      },
+      "tenantId" : {
+        "label" : "ಟೆನಂಟ್ ಐಡಿ",
+        "help" : "ನಿಮ್ಮ ಸಂಸ್ಥೆಯ microsoft \"entra\" ಉತ್ಪನ್ನಕ್ಕಾಗಿ Oauth2 ಟೆನಂಟ್ ಗುರುತಿನ ಚಿಹ್ನೆ (microsoft cloud admin console ನಲ್ಲಿ ಪಡೆಯಬಹುದು)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai ಗಾಗಿ Microsoft oauth2 ಅಪ್ಲಿಕೇಶನ್ ನೋಂದಣಿ ವಿವರಗಳು"
+      },
+      "CreateBtn" : {
+        "label" : "ರಚಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive ವ್ಯವಸ್ಥೆಯ ಸಂರಚನೆ ರಚಿಸಿ"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "PublishBtn" : {
+        "label" : "ಪ್ರಕಟಿಸಿ!",
+        "help" : "ಉಳಿಸಿ ಮತ್ತು ಈ ವಿಷಯವನ್ನು ತಿಳುವಳಿಕೆಯ ಪೂರ್ವಭಾಗದಲ್ಲಿ LLm ಗಳಿಗೆ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡುತ್ತದೆ"
+      },
+      "SettingsTab" : {
+        "label" : "ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive ವಿಷಯ ಹಂಚಿಕೆ"
+      },
+      "LogsTab" : {
+        "label" : "ಲಾಗ್‌ಗಳು"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "ವಿಷಯಗಳ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಪೋಷಕ ಪ್ರಾಜೆಕ್ಟ್ ಉಲ್ಲೇಖ."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "SharePoint/OneDrive ನೊಂದಣಿಗಳ ಡೇಟಾ ಮೂಲಗಳ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint ವ್ಯವಸ್ಥೆ",
+        "help" : "ಈ ಹಿಂದೆ ಸಂರಚಿಸಲಾದ SharePoint/OneDrive ವ್ಯವಸ್ಥೆಯ ಉಲ್ಲೇಖ."
+      },
+      "openZips" : {
+        "label" : "Zip ಕಡತಗಳನ್ನು ತೆರೆಯಿರಿ",
+        "help" : "Zip ಕಡತಗಳನ್ನು ತೆರೆಯುವುದು ಮತ್ತು ವಿಷಯವನ್ನು ಹೊಡೆಯಿರಿ"
+      },
+      "tree" : {
+        "label" : "ಆಯ್ದ SharePoint ಸೈಟ್‌ಗಳು/ಪುಟಗಳು/ಉಪಪುಟಗಳು ಅಥವಾ OneDrive ಡ್ರೈವ್‌ಗಳು/ಫೋಲ್ಡರ್‌ಗಳು/ಕಡತಗಳು",
+        "help" : "ಹಂಚಿಕೊಂಡ SharePoint/OneDrive ವಿಷಯಗಳು"
+      },
+      "programmedTables" : {
+        "label" : "ವಿಷಯ ಅಪ್ಡೇಟ್‌ಗಳಿಗೆ ಪರಿಶೀಲನೆ ವೇಳಾಪಟ್ಟಿ",
+        "help" : "ಬದಲಾದ ವಿಷಯಗಳ ವೇಳಾಪಟ್ಟಿಯನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿ, retrieve augmented generation ವ್ಯವಸ್ಥೆಯನ್ನು ನವೀಕರಿಸಲು"
+      },
+      "catalogingCriteria" : {
+        "label" : "ಗಿ೦ತೆಗಳು, ಪುಟಗಳು ಮತ್ತು ಉಪಪುಟಗಳ ಸಂಯೋಜನಾ ಮಾನ ದಂಡಗಳು",
+        "help" : "SharePoint ವಿಷಯಗಳಲ್ಲಿ ಜಾರಿಗೊಂಡ ಮೆಟಾಡೇಟಾ ನಿಯಮಗಳು ಹೇಗೆ ಜಾರಿಗೊಂಡಿವೆ ಎಂಬುದನ್ನು ಇಲ್ಲಿ ವಿವರಿಸಿ, Gebo.ai ಯೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಲಾಗಿದೆ"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint ವ್ಯವಸ್ಥೆ ಸಂಪಾದನೆ"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "secretCode" : {
+        "label" : "ಬಳಸದ ಗುರುತು",
+        "help" : "SharePoint ವ್ಯವಸ್ಥೆಗೆ ಪ್ರವೇಶಿಸಲು ಗುರುತನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ರಚಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "SharePoint ವ್ಯವಸ್ಥೆಯ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "SharePoint ವ್ಯವಸ್ಥೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint ಆವೃತ್ತಿ",
+        "help" : "sharepoint ಆವೃತ್ತಿ"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ/ವಿಷಯದ ಸೆಟ್ಟಿಂಗ್ಸ್"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms ಸೆಟ್ಟಿಂಗ್ಸ್"
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "ನಾಲಿವು ಗ್ರಾಫ್ ಡೇಟಾ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಹಂತದ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವಿಶಿಷ್ಟ ಕೋಡ್"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/knowledge ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಸಂರಚನೆ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಈ ಕಾಲಿವು ಗ್ರಾಫ್ ಡೇಟಾ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಹಂತದ ಸಂರಚನೆಯ ವಿವರವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "extractionPrompt" : {
+        "label" : "ಮಾಹಿತಿ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ಅಸ್ತಿತ್ವ/ಘಟನೆ/ಸಂಬಂಧ ಮತ್ತು ಉಪನಾಮಗಳ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಗಾಗಿ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಪ್ರಾಂಪ್ಟ್"
+      },
+      "usedModelConfiguration" : {
+        "label" : "ಡೇಟಾ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಗೆ ಬಳಸಿರುವ LLM",
+        "help" : "ಗ್ನಾನ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಗೆ ಬಳಸಿರುವ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಯನ್ನು ಸೂಚಿಸಿ, ಯಾವುದೂ ಆಯ್ಕೆಮಾಡದೆ ಇದ್ದರೆ ಡಿಫಾಲ್ಟ್ ಅನ್ನು ಬಳಸಲಾಗುತ್ತದೆ."
+      },
+      "graphRagAllSources" : {
+        "label" : "ಎಲ್ಲಾ ಡೇಟಾ ಸ್ರೋತಗಳಿಗೆ ಗ್ರಾಫ್ ರಾಗ್ ಅನ್ವಯಿಸಿ",
+        "help" : "ಈ ಆಯ್ಕೆ ಸತ್ಯವಾಗಿದ್ದರೆ ಎಲ್ಲಾ ಗ್ನಾನದ ಮೂಲಗಳು/ಪ್ರಾಜೆಕ್ಟ್/ಡೇಟಾ ಸ್ರೋತಗಳನ್ನು ಗ್ನಾನ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಗೆ ಪ್ರಕ್ರಿಯೆ ಮಾಡಲಾಗುತ್ತದೆ, ಇಲ್ಲದಿದ್ದರೆ ವಿಶೇಷವಾಗಿ ಸಂರಚಿಸಲಾದವುಗಳನ್ನು ಮಾತ್ರ ಪರಿಗಣಿಸಲಾಗುತ್ತದೆ"
+      },
+      "defaultModel" : {
+        "label" : "ಡಿಫಾಲ್ಟ್ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ",
+        "help" : "ಗ್ನಾನ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಗೆ ಡಿಫಾಲ್ಟ್ ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿಯನ್ನು ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "processEveryDocument" : {
+        "label" : "ಎಲ್ಲಾ ಫೈಲ್ಗಳಿಗೆ ಗ್ರಾಫ್ ರಾಗ್ ಅನ್ವಯಿಸಿ",
+        "help" : "ಗ್ರಾಫ್ ರಾಗ್ ಆಲ್ಗಾರಿತಮುಗಳನ್ನು ಎಲ್ಲಾ ಫೈಲ್‌ಗಳಿಗೆ ಅನ್ವಯಿಸಲಾಗುತ್ತದೆ, ಇದು ವ್ಯವಸ್ಥೆಯ ವಿಶ್ಲೇಷಣೆಯ ವಿವರವನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ ಆದರೆ ಪ್ರಕ್ರಿಯೆಗೆ ಬೇಕಾದ ವೆಚ್ಚ ಹಾಗೂ ಸಮಯವನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag ಪ್ರಕ್ರಿಯೆಗೆ ಫೈಲ್ ಆಯ್ಕೆ ಮಾನದಂಡಗಳು",
+        "help" : "Graphrag ನ ಮಾಹಿತಿ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಪೈಪ್‌ಲೈನ್‌ಗೆ ಕಳುಹಿಸಲಿರುವ ಫೈಲ್ ಮಾಲಿಕೆಗಳನ್ನು ಸಂಪಾದಿಸಿ, ಕನಿಷ್ಠ ಫೈಲ್ ಹೆಸರು ಮತ್ತು ಮಾನದಂಡ ಮತ್ತು/ಅಥವಾ ಫೈಲ್ ಪ್ರಕಾರ ಮತ್ತು/ಅಥವಾ ಫೈಲ್ ಗಾತ್ರದ ಗರಿಷ್ಠ ಬೈಟ್ಸ್ ಮತ್ತು/ಅಥವಾ ಕೊನೆಯ ಬದಲಾವಣೆಯ ದಿನಗಳ ವಯಸ್ಸನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "ಕಡತ ಪ್ರಕಾರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ಕಡತ ಹೆಸರಿನ ಶೋಧನ ಮಾನದಂಡ"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "ಕೊನೆಯ ಬಾರಿ ಕಡತವನ್ನು ಮರುಸಂಪಾದಿಸಿದ ದಿನಗಳು"
+      },
+      "nameFilter" : {
+        "placeholder" : "ಕಡತನ ಹೆಸರು"
+      },
+      "maxFileSize" : {
+        "placeholder" : "ಗರಿಷ್ಠ ಕಡತ ಗಾತ್ರ (ಬೈಟ್ಸ್‌ನಲ್ಲಿ)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "MainPanel" : {
+        "label" : "ನಾಲಿಕಾಧಾರವನ್ನು ಸಂಪಾದನೆ ಮಾಡಲಾಗುತ್ತಿದೆ"
+      },
+      "AccessSettingsTab" : {
+        "label" : "ನಾಲಿಕಾಧಾರದ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "code" : {
+        "label" : "ಸ್ಪೆಷಲ್ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರೂಪುಗೊಂಡಿರುವ ನಾಲಿಕಾಧಾರದ ವಿಶಿಷ್ಟ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ನಾಲಿಕಾಧಾರದ ವಿವರವನ್ನು ನಮೂದಿಸಿ."
+      },
+      "embeddingModelReferences" : {
+        "label" : "ಬಳಸಲಾದ embedding ಮಾದರಿಗಳು (ಮೊದಲನೆಯದಾಗಿ ಟೋರಿಸಿ ತೆರಳಿ буш್ಯ ಪದಯೋನೆಯನ್ನನ್ನ ಬಿಟ್ಟಿರಿರಿ)",
+        "help" : "ನಾಲಿಕಾಧಾರಕ್ಕಾಗಿ embedding ಮಾದರಿಗಳು, ಬಿಟ್ಟುಹೋದರೆ ಡೀಫಾಲ್ಟ್ ಮಾದರಿಯನ್ನು ಬಳಸಲಾಗುತ್ತದೆ."
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "IndexBtn" : {
+        "label" : "ಇಂಡೆಕ್ಸ್",
+        "help" : "ವಿಷಯಗಳನ್ನು ಮರು-ಇಂಡೆಕ್ಸ್ ಮಾಡಿ"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್ ಅಥವಾ ಐಟಮ್ ಸಂಪಾದನೆ"
+      },
+      "code" : {
+        "label" : "ಸ್ಪೆಷಲ್ ಕೋಡ್",
+        "help" : "ಪ್ರಾಜೆಕ್ಟ್‌ನ ಸ್ವಯಂಚಾಲಿತ ವಿಶಿಷ್ಟ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಪ್ರಾಜೆಕ್ಟ್‌ನ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "ನಾಲಿಕಾಧಾರ",
+        "help" : "ನಾಲಿಕಾಧಾರ."
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "IndexBtn" : {
+        "label" : "ಇಂಡೆಕ್ಸ್",
+        "help" : "ವಿಷಯಗಳನ್ನು ಮರು-ಇಂಡೆಕ್ಸ್ ಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ ಐಟಂ/ಪ್ರಾಜೆಕ್ಟ್ ಸೇರಿಸಿ",
+        "help" : "ಹೊಸದು ಸೇರಿಸಿ..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "ಯಾರೂ ಬಳಸಬಹುದು",
+        "help" : "ಪ್ರತಿಯೊಬ್ಬರೂ ಬಳಸಬಹುದು"
+      },
+      "accessibleGroups" : {
+        "label" : "ಗುಂಪುಗಳ ಪಟ್ಟಿ",
+        "help" : "ಅನುಮತಿಸಿದ ಗುಂಪುಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "accessibleUsers" : {
+        "label" : "ಬಳಕೆದಾರರ ಪಟ್ಟಿ",
+        "help" : "ಅನುಮತಿಸಿದ ಬಳಕೆದಾರರನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್"
+      },
+      "LLMSTab" : {
+        "label" : "ಚಾಟ್ ಮತ್ತು ಎಂಬೆಡಿಂಗ್‌ಗಾಗಿ LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag ಚಾಟ್ ಪ್ರೊಫೈಲ್‌ಗಳು/ಮಾದರಿ ಸೂಚನೆಗಳು"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "ನಾಲಿವು ಬೇಸ್‌ಗಳು ಮತ್ತು ಯೋಜನೆಗಳು"
+      },
+      "UsersGroupTab" : {
+        "label" : "ಬಳಕೆದಾರರು ಮತ್ತು ಗುಳುಗಳು"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai ಮಾಡ್ಯೂಲ್‌ಗಳು ಸಂರಚನೆ"
+      },
+      "LogsTab" : {
+        "label" : "ಲಾಗ್‌ಗಳು"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ಸಂರಚಿಸಿ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ಸಂರಚಿಸಿ"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "ಹೊಸ ಪ್ರಾಂಪ್ಟ್ ಸಂರಚನೆ"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "ಹೊಸ ಚಾಟ್ ಪ್ರೊಫೈಲ್"
+      },
+      "MainPanel" : {
+        "label" : "ಪ್ರತ್ಯಾಹರಣಾ ಹೆಚ್ಚಿಸಿದ ಉತ್ಪಾದನಾ ಚಾಟ್ ಪ್ರೊಫೈಲುಗಳು"
+      },
+      "PromptsPanel" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ಸಂಗ್ರಹ ಮತ್ತು ಡಿಫಾಲ್ಟ್ ಪ್ರಾಂಪ್ಟ್‌ಗಳು"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರಗಳು"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ConfigureBtn1" : {
+        "label" : "ಸಂರಚಿಸಿ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "ಹೊಸ ಜ್ಞಾನದಾತ ಆಧಾರ"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "ಹೊಸ ಎಂಬೆಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆ"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "ಹೊಸ ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "ModelHeader" : {
+        "label" : "ಮಾದರಿ "
+      },
+      "ModelProviderHeader" : {
+        "label" : "ಮಾದರಿ ಪೂರೈಕೆದಾರ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ಸಂರಚಿಸಿ"
+      },
+      "CodeHeader2" : {
+        "label" : "ಕೋಡ್"
+      },
+      "DescriptionHeader2" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "ಮಾದರಿ ಪೂರೈಕೆದಾರ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ಸಂರಚಿಸಿ"
+      },
+      "ModelHeader2" : {
+        "label" : "ಮಾದರಿ "
+      },
+      "ChatmodelsZone" : {
+        "label" : "ಸಂರಚಿಸಿರುವ ಚಾಟ್ ಮಾದರಿಗಳು"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "ಸಂರಚಿಸಿರುವ ಎಂಬೆಡಿಂಗ್ ಮಾದರಿಗಳು"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "ಮಾದರಿಯನ್ನು ಪರೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "TestChatBtn" : {
+        "label" : "ಚಾಟ್ ಪರೀಕ್ಷಿಸಿ"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ OpenAI ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ OpenAI ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ OpenAI ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ OpenAI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "baseUrl" : {
+        "label" : "ಮುಖ್ಯ ollama ಸರ್ವರ್ ವಿಳಾಸ",
+        "help" : "ollama ಸ್ಥಳೀಯ ಅಥವಾ LAN ಸರ್ವರ್ ಪ್ರತಿಕ್ರಿಯಿಸುವ ಮೂಲ ವಿಳಾಸ (ಉದಾ: http://servername:234/)."
+      },
+      "choosedModel" : {
+        "label" : "Ollama ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ Ollama ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "placeholder" : "ಮಾದರಿ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ Ollama ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ (ಐಚ್ಛಿಕ)"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "MainPanel" : {
+        "label" : "Ollama ಸ್ಥಳೀಯ (ಅಥವಾ lan) ಸರ್ವರ್ ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ Anthropic ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ Anthropic ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "placeholder" : "ಮಾದರಿ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ MistralAI ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ MistralAI ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ Google Vertex AI ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ Google Vertex AI ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "TabGeneralInfos" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ Deepseek ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ Deepseek ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ.",
+        "placeholder" : "ಮಾದರಿ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "baseUrl" : {
+        "label" : "ಚಾಟ್ ಮಾದರಿ API ಮೂಲ ಸರ್ವರ್ ವಿಳಾಸ",
+        "help" : "ಚಾಟ್ ಮಾದರಿಯ ಮೂಲ ವಿಳಾಸ."
+      },
+      "apiSecretCode" : {
+        "label" : " ಚಾಟ್ ಮಾದರಿ API ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ ಚಾಟ್ ಮಾದರಿ API ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ (ಐಚ್ಛಿಕ)"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಚಾಟ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಚಾಟ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "choosedModel" : {
+        "label" : "ಚಾಟ್ ಮಾದರಿ ಚಾಟ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ ಚಾಟ್ ಮಾದರಿ ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "TitleFragment" : {
+        "label" : "ಚಾಟ್ ಮಾದರಿ ಪೂರೈಕೆದಾರ ಸಂಶೋಧನೆ:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ಸುಧಾರಿತ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ಮಾದರಿ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "Ollama ಸ್ಥಳೀಯ (ಅಥವಾ lan) ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ Ollama ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "choosedModel" : {
+        "label" : "Ollama ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ Ollama ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "baseUrl" : {
+        "label" : "ಮುಖ್ಯ ollama ಸರ್ವರ್ ವಿಳಾಸ",
+        "help" : "ollama ಸ್ಥಳೀಯ ಅಥವಾ LAN ಸರ್ವರ್ ಪ್ರತಿಕ್ರಿಯಿಸುವ ಮೂಲ ವಿಳಾಸ (ಉದಾ: http://servername:234/)."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ MistralAI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ MistralAI ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆ ಸಂಪಾದನೆ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ Google Vertex AI ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ Google Vertex AI ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಸೇವ್ ಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "TitleFragment" : {
+        "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಪೂರೈಕೆದಾರ ಸಂಪಾದನೆ:"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವಿಲ್ಲದ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯ ಅನನ್ಯ ಕೋಡ್"
+      },
+      "choosedModel" : {
+        "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಆಯ್ಕೆ",
+        "help" : "ಉಪಯೋಗಿಸಬೇಕಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ."
+      },
+      "baseUrl" : {
+        "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ API ಸರ್ವರ್ ವಿಳಾಸ",
+        "help" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ ಸರ್ವರ್‌ನ ಮೂಲ ವಿಳಾಸ."
+      },
+      "defaultModel" : {
+        "label" : "ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಹೊಂದಿಸಿ",
+        "help" : "ನಿಜವಾದರೆ, ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯನ್ನು ತಿಳಿಸಲಾಗದಿರುವಾಗ ಇದನ್ನು ಡೀಫಾಲ್ಟ್ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿಯಾಗಿ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "apiSecretCode" : {
+        "label" : "ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ API ಟೋಕನ್",
+        "help" : "ಈ ಮಾದರಿಗಾಗಿ ಬಳಸಬೇಕಾದ ಎಂಬೆಡ್ಡಿಂಗ್ ಮಾದರಿ API ಟೋಕನ್ ಆಯ್ಕೆಮಾಡಿ"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "ಚಾಟ್ ಸಂರಚನಾ ಮಾಹಿತಿ"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ಈ ಚಾಟ್ ಸೆಷನ್ ಅಳಿಸು"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "ಚಾಟ್ ಸೆಷನ್ ಪುನರುಪನಾಮಕರಣ"
+      },
+      "QueryControl" : {
+        "placeholder" : "ಚಾಟ್ ಬೋಟ್ಗೆ ಸಂದೇಶ ಬರಯಿರಿ"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದು ಮಾಡು"
+      },
+      "description" : {
+        "label" : "ಚಾಟ್ ವಿವರಣೆ",
+        "help" : "ಚಾಟ್ ಸೆಷನ್ನಿನ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "ಬಳಸಿದ ಮಾದರಿ",
+        "help" : "ಮಾದರಿ ಕೋಡ್"
+      },
+      "providerId" : {
+        "label" : "ಚಾಟ್ ಮಾದರಿ ಪ್ರೊವೈಡರ್",
+        "help" : "LLms ಪ್ರೊವೈಡರ್ ಡ್ರೈವರ್"
+      },
+      "functions" : {
+        "label" : "ಚಾಟ್ ಮಾದರಿ ಕರೆ ಮಾಡಬಹುದಾದ ಫಂಕ್ಷನ್‌ಗಳು",
+        "help" : "ಚಾಟ್ ಮಾದರಿಗಾಗಿ ಲಭ್ಯವಿರುವ ಫಂಕ್ಷನ್‌ಗಳ ಪಟ್ಟಿ"
+      },
+      "NameCol" : {
+        "label" : "ಹೆಸರು"
+      },
+      "DescriptionCol" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "kbases" : {
+        "label" : "ಲಭ್ಯವಿರುವ ಜ್ಞಾನ ಆಧಾರಗಳು",
+        "help" : "ಈ RAG ಚಾಟ್‌ನಲ್ಲಿ ಬಳಸಲಾದ ಜ್ಞಾನ ಆಧಾರಗಳ ಪಟ್ಟಿ"
+      },
+      "CloseBtn" : {
+        "help" : "ಮುಚ್ಚಿ"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "ರೆಕಾರ್ಡ್",
+        "help" : "ಆಡಿಯೋ ಟ್ರ್ಯಾಕ್ ಅನ್ನು ರೆಕಾರ್ಡ್ ಮಾಡಿ ಮತ್ತು ಕಳುಹಿಸಿ"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "ಡೇಟಾವನ್ನು ರೀಲೋಡ್ ಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SelectHeader" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "ಅಂತಿಮ ದಿನಾಂಕ/ಸಮಯ"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "ಪ್ರಾರಂಭ ದಿನಾಂಕ/ಸಮಯ"
+      },
+      "ProcessingHeader" : {
+        "label" : "ಪ್ರಕ್ರಿಯೆ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "FinishedHeader" : {
+        "label" : "ಮುಗಿದಿದೆ"
+      },
+      "WithErrorHeader" : {
+        "label" : "ದೋಷದೊಂದಿಗೆ"
+      },
+      "LogTableComponent" : {
+        "help" : "ಈ ಹಂಚಿದ ಫೈಲ್ ಸಿಸ್ಟಮ್ ಪ್ರದೇಶದ ಇಂಜೆಕ್ಷನ್ ಲಾಗ್"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "ಪ್ರಕ್ರಿಯೆಗಳ ಸ್ಥಿತಿಪಡಿಗಳು"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "CloseBtn" : {
+        "label" : "ಮುಚ್ಚಿ"
+      },
+      "PublicationLogTab" : {
+        "label" : "ಪ್ರಕಟಣಾ ಲಾಗ್"
+      },
+      "MainPanel" : {
+        "label" : "ಪ್ರಕಟಣಾ ಲಾಗ್"
+      },
+      "actualStatus" : {
+        "label" : "ಸ್ಥಿತಿ",
+        "help" : "ಕಾರ್ಯದ ಸ್ಥಿತಿ, ಇನ್ನೂ ನಡೆಯುತ್ತಿದೆ, ಮುಗಿದಿದೆ ಅಥವಾ ದೋಷಗಳೊಂದಿಗೆ ಮುಗಿದಿದೆ."
+      },
+      "publishingSystem" : {
+        "label" : "ಪ್ರಕಟಿತ ವಿಷಯದ ಸಂರಚನೆ",
+        "help" : "ಪ್ರಕಟಿತ ವಿಷಯದ ಮಾಹಿತಿ"
+      },
+      "startDateTime" : {
+        "label" : "ಪ್ರಾರಂಭ ದಿನಾಂಕ/ಸಮಯ",
+        "help" : "ವಿಷಯ ಸಂಶ್ಲೇಷಣಾ ಕಾರ್ಯದ ಪ್ರಾರಂಭ ದಿನಾಂಕ ಮತ್ತು ಸಮಯ"
+      },
+      "endDateTime" : {
+        "label" : "ಅಂತಿಮ ದಿನಾಂಕ/ಸಮಯ",
+        "help" : "ವಿಷಯ ಸಂಶ್ಲೇಷಣಾ ಕಾರ್ಯದ ಅಂತಿಮ ದಿನಾಂಕ ಮತ್ತು ಸಮಯ"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "ಪೂರ್ಣವಾಗಿ ಸಂಸ್ಕರಿಸಲಾಗಿಲ್ಲ"
+      },
+      "ProcessedCompletely" : {
+        "label" : "ಪೂರ್ಣವಾಗಿ ಸಂಸ್ಕರಿಸಲಾಗಿದೆ"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "ಎಂಬೆಡಿಂಗ್ ವಿರುದ್ಧ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳ ಒಟ್ಟೂ ಸಂಖ್ಯೆ"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "ಹೆಚ್ಚಿನ ವಿವರಗಳು"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ರಚಿಸಿ"
+      },
+      "PromptWizardBtn" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ವಿಸಾರ್ಡ್",
+        "help" : "ನಿಮ್ಮ ಗುರಿಗಳಿಗಾಗಿ ಪ್ರಾಂಪ್ಟ್ ರಚಿಸಲು ಈದನ್ನು ಬಳಸಿ LLM ಅನ್ನು ಉಪಯೋಗಿಸಿ"
+      },
+      "acceptPrompt" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ಸ್ವೀಕರಿಸಿ"
+      },
+      "promptWizardUI" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ಟೆಂಪ್ಲೇಟ್ ರಚನೆ ವಿಸಾರ್ಡ್"
+      },
+      "cancel" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "response" : {
+        "label" : "ಸಲಹೆಯಾದ ಪ್ರಾಂಪ್ಟ್ ಟೆಂಪ್ಲೇಟ್",
+        "help" : "ನಿಮ್ಮ ಗುರಿಗಾಗಿ ರಚಿಸಲಾದ ಟೆಂಪ್ಲೇಟ್ ಪಠ್ಯ (ನೀವು ಇದನ್ನು ಬದಲಾಯಿಸಬಹುದು ಅಥವಾ ಸರಿಪಡಿಸಬಹುದು)"
+      },
+      "modelCode" : {
+        "label" : "ಬಳಸದಿರುವ ಚಾಟ್ ಮಾದರಿ",
+        "help" : "ಪ್ರಾಂಪ್ಟ್ ಟೆಂಪ್ಲೇಟ್ ರಚನೆಗೆ ಕೇಳಲು ಚಾಟ್ ಮಾದರಿಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "query" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ಟೆಂಪ್ಲೇಟ್ ವಿನಂತಿ",
+        "help" : "AI ಯು ಬಳಕೆದಾರನನ್ನು ಬೆಂಬಲಿಸುವ ಗುರಿಯನ್ನು ನೀವು ಎರಡನೇ ವ್ಯಕ್ತಿಯಲ್ಲಿ ಸ್ಪಷ್ಟಪಡಿಸಿ"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "ತೆಂಪರೆಚರ್",
+        "help" : "ಮಾಡೆಲ್ ಪ್ರತ್ಯುತ್ತರವ ನೀಡುವ ಉಷ್ಣತೆ, 0 ರಿಂದ 1 ವರೆಗೆ (ಖಚಿತವಿಲ್ಲದಿದ್ದರೆ ಖಾಲಿಯಾಗಿರಿಸಿ)"
+      },
+      "contextLength" : {
+        "label" : "ಸಂದರ್ಭದ ಉದ್ದ (ಟೋಕನ್ಸ್)",
+        "help" : "AI ಮಾದರಿ ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿ ಪರಿಗಣಿಸಬಹುದಾದ ಪಠ್ಯದ ಪ್ರಮಾಣ (ಹೊಂದಿಸಲಿಲ್ಲ ಎಂದರೆ 1047576 ಉಪಯೋಗಿಸಲಾಗುತ್ತದೆ)"
+      },
+      "topP" : {
+        "label" : "ಟಾಪ್P",
+        "help" : "ಟಾಪ್P ಪರಿಮಾಣ, 0 ರಿಂದ 1 ವರೆಗೆ (ಖಚಿತವಿಲ್ಲದಿದ್ದರೆ ಖಾಲಿಯಾಗಿರಿಸಿ)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "ಈ ಮಾದರಿಗಾಗಿ ಸಕ್ರಿಯಗೊಳಿಸಿದ ಕಾರ್ಯಗಳ ಕರೆ",
+        "help" : "ಚಾಟ್ ಸಮಯದಲ್ಲಿ ಮಾದರಿ ಬಳಸಬಹುದಾದ ಕಾರ್ಯಗಳು"
+      },
+      "defaultModelPrompt" : {
+        "label" : "ಡಿಫಾಲ್ಟ್ ಮಾದರಿ ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ಚಾಟ್ ಮಾದರಿಗಾಗಿ ಡಿಫಾಲ್ಟ್ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸು."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಒಂದು ಗುರುತಿನ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "ಗುರುತಿಯ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವಿಶೇಷ ಕೋಡ್."
+      },
+      "secretType" : {
+        "label" : "ಗುರುತಿ ಪ್ರಕಾರ",
+        "help" : "ದೂರಸ್ಥ ವ್ಯವಸ್ಥೆಗೆ ರಚಿಸಲು ಗುರುತಿ ಪ್ರಕಾರ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "InsertBtn" : {
+        "label" : "ಸೇರಿಸಿ"
+      },
+      "token" : {
+        "label" : "ಟೋಕನ್",
+        "help" : "ಟೋಕನ್ ನಮೂದಿಸಿ."
+      },
+      "user" : {
+        "label" : "ಬಳಕೆದಾರ",
+        "help" : "ಟೋಕನ್ ಸೂಚಿಸುವ ಬಳಕೆದಾರರನ್ನು ನಮೂದಿಸಿ."
+      },
+      "MainPanel" : {
+        "label" : "ಗುರುತಿ ರಚಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸು"
+      },
+      "username" : {
+        "label" : "ಬಳಕೆದಾರ ಹೆಸರು",
+        "help" : "ಬಳಕೆದಾರ ಹೆಸರನ್ನು ನಮೂದಿಸಿ."
+      },
+      "password" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್",
+        "help" : "ಪಾಸ್ವರ್ಡ್ ನಮೂದಿಸಿ."
+      },
+      "email" : {
+        "label" : "ಇ-ಮೇಲ್/ಬಳಕೆದಾರ ಹೆಸರು",
+        "help" : "ssh ಕೀಲಿಗೆ ಸಂಬಂಧಿಸಿದ ಇ-ಮೇಲ್ ಅಥವಾ ಬಳಕೆದಾರ ಹೆಸರನ್ನು ನಮೂದಿಸಿ."
+      },
+      "key" : {
+        "label" : "ಗೋಪ್ಯ ಕೀಲಿ",
+        "help" : "ಖಾಸಗಿ ಕೀಲಿಯ ಫೈಲ್ ತೆರೆಯಿರಿ ಮತ್ತು ಈ ಪಠ್ಯ ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರತಿಬಿಂಬಿಸಿ."
+      },
+      "passphrase" : {
+        "label" : "ಕೀಲಿ ಪಾಸ್‌ಫ್ರೇಸ್",
+        "help" : "ಕೀಲಿಯ ಪಾಸ್‌ಫ್ರೇಸ್ ನಮೂದಿಸಿ."
+      },
+      "pub" : {
+        "label" : "ಸಾರ್ವಜನಿಕ ಕೀಲಿ",
+        "help" : "ಸಾರ್ವಜನಿಕ ಕೀಲಿ ಫೈಲ್ ತೆರೆಯಿರಿ ಮತ್ತು ಈ ಪಠ್ಯ ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರತಿಬಿಂಬಿಸಿ."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "ವಿಷಯಗಳ ಸ್ವಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ಅನನ್ಯ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಫೈಲ್ ಸಿಸ್ಟಂ ಎಂಟ್ರಿಯ ಅಪ್ಲೋಡ್ ಮಾಡಿದ ವಿಷಯದ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಪಿತೃ ಪ್ರಾಜೆಕ್ಟ್ ಉಲ್ಲೇಖ."
+      },
+      "upload" : {
+        "label" : "ವಿಷಯಗಳನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ",
+        "help" : "ಬ್ರೌಸ್ ಬಟನ್ ಅನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ ಮತ್ತು zip ಫೈಲ್‌ಗಳು ಅಥವಾ ಇತರ ಫೈಲ್‌ಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "openZips" : {
+        "label" : "zip ಫೈಲ್‌ಗಳನ್ನು ತೆರೆ",
+        "help" : "zip ಫೈಲ್‌ಗಳನ್ನು ತೆರೆಯುವ ಮತ್ತು ವಿಷಯವನ್ನು ತೆಗೆದುಹಾಕಲು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "PublishBtn" : {
+        "label" : "ಪ್ರಕಟಿಸಿ!",
+        "help" : "ಉಳಿಸಿ ಮತ್ತು ಈ ವಿಷಯಗಳನ್ನು ಜ್ಞಾನಾಧಾರದಲ್ಲಿ LLm ಗಳಿಗೆ ಲಭ್ಯವಾಗಿಸು"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದು ಮಾಡಿ"
+      },
+      "LogsTab" : {
+        "label" : "ಲಾಗ್‌ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "ಅಪ್ಲೋಡ್ ಮಾಡಿದ ವಿಷಯ ಸಂಪಾದನೆ"
+      },
+      "SettingsTab" : {
+        "label" : "ಸಂಯೋಜಣೆಗಳು"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ಬಿಲ್ಡ್ ವ್ಯವಸ್ಥೆಗಳನ್ನು ಸಂರಚಿಸಿ",
+        "help" : "ಮೆಟಾ ಮಾಹಿತಿ ಮತ್ತು ಇನ್ನಷ್ಟು ಕಲಿಕೆಗಳ ವಿವರಗಳಿಗಾಗಿ ನೋಡಲು ಬಿಲ್ಡ್/ಪ್ಯಾಕೇಜಿಂಗ್ ವ್ಯವಸ್ಥೆಗಳ ಪಟ್ಟಿಗೆ (ಯಾವುದೇ ಸಾಫ್ಟ್‌ವೇರ್ ಕೋಡ್ ಇಲ್ಲದಿದ್ದರೆ ಖಾಲಿ ಬಿಡಿ)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "ಆಯ್ದಿರುವ ಅಂಶಗಳು"
+      },
+      "ChooseOk" : {
+        "label" : "ಸರಿ"
+      },
+      "ChooseCancel" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "EditBtn" : {
+        "help" : "ಆಯ್ದಿರುವುದನ್ನು ಬದಲಾಯಿಸಿ"
+      },
+      "ChooseElementsArea" : {
+        "label" : "ಅಂಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "VFileSystemSelector" : {
+        "label" : "ಅಂಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "ವೇಳಾಪಟ್ಟಿ ಸಂಪಾದಿಸಿ"
+      },
+      "ConfirmBtn" : {
+        "label" : "ಖಚಿತಪಡಿಸಿ"
+      },
+      "AddBtn" : {
+        "label" : "+ಸೇರಿಸಿ"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ಪ್ರಕಟಿಸಿ!",
+        "help" : "ಈ ವಿಷಯಗಳನ್ನು ಉಳಿಸಿ ಮತ್ತು ಜ್ಞಾನಾಧಾರದಲ್ಲಿಗೆ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡಿ LLmಗಳಿಗೆ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SettingsTab" : {
+        "label" : "ಸಂಯೋಜನೆಗಳು"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "ಮೂಲ ಕೋಡ್ ಚಿಕಿತ್ಸೆ"
+      },
+      "LogsTab" : {
+        "label" : "ಲೆಕ್ಕಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "ಇನ್ನುಳಿದ ಫೈಲ್ ಸಿಸ್ಟಂ ವಿಷಯವನ್ನು ಸಂಪಾದಿಸುವುದು"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ವಿಷಯದ ವಿವರಣೆಯನ್ನು ಇಲ್ಲಿ ನಮೂದಿಸಿ."
+      },
+      "openZips" : {
+        "label" : "ಜಿಪ್ ಫೈಲ್ ತೆರೆಯಿರಿ",
+        "help" : "ಜಿಪ್ ಫೈಲ್ ತೆರೆಯುವ ಮತ್ತು ವಿಷಯ ತೆಗೆದುಮಾಡುವ ಅವಕಾಶ"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಯುತ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಯುತ ಪುಟ ಸಂಕೇತ."
+      },
+      "tree" : {
+        "label" : "ಆಯ್ದ ಫೈಲ್‌ಗಳು ಅಥವಾ ಫೋಲ್ಡರ್‌ಗಳು",
+        "help" : "ಪಂಗಡಿತ ಫೈಲ್ ಸಿಸ್ಟಂ ಫೈಲ್‌ಗಳು ಅಥವಾ ಡೈರೆಕ್ಟರಿ‌ಗಳು ಸರ್ವರ್‌ನಲ್ಲಿ ಲಭ್ಯವಿದೆ"
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಪೋಷಕ ಯೋಜನೆಯ ಉಲ್ಲೇಖ."
+      },
+      "programmedTables" : {
+        "label" : "ವಿಷಯದ ನವೀಕರಣ ಪರಿಶೀಲನೆಯ ವೇಳಾಪಟ್ಟಿ",
+        "help" : "ಮರೆದಿರುವ ವಿಷಯಗಳ ಪರಿಶೀಲನೆಯನ್ನು ಸಂರಚಿಸಿ, ದಾಖಲೆ ಹೆಚ್ಚಿಸುವ ಪದವಿಗೆ ಹೊಸದಾಗಿ ತಲುಪಿಸಲು"
+      },
+      "catalogingCriteria" : {
+        "label" : "ಫೋಲ್ಡರ್ ವೇವಸ್ತೆ ಮಾನದಂಡಗಳು",
+        "help" : "ನೀವು Gebo.ai ಜೊತೆ ಹಂಚಿಕೊಳ್ಳುತ್ತಿರುವ ಫೈಲ್ ಸಿಸ್ಟಂ ಪ್ರದೇಶದಲ್ಲಿ ಫೋಲ್ಡರ್‌ಗಳ ವೇವಸ್ತೆ ಹೇಗೆ ಮಾಡಿದಿರಿ ಎಂಬುದನ್ನು ಇಲ್ಲಿ ವಿವರಿಸಿ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ನಿರ್ಮಾಣ ವ್ಯವಸ್ಥೆ ಸಂಯೋಜಿಸಿ",
+        "help" : "ಮೆಟಾ ಮಾಹಿತಿಗಳಿಗಾಗಿ ಮತ್ತು ಹೆಚ್ಚುವರಿ ಕಲಾಸಂಗ್ರಹ ವಿವರಗಳಿಗಾಗಿ ಪರಿಶೀಲಿಸಲು ನಿರ್ಮಾಣ/ಪ್ಯಾಕೇಜಿಂಗ್ ವ್ಯವಸ್ಥೆಗಳ ಪಟ್ಟಿ (ಸಾಫ್ಟ್‌ವೇರ್ ಕೋಡ್ ಇಲ್ಲದಿದ್ದರೆ ಖಾಲಿ ಬಿಡಿ)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "ಹೊಸ ಫೈಲ್ ಹಂಚಿಕೆ ಪ್ರದೇಶ"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "ಸಂಪೂರ್ಣ ಪಥ"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db ಅಥವಾ yml ಫೈಲ್ ಸಂಯೋಜನೆ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "ModifyHeader" : {
+        "label" : "ತಿದ್ದು"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "ಆಯ್ದ ಹಂಚಿದ ಫೈಲ್ ಸಿಸ್ಟಂ ಫೋಲ್ಡರ್",
+        "help" : "ನಿಮ್ಮ ಸಂಸ್ಥೆಯಲ್ಲಿ ದಾಖಲೆ ಸಂಗ್ರಹಣೆಗಾಗಿ ಬಳಸುವ ಹಂಚಿದ ಫೈಲ್ ಸಿಸ್ಟಂಗೆ ಮೂಲ ಪಥವಾಗಿರುವ ಸರ್ವರ್‌ ಫೋಲ್ಡರ್‌ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಹಂಚಿದ ಫೈಲ್ ಸಿಸ್ಟಂ ಪ್ರದೇಶದ ವಿವರವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "InsertBtn" : {
+        "label" : "ಸೇರಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "MainPanel" : {
+        "label" : "ಸರ್ವರ್ ಹಂಚಿದ ಫೈಲ್ ಫೋಲ್ಡರ್ ಸಂಚಿಕೆ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "PublishBtn" : {
+        "label" : "ಪ್ರಕಟಿಸಿ!",
+        "help" : "ಉಳಿಸಿ ಮತ್ತು ಈ ವಿಷಯಗಳನ್ನು ಜ್ಞಾನ ಆಧಾರದಲ್ಲಿ LLm'ಗಳಿಗೆ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡಿ"
+      },
+      "MainPanel" : {
+        "label" : "Git ಮೂಲ/ದಸ್ತಾವೇಜು ರೆಪೊಸಿಟರಿಯನ್ನು ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Git repo'ಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತಯಾರಿಸಿದ git repo'ಯ ಅನನ್ಯ ಕೋಡ್."
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಮೂಲ ಪ್ರಾಜೆಕ್ಟ್ ಅನ್ನು ಉಲ್ಲೇಖಿಸುತ್ತದೆ."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git ಸಿಸ್ಟಂ",
+        "help" : "ಈಗಾಗಲೇ ವಿವರಿಸಿದ git ಸಿಸ್ಟಂ ಉಲ್ಲೇಖ."
+      },
+      "branch" : {
+        "label" : "ಶಾಖೆ",
+        "help" : "ಚೆಕ್‌ಔಟ್ ಮಾಡಬೇಕಾದ ಶಾಖೆಯ ಹೆಸರು (ಸಾಧಾರಣವಾಗಿ master, main ಅಥವಾ develop)"
+      },
+      "identityCode" : {
+        "label" : "ಬಳಸುವ ಐಡಂಟಿಟಿ",
+        "help" : "ಕ್ಲೋನ್/ಚೆಕ್‌ಔಟ್ ಮಾಡುವ ಅನುಸರಣೆ ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "repositoryUri" : {
+        "label" : "ರೆಪೊಸಿಟರಿ url/ವಿಳಾಸ",
+        "help" : "Git ದೂರಸ್ಥ ರೆಪೊಸಿಟರಿಯ ಸಂಪೂರ್ಣ ವಿಳಾಸ (ಸಾಮಾನ್ಯವಾಗಿ http:, https: ಅಥವಾ ssh: ಪ್ರಾರಂಭವಾಗುತ್ತದೆ)"
+      },
+      "publicAccess" : {
+        "label" : "ಸಾರ್ವಜನಿಕ",
+        "help" : "ಸರಿಯಾಗಿದ್ದರೆ, ರೆಪೊಸಿಟರಿ ಪ್ರವೇಶಕ್ಕೆ ಪರಿಶೀಲನೆ ಅಗತ್ಯವಿಲ್ಲ"
+      },
+      "openZips" : {
+        "label" : "Zip ಕಡತಗಳನ್ನು ತೆರೆಯಿರಿ",
+        "help" : "Zip ಕಡತಗಳನ್ನು ತೆರೆಯುವುದು ಮತ್ತು ವಿಷಯವನ್ನು ಹೊರತೆಗೆಯುವುದು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "programmedTables" : {
+        "label" : "ವಿಷಯ ನವೀಕರಣಗಳ ಪರಿಶೀಲನೆ ಸಮಯದಡು",
+        "help" : "ಬदलಿದ ವಿಷಯಗಳನ್ನು ನಿರಂತರವಾಗಿ Retrieve Augmented Generation sustem ನವೀಕರಿಸಲು ವೇಳಾಪಟ್ಟಿ ಹೊಂದಿಸಿ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ನಿರ್ಮಾಣ ವ್ಯವಸ್ಥೆಗಳನ್ನು ಸಂರಚಿಸಿ",
+        "help" : "ಮೆಟಾ ಮಾಹಿತಿ ಮತ್ತು ಅತರಿಕ ಅಂಶದ ಮಾಹಿತಿಗಾಗಿ ಪರಿಶೀಲಿಸಬೇಕಾದ ನಿರ್ಮಾಣ/ಪ್ಯಾಕೇಜಿಂಗ್ ವ್ಯವಸ್ಥೆಗಳ ಪಟ್ಟಿ"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡು"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ಸಾಮಾನ್ಯ ಮಾಹಿತಿ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ಚಾಟ್ ಮಾದರಿಯನ್ನು ಬಳಸಿ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ಚಾಟ್ ಮಾದರಿ ಸಂರಚನೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "ಎಂಬೆಡಿಂಗ್ ಮಾದರಿ ಸಂರಚನೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "LanguageModelTab" : {
+        "label" : "ದೊಡ್ಡ ಭಾಷಾ ಮಾದರಿ ಮತ್ತು ಉಪಯೋಗಿಸಬಹುದಾದ ಟೂಲ್‌ನ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "ಎಂಬೆಡಿಂಗ್ ಮಾದರಿಯನ್ನು ಬಳಸಿ"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "ಸುರಕ್ಷತಾ ಪ್ರವೇಶ ಸೆಟ್ಟಿಂಗ್‌ಗಳು"
+      },
+      "MainPanel" : {
+        "label" : "ಮರಳಿ ಪಡೆದು ವೃದ್ಧಿಪಡಿಸಿದ ಜನರೇಶನ್ ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸುತ್ತಿದೆ"
+      },
+      "code" : {
+        "label" : "ಅನನ್ಯ ಕೋಡ್",
+        "help" : "ಚಾಟ್ ಪ್ರೊಫೈಲ್‌ನ ಸ್ವಯಂ-ಸೃಷ್ಟಿಯಾದ ಅನನ್ಯ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಚಾಟ್ ಪ್ರೊಫೈಲ್ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "ಬಳಕೆದಾರನು ಜ್ಞಾನ ಆಧಾರಗಳನ್ನು ಆಯ್ಕೆಮಾಡುತ್ತಾನೆ",
+        "help" : "ಬಳಕೆದಾರನು ಲಭ್ಯವಿರುವ ಜ್ಞಾನ ಆಧಾರಗಳಿಂದ ಆಯ್ಕೆಮಾಡಬಹುದು ಮತ್ತು/ಅಥವಾ ತನ್ನದೇನೇ ಕಡತಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಬಹುದು."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರಗಳು",
+        "help" : "ಡಾಕ್ಯುಮೆಂಟ್ ಪಡೆದುಕೊಳ್ಳಲು ಬಳಸುವ ಜ್ಞಾನ ಆಧಾರಗಳು."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "ಸಾಧ್ರಸ್ಯದ ಮಿತಿ",
+        "help" : "ಅರ್ಥದ ಹುಡುಕಾಟಗಳಿಗಾಗಿ ಸಾಧ್ರಸ್ಯದ ಮಿತಿ, 0.60–0.65 ಕಡಿಮೆ ಫಿಲ್ಟರ್, 0.70-0.75 ಮಧ್ಯಮ ಫಿಲ್ಟರ್, 0.80–0.85 ಖಚಿತ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2ನೇ 'ಹಾಪ್' ಸಾಧ್ರಸ್ಯದ ಮಿತಿ",
+        "help" : "ಅರ್ಥದ ಹುಡುಕಾಟಗಳಿಗಾಗಿ ಸಾಧ್ರಸ್ಯದ ಮಿತಿ, 0.60–0.65 ಕಡಿಮೆ ಫಿಲ್ಟರ್, 0.70-0.75 ಮಧ್ಯಮ ಫಿಲ್ಟರ್, 0.80–0.85 ಖಚಿತ – ಬಹು ಹಾಪ್ rag ನಲ್ಲಿ 2ನೇ ಹುಡುಕಾಟದಿಂದ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'ಮುಲ್ಟಿ ಹಾಪ್' rag ಅನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ",
+        "help" : "'ಮುಲ್ಟಿ ಹಾಪ್ rag' ಕಾರ್ಯವನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ. ಮುಲ್ಟಿ ಹಾಪ್ ಹುಡುಕಾಟವು ಮೊದಲ ಅರ್ಥದ ಹುಡುಕಾಟವನ್ನು ಮಾಡುತ್ತದೆ ಮತ್ತು ಕಂಡುಕೊಂಡಿರುವ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಅರ್ಥದ ಹುಡುಕಾಟಕ್ಕೆ ಸನ್ನಿವೇಶವಾಗಿ ಬಳಸುತ್ತದೆ, ಹೆಚ್ಚಿನ ಸನ್ನಿವೇಶವನ್ನು ನೀಡುತ್ತದೆ."
+      },
+      "topK" : {
+        "label" : "ಸರಿದೂಗಿಸಲಾಗುವ ಡಾಕ್ಯುಮೆಂಟ್ ತುಂಡುಗಳು (TopK)",
+        "help" : "ಪಡೆಯುವ ವೃದ್ಧಿಪಡಿಸಿದ ಜನರೇಶನ್‌ನಲ್ಲಿ, ಅರ್ಥದ ಹುಡುಕಾಟದಲ್ಲಿ ಕಂಡುಕೊಂಡ ಮೇಲೆ Top Nドಾಕ್ಯುಮೆಂಟ್ ತುಂಡುಗಳನ್ನು ಪರಿಗಣಿಸಲಾಗುತ್ತದೆ"
+      },
+      "enabledFunctions" : {
+        "label" : "ಈ RAG ಚಾಟ್‌ಗೆ ಸಕ್ರಿಯಗೊಳಿಸಿದ ಕಾರ್ಯಗಳು",
+        "help" : "ಬಳಕೆದಾರನೊಂದಿಗೆ ಚಾಟ್ ಮಾಡುವಾಗ ಆಯ್ಕೆಮಾಡಿದ ಜ್ಞಾನ ಆಧಾರದೊಂದಿಗೆ ಸಂವಹನ ನಡೆಸಲು llm ಮಾದರಿಯು ಬಳಸಬಹುದಾದ ಕಾರ್ಯಗತತೆಗಳು"
+      },
+      "prompt" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ಪಡೆಯುವ ವೃದ್ಧಿಪಡಿಸಿದ ಜನರೇಶನ್ ಸೆಷನ್‌ಗಳಿಗೆ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸು"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡು"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "ಪ್ರಾಂಪ್ಟ್ ವರ್ಗವನ್ನು ನಮೂದಿಸಿ ಅಥವಾ ಸೇರ್ಪಡಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದನೆ"
+      },
+      "promptCategory" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್ ವರ್ಗ",
+        "help" : "ಪ್ರಾಂಪ್ಟ್ ವರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ಸೇರ್ಪಡಿಸಿ."
+      },
+      "prompt" : {
+        "label" : "ಪ್ರಾಂಪ್ಟ್",
+        "help" : "ಚಾಟ್‌ಗೆ ಪ್ರಾಂಪ್ಟ್ ಸಂಪಾದಿಸಿ, ಬಳಕೆದಾರರ ಪ್ರಶ್ನೆಗೆ {query} ಮತ್ತು LLMಗೆ ಕಳುಹಿಸಿರುವ ಡಾಕ್ಯುಮೆಂಟ್/ಚರಿತ್ರೆಯ ಘಟಕಕ್ಕೆ {context} ಅನ್ನು ಬಳಸಿ."
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "ಪ್ರಾಂಪ್ಟ್‌ನ ինքնಚಾಲಿತವಾಗಿ ಉತ್ಪಾದಿಸಲಾದ ವಿಶಿಷ್ಟ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಪ್ರಾಂಪ್ಟ್ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್ ಬದಲಿ ಮಾಡಿ"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "ಹಳೆಯ ಪಾಸ್ವರ್ಡ್",
+        "help" : "ಲಾಗಿನ್ ಮಾಡಲು ಪ್ರಸ್ತುತ ಪಾಸ್ವರ್ಡ್"
+      },
+      "newPassword" : {
+        "label" : "ಹೊಸ ಪಾಸ್ವರ್ಡ್",
+        "help" : "ಹೊಸ ಪಾಸ್ವರ್ಡ್"
+      },
+      "username" : {
+        "label" : "ಇ-ಮೇಲ್",
+        "help" : "ಲಾಗಿನ್ ಮಾಡಲು ಬಳಕೆಹೃದಯ ಇ-ಮೇಲ್"
+      },
+      "ChangePasswordUI" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್ ಬದಲಾವಣಾ ಫಾರ್ಮ್"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡು"
+      },
+      "ChangePwdBtn" : {
+        "label" : "ಪಾಸ್ವರ್ಡ್ ಬದಲಿ ಮಾಡಿ"
+      },
+      "newPassword1" : {
+        "label" : "ಹೊಸ ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+        "help" : "ಹೊಸ ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಿಸಿ"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google ಕಸ್ಟಮ್ ಸರ್ಚ್ API ಅಥವಾ ಉಚಿತವಾಗಿ ನಿಮ್ಮ API ಕೀ ಪಡೆಯಲು ಹೆಚ್ಚಿನ ಮಾಹಿತಿಗೆ ಭೇಟಿ ನೀಡಿ: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "ವಿಶಿಷ್ಟ ಕೋಡ್",
+        "help" : "Google search API ಸಂರಚನೆಯ ವಿಶಿಷ್ಟ ಕೋಡ್."
+      },
+      "MainPanel" : {
+        "label" : "Google ಕಸ್ಟಮ್ ಸರ್ಚ್ API ಕ್ರೆಡೆನ್‌ಷಿಯಲ್‌ಗಳ ಸಂಪಾದನೆ"
+      },
+      "secretCode" : {
+        "label" : "Google search API ಟೋಕನ್",
+        "help" : "ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ Google search API ಟೋಕನ್ ಹಾಕಿ"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Google search API ಸಂರಚನೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "ಜ್ಞಾನದ ಆಧಾರಗಳು ಇಲ್ಲದೆ ಚಾಟ್ ಮಾಡಿ",
+        "help" : "ಚಾಟ್ ಅಧಿವೇಶನಕ್ಕಾಗಿ LLMಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+        "placeholder" : "ಚಾಟ್ ಅಧಿವೇಶನಕ್ಕಾಗಿ LLMಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "ಚಾಟ್ ಆಯ್ಕೆಗಳ ವಿಭಾಗವನ್ನು ತೆರೆಯಿರಿ"
+      },
+      "CreateChatBtn" : {
+        "label" : "ಹೊಸ ಚಾಟ್"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "ಹೊಸದ ಚಾಟ್ ಅಧಿವೇಶನ"
+      },
+      "chatProfileCode" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರಗಳೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
+        "help" : "ಕಂಪನಿಯ (ಮತ್ತು ನಿಮ್ಮ) ದಾಖಲೆಗಳು ಮತ್ತು LLM ಗಳೊಂದಿಗೆ ಸಂವಹನ ಮಾಡಲು ಕಂಪನಿ ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+        "placeholder" : "ಕಂಪನಿಯ (ಮತ್ತು ನಿಮ್ಮ) ದಾಖಲೆಗಳು ಮತ್ತು LLM ಗಳೊಂದಿಗೆ ಸಂವಹನ ಮಾಡಲು ಕಂಪನಿ ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಅನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "NewChatBtn" : {
+        "label" : "ಹೊಸ ಚಾಟ್"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
+        "help" : "ವೀಕ್ಷಿಸಿ ಅಥವಾ ಹುಡುಕಿ ಮತ್ತು ಕೆಲಸ ಮಾಡಲು ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಆಯ್ಕೆ ಮಾಡಿ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ಚಾಟ್ ಮಾಡಲು ಫೈಲ್‌ಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "ಖಚಿತಪಡಿಸಿ"
+      },
+      "userspaceBrowsing" : {
+        "label" : "ನಿಮ್ಮ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಅಪ್ಲೋಡ್ ಅಥವಾ ಆಯ್ಕೆಮಾಡಿ",
+        "help" : "ನಿಮ್ಮ ಬಳಕೆದಾರ ಸ್ಥಳದಿಂದ ಡಾಕ್ಯುಮೆಂಟ್‌ಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ/ಅಪ್ಲೋಡ್ ಮಾಡಿ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ಹುಡುಕು"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ಹುಡುಕು"
+      },
+      "query" : {
+        "label" : "ಅರ್ಥಪೂರ್ಣ ಹುಡುಕು ಪದಗುಚ್ಛ",
+        "help" : "ನಿಮ್ಮ ಹುಡುಕಾಟಕ್ಕೆ ಸಂಬಂಧಿಸಿದ ಅರ್ಥಪೂರ್ಣ ಪದಗುಚ್ಛವನ್ನು ನಮೂದಿಸಿ"
+      },
+      "choosenBrowsing" : {
+        "label" : "ಹೊಂದಿರುವ ಫೈಲ್‌ಗಳು ಮತ್ತು ಜ್ಞಾನಾಧಾರಿತ ಮೂಲಗಳನ್ನು ಆರಿಸಿ",
+        "help" : "ಕಂಪನಿಯ ಹಂಚಿಕೆಗೆ ಜ್ಞಾನಾಧಾರಿತ ಮೂಲಗಳಿಂದ ಫೈಲ್‌ಗಳನ್ನು ಆರಿಸಿ"
+      },
+      "filename" : {
+        "label" : "ಹುಡಿದ ಫೈಲ್ ಹೆಸರು",
+        "help" : "ಹುಡುಕುುತ್ತಿರುವ ವಿಷಯಕ್ಕೆ ಫೈಲ್ ಹೆಸರಿನ ಭಾಗವನ್ನು ನಮೂದಿಸಿ"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "ಆಯ್ಕೆಮಾಡಿದವನ್ನು ಮಾರ್ಪಡಿಸಿ"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "ಬಳಕೆದಾರರ ಕಡತಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "okBtn" : {
+        "label" : "ಸರಿ"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "ಬಳಕೆದಾರ ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ವಿಷಯವನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "UserspaceBrowser" : {
+        "label" : "ಜ್ಞಾನ ಆಧಾರಗಳು ಮತ್ತು ಬಳಕೆದಾರರ ಕಡತಗಳು"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ಉಪಪ್ರಾಜೆಕ್ಟ್ ಅಥವಾ ಐಟಂ",
+        "help" : "ಉಪಪ್ರಾಜೆಕ್ಟ್ ಅಥವಾ ಐಟಂ ಸೇರಿಸಿ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ಫೈಲ್‌ಗಳನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+        "help" : "ಅಪ್‌ಲೋಡ್ ಮಾಡಲ್ಪಟ್ಟ ಫೈಲ್ ಡೇಟಾ ಮೂಲ ಸೇರಿಸಿ"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive ಡೇಟಾ ಮೂಲವನ್ನು ಸೇರಿಸಿ"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence ಡೇಟಾ ಮೂಲವನ್ನು ಸೇರಿಸಿ"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ಫೈಲ್ ಸಿಸ್ಟಮ್",
+        "help" : "ಹಂಚಿದ ಫೈಲ್ ಸಿಸ್ಟಮ್ ಡೇಟಾ ಮೂಲ ಸೇರಿಸಿ"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira ಡೇಟಾ ಮೂಲವನ್ನು ಸೇರಿಸಿ"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github ಅಥವಾ ಇತರರಂತಹ git repository ಡೇಟಾ ಮೂಲ ಸೇರಿಸಿ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ಚಾಟ್"
+      },
+      "setup" : {
+        "label" : "ಸೆಟಪ್"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ಆಡಳಿತ"
+      },
+      "currentProfile" : {
+        "label" : "ನನ್ನ ಪ್ರೊಫೈಲ್"
+      },
+      "logout" : {
+        "label" : "ಲಾಗ್‌ಔಟ್"
+      }
+    }
+  }
+}

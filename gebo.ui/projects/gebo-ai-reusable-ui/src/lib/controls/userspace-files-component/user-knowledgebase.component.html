@@ -1,44 +1,8 @@
-<!--
-/**
- * This Source Code is subject to the terms of the 
- * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
- * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
- */
- -->
- 
- 
- 
+<gebo-ai-field id="description" label="User space description" [required]="true" help="Enter the description of your user space.">
+    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+</gebo-ai-field>
 
-<p-panel #userspaceKbUI header="User space editing">
-    <p-blockUI [target]="userspaceKbUI" [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
-    </p-blockUI>
-    <div class="grid" [formGroup]="formGroup">
-        <div class="col-6">
-            <div class="flex flex-column gap-2">
-                <label for="description">User space description</label>
-                <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                    aria-describedby="description-help" />
-                <small id="description-help">
-                    Enter the description of your user space.
-                </small>
-            </div>
-        </div>
-        <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-                <label for="accessibleGroups">Accessible from groups</label>
-                <p-multiSelect styleClass="w-full" id="accessibleGroups" formControlName="accessibleGroups"
-                    aria-describedby="accessibleGroups-help" optionLabel="description" optionValue="code" dataKey="code"
-                    [options]="userGroups" showClear="true" display="chip"></p-multiSelect>
-
-
-                <small id="accessibleGroups-help">
-                    Set wich of the groups you are participating can access these documents.
-                </small>
-            </div>
-        </div>
-    </div>
-</p-panel>
+<gebo-ai-field id="accessibleGroups" label="Accessible from groups" help="Set wich of the groups you are participating can access these documents.">
+    <p-multiSelect styleClass="w-full" id="accessibleGroups" formControlName="accessibleGroups" optionLabel="description" optionValue="code" dataKey="code" [options]="userGroups" showClear="true" display="chip" gebo-ai-field-element></p-multiSelect>
+</gebo-ai-field>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

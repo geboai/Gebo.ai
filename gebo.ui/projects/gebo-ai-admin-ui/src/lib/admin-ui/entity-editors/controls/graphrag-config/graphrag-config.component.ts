@@ -1,11 +1,14 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { GeboNeo4jModuleSetupControllerService, GObjectRef, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 @Component({
     templateUrl: "graphrag-config.component.html",
     selector: "gebo-ai-graphrag-component",
-    standalone: false
+    standalone: false,
+    providers: [
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGraphragConfigComponent") }, 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIGraphRagConfigModule", multi: false }]
 })
 export class GeboAIGraphragConfigComponent implements OnInit, OnChanges {
     @Input() context?: { knowledgeBaseCode?: string, projectCode?: string, reference?: GObjectRef };

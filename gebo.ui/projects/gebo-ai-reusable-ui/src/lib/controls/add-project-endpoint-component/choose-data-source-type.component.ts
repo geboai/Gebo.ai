@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,7 +20,7 @@
 import { Component, Injector } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { ChooseDataSourceType } from "./choose-data-source-type";
 import { ConfirmationService, MenuItem } from "primeng/api";
 import { GProject, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
@@ -30,6 +30,7 @@ import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-ro
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
 import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architecture/actions.model";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 
 /**
@@ -40,19 +41,20 @@ import { GeboActionPerformedEvent, GeboUIActionRequest } from "../../architectur
 @Component({
     selector: "gebo-ui-choose-data-source-type-component",
     templateUrl: "choose-data-source-type.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIChooseDataSourceTypeComponent") }]
 })
 export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingComponent<ChooseDataSourceType> {
     /**
      * The entity name for this component, used for identification in the base component
      */
     protected override entityName: string = "ChooseDataSourceType";
-    
+
     /**
      * Menu items used to display available data source types
      */
     public items: MenuItem[] = [];
-    
+
     /**
      * Form group containing controls for the ChooseDataSourceType entity
      */
@@ -62,17 +64,17 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
         projectCode: new FormControl(),
         entityType: new FormControl()
     });
-    
+
     /**
      * The project associated with this data source type selection
      */
     project?: GProject;
-
+    private subscription?:Subscription;
     /**
      * Component constructor that injects required services
      */
     constructor(
-        injector:Injector,
+        injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
@@ -80,7 +82,7 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
         private kbTreeSearchService: GeboAIPluggableKnowledgeAdminBaseTreeSearchService,
         outputForwardingService?: GeboUIOutputForwardingService
     ) {
-        super(injector,geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
+        super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
     }
 
     /**
@@ -88,7 +90,7 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
      * Sets up form validation to ensure entityType is selected.
      */
     override ngOnInit(): void {
-        
+
         this.formGroup.setValidators((f: AbstractControl) => {
             const value: ChooseDataSourceType = f.value;
             if (value.entityType)
@@ -112,7 +114,19 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
                     this.project = p;
                     const actionConsumer = (action: GeboUIActionRequest) => { };
                     const actionsCallback = (event: GeboActionPerformedEvent) => { };
-                    this.items = this.kbTreeSearchService.generateAddToProjectMenu(false, this.project, actionConsumer, actionsCallback);
+                    if (this.subscription) {
+                        this.subscription.unsubscribe();
+                        this.subscription=undefined;
+                    }
+                    this.items = this.kbTreeSearchService.generateAddToProjectMenuEnglish(false, this.project, actionConsumer, actionsCallback);
+                    this.subscription=this.kbTreeSearchService.generateAddToProjectMenu(false, this.project, actionConsumer, actionsCallback).subscribe({
+                        next:(menuItems)=>{
+                            if (menuItems) {
+                                this.items=menuItems;
+                            }
+                        }    
+                    });
+                    
                 }
             })
         }

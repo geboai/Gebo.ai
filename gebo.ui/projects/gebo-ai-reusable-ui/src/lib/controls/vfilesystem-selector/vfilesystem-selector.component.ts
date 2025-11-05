@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -25,6 +25,7 @@ import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from 
 import { of } from "rxjs";
 import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemReference, reconstructNavigationObservableCallback } from "./vfilesystem-types";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, fieldHostComponentName } from "../field-host-component-iface/field-host-component-iface";
 
 
 /**
@@ -143,6 +144,12 @@ function findNode(x: EnrichedFilesystemReference, roots: TreeNode<EnrichedFilesy
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => VFilesystemSelectorComponent),
             multi: true
+        },
+        {
+            provide: GEBO_AI_MODULE, useValue: "VFilesystemSelectorModule", multi: false
+        },
+        {
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("VFilesystemSelectorComponent")
         }
     ],
     standalone: false
@@ -153,82 +160,82 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * Flag indicating whether the component is currently loading data
      */
     public loading: boolean = false;
-    
+
     /**
      * Whether the component should be in read-only mode
      */
     @Input() readonly = false;
-    
+
     /**
      * Whether folders can be selected
      */
     @Input() canChooseFolders: boolean = true;
-    
+
     /**
      * Whether files can be selected
      */
     @Input() canChooseFiles: boolean = true;
-    
+
     /**
      * Observable callback for loading filesystem roots
      */
     @Input() loadRootsObservable: loadRootsObservableCallback = () => of({});
-    
+
     /**
      * Observable callback for browsing a path within the filesystem
      */
     @Input() browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => of({});
-    
+
     /**
      * Optional callback for reconstructing navigation paths
      */
     @Input() reconstructNavigationCallback?: reconstructNavigationObservableCallback;
-    
+
     /**
      * Whether to allow single or multiple selection
      */
     @Input() selectionMode: "single" | "multiple" = "single";
-    
+
     /**
      * Placeholder text for the selection input
      */
     @Input() placeholder: string = "Select proper path";
-    
+
     /**
      * The root nodes of the filesystem tree
      */
     public roots: TreeNode<EnrichedFilesystemReference>[] = [];
-    
+
     /**
      * Currently selected filesystem references
      */
     public internalValue: EnrichedFilesystemReference[] = [];
-    
+
     /**
      * Whether the edit dialog is open
      */
     public openEditWindow: boolean = false;
-    
+
     /**
      * References currently being edited in the dialog
      */
     public editingNodeValues: EnrichedFilesystemReference[] = [];
-    
+
     /**
      * Toast messages to display to the user
      */
     public messages: ToastMessageOptions[] = [];
-    
+
     /**
      * Flag to indicate whether tree consistency needs to be checked
      */
     private checkTreeConsistency: boolean = false;
-    
+
     /**
      * Map of node unique codes to their tree nodes for quick lookup
      */
     private nodesMap: Map<string, TreeNode<EnrichedFilesystemReference>> = new Map();
-    
+
     /**
      * Form group for the selection control
      */
@@ -810,8 +817,8 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * Removes an item from the main selection panel
      * @param item - The item to remove
      */
-    removeFromMainPanel(item: EnrichedFilesystemReference):void {
-        this.internalValue=this.internalValue.filter(x=>x.uniqueCode!==item.uniqueCode);
+    removeFromMainPanel(item: EnrichedFilesystemReference): void {
+        this.internalValue = this.internalValue.filter(x => x.uniqueCode !== item.uniqueCode);
         let out: VFilesystemReference[] | VFilesystemReference | undefined = undefined;
         if (this.selectionMode === "single") {
             out = (this.internalValue.length ? toBackendData(this.internalValue[0]) : undefined);
@@ -826,14 +833,14 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * @param item - The item to remove
      */
     removeFromEditPanel(item: EnrichedFilesystemReference): void {
-        const actualValues:string[]|string|undefined|null=this.formGroup.controls["choosed"].value;
-        if (actualValues){
-            const asArray:string[]=Array.isArray(actualValues)?Array.from(actualValues):[actualValues];
-            const newArray:string[]=asArray.filter(x=>x!==item.uniqueCode);
-            if (this.selectionMode==="multiple") {
+        const actualValues: string[] | string | undefined | null = this.formGroup.controls["choosed"].value;
+        if (actualValues) {
+            const asArray: string[] = Array.isArray(actualValues) ? Array.from(actualValues) : [actualValues];
+            const newArray: string[] = asArray.filter(x => x !== item.uniqueCode);
+            if (this.selectionMode === "multiple") {
                 this.formGroup.controls["choosed"].setValue(newArray);
-            }else {
-                this.formGroup.controls["choosed"].setValue(newArray && newArray.length?newArray[0]:undefined);
+            } else {
+                this.formGroup.controls["choosed"].setValue(newArray && newArray.length ? newArray[0] : undefined);
             }
         }
     }

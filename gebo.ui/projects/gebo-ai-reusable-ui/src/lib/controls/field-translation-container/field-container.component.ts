@@ -12,7 +12,7 @@ import { GeboAITranslationService } from "./gebo-translation.service";
     providers: [
 
         { provide: ControlContainer, useExisting: FormGroupDirective }
-    ]
+    ]    
 })
 export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     @Input({ required: true }) id!: string;
@@ -28,11 +28,12 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         if (this.host) {
             if (Array.isArray(this.host)) {
                 const array = Array.from(this.host);
-                this.host = array.length ? array[array.length - 1] : undefined;
+                this.host = array.length ? array[0] : undefined;
             }
         }
-        if (this.moduleId && this.moduleId.length) {
-            this.moduleId = this.moduleId[this.moduleId.length - 1];
+        if (Array.isArray(this.moduleId)) {
+            const modules=Array.from(this.moduleId);
+            this.moduleId = modules[0];
         }
     }
     localizationSubject: Subject<{ label?: string, help?: string, placeholder?: string }> = new Subject();
@@ -47,14 +48,15 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
             this.internalPlaceholder = this.placeholder;
         }
     }
-    ngOnInit(): void {
+    async ngOnInit() {
+        await this.translationService.tryInit();
         const existingTexts: UIExistingText[] = [];
         let label: UIExistingText | undefined = undefined;
         let help: UIExistingText | undefined = undefined;
         let placeholder: UIExistingText | undefined = undefined;
         if (this.internalLabel) {
             existingTexts.push(label = {
-                moduleId:this.moduleId,
+                moduleId: this.moduleId,
                 entityId: this.host?.getEntityName(),
                 componentId: this.id,
                 key: "label",
@@ -64,7 +66,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         }
         if (this.internalHelp) {
             existingTexts.push(help = {
-                moduleId:this.moduleId,
+                moduleId: this.moduleId,
                 entityId: this.host?.getEntityName(),
                 componentId: this.id,
                 key: "help",
@@ -74,7 +76,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         }
         if (this.internalPlaceholder) {
             existingTexts.push(placeholder = {
-                moduleId:this.moduleId,
+                moduleId: this.moduleId,
                 entityId: this.host?.getEntityName(),
                 componentId: this.id,
                 key: "placeholder",
@@ -86,7 +88,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         if (substitutions) {
             substitutions.subscribe({
                 next: (resources) => {
-                    if (resources && resources?.length) {
+                    if (resources) {
                         if (label) {
                             const labelTranslation = findMatchingTranslation(label, resources);
                             if (labelTranslation && labelTranslation.translation) {

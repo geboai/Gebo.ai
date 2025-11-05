@@ -81,6 +81,7 @@ import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
+import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
@@ -170,6 +171,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
     TokenRenewControllerService,
+    UiTextResourcesControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UsersAdminControllerService,

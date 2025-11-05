@@ -1,0 +1,109 @@
+/* Base badge */
+.flag {
+  display:inline-block;
+  width:24px;
+  height:16px;
+  border-radius:2px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.1) inset, 0 1px 2px rgba(0,0,0,.15);
+  vertical-align:middle;
+}
+
+/* Tri-band vertical (use 90deg) / horizontal (use 180deg) */
+
+/* en – red/white/blue (generic Anglophone colors) */
+.flag-en { background: linear-gradient(180deg,#C8102E 0 33%, #FFFFFF 33% 66%, #012169 66% 100%); }
+
+/* it – green/white/red vertical */
+.flag-it { background: linear-gradient(90deg,#009246 0 33%, #FFFFFF 33% 66%, #CE2B37 66% 100%); }
+
+/* es – red/yellow/red */
+.flag-es { background: linear-gradient(180deg,#AA151B 0 25%, #F1BF00 25% 75%, #AA151B 75% 100%); }
+
+/* fr – blue/white/red vertical */
+.flag-fr { background: linear-gradient(90deg,#0055A4 0 33%, #FFFFFF 33% 66%, #EF4135 66% 100%); }
+
+/* de – black/red/gold */
+.flag-de { background: linear-gradient(180deg,#000000 0 33%, #DD0000 33% 66%, #FFCE00 66% 100%); }
+
+/* pt – green/red */
+.flag-pt { background: linear-gradient(90deg,#006600 0 40%, #FF0000 40% 100%); }
+
+/* nl – red/white/blue */
+.flag-nl { background: linear-gradient(180deg,#AE1C28 0 33%, #FFFFFF 33% 66%, #21468B 66% 100%); }
+
+/* pl – white/red */
+.flag-pl { background: linear-gradient(180deg,#FFFFFF 0 50%, #DC143C 50% 100%); }
+
+/* ru – white/blue/red */
+.flag-ru { background: linear-gradient(180deg,#FFFFFF 0 33%, #0039A6 33% 66%, #D52B1E 66% 100%); }
+
+/* zh – red with yellow accent */
+.flag-zh { background:#DE2910; position:relative; }
+.flag-zh::after { content:""; position:absolute; width:4px; height:4px; left:3px; top:3px; background:#FFDE00; border-radius:50%; }
+
+/* ja – white with red disc */
+.flag-ja { background:#FFFFFF; position:relative; }
+.flag-ja::after { content:""; position:absolute; width:8px; height:8px; left:8px; top:4px; background:#BC002D; border-radius:50%; }
+
+/* ko – white with blue/red disc (simplified) */
+.flag-ko { background:#FFFFFF; position:relative; }
+.flag-ko::after {
+  content:""; position:absolute; width:10px; height:10px; left:7px; top:3px;
+  background: radial-gradient(circle at 50% 45%, #C60C30 0 50%, transparent 50%),
+              radial-gradient(circle at 50% 55%, #003478 0 50%, transparent 50%);
+  border-radius:50%;
+}
+
+/* ar – black/white/green with red triangle (simplified PA colors) */
+.flag-ar { background: linear-gradient(180deg,#000 0 33%, #fff 33% 66%, #007A3D 66% 100%); position:relative; }
+.flag-ar::before { content:""; position:absolute; left:0; top:0; bottom:0; width:0; border-top:8px solid transparent; border-bottom:8px solid transparent; border-left:10px solid #CE1126; }
+
+/* tr – red with white crescent/star simplified */
+.flag-tr { background:#E30A17; position:relative; }
+.flag-tr::before { content:""; position:absolute; width:10px; height:10px; left:5px; top:3px; background:#E30A17; border-radius:50%; box-shadow:-3px 0 0 0 #fff inset; }
+.flag-tr::after { content:""; position:absolute; width:0; height:0; border-left:4px solid #fff; border-top:3px solid transparent; border-bottom:3px solid transparent; left:12px; top:7px; }
+
+/* hi – saffron/white/green */
+.flag-hi { background: linear-gradient(180deg,#FF9933 0 33%, #FFFFFF 33% 66%, #138808 66% 100%); }
+
+/* id – red/white */
+.flag-id { background: linear-gradient(180deg,#FF0000 0 50%, #FFFFFF 50% 100%); }
+
+/* vi – red with yellow star dot */
+.flag-vi { background:#DA251D; position:relative; }
+.flag-vi::after { content:""; position:absolute; width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-bottom:8px solid #FF0; left:9px; top:2px; transform:translateX(-2px) rotate(35deg); }
+
+/* sv – blue with yellow cross (simplified as bands) */
+.flag-sv { background: linear-gradient(90deg,#006AA7 0 30%, #FECC00 30% 40%, #006AA7 40% 100%); }
+
+/* no – red with blue cross (simplified bands) */
+.flag-no { background: linear-gradient(90deg,#BA0C2F 0 28%, #FFFFFF 28% 35%, #00205B 35% 45%, #FFFFFF 45% 52%, #BA0C2F 52% 100%); }
+
+/* da – red with white cross (bands) */
+.flag-da { background: linear-gradient(90deg,#C60C30 0 30%, #FFFFFF 30% 35%, #C60C30 35% 100%); }
+
+/* fi – blue cross on white (bands) */
+.flag-fi { background: linear-gradient(90deg,#fff 0 30%, #003580 30% 45%, #fff 45% 100%); }
+
+/* el – blue/white stripes */
+.flag-el { background: repeating-linear-gradient(180deg,#0D5EAF 0 2px,#FFFFFF 2px 4px); }
+
+/* cs – white/red/blue (Czech, simplified stripes) */
+.flag-cs { background: linear-gradient(180deg,#FFFFFF 0 33%, #D7141A 33% 66%, #11457E 66% 100%); }
+
+/* hu – red/white/green */
+.flag-hu { background: linear-gradient(180deg,#CE2939 0 33%, #FFFFFF 33% 66%, #477050 66% 100%); }
+
+/* ro – blue/yellow/red vertical */
+.flag-ro { background: linear-gradient(90deg,#002B7F 0 33%, #FCD116 33% 66%, #CE1126 66% 100%); }
+
+/* he – blue/white/blue bands */
+.flag-he { background: linear-gradient(180deg,#0038B8 0 25%, #FFFFFF 25% 75%, #0038B8 75% 100%); }
+
+/* th – red/white/blue/white/red */
+.flag-th { background: linear-gradient(180deg,#A51931 0 20%, #FFFFFF 20% 35%, #2D2A4A 35% 65%, #FFFFFF 65% 80%, #A51931 80% 100%); }
+
+/* uk – blue/yellow */
+.flag-uk { background: linear-gradient(180deg,#005BBB 0 50%, #FFD500 50% 100%); }
+
+

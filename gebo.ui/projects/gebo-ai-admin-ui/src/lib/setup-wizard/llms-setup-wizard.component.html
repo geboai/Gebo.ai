@@ -8,65 +8,65 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
-
-<p-blockUI [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUi" gebo-ai-label [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel #instModeUI header="Setup Gebo.ai llms providers access with your own api key">
+<p-panel id="MainPanel" gebo-ai-label #instModeUI header="Setup Gebo.ai llms providers access with your own api key">
 
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <form [formGroup]="formGroup">
         <div class="grid " *ngIf="isSetupCompleted!==true">
             <div class="col-12">
-                <p>Provide an api-key with proper available credit. If OpenAI is choosen you must add some specific credit (10-30$ can be enough) to your usual plan for api use, otherwise no available llms traffic will be available in this application.   </p>
+                <p id="InstructionText" gebo-ai-text>Provide an api-key with proper available credit. If OpenAI is choosen you must add some specific credit (10-30$ can be enough) to your usual plan for api use, otherwise no available llms traffic will be available in this application.   </p>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="provider">Large language model supplier</label>
-                    <geboai-editable-listbox-component id="provider" formControlName="provider"
-                        aria-describedby="provider-help" [data]="providersList"
-                        [required]="true"></geboai-editable-listbox-component>
-                    <small id="provider-help">
-                        Choose one supplier between OpenAI (chatgpt), Google (Gemini),Anthropic
-                        (Claude)
-                    </small>
-                </div>
+                <gebo-ai-field id="provider" label="Large language model supplier" help="Choose one supplier between OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)" [required]="true">
+                    <geboai-editable-listbox-component
+                        id="provider"
+                        formControlName="provider"
+                        [data]="providersList"
+                        [required]="true"
+                        gebo-ai-field-element
+                    >
+                    </geboai-editable-listbox-component>
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="user">User</label>
-                    <input pInputText id="user" formControlName="user" [required]="true" aria-describedby="user-help" />
-                    <small id="username-help">
-                        Enter the user associated to the apiKey
-                    </small>
-                </div>
+                <gebo-ai-field id="user" label="User" help="Enter the user associated to the apiKey" [required]="true">
+                    <input
+                        pInputText
+                        id="user"
+                        formControlName="user"
+                        [required]="true"
+                        gebo-ai-field-element
+                    />
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="apiKey">Api key</label>
-                    <input pInputText id="apiKey" formControlName="apiKey" class="col-12" [required]="true"
-                        aria-describedby="apiKey-help">
-
-                    <small id="apiKey-help">
-                        Your api key of the LLMS providers to be used
-                    </small>
-                </div>
+                <gebo-ai-field id="apiKey" label="Api key" help="Your api key of the LLMS providers to be used" [required]="true">
+                    <input
+                        pInputText
+                        id="apiKey"
+                        formControlName="apiKey"
+                        class="col-12"
+                        [required]="true"
+                        gebo-ai-field-element
+                    >
+                    
+                </gebo-ai-field>
             </div>
         </div>
         <div class="grid " *ngIf="isSetupCompleted===true">
 
-            <p-table [value]="modelsList" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-table id="ModelsListTable" gebo-ai-label [value]="modelsList" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template #header pTemplate="header">
                     <tr>
-                        <th>Configuration code</th>
-                        <th>Provider</th>
-                        <th>Model type</th>
-                        <th>Model</th>
-                        <th>Default model</th>
+                        <th id="ConfigurationCodeHeader" gebo-ai-text>Configuration code</th>
+                        <th id="ProviderHeader" gebo-ai-text>Provider</th>
+                        <th id="ModelTypeHeader" gebo-ai-text>Model type</th>
+                        <th id="ModelHeader" gebo-ai-text>Model</th>
+                        <th id="DefaultModelHeader" gebo-ai-text>Default model</th>
                     </tr>
                 </ng-template>
                 <ng-template #body let-model pTemplate="body">
@@ -85,9 +85,11 @@
     <div class="grid geboLargeButtonsBar">
 
         <div class="col-6">
-            <p-button [outlined]="true" label="Configure" (onClick)="setupLLMS()" icon="pi pi-save" severity="success"
+            <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="setupLLMS()" icon="pi pi-save" severity="success"
                 [disabled]="this.formGroup.invalid " styleClass="w-full" *ngIf="isSetupCompleted!==true"></p-button>
 
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

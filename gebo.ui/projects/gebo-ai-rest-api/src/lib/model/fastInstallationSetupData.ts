@@ -15,4 +15,5 @@ export interface FastInstallationSetupData {
     password: string;
     passwordC?: string;
     licenceAgreement: string;
+    lang: string;
 }

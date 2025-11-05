@@ -1,18 +1,27 @@
-
-
-<p-blockUI [target]="instModeUI" [blocked]="loading">
+<!--
+/**
+ * This Source Code is subject to the terms of the 
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai 
+ */
+ -->
+ 
+<p-blockUI id="LockBlockUI" gebo-ai-label [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #instModeUI header="Setup Graph Rag & knowledge extraction default configuration">
+<p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup Graph Rag & knowledge extraction default configuration">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <div class=" grid">
 
-        <div class="col-12"><p-table [value]="defaultConfigurations" [tableStyle]="{ 'min-width': '50rem' }">
+        <div class="col-12"><p-table id="Table" gebo-ai-label [value]="defaultConfigurations" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template #header pTemplate="header">
                     <tr>
-                        <th>Config code</th>
-                        <th>Description</th>
-                        <th></th>
+                        <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+                        <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                        <th id="EmptyHeader" gebo-ai-text></th>
 
                     </tr>
                 </ng-template>
@@ -20,7 +29,7 @@
                     <tr>
                         <td>{{ item.code }}</td>
                         <td>{{ item.description }}</td>
-                        <td><p-button label="Edit config" icon="pi pi-pencil" [outlined]="true"
+                        <td><p-button id="EditConfigBtn" gebo-ai-label label="Edit config" icon="pi pi-pencil" [outlined]="true"
                                 (onClick)="editConfig(item)"></p-button></td>
                     </tr>
                 </ng-template>
@@ -30,8 +39,11 @@
     <div class="grid geboLargeButtonsBar">
 
         <div class="col-6">
-            <p-button icon="pi pi-plus" label="Create graph rag config" styleClass="w-full" [outlined]="true" [disabled]="defaultConfigurations && defaultConfigurations.length>0"
+            <p-button id="CreateGraphRagConfigBtn" gebo-ai-label icon="pi pi-plus" label="Create graph rag config" styleClass="w-full" [outlined]="true" [disabled]="defaultConfigurations && defaultConfigurations.length>0"
                 (onClick)="createConfig()"></p-button>
         </div>
     </div>
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

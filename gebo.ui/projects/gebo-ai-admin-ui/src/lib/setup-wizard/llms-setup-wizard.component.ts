@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /** 
  * AI generated comments
@@ -18,7 +18,7 @@
 
 import { Component } from "@angular/core";
 import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, FastLLMSSetupData, OperationStatusBoolean, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseWizardSectionComponent, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { forkJoin, Observable } from "rxjs";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -28,8 +28,8 @@ import { ToastMessageOptions } from "primeng/api";
  * Interface defining the structure of LLM entries displayed in the component.
  * Contains configuration details for both chat and embedding models.
  */
-interface LLMSEntry{
-    configurationCode?:string;provider?:string;modelType?:string;modelCode?:string;description?:string,defaultModel?:boolean;
+interface LLMSEntry {
+    configurationCode?: string; provider?: string; modelType?: string; modelCode?: string; description?: string, defaultModel?: boolean;
 }
 
 /**
@@ -40,7 +40,8 @@ interface LLMSEntry{
 @Component({
     selector: "gebo-llms-wizard-component",
     templateUrl: "llms-setup-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSetupWizardComponent") }]
 })
 export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     /**
@@ -51,7 +52,7 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
         { code: "openai", description: "openai (ChatGpt) provider" },
         { code: "nvidia", description: "Nvidia nim provider" } /*,
         {code:"xai",description:"Xai (Grok) provider"}*/];
-    
+
     /**
      * Form group for capturing user input during LLM setup.
      * Contains fields for user, provider, and API key.
@@ -61,12 +62,12 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
         provider: new FormControl(),
         apiKey: new FormControl()
     });
-    
+
     /**
      * Array to store configured LLM models fetched from the backend.
      */
-    public modelsList:LLMSEntry[]=[];
-    
+    public modelsList: LLMSEntry[] = [];
+
     /**
      * Constructor initializes services required for LLM setup functionality.
      */
@@ -94,45 +95,45 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
         forkJoin(observables).subscribe({
             next: (value) => {
                 this.isSetupCompleted = value[0] === true;
-                if (this.isSetupCompleted === true) { 
-                    this.userMessages = [{ severity: "success", summary: "Large language models setup OK!", detail: "There are at least a default chat bot model and a default embedding model both configured" }]; 
-                }else {
-                    this.userMessages = [{ severity: "error", summary: "Large language models setup not yet done", detail: "At least a default chat bot model and a default embedding model both correctly configured are required" }]; 
+                if (this.isSetupCompleted === true) {
+                    this.userMessages = [{ severity: "success", summary: "Large language models setup OK!", detail: "There are at least a default chat bot model and a default embedding model both configured" }];
+                } else {
+                    this.userMessages = [{ severity: "error", summary: "Large language models setup not yet done", detail: "At least a default chat bot model and a default embedding model both correctly configured are required" }];
                 }
-                const modelsList:LLMSEntry[]=[];
+                const modelsList: LLMSEntry[] = [];
                 if (value[1]) {
-                    const chatModels=value[1];
+                    const chatModels = value[1];
                     if (chatModels && chatModels.length) {
-                        chatModels.forEach(x=>{
-                            const newEntry:LLMSEntry={
-                                configurationCode:x.configuration?.code,
-                                modelCode:x.configuration?.choosedModel?.code,
-                                modelType:"chat model",
-                                provider:x.configuration?.modelTypeCode,
-                                defaultModel:x.configuration?.defaultModel,
-                                description:x.configuration?.description
+                        chatModels.forEach(x => {
+                            const newEntry: LLMSEntry = {
+                                configurationCode: x.configuration?.code,
+                                modelCode: x.configuration?.choosedModel?.code,
+                                modelType: "chat model",
+                                provider: x.configuration?.modelTypeCode,
+                                defaultModel: x.configuration?.defaultModel,
+                                description: x.configuration?.description
                             };
                             modelsList.push(newEntry);
                         });
                     }
                 }
                 if (value[2]) {
-                    const embeddingModels=value[2];
+                    const embeddingModels = value[2];
                     if (embeddingModels && embeddingModels.length) {
-                        embeddingModels.forEach(x=>{
-                            const newEntry:LLMSEntry={
-                                configurationCode:x.configuration?.code,
-                                modelCode:x.configuration?.choosedModel?.code,
-                                modelType:"embedding model",
-                                provider:x.configuration?.modelTypeCode,
-                                defaultModel:x.configuration?.defaultModel,
-                                description:x.configuration?.description
+                        embeddingModels.forEach(x => {
+                            const newEntry: LLMSEntry = {
+                                configurationCode: x.configuration?.code,
+                                modelCode: x.configuration?.choosedModel?.code,
+                                modelType: "embedding model",
+                                provider: x.configuration?.modelTypeCode,
+                                defaultModel: x.configuration?.defaultModel,
+                                description: x.configuration?.description
                             };
                             modelsList.push(newEntry);
                         });
                     }
                 }
-                this.modelsList=modelsList;
+                this.modelsList = modelsList;
                 if (value[3]) {
                     if (!this.isSetupCompleted && !this.formGroup.controls["user"].value) {
                         this.formGroup.controls["user"].setValue(value[3].username);
@@ -144,7 +145,7 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
             }
         });
     }
-    
+
     /**
      * Submits the LLM setup form data to the backend service.
      * Creates new LLM configurations based on user input.
@@ -152,17 +153,17 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
      */
     setupLLMS() {
         const data: FastLLMSSetupData = this.formGroup.value;
-        this.loading=true;
+        this.loading = true;
         this.llmsSetupWizardService.createLLMSSetup(data).subscribe({
-            next:(opstatus:OperationStatusBoolean)=>{
-                this.isSetupCompleted=opstatus.result===true;
-                this.userMessages=opstatus.messages as ToastMessageOptions[];
-                if (this.isSetupCompleted===true) {
+            next: (opstatus: OperationStatusBoolean) => {
+                this.isSetupCompleted = opstatus.result === true;
+                this.userMessages = opstatus.messages as ToastMessageOptions[];
+                if (this.isSetupCompleted === true) {
                     this.closeWizard();
                 }
             },
-            complete:()=>{
-                this.loading=false;
+            complete: () => {
+                this.loading = false;
             }
         });
     }

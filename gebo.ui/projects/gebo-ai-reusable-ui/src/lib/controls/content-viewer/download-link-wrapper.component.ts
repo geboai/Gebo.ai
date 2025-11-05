@@ -16,9 +16,9 @@
  * It handles retrieving content URLs and formatting them for user download.
  */
 
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
-import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
+import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH, ContentMetaInfo, IngestionFileType } from "@Gebo.ai/gebo-ai-rest-api";
 
 /**

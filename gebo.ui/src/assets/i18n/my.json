@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "ပုံသေစနစ်ဘာသာစကား",
+        "help" : "ဤ Gebo.ai တပ်ဆင်မှုအတွက် ပုံသေအနေနဲ့ အသုံးပြုမယ့် စနစ်ဘာသာစကား"
+      },
+      "username" : {
+        "label" : "အီးမေးလ်",
+        "help" : "လော့ဂ်အင်ဝင်ရန် အီးမေးလ်ကို အသုံးပြုပါ"
+      },
+      "passwordC" : {
+        "label" : "စကားဝှက်ကို အတည်ပြုပါ",
+        "help" : "စကားဝှက်ကို အတည်ပြုပါ"
+      },
+      "password" : {
+        "label" : "စကားဝှက်",
+        "help" : "လော့ဂ်အင်ဝင်ရန် စကားဝှက် (အနည်းဆုံး အက္ခရာ ၈ လုံး)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " စကားဝှက်များကိုက်ညီမှုမရှိပါ "
+      },
+      "LocalAdmin" : {
+        "label" : "သင့်ရဲ့ ဒေသခံ အက်ဒ်မင်အကောင့်ကို ဖန်တီးပါ"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "ဒီအကောင့်နဲ့ ယနေ့အနာဂတ်မှာ ဆော့ဖ်ဝဲကို စနစ်တကျပြုလုပ်ရန်/စီမံခန့်ခွဲရန် အသုံးပြုပါမည်၊ ဤအချက်အလက်များသည် သင့်စနစ်တွင်သာရှိပြီး ကွန်ယက်မှတစ်ဆင့် မပို့ဆောင်ပါ"
+      },
+      "EnterBtn" : {
+        "label" : "ဝင်ရောက်ရန် လော့ဂ်အင်စာမျက်နှာသို့ သွားပါ"
+      },
+      "SetupPage" : {
+        "label" : "သင့် gebo.ai တပ်ဆင်မှုကိုပြင်ဆင်ပါ"
+      },
+      "CreateBtn" : {
+        "label" : "စနစ်တပ်ဆင်မှု ဖန်တီးပါ"
+      },
+      "LicenceFieldSet" : {
+        "label" : "လိုင်စင်ကို ဖတ်ပြီး သဘောတူပါ"
+      },
+      "AcceptMark" : {
+        "label" : "အခြေအနေများကို သဘောတူပါသည်",
+        "help" : "ဒီအချက်အချာကိုနှိပ်ခြင်းအားဖြင့် လိုင်စင်အတွင်းပါသော စည်းမျဉ်းများနှင့် အခြေအနေများကို သဘောတူသည်"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "အီးမေးလ်",
+        "help" : "လော့ဂ်အင်ဝင်ရန် အသုံးပြုမည့် အီးမေးလ်"
+      },
+      "password" : {
+        "label" : "စကားဝှက်",
+        "help" : "လော့ဂ်အင်အတွက် စကားဝှက်"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai တွင် ဝင်ရောက်ရန်"
+      },
+      "LoginBtn" : {
+        "label" : "လော့ဂ်အင်ဝင်မည်"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "အိုကေ! ",
+        "detail" : "လုပ်ဆောင်မှု အောင်မြင်ပါသည်"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 ပြင်ဆင်မှု"
+      },
+      "ProviderNameHeader" : {
+        "label" : "ပံပိုးပေးသူအမည်"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 လုံခြုံရေး ဆက်တင်များ"
+      },
+      "IdHeader" : {
+        "label" : "အိုင်ဒီ"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "နောက်သို့ - ဆက်တင် မူလမျက်နှာစာသို့"
+      },
+      "WizardUi" : {
+        "label" : "ဆက်တင် အခန်းတစ်ခု ရွေးပါ"
+      },
+      "adminUserSetupSection" : {
+        "label" : "စီမံခန့်ခွဲသူနှင့်အခြားအကောင့်များ ပြင်ဆင်ခြင်း",
+        "description" : "Gebo.ai တပ်ဆင်မှုကို စနစ်တကျ စီမံခန့်ခွဲနိုင်ရန် စီမံခန့်ခွဲသူအကောင့် တစ်ခု လုံခြုံစွာ ဖန်တီးရန် လိုအပ်သည်။ လိုအပ်ပါက အခြားအသုံးပြုသူများကိုလည်း ထည့်သွင်းနိုင်သည်။"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai အလုပ်လမ်းကြောင်း",
+        "description" : "အလုပ်လုပ်ရန် directory တစ်ခု ရွေးချယ်ပြီး ဤတွင် တပ်ဆင်မှုအတွက် ဆက်တင်များနှင့် ဖိုင်များအားလုံး သိမ်းဆည်းမည်။ ဒီဖိုင်လမ်းကြောင်းအား အချိန်နပ် Backup ဆောင်ရွက်ပေးပါလည်း ကောင်းသည်။"
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vector ဒေတာဘေ့စ် ဆက္တင်",
+        "description" : "Gebo.ai ၏ retrieve augmented generation ဝန်ဆောင်မှုများအတွက် vector ဒေတာဘေ့စ် တစ်ခု ပြင်ဆင်ဖွဲ့စည်းရန် လိုအပ်သည်။ ဗဟုသုတအချက်အလက်များအတွက် Qdrant သို့မဟုတ် Mongo Atlas ကိုရွေးချယ်နိုင်သည်။"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single signon, oauth2 အသိအမှတ်ပြုခြင်း",
+        "description" : "Oauth2 တစ်ကြိမ်တည်း အသုံးပြုခြင်းနှင့် oauth2 client ဆက်တင်မှု"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "ကြီးမားသော ဘာသာစကားမော်ဒယ်များ သတ်မှတ်ခြင်း",
+        "description" : "Cloud သို့မဟုတ် မိမိစက်/lan infra မှ LLMS များ ထည့်သွင်းသတ်မှတ်ပေးပါ။ အသုံးပြုနိုင်ရန် နောက်ဆုံးလုပ်ရန် chat မော်ဒယ်တစ်ခုနဲ့ embedding မော်ဒယ်တစ်ခု အနည်းဆုံးလိုအပ်ပါတယ်။"
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "ဂရပ် rag / ဗဟုသုတထုတ်ယူမှု ဆက်တင်",
+        "description" : "ဂရပ် rag နှင့် ဗဟုသုတထုတ်ယူမှု ဆော်စနစ် ရှိဖို့ ဆက်တင်ပေးပါ"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "မျှဝေထားသော ဖိုင်စနစ်လမ်းကြောင်း ပြင်ဆင်ခြင်း",
+        "description" : "ကုမ္ပဏီ မျှဝေထားသော ဖိုင်စနစ်ရာလမ်းကြောင်းများကို အမျိုးမျိုးသော ဗဟုသုတသိုလှောင်ခန်းများအတွင်း ရယူခြင်းအတွက် ပြင်ဆင်ဆောင်ရွက်ပါ"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence အဖွဲ့အစည်း ထည့်သွင်းမှု",
+        "description" : "Gebo.ai ကို သင့် Atlassian Confluence cloud သို့မဟုတ် local တပ်ဆင်မှုများသို့ ဝင်ရောက်နိုင်ရန် ပြင်ဆင်ပါ"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira ထည့်သွင်းမှု",
+        "description" : "Gebo.ai ကို သင့် Atlassian jira cloud တွင် အသုံးပြုနိုင်အောင် ပြင်ဆင်ပါ"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ထည့်သွင်းမှု",
+        "description" : "Microsoft Sharepoint cloud သို့မဟုတ် local တပ်ဆင်မှုများသို့ Gebo.ai ဝင်ရောက်အသုံးပြုနိုင်ရန် ဆက်တင်ပါ"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "ဗဟုသုတသိုလှောင်ခန်း တစ်ခုပြုလုပ်ပါ",
+        "description" : "အနည်းဆုံး ဗဟုသုတသိုလှောင်ခန်း တစ်ခု ပြင်ဆင်ထားရမည့်အတွက် သင့်အသုံးပြုသူများသည် Gebo.ai ၏ retrieve augmented generations ကိုကြည့်ရှုနိုင်မည်။"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "\"R.A.G.\" ဆွေးနွေးရန်ပရိုဖိုင် တစ်ခု ပြင်ဆင်ပါ",
+        "description" : "သင့် knowledge base များအနက် တစ်ခုအပေါ်အခြေခံ၍ retrieve augmented chat profile တစ်ခု ပြင်ဆင်နိုင်ပါသည်။"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ကုမ္ပဏီ Atlassian Confluence စနစ်များ ပြင်ဆင်ခြင်း"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "SystemTypeHeader" : {
+        "label" : "စနစ်အမျိုးအစား"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ပြင်ဆင်ရေးကုဒ်"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence စနစ်"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira စနစ်"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ပြင်ဆင်ရေးကုဒ်"
+      },
+      "MainPanel" : {
+        "label" : "ကုမ္ပဏီ Atlassian Jira စနစ်များ ပြင်ဆင်ခြင်း"
+      },
+      "SystemTypeHeader" : {
+        "label" : "စနစ်အမျိုးအစား"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ပြင်ဆင်ရေးကုဒ်"
+      },
+      "MainPanel" : {
+        "label" : "ကုမ္ပဏီ Microsoft Sharepoint စနစ်များ ပြင်ဆင်ခြင်း"
+      },
+      "SystemTypeHeader" : {
+        "label" : "စနစ်အမျိုးအစား"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint စနစ်"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "သင့် api-key အတွက် လိုအပ်သည့် ခရက်ဒစ် ရှိစေရန်ပေးပါ။ OpenAI ကိုရွေးပါက သင့် api အသုံးပြုမှုအတွက် အထူးခရက်ဒစ် (၁၀-၃၀$) ထည့်သွင်းရန်လိုအပ်ပါသည်။ မထည့်ပါက ပေါ်တက်လာမည့် llms traffic မရနိုင်ပါ။"
+      },
+      "MainPanel" : {
+        "label" : "သင့် api key ဖြင့် Gebo.ai llms ပံ့ပိုးသူများ သတ်မှတ်ပါ"
+      },
+      "provider" : {
+        "label" : "ကြီးမားသော ဘာသာစကားမော်ဒယ်ပံ့ပိုးသူ",
+        "help" : "OpenAI (chatgpt)၊ Google (Gemini)၊Anthropic (Claude) များမှ တစ်ခု ရွေးချယ်ပါ"
+      },
+      "user" : {
+        "label" : "အသုံးပြုသူ",
+        "help" : "apiKey နှင့် ဆက်စပ်သော အသုံးပြုသူအမည် ထည့်ပါ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ပြင်ဆင်ပါ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "အသုံးပြုမည့် LLMS ပံ့ပိုးသူများအတွက် သင့် api key"
+      },
+      "ProviderHeader" : {
+        "label" : "ပံ့ပိုးသူ"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "ပေါင်းစပ်ကုဒ်"
+      },
+      "ModelHeader" : {
+        "label" : "မော်ဒယ်"
+      },
+      "ModelTypeHeader" : {
+        "label" : "မော်ဒယ်အမျိုးအစား"
+      },
+      "DefaultModelHeader" : {
+        "label" : "မူလမော်ဒယ်"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Graph rag ပြင်ဆင်မှု ဖန်တီးပါ"
+      },
+      "MainPanel" : {
+        "label" : "Graph Rag နှင့် ဗဟုသုတထုတ်ယူမှု ပုံသေနည်း ပြင်ဆင်ပါ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ပြင်ဆင်ရေးကုဒ်"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "ပရောဂျက်"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "ဗဟုသုတသိုလှောင်ခန်းထည့်ပါ"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "ဗဟုသုတသိုလှောင်ခန်း"
+      },
+      "MainPanel" : {
+        "label" : "ဗဟုသုတသိုလှောင်ခန်းများနှင့် အကြောင်းအရာပြင်ဆင်ခြင်း"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "အကြောင်းအရာရင်းမြစ်"
+      },
+      "PublishedHeader" : {
+        "label" : "ထုတ်ဝေပြီး"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "စာရွက်စာတမ်း အရေအတွက်"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Project/ပစ္စည်း ထည့်ပါ",
+        "help" : "Project အသစ်ဖန်တီးပါ"
+      },
+      "Button1" : {
+        "help" : "ဗဟုသုတသိုလှောင်ခန်းဖွင့်ပါ"
+      },
+      "Button2" : {
+        "help" : "ပရောဂျက်ဖောင်ဖွင့်ပါ"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai အလုပ်ဖိုင်လ်ဒါ ပြင်ဆင်မှု"
+      },
+      "ConfigureBtn" : {
+        "label" : "ပြင်ဆင်ပါ"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai အလုပ်ဖိုင်လ်ဒါ တစ်ခုရွေးပါ",
+        "help" : "ဤတပ်ဆင်မှုသည် မိမိပြင်ဆင်မှုများနှင့် အကြောင်းအရာ ဘယ်လို သိမ်းဆည်းမည်ကို server ဖိုင်လ်ဒါတစ်ခုရွေးပါ။"
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "ဖိုလ်ဒါထည့်ပါ"
+      },
+      "AddFolderBtn" : {
+        "label" : "ဖိုလ်ဒါထည့်ပါ"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "MainPanel" : {
+        "label" : "Server တွင် မျှဝေထားသော ဖိုင်စနစ်လမ်းကြောင်းများ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "တိတိကျကျ လမ်းကြောင်း"
+      },
+      "DeleteHeader" : {
+        "label" : "ဖျက်ပါ"
+      },
+      "path" : {
+        "label" : "မျှဝေထားသော ဖိုင်စနစ်အရင်းအဖြစ် ဖိုလ်ဒါတစ်ခုထည့်ပါ",
+        "help" : "စာရွက်စာတမ်းသိုလှောင်ရုံအနေနဲ့ သုံးမယ့် ဖိုင်စနစ်အရင်း server ဖိုလ်ဒါတစ်ခုရွေးပါ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "ဖိုင်စနစ်အကြောင်းအရာဖော်ပြချက်ထည့်ပါ"
+      },
+      "RemovePathBtn" : {
+        "label" : "လမ်းကြောင်း ဖယ်ရှားပါ"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "ပြင်ဆင်ပါ"
+      },
+      "MainPanel" : {
+        "label" : "Vector ဒေတာဘေ့စ် ဆက်တင်"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Qdrant host အမည် သို့မဟုတ် ip လိပ်စာထည့်ပါ"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant ချိတ်ဆက်မှု ဆက်တင်များ"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant ဆက်သွယ်မှု port (ပုံသေနဲ့ ၆၃၃၄)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Qdrant အသိအမှတ်ပြုရန် Api key"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai ဆက်တင် မလိုမဖြစ်အဆင့်များ ပြီးဆုံးပါပြီ...",
+        "detail" : "မလိုမဖြစ်အဆင့်များ ပြီးဆုံးသော်လည်း အချို့အဆင့်များ လိုနေသောကြောင့် ဤ software မှ အပြည့်အဝ အသုံးမပြုနိုင်သေးပါ"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai ဆက်တင်တွင် မလိုမဖြစ်အဆင့်တချို့ လိုနေပါသည်",
+        "detail" : "Setup လုပ်ငန်းစဉ်အနက် နီနီလေးအဆင့်များအား ပြန်လည်ဆန်းစစ်ပါ"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai ဆက်တင် အောင်မြင်ပါသည်!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "ကုဒ်",
+        "help" : "OAUTH2 인증/통합ကုဒ် (registrationId) ကို ဖော်ပြချက်ထည့်ပါ။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "OAUTH2 인증/통합 အချက်အလက် ဖော်ပြချက်ထည့်ပါ။"
+      },
+      "configurationType" : {
+        "label" : "တပ်ဆင်ရည်ရွယ်ချက်",
+        "help" : "ဒီဆက်တင်ကို Gebo.ai တွင် အသုံးပြုမလား၊ သို့မဟုတ် Gebo.ai သည် တတိယဖက်စနစ်နှင့် client ဆက်သွယ်မှုရရှိရန် အသုံးပြုမလားရွေးချယ်ပါ။"
+      },
+      "authProvider" : {
+        "label" : "ပံ့ပိုးသူ",
+        "help" : "OAUTH2 인증 ပံ့ပိုးသူ ထည့်ပါ"
+      },
+      "issuerUri" : {
+        "label" : "ထုတ်ပြန်သူ URI",
+        "help" : "ပံ့ပိုးသူ၏ OAUTH2 ထုတ်ပြန်သူ URL ထည့်ပါ"
+      },
+      "authorizationUri" : {
+        "label" : "ခွင့်ပြုချက် URL",
+        "help" : "ပံ့ပိုးသူ၏ OAUTH2 ခွင့်ပြုချက် URL ထည့်ပါ"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "ပံ့ပိုးသူ၏ OAUTH2 Jwk Set url ထည့်ပါ"
+      },
+      "userInfoUri" : {
+        "label" : "အသုံးပြုသူ အချက်အလက် URL",
+        "help" : "ပံ့ပိုးသူ၏ OAUTH2 အသုံးပြုသူအချက်အလက် Url URL ထည့်ပါ"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "ပံ့ပိုးသူ၏ OAUTH2 introspection URL ထည့်ပါ"
+      },
+      "tokenUri" : {
+        "label" : "တိုကင် URL",
+        "help" : "ပံ့ပိုးသူ၏ OAUTH2 Token URL ထည့်ပါ"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 ပံ့ပိုးသူ URL များ"
+      },
+      "MainPanel" : {
+        "label" : "OAUTH2 인증/통합 အချက်အလက်အသစ် ထည့်သွင်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "oauth2 နည်းလမ်းအတွက် client အတည်ပြုအမှတ်အသား (oauth2 နှင့်အတူ အသိအမှတ်ပြုထားသော 3rd party ဆော့ဖ်ဝဲ အုပ်ချုပ်မှုဧရိယာသို့ ဝင်ရောက်၍ ရယူရပါမည်)"
+      },
+      "secret" : {
+        "label" : "လျှို့ဝှက်သော key",
+        "help" : "oauth2 နည်းလမ်းအတွက် client လျှို့ဝှက်ချက် (oauth2 နှင့်အတူ အသိအမှတ်ပြုထားသော 3rd party ဆော့ဖ်ဝဲ အုပ်ချုပ်မှုဧရိယာသို့ ဝင်ရောက်၍ ရယူရပါမည်)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence စနစ်ကို ပြင်ဆင်ဖန်တီးပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Confluence စနစ်အကြောင်း ဖော်ပြချက်ကိုရေးပါ။"
+      },
+      "CreateBtn" : {
+        "label" : "ဖန်တီးပါ"
+      },
+      "username" : {
+        "label" : "Confluence အသုံးပြုသူအမည်",
+        "help" : "Confluence အသုံးပြုသူအမည်"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ဗားရှင်း",
+        "help" : "Confluence ဗားရှင်း"
+      },
+      "baseUri" : {
+        "label" : "အခြေခံ အင်တာနက်လိပ်စာ",
+        "help" : "Onpremise တပ်ဆင်ခြင်းအတွက် base Confluence စနစ်လိပ်စာအတွက် URL သို့မဟုတ် Confluence cloud စနစ်အတွက် သင့်အဖွဲ့အစည်း base URL"
+      },
+      "password" : {
+        "label" : "Confluence စကားဝှက်",
+        "help" : "Confluence စကားဝှက်"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD apikey ကို Confluence backoffice မှရယူပါ၊ ဒီနေရာမှာ \"သင့် Atlassian Account အတွက် API Token\" ထည့်ပါ။"
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ထုတ်ဝေပါ!",
+        "help" : "တင်သွင်းမှုကို သိမ်းဆည်းပြီး knowledge base တွင် LLm များအသုံးပြုနိုင်အောင်ထားပါသည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "SettingsTab" : {
+        "label" : "ဆက်တင်များ"
+      },
+      "MainPanel" : {
+        "label" : "Confluence များကို မျှဝေခြင်း"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "အကြောင်းအရာများအတွက် အလိုအလျောက်ဖန်တီးသည့် ထူးခြားသည့်ကုဒ်။"
+      },
+      "description" : {
+        "label" : "ဖေါ်ပြချက်",
+        "help" : "Confluence မှ upload လုပ်ထားသော အကြောင်းအရာများအတွက် ဖေါ်ပြချက်ကိုရေးပါ။"
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence စနစ်",
+        "help" : "ဖန်တီးပြီးသား confluence စနစ်အညွှန်း။"
+      },
+      "parentProjectCode" : {
+        "label" : "ပရောဂျက်",
+        "help" : "မူရင်းပရောဂျက်အညွှန်း။"
+      },
+      "openZips" : {
+        "label" : "Zip ဖိုင်များဖွင့်ရန်",
+        "help" : "Zip ဖိုင်များဖွင့်ပြီး အကြောင်းအရာထုတ်ယူခွင့်ပေးပါ"
+      },
+      "tree" : {
+        "label" : "ရွေးချယ်ထားသော spaces သို့မဟုတ် စာမျက်နှာ/ခွဲစာမျက်နှာများ",
+        "help" : "မျှဝေထားသော confluence spaces နှင့် စာမျက်နှာများ အကြောင်းအရာ"
+      },
+      "programmedTables" : {
+        "label" : "အကြောင်းအရာ အသစ်စစ်ဆေးမှု အချိန်ဇယား",
+        "help" : "ပြောင်းလဲသည့်အကြောင်းအရာများကို မကြာခဏ ရယူနိုင်ရန် schedule တစ်ခု ချမှတ်ပါ"
+      },
+      "catalogingCriteria" : {
+        "label" : "Spaces, စာမျက်နှာများနှင့် ခွဲစာမျက်နှာများစီစဉ်ပုံ",
+        "help" : "Gebo.ai နှင့် မျှဝေသည့် confluence အကြောင်းအရာများတွင် spaces, စာမျက်နှာများနှင့် ခွဲစာမျက်နှာများကို စီစဉ်ပုံကို ဒီနေရာမှာရှင်းပြပေးပါ"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ယေဘုယျ ဆက်တင်များ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "MainPanel" : {
+        "label" : "Confluence စနစ်ကို တည်းဖြတ်ခြင်း"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "baseUri" : {
+        "label" : "အခြေခံ အင်တာနက်လိပ်စာ",
+        "help" : "Base Confluence စနစ်လိပ်စာ URL"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "Confluence စနစ်အတွက် အလိုအလျောက် ဖန်တီးသည့် ထူးခြားသည့်ကုဒ်။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Confluence စနစ်အကြောင်းဖော်ပြချက်ကိုရေးပါ။"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ဗားရှင်း",
+        "help" : "Confluence ဗားရှင်း"
+      },
+      "secretCode" : {
+        "label" : "အသုံးပြုမည့် မျိုးသားရေးဝင်ဘာသာရပ်",
+        "help" : "Confluence စနစ်သို့ ဝင်ရောက်ရန် အသုံးပြုမည့် identity ကို ရွေးချယ်သို့မဟုတ် ဖန်တီးပါ"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "ဂုရုပ်အသစ်"
+      },
+      "NewUserBtn" : {
+        "label" : "အသုံးပြုသူအသစ်"
+      },
+      "UsersListPanel" : {
+        "label" : "အသုံးပြုသူများစာရင်း"
+      },
+      "GroupsListPanel" : {
+        "label" : "ဂုရုပ်များစာရင်း"
+      },
+      "SournameHeader" : {
+        "label" : "အကြောင်းအမည်"
+      },
+      "UsernameHeader" : {
+        "label" : "အသုံးပြုသူအမည်"
+      },
+      "RolesHeader" : {
+        "label" : "အခန်းကဏ္ဍများ"
+      },
+      "NameHeader" : {
+        "label" : "အမည်"
+      },
+      "EditBtn" : {
+        "label" : "ပြင်ဆင်မည်"
+      },
+      "DisabledHeader" : {
+        "label" : "ဖျက်သိမ်းထားသည်"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "UserIds" : {
+        "placeholder" : "အသုံးပြုသူများ ရွေးချယ်ပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "MainPanel" : {
+        "label" : "အသုံးပြုသူအုပ်စု တည်းဖြတ်ခြင်း"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "အသုံးပြုသူအုပ်စု၏ ဖော်ပြချက်ကို ရိုက်ထည့်ပါ"
+      },
+      "code" : {
+        "label" : "တစ်ခုတည်းသောကုဒ်",
+        "help" : "အသုံးပြုသူအုပ်စု၏ ကုဒ်ကို ရိုက်ထည့်ပါ"
+      },
+      "userIds" : {
+        "label" : "အသုံးပြုသူစာရင်း",
+        "help" : "အုပ်စုတွင် ပါဝင်မည့်အသုံးပြုသူများ ရွေးချယ်ပါ"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ဖန်တီးမည်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "jira system ၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "MainPanel" : {
+        "label" : "jira system အပြင်အဆင် ပြုလုပ်မှု"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းမည်"
+      },
+      "username" : {
+        "label" : "jira အသုံးပြုသူအမည်",
+        "help" : "jira အသုံးပြုသူအမည်"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira backoffic တွင် ရရှိသော jira CLOUD apikey ကို ဤနေရာတွင် 'API Token for your Atlassian Account' ထည့်ရန်လိုအပ်သည်။"
+      },
+      "baseUri" : {
+        "label" : "အခြေခံ အင်တာနက်လိပ်စာ",
+        "help" : "onpremise installation အတွက် jira system အခြေခံ url သို့မဟုတ် သင့်အဖွဲ့အစည်းအတွက် jira cloud system base url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "PublishBtn" : {
+        "label" : "မျှဝေမည်!",
+        "help" : "သိမ်းပြီး knowledge base တွင် LLm's များအတွက်မူဝါဒဖြင့် အသုံးပြုနိုင်အောင်လုပ်ပါသည်"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းမည်"
+      },
+      "SettingsTab" : {
+        "label" : "ဆက်တင်များ"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      },
+      "MainPanel" : {
+        "label" : "jira အကြောင်းအရာမျှဝေခြင်း"
+      },
+      "code" : {
+        "label" : "အထူးကုဒ်",
+        "help" : "အလိုအလျောက် ထုတ်ပေးသော ယူနစ်ကုဒ်ကို အသုံးပြုသည်။"
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "လက်ရှိထားရှိပြီးသား jira system ကို ရည်ညွှန်းထားသည်။"
+      },
+      "parentProjectCode" : {
+        "label" : "ပရော့ဂျက်",
+        "help" : "မူလပရောဂျက်ကို ရည်ညွှန်းပါ။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "တင်ထားသော jira အကြောင်းအရာအတွက် ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "programmedTables" : {
+        "label" : "အကြောင်းအရာ ပြင်ဆင်မှု စစ်ဆေးချိန်ဇယား",
+        "help" : "ပိုမိုထိရောက်သော retrieve augmented generation system အား နောက်ဆုံးဆန်းစစ်ထားနိုင်အောင် ပြင်ဆင်မှုများ၏ အချိန်ဇယား များကို အပြင်အဆင် ပြုလုပ်ပါ"
+      },
+      "openZips" : {
+        "label" : "zip ဖိုင်များ ဖွင့်ရန်",
+        "help" : "zip ဖိုင်များကိုဖွင့်၍ အကြောင်းအရာထုတ်ယူခြင်းကို အသုံးပြုပါ"
+      },
+      "tree" : {
+        "label" : "ရွေးချယ်ထားသော spaces သို့မဟုတ် စာမျက်နှာများ/အခန်းငယ်များ",
+        "help" : "မျှဝေထားသော jira projects နှင့် tickets များ၏ အသွင်အပြင် Tree"
+      },
+      "catalogingCriteria" : {
+        "label" : "Spaces, pages နှင့် subpages စီမံခန့်ခွဲဖွဲ့စည်းမှု",
+        "help" : "Gebo.ai ဖြင့် ချိတ်ဆက်ထားသည့် jira အကြောင်းအရာ တွင် spaces, pages နှင့် sub pages များ အဖွဲ့စည်းသည့် နည်းလမ်းဖြစ်စဉ်ကို ဤနေရာတွင် ရှင်းပြပါ"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "jira system ၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "MainPanel" : {
+        "label" : "jira system ကို တည်းဖြတ်ခြင်း"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းမည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "baseUri" : {
+        "label" : "အခြေခံ အင်တာနက်လိပ်စာ",
+        "help" : "jira system ၏ အခြေခံအနားလိပ်စာ url"
+      },
+      "code" : {
+        "label" : "အထူးကုဒ်",
+        "help" : "jira system အတွက် အလိုအလျောက် ဖန်တီးသည့် ယူနစ်ကုဒ်"
+      },
+      "secretCode" : {
+        "label" : "အသုံးပြုသော ပေါ်ပေါက်ချက်",
+        "help" : "jira system ကို ဝင်ရောက်အသုံးပြုရန် ပေါ်ပေါက်ချက်ကို ရွေးချယ်ပါ သို့မဟုတ် ဖန်တီးပါ"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "ဖေါ်ပြချက်",
+        "help" : "SharPpoint/OneDrive system ၏ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint ဗားရှင်း",
+        "help" : "sharepoint ဗားရှင်း"
+      },
+      "secret" : {
+        "label" : "လျှို့ဝှက် key",
+        "help" : "ဒီ app ကို microsoft \"entra\" ထဲမှာ register လုပ်ထားတဲ့ Oauth2 client secret (microsoft cloud admin console မှာ ရယူနိုင်သည်)"
+      },
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "ဒီ app ကို microsoft \"entra\" ထဲမှာ register လုပ်ထားတဲ့ Oauth2 client identifier (microsoft cloud admin console မှာ ရယူနိုင်သည်)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID",
+        "help" : "သင့်အဖွဲ့အစည်း့ microsoft \"entra\" ထုတ်လုပ်မှုအတွက် Oauth2 tenant identifier (microsoft cloud admin console မှာ ရယူနိုင်သည်)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai အတွက် Microsoft oauth2 app registration အချက်အလက်များ"
+      },
+      "CreateBtn" : {
+        "label" : "အသစ်ဖန်တီးမည်"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းမည်"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive system configuration အသစ်ဖန်တီးရန်"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းမည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "PublishBtn" : {
+        "label" : "ထုတ်လုပ်မည်!",
+        "help" : "သိမ်းပြီး အကြောင်းအရာများကို knowledge base တွင် LLm များဆီ ရရှိနိုင်အောင် ပြုလုပ်သည်"
+      },
+      "SettingsTab" : {
+        "label" : "ဆကျသွယ်မှုအပြင်အဆင်များ"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive အကြောင်းအရာမျာ် သုံးဝေခြင်း"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "အကြောင်းအရာများအတွက် အလိုအလျောက် ထုတ်ပေးသည့် ထူးခြားသောကုဒ်"
+      },
+      "parentProjectCode" : {
+        "label" : "ပရောဂျက်",
+        "help" : "မူလပရောဂျက်ကိုဖြစ်စေသော အညွှန်း"
+      },
+      "description" : {
+        "label" : "ဖေါ်ပြချက်",
+        "help" : "SharePoint/OneDrive အချက်အလက်ရင်းမြစ်များ၏ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint system",
+        "help" : "ထည့်သွင်းပြီးသား SharePoint/OneDrive system အညွှန်း"
+      },
+      "openZips" : {
+        "label" : "zip ဖိုင်များဖွင့်ရန်",
+        "help" : "zip ဖိုင်များဖွင့်ခြင်းနှင့် အကြောင်းအရာထုတ်ယူမှုကို فعال ပြုလုပ်မည်"
+      },
+      "tree" : {
+        "label" : "ရွေးချယ်ထားသော Sharepoint sites/pages/subpages သို့မဟုတ် OneDrive drives/folder/files များ",
+        "help" : "မျှဝေထားသော Sharepoint/OneDrive အကြောင်းအရာများ"
+      },
+      "programmedTables" : {
+        "label" : "အကြောင်းအရာ ပြောင်းလဲမှု စစ်ဆေးမှု အချိန်ပေါ်အပ်ဒိတ်ဇယား",
+        "help" : "ပြောင်းလဲမှုရှိသည့် အကြောင်းအရာများကို စနစ်တကျသတ်မှတ်ပြီး ရယူခြင်းအတွက် schedule ပြုလုပ်ပါ"
+      },
+      "catalogingCriteria" : {
+        "label" : "နေရာများ၊ စာမျက်နှာများနှင့် အခြားစာမျက်နှာ များကို အစီအစဉ်အတိုင်းစီစဉ်ခြင်းသော အသုံးအဆောင်အချက်များ",
+        "help" : "SharePoint အကြောင်းအရာများကို Gebo.ai နှင့်မျှဝေထားသည့်အခါ ဖန်တီးသည့် နေရာ၊ စာမျက်နှာ၊ စာမျက်နှာခွဲများကို မည်သို့စီစဉ်ထားသည်ကို ဤနေရာတွင်ရှင်းပြပါ"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint system တည်းဖြတ်နေသည်"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "ဘောင်သတ် အပြင်အဆင်များ"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းမည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "secretCode" : {
+        "label" : "အသုံးပြုသော အထောက်အထား",
+        "help" : "sharepoint system သို့ လက်ခံအသုံးပြုသည့် အထောက်အထားကို ရွေးပါ သို့မဟုတ် ဖန်တီးပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "Sharepoint system အတွက် အလိုအလျောက် ထုတ်ပေးသည့် ထူးခြားသောကုဒ်"
+      },
+      "description" : {
+        "label" : "ဖေါ်ပြချက်",
+        "help" : "sharepoint system ၏ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint ဗားရှင်း",
+        "help" : "sharepoint ဗားရှင်း"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "ပယ်ဖျက်"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "သိမ်းမည်"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "အထွေထွေအချက်အလက်/အကြောင်းအရာ ဆက်တင်များ"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms ဆက်တင်များ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "အလိုအလျောက်ဖန်တီးသည့် knowledge graph ဒေတာထုတ်ယူမှုအဆင့်၏ ထူးခြားသောကုဒ်"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/knowledge ထုတ်ယူမှု ဆက်တင်ခြင်း"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "ဤ knowledge graph ဒေတာထုတ်ယူမှုအဆင့်ဆက်တင်မှုအတွက် ဖော်ပြချက်ထည့်ပါ"
+      },
+      "extractionPrompt" : {
+        "label" : "အချက်အလက်ထုတ်ယူချက် prompt",
+        "help" : "အကျိူးတိုးပညာရပ်ကြီး မော်ဒယ် prompt ကို entity/event/relationship နှင့် အခြားနာမည်များ ထုတ်ယူရန်"
+      },
+      "usedModelConfiguration" : {
+        "label" : "ဒေတာထုတ်ယူမှုအတွက် အသုံးပြုသော LLM",
+        "help" : "Knowledge ထုတ်ယူရန် အသုံးပြုသည့် အကျိူးတိုးပညာရပ်ကြီး မော်ဒယ်ကို သတ်မှတ်ပါ၊ တစ်ခုမှ မရွေးထားလျှင် မူလသတ်မှတ်ထားသည် သုံးမည်။"
+      },
+      "graphRagAllSources" : {
+        "label" : "ဒေတာအရင်းအမြစ်အားလုံးတွင် graph rag အသုံးပြုမည်",
+        "help" : "True ဖြစ်ပါက knowledge bases/project/data sources အားလုံးကို knowledge ထုတ်ယူရန်လုပ်ဆောင်မည်၊ မဟုတ်ပါက သီးသန့်စီစဉ်ထားသည့်အရာများကိုသာ လုပ်ဆောင်မည်"
+      },
+      "defaultModel" : {
+        "label" : "မူရင်းအကြီးစားဘာသာပြန်မော်ဒယ်",
+        "help" : "Knowledge ထုတ်ယူရန် မူရင်းအကြီးစားဘာသာပြန်မော်ဒယ်ကို အသုံးပြုမည်"
+      },
+      "processEveryDocument" : {
+        "label" : "ဖိုင်အားလုံးတွင် graph rag အသုံးပြုမည်",
+        "help" : "ဖိုင်အားလုံးတွင် graph rag algorithm များအသုံးပြုမည်၊ ဤသည်မှ တိုက်ရိုက်စစ်ဆေးခြင်းအသေးစိတ်များကို မြှင့်တင်စေသော်လည်း အလုပ်လုပ်ရန် လိုအပ်သည့်ချိန်နှင့်ကုန်ကျစရိတ်များ များဝင်စေနိုင်သည်"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag များလုပ်ဆောင်ရန် ဖိုင်ရွေးချယ်ခြင်း စံနှုန်းများ",
+        "help" : "Graphrag အတွက် အချက်အလက်ထုတ်ယူမှု ပိုက်လိုင်းသို့ ပေးပို့ရန် ဖိုင်ပေါ်တွင် စံနှုန်းများ တည်းဖြတ်ပါ၊ ဖိုင်နာမည်နှင့်စံနှုန်း တစ်ခုအနည်းဆုံး/ဖိုင်အမျိုးအစား/ဖိုင်အရွယ်အစားအမြင့်ဆုံး byte အရေအတွက်/နောက်ဆုံးပြင်ဆင်ခဲ့သည့်နေ့အရက် နည်းဆုံးကို ရွေးချယ်ပါ"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "ဖိုင်အမျိုးအစားများကို ရွေးပါ"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ဖိုင်အမည်ဖျော်ဖြေရန် ချန်လှပ်ချက်များ"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "နောက်ဆုံး ပြုပြင်ခဲ့သည့်နေ့၊ ရက်အရေအတွက်"
+      },
+      "nameFilter" : {
+        "placeholder" : "ဖိုင်အမည်"
+      },
+      "maxFileSize" : {
+        "placeholder" : "အကြီးဆုံးဖိုင်အရွယ်အစား (Bytes)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "ယေဘုယျ အချက်အလက်များ"
+      },
+      "MainPanel" : {
+        "label" : "Knowledge base ကိုတည်းဖြတ်နေသည်"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Knowledge base ဝင်ရောက်ခွင့် ဆက်တင်များ"
+      },
+      "code" : {
+        "label" : "တစ်ခုတည်းသော ကုဒ်",
+        "help" : "Knowledge base ၏ အလိုအလျောက် ထုတ်ပေးသော တစ်ခုတည်းသော ကုဒ်။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Knowledge base ၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "embeddingModelReferences" : {
+        "label" : "အသုံးပြုသော embedding မော်ဒယ်များ (အမြင့်ဆုံးတန်ဖိုးသတ်မှတ်ရန် ဖျက်ထားပါ)",
+        "help" : "Knowledge base အတွက် embedding မော်ဒယ်များ။ ဖွင့်ခြင်းမရှိပါက စနစ်၏မူလတန်ဖိုးကို အသုံးပြုပါမည်။"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "IndexBtn" : {
+        "label" : "အညွှန်း",
+        "help" : "အကြောင်းအရာများကို ပြန်လည်အညွှန်းတပ်မည်"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Project သို့မဟုတ် item ကို တည်းဖြတ်ခြင်း"
+      },
+      "code" : {
+        "label" : "တစ်ခုတည်းသော ကုဒ်",
+        "help" : "Project ၏ အလိုအလျောက် ထုတ်ပေးသော တစ်ခုတည်းသော ကုဒ်။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Project ၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "knowledge base",
+        "help" : "knowledge base။"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "IndexBtn" : {
+        "label" : "အညွှန်း",
+        "help" : "အကြောင်းအရာများကို ပြန်လည်အညွှန်းတပ်မည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းမည်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ item/project အသစ်ထည့်ပါ",
+        "help" : "အသစ်ထည့်ပါ..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "တစ်လွှားအသုံးပြုနိုင်သည်",
+        "help" : "လူတိုင်းအသုံးပြုနိုင်သည်"
+      },
+      "accessibleGroups" : {
+        "label" : "အုပ်စုများရဲ့စာရင်း",
+        "help" : "ခွင့်ပြုထားသောအုပ်စုများကိုရွေးပါ"
+      },
+      "accessibleUsers" : {
+        "label" : "အသုံးပြုသူများရဲ့စာရင်း",
+        "help" : "ခွင့်ပြုထားသောအသုံးပြုသူများကိုရွေးချယ်ပါ"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "ဒိုင်ဘာ့ဒ်"
+      },
+      "LLMSTab" : {
+        "label" : "ချတ်နှင့် embedding အတွက် LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag ချတ် ပရိုဖိုင်များ/မော်ဒယ် prompt များ"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "သိဒ်စွမ်းရင်းနှီးမြုပ်နှံမှုများနှင့် ပရောဂျက်များ"
+      },
+      "UsersGroupTab" : {
+        "label" : "အသုံးပြုသူများ နှင့် အုပ်စုများ"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai မော်ဂျူး များ၏ ဆက်တင်"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ချိန်ညှိရန်"
+      },
+      "ConfigureBtn" : {
+        "label" : "ချိန်ညှိရန်"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "အသစ်ပြုလုပ်သည့် prompt ဖန်တီးမှု"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "အသစ်ပြုလုပ်သည့် chat profile"
+      },
+      "MainPanel" : {
+        "label" : "Retrivial augmented generation chat profiles"
+      },
+      "PromptsPanel" : {
+        "label" : "Prompts သိမ်းဆည်းမှုနှင့် မူလ prompts များ"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "知识库များ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ConfigureBtn1" : {
+        "label" : "ပြင်ဆင်ရန်"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "အသစ်သော ဗဟုသုတ အချက်အလက် စုစည်းမှု"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "embedding model ဆောင်ရွက်မှု အသစ်"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "chat model ဆောင်ရွက်မှု အသစ်"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "ModelHeader" : {
+        "label" : "မော်ဒယ်"
+      },
+      "ModelProviderHeader" : {
+        "label" : "မော်ဒယ်ပံ့ပိုးသူ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ပြင်ဆင်ရန်"
+      },
+      "CodeHeader2" : {
+        "label" : "ကုဒ်"
+      },
+      "DescriptionHeader2" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "မော်ဒယ်ပံ့ပိုးသူ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ပြင်ဆင်ရန်"
+      },
+      "ModelHeader2" : {
+        "label" : "မော်ဒယ်"
+      },
+      "ChatmodelsZone" : {
+        "label" : "ပြင်ဆင်ပြီး chat မော်ဒယ်များ"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "ပြင်ဆင်ပြီး embedding မော်ဒယ်များ"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "မော်ဒယ်ကို စမ်းသပ်နေသည်"
+      },
+      "TestChatBtn" : {
+        "label" : "စမ်းသပ်စာပြော"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက်ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် OpenAI token ကို ရွေးချယ်ပါ"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ်ရရှိမှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်အသုံးပြုပါမည်"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI စာပြောမော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် OpenAI စာပြောမော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "GeneralInfosTab" : {
+        "label" : "အခြေခံအချက်အလက်များ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "အဆင့်မြင့် setting များ"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding မော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် OpenAI token ကို ရွေးချယ်ပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding မော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် OpenAI embedding မော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက embedding မော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "baseUrl" : {
+        "label" : "Ollama server အခြေခံ လိပ်စာ",
+        "help" : "Ollama local သို့မဟုတ် lan server ပြန်ကြားသော အခြေခံလိပ်စာ (ဥပမာ http://servername:234/)"
+      },
+      "choosedModel" : {
+        "label" : "Ollama စာပြောမော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် Ollama စာပြောမော်ဒယ်ကို ရွေးချယ်ပါ။",
+        "placeholder" : "မော်ဒယ်ရွေးချယ်ပါ"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် Ollama token ကို ရွေးချယ်ပါ (ရွေးချယ်နိုင်ပါသည်)"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "MainPanel" : {
+        "label" : "Ollama local (သို့မဟုတ် lan) server စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် Anthropic token ကို ရွေးချယ်ပါ"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic စာပြောမော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် Anthropic စာပြောမော်ဒယ်ကို ရွေးချယ်ပါ။",
+        "placeholder" : "မော်ဒယ်ရွေးချယ်ပါ"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "အဆင့်မြင့် setting များ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "အခြေခံအချက်အလက်များ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် MistralAI token ကို ရွေးချယ်ပါ"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI စာပြောမော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် MistralAI စာပြောမော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "GeneralInfosTab" : {
+        "label" : "အခြေခံအချက်အလက်များ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "အဆင့်မြင့် setting များ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI စာပြောမော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် Google Vertex AI စာပြောမော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် Google Vertex AI token ကို ရွေးချယ်ပါ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "TabGeneralInfos" : {
+        "label" : "အခြေခံအချက်အလက်များ"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "အဆင့်မြင့် setting များ"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် Deepseek token ကို ရွေးချယ်ပါ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek စာပြောမော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် Deepseek စာပြောမော်ဒယ်ကို ရွေးချယ်ပါ။",
+        "placeholder" : "မော်ဒယ်ရွေးချယ်ပါ"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "အဆင့်မြင့် setting များ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "အခြေခံအချက်အလက်များ"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek စာပြောမော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "baseUrl" : {
+        "label" : "စာပြောမော်ဒယ် API အခြေခံ server လိပ်စာ",
+        "help" : "စာပြောမော်ဒယ်အတွက် အခြေခံလိပ်စာ။"
+      },
+      "apiSecretCode" : {
+        "label" : "စာပြောမော်ဒယ် API token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် စာပြောမော်ဒယ် API token ကို ရွေးချယ်ပါ (optional)"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလစာပြောမော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက စာပြောမော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "choosedModel" : {
+        "label" : "စာပြောမော်ဒယ် chat မော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် စာပြောမော်ဒယ် မော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "GeneralInfosTab" : {
+        "label" : "အခြေခံအချက်အလက်များ"
+      },
+      "TitleFragment" : {
+        "label" : "Chat မော်ဒယ်ပေးသွင်းသူအား တည်းဖြတ်နေသည်:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "အဆင့်မြင့် setting များ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "မော်ဒယ်သုံးသပ်ခွင့် setting များ"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "MainPanel" : {
+        "label" : "Ollama local (သို့မဟုတ် lan) embedding မော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် Ollama token ကို ရွေးချယ်ပါ"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding မော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် Ollama embedding မော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက embedding မော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "baseUrl" : {
+        "label" : "Ollama server အခြေခံ လိပ်စာ",
+        "help" : "Ollama local သို့မဟုတ် lan server ပြန်ကြားသော အခြေခံလိပ်စာ (ဥပမာ http://servername:234/)"
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding မော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding မော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် MistralAI embedding မော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက embedding မော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် MistralAI token ကို ရွေးချယ်ပါ"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding မော်ဒယ်ဖန်တီးမှုကို တည်းဖြတ်နေသည်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding မော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် Google Vertex AI embedding မော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက embedding မော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "embedding မော်ဒယ်ဖန်တီးချက်အတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် Google Vertex AI token ကို ရွေးချယ်ပါ"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "နောက်သို့ပြန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "TitleFragment" : {
+        "label" : "embedding မော်ဒယ်ပေးသွင်းသူအား တည်းဖြတ်နေသည်:"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Embedding မော်ဒယ် ဖန်တီးမှုအတွက် ဖော်ပြချက် ထည့်သွင်းပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသည့်ကုဒ်",
+        "help" : "Embedding မော်ဒယ် ဖန်တီးမှုအတွက် အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသည့်ကုဒ်"
+      },
+      "choosedModel" : {
+        "label" : "Embedding မော်ဒယ် embedding မော်ဒယ်ရွေးချယ်မှု",
+        "help" : "အသုံးပြုမည့် embedding မော်ဒယ်ကို ရွေးချယ်ပါ။"
+      },
+      "baseUrl" : {
+        "label" : "Embedding မော်ဒယ် API server လိပ်စာ",
+        "help" : "Embedding မော်ဒယ် server ၏ အခြေခံလိပ်စာ။"
+      },
+      "defaultModel" : {
+        "label" : "ဤအရာကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "မှန်ပါက embedding မော်ဒယ် ရွေးချယ်မှု မရှိသည့်နေရာတွင် ဤမော်ဒယ်ကို မူလအဖြစ်သတ်မှတ်ပါမည်"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding မော်ဒယ် API token",
+        "help" : "ဤမော်ဒယ်အတွက် အသုံးပြုမည့် embedding မော်ဒယ် API token ကို ရွေးချယ်ပါ"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "စည်းမျဉ်းချုပ်ဆွေးနွေးမှုအချက်အလက်များ"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ဤဆွေးနွေးမှုကို ဖျက်ပါ"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "ဆွေးနွေးမှုအမည် ပြောင်းရန်"
+      },
+      "QueryControl" : {
+        "placeholder" : "Chat bot အတွက် မက်ဆေ့ခ်ျရေးပါ"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "description" : {
+        "label" : "ဆွေးနွေးမှုဖော်ပြချက်",
+        "help" : "ဤဆွေးနွေးမှု၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "အသုံးပြုထားသောမော်ဒယ်",
+        "help" : "မော်ဒယ်ကုဒ်"
+      },
+      "providerId" : {
+        "label" : "Chat မော်ဒယ်ပေးသူ",
+        "help" : "LLms ပံ့ပိုးသူ driver"
+      },
+      "functions" : {
+        "label" : "Chat မော်ဒယ်ခေါ်ယူနိုင်သောလုပ်ဆောင်ချက်များ",
+        "help" : "ဤ chat မော်ဒယ်အတွက် အသုံးပြုနိုင်သော လုပ်ဆောင်ချက်စာရင်း"
+      },
+      "NameCol" : {
+        "label" : "အမည်"
+      },
+      "DescriptionCol" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "kbases" : {
+        "label" : "အသုံးပြုနိုင်သော သိပ္ပံအခြေခံများ",
+        "help" : "ဤ RAG chat တွင် အသုံးပြုထားသည့် သိပ္ပံအခြေခံစာရင်း"
+      },
+      "CloseBtn" : {
+        "help" : "ပိတ်ပါ"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "မှတ်တမ်းတင်ပါ",
+        "help" : "အသံဖိုင်တစ်ခု မှတ်တမ်းတင်ပြီး ပေးပို့ပါ"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "ဒေတာပြန်သွင်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "SelectHeader" : {
+        "label" : "ရွေးပါ"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "ပြီးဆုံးသည့် နေ့/အချိန်"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "စတင်သည့် နေ့/အချိန်"
+      },
+      "ProcessingHeader" : {
+        "label" : "လုပ်ဆောင်နေသည်"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "FinishedHeader" : {
+        "label" : "ပြီးဆုံးသည်"
+      },
+      "WithErrorHeader" : {
+        "label" : "အမှားဖြင့်"
+      },
+      "LogTableComponent" : {
+        "help" : "ဤသည်သည် မျှဝေထားသော ဖိုင်စနစ်ဧရိယာ ingestion မှတ်တမ်းပါ"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "လုပ်ငန်းများ စုစုပေါင်းအခြေအနေ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "CloseBtn" : {
+        "label" : "ပိတ်ရန်"
+      },
+      "PublicationLogTab" : {
+        "label" : "ထုတ်ဝေမှတ်တမ်း"
+      },
+      "MainPanel" : {
+        "label" : "ထုတ်ဝေမှုမှတ်တမ်း"
+      },
+      "actualStatus" : {
+        "label" : "အခြေအနေ",
+        "help" : "အလုပ်တာဝန်၏ အခြေအနေ၊ လုပ်ဆောင်နေဆဲ၊ ပြီးဆုံးသော်လည်း သို့မဟုတ် အမှားဖြင့်ပြီးဆုံးခြင်း ဖြစ်နိုင်သည်။"
+      },
+      "publishingSystem" : {
+        "label" : "ထုတ်ဝေထားသော အကြောင်းအရာ သတ်မှတ်မှု",
+        "help" : "ထုတ်ဝေထားသော အကြောင်းအရာ အချက်အလက်"
+      },
+      "startDateTime" : {
+        "label" : "စတင်သည့် နေ့/အချိန်",
+        "help" : "အကြောင်းအရာ တစ်ပြိုင်နက်တည်း ချိတ်ဆက်မှု အလုပ်တာဝန်၏ စတင်သည့် နေ့နှင့်အချိန်"
+      },
+      "endDateTime" : {
+        "label" : "ပြီးဆုံးသည့် နေ့/အချိန်",
+        "help" : "အကြောင်းအရာ တစ်ပြိုင်နက်တည်း ချိတ်ဆက်မှု အလုပ်တာဝန်၏ ပြီးဆုံးသည့် နေ့နှင့်အချိန်"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "လုံးဝမလုပ်ဆောင်နိုင်ခဲ့ပါ"
+      },
+      "ProcessedCompletely" : {
+        "label" : "အပြည့်အဝလုပ်ဆောင်ပြီးပါပြီ"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding နှင့် စုစုပေါင်းစာရွက်အရေအတွက်"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "အသေးစိတ်ကြည့်ပါ"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "ပရောမ့်ကို ဖန်တီးပါ"
+      },
+      "PromptWizardBtn" : {
+        "label" : "ပရောမ့် ဗျူအိုင်ဇတ်",
+        "help" : "ဤနည်းလမ်းကို အသုံးပြု၍ သင့်ရည်မှန်းချက်များအတွက် ပရောမ့်ကို LLM မှ ဖန်တီးစေပါ"
+      },
+      "acceptPrompt" : {
+        "label" : "ပရောမ့်ကို အတည်ပြုပါ"
+      },
+      "promptWizardUI" : {
+        "label" : "ပရောမ့် ပံုစံဖန်တီးမှု ဗျူအိုင်ဇတ်"
+      },
+      "cancel" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "response" : {
+        "label" : "အကြံပြုထားသည့် ပရောမ့် ပံုစံ",
+        "help" : "သင့်ရည်မှန်းချက်အတွက် ဖန်တီးပေးထားသည့် ပုံစံစာသား (သင်သည် ပြင်ဆင်ပြောင်းလဲနိုင်သည်)"
+      },
+      "modelCode" : {
+        "label" : "အသုံးပြုရန် ချတ်မော်ဒယ်",
+        "help" : "ပရောမ့်ပံုစံ ဖန်တီးရန် မေးမြန်းလိုသော ချတ်မော်ဒယ်ကို ရွေးချယ်ပါ"
+      },
+      "query" : {
+        "label" : "ပရောမ့်ပံုစံ တောင်းဆိုမှု",
+        "help" : "AI သည် အသုံးပြုသူအား အထောက်အပံ့ပေးမည့် ရည်မှန်းချက်ကို ဒုတိယပုဒ်ဖြင့် ဖော်ပြပါ"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "အပူချိန်",
+        "help" : "မော်ဒယ်မှတုံ့ပြန်မှုအပူချိန်၊ 0 မှ 1 အထိ (မသိရင် ထားလိုက်ပါ)"
+      },
+      "contextLength" : {
+        "label" : "အကြောင်းအရာ အရှည် (tokens)",
+        "help" : "AI မော်ဒယ်တစ်ခု တုံ့ပြန်ရာတွင် စဉ်းစားနိုင်သော စာသားပမာဏ (မသတ်မှတ်လျှင် 1047576 ကို အသုံးပြုပါမည်)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP ပါရာမီတာ 0 မှ 1 အထိ (မသိရင် ထားလိုက်ပါ)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "ဒီမော်ဒယ်အတွက် ဖွင့်ထားသောလုပ်ဆောင်ချက်များ",
+        "help" : "စကားပြောမှုအတွင်း မော်ဒယ်က အသုံးပြုနိုင်သောလုပ်ဆောင်ချက်များ"
+      },
+      "defaultModelPrompt" : {
+        "label" : "မော်ဒယ်အတွက် မူရင်းချန်ထားချက်",
+        "help" : "စကားပြောမော်ဒယ်အတွက် မူရင်းချန်ထားချက်ကို ပြင်ဆင်ပါ။"
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "မှတ်စွဲဖော်ပြချက်ကိုထည့်ပါ။"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "အလိုအလျောက်ဖန်တီးသောထူးခြားသောအထောက်အထားကုဒ်။"
+      },
+      "secretType" : {
+        "label" : "အထောက်အထားအမျိုးအစား",
+        "help" : "ဝေးလံသောစနစ်အတွက်ဖန်တီးမည့်အထောက်အထားအမျိုးအစားကိုရွေးပါ"
+      },
+      "InsertBtn" : {
+        "label" : "ထည့်သွင်းပါ"
+      },
+      "token" : {
+        "label" : "တိုးကင်",
+        "help" : "တိုးကင်ကိုထည့်ရန်။"
+      },
+      "user" : {
+        "label" : "အသုံးပြုသူ",
+        "help" : "တိုးကင်နှင့် ပြသသည့် အသုံးပြုသူကိုထည့်ပါ။"
+      },
+      "MainPanel" : {
+        "label" : "အထောက်အထားဖန်တီးနေသည်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်မည်"
+      },
+      "username" : {
+        "label" : "အသုံးပြုသူအမည်",
+        "help" : "အသုံးပြုသူအမည်ကိုထည့်ပါ။"
+      },
+      "password" : {
+        "label" : "စကားဝှက်",
+        "help" : "စကားဝှက်ကိုထည့်ပါ။"
+      },
+      "email" : {
+        "label" : "အီးမေးလ်/အသုံးပြုသူအမည်",
+        "help" : "ssh key နှင့် ဆက်စပ်ထားသော အီးမေးလ် သို့မဟုတ် အသုံးပြုသူအမည်ကို ထည့်ပါ။"
+      },
+      "key" : {
+        "label" : "လျှို့ဝှက်သော key",
+        "help" : "ပုဂ္ဂလိက key ဖိုင်ကိုဖွင့်ပြီး ဒီစာရိုက်ရာနေရာမှာကူးထည့်ပါ။"
+      },
+      "passphrase" : {
+        "label" : "key စကားဝှက်",
+        "help" : "key စကားဝှက်ကိုထည့်ပါ။"
+      },
+      "pub" : {
+        "label" : "အများသုံး key",
+        "help" : "အများသုံး key ဖိုင်ကိုဖွင့်ပြီး ဒီစာရိုက်ရာနေရာမှာကူးထည့်ပါ။"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "တစ်ဦးချင်းသီးသန့်ကုဒ်",
+        "help" : "အလိုအလျောက်ပြုလုပ်ပေးသည့် အကြောင်းအရာများ၏ တစ်ဦးချင်းသီးသန့်ကုဒ်။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "ဖိုင်စနစ်အတွင်းတင်ခဲ့သည့် အကြောင်းအရာအတွက် ဖော်ပြချက်ထည့်ပါ။"
+      },
+      "parentProjectCode" : {
+        "label" : "ပရောဂျက်",
+        "help" : "မူလပရောဂျက်ကို ရည်ညွှန်းခြင်း။"
+      },
+      "upload" : {
+        "label" : "အကြောင်းအရာများ တင်ပါ",
+        "help" : "Browse ခလုတ်ကိုနှိပ်ပြီး zip ဖိုင်များ သို့မဟုတ် အခြားဖိုင်များ ရွေးချယ်ပါ"
+      },
+      "openZips" : {
+        "label" : "zip ဖိုင်များ ဖွင့်ပါ",
+        "help" : "zip ဖိုင်များကို ဖွင့်ခြင်းနှင့် အကြောင်းအရာ ဖြုတ်ယူမှုကို ဖွင့်ပါ"
+      },
+      "PublishBtn" : {
+        "label" : "ဖော်ပြမည်!",
+        "help" : "သိမ်းဆည်းပြီး ဤအကြောင်းအရာများကို စုစည်းထားသော ဒေတာများအတွင်းမှ LLm များအတွက် ရရှိနိုင်အောင် ပြုလုပ်သည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ပါ"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      },
+      "MainPanel" : {
+        "label" : "တင်သွင်းထားသော အကြောင်းအရာ တည်းဖြတ်ခြင်း"
+      },
+      "SettingsTab" : {
+        "label" : "ဆက်တင်များ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Build systems ပြင်ဆင်ရန်",
+        "help" : "Meta အချက်အလက်များနှင့် ပေါင်းထည့်ထားသည့် artifacts အချက်အလက်များကို စစ်ဆေးရန် build/packaging systems စာရင်း (software code မပါလျှင် ဗလာထားပါ)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "ရွေးထားသောအချက်အလက်များ"
+      },
+      "ChooseOk" : {
+        "label" : "အိုကေ"
+      },
+      "ChooseCancel" : {
+        "label" : "ပယ်ဖျက်ပါ"
+      },
+      "EditBtn" : {
+        "help" : "ရွေးထားသောအချက်အလက်များကို ပြင်ဆင်ရန်"
+      },
+      "ChooseElementsArea" : {
+        "label" : "အချက်အလက်များကို ရွေးပါ"
+      },
+      "VFileSystemSelector" : {
+        "label" : "အချက်အလက်များကို ရွေးပါ"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "အချိန်ဇယားပြင်ဆင်ရန်"
+      },
+      "ConfirmBtn" : {
+        "label" : "အတည်ပြုရန်"
+      },
+      "AddBtn" : {
+        "label" : "+ထည့်ရန်"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ထုတ်ဝေပါ!",
+        "help" : "သိပ္ပံသိမြင်ရေးဗဟုသုတအခြေခံစာတမ်းအဖြစ် ထည့်သွင်းနိုင်ရန် ဆော့ဖ်လုပ်ပြီး အကြောင်းအရာများကို ရရှိနိုင်အောင်ပြုလုပ်သည်။"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ပါ"
+      },
+      "SettingsTab" : {
+        "label" : "သတင်းအချက်အလက်များ"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "နောက်ခံကုဒ်ကို ကိုင်တွယ်ဆောင်ရွက်ခြင်း"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      },
+      "MainPanel" : {
+        "label" : "ရှိပြီးသား ဖိုင်စနစ်အကြောင်းအရာ အယ်ဒီတုန်းလုပ်နေသည်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "ဖိုင်စနစ်ထဲ တင်ထားသော အကြောင်းအရာ၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "openZips" : {
+        "label" : "zip ဖိုင်များ ဖွင့်ရန်",
+        "help" : "zip ဖိုင်များကို ဖွင့်နိုင်ရန်နှင့် အကြောင်းအရာ ထုတ်ပေးနိုင်ရန်"
+      },
+      "code" : {
+        "label" : "တစ်ခုတည်းသောကုဒ်",
+        "help" : "အကြောင်းအရာများအတွက် တစ်ခုတည်းသာပါဝင်သော ကုဒ်ကို အလိုအလျောက် တည်ဆောက်ပေးသည်။"
+      },
+      "tree" : {
+        "label" : "ရွေးချယ်ထားသော ဖိုင်များ သို့မဟုတ် ဖိုလ်ဒါများ",
+        "help" : "Server ပြုစုထားသော ဖိုင်များ သို့မဟုတ် ဖိုလ်ဒါများကို မျှဝေရန် ရရှိနိုင်ပါသည်။"
+      },
+      "parentProjectCode" : {
+        "label" : "ပရောဂျက်",
+        "help" : "အထက်တန်းပရောဂျက်အညွှန်း"
+      },
+      "programmedTables" : {
+        "label" : "အကြောင်းအရာများ မွမ်းမံချက် စစ်ဆေးရက်စွဲ",
+        "help" : "ပြောင်းလဲမှုရှိသော အကြောင်းအရာများ စနစ်တကျ စနစ်တကျ စစ်ဆေးနိုင်အောင် စီစဉ်ပါ။"
+      },
+      "catalogingCriteria" : {
+        "label" : "ဖိုလ်ဒါများ စီစဉ်ရေးစံနှုန်း",
+        "help" : "Gebo.ai ထဲ မျှဝေထားသော ဖိုင်စနစ်ဧရိယာတွင် ဖိုလ်ဒါများ စီစဉ်ထားသည့် နည်းလမ်းကို ရှင်းပြပေးပါ။"
+      },
+      "buildSystemsRefs" : {
+        "label" : "build systems များ ပြင်ဆင်ပါ",
+        "help" : "meta အချက်အလက်များနှင့် အပိုအချက်အလက်များ ရရှိရန် build/packaging systems များစာရင်း ထည့်သွင်းပါ (စနစ်ထဲ၌ code မပါဝင်ပါက ရှင်းလင်းထားနိုင်သည်)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "ဖိုင်မျှဝေဧရိယာအသစ်"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "အပြည့်အစုံလမ်းကြောင်း"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db သို့မဟုတ် yml ဖိုင် ပြင်ဆင်မှု"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "ModifyHeader" : {
+        "label" : "ပြင်ဆင်ရန်"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "ရွေးချယ်ထားသော သီးသန့် file system ဖိုလ်ဒါ",
+        "help" : "သင့်အဖွဲ့အစည်းအသုံးပြုသည့် စာရွက်စာတမ်းသိုလှောင်ရာ file system အတည်ပြု server ဖိုလ်ဒါတစ်ခု ရွေးချယ်ပါ။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "သင့်အဖွဲ့အစည်းအား မျှဝေထားသော ဖိုင်စနစ်ဧရိယာအကြောင်း ဖော်ပြချက် ထည့်ပါ။"
+      },
+      "code" : {
+        "label" : "တစ်ခုတည်းသောကုဒ်",
+        "help" : "အကြောင်းအရာများအတွက် တစ်ခုတည်းသာပါဝင်သော ကုဒ်ကို အလိုအလျောက် တည်ဆောက်ပေးသည်။"
+      },
+      "InsertBtn" : {
+        "label" : "ထည့်ပါ"
+      },
+      "CancelBtn" : {
+        "label" : "ဖျက်သိမ်းပါ"
+      },
+      "MainPanel" : {
+        "label" : "Server မျှဝေထားသော ဖိုင်ဖိုလ်ဒါကို တည်းဖြတ်ခြင်း"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ပါ"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းရန်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ရန်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "PublishBtn" : {
+        "label" : "ထုတ်ဝေပါ!",
+        "help" : "သိမ်းဆည်းပြီး ဒီအကြောင်းအရာများကို knowledge base တွင် LLm's များအတွက် အသုံးပြုနိုင်အောင် ဖွင့်ထားပါ"
+      },
+      "MainPanel" : {
+        "label" : "git source/documentation repository ကို တည်းဖြတ်နေသည်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "git repo ၏ ဖော်ပြချက်ကို ရိုက်ထည့်ပါ။"
+      },
+      "code" : {
+        "label" : "သီးသန့်ကုဒ်",
+        "help" : "git repo ၏ အလိုအလျောက် ဖန်တီးထားသည့် သီးသန့်ကုဒ်"
+      },
+      "parentProjectCode" : {
+        "label" : "ပရောဂျက်",
+        "help" : "မူလ ပရောဂျက် ကိုးကားချက်။"
+      },
+      "contentManagementSystem" : {
+        "label" : "Git system",
+        "help" : "ရင်းမြစ်မှာရေးသားပြီးသား git system ကိုးကားချက်"
+      },
+      "branch" : {
+        "label" : "ဌာနခွဲ",
+        "help" : "checkout ပြုလုပ်ရန် ဌာနခွဲအမည် (ပုံမှန်အားဖြင့် master, main သို့မဟုတ် develop)"
+      },
+      "identityCode" : {
+        "label" : "အသုံးပြုထားသော အညွှန်း",
+        "help" : "စနစ်တွင် clone/checkout ပြုလုပ်ရန် အညွှန်းတစ်ခုကို ရွေးပါ"
+      },
+      "repositoryUri" : {
+        "label" : "Repository url/လိပ်စာ",
+        "help" : "git remote repository ၏ ပြည့်စုံသော လိပ်စာ (ပုံမှန်အားဖြင့် http: သို့မဟုတ် https: သို့မဟုတ် ssh: ဖြင့်စတင်သည်)"
+      },
+      "publicAccess" : {
+        "label" : "အများသုံး",
+        "help" : "တကယ်ပါက repository access အတွက် အတည်ပြုခြင်း မလိုအပ်ပါ"
+      },
+      "openZips" : {
+        "label" : "Zip ဖိုင်များဖွင့်ရန်",
+        "help" : "zip ဖိုင်များကို ဖွင့်ရန်နှင့် အကြောင်းအရာ ထုတ်ယူနိုင်ရန် ခွင့်ပြုပါ"
+      },
+      "programmedTables" : {
+        "label" : "အကြောင်းအရာ အသစ်များစစ်ဆေးသည့် အချိန်စာရင်း",
+        "help" : "ပြောင်းလဲသည့် အကြောင်းအရာများကို စနစ်အသစ် အဆက်မပြတ် လှုပ်လှုပ်ရှားရှား ဆောင်ရွက်နိုင်အောင် အချိန်စာရင်း ဆက်တင်ပါ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Build systems များပြင်ဆင်ရန်",
+        "help" : "meta informations နှင့် ထပ်ဆောင်း artifacts အသေးစိတ်အချက်အလက်များ ရှာဖွေရန် build/packaging systems များ၏ စာရင်း"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းမည်"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်လိုက်မည်"
+      },
+      "GeneralInfosTab" : {
+        "label" : "အထွေထွေအချက်အလက်များ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Chat မော်ဒယ်အသုံးပြုရန်"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ရွေးချယ်ရန်"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chat မော်ဒယ်ပြင်ဆင်မှုတစ်ခုရွေးချယ်ပါ"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Embedding မော်ဒယ်ပြင်ဆင်မှုတစ်ခုရွေးချယ်ပါ"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "ရွေးချယ်ရန်"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG ဆက်တင်များ"
+      },
+      "LanguageModelTab" : {
+        "label" : "ကျယ်ပြန့်သောဘာသာစကားမော်ဒယ်နှင့် အသုံးပြုနိုင်သည့်ကိရိယာများ ဆက်တင်"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Embedding မော်ဒယ် အသုံးပြုရန်"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "လုံခြုံရေး ဝင်ရောက်ခွင့်ဆက်တင်များ"
+      },
+      "MainPanel" : {
+        "label" : "Retrieve augmented generation chat profile ကို တည်းဖြတ်နေသည်"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "Chat profile ၏ ထူးခြားသောကုဒ်ကို အလိုအလျောက်ထုတ်ပေးသည်။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Chat profile အသေးစိတ်ဖော်ပြချက်ရေးပါ။"
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "အသုံးပြုသူက knowledge bases ကိုရွေးချယ်သည်",
+        "help" : "အသုံးပြုသူသည် ဝင်ရောက်နိုင်သည့် knowledge bases များ၊ သို့မဟုတ် မိမိ၏ မိမိဖိုင်များ တင်နိုင်သည်။"
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Knowledge bases များ",
+        "help" : "စာရွက်စာတမ်းရှာဖွေရန် Knowledge bases များကို သုံးပါ။"
+      },
+      "similaritySearchThreshold" : {
+        "label" : "ဆင်တူမှု သတ်မှတ်ချက်",
+        "help" : "Semantic ရှာဖွေရေးများအတွက် ဆင်တူမှု သတ်မှတ်ချက်၊ 0.60–0.65 နိမ့်သောစစ်ထုတ်မှု၊ 0.70-0.75 အလယ်အလတ်၊ 0.80–0.85 တိကျစွာ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "ဒုတိယ 'hop' ဆင်တူမှု သတ်မှတ်ချက်",
+        "help" : "Semantic ရှာဖွေရေးများအတွက် ဆင်တူမှု သတ်မှတ်ချက်၊ 0.60–0.65 နိမ့်သောစစ်ထုတ်မှု၊ 0.70-0.75 အလယ်အလတ်၊ 0.80–0.85 တိကျစွာ (multi-hop rag ၏ ဒုတိယရှာဖွေရေးတွင်သုံးဝင်သည်)"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'Multi Hop' rag ကို ပိတ်ရန်",
+        "help" : "'Multi hop rag' လုပ်ဆောင်ချက်ကို ပိတ်ပါ။ Multi hop ရှာဖွေရေးသည် ပထမတစ်ကြိမ် semantic ရှာဖွေရေး ပြုလုပ်ပြီး တွေ့ရှိသောစာရွက်စာတမ်းများကို နောက်ထပ် semantic ရှာဖွေရေးအတွက် မူတည်ထားသည့်အနေဖြင့် context အဖြစ်သုံးပါသည်။"
+      },
+      "topK" : {
+        "label" : "ယူဆချက်ထည့်သွင်းဆောင်ရွက်မည့်စာရွက်အစိတ်အပိုင်းများ (TopK)",
+        "help" : "Retrieve augmented generation တွင် Semantic ရှာဖွေရေးတွင် တွေ့ရှိထားသည့် Top N စာရွက် အစိတ်အပိုင်းများ"
+      },
+      "enabledFunctions" : {
+        "label" : "ဤ RAG chat အတွက် အသုံးပြုနိုင်သည့် function များ",
+        "help" : "အသုံးပြုသူနှင့် ချက်သွင်းမှုအတွင်း llm မော်ဒယ်မှ အသုံးပြုနိုင်သည့် လုပ်ဆောင်ချက်များ (ရွေးချယ်ထားသော knowledge base နှင့်လည်း အလုပ်လုပ်နိုင်သည်)"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Retrieve augmented generation session များအတွက် prompt ကို တည်းဖြတ်ပါ။"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းရန်"
+      },
+      "CancelBtn" : {
+        "label" : "ရပ်ရန်"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Prompts အမျိုးအစားကို ထည့်ပါ သို့မဟုတ် ရိုက်ထည့်ပါ"
+      },
+      "MainPanel" : {
+        "label" : "Prompt ကို တည်းဖြတ်နေသည်"
+      },
+      "promptCategory" : {
+        "label" : "Prompt အမျိုးအစား",
+        "help" : "Prompt အမျိုးအစားကို ရွေးပါ သို့မဟုတ် ထည့်ပါ။"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Chat အတွက် prompt ကို တည်းဖြတ်ပါ၊ {query} ကို အသုံးပြုပြီး အသုံးပြုသူမေးခွန်းပြပါ၊ {context} ကို အသုံးပြုပြီး LLM သို့ပေးပို့သောစာတမ်း/မှတ်တမ်းအကြောင်းအရာကိုဖော်ပြပါ။"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "Prompt ၏ အလိုအလျောက် ဖန်တီးပေးသော ထူးခြားသော ကုဒ်ဖြစ်သည်။"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Prompt ၏ဖော်ပြချက်ကို ထည့်သွင်းပါ။"
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "စကားဝှက် ပြောင်းရန်"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "အဟောင်း စကားဝှက်",
+        "help" : "လော့ဂ်အင် ဝင်ရန် အသုံးပြုသော အမှန်တကယ်သော စကားဝှက်"
+      },
+      "newPassword" : {
+        "label" : "စကားဝှက် အသစ်",
+        "help" : "စကားဝှက် အသစ်"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "လော့ဂ်အင် ဝင်ရန် အသုံးပြုသော E-mail"
+      },
+      "ChangePasswordUI" : {
+        "label" : "စကားဝှက် ပြောင်းရန် ဖောင်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ရန်"
+      },
+      "ChangePwdBtn" : {
+        "label" : "စကားဝှက် ပြောင်းရန်"
+      },
+      "newPassword1" : {
+        "label" : "စကားဝှက် အသစ် ထပ်မံ အတည်ပြုပါ",
+        "help" : "စကားဝှက် အသစ် အတည်ပြုပါ"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "ဖျက်ရန်"
+      },
+      "CancelBtn" : {
+        "label" : "ပယ်ဖျက်ရန်"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းရန်"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google custom search API သို့မဟုတ် သင့်အတွက် api key (အခမဲ့) ရယူရန်အချက်အလက်များကို ဒီမှာကြည့်ပါ: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "တစ်ခုတည်းသောကုဒ်",
+        "help" : "google search api ပြင်ဆင်မှုအတွက် တစ်ခုတည်းသောကုဒ်"
+      },
+      "MainPanel" : {
+        "label" : "Google custom search api အသုံးပြုခွင့်အချက်အလက်ကိုတည်းဖြတ်နေသည်"
+      },
+      "secretCode" : {
+        "label" : "Google search api token",
+        "help" : "Google search api token ကိုရွေးပါ သို့မဟုတ် ထည့်သွင်းပါ"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "google search api ပြင်ဆင်မှုအတွက် ဖော်ပြချက်ကိုထည့်ပါ"
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "သိပ္သည့်အချက်အလက်အုတ်တွေနဲ့ မဟုတ်ပဲ စကားပြောခြင်း",
+        "help" : "စကားပြောစနစ်အတွက် LLMs ရွေးချယ်ပါ",
+        "placeholder" : "စကားပြောစနစ်အတွက် LLMs ရွေးချယ်ပါ"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "စကားပြောရွေးစရာအပိုင်းကိုဖွင့်ရန်"
+      },
+      "CreateChatBtn" : {
+        "label" : "စကားပြောအသစ်"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "စကားပြောအကြိမ်အသစ်"
+      },
+      "chatProfileCode" : {
+        "label" : "သိပ္သည့်အချက်အလက်အုတ်တွေနဲ့ စကားပြောခြင်း",
+        "help" : "ကုမ္ပဏီ (နှင့် မိမိတို့) စာရွက်စာတမ်းများနဲ့ LLMs တွေနဲ့ ကိုက်ညီစွာ ဆွေးနွေးနိုင်ရန် ကုမ္ပဏီစကားပြောပရိုဖိုင်ရွေးပါ",
+        "placeholder" : "ကုမ္ပဏီစကားပြောပရိုဖိုင်ရွေးပြီး၊ ကုမ္ပဏီ (နှင့် မိမိတို့) စာရွက်စာတမ်းများနဲ့ LLMs တွေနဲ့ ကိုက်ညီစွာ ဆွေးနွေးနိုင်ပါ"
+      },
+      "NewChatBtn" : {
+        "label" : "စကားပြောအသစ်"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "စာရွက်စာတမ်းများနှင့် ဆွေးနွေးရန်",
+        "help" : "အလုပ်လုပ်ရန် စာရွက်စာတမ်းများ ကြည့်ရှုပါ သို့မဟုတ် ရှာဖွေပြီး ရွေးချယ်ပါ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ဆွေးနွေးရန် ဖိုင်များ ရွေးချယ်ပါ"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "အတည်ပြုရန်"
+      },
+      "userspaceBrowsing" : {
+        "label" : "သင့်စာရွက်စာတမ်းများ တင်ပါ သို့မဟုတ် ရွေးပါ",
+        "help" : "သင့် အသုံးပြုသူနေရာမှ စာရွက်စာတမ်းများ ရွေးပါ/တင်ပါ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ရှာဖွေရန်"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ရှာဖွေရန်"
+      },
+      "query" : {
+        "label" : "အဓိပ္ပါယ်ပါတဲ့ ရှာဖွေရေးစကားစု",
+        "help" : "သင့်ရှာဖွေလိုသော အကြောင်းအရာနှင့် သက်ဆိုင်သော သေချာသောစကားစု ထည့်ပါ"
+      },
+      "choosenBrowsing" : {
+        "label" : "ဖိုင်များရွေးချယ်၍ အသိပညာအခြေခံများ သုံးကြည့်ခြင်း",
+        "help" : "ကုမ္ပဏီ ဝေမျှထားသော အသိပညာအခြေခံများမှ ဖိုင်များရွေးချယ်ပါ"
+      },
+      "filename" : {
+        "label" : "ရှာဖွေသောဖိုင်အမည်",
+        "help" : "ရှာလိုသောအကြောင်းအရာအတွက် ဖိုင်အမည်အပိုင်းကို ထည့်ပေးပါ"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "ရွေးထားသောအရာများကို ပြင်ဆင်ပါ"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "အသုံးပြုသူဖိုင်များကို ရွေးချယ်ပါ"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "ပယ်ဖျက်မည်"
+      },
+      "okBtn" : {
+        "label" : "အိုကေ"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "အသုံးပြုသူတင်ထားသောအကြောင်းအရာကို ရွေးချယ်ပါ"
+      },
+      "UserspaceBrowser" : {
+        "label" : "အသိပညာစုများ နှင့် အသုံးပြုသူဖိုင်များ"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ဌာနခွဲခေါင်းစဥ် သို့မဟုတ် အိုင်တင်",
+        "help" : "ဌာနခွဲခေါင်းစဥ် သို့မဟုတ် အိုင်တင် ထည့်ရန်"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ဖိုင်များ တင်ရန်",
+        "help" : "တင်ထားသောဖိုင်များ ဒေတာရင်းမြစ် ထည့်ရန်"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive ဒေတာရင်းမြစ်ထည့်ရန်"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence ဒေတာရင်းမြစ်ထည့်ရန်"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ဖိုင်စနစ်",
+        "help" : "မျှဝေထားသော ဖိုင်စနစ် ဒေတာရင်းမြစ် ထည့်ရန်"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira ဒေတာရင်းမြစ်ထည့်ရန်"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket၊ github သို့မဟုတ် အခြား git repository ဒေတာရင်းမြစ် ထည့်ရန်"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "ဆက်တပ်ရန်"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "ကျွန်ုပ်၏ ကိုယ်ရေးအချက်အလက်"
+      },
+      "logout" : {
+        "label" : "ထွက်ရန်"
+      }
+    }
+  }
+}

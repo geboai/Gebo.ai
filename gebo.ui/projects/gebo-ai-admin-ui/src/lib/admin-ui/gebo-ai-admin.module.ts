@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -25,7 +25,7 @@
  * The module imports numerous Angular and PrimeNG modules for UI components and
  * declares all the admin components needed for the Gebo.ai administrative interface.
  */
-import { BrowseContentModule, EditableListboxModule, GeboAIContentReindexModule, GeboAIFileTypesModule, GeboAIModulesModule, GeboAiRelationListModule, GeboAIReusableChatModel, GeboOauth2SecretModule, GeboUIArchitectureModule, ProjectAddContextMenuModule, GeboAIContentSelectionFilterModule, GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
+import { BrowseContentModule, EditableListboxModule, GeboAIContentReindexModule, GeboAIFileTypesModule, GeboAIModulesModule, GeboAiRelationListModule, GeboAIReusableChatModel, GeboOauth2SecretModule, GeboUIArchitectureModule, ProjectAddContextMenuModule, GeboAIContentSelectionFilterModule, GeboAIFieldTransationContainerModule, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -91,7 +91,7 @@ import { GeboAIContentViewerModule } from "@Gebo.ai/reusable-ui";
 import { MessageService } from "primeng/api";
 import { GeboAIAccessControlComponent } from "./entity-editors/controls/access-control-group/access-control-group.component";
 import { GeboAIAdvancedChatModelGroupComponent } from "./entity-editors/controls/advanced-settings-chatmodel-group/advanced-settings-chatmodel-group.component";
-import { GeboAIChooseLLMFunctionsModule } from "./entity-editors/controls/choose-llm-functions/choose-llm-functions.module";
+import { GeboAIChooseLLMFunctionsModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIPromptWizardComponent } from "./entity-editors/controls/prompt-wizard/prompt-wizard.component";
 import { GeboAIGFileSystemShareReferenceAdminComponent } from "./entity-editors/gebo-ai-filesystems-admin/gebo-ai-filesystem-share-reference-admin.component";
 import { GeboAISharedFilesystemsComponent } from "./entity-editors/gebo-ai-filesystems-admin/gebo-ai-shared-filesystems.component";
@@ -140,7 +140,7 @@ import { GeboAIAzureOpenAIChatModelAdminComponent } from "./entity-editors/gebo-
 import { GeboAIGraphRagExtractionConfigComponent } from "./entity-editors/gebo-graph-rag-extraction-config-admin/graph-rag-extraction-config.component";
 import { GeboAIStatsVisualizerComponent } from "./entity-editors/gebo-ai-job-status-viewer/graphic-visualizer.component";
 import { GeboAIGraphragConfigComponent } from "./entity-editors/controls/graphrag-config/graphrag-config.component";
-import { TabPanels, TabsModule } from "primeng/tabs";
+//import { TabPanels, TabsModule } from "primeng/tabs";
 
 /**
  * GeboAiAdminModule is the main Angular NgModule for the Gebo.ai administration interface.
@@ -155,10 +155,10 @@ import { TabPanels, TabsModule } from "primeng/tabs";
  * including knowledge bases, model configurations, integration endpoints, and user management.
  */
 @NgModule({
-  imports: [CommonModule, FormsModule, GeboAICommonModulesInjectionsModule, OverlayPanelModule, ListboxModule, TextareaModule, ChipModule, MessagesModule, FieldsetModule, MultiSelectModule, PaginatorModule, CalendarModule, ToastModule, FileUploadModule, InputNumberModule, PasswordModule, GeboAiRelationListModule, ReactiveFormsModule, MenuModule, TabViewModule, AccordionModule, TableModule, BlockUIModule, ButtonModule, TreeModule, DialogModule, PanelModule, GeboUIArchitectureModule, InputTextModule, CheckboxModule, EditableListboxModule, GeboAIReusableChatModel, GeboAIContentViewerModule, GeboAIChooseLLMFunctionsModule, BrowseContentModule, TreeSelectModule, VFilesystemSelectorModule, TranslableModule, GeboAIContentReindexModule, ProjectAddContextMenuModule, ChartModule, RadioButtonModule, GeboAIFileTypesModule, SelectModule, GeboAIModulesModule, GeboOauth2SecretModule, GeboAIContentSelectionFilterModule, TabPanels, TabsModule, GeboAIFieldTransationContainerModule],
-  declarations: [GeboAiAdminComponent, BuildPackagingSystemsComponent, ChatProfilesComponent, SystemsComponent, KnowledgeBasesComponent, LlmsSystemsComponent, GeboAiGitSystemAdminComponent, GeboAiGitEndpointAdminComponent, GeboAiKnowledgeBaseAdminComponent, GeboAiKnowledgeBaseTreeComponent, GeboAiProjectAdminComponent, GeboAiEntityEditingLauncherComponent, GeboAiSecretsAdminListComponent, GeboAiSecretsAdminEditComponent, BuildSystemsChooserComponent, GeboAIJobStatusViewerComponent, GeboAiLogsViewComponent, LogTableComponent, GeboAIFileSystemEndpointComponent, GeboAIOpenAIChatModelAdminComponent, GeboAIOpenAIEmbedModelAdminComponent, GeboAITestChatComponent, GeboAIOllamaChatModelAdminComponent, GeboAIOllamaEmbedModelAdminComponent, GeboAIChatProfileAdminComponent, GeboAIPromptAdminComponent, GeboAIUsersManagementComponent, GeboAIUserComponent, GeboAIGroupComponent, GeboAIAccessControlComponent, GeboAIPromptWizardComponent, GeboAIAdvancedChatModelGroupComponent, GeboAIUploadsEndpointComponent, AncestorPanelComponent, GeboAISharedFilesystemsComponent, GeboAIGFileSystemShareReferenceAdminComponent, GeboAIGoogleSearchAccountComponent, GeboAIAnthropicChatModelAdminComponent, GeboAIDashboardComponent, GeboAiEmbeddedDocumentsPiechartComponent, GeboAIEmbeddingStatsPanelComponent, GeboAIGoogleWorkspaceAccessComponent, GeboAiGoogleDriveSystemAdminComponent, GeboAiGoogleDriveProjectEndpointAdminComponent, GeboAIConfluenceAdminComponent, GeboAIConfluenceEndpointComponent, GeboAIConfluenceSystemFastComponent, GeboAIGenericOpenAIAPIChatModelAdminComponent, GeboAIGenericOpenAIAPIEmbedModelAdminComponent, GeboAIGoogleVertexChatModelAdminComponent, GeboAIGoogleVertexEmbedModelAdminComponent, GeboAIMistralAIChatModelAdminComponent, GeboAIMistralAIEmbedModelAdminComponent, GeboAIStandardChatModelSettings, GeboAISharepointEndpointComponent, GeboAISharepointAdminComponent, GeboAISharepointSystemFastComponent, GeboAIGoogleDriveFastComponent, GeboAIJiraEndpointComponent, GeboAIJiraAdminComponent, GeboAIJiraSystemFastComponent,GeboAIDeepseekChatModelAdminComponent,GeboAIOauth2RegistrationComponent,GeboAIAzureOpenAIEmbedModelAdminComponent,GeboAIAzureOpenAIChatModelAdminComponent,GeboAIGraphRagExtractionConfigComponent,GeboAIStatsVisualizerComponent,GeboAIGraphragConfigComponent],
-  exports: [GeboAiAdminComponent, GeboAiEntityEditingLauncherComponent, GeboAIUsersManagementComponent, GeboAIConfluenceSystemFastComponent, GeboAISharepointSystemFastComponent, GeboAIGoogleDriveFastComponent,GeboAIJiraSystemFastComponent],
-  providers: [GeboAIPluggableKnowledgeAdminBaseTreeSearchService, MessageService]
+  imports: [CommonModule, FormsModule, GeboAICommonModulesInjectionsModule, OverlayPanelModule, ListboxModule, TextareaModule, ChipModule, MessagesModule, FieldsetModule, MultiSelectModule, PaginatorModule, CalendarModule, ToastModule, FileUploadModule, InputNumberModule, PasswordModule, GeboAiRelationListModule, ReactiveFormsModule, MenuModule, TabViewModule, AccordionModule, TableModule, BlockUIModule, ButtonModule, TreeModule, DialogModule, PanelModule, GeboUIArchitectureModule, InputTextModule, CheckboxModule, EditableListboxModule, GeboAIReusableChatModel, GeboAIContentViewerModule, GeboAIChooseLLMFunctionsModule, BrowseContentModule, TreeSelectModule, VFilesystemSelectorModule, TranslableModule, GeboAIContentReindexModule, ProjectAddContextMenuModule, ChartModule, RadioButtonModule, GeboAIFileTypesModule, SelectModule, GeboAIModulesModule, GeboOauth2SecretModule, GeboAIContentSelectionFilterModule,/* TabPanels, TabsModule,*/ GeboAIFieldTransationContainerModule],
+  declarations: [GeboAiAdminComponent, BuildPackagingSystemsComponent, ChatProfilesComponent, SystemsComponent, KnowledgeBasesComponent, LlmsSystemsComponent, GeboAiGitSystemAdminComponent, GeboAiGitEndpointAdminComponent, GeboAiKnowledgeBaseAdminComponent, GeboAiKnowledgeBaseTreeComponent, GeboAiProjectAdminComponent, GeboAiEntityEditingLauncherComponent, GeboAiSecretsAdminListComponent, GeboAiSecretsAdminEditComponent, BuildSystemsChooserComponent, GeboAIJobStatusViewerComponent, GeboAiLogsViewComponent, LogTableComponent, GeboAIFileSystemEndpointComponent, GeboAIOpenAIChatModelAdminComponent, GeboAIOpenAIEmbedModelAdminComponent, GeboAITestChatComponent, GeboAIOllamaChatModelAdminComponent, GeboAIOllamaEmbedModelAdminComponent, GeboAIChatProfileAdminComponent, GeboAIPromptAdminComponent, GeboAIUsersManagementComponent, GeboAIUserComponent, GeboAIGroupComponent, GeboAIAccessControlComponent, GeboAIPromptWizardComponent, GeboAIAdvancedChatModelGroupComponent, GeboAIUploadsEndpointComponent, AncestorPanelComponent, GeboAISharedFilesystemsComponent, GeboAIGFileSystemShareReferenceAdminComponent, GeboAIGoogleSearchAccountComponent, GeboAIAnthropicChatModelAdminComponent, GeboAIDashboardComponent, GeboAiEmbeddedDocumentsPiechartComponent, GeboAIEmbeddingStatsPanelComponent, GeboAIGoogleWorkspaceAccessComponent, GeboAiGoogleDriveSystemAdminComponent, GeboAiGoogleDriveProjectEndpointAdminComponent, GeboAIConfluenceAdminComponent, GeboAIConfluenceEndpointComponent, GeboAIConfluenceSystemFastComponent, GeboAIGenericOpenAIAPIChatModelAdminComponent, GeboAIGenericOpenAIAPIEmbedModelAdminComponent, GeboAIGoogleVertexChatModelAdminComponent, GeboAIGoogleVertexEmbedModelAdminComponent, GeboAIMistralAIChatModelAdminComponent, GeboAIMistralAIEmbedModelAdminComponent, GeboAIStandardChatModelSettings, GeboAISharepointEndpointComponent, GeboAISharepointAdminComponent, GeboAISharepointSystemFastComponent, GeboAIGoogleDriveFastComponent, GeboAIJiraEndpointComponent, GeboAIJiraAdminComponent, GeboAIJiraSystemFastComponent, GeboAIDeepseekChatModelAdminComponent, GeboAIOauth2RegistrationComponent, GeboAIAzureOpenAIEmbedModelAdminComponent, GeboAIAzureOpenAIChatModelAdminComponent, GeboAIGraphRagExtractionConfigComponent, GeboAIStatsVisualizerComponent, GeboAIGraphragConfigComponent],
+  exports: [GeboAiAdminComponent, GeboAiEntityEditingLauncherComponent, GeboAIUsersManagementComponent, GeboAIConfluenceSystemFastComponent, GeboAISharepointSystemFastComponent, GeboAIGoogleDriveFastComponent, GeboAIJiraSystemFastComponent],
+  providers: [GeboAIPluggableKnowledgeAdminBaseTreeSearchService, MessageService, { provide: GEBO_AI_MODULE, useValue: "GeboAIAdminModule", multi: false }]
 })
 export class GeboAiAdminModule {
 

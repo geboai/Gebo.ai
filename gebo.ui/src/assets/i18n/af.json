@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Verstek stelsel taal",
+        "help" : "Verstek stelsel taal vir hierdie Gebo.ai installasie"
+      },
+      "username" : {
+        "label" : "E-pos",
+        "help" : "E-pos as gebruikersnaam om aan te meld"
+      },
+      "passwordC" : {
+        "label" : "Bevestig wagwoord",
+        "help" : "Bevestig wagwoord"
+      },
+      "password" : {
+        "label" : "Wagwoord",
+        "help" : "Wagwoord om aan te meld (ten minste 8 karakters)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " wagwoorde stem nie ooreen nie "
+      },
+      "LocalAdmin" : {
+        "label" : "Skep jou plaaslike admin rekening"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Jy gaan hierdie rekening in die toekoms gebruik om die sagteware op te stel of te administreer; hierdie data bly plaaslik op jou stelsel en word nie oor die netwerk gestuur nie"
+      },
+      "EnterBtn" : {
+        "label" : "Gaan na die aanmeldbladsy om in te gaan"
+      },
+      "SetupPage" : {
+        "label" : "Stel jou gebo.ai installasie op"
+      },
+      "CreateBtn" : {
+        "label" : "Skep stelselopstelling"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Lees & aanvaar die lisensie"
+      },
+      "AcceptMark" : {
+        "label" : "Ek aanvaar die bepalings",
+        "help" : "Deur hier te klik aanvaar jy die bepalings & voorwaardes in die lisensie"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-pos",
+        "help" : "Gebruik e-pos as gebruikersnaam om aan te meld"
+      },
+      "password" : {
+        "label" : "Wagwoord",
+        "help" : "Wagwoord om aan te meld"
+      },
+      "LoginPanel" : {
+        "label" : "Meld aan by gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Meld aan"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2-konfigurasie"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Verskaffer naam"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2-sekuriteitinstellings"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Terug na opstel-tuisblad"
+      },
+      "WizardUi" : {
+        "label" : "Kies 'n opstelafdeling"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administrateur & ander rekening opstel",
+        "description" : "Ten minste een administrasierekening is nodig om te verseker dat hierdie gebo.ai-installasie behoorlik bestuur word, voeg ander gebruikers by indien nodig"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai werk-gids",
+        "description" : "Stel 'n werk-gids op, dit sal die lêergids wees waar konfigurasies en alle werklêers van hierdie installasie gestoor word. Dit is ook 'n goeie idee om dit gereeld te rugsteun."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektordata-basis konfigurasie",
+        "description" : "'n Vektordata-basis moet opgestel word sodat Gebo.ai verbeterde generasie-dienste kan lewer; jy kan tussen 'n plaaslike vektordata-basis, Qdrant of Mongo Atlas kies"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Enkele aanmelding, oauth2-verifikasie",
+        "description" : "Oauth2 enkele aanmelding-verifikasie en oauth2-kliënt konfigurasie"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Groot taalmodelle opstel",
+        "description" : "Stel verskeie llms op met wolk of plaaslike/LAN infrastruktuur agtergronddienste. Ten minste een geselsmodel en een ingebedde model moet opgestel word sodat die sagteware behoorlik werk."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Grafiek rag/kennisonttrekking opstel",
+        "description" : "Stel grafiek rag en kennisonttrekking subsisteem op"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Gedeelde lêerstelsel-paadjies opstel",
+        "description" : "Stel die maatskappy se gedeelde lêerstelsel-paadjies op wat as verbeterde generasie dokumentgebied in verskeie kennisbasisse gebruik word"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian Confluence-integrasie",
+        "description" : "Stel Gebo.ai op om jou Atlassian Confluence wolk- of plaaslike installasies te gebruik"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian Jira-integrasie",
+        "description" : "Stel Gebo.ai op om jou Atlassian Jira wolkinstallasies te gebruik"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint-integrasie",
+        "description" : "Stel Gebo.ai op om jou Microsoft Sharepoint wolk- of plaaslike installasies te gebruik"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Stel ten minste een kennisbasis op",
+        "description" : "Stel ten minste een kennisbasis op sodat jou gebruikers die verbeterde generasie-dienste van Gebo.ai kan gebruik"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Stel ten minste 'n \"R.A.G.\" geselsprofiel op",
+        "description" : "Stel ten minste 'n verbeterde generasie geselsprofiel vir jou gebruikers op, gebaseer op een van jou opgestelde kennisbasisse"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Stel maatskappy se Atlassian Confluence-stelsels op"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Stelseltipe"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence-stelsel"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira-stelsel"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "MainPanel" : {
+        "label" : "Stel maatskappy se Atlassian Jira-stelsels op"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Stelseltipe"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "MainPanel" : {
+        "label" : "Stel maatskappy se Microsoft Sharepoint-stelsels op"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Stelseltipe"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint-stelsel"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Verskaf 'n API-sleutel met toepaslike beskikbare krediet. As OpenAI gekies word moet jy 'n bietjie spesifieke krediet (10-30$ is genoeg) by jou gewone plan voeg vir API-gebruik; anders sal geen llms-verkeer in hierdie toepassing beskikbaar wees nie."
+      },
+      "MainPanel" : {
+        "label" : "Stel Gebo.ai llms-verskaffers toegang op met jou eie API-sleutel"
+      },
+      "provider" : {
+        "label" : "Groot taalmodelverskaffer",
+        "help" : "Kies 'n verskaffer tussen OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Gebruiker",
+        "help" : "Voer die gebruiker wat aan die API-sleutel gekoppel is in"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigureer"
+      },
+      "apiKey" : {
+        "label" : "API-sleutel",
+        "help" : "Jou API-sleutel van die LLMS-verskaffers om te gebruik"
+      },
+      "ProviderHeader" : {
+        "label" : "Verskaffer"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Modeltipe"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Verstekmodel"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Skep grafiek rag-konfigurasie"
+      },
+      "MainPanel" : {
+        "label" : "Stel Grafiek Rag & kennisonttrekking verstekopstelling op"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projek"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Voeg 'n kennisbasis by"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Kennisbasis"
+      },
+      "MainPanel" : {
+        "label" : "Kennisbasis- & inhoudskonfigurasies"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Inhoudsbron"
+      },
+      "PublishedHeader" : {
+        "label" : "Gepubliseer"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Aantal dokumente"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Voeg projek/item by",
+        "help" : "skep nuwe projek"
+      },
+      "Button1" : {
+        "help" : "open kennisbasis"
+      },
+      "Button2" : {
+        "help" : "open projekvorm"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai werk-gids konfigurasie"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigureer"
+      },
+      "workDirectory" : {
+        "label" : "Kies 'n gids as Gebo.ai werk-gids",
+        "help" : "Kies 'n bedienergids wat hierdie installasie as werkgids gebruik vir konfigurasies en inhoudberging."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Voeg gids by"
+      },
+      "AddFolderBtn" : {
+        "label" : "Voeg gids by"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "MainPanel" : {
+        "label" : "Bediener gedeelde lêerstelsel-paadjies"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoluut pad"
+      },
+      "DeleteHeader" : {
+        "label" : "Verwyder"
+      },
+      "path" : {
+        "label" : "Voeg wortelgids van 'n gedeelde lêerstelsel by",
+        "help" : "Kies 'n bedienergids wat 'n wortelpad is vir die gedeelde lêerstelsel wat in jou organisasie as dokumentbewaararea gebruik word"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer lêerstelsel-inskrywingsbeskrywing in"
+      },
+      "RemovePathBtn" : {
+        "label" : "Verwyder pad"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigureer"
+      },
+      "MainPanel" : {
+        "label" : "Vektordata-basis konfigurasie"
+      },
+      "host" : {
+        "label" : "Qdrant-gasheer",
+        "help" : "Qdrant gasheernaam of IP-adres"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant verbinding-instellings"
+      },
+      "port" : {
+        "label" : "Qdrant-poort",
+        "help" : "Qdrant kommunikasiepoort (6334 is die standaard)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant API-sleutel",
+        "help" : "API-sleutel vir Qdrant-verifikasie"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS-parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai opstel verpligte stappe voltooi...",
+        "detail" : "Verpligte opstelstappe is voltooi, maar sommige ontbrekende stappe keer dat jou organisasie die meeste uit hierdie sagteware kan put"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai opstel mis 'n verpligte stap",
+        "detail" : "Hersien asseblief die rooi stappe van die opstelproses"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai opstel OK!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kode",
+        "help" : "Voer die beskrywing van OAUTH2-verifikasie/integrasie kode (registrationId) in."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van OAUTH2-verifikasie/integrasie inligting in."
+      },
+      "configurationType" : {
+        "label" : "Konfigurasiedoel",
+        "help" : "Kies of hierdie instellings gebruik gaan word om aan te meld in Gebo.ai of om Gebo.ai kliëntverbinding met 'n derdeparty-stelsel toe te laat."
+      },
+      "authProvider" : {
+        "label" : "Verskaffer",
+        "help" : "Voer die verskaffer van OAUTH2-verifikasie in"
+      },
+      "issuerUri" : {
+        "label" : "Uitgewer-Uri",
+        "help" : "Voer die OAUTH2-uitgewer se URL van die verskaffer in"
+      },
+      "authorizationUri" : {
+        "label" : "Magtigings-URL",
+        "help" : "Voer die OAUTH2-magtigings-URL van die verskaffer in"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk-stel-Uri",
+        "help" : "Voer die OAUTH2 Jwk-stel URL van die verskaffer in"
+      },
+      "userInfoUri" : {
+        "label" : "Gebruikersinfo-URL",
+        "help" : "Voer die OAUTH2 gebruikersinfo-URL van die verskaffer in"
+      },
+      "introspectionUri" : {
+        "label" : "Introspeksie-Uri",
+        "help" : "Voer die OAUTH2 introspeksie-URL van die verskaffer in"
+      },
+      "tokenUri" : {
+        "label" : "Teken-URL",
+        "help" : "Voer die OAUTH2-teken-URL van die verskaffer in"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 verskaffer-URL's"
+      },
+      "MainPanel" : {
+        "label" : "Voeg nuwe OAUTH2-verifikasie/integrasie inligting in"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Kliënt-ID",
+        "help" : "Kliënt-identifiseerder vir die oauth2-protokol (verkrygbaar in die oauth2-geauthentiseerde derdeparty-sagteware administrasie area)"
+      },
+      "secret" : {
+        "label" : "Geheime sleutel",
+        "help" : "Kliënt-geheim vir die oauth2-protokol (verkrygbaar in die oauth2-geauthentiseerde derdeparty-sagteware administrasie area)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Skep Confluence-stelselkonfigurasie"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die Confluence-stelsel in."
+      },
+      "CreateBtn" : {
+        "label" : "Skep"
+      },
+      "username" : {
+        "label" : "Confluence-gebruikersnaam",
+        "help" : "Confluence-gebruikersnaam"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-weergawe",
+        "help" : "Confluence-weergawe"
+      },
+      "baseUri" : {
+        "label" : "Basis internetadres",
+        "help" : "Url van die basis Confluence-stelseladres vir self-geverifieerde installasie of jou organisasie se basis url vir Confluence wolkstelsel"
+      },
+      "password" : {
+        "label" : "Confluence-wagwoord",
+        "help" : "Confluence-wagwoord"
+      },
+      "token" : {
+        "label" : "Confluence wolk api-sleutel",
+        "help" : "Confluence CLOUD api-sleutel verkry in die Confluence-agterkant, vul hier \"API Token for your Atlassian Account\" in."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in kennisbasis vir LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SettingsTab" : {
+        "label" : "Instellings"
+      },
+      "MainPanel" : {
+        "label" : "Deel Confluence-inhoud"
+      },
+      "LogsTab" : {
+        "label" : "Logboeke"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die inhoud."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die opgelaaide inhoud van Confluence-inskrywings in."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence-stelsel",
+        "help" : "Reeds gekonfigureerde Confluence-stelsel verwysing."
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Ouerprojek verwysing."
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Aktiveer zip-lêers wat oopgemaak en inhoud onttrek kan word"
+      },
+      "tree" : {
+        "label" : "Gekose spasies of bladsye/subbladsye",
+        "help" : "Gedeelde Confluence-spasies en bladsye se inhoud"
+      },
+      "programmedTables" : {
+        "label" : "Inhoud-opdateringskedule",
+        "help" : "Stel die skedulering van veranderde inhoud in om die retrieve augmented generation-stelsel op datum te hou"
+      },
+      "catalogingCriteria" : {
+        "label" : "Spasies, bladsye en subbladsye organisasie kriteria",
+        "help" : "Verduidelik hier hoe die spasies, bladsye en subbladsye se organiseringskriteria toegepas is in die Confluence-inhoud wat met Gebo.ai gedeel word"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Algemene instellings"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer Confluence-stelsel"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "baseUri" : {
+        "label" : "Basis internetadres",
+        "help" : "Url van die basis Confluence-stelseladres"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die Confluence-stelsel."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die Confluence-stelsel in."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-weergawe",
+        "help" : "Confluence-weergawe"
+      },
+      "secretCode" : {
+        "label" : "Identiteit gebruik",
+        "help" : "Kies of skep die identiteit om toegang tot die Confluence-stelsel te kry"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nuwe groep"
+      },
+      "NewUserBtn" : {
+        "label" : "nuwe gebruiker"
+      },
+      "UsersListPanel" : {
+        "label" : "Gebruikerslys"
+      },
+      "GroupsListPanel" : {
+        "label" : "Groepe lys"
+      },
+      "SournameHeader" : {
+        "label" : "van"
+      },
+      "UsernameHeader" : {
+        "label" : "gebruikersnaam"
+      },
+      "RolesHeader" : {
+        "label" : "rolle"
+      },
+      "NameHeader" : {
+        "label" : "naam"
+      },
+      "EditBtn" : {
+        "label" : "Wysig"
+      },
+      "DisabledHeader" : {
+        "label" : "gedeaktiveer"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "UserIds" : {
+        "placeholder" : "Kies gebruikers"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer gebruikersgroep"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die gebruikersgroep in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Voer die kode van die gebruikersgroep in"
+      },
+      "userIds" : {
+        "label" : "Gebruikerslys",
+        "help" : "Kies gebruikers wat aan die groep deelneem"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Skep"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die jira-stelsel in."
+      },
+      "MainPanel" : {
+        "label" : "Skep jira-stelselkonfigurasie"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "username" : {
+        "label" : "jira-gebruikersnaam",
+        "help" : "jira gebruikersnaam"
+      },
+      "token" : {
+        "label" : "jira cloud api-sleutel",
+        "help" : "jira CLOUD apikey verkry in die jira backend, hier moet \"API Token for your Atlassian Account\" ingevoer word."
+      },
+      "baseUri" : {
+        "label" : "Basiese internetadres",
+        "help" : "Url van die basiese jira-stelseladres vir plaaslike installasie of jou organisasie se basiese url vir jira cloud-stelsel"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in die kennisbasis vir LLm’s"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SettingsTab" : {
+        "label" : "Instellings"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "MainPanel" : {
+        "label" : "Deel jira-inhoud"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties-gegenereerde unieke kode van die inhoud."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira-stelsel",
+        "help" : "Reeds gekonfigureerde jira-stelsel verwysing."
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Verwysing na ouerprojek."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die opgelaaide inhoud van jira-inskrywings in."
+      },
+      "programmedTables" : {
+        "label" : "Inhoud-opdateringskontrole skedule",
+        "help" : "Stel die skedulering van inhoudsveranderinge op om die retrieve augmented generation-stelsel op datum te hou"
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Laat oopmaak van zip-lêers en inhoudonttrekking toe"
+      },
+      "tree" : {
+        "label" : "Geselekteerde ruimtes of bladsye/subbladsye",
+        "help" : "Gedeelde jira-projekte en kaartjies se hiërargie-inhoud"
+      },
+      "catalogingCriteria" : {
+        "label" : "Organisasiekriteria vir ruimtes, bladsye en subbladsye",
+        "help" : "Verduidelik asseblief hier hoe die organisasiekriteria vir ruimtes, bladsye en subbladsye toegepas is op die jira-inhoud wat met Gebo.ai gedeel is"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die jira-stelsel in."
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "MainPanel" : {
+        "label" : "Wysig jira-stelsel"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "baseUri" : {
+        "label" : "Basiese internetadres",
+        "help" : "Url van die basiese jira-stelseladres"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties-gegenereerde unieke kode van die jira-stelsel."
+      },
+      "secretCode" : {
+        "label" : "Gebruikde identiteit",
+        "help" : "Kies of skep die identiteit om toegang tot die jira-stelsel te verkry"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die SharePoint/OneDrive-stelsel in."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint-weergawe",
+        "help" : "SharePoint-weergawe"
+      },
+      "secret" : {
+        "label" : "Geheime sleutel",
+        "help" : "Oauth2 kliëntgeheim vir hierdie app wat in die Microsoft \"entra\" produk geregistreer is (verkrygbaar in Microsoft cloud admin konsol)"
+      },
+      "clientId" : {
+        "label" : "Kliënt ID",
+        "help" : "Oauth2 kliënt-identifiseerder vir hierdie app wat in die Microsoft \"entra\" produk geregistreer is (verkrygbaar in Microsoft cloud admin konsol)"
+      },
+      "tenantId" : {
+        "label" : "Huurder ID",
+        "help" : "Oauth2 huurder-identifiseerder vir jou organisasie se Microsoft \"entra\" produk (verkrygbaar in Microsoft cloud admin konsol)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsoft oauth2 app registrasie-inligting vir Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Skep"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "MainPanel" : {
+        "label" : "Skep SharePoint/OneDrive-stelselkonfigurasie"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in die kennisbasis vir LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Instellings"
+      },
+      "MainPanel" : {
+        "label" : "Deel SharePoint/OneDrive-inhoud"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode vir die inhoud."
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Verwysing na ouerprojek."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing in van SharePoint/OneDrive-broninskrywings."
+      },
+      "sharePointSystemCode" : {
+        "label" : "SharePoint-stelsel",
+        "help" : "Reeds gekonfigureerde SharePoint/OneDrive-stelselverwysing."
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Aktiveer oopmaak van zip-lêers en inhoudontrekking"
+      },
+      "tree" : {
+        "label" : "Gekose SharePoint-webwerwe/bladsye/subbladsye of OneDrive-skyfies/gidse/lêers",
+        "help" : "Gedeelde SharePoint/OneDrive-inhoud"
+      },
+      "programmedTables" : {
+        "label" : "Skedule vir inhoudopdaterings",
+        "help" : "Stel die skedulering op van veranderinge om die retrieve augmented generation-stelsel op datum te hou"
+      },
+      "catalogingCriteria" : {
+        "label" : "Organisasiekriteria vir ruimtes, bladsye en subbladsye",
+        "help" : "Verduidelik hier hoe die organisasiekriteria vir ruimtes, bladsye en subbladsye toegepas is in die SharePoint-inhoud wat met Gebo.ai gedeel is"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Redigeer SharePoint-stelsel"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Algemene instellings"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "secretCode" : {
+        "label" : "Identiteit gebruik",
+        "help" : "Kies of skep die identiteit om toegang tot die SharePoint-stelsel te verkry"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die SharePoint-stelsel."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die SharePoint-stelsel in."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint-weergawe",
+        "help" : "SharePoint-weergawe"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Verwyder"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Stoor"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Kanselleer"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Algemene inligtings-/inhoudinstellings"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms-instellings"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die kennisgrafiek-data-onttrekkingstadium"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/kennis-onttrekkingskonfigurasie"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing in van hierdie kennisgrafiek-data-onttrekkingstadiumkonfigurasie"
+      },
+      "extractionPrompt" : {
+        "label" : "Inligtingsonttrekkingsprompt",
+        "help" : "Groot taalmodel-prompt vir entiteit/geleenthede/verhouding en alias-onttrekking"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM wat gebruik word vir data-onttrekking",
+        "help" : "Spesifiseer die groot taalmodel wat vir kennisonttrekking gebruik word, die verstek een sal gebruik word as geen gekies is nie."
+      },
+      "graphRagAllSources" : {
+        "label" : "Pas graph rag toe op alle databronne",
+        "help" : "As gekies, sal al die kennisbasisse/projekte/databronne verwerk word vir kennisonttrekking, anders net dié wat spesifiek gekonfigureer is"
+      },
+      "defaultModel" : {
+        "label" : "Verstek groot taalmodel",
+        "help" : "Die verstek groot taalmodel sal gebruik word vir kennisonttrekking"
+      },
+      "processEveryDocument" : {
+        "label" : "Pas graph rag toe op alle lêers",
+        "help" : "Die graph rag-algoritmes sal op alle lêers toegepas word. Dit verbeter die detail van ontleding waarvoor die stelsel in staat is, maar dit verhoog die koste en tyd wat nodig is om dokumente te verwerk."
+      },
+      "contentSelectionFilter" : {
+        "label" : "Lêerkeusekriteria vir graphrag-verwerking",
+        "help" : "Redigeer kriteria vir lêers om na die inligtingsonttrekkingsproses via graphrag te stuur; kies ten minste 'n lêernaam en kriteria en/of 'n lêertipe en/of die maksimum aantal grepe van lêergrootte en/of die ouderdom van laaste wysiging in dae"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Kies lêertipes"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Lêernaam filterkriteria"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Laaste wysiging van lêer, dae gelede"
+      },
+      "nameFilter" : {
+        "placeholder" : "Lêernaam"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maksimum lêergrootte in grepe"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "MainPanel" : {
+        "label" : "Kennisbasis wysig"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Toegangsinstellings vir kennisbasis"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die kennisbasis."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die kennisbasis in."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Gebruikte inbeddingsmodelle (laat leeg om stelselverstek te gebruik)",
+        "help" : "Inbeddingsmodelle vir die kennisbasis, laat leeg om die verstekeen te gebruik."
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "IndexBtn" : {
+        "label" : "Indeks",
+        "help" : "Herindekseer inhoud"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Wysig projek of item"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die projek."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die projek in."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "kennisbasis",
+        "help" : "kennisbasis."
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "IndexBtn" : {
+        "label" : "Indeks",
+        "help" : "Herindekseer inhoud"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Voeg item/projek by",
+        "help" : "voeg nuut by..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Enigiemand gebruik",
+        "help" : "Enigiemand kan gebruik"
+      },
+      "accessibleGroups" : {
+        "label" : "Groepelys",
+        "help" : "Kies toegelate groepe"
+      },
+      "accessibleUsers" : {
+        "label" : "Gebruikerslys",
+        "help" : "Kies toegelate gebruikers"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Dashboard"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs vir gesels en embedding"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag-kletskonfigurasies/Model-aanwysings"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Kennisbasisse en projekte"
+      },
+      "UsersGroupTab" : {
+        "label" : "Gebruikers en groepe"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai modulekonfigurasie"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfigureer"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigureer"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nuwe opdrag-konfigurasie"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Nuwe kletsprofiel"
+      },
+      "MainPanel" : {
+        "label" : "Herwinning-verbeterde generasie kletsprofiele"
+      },
+      "PromptsPanel" : {
+        "label" : "Versameling opdragte & verstek opdragte"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Kennisbasisse"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfigureer"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nuwe kennisbasis"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nuwe inbeddingsmodelkonfigurasie"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nuwe geselsmodelkonfigurasie"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Modelverskaffer"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfigureer"
+      },
+      "CodeHeader2" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Beskrywing"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Modelverskaffer"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfigureer"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Gekonfigureerde geselsmodelle"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Gekonfigureerde inbeddingsmodelle"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Toets model"
+      },
+      "TestChatBtn" : {
+        "label" : "Toets klets"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI-token",
+        "help" : "Kies die OpenAI-token om vir hierdie model te gebruik"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI kletsmodel-keuse",
+        "help" : "Kies die OpenAI kletsmodel om mee te werk."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gevorderde instellings"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer OpenAI kletsmodel-konfigurasie"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeltoegang-instellings"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer OpenAI embedding model-konfigurasie"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI-token",
+        "help" : "Kies die OpenAI-token om vir hierdie model te gebruik"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die embedding model-konfigurasie"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die embedding model-konfigurasie in"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding model-keuse",
+        "help" : "Kies die OpenAI embedding model om mee te werk."
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek embedding model",
+        "help" : "As waar, sal dit as verstek embedding model gebruik word indien geen model aangedui is nie"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "baseUrl" : {
+        "label" : "Basis Ollama bedieneradres",
+        "help" : "Basisadres (soos http://servername:234/) waarmee die Ollama plaaslike of lan-bediener reageer."
+      },
+      "choosedModel" : {
+        "label" : "Ollama kletsmodel-keuse",
+        "help" : "Kies die Ollama kletsmodel om mee te werk.",
+        "placeholder" : "Kies 'n model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama-token",
+        "help" : "Kies die Ollama-token om vir hierdie model te gebruik (opsioneel)"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer Ollama plaaslike (of lan) kletsmodel-konfigurasie"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic-token",
+        "help" : "Kies die Anthropic-token om vir hierdie model te gebruik"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic kletsmodel-keuse",
+        "help" : "Kies die Anthropic kletsmodel om mee te werk.",
+        "placeholder" : "Kies 'n model"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gevorderde instellings"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeltoegang-instellings"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer Anthropic kletsmodel-konfigurasie"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI-token",
+        "help" : "Kies die MistralAI-token om vir hierdie model te gebruik"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI kletsmodel-keuse",
+        "help" : "Kies die MistralAI kletsmodel om mee te werk."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gevorderde instellings"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeltoegang-instellings"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer MistralAI kletsmodel-konfigurasie"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI kletsmodel-keuse",
+        "help" : "Kies die Google Vertex AI kletsmodel om mee te werk."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI-token",
+        "help" : "Kies die Google Vertex AI-token om vir hierdie model te gebruik"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Algemene inligting"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Modeltoegang-instellings"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Gevorderde instellings"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer Google Vertex AI kletsmodel-konfigurasie"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek-token",
+        "help" : "Kies die Deepseek-token om vir hierdie model te gebruik"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek kletsmodel-keuse",
+        "help" : "Kies die Deepseek kletsmodel om mee te werk.",
+        "placeholder" : "Kies 'n model"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gevorderde instellings"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer Deepseek kletsmodel-konfigurasie"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeltoegang-instellings"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die modelkonfigurasie in"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die modelkonfigurasie"
+      },
+      "baseUrl" : {
+        "label" : "Kletsmodel API basis-bedieneradres",
+        "help" : "Basisadres van Kletsmodel."
+      },
+      "apiSecretCode" : {
+        "label" : "Kletsmodel API-token",
+        "help" : "Kies die Kletsmodel API-token om vir hierdie model te gebruik (opsioneel)"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek kletsmodel",
+        "help" : "As waar, sal dit as verstek kletsmodel gebruik word indien geen model aangedui is nie"
+      },
+      "choosedModel" : {
+        "label" : "Kletsmodel kletsmodel-keuse",
+        "help" : "Kies die Kletsmodel kletsmodel om mee te werk."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "TitleFragment" : {
+        "label" : "Redigeer kletsmodelverskaffer:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gevorderde instellings"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeltoegang-instellings"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die embedding model-konfigurasie in"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer Ollama plaaslike (of lan) embedding model-konfigurasie"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama-token",
+        "help" : "Kies die Ollama-token om vir hierdie model te gebruik"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding model-keuse",
+        "help" : "Kies die Ollama embedding model om mee te werk."
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die embedding model-konfigurasie"
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek embedding model",
+        "help" : "As waar, sal dit as verstek embedding model gebruik word indien geen model aangedui is nie"
+      },
+      "baseUrl" : {
+        "label" : "Basis Ollama bedieneradres",
+        "help" : "Basisadres (soos http://servername:234/) waarmee die Ollama plaaslike of lan-bediener reageer."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die embedding model-konfigurasie in"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer MistralAI embedding model-konfigurasie"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die embedding model-konfigurasie"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding model-keuse",
+        "help" : "Kies die MistralAI embedding model om mee te werk."
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek embedding model",
+        "help" : "As waar, sal dit as verstek embedding model gebruik word indien geen model aangedui is nie"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI-token",
+        "help" : "Kies die MistralAI-token om vir hierdie model te gebruik"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Redigeer Google Vertex AI embedding model-konfigurasie"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die embedding model-konfigurasie in"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding model-keuse",
+        "help" : "Kies die Google Vertex AI embedding model om mee te werk."
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek embedding model",
+        "help" : "As waar, sal dit as verstek embedding model gebruik word indien geen model aangedui is nie"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die embedding model-konfigurasie"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI-token",
+        "help" : "Kies die Google Vertex AI-token om vir hierdie model te gebruik"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "DeleteBtn" : {
+        "label" : "Vee uit"
+      },
+      "TitleFragment" : {
+        "label" : "Redigeer embedding model-verskaffer:"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die Embedding model-konfigurasie in"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die Embedding model-konfigurasie"
+      },
+      "choosedModel" : {
+        "label" : "Embedding model embedding model-keuse",
+        "help" : "Kies die Embedding model embedding model om mee te werk."
+      },
+      "baseUrl" : {
+        "label" : "Embedding model API-bedieneradres",
+        "help" : "Basisadres van die Embedding model-bediener."
+      },
+      "defaultModel" : {
+        "label" : "stel dit as verstek embedding model",
+        "help" : "As waar, sal dit as verstek embedding model gebruik word indien geen model aangedui is nie"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding model API-token",
+        "help" : "Kies die Embedding model API-token om vir hierdie model te gebruik"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Klets konfigurasie-inligting"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Verwyder hierdie kletssessie"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Hernoem die kletssessie"
+      },
+      "QueryControl" : {
+        "placeholder" : "Skryf 'n boodskap vir die kletsgids"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "description" : {
+        "label" : "Kletsbeskrywing",
+        "help" : "Voer die beskrywing van die kletssessie in."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Gebruik model",
+        "help" : "Modelkode"
+      },
+      "providerId" : {
+        "label" : "Kletsmodel verskaffer",
+        "help" : "LLms verskaffer drywer"
+      },
+      "functions" : {
+        "label" : "Kletsmodel oproepbare funksies",
+        "help" : "Lys van funksies beskikbaar vir die kletsmodel"
+      },
+      "NameCol" : {
+        "label" : "Naam"
+      },
+      "DescriptionCol" : {
+        "label" : "Beskrywing"
+      },
+      "kbases" : {
+        "label" : "Beskikbare kennisbasisse",
+        "help" : "Lys van kennisbasisse gebruik in hierdie RAG-klets"
+      },
+      "CloseBtn" : {
+        "help" : "Maak toe"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Opneem",
+        "help" : "Begin om 'n oudio snit op te neem en stuur dit"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "herlaai data"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SelectHeader" : {
+        "label" : "Kies"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "einddatum/-tyd"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "begindatum/-tyd"
+      },
+      "ProcessingHeader" : {
+        "label" : "verwerking"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "FinishedHeader" : {
+        "label" : "afgehandel"
+      },
+      "WithErrorHeader" : {
+        "label" : "met fout"
+      },
+      "LogTableComponent" : {
+        "help" : "Hierdie gedeelde lêerstelselarea-inlaslog"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Prosesstatistiek"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "CloseBtn" : {
+        "label" : "Maak toe"
+      },
+      "PublicationLogTab" : {
+        "label" : "Publikasielog"
+      },
+      "MainPanel" : {
+        "label" : "Publikasielog"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Status van die taak, steeds besig, afgehandel of afgehandel met foute."
+      },
+      "publishingSystem" : {
+        "label" : "Gepubliseerde inhoudskonfigurasie",
+        "help" : "Gepubliseerde inhoudinligting"
+      },
+      "startDateTime" : {
+        "label" : "Begindatum/-tyd",
+        "help" : "Begindatum en -tyd van die inhoudsinksinkroniseringstaak"
+      },
+      "endDateTime" : {
+        "label" : "Einddatum/-tyd",
+        "help" : "Einddatum en -tyd van die inhoudsinksinkroniseringstaak"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Nie volledig verwerk nie"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Volledig verwerk"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding teenoor totale aantal dokumente"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Meer besonderhede"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Genereer prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Prompt-wizard",
+        "help" : "Gebruik dit om 'n LLM te gebruik om die prompt vir jou doelwitte te genereer"
+      },
+      "acceptPrompt" : {
+        "label" : "Aanvaar prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Prompt-templaatgenerasie-wizard"
+      },
+      "cancel" : {
+        "label" : "Kanselleer"
+      },
+      "response" : {
+        "label" : "Voorgestelde prompt-templaat",
+        "help" : "Gegenereerde templaatteks vir jou doelwit (jy kan dit verander of aanpas)"
+      },
+      "modelCode" : {
+        "label" : "Kletmodel om te gebruik",
+        "help" : "Kies die kletmodel waaraan jy die prompt-templaatgenerasie wil vra"
+      },
+      "query" : {
+        "label" : "Prompt-templaatversoek",
+        "help" : "Spesifiseer in die tweede persoon wat die doel is wat die KI vir die gebruiker gaan ondersteun"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatuur",
+        "help" : "Temperatuur waarop die model sal reageer, van 0 tot 1 (laat leeg as jy onseker is)"
+      },
+      "contextLength" : {
+        "label" : "Kontekslengte (tokens)",
+        "help" : "Hoeveelheid teks wat 'n KI-model kan oorweeg tydens verwerking (as nie gestel nie, sal 1047576 gebruik word)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, van 0 tot 1 (laat leeg as jy onseker is)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Geaktiveerde funksies vir hierdie model",
+        "help" : "Funksies wat deur die model tydens die gesprek gebruik kan word"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Verstek model-aanmoediging",
+        "help" : "Redigeer die verstekaanmoediging vir die geselskapmodel."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer identiteitsbeskrywing in."
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die identiteit."
+      },
+      "secretType" : {
+        "label" : "Identiteitstipe",
+        "help" : "Kies die identiteitstipe om vir die afgeleë stelsel te skep"
+      },
+      "InsertBtn" : {
+        "label" : "Voeg in"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Voer die token in."
+      },
+      "user" : {
+        "label" : "Gebruiker",
+        "help" : "Voer die gebruiker aan wat deur die token aangedui word."
+      },
+      "MainPanel" : {
+        "label" : "Skep identiteit"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "username" : {
+        "label" : "Gebruikersnaam",
+        "help" : "Voer die gebruikersnaam in."
+      },
+      "password" : {
+        "label" : "Wagwoord",
+        "help" : "Voer die wagwoord in."
+      },
+      "email" : {
+        "label" : "E-pos/gebruikersnaam",
+        "help" : "Voer die e-pos of gebruikersnaam in wat met die ssh-sleutel geassosieer word."
+      },
+      "key" : {
+        "label" : "Geheime sleutel",
+        "help" : "Maak die privaatsleutel-lêer oop en kopieer in hierdie teksarea."
+      },
+      "passphrase" : {
+        "label" : "Sleutel wagwoordfrase",
+        "help" : "Voer die sleutel wagwoordfrase in."
+      },
+      "pub" : {
+        "label" : "Publieke sleutel",
+        "help" : "Maak die publieke sleutel-lêer oop en kopieer in hierdie teksarea."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die inhoud."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die opgelaaide inhoud van die lêerstelselinskrywing in."
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Verwysing na ouerprojek."
+      },
+      "upload" : {
+        "label" : "Laai inhoud op",
+        "help" : "Klik op die blaai-knoppie en kies zip-lêers of ander lêers"
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Aktiveer oopmaak van zip-lêers en inhoudonttrekking"
+      },
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in kennisbasis vir LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer opgelaaide inhoud"
+      },
+      "SettingsTab" : {
+        "label" : "Instellings"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigureer boustelsels",
+        "help" : "Lys van bou-/verpakkingsisteme om na meta-inligting en bykomende artefak-inligting te soek (los oop as daar geen sagtewarekode is nie)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Gekose elemente"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Kanselleer"
+      },
+      "EditBtn" : {
+        "help" : "Wysig gekose"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Kies elemente"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Kies elemente"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Wysig skedulering"
+      },
+      "ConfirmBtn" : {
+        "label" : "Bevestig"
+      },
+      "AddBtn" : {
+        "label" : "+Voeg by"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in die kennisbasis vir LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SettingsTab" : {
+        "label" : "Instellings"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Bronkodebehandeling"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "MainPanel" : {
+        "label" : "Wysig bestaande lêerstelselinhoud"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing in van die opgelaaide inhoud van die lêerstelselinskrywing."
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Aktiveer oopmaak van zip-lêers en inhoudonttrekking"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die inhoud."
+      },
+      "tree" : {
+        "label" : "Gekose lêers of vouers",
+        "help" : "Gedeelde lêerstelsellêers of -gidse beskikbaar op die bediener"
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Verwysing na ouerprojek."
+      },
+      "programmedTables" : {
+        "label" : "Skedule vir inhoudsopdateringstoetse",
+        "help" : "Stel die skedulering op van veranderde inhoud om die stelsel vir verbeterde inligtingherwinning op datum te hou"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vouersorganisasiekriteria",
+        "help" : "Verduidelik asseblief hier hoe die organisasiekriteria van vouers gedoen is in die lêerstelselsektor wat jy met Gebo.ai deel"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Stel boustelsels op",
+        "help" : "Lys van bou-/verpakkingsisteme om te inspekteer vir metainligting en bykomende artefakte-inligting (laat leeg as daar geen sagtewarekode is nie)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nuwe lêerdeelgebied"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolute pad"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db of yml lêerkonfigurasie"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ModifyHeader" : {
+        "label" : "Wysig"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Gekose gedeelde lêerstelselvouer",
+        "help" : "Kies 'n bedienervouer wat 'n wortelpad is vir die gedeelde lêerstelsel wat in jou organisasie as dokumentbewaarplek gebruik word"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing in van die gedeelde lêerstelselarea van jou organisasie"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die inhoud."
+      },
+      "InsertBtn" : {
+        "label" : "Voeg in"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "MainPanel" : {
+        "label" : "Wysig bediener se gedeelde lêervouer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in die kennisbasis vir LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer git bron/dokumentasie-bewaarplek"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die git-bewaarplek in."
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die git-bewaarplek."
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Verwysing na ouerprojek."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git-stelsel",
+        "help" : "Reeds gekonfigureerde git-stelsel verwysing."
+      },
+      "branch" : {
+        "label" : "Tak",
+        "help" : "Naam van die tak om af te teken (gewoonlik master, main of develop)"
+      },
+      "identityCode" : {
+        "label" : "Gebruik identifikasie",
+        "help" : "Kies die identifikasie om te kloon/af te teken op die stelsel"
+      },
+      "repositoryUri" : {
+        "label" : "Bewaarplek url/adres",
+        "help" : "Volledige adres van die git eksterne bewaarplek (gewoonlik begin met http:, https: of ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "openbaar",
+        "help" : "As waar, vereis die bewaarplek nie verifikasie nie"
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Laat toe dat zip-lêers oopgemaak en inhoud uitgehaal word"
+      },
+      "programmedTables" : {
+        "label" : "Skedule vir kontrole van inhoudsopdaterings",
+        "help" : "Stel die skedulering van veranderde inhoud op om die stelsel vir verbeterde generasie op datum te hou"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Stel boustelsels op",
+        "help" : "Lys van bou-/verpakkingsisteme wat nagegaan moet word vir metainligting en bykomende artefak-inligting"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Algemene inligting"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Gebruik kletsmodel"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "kies"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Kies 'n kletsmodelkonfigurasie"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Kies 'n embedding-modelkonfigurasie"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "kies"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG-instellings"
+      },
+      "LanguageModelTab" : {
+        "label" : "Groot taalmodel & bruikbare hulpmiddel-instellings"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Gebruik embedding-model"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Sekuriteitstoegang-instellings"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer retrieve augmented generation kletsprofiel"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die kletsprofiel."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer kletsprofielbeskrywing in."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Gebruiker kies kennisbasisse",
+        "help" : "Gebruiker kan kies uit toeganklike kennisbasisse en/of hul eie lêers oplaai."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Kennisbasisse",
+        "help" : "Kennisbasisse wat gebruik word vir dokumentherwinning."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Gelyksoortigheid drumpelwaarde",
+        "help" : "Drumpelwaarde vir semantiese soektogte, 0.60–0.65 Lae filter, 0.70-0.75 Medium filter, 0.80–0.85 Akkuraat"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2de 'hop' gelyksoortigheid drumpelwaarde",
+        "help" : "Drumpelwaarde vir semantiese soektogte, 0.60–0.65 Lae filter, 0.70-0.75 Medium filter, 0.80–0.85 Akkuraat, wat van die 2de soektog van multi-hop rag gebruik word"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Deaktiveer 'Multi Hop' rag",
+        "help" : "Deaktiveer die 'multi hop rag'-funksionaliteit. Multi hop-soektog doen 'n eerste semantiese soektog en gebruik die gevonde dokumente as konteks vir die semantiese soek self en bied 'n groter konteks."
+      },
+      "topK" : {
+        "label" : "Oorweegde dokumentfragmente (TopK)",
+        "help" : "In die retrieve augmented generation word die Top N gevonde dokumentfragmente in die semantiese soektog oorweeg"
+      },
+      "enabledFunctions" : {
+        "label" : "Geaktiveerde funksie-oproepe vir hierdie RAG-klets",
+        "help" : "Funksionaliteite wat deur die llm-model gebruik kan word tydens die klets met die gebruiker, ook met die geselekteerde kennisbasis"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Redigeer die prompt vir die retrieve augmented generation sessies."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Voer die aanvraatkategorie in of voeg dit by"
+      },
+      "MainPanel" : {
+        "label" : "Redigeer prompt"
+      },
+      "promptCategory" : {
+        "label" : "Aanvraatkategorie",
+        "help" : "Kies of voeg die aanvraatkategorie by."
+      },
+      "prompt" : {
+        "label" : "Aanvraag",
+        "help" : "Redigeer die prompt vir die klets, gebruik {query} om die gebruikersvraag aan te dui en {context} om die dokumente/geskiedenis konteks wat aan die LLM gestuur word aan te dui."
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die prompt."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die prompt in."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Verander wagwoord"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Ou wagwoord",
+        "help" : "Huidige wagwoord om aan te meld"
+      },
+      "newPassword" : {
+        "label" : "Nuwe wagwoord",
+        "help" : "nuwe wagwoord"
+      },
+      "username" : {
+        "label" : "E-pos",
+        "help" : "E-pos as gebruikersnaam om aan te meld"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Wagwoord verander vorm"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "ChangePwdBtn" : {
+        "label" : "verander wagwoord"
+      },
+      "newPassword1" : {
+        "label" : "Bevestig nuwe wagwoord",
+        "help" : "Bevestig nuwe wagwoord"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "ForMoreInformations" : {
+        "label" : "Vir meer inligting oor Google se persoonlike soek API of om jou API-sleutel te kry (gratis), besoek: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Unieke kode van die google soek API-konfigurasie."
+      },
+      "MainPanel" : {
+        "label" : "Redigeer google persoonlike soek API-bewyse"
+      },
+      "secretCode" : {
+        "label" : "Google soek API-token",
+        "help" : "Kies of voer die google soek API-token in"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google soekenjin-ID",
+        "help" : "Google soekenjin-ID"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van google soek API-konfigurasie in."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Gesels sonder kennisbasisse",
+        "help" : "Kies die LLMs vir 'n geselssessie",
+        "placeholder" : "Kies die LLMs vir 'n geselssessie"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Maak geselsopsies oop"
+      },
+      "CreateChatBtn" : {
+        "label" : "Nuwe gesels"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nuwe geselssessie"
+      },
+      "chatProfileCode" : {
+        "label" : "Gesels met kennisbasisse",
+        "help" : "Kies die maatskappy-geselsprofiel om met maatskappy- (en jou) dokumente en LLMs te kommunikeer",
+        "placeholder" : "Kies die maatskappy-geselsprofiel om met maatskappy- (en jou) dokumente en LLMs te kommunikeer"
+      },
+      "NewChatBtn" : {
+        "label" : "Nuwe gesels"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Gesels met dokumente",
+        "help" : "Blaai of soek en kies dokumente om mee te werk"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Kies lêers om mee te gesels"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Bevestig"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Laai op of kies jou dokumente",
+        "help" : "Kies/laai dokumente op uit jou gebruikersruimte"
+      },
+      "fileSearchBtn" : {
+        "label" : "Soek"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Soek"
+      },
+      "query" : {
+        "label" : "Semantiese soekfrase",
+        "help" : "Voer 'n beskrywende frase in wat verband hou met jou soektog"
+      },
+      "choosenBrowsing" : {
+        "label" : "Kies lêers blaai kennisbasisse",
+        "help" : "Kies lêers deur maatskappy gesamentlike kennisbasisse te blaai"
+      },
+      "filename" : {
+        "label" : "Gesogte lêernaam",
+        "help" : "Voer 'n deel van die lêernaam in vir jou gesoekte inhoud"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Wysig geselecteerde"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Kies gebruikerslêers"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Kies gebruiker opgelaaide inhoud"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Kennisbasisse & gebruikerslêers"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojek of item",
+        "help" : "voeg subprojek of item by"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+laai lêers op",
+        "help" : "voeg opgelaaide lêers databron by"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "voeg 'n Microsoft SharePoint/OneDrive databron by"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "voeg 'n Atlassian Confluence databron by"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+lêerstelsel",
+        "help" : "voeg gesamentlike lêerstelsel databron by"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "voeg 'n Atlassian Jira databron by"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "voeg 'n git-bewaarplek databron by soos bitbucket, github of ander"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Instel"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "my profiel"
+      },
+      "logout" : {
+        "label" : "meld af"
+      }
+    }
+  }
+}

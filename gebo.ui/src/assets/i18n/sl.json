@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Privzeti sistemski jezik",
+        "help" : "Privzeti sistemski jezik za to namestitev Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-pošta",
+        "help" : "E-pošta kot uporabniško ime za prijavo"
+      },
+      "passwordC" : {
+        "label" : "Potrdite geslo",
+        "help" : "Potrdite geslo"
+      },
+      "password" : {
+        "label" : "Geslo",
+        "help" : "Geslo za prijavo (vsaj 8 znakov)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " gesli se ne ujemata "
+      },
+      "LocalAdmin" : {
+        "label" : "Ustvarite svoj lokalni skrbniški račun"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Ta račun boste uporabljali v prihodnje za nastavitev/upravljanje programske opreme, ti podatki bodo ostali lokalno v vašem sistemu in ne bodo poslani prek omrežja"
+      },
+      "EnterBtn" : {
+        "label" : "Pojdi na prijavno stran"
+      },
+      "SetupPage" : {
+        "label" : "Nastavite svojo namestitev gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Ustvari sistemsko nastavitev"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Preberite in sprejmite licenco"
+      },
+      "AcceptMark" : {
+        "label" : "Sprejemam pogoje",
+        "help" : "S klikom tukaj sprejmete pogoje v licenci"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-pošta",
+        "help" : "E-pošta kot uporabniško ime za prijavo"
+      },
+      "password" : {
+        "label" : "Geslo",
+        "help" : "Geslo za prijavo"
+      },
+      "LoginPanel" : {
+        "label" : "Prijava v gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Prijava"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "V redu!",
+        "detail" : "Operacija je bila uspešno izvedena"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 konfiguracija"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Ime ponudnika"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "MainPanel" : {
+        "label" : "Nastavitve varnosti Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Nazaj na začetno stran nastavitve"
+      },
+      "WizardUi" : {
+        "label" : "Izberite razdelek za nastavitev"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Nastavitev računa administratorja & drugih uporabnikov",
+        "description" : "Za pravilno upravljanje te namestitve gebo.ai je potreben vsaj en administratorski račun. Po potrebi dodajte še druge uporabnike."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Delovna mapa Gebo.ai",
+        "description" : "Nastavite delovno mapo, ki bo mapa, kjer bodo shranjene vse konfiguracije in delovne datoteke te namestitve. Priporočamo tudi redno varnostno kopiranje."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Konfiguracija vektorske baze podatkov",
+        "description" : "Za uporabo storitev razširjene generacije je za Gebo.ai potrebna konfiguracija vektorske baze podatkov. Izbirate lahko med lokalno bazo, Qdrant ali Mongo Atlas."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Enotna prijava, oauth2 avtentikacija",
+        "description" : "Oauth2 enotna prijava in konfiguracija oauth2 klientov"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Nastavitev obsežnih jezikovnih modelov",
+        "description" : "Nastavite različne llms z oblačnimi ali lokalnimi/LAN zalednimi storitvami. Za pravilno delovanje programske opreme je potreben vsaj en model za klepet in en model za vdelavo."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Nastavitev Graph rag/izvlečka znanja",
+        "description" : "Nastavite graph rag in podsystem za izvleček znanja"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Nastavitev poti za deljene datotečne sisteme",
+        "description" : "Nastavite poti do deljenih datotečnih sistemov podjetja, ki bodo služile kot območje dokumentov za razširjeno generacijo v različnih bazah znanja"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integracija Atlassian confluence",
+        "description" : "Nastavite dostop Gebo.ai do vaših Atlassian Confluence oblačnih ali lokalnih namestitev"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integracija Atlassian jira",
+        "description" : "Nastavite dostop Gebo.ai do vaših Atlassian jira oblačnih namestitev"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integracija Microsoft Sharepoint",
+        "description" : "Nastavite dostop Gebo.ai do vaših Microsoft Sharepoint oblačnih ali lokalnih namestitev"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Nastavite vsaj eno bazo znanja",
+        "description" : "Nastavite vsaj eno bazo znanja, da lahko vaši uporabniki uporabljajo storitve razširjene generacije v Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Nastavite vsaj en \"R.A.G.\" profil za klepet",
+        "description" : "Nastavite vsaj en profil za razširjeni klepet glede na eno izmed vaših konfiguriranih baz znanja"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Nastavitev podjetniških Atlassian Confluence sistemov"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tip sistema"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Koda konfiguracije"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence sistem"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira sistem"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Koda konfiguracije"
+      },
+      "MainPanel" : {
+        "label" : "Nastavitev podjetniških Atlassian Jira sistemov"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tip sistema"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Koda konfiguracije"
+      },
+      "MainPanel" : {
+        "label" : "Nastavitev podjetniških Microsoft Sharepoint sistemov"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tip sistema"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint sistem"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Vnesite api-ključ z ustrezno dobroimetjem. Če izberete OpenAI, morate na svoj običajni načrt za uporabo API dodati posebno dobroimetje (10–30 $ je lahko dovolj), sicer promet do llms v tej aplikaciji ne bo na voljo."
+      },
+      "MainPanel" : {
+        "label" : "Nastavitev dostopa do Gebo.ai llms ponudnikov z vašim lastnim api ključem"
+      },
+      "provider" : {
+        "label" : "Ponudnik obsežnih jezikovnih modelov",
+        "help" : "Izberite enega izmed ponudnikov: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Uporabnik",
+        "help" : "Vnesite uporabnika, ki je povezan z apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfiguriraj"
+      },
+      "apiKey" : {
+        "label" : "Api ključ",
+        "help" : "Vaš api ključ ponudnika LLMS za uporabo"
+      },
+      "ProviderHeader" : {
+        "label" : "Ponudnik"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Koda konfiguracije"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Tip modela"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Privzeti model"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Ustvari konfiguracijo graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Nastavitev privzete konfiguracije Graph Rag & izvlečka znanja"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Koda konfiguracije"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Dodaj bazo znanja"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Baza znanja"
+      },
+      "MainPanel" : {
+        "label" : "Baze znanja in konfiguracije vsebin"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Vir vsebine"
+      },
+      "PublishedHeader" : {
+        "label" : "Objavljeno"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Št. dokumentov"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Dodaj projekt/postavko",
+        "help" : "ustvari nov projekt"
+      },
+      "Button1" : {
+        "help" : "odpri bazo znanja"
+      },
+      "Button2" : {
+        "help" : "odpri obrazec projekta"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Konfiguracija delovne mape Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfiguriraj"
+      },
+      "workDirectory" : {
+        "label" : "Izberite mapo kot delovno mapo za Gebo.ai",
+        "help" : "Izberite mapo na strežniku, ki jo bo ta namestitev uporabljala kot delovno mapo za shranjevanje konfiguracij in vsebin."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Dodaj mapo"
+      },
+      "AddFolderBtn" : {
+        "label" : "Dodaj mapo"
+      },
+      "CodeHeader" : {
+        "label" : "Koda"
+      },
+      "MainPanel" : {
+        "label" : "Poti strežniškega deljenega datotečnega sistema"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolutna pot"
+      },
+      "DeleteHeader" : {
+        "label" : "Izbriši"
+      },
+      "path" : {
+        "label" : "Dodajte korensko mapo deljenega datotečnega sistema",
+        "help" : "Izberite mapo na strežniku, ki predstavlja korensko pot za deljeni datotečni sistem, ki ga v organizaciji uporabljate za shranjevanje dokumentov"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis vneska datotečnega sistema"
+      },
+      "RemovePathBtn" : {
+        "label" : "Odstrani pot"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfiguriraj"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracija vektorske baze podatkov"
+      },
+      "host" : {
+        "label" : "Qdrant gostitelj",
+        "help" : "Ime gostitelja ali IP naslov za Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Nastavitve povezave Qdrant"
+      },
+      "port" : {
+        "label" : "Qdrant vrata",
+        "help" : "Komunikacijska vrata Qdrant (6334 je standardna nastavitev)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api ključ",
+        "help" : "Api ključ za Qdrant avtentikacijo"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Obvezni koraki nastavitve Gebo.ai so opravljeni...",
+        "detail" : "Obvezni koraki nastavitve so zaključeni, vendar nekaj manjkajočih korakov vaši organizaciji onemogoča izkušnjo s polno funkcionalnostjo te programske opreme"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Nekateri obvezni koraki nastavitve Gebo.ai manjkajo",
+        "detail" : "Prosimo, preverite rdeče korake v nastavitvenem postopku"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Nastavitev Gebo.ai je uspešna!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Koda",
+        "help" : "Vnesite opis kode za OAUTH2 avtentikacijo/integracijo (registrationId)."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis podatkov o OAUTH2 avtentikaciji/integraciji."
+      },
+      "configurationType" : {
+        "label" : "Namen konfiguracije",
+        "help" : "Izberite, ali bodo te nastavitve uporabljene za prijavo v Gebo.ai ali za omogočanje povezave Gebo.ai s tretjim sistemom."
+      },
+      "authProvider" : {
+        "label" : "Ponudnik",
+        "help" : "Vnesite ponudnika OAUTH2 avtentikacije"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Vnesite OAUTH2 URL izdajatelja ponudnika"
+      },
+      "authorizationUri" : {
+        "label" : "URL za avtorizacijo",
+        "help" : "Vnesite OAUTH2 URL za avtorizacijo ponudnika"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Vnesite OAUTH2 Jwk Set url ponudnika"
+      },
+      "userInfoUri" : {
+        "label" : "URL za podatke o uporabniku",
+        "help" : "Vnesite OAUTH2 URL za podatke o uporabniku ponudnika"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Vnesite OAUTH2 introspection URL ponudnika"
+      },
+      "tokenUri" : {
+        "label" : "URL za žeton",
+        "help" : "Vnesite OAUTH2 URL za žeton ponudnika"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 URL-ji ponudnika"
+      },
+      "MainPanel" : {
+        "label" : "Vnesite nove podatke za OAUTH2 avtentikacijo/integracijo"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID odjemalca",
+        "help" : "Identifikator odjemalca za protokol oauth2 (pridobite ga v administraciji oauth2 overjene programske opreme tretje strani) "
+      },
+      "secret" : {
+        "label" : "Skrivni ključ",
+        "help" : "Skrivnost odjemalca za protokol oauth2 (pridobite jo v administraciji oauth2 overjene programske opreme tretje strani)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Ustvari konfiguracijo sistema Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis sistema Confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Ustvari"
+      },
+      "username" : {
+        "label" : "Confluence uporabniško ime",
+        "help" : "Uporabniško ime za Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence različica",
+        "help" : "Različica Confluence"
+      },
+      "baseUri" : {
+        "label" : "Osnovni spletni naslov",
+        "help" : "URL osnovnega naslova sistema Confluence za lokalno namestitev ali osnovni URL vaše organizacije za sistem Confluence v oblaku"
+      },
+      "password" : {
+        "label" : "Confluence geslo",
+        "help" : "Geslo za Confluence"
+      },
+      "token" : {
+        "label" : "Confluence cloud api ključ",
+        "help" : "Confluence CLOUD API ključ, pridobljen v ozadju Confluence; tukaj vnesite \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in omogoči, da so te vsebine na voljo v bazi znanja za LLm."
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavitve"
+      },
+      "MainPanel" : {
+        "label" : "Deljenje vsebine Confluence"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      },
+      "code" : {
+        "label" : "Edinstvena koda",
+        "help" : "Samodejno ustvarjena edinstvena koda vsebine."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis naložene vsebine vnosov Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Sistem Confluence",
+        "help" : "Referenca že konfiguriranega sistema Confluence."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca nadrejenega projekta."
+      },
+      "openZips" : {
+        "label" : "Odpiranje zip datotek",
+        "help" : "Omogočite odpiranje zip datotek in ekstrakcijo vsebine"
+      },
+      "tree" : {
+        "label" : "Izbrani prostori ali strani/podstrani",
+        "help" : "Deljene vsebine prostorov in strani v Confluence"
+      },
+      "programmedTables" : {
+        "label" : "Urnik preverjanja posodobitev vsebin",
+        "help" : "Nastavite urnik preverjanja spremenjenih vsebin, da bo sistem za razširjeno pridobivanje informacij ažuren"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteriji za organizacijo prostorov, strani in podstrani",
+        "help" : "Prosim pojasnite, kako so bili določeni kriteriji za organizacijo prostorov, strani in podstrani v vsebinah Confluence, deljenih z Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Splošne nastavitve"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje sistema Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "baseUri" : {
+        "label" : "Osnovni spletni naslov",
+        "help" : "URL osnovnega naslova sistema Confluence"
+      },
+      "code" : {
+        "label" : "Edinstvena koda",
+        "help" : "Samodejno ustvarjena edinstvena koda sistema Confluence."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis sistema Confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence različica",
+        "help" : "Različica Confluence"
+      },
+      "secretCode" : {
+        "label" : "Uporabljena identiteta",
+        "help" : "Izberite ali ustvarite identiteto za dostop do sistema Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nova skupina"
+      },
+      "NewUserBtn" : {
+        "label" : "nov uporabnik"
+      },
+      "UsersListPanel" : {
+        "label" : "Seznam uporabnikov"
+      },
+      "GroupsListPanel" : {
+        "label" : "Seznam skupin"
+      },
+      "SournameHeader" : {
+        "label" : "priimek"
+      },
+      "UsernameHeader" : {
+        "label" : "uporabniško ime"
+      },
+      "RolesHeader" : {
+        "label" : "vloge"
+      },
+      "NameHeader" : {
+        "label" : "ime"
+      },
+      "EditBtn" : {
+        "label" : "Uredi"
+      },
+      "DisabledHeader" : {
+        "label" : "onemogočeno"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "UserIds" : {
+        "placeholder" : "Izberi uporabnike"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje uporabniške skupine"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis uporabniške skupine"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Vnesite kodo uporabniške skupine"
+      },
+      "userIds" : {
+        "label" : "Seznam uporabnikov",
+        "help" : "Izberite uporabnike, ki sodelujejo v skupini"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Ustvari"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis jira sistema."
+      },
+      "MainPanel" : {
+        "label" : "Ustvari konfiguracijo jira sistema"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "username" : {
+        "label" : "jira uporabniško ime",
+        "help" : "jira uporabniško ime"
+      },
+      "token" : {
+        "label" : "jira cloud api ključ",
+        "help" : "jira CLOUD apikey pridobljen v jira backoffice, tukaj vnesite \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Osnovni spletni naslov",
+        "help" : "Url osnovnega naslova jira sistema za namestitev na lokaciji ali osnovni url vaše organizacije za jira cloud sistem"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in omogoči, da so te vsebine na voljo v bazi znanja za LLm-je"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavitve"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      },
+      "MainPanel" : {
+        "label" : "Deljenje jira vsebin"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda vsebin."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira sistem",
+        "help" : "Že nastavljena referenca na jira sistem."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca na nadrejeni projekt."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis naložene vsebine jira zapisov."
+      },
+      "programmedTables" : {
+        "label" : "Razpored preverjanj posodobitev vsebin",
+        "help" : "Nastavite urnik spreminjanja vsebin, da bo sistem za okrepljeno generiranje vsebin posodobljen"
+      },
+      "openZips" : {
+        "label" : "Odpri zip datoteke",
+        "help" : "Omogoči odpiranje zip datotek in pridobivanje vsebine"
+      },
+      "tree" : {
+        "label" : "Izbrani prostori ali strani/podstrani",
+        "help" : "Deljena hierarhija projektov in vstopnic jir-a"
+      },
+      "catalogingCriteria" : {
+        "label" : "Merila za organizacijo prostorov, strani in podstrani",
+        "help" : "Tukaj opišite, kako se uporablja organizacijsko merilo za prostore, strani in podstrani v jira vsebinah, deljenih z Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis jira sistema."
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje jira sistema"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "baseUri" : {
+        "label" : "Osnovni spletni naslov",
+        "help" : "Url osnovnega naslova jira sistema"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno ustvarjena unikatna koda jira sistema."
+      },
+      "secretCode" : {
+        "label" : "Uporabljena identiteta",
+        "help" : "Izberite ali ustvarite identiteto za dostop do jira sistema"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis sistema SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Različica Sharepoint",
+        "help" : "različica sharepoint"
+      },
+      "secret" : {
+        "label" : "Skrivni ključ",
+        "help" : "Oauth2 klient skrivnost za to aplikacijo, registrirano v microsoft produktu \"entra\" (pridobite v konzoli za upravljanje microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "ID klienta",
+        "help" : "Oauth2 identifikator klienta za to aplikacijo, registrirano v microsoft produktu \"entra\" (pridobite v konzoli za upravljanje microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "ID najemnika",
+        "help" : "Oauth2 identifikator najemnika vaše organizacije v microsoft produktu \"entra\" (pridobite v konzoli za upravljanje microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Informacije o registraciji Microsof oauth2 aplikacije za Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Ustvari"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "MainPanel" : {
+        "label" : "Ustvari konfiguracijo sistema SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in naredi te vsebine dostopne v bazi znanja za LLm-je"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavitve"
+      },
+      "MainPanel" : {
+        "label" : "Deljenje vsebin SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda vsebine."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca nadrejenega projekta."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis virov podatkov SharePoint/OneDrive vnosa."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sistem sharepoint",
+        "help" : "Referenca že nastavljenega sistema SharePoint/OneDrive."
+      },
+      "openZips" : {
+        "label" : "Odpri zip datoteke",
+        "help" : "Omogoči odpiranje zip datotek in pridobivanje vsebine"
+      },
+      "tree" : {
+        "label" : "Izbrane Sharepoint strani/podstrani ali OneDrive pogoni/mape/datoteke",
+        "help" : "Deljene vsebine sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Razpored preverjanja posodobitev vsebin",
+        "help" : "Nastavite urnik preverjanja sprememb vsebend, da bo sistem za razširjeno pridobivanje informacij posodobljen"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteriji organizacije prostorov, strani in podstrani",
+        "help" : "Tukaj prosimo razložite, kako ste organizirali prostore, strani in podstrani v sharepoint-ovih vsebinah, deljenih z Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Urejanje sistema sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Splošne nastavitve"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "secretCode" : {
+        "label" : "Uporabljena identiteta",
+        "help" : "Izberite ali ustvarite identiteto za dostop do sistema sharepoint"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda sistema sharepoint."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis sistema sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Različica Sharepoint",
+        "help" : "različica sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Izbriši"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Shrani"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Prekliči"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Splošne nastavitve informacij/vsebin"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Nastavitve LLms"
+      },
+      "code" : {
+        "label" : "Edinstvena koda",
+        "help" : "Samodejno generirana edinstvena koda za fazo ekstrakcije podatkov iz grafa znanja"
+      },
+      "MainPanel" : {
+        "label" : "Konfiguracija ekstrakcije Graphrag/znanja"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis te konfiguracije faze ekstrakcije podatkov iz grafa znanja"
+      },
+      "extractionPrompt" : {
+        "label" : "Poziv za ekstrakcijo informacij",
+        "help" : "Poziv za velik jezikovni model za ekstrakcijo entitet/dogodkov/relacij in vzdevkov"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM, uporabljen za ekstrakcijo podatkov",
+        "help" : "Navedite velik jezikovni model, uporabljen za ekstrakcijo znanja. Če noben ni izbran, bo uporabljen privzet model."
+      },
+      "graphRagAllSources" : {
+        "label" : "Uporabi graph rag na vse vire podatkov",
+        "help" : "Če je omogočeno, bodo vse baze znanja/projekti/viri podatkov procesirani za ekstrakcijo znanja, sicer samo posebej konfigurirani viri."
+      },
+      "defaultModel" : {
+        "label" : "Privzeti velik jezikovni model",
+        "help" : "Za ekstrakcijo znanja bo uporabljen privzeti velik jezikovni model"
+      },
+      "processEveryDocument" : {
+        "label" : "Uporabi graph rag na vse datoteke",
+        "help" : "Algoritmi graph rag bodo uporabljeni na vseh datotekah, kar poveča podrobnost analize, ki jo sistem omogoča, vendar zviša stroške in čas obdelave dokumentov"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Kriteriji izbire datotek za obdelavo z graphrag",
+        "help" : "Uredite kriterije datotek, ki jih pošljete v pipeline za ekstrakcijo informacij z graphrag. Izberite vsaj ime datoteke in kriterij in/ali vrsto datoteke in/ali največjo velikost datoteke v bajtih in/ali starost zadnje spremembe v dneh"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Izberite vrste datotek"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Merila za filtriranje imen datotek"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Zadnja sprememba datoteke, pred dnevi"
+      },
+      "nameFilter" : {
+        "placeholder" : "Ime datoteke"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Največja velikost datoteke v bajtih"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje baze znanja"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Nastavitve dostopa do baze znanja"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda baze znanja."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis baze znanja."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Uporabljeni modeli za vdelavo (pustite prazno za privzeto nastavitev)",
+        "help" : "Modeli za vdelavo za bazo znanja. Če pustite prazno, se uporabi privzeta nastavitev."
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksiraj",
+        "help" : "Ponovno indeksiraj vsebino"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Urejanje projekta ali elementa"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda projekta."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis projekta."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "baza znanja",
+        "help" : "baza znanja."
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksiraj",
+        "help" : "Ponovno indeksiraj vsebino"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Dodaj postavko/projekt",
+        "help" : "dodaj novo..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Uporabljajo vsi",
+        "help" : "Uporabljajo lahko vsi"
+      },
+      "accessibleGroups" : {
+        "label" : "Seznam skupin",
+        "help" : "Izberite dovoljene skupine"
+      },
+      "accessibleUsers" : {
+        "label" : "Seznam uporabnikov",
+        "help" : "Izberite dovoljene uporabnike"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Nadzorna plošča"
+      },
+      "LLMSTab" : {
+        "label" : "LLM-ji za klepet in vdelavo"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Profili Rag klepeta / Modelni pozivi"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Baze znanja in projekti"
+      },
+      "UsersGroupTab" : {
+        "label" : "Uporabniki in skupine"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai konfiguracija modulov"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Koda"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Nastavi"
+      },
+      "ConfigureBtn" : {
+        "label" : "Nastavi"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nova konfiguracija poziva"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Nov profil klepeta"
+      },
+      "MainPanel" : {
+        "label" : "Profili klepeta z razširjeno generacijo iskanja"
+      },
+      "PromptsPanel" : {
+        "label" : "Zbirka pozivov in privzeti pozivi"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Baze znanja"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "ConfigureBtn1" : {
+        "label" : "nastavi"
+      },
+      "CodeHeader" : {
+        "label" : "Koda"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nova zbirka znanja"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nova konfiguracija modela za vdelavo"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nova konfiguracija pogovornega modela"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CodeHeader" : {
+        "label" : "Koda"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Ponudnik modela"
+      },
+      "ConfigureBtn" : {
+        "label" : "nastavi"
+      },
+      "CodeHeader2" : {
+        "label" : "Koda"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Opis"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Ponudnik modela"
+      },
+      "ConfigureBtn2" : {
+        "label" : "nastavi"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Nastavljeni pogovorni modeli"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Nastavljeni modeli za vdelavo"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Preizkušanje modela"
+      },
+      "TestChatBtn" : {
+        "label" : "Preizkusi klepet"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI žeton",
+        "help" : "Izberite OpenAI žeton, ki ga želite uporabiti za ta model"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "choosedModel" : {
+        "label" : "Izbira OpenAI klepetalnega modela",
+        "help" : "Izberite OpenAI klepetalni model za uporabo."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Napredne nastavitve"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije OpenAI klepetalnega modela"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavitve dostopa do modela"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije OpenAI vgraditvenega modela"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI žeton",
+        "help" : "Izberite OpenAI žeton, ki ga želite uporabiti za ta model"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije vgraditvenega modela"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije vgraditvenega modela"
+      },
+      "choosedModel" : {
+        "label" : "Izbira OpenAI vgraditvenega modela",
+        "help" : "Izberite OpenAI vgraditveni model za uporabo."
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti vgraditveni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti vgraditveni model, kadar ni izbran drugačen."
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "baseUrl" : {
+        "label" : "Osnovni naslov Ollama strežnika",
+        "help" : "Osnovni naslov (npr. http://servername:234/), kjer se odziva lokalni ali LAN ollama strežnik."
+      },
+      "choosedModel" : {
+        "label" : "Izbira Ollama klepetalnega modela",
+        "help" : "Izberite Ollama klepetalni model za uporabo.",
+        "placeholder" : "Izberite model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama žeton",
+        "help" : "Izberite Ollama žeton, ki ga želite uporabiti za ta model (neobvezno)"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije Ollama lokalnega (ali LAN) klepetalnega modela"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic žeton",
+        "help" : "Izberite Anthropic žeton, ki ga želite uporabiti za ta model"
+      },
+      "choosedModel" : {
+        "label" : "Izbira Anthropic klepetalnega modela",
+        "help" : "Izberite Anthropic klepetalni model za uporabo.",
+        "placeholder" : "Izberite model"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Napredne nastavitve"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavitve dostopa do modela"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije Anthropic klepetalnega modela"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI žeton",
+        "help" : "Izberite MistralAI žeton, ki ga želite uporabiti za ta model"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "choosedModel" : {
+        "label" : "Izbira MistralAI klepetalnega modela",
+        "help" : "Izberite MistralAI klepetalni model za uporabo."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Napredne nastavitve"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavitve dostopa do modela"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije MistralAI klepetalnega modela"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "choosedModel" : {
+        "label" : "Izbira Google Vertex AI klepetalnega modela",
+        "help" : "Izberite Google Vertex AI klepetalni model za uporabo."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI žeton",
+        "help" : "Izberite Google Vertex AI žeton, ki ga želite uporabiti za ta model"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Splošne informacije"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Nastavitve dostopa do modela"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Napredne nastavitve"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije Google Vertex AI klepetalnega modela"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek žeton",
+        "help" : "Izberite Deepseek žeton, ki ga želite uporabiti za ta model"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "choosedModel" : {
+        "label" : "Izbira Deepseek klepetalnega modela",
+        "help" : "Izberite Deepseek klepetalni model za uporabo.",
+        "placeholder" : "Izberite model"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Napredne nastavitve"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije Deepseek klepetalnega modela"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavitve dostopa do modela"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije modela"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije modela"
+      },
+      "baseUrl" : {
+        "label" : "Osnovni naslov API strežnika klepetalnega modela",
+        "help" : "Osnovni naslov klepetalnega modela."
+      },
+      "apiSecretCode" : {
+        "label" : "API žeton klepetalnega modela",
+        "help" : "Izberite API žeton klepetalnega modela, ki ga želite uporabiti za ta model (neobvezno)"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti klepetalni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti klepetalni model, kadar ni izbran drugačen."
+      },
+      "choosedModel" : {
+        "label" : "Izbira klepetalnega modela",
+        "help" : "Izberite klepetalni model za uporabo."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "TitleFragment" : {
+        "label" : "Urejanje ponudnika klepetalnega modela:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Napredne nastavitve"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavitve dostopa do modela"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije vgraditvenega modela"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije Ollama lokalnega (ali LAN) vgraditvenega modela"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama žeton",
+        "help" : "Izberite Ollama žeton, ki ga želite uporabiti za ta model"
+      },
+      "choosedModel" : {
+        "label" : "Izbira Ollama vgraditvenega modela",
+        "help" : "Izberite Ollama vgraditveni model za uporabo."
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije vgraditvenega modela"
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti vgraditveni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti vgraditveni model, kadar ni izbran drugačen."
+      },
+      "baseUrl" : {
+        "label" : "Osnovni naslov Ollama strežnika",
+        "help" : "Osnovni naslov (npr. http://servername:234/), kjer se odziva lokalni ali LAN ollama strežnik."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije vgraditvenega modela"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije MistralAI vgraditvenega modela"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije vgraditvenega modela"
+      },
+      "choosedModel" : {
+        "label" : "Izbira MistralAI vgraditvenega modela",
+        "help" : "Izberite MistralAI vgraditveni model za uporabo."
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti vgraditveni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti vgraditveni model, kadar ni izbran drugačen."
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI žeton",
+        "help" : "Izberite MistralAI žeton, ki ga želite uporabiti za ta model"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Urejanje konfiguracije Google Vertex AI vgraditvenega modela"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije vgraditvenega modela"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "choosedModel" : {
+        "label" : "Izbira Google Vertex AI vgraditvenega modela",
+        "help" : "Izberite Google Vertex AI vgraditveni model za uporabo."
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti vgraditveni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti vgraditveni model, kadar ni izbran drugačen."
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije vgraditvenega modela"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI žeton",
+        "help" : "Izberite Google Vertex AI žeton, ki ga želite uporabiti za ta model"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "TitleFragment" : {
+        "label" : "Urejanje ponudnika vgraditvenega modela:"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije vgraditvenega modela"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda konfiguracije vgraditvenega modela"
+      },
+      "choosedModel" : {
+        "label" : "Izbira vgraditvenega modela",
+        "help" : "Izberite vgraditveni model za uporabo."
+      },
+      "baseUrl" : {
+        "label" : "Naslov API strežnika vgraditvenega modela",
+        "help" : "Osnovni naslov strežnika vgraditvenega modela."
+      },
+      "defaultModel" : {
+        "label" : "nastavi kot privzeti vgraditveni model",
+        "help" : "Če je omogočeno, bo to nastavljen privzeti vgraditveni model, kadar ni izbran drugačen."
+      },
+      "apiSecretCode" : {
+        "label" : "API žeton vgraditvenega modela",
+        "help" : "Izberite API žeton vgraditvenega modela, ki ga želite uporabiti za ta model"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Informacije o nastavitvah klepeta"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Izbriši to sejo klepeta"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Preimenuj sejo klepeta"
+      },
+      "QueryControl" : {
+        "placeholder" : "Napišite sporočilo za klepetalni bot"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "description" : {
+        "label" : "Opis klepeta",
+        "help" : "Vnesite opis seje klepeta."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Uporabljen model",
+        "help" : "Koda modela"
+      },
+      "providerId" : {
+        "label" : "Ponudnik modela klepeta",
+        "help" : "Pogon ponudnika LLms"
+      },
+      "functions" : {
+        "label" : "Funkcije, ki jih lahko kliče model klepeta",
+        "help" : "Seznam funkcij, ki so na voljo modelu klepeta"
+      },
+      "NameCol" : {
+        "label" : "Ime"
+      },
+      "DescriptionCol" : {
+        "label" : "Opis"
+      },
+      "kbases" : {
+        "label" : "Dostopne baze znanja",
+        "help" : "Seznam baz znanja, ki se uporabljajo v tem RAG klepetu"
+      },
+      "CloseBtn" : {
+        "help" : "Zapri"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Snemaj",
+        "help" : "Začni snemati zvočni posnetek in ga pošlji"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "osveži podatke"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SelectHeader" : {
+        "label" : "Izberi"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "končni datum/čas"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "začetni datum/čas"
+      },
+      "ProcessingHeader" : {
+        "label" : "obdelava"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CodeHeader" : {
+        "label" : "Koda"
+      },
+      "FinishedHeader" : {
+        "label" : "zaključeno"
+      },
+      "WithErrorHeader" : {
+        "label" : "z napako"
+      },
+      "LogTableComponent" : {
+        "help" : "Ta dnevnik prevzema skupnega datotečnega sistema"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Statistika procesov"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "CloseBtn" : {
+        "label" : "Zapri"
+      },
+      "PublicationLogTab" : {
+        "label" : "Dnevnik objav"
+      },
+      "MainPanel" : {
+        "label" : "Dnevnik objav"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Stanje naloge, v teku, zaključeno ali zaključeno z napakami."
+      },
+      "publishingSystem" : {
+        "label" : "Konfiguracija objavljene vsebine",
+        "help" : "Informacije o objavljeni vsebini"
+      },
+      "startDateTime" : {
+        "label" : "Začetni datum/čas",
+        "help" : "Datum in čas začetka naloge za sinhronizacijo vsebine"
+      },
+      "endDateTime" : {
+        "label" : "Končni datum/čas",
+        "help" : "Datum in čas zaključka naloge za sinhronizacijo vsebine"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Ni popolnoma obdelano"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Popolnoma obdelano"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "vgnezdenje v primerjavi s skupnim številom dokumentov"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Več podrobnosti"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Ustvari poziv"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Čarovnik za poziv",
+        "help" : "Uporabite to, da z LLM ustvarite poziv za svoje cilje"
+      },
+      "acceptPrompt" : {
+        "label" : "Sprejmi poziv"
+      },
+      "promptWizardUI" : {
+        "label" : "Čarovnik za ustvarjanje predlog pozivov"
+      },
+      "cancel" : {
+        "label" : "Prekliči"
+      },
+      "response" : {
+        "label" : "Predlagana predloga poziva",
+        "help" : "Ustvarjeno besedilo predloge za vaš cilj (lahko ga spremenite ali popravite)"
+      },
+      "modelCode" : {
+        "label" : "Model za klepet",
+        "help" : "Izberite model za klepet, ki ga želite uporabiti za generiranje predloge poziva"
+      },
+      "query" : {
+        "label" : "Zahteva za predlogo poziva",
+        "help" : "Navedite v drugi osebi, kateremu cilju bo AI pomagal uporabniku"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura, pri kateri bo model odgovarjal, od 0 do 1 (če niste prepričani, pustite prazno)"
+      },
+      "contextLength" : {
+        "label" : "Dolžina konteksta (tokeni)",
+        "help" : "Količina besedila, ki ga lahko AI model upošteva pri obdelavi (če ni nastavljeno, bo uporabljena vrednost 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parameter TopP, od 0 do 1 (če niste prepričani, pustite prazno)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Omogočene funkcije za ta model",
+        "help" : "Funkcionalnosti, ki jih lahko model uporablja med klepetom"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Privzeti poziv za model",
+        "help" : "Uredi privzeti poziv za klepetalni model."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis identitete."
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda identitete."
+      },
+      "secretType" : {
+        "label" : "Vrsta identitete",
+        "help" : "Izberite vrsto identitete za ustvarjanje za oddaljeni sistem"
+      },
+      "InsertBtn" : {
+        "label" : "Vstavi"
+      },
+      "token" : {
+        "label" : "Žeton",
+        "help" : "Vnesite žeton."
+      },
+      "user" : {
+        "label" : "Uporabnik",
+        "help" : "Vnesite uporabnika, ki ga določa žeton."
+      },
+      "MainPanel" : {
+        "label" : "Ustvarjanje identitete"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "username" : {
+        "label" : "Uporabniško ime",
+        "help" : "Vnesite uporabniško ime."
+      },
+      "password" : {
+        "label" : "Geslo",
+        "help" : "Vnesite geslo."
+      },
+      "email" : {
+        "label" : "E-pošta/uporabniško ime",
+        "help" : "Vnesite e-pošto ali uporabniško ime povezano s ssh ključem."
+      },
+      "key" : {
+        "label" : "Skrivni ključ",
+        "help" : "Odprite datoteko zasebnega ključa in jo kopirajte v to besedilno polje."
+      },
+      "passphrase" : {
+        "label" : "Geslo ključa",
+        "help" : "Vnesite geslo ključa."
+      },
+      "pub" : {
+        "label" : "Javni ključ",
+        "help" : "Odprite datoteko javnega ključa in jo kopirajte v to besedilno polje."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda vsebine."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis naložene vsebine vnosa datotečnega sistema."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca nadrejenega projekta."
+      },
+      "upload" : {
+        "label" : "Naloži vsebino",
+        "help" : "Kliknite gumb za brskanje in izberite zip datoteke ali druge datoteke"
+      },
+      "openZips" : {
+        "label" : "Odpri zip datoteke",
+        "help" : "Omogoči odpiranje zip datotek in izvlečenje vsebine"
+      },
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in omogoči razpoložljivost te vsebine v bazi znanja za LLm-je"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje naložene vsebine"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavitve"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Nastavi sisteme za izgradnjo",
+        "help" : "Seznam sistemov za izgradnjo/pakiranje za pregled meta informacij in dodatnih podatkov o artefaktih (pustite prazno, če ni programske kode)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Izbrani elementi"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Prekliči"
+      },
+      "EditBtn" : {
+        "help" : "Uredi izbrane"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Izberi elemente"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Izberi elemente"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Uredi razpored"
+      },
+      "ConfirmBtn" : {
+        "label" : "Potrdi"
+      },
+      "AddBtn" : {
+        "label" : "+Dodaj"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in omogoči dostopnost teh vsebin v bazi znanja za LLm-je"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavitve"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Obdelava izvorne kode"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje obstoječe vsebine datotečnega sistema"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis naložene vsebine vnosa datotečnega sistema."
+      },
+      "openZips" : {
+        "label" : "Odpri ZIP datoteke",
+        "help" : "Omogoči odpiranje ZIP datotek in izvleček vsebine"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda vsebine."
+      },
+      "tree" : {
+        "label" : "Izbrane datoteke ali mape",
+        "help" : "Deljene datoteke ali mape datotečnega sistema na strežniku"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca nadrejenega projekta."
+      },
+      "programmedTables" : {
+        "label" : "Razpored preverjanj posodobitev vsebin",
+        "help" : "Nastavite načrt preverjanja spremenjenih vsebin, da bo sistem za pridobivanje razširjenih vsebin posodobljen"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteriji organizacije map",
+        "help" : "Prosimo, opišite, kako so bili postavljeni kriteriji organizacije map na področju datotečnega sistema, ki ga delite z Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Nastavi sisteme za gradnjo",
+        "help" : "Seznam build/packaging sistemov za pregled meta informacij in dodatnih podatkovnih artefaktov (pustite prazno, če koda programske opreme ni vsebovana)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Novo območje souporabe datotek"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolutna pot"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db ali yml konfiguracija"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "CodeHeader" : {
+        "label" : "Koda"
+      },
+      "ModifyHeader" : {
+        "label" : "Uredi"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Izbrana mapa za skupno rabo datotečnega sistema",
+        "help" : "Izberite mapo na strežniku, ki je korenska pot za skupni datotečni sistem, ki se v vaši organizaciji uporablja kot repozitorij dokumentov"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis območja skupne rabe datotečnega sistema v vaši organizaciji"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda vsebine."
+      },
+      "InsertBtn" : {
+        "label" : "Vstavi"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje mape za skupno rabo datotek na strežniku"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in omogoči, da so te vsebine na voljo v zbirki znanja za LLm-je"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje git izvorne/dokumentacijske repozitorija"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis git repozitorija."
+      },
+      "code" : {
+        "label" : "Edinstvena koda",
+        "help" : "Samodejno generirana edinstvena koda git repozitorija."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca na nadrejeni projekt."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git sistem",
+        "help" : "Že nastavljena referenca na git sistem."
+      },
+      "branch" : {
+        "label" : "Veja",
+        "help" : "Ime veje za preverjanje (običajno master, main ali develop)"
+      },
+      "identityCode" : {
+        "label" : "Uporabljena identiteta",
+        "help" : "Izberite identiteto za kloniranje/preverjanje v sistemu"
+      },
+      "repositoryUri" : {
+        "label" : "URL/naslov repozitorija",
+        "help" : "Popoln naslov oddaljenega git repozitorija (običajno začne z http:, https: ali ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "javno",
+        "help" : "Če je izbrano, za dostop do repozitorija ni potrebna avtentikacija"
+      },
+      "openZips" : {
+        "label" : "Odpri zip datoteke",
+        "help" : "Omogoči odpiranje zip datotek in izvlečenje vsebine"
+      },
+      "programmedTables" : {
+        "label" : "Urnik preverjanja posodobitev vsebin",
+        "help" : "Nastavite urnik za preverjanje spremenjenih vsebin, da bo sistem za razširjeno iskanje ostal posodobljen"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Nastavi sisteme za gradnjo",
+        "help" : "Seznam sistemov za gradnjo/paketiranje za pregled meta podatkov in dodatnih informacij o artefaktih"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Splošne informacije"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Uporabi chat model"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "izberi"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Izberite konfiguracijo chat modela"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Izberite konfiguracijo embedding modela"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "izberi"
+      },
+      "RagSettingsTab" : {
+        "label" : "Nastavitve RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Nastavitve modela velikega jezika in orodij"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Uporabi embedding model"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Nastavitve varnostnega dostopa"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje profila chat z razširjenim pridobivanjem"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda profila chata."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis profila chata."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Uporabnik izbira baze znanja",
+        "help" : "Uporabnik lahko izbere dostopne baze znanja in/ali naloži lastne datoteke."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Baze znanja",
+        "help" : "Baze znanja za iskanje dokumentov."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Prag podobnosti",
+        "help" : "Prag podobnosti za semantična iskanja, 0.60–0.65 Nizko filtriranje, 0.70-0.75 Srednje filtriranje, 0.80–0.85 Natančno"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Drugi prag podobnosti ('hop')",
+        "help" : "Prag podobnosti za semantična iskanja, 0.60–0.65 Nizko filtriranje, 0.70-0.75 Srednje filtriranje, 0.80–0.85 Natančno uporabljeno od drugega iskanja v večkratnem RAG"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Onemogoči 'Večkratni hop' RAG",
+        "help" : "Onemogoči funkcionalnost 'večkratni hop rag'. Večkratno iskanje opravi prvo semantično iskanje in najdene dokumente uporabi kot kontekst za nadaljnje semantično iskanje za večji kontekst."
+      },
+      "topK" : {
+        "label" : "Upoštevani fragmenti dokumenta (TopK)",
+        "help" : "Pri pridobivanju z razširjeno generacijo, Top N najdenih fragmentov dokumenta v semantičnem iskanju"
+      },
+      "enabledFunctions" : {
+        "label" : "Omogočene funkcije za ta RAG chat",
+        "help" : "Funkcionalnosti, ki jih lahko model llm uporablja med klepetom z uporabnikom in izbrano bazo znanja"
+      },
+      "prompt" : {
+        "label" : "Poziv",
+        "help" : "Uredite poziv za seje pridobivanja z razširjeno generacijo."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Vnesite ali izberite kategorijo poziva"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje poziva"
+      },
+      "promptCategory" : {
+        "label" : "Kategorija poziva",
+        "help" : "Izberite ali vnesite kategorijo poziva."
+      },
+      "prompt" : {
+        "label" : "Poziv",
+        "help" : "Uredite poziv za klepet, uporabite {query} za vprašanje uporabnika in {context} za kontekst dokumentov/zgodovine, poslan LLM-u."
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda poziva."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis poziva."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Spremeni geslo"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Staro geslo",
+        "help" : "Trenutno geslo za prijavo"
+      },
+      "newPassword" : {
+        "label" : "Novo geslo",
+        "help" : "novo geslo"
+      },
+      "username" : {
+        "label" : "E-pošta",
+        "help" : "E-pošta kot uporabniško ime za prijavo"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Obrazec za spremembo gesla"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "ChangePwdBtn" : {
+        "label" : "spremeni geslo"
+      },
+      "newPassword1" : {
+        "label" : "Potrdite novo geslo",
+        "help" : "Potrdite novo geslo"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "ForMoreInformations" : {
+        "label" : "Za več informacij o Google custom search API ali pridobivanju svojega API ključa (brezplačno) obiščite: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "unikatna koda konfiguracije google search api."
+      },
+      "MainPanel" : {
+        "label" : "Urejanje poverilnic google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Google search api žeton",
+        "help" : "Izberite ali vnesite žeton za google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google ID iskalnika",
+        "help" : "Google ID iskalnika"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis konfiguracije google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Klepet brez zbirk znanja",
+        "help" : "Izberi LLM-e za sejo klepeta",
+        "placeholder" : "Izberi LLM-e za sejo klepeta"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Odpri razdelek z možnostmi klepeta"
+      },
+      "CreateChatBtn" : {
+        "label" : "Nov klepet"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nova seja klepeta"
+      },
+      "chatProfileCode" : {
+        "label" : "Klepet z zbirkami znanja",
+        "help" : "Izberi profil podjetja za klepet za interakcijo s podjetniškimi (in tvojimi) dokumenti ter LLM-i",
+        "placeholder" : "Izberi profil podjetja za klepet za interakcijo s podjetniškimi (in tvojimi) dokumenti ter LLM-i"
+      },
+      "NewChatBtn" : {
+        "label" : "Nov klepet"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Klepetaj z dokumenti",
+        "help" : "Brskaj ali išči ter izberi dokumente za delo"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Izberi datoteke za klepet"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Potrdi"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Naloži ali izberi svoje dokumente",
+        "help" : "Izberi ali naloži dokumente iz svojega prostora"
+      },
+      "fileSearchBtn" : {
+        "label" : "Iskanje"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Iskanje"
+      },
+      "query" : {
+        "label" : "Semantična iskalna fraza",
+        "help" : "Vnesite smiselno frazo, povezano z vašim iskanjem"
+      },
+      "choosenBrowsing" : {
+        "label" : "Izberi datoteke z brskanjem po bazah znanja",
+        "help" : "Izberite datoteke z brskanjem po skupnih bazah znanja podjetja"
+      },
+      "filename" : {
+        "label" : "Ime iskane datoteke",
+        "help" : "Vnesite del imena datoteke, ki jo iščete"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Uredi izbrano"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Izberi uporabnikove datoteke"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "okBtn" : {
+        "label" : "V redu"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Izberi uporabnikovo naloženo vsebino"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Baze znanja in uporabniške datoteke"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+podprojekt ali postavka",
+        "help" : "dodaj podprojekt ali postavko"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+naloži datoteke",
+        "help" : "dodaj vir podatkov z naloženimi datotekami"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "dodaj vir podatkov iz Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "dodaj vir podatkov Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+datotečni sistem",
+        "help" : "dodaj vir podatkov skupnega datotečnega sistema"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "dodaj vir podatkov Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repozitorij",
+        "help" : "dodaj vir podatkov git repozitorija kot so bitbucket, github ali drugi"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Nastavitve"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "moj profil"
+      },
+      "logout" : {
+        "label" : "odjava"
+      }
+    }
+  }
+}

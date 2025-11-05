@@ -17,10 +17,10 @@
  * with functionalities like creating, updating, deleting, and linking to projects.
  */
 
-import { Component, Injector, SimpleChanges } from "@angular/core";
+import { Component, forwardRef, Injector, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentsResetControllerService, EmbeddingModelsControllersService, GKnowledgeBase, GObjectRef, GProject, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, EnrichedChild, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 
@@ -33,7 +33,10 @@ import { forkJoin, map, Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-knowledgebase-admin-component",
     templateUrl: "gebo-ai-knowledgebase-admin.component.html",
-    standalone: false
+    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiKnowledgeBaseModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiKnowledgeBaseAdminComponent),
+        multi: false
+    }]
 })
 export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponent<GKnowledgeBase> {
     /**
@@ -113,7 +116,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
     }
     protected override onLoadedPersistentData(actualValue: GKnowledgeBase): void {
         super.onLoadedPersistentData(actualValue);
-        this.graphRagContext={
+        this.graphRagContext = {
             knowledgeBaseCode: actualValue?.code
         };
     }

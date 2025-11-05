@@ -8,24 +8,29 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <div class="grid">
     <div class="col-6">
         <!-- in this area the start and stop record control -->
-        <p-button [disabled]="disabled || playMode" (onClick)="startRecording()" icon="pi pi-microphone" label="Record"
-            title="Start recording an audio track and send it" [text]="true" *ngIf="recording!==true " [severity]="(errorState===true?'danger':'primary')"> </p-button>
-        <p-button [disabled]="disabled  || playMode" (onClick)="stopRecording()" icon="pi pi-stop-circle"
-            label="Recording" title="Recording" [text]="true" *ngIf="recording" [severity]="(errorState===true?'danger':'primary')"></p-button>
+        <p-button id="RecordBtn" gebo-ai-label [disabled]="disabled || playMode" (onClick)="startRecording()"
+            icon="pi pi-microphone" label="Record" title="Start recording an audio track and send it" [text]="true"
+            *ngIf="recording!==true " [severity]="(errorState===true?'danger':'primary')"> </p-button>
+        <p-button id="StopBtn" gebo-ai-label [disabled]="disabled  || playMode" (onClick)="stopRecording()"
+            icon="pi pi-stop-circle" label="Recording" title="Recording" [text]="true" *ngIf="recording"
+            [severity]="(errorState===true?'danger':'primary')"></p-button>
     </div>
     <div class="col-6">
         <!-- Here the abandon record button or the play control-->
-        <p-button [disabled]="disabled" (onClick)="abortRecording()" [severity]="(errorState===true?'danger':'primary')" icon="pi pi-times" label="Abort recording"
+        <p-button id="AbortBtn" gebo-ai-label [disabled]="disabled" (onClick)="abortRecording()"
+            [severity]="(errorState===true?'danger':'primary')" icon="pi pi-times" label="Abort recording"
             title="Abort recording" [text]="true" *ngIf="recording"></p-button>
-        <p-button [disabled]="disabled" *ngIf="playMode" (onClick)="pausePlay()" [severity]="(errorState===true?'danger':'primary')" icon="pi pi-pause" label="Pause"
-            title="Abort recording" [text]="true"></p-button>
-        <p-button [disabled]="disabled"  *ngIf="playPaused" (onClick)="continuePlay()" icon="pi pi-play"  label="Continue" [text]="true" [severity]="(errorState===true?'danger':'primary')"></p-button>
+        <p-button id="AbortRecordingBtn" gebo-ai-label [disabled]="disabled" *ngIf="playMode" (onClick)="pausePlay()"
+            [severity]="(errorState===true?'danger':'primary')" icon="pi pi-pause" label="Pause" title="Abort recording"
+            [text]="true"></p-button>
+        <p-button [disabled]="disabled" *ngIf="playPaused" (onClick)="continuePlay()" icon="pi pi-play" label="Continue"
+            [text]="true" [severity]="(errorState===true?'danger':'primary')"></p-button>
     </div>
 </div>

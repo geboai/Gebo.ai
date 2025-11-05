@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Standard systemspråk",
+        "help" : "Standard systemspråk for denne Gebo.ai-installasjonen"
+      },
+      "username" : {
+        "label" : "E-post",
+        "help" : "E-post som brukernavn for innlogging"
+      },
+      "passwordC" : {
+        "label" : "Bekreft passord",
+        "help" : "Bekreft passord"
+      },
+      "password" : {
+        "label" : "Passord",
+        "help" : "Passord for innlogging (minst 8 tegn)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " passordene samsvarer ikke "
+      },
+      "LocalAdmin" : {
+        "label" : "Opprett din lokale admin-konto"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Du vil bruke denne kontoen for å sette opp/administrere programvaren i fremtiden. Disse dataene forblir lokale på systemet ditt og sendes ikke over nettverket"
+      },
+      "EnterBtn" : {
+        "label" : "Gå til innloggingssiden"
+      },
+      "SetupPage" : {
+        "label" : "Sett opp din Gebo.ai-installasjon"
+      },
+      "CreateBtn" : {
+        "label" : "Opprett systemoppsett"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Les og godta lisensen"
+      },
+      "AcceptMark" : {
+        "label" : "Jeg godtar vilkårene",
+        "help" : "Ved å klikke her godtar du vilkårene i lisensen"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-post",
+        "help" : "E-post som brukernavn for å logge inn"
+      },
+      "password" : {
+        "label" : "Passord",
+        "help" : "Passord for å logge inn"
+      },
+      "LoginPanel" : {
+        "label" : "Logg inn på gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Logg inn"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble utført"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2-oppsett"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Leverandørnavn"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 sikkerhetsinnstillinger"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Tilbake til oppsettets startsiden"
+      },
+      "WizardUi" : {
+        "label" : "Velg en oppsettseksjon"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administratorkonto og andre kontoer",
+        "description" : "Minst en administratorkonto kreves for å sikre at denne Gebo.ai-installasjonen administreres riktig. Legg til flere brukere om nødvendig."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai arbeidskatalog",
+        "description" : "Konfigurer en arbeidskatalog. Den vil være mappen der innstillinger og alle arbeidsfiler for denne installasjonen lagres. Det er også lurt å sikkerhetskopiere jevnlig."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektordatabaseoppsett",
+        "description" : "En vektordatabase må konfigureres for at Gebo.ai kan tilby retrieve augmented generation-tjenester. Du kan velge mellom en lokal vektordatabase, Qdrant eller Mongo Atlas."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single sign-on, oauth2-autentisering",
+        "description" : "Oauth2 single sign-on-autentisering og oauth2-klientkonfigurasjon"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Store språkmodeller (LLMs) oppsett",
+        "description" : "Konfigurer ulike llms med sky- eller lokal infrastruktur. Minst én chatmodell og én embedded-modell må konfigureres for å få programvaren til å fungere."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graph rag/Kunnskapsekstraksjon oppsett",
+        "description" : "Konfigurer graph rag og kunnskapsekstraksjon"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Oppsett av delt filbaner",
+        "description" : "Konfigurer virksomhetens delte filbane som benyttes som dokumentområder i kunnskapsbaser"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian Confluence-integrasjon",
+        "description" : "Sett opp Gebo.ai til å få tilgang til dine Atlassian Confluence sky- eller lokale installasjoner"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian Jira-integrasjon",
+        "description" : "Sett opp Gebo.ai til å få tilgang til dine Atlassian Jira sky-installasjoner"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint-integrasjon",
+        "description" : "Sett opp Gebo.ai til å få tilgang til dine Microsoft Sharepoint sky- eller lokale installasjoner"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Sett opp minst én kunnskapsbase",
+        "description" : "Konfigurer minst én kunnskapsbase slik at brukerne kan dra nytte av retrieve augmented generation-tjenestene i Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Sett opp minst én \"R.A.G.\" chatprofil",
+        "description" : "Konfigurer minst én retrieve augmented chatprofil for brukerne, basert på en av dine konfigurerte kunnskapsbaser"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Oppsett av virksomhetens Atlassian Confluence-systemer"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Systemtype"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Oppsettskoden"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence-system"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira-system"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Oppsettskoden"
+      },
+      "MainPanel" : {
+        "label" : "Oppsett av virksomhetens Atlassian Jira-systemer"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Systemtype"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Oppsettskoden"
+      },
+      "MainPanel" : {
+        "label" : "Oppsett av virksomhetens Microsoft Sharepoint-systemer"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Systemtype"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint-system"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Oppgi en api-nøkkel med tilstrekkelig tilgang. Hvis du velger OpenAI må du legge til spesifikk kreditt (10-30$ kan være nok) på din vanlige plan for api-bruk. Ellers vil det ikke være tilgjengelig LLM-trafikk i denne applikasjonen."
+      },
+      "MainPanel" : {
+        "label" : "Sett opp tilgang til Gebo.ai llms-leverandører med din egen api-nøkkel"
+      },
+      "provider" : {
+        "label" : "Leverandør av store språkmodeller",
+        "help" : "Velg en leverandør mellom OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Bruker",
+        "help" : "Skriv inn brukeren tilknyttet api-nøkkelen"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      },
+      "apiKey" : {
+        "label" : "Api-nøkkel",
+        "help" : "Din api-nøkkel fra LLMS-leverandøren som skal brukes"
+      },
+      "ProviderHeader" : {
+        "label" : "Leverandør"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfigurasjonskode"
+      },
+      "ModelHeader" : {
+        "label" : "Modell"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Modelltype"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Standardmodell"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Opprett graph rag-oppsett"
+      },
+      "MainPanel" : {
+        "label" : "Sett opp standardkonfigurasjon for Graph Rag og kunnskapsekstraksjon"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Oppsettskoden"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Prosjekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Legg til kunnskapsbase"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Kunnskapsbase"
+      },
+      "MainPanel" : {
+        "label" : "Oppsett av kunnskapsbaser og innhold"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Kilde for innhold"
+      },
+      "PublishedHeader" : {
+        "label" : "Publisert"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Antall dokumenter"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Legg til prosjekt/element",
+        "help" : "opprett nytt prosjekt"
+      },
+      "Button1" : {
+        "help" : "åpne kunnskapsbase"
+      },
+      "Button2" : {
+        "help" : "åpne prosjekt-skjema"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai arbeidsmappe-oppsett"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      },
+      "workDirectory" : {
+        "label" : "Velg en mappe som Gebo.ai arbeidskatalog",
+        "help" : "Velg en servermappe som denne installasjonen skal bruke som arbeidsmappe for innstillinger og innhold."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Legg til mappe"
+      },
+      "AddFolderBtn" : {
+        "label" : "Legg til mappe"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "MainPanel" : {
+        "label" : "Baner for delt serverfilsystem"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolutt bane"
+      },
+      "DeleteHeader" : {
+        "label" : "Slett"
+      },
+      "path" : {
+        "label" : "Legg til en rotmappe i et delt filsystem",
+        "help" : "Velg en servermappe som er rotbanen for ditt organisasjons delte filsystem brukt som dokumentarkiv"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse for filsystemoppføringen"
+      },
+      "RemovePathBtn" : {
+        "label" : "Fjern bane"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      },
+      "MainPanel" : {
+        "label" : "Vektor databaseoppsett"
+      },
+      "host" : {
+        "label" : "Qdrant vert",
+        "help" : "Qdrant vertsnavn eller ip-adresse"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant tilkoblingsinnstillinger"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant kommunikasjonsport (6334 er standard)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api-nøkkel",
+        "help" : "Api-nøkkel for Qdrant-autentisering"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS-parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai obligatoriske oppsettstrinn fullført...",
+        "detail" : "Obligatoriske oppsettstrinn er fullført, men noen manglende trinn hindrer organisasjonen fra å få fullt utbytte av programvaren"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai-oppsett mangler noen obligatoriske steg",
+        "detail" : "Vennligst se over de markerte stegene i oppsettprosessen"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai-oppsettet er klart!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kode",
+        "help" : "Skriv inn beskrivelse av OAUTH2 autentiserings-/integrasjonskode (registrationId)."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av OAUTH2 autentiserings-/integrasjonsinformasjon."
+      },
+      "configurationType" : {
+        "label" : "Konfigurasjonsformål",
+        "help" : "Velg om denne innstillingen skal brukes for å autentisere i Gebo.ai eller for å gi Gebo.ai klienttilkobling til et tredjepartssystem."
+      },
+      "authProvider" : {
+        "label" : "Leverandør",
+        "help" : "Skriv inn leverandøren av OAUTH2-autentisering"
+      },
+      "issuerUri" : {
+        "label" : "Issuer-uri",
+        "help" : "Skriv inn OAUTH2 issuer-URL for leverandøren"
+      },
+      "authorizationUri" : {
+        "label" : "Autorisasjons-URL",
+        "help" : "Skriv inn OAUTH2 autorisasjons-URL for leverandøren"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk set-uri",
+        "help" : "Skriv inn OAUTH2 jwk set-URL for leverandøren"
+      },
+      "userInfoUri" : {
+        "label" : "Brukerinformasjon-URL",
+        "help" : "Skriv inn OAUTH2 brukerinformasjon-URL for leverandøren"
+      },
+      "introspectionUri" : {
+        "label" : "Introspeksjons-uri",
+        "help" : "Skriv inn OAUTH2 introspeksjons-URL for leverandøren"
+      },
+      "tokenUri" : {
+        "label" : "Token-URL",
+        "help" : "Skriv inn OAUTH2 token-URL for leverandøren"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2-leverandør-URLer"
+      },
+      "MainPanel" : {
+        "label" : "Legg til ny OAUTH2 autentisering-/integrasjonsinformasjon"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Klient-ID",
+        "help" : "Klientidentifikator for oauth2-protokollen (hentes i administratorområdet til den oauth2-autentiserte tredjepartsprogramvaren)"
+      },
+      "secret" : {
+        "label" : "Hemmelig nøkkel",
+        "help" : "Klienthemmelighet for oauth2-protokollen (hentes i administratorområdet til den oauth2-autentiserte tredjepartsprogramvaren)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Opprett confluence-systemkonfigurasjon"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av confluence-systemet."
+      },
+      "CreateBtn" : {
+        "label" : "Opprett"
+      },
+      "username" : {
+        "label" : "Confluence brukernavn",
+        "help" : "Confluence brukernavn"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-versjon",
+        "help" : "Confluence-versjon"
+      },
+      "baseUri" : {
+        "label" : "Base internettadresse",
+        "help" : "URL til baseadressen for confluence-systemet ved lokal installasjon, eller organisasjonens base-URL for confluence cloud-system"
+      },
+      "password" : {
+        "label" : "Confluence-passord",
+        "help" : "Confluence-passord"
+      },
+      "token" : {
+        "label" : "Confluence cloud API-nøkkel",
+        "help" : "Confluence CLOUD apinøkkel hentet fra confluence-backoffice. Her må du sette inn \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagrer og gjør innholdet tilgjengelig i kunnskapsbasen for LLm'er"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SettingsTab" : {
+        "label" : "Innstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Deling av confluence-innhold"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen for det opplastede innholdet fra confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence-system",
+        "help" : "Referanse til allerede oppsatt confluence-system."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Referanse til hovedprosjekt."
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning av zip-filer og uthenting av innhold"
+      },
+      "tree" : {
+        "label" : "Valgte områder eller sider/undersider",
+        "help" : "Delte confluence-områder og sideinnhold"
+      },
+      "programmedTables" : {
+        "label" : "Plan for kontroll av innholdsoppdateringer",
+        "help" : "Konfigurer tidsplan for oppdaterte innhold for å holde generasjonssystemet oppdatert"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering av områder, sider og undersider",
+        "help" : "Forklar her hvordan organiseringen av områder, sider og undersider er gjort i confluence-innholdet delt med Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Generelle innstillinger"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer confluence-system"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "baseUri" : {
+        "label" : "Base internettadresse",
+        "help" : "URL til baseadressen for confluence-systemet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for confluence-systemet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av confluence-systemet."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-versjon",
+        "help" : "Confluence-versjon"
+      },
+      "secretCode" : {
+        "label" : "Benytter identitet",
+        "help" : "Velg eller opprett identiteten som skal brukes for tilgang til confluence-systemet"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "ny gruppe"
+      },
+      "NewUserBtn" : {
+        "label" : "ny bruker"
+      },
+      "UsersListPanel" : {
+        "label" : "Brukerliste"
+      },
+      "GroupsListPanel" : {
+        "label" : "Gruppeliste"
+      },
+      "SournameHeader" : {
+        "label" : "etternavn"
+      },
+      "UsernameHeader" : {
+        "label" : "brukernavn"
+      },
+      "RolesHeader" : {
+        "label" : "roller"
+      },
+      "NameHeader" : {
+        "label" : "navn"
+      },
+      "EditBtn" : {
+        "label" : "Rediger"
+      },
+      "DisabledHeader" : {
+        "label" : "deaktivert"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "UserIds" : {
+        "placeholder" : "Velg brukere"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer brukergruppe"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av brukergruppen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Skriv inn koden for brukergruppen"
+      },
+      "userIds" : {
+        "label" : "Brukerliste",
+        "help" : "Velg brukere som deltar i gruppen"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Opprett"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av jira-systemet."
+      },
+      "MainPanel" : {
+        "label" : "Opprett jira system-konfigurasjon"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "username" : {
+        "label" : "jira brukernavn",
+        "help" : "jira brukernavn"
+      },
+      "token" : {
+        "label" : "jira cloud api-nøkkel",
+        "help" : "jira CLOUD api-nøkkel hentet fra jira backoffice, her må du sette inn \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Base internettadresse",
+        "help" : "Url for baseadressen til jira-systemet for lokal installasjon eller din organisasjons baseadresse for jira cloud-system"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagrer og gjør dette innholdet tilgjengelig i kunnskapsbasen for LLm-er"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SettingsTab" : {
+        "label" : "Innstillinger"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      },
+      "MainPanel" : {
+        "label" : "Deler jira-innhold"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "Allerede konfigurert jira systemreferanse."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Referanse til overordnet prosjekt."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av det opplastede innholdet fra jira."
+      },
+      "programmedTables" : {
+        "label" : "Kontrollplan for innholdsoppdateringer",
+        "help" : "Konfigurer tidsplan for endret innhold for å holde oppdateringssystemet for utvidet generering oppdatert"
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning av zip-filer og utpakking av innhold"
+      },
+      "tree" : {
+        "label" : "Valgte områder eller sider/undersider",
+        "help" : "Delte jira-prosjekter og billett-hierarki"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering av områder, sider og undersider",
+        "help" : "Forklar her hvordan organiseringen av områder, sider og undersider ble gjort for jira-innholdet delt med Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av jira-systemet."
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer jira-system"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "baseUri" : {
+        "label" : "Base internettadresse",
+        "help" : "Url til baseadressen for jira-systemet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for jira-systemet."
+      },
+      "secretCode" : {
+        "label" : "Brukt identitet",
+        "help" : "Velg eller opprett identiteten som skal brukes for tilgang til jira-systemet"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av SharPpoint/OneDrive-systemet."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint-versjon",
+        "help" : "SharePoint-versjon"
+      },
+      "secret" : {
+        "label" : "Hemmelig nøkkel",
+        "help" : "Oauth2-klientnøkkel for denne appen registrert i Microsoft \"entra\"-produktet (skal hentes i Microsoft Cloud Admin-konsollen)"
+      },
+      "clientId" : {
+        "label" : "Klient-ID",
+        "help" : "Oauth2-klientidentifikator for denne appen registrert i Microsoft \"entra\"-produktet (skal hentes i Microsoft Cloud Admin-konsollen)"
+      },
+      "tenantId" : {
+        "label" : "Leietaker-ID",
+        "help" : "Oauth2-leietakeridentifikator for din organisasjons Microsoft \"entra\"-produkt (skal hentes i Microsoft Cloud Admin-konsollen)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsoft oauth2-appregistreringsinfo for Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Opprett"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "MainPanel" : {
+        "label" : "Opprett SharePoint/OneDrive systemkonfigurasjon"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagrer og gjør dette innholdet tilgjengelig i kunnskapsbasen for LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Innstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Deling av SharePoint/OneDrive-innhold"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Referanse til overordnet prosjekt."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv beskrivelsen av SharePoint/OneDrive-kildene."
+      },
+      "sharePointSystemCode" : {
+        "label" : "SharePoint-system",
+        "help" : "Referanse til allerede konfigurert SharePoint/OneDrive-system."
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning av zip-filer og innholdsekstraksjon"
+      },
+      "tree" : {
+        "label" : "Valgte SharePoint-nettsteder/sider/undersider eller OneDrive-disker/mapper/filer",
+        "help" : "Delt SharePoint/OneDrive-innhold"
+      },
+      "programmedTables" : {
+        "label" : "Tidsplan for innholdsoppdateringer",
+        "help" : "Konfigurer planlegging av endret innhold for å holde hentesystemet for augmented generation oppdatert"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering av områder, sider og undersider",
+        "help" : "Forklar hvordan organisering av områder, sider og undersider er gjort for SharePoint-innholdet delt med Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Redigering av SharePoint-system"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Generelle innstillinger"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "secretCode" : {
+        "label" : "Brukt identitet",
+        "help" : "Velg eller opprett identiteten som skal brukes for å få tilgang til SharePoint-systemet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for SharePoint-systemet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av SharePoint-systemet."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint-versjon",
+        "help" : "SharePoint-versjon"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Slett"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Lagre"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Avbryt"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Generelle info-/innholdsinnstillinger"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms-innstillinger"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for denne kunnskapsgraf-datauttrekksfasen"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/konfigurasjon for kunnskapsuttrekk"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen for denne konfigurasjonen av kunnskapsgraf-datauttrekk"
+      },
+      "extractionPrompt" : {
+        "label" : "Prompt for informasjonsuttrekk",
+        "help" : "Stor språkmodell-prompt for utvinning av enhet/hendelser/relasjoner og aliaser"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM brukt for datauttrekk",
+        "help" : "Spesifiser stor språkmodell brukt for kunnskapsuttrekk. Standardmodell brukes hvis ingen er valgt."
+      },
+      "graphRagAllSources" : {
+        "label" : "Bruk graph rag på alle datakilder",
+        "help" : "Hvis aktivert, vil alle kunnskapsbaser/prosjekter/datakilder bli behandlet for kunnskapsuttrekk. Ellers bare de som er spesifikt konfigurert."
+      },
+      "defaultModel" : {
+        "label" : "Standard stor språkmodell",
+        "help" : "Standard stor språkmodell brukes for kunnskapsuttrekk"
+      },
+      "processEveryDocument" : {
+        "label" : "Bruk graph rag på alle filer",
+        "help" : "Graph rag-algoritmene brukes på alle filer. Dette øker detaljnivået i analysen systemet kan gjøre, men øker også kostnadene og tiden som kreves for å behandle dokumentene."
+      },
+      "contentSelectionFilter" : {
+        "label" : "Filutvalgskriterier for graphrag-behandling",
+        "help" : "Rediger kriterier for hvilke filer som skal sendes til informasjonsuttrekkspipelinen for graphrag. Velg minst et filnavn og kriterium, og/eller en filtype, og/eller maks filstørrelse i byte, og/eller antall dager siden siste endring."
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Velg filtyper"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Kriterier for filtrering av filnavn"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Sist endret, dager siden"
+      },
+      "nameFilter" : {
+        "placeholder" : "Filnavn"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maks filstørrelse i byte"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Generell informasjon"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer en kunnskapsbase"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Tilgangsinnstillinger for kunnskapsbase"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for kunnskapsbasen."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn en beskrivelse av kunnskapsbasen."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Brukte embedding-modeller (la stå tomt for å bruke systemstandard)",
+        "help" : "Embedding-modeller for kunnskapsbasen, la feltet stå tomt for å bruke standardmodellen."
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "IndexBtn" : {
+        "label" : "Indekser",
+        "help" : "Indekser innhold"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Redigerer et prosjekt eller element"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for prosjektet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn en beskrivelse av prosjektet."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "kunnskapsbase",
+        "help" : "kunnskapsbase."
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "IndexBtn" : {
+        "label" : "Indekser",
+        "help" : "Indekser innhold"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Legg til element/prosjekt",
+        "help" : "legg til ny..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Alle bruker",
+        "help" : "Alle kan bruke"
+      },
+      "accessibleGroups" : {
+        "label" : "Gruppeoversikt",
+        "help" : "Velg tillatte grupper"
+      },
+      "accessibleUsers" : {
+        "label" : "Brukerliste",
+        "help" : "Velg tillatte brukere"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Dashbord"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs for chat og embedding"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag chat-profiler/Modellprompt"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Kunnskapsbaser og prosjekter"
+      },
+      "UsersGroupTab" : {
+        "label" : "Brukere og grupper"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai moduloppsett"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfigurer"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Ny promptkonfigurasjon"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Ny chatprofil"
+      },
+      "MainPanel" : {
+        "label" : "Retrivial augmented generation chatprofiler"
+      },
+      "PromptsPanel" : {
+        "label" : "Promptsamling og standardprompter"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Kunnskapsbaser"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfigurer"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Ny kunnskapsbase"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Ny konfigurasjon for innebyggingsmodell"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Ny konfigurasjon for chat-modell"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ModelHeader" : {
+        "label" : "Modell "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Modellleverandør"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfigurer"
+      },
+      "CodeHeader2" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Beskrivelse"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Modellleverandør"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfigurer"
+      },
+      "ModelHeader2" : {
+        "label" : "Modell "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Konfigurerte chat-modeller"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Konfigurerte innebyggingsmodeller"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Tester modell"
+      },
+      "TestChatBtn" : {
+        "label" : "Test chat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Velg OpenAI-token som skal brukes for denne modellen"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "choosedModel" : {
+        "label" : "Velg OpenAI chatmodell",
+        "help" : "Velg OpenAI chatmodellen du ønsker å bruke."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell info"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avanserte innstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer OpenAI chatmodelloppsett"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Innstillinger for modelltilgang"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer OpenAI embedding-modelloppsett"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Velg OpenAI-token som skal brukes for denne modellen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for embedding-modelloppsettet"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av embedding-modelloppsettet"
+      },
+      "choosedModel" : {
+        "label" : "Velg OpenAI embedding-modell",
+        "help" : "Velg OpenAI embedding-modellen du ønsker å bruke."
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard embedding-modell",
+        "help" : "Hvis valgt, brukes denne som standard embedding-modell når embedding-modell ikke er spesifisert"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "baseUrl" : {
+        "label" : "Base Ollama serveradresse",
+        "help" : "Baseadresse (for eksempel http://servernavn:234/) som Ollama lokal- eller lan-server svarer på."
+      },
+      "choosedModel" : {
+        "label" : "Velg Ollama chatmodell",
+        "help" : "Velg Ollama chatmodellen du ønsker å bruke.",
+        "placeholder" : "Velg en modell"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Velg Ollama-token som skal brukes for denne modellen (valgfritt)"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Ollama lokal (eller lan) server chatmodelloppsett"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Velg Anthropic-token som skal brukes for denne modellen"
+      },
+      "choosedModel" : {
+        "label" : "Velg Anthropic chatmodell",
+        "help" : "Velg Anthropic chatmodellen du ønsker å bruke.",
+        "placeholder" : "Velg en modell"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avanserte innstillinger"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell info"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Innstillinger for modelltilgang"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Anthropic chatmodelloppsett"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Velg MistralAI-token som skal brukes for denne modellen"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "choosedModel" : {
+        "label" : "Velg MistralAI chatmodell",
+        "help" : "Velg MistralAI chatmodellen du ønsker å bruke."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell info"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avanserte innstillinger"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Innstillinger for modelltilgang"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer MistralAI chatmodelloppsett"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "choosedModel" : {
+        "label" : "Velg Google Vertex AI chatmodell",
+        "help" : "Velg Google Vertex AI chatmodellen du ønsker å bruke."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Velg Google Vertex AI-token som skal brukes for denne modellen"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Generell info"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Innstillinger for modelltilgang"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Avanserte innstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Google Vertex AI chatmodelloppsett"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Velg Deepseek-token som skal brukes for denne modellen"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "choosedModel" : {
+        "label" : "Velg Deepseek chatmodell",
+        "help" : "Velg Deepseek chatmodellen du ønsker å bruke.",
+        "placeholder" : "Velg en modell"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avanserte innstillinger"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell info"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Deepseek chatmodelloppsett"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Innstillinger for modelltilgang"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av modelloppsettet"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for modelloppsettet"
+      },
+      "baseUrl" : {
+        "label" : "Chatmodell API base serveradresse",
+        "help" : "Baseadresse for Chatmodell."
+      },
+      "apiSecretCode" : {
+        "label" : "Chatmodell API token",
+        "help" : "Velg Chatmodell API-token som skal brukes for denne modellen (valgfritt)"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard chatmodell",
+        "help" : "Hvis valgt, brukes denne som standard chatmodell når chatmodell ikke er spesifisert"
+      },
+      "choosedModel" : {
+        "label" : "Velg Chatmodell chatmodell",
+        "help" : "Velg Chatmodell chatmodellen du ønsker å bruke."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell info"
+      },
+      "TitleFragment" : {
+        "label" : "Redigerer chatmodell-leverandør:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avanserte innstillinger"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Innstillinger for modelltilgang"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av embedding-modelloppsettet"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Ollama lokal (eller lan) embedding-modelloppsett"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Velg Ollama-token som skal brukes for denne modellen"
+      },
+      "choosedModel" : {
+        "label" : "Velg Ollama embedding-modell",
+        "help" : "Velg Ollama embedding-modellen du ønsker å bruke."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for embedding-modelloppsettet"
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard embedding-modell",
+        "help" : "Hvis valgt, brukes denne som standard embedding-modell når embedding-modell ikke er spesifisert"
+      },
+      "baseUrl" : {
+        "label" : "Base Ollama serveradresse",
+        "help" : "Baseadresse (for eksempel http://servernavn:234/) som Ollama lokal- eller lan-server svarer på."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av embedding-modelloppsettet"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer MistralAI embedding-modelloppsett"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for embedding-modelloppsettet"
+      },
+      "choosedModel" : {
+        "label" : "Velg MistralAI embedding-modell",
+        "help" : "Velg MistralAI embedding-modellen du ønsker å bruke."
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard embedding-modell",
+        "help" : "Hvis valgt, brukes denne som standard embedding-modell når embedding-modell ikke er spesifisert"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Velg MistralAI-token som skal brukes for denne modellen"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Redigerer Google Vertex AI embedding-modelloppsett"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av embedding-modelloppsettet"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "choosedModel" : {
+        "label" : "Velg Google Vertex AI embedding-modell",
+        "help" : "Velg Google Vertex AI embedding-modellen du ønsker å bruke."
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard embedding-modell",
+        "help" : "Hvis valgt, brukes denne som standard embedding-modell når embedding-modell ikke er spesifisert"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for embedding-modelloppsettet"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Velg Google Vertex AI-token som skal brukes for denne modellen"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "TitleFragment" : {
+        "label" : "Redigerer embedding-modell-leverandør:"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av Embedding-modelloppsettet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for Embedding-modelloppsettet"
+      },
+      "choosedModel" : {
+        "label" : "Velg Embedding-modell",
+        "help" : "Velg Embedding-modellen du ønsker å bruke."
+      },
+      "baseUrl" : {
+        "label" : "Embedding-modell API serveradresse",
+        "help" : "Baseadresse for Embedding-modell-serveren."
+      },
+      "defaultModel" : {
+        "label" : "angi denne som standard embedding-modell",
+        "help" : "Hvis valgt, brukes denne som standard embedding-modell når embedding-modell ikke er spesifisert"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding-modell API token",
+        "help" : "Velg Embedding-modell API-token som skal brukes for denne modellen"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Chatkonfigurasjonsinformasjon"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Slett denne chatsesjonen"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Gi chatsesjonen nytt navn"
+      },
+      "QueryControl" : {
+        "placeholder" : "Skriv en melding til chatbott"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "description" : {
+        "label" : "Chatbeskrivelse",
+        "help" : "Skriv inn beskrivelsen av chatsesjonen."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Brukt modell",
+        "help" : "Modellkode"
+      },
+      "providerId" : {
+        "label" : "Chatmodell-leverandør",
+        "help" : "LLms leverandør-driver"
+      },
+      "functions" : {
+        "label" : "Kallbare chatmodell-funksjoner",
+        "help" : "Liste over funksjoner tilgjengelig for chatmodellen"
+      },
+      "NameCol" : {
+        "label" : "Navn"
+      },
+      "DescriptionCol" : {
+        "label" : "Beskrivelse"
+      },
+      "kbases" : {
+        "label" : "Tilgjengelige kunnskapsbaser",
+        "help" : "Liste over kunnskapsbaser brukt i denne RAG-chaten"
+      },
+      "CloseBtn" : {
+        "help" : "Lukk"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Ta opp",
+        "help" : "Start opptak av et lydspor og send det"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "last inn data på nytt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SelectHeader" : {
+        "label" : "Velg"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "slutt dato/tid"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "start dato/tid"
+      },
+      "ProcessingHeader" : {
+        "label" : "behandler"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "FinishedHeader" : {
+        "label" : "fullført"
+      },
+      "WithErrorHeader" : {
+        "label" : "med feil"
+      },
+      "LogTableComponent" : {
+        "help" : "Denne loggen for innlasting av felles filsystemområde"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Prosessstatistikk"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "CloseBtn" : {
+        "label" : "Lukk"
+      },
+      "PublicationLogTab" : {
+        "label" : "Publiseringslogg"
+      },
+      "MainPanel" : {
+        "label" : "Publiseringslogg"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Status for oppgaven, fortsatt kjører, fullført eller fullført med feil."
+      },
+      "publishingSystem" : {
+        "label" : "Konfigurasjon for publisert innhold",
+        "help" : "Informasjon om publisert innhold"
+      },
+      "startDateTime" : {
+        "label" : "Start dato/tid",
+        "help" : "Startdato og klokkeslett for innholdssynkroniseringsoppgaven"
+      },
+      "endDateTime" : {
+        "label" : "Slutt dato/tid",
+        "help" : "Sluttdato og klokkeslett for innholdssynkroniseringsoppgaven"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Ikke fullstendig behandlet"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Fullstendig behandlet"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "innebygging vs totalt antall dokumenter"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Flere detaljer"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Generer prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Prompt-veiviser",
+        "help" : "Bruk dette for å bruke en LLM til å generere prompten for dine mål"
+      },
+      "acceptPrompt" : {
+        "label" : "Godta prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Veiviser for generering av promptmal"
+      },
+      "cancel" : {
+        "label" : "Avbryt"
+      },
+      "response" : {
+        "label" : "Foreslått promptmal",
+        "help" : "Generert maltekst for målet ditt (du kan endre eller korrigere/justere den)"
+      },
+      "modelCode" : {
+        "label" : "Chat-modell som skal brukes",
+        "help" : "Velg chat-modellen du vil be om generering av promptmal"
+      },
+      "query" : {
+        "label" : "Forespørsel om promptmal",
+        "help" : "Spesifiser i andre person hva som er målet AI-en skal støtte brukeren med"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Temperaturen modellen vil bruke ved svar, fra 0 til 1 (hvis du er usikker, la stå tomt)"
+      },
+      "contextLength" : {
+        "label" : "Kontekstlengde (tokens)",
+        "help" : "Mengden tekst en AI-modell kan vurdere under behandling (hvis ikke satt brukes 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, fra 0 til 1 (hvis du er usikker, la stå tomt)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Aktiverte funksjonskall for denne modellen",
+        "help" : "Funksjoner som kan brukes av modellen under chatten"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Standard prompt for modell",
+        "help" : "Rediger standardprompten for chatmodellen."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn identitetsbeskrivelse."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for identiteten."
+      },
+      "secretType" : {
+        "label" : "Identitetstype",
+        "help" : "Velg identitetstype som skal opprettes for det eksterne systemet"
+      },
+      "InsertBtn" : {
+        "label" : "Sett inn"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Skriv inn token."
+      },
+      "user" : {
+        "label" : "Bruker",
+        "help" : "Skriv inn brukeren angitt av tokenet."
+      },
+      "MainPanel" : {
+        "label" : "Oppretter identitet"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "username" : {
+        "label" : "Brukernavn",
+        "help" : "Skriv inn brukernavn."
+      },
+      "password" : {
+        "label" : "Passord",
+        "help" : "Skriv inn passord."
+      },
+      "email" : {
+        "label" : "E-post/brukernavn",
+        "help" : "Skriv inn e-post eller brukernavn tilknyttet ssh-nøkkelen."
+      },
+      "key" : {
+        "label" : "Hemmelig nøkkel",
+        "help" : "Åpne privat nøkkelfil og kopier innholdet i dette tekstfeltet."
+      },
+      "passphrase" : {
+        "label" : "Nøkkelpassord",
+        "help" : "Skriv inn nøkkelpassord."
+      },
+      "pub" : {
+        "label" : "Offentlig nøkkel",
+        "help" : "Åpne offentlig nøkkelfil og kopier innholdet i dette tekstfeltet."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av det opplastede innholdet av filsystemoppføringen."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Foreldresprosjektreferanse."
+      },
+      "upload" : {
+        "label" : "Last opp innhold",
+        "help" : "Klikk på bla-knappen og velg zip-filer eller andre filer"
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning av zip-filer og uttrekk av innhold"
+      },
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagrer og gjør dette innholdet tilgjengelig i kunnskapsbasen for LLm’s"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer opplastet innhold"
+      },
+      "SettingsTab" : {
+        "label" : "Innstillinger"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurer byggesystemer",
+        "help" : "Liste over bygg- eller pakkesystemer som skal inspiseres for metainformasjon og ekstra artefaktinformasjon (la stå tom hvis det ikke er programvarekode inkludert)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Valgte elementer"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Avbryt"
+      },
+      "EditBtn" : {
+        "help" : "Endre valgt"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Velg elementer"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Velg elementer"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Rediger planlegging"
+      },
+      "ConfirmBtn" : {
+        "label" : "Bekreft"
+      },
+      "AddBtn" : {
+        "label" : "+Legg til"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagrer og gjør innholdet tilgjengelig i kunnskapsbasen for LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SettingsTab" : {
+        "label" : "Innstillinger"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Behandling av kildekode"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer eksisterende filsysteminnhold"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av det opplastede innholdet for filsystemoppføringen."
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning av zip-filer og utpakking av innhold"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "tree" : {
+        "label" : "Valgte filer eller mapper",
+        "help" : "Delte filsystemfiler eller kataloger tilgjengelig på serveren"
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Referanse til overordnet prosjekt."
+      },
+      "programmedTables" : {
+        "label" : "Plan for oppdateringskontroller av innhold",
+        "help" : "Sett opp tidsplan for endrede innhold for å holde oppdatert retrieval augmented generation-system"
+      },
+      "catalogingCriteria" : {
+        "label" : "Organiseringskriterier for mapper",
+        "help" : "Forklar her hvordan organiseringskriteriene for mapper er gjort i filsystemområdet du deler med Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurer byggesystemer",
+        "help" : "Liste over bygg-/pakkesystemer som skal inspiseres for metainformasjon og tilleggsinformasjon om artefakter (la stå tomt hvis det ikke er kode)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nytt fildelingsområde"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolutt sti"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db eller yml filkonfig"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ModifyHeader" : {
+        "label" : "Endre"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Valgt delt filsystemmappe",
+        "help" : "Velg en servermappe som er en rotsti for det delte filsystemet brukt i organisasjonen som dokumentlager"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av det delte filsystemområdet i organisasjonen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "InsertBtn" : {
+        "label" : "Sett inn"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer delt filmappe på server"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagre og gjør dette innholdet tilgjengelig i kunnskapsbasen for LLm-er"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer git-kilde/dokumentasjonslager"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av git-repositoriet."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for git-repositoriet."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Referanse til overordnet prosjekt."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git-system",
+        "help" : "Referanse til allerede konfigurert git-system."
+      },
+      "branch" : {
+        "label" : "Gren",
+        "help" : "Navn på gren som skal sjekkes ut (vanligvis master, main eller develop)"
+      },
+      "identityCode" : {
+        "label" : "Benytter identitet",
+        "help" : "Velg identiteten som skal brukes for kloning/sjekk ut i systemet"
+      },
+      "repositoryUri" : {
+        "label" : "Repository-url/adresse",
+        "help" : "Fullstendig adresse til git-fjernlageret (starter vanligvis med http:, https: eller ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "offentlig",
+        "help" : "Hvis dette er valgt, kreves ikke autentisering for å få tilgang til repositoriet"
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning av zip-filer og uttrekk av innhold"
+      },
+      "programmedTables" : {
+        "label" : "Tidsplan for sjekk av innholdsoppdateringer",
+        "help" : "Konfigurer planleggingen av endrede innhold for å holde systemet for forsterket gjenfinning oppdatert"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurer byggesystemer",
+        "help" : "Liste over bygg-/pakkesystemer som skal inspiseres for metainformasjon og tilleggsinformasjon om artefakter"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generell informasjon"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Bruk chatmodell"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "velg"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Velg en chatmodell-konfigurasjon"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Velg en embedding-modell-konfigurasjon"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "velg"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG-innstillinger"
+      },
+      "LanguageModelTab" : {
+        "label" : "Stort språkmodell og tilgjengelige verktøy-innstillinger"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Bruk embedding-modell"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Sikkerhetstilgang-innstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer chatprofil for utvidet generering"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for chatprofilen."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av chatprofilen."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Bruker velger kunnskapsbaser",
+        "help" : "Bruker kan velge fra tilgjengelige kunnskapsbaser og/eller laste opp egne filer."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Kunnskapsbaser",
+        "help" : "Kunnskapsbasene som brukes til dokumentgjenfinning."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Likhetsterskel",
+        "help" : "Likhetsterskel for semantiske søk: 0,60–0,65 Lav filtrering, 0,70-0,75 Middels filtrering, 0,80–0,85 Nøyaktig"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2. trinns likhetsterskel",
+        "help" : "Likhetsterskel for semantiske søk: 0,60–0,65 Lav filtrering, 0,70-0,75 Middels filtrering, 0,80–0,85 Nøyaktig brukt fra det andre søket i multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Deaktiver 'Multi Hop' rag",
+        "help" : "Deaktiver funksjonen 'multi hop rag'. Multi hop-søk utfører et første semantisk søk og bruker funnet dokumenter som kontekst for nye søk for å gi større kontekst."
+      },
+      "topK" : {
+        "label" : "Vurderte dokumentfragmenter (TopK)",
+        "help" : "I utvidet generering vurderes de N beste dokumentfragmentene funnet i semantisk søk"
+      },
+      "enabledFunctions" : {
+        "label" : "Aktiverte funksjonskall for denne RAG-chatten",
+        "help" : "Funksjonaliteter som kan brukes av llm-modellen i chatten når bruker samhandler med valgt kunnskapsbase"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Rediger prompten for øktene med utvidet generering."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Skriv inn eller velg promptkategori"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer prompt"
+      },
+      "promptCategory" : {
+        "label" : "Promptkategori",
+        "help" : "Velg eller skriv inn promptkategori."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Rediger prompten for chatten, bruk {query} for å indikere brukerens spørsmål og {context} for å indikere dokument-/historikkonteksten som sendes til LLM."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for prompten."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn en beskrivelse av prompten."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Bytt passord"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Gammelt passord",
+        "help" : "Gjeldende passord for innlogging"
+      },
+      "newPassword" : {
+        "label" : "Nytt passord",
+        "help" : "nytt passord"
+      },
+      "username" : {
+        "label" : "E-post",
+        "help" : "E-post som brukernavn for innlogging"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Skjema for å bytte passord"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "ChangePwdBtn" : {
+        "label" : "bytt passord"
+      },
+      "newPassword1" : {
+        "label" : "Bekreft nytt passord",
+        "help" : "Bekreft nytt passord"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "ForMoreInformations" : {
+        "label" : "For mer informasjon om Google custom search API eller for å få din api-nøkkel (gratis), besøk: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "unik kode for google search api-konfigurasjonen."
+      },
+      "MainPanel" : {
+        "label" : "Redigerer google custom search api-legitimasjon"
+      },
+      "secretCode" : {
+        "label" : "Google search api-token",
+        "help" : "Velg eller sett inn google search api-token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google søkemotor-id",
+        "help" : "Google søkemotor-id"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelse av google search api-konfigurasjonen."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Chat uten kunnskapsbaser",
+        "help" : "Velg LLMene for en chatøkt",
+        "placeholder" : "Velg LLMene for en chatøkt"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Åpne chatvalg seksjon"
+      },
+      "CreateChatBtn" : {
+        "label" : "Ny chat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Ny chatøkt"
+      },
+      "chatProfileCode" : {
+        "label" : "Chat med kunnskapsbaser",
+        "help" : "Velg firmachattprofil for å samhandle med firmaets (og dine) dokumenter og LLMer",
+        "placeholder" : "Velg firmachattprofil for å samhandle med firmaets (og dine) dokumenter og LLMer"
+      },
+      "NewChatBtn" : {
+        "label" : "Ny chat"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Chat med dokumenter",
+        "help" : "Bla gjennom eller søk og velg dokumenter å jobbe med"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Velg filer å chatte med"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Bekreft"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Last opp eller velg dine dokumenter",
+        "help" : "Velg eller last opp dokumenter fra brukerområdet ditt"
+      },
+      "fileSearchBtn" : {
+        "label" : "Søk"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Søk"
+      },
+      "query" : {
+        "label" : "Semantisk søkefrase",
+        "help" : "Skriv inn en relevant frase for søket ditt"
+      },
+      "choosenBrowsing" : {
+        "label" : "Velg filer ved å bla i kunnskapsbaser",
+        "help" : "Velg filer fra delte kunnskapsbaser i selskapet"
+      },
+      "filename" : {
+        "label" : "Søkt filnavn",
+        "help" : "Skriv inn en del av filnavnet du søker etter"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Endre valgte"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Velg brukerfiler"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Velg innhold lastet opp av bruker"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Kunnskapsbaser og brukerfiler"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+delprosjekt eller element",
+        "help" : "legg til delprosjekt eller element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+last opp filer",
+        "help" : "legg til opplastet filkilde"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "legg til en Microsoft SharePoint/OneDrive kilde"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "legg til en Atlassian Confluence datakilde"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filsystem",
+        "help" : "legg til delt filsystemskilde"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "legg til en Atlassian Jira datakilde"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "legg til en git repository kilde som bitbucket, github eller andre"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Oppsett"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "min profil"
+      },
+      "logout" : {
+        "label" : "logg ut"
+      }
+    }
+  }
+}

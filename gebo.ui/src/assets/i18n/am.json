@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "ነባሪ የሲስተም ቋንቋ",
+        "help" : "ለዚህ Gebo.ai እተግባሪያ ነባሪ የሲስተም ቋንቋ"
+      },
+      "username" : {
+        "label" : "ኢሜይል",
+        "help" : "ለመግባት ኢሜይል ተጠቃሚ ስም አድርጉ"
+      },
+      "passwordC" : {
+        "label" : "የይለፍ ቃል ያረጋግጡ",
+        "help" : "የይለፍ ቃል ያረጋግጡ"
+      },
+      "password" : {
+        "label" : "የይለፍ ቃል",
+        "help" : "ለመግባት የይለፍ ቃል (ቢያንስ 8 ቁጥር አቀፍ ነው)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " የይለፍ ቃሎቹ አይዛመዱም "
+      },
+      "LocalAdmin" : {
+        "label" : "የአካባቢ አስተዳዳሪ መለያዎን ይፍጠሩ"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "በወደፊት ይህን መለያ ለሶፍትዌሩ ማዘጋጀት እና ማስተዳደር ትጠቀሙበታላችሁ፣ ይህ መረጃ በአካባቢዎ ሲስተም ውስጥ ይቆያል፣ በኔትዎርክ አይላከም"
+      },
+      "EnterBtn" : {
+        "label" : "የመግቢያ ገጽ ላይ ይውጡ"
+      },
+      "SetupPage" : {
+        "label" : "የgebo.ai እተግባሪያዎን ያዘጋጁ"
+      },
+      "CreateBtn" : {
+        "label" : "የሲስተም ማዘጋጀት ይፍጠሩ"
+      },
+      "LicenceFieldSet" : {
+        "label" : "ፈቃዱን ያንብቡና ይቀበሉ"
+      },
+      "AcceptMark" : {
+        "label" : "ውሎቹን እቀበላለሁ",
+        "help" : "እዚህ በመጫን የፈቃዱን ውሎች እና መመሪያዎች ትቀበላላችሁ"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ኢ-ሜይል",
+        "help" : "እንደ የተጠቃሚ ስም የሚገባ ኢ-ሜይል"
+      },
+      "password" : {
+        "label" : "የይለፍ ቃል",
+        "help" : "ለመግባት የይለፍ ቃል"
+      },
+      "LoginPanel" : {
+        "label" : "ወደ gebo.ai ይግቡ"
+      },
+      "LoginBtn" : {
+        "label" : "ይግቡ"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "እሺ!",
+        "detail" : "እባየቱ በተሳካ ሁኔታ ተከናውኗል"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 ቅንብር"
+      },
+      "ProviderNameHeader" : {
+        "label" : "የአቅራቢው ስም"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 የደህንነት ቅንብሮች"
+      },
+      "IdHeader" : {
+        "label" : "መታወቂያ"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "ወደ መጀመሪያው አቀባበል ገፅ ተመለስ"
+      },
+      "WizardUi" : {
+        "label" : "የማከናወን ክፍል ይምረጡ"
+      },
+      "adminUserSetupSection" : {
+        "label" : "የአመራር እና ሌሎች መለያ ዝግጅት",
+        "description" : "ይህ ተጫዋች Gebo.ai በትክክል እንዲተገናኝ ቢያንስ የአስተዳዳሪ መለያ ያስፈልጋል፣ አዲስ ተጠቃሚዎች ከአስፈላጊነቱ በመሰረት ያክሉ"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai የመስራት ዳይሬክቶሪ",
+        "description" : "የመስራት ዳይሬክቶሪ ያቅኙ፣ ይህ የተጫዋች ሁሉንም ቅንብሮች እና የስራ ፋይሎች ይቀመጡበት ማከማቻ ይሆናል። የሰራዊት ዳይሬክቶሪውን በተደጋጋሚ መቅጠር ደግሞ ጥሩ ሀሳብ ነው።"
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "የቬክተር ዳታቤዝ ቅንብር",
+        "description" : "ቬክተር ዳታቤዝ ለGebo.ai ማስተናገድ ያስፈልጋል፣ የአካባቢ ወይም Qdrant ወይም Mongo Atlas መምረጥ ትችላላችሁ"
+      },
+      "oauth2SetupSection" : {
+        "label" : "አንድ ጊዜ የግብዣ መናፈሻ፣ oauth2 ማረጋገጫ",
+        "description" : "Oauth2 አንድ ጊዜ ግብዣ ማረጋገጫ እና የoauth2 ደንበኞች ቅንብሮች"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "የትልቅ ቋንቋ ሞዴሎች አቀናባሪ",
+        "description" : "በደመና ወይም በአካባቢ/lan አማታ አገልግሎት ጀርባ በተለያዩ llms ያቀናብሩ፣ ከመቻል አንዱ የቻት ሞዴል እና አንዱ የተስተናጋጆች ሞዴል እንዲቀናበሩ ያስፈልጋል"
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "ግራፍ rag/ዕውቀት መወጣጠሪያ ስቱፕ",
+        "description" : "ግራፍ rag እና ዕውቀት መለያየት ክፍል ያቅኑ"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "የተጋራ ፋይልሲስተም መንገዶች ማቀናበር",
+        "description" : "ድርጅቱ የተጋራ ፋይልሲስተሞች ለተለያዩ የዕውቀት መሠረቶች ሰነዶች እንደቦታ እንዲጠቀሙባቸው ያቅኑ"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence ትግበራ",
+        "description" : "Gebo.ai እንዲደርስ በአየር ወይም በአካባቢ Atlassian Confluence ቅጥራት ያቅኑ"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira ትግበራ",
+        "description" : "Gebo.ai ወደ እርስዎ Atlassian jira ደመና ተጫዋች እንዲደርስ ያቅኑ"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ትግበራ",
+        "description" : "Gebo.ai ወደ እርስዎ Microsoft Sharepoint ደመና ወይም በአካባቢ ተጫዋች እንዲደርስ ያቅኑ"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "ቢያንስ አንድ የዕውቀት መሠረት ያቅኑ",
+        "description" : "ተጠቃሚዎችዎ የGebo.ai የተሻሻለ ትውልድ አገልግሎቶችን እንዲቀበሉ ቢያንስ አንድ የዕውቀት መሰረት ይዘጋጁ"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "ቢያንስ አንድ \"R.A.G.\" የቻት ፕሮፋይል ያቅኑ",
+        "description" : "ተጠቃሚዎችዎ በትክክል ከተዘጋጀ የዕውቀት መሠረቶች መካከል ቢያንስ አንድ የተሻሻለ የቻት ፕሮፋይል ያቅኑ"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "የድርጅት Atlassian Confluence ስርዓቶችን አቀናብር"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "SystemTypeHeader" : {
+        "label" : "የስርዓት ዓይነት"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የቅንብር ኮድ"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence ስርዓት"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira ስርዓት"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የቅንብር ኮድ"
+      },
+      "MainPanel" : {
+        "label" : "የድርጅት Atlassian Jira ስርዓቶችን አቀናብር"
+      },
+      "SystemTypeHeader" : {
+        "label" : "የስርዓት ዓይነት"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የቅንብር ኮድ"
+      },
+      "MainPanel" : {
+        "label" : "የድርጅት Microsoft Sharepoint ስርዓቶችን አቀናብር"
+      },
+      "SystemTypeHeader" : {
+        "label" : "የስርዓት ዓይነት"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint ስርዓት"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "በትክክል ያሉ ብቃት ያላቸውን ክሬዲቶች ያስያዙ የapi-key ያቅኑ። ከOpenAI ተመርጦ ከሆነ በapi ተጠቃሚነትዎ ውስጥ በተጨማሪ $10-30 ያክሉ፣ ሌላ በዚህ መተግበሪያ ላይ የllms ግብዣ አይገኝም።"
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai llms አቅራቢዎችን ለመድረስ api key ይጠቀሙ"
+      },
+      "provider" : {
+        "label" : "የትልቅ ቋንቋ ሞዴል አቅራቢ",
+        "help" : "OpenAI (chatgpt), Google (Gemini), Anthropic (Claude) ውስጥ አንዱን ይምረጡ"
+      },
+      "user" : {
+        "label" : "ተጠቃሚ",
+        "help" : "ከapiKey ጋር የተያያዘውን ተጠቃሚ ያስገቡ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ያቅኑ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "ለመጠቀም የሚፈልጉትን LLMS አቅራቢዎች api key ያስገቡ"
+      },
+      "ProviderHeader" : {
+        "label" : "አቅራቢ"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "የቅንብር ኮድ"
+      },
+      "ModelHeader" : {
+        "label" : "ሞዴል"
+      },
+      "ModelTypeHeader" : {
+        "label" : "የሞዴል አይነት"
+      },
+      "DefaultModelHeader" : {
+        "label" : "ነባር ሞዴል"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "ግራፍ rag ቅንብር ይፍጠሩ"
+      },
+      "MainPanel" : {
+        "label" : "ቀዳሚ የግራፍ Rag & የዕውቀት መለያየት ቅንብር"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የቅንብር ኮድ"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "የፕሮጀክት"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "የዕውቀት መሠረት ያክሉ"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "የዕውቀት መሠረት"
+      },
+      "MainPanel" : {
+        "label" : "የዕውቀት መሠረቶችና ይዘቶች ቅንብር"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "የይዘቶች ምንጭ"
+      },
+      "PublishedHeader" : {
+        "label" : "የታተመ"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "የሰነዶች ብዛት"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "ፕሮጀክት/ንጥል ያክሉ",
+        "help" : "አዲስ ፕሮጀክት ይፍጠሩ"
+      },
+      "Button1" : {
+        "help" : "የዕውቀት መሠረት ክፈት"
+      },
+      "Button2" : {
+        "help" : "ፕሮጀክት ቅጽ ክፈት"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai የስራ ፎልደር ቅንብር"
+      },
+      "ConfigureBtn" : {
+        "label" : "ያቅኑ"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai የስራ ዳይሬክቶሪ ይምረጡ",
+        "help" : "ይህ ቅጥራት በመስሪያ ሂደቱ ውስጥ እንደ ዋና ፎልደር ለማገልገል ሰርቨር ፎልደር ይምረጡ።"
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "ፎልደር ያክሉ"
+      },
+      "AddFolderBtn" : {
+        "label" : "ፎልደር ያክሉ"
+      },
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      },
+      "MainPanel" : {
+        "label" : "የሰርቨር ተጋራ ፋይልሲስተም መንገዶች"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "ፍጹም መንገድ"
+      },
+      "DeleteHeader" : {
+        "label" : "ሰርዝ"
+      },
+      "path" : {
+        "label" : "የተጋራ ፋይልሲስተም ስር ፎልደር ያክሉ",
+        "help" : "ማንኛውንም ሰርቨር ፎልደር የተጣባቂ መንገድ አድርጉ ወደ ወንድሞች የተሳለ እንደ ሰነድ አከማቻ የሚያገለግሉት"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የፋይልሲስተም ግቤት መግለጫ ያስገቡ"
+      },
+      "RemovePathBtn" : {
+        "label" : "መንገዱን ያውጡ"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "ያቅኑ"
+      },
+      "MainPanel" : {
+        "label" : "የቬክተር ዳታቤዝ ቅንብር"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Qdrant የቤት ስም ወይም አይፒ አድራሻ"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant የግንኙነት ቅንብሮች"
+      },
+      "port" : {
+        "label" : "Qdrant ፖርት",
+        "help" : "Qdrant የኮሙኒኬሽን ፖርት (6334 የተለመደ ነው)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Qdrant ማረጋገጫ አይኒ"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS መለኪያ",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "የGebo.ai ቅንብር ጠየቀው እርምጃዎች ተከናውኗል...",
+        "detail" : "የጠየቀው የቅንብር እርምጃዎች ተጠናቀቁና አንዳንድ የቀሩ እርምጃዎች ድርጅቱ ከመተጠቀም ይጎዳሉ"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "የGebo.ai ቅንብር አንዳንድ ጠየቀ እርምጃዎች አሉት",
+        "detail" : "የቅንብር ሂደቶች ቀይ የተሳሳቱትን ደግመው ይመርምሩ"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "የGebo.ai ቅንብር ዝግጅት ተሳክቷል!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "ኮድ",
+        "help" : "የ OAUTH2 ማረጋገጫ/የውሂብ ቀላበሻ ኮድ (registrationId) መግለጫ ያስገቡ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የ OAUTH2 ማረጋገጫ/የውሂብ ቀላበሻ መረጃዎች መግለጫ ያስገቡ።"
+      },
+      "configurationType" : {
+        "label" : "የውቅር ዓላማ",
+        "help" : "ይህ ቅንብር በ Gebo.ai ለመረጋገጥ ወይም Gebo.ai ለሶስተኛ የአገልግሎት ስርዓት ደንብ ይገናኛል ብለው ይምረጡ።"
+      },
+      "authProvider" : {
+        "label" : "አቅራቢ",
+        "help" : "የ OAUTH2 ማረጋገጫ አቅራቢ ያስገቡ።"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "የ OAUTH2 አቅራቢውን issuer URL ያስገቡ።"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "የ OAUTH2 አቅራቢውን Authorization URL ያስገቡ።"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "የ OAUTH2 አቅራቢውን Jwk Set url ያስገቡ።"
+      },
+      "userInfoUri" : {
+        "label" : "የተጠቃሚ መረጃ URL",
+        "help" : "የ OAUTH2 አቅራቢውን የተጠቃሚ መረጃ URL ያስገቡ።"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "የ OAUTH2 አቅራቢውን introspection URL ያስገቡ።"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "የ OAUTH2 አቅራቢውን Token URL ያስገቡ።"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "የ OAUTH2 አቅራቢዎች URL"
+      },
+      "MainPanel" : {
+        "label" : "አዲስ የ OAUTH2 ማረጋገጫ/የውሂብ ቀላበሻ መረጃዎች ያስገቡ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "የአይዲ ደንብ",
+        "help" : "የoauth2 መለያ አካል መለያ በoauth2 የተማከሩ የሶፍትዌር አስተዳደር ቦታ ውስጥ ይሰጣል"
+      },
+      "secret" : {
+        "label" : "የሚስጥር ቁልፍ",
+        "help" : "የoauth2 አይነት የደንበኛ ሚስጥር ቁልፍ በoauth2 የተማከሩ የሶፍትዌር አስተዳደር ቦታ ውስጥ ይሰጣል"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence ስርዓት ቅኔ ፍጠር"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የconfluence ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "CreateBtn" : {
+        "label" : "ፍጠር"
+      },
+      "username" : {
+        "label" : "Confluence የተጠቃሚ ስም",
+        "help" : "Confluence የተጠቃሚ ስም"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ስሪት",
+        "help" : "Confluence ስሪት"
+      },
+      "baseUri" : {
+        "label" : "መሰረታዊ የመስመር አድራሻ",
+        "help" : "ለonpremise ተጫን ወይም ለconfluence cloud system የመሰረቱ የconfluence ስርዓት አድራሻ URL"
+      },
+      "password" : {
+        "label" : "Confluence ይለፍ ቃል",
+        "help" : "Confluence ይለፍ ቃል"
+      },
+      "token" : {
+        "label" : "Confluence cloud api ቁልፍ",
+        "help" : "ከconfluence backoffic የተገኘው Confluence CLOUD apikey እዚህ \"API Token for your Atlassian Account\" መግባት ይገባል።"
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "አትም!",
+        "help" : "አስቀምጥና ይህን ይዘት ከLLm's ጋር በእውቀት መዝገብ የሚገኙ ያደርጋል"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "SettingsTab" : {
+        "label" : "ቅንብሮች"
+      },
+      "MainPanel" : {
+        "label" : "የconfluence ይዘቶችን መካፈል"
+      },
+      "LogsTab" : {
+        "label" : "አቅጣጫዎች"
+      },
+      "code" : {
+        "label" : "ብቸኛ ኮድ",
+        "help" : "ራሱ በራሱ የሚፈጠረው የይዘቱ ብቸኛ ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የተወደደውን የconfluence ይዘት መግለጫ ያስገቡ።"
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence ስርዓት",
+        "help" : "ቀድሞ የተቀናጀው confluence ስርዓት ቅኔ ማግኛ"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የወላጅ ፕሮጀክት ማግኛ።"
+      },
+      "openZips" : {
+        "label" : "የzip ፋይሎችን ክፈት",
+        "help" : "የzip ፋይሎችን መክፈቻ እና ይዘት ማውጣትን ያንቀሳቅሱ"
+      },
+      "tree" : {
+        "label" : "የተመረጡ ስፔሶች ወይም ገጾች/ንዑስገጾች",
+        "help" : "የconfluence የተካፈሉ ስፔሶችና የገጾች ይዘት"
+      },
+      "programmedTables" : {
+        "label" : "የይዘት አዘል ማረጋገጫ ጊዜ ሰሌዳ",
+        "help" : "የቀየሩትን ይዘቶች መዘግየት የተቃውሞውን የእውቀት ትክክለኛነት አይተን ሲያደርጉ ያቀናብሩ"
+      },
+      "catalogingCriteria" : {
+        "label" : "የስፔሶች፣ ገጾችና ንዑስገጾች የአደራ መፍትሔዎች",
+        "help" : "እባክዎን በGebo.ai ጋር የተካፈሉትን የconfluence ይዘቶች የስፔሶች፣ የገጾችና የንዑስገጾች የአደራ መግለጫ እዚህ ያቅርቡ"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "አጠቃላይ ቅንብሮች"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "MainPanel" : {
+        "label" : "Confluence ስርዓትን ማስተካከል"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "baseUri" : {
+        "label" : "መሰረታዊ የመስመር አድራሻ",
+        "help" : "የconfluence ስርዓት መሰረታዊ አድራሻ URL"
+      },
+      "code" : {
+        "label" : "ብቸኛ ኮድ",
+        "help" : "ራሱ በራሱ የሚፈጠረው የconfluence ስርዓት ብቸኛ ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የconfluence ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ስሪት",
+        "help" : "Confluence ስሪት"
+      },
+      "secretCode" : {
+        "label" : "አጠቃላይ መለያ ተጠቀም",
+        "help" : "እባክዎ በconfluence ስርዓቱ ላይ ለመግባት መለያ ይምረጡ ወይም ፍጠሩ"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "አዲስ ቡድን"
+      },
+      "NewUserBtn" : {
+        "label" : "አዲስ ተጠቃሚ"
+      },
+      "UsersListPanel" : {
+        "label" : "የተጠቃሚዎች ዝርዝር"
+      },
+      "GroupsListPanel" : {
+        "label" : "የቡድኖች ዝርዝር"
+      },
+      "SournameHeader" : {
+        "label" : "የአያት ስም"
+      },
+      "UsernameHeader" : {
+        "label" : "የተጠቃሚ ስም"
+      },
+      "RolesHeader" : {
+        "label" : "ሚናዎች"
+      },
+      "NameHeader" : {
+        "label" : "ስም"
+      },
+      "EditBtn" : {
+        "label" : "አርትዕ"
+      },
+      "DisabledHeader" : {
+        "label" : "ተሰናክሏል"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "UserIds" : {
+        "placeholder" : "ተጠቃሚዎችን ይምረጡ"
+      },
+      "CancelBtn" : {
+        "label" : "ደጋሚ ተመልስ"
+      },
+      "MainPanel" : {
+        "label" : "የተጠቃሚ ቡድን ማረም"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የተጠቃሚ ቡድኑን መግለጫ ያስገቡ"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "የተጠቃሚ ቡድኑን ኮድ ያስገቡ"
+      },
+      "userIds" : {
+        "label" : "የተጠቃሚዎች ዝርዝር",
+        "help" : "በቡድኑ ውስጥ ተሳትፎ የሚያደርጉ ተጠቃሚዎችን ይምረጡ"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ፍጠር"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የjira ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "MainPanel" : {
+        "label" : "የjira ስርዓት አቀናበር ፍጠር"
+      },
+      "CancelBtn" : {
+        "label" : "ተወው"
+      },
+      "username" : {
+        "label" : "jira የተጠቃሚ ስም",
+        "help" : "jira የተጠቃሚ ስም"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "በjira backoffice የተገኘው jira CLOUD apikey እዚህ \"API Token for your Atlassian Account\" ማስገባት አለበት።"
+      },
+      "baseUri" : {
+        "label" : "የመስመር ላይ መለኪያ አድራሻ",
+        "help" : "የonpremise jira ስርዓት base url ወይም ለjira cloud ስርዓት የድርጅትዎ ዋና url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "PublishBtn" : {
+        "label" : "ይለጥፉ!",
+        "help" : "ያስቀምጡና ይህን ይዘት knowledge base ላይ ለLLm's ያቀርቡ"
+      },
+      "CancelBtn" : {
+        "label" : "ተወው"
+      },
+      "SettingsTab" : {
+        "label" : "ቅንብሮች"
+      },
+      "LogsTab" : {
+        "label" : "መዝገቦች"
+      },
+      "MainPanel" : {
+        "label" : "የjira ይዘቶችን ማጋራት"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "በራስ-ሰር የተፈጠረ ልዩ የይዘት ኮድ።"
+      },
+      "jiraSystemCode" : {
+        "label" : "jira ስርዓት",
+        "help" : "አስቀድሞ የተዘጋጀ jira ስርዓት ማጣቀሻ።"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የወላጅ ፕሮጀክት ማጣቀሻ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የተጫነውን የjira መዝገቦች ይዘት መግለጫ ያስገቡ።"
+      },
+      "programmedTables" : {
+        "label" : "የይዘት ማዘመኛ ፕሮግራሞች መርሃግብር",
+        "help" : "የተሻሻሉትን ይዘት የretrieve augmented generation ስርዓት ለማዘመን ጊዜ አቆጣጠር ያዘጋጁ"
+      },
+      "openZips" : {
+        "label" : "zip ፋይሎችን ክፈት",
+        "help" : "የzip ፋይሎችን ክፈትና ይዘት መውጣት አካል ያድርጉ"
+      },
+      "tree" : {
+        "label" : "የተመረጡ ቦታዎች ወይም ገፆች/ንግግሶች",
+        "help" : "በ jira ፕሮጀክቶች እና ቲኬቶች የተመደበ ይዘት አዋቂነት"
+      },
+      "catalogingCriteria" : {
+        "label" : "ቦታዎች፣ ገፆች እና ንግግሶች የሰበሰቡ መስፈርቶች",
+        "help" : "በ jira Gebo.ai ጋር የተተላለፉትን ይዘት ቦታዎች፣ ገፆች እና ንግግሶች የተከፋፈሉበትን መስፈርት እባክዎ ይሰሙ።"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የjira ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "MainPanel" : {
+        "label" : "የjira ስርዓትን ማረም"
+      },
+      "CancelBtn" : {
+        "label" : "ተወው"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "baseUri" : {
+        "label" : "የመስመር ላይ መለኪያ አድራሻ",
+        "help" : "የjira ስርዓት ዋና url"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "በራስ-ሰር የተፈጠረ ልዩ የjira ስርዓት ኮድ።"
+      },
+      "secretCode" : {
+        "label" : "ተለዋዋጭ መለያ",
+        "help" : "ወይም የjira ስርዓትን የመዳረሻ መለያ ይምረጡ ወይም ይፍጠሩ"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የSharPpoint/OneDrive ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "sharepointVersion" : {
+        "label" : "የSharepoint ስሪት",
+        "help" : "የsharepoint ስሪት"
+      },
+      "secret" : {
+        "label" : "የሚሰለጠነ ቁልፍ",
+        "help" : "በmicrosoft \"entra\" ምርት ላይ ለዚህ መተግበሪያ የተመዘገበው oauth2 የደንበኛ ሚስጥር ቁልፍ (በmicrosoft cloud አስተዳደር ገበታ ላይ ማግኘት የሚቻል)"
+      },
+      "clientId" : {
+        "label" : "የደንበኛ መታወቂያ",
+        "help" : "በmicrosoft \"entra\" ምርት ላይ ለዚህ መተግበሪያ የተመዘገበው oauth2 የደንበኛ መታወቂያ (በmicrosoft cloud አስተዳደር ገበታ ላይ ማግኘት የሚቻል)"
+      },
+      "tenantId" : {
+        "label" : "የተነንት መታወቂያ",
+        "help" : "ለድርጅቶ በሚጠቀመው microsoft \"entra\" ምርት የoauth2 ቲናንት መታወቂያ (በmicrosoft cloud አስተዳደር ገበታ ላይ ማግኘት የሚችል)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "የMicrosof oauth2 መተግበሪያ መመዝገቢያ መረጃዎች ለGebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "ፍጠር"
+      },
+      "CancelBtn" : {
+        "label" : "ተወው"
+      },
+      "MainPanel" : {
+        "label" : "የSharePoint/OneDrive ስርዓት አውትኖሪዜሽን ፍጠር"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "ተወው"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "PublishBtn" : {
+        "label" : "አትም!",
+        "help" : "ማስቀመጥና ይህን ይዘት በLLm's የእውቀት መረጃ ላይ ማድረግ ይፈቅዳል"
+      },
+      "SettingsTab" : {
+        "label" : "ቅንብሮች"
+      },
+      "MainPanel" : {
+        "label" : "የSharePoint/OneDrive ይዘቶችን መካፈል"
+      },
+      "LogsTab" : {
+        "label" : "መዝገቦች"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "code" : {
+        "label" : "በትክክል የተፈጠረ ኮድ",
+        "help" : "የበትክክል ተፈጥሯል የተለየ የይዘት ኮድ።"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የዋናው ፕሮጀክት ማጣቀሻ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የSharePoint/OneDrive ማስገቢያዎች የመረጃ ምንጮችን መግለጫ ያስገቡ።"
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint ስርዓት",
+        "help" : "አስቀድሞ የተቀናጀው የSharePoint/OneDrive ስርዓት ማጣቀሻ።"
+      },
+      "openZips" : {
+        "label" : "የzip ፋይሎችን ክፈት",
+        "help" : "የzip ፋይሎችን መክፈትና ይዘት መወገድ አቻል።"
+      },
+      "tree" : {
+        "label" : "የተመረጡት Sharepoint sites/pages/subpages ወይም OneDrive drives/folder/files",
+        "help" : "የተተዋዋቁ የsharepoint/OneDrive ይዘቶች"
+      },
+      "programmedTables" : {
+        "label" : "የይዘቶች አዳዲስ ምርመራ የሚፈተሽበት ጊዜ",
+        "help" : "የተቀየሩ ይዘቶችን ሲያመዘኑ ጠቅላላው retrieve augmented generation ሲስተምን ዘመናዊ ያደርጉ ሁኔታ ለመቀነባበር ቅድመ ጊዜዎችን ያቅርቡ"
+      },
+      "catalogingCriteria" : {
+        "label" : "የቦታዎች፣ ገፆችና ንዑስ ገፆች የማደራጀት መስፈርቶች",
+        "help" : "ለGebo.ai በSharepoint ይዘት ውስጥ የቦታዎች፣ ገፆችና ንዑስ ገፆች እንዴት እንደተደረገ እባክዎን እዚህ ያብራሩ"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "የsharepoint ስርዓት ማረሚያ"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "አጠቃላይ ቅንብሮች"
+      },
+      "CancelBtn" : {
+        "label" : "ተወው"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "secretCode" : {
+        "label" : "ተጠቃሚ መታወቂያ",
+        "help" : "ወደ sharepoint ስርዓቱ የመዳሰሻ መታወቂያ ምረጡ ወይም ፍጠሩ"
+      },
+      "code" : {
+        "label" : "በትክክል የተፈጠረ ኮድ",
+        "help" : "በትክክል የተፈጠረ የተለየ የsharepoint ስርዓት ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የsharepoint ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "sharepointVersion" : {
+        "label" : "የSharepoint ስሪት",
+        "help" : "የsharepoint ስሪት"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "ማጥፋት"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "ማስቀመጥ"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "መሰረዝ"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "አጠቃላይ መረጃ እና ይዘቶች ቅንብሮች"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms ቅንብሮች"
+      },
+      "code" : {
+        "label" : "ብቸኛ ኮድ",
+        "help" : "የእውቀት ግራፍ ውስጥ የመረጃ መውጣት\n                                    ደረጃ በራሱ የተፈጠረ ብቸኛ ኮድ"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/እውቀት መውጣት ቅንብር"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "ይህን የእውቀት ግራፍ መውጣት ደረጃ\n                                    ቅንብር መግለጫ ያስገቡ"
+      },
+      "extractionPrompt" : {
+        "label" : "የመረጃ መውጣት ማነጽ ጥያቄ",
+        "help" : "በ entity/events/relation እና መተካት ላይ የሚውሉ የትላልቅ ቋንቋ ሞዴል ጥያቄ"
+      },
+      "usedModelConfiguration" : {
+        "label" : "ለመውጣት የተጠቀሰው LLM",
+        "help" : "ለእውቀት መውጣት የተመረጠውን ትላልቅ ቋንቋ ሞዴል ያስገቡ፣ ምንም ካልተመረጠ Default ይሆናል።"
+      },
+      "graphRagAllSources" : {
+        "label" : "graph rag ወደ ሁሉም የመረጃ ምንጮች መተግበሪያ",
+        "help" : "ሲሆን እውቀት መውጣት ማከናወን ሲፈፀም ሁሉ መረጃ ምንጮች/ፕሮጀክቶች/የመረጃ ምንጮች ይካተታሉ፣ ካልሆነ ከተቀመጡት ውስጥ ብቻ ይሰራል"
+      },
+      "defaultModel" : {
+        "label" : "ዲፎልት ትላልቅ ቋንቋ ሞዴል",
+        "help" : "የእውቀት መውጣት ለማድረግ ዲፎልት ትላልቅ ቋንቋ ሞዴል ይጠቀማል"
+      },
+      "processEveryDocument" : {
+        "label" : "graph rag ወደ ሁሉም ፋይሎች መተግበሪያ",
+        "help" : "የgraph rag አልጎሪዝሞች በሁሉም ፋይሎች ላይ ይተገበራሉ፣ ይህ የሲስተሙ የአከናወን ዝርዝሮችን ይጨምራል ነገር ግን ወጪ እና ጊዜን ያሳድጋል"
+      },
+      "contentSelectionFilter" : {
+        "label" : "ለgraphrag ሂደት የፋይል መምረጫ መመሪያዎች",
+        "help" : "ወደ መረጃ መውጣት ፓይፕላይን ለመላክ ላለሚችሉ ፋይሎች ቅንብሮችን ያስተካክሉ፣ ቢያንስ የፋይል ስም እና መመሪያ እና/ወይም የፋይል አይነት እና/የፋይል መጠን በባይት ክፍፍል እና/የመጨረሻ ማሻሻያ እድሜ በቀን ይምረጡ"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "የፋይል አይነቶችን ይምረጡ"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "የፋይል ስም መፍትሄ መደበኛዎች"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "ፋይሉ በመጨረሻ የተቀየረው ቀናት በፊት"
+      },
+      "nameFilter" : {
+        "placeholder" : "የፋይል ስም"
+      },
+      "maxFileSize" : {
+        "placeholder" : "ከፍተኛ የፋይል መጠን በባይት"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "የበዓላዊ መረጃዎች"
+      },
+      "MainPanel" : {
+        "label" : "የ እውቀት ቤዝ ማስተካከያ"
+      },
+      "AccessSettingsTab" : {
+        "label" : "የ እውቀት ቤዝ መድረሻ ቅንብሮች"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "የ እውቀት ቤዝ ራሱ ስለተፈጠረ ልዩ ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የ እውቀት ቤዝ መግለጫ ያስገቡ።"
+      },
+      "embeddingModelReferences" : {
+        "label" : "የተጠቀሱ የ embedding ሞዴሎች (ባዶ ካወዱ የስርዓቱን ነባር ይጠቀማል)",
+        "help" : "ለ እውቀት ቤዝ የ embedding ሞዴሎች፣ ባዶ ተወው ነባር ይጠቀመዋል።"
+      },
+      "SaveBtn" : {
+        "label" : "ያኑሩ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ይሰርዙ"
+      },
+      "IndexBtn" : {
+        "label" : "ማግኛ",
+        "help" : "ይዳግሙ ይውሰኑ"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "ፕሮጀክት ወይም እቃ ማስተካከያ"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "የፕሮጀክቱ ራሱ የተፈጠረ ልዩ ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የፕሮጀክቱ መግለጫ ያስገቡ።"
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "እውቀት ቤዝ",
+        "help" : "እውቀት ቤዝ።"
+      },
+      "DeleteBtn" : {
+        "label" : "ይሰርዙ"
+      },
+      "IndexBtn" : {
+        "label" : "ማግኛ",
+        "help" : "ይዳግሙ ይውሰኑ"
+      },
+      "SaveBtn" : {
+        "label" : "ያኑሩ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ አዲስ እቃ/ፕሮጀክት ያክሉ",
+        "help" : "አዲስ ያክሉ..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "ሁሉም ይጠቀማሉ",
+        "help" : "ሁሉም መጠቀም ይችላሉ"
+      },
+      "accessibleGroups" : {
+        "label" : "የቡድን ዝርዝር",
+        "help" : "የተፈቀዱትን ቡድኖች ይምረጡ"
+      },
+      "accessibleUsers" : {
+        "label" : "የተጠቃሚዎች ዝርዝር",
+        "help" : "የተፈቀዱትን ተጠቃሚዎች ይምረጡ"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "ዳሽቦርድ"
+      },
+      "LLMSTab" : {
+        "label" : "ንግግር እና እትብት ለማድረግ የ LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "የ Rag ቻት ፕሮፋይሎች/የሞዴል ማበሪያዎች"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "የእውቀት ቤዞች እና ፕሮጀክቶች"
+      },
+      "UsersGroupTab" : {
+        "label" : "ተጠቃሚዎች እና ቡድኖች"
+      },
+      "GeboModulesTab" : {
+        "label" : "የ Gebo.ai ሞጁል አቀናብር"
+      },
+      "LogsTab" : {
+        "label" : "መዝገቦች"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "አዘጋጅ"
+      },
+      "ConfigureBtn" : {
+        "label" : "አዘጋጅ"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "አዲስ ፕሮምፕት ቅንብር"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "አዲስ የውይይት መገለጫ"
+      },
+      "MainPanel" : {
+        "label" : "በመመርመር የተደገፉ የውይይት መገለጫዎች"
+      },
+      "PromptsPanel" : {
+        "label" : "የፕሮምፕት ስብስብና ነባሪ ፕሮምፕቶች"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "የእውቀት ቤዛዎች"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "ConfigureBtn1" : {
+        "label" : "ቅናት አድርግ"
+      },
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "አዲስ የብልሃት ማህደር"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "አዲስ ማስተካከያ ሞዴል የማዋቀሪያ ማስተካከያ"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "አዲስ የውይይት ሞዴል የማዋቀሪያ ማስተካከያ"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      },
+      "ModelHeader" : {
+        "label" : "ሞዴል "
+      },
+      "ModelProviderHeader" : {
+        "label" : "የሞዴል አቅራቢ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ማስተካከያ"
+      },
+      "CodeHeader2" : {
+        "label" : "ኮድ"
+      },
+      "DescriptionHeader2" : {
+        "label" : "መግለጫ"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "የሞዴል አቅራቢ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ማስተካከያ"
+      },
+      "ModelHeader2" : {
+        "label" : "ሞዴል "
+      },
+      "ChatmodelsZone" : {
+        "label" : "የተዘጋጀ የውይይት ሞዴሎች"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "የተዘጋጀ ማስተካከያ ሞዴሎች"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "ሞዴሉ በመሙከር ላይ"
+      },
+      "TestChatBtn" : {
+        "label" : "ቻት ሞክር"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴሉ ውቅር መግለጫ ያስገቡ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ በትውልድ የሞዴሉ ኮንፊግሬሽን ኮድ"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን OpenAI ቶክን ይምረጡ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት የOpenAI የቻት ሞዴል ይምረጡ።"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "የረቀቀ ማስተካከያዎች"
+      },
+      "MainPanel" : {
+        "label" : "የOpenAI ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "MainPanel" : {
+        "label" : "የOpenAI እተጋጠሚ ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን OpenAI ቶክን ይምረጡ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ እተጋጠሚ ሞዴል ኮንፊግሬሽን ኮድ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የእተጋጠሚ ሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI እተጋጠሚ ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት የOpenAI እተጋጠሚ ሞዴል ይምረጡ።"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ እተጋጠሚ ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን እተጋጠሚ ሞዴል ካልተገለጸ እንደ ነባሪ ይይዛል"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ የሞዴሉ ኮንፊግሬሽን ኮድ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "baseUrl" : {
+        "label" : "የቤዝ ኦላማ ሰርቨር አድራሻ",
+        "help" : "የቤዝ አድራሻ (ምሳ. http://servername:234/) ለኦላማ አካባቢ ወይም የLAN ሰርቨር ማምለኪያ"
+      },
+      "choosedModel" : {
+        "label" : "Ollama የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት Ollama የቻት ሞዴል ይምረጡ።",
+        "placeholder" : "ሞዴል ይምረጡ"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን Ollama ቶክን ይምረጡ (አስፈላጊ ነው)"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "MainPanel" : {
+        "label" : "የOllama አካባቢ (ወይም LAN) ሰርቨር ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ የሞዴሉ ኮንፊግሬሽን ኮድ"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን Anthropic ቶክን ይምረጡ"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት የAnthropic ቻት ሞዴል ይምረጡ።",
+        "placeholder" : "ሞዴል ይምረጡ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "የረቀቀ ማስተካከያዎች"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      },
+      "MainPanel" : {
+        "label" : "የAnthropic ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ የሞዴሉ ኮንፊግሬሽን ኮድ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን MistralAI ቶክን ይምረጡ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት የMistralAI ቻት ሞዴል ይምረጡ።"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "የረቀቀ ማስተካከያዎች"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      },
+      "MainPanel" : {
+        "label" : "የMistralAI ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት Google Vertex AI የቻት ሞዴል ይምረጡ።"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበት Google Vertex AI ቶክን ይምረጡ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ የሞዴሉ ኮንፊግሬሽን ኮድ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "TabGeneralInfos" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "የረቀቀ ማስተካከያዎች"
+      },
+      "MainPanel" : {
+        "label" : "የGoogle Vertex AI ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን Deepseek ቶክን ይምረጡ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ የሞዴሉ ኮንፊግሬሽን ኮድ"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት Deepseek የቻት ሞዴል ይምረጡ።",
+        "placeholder" : "ሞዴል ይምረጡ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "የረቀቀ ማስተካከያዎች"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "MainPanel" : {
+        "label" : "የDeepseek ቻት ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የሞዴል ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ የሞዴሉ ኮድ"
+      },
+      "baseUrl" : {
+        "label" : "የቻት ሞዴል  API ቤዝ ሰርቨር አድራሻ",
+        "help" : "የቻት ሞዴሉ የቤዝ አድራሻ።"
+      },
+      "apiSecretCode" : {
+        "label" : "ቻት ሞዴል  API ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበት ቻት ሞዴል  API ቶክን ይምረጡ (አስፈላጊ አይደለም)"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ ቻት ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን ቻት ሞዴል ካልተገለጸ እንደ ነባሪ ቻት ሞዴል ይይዛል"
+      },
+      "choosedModel" : {
+        "label" : "ቻት ሞዴል  የቻት ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት ቻት ሞዴል  ቻት ሞዴል ይምረጡ።"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "TitleFragment" : {
+        "label" : "የቻት ሞዴል ተቀባይነትን በማርትት ላይ፡"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "የረቀቀ ማስተካከያዎች"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "የሞዴል መዳረሻ ማስተካከያዎች"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የእተጋጠሚ ሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "MainPanel" : {
+        "label" : "የOllama አካባቢ (ወይም LAN) እተጋጠሚ ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን Ollama ቶክን ይምረጡ"
+      },
+      "choosedModel" : {
+        "label" : "Ollama እተጋጠሚ ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት Ollama እተጋጠሚ ሞዴል ይምረጡ።"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ እተጋጠሚ ሞዴል ኮንፊግሬሽን ኮድ"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ እተጋጠሚ ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን እተጋጠሚ ሞዴል ካልተገለጸ እንደ ነባሪ ይይዛል"
+      },
+      "baseUrl" : {
+        "label" : "የቤዝ ኦላማ ሰርቨር አድራሻ",
+        "help" : "የቤዝ አድራሻ (ምሳ. http://servername:234/) የኦላማ አካባቢ እና LAN ሰርቨር ማምለኪያ"
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የእተጋጠሚ ሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "MainPanel" : {
+        "label" : "የMistralAI እተጋጠሚ ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ እተጋጠሚ ሞዴል ኮንፊግሬሽን ኮድ"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI እተጋጠሚ ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት MistralAI እተጋጠሚ ሞዴል ይምረጡ።"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ እተጋጠሚ ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን እተጋጠሚ ሞዴል ካልተገለጸ እንደ ነባሪ ይይዛል"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበትን MistralAI ቶክን ይምረጡ"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "የGoogle Vertex AI እተጋጠሚ ሞዴል ኮንፊግሬሽን በማርትት ላይ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የእተጋጠሚ ሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI እተጋጠሚ ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት Google Vertex AI እተጋጠሚ ሞዴል ይምረጡ።"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ እተጋጠሚ ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን እተጋጠሚ ሞዴል ካልተገለጸ እንደ ነባሪ ይይዛል"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ እተጋጠሚ ሞዴል ኮንፊግሬሽን ኮድ"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበት Google Vertex AI ቶክን ይምረጡ"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "DeleteBtn" : {
+        "label" : "አሰርዝ"
+      },
+      "TitleFragment" : {
+        "label" : "የእተጋጠሚ ሞዴል ተቀባይነትን በማርትት ላይ፡"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የእተጋጠሚ ሞዴሉ ኮንፊግሬሽን መግለጫ ይጻፉ"
+      },
+      "code" : {
+        "label" : "መለያየት ኮድ",
+        "help" : "በራሱ ሰርቷ የተፈጠረ እተጋጠሚ ሞዴል ኮንፊግሬሽን ኮድ"
+      },
+      "choosedModel" : {
+        "label" : "እተጋጠሚ ሞዴል  እተጋጠሚ ሞዴል ምርጫ",
+        "help" : "ለሚሰሩበት እተጋጠሚ ሞዴል  እተጋጠሚ ሞዴል ይምረጡ።"
+      },
+      "baseUrl" : {
+        "label" : "እተጋጠሚ ሞዴል  API ሰርቨር አድራሻ",
+        "help" : "እተጋጠሚ ሞዴሉ የቤዝ አድራሻ።"
+      },
+      "defaultModel" : {
+        "label" : "ይህን እንደ ነባሪ እተጋጠሚ ሞዴል ማድረግ",
+        "help" : "እሱ ሲሆን እተጋጠሚ ሞዴል ካልተገለጸ እንደ ነባሪ ይይዛል"
+      },
+      "apiSecretCode" : {
+        "label" : "እተጋጠሚ ሞዴል  API ቶክን",
+        "help" : "ለዚህ ሞዴል የሚጠቀምበት እተጋጠሚ ሞዴል  API ቶክን ይምረጡ"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "የቻት ማቀናበሪያ መረጃዎች"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ይህን የቻት ስብስብ ያጥፉ"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "የቻት ስብስቡን ይሰይሙ"
+      },
+      "QueryControl" : {
+        "placeholder" : "ለቻት ቦት መልእክት ይጻፉ"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "description" : {
+        "label" : "የቻት መግለጫ",
+        "help" : "የቻት ስብስቡን መግለጫ ያስገቡ።"
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "የተጠቀሰው ሞዴል",
+        "help" : "የሞዴል ኮድ"
+      },
+      "providerId" : {
+        "label" : "የቻት ሞዴል አቅራቢ",
+        "help" : "LLms አቅራቢ ዳይቨር"
+      },
+      "functions" : {
+        "label" : "ቻት ሞዴሉ ሊጠቀምባቸው የሚችለው ተግባሮች",
+        "help" : "ቻት ሞዴሉ ሊጠቀምባቸው የሚችለው ተግባሮች ዝርዝር"
+      },
+      "NameCol" : {
+        "label" : "ስም"
+      },
+      "DescriptionCol" : {
+        "label" : "መግለጫ"
+      },
+      "kbases" : {
+        "label" : "የሚገኙ የእውቀት ማጠቃለያዎች",
+        "help" : "በዚህ የRAG ቻት ውስጥ የተጠቀሰው የእውቀት ማጠቃለያዎች ዝርዝር"
+      },
+      "CloseBtn" : {
+        "help" : "ዝጋ"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "መቅዳት",
+        "help" : "የድምጽ አውድ መቅዳት ይጀመሩ እና ይላኩ"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "መረጃ እንደገና ጫን"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SelectHeader" : {
+        "label" : "ይምረጡ"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "መጨረሻ ቀን/ሰዓት"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "መጀመሪያ ቀን/ሰዓት"
+      },
+      "ProcessingHeader" : {
+        "label" : "በአስራር ላይ"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      },
+      "FinishedHeader" : {
+        "label" : "ተጠናቋል"
+      },
+      "WithErrorHeader" : {
+        "label" : "በስህተት"
+      },
+      "LogTableComponent" : {
+        "help" : "ይህ የተጋላጭ ፋይል ስርዓት ቦታ የግብዣ መዝገብ ነው"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "የሂደቶች ዳሰሳ"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "CloseBtn" : {
+        "label" : "ዝጋ"
+      },
+      "PublicationLogTab" : {
+        "label" : "የህትመት መዝገብ"
+      },
+      "MainPanel" : {
+        "label" : "የህትመት መዝገብ"
+      },
+      "actualStatus" : {
+        "label" : "ሁኔታ",
+        "help" : "የተግባሩ ሁኔታ፣ በእውነት በሂደት ላይ ወይም ተጠናቋል ወይም በስህተት ጨርሷል።"
+      },
+      "publishingSystem" : {
+        "label" : "የታተመው ይዘት ቅኝጥ",
+        "help" : "የታተመው ይዘት መረጃ"
+      },
+      "startDateTime" : {
+        "label" : "መጀመሪያ ቀን/ሰዓት",
+        "help" : "የይዘት እኩልነት ስራ መጀመሪያ ቀን እና ሰዓት"
+      },
+      "endDateTime" : {
+        "label" : "መጨረሻ ቀን/ሰዓት",
+        "help" : "የይዘት እኩልነት ስራ መጨረሻ ቀን እና ሰዓት"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "ፍጹም አልተሳካም"
+      },
+      "ProcessedCompletely" : {
+        "label" : "ፍጹም ተሳክቷል"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "መያዣ ከጠቅላላው የሰነዶች ብዛት ጋር"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "ተጨማሪ ዝርዝሮች"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "አመልካች ፅሁፍ ፍጠር"
+      },
+      "PromptWizardBtn" : {
+        "label" : "አመልካች ፅሁፍ አስተካካይ",
+        "help" : "ለአላማዎ አመልካች ፅሁፍ ለመፍጠር ይህን በመጠቀም LLM ያጠቀሙ"
+      },
+      "acceptPrompt" : {
+        "label" : "አመልካች ፅሁፍ ተቀበል"
+      },
+      "promptWizardUI" : {
+        "label" : "አመልካች ፅሁፍ አምስት እቃውን የሚያመረት አስተካካይ"
+      },
+      "cancel" : {
+        "label" : "አቅርብ"
+      },
+      "response" : {
+        "label" : "የተገለጸ አመልካች አብነት",
+        "help" : "ለአላማዎ የተፈጠረ አብነት ጽሁፍ (መቀየር ወይም መጠግን/ማስተካከል ይችላሉ)"
+      },
+      "modelCode" : {
+        "label" : "የሚጠቀሙት የቻት ሞዴል",
+        "help" : "ለአመልካች አብነት ፅሁፍ ማመንጨት የሚፈልጉትን ቻት ሞዴል ይምረጡ"
+      },
+      "query" : {
+        "label" : "የአመልካች አብነት ጥያቄ",
+        "help" : "በሁለተኛ ግምት ላይ በግልጽነት የAI ተጠቃሚውን የሚደግፈውን አላማ ይግለጹ"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "ሙቀት",
+        "help" : "ሞዴሉ የሚሰጠውን ምላሽ ሙቀት፣ ከ0 እስከ 1 ድረስ (አይታወቅም ከሆነ ባዶ ይተዉት)"
+      },
+      "contextLength" : {
+        "label" : "የአይነት ርዝመት (ቶከኖች)",
+        "help" : "AI ሞዴሉ ሲሰራ የሚያቅም የጽሑፍ መጠን (ካልተመረጠ 1047576 ይጠቀማል)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "የTopP መለኪያ፣ ከ0 እስከ 1 ድረስ (አይታወቅም ከሆነ ባዶ ይተዉት)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "ለዚያ ሞዴል የተነቁ ተግባሮች ጥሪ",
+        "help" : "በውይይት ላይ በሞዴሉ ሊያጠቀሙት የሚችሉ ተግባሮች"
+      },
+      "defaultModelPrompt" : {
+        "label" : "ነባሪ የሞዴል ጥያቄ",
+        "help" : "ለውይይት ሞዴል ነባሪ ጥያቄውን ያስተካክሉ።"
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የመለያ መግለጫ ያስገቡ።"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "በራስ-ሰር የተፈጠረ የመለያ ልዩ ኮድ።"
+      },
+      "secretType" : {
+        "label" : "የመለያ አይነት",
+        "help" : "ለየፊት ስርዓት ምርጥ የመለያ አይነትን ይምረጡ"
+      },
+      "InsertBtn" : {
+        "label" : "አስገባ"
+      },
+      "token" : {
+        "label" : "ቶከን",
+        "help" : "ቶከኑን ያስገቡ።"
+      },
+      "user" : {
+        "label" : "ተጠቃሚ",
+        "help" : "በቶከኑ የተጠቀሰውን ተጠቃሚ ያስገቡ።"
+      },
+      "MainPanel" : {
+        "label" : "መለያ በመፍጠር ላይ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "username" : {
+        "label" : "የተጠቃሚ ስም",
+        "help" : "የተጠቃሚውን ስም ያስገቡ።"
+      },
+      "password" : {
+        "label" : "የይለፍ ቃል",
+        "help" : "የይለፍ ቃሉን ያስገቡ።"
+      },
+      "email" : {
+        "label" : "ኢሜይል/የተጠቃሚ ስም",
+        "help" : "ከ ssh key ጋር የተያያዙትን ኢሜይል ወይም የተጠቃሚ ስም ያስገቡ።"
+      },
+      "key" : {
+        "label" : "የሚስጥር ቁልፍ",
+        "help" : "የፍቃድ ቁልፉን ፋይል በደቡ ከፍተና ወደዚህ ቦታ ያቅሩ።"
+      },
+      "passphrase" : {
+        "label" : "የቁልፍ መስጫ-ቃል",
+        "help" : "የቁልፍ መስጫ-ቃሉን ያስገቡ።"
+      },
+      "pub" : {
+        "label" : "የህዝብ ቁልፍ",
+        "help" : "የህዝብ ቁልፉን ፋይል በደቡ ከፍተና ወደዚህ ቦታ ያቅሩ።"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "በብዛት የተለየ ኮድ",
+        "help" : "የይዘቱን በብዛት የተፈጠረ ኮድ በራስ-ሰር ይሰጣል።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የተጫኑትን ይዘት ወይም file system ግቤት መግለጫ ያስገቡ።"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የወላጅ ፕሮጀክት አገናኝ።"
+      },
+      "upload" : {
+        "label" : "ይዘቶችን ስቀል",
+        "help" : "የመቃኛ ቁልፍ ይጫኑና የzip ፋይሎች ወይም ሌሎች ፋይሎችን ይምረጡ"
+      },
+      "openZips" : {
+        "label" : "የzip ፋይሎችን ክፈት",
+        "help" : "የzip ፋይሎችን መክፈትና ይዘቶችን መውጣት ይፍቀዱ"
+      },
+      "PublishBtn" : {
+        "label" : "አትላ!",
+        "help" : "ይመዝግቡና እነዚህ ይዘቶች በእውቀት መዝገቡ ለLLm ይገኙ"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "ያስቀምጡ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "LogsTab" : {
+        "label" : "መዝገቦች"
+      },
+      "MainPanel" : {
+        "label" : "የተጫኑትን ይዘት ማስተካከል"
+      },
+      "SettingsTab" : {
+        "label" : "ቅንብሮች"
+      },
+      "buildSystemsRefs" : {
+        "label" : "የመገኛ ስርዓቶችን ያቀናብሩ",
+        "help" : "ከmeta መረጃዎችና ተጨማሪ አካላዊ መረጃዎች የሚያሰቡ የማአከቻ/መደበቂያ ስርዓቶች ዝርዝር (የሶፍትዌር ኮድ ካልወሰነበት empty ይተዉት)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "ተመርጠው ያሉ እቃዎች"
+      },
+      "ChooseOk" : {
+        "label" : "እሺ"
+      },
+      "ChooseCancel" : {
+        "label" : "ሰርዝ"
+      },
+      "EditBtn" : {
+        "help" : "የተመረጡትን ቀይር"
+      },
+      "ChooseElementsArea" : {
+        "label" : "እቃዎችን ይምረጡ"
+      },
+      "VFileSystemSelector" : {
+        "label" : "እቃዎችን ይምረጡ"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "የመሥሪያ ጊዜን አርትዕ"
+      },
+      "ConfirmBtn" : {
+        "label" : "አረጋግጥ"
+      },
+      "AddBtn" : {
+        "label" : "+አክል"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "አትርፉ! ",
+        "help" : "ያስቀምጡና ይህን ይዘት በLLm's ችሎታ ማስተዋወቅ ያድርጉት"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SettingsTab" : {
+        "label" : "ቅንብሮች"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "የምንጭ ኮድ አስተዳደር"
+      },
+      "LogsTab" : {
+        "label" : "መዝገቦች"
+      },
+      "MainPanel" : {
+        "label" : "የቀድሞ የፋይል ስርዓት ይዘትን ትራክት ማስተካከል"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የተሰቀመውን የፋይል ስርዓት ይዘት መግለጫ ያስገቡ።"
+      },
+      "openZips" : {
+        "label" : "የZip ፋይሎችን ክፈት",
+        "help" : "የZip ፋይሎችን መክፈትና ይዘቶቻቸውን ማውጣት ያብቃት"
+      },
+      "code" : {
+        "label" : "በተለየ ቁጥር",
+        "help" : "በራሱ ሲፈጠር የሚሰጥበት በተለየ ቁጥር የይዘቱ።"
+      },
+      "tree" : {
+        "label" : "የተመረጡ ፋይሎች ወይም ፎልደሮች",
+        "help" : "በሰርቨሩ ላይ የተጋሩ የፋይል ስርዓት ፋይሎች ወይም የዎደ ፎልደር"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የአያት ፕሮጀክት ማጣቀሻ።"
+      },
+      "programmedTables" : {
+        "label" : "የይዘቶች እድሳት ማረሚያ ጊዜ ሰሌዳ",
+        "help" : "የተቀየሩ ይዘቶችን ማቅረብ፣ የተዛማጅ መፍጠር ስርዓት እንዲዘመኑ ለመያዝ ጊዜያዊ አቀማመጦችን ያስተካክሉ"
+      },
+      "catalogingCriteria" : {
+        "label" : "የፎልደሮች የውቅረት መስፈርቶች",
+        "help" : "በGebo.ai የምትካፈሉትን በፋይል ስርዓት አካባቢ ፎልደሮች የተያዙበትን መስፈርት እባክዎ እዚህ ይገልጹ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "የግንባታ ስርዓቶችን ቅናት",
+        "help" : "ለMeta መረጃዎችና ተጨማሪ አርቲፋክቶች መረጃዎች ማወቅ የሚያስችሉ የግንባታ/መደበኛ ስርዓቶች ዝርዝር (ከፍተኛ ሶፍትዌር ኮድ ካልተያዙ ባይሆን)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "አዲስ የፋይል አጋራ አካባቢ"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "ፍጹም መንገድ"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db ወይም yml ፋይል ውቅር"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "CodeHeader" : {
+        "label" : "ቁጥር"
+      },
+      "ModifyHeader" : {
+        "label" : "አስተካክል"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "የተመረጠው የተጋራ ፋይልስ ፎልደር",
+        "help" : "በድርጅታችሁ የስኬት ማከማቻ እንዲሆን የተጋራ ፋይል ስርዓት መሠረት መንገድ የሆነውን የሰርቨሩ ፎልደር ይምረጡ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የድርጅታችሁን የተጋራ ፋይል ስርዓት አካባቢ መግለጫ ያስገቡ"
+      },
+      "code" : {
+        "label" : "በተለየ ቁጥር",
+        "help" : "በራሱ ሲፈጠር የሚሰጥበት በተለየ ቁጥር የይዘቱ።"
+      },
+      "InsertBtn" : {
+        "label" : "አስገባ"
+      },
+      "CancelBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "MainPanel" : {
+        "label" : "የሰርቨሩ የተጋራ ፋይል ፎልደርን ማስተካከል"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "PublishBtn" : {
+        "label" : "አትልቅ!",
+        "help" : "አስቀምጥ እና ይህን ይዞታ በእውቀት ቤት ለLLm's ይገናኛል"
+      },
+      "MainPanel" : {
+        "label" : "git ምንጭ/ሰነድ ማከማቻ ማረሚያ"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የgit repo መግለጫ ያስገቡ።"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "በራሱ የተፈጠረ የgit repo ልዩ ኮድ።"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የወላጅ ፕሮጀክት ማጣቀሻ።"
+      },
+      "contentManagementSystem" : {
+        "label" : "Git system",
+        "help" : "አስቀድሞ የተቀመጠ git system ማጣቀሻ።"
+      },
+      "branch" : {
+        "label" : "ቅርንጫፍ",
+        "help" : "የቅርንጫፍ ስም ለመምረጥ (በተደጋጋሚ master, main ወይም develop)"
+      },
+      "identityCode" : {
+        "label" : "የተጠቀሰው መለያ",
+        "help" : "ሰነዱን ለመቅዳት ምርጥ መለያ ይምረጡ"
+      },
+      "repositoryUri" : {
+        "label" : "የማከማቻ url/አድራሻ",
+        "help" : "የgit ሩቅ ማከማቻ ሙሉ አድራሻ (ብዙውን ጊዜ http: ወይም https: ወይም ssh: ይጀምራል)"
+      },
+      "publicAccess" : {
+        "label" : "ለሁሉም",
+        "help" : "የተረፈው true ከሆነ ወደ ማከማቻው መዳረሻ ማረጋገጫ አያስፈልግም"
+      },
+      "openZips" : {
+        "label" : "zip ፋይሎችን ክፈት",
+        "help" : "zip ፋይሎችን ለመክፈት እና ይዞታ ለመስረዳት አንቃ"
+      },
+      "programmedTables" : {
+        "label" : "የይዞታዎቹ አዘል ማስተካከያ ቅደም ተከተል",
+        "help" : "የተሻሻለ ይዞታዎችን ለማስተካከል ቀን ቀጠሮ ያቀናብሩ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "የመገንባት ሥርዓትን ያዘጋጁ",
+        "help" : "ለmetainfoና ተጨማሪ እቃዎች መረጃ የመገንባት/መሸፈኛ ሥርዓቶች ዝርዝር ይመልከቱ"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "አጠቃላይ መረጃዎች"
+      },
+      "UseChatModelLabel" : {
+        "label" : "የቻት ሞዴል ይጠቀሙ"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ይምረጡ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "የቻት ሞዴል ቅንብር ይምረጡ"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "የembedding ሞዴል ቅንብር ይምረጡ"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "ይምረጡ"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG ቅንብሮች"
+      },
+      "LanguageModelTab" : {
+        "label" : "የትልቅ ቋንቋ ሞዴል እና የተጠቀምነው አሞሌ ቅንብሮች"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "የEmbedding ሞዴል ይጠቀሙ"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "የደህንነት መዳረሻ ቅንብሮች"
+      },
+      "MainPanel" : {
+        "label" : "የመረጃ ተበላሽ ትዕዛዝ ቻት ፕሮፋይል ማስተካከያ"
+      },
+      "code" : {
+        "label" : "ልዩ ኮድ",
+        "help" : "ለቻት ፕሮፋይል በራሱ ሰር የታመነ ልዩ ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የቻት ፕሮፋይል መግለጫ ያስገቡ።"
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "ተጠቃሚው የእውቀት መሠረቶችን ይምረጣል",
+        "help" : "ተጠቃሚው ከፈቃዱ የእውቀት መሠረቶች ወይም የራሱን ፋይሎች ማስገባት ይችላል።"
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "የእውቀት መሠረቶች",
+        "help" : "ለሰነድ መረጃ መልስ የሚጠቀሙት የእውቀት መሠረቶች።"
+      },
+      "similaritySearchThreshold" : {
+        "label" : "የተመሳሳይነት መደበቂያ ደረጃ",
+        "help" : "ለSemantic Search የተመሳሳይነት መደበቂያ ደረጃ፣ 0.60–0.65 ዝቅተኛ ማጣሪያ፣ 0.70-0.75 መካከለኛ፣ 0.80–0.85 ትክክለኛ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "አሁን ለሁለተኛው 'hop' የተመሳሳይነት መደበቂያ",
+        "help" : "ለSemantic Search የተመሳሳይነት ደረጃ፣ 0.60–0.65 ዝቅተኛ ማጣሪያ፣ 0.70-0.75 መካከለኛ፣ 0.80–0.85 ትክክለኛ ከሁለተኛ ፍለጋ ሲጠቀምበት"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'Multi Hop' rag ማጥፊያ",
+        "help" : "'multi hop rag' ባለው ተግባር ማጥፋት። Multi hop ፍለጋ የመጀመሪያ የSemantic Search ያደረገ ሰነዶችን በContext ስለሚጠቀም ተጨማሪ አይነቱን ገፅታ ይሰጣል።"
+      },
+      "topK" : {
+        "label" : "የተመረጡ የሰነድ ቁልፎች (TopK)",
+        "help" : "በመረጃ ተበላሽ ትዕዛዝ፣ በSemantic Search ውስጥ የተገኙት የሰነድ ቁልፎች በቁጥር"
+      },
+      "enabledFunctions" : {
+        "label" : "ለዚህ RAG chat የተፈቀዱ ተግባሮች",
+        "help" : "በቻቱ በውስጥ ተደላይተው የሚጠቀሙበት በተመረጡ የእውቀት መሠረቶችም ገብስ በllm ሞዴሉ የሚታወሱ ተግባሮች።"
+      },
+      "prompt" : {
+        "label" : "ፕሮምፕት",
+        "help" : "ለመረጃ ተበላሽ ትዕዛዝ ክፍለ-ጊዜዎች፣ ፕሮምፕቱን ያስተካክሉ።"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "አስወግድ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "የፕሮምፕት ምድብ ያስገቡ ወይም ያስገቡ"
+      },
+      "MainPanel" : {
+        "label" : "ፕሮምፕት በማስተካከል ላይ"
+      },
+      "promptCategory" : {
+        "label" : "የፕሮምፕት ምድብ",
+        "help" : "የፕሮምፕት ምድብ ይምረጡ ወይም ያስገቡ።"
+      },
+      "prompt" : {
+        "label" : "ፕሮምፕት",
+        "help" : "ለቻት ፕሮምፕትን ያስተካክሉ፣ የተጠየቀውን ጥያቄ {query} ለማመለከት እና ለ LLM የተላከውን ሰነዶች/ታሪክ የተዛረበውን {context} ይጠቀሙ።"
+      },
+      "code" : {
+        "label" : "በተለየ የሚታወቀው ኮድ",
+        "help" : "ራሱ የሚፈጠር የፕሮምፕት በተለየ የሚታወቀው ኮድ።"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የፕሮምፕት መግለጫ ያስገቡ።"
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "የይለፍ ቃል ለውጥ"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "አሮጌ የይለፍ ቃል",
+        "help" : "ለመግባት የተጠቀሙት የይለፍ ቃል"
+      },
+      "newPassword" : {
+        "label" : "አዲስ የይለፍ ቃል",
+        "help" : "አዲሱ የይለፍ ቃል"
+      },
+      "username" : {
+        "label" : "ኢሜይል",
+        "help" : "ለመግባት ኢሜይል እንደ የተጠቃሚ ስም"
+      },
+      "ChangePasswordUI" : {
+        "label" : "የይለፍ ቃል ለውጥ ቅፅ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "ChangePwdBtn" : {
+        "label" : "የይለፍ ቃል ቀይር"
+      },
+      "newPassword1" : {
+        "label" : "አዲሱን የይለፍ ቃል አረጋግጥ",
+        "help" : "አዲሱን የይለፍ ቃል ያረጋግጡ"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "ማጥፊያ"
+      },
+      "CancelBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "ForMoreInformations" : {
+        "label" : "ስለ Google custom search API ወይም የአፒ ቁልፍዎን ለማግኘት (በነፃ) ዝርዝር መረጃ ለማግኘት ይጎብኙ፡ https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "ብቸኛ ኮድ",
+        "help" : "የgoogle search api ቅኝቻ ብቸኛ ኮድ።"
+      },
+      "MainPanel" : {
+        "label" : "የgoogle custom search api የማስገቢያ መረጃዎችን እየቀየራችሁ ነው"
+      },
+      "secretCode" : {
+        "label" : "Google search api token",
+        "help" : "የgoogle search api token ይምረጡ ወይም ያስገቡ"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የgoogle search api ቅኝቻ መግለጫ ያስገቡ።"
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "ከእውቀት ሰብስኦች ውጪ ውይይት",
+        "help" : "የውይይት ክፍል ለመጀመር LLMs ይምረጡ",
+        "placeholder" : "የውይይት ክፍል ለመጀመር LLMs ይምረጡ"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "የውይይት አማራጮችን ክፍል ክፈት"
+      },
+      "CreateChatBtn" : {
+        "label" : "አዲስ ውይይት"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "አዲስ የውይይት ክፍል"
+      },
+      "chatProfileCode" : {
+        "label" : "ከእውቀት ሰብስኦች ጋር ውይይት",
+        "help" : "ከድርጅቱ (እና ከእርስዎ) ሰነዶች እና LLMs ለመውያየት የድርጅት የውይይት ፕሮፋይል ይምረጡ",
+        "placeholder" : "ከድርጅቱ (እና ከእርስዎ) ሰነዶች እና LLMs ለመውያየት የድርጅት የውይይት ፕሮፋይል ይምረጡ"
+      },
+      "NewChatBtn" : {
+        "label" : "አዲስ ውይይት"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "ለሰነዶች ውስጥ ይወያዩ",
+        "help" : "ማድረሻ ወይም ፍለጋ አድርጉ እና የሚሰሩበትን ሰነድ ይምረጡ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ለውይይት ሰነዶችን ይምረጡ"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "ያረጋግጡ"
+      },
+      "userspaceBrowsing" : {
+        "label" : "የእርስዎን ሰነዶች ይጫኑ ወይም ይምረጡ",
+        "help" : "ከተጠቃሚ ቦታዎ ሰነዶችን ይምረጡ/ይጫኑ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ፈልግ"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ፈልግ"
+      },
+      "query" : {
+        "label" : "የስምንት ፍለጋ ሐረግ",
+        "help" : "ከፍለጋዎ ጋር የተያያዘ ትርጉም ያለው ንግግር ያስገቡ"
+      },
+      "choosenBrowsing" : {
+        "label" : "የማውጫ መረጃ መዝገቦችን ይምረጡ",
+        "help" : "የኩባንያው የተጋሩ መረጃ መዝገቦችን በማውጫ ይምረጡ"
+      },
+      "filename" : {
+        "label" : "የተፈለገው የፋይል ስም",
+        "help" : "ለየተፈለጉት ይዞታዎ የፋይል አካል ያስገቡ"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "የተመረጡትን ማስተካከያ"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "የተጠቃሚዎችን ፋይሎች ይምረጡ"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "መተው"
+      },
+      "okBtn" : {
+        "label" : "እሺ"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "የተጠቃሚ የተጫኑ ይዘቶችን ይምረጡ"
+      },
+      "UserspaceBrowser" : {
+        "label" : "የእውቀት መሰብሰቢያዎች፣ የተጠቃሚ ፋይሎች"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ንዑስ ፕሮጀክት ወይም እቃ",
+        "help" : "ንዑስ ፕሮጀክት ወይም እቃ ያክሉ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ፋይሎች ይጫኑ",
+        "help" : "የተጫኑ ፋይሎች መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "የMicrosoft SharePoint/OneDrive መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "የAtlassian Confluence መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ፋይል ሲሰስተም",
+        "help" : "የተጋሩ ፋይል ሲሰስተም መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "የAtlassian Jira መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "እንደ bitbucket, github ወይም ሌሎች የgit መዝገቦች መረጃ ምንጭ ያክሉ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ቻት"
+      },
+      "setup" : {
+        "label" : "ቅንብር"
+      },
+      "admin" : {
+        "label" : "Gebo.ai አስተዳዳሪ"
+      },
+      "currentProfile" : {
+        "label" : "የኔ መገለጫ"
+      },
+      "logout" : {
+        "label" : "ውጣ"
+      }
+    }
+  }
+}

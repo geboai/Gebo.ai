@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "默认系统语言",
+        "help" : "此 Gebo.ai 安装的默认系统语言"
+      },
+      "username" : {
+        "label" : "电子邮件",
+        "help" : "用于登录的电子邮件作为用户名"
+      },
+      "passwordC" : {
+        "label" : "确认密码",
+        "help" : "确认密码"
+      },
+      "password" : {
+        "label" : "密码",
+        "help" : "登录密码（至少 8 个字符）"
+      },
+      "PasswordNotMatching" : {
+        "label" : " 两次输入的密码不一致 "
+      },
+      "LocalAdmin" : {
+        "label" : "创建您的本地管理员账户"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "您将来会用此账户来安装或管理员软件，这些数据仅保留在本地系统，不会通过网络发送"
+      },
+      "EnterBtn" : {
+        "label" : "前往登录页面"
+      },
+      "SetupPage" : {
+        "label" : "设置您的 gebo.ai 安装"
+      },
+      "CreateBtn" : {
+        "label" : "创建系统设置"
+      },
+      "LicenceFieldSet" : {
+        "label" : "阅读并接受许可协议"
+      },
+      "AcceptMark" : {
+        "label" : "我接受条款",
+        "help" : "点击此处即表示您接受许可中的条款和条件"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "电子邮件",
+        "help" : "使用电子邮件作为用户名登录"
+      },
+      "password" : {
+        "label" : "密码",
+        "help" : "用于登录的密码"
+      },
+      "LoginPanel" : {
+        "label" : "登录到 gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "登录"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "好的！",
+        "detail" : "操作成功完成"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 配置"
+      },
+      "ProviderNameHeader" : {
+        "label" : "提供者名称"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 安全设置"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "返回设置首页"
+      },
+      "WizardUi" : {
+        "label" : "选择一个设置部分"
+      },
+      "adminUserSetupSection" : {
+        "label" : "管理员及其他账户设置",
+        "description" : "至少需要一个管理账户来确保此 Gebo.ai 安装被正确管理，必要时可添加其他用户"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai 工作目录",
+        "description" : "配置一个工作目录，它将作为本次安装的配置和所有工作文件的存储文件夹。建议定期备份。"
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "向量数据库配置",
+        "description" : "需要为 Gebo.ai 配置一个向量数据库以提供检索增强生成服务，可在本地向量数据库、Qdrant 或 Mongo Atlas 之间选择"
+      },
+      "oauth2SetupSection" : {
+        "label" : "单点登录，Oauth2 认证",
+        "description" : "Oauth2 单点登录认证及 Oauth2 客户端配置"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "大语言模型设置",
+        "description" : "配置多个基于云端或本地/局域网基础设施的 llms 后端服务，需至少配置一个聊天模型和一个嵌入模型以保证软件正常运行。"
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "图 RAG/知识抽取设置",
+        "description" : "配置图 RAG 与知识抽取子系统"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "共享文件系统路径设置",
+        "description" : "配置公司共享文件系统路径，以用于各知识库中的检索增强生成文档区"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian Confluence 集成",
+        "description" : "将 Gebo.ai 配置为可访问您的 Atlassian Confluence 云端或本地安装"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian Jira 集成",
+        "description" : "将 Gebo.ai 配置为可访问您的 Atlassian Jira 云端安装"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint 集成",
+        "description" : "将 Gebo.ai 配置为可访问您的 Microsoft Sharepoint 云端或本地安装"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "至少配置一个知识库",
+        "description" : "至少配置一个知识库，让您的用户能够体验 Gebo.ai 的检索增强生成服务"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "至少配置一个“R.A.G.” 聊天配置",
+        "description" : "为用户配置至少一个基于已设置知识库的检索增强聊天配置"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "设置公司 Atlassian Confluence 系统"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "SystemTypeHeader" : {
+        "label" : "系统类型"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "配置代码"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence 系统"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira 系统"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "配置代码"
+      },
+      "MainPanel" : {
+        "label" : "设置公司 Atlassian Jira 系统"
+      },
+      "SystemTypeHeader" : {
+        "label" : "系统类型"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "配置代码"
+      },
+      "MainPanel" : {
+        "label" : "设置公司 Microsoft Sharepoint 系统"
+      },
+      "SystemTypeHeader" : {
+        "label" : "系统类型"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint 系统"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "请提供有效额度的 API 密钥。如果选择 OpenAI，您需要为 API 使用在当前套餐中额外充值一定金额（10-30 美元通常足够），否则应用内将无法使用 llms 流量。"
+      },
+      "MainPanel" : {
+        "label" : "使用您自己的 API 密钥设置 Gebo.ai llms 提供商访问权限"
+      },
+      "provider" : {
+        "label" : "大语言模型供应商",
+        "help" : "在 OpenAI（chatgpt）、Google（Gemini）、Anthropic（Claude）三者中选择一个"
+      },
+      "user" : {
+        "label" : "用户",
+        "help" : "输入与 apiKey 关联的用户"
+      },
+      "ConfigureBtn" : {
+        "label" : "配置"
+      },
+      "apiKey" : {
+        "label" : "Api 密钥",
+        "help" : "您将要使用的 LLMS 提供商的 api 密钥"
+      },
+      "ProviderHeader" : {
+        "label" : "提供商"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "配置代码"
+      },
+      "ModelHeader" : {
+        "label" : "模型"
+      },
+      "ModelTypeHeader" : {
+        "label" : "模型类型"
+      },
+      "DefaultModelHeader" : {
+        "label" : "默认模型"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "创建图 rag 配置"
+      },
+      "MainPanel" : {
+        "label" : "设置 Graph Rag & 知识抽取的默认配置"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "配置代码"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "项目"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "添加知识库"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "知识库"
+      },
+      "MainPanel" : {
+        "label" : "知识库与内容配置"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "内容来源"
+      },
+      "PublishedHeader" : {
+        "label" : "已发布"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "文档数量"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "添加项目/条目",
+        "help" : "新建项目"
+      },
+      "Button1" : {
+        "help" : "打开知识库"
+      },
+      "Button2" : {
+        "help" : "打开项目表单"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai 工作文件夹配置"
+      },
+      "ConfigureBtn" : {
+        "label" : "配置"
+      },
+      "workDirectory" : {
+        "label" : "选择一个文件夹作为 Gebo.ai 工作目录",
+        "help" : "请选择一个服务器文件夹，此安装将用作配置和内容的工作目录。"
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "添加文件夹"
+      },
+      "AddFolderBtn" : {
+        "label" : "添加文件夹"
+      },
+      "CodeHeader" : {
+        "label" : "代码"
+      },
+      "MainPanel" : {
+        "label" : "服务器共享文件系统路径"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "绝对路径"
+      },
+      "DeleteHeader" : {
+        "label" : "删除"
+      },
+      "path" : {
+        "label" : "添加一个共享文件系统的根文件夹",
+        "help" : "选择一个服务器文件夹，作为贵组织用于文档存储的共享文件系统根路径"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入文件系统条目的描述"
+      },
+      "RemovePathBtn" : {
+        "label" : "移除路径"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "配置"
+      },
+      "MainPanel" : {
+        "label" : "向量数据库配置"
+      },
+      "host" : {
+        "label" : "Qdrant 主机",
+        "help" : "Qdrant 主机名或 ip 地址"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant 连接设置"
+      },
+      "port" : {
+        "label" : "Qdrant 端口",
+        "help" : "Qdrant 通信端口（标准为 6334）"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api 密钥",
+        "help" : "用于 Qdrant 认证的 api 密钥"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS 参数",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai 安装必需步骤已完成...",
+        "detail" : "必需的设置步骤已完成，但仍有些未完成的步骤会影响贵组织对本软件的完整体验"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai 安装缺少部分必需步骤",
+        "detail" : "请查看设置过程中标红的步骤"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai 安装成功！"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "代码",
+        "help" : "请输入 OAUTH2 认证/集成代码（registrationId）的描述。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入 OAUTH2 认证/集成信息的描述。"
+      },
+      "configurationType" : {
+        "label" : "配置用途",
+        "help" : "选择此设置是否用于在 Gebo.ai 进行认证，或者让 Gebo.ai 连接到第三方系统。"
+      },
+      "authProvider" : {
+        "label" : "提供方",
+        "help" : "请输入 OAUTH2 认证提供方"
+      },
+      "issuerUri" : {
+        "label" : "发行者 Uri",
+        "help" : "请输入提供方的 OAUTH2 发行者 URL"
+      },
+      "authorizationUri" : {
+        "label" : "授权 URL",
+        "help" : "请输入提供方的 OAUTH2 授权 URL"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk 集合 Uri",
+        "help" : "请输入提供方的 OAUTH2 Jwk 集合 url"
+      },
+      "userInfoUri" : {
+        "label" : "用户信息 URL",
+        "help" : "请输入提供方的 OAUTH2 用户信息 Url URL"
+      },
+      "introspectionUri" : {
+        "label" : "验证 Uri",
+        "help" : "请输入提供方的 OAUTH2 验证 URL"
+      },
+      "tokenUri" : {
+        "label" : "令牌 URL",
+        "help" : "请输入提供方的 OAUTH2 令牌 URL"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 提供方 URL"
+      },
+      "MainPanel" : {
+        "label" : "添加新的 OAUTH2 认证/集成信息"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "客户端 ID",
+        "help" : "oauth2 协议的客户端标识符（请在 oauth2 认证的第三方软件管理区获取）"
+      },
+      "secret" : {
+        "label" : "密钥",
+        "help" : "oauth2 协议的客户端密钥（请在 oauth2 认证的第三方软件管理区获取）"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "创建 Confluence 系统配置"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入 Confluence 系统的描述。"
+      },
+      "CreateBtn" : {
+        "label" : "创建"
+      },
+      "username" : {
+        "label" : "Confluence 用户名",
+        "help" : "Confluence 用户名"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence 版本",
+        "help" : "Confluence 版本"
+      },
+      "baseUri" : {
+        "label" : "基础网络地址",
+        "help" : "用于本地部署的 Confluence 系统基地址 URL 或你组织的 Confluence 云系统基础网址"
+      },
+      "password" : {
+        "label" : "Confluence 密码",
+        "help" : "Confluence 密码"
+      },
+      "token" : {
+        "label" : "Confluence 云 API 密钥",
+        "help" : "在 Confluence 后台获取的 Confluence CLOUD apikey，在此处需填写你 Atlassian 账户的“API Token”。"
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容在知识库中对 LLm 可用"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SettingsTab" : {
+        "label" : "设置"
+      },
+      "MainPanel" : {
+        "label" : "共享 Confluence 内容"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "内容自动生成的唯一编码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入已上传的 Confluence 条目内容的描述。"
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence 系统",
+        "help" : "已配置的 Confluence 系统引用。"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "父项目引用。"
+      },
+      "openZips" : {
+        "label" : "打开 zip 文件",
+        "help" : "启用 zip 文件解压和内容提取"
+      },
+      "tree" : {
+        "label" : "已选择的空间或页面/子页面",
+        "help" : "共享的 Confluence 空间和页面内容"
+      },
+      "programmedTables" : {
+        "label" : "内容更新检查计划",
+        "help" : "配置已更改内容的计划以保持检索增强生成系统的更新"
+      },
+      "catalogingCriteria" : {
+        "label" : "空间、页面和子页面的组织标准",
+        "help" : "请在此说明在与 Gebo.ai 共享的 Confluence 内容中空间、页面和子页面的组织标准"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "常规设置"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "MainPanel" : {
+        "label" : "编辑 Confluence 系统"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "baseUri" : {
+        "label" : "基础网络地址",
+        "help" : "Confluence 系统基地址 URL"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "Confluence 系统自动生成的唯一编码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入 Confluence 系统的描述。"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence 版本",
+        "help" : "Confluence 版本"
+      },
+      "secretCode" : {
+        "label" : "使用的身份",
+        "help" : "选择或创建用于访问 Confluence 系统的身份"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "新建群组"
+      },
+      "NewUserBtn" : {
+        "label" : "新建用户"
+      },
+      "UsersListPanel" : {
+        "label" : "用户列表"
+      },
+      "GroupsListPanel" : {
+        "label" : "群组列表"
+      },
+      "SournameHeader" : {
+        "label" : "姓氏"
+      },
+      "UsernameHeader" : {
+        "label" : "用户名"
+      },
+      "RolesHeader" : {
+        "label" : "角色"
+      },
+      "NameHeader" : {
+        "label" : "名称"
+      },
+      "EditBtn" : {
+        "label" : "编辑"
+      },
+      "DisabledHeader" : {
+        "label" : "已禁用"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "UserIds" : {
+        "placeholder" : "选择用户"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "MainPanel" : {
+        "label" : "编辑用户组"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入用户组的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "输入用户组的编码"
+      },
+      "userIds" : {
+        "label" : "用户列表",
+        "help" : "选择参与该组的用户"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "创建"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入jira系统的描述。"
+      },
+      "MainPanel" : {
+        "label" : "创建jira系统配置"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "username" : {
+        "label" : "jira用户名",
+        "help" : "jira用户名"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "在jira后端获取的jira CLOUD apikey，此处需填写“API Token for your Atlassian Account”。"
+      },
+      "baseUri" : {
+        "label" : "基础网址",
+        "help" : "本地安装的jira系统基础地址或组织的jira cloud系统基础url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容在知识库中对LLm开放"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SettingsTab" : {
+        "label" : "设置"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      },
+      "MainPanel" : {
+        "label" : "共享jira内容"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "内容自动生成的唯一代码。"
+      },
+      "jiraSystemCode" : {
+        "label" : "jira系统",
+        "help" : "已配置的jira系统引用。"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "父项目引用。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入上传的jira条目的内容描述。"
+      },
+      "programmedTables" : {
+        "label" : "内容更新检查计划",
+        "help" : "配置内容变更的调度，以保持检索增强生成系统的更新"
+      },
+      "openZips" : {
+        "label" : "打开zip文件",
+        "help" : "启用zip文件读取与内容提取"
+      },
+      "tree" : {
+        "label" : "已选空间或页面/子页面",
+        "help" : "共享的jira项目与工单层次结构内容"
+      },
+      "catalogingCriteria" : {
+        "label" : "空间、页面和子页面组织标准",
+        "help" : "请说明在与Gebo.ai共享的jira内容中如何组织空间、页面和子页面"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入jira系统的描述。"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "MainPanel" : {
+        "label" : "编辑jira系统"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "baseUri" : {
+        "label" : "基础网址",
+        "help" : "jira系统的基础地址"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "jira系统自动生成的唯一代码。"
+      },
+      "secretCode" : {
+        "label" : "所用身份",
+        "help" : "选择或新建用于访问jira系统的身份"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入 SharPpoint/OneDrive 系统的描述。"
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint 版本",
+        "help" : "sharepoint 版本"
+      },
+      "secret" : {
+        "label" : "密钥",
+        "help" : "在 microsoft \"entra\" 产品中为此应用注册的 Oauth2 客户端密钥（请在 microsoft 云管理控制台获取）"
+      },
+      "clientId" : {
+        "label" : "客户端 ID",
+        "help" : "在 microsoft \"entra\" 产品中为此应用注册的 Oauth2 客户端标识符（请在 microsoft 云管理控制台获取）"
+      },
+      "tenantId" : {
+        "label" : "租户 ID",
+        "help" : "您的组织在 microsoft \"entra\" 产品中的 Oauth2 租户标识符（请在 microsoft 云管理控制台获取）"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai 的 Microsof oauth2 应用注册信息"
+      },
+      "CreateBtn" : {
+        "label" : "创建"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "MainPanel" : {
+        "label" : "创建 SharePoint/OneDrive 系统配置"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容在知识库中可供 LLm 使用"
+      },
+      "SettingsTab" : {
+        "label" : "设置"
+      },
+      "MainPanel" : {
+        "label" : "共享 SharePoint/OneDrive 内容"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的内容唯一代码。"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "父项目引用。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入 SharePoint/OneDrive 条目数据源的描述。"
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint 系统",
+        "help" : "已配置的 SharePoint/OneDrive 系统引用。"
+      },
+      "openZips" : {
+        "label" : "打开 zip 文件",
+        "help" : "启用 zip 文件打开及内容提取"
+      },
+      "tree" : {
+        "label" : "选定的 Sharepoint 站点/页面/子页面或 OneDrive 云盘/文件夹/文件",
+        "help" : "已共享的 sharepoint/OneDrive 内容"
+      },
+      "programmedTables" : {
+        "label" : "内容更新检查计划",
+        "help" : "配置内容变更调度，以保证检索增强生成系统保持最新"
+      },
+      "catalogingCriteria" : {
+        "label" : "空间、页面和子页面的组织标准",
+        "help" : "请说明在与 Gebo.ai 共享的 sharepoint 内容中空间、页面及子页面的组织标准"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "编辑 sharepoint 系统"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "通用设置"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "secretCode" : {
+        "label" : "使用的身份",
+        "help" : "选择或创建用于访问 sharepoint 系统的身份"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的 sharepoint 系统唯一代码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入 sharepoint 系统的描述。"
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint 版本",
+        "help" : "sharepoint 版本"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "删除"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "保存"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "取消"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "常规信息/内容设置"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms 设置"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "知识图谱数据抽取阶段自动生成的唯一代码"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/知识抽取配置"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入此知识图谱数据抽取阶段配置的描述"
+      },
+      "extractionPrompt" : {
+        "label" : "信息抽取提示词",
+        "help" : "用于实体/事件/关系及别名抽取的大型语言模型提示词"
+      },
+      "usedModelConfiguration" : {
+        "label" : "用于数据抽取的LLM",
+        "help" : "请指定用于知识抽取的大型语言模型，如果未选择，则将使用默认模型。"
+      },
+      "graphRagAllSources" : {
+        "label" : "对所有数据源应用 graph rag",
+        "help" : "如果为 true，则所有知识库/项目/数据源都将进行知识抽取，否则仅处理已指定配置的部分。"
+      },
+      "defaultModel" : {
+        "label" : "默认大型语言模型",
+        "help" : "将使用默认大型语言模型进行知识抽取"
+      },
+      "processEveryDocument" : {
+        "label" : "对所有文件应用 graph rag",
+        "help" : "graph rag 算法将应用于所有文件，这将增强系统的分析细节能力，但会增加处理文档所需的成本和时间"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag 处理的文件筛选条件",
+        "help" : "编辑文件筛选条件以发送至 graphrag 信息抽取流程，至少选择一个文件名和条件、文件类型、最大文件大小（字节）或最后修改天数"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "选择文件类型"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "文件名筛选条件"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "文件最后修改时间，几天前"
+      },
+      "nameFilter" : {
+        "placeholder" : "文件名"
+      },
+      "maxFileSize" : {
+        "placeholder" : "最大文件大小（字节）"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "MainPanel" : {
+        "label" : "编辑知识库"
+      },
+      "AccessSettingsTab" : {
+        "label" : "知识库访问设置"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "知识库的唯一自动生成编码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入知识库描述。"
+      },
+      "embeddingModelReferences" : {
+        "label" : "使用的嵌入模型（留空将使用系统默认）",
+        "help" : "知识库用的嵌入模型，留空则使用默认模型。"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "IndexBtn" : {
+        "label" : "索引",
+        "help" : "重新索引内容"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "编辑项目或条目"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "项目的唯一自动生成编码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入项目描述。"
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "知识库",
+        "help" : "知识库。"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "IndexBtn" : {
+        "label" : "索引",
+        "help" : "重新索引内容"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ 添加条目/项目",
+        "help" : "新增..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "所有人可用",
+        "help" : "所有人都可以使用"
+      },
+      "accessibleGroups" : {
+        "label" : "群组列表",
+        "help" : "选择允许的群组"
+      },
+      "accessibleUsers" : {
+        "label" : "用户列表",
+        "help" : "选择允许的用户"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "仪表盘"
+      },
+      "LLMSTab" : {
+        "label" : "聊天与嵌入的LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag聊天配置/模型提示词"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "知识库和项目"
+      },
+      "UsersGroupTab" : {
+        "label" : "用户与群组"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai模块配置"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "代码"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "ConfigureBtn2" : {
+        "label" : "配置"
+      },
+      "ConfigureBtn" : {
+        "label" : "配置"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "新提示配置"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "新聊天配置"
+      },
+      "MainPanel" : {
+        "label" : "检索增强生成聊天配置"
+      },
+      "PromptsPanel" : {
+        "label" : "提示集合与默认提示"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "知识库"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "ConfigureBtn1" : {
+        "label" : "配置"
+      },
+      "CodeHeader" : {
+        "label" : "代码"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "新建知识库"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "新嵌入模型配置"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "新聊天模型配置"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "CodeHeader" : {
+        "label" : "代码"
+      },
+      "ModelHeader" : {
+        "label" : "模型 "
+      },
+      "ModelProviderHeader" : {
+        "label" : "模型提供商"
+      },
+      "ConfigureBtn" : {
+        "label" : "配置"
+      },
+      "CodeHeader2" : {
+        "label" : "代码"
+      },
+      "DescriptionHeader2" : {
+        "label" : "描述"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "模型提供商"
+      },
+      "ConfigureBtn2" : {
+        "label" : "配置"
+      },
+      "ModelHeader2" : {
+        "label" : "模型 "
+      },
+      "ChatmodelsZone" : {
+        "label" : "已配置的聊天模型"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "已配置的嵌入模型"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "测试模型"
+      },
+      "TestChatBtn" : {
+        "label" : "测试聊天"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI 令牌",
+        "help" : "选择要用于此模型的 OpenAI 令牌"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI 聊天模型选择",
+        "help" : "选择要使用的 OpenAI 聊天模型。"
+      },
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "高级设置"
+      },
+      "MainPanel" : {
+        "label" : "编辑 OpenAI 聊天模型配置"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "模型访问设置"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "MainPanel" : {
+        "label" : "编辑 OpenAI 向量模型配置"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI 令牌",
+        "help" : "选择要用于此模型的 OpenAI 令牌"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的向量模型配置唯一编码"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入向量模型配置的描述"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI 向量模型选择",
+        "help" : "选择要使用的 OpenAI 向量模型。"
+      },
+      "defaultModel" : {
+        "label" : "设为默认向量模型",
+        "help" : "如为真，则在未指定向量模型时使用此作为默认向量模型"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "baseUrl" : {
+        "label" : "基础 ollama 服务器地址",
+        "help" : "基础地址（如 http://servername:234/）对应 ollama 本地或局域网服务器的响应地址。"
+      },
+      "choosedModel" : {
+        "label" : "Ollama 聊天模型选择",
+        "help" : "选择要使用的 Ollama 聊天模型。",
+        "placeholder" : "请选择模型"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama 令牌",
+        "help" : "选择要用于此模型的 Ollama 令牌（可选）"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "MainPanel" : {
+        "label" : "编辑 Ollama 本地（或局域网）服务器聊天模型配置"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic 令牌",
+        "help" : "选择要用于此模型的 Anthropic 令牌"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic 聊天模型选择",
+        "help" : "选择要使用的 Anthropic 聊天模型。",
+        "placeholder" : "请选择模型"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "高级设置"
+      },
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "模型访问设置"
+      },
+      "MainPanel" : {
+        "label" : "编辑 Anthropic 聊天模型配置"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI 令牌",
+        "help" : "选择要用于此模型的 MistralAI 令牌"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI 聊天模型选择",
+        "help" : "选择要使用的 MistralAI 聊天模型。"
+      },
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "高级设置"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "模型访问设置"
+      },
+      "MainPanel" : {
+        "label" : "编辑 MistralAI 聊天模型配置"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI 聊天模型选择",
+        "help" : "选择要使用的 Google Vertex AI 聊天模型。"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI 令牌",
+        "help" : "选择要用于此模型的 Google Vertex AI 令牌"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "TabGeneralInfos" : {
+        "label" : "基本信息"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "模型访问设置"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "高级设置"
+      },
+      "MainPanel" : {
+        "label" : "编辑 Google Vertex AI 聊天模型配置"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek 令牌",
+        "help" : "选择要用于此模型的 Deepseek 令牌"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek 聊天模型选择",
+        "help" : "选择要使用的 Deepseek 聊天模型。",
+        "placeholder" : "请选择模型"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "高级设置"
+      },
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "MainPanel" : {
+        "label" : "编辑 Deepseek 聊天模型配置"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "模型访问设置"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入模型配置的描述"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的模型配置唯一编码"
+      },
+      "baseUrl" : {
+        "label" : "聊天模型 API 基础服务器地址",
+        "help" : "聊天模型的基础地址。"
+      },
+      "apiSecretCode" : {
+        "label" : "聊天模型 API 令牌",
+        "help" : "选择要用于此模型的聊天模型 API 令牌（可选）"
+      },
+      "defaultModel" : {
+        "label" : "设为默认聊天模型",
+        "help" : "如为真，则在未指定聊天模型时使用此作为默认聊天模型"
+      },
+      "choosedModel" : {
+        "label" : "聊天模型 聊天模型选择",
+        "help" : "选择要使用的聊天模型聊天模型。"
+      },
+      "GeneralInfosTab" : {
+        "label" : "基本信息"
+      },
+      "TitleFragment" : {
+        "label" : "编辑聊天模型提供方："
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "高级设置"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "模型访问设置"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入向量模型配置的描述"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "MainPanel" : {
+        "label" : "编辑 Ollama 本地（或局域网）向量模型配置"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama 令牌",
+        "help" : "选择要用于此模型的 Ollama 令牌"
+      },
+      "choosedModel" : {
+        "label" : "Ollama 向量模型选择",
+        "help" : "选择要使用的 Ollama 向量模型。"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的向量模型配置唯一编码"
+      },
+      "defaultModel" : {
+        "label" : "设为默认向量模型",
+        "help" : "如为真，则在未指定向量模型时使用此作为默认向量模型"
+      },
+      "baseUrl" : {
+        "label" : "基础 ollama 服务器地址",
+        "help" : "基础地址（如 http://servername:234/）对应 ollama 本地或局域网服务器的响应地址。"
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "描述",
+        "help" : "输入向量模型配置的描述"
+      },
+      "MainPanel" : {
+        "label" : "编辑 MistralAI 向量模型配置"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的向量模型配置唯一编码"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI 向量模型选择",
+        "help" : "选择要使用的 MistralAI 向量模型。"
+      },
+      "defaultModel" : {
+        "label" : "设为默认向量模型",
+        "help" : "如为真，则在未指定向量模型时使用此作为默认向量模型"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI 令牌",
+        "help" : "选择要用于此模型的 MistralAI 令牌"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "编辑 Google Vertex AI 向量模型配置"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入向量模型配置的描述"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI 向量模型选择",
+        "help" : "选择要使用的 Google Vertex AI 向量模型。"
+      },
+      "defaultModel" : {
+        "label" : "设为默认向量模型",
+        "help" : "如为真，则在未指定向量模型时使用此作为默认向量模型"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的向量模型配置唯一编码"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI 令牌",
+        "help" : "选择要用于此模型的 Google Vertex AI 令牌"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "TitleFragment" : {
+        "label" : "编辑向量模型提供方："
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入向量模型配置的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的向量模型配置唯一编码"
+      },
+      "choosedModel" : {
+        "label" : "向量模型 向量模型选择",
+        "help" : "选择要使用的向量模型向量模型。"
+      },
+      "baseUrl" : {
+        "label" : "向量模型 API 服务器地址",
+        "help" : "向量模型服务器的基础地址。"
+      },
+      "defaultModel" : {
+        "label" : "设为默认向量模型",
+        "help" : "如为真，则在未指定向量模型时使用此作为默认向量模型"
+      },
+      "apiSecretCode" : {
+        "label" : "向量模型 API 令牌",
+        "help" : "选择要用于此模型的向量模型 API 令牌"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "聊天配置信息"
+      },
+      "chaDeleteBtn" : {
+        "help" : "删除此聊天会话"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "重命名聊天会话"
+      },
+      "QueryControl" : {
+        "placeholder" : "为聊天机器人输入消息"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "description" : {
+        "label" : "聊天描述",
+        "help" : "请输入聊天会话的描述。"
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "使用的模型",
+        "help" : "模型代码"
+      },
+      "providerId" : {
+        "label" : "聊天模型提供者",
+        "help" : "LLms 提供者驱动"
+      },
+      "functions" : {
+        "label" : "聊天模型可调用函数",
+        "help" : "聊天模型可用函数列表"
+      },
+      "NameCol" : {
+        "label" : "名称"
+      },
+      "DescriptionCol" : {
+        "label" : "描述"
+      },
+      "kbases" : {
+        "label" : "可用知识库",
+        "help" : "此 RAG 聊天中使用的知识库列表"
+      },
+      "CloseBtn" : {
+        "help" : "关闭"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "录音",
+        "help" : "开始录制音频并发送"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "重新加载数据"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SelectHeader" : {
+        "label" : "选择"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "结束日期/时间"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "开始日期/时间"
+      },
+      "ProcessingHeader" : {
+        "label" : "处理中"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "CodeHeader" : {
+        "label" : "代码"
+      },
+      "FinishedHeader" : {
+        "label" : "已完成"
+      },
+      "WithErrorHeader" : {
+        "label" : "有错误"
+      },
+      "LogTableComponent" : {
+        "help" : "此共享文件系统区域的摄取日志"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "进程统计"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "CloseBtn" : {
+        "label" : "关闭"
+      },
+      "PublicationLogTab" : {
+        "label" : "发布日志"
+      },
+      "MainPanel" : {
+        "label" : "发布日志"
+      },
+      "actualStatus" : {
+        "label" : "状态",
+        "help" : "任务的状态，正在运行、已完成或已完成但有错误。"
+      },
+      "publishingSystem" : {
+        "label" : "已发布内容配置",
+        "help" : "已发布内容信息"
+      },
+      "startDateTime" : {
+        "label" : "开始日期/时间",
+        "help" : "内容同步任务的开始日期和时间"
+      },
+      "endDateTime" : {
+        "label" : "结束日期/时间",
+        "help" : "内容同步任务的结束日期和时间"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "未完全处理"
+      },
+      "ProcessedCompletely" : {
+        "label" : "已完全处理"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "嵌入与文档总数对比"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "更多详情"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "生成提示"
+      },
+      "PromptWizardBtn" : {
+        "label" : "提示向导",
+        "help" : "用此功能让 LLM 为你的目标生成提示"
+      },
+      "acceptPrompt" : {
+        "label" : "接受提示"
+      },
+      "promptWizardUI" : {
+        "label" : "提示模板生成向导"
+      },
+      "cancel" : {
+        "label" : "取消"
+      },
+      "response" : {
+        "label" : "建议提示模板",
+        "help" : "为你的目标生成的模板文本（你可以修改或更正）"
+      },
+      "modelCode" : {
+        "label" : "要使用的聊天模型",
+        "help" : "选择你想用于提示模板生成的聊天模型"
+      },
+      "query" : {
+        "label" : "提示模板请求",
+        "help" : "用第二人称说明 AI 将协助用户达成的目标"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "温度",
+        "help" : "模型回复的温度，范围 0 到 1（如不确定可留空）"
+      },
+      "contextLength" : {
+        "label" : "上下文长度（标记）",
+        "help" : "AI 模型在处理时可考虑的文本长度（如未设置，将使用 1047576）"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP 参数，范围 0 到 1（如不确定可留空）"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "该模型启用的功能调用",
+        "help" : "聊天过程中模型可用的功能"
+      },
+      "defaultModelPrompt" : {
+        "label" : "默认模型提示词",
+        "help" : "编辑聊天模型的默认提示词。"
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入身份描述。"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "自动生成的身份唯一编码。"
+      },
+      "secretType" : {
+        "label" : "身份类型",
+        "help" : "请选择要为远程系统创建的身份类型"
+      },
+      "InsertBtn" : {
+        "label" : "插入"
+      },
+      "token" : {
+        "label" : "令牌",
+        "help" : "请输入令牌。"
+      },
+      "user" : {
+        "label" : "用户",
+        "help" : "请输入令牌对应的用户。"
+      },
+      "MainPanel" : {
+        "label" : "创建身份"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "username" : {
+        "label" : "用户名",
+        "help" : "请输入用户名。"
+      },
+      "password" : {
+        "label" : "密码",
+        "help" : "请输入密码。"
+      },
+      "email" : {
+        "label" : "邮箱/用户名",
+        "help" : "请输入与 ssh 密钥相关联的邮箱或用户名。"
+      },
+      "key" : {
+        "label" : "密钥",
+        "help" : "打开私钥文件并复制到此文本区域。"
+      },
+      "passphrase" : {
+        "label" : "密钥口令",
+        "help" : "请输入密钥口令。"
+      },
+      "pub" : {
+        "label" : "公钥",
+        "help" : "打开公钥文件并复制到此文本区域。"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "内容的自动生成唯一编码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入文件系统条目的上传内容描述。"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "父项目引用。"
+      },
+      "upload" : {
+        "label" : "上传内容",
+        "help" : "点击浏览按钮并选择 zip 文件或其他文件"
+      },
+      "openZips" : {
+        "label" : "打开 zip 文件",
+        "help" : "启用 zip 文件打开和内容提取"
+      },
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容可用于知识库中的 LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      },
+      "MainPanel" : {
+        "label" : "正在编辑上传的内容"
+      },
+      "SettingsTab" : {
+        "label" : "设置"
+      },
+      "buildSystemsRefs" : {
+        "label" : "配置构建系统",
+        "help" : "要检查元信息和其他制品信息的构建/打包系统列表（如果不包含软件代码请留空）"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "已选择的元素"
+      },
+      "ChooseOk" : {
+        "label" : "确定"
+      },
+      "ChooseCancel" : {
+        "label" : "取消"
+      },
+      "EditBtn" : {
+        "help" : "修改所选项"
+      },
+      "ChooseElementsArea" : {
+        "label" : "选择元素"
+      },
+      "VFileSystemSelector" : {
+        "label" : "选择元素"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "编辑调度"
+      },
+      "ConfirmBtn" : {
+        "label" : "确认"
+      },
+      "AddBtn" : {
+        "label" : "+添加"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容在知识库中对LLm可用"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SettingsTab" : {
+        "label" : "设置"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "源代码处理"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      },
+      "MainPanel" : {
+        "label" : "编辑现有文件系统内容"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入上传文件系统条目的内容描述。"
+      },
+      "openZips" : {
+        "label" : "打开zip文件",
+        "help" : "启用zip文件打开和内容提取"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "内容的自动生成唯一编码。"
+      },
+      "tree" : {
+        "label" : "已选择的文件或文件夹",
+        "help" : "服务器上可用的共享文件系统文件或目录"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "上级项目参考。"
+      },
+      "programmedTables" : {
+        "label" : "内容更新检查计划",
+        "help" : "配置变更内容的调度以保持检索增强生成系统的更新"
+      },
+      "catalogingCriteria" : {
+        "label" : "文件夹组织标准",
+        "help" : "请说明在与Gebo.ai共享的文件系统区域中，文件夹的组织标准"
+      },
+      "buildSystemsRefs" : {
+        "label" : "配置构建系统",
+        "help" : "用于检查元信息和附加工件信息的构建/打包系统列表（如果没有包含软件代码可留空）"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "新建文件共享区"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "绝对路径"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db或yml文件配置"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "CodeHeader" : {
+        "label" : "编码"
+      },
+      "ModifyHeader" : {
+        "label" : "修改"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "已选择的共享文件系统文件夹",
+        "help" : "选择作为组织中文档存储库的共享文件系统根路径的服务器文件夹"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "请输入您组织共享文件系统区域的描述"
+      },
+      "code" : {
+        "label" : "唯一编码",
+        "help" : "内容的自动生成唯一编码。"
+      },
+      "InsertBtn" : {
+        "label" : "插入"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "MainPanel" : {
+        "label" : "编辑服务器共享文件夹"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容在知识库中对LLm可用"
+      },
+      "MainPanel" : {
+        "label" : "正在编辑git源/文档仓库"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入git仓库的描述。"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的git仓库唯一代码。"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "父项目引用。"
+      },
+      "contentManagementSystem" : {
+        "label" : "Git系统",
+        "help" : "已配置好的git系统引用。"
+      },
+      "branch" : {
+        "label" : "分支",
+        "help" : "需要检出的分支名称（通常是master、main或develop）"
+      },
+      "identityCode" : {
+        "label" : "使用的身份",
+        "help" : "选择用于在系统上克隆/检出的身份"
+      },
+      "repositoryUri" : {
+        "label" : "仓库url/地址",
+        "help" : "git远程仓库的完整地址（通常以http:、https:或ssh:开头）"
+      },
+      "publicAccess" : {
+        "label" : "公开",
+        "help" : "如果为真，访问仓库时无需认证"
+      },
+      "openZips" : {
+        "label" : "打开zip文件",
+        "help" : "启用zip文件的打开和内容提取"
+      },
+      "programmedTables" : {
+        "label" : "内容更新检查计划",
+        "help" : "配置变更内容的计划，以保持检索增强生成系统的更新"
+      },
+      "buildSystemsRefs" : {
+        "label" : "配置构建系统",
+        "help" : "检索元信息及附加构建产物信息所需的构建/打包系统列表"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "GeneralInfosTab" : {
+        "label" : "常规信息"
+      },
+      "UseChatModelLabel" : {
+        "label" : "使用聊天模型"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "选择"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "选择聊天模型配置"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "选择嵌入模型配置"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "选择"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG 设置"
+      },
+      "LanguageModelTab" : {
+        "label" : "大语言模型和可用工具设置"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "使用嵌入模型"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "安全访问设置"
+      },
+      "MainPanel" : {
+        "label" : "编辑增强检索生成聊天配置"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的聊天配置唯一代码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入聊天配置描述。"
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "用户选择知识库",
+        "help" : "用户可从可访问知识库选择并/或上传自己的文件。"
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "知识库",
+        "help" : "用于文档检索的知识库。"
+      },
+      "similaritySearchThreshold" : {
+        "label" : "相似度阈值",
+        "help" : "语义搜索的相似度阈值，0.60–0.65 低过滤，0.70-0.75 中等过滤，0.80–0.85 精准"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "第二跳相似度阈值",
+        "help" : "语义搜索的相似度阈值，0.60–0.65 低过滤，0.70-0.75 中等过滤，0.80–0.85 精准，用于多跳 RAG 的第二次搜索"
+      },
+      "disableMultiHopRag" : {
+        "label" : "禁用多跳 RAG",
+        "help" : "禁用多跳 RAG 功能。多跳搜索会先进行一次语义搜索，并将找到的文档作为语境再次进行语义搜索，提供更大上下文。"
+      },
+      "topK" : {
+        "label" : "考虑的文档片段 (TopK)",
+        "help" : "在增强检索生成中，语义搜索中考虑的前 N 个文档片段"
+      },
+      "enabledFunctions" : {
+        "label" : "此 RAG 聊天启用的函数调用",
+        "help" : "在聊天过程中，大语言模型与所选知识库互动时可用的功能"
+      },
+      "prompt" : {
+        "label" : "提示词",
+        "help" : "编辑增强检索生成会话的提示词。"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "输入或插入提示类别"
+      },
+      "MainPanel" : {
+        "label" : "编辑提示"
+      },
+      "promptCategory" : {
+        "label" : "提示类别",
+        "help" : "选择或插入提示类别。"
+      },
+      "prompt" : {
+        "label" : "提示",
+        "help" : "编辑聊天提示，使用 {query} 表示用户问题，使用 {context} 表示发送给LLM的文档/历史上下文。"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的提示唯一代码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入提示描述。"
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "更改密码"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "旧密码",
+        "help" : "用于登录的当前密码"
+      },
+      "newPassword" : {
+        "label" : "新密码",
+        "help" : "新密码"
+      },
+      "username" : {
+        "label" : "邮箱",
+        "help" : "用于登录的邮箱作为用户名"
+      },
+      "ChangePasswordUI" : {
+        "label" : "更改密码表单"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "ChangePwdBtn" : {
+        "label" : "更改密码"
+      },
+      "newPassword1" : {
+        "label" : "确认新密码",
+        "help" : "请确认新密码"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "ForMoreInformations" : {
+        "label" : "有关 Google 自定义搜索 API 或获取您的 api 密钥（免费）的更多信息，请访问：https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "Google 搜索 API 配置的唯一代码。"
+      },
+      "MainPanel" : {
+        "label" : "编辑 google 自定义搜索 api 凭证"
+      },
+      "secretCode" : {
+        "label" : "Google 搜索 api 令牌",
+        "help" : "选择或输入 google 搜索 api 令牌"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google 搜索引擎 id",
+        "help" : "Google 搜索引擎 id"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入 Google 搜索 API 配置的描述。"
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "纯对话，无知识库",
+        "help" : "选择用于本次对话的 LLMs",
+        "placeholder" : "选择用于本次对话的 LLMs"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "打开聊天选项区"
+      },
+      "CreateChatBtn" : {
+        "label" : "新建对话"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "新建对话会话"
+      },
+      "chatProfileCode" : {
+        "label" : "知识库对话",
+        "help" : "选择公司对话配置以便与公司（以及你的）文档和 LLMs 交互",
+        "placeholder" : "选择公司对话配置以便与公司（以及你的）文档和 LLMs 交互"
+      },
+      "NewChatBtn" : {
+        "label" : "新建对话"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "与文档对话",
+        "help" : "浏览、搜索并选择要处理的文档"
+      },
+      "chooseFilesDialog" : {
+        "label" : "选择要对话的文件"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "确认"
+      },
+      "userspaceBrowsing" : {
+        "label" : "上传或选择您的文档",
+        "help" : "从您的用户空间选择或上传文档"
+      },
+      "fileSearchBtn" : {
+        "label" : "搜索"
+      },
+      "semanticSearchBtn" : {
+        "label" : "搜索"
+      },
+      "query" : {
+        "label" : "语义搜索短语",
+        "help" : "输入与您的搜索相关的有意义短语"
+      },
+      "choosenBrowsing" : {
+        "label" : "选择文件浏览知识库",
+        "help" : "选择文件，浏览公司共享知识库"
+      },
+      "filename" : {
+        "label" : "已搜索文件名",
+        "help" : "输入您要搜索内容的文件名片段"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "修改所选项"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "选择用户文件"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "取消"
+      },
+      "okBtn" : {
+        "label" : "确定"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "选择用户上传内容"
+      },
+      "UserspaceBrowser" : {
+        "label" : "知识库和用户文件"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+子项目或条目",
+        "help" : "添加子项目或条目"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+上传文件",
+        "help" : "添加上传的文件数据源"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "添加 Microsoft SharePoint/OneDrive 数据源"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "添加 Atlassian Confluence 数据源"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+文件系统",
+        "help" : "添加共享文件系统数据源"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "添加 Atlassian Jira 数据源"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git 仓库",
+        "help" : "添加 git 仓库数据源，例如 bitbucket、github 或其他"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai 聊天"
+      },
+      "setup" : {
+        "label" : "设置"
+      },
+      "admin" : {
+        "label" : "Gebo.ai 管理"
+      },
+      "currentProfile" : {
+        "label" : "我的资料"
+      },
+      "logout" : {
+        "label" : "退出登录"
+      }
+    }
+  }
+}

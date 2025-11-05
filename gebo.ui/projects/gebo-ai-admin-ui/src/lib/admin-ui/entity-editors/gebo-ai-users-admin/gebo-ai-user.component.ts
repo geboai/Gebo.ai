@@ -16,15 +16,21 @@
  * Provides functionality for creating, editing, and deleting users with role management.
  * Handles form control for user properties and displays messages for operation outcomes.
  */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable } from "rxjs";
 @Component({
     selector: "gebo-ai-user-component",
     templateUrl: "gebo-ai-user.component.html",
-    standalone: false
+    standalone: false,
+    providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUserComponent),
+        multi: false
+    }]
 })
 export class GeboAIUserComponent implements OnInit, OnChanges {
     /** Indicates if an operation is in progress */
@@ -55,7 +61,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
 
     /** Available roles for user assignment */
     protected rolesList: string[] = ["USER", "ADMIN", "APPLICATION"];
-    protected actualAuthProvider?:AuthProviderDto.ProviderEnum;
+    protected actualAuthProvider?: AuthProviderDto.ProviderEnum;
     protected authProviderObservable: Observable<{ code?: string; description?: string }[]> = this.authProvidersControllerService.listAuthProviders().pipe(map((x: AuthProviderDto[]) => {
 
         return x?.map(y => {
@@ -85,8 +91,8 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
      * when APPLICATION role is not selected
      */
     ngOnInit(): void {
-        this.formGroup.controls["authProvider"].valueChanges.subscribe((x?:AuthProviderDto.ProviderEnum)=>{
-            this.actualAuthProvider=x;
+        this.formGroup.controls["authProvider"].valueChanges.subscribe((x?: AuthProviderDto.ProviderEnum) => {
+            this.actualAuthProvider = x;
         });
         this.formGroup.controls["roles"].valueChanges.subscribe(x => {
             const array: string[] = x;

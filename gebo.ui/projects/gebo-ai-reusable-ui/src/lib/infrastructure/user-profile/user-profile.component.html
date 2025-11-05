@@ -17,7 +17,7 @@
     <b>Hello:</b> {{user?.username}}
   </div>
   <div class="col-3">
-    <p-button icon="pi pi-password" [outlined]="true" label="Change password"
+    <p-button id="ChangePasswdBtn" gebo-ai-label icon="pi pi-password" [outlined]="true" label="Change password"
       (onClick)="changePasswordWindowOpened=true"></p-button>
   </div>
 </div>
@@ -25,3 +25,4 @@
 <gebo-ai-change-password-component  [user]="user" [visible]="changePasswordWindowOpened"
   (close)="changePasswordWindowOpened=false"
   (changedPasswordCorrectly)="changePasswordWindowOpened=false"></gebo-ai-change-password-component>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

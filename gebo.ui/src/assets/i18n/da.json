@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Standardsystemets sprog",
+        "help" : "Standardsystemets sprog for denne Gebo.ai installation"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail som brugernavn til login"
+      },
+      "passwordC" : {
+        "label" : "Bekræft adgangskode",
+        "help" : "Bekræft adgangskode"
+      },
+      "password" : {
+        "label" : "Adgangskode",
+        "help" : "Adgangskode til login (mindst 8 tegn)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " adgangskoderne matcher ikke "
+      },
+      "LocalAdmin" : {
+        "label" : "Opret din lokale admin-konto"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Du vil bruge denne konto fremover til at opsætte/administrere softwaren, disse data forbliver lokale på dit system og sendes ikke over netværket"
+      },
+      "EnterBtn" : {
+        "label" : "Gå til login-siden for at fortsætte"
+      },
+      "SetupPage" : {
+        "label" : "Opsæt din Gebo.ai installation"
+      },
+      "CreateBtn" : {
+        "label" : "Opret systemopsætning"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Læs og accepter licensen"
+      },
+      "AcceptMark" : {
+        "label" : "Jeg accepterer betingelserne",
+        "help" : "Ved at klikke her accepterer du vilkårene og betingelserne i licensen"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail som brugernavn til login"
+      },
+      "password" : {
+        "label" : "Adgangskode",
+        "help" : "Adgangskode til login"
+      },
+      "LoginPanel" : {
+        "label" : "Login til Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Login"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Handling udført med succes"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2-konfiguration"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Udbydernavn"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2-sikkerhedsindstillinger"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Tilbage til opsætningsforside"
+      },
+      "WizardUi" : {
+        "label" : "Vælg en opsætningssektion"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administrator- og andre kontiopsætning",
+        "description" : "Der kræves mindst én administratorkonto for at sikre, at denne gebo.ai-installation håndteres korrekt. Tilføj andre brugere, hvis nødvendigt"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai arbejdsmappe",
+        "description" : "Konfigurer en arbejdsmappe. Det bliver den mappe, hvor konfigurationer og alle arbejdsfiler til denne installation gemmes. Det er også en god idé at tage regelmæssig backup."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektordatabaskonfiguration",
+        "description" : "En vektordatabase skal konfigureres, for at Gebo.ai kan levere retrieve augmented generation-tjenester. Du kan vælge mellem en lokal vektordatabase, Qdrant eller Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single signon, oauth2-godkendelse",
+        "description" : "Oauth2 single signon-godkendelse og oauth2-klientkonfiguration"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Store sprogmodelopsætning",
+        "description" : "Konfigurer forskellige llm'er med cloud- eller lokal/lan-infrastrukturbagendservices. Der skal som minimum konfigureres én chatmodel og en embeddingmodel, så softwaren fungerer korrekt."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graf rag/vidensudtrækningsopsætning",
+        "description" : "Konfigurer graf rag- og vidensudtrækningsundersystem"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Opsætning af delte filsystemstier",
+        "description" : "Konfigurer virksomhedens delte filsystemstier, der skal bruges som retrieve augmented generation-dokumentområde i forskellige vidensbaser"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence-integration",
+        "description" : "Konfigurer Gebo.ai til adgang til dine Atlassian Confluence cloud- eller on premise-installationer"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira-integration",
+        "description" : "Konfigurer Gebo.ai til adgang til dine Atlassian jira cloud-installationer"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint-integration",
+        "description" : "Konfigurer Gebo.ai til adgang til dine Microsoft Sharepoint cloud- eller on premise-installationer"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Konfigurer mindst én vidensbase",
+        "description" : "Konfigurer mindst én vidensbase, så dine brugere får glæde af retrieve augmented generations-tjenester fra Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Konfigurer mindst én \"R.A.G.\" chatprofil",
+        "description" : "Konfigurer mindst én retrieve augmented chatprofil for dine brugere baseret på en af de konfigurerede vidensbaser"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Opsæt virksomhedens Atlassian Confluence-systemer"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Systemtype"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskode"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence-system"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira-system"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskode"
+      },
+      "MainPanel" : {
+        "label" : "Opsæt virksomhedens Atlassian Jira-systemer"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Systemtype"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskode"
+      },
+      "MainPanel" : {
+        "label" : "Opsæt virksomhedens Microsoft Sharepoint-systemer"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Systemtype"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint-system"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Angiv en api-nøgle med tilgængelig kredit. Hvis OpenAI vælges, skal du tilføje særlig kredit (10-30$ bør være nok) til din normale plan for api-brug, ellers vil der ikke være tilgængelig llms-trafik i denne applikation."
+      },
+      "MainPanel" : {
+        "label" : "Opsæt Gebo.ai llms-udbyderadgang med din egen api-nøgle"
+      },
+      "provider" : {
+        "label" : "Leverandør af store sprogmodeller",
+        "help" : "Vælg en leverandør blandt OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Bruger",
+        "help" : "Indtast brugeren tilknyttet til apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      },
+      "apiKey" : {
+        "label" : "Api-nøgle",
+        "help" : "Din api-nøgle fra LLMS-udbydere, der skal bruges"
+      },
+      "ProviderHeader" : {
+        "label" : "Udbyder"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfigurationskode"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Modeltype"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Standardmodel"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Opret graf rag-konfiguration"
+      },
+      "MainPanel" : {
+        "label" : "Opsætning af Graph Rag & vidensudtrækningsstandard"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskode"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Tilføj en vidensbase"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Vidensbase"
+      },
+      "MainPanel" : {
+        "label" : "Vidensbaser og indholdsopsætning"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Indholdskilde"
+      },
+      "PublishedHeader" : {
+        "label" : "Udgivet"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Antal dokumenter"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Tilføj et projekt/item",
+        "help" : "opret nyt projekt"
+      },
+      "Button1" : {
+        "help" : "åbn vidensbase"
+      },
+      "Button2" : {
+        "help" : "åbn projektformular"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai arbejdsmappekonfiguration"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      },
+      "workDirectory" : {
+        "label" : "Vælg en mappe som Gebo.ai arbejdsmappe",
+        "help" : "Vælg en servermappe, som denne installation vil bruge som arbejdsmappe til konfiguration og lagring af indhold."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Tilføj mappe"
+      },
+      "AddFolderBtn" : {
+        "label" : "Tilføj mappe"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "MainPanel" : {
+        "label" : "Server delte filsystemstier"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolut sti"
+      },
+      "DeleteHeader" : {
+        "label" : "Slet"
+      },
+      "path" : {
+        "label" : "Tilføj en rodmappe til et delt filsystem",
+        "help" : "Vælg en servermappe, der er roden af det delte filsystem, din organisation bruger som dokumentarkiv"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af filsystempost"
+      },
+      "RemovePathBtn" : {
+        "label" : "Fjern sti"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      },
+      "MainPanel" : {
+        "label" : "Vektordatabaskonfiguration"
+      },
+      "host" : {
+        "label" : "Qdrant-vært",
+        "help" : "Qdrant-værtsnavn eller ip-adresse"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant-forbindelsesindstillinger"
+      },
+      "port" : {
+        "label" : "Qdrant-port",
+        "help" : "Qdrant kommunikationsport (6334 er standard)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api-nøgle",
+        "help" : "Api-nøgle til Qdrant-godkendelse"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS-parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai opsætning - nødvendige trin fuldført...",
+        "detail" : "Alle nødvendige opsætningsskridt er fuldført, men manglende trin forhindrer din organisation i at få det fulde udbytte af softwaren"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai opsætning mangler et påkrævet trin",
+        "detail" : "Gennemgå de røde trin i opsætningsprocessen"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai opsætning OK!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kode",
+        "help" : "Indtast beskrivelsen af OAUTH2 godkendelses-/integrationskode (registrationId)."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af OAUTH2 godkendelses-/integrationsoplysninger."
+      },
+      "configurationType" : {
+        "label" : "Konfigurationsformål",
+        "help" : "Vælg om disse indstillinger skal bruges til at godkende i Gebo.ai eller lade Gebo.ai få klientforbindelse til et tredjepartssystem."
+      },
+      "authProvider" : {
+        "label" : "Udbyder",
+        "help" : "Indtast udbyderen af OAUTH2-godkendelsen"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Indtast OAUTH2 issuer-URL for udbyderen"
+      },
+      "authorizationUri" : {
+        "label" : "Autoriserings-URL",
+        "help" : "Indtast OAUTH2 autoriserings-URL for udbyderen"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Indtast OAUTH2 Jwk Set URL for udbyderen"
+      },
+      "userInfoUri" : {
+        "label" : "User info URL",
+        "help" : "Indtast OAUTH2 User info URL for udbyderen"
+      },
+      "introspectionUri" : {
+        "label" : "Introspektions-URL",
+        "help" : "Indtast OAUTH2 introspektions-URL for udbyderen"
+      },
+      "tokenUri" : {
+        "label" : "Token-URL",
+        "help" : "Indtast OAUTH2 Token-URL for udbyderen"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 udbyder-URL'er"
+      },
+      "MainPanel" : {
+        "label" : "Indsæt nye OAUTH2 godkendelses-/integrationsoplysninger"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Klient-id",
+        "help" : "Klientidentifikator til oauth2-protokollen (skal hentes i det oauth2-autentificerede 3. parts software administrationsområde)"
+      },
+      "secret" : {
+        "label" : "Hemmelig nøgle",
+        "help" : "Klienthemmelighed til oauth2-protokollen (skal hentes i det oauth2-autentificerede 3. parts software administrationsområde)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Opret confluence systemkonfiguration"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af confluence-systemet."
+      },
+      "CreateBtn" : {
+        "label" : "Opret"
+      },
+      "username" : {
+        "label" : "Confluence brugernavn",
+        "help" : "Confluence brugernavn"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-version",
+        "help" : "Confluence-version"
+      },
+      "baseUri" : {
+        "label" : "Base internetadresse",
+        "help" : "Url til den grundlæggende confluence system-adresse for lokal installation eller din organisations basis-url for confluence cloud system"
+      },
+      "password" : {
+        "label" : "Confluence adgangskode",
+        "help" : "Confluence adgangskode"
+      },
+      "token" : {
+        "label" : "Confluence cloud api-nøgle",
+        "help" : "Confluence CLOUD apikey hentet i confluence backoffice, her skal \"API Token for your Atlassian Account\" indsættes."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Udgiv!",
+        "help" : "Gemmer og gør disse indhold tilgængelige i videnbasen for LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "SettingsTab" : {
+        "label" : "Indstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Deling af confluence-indhold"
+      },
+      "LogsTab" : {
+        "label" : "Logfiler"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for indholdet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af det uploadede indhold af confluence-elementer."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence-system",
+        "help" : "Allerede konfigureret confluence systemreference."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktiver åbning af zip-filer og udtrækning af indhold"
+      },
+      "tree" : {
+        "label" : "Valgte rum eller sider/undersider",
+        "help" : "Delte confluence-områder og sideindhold"
+      },
+      "programmedTables" : {
+        "label" : "Opdateringstjek skema",
+        "help" : "Konfigurer planlægning af ændrede indhold så systemet for retrieve augmented generation holdes opdateret"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering af rum, sider og undersider",
+        "help" : "Forklar her, hvordan kriterierne for organisering af rum, sider og undersider er blevet udført for de confluence-indhold, der deles med Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Generelle indstillinger"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "MainPanel" : {
+        "label" : "Redigering af confluence-system"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "baseUri" : {
+        "label" : "Base internetadresse",
+        "help" : "Url til den grundlæggende confluence system-adresse"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for confluence-systemet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af confluence-systemet."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-version",
+        "help" : "Confluence-version"
+      },
+      "secretCode" : {
+        "label" : "Identitet brugt",
+        "help" : "Vælg eller opret identiteten til adgang til confluence-systemet"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "ny gruppe"
+      },
+      "NewUserBtn" : {
+        "label" : "ny bruger"
+      },
+      "UsersListPanel" : {
+        "label" : "Brugerliste"
+      },
+      "GroupsListPanel" : {
+        "label" : "Gruppeliste"
+      },
+      "SournameHeader" : {
+        "label" : "efternavn"
+      },
+      "UsernameHeader" : {
+        "label" : "brugernavn"
+      },
+      "RolesHeader" : {
+        "label" : "roller"
+      },
+      "NameHeader" : {
+        "label" : "navn"
+      },
+      "EditBtn" : {
+        "label" : "Rediger"
+      },
+      "DisabledHeader" : {
+        "label" : "deaktiveret"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "UserIds" : {
+        "placeholder" : "Vælg brugere"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer brugergruppe"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af brugergruppen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Indtast koden for brugergruppen"
+      },
+      "userIds" : {
+        "label" : "Brugerliste",
+        "help" : "Vælg brugere, der deltager i gruppen"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Opret"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af jira-systemet."
+      },
+      "MainPanel" : {
+        "label" : "Opret jira systemkonfiguration"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "username" : {
+        "label" : "jira brugernavn",
+        "help" : "jira brugernavn"
+      },
+      "token" : {
+        "label" : "jira cloud api-nøgle",
+        "help" : "jira CLOUD apinøgle hentet i jira backoffice, her skal \"API Token for your Atlassian Account\" indsættes."
+      },
+      "baseUri" : {
+        "label" : "Basis internetadresse",
+        "help" : "Url til basisadressen for jira-systemet til onpremise installation eller din organisations basis-url for jira cloud system"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "PublishBtn" : {
+        "label" : "Udgiv!",
+        "help" : "Gemmer og gør dette indhold tilgængeligt i vidensbasen til LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "SettingsTab" : {
+        "label" : "Indstillinger"
+      },
+      "LogsTab" : {
+        "label" : "Logfiler"
+      },
+      "MainPanel" : {
+        "label" : "Deling af jira-indhold"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode til indholdet."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "Allerede konfigureret jira system reference."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af det uploadede indhold fra jira-indlæg."
+      },
+      "programmedTables" : {
+        "label" : "Tidsplan tjek af indholdsopdateringer",
+        "help" : "Konfigurer tidsplanen for ændret indhold for at holde systemet til forbedret generering opdateret"
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktivér åbning af zip-filer og udtrækning af indhold"
+      },
+      "tree" : {
+        "label" : "Valgte rum eller sider/undersider",
+        "help" : "Delte jira-projekter og ticket-hierarkiindhold"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering af rum, sider og undersider",
+        "help" : "Forklar venligst her, hvordan kriteriet for organisering af rum, sider og undersider er udført i jira-indholdet delt med Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af jira-systemet."
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer jira system"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "baseUri" : {
+        "label" : "Basis internetadresse",
+        "help" : "Url til basisadressen for jira-systemet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode til jira-systemet."
+      },
+      "secretCode" : {
+        "label" : "Brugt identitet",
+        "help" : "Vælg eller opret identiteten til adgang til jira-systemet"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af SharePoint/OneDrive systemet."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint-version",
+        "help" : "sharepoint-version"
+      },
+      "secret" : {
+        "label" : "Hemmelig nøgle",
+        "help" : "Oauth2-klienthemmelighed for denne app registreret i microsoft \"entra\" produktet (hentes i microsoft cloud admin-konsollen)"
+      },
+      "clientId" : {
+        "label" : "Klient-ID",
+        "help" : "Oauth2-klientidentifikator for denne app registreret i microsoft \"entra\" produktet (hentes i microsoft cloud admin-konsollen)"
+      },
+      "tenantId" : {
+        "label" : "Lejer-ID",
+        "help" : "Oauth2-lejeridentifikator for din organisation microsoft \"entra\" produktet (hentes i microsoft cloud admin-konsollen)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 app-registreringsoplysninger til Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Opret"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "MainPanel" : {
+        "label" : "Opret SharePoint/OneDrive systemkonfiguration"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "PublishBtn" : {
+        "label" : "Publicér!",
+        "help" : "Gemmer og gør disse indhold tilgængelige i vidensbasen til LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Indstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Deling af SharePoint/OneDrive indhold"
+      },
+      "LogsTab" : {
+        "label" : "Logfiler"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for indholdet."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af SharePoint/OneDrive datakilder."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint-system",
+        "help" : "Allerede konfigureret SharePoint/OneDrive systemreference."
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktivér åbning og udtrækning af indhold fra zip-filer"
+      },
+      "tree" : {
+        "label" : "Valgte SharePoint-sites/sider/undersider eller OneDrive-drev/mappe/filer",
+        "help" : "Delte sharepoint/OneDrive indhold"
+      },
+      "programmedTables" : {
+        "label" : "Tjekplan for indholdsopdateringer",
+        "help" : "Konfigurér planlægning af indholdsændringer for at holde genereringssystemet opdateret"
+      },
+      "catalogingCriteria" : {
+        "label" : "Organisering af rum, sider og undersider",
+        "help" : "Forklar hvordan organiseringen af rum, sider og undersider er lavet i de delte sharepoint-indhold med Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Redigerer sharepoint-system"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Generelle indstillinger"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "secretCode" : {
+        "label" : "Anvendt identitet",
+        "help" : "Vælg eller opret identiteten til adgang til sharepoint-systemet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for sharepoint-systemet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af sharepoint-systemet."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint-version",
+        "help" : "sharepoint-version"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Slet"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Gem"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Annuller"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Generelle info-/indholdsindstillinger"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms-indstillinger"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for viden-graf uddatatrins-ekstraktion"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/viden-udtrækningskonfiguration"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af denne viden-graf udtrækningskonfiguration"
+      },
+      "extractionPrompt" : {
+        "label" : "Informationsudtrækningsprompt",
+        "help" : "Large language model-prompt til udtrækning af entiteter/begivenheder/relationer og aliasser"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM brugt til dataudtræk",
+        "help" : "Angiv large language model brugt til videnudtrækning, standardmodel vil blive anvendt hvis ingen vælges."
+      },
+      "graphRagAllSources" : {
+        "label" : "Anvend graph rag på alle datakilder",
+        "help" : "Hvis sandt, vil alle vidensbaser/projekter/datakilder blive behandlet til videnudtrækning, ellers kun de særligt konfigurerede"
+      },
+      "defaultModel" : {
+        "label" : "Standard large language model",
+        "help" : "Standard large language model vil blive brugt til videnudtrækning"
+      },
+      "processEveryDocument" : {
+        "label" : "Anvend graph rag på alle filer",
+        "help" : "Graph rag-algoritmen vil blive anvendt på alle filer. Dette forbedrer detaljegraden for systemets analyse, men øger omkostninger og tid til behandling af dokumenter"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Filudvælgelseskriterier til graphrag-behandling",
+        "help" : "Rediger kriterier for hvilke filer, der skal sendes i informationsudtrækningsprocessen for graphrag. Vælg mindst et filnavn og kriterie og/eller en filtype og/eller maksimal filstørrelse i byte og/eller alder på sidste modifikation i dage"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Vælg filtyper"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Filnavn filtreringskriterier"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Sidste filændring, dage siden"
+      },
+      "nameFilter" : {
+        "placeholder" : "Filnavn"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maks. filstørrelse i bytes"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer en vidensbase"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Adgangsindstillinger for vidensbase"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for vidensbasen."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af vidensbasen."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Brugte embeddingmodeller (lad være tom for at bruge systemets standard)",
+        "help" : "Embeddingmodeller for vidensbasen, hvis tom bruges standardmodellen."
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksér",
+        "help" : "Reindeksér indhold"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Redigerer et projekt eller element"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for projektet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af projektet."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "vidensbase",
+        "help" : "vidensbase."
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksér",
+        "help" : "Reindeksér indhold"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Tilføj element/projekt",
+        "help" : "tilføj ny..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Alle bruger",
+        "help" : "Alle kan bruge"
+      },
+      "accessibleGroups" : {
+        "label" : "Gruppeliste",
+        "help" : "Vælg tilladte grupper"
+      },
+      "accessibleUsers" : {
+        "label" : "Brugerliste",
+        "help" : "Vælg tilladte brugere"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Dashboard"
+      },
+      "LLMSTab" : {
+        "label" : "LLM'er til chat og embedding"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag chat-profiler/Model-prompter"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Vidensbaser og projekter"
+      },
+      "UsersGroupTab" : {
+        "label" : "Brugere og grupper"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai modulopsætning"
+      },
+      "LogsTab" : {
+        "label" : "Logfiler"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfigurer"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurer"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Ny promptkonfiguration"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Ny chatprofil"
+      },
+      "MainPanel" : {
+        "label" : "Retrivial augmented generation chatprofiler"
+      },
+      "PromptsPanel" : {
+        "label" : "Promptsamling & standardprompter"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Vidensbaser"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfigurer"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Ny vidensbase"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Ny konfiguration af embedding-model"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Ny konfiguration af chatmodel"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Modeludbyder"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfigurer"
+      },
+      "CodeHeader2" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Beskrivelse"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Modeludbyder"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfigurer"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Konfigurerede chatmodeller"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Konfigurerede embedding-modeller"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Tester model"
+      },
+      "TestChatBtn" : {
+        "label" : "Test chat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI-token",
+        "help" : "Vælg det OpenAI-token, der skal bruges til denne model"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI chatmodelvalg",
+        "help" : "Vælg OpenAI chatmodel at arbejde med."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avancerede indstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer OpenAI chatmodelkonfiguration"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Indstillinger for modeladgang"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer OpenAI embedding-modelkonfiguration"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI-token",
+        "help" : "Vælg det OpenAI-token, der skal bruges til denne model"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for embedding-modelkonfigurationen"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af embedding-modelkonfigurationen"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embeddingmodelvalg",
+        "help" : "Vælg OpenAI embeddingmodel at arbejde med."
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard embeddingmodel",
+        "help" : "Hvis valgt, bruges denne som standard embeddingmodel hvor embeddingmodel ikke er angivet"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "baseUrl" : {
+        "label" : "Base Ollama-serveradresse",
+        "help" : "Baseadresse (f.eks. http://servername:234/) som Ollama lokal eller LAN-serveren svarer på."
+      },
+      "choosedModel" : {
+        "label" : "Ollama chatmodelvalg",
+        "help" : "Vælg Ollama chatmodel at arbejde med.",
+        "placeholder" : "Vælg en model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama-token",
+        "help" : "Vælg Ollama-token, der skal bruges til denne model (valgfrit)"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Ollama lokal (eller LAN) server chatmodelkonfiguration"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic-token",
+        "help" : "Vælg det Anthropic-token, der skal bruges til denne model"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic chatmodelvalg",
+        "help" : "Vælg Anthropic chatmodel at arbejde med.",
+        "placeholder" : "Vælg en model"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avancerede indstillinger"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Indstillinger for modeladgang"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Anthropic chatmodelkonfiguration"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI-token",
+        "help" : "Vælg det MistralAI-token, der skal bruges til denne model"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI chatmodelvalg",
+        "help" : "Vælg MistralAI chatmodel at arbejde med."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avancerede indstillinger"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Indstillinger for modeladgang"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer MistralAI chatmodelkonfiguration"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI chatmodelvalg",
+        "help" : "Vælg Google Vertex AI chatmodel at arbejde med."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI-token",
+        "help" : "Vælg det Google Vertex AI-token, der skal bruges til denne model"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Generelle oplysninger"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Indstillinger for modeladgang"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Avancerede indstillinger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Google Vertex AI chatmodelkonfiguration"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek-token",
+        "help" : "Vælg det Deepseek-token, der skal bruges til denne model"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek chatmodelvalg",
+        "help" : "Vælg Deepseek chatmodel at arbejde med.",
+        "placeholder" : "Vælg en model"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avancerede indstillinger"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Deepseek chatmodelkonfiguration"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Indstillinger for modeladgang"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af modelkonfigurationen"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for modelkonfigurationen"
+      },
+      "baseUrl" : {
+        "label" : "Chatmodel API-base serveradresse",
+        "help" : "Baseadresse for Chatmodel."
+      },
+      "apiSecretCode" : {
+        "label" : "Chatmodel API-token",
+        "help" : "Vælg det Chatmodel API-token, der skal bruges til denne model (valgfrit)"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard chatmodel",
+        "help" : "Hvis valgt, bruges denne som standard chatmodel hvor chatmodel ikke er angivet"
+      },
+      "choosedModel" : {
+        "label" : "Chatmodel chatmodelvalg",
+        "help" : "Vælg Chatmodel chatmodel at arbejde med."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "TitleFragment" : {
+        "label" : "Redigerer chatmodeludbyder:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Avancerede indstillinger"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Indstillinger for modeladgang"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af embedding-modelkonfigurationen"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Ollama lokal (eller LAN) embedding-modelkonfiguration"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama-token",
+        "help" : "Vælg det Ollama-token, der skal bruges til denne model"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embeddingmodelvalg",
+        "help" : "Vælg Ollama embeddingmodel at arbejde med."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for embedding-modelkonfigurationen"
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard embeddingmodel",
+        "help" : "Hvis valgt, bruges denne som standard embeddingmodel hvor embeddingmodel ikke er angivet"
+      },
+      "baseUrl" : {
+        "label" : "Base Ollama-serveradresse",
+        "help" : "Baseadresse (f.eks. http://servername:234/) som Ollama lokal eller LAN-serveren svarer på."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af embedding-modelkonfigurationen"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer MistralAI embedding-modelkonfiguration"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for embedding-modelkonfigurationen"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embeddingmodelvalg",
+        "help" : "Vælg MistralAI embeddingmodel at arbejde med."
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard embeddingmodel",
+        "help" : "Hvis valgt, bruges denne som standard embeddingmodel hvor embeddingmodel ikke er angivet"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI-token",
+        "help" : "Vælg det MistralAI-token, der skal bruges til denne model"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Redigerer Google Vertex AI embedding-modelkonfiguration"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af embedding-modelkonfigurationen"
+      },
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embeddingmodelvalg",
+        "help" : "Vælg Google Vertex AI embeddingmodel at arbejde med."
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard embeddingmodel",
+        "help" : "Hvis valgt, bruges denne som standard embeddingmodel hvor embeddingmodel ikke er angivet"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for embedding-modelkonfigurationen"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI-token",
+        "help" : "Vælg det Google Vertex AI-token, der skal bruges til denne model"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Annullér"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "TitleFragment" : {
+        "label" : "Redigerer embeddingmodeludbyder:"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelse af Embedding model-konfigurationen"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for Embedding model-konfigurationen"
+      },
+      "choosedModel" : {
+        "label" : "Embedding model embeddingmodelvalg",
+        "help" : "Vælg Embedding model embeddingmodel at arbejde med."
+      },
+      "baseUrl" : {
+        "label" : "Embedding model API-serveradresse",
+        "help" : "Baseadresse for Embedding model-serveren."
+      },
+      "defaultModel" : {
+        "label" : "sæt dette som standard embeddingmodel",
+        "help" : "Hvis valgt, bruges denne som standard embeddingmodel hvor embeddingmodel ikke er angivet"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding model API-token",
+        "help" : "Vælg det Embedding model API-token, der skal bruges til denne model"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Chatkonfigurationsoplysninger"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Slet denne chatsession"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Omdøb chatsessionen"
+      },
+      "QueryControl" : {
+        "placeholder" : "Skriv en besked til chatbotten"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "description" : {
+        "label" : "Chatbeskrivelse",
+        "help" : "Indtast beskrivelse af chatsessionen."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Anvendt model",
+        "help" : "Modelkode"
+      },
+      "providerId" : {
+        "label" : "Chatmodellens udbyder",
+        "help" : "LLms udbyderdriver"
+      },
+      "functions" : {
+        "label" : "Funktionskald for chatmodellen",
+        "help" : "Liste over funktioner tilgængelig for chatmodellen"
+      },
+      "NameCol" : {
+        "label" : "Navn"
+      },
+      "DescriptionCol" : {
+        "label" : "Beskrivelse"
+      },
+      "kbases" : {
+        "label" : "Tilgængelige vidensbaser",
+        "help" : "Liste over vidensbaser anvendt i denne RAG-chat"
+      },
+      "CloseBtn" : {
+        "help" : "Luk"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Optag",
+        "help" : "Start optagelse af et lydspor og send det"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "genindlæs data"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SelectHeader" : {
+        "label" : "Vælg"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "slutdato/-tid"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "startdato/-tid"
+      },
+      "ProcessingHeader" : {
+        "label" : "behandler"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "FinishedHeader" : {
+        "label" : "afsluttet"
+      },
+      "WithErrorHeader" : {
+        "label" : "med fejl"
+      },
+      "LogTableComponent" : {
+        "help" : "Denne log for indlæsning af delt filsystemområde"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Processtatistik"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "CloseBtn" : {
+        "label" : "Luk"
+      },
+      "PublicationLogTab" : {
+        "label" : "Publiceringslog"
+      },
+      "MainPanel" : {
+        "label" : "Publiceringslog"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Opgavens status: kører, afsluttet eller afsluttet med fejl."
+      },
+      "publishingSystem" : {
+        "label" : "Konfiguration af publiceret indhold",
+        "help" : "Info om publiceret indhold"
+      },
+      "startDateTime" : {
+        "label" : "Startdato/-tid",
+        "help" : "Startdato og -tid for indholdssynkroniseringsopgaven"
+      },
+      "endDateTime" : {
+        "label" : "Slutdato/-tid",
+        "help" : "Slutdato og -tid for indholdssynkroniseringsopgaven"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Ikke færdigbehandlet"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Færdigbehandlet"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding vs samlet antal dokumenter"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Flere detaljer"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Generer prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Prompt-guiden",
+        "help" : "Brug dette til at få en LLM til at generere prompten til dine mål"
+      },
+      "acceptPrompt" : {
+        "label" : "Acceptér prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Promptskabelon-genereringsguide"
+      },
+      "cancel" : {
+        "label" : "Annuller"
+      },
+      "response" : {
+        "label" : "Foreslået promptskabelon",
+        "help" : "Genereret skabelon-tekst til dit mål (du kan ændre eller rette den)"
+      },
+      "modelCode" : {
+        "label" : "Chatmodel der skal bruges",
+        "help" : "Vælg den chatmodel, du vil bruge til at generere promptskabelonen"
+      },
+      "query" : {
+        "label" : "Anmodning om promptskabelon",
+        "help" : "Angiv i anden person hvilket mål, AI'en skal hjælpe brugeren med"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatur",
+        "help" : "Temperaturen modellen svarer med, fra 0 til 1 (hvis du er i tvivl, lad feltet være tomt)"
+      },
+      "contextLength" : {
+        "label" : "Kontekstlængde (tokens)",
+        "help" : "Mængden af tekst en AI-model kan tage med i behandlingen (hvis ikke angivet, bruges 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parameter, fra 0 til 1 (hvis du er i tvivl, lad feltet være tomt)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Aktiverede funktioner til denne model",
+        "help" : "Funktionaliteter, som modellen kan bruge under chatten"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Standardprompt for model",
+        "help" : "Redigér standardprompten for chatmodellen."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast identitetsbeskrivelse."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for identiteten."
+      },
+      "secretType" : {
+        "label" : "Identitetstype",
+        "help" : "Vælg den identitetstype, der skal oprettes til det eksterne system"
+      },
+      "InsertBtn" : {
+        "label" : "Indsæt"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Indtast token."
+      },
+      "user" : {
+        "label" : "Bruger",
+        "help" : "Indtast brugeren angivet af tokenet."
+      },
+      "MainPanel" : {
+        "label" : "Opretter identitet"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "username" : {
+        "label" : "Brugernavn",
+        "help" : "Indtast brugernavn."
+      },
+      "password" : {
+        "label" : "Adgangskode",
+        "help" : "Indtast adgangskode."
+      },
+      "email" : {
+        "label" : "E-mail/brugernavn",
+        "help" : "Indtast den e-mail eller det brugernavn, der er knyttet til ssh-nøglen."
+      },
+      "key" : {
+        "label" : "Hemmelig nøgle",
+        "help" : "Åbn den private nøglefil og kopier den i dette tekstfelt."
+      },
+      "passphrase" : {
+        "label" : "Nøglekodeord",
+        "help" : "Indtast nøglens kodeord."
+      },
+      "pub" : {
+        "label" : "Offentlig nøgle",
+        "help" : "Åbn den offentlige nøglefil og kopier den i dette tekstfelt."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for indholdet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af det uploadede indhold fra filsystemet."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "upload" : {
+        "label" : "Upload indhold",
+        "help" : "Klik på gennemse og vælg zip-filer eller andre filer"
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktivér åbning af zip-filer og udtrækning af indhold"
+      },
+      "PublishBtn" : {
+        "label" : "Udgiv!",
+        "help" : "Gemmer og gør dette indhold tilgængeligt i vidensbasen for LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "LogsTab" : {
+        "label" : "Logfiler"
+      },
+      "MainPanel" : {
+        "label" : "Rediger uploadet indhold"
+      },
+      "SettingsTab" : {
+        "label" : "Indstillinger"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurer build-systemer",
+        "help" : "Liste over build/packaging-systemer, der skal inspiceres for metainformation og yderligere artefaktinformation (lad være tom, hvis der ikke er nogen softwarekode)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Valgte elementer"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Annuller"
+      },
+      "EditBtn" : {
+        "help" : "Rediger valgte"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Vælg elementer"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Vælg elementer"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Rediger planlægning"
+      },
+      "ConfirmBtn" : {
+        "label" : "Bekræft"
+      },
+      "AddBtn" : {
+        "label" : "+Tilføj"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Udgiv!",
+        "help" : "Gemmer og gør dette indhold tilgængeligt i vidensbasen for LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SettingsTab" : {
+        "label" : "Indstillinger"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Behandling af kildekode"
+      },
+      "LogsTab" : {
+        "label" : "Logfiler"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer eksisterende filesystem-indhold"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af det uploadede indhold i filesystem-indgangen."
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktiver åbning af zip-filer og udtræk af indhold"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for indholdet."
+      },
+      "tree" : {
+        "label" : "Valgte filer eller mapper",
+        "help" : "Delte filesystem-filer eller mapper tilgængelige på serveren"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "programmedTables" : {
+        "label" : "Tjekplan for indholdsopdateringer",
+        "help" : "Konfigurer tidsplanen for ændret indhold, så systemet for retrieve augmented generation holdes opdateret"
+      },
+      "catalogingCriteria" : {
+        "label" : "Organisationskriterier for mapper",
+        "help" : "Forklar her, hvordan mappernes organisationskriterier er udført i det filsystemområde, du deler med Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurer build-systemer",
+        "help" : "Liste over build-/pakkesystemer til inspektion for metaoplysninger og yderligere artefaktinformationer (lad stå tomt hvis der ikke er softwarekode indholdt)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nyt område til fildeling"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolut sti"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db eller yml-filkonfiguration"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ModifyHeader" : {
+        "label" : "Redigér"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Valgt delt filesystem-mappe",
+        "help" : "Vælg en servermappe, der er rodsti for den delte filesystem, som bruges i din organisation som dokumentlager"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af det delte filesystem-område i din organisation"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for indholdet."
+      },
+      "InsertBtn" : {
+        "label" : "Indsæt"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer serverens delte fillmappe"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "PublishBtn" : {
+        "label" : "Publicer!",
+        "help" : "Gem og gør dette indhold tilgængeligt i vidensbasen for LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer git kilde-/dokumentationsarkiv"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af git-repositoriet."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for git-repositoriet."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git-system",
+        "help" : "Allerede konfigureret reference til git-system."
+      },
+      "branch" : {
+        "label" : "Branch",
+        "help" : "Navn på branch der skal hentes (normalt master, main eller develop)"
+      },
+      "identityCode" : {
+        "label" : "Brugt identitet",
+        "help" : "Vælg den identitet, der skal bruges til at klone/hente på systemet"
+      },
+      "repositoryUri" : {
+        "label" : "Repository url/adresse",
+        "help" : "Komplet adresse på git remote repository (starter typisk med http:, https: eller ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "offentlig",
+        "help" : "Hvis sandt, kræver adgang til repository ikke godkendelse"
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktivér åbning af zip-filer og udtrækning af indhold"
+      },
+      "programmedTables" : {
+        "label" : "Tidsplan for indholdsopdateringer",
+        "help" : "Konfigurer planlægning af ændret indhold for at holde det retrieve augmented generation system opdateret"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurer build-systemer",
+        "help" : "Liste over build-/pakkeringssystemer som skal gennemsøges for metainformationer og yderligere artefaktinfo"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Generelle oplysninger"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Brug chatmodel"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "vælg"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Vælg en chatmodelkonfiguration"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Vælg en embeddingmodel-konfiguration"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "vælg"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG-indstillinger"
+      },
+      "LanguageModelTab" : {
+        "label" : "Indstillinger for large language model og tilgængelige værktøjer"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Brug embeddingmodel"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Indstillinger for sikkerhedsadgang"
+      },
+      "MainPanel" : {
+        "label" : "Rediger retrieval augmented generation-chatprofil"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for chatprofilen."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast chatprofilbeskrivelse."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Bruger vælger vidensbaser",
+        "help" : "Brugeren kan vælge mellem tilgængelige vidensbaser og/eller uploade egne filer."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Vidensbaser",
+        "help" : "Vidensbaser, der bruges til dokument-hentning."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Lighedstærskel",
+        "help" : "Lighedstærskel for semantiske søgninger, 0.60–0.65 Lav filtrering, 0.70-0.75 Mellem filtrering, 0.80–0.85 Præcis"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2. 'hop' lighedstærskel",
+        "help" : "Lighedstærskel for semantiske søgninger, 0.60–0.65 Lav filtrering, 0.70-0.75 Mellem filtrering, 0.80–0.85 Præcis bruges fra 2. søgning ved multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Deaktiver 'Multi Hop' rag",
+        "help" : "Deaktiver 'multi hop rag'-funktionen. Multi hop-søgning foretager først en semantisk søgning og bruger de fundne dokumenter som kontekst for den næste semantiske søgning for at give større kontekst."
+      },
+      "topK" : {
+        "label" : "Antal overvejede dokumentfragmenter (TopK)",
+        "help" : "I retrieval augmented generation, er det Top N fundne og overvejede dokumentfragmenter i den semantiske søgning"
+      },
+      "enabledFunctions" : {
+        "label" : "Aktiverede funktionskald til denne RAG-chat",
+        "help" : "Funktionaliteter, som llm-modellen kan bruge under chatten med brugeren, også i interaktion med den valgte vidensbase"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Rediger prompten til retrieval augmented generation-sessioner."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Indtast eller indsæt promptkategori"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer prompt"
+      },
+      "promptCategory" : {
+        "label" : "Promptkategori",
+        "help" : "Vælg eller indsæt promptkategori."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Rediger prompten til chatten, brug {query} for at angive brugerens spørgsmål og {context} for at angive dokumenter/historik sendt til LLM."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode til prompten."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast promptbeskrivelse."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Skift adgangskode"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Gammel adgangskode",
+        "help" : "Nuværende adgangskode til login"
+      },
+      "newPassword" : {
+        "label" : "Ny adgangskode",
+        "help" : "ny adgangskode"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail som brugernavn til login"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Skift adgangskode formular"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "ChangePwdBtn" : {
+        "label" : "skift adgangskode"
+      },
+      "newPassword1" : {
+        "label" : "Bekræft ny adgangskode",
+        "help" : "Bekræft ny adgangskode"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "ForMoreInformations" : {
+        "label" : "For mere information om Google custom search API eller for at få din api-nøgle (gratis), besøg: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "unik kode for google search api-konfigurationen."
+      },
+      "MainPanel" : {
+        "label" : "Redigerer google custom search api-legitimationsoplysninger"
+      },
+      "secretCode" : {
+        "label" : "Google search api-token",
+        "help" : "Vælg eller indsæt google search api-token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af google search api-konfigurationen."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Chat uden vidensbaser",
+        "help" : "Vælg LLM'er til en chat-session",
+        "placeholder" : "Vælg LLM'er til en chat-session"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Åbn chatindstillingssektion"
+      },
+      "CreateChatBtn" : {
+        "label" : "Ny chat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Ny chat-session"
+      },
+      "chatProfileCode" : {
+        "label" : "Chat med vidensbaser",
+        "help" : "Vælg virksomhedens chatprofil for at interagere med virksomhedens (og dine) dokumenter og LLM'er",
+        "placeholder" : "Vælg virksomhedens chatprofil for at interagere med virksomhedens (og dine) dokumenter og LLM'er"
+      },
+      "NewChatBtn" : {
+        "label" : "Ny chat"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Chat med dokumenter",
+        "help" : "Gennemse eller søg og vælg dokumenter at arbejde med"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vælg filer til chat"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Bekræft"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Upload eller vælg dine dokumenter",
+        "help" : "Vælg/upload dokumenter fra dit brugerområde"
+      },
+      "fileSearchBtn" : {
+        "label" : "Søg"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Søg"
+      },
+      "query" : {
+        "label" : "Semantisk søgefrase",
+        "help" : "Indtast en meningsfuld sætning relateret til din søgning"
+      },
+      "choosenBrowsing" : {
+        "label" : "Vælg filer ved at gennemse vidensbaser",
+        "help" : "Vælg filer ved at gennemse virksomhedens delte vidensbaser"
+      },
+      "filename" : {
+        "label" : "Søgt filnavn",
+        "help" : "Indtast en del af filnavnet for det indhold, du søger"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Rediger valgte"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Vælg brugerfiler"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Annuller"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Vælg brugeruploadet indhold"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Vidensbaser og brugerfiler"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+underrprojekt eller element",
+        "help" : "tilføj underprojekt eller element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+upload filer",
+        "help" : "tilføj datakilde for uploadede filer"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "tilføj en Microsoft SharePoint/OneDrive datakilde"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "tilføj en Atlassian Confluence datakilde"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filsystem",
+        "help" : "tilføj delt filsystem-datakilde"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "tilføj en Atlassian Jira datakilde"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "tilføj en git repository-datakilde såsom bitbucket,github eller andre"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Opsætning"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "min profil"
+      },
+      "logout" : {
+        "label" : "log ud"
+      }
+    }
+  }
+}

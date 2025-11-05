@@ -1,4 +1,4 @@
-import { AfterContentInit, Directive, ElementRef, Inject, Optional } from "@angular/core";
+import { AfterContentInit, Directive, ElementRef, Inject, OnInit, Optional } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { findMatchingTranslation, UIExistingText } from "./text-language-resources";
@@ -7,7 +7,7 @@ import { findMatchingTranslation, UIExistingText } from "./text-language-resourc
     selector: '[gebo-ai-text]',
     standalone: false
 })
-export class GeboAITextDirective implements AfterContentInit {
+export class GeboAITextDirective implements AfterContentInit, OnInit {
     private componentId: string | null | undefined;
     private existingTexts?: UIExistingText;
     constructor(
@@ -18,12 +18,16 @@ export class GeboAITextDirective implements AfterContentInit {
         if (this.host) {
             if (Array.isArray(this.host)) {
                 const array = Array.from(this.host);
-                this.host = array.length ? array[array.length - 1] : undefined;
+                this.host = array.length ? array[0] : undefined;
             }
         }
-        if (this.moduleId && this.moduleId.length) {
-            this.moduleId = this.moduleId[this.moduleId.length - 1];
+        if (Array.isArray(this.moduleId)) {
+            const modules=Array.from(this.moduleId);
+            this.moduleId = modules[0];
         }
+    }
+    async ngOnInit() {
+        await this.translationService.tryInit();
     }
     ngAfterContentInit(): void {
         this.componentId = this.el.nativeElement.getAttribute("id");
@@ -42,7 +46,7 @@ export class GeboAITextDirective implements AfterContentInit {
             if (substitutions) {
                 substitutions.subscribe({
                     next: (resources) => {
-                        if (resources && resources?.length) {
+                        if (resources) {
                             if (this.existingTexts) {
                                 const labelTranslation = findMatchingTranslation(this.existingTexts, resources);
                                 if (labelTranslation && labelTranslation.translation) {

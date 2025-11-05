@@ -23,7 +23,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { LLMSetupWizardComponent } from "./llms-setup-wizard.component";
-import { AlwaysTrueStatusService, EditableListboxModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI } from "@Gebo.ai/reusable-ui";
+import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTransationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { SetupWizardsComponent } from "./setup-wizards.component";
 import { DialogModule } from "primeng/dialog";
@@ -139,12 +139,12 @@ const graphRagBaseSetupSection: SetupWizardsSection = {
     label: "Graph rag/Knowledge extraction stup",
     description: "Configure graph rag and knowledge extraction subsystem",
     installedModule: Neo4jModuleEnabledService,
-    enabledService:AlwaysTrueStatusService,
+    enabledService: AlwaysTrueStatusService,
     setupCompletedService: GraphRagStatusService,
     wizardComponent: GraphRagWizardComponent,
     wizardSectionId: "graphRagBaseSetupSection",
     mandatory: false,
-    experimental:true
+    experimental: true
 };
 /**
  * Setup section for shared filesystem paths.
@@ -239,7 +239,7 @@ const firstKnowledgeBaseSetupSection: SetupWizardsSection = {
     requredStepsIds: ["geboWorkDirectorySetupSection", "VectorStoreSetupSection", "adminLLMSSetupSection"],
     label: "Configure at least a knowledge base",
     description: "Configure at least a knowledge base to let your users enjoy the retrieve augmented generations services of Gebo.ai",
-    
+
     enabledService: AlwaysTrueStatusService,
     setupCompletedService: KnowledgeBasePresentService,
     wizardComponent: KnowledgeBaseWizardComponent,
@@ -274,7 +274,7 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTransationContainerModule],
     declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
@@ -311,7 +311,9 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: microsoftSharepointSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: googleDriveWorkspacesSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
-        { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true }]
+        { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
+        { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }]
+
 
 })
 export class GeboSetupWizardsModule {

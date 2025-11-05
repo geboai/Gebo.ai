@@ -8,11 +8,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
-
-<div class="card flex justify-center">
+ <div class="card flex justify-center">
     <p-toast />
 </div>
 <p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title" >
@@ -64,9 +60,7 @@
                         <li style="with: 100%;">
                             <b>You:</b>
                             <div style="overflow-wrap: break-word;">{{interaction.request.query}}</div>
-                            <!-- 
-                            <pre style="overflow-wrap: break-word;">{{interaction.request.query}}</pre>
-                            -->
+                            
                         </li>
                         <li style="with: 100%;">
                             <b>{{(interaction?.response?.usedChatModelCode?interaction?.response?.usedChatModelCode:modelName)}}</b>
@@ -74,14 +68,10 @@
                                 [data]="interaction?.response?.queryResponse"></markdown>
                             <p-progressSpinner strokeWidth="8" fill="transparent" *ngIf="interaction.loading===true"
                                 animationDuration="1.5s" [style]="{ width: '30px', height: '30px' }" />
-                            <!-- 
-                            <p-skeleton styleClass="mb-2 pi pi-microchip-ai" height="2rem" *ngIf="interaction.loading===true" />
-                            -->
+                           
                             <p-button *ngIf="this.chatInfo?.code && isChatStreamingProbabilyFailing" icon="pi pi-undo"
                                 [text]="true" (onClick)="loadChatHistory()" [severity]="'danger'"></p-button>
-                            <!-- 
-                            <i class="pi pi-microchip-ai" *ngIf="interaction.loading===true"></i>
-                            -->
+                            
                             <ul style="with: 100%;">
                                 <li *ngIf="ragsystem && interaction?.response?.documentsRef && interaction?.response?.documentsRef?.length"
                                     style="with: 100%;">
@@ -96,11 +86,11 @@
                                 <li
                                     *ngIf="interaction?.response?.calledFunctions && interaction?.response?.calledFunctions?.length">
                                     <ul class="pi pi-microchip">
-                                        <b>AI Called functions:</b>
+                                        <b id="CalledFunctionsCtl" gebo-ai-text>AI Called functions:</b>
                                         <li *ngFor="let f of interaction.response?.calledFunctions;"
                                             [title]="f.functionDescription">
                                             <i class="pi pi-bolt"></i>
-                                            {{f.functionName}} with params: {{f.paramsDescription}}
+                                            {{f.functionName}}<span id="WithParams" gebo-ai-text >with params:</span>{{f.paramsDescription}}
                                         </li>
                                     </ul>
                                 </li>
@@ -121,7 +111,7 @@
                     [interactionDisabled]="loading" [knowledgeBaseCodes]="knowledgeBaseCodes"
                     formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
                     
-                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="h-full"  gebo-ai-label  
+                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="h-full"  gebo-ai-label  id="QueryControl"
                     placeholder="Write a message for the chat bot">
                 </textarea>
 

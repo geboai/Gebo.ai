@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "డిఫాల్ట్ సిస్టమ్ భాష",
+        "help" : "ఈ Gebo.ai ఇన్‌స్టాలేషన్ కోసం డిఫాల్ట్ సిస్టమ్ భాష"
+      },
+      "username" : {
+        "label" : "ఇమెయిల్",
+        "help" : "లాగిన్ కావడానికి యూజర్ నేమ్‌గా ఇమెయిల్"
+      },
+      "passwordC" : {
+        "label" : "పాస్‌వర్డ్‌ని నిర్ధారించండి",
+        "help" : "పాస్‌వర్డ్‌ని నిర్ధారించండి"
+      },
+      "password" : {
+        "label" : "పాస్‌వర్డ్",
+        "help" : "లాగిన్ కోసం పాస్‌వర్డ్ (కనీసం 8 అక్షరాలు)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " పాస్‌వర్డ్లు సరిపోలడం లేదు "
+      },
+      "LocalAdmin" : {
+        "label" : "మీ లోకల్ అడ్మిన్ ఖాతాను సృష్టించండి"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "మీరు భవిష్యత్‌లో ఈ ఖాతాను సాఫ్ట్‌వేర్ సెటప్/అడ్మిన్ చేయడానికి ఉపయోగిస్తారు, ఈ డేటా మీ సిస్టమ్‌లోనే ఉంటుంది మరియు నెట్‌వర్క్‌పై పంపద్"
+      },
+      "EnterBtn" : {
+        "label" : "లాగిన్ పేజీలోకి వెళ్ళండి"
+      },
+      "SetupPage" : {
+        "label" : "మీ gebo.ai ఇన్‌స్టాలేషన్ సెటప్ చేయండి"
+      },
+      "CreateBtn" : {
+        "label" : "సిస్టమ్ సెటప్ సృష్టించండి"
+      },
+      "LicenceFieldSet" : {
+        "label" : "లైసెన్స్ ను చదివి అంగీకరించండి"
+      },
+      "AcceptMark" : {
+        "label" : "నేను షరతులను అంగీకరిస్తున్నాను",
+        "help" : "ఇక్కడ క్లిక్ చేయడం ద్వారా మీరు లైసెన్స్ లోని షరతులను అంగీకరిస్తారు"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ఈ-మెయిల్",
+        "help" : "లాగిన్ చేయడానికి ఈ-మెయిల్ ను యూజర్ నేమ్‌గా ఉపయోగించండి"
+      },
+      "password" : {
+        "label" : "పాస్వర్డ్",
+        "help" : "లాగిన్ చేయడానికి పాస్వర్డ్"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai లో లాగిన్ అవ్వండి"
+      },
+      "LoginBtn" : {
+        "label" : "లాగిన్"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "సరే!",
+        "detail" : "ఆపరేషన్ విజయవంతంగా పూర్తయింది"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 కాన్ఫిగరేషన్"
+      },
+      "ProviderNameHeader" : {
+        "label" : "ప్రొవైడర్ పేరు"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 భద్రతా సెట్టింగులు"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "సెట్‌అప్ హోమ్ పేజీకి తిరిగి వెళ్ళు"
+      },
+      "WizardUi" : {
+        "label" : "ఒక సెటప్ విభాగాన్ని ఎంచుకోండి"
+      },
+      "adminUserSetupSection" : {
+        "label" : "అడ్మినిస్ట్రేటర్ & ఇతర ఖాతా సెటప్",
+        "description" : "ఈ gebo.ai ఇన్స్టాలేషన్‌ను సరిగ్గా నిర్వహించేందుకు కనీసం ఒక అడ్మిన్ ఖాతా అవసరం, అవసరమైతే ఇతర వినియోగదారులను జోడించండి"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai వర్క్ డైరెక్టరీ",
+        "description" : "వర్క్ డైరెక్టరీని కాన్ఫిగర్ చేయండి, ఇది ఈ ఇన్‌స్టాల్‌షన్‌లోని కాన్ఫిగరేషన్లు మరియు పని ఫైల్స్ నిల్వ చేసే ఫోల్డర్ అవుతుంది. దీన్ని తరచుగా బ్యాకప్ చేయడం మంచిది."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "వెక్టర్ డేటాబేస్ కాన్ఫిగరేషన్",
+        "description" : "Gebo.ai కు రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్ సేవలను అందించేందుకు వెక్టర్ డేటాబేస్ కావాలి, మీరు స్థానిక వెక్టర్ డేటాబేస్, Qdrant లేదా Mongo Atlas ను ఎంచుకోవచ్చు"
+      },
+      "oauth2SetupSection" : {
+        "label" : "సింగిల్ సైన్ ఆన్, oauth2 ప్రమాణీకరణ",
+        "description" : "Oauth2 సింగిల్ సైన్ ఆన్ ప్రమాణీకరణ మరియు oauth2 క్లయింట్లు కాన్ఫిగరేషన్"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "లార్జ్ లాంగ్వేజ్ మోడళ్ల సెటప్",
+        "description" : "వివిధ llms లను క్లౌడ్ లేదా స్థానిక/LAN ఇన్ఫ్రాస్ట్రక్చర్ బ్యాక్‌ఎండ్‌ సేవలతో కాన్ఫిగర్ చేయండి, కనీసం ఒక చాట్ మోడల్ మరియు ఒక ఎంబెడింగ్ మోడల్ కాన్ఫిగర్ చేయాలి."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "గ్రాఫ్ రాగ్/నోలెడ్జ్ ఎక్స్‌ట్రాక్షన్ సెటప్",
+        "description" : "గ్రాఫ్ రాగ్ మరియు నోలెడ్జ్ ఎక్స్‌ట్రాక్షన్ సబ్‌సిస్టమ్‌ను కాన్ఫిగర్ చేయండి"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "షేర్డ్ ఫైల్‌సిస్టమ్ మార్గాల సెటప్",
+        "description" : "వైవిధ్యమైన నోలెడ్జ్ బేస్‌లలో రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్ డాక్యుమెంట్స్ ఏరియాగా ఉపయోగించేందుకు కంపెనీ షేర్డ్ ఫైల్‌సిస్టమ్స్ మార్గాలు కాన్ఫిగర్ చేయండి"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "అట్లాసియన్ Confluence ఇంటిగ్రేషన్",
+        "description" : "మీ Atlassian Confluence క్లౌడ్ లేదా ఆన్ ప్రిమైస్ ఇన్‌స్టాలేషన్‌లకు అడుగు పెట్టేందుకు Gebo.ai ను కాన్ఫిగర్ చేయండి"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "అట్లాసియన్ Jira ఇంటిగ్రేషన్",
+        "description" : "మీ Atlassian Jira క్లౌడ్ ఇన్‌స్టాలేషన్‌లకు అడుగు పెట్టేందుకు Gebo.ai ను కాన్ఫిగర్ చేయండి"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ఇంటిగ్రేషన్",
+        "description" : "మీ Microsoft Sharepoint క్లౌడ్ లేదా ఆన్ ప్రిమైస్ ఇన్‌స్టాలేషన్‌లకు అడుగు పెట్టేందుకు Gebo.ai ను కాన్ఫిగర్ చేయండి"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "కనీసం ఒక నోలెడ్జ్ బేస్‌ను కాన్ఫిగర్ చేయండి",
+        "description" : "Gebo.ai యొక్క రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్ సేవలను ఉపయోగించేందుకు కనీసం ఒక నోలెడ్జ్ బేస్‌ను కాన్ఫిగర్ చేయండి"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "కనీసం ఒక \"R.A.G.\" చాట్ ప్రొఫైల్‌ను కాన్ఫిగర్ చేయండి",
+        "description" : "మీరు కాన్ఫిగర్ చేసిన నోలెడ్జ్ బేస్‌లపై ఆధారపడి వినియోగదారులకు కనీసం ఒక రిట్రీవ్ ఆగ్మెంటెడ్ చాట్ ప్రొఫైల్‌ని కాన్ఫిగర్ చేయండి"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "కంపెనీ Atlassian Confluence సిస్టమ్స్ సెటప్ చేయండి"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "SystemTypeHeader" : {
+        "label" : "సిస్టమ్ రకం"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగ్ కోడ్"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence సిస్టమ్"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira సిస్టమ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగ్ కోడ్"
+      },
+      "MainPanel" : {
+        "label" : "కంపెనీ Atlassian Jira సిస్టమ్స్ సెటప్ చేయండి"
+      },
+      "SystemTypeHeader" : {
+        "label" : "సిస్టమ్ రకం"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగ్ కోడ్"
+      },
+      "MainPanel" : {
+        "label" : "కంపెనీ Microsoft Sharepoint సిస్టమ్స్ సెటప్ చేయండి"
+      },
+      "SystemTypeHeader" : {
+        "label" : "సిస్టమ్ రకం"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint సిస్టమ్"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "సరైన క్రెడిట్‌తో api-key ఇవ్వండి. OpenAI ఎంచుకున్నట్లయితే api ఉపయోగానికి మీ ప్రణాళికలో కొంత క్రెడిట్ (10-30$ చాలవుతుంది) యాడ్ చేయాలి, లేదంటే ఈ అనువర్తనంలో llms ట్రాఫిక్ అందుబాటులో ఉండదు."
+      },
+      "MainPanel" : {
+        "label" : "గebo.ai llms ప్రొవైడర్ల యాక్సెస్ కోసం మీ api keyతో సెటప్ చేయండి"
+      },
+      "provider" : {
+        "label" : "లార్జ్ లాంగ్వేజ్ మోడల్ సరఫరాదారు",
+        "help" : "OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)లో ఒక సరఫరాదారుని ఎంచుకోండి"
+      },
+      "user" : {
+        "label" : "వినియోగదారు",
+        "help" : "apiKeyకు సంబంధించిన యూజర్‌ని నమోదు చేయండి"
+      },
+      "ConfigureBtn" : {
+        "label" : "కాన్ఫిగర్ చేయండి"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "ఉపయోగించగల LLMS ప్రొవైడర్లకు మీ api key"
+      },
+      "ProviderHeader" : {
+        "label" : "ప్రొవైడర్"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "కాన్ఫిగరేషన్ కోడ్"
+      },
+      "ModelHeader" : {
+        "label" : "మోడల్"
+      },
+      "ModelTypeHeader" : {
+        "label" : "మోడల్ రకం"
+      },
+      "DefaultModelHeader" : {
+        "label" : "డిఫాల్ట్ మోడల్"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "గ్రాఫ్ రాగ్ కాన్ఫిగ్ సృష్టించండి"
+      },
+      "MainPanel" : {
+        "label" : "గ్రాఫ్ రాగ్ & నోలెడ్జ్ ఎక్స్‌ట్రాక్షన్ డిఫాల్ట్ కాన్ఫిగరేషన్ సెటప్ చేయండి"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగ్ కోడ్"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "ప్రాజెక్ట్"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "ఒక నోలెడ్జ్ బేస్ జోడించండి"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "నోలెడ్జ్ బేస్"
+      },
+      "MainPanel" : {
+        "label" : "నోలెడ్జ్ బేస్‌ల & కంటెంట్ కాన్ఫిగరేషన్స్"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "కంటెంట్స్ సోర్స్"
+      },
+      "PublishedHeader" : {
+        "label" : "ప్రచురించబడింది"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "డాక్యుమెంట్ల సంఖ్య"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "ఒక ప్రాజెక్ట్/ఐటమ్ జోడించండి",
+        "help" : "కొత్త ప్రాజెక్ట్ సృష్టించండి"
+      },
+      "Button1" : {
+        "help" : "నోలెడ్జ్ బేస్ తెరువు"
+      },
+      "Button2" : {
+        "help" : "ప్రాజెక్ట్ ఫారమ్ తెరువు"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai వర్క్ ఫోల్డర్ కాన్ఫిగరేషన్"
+      },
+      "ConfigureBtn" : {
+        "label" : "కాన్ఫిగర్ చేయండి"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai వర్క్ డైరెక్టరీగా ఫోల్డర్ ఎంచుకోండి",
+        "help" : "ఈ ఇన్స్టాలేషన్ పనికొరకు కాన్ఫిగరేషన్లు మరియు కంటెంట్ నిల్వ చేసే సర్వర్ ఫోల్డర్ ఎంచుకోండి."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "ఫోల్డర్ జోడించండి"
+      },
+      "AddFolderBtn" : {
+        "label" : "ఫోల్డర్ జోడించండి"
+      },
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      },
+      "MainPanel" : {
+        "label" : "సర్వరు షేర్డ్ ఫైల్సిస్టమ్ మార్గాలు"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "అబ్సల్యూట్ మార్గం"
+      },
+      "DeleteHeader" : {
+        "label" : "తొలగించు"
+      },
+      "path" : {
+        "label" : "షేర్డ్ ఫైల్సిస్టమ్‌కి రూట్ ఫోల్డర్‌ను జోడించండి",
+        "help" : "మీ సంస్థలో డాక్యుమెంట్ రెపోజిటరీగా ఉపయోగించే షేర్డ్ ఫైల్సిస్టమ్‌కు సర్వర్ రూట్ ఫోల్డర్ ఎంచుకోండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఫైల్సిస్టమ్ ఎంట్రీ వివరణను నమోదు చేయండి"
+      },
+      "RemovePathBtn" : {
+        "label" : "మార్గాన్ని తీసివేయండి"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "కాన్ఫిగర్ చేయండి"
+      },
+      "MainPanel" : {
+        "label" : "వెక్టర్ డేటాబేస్ కాన్ఫిగరేషన్"
+      },
+      "host" : {
+        "label" : "Qdrant హోస్ట్",
+        "help" : "Qdrant హోస్ట్ పేరు లేదా IP అడ్రస్"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant కనెక్షన్ సెట్టింగ్లు"
+      },
+      "port" : {
+        "label" : "Qdrant పోర్ట్",
+        "help" : "Qdrant కమ్యూనికేషన్ పోర్ట్ (సాధారణంగా 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Qdrant ప్రమాణీకరణకు api key"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS పారామీటర్",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai సెటప్ తప్పనిసరి దశలు పూర్తయ్యాయి...",
+        "detail" : "తప్పనిసరి సెటప్ దశలు పూర్తయ్యాయి కానీ మరికొన్నివ్వాల్సిన దశలు మిస్సయ్యాయి, వీటివల్ల మీ ఆర్గనైజేషన్ ఈ సాఫ్ట్‌వేర్‌ను పూర్తిగా ఉపయోగించలేరు"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai సెటప్‌లో కొన్ని తప్పనిసరి దశలు మిస్సయ్యాయి",
+        "detail" : "దయచేసి సెటప్ ప్రక్రియలో ఎరుపు రంగులోని దశలను సమీక్షించండి"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai సెటప్ OK!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "కోడ్",
+        "help" : "OAUTH2 ప్రమాణీకరణ/ఇంటిగ్రేషన్ కోడ్ (registrationId) వివరణను నమోదు చేయండి."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "OAUTH2 ప్రమాణీకరణ/ఇంటిగ్రేషన్ సమాచారం వివరణను నమోదు చేయండి."
+      },
+      "configurationType" : {
+        "label" : "కాన్ఫిగరేషన్ లక్ష్యం",
+        "help" : "ఈ సెట్టింగులు Gebo.ai లో ఆథెంటికేట్ చేయడానికి లేదా Gebo.ai కి ఒక మూడవ పక్ష వ్యవస్థలో క్లయింట్ కనెక్టివిటీ ఉండేందుకు ఉపయోగించాలా ఎంచుకోండి."
+      },
+      "authProvider" : {
+        "label" : "ప్రమాణీకరణదారుడు",
+        "help" : "OAUTH2 ప్రమాణీకరణందారును నమోదు చేయండి"
+      },
+      "issuerUri" : {
+        "label" : "ఇష్యూయర్ Uri",
+        "help" : "ప్రమాణీకరణందారుల OAUTH2 ఇష్యూయర్ URL ను నమోదు చేయండి"
+      },
+      "authorizationUri" : {
+        "label" : "ఆధికార URL",
+        "help" : "ప్రమాణీకరణందారుల OAUTH2 అధికరణ URL ను నమోదు చేయండి"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk సెట్ Uri",
+        "help" : "ప్రమాణీకరణందారుల OAUTH2 Jwk సెట్ url ను నమోదు చేయండి"
+      },
+      "userInfoUri" : {
+        "label" : "యూజర్ సమాచారం URL",
+        "help" : "ప్రమాణీకరణందారుల OAUTH2 యూజర్ సమాచారం URL ను నమోదు చేయండి"
+      },
+      "introspectionUri" : {
+        "label" : "ఇంట్రోస్పెక్షన్ Uri",
+        "help" : "ప్రమాణీకరణందారుల OAUTH2 ఇంట్రోస్పెక్షన్ URL ను నమోదు చేయండి"
+      },
+      "tokenUri" : {
+        "label" : "టోకెన్ URL",
+        "help" : "ప్రమాణీకరణందారుల OAUTH2 టోకెన్ URL ను నమోదు చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 ప్రవైడర్ URLs"
+      },
+      "MainPanel" : {
+        "label" : "కొత్త OAUTH2 ప్రమాణీకరణ/ఇంటిగ్రేషన్ సమాచారం చేర్చండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "క్లయింట్ ID",
+        "help" : "oauth2 ప్రోటోకాల్‌కు క్లయింట్ గుర్తింపు (oauth2 ధృవీకరించబడిన 3వ పక్ష సాఫ్ట్‌వేర్ అడ్మిన్ ప్రాంతంలో పొందాలి)"
+      },
+      "secret" : {
+        "label" : "సీక్రెట్ కీ",
+        "help" : "oauth2 ప్రోటోకాల్‌కు క్లయింట్ సీక్రెట్ (oauth2 ధృవీకరించబడిన 3వ పక్ష సాఫ్ట్‌వేర్ అడ్మిన్ ప్రాంతంలో పొందాలి)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence సిస్టమ్ కాన్ఫిగరేషన్ సృష్టించండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "Confluence సిస్టమ్ యొక్క వివరణను నమోదు చేయండి."
+      },
+      "CreateBtn" : {
+        "label" : "సృష్టించండి"
+      },
+      "username" : {
+        "label" : "Confluence వినియోగదారు పేరు",
+        "help" : "Confluence వినియోగదారు పేరు"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence వెర్షన్",
+        "help" : "Confluence వెర్షన్"
+      },
+      "baseUri" : {
+        "label" : "మూల ఇంటర్నెట్ చిరునామా",
+        "help" : "Onpremise ఇన్‌స్టాలేషన్ కోసం ప్రాథమిక confluence సిస్టమ్ చిరునామా లేదా confluence cloud సిస్టమ్ కోసం మీ సంస్థ యొక్క ప్రాథమిక url"
+      },
+      "password" : {
+        "label" : "Confluence పాస్‌వర్డ్",
+        "help" : "Confluence పాస్‌వర్డ్"
+      },
+      "token" : {
+        "label" : "Confluence cloud api కీ",
+        "help" : "Confluence CLOUD apikey ను confluence backoffic లో పొందండి, ఇక్కడ \"API Token for your Atlassian Account\" ని నమోదు చేయాలి."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ప్రచురించండి!",
+        "help" : "ఈ కంటెంట్లు సేవ్ చేసి, LLmలకు నాలెడ్జ్ బేస్‌లో అందుబాటులో ఉండేలా చేస్తుంది"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు"
+      },
+      "SettingsTab" : {
+        "label" : "సెట్టింగ్లు"
+      },
+      "MainPanel" : {
+        "label" : "Confluence కంటెంట్లను పంచుకోవడం"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్‌లు"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "కంటెంట్లకు ఆటోమేటిక్‌గా రూపొందించబడిన ప్రత్యేక కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఖాతాదారుల నిర్ణాయక వివరాలు అప్లోడ్ చేసిన confluence కంటెంట్ వివరణను నమోదు చేయండి."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence సిస్టమ్",
+        "help" : "ఇప్పటికే కాన్ఫిగర్ చేసిన Confluence సిస్టమ్ రిఫరెన్స్."
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్టు",
+        "help" : "పేరెంట్ ప్రాజెక్ట్ రిఫరెన్స్."
+      },
+      "openZips" : {
+        "label" : "Zip ఫైళ్ళను తెరవండి",
+        "help" : "Zip ఫైళ్లను తెరవడం మరియు కంటెంట్ ఎక్స్‌ట్రాక్షన్‌ను ప్రారంభించండి"
+      },
+      "tree" : {
+        "label" : "ఎంచుకున్న స్పేస్‌లు లేదా పేజీలు/ఉపపేజీలు",
+        "help" : "షేర్డ్ Confluence స్పేస్‌లు మరియు పేజీ కంటెంట్‌లు"
+      },
+      "programmedTables" : {
+        "label" : "కంటెంట్ అప్‌డేట్‌ల షెడ్యూల్ చెక్స్",
+        "help" : "మారిన కంటెంట్‌ను రీట్రివ్ ఆగ్మెంటెడ్ జనరేషన్ సిస్టమ్‌ను నవీకరించేందుకు షెడ్యూలింగ్‌ను కాన్ఫిగర్ చేయండి"
+      },
+      "catalogingCriteria" : {
+        "label" : "స్పేస్‌లు, పేజీలు మరియు ఉపపేజీల నిర్వహణ معیارాలు",
+        "help" : "Confluence కంటెంట్‌ను Gebo.aiతో పంచుకొనబడిన పదార్థాలలో స్పేస్‌లు, పేజీలు మరియు ఉపపేజీలు ఎలా ఆర్గనైజ్ చేయబడినవో వివరించండి"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "జనరల్ సెట్టింగ్లు"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "MainPanel" : {
+        "label" : "Confluence సిస్టమ్ ఎడిటింగ్"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "baseUri" : {
+        "label" : "మూల ఇంటర్నెట్ చిరునామా",
+        "help" : "Confluence సిస్టమ్ చిరునామాకు Url"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "Confluence సిస్టమ్‌కు ఆటోమేటిక్‌గా రూపొందించిన ప్రత్యేక కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "Confluence సిస్టమ్ వివరణను నమోదు చేయండి."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence వెర్షన్",
+        "help" : "Confluence వెర్షన్"
+      },
+      "secretCode" : {
+        "label" : "వాడిన ఐడెంటిటీ",
+        "help" : "Confluence సిస్టమ్‌కి ప్రాప్యత కోసం ఐడెంటిటీని ఎంచుకోండి లేదా సృష్టించండి"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "కొత్త గ్రూప్"
+      },
+      "NewUserBtn" : {
+        "label" : "కొత్త వినియోగదారు"
+      },
+      "UsersListPanel" : {
+        "label" : "వినియోగదారుల జాబితా"
+      },
+      "GroupsListPanel" : {
+        "label" : "గ్రూపుల జాబితా"
+      },
+      "SournameHeader" : {
+        "label" : "పేరు"
+      },
+      "UsernameHeader" : {
+        "label" : "ఉపయోగదారు పేరు"
+      },
+      "RolesHeader" : {
+        "label" : "పాత్రలు"
+      },
+      "NameHeader" : {
+        "label" : "పేరు"
+      },
+      "EditBtn" : {
+        "label" : "ఎడిట్ చేయు"
+      },
+      "DisabledHeader" : {
+        "label" : "డిసేబుల్ చేయబడింది"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "UserIds" : {
+        "placeholder" : "వాడులను ఎంచుకోండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "MainPanel" : {
+        "label" : "వినియోగదారుల గుంపును సవరించటం"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "వినియోగదారుల గుంపు యొక్క వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "ఒకే కోడ్",
+        "help" : "వినియోగదారుల గుంపు కోడ్‌ను నమోదు చేయండి"
+      },
+      "userIds" : {
+        "label" : "వాడుల జాబితా",
+        "help" : "గుంపులో పాల్గొనేవారి వాడులను ఎంచుకోండి"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "సృష్టించండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "jira సిస్టమ్ యొక్క వివరణను నమోదు చేయండి."
+      },
+      "MainPanel" : {
+        "label" : "jira సిస్టమ్ కాన్ఫిగరేషన్ సృష్టించండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "username" : {
+        "label" : "jira వినియోగదారు పేరు",
+        "help" : "jira వినియోగదారు పేరు"
+      },
+      "token" : {
+        "label" : "jira cloud api కీ",
+        "help" : "jira backoffic లో పొందిన jira CLOUD apikey ను ఇక్కడ \"API Token for your Atlassian Account\" ను నమోదు చేయాలి."
+      },
+      "baseUri" : {
+        "label" : "ప్రధాన ఇంటర్ణెట్ చిరునామా",
+        "help" : "onpremise ఇన్స్టాలేషన్ కోసం లేదా మీ సంస్థ jira cloud సిస్టమ్ కోసం ప్రధాన jira చిరునామా url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "PublishBtn" : {
+        "label" : "ప్రచురించండి!",
+        "help" : "దీనిని సేవ్ చేసి, ఈ విషయాలను LLm లకు knowledge baseలో అందుబాటులో ఉంచుతుంది"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "SettingsTab" : {
+        "label" : "అమరికలు"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "jira విషయాలను షేర్ చేస్తోంది"
+      },
+      "code" : {
+        "label" : "ఒక్కోటి కోడ్",
+        "help" : "విషయాల కోసం ఆటోమేటిక్‌గా రూపొందించిన ఒక్కటి కోడ్."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira సిస్టమ్",
+        "help" : "ఇప్పటికే కాన్ఫిగర్ చేయబడ్డ jira సిస్టమ్ యొక్క సూచన."
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్ట్",
+        "help" : "ప్యారెంట్ ప్రాజెక్ట్ యొక్క సూచన."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "అప్‌లోడ్‌ చేసిన jira అంశాల విషయాల వివరాన్ని నమోదు చేయండి."
+      },
+      "programmedTables" : {
+        "label" : "విషయాలకు నవీకరణలను పరీక్షించే షెడ్యూల్",
+        "help" : "మారిన విషయాలను సెట్ ఏజెనరేషన్ సిస్టమ్‌ను తాజాకి ఉంచే షెడ్యూల్‌ని కాన్ఫిగర్ చేయండి"
+      },
+      "openZips" : {
+        "label" : "జిప్ ఫైళ్లు తెరుస్తుంది",
+        "help" : "జిప్ ఫైల్స్‌ని తెరవడాన్ని మరియు విషయం ఎత్తేను ప్రారంభించండి"
+      },
+      "tree" : {
+        "label" : "ఎంచుకున్న స్పేసెస్ లేదా పేజీలు/సబ్‌పేజీలు",
+        "help" : "షేర్ చేసిన jira ప్రాజెక్ట్స్ మరియు టిక్కెట్ల హైయరకీ వివరాలు"
+      },
+      "catalogingCriteria" : {
+        "label" : "స్పేసెస్, పేజీలు మరియు సబ్‌పేజీల నిర్వహణ ప్రమాణాలు",
+        "help" : "Gebo.ai తో షేర్ చేయబడిన jira విషయాలలో స్పేసెస్, పేజీలు మరియు సబ్‌పేజీల నిర్వహణ ప్రమాణాలు ఎలా చేయబడిందో ఇక్కడ వివరించండి"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "jira సిస్టమ్ కు వివరాన్ని నమోదు చేయండి."
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "MainPanel" : {
+        "label" : "jira సిస్టమ్‌ను ఎడిట్ చేయడం"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "baseUri" : {
+        "label" : "ప్రధాన ఇంటర్ణెట్ చిరునామా",
+        "help" : "jira సిస్టమ్ యొక్క ప్రధాన చిరునామా url"
+      },
+      "code" : {
+        "label" : "ఒక్కోటి కోడ్",
+        "help" : "jira సిస్టమ్ కోసం ఆటోమేటిక్‌గా రూపొందించిన ఒక్కటి కోడ్."
+      },
+      "secretCode" : {
+        "label" : "వాడిన విలక్షణత",
+        "help" : "jira సిస్టమ్‌ను యాక్సెస్ చేయడానికి విలక్షణతను ఎంచుకోండి లేదా సృష్టించండి"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "SharPpoint/OneDrive వ్యవస్థ యొక్క వివరణను నమోదు చేయండి."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint వెర్షన్",
+        "help" : "sharepoint వెర్షన్"
+      },
+      "secret" : {
+        "label" : "సీక్రెట్ కీ",
+        "help" : "ఈ యాప్‌కి Microsoft \"entra\" ఉత్పత్తిలో నమోదు చేసిన Oauth2 క్లయింట్ సీక్రెట్ (microsoft cloud admin consoleలో పొందాలి)"
+      },
+      "clientId" : {
+        "label" : "క్లయింట్ ID",
+        "help" : "ఈ యాప్‌కి Microsoft \"entra\" ఉత్పత్తిలో నమోదు చేసిన Oauth2 క్లయింట్ గుర్తింపు (microsoft cloud admin consoleలో పొందాలి)"
+      },
+      "tenantId" : {
+        "label" : "టెనంట్ ID",
+        "help" : "మీ సంస్థ కోసం Microsoft \"entra\" ఉత్పత్తిలో Oauth2 టెనంట్ ఐడెంటిఫైయర్ (microsoft cloud admin consoleలో పొందాలి)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai కోసం Microsoft oauth2 యాప్ నమోదు సమాచారం"
+      },
+      "CreateBtn" : {
+        "label" : "సృష్టించు"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయు"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive వ్యవస్థ కాన్ఫిగరేషన్ సృష్టించండి"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "రద్దు చేయు"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "PublishBtn" : {
+        "label" : "ప్రచురించు!",
+        "help" : "సేవ్ చేసి, ఈ కంటెంట్‌ను LLm యొక్క knowledge base లో అందుబాటులో ఉంచుతుంది"
+      },
+      "SettingsTab" : {
+        "label" : "సెట్టింగ్‌లు"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive కంటెంట్‌లు పంచుకోవడం"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్లు"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "code" : {
+        "label" : "ఒకే కోడ్",
+        "help" : "స్వయంచాలకంగా ఉత్పత్తి చేసిన కంటెంట్‌ల యొక్క యునిక్ కోడ్."
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్ట్",
+        "help" : "పేరెంట్ ప్రాజెక్ట్ రిఫరెన్స్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "SharePoint/OneDrive ప్రవేశాల డేటా సోర్స్‌ల వివరణను నమోదు చేయండి."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint వ్యవస్థ",
+        "help" : "ఇప్పటికే కన్ఫిగర్ చేసిన SharePoint/OneDrive వ్యవస్థ రిఫరెన్స్."
+      },
+      "openZips" : {
+        "label" : "Zip ఫైళ్లను ఓపెన్ చేయి",
+        "help" : "Zip ఫైళ్లను ఓపెన్ చేసి కంటెంట్ ఎక్స్ట్రాక్షన్ ప్రారంభించండి"
+      },
+      "tree" : {
+        "label" : "ఎంచుకున్న Sharepoint సైట్‌లు/పేజీలు/ఉపపేజీలు లేదా OneDrive డ్రైవ్‌లు/ఫోల్డర్లు/ఫైళ్లు",
+        "help" : "పంచుకున్న sharepoint/OneDrive కంటెంట్‌లు"
+      },
+      "programmedTables" : {
+        "label" : "కంటెంట్ నవీకరణలను తనిఖీ చేసే షెడ్యూల్‌",
+        "help" : "తరచూ మారే కంటెంట్‌ల కోసం షెడ్యూల్‌ను సెటప్ చేయండి రెటికీవ్ ఆగ్మెంటెడ్ జనరేషన్ సిస్టమ్‌ను నవీకరిస్తుంది"
+      },
+      "catalogingCriteria" : {
+        "label" : "స్పేస్‌లు, పేజీలు మరియు ఉపపేజీల ఆర్గనైజేషన్ క్రైటీరియాలు",
+        "help" : "Sharepoint కంటెంట్‌లను Gebo.aiతో పంచుకునే సమయంలో స్పేస్‌లు, పేజీలు, ఉపపేజీలను ఏర్పాటు చేసిన విధానాన్ని ఇక్కడ వివరించండి"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint వ్యవస్థను ఎడిట్ చేయడం"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "సాధారణ సెట్టింగ్‌లు"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయు"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "secretCode" : {
+        "label" : "వినియోగించిన గుర్తింపు",
+        "help" : "Sharepoint వ్యవస్థను యాక్సెస్ చేయడానికి గుర్తింపును ఎంచుకోండి లేదా సృష్టించండి"
+      },
+      "code" : {
+        "label" : "ఒకే కోడ్",
+        "help" : "స్వయంచాలకంగా ఉత్పత్తి చేసిన sharepoint వ్యవస్థ యొక్క యునిక్ కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "sharepoint వ్యవస్థ యొక్క వివరాలను నమోదు చేయండి."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint వెర్షన్",
+        "help" : "sharepoint వెర్షన్"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "తొలగించు"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "సాధారణ సమాచారం/విషయాల సెట్టింగులు"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms సెట్టింగులు"
+      },
+      "code" : {
+        "label" : "ప్రత్యేక కేడి",
+        "help" : "స్వయంచాలకంగా ఉత్పత్తి చేయబడిన యునీక్ ఆకోడ్ యొక్క నాలెడ్జ్ గ్రాఫ్ డేటా ఎక్స్ట్రాక్షన్ దశ"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/నాలెడ్జ్ ఎక్స్ట్రాక్షన్ కాన్ఫిగరేషన్"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఈ నాలెడ్జ్ గ్రాఫ్ డేటా ఎక్స్ట్రాక్షన్ దశ కాన్ఫిగరేషన్ వివరాన్ని నమోదు చేయండి"
+      },
+      "extractionPrompt" : {
+        "label" : "సమాచారం యాజనం ప్రాంప్ట్",
+        "help" : "యూనిటీలను/ఈవెంట్లు/సంబంధాలు మరియు అలియాస్లను యాజించాలని లార్జ్ లాంగ్వేజ్ మోడల్‌కి ప్రాంప్ట్"
+      },
+      "usedModelConfiguration" : {
+        "label" : "డేటా ఎక్స్ట్రాక్షన్ కోసం వాడిన LLM",
+        "help" : "నాలెడ్జ్ ఎక్స్ట్రాక్షన్ కోసం వాడిన లార్జ్ లాంగ్వేజ్ మోడల్‌ను పేర్కొనండి, ఎవరూ ఎంచుకోనిచేత డిఫాల్ట్ వాడబడుతుంది."
+      },
+      "graphRagAllSources" : {
+        "label" : "అన్ని డేటా సోర్సులపై graph rag ని వర్తించండి",
+        "help" : "నిజం అయితే అన్ని నాలెడ్జ్ బేస్‌లు/ప్రాజెక్ట్‌లు/డేటా సోర్సులు నాలెడ్జ్ ఎక్స్ట్రాక్షన్ కోసం ప్రాసెస్ చేయబడతాయి, లేకపోతే వివరంగా కాన్ఫిగర్ చేసినవే ప్రాసెస్ చేయబడతాయి"
+      },
+      "defaultModel" : {
+        "label" : "డిఫాల్ట్ లార్జ్ లాంగ్వేజ్ మోడల్",
+        "help" : "డిఫాల్ట్ లార్జ్ లాంగ్వేజ్ మోడల్ నాలెడ్జ్ ఎక్స్ట్రాక్షన్ కోసం వాడబడుతుంది"
+      },
+      "processEveryDocument" : {
+        "label" : "అన్ని ఫైళ్ళపై graph rag ని వర్తించండి",
+        "help" : "graph rag అల్గోరిథమ్లు అన్ని ఫైళ్లకు వర్తించబడతాయి. ఇది సిస్టమ్ చేయగలిగే విశ్లేషణ వివరాలను మెరుగుపరుస్తుంది కానీ ప్రాసెస్ చేయడానికి ఖర్చు మరియు సమయం పెరుగుతుంది"
+      },
+      "contentSelectionFilter" : {
+        "label" : "graphrag ప్రాసెసింగ్ కోసం ఫైల్ ఎంపిక ప్రమాణాలు",
+        "help" : "graphrag సమాచారం యాజన పైపును పంపే ఫైల్‌పై ప్రమాణాలను సవరించండి, అనవసరం కనీసం ఒక ఫైల్ పేరు మరియు ప్రమాణం మరియు/లేదా ఫైల్ రకం మరియు/లేదా గరిష్ట ఫైల్ సైజుకు బైట్లలో పరిమితి మరియు/లేదా చివరి మార్పిడి వయస్సు రోజుల్లో ఎంచుకోండి"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "ఫైల్ రకాల్ని ఎంచుకోండి"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ఫైల్ పేరు తనిఖీ ప్రమాణాలు"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "చివరి సవరణ గడువు (రోజుల్లో)"
+      },
+      "nameFilter" : {
+        "placeholder" : "ఫైల్ పేరు"
+      },
+      "maxFileSize" : {
+        "placeholder" : "గరిష్ఠ ఫైల్ పరిమాణం (బైట్స్‌లో)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "MainPanel" : {
+        "label" : "నాలెడ్జ్ బేస్ ను సవరించండి"
+      },
+      "AccessSettingsTab" : {
+        "label" : "నాలెడ్జ్ బేస్ ప్రాప్యత సెట్టింగులు"
+      },
+      "code" : {
+        "label" : "ఒకే కోడ్",
+        "help" : "నాలెడ్జ్ బేస్ యొక్క ఆటోమేటిక్గా జెనరేట్ చేయబడిన ప్రత్యేక కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "నాలెడ్జ్ బేస్ వివరణను నమోదు చేయండి."
+      },
+      "embeddingModelReferences" : {
+        "label" : "ఉపయోగించే ఎంబెడ్డింగ్ మోడళ్ళు (సిస్టమ్ డిఫాల్ట్ కోసం ఖాళీగా వదలండి)",
+        "help" : "నాలెడ్జ్ బేస్ కోసం ఎంబెడ్డింగ్ మోడళ్ళు, ఖాళీగా వదలితే డిఫాల్ట్ మోడల్ ఉపయోగించబడుతుంది."
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "IndexBtn" : {
+        "label" : "ఇండెక్స్",
+        "help" : "కంటెంట్ మళ్లీ ఇండెక్స్ చేయండి"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "ప్రాజెక్టు లేదా అంశాన్ని సవరించండి"
+      },
+      "code" : {
+        "label" : "ఒకే కోడ్",
+        "help" : "ప్రాజెక్టు యొక్క ఆటోమేటిక్గా జెనరేట్ చేయబడిన ప్రత్యేక కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ప్రాజెక్టు వివరణను నమోదు చేయండి."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "నాలెడ్జ్ బేస్",
+        "help" : "నాలెడ్జ్ బేస్."
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "IndexBtn" : {
+        "label" : "ఇండెక్స్",
+        "help" : "కంటెంట్ మళ్లీ ఇండెక్స్ చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ అంశం/ప్రాజెక్టుని జోడించండి",
+        "help" : "కొత్తదాన్ని జోడించండి..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "ప్రతి ఒక్కరు ఉపయోగించవచ్చు",
+        "help" : "ప్రతి ఒక్కరూ ఉపయోగించవచ్చు"
+      },
+      "accessibleGroups" : {
+        "label" : "గుట్టుల జాబితా",
+        "help" : "అనుమతించబడిన గుట్టులను ఎంచుకోండి"
+      },
+      "accessibleUsers" : {
+        "label" : "వాడుల జాబితా",
+        "help" : "అనుమతించబడిన వాడులను ఎంచుకోండి"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "డ్యాష్‌బోర్డ్"
+      },
+      "LLMSTab" : {
+        "label" : "చాట్ & ఎంబెడ్డింగ్ కోసం LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag చాట్ ప్రొఫైల్‌లు/మోడల్ ప్రాంప్ట్‌లు"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "నాలెడ్జ్ బేస్‌లు & ప్రాజెక్ట్‌లు"
+      },
+      "UsersGroupTab" : {
+        "label" : "వినియోగదారులు మరియు గ్రూప్లు"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai మాడ్యూల్ కాన్ఫిగ్"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్లు"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "కాన్‌ఫిగర్ చేయండి"
+      },
+      "ConfigureBtn" : {
+        "label" : "కాన్‌ఫిగర్ చేయండి"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "కొత్త ప్రాంప్ట్ కాన్ఫిగరేషన్"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "కొత్త చాట్ ప్రొఫైల్"
+      },
+      "MainPanel" : {
+        "label" : "రిట్రీవల్ ఆగ్మెంటెడ్ జనరేషన్ చాట్ ప్రొఫైల్‌లు"
+      },
+      "PromptsPanel" : {
+        "label" : "ప్రాంప్ట్‌ల సేకరణ & డిఫాల్ట్ ప్రాంప్ట్‌లు"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "నాలెడ్జ్ బేస్‌లు"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "ConfigureBtn1" : {
+        "label" : "అமைకి"
+      },
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "క్రొత్త నాలెడ్జ్ బేస్"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "కొత్త ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "కొత్త చాట్ మోడల్ కాన్ఫిగరేషన్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      },
+      "ModelHeader" : {
+        "label" : "మోడల్"
+      },
+      "ModelProviderHeader" : {
+        "label" : "మోడల్ ప్రొవైడర్"
+      },
+      "ConfigureBtn" : {
+        "label" : "కాన్ఫిగర్ చేయండి"
+      },
+      "CodeHeader2" : {
+        "label" : "కోడ్"
+      },
+      "DescriptionHeader2" : {
+        "label" : "వివరణ"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "మోడల్ ప్రొవైడర్"
+      },
+      "ConfigureBtn2" : {
+        "label" : "కాన్ఫిగర్ చేయండి"
+      },
+      "ModelHeader2" : {
+        "label" : "మోడల్"
+      },
+      "ChatmodelsZone" : {
+        "label" : "కాన్ఫిగర్ చేసిన చాట్ మోడల్స్"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "కాన్ఫిగర్ చేసిన ఎంబెడింగ్ మోడల్స్"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "మోడల్‌ని పరీక్షిస్తోంది"
+      },
+      "TestChatBtn" : {
+        "label" : "చాట్‌ని పరీక్షించండి"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు OpenAI టోకెన్‌ను ఎంచుకోండి"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి OpenAI చాట్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "GeneralInfosTab" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ఆధునిక సెట్టింగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "మోడల్ యాక్సెస్ సెట్టింగ్స్"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు OpenAI టోకెన్‌ను ఎంచుకోండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI ఎంబెడింగ్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి OpenAI ఎంబెడింగ్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ ఎంబెడింగ్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, ఎంబెడింగ్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "baseUrl" : {
+        "label" : "బేస్ ollama సర్వర్ అడ్రస్",
+        "help" : "బేస్ అడ్రస్ (ఉదా: http://servername:234/) కు ollama లోకల్ లేదా లాన్ సర్వర్ స్పందిస్తుంది."
+      },
+      "choosedModel" : {
+        "label" : "Ollama చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి Ollama చాట్ మోడల్‌ను ఎంచుకోండి.",
+        "placeholder" : "ఒక మోడల్‌ని ఎంచుకోండి"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు Ollama టోకెన్‌ను ఎంచుకోండి (ఐచ్ఛికం)"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "MainPanel" : {
+        "label" : "Ollama లోకల్ (లేదా లాన్) సర్వర్ చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు Anthropic టోకెన్‌ను ఎంచుకోండి"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి Anthropic చాట్ మోడల్‌ను ఎంచుకోండి.",
+        "placeholder" : "ఒక మోడల్‌ని ఎంచుకోండి"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ఆధునిక సెట్టింగ్స్"
+      },
+      "GeneralInfosTab" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "మోడల్ యాక్సెస్ సెట్టింగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు MistralAI టోకెన్‌ను ఎంచుకోండి"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి MistralAI చాట్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "GeneralInfosTab" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ఆధునిక సెట్టింగ్స్"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "మోడల్ యాక్సెస్ సెట్టింగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి Google Vertex AI చాట్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు Google Vertex AI టోకెన్‌ను ఎంచుకోండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "TabGeneralInfos" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "మోడల్ యాక్సెస్ సెట్టింగ్స్"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "ఆధునిక సెట్టింగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు Deepseek టోకెన్‌ను ఎంచుకోండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి Deepseek చాట్ మోడల్‌ను ఎంచుకోండి.",
+        "placeholder" : "ఒక మోడల్‌ని ఎంచుకోండి"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ఆధునిక సెట్టింగ్స్"
+      },
+      "GeneralInfosTab" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "మోడల్ యాక్సెస్ సెట్టింగ్స్"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "baseUrl" : {
+        "label" : "చాట్ మోడల్ API బేస్ సర్వర్ అడ్రస్",
+        "help" : "చాట్ మోడల్ యొక్క బేస్ అడ్రస్."
+      },
+      "apiSecretCode" : {
+        "label" : "చాట్ మోడల్ API టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు చాట్ మోడల్ API టోకెన్‌ను ఎంచుకోండి (ఐచ్ఛికం)"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ చాట్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, చాట్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "choosedModel" : {
+        "label" : "చాట్ మోడల్ చాట్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి చాట్ మోడల్ చాట్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "GeneralInfosTab" : {
+        "label" : "సాధారణ సమాచారం"
+      },
+      "TitleFragment" : {
+        "label" : "చాట్ మోడల్ ప్రొవైడర్‌ను ఎడిట్ చేయడం:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ఆధునిక సెట్టింగ్స్"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "మోడల్ యాక్సెస్ సెట్టింగ్స్"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "MainPanel" : {
+        "label" : "Ollama లోకల్ (లేదా లాన్) ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు Ollama టోకెన్‌ను ఎంచుకోండి"
+      },
+      "choosedModel" : {
+        "label" : "Ollama ఎంబెడింగ్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి Ollama ఎంబెడింగ్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ ఎంబెడింగ్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, ఎంబెడింగ్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "baseUrl" : {
+        "label" : "బేస్ ollama సర్వర్ అడ్రస్",
+        "help" : "బేస్ అడ్రస్ (ఉదా: http://servername:234/) కు ollama లోకల్ లేదా లాన్ సర్వర్ స్పందిస్తుంది."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI ఎంబెడింగ్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి MistralAI ఎంబెడింగ్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ ఎంబెడింగ్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, ఎంబెడింగ్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు MistralAI టోకెన్‌ను ఎంచుకోండి"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI ఎంబెడింగ్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి Google Vertex AI ఎంబెడింగ్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ ఎంబెడింగ్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, ఎంబెడింగ్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు Google Vertex AI టోకెన్‌ను ఎంచుకోండి"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయండి"
+      },
+      "TitleFragment" : {
+        "label" : "ఎంబెడింగ్ మోడల్ ప్రొవైడర్‌ను ఎడిట్ చేయడం:"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు వివరణను నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "ఎంబెడింగ్ మోడల్ కాన్ఫిగరేషన్‌కు ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్"
+      },
+      "choosedModel" : {
+        "label" : "ఎంబెడింగ్ మోడల్ ఎంపిక",
+        "help" : "పనిచేయడానికి ఎంబెడింగ్ మోడల్‌ను ఎంచుకోండి."
+      },
+      "baseUrl" : {
+        "label" : "ఎంబెడింగ్ మోడల్ API సర్వర్ అడ్రస్",
+        "help" : "ఎంబెడింగ్ మోడల్ సర్వర్ యొక్క బేస్ అడ్రస్."
+      },
+      "defaultModel" : {
+        "label" : "దీనిని డిఫాల్ట్ ఎంబెడింగ్ మోడల్‌గా సెట్కు చేయండి",
+        "help" : "సత్యంగా ఉంటే, ఎంబెడింగ్ మోడల్ సూచించలేదు అంటే ఇది డిఫాల్ట్ గా ఉపయోగించబడుతుంది"
+      },
+      "apiSecretCode" : {
+        "label" : "ఎంబెడింగ్ మోడల్ API టోకెన్",
+        "help" : "ఈ మోడల్‌కు ఉపయోగించేందుకు ఎంబెడింగ్ మోడల్ API టోకెన్‌ను ఎంచుకోండి"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "చాట్ కాన్ఫిగరేషన్ సమాచారాలు"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ఈ చాట్ సెషన్‌ను తొలగించండి"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "చాట్ సెషన్‌కు పేరు మార్చండి"
+      },
+      "QueryControl" : {
+        "placeholder" : "చాట్ బాట్ కోసం సందేశాన్ని వ్రాయండి"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "description" : {
+        "label" : "చాట్ వివరణ",
+        "help" : "చాట్ సెషన్ వివరణను ఇవ్వండి."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "ఉపయోగించిన మోడల్",
+        "help" : "మోడల్ కోడ్"
+      },
+      "providerId" : {
+        "label" : "చాట్ మోడల్ ప్రొవైడర్",
+        "help" : "LLms ప్రొవైడర్ డ్రైవర్"
+      },
+      "functions" : {
+        "label" : "చాట్ మోడల్ కాల్ చేయదగిన విధులు",
+        "help" : "చాట్ మోడల్‌కు అందుబాటులో ఉన్న విధుల జాబితా"
+      },
+      "NameCol" : {
+        "label" : "పేరు"
+      },
+      "DescriptionCol" : {
+        "label" : "వివరణ"
+      },
+      "kbases" : {
+        "label" : "అందుబాటులో ఉన్న నాలెడ్జ్ బేసెస్",
+        "help" : "ఈ RAG చాట్‌లో ఉపయోగించిన నాలెడ్జ్ బేసెస్ జాబితా"
+      },
+      "CloseBtn" : {
+        "help" : "మూసివేయండి"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "రికార్డ్ చేయండి",
+        "help" : "ఆడియో ట్రాక్ ను రికార్డ్ చేయడం ప్రారంభించండి మరియు పంపండి"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "డేటాను రీలోడ్ చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "SelectHeader" : {
+        "label" : "ఎంచుకోండి"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "ముగింపు తేదీ/సమయం"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "ప్రారంభ తేదీ/సమయం"
+      },
+      "ProcessingHeader" : {
+        "label" : "ప్రాసెసింగ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      },
+      "FinishedHeader" : {
+        "label" : "ముగిసింది"
+      },
+      "WithErrorHeader" : {
+        "label" : "లోపంతో"
+      },
+      "LogTableComponent" : {
+        "help" : "ఈ షేర్డ్ ఫైల్‌సిస్టం ప్రాంతం ఇంజెషన్ లాగ్"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "ప్రక్రియల గణాంకాలు"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "CloseBtn" : {
+        "label" : "మూసివేయి"
+      },
+      "PublicationLogTab" : {
+        "label" : "ప్రచురణ లాగ్"
+      },
+      "MainPanel" : {
+        "label" : "ప్రచురణ లాగ్"
+      },
+      "actualStatus" : {
+        "label" : "స్థితి",
+        "help" : "పని యొక్క స్థితి, ఇంకా నడుస్తోంది, ముగిసింది లేదా లోపాలతో ముగిసింది."
+      },
+      "publishingSystem" : {
+        "label" : "ప్రచురించిన కంటెంట్ కాన్ఫిగరేషన్",
+        "help" : "ప్రచురించిన కంటెంట్ సమాచారం"
+      },
+      "startDateTime" : {
+        "label" : "ప్రారంభ తేదీ/సమయం",
+        "help" : "కంటెంట్ సమకాలీకరణ పనిని ప్రారంభించిన తేదీ మరియు సమయం"
+      },
+      "endDateTime" : {
+        "label" : "ముగింపు తేదీ/సమయం",
+        "help" : "కంటెంట్ సమకాలీకరణ పనికి ముగిసిన తేదీ మరియు సమయం"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "పూర్తిగా ప్రాసెస్ కాలేదు"
+      },
+      "ProcessedCompletely" : {
+        "label" : "పూర్తిగా ప్రాసెస్ అయింది"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "ఎంబెడింగ్ మరియు మొత్తం డాక్యుమెంట్ల సంఖ్య"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "మరిన్ని వివరాలు"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "ప్రాంప్ట్‌ను సృష్టించండి"
+      },
+      "PromptWizardBtn" : {
+        "label" : "ప్రాంప్ట్ విజార్డ్",
+        "help" : "మీ లక్ష్యాల కోసం ప్రాంప్ట్‌ను స్వయంగా రూపొందించేందుకు LLM ఉపయోగించడానికి దీన్ని ఉపయోగించండి"
+      },
+      "acceptPrompt" : {
+        "label" : "ప్రాంప్ట్‌ను అంగీకరించండి"
+      },
+      "promptWizardUI" : {
+        "label" : "ప్రాంప్ట్ టెంప్లేట్ రూపొందింపు విజార్డ్"
+      },
+      "cancel" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "response" : {
+        "label" : "సిఫార్సైన ప్రాంప్ట్ టెంప్లేట్",
+        "help" : "మీ లక్ష్యానికి రూపొందించిన టెంప్లేట్ టెక్స్ట్ (మీరు దీన్ని మార్చవచ్చు లేదా సరిదిద్దవచ్చు)"
+      },
+      "modelCode" : {
+        "label" : "ఉపయోగించదగిన చాట్ మోడల్",
+        "help" : "ప్రాంప్ట్ టెంప్లేట్ తయారీకి మీరు అడగదలచిన చాట్ మోడల్‌ను ընտրించండి"
+      },
+      "query" : {
+        "label" : "ప్రాంప్ట్ టెంప్లేట్ అభ్యర్థన",
+        "help" : "AI వినియోగదారుని మద్దతు ఇచ్చే లక్ష్యం ఏమిటో మీరు రెండవ వ్యక్తిలో స్పష్టీకరించండి"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "టెంపరేచర్",
+        "help" : "మోడల్ స్పందించే టెంపరేచర్, 0 నుండి 1 వరకు (ఖచ్చితంగా తెలియకపోతే ఖాళీగా వదలండి)"
+      },
+      "contextLength" : {
+        "label" : "కాంటెక్స్ట్ పొడవు (టోకెన్లు)",
+        "help" : "ఏఐ మోడల్ ప్రాసెస్ చేయడంలో పట్టుకోగల టెక్స్ట్ పరిమాణం (సెట్టింగ్ ఇవ్వకపోతే 1047576 ఉపయోగించబడుతుంది)"
+      },
+      "topP" : {
+        "label" : "టాప్‌పి",
+        "help" : "టాప్‌పి పరామితి, 0 నుండి 1 వరకు (ఖచ్చితంగా తెలియకపోతే ఖాళీగా వదలండి)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "ఈ మోడల్‌కి ఆకృతీకరించబడిన ఫంక్షన్లు",
+        "help" : "చాట్ సమయంలో మోడల్ ఉపయోగించగలిగే ఫంక్షనాలిటీలు"
+      },
+      "defaultModelPrompt" : {
+        "label" : "డిఫాల్ట్ మోడల్ ప్రాంప్ట్",
+        "help" : "చాట్ మోడల్ కోసం డిఫాల్ట్ ప్రాంప్ట్‌ను సవరించండి."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "గురుత్వాన్ని వివరించండి."
+      },
+      "code" : {
+        "label" : "అనన్య కోడ్",
+        "help" : "గురుత్వానికి ఆటోమేటిక్‌గా రూపొందించిన అనన్య కోడ్."
+      },
+      "secretType" : {
+        "label" : "గురుత్వ రకం",
+        "help" : "రిమోట్ సిస్టమ్‌ కోసం సృష్టించాల్సిన గురుత్వ రకాన్ని ఎంచుకోండి"
+      },
+      "InsertBtn" : {
+        "label" : "చేర్చండి"
+      },
+      "token" : {
+        "label" : "టోకెన్",
+        "help" : "టోకెన్‌ను నమోదు చేయండి."
+      },
+      "user" : {
+        "label" : "వినియోగదారు",
+        "help" : "టోకెన్ ద్వారా సూచించబడిన వినియోగదారిని నమోదు చేయండి."
+      },
+      "MainPanel" : {
+        "label" : "గురుత్వాన్ని సృష్టిస్తోంది"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "username" : {
+        "label" : "వినియోగదారి పేరు",
+        "help" : "వినియోగదారి పేరును నమోదు చేయండి."
+      },
+      "password" : {
+        "label" : "పాస్వర్డ్",
+        "help" : "పాస్వర్డ్ను నమోదు చేయండి."
+      },
+      "email" : {
+        "label" : "ఇ-మెయిల్/వినియోగదారి పేరు",
+        "help" : "ssh key కు సంబంధించిన ఇ-మెయిల్ లేదా వినియోగదారి పేరును నమోదు చేయండి."
+      },
+      "key" : {
+        "label" : "రహస్య కీ",
+        "help" : "ప్రైవేట్ కీ ఫైలును తెరిచి, ఈ టెక్స్ట్ ప్రాంతంలో కాపీ చేయండి."
+      },
+      "passphrase" : {
+        "label" : "కీ పాస్‌ఫ్రేజ్",
+        "help" : "కీ పాస్‌ఫ్రేజ్‌ను నమోదు చేయండి."
+      },
+      "pub" : {
+        "label" : "పబ్లిక్ కీ",
+        "help" : "పబ్లిక్ కీ ఫైలును తెరిచి, ఈ టెక్స్ట్ ప్రాంతంలో కాపీ చేయండి."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "వినూత్న కోడ్",
+        "help" : "స్వయంచాలకంగా ఉత్పత్తి చేసిన వినూత్న కంటెంట్ కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ఫైల్ సిస్టమ్ ఎంట్రీకి అప్‌లోడ్ చేసిన కంటెంట్ పరిచయాన్ని నమోదు చేయండి."
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్ట్",
+        "help" : "పేరెంట్ ప్రాజెక్ట్ సూచన."
+      },
+      "upload" : {
+        "label" : "కంటెంట్‌ను అప్‌లోడ్ చేయండి",
+        "help" : "బ్రౌజ్ బటన్‌పై క్లిక్ చేసి zip ఫైల్‌లు లేదా ఇతర ఫైల్‌లను ఎంచుకోండి"
+      },
+      "openZips" : {
+        "label" : "zip ఫైళ్లను తెరవండి",
+        "help" : "zip ఫైళ్లు తెరవడం మరియు కంటెంట్‌ను వెలికితీయడం ఎనేబుల్ చేయండి"
+      },
+      "PublishBtn" : {
+        "label" : "ప్రచురు చేయండి!",
+        "help" : "సేవ్ చేసి ఈ కంటెంట్‌ను LLm యొక్క నాలెడ్జ్ బేస్‌లో అందుబాటులో ఉంచండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "అప్‌లోడ్ అయిన కంటెంట్‌ను సవరించండి"
+      },
+      "SettingsTab" : {
+        "label" : "సెట్టింగ్స్"
+      },
+      "buildSystemsRefs" : {
+        "label" : "బిల్డ్ సిస్టమ్‌లను కాన్ఫిగర్ చేయండి",
+        "help" : "మెటా ఇన్ఫర్మేషన్ మరియు అదనపు ఆర్టిఫాక్ట్ వివరాల కోసం చూడాల్సిన బిల్డ్/ప్యాకేజింగ్ సిస్టమ్‌ల జాబితా (సాఫ్ట్‌వేర్ కోడ్ ఏదీ లేకపోతే ఖాళీగా ఉంచండి)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "ఎంచుకున్న అంశాలు"
+      },
+      "ChooseOk" : {
+        "label" : "సరే"
+      },
+      "ChooseCancel" : {
+        "label" : "రద్దు"
+      },
+      "EditBtn" : {
+        "help" : "ఎంపిక చేసినవాటిని మార్చు"
+      },
+      "ChooseElementsArea" : {
+        "label" : "అంశాలను ఎంచుకోండి"
+      },
+      "VFileSystemSelector" : {
+        "label" : "అంశాలను ఎంచుకోండి"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "షెడ్యూల్‌ను సవరించండి"
+      },
+      "ConfirmBtn" : {
+        "label" : "నిర్ధారించండి"
+      },
+      "AddBtn" : {
+        "label" : "+చేర్చండి"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ప్రచురించండి!",
+        "help" : "సమాచారాన్ని సేవ్ చేసి, ఈ విషయాలను గుర్తింపు ఆధారిత పరిజ్ఞాన భండారంలో LLmలకు అందుబాటులో ఉంచుతుంది"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "వెనక్కు తీసేయండి"
+      },
+      "SettingsTab" : {
+        "label" : "సెట్టింగ్స్"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "సోర్స్ కోడ్ వినియోగం"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్‌లు"
+      },
+      "MainPanel" : {
+        "label" : "ప్రస్తుత ఫైల్ సిస్టమ్ కంటెంట్‌ను సవరించడం"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "అప్‌లోడ్ చేసిన ఫైల్ సిస్టమ్ ఎంట్రీ విషయం వివరాన్ని నమోదు చేయండి."
+      },
+      "openZips" : {
+        "label" : "జిప్ ఫైళ్లను ఓపెన్ చేయండి",
+        "help" : "జిప్ ఫైల్స్‌ను తెరవడానికి మరియు లోపలి విషయాలను వెలికితీయడానికి అనుమతించండి"
+      },
+      "code" : {
+        "label" : "యునిక్ కోడ్",
+        "help" : "స్వయంగా రూపొందించబడిన ప్రత్యేక కోడ్."
+      },
+      "tree" : {
+        "label" : "ఎంచుకున్న ఫైళ్ళు లేదా ఫోల్డర్లు",
+        "help" : "సర్వర్లో కలిగిన పంచబడిన ఫైల్ సిస్టమ్ ఫైళ్ళు లేదా డైరెక్టరీలు"
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్ట్",
+        "help" : "పెరెంట్ ప్రాజెక్ట్ సూచన."
+      },
+      "programmedTables" : {
+        "label" : "విషయాల నవీకరణల చెక్‌ల షెడ్యూల్",
+        "help" : "తాజాపరిచిన విషయాలు సమాచారం పొందడానికి షెడ్యూల్‌ను అమర్చండి"
+      },
+      "catalogingCriteria" : {
+        "label" : "ఫోల్డర్ల వ్యవస్థీకరణ ప్రమాణాలు",
+        "help" : "మీరు Gebo.aiతో భాగస్వామ్యం చేస్తున్న ఫైల్ సిస్టమ్ ప్రాంతంలో ఫోల్డర్లు ఎలా వ్యవస్థీకరించారో వివరించండి"
+      },
+      "buildSystemsRefs" : {
+        "label" : "బిల్డ్ సిస్టంలను అమర్చండి",
+        "help" : "మెటా సమాచారం మరియు అదనపు ఆర్టిఫాక్ట్స్ కోసం పూర్తయిన/ప్యాకేజింగ్ సిస్టంల జాబితా (సాఫ్ట్‌వేర్ కోడ్ లేనట్లయితే ఖాళీగా వదలండి)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "కొత్త ఫైల్ షేర్ ప్రాంతం"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "అబ్సొల్యూట్ పాత్"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "డిబి లేదా yml ఫైల్ కాన్ఫిగ్"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
+      },
+      "CodeHeader" : {
+        "label" : "కోడ్"
+      },
+      "ModifyHeader" : {
+        "label" : "మార్చండి"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "ఎంచుకున్న పంచబడిన ఫైల్ సిస్టమ్ ఫోల్డర్",
+        "help" : "మీ సంస్థలోని డాక్యుమెంట్ రిపోజిటరీగా ఉపయోగించే ఫైల్ సిస్టమ్‌కు రూట్ మార్గంగా ఉండే సర్వర్ ఫోల్డర్‌ని ఎంచుకోండి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "మీ సంస్థలోని పంచబడిన ఫైల్ సిస్టమ్ ప్రాంత వివరాలు నమోదు చేయండి"
+      },
+      "code" : {
+        "label" : "యునిక్ కోడ్",
+        "help" : "స్వయంగా రూపొందించబడిన ప్రత్యేక కోడ్."
+      },
+      "InsertBtn" : {
+        "label" : "చేర్చండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "MainPanel" : {
+        "label" : "సర్వర్ పంచిన ఫైల్ ఫోల్డర్‌ను సవరించడం"
+      },
+      "DeleteBtn" : {
+        "label" : "వెనక్కు తీసేయండి"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలిగించు"
+      },
+      "PublishBtn" : {
+        "label" : "ప్రచురించు!",
+        "help" : "సేవ్ చేసి ఈ విషయాలను జ్ఞాన బ్యాంక్‌కు అందుబాటులో ఉంచండి LLm's కి"
+      },
+      "MainPanel" : {
+        "label" : "git మూలం/డాక్యుమెంటేషన్ రిపోజిటరీ ఎడిటింగ్"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "git repo యొక్క వివరణను నమోదు చేయండి."
+      },
+      "code" : {
+        "label" : "అద్వితీయ కోడ్",
+        "help" : "git repo యొక్క ఆటోమేటిక్‌గా రూపొందించబడిన ప్రత్యేక కోడ్."
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్ట్",
+        "help" : "పెయిరెంట్ ప్రాజెక్ట్ రిఫరెన్స్."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git సిస్టమ్",
+        "help" : "ఇప్పటికే ఆకృతీకరించిన git సిస్టమ్ రిఫరెన్స్."
+      },
+      "branch" : {
+        "label" : "బ్రాంచ్",
+        "help" : "చెక్అవుట్ చేయడానికి బ్రాంచ్ పేరు (సాధారణంగా master, main లేదా develop)"
+      },
+      "identityCode" : {
+        "label" : "వాడిన ఐడెంటిటీ",
+        "help" : "సిస్టమ్‌లో clone/checkout చేయడానికి ఐడెంటిటీని ఎంచుకోండి"
+      },
+      "repositoryUri" : {
+        "label" : "రిపోజిటరీ URL/అడ్రస్",
+        "help" : "git రిమోట్ రిపోజిటరీ పూర్తి చిరునామా (సాధారణంగా http: లేదా https: లేదా ssh: తో ప్రారంభమవుతుంది)"
+      },
+      "publicAccess" : {
+        "label" : "ప్రజలకు",
+        "help" : "true అయితే, రిపోజిటరీకి విచారణ కోసం ప్రామాణీకరణ అవసరం లేదు"
+      },
+      "openZips" : {
+        "label" : "zip ఫైళ్ళను తెరవండి",
+        "help" : "zip ఫైళ్ళను తెరవడం మరియు కంటెంట్ ఎక్స్‌ట్రాక్షన్‌ను అనుమతించండి"
+      },
+      "programmedTables" : {
+        "label" : "కంటెంట్స్ నవీకరణ షెడ్యూల్ తనిఖీలు",
+        "help" : "రావాల్సిన మార్చిన కంటెంట్స్ షెడ్యూలింగ్ ఆకృతీకరించండి ताकि retrieve augmented generation system ఎప్పటికప్పుడు నవీకరించబడుతుంది"
+      },
+      "buildSystemsRefs" : {
+        "label" : "బిల్డ్ సిస్టమ్స్‌ని ఆకృతీకరించండి",
+        "help" : "మెటా సమాచారం మరియు అదనపు ఆర్టిఫాక్ట్స్ కోసం చూడాల్సిన బిల్డ్/ప్యాకేజింగ్ సిస్టమ్స్ జాబితా"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "తొలగించండి"
+      },
+      "GeneralInfosTab" : {
+        "label" : "సామాన్య సమాచారం"
+      },
+      "UseChatModelLabel" : {
+        "label" : "చాట్ నమూనాను ఉపయోగించండి"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ఎంచుకోండి"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ఒక చాట్ మోడల్ కాన్ఫిగరేషన్‌ను ఎంచుకోండి"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "ఒక ఎంబెడ్డింగ్ మోడల్ కాన్ఫిగరేషన్‌ను ఎంచుకోండి"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "ఎంచుకోండి"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG సెట్టింగ్స్"
+      },
+      "LanguageModelTab" : {
+        "label" : "పెద్ద భాషా మోడల్ & వాడే టూల్స్ సెట్టింగ్స్"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "ఎంబెడ్డింగ్ మోడల్‌ని ఉపయోగించండి"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "భద్రతా యాక్సెస్ సెట్టింగ్స్"
+      },
+      "MainPanel" : {
+        "label" : "రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్ చాట్ ప్రొఫైల్ ఎడిటింగ్"
+      },
+      "code" : {
+        "label" : "యునిక్ కోడ్",
+        "help" : "చాట్ ప్రొఫైల్ యొక్క ఆటోమేటిక్‌గా జనరేట్ అయ్యే ప్రత్యేక కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "చాట్ ప్రొఫైల్ వివరణను నమోదు చేయండి."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "వినియోగదారుడు నాలెడ్జ్ బేస్‌లను ఎంచుకుంటాడు",
+        "help" : "వినియోగదారుడు యాక్సెస్‌లో ఉండే నాలెడ్జ్ బేస్‌లను ఎంచుకోవచ్చు లేదా తన ఫైల్స్‌ను అప్‌లోడ్ చేయవచ్చు."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "నాలెజ్ బేస్‌లు",
+        "help" : "డాక్యుమెంట్ రిట్రీవల్ కోసం వాడే నాలెడ్జ్ బేస్‌లు."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "సామ్యత థ్రెషోల్డ్",
+        "help" : "సెమాంటిక్ సెర్చ్‌ల కోసం సామ్యత థ్రెషోల్డ్, 0.60–0.65 తక్కువ ఫిల్టరింగ్, 0.70-0.75 మాధ్యమ ఫిల్టరింగ్, 0.80–0.85 ఖచ్చితంగా"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2వ 'హాప్' సామ్యత థ్రెషోల్డ్",
+        "help" : "సెమాంటిక్ సెర్చ్‌ల కోసం సామ్యత థ్రెషోల్డ్, 0.60–0.65 తక్కువ ఫిల్టరింగ్, 0.70-0.75 మాధ్యమ ఫిల్టరింగ్, 0.80–0.85 ఖచ్చితంగా. ఇది బహుళ-హాప్ rag యొక్క రెండవ సెర్చ్ నుండి ఉపయోగిస్తారు."
+      },
+      "disableMultiHopRag" : {
+        "label" : "'మల్టీ హాప్' rag ను ఆపివేయండి",
+        "help" : "'మల్టీ హాప్ rag' ఫంక్షనాలిటీని ఆపివేయండి. మల్టీ హాప్ సెర్చ్ మొదటి సెమాంటిక్ సెర్చ్ చేస్తుంది మరియు కనుగొన్న డాక్యుమెంట్లను కాంటెక్స్ట్‌గా వాడుతుంది, మరింత విస్తృత కాంటెక్స్ట్‌ను అందిస్తుంది."
+      },
+      "topK" : {
+        "label" : "పరిగణనలోకి తీసుకునే డాక్యుమెంట్ భాగాలు (TopK)",
+        "help" : "రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్‌లో, సెమాంటిక్ సెర్చ్‌లో కనుగొన్న Top N డాక్యుమెంట్ భాగాలు"
+      },
+      "enabledFunctions" : {
+        "label" : "ఈ RAG చాట్‌కు ఎనేబుల్ చేసిన ఫంక్షన్స్ కాల్",
+        "help" : "వినియోగదారుతో చాట్ చేస్తున్నప్పుడు llm మోడల్ వాడే ఫంక్షనాలిటీలు మరియు ఎంచుకున్న నాలెడ్జ్ బేస్‌తో కూడిన ఇంటరాక్షన్"
+      },
+      "prompt" : {
+        "label" : "ప్రాంప్ట్",
+        "help" : "రిట్రీవ్ ఆగ్మెంటెడ్ జనరేషన్ సెషన్‌ల కోసం ప్రాంప్ట్‌ను ఎడిట్ చేయండి."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "ప్రాంప్ట్ విభాగాన్ని నమోదు చేయండి లేదా ఎంచుకోండి"
+      },
+      "MainPanel" : {
+        "label" : "ప్రాంప్ట్ మోడిఫై చేయడం"
+      },
+      "promptCategory" : {
+        "label" : "ప్రాంప్ట్ విభాగం",
+        "help" : "ప్రాంప్ట్ విభాగాన్ని ఎంచుకోండి లేదా నమోదు చేయండి."
+      },
+      "prompt" : {
+        "label" : "ప్రాంప్ట్",
+        "help" : "చాట్ కోసం ప్రాంప్ట్‌ను ఎడిట్ చేయండి, వాడండి {query} యూజర్ ప్రశ్నను సూచించడానికి మరియు {context} డాక్యుమెంట్లు/చరిత్ర సందర్భాన్ని LLM‌కు పంపడానికి."
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "ప్రాంప్ట్ యొక్క ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "ప్రాంప్ట్ వివరణను నమోదు చేయండి."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "పాస్‌వర్డ్ మార్చు"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "పాత పాస్‌వర్డ్",
+        "help" : "లాగిన్‌కు ప్రస్తుత పాస్‌వర్డ్"
+      },
+      "newPassword" : {
+        "label" : "కొత్త పాస్‌వర్డ్",
+        "help" : "కొత్త పాస్‌వర్డ్"
+      },
+      "username" : {
+        "label" : "ఈ-మెయిల్",
+        "help" : "లాగిన్‌కు ఈ-మెయిల్ వాడండి"
+      },
+      "ChangePasswordUI" : {
+        "label" : "పాస్‌వర్డ్ మార్చే ఫారం"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "ChangePwdBtn" : {
+        "label" : "పాస్‌వర్డ్ మార్చు"
+      },
+      "newPassword1" : {
+        "label" : "కొత్త పాస్‌వర్డ్‌ని నిర్ధారించండి",
+        "help" : "కొత్త పాస్‌వర్డ్‌ని నిర్ధారించండి"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "తొలగించు"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google custom search API గురించి లేదా మీ api key (ఉచితంగా) పొందేందుకు మరిన్ని వివరాలకు సందర్శించండి: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "యునిక్ కోడ్",
+        "help" : "google search api సెట్టింగ్ యొక్క ప్రత్యేక కోడ్."
+      },
+      "MainPanel" : {
+        "label" : "Google custom search api అభిషేకణలు խմբౌతున్నాయి"
+      },
+      "secretCode" : {
+        "label" : "Google search api టోకెన్",
+        "help" : "Google search api టోకెన్ ఎంచుకోండి లేదా నమోదు చేయండి"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine ఐడి",
+        "help" : "Google search engine ఐడి"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "Google search api సెట్టింగ్ వివరాన్ని నమోదు చేయండి."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "నాలెడ్జ్ బేస్‌ల లేకుండా చాట్ చేయండి",
+        "help" : "ఒక చాట్ సెషన్ కోసం LLMలను ఎంచుకోండి",
+        "placeholder" : "ఒక చాట్ సెషన్ కోసం LLMలను ఎంచుకోండి"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "చాట్ ఆప్టిషన్లు విభాగాన్ని తెరవండి"
+      },
+      "CreateChatBtn" : {
+        "label" : "కొత్త చాట్"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "కొత్త చాట్ సెషన్"
+      },
+      "chatProfileCode" : {
+        "label" : "నాలెడ్జ్ బేస్‌లతో చాట్ చేయండి",
+        "help" : "కంపెనీ (మరియు మీ) డాక్యుమెంట్లు మరియు LLMలతో ఇంటరాక్ట్ చేయడానికి కంపెనీ చాట్ ప్రొఫైల్‌ను ఎంచుకోండి",
+        "placeholder" : "కంపెనీ (మరియు మీ) డాక్యుమెంట్లు మరియు LLMలతో ఇంటరాక్ట్ చేయడానికి కంపెనీ చాట్ ప్రొఫైల్‌ను ఎంచుకోండి"
+      },
+      "NewChatBtn" : {
+        "label" : "కొత్త చాట్"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "డాక్యుమెంట్లతో చాట్ చేయండి",
+        "help" : "బ్రౌజ్ చేయండి లేదా సెర్చ్ చేసి పనిచేయడానికి డాక్యుమెంట్లను ఎంచుకోండి"
+      },
+      "chooseFilesDialog" : {
+        "label" : "చాట్ చేయడానికి ఫైళ్ళను ఎంచుకోండి"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "నిర్ధారించండి"
+      },
+      "userspaceBrowsing" : {
+        "label" : "మీ డాక్యుమెంట్లు అప్‌లోడ్ చేయండి లేదా ఎంచుకోండి",
+        "help" : "మీ యూజర్ స్పేస్ నుండి డాక్యుమెంట్లు ఎంచుకోండి/అప్‌లోడ్ చేయండి"
+      },
+      "fileSearchBtn" : {
+        "label" : "వెతకండి"
+      },
+      "semanticSearchBtn" : {
+        "label" : "వెతకండి"
+      },
+      "query" : {
+        "label" : "అర్థవంతమైన శోధన పదబంధం",
+        "help" : "మీ శోధనకు సంబంధించిన అర్థవంతమైన పదబంధాన్ని నమోదు చేయండి"
+      },
+      "choosenBrowsing" : {
+        "label" : "ఫైళ్లను ఎన్నుకోండి జ్ఞానాన్ని అన్వేషించండి",
+        "help" : "సంస్థ పంచుకున్న జ్ఞానము ఆధారాలను అన్వేషిస్తూ ఫైళ్లను ఎన్నుకోండి"
+      },
+      "filename" : {
+        "label" : "వెతికిన ఫైల్ పేరు",
+        "help" : "మీరు వెతుకుతున్న విషయానికి సంబంధించి ఫైల్ పేరులోని భాగాన్ని నమోదు చేయండి"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "ఎంచుకున్న వాటిని మార్చండి"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "వాడుకరి ఫైళ్లను ఎంపిక చేయండి"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "రద్దు చేయండి"
+      },
+      "okBtn" : {
+        "label" : "సరే"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "వాడుకరి ఎక్స్‌లోడ్ చేసిన విషయాన్ని ఎంచుకోండి"
+      },
+      "UserspaceBrowser" : {
+        "label" : "నాలెడ్జ్ బేస్‌లు మరియు వాడుకరి ఫైళ్లు"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ఉపప్రాజెక్ట్ లేదా అంశం",
+        "help" : "ఉపప్రాజెక్ట్ లేదా అంశం జోడించండి"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ఫైళ్లను అప్‌లోడ్ చేయండి",
+        "help" : "అప్‌లోడ్ చేయబడిన ఫైళ్ల డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ఫైల్ సిస్టమ్",
+        "help" : "పంచుకున్న ఫైల్ సిస్టమ్ డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github లేదా ఇతర git రెపోజిటరీ డేటా సోర్స్‌ను జోడించండి"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai చాట్"
+      },
+      "setup" : {
+        "label" : "సెట్టప్"
+      },
+      "admin" : {
+        "label" : "Gebo.ai అడ్మిన్"
+      },
+      "currentProfile" : {
+        "label" : "నా ప్రొఫైల్"
+      },
+      "logout" : {
+        "label" : "లాగ్అవుట్"
+      }
+    }
+  }
+}

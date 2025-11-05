@@ -9,13 +9,10 @@
  */
  -->
  
- 
- 
-
-<p-blockUI [target]="endPointUI" [blocked]="loading">
+<p-blockUI id="BlockuiLock" gebo-ai-label [target]="endPointUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #endPointUI header="Editing git source/documentation repository" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label #endPointUI header="Editing git source/documentation repository" [formGroup]="formGroup">
   <div class="geboDialogContent">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <p-tabView class="standardTabDialogueHeight">
@@ -23,132 +20,70 @@
         <div class="grid">
 
           <div class="col-6">
-            <div class="flex flex-column gap-2">
-              <label for="description">Description</label>
-              <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                aria-describedby="description-help" />
-              <small id="description-help">
-                Enter the description of the git repo.
-              </small>
-            </div>
+            <gebo-ai-field id="description" label="Description" help="Enter the description of the git repo." [required]="true">
+              <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="code">Unique Code</label>
-              <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-              <small id="code-help">
-                Automatically generated unique code of the git repo.
-              </small>
-            </div>
+            <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the git repo.">
+              <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="parentProjectCode">Project</label>
-              <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
-                [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject"
-                aria-describedby="parentProjectCode-help">
-
+            <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+              <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
               </geboai-editable-listbox-component>
-              <small id="parentProjectCode-help">
-                Parent project reference.
-              </small>
-            </div>
+            </gebo-ai-field>
           </div>
           <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-              <label for="contentManagementSystem">Git system</label>
-              <geboai-editable-listbox-component formControlName="contentManagementSystem" [required]="true"
-                [readonly]="mode!=='NEW'" placeholder="Select a git server setting"
-                [optionsObservable]="gitSystemsObservable" aria-describedby="contentManagementSystem-help"
-                [readonly]="cantModifyGitSystem">
-
+            <gebo-ai-field id="contentManagementSystem" label="Git system" help="Already configured git system reference." [required]="true">
+              <geboai-editable-listbox-component formControlName="contentManagementSystem" [required]="true" [readonly]="mode!=='NEW'" placeholder="Select a git server setting" [optionsObservable]="gitSystemsObservable" [readonly]="cantModifyGitSystem" gebo-ai-field-element>
               </geboai-editable-listbox-component>
-
-              <small id="contentManagementSystem-help">
-                Already configured git system reference.
-              </small>
-            </div>
+            </gebo-ai-field>
           </div>
           <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-              <label for="repositoryUri">Repository url/address</label>
-              <input pInputText id="repositoryUri" formControlName="repositoryUri" aria-describedby="repositoryUri-help" (blur)="onGitConnectivityChange()"
-                [required]="true" />
-              <small id="repositoryUri-help">
-                Complete address of the git remote repository (usually starts with http: or https: or ssh:)
-              </small>
-            </div>
+            <gebo-ai-field id="repositoryUri" label="Repository url/address" help="Complete address of the git remote repository (usually starts with http: or https: or ssh:)" [required]="true">
+              <input pInputText id="repositoryUri" formControlName="repositoryUri" (blur)="onGitConnectivityChange()" [required]="true" gebo-ai-field-element />
+            </gebo-ai-field>
           </div>
           <div class="col-4">
-            <div class="flex flex-column gap-2 ">
-              <label for="branch">Branch</label>
-              <!-- 
-              <input pInputText id="branch" formControlName="branch" aria-describedby="branch-help" [required]="true" />
-              -->
-              <geboai-editable-listbox-component id="branch" formControlName="branch" [required]="true"
-                placeholder="Select a branch" [optionsObservable]="branchesObservable" aria-describedby="branch-help">
-
+            <gebo-ai-field id="branch" label="Branch" help="Branch name to checkout (normally master, main or develop)" [required]="true">
+              <geboai-editable-listbox-component id="branch" formControlName="branch" [required]="true" placeholder="Select a branch" [optionsObservable]="branchesObservable" gebo-ai-field-element>
               </geboai-editable-listbox-component>
-              <small id="branch-help">
-                Branch name to checkout (normally master, main or develop)
-              </small>
-            </div>
+            </gebo-ai-field>
           </div>
 
 
           <div class="col-2">
-            <div class="flex flex-column gap-2 ">
-              <label for="publicAccess">public</label>
+            <gebo-ai-field id="publicAccess" label="public" help="If true the repository access does not require autentication">
               <p-checkbox formControlName="publicAccess" id="publicAccess" [binary]="true" [trueValue]="true"
-                [falseValue]="false" aria-describedby="publicAccess-help"  (onBlur)="onGitConnectivityChange()"></p-checkbox>
-              <small id="publicAccess-help">
-                If true the repository access does not require autentication
-              </small>
-            </div>
+                [falseValue]="false" (onBlur)="onGitConnectivityChange()" gebo-ai-field-element></p-checkbox>
+            </gebo-ai-field>
           </div>
           <div class="col-4" >
-            <div class="flex flex-column gap-2 " *ngIf="publicAccess===false">
-              <label for="identityCode">Identity used</label>
+            <gebo-ai-field id="identityCode" label="Identity used" help="Select the identity to do clone/checkout on the system" [required]="publicAccess===false">
               <geboai-editable-listbox-component formControlName="identityCode" id="identityCode"
                 [required]="publicAccess===false" placeholder="Select an identity"
                 [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
-                aria-describedby="identityCode-help" (selectionChanged)="onGitConnectivityChange()">
-
+                (selectionChanged)="onGitConnectivityChange()" gebo-ai-field-element>
               </geboai-editable-listbox-component>
-              <small id="public-help">
-                Select the identity to do clone/checkout on the system
-              </small>
-            </div>
+            </gebo-ai-field>
           </div>
           <div class="col-2">
-            <div class="flex flex-column gap-2 ">
-              <label for="openZips">Open zip files</label>
-              <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true"
-                [falseValue]="false" aria-describedby="openZips-help" ></p-checkbox>
-              <small id="openZips-help">
-                Enable zip files opening and content extraction
-              </small>
-            </div>
+            <gebo-ai-field id="openZips" label="Open zip files" help="Enable zip files opening and content extraction">
+              <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+            </gebo-ai-field>
           </div>
           <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-              <label for="programmedTables">Contents updates checks schedule</label>
-              <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
-                aria-describedby="programmedTables-help"></gebo-ai-content-reindex-scheduler-component>
-              <small id="programmedTables-help">
-                Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated
-              </small>
-            </div>
+            <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated">
+              <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables" gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
+            </gebo-ai-field>
           </div>
           <div class="col-10">
-            <div class="flex flex-column gap-2 ">
-              <label for="buildSystemsRefs">Configure build systems</label>
+            <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta informations and additional artifacts infos">
               <gebo-ai-build-systems-chooser id="buildSystemsRefs"
-                formControlName="buildSystemsRefs"></gebo-ai-build-systems-chooser>
-              <small id="buildSystemsRefs-help">
-                List of build/packaging systems to inspect for meta informations and additional artifacts infos
-              </small>
-            </div>
+                formControlName="buildSystemsRefs" gebo-ai-field-element></gebo-ai-build-systems-chooser>
+            </gebo-ai-field>
           </div>
 
         </div>
@@ -165,26 +100,29 @@
   <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
     <div class="grid">
       <div class="col-3">
-        <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
           styleClass="w-full"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"></p-button>
       </div>
       <div class="col-3">
-        <p-button [outlined]="true" label="Publish!"
+        <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
           title="Save and let these contents being available in knowledge base to LLm's" severity="success"
           styleClass="w-full" icon="pi pi-microchip-ai" (onClick)="doPublish()"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" />
 
       </div>
       <div class="col-3">
-        <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
           styleClass="w-full" />
       </div>
       <div class="col-3">
-        <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
           styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
       </div>
 
     </div>
   </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

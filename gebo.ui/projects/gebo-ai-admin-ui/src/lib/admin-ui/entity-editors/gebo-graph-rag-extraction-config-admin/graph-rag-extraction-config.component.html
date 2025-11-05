@@ -1,4 +1,4 @@
-<p-panel #graphRagConfigUI id="graphRagConfigUI" header="Graphrag/knowledge extraction configuration"
+<p-panel id="MainPanel" gebo-ai-label  #graphRagConfigUI  header="Graphrag/knowledge extraction configuration"
     [formGroup]="formGroup" gebo-ai-label>
     <p-blockUI [target]="graphRagConfigUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -46,18 +46,22 @@
                                             details of
                                             analisys that the system is capable of but will high the cost and time
                                             required to process
-                                            documents"><p-checkbox formControlName="processEveryDocument"
+                                            documents">
+                                        <p-checkbox formControlName="processEveryDocument"
                                             [trueValue]="true" [falseValue]="false" [binary]="true"
                                             id="processEveryDocument"
-                                            gebo-ai-field-element></p-checkbox></gebo-ai-field>
+                                            gebo-ai-field-element></p-checkbox>
+                                    </gebo-ai-field>
 
                                 </div>
                                 <div class="col-9" *ngIf="processEveryDocument!==true">
                                     <gebo-ai-field id="contentSelectionFilter"
                                         label="File selection criterias for graphrag processing"
-                                        help="Edit criterias on file to send to information extraction pipeline for graphrag, select at least a file name and criteria and/or a file type and/or the maximum number of bytes of file size and/or the age of last modification in days"><gebo-ai-content-selection-filter-component
+                                        help="Edit criterias on file to send to information extraction pipeline for graphrag, select at least a file name and criteria and/or a file type and/or the maximum number of bytes of file size and/or the age of last modification in days">
+                                        <gebo-ai-content-selection-filter-component
                                             gebo-ai-field-element formControlName="contentSelectionFilter"
-                                            title=""></gebo-ai-content-selection-filter-component></gebo-ai-field>
+                                            title=""></gebo-ai-content-selection-filter-component>
+                                    </gebo-ai-field>
 
                                 </div>
                             </div>
@@ -75,7 +79,7 @@
                         <div class="col-6">
                             <gebo-ai-field id="usedModelConfiguration" label="LLM used for data extraction" help="Specify large language model used for knowledge extraction, default one will be
                                     used if none is
-                                    selected." placeholder="Select a chat model configuration">
+                                    selected.">
                                 <p-select gebo-ai-field-element styleClass="w-full"
                                     formControlName="usedModelConfiguration" styleClass="w-full"
                                     id="usedModelConfiguration" [options]="chatModelsData"
@@ -86,8 +90,10 @@
                         <div class="col-6"
                             *ngIf="formGroup.controls['usedModelConfiguration']?.value?false:true && defaultChatModel">
                             <gebo-ai-field id="defaultModel" label="Default large language model"
-                                help="The default large language model will be used for knowledge extraction"><label
-                                    id="defaultModel">{{defaultChatModel?.description}}</label></gebo-ai-field>
+                                help="The default large language model will be used for knowledge extraction">
+                                <label
+                                    id="defaultModel">{{defaultChatModel?.description}}</label>
+                            </gebo-ai-field>
 
                         </div>
                         <div class="col-12">
@@ -128,3 +134,4 @@
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

@@ -13,7 +13,7 @@
  
 
 <p-breadcrumb class="max-w-full" [model]="bcItems" [home]="home" />
-<p-panel #wizardUI [header]="title" *ngIf="!wizardComponent">
+<p-panel id="WizardUi" gebo-ai-label #wizardUI header="Choose a setup section" *ngIf="!wizardComponent">
     <p-blockUI [target]="wizardUI" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
@@ -43,7 +43,7 @@
 </p-panel>
 <div class="grid" *ngIf="wizardComponent">
     <div class="col-12">
-        <p-button [text]="true" icon="pi pi-arrow-left" (onClick)="closeWizard();" label="Back to setup home page"></p-button>
+        <p-button  id="WizardBackBtn" gebo-ai-label  [text]="true" icon="pi pi-arrow-left" (onClick)="closeWizard();" label="Back to setup home page"></p-button>
 
     </div>
     <div class="col-12">

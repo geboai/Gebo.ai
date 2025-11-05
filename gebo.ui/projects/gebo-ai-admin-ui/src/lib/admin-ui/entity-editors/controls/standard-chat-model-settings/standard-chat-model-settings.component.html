@@ -1,3 +1,4 @@
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -7,41 +8,49 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- -->
- 
- 
- 
+-->
 
 <div class="col-12 grid" *ngIf="formGroup" [formGroup]="formGroup">
     <div class="col-4">
-        <div class="flex flex-column gap-2 ">
-            <label for="temperature">Temperature</label>
-            <p-inputNumber formControlName="temperature" [min]="minTemperature" [max]="maxTemperature"
-                [maxFractionDigits]="maxTemperatureDigits"  styleClass="w-full"></p-inputNumber>
-            <small id="temperature-help">
-                Temperature the model will respond, from {{minTemperature}} to {{maxTemperature}} <b>(if unsure leave empty)</b>
-            </small>
-        </div>
+        <gebo-ai-field id="temperature" label="Temperature" help="Temperature the model will respond, from {{minTemperature}} to {{maxTemperature}} (if unsure leave empty)">
+            <p-inputNumber 
+                id="temperature"
+                formControlName="temperature"
+                [min]="minTemperature"
+                [max]="maxTemperature"
+                [maxFractionDigits]="maxTemperatureDigits"
+                styleClass="w-full"
+                gebo-ai-field-element
+            />
+        </gebo-ai-field>
     </div>
     <div class="col-4">
-        <div class="flex flex-column gap-2 ">
-            <label for="topP">TopP</label>
-            <p-inputNumber formControlName="topP" [min]="minTopP" [max]="maxTopP"
-                [maxFractionDigits]="maxTopPDigits"  styleClass="w-full"></p-inputNumber>
-            <small id="topP-help">
-                TopP parameter, from {{minTopP}} to {{maxTopP}} <b>(if unsure leave empty)</b>
-            </small>
-        </div>
+        <gebo-ai-field id="topP" label="TopP" help="TopP parameter, from {{minTopP}} to {{maxTopP}} (if unsure leave empty)">
+            <p-inputNumber 
+                id="topP"
+                formControlName="topP"
+                [min]="minTopP"
+                [max]="maxTopP"
+                [maxFractionDigits]="maxTopPDigits"
+                styleClass="w-full"
+                gebo-ai-field-element
+            />
+        </gebo-ai-field>
     </div>
     <div class="col-4">
-        <div class="flex flex-column gap-2 ">
-            <label for="contextLength">Context length (tokens)</label>
-            <p-inputNumber formControlName="contextLength" [min]="minContextLength" [max]="maxContextLength"
-                [maxFractionDigits]="0"  styleClass="w-full"></p-inputNumber>
-            <small id="contextLength-help">
-                Amount of text an AI model can consider when processing <b>(if not set {{defaultContextLength}} will be
-                    used)</b>
-            </small>
-        </div>
+        <gebo-ai-field id="contextLength" label="Context length (tokens)" help="Amount of text an AI model can consider when processing (if not set {{defaultContextLength}} will be used)">
+            <p-inputNumber 
+                id="contextLength"
+                formControlName="contextLength"
+                [min]="minContextLength"
+                [max]="maxContextLength"
+                [maxFractionDigits]="0"
+                styleClass="w-full"
+                gebo-ai-field-element
+           />
+        </gebo-ai-field>
     </div>
 </div>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -1,0 +1,2504 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Järjestelmän oletuskieli",
+        "help" : "Tämän Gebo.ai-asennuksen oletuskieli"
+      },
+      "username" : {
+        "label" : "Sähköposti",
+        "help" : "Sähköposti käyttäjänimenä kirjautumista varten"
+      },
+      "passwordC" : {
+        "label" : "Vahvista salasana",
+        "help" : "Vahvista salasana"
+      },
+      "password" : {
+        "label" : "Salasana",
+        "help" : "Salasana kirjautumista varten (vähintään 8 merkkiä)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " salasanat eivät täsmää "
+      },
+      "LocalAdmin" : {
+        "label" : "Luo paikallinen ylläpitäjätili"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Käytät tätä tiliä jatkossa ohjelmiston asennuksessa ja hallinnassa, nämä tiedot säilyvät paikallisesti järjestelmässäsi eikä niitä lähetetä verkon yli"
+      },
+      "EnterBtn" : {
+        "label" : "Siirry kirjautumissivulle"
+      },
+      "SetupPage" : {
+        "label" : "Asenna gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Luo järjestelmän asennus"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Lue ja hyväksy lisenssi"
+      },
+      "AcceptMark" : {
+        "label" : "Hyväksyn ehdot",
+        "help" : "Hyväksyt napsauttamalla käyttöehdot ja lisenssin"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "sähköposti",
+        "help" : "Sähköpostiosoite käyttäjätunnuksena kirjautumiseen"
+      },
+      "password" : {
+        "label" : "Salasana",
+        "help" : "Salasana kirjautumista varten"
+      },
+      "LoginPanel" : {
+        "label" : "Kirjaudu sisään Gebo.ai-palveluun"
+      },
+      "LoginBtn" : {
+        "label" : "Kirjaudu"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2-asetukset"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Palveluntarjoajan nimi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2-turva-asetukset"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Takaisin asetusaloitussivulle"
+      },
+      "WizardUi" : {
+        "label" : "Valitse asetusosio"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Ylläpitäjän ja muiden tilien asetukset",
+        "description" : "Vähintään yksi ylläpitotili tarvitaan, jotta tämä gebo.ai-asennus on hallittavissa asianmukaisesti. Lisää tarvittaessa muita käyttäjiä."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai-työhakemisto",
+        "description" : "Määritä työhakemisto – tähän kansioon tallennetaan tämän asennuksen asetukset ja kaikki työtiedostot. On myös hyvä varmuuskopioida se säännöllisesti."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektorikantatietokannan määritys",
+        "description" : "Vektorikantatietokanta on määritettävä, jotta Gebo.ai voi tarjota haun laajennukseen perustuvia generointipalveluita. Voit valita paikallisen tietokannan, Qdrantin tai Mongo Atlasin väliltä."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single sign-on, oauth2-tunnistautuminen",
+        "description" : "Oauth2-yksinkirjautumisen ja oauth2-asiakkaiden määritys"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Suurten kielimallien määritys",
+        "description" : "Määritä eri LLM:t pilvi- tai paikallis-/lan-infrastruktuuriin. Vähintään yksi chat-malli ja yksi upotusmalli tarvitaan, jotta ohjelmisto toimii oikein."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graph rag/tiedon poiminnan määritys",
+        "description" : "Määritä graph rag ja tiedon poiminnan alajärjestelmä"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Jaettujen tiedostojärjestelmien polkujen määritys",
+        "description" : "Määritä yrityksen jaetut tiedostojärjestelmäpolut, joita käytetään generoitujen tietokantojen noutoalueina"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence -integraatio",
+        "description" : "Määritä Gebo.ai käyttämään Atlassian Confluence -pilvi- tai paikallisratkaisujasi"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira -integraatio",
+        "description" : "Määritä Gebo.ai käyttämään Atlassian jira -pilviratkaisujasi"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint -integraatio",
+        "description" : "Määritä Gebo.ai käyttämään Microsoft Sharepointin pilvi- tai paikallisratkaisujasi"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Määritä vähintään yksi tietopohja",
+        "description" : "Määritä vähintään yksi tietopohja, jotta käyttäjäsi voivat hyödyntää Gebo.ai:n generointitoimintoja"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Määritä vähintään yksi \"R.A.G.\"-chatprofiili",
+        "description" : "Määritä vähintään yksi generointihakuun perustuva chat-profiili käyttäjillesi yhden tietokantojesi pohjalta"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Yrityksen Atlassian Confluence -järjestelmien määritys"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Järjestelmän tyyppi"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Asetuskoodi"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence-järjestelmä"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira-järjestelmä"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Asetuskoodi"
+      },
+      "MainPanel" : {
+        "label" : "Yrityksen Atlassian Jira -järjestelmien määritys"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Järjestelmän tyyppi"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Asetuskoodi"
+      },
+      "MainPanel" : {
+        "label" : "Yrityksen Microsoft Sharepoint -järjestelmien määritys"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Järjestelmän tyyppi"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint-järjestelmä"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Anna api-avain, jossa on riittävästi saldoa. Jos valitset OpenAI:n, lisää erityistä saldoa (10–30 $ riittää) tiliisi api-käyttöä varten – muuten sovelluksessa ei voi käyttää llms-liikennettä."
+      },
+      "MainPanel" : {
+        "label" : "Aseta Gebo.ai-llms-tarjoajien käyttö api-avaimellasi"
+      },
+      "provider" : {
+        "label" : "Suuren kielimallin tarjoaja",
+        "help" : "Valitse yksi tarjoaja OpenAI:n (chatgpt), Googlen (Gemini) tai Anthropicin (Claude) väliltä"
+      },
+      "user" : {
+        "label" : "Käyttäjä",
+        "help" : "Syötä apiKey:lle liitetty käyttäjä"
+      },
+      "ConfigureBtn" : {
+        "label" : "Määritä"
+      },
+      "apiKey" : {
+        "label" : "Api-avain",
+        "help" : "Käytettävien LLMS-tarjoajien api-avain"
+      },
+      "ProviderHeader" : {
+        "label" : "Tarjoaja"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Asetuskoodi"
+      },
+      "ModelHeader" : {
+        "label" : "Malli"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Mallin tyyppi"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Oletusmalli"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Luo graph rag -asetus"
+      },
+      "MainPanel" : {
+        "label" : "Oletusasetuksen määritys: Graph Rag & tiedon poiminta"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Asetuskoodi"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekti"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Lisää tietopohja"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Tietopohja"
+      },
+      "MainPanel" : {
+        "label" : "Tietopohjat ja sisältöjen asetukset"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Sisällön lähde"
+      },
+      "PublishedHeader" : {
+        "label" : "Julkaistu"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Dokumenttien lukumäärä"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Lisää projekti/kohde",
+        "help" : "Luo uusi projekti"
+      },
+      "Button1" : {
+        "help" : "Avaa tietopohja"
+      },
+      "Button2" : {
+        "help" : "Avaa projektin lomake"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai-työhakemiston asetukset"
+      },
+      "ConfigureBtn" : {
+        "label" : "Määritä"
+      },
+      "workDirectory" : {
+        "label" : "Valitse kansio Gebo.ai-työhakemistoksi",
+        "help" : "Valitse palvelinkansio, jota tämä asennus käyttää työhakemistona asetuksia ja sisältöjä varten."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Lisää kansio"
+      },
+      "AddFolderBtn" : {
+        "label" : "Lisää kansio"
+      },
+      "CodeHeader" : {
+        "label" : "Koodi"
+      },
+      "MainPanel" : {
+        "label" : "Palvelimen jaetut tiedostojärjestelmäpolut"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoluuttinen polku"
+      },
+      "DeleteHeader" : {
+        "label" : "Poista"
+      },
+      "path" : {
+        "label" : "Lisää jaetun tiedostojärjestelmän juurikansio",
+        "help" : "Valitse palvelimen kansio, joka on organisaation dokumenttivarastona käytettävän jaetun tiedostojärjestelmän juuripolku"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä tiedostojärjestelmän kuvaus"
+      },
+      "RemovePathBtn" : {
+        "label" : "Poista polku"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Määritä"
+      },
+      "MainPanel" : {
+        "label" : "Vektorikannan asetukset"
+      },
+      "host" : {
+        "label" : "Qdrant-isäntä",
+        "help" : "Qdrant-isännän nimi tai ip-osoite"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant-yhteysasetukset"
+      },
+      "port" : {
+        "label" : "Qdrant-portti",
+        "help" : "Qdrantin viestintäportti (6334 on oletus)"
+      },
+      "apiKey" : {
+        "label" : "Qdrantin api-avain",
+        "help" : "Qdrantin tunnistautumisen api-avain"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS -parametri",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai-asennuksen pakolliset vaiheet tehty...",
+        "detail" : "Pakolliset asetukset on tehty, mutta puuttuvia vaiheita on, jotka estävät ohjelmiston täysimääräisen hyödyntämisen organisaatiossasi"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai-asennuksesta puuttuu pakollinen vaihe",
+        "detail" : "Tarkista asennusprosessin punaisella merkityt vaiheet"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai-asennus OK!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Koodi",
+        "help" : "Anna OAUTH2-todennuksen/integration koodi (registrationId)."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna OAUTH2-todennuksen/integration tiedot."
+      },
+      "configurationType" : {
+        "label" : "Määrityksen tarkoitus",
+        "help" : "Valitse, käytetäänkö tätä asetusta Gebo.ai-todennukseen vai mahdollistamaan Gebo.ai:n yhteys kolmannen osapuolen järjestelmään."
+      },
+      "authProvider" : {
+        "label" : "Tarjoaja",
+        "help" : "Anna OAUTH2-todennuksen tarjoaja"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Anna tarjoajan OAUTH2-issuer URL"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "Anna tarjoajan OAUTH2-auktorisointi-URL"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Anna tarjoajan OAUTH2 Jwk Set -url"
+      },
+      "userInfoUri" : {
+        "label" : "Käyttäjätiedot URL",
+        "help" : "Anna tarjoajan OAUTH2-käyttäjätietojen URL"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Anna tarjoajan OAUTH2 introspection URL"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Anna tarjoajan OAUTH2 token URL"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2-tarjoajan URL-osoitteet"
+      },
+      "MainPanel" : {
+        "label" : "Lisää uudet OAUTH2-todennus-/integraatiotiedot"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Asiakas-ID",
+        "help" : "Oauth2-protokollan asiakastunniste (haetaan oauth2-autentikoidun kolmannen osapuolen ohjelmiston hallinta-alueelta)"
+      },
+      "secret" : {
+        "label" : "Salainen avain",
+        "help" : "Oauth2-protokollan asiakassalasana (haetaan oauth2-autentikoidun kolmannen osapuolen ohjelmiston hallinta-alueelta)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Luo confluence-järjestelmän määritys"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna confluence-järjestelmän kuvaus."
+      },
+      "CreateBtn" : {
+        "label" : "Luo"
+      },
+      "username" : {
+        "label" : "Confluence-käyttäjätunnus",
+        "help" : "Confluence-käyttäjän nimi"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-versio",
+        "help" : "Confluence-versio"
+      },
+      "baseUri" : {
+        "label" : "Perusverkkosoite",
+        "help" : "On-premise-asennuksen confluence-järjestelmän osoite tai organisaatiosi perus-URL confluence cloud -järjestelmälle"
+      },
+      "password" : {
+        "label" : "Confluence-salasana",
+        "help" : "Confluence-salasana"
+      },
+      "token" : {
+        "label" : "Confluence cloud api -avain",
+        "help" : "Confluence CLOUD apikey, hankitaan confluencen hallintapaneelista, tähän tulee lisätä \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallentaa ja mahdollistaa sisällön käytön tietopohjassa LLm:ille"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SettingsTab" : {
+        "label" : "Asetukset"
+      },
+      "MainPanel" : {
+        "label" : "Confluence-sisältöjen jakaminen"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Sisällölle automaattisesti luotu yksilöllinen tunniste."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä ladattujen confluence-tietueiden sisällön kuvaus."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence-järjestelmä",
+        "help" : "Jo määritetty confluence-järjestelmän viite."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Ylemmän tason projektin viite."
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Ota käyttöön zip-tiedostojen avaaminen ja sisällön purku"
+      },
+      "tree" : {
+        "label" : "Valitut tilat tai sivut/alalehdet",
+        "help" : "Jaetut confluence-tilat ja sivujen sisällöt"
+      },
+      "programmedTables" : {
+        "label" : "Sisällön päivitysten tarkistusaikataulu",
+        "help" : "Määritä muutettujen sisältöjen aikataulu, jotta järjestelmän sukupolven päivitys pysyy ajan tasalla"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tilojen, sivujen ja alasivujen järjestelyperusteet",
+        "help" : "Kuvaile tähän, miten tilojen, sivujen ja alasivujen järjestelyperuste on toteutettu confluence-sisällöissä, jotka on jaettu Gebo.ai:n kanssa"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Yleiset asetukset"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "MainPanel" : {
+        "label" : "Confluence-järjestelmän muokkaus"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "baseUri" : {
+        "label" : "Perusverkkosoite",
+        "help" : "Confluence-järjestelmän perusosoitteen URL"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Confluence-järjestelmälle automaattisesti luotu yksilöllinen tunniste."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä confluence-järjestelmän kuvaus."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence-versio",
+        "help" : "Confluence-versio"
+      },
+      "secretCode" : {
+        "label" : "Käytetty tunniste",
+        "help" : "Valitse tai luo tunniste confluence-järjestelmän käyttöön"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "uusi ryhmä"
+      },
+      "NewUserBtn" : {
+        "label" : "uusi käyttäjä"
+      },
+      "UsersListPanel" : {
+        "label" : "Käyttäjien lista"
+      },
+      "GroupsListPanel" : {
+        "label" : "Ryhmien lista"
+      },
+      "SournameHeader" : {
+        "label" : "sukunimi"
+      },
+      "UsernameHeader" : {
+        "label" : "käyttäjätunnus"
+      },
+      "RolesHeader" : {
+        "label" : "roolit"
+      },
+      "NameHeader" : {
+        "label" : "nimi"
+      },
+      "EditBtn" : {
+        "label" : "Muokkaa"
+      },
+      "DisabledHeader" : {
+        "label" : "poistettu käytöstä"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "UserIds" : {
+        "placeholder" : "Valitse käyttäjät"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan käyttäjäryhmää"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna käyttäjäryhmän kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Syötä käyttäjäryhmän koodi"
+      },
+      "userIds" : {
+        "label" : "Käyttäjälista",
+        "help" : "Valitse ryhmään osallistuvat käyttäjät"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Luo"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä jira-järjestelmän kuvaus."
+      },
+      "MainPanel" : {
+        "label" : "Luo jira-järjestelmän määritys"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "username" : {
+        "label" : "jira-käyttäjänimi",
+        "help" : "jira-käyttäjän nimi"
+      },
+      "token" : {
+        "label" : "jira cloud api-avain",
+        "help" : "jira CLOUD -apikey, joka on hankittu jira backofficesta, tähän tulee lisätä \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Perusverkkosoite",
+        "help" : "Jira-järjestelmän perustason url on premise -asennukselle tai organisaation perusurl jira cloud -järjestelmälle"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallentaa ja tekee sisällöt saataville tietopankissa LLm:n käyttöön"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SettingsTab" : {
+        "label" : "Asetukset"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      },
+      "MainPanel" : {
+        "label" : "Jaa jira-sisältöä"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Automaattisesti luotu sisällön yksilöllinen koodi."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira-järjestelmä",
+        "help" : "Aiemmin määritelty jira-järjestelmän viite."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Ylemmän tason projektin viite."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä ladatun jira-sisällön kuvaus."
+      },
+      "programmedTables" : {
+        "label" : "Sisällön päivitysten tarkistuksen ajoitus",
+        "help" : "Määritä muuttuneen sisällön ajoitus, jotta tiedonhaku pysyy ajan tasalla"
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Mahdollista zip-tiedostojen avaaminen ja sisällön purku"
+      },
+      "tree" : {
+        "label" : "Valitut tilat tai sivut/alalehdet",
+        "help" : "Jaettavien jira-projektien ja tikettien hierarkiasisältö"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tilojen, sivujen ja alasivujen järjestelyperusteet",
+        "help" : "Kuvaile tässä, miten järjestelyperiaate tiloille, sivuille ja alasivuille on toteutettu jira-sisällöissä, jotka jaetaan Gebo.ai:n kanssa"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä jira-järjestelmän kuvaus."
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "MainPanel" : {
+        "label" : "Muokkaa jira-järjestelmää"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "baseUri" : {
+        "label" : "Perusverkkosoite",
+        "help" : "Jira-järjestelmän perustason url"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Automaattisesti luotu jira-järjestelmän yksilöllinen koodi."
+      },
+      "secretCode" : {
+        "label" : "Käytettävä tunniste",
+        "help" : "Valitse tai luo tunniste jira-järjestelmään pääsyä varten"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna SharPpoint/OneDrive-järjestelmän kuvaus."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint-versio",
+        "help" : "Sharepoint-versio"
+      },
+      "secret" : {
+        "label" : "Salainen avain",
+        "help" : "Oauth2 client secret tälle sovellukselle, joka on rekisteröity microsoftin \"entra\"-tuotteeseen (haettavissa microsoftin pilvihallintakonsolista)"
+      },
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "Oauth2 client identifier tälle sovellukselle, joka on rekisteröity microsoftin \"entra\"-tuotteeseen (haettavissa microsoftin pilvihallintakonsolista)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID",
+        "help" : "Oauth2 tenant identifier organisaatiosi microsoft \"entra\" -tuotteelle (haettavissa microsoftin pilvihallintakonsolista)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 -sovelluksen rekisteröintitiedot Gebo.ai:lle"
+      },
+      "CreateBtn" : {
+        "label" : "Luo"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "MainPanel" : {
+        "label" : "Luo SharePoint/OneDrive-järjestelmäkonfiguraatio"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallentaa ja tekee sisällön tietopohjassa käyttöön LLm-järjestelmille"
+      },
+      "SettingsTab" : {
+        "label" : "Asetukset"
+      },
+      "MainPanel" : {
+        "label" : "Jaa SharePoint/OneDrive-sisältöjä"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Sisällölle automaattisesti luotu yksilöllinen koodi."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Ylemmän projektin viittaus."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna SharePoint/OneDrive-tietolähteiden kuvaus."
+      },
+      "sharePointSystemCode" : {
+        "label" : "Sharepoint-järjestelmä",
+        "help" : "Aiemmin määritetyn SharePoint/OneDrive-järjestelmän viittaus."
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Ota käyttöön zip-tiedostojen avaaminen ja sisällön purkaminen"
+      },
+      "tree" : {
+        "label" : "Valitut Sharepoint-sivustot/sivut/alit tai OneDrive-asemat/kansiot/tiedostot",
+        "help" : "Jaetut Sharepoint/OneDrive-sisällöt"
+      },
+      "programmedTables" : {
+        "label" : "Sisältöpäivitysten tarkastusajastukset",
+        "help" : "Määritä muuttuneiden sisältöjen ajastus, jotta tietojen haku ja järjestelmä pysyvät ajan tasalla"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tilojen, sivujen ja alasivujen järjestelyperusteet",
+        "help" : "Kerro tässä, miten tilojen, sivujen ja alasivujen järjestelyperiaate on toteutettu SharePoint-sisällöissä, jotka on jaettu Gebo.ai:n kanssa"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Sharepoint-järjestelmän muokkaus"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Yleiset asetukset"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "secretCode" : {
+        "label" : "Käytetty tunniste",
+        "help" : "Valitse tai luo tunniste Sharepoint-järjestelmään kirjautumista varten"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Sharepoint-järjestelmälle automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna Sharepoint-järjestelmän kuvaus."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint-versio",
+        "help" : "Sharepoint-versio"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Poista"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Tallenna"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Peruuta"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Yleiset tiedot/sisällön asetukset"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms-asetukset"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Tietämyksen graafin tietojen poimintavaiheen automaattisesti luotu tunniste"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/tiedonpoiminnan määritys"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna kuvaus tästä tietämyksen graafin tietojen poimintavaiheen asetuksesta"
+      },
+      "extractionPrompt" : {
+        "label" : "Tietojen poimintakehote",
+        "help" : "Suurten kielimallien kehote entiteettien/tapahtumien/suhteiden ja aliasien poimintaan"
+      },
+      "usedModelConfiguration" : {
+        "label" : "Tietojen poimintaan käytettävä LLM",
+        "help" : "Määritä tietämyksen poimintaan käytettävä suuri kielimalli, jos mallia ei valita, käytetään oletusta"
+      },
+      "graphRagAllSources" : {
+        "label" : "Käytä graph rag kaikissa tietolähteissä",
+        "help" : "Jos tosi, kaikki tietämyspankit/projektit/tietolähteet käsitellään tiedon poimintaan, muuten vain erikseen määritetyt"
+      },
+      "defaultModel" : {
+        "label" : "Oletus suuri kielimalli",
+        "help" : "Oletus suurta kielimallia käytetään tietämyksen poimintaan"
+      },
+      "processEveryDocument" : {
+        "label" : "Käytä graph rag kaikissa tiedostoissa",
+        "help" : "Graph rag -algoritmit sovelletaan kaikkiin tiedostoihin, mikä parantaa järjestelmän analyysintarkkuutta mutta kasvattaa käsittelykustannuksia ja -aikaa"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Tiedostojen valintaperusteet graphrag-käsittelyyn",
+        "help" : "Muokkaa kriteereitä, joiden perusteella tiedosto lähetetään tiedonpoimintaputkeen graphragille. Valitse vähintään tiedostonimi ja valintaehto ja/tai tiedostotyyppi ja/tai tiedoston enimmäiskoko sekä/tai tiedoston viimeisen muutoksen ikä (päivinä)"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Valitse tiedostotyypit"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Tiedostonimen suodatuskriteeri"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Tiedoston viimeisin muokkaus, päivää sitten"
+      },
+      "nameFilter" : {
+        "placeholder" : "Tiedoston nimi"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Suurin tiedostokoko tavuina"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Yleistiedot"
+      },
+      "MainPanel" : {
+        "label" : "Tietopohjan muokkaus"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Tietopohjan käyttöoikeusasetukset"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Tietopohjan automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Kirjoita tietopohjan kuvaus."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Käytetyt upotusmallit (jätä tyhjäksi käyttääksesi oletusta)",
+        "help" : "Tietopohjassa käytettävät upotusmallit, oletusmalli käytetään jos kenttä jätetään tyhjäksi."
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksoi",
+        "help" : "Indeksoi sisältö uudelleen"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Projektin tai kohteen muokkaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Projektin automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Kirjoita projektin kuvaus."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "tietopohja",
+        "help" : "tietopohja."
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksoi",
+        "help" : "Indeksoi sisältö uudelleen"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Lisää kohde/projekti",
+        "help" : "lisää uusi…"
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Kaikki käyttävät",
+        "help" : "Kaikki voivat käyttää"
+      },
+      "accessibleGroups" : {
+        "label" : "Ryhmien luettelo",
+        "help" : "Valitse sallitut ryhmät"
+      },
+      "accessibleUsers" : {
+        "label" : "Käyttäjien luettelo",
+        "help" : "Valitse sallitut käyttäjät"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Hallintapaneeli"
+      },
+      "LLMSTab" : {
+        "label" : "LLM:t keskusteluun ja upotuksiin"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag-keskusteluprofiilit / mallikehotteet"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Tietopankit ja projektit"
+      },
+      "UsersGroupTab" : {
+        "label" : "Käyttäjät ja ryhmät"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai-moduulien asetukset"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Koodi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Määritä"
+      },
+      "ConfigureBtn" : {
+        "label" : "Määritä"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Uusi kehotemääritys"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Uusi keskusteluprofiili"
+      },
+      "MainPanel" : {
+        "label" : "Hakua vahvistavat sukupolviketjun keskusteluprofiilit"
+      },
+      "PromptsPanel" : {
+        "label" : "Kehotevalikoima ja oletuskehotteet"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Tietopohjat"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "ConfigureBtn1" : {
+        "label" : "määritä"
+      },
+      "CodeHeader" : {
+        "label" : "Koodi"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Uusi tietopankki"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Uusi upotusmallin määritys"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Uusi keskustelumallin määritys"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "CodeHeader" : {
+        "label" : "Koodi"
+      },
+      "ModelHeader" : {
+        "label" : "Malli "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Mallin tarjoaja"
+      },
+      "ConfigureBtn" : {
+        "label" : "määritä"
+      },
+      "CodeHeader2" : {
+        "label" : "Koodi"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Kuvaus"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Mallin tarjoaja"
+      },
+      "ConfigureBtn2" : {
+        "label" : "määritä"
+      },
+      "ModelHeader2" : {
+        "label" : "Malli "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Määritetyt keskustelumallit"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Määritetyt upotusmallit"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Testataan mallia"
+      },
+      "TestChatBtn" : {
+        "label" : "Testaa keskustelua"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI-token",
+        "help" : "Valitse tämän mallin käyttämä OpenAI-token"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI-keskustelumallin valinta",
+        "help" : "Valitse OpenAI-keskustelumalli käyttöön."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleiset tiedot"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Lisäasetukset"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan OpenAI-keskustelumalliasetuksia"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mallin käyttöoikeudet"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan OpenAI upotusmallin asetuksia"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI-token",
+        "help" : "Valitse tämän mallin käyttämä OpenAI-token"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Upotusmallin asetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä upotusmallin asetusten kuvaus"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI-upotusmallin valinta",
+        "help" : "Valitse OpenAI-upotusmalli käyttöön."
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletusupotusmalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletusupotusmallina, jos upotusmallia ei ole määritelty"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "baseUrl" : {
+        "label" : "Ollama-palvelimen perusosoite",
+        "help" : "Perusosoite (esim. http://palvelin:234/) johon ollama-lähiverkkopalvelin vastaa."
+      },
+      "choosedModel" : {
+        "label" : "Ollama keskustelumallin valinta",
+        "help" : "Valitse Ollama-keskustelumalli käyttöön.",
+        "placeholder" : "Valitse malli"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama-token",
+        "help" : "Valitse tämän mallin käyttämä Ollama-token (valinnainen)"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan Ollama lähipalvelimen keskustelumalliasetuksia"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic-token",
+        "help" : "Valitse tämän mallin käyttämä Anthropic-token"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic keskustelumallin valinta",
+        "help" : "Valitse Anthropic-keskustelumalli käyttöön.",
+        "placeholder" : "Valitse malli"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Lisäasetukset"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleiset tiedot"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mallin käyttöoikeudet"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan Anthropic-keskustelumalliasetuksia"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI-token",
+        "help" : "Valitse tämän mallin käyttämä MistralAI-token"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI keskustelumallin valinta",
+        "help" : "Valitse MistralAI-keskustelumalli käyttöön."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleiset tiedot"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Lisäasetukset"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mallin käyttöoikeudet"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan MistralAI-keskustelumalliasetuksia"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI keskustelumallin valinta",
+        "help" : "Valitse Google Vertex AI keskustelumalli käyttöön."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Valitse tämän mallin käyttämä Google Vertex AI token"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Yleiset tiedot"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Mallin käyttöoikeudet"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Lisäasetukset"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan Google Vertex AI keskustelumalliasetuksia"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek-token",
+        "help" : "Valitse tämän mallin käyttämä Deepseek-token"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek keskustelumallin valinta",
+        "help" : "Valitse Deepseek-keskustelumalli käyttöön.",
+        "placeholder" : "Valitse malli"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Lisäasetukset"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleiset tiedot"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan Deepseek keskustelumalliasetuksia"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mallin käyttöoikeudet"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä malliasetusten kuvaus"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Malliasetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "baseUrl" : {
+        "label" : "Keskustelumallin API-palvelimen osoite",
+        "help" : "Keskustelumallin perusosoite."
+      },
+      "apiSecretCode" : {
+        "label" : "Keskustelumallin API-token",
+        "help" : "Valitse tämän mallin käyttämä keskustelumallin API-token (valinnainen)"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletuskeskustelumalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletuskeskustelumallina, jos keskustelumallia ei ole määritelty"
+      },
+      "choosedModel" : {
+        "label" : "Keskustelumallin valinta",
+        "help" : "Valitse keskustelumalli käyttöön."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleiset tiedot"
+      },
+      "TitleFragment" : {
+        "label" : "Muokataan keskustelumallin tarjoajaa:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Lisäasetukset"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mallin käyttöoikeudet"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä upotusmallin asetusten kuvaus"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan Ollama lähipalvelimen upotusmalliasetuksia"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama-token",
+        "help" : "Valitse tämän mallin käyttämä Ollama-token"
+      },
+      "choosedModel" : {
+        "label" : "Ollama upotusmallin valinta",
+        "help" : "Valitse Ollama-upotusmalli käyttöön."
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Upotusmallin asetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletusupotusmalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletusupotusmallina, jos upotusmallia ei ole määritelty"
+      },
+      "baseUrl" : {
+        "label" : "Ollama-palvelimen perusosoite",
+        "help" : "Perusosoite (esim. http://palvelin:234/) johon ollama-lähiverkkopalvelin vastaa."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä upotusmallin asetusten kuvaus"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan MistralAI-upotusmallin asetuksia"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Upotusmallin asetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI upotusmallin valinta",
+        "help" : "Valitse MistralAI-upotusmalli käyttöön."
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletusupotusmalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletusupotusmallina, jos upotusmallia ei ole määritelty"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI-token",
+        "help" : "Valitse tämän mallin käyttämä MistralAI-token"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Muokataan Google Vertex AI upotusmallin asetuksia"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä upotusmallin asetusten kuvaus"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI upotusmallin valinta",
+        "help" : "Valitse Google Vertex AI upotusmalli käyttöön."
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletusupotusmalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletusupotusmallina, jos upotusmallia ei ole määritelty"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Upotusmallin asetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Valitse tämän mallin käyttämä Google Vertex AI token"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "TitleFragment" : {
+        "label" : "Muokataan upotusmallin tarjoajaa:"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä upotusmallin asetusten kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Upotusmallin asetusten automaattisesti luotu yksilöllinen koodi"
+      },
+      "choosedModel" : {
+        "label" : "Upotusmallin valinta",
+        "help" : "Valitse upotusmalli käyttöön."
+      },
+      "baseUrl" : {
+        "label" : "Upotusmallin API-palvelimen osoite",
+        "help" : "Upotusmallin palvelimen perusosoite."
+      },
+      "defaultModel" : {
+        "label" : "aseta tämä oletusupotusmalliksi",
+        "help" : "Jos valittuna, tätä käytetään oletusupotusmallina, jos upotusmallia ei ole määritelty"
+      },
+      "apiSecretCode" : {
+        "label" : "Upotusmallin API-token",
+        "help" : "Valitse tämän mallin käyttämä upotusmallin API-token"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Chatin asetustiedot"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Poista tämä keskustelu"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Nimeä keskustelu uudelleen"
+      },
+      "QueryControl" : {
+        "placeholder" : "Kirjoita viesti bottiin"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "description" : {
+        "label" : "Keskustelun kuvaus",
+        "help" : "Syötä keskustelun kuvaus."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Käytetty malli",
+        "help" : "Mallin koodi"
+      },
+      "providerId" : {
+        "label" : "Keskustelumallin tarjoaja",
+        "help" : "LLms provider driver"
+      },
+      "functions" : {
+        "label" : "Keskustelumallin käytettävät funktiot",
+        "help" : "Luettelo keskustelumallin funktioista"
+      },
+      "NameCol" : {
+        "label" : "Nimi"
+      },
+      "DescriptionCol" : {
+        "label" : "Kuvaus"
+      },
+      "kbases" : {
+        "label" : "Käytettävissä olevat tietopankit",
+        "help" : "Luettelo keskustelussa käytetyistä tietopankeista"
+      },
+      "CloseBtn" : {
+        "help" : "Sulje"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Tallenna",
+        "help" : "Aloita ääniraidan tallennus ja lähetä se"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "lataa tiedot uudelleen"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SelectHeader" : {
+        "label" : "Valitse"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "päättymisaika"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "aloitusaika"
+      },
+      "ProcessingHeader" : {
+        "label" : "käsittely"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "CodeHeader" : {
+        "label" : "Koodi"
+      },
+      "FinishedHeader" : {
+        "label" : "valmis"
+      },
+      "WithErrorHeader" : {
+        "label" : "virheellinen"
+      },
+      "LogTableComponent" : {
+        "help" : "Tämä jaetun tiedostojärjestelmän alueen sisäänvientiloki"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Prosessien tilastot"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "CloseBtn" : {
+        "label" : "Sulje"
+      },
+      "PublicationLogTab" : {
+        "label" : "Julkaisuloki"
+      },
+      "MainPanel" : {
+        "label" : "Julkaisuloki"
+      },
+      "actualStatus" : {
+        "label" : "Tila",
+        "help" : "Tehtävän tila: käynnissä, valmis tai valmis virheillä."
+      },
+      "publishingSystem" : {
+        "label" : "Julkaistun sisällön asetukset",
+        "help" : "Tietoja julkaistusta sisällöstä"
+      },
+      "startDateTime" : {
+        "label" : "Aloitusaika",
+        "help" : "Sisällön synkronointitehtävän alkamisajankohta"
+      },
+      "endDateTime" : {
+        "label" : "Päättymisaika",
+        "help" : "Sisällön synkronointitehtävän päättymisajankohta"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Ei käsitelty kokonaan"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Käsitelty kokonaan"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "upotukset vs dokumenttien kokonaismäärä"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Lisätietoja"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Luo kehotus"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Kehotusvelho",
+        "help" : "Käytä tätä hyödyntääksesi LLM:ää kehotuksen luomiseen tavoitteitasi varten"
+      },
+      "acceptPrompt" : {
+        "label" : "Hyväksy kehotus"
+      },
+      "promptWizardUI" : {
+        "label" : "Kehotusmallin luontivelho"
+      },
+      "cancel" : {
+        "label" : "Peruuta"
+      },
+      "response" : {
+        "label" : "Ehdotettu kehotusmalli",
+        "help" : "Luotu malliteksti tavoitteellesi (voit muuttaa tai korjata/säätää sitä)"
+      },
+      "modelCode" : {
+        "label" : "Käytettävä keskustelumalli",
+        "help" : "Valitse keskustelumalli, jolle haluat pyytää kehotusmallin luontia"
+      },
+      "query" : {
+        "label" : "Kehotusmallin pyyntö",
+        "help" : "Määrittele toisen persoonan muodossa, mikä on tavoite, jossa AI tukee käyttäjää"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Lämpötila",
+        "help" : "Mallin vasteen lämpötila, välillä 0–1 (jos et ole varma, jätä tyhjäksi)"
+      },
+      "contextLength" : {
+        "label" : "Kontekstin pituus (tokenit)",
+        "help" : "Tekstin määrä, jonka AI-malli voi huomioida käsitellessään (jos ei asetettu, käytetään arvoa 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP-parametri, välillä 0–1 (jos et ole varma, jätä tyhjäksi)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Käytössä olevat toiminnot tälle mallille",
+        "help" : "Toiminnot, joita malli voi käyttää keskustelun aikana"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Oletusmallin kehote",
+        "help" : "Muokkaa chat-mallin oletuskehotetta."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä tunnisteen kuvaus."
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Tunnisteen automaattisesti luotu yksilöllinen koodi."
+      },
+      "secretType" : {
+        "label" : "Tunnistetyyppi",
+        "help" : "Valitse tunnistetyyppi, jonka haluat luoda etäjärjestelmää varten"
+      },
+      "InsertBtn" : {
+        "label" : "Lisää"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Syötä token."
+      },
+      "user" : {
+        "label" : "Käyttäjä",
+        "help" : "Syötä tokenissa ilmoitettu käyttäjä."
+      },
+      "MainPanel" : {
+        "label" : "Luodaan tunniste"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "username" : {
+        "label" : "Käyttäjänimi",
+        "help" : "Syötä käyttäjänimi."
+      },
+      "password" : {
+        "label" : "Salasana",
+        "help" : "Syötä salasana."
+      },
+      "email" : {
+        "label" : "Sähköposti/käyttäjänimi",
+        "help" : "Syötä ssh-avaimeen liitetty sähköposti tai käyttäjänimi."
+      },
+      "key" : {
+        "label" : "Salainen avain",
+        "help" : "Avaa yksityinen avaintiedosto ja kopioi tämä tekstialue."
+      },
+      "passphrase" : {
+        "label" : "Avaimen salasana",
+        "help" : "Syötä avaimen salasana."
+      },
+      "pub" : {
+        "label" : "Julkinen avain",
+        "help" : "Avaa julkinen avaintiedosto ja kopioi tämä tekstialue."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Sisällön automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna ladatun tiedoston tai tiedostojärjestelmän kohteen kuvaus."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Ylemmän projektin viite."
+      },
+      "upload" : {
+        "label" : "Lataa sisältöä",
+        "help" : "Napsauta selauspainiketta ja valitse zip- tai muut tiedostot"
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Ota zip-tiedostojen avaaminen ja sisällön purku käyttöön"
+      },
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallentaa ja tekee sisällön saataville tietopohjaan LLm:ille"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      },
+      "MainPanel" : {
+        "label" : "Ladatun sisällön muokkaus"
+      },
+      "SettingsTab" : {
+        "label" : "Asetukset"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Määritä rakennusjärjestelmät",
+        "help" : "Luettelo rakennus- ja pakkausjärjestelmistä, joita tutkitaan metatietojen ja lisäliitteiden tietojen osalta (jätä tyhjäksi, jos ohjelmistokoodia ei sisälly)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Valitut kohteet"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Peruuta"
+      },
+      "EditBtn" : {
+        "help" : "Muokkaa valittua"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Valitse kohteet"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Valitse kohteet"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Muokkaa ajoitusta"
+      },
+      "ConfirmBtn" : {
+        "label" : "Vahvista"
+      },
+      "AddBtn" : {
+        "label" : "+Lisää"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallentaa ja tekee sisällön saataville tietopohjaan LLm:ille"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SettingsTab" : {
+        "label" : "Asetukset"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Lähdekoodin käsittely"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      },
+      "MainPanel" : {
+        "label" : "Muokkaa olemassa olevaa tiedostojärjestelmän sisältöä"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä ladatun sisällön kuvaus tiedostojärjestelmäkohdalle."
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Ota käyttöön zip-tiedostojen avaaminen ja sisällön purkaminen"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Automaattisesti luotu sisällön yksilöllinen koodi."
+      },
+      "tree" : {
+        "label" : "Valitut tiedostot tai kansiot",
+        "help" : "Palvelimella olevat jaettavat tiedostojärjestelmän tiedostot tai kansiot"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Ylätason projektiviite."
+      },
+      "programmedTables" : {
+        "label" : "Sisällön päivitysten tarkistusajastus",
+        "help" : "Määrittele muuttuneiden sisältöjen ajoitus, jotta hakupohjainen generointijärjestelmä pysyy ajan tasalla"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kansioiden järjestelyperusteet",
+        "help" : "Kuvaile tähän, miten kansioiden järjestelyperusteet on toteutettu siinä tiedostojärjestelmän alueessa, jota jaat Gebo.ai-palvelulla"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Määritä rakennusjärjestelmät",
+        "help" : "Lista rakennus-/paketointijärjestelmistä, joita tarkastellaan metatietojen ja lisäartefaktien tietojen löytämiseksi (jätä tyhjäksi, jos ohjelmistokoodia ei ole)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Uusi tiedostojen jakamisalue"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absoluuttinen polku"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db- tai yml-tiedoston määritys"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "CodeHeader" : {
+        "label" : "Koodi"
+      },
+      "ModifyHeader" : {
+        "label" : "Muokkaa"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Valittu jaettu tiedostojärjestelmän kansio",
+        "help" : "Valitse palvelimelta kansio, joka toimii jakamasi tiedostojärjestelmän juuripolkuna organisaatiosi dokumenttien säilytykseen"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Kirjoita organisaation jaetun tiedostojärjestelmäalueen kuvaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Automaattisesti luotu sisällön yksilöllinen koodi."
+      },
+      "InsertBtn" : {
+        "label" : "Lisää"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "MainPanel" : {
+        "label" : "Muokkaa palvelimen jaettua tiedostokansiota"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallenna ja tee sisällöt saataville tietopohjaan LLm:ille"
+      },
+      "MainPanel" : {
+        "label" : "Git-lähdekoodin/dokumentaation muokkaus"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä git-repon kuvaus."
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Automaattisesti luotu git-repon yksilöllinen koodi."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Viittaus ylätason projektiin."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git-järjestelmä",
+        "help" : "Aiemmin määritetyn git-järjestelmän viite."
+      },
+      "branch" : {
+        "label" : "Haara",
+        "help" : "Haara minkä haluat ladata (yleensä master, main tai develop)"
+      },
+      "identityCode" : {
+        "label" : "Käytetty tunniste",
+        "help" : "Valitse tunniste kloonausta/haun suorittamiseen järjestelmässä"
+      },
+      "repositoryUri" : {
+        "label" : "Repositoryn url/osoite",
+        "help" : "Git-etärepositoryn koko osoite (yleensä alkaa http:, https: tai ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "julkinen",
+        "help" : "Jos tosi, repositoryyn pääsy ei vaadi tunnistautumista"
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Salli zip-tiedostojen avaus ja sisällön purkaminen"
+      },
+      "programmedTables" : {
+        "label" : "Sisältöpäivitysten tarkistusaikataulu",
+        "help" : "Ajoita muuttuneiden sisältöjen tarkistukset, jotta hakuavusteinen sukupolvisysteemi pysyy ajan tasalla"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Määritä build-järjestelmät",
+        "help" : "Lista build/packaging-järjestelmistä, joista tarkistaa metatiedot ja lisäartefaktien tiedot"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Yleistiedot"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Käytä chat-mallia"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "valitse"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Valitse chat-mallin konfiguraatio"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Valitse upotusmallin konfiguraatio"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "valitse"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG-asetukset"
+      },
+      "LanguageModelTab" : {
+        "label" : "Suuren kielimallin ja työkalujen asetukset"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Käytä upotusmallia"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Tietoturva- ja käyttöoikeusasetukset"
+      },
+      "MainPanel" : {
+        "label" : "Muokkaa hakuavusteisen generoinnin chat-profiilia"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Chat-profiilin automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä chat-profiilin kuvaus."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Käyttäjä valitsee tietopohjat",
+        "help" : "Käyttäjä voi valita käytettävissä olevista tietopohjista ja/ tai ladata omia tiedostojaan."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Tietopohjat",
+        "help" : "Tietopohjat, joita käytetään dokumenttien hakemiseen."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Samankaltaisuusraja",
+        "help" : "Samankaltaisuusraja semanttisissa hauissa, 0,60–0,65 matala suodatus, 0,70–0,75 keskitasoinen suodatus, 0,80–0,85 tarkka"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Toisen 'hypyn' samankaltaisuusraja",
+        "help" : "Samankaltaisuusraja semanttisissa hauissa, 0,60–0,65 matala suodatus, 0,70–0,75 keskitasoinen suodatus, 0,80–0,85 tarkka, käytetään toisen haun kohdalla moniaskelisessa rag-haussa"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Poista käytöstä 'multi hop' rag",
+        "help" : "Poista 'multi hop rag' -toiminnallisuus käytöstä. Multi hop -haku suorittaa ensin semanttisen haun ja käyttää löydettyjä dokumentteja kontekstina uudelle haulle mahdollistaen laajemman kontekstin."
+      },
+      "topK" : {
+        "label" : "Otetut dokumenttifragmentit huomioon (TopK)",
+        "help" : "Hakuavusteisessa generoinnissa huomioitavien dokumenttifragmenttien määrä semanttisessa haussa"
+      },
+      "enabledFunctions" : {
+        "label" : "Käytössä olevat funktiokutsut tässä RAG-chatissa",
+        "help" : "Toiminnot, joita kielimalli voi käyttää keskustelun aikana valitun tietopohjan kanssa"
+      },
+      "prompt" : {
+        "label" : "Ohje",
+        "help" : "Muokkaa hakuavusteisen generoinnin keskusteluiden ohjetekstiä."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Anna tai lisää kyselyn kategoria"
+      },
+      "MainPanel" : {
+        "label" : "Muokataan kyselyä"
+      },
+      "promptCategory" : {
+        "label" : "Kyselyn kategoria",
+        "help" : "Valitse tai lisää kyselyn kategoria."
+      },
+      "prompt" : {
+        "label" : "Kysely",
+        "help" : "Muokkaa keskustelun kyselyä, käytä {query} osoittamaan käyttäjän kysymystä ja {context} osoittamaan dokumenttien/ historian kontekstia, joka lähetetään LLM:lle."
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Kyselylle automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä kyselyn kuvaus."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Vaihda salasana"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Vanha salasana",
+        "help" : "Nykyinen salasana kirjautumiseen"
+      },
+      "newPassword" : {
+        "label" : "Uusi salasana",
+        "help" : "uusi salasana"
+      },
+      "username" : {
+        "label" : "Sähköposti",
+        "help" : "Sähköposti käyttäjätunnuksena kirjautumiseen"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Salasanan vaihto"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "ChangePwdBtn" : {
+        "label" : "Vaihda salasana"
+      },
+      "newPassword1" : {
+        "label" : "Vahvista uusi salasana",
+        "help" : "Vahvista uusi salasana"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "ForMoreInformations" : {
+        "label" : "Lisätietoja Google custom search API:sta tai ilmaisen api-avaimen hankkimisesta: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Google search api -asetuksen yksilöllinen koodi."
+      },
+      "MainPanel" : {
+        "label" : "Google custom search api -tunnistetietojen muokkaus"
+      },
+      "secretCode" : {
+        "label" : "Google search api -token",
+        "help" : "Valitse tai syötä google search api -token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Syötä kuvaus google search api -asetukselle."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Keskustele ilman tietopohjia",
+        "help" : "Valitse LLM:t keskusteluun",
+        "placeholder" : "Valitse LLM:t keskusteluun"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Avaa keskustelun asetukset"
+      },
+      "CreateChatBtn" : {
+        "label" : "Uusi keskustelu"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Uusi keskusteluistunto"
+      },
+      "chatProfileCode" : {
+        "label" : "Keskustele tietopohjien kanssa",
+        "help" : "Valitse yrityksen keskusteluprofiili käyttääksesi yrityksen (ja omia) dokumentteja ja LLM:iä",
+        "placeholder" : "Valitse yrityksen keskusteluprofiili käyttääksesi yrityksen (ja omia) dokumentteja ja LLM:iä"
+      },
+      "NewChatBtn" : {
+        "label" : "Uusi keskustelu"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Keskustele asiakirjojen kanssa",
+        "help" : "Selaa tai hae ja valitse asiakirjat, joiden kanssa haluat työskennellä"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Valitse tiedostot keskustelua varten"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Vahvista"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Lähetä tai valitse omat asiakirjat",
+        "help" : "Valitse/lähetä asiakirjoja omasta tilasta"
+      },
+      "fileSearchBtn" : {
+        "label" : "Etsi"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Etsi"
+      },
+      "query" : {
+        "label" : "Semanttinen hakulauseke",
+        "help" : "Syötä hakua kuvaava merkityksellinen lause"
+      },
+      "choosenBrowsing" : {
+        "label" : "Valitse tiedostoja selaten tietopankkeja",
+        "help" : "Valitse tiedostoja selaten yrityksen jaettuja tietopankkeja"
+      },
+      "filename" : {
+        "label" : "Haettu tiedoston nimi",
+        "help" : "Syötä osa tiedostonimestä, jota haet"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Muokkaa valittuja"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Valitse käyttäjien tiedostot"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Valitse käyttäjän lataama sisältö"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Tietopankit ja käyttäjätiedostot"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+aliprojekti tai kohde",
+        "help" : "lisää aliprojekti tai kohde"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+lataa tiedostoja",
+        "help" : "lisää ladattujen tiedostojen tietolähde"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "lisää Microsoft SharePoint/OneDrive -tietolähde"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "lisää Atlassian Confluence -tietolähde"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+tiedostojärjestelmä",
+        "help" : "lisää jaettu tiedostojärjestelmän tietolähde"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "lisää Atlassian Jira -tietolähde"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "lisää git-repositorion tietolähde, kuten bitbucket, github tai muut"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Asetukset"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "oma profiili"
+      },
+      "logout" : {
+        "label" : "kirjaudu ulos"
+      }
+    }
+  }
+}

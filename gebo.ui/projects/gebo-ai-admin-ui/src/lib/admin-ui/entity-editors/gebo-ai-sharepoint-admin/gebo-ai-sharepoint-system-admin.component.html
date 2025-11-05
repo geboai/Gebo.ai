@@ -12,74 +12,80 @@
  
  
 
-<p-blockUI [target]="sharepointSystemCtrl" [blocked]="loading">
+<p-blockUI id="LockIconBlockUI" gebo-ai-label [target]="sharepointSystemCtrl" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #sharepointSystemCtrl header="Editing sharepoint system" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #sharepointSystemCtrl header="Editing sharepoint system" [formGroup]="formGroup">
     <div class="geboDialogContent">
         <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
         <p-tabView>
-            <p-tabPanel header="General settings">
+            <p-tabPanel id="GeneralSettingsTab" gebo-ai-label header="General settings">
                 <div class="grid">
 
                     <div class="col-6">
-                        <div class="flex flex-column gap-2">
-                            <label for="description">Description</label>
-                            <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" aria-describedby="description-help" />
-                            <small id="description-help">
-                                Enter the description of the sharepoint system.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="description" label="Description" help="Enter the description of the sharepoint system." [required]="true">
+                            <input
+                                id="description"
+                                formControlName="description"
+                                maxlength="120"
+                                [required]="true"
+                                pInputText
+                                gebo-ai-field-element
+                            />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="code">Unique Code</label>
-                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                readonly="true" />
-                            <small id="description-help">
-                                Automatically generated unique code of the sharepoint system.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the sharepoint system.">
+                            <input
+                                id="code"
+                                formControlName="code"
+                                readonly="true"
+                                pInputText
+                                gebo-ai-field-element
+                            />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="sharepointVersion">Sharepoint version</label>
-                            <geboai-editable-listbox-component id="sharepointVersion"
-                                formControlName="sharepointVersion" [required]="true" [readonly]="mode!=='NEW'"
-                                placeholder="Select a sharepoint version" class="col-12"
-                                aria-describedby="sharepointVersion-help" [data]="sharepointVersions">
-
+                        <gebo-ai-field id="sharepointVersion" label="Sharepoint version" help="sharepoint version" [required]="true">
+                            <geboai-editable-listbox-component
+                                id="sharepointVersion"
+                                formControlName="sharepointVersion"
+                                [required]="true"
+                                [readonly]="mode!=='NEW'"
+                                placeholder="Select a sharepoint version"
+                                class="col-12"
+                                [data]="sharepointVersions"
+                                gebo-ai-field-element
+                            >
                             </geboai-editable-listbox-component>
-                            <small id="sharepointVersion-help">
-                                sharepoint version
-                            </small>
-                        </div>
+                        </gebo-ai-field>
                     </div>
 
                     <div class="col-12" *ngIf="actualSharepointVersion!=='CLOUD_VERSION'">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="baseUri">Base internet address</label>
-                            <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12"
-                                aria-describedby="baseUri-help" />
-                            <small id="baseUri-help">
-                                Url of the base sharepoint system address
-                            </small>
-                        </div>
+                        <gebo-ai-field id="baseUri" label="Base internet address" help="Url of the base sharepoint system address">
+                            <input
+                                type="text"
+                                id="baseUri"
+                                formControlName="baseUri"
+                                class="col-12"
+                                pInputText
+                                gebo-ai-field-element
+                            />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="secretCode">Identity used</label>
-                            <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
-                                placeholder="Select an identity" [optionsObservable]="identitiesObservable"
-                                [required]="true" aria-describedby="secretCode-help"
-                                [createNewRecordRequest]="newSecretAction">
-
+                        <gebo-ai-field id="secretCode" label="Identity used" help="Select or create the identity to access the sharepoint system" [required]="true">
+                            <geboai-editable-listbox-component
+                                id="secretCode"
+                                formControlName="secretCode"
+                                placeholder="Select an identity"
+                                [optionsObservable]="identitiesObservable"
+                                [required]="true"
+                                [createNewRecordRequest]="newSecretAction"
+                                gebo-ai-field-element
+                            >
                             </geboai-editable-listbox-component>
-                            <small id="secretCode-help">
-                                Select or create the identity to access the sharepoint system
-                            </small>
-                        </div>
+                        </gebo-ai-field>
                     </div>
                 </div>
             </p-tabPanel>
@@ -99,18 +105,20 @@
     <div class="geboButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
         <div class="grid">
             <div class="col-3">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
                     [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
             </div>
 
             <div class="col-3">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
                     styleClass="w-full" />
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
                     styleClass="w-full" [disabled]="canDelete===false" />
             </div>
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

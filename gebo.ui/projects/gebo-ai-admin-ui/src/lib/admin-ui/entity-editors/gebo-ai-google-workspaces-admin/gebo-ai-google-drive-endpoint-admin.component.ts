@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,17 +19,21 @@
  * browsing Google Drive contents, managing synchronization settings, and handling
  * authentication with Google Workspace.
  */
-import { Component, Injector } from "@angular/core";
+import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GGoogleDriveProjectEndpoint, GGoogleDriveSystem, GoogleDriveBrowsingControllerService, GoogleDriveSystemsControllerService, GProject, JobLauncherControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, browsePathObservableCallback, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 
 @Component({
   selector: "gebo-ai-google-drive-endpoint-admin-component",
   templateUrl: "gebo-ai-google-drive-endpoint-admin.component.html",
-  standalone: false
+  standalone: false, providers: [
+    { provide: GEBO_AI_MODULE, useValue: "GeboAiGoogleWorkspacesModule", multi: false }, {
+      provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGoogleDriveProjectEndpointAdminComponent),
+      multi: false
+    }]
 })
 export class GeboAiGoogleDriveProjectEndpointAdminComponent extends BaseEntityEditingComponent<GGoogleDriveProjectEndpoint> {
   /**

@@ -9,17 +9,14 @@
  */
  -->
 
-
-
-
-<p-blockUI [target]="kbCompo" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="kbCompo" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #kbCompo header="Editing a Knowledge base" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #kbCompo header="Editing a Knowledge base" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-        <p-tabView>
-            <p-tabPanel header="General infos">
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-tabView id="TabView" gebo-ai-label>
+            <p-tabPanel id="GeneralInfosTab" gebo-ai-label header="General infos">
                 <div class="grid">
                     <!-- 
             <div class="col-6">
@@ -40,44 +37,26 @@
            -->
 
                     <div class="col-6">
-                        <div class="flex flex-column gap-2">
-                            <label for="description">Description</label>
-                            <input pInputText id="description" formControlName="description" maxlength="120"
-                                [required]="true" aria-describedby="description-help" />
-                            <small id="description-help">
-                                Enter the description of the knowledge base.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="description" label="Description" help="Enter the description of the knowledge base." [required]="true">
+                            <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="code">Unique Code</label>
-                            <input pInputText id="code" formControlName="code" aria-describedby="code-help"
-                                readonly="true" />
-                            <small id="description-help">
-                                Automatically generated unique code of the knowledge base.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the knowledge base.">
+                            <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="embeddingModelReferences">Used embedding models (leave empty to use system
-                                default)</label>
-                            <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource"
-                                formControlName="embeddingModelReferences" id="embeddingModelReferences"
-                                placeholder="Select embedding models" optionLabel="description" display="chip"
-                                [showClear]="true" aria-describedby="embeddingModelReferences-help" />
-                            <small id="embeddingModelReferences-help">
-                                Embedding models for the knowledge base, leave empty will use the default one.
-                            </small>
-                        </div>
+                        <gebo-ai-field id="embeddingModelReferences" label="Used embedding models (leave empty to use system default)" help="Embedding models for the knowledge base, leave empty will use the default one.">
+                            <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource" formControlName="embeddingModelReferences" id="embeddingModelReferences" placeholder="Select embedding models" optionLabel="description" display="chip" [showClear]="true" gebo-ai-field-element />
+                        </gebo-ai-field>
                     </div>
                     <div class="col-6" *ngIf="graphRagContext">
                         <gebo-ai-graphrag-component [context]="graphRagContext"></gebo-ai-graphrag-component>
                     </div>
                 </div>
             </p-tabPanel>
-            <p-tabPanel header="Knowledge base access settings">
+            <p-tabPanel id="AccessSettingsTab" gebo-ai-label header="Knowledge base access settings">
                 <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
             </p-tabPanel>
         </p-tabView>
@@ -86,22 +65,24 @@
     <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
         <div class="grid">
             <div class="col-3">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
                     [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
             </div>
 
             <div class="col-3">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
                     styleClass="w-full" />
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"
+                <p-button id="IndexBtn" gebo-ai-label [outlined]="true" label="Index" (onClick)="doReindex()" icon="pi pi-refresh" severity="danger"
                     title="Reindex contents" [disabled]="mode==='NEW'" styleClass="w-full"></p-button>
             </div>
             <div class="col-3">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
                     [disabled]="canDelete===false" styleClass="w-full" />
             </div>
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

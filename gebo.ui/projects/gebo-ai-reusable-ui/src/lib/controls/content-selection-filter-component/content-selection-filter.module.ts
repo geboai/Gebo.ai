@@ -11,12 +11,19 @@ import { InputNumber } from "primeng/inputnumber";
 import { InputTextModule } from "primeng/inputtext";
 import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 import { MultiSelect } from "primeng/multiselect";
-import { GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
+
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, Fieldset, Button, InputNumber, InputTextModule, EditableListboxModule, MultiSelect,GeboAIFieldTransationContainerModule],
-    declarations:[GeboAIContentSelectionFilterComponent,GeboAISelectionFilterCriteriaComponent],
-    exports:[GeboAIContentSelectionFilterComponent]
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, Fieldset, Button, InputNumber, InputTextModule, EditableListboxModule, MultiSelect, GeboAIFieldTransationContainerModule],
+    declarations: [GeboAIContentSelectionFilterComponent, GeboAISelectionFilterCriteriaComponent],
+    exports: [GeboAIContentSelectionFilterComponent],
+    providers: [{
+        provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: false
+    }, {
+        provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentSelectionFilterComponent"), multi: false
+    }]
 })
 export class GeboAIContentSelectionFilterModule {
 

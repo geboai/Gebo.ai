@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,7 +19,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { GeboModulesConfigControllerService, GSharepointContentManagementSystem, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, SHAREPOINT_MODULE } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, SHAREPOINT_MODULE } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { GeboRootInstalledModuleService } from "./abstract-module-installed.service";
 
@@ -39,7 +39,7 @@ export class SharepointStatusService extends AbstractStatusService {
    * @returns An Observable that emits true if at least one SharePoint system is configured, false otherwise.
    */
   public override getBooleanStatus(): Observable<boolean> {
-    return this.sharePointControllerService.getSharepointSystems().pipe(map(c => ((c && c.length > 0)?true:false)));
+    return this.sharePointControllerService.getSharepointSystems().pipe(map(c => ((c && c.length > 0) ? true : false)));
   }
 }
 
@@ -52,8 +52,8 @@ export class SharepointInstalledModuleService extends GeboRootInstalledModuleSer
   /**
    * The unique identifier for the SharePoint module
    */
-  protected override moduleCode: string=SHAREPOINT_MODULE;
-  
+  protected override moduleCode: string = SHAREPOINT_MODULE;
+
   constructor(geboModulesConfigService: GeboModulesConfigControllerService) {
     super(geboModulesConfigService);
   }
@@ -65,9 +65,11 @@ export class SharepointInstalledModuleService extends GeboRootInstalledModuleSer
  * Allows users to view, create, and edit SharePoint system connections.
  */
 @Component({
-    selector: "gebo-sharepoint-wizard-component",
-    templateUrl: "sharepoint-wizard.component.html",
-    standalone: false
+  selector: "gebo-sharepoint-wizard-component",
+  templateUrl: "sharepoint-wizard.component.html",
+  standalone: false,
+  providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SharepointWizardComponent") }]
+
 })
 export class SharepointWizardComponent extends BaseWizardSectionComponent {
 
@@ -75,12 +77,12 @@ export class SharepointWizardComponent extends BaseWizardSectionComponent {
    * Flag that controls the visibility of the SharePoint creation dialog
    */
   public createSharepointWindowOpen: boolean = false;
-  
+
   /**
    * List of configured SharePoint systems
    */
   public systems: GSharepointContentManagementSystem[] = [];
-  
+
   constructor(setupWizardComunicationService: SetupWizardComunicationService,
     private sharepointControllerService: SharepointSystemsControllerService,
     private geboUIActionsRouter: GeboUIActionRoutingService

@@ -20,7 +20,7 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { EnrichedDocumentReferenceView, EnrichedDocumentReferenceViewRetrieveService } from "../content-viewer/enriched-document-reference-view.service";
-import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * A component that provides a UI panel for choosing and managing documents.
@@ -37,9 +37,10 @@ import { GEBO_AI_FIELD_HOST, GeboAIFieldHost } from "../field-host-component-ifa
             useExisting: forwardRef(() => GeboAIChooseDocumentsPanelComponent),
             multi: true
         },
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIChooseDocumentsPanelComponent),
-            multi: true
+            multi: false
         }
     ],
     standalone: false

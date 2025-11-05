@@ -8,25 +8,22 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
 <p-blockUI [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel #instModeUI header="Server shared filesystem paths">
+<p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Server shared filesystem paths">
     
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     
         <p-table [value]="shares?shares:[]" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template #header pTemplate="header">
                 <tr>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Absolute path</th>
-                    <th>Delete</th>
+                    <th id="CodeHeader" gebo-ai-text>Code</th>
+                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                    <th id="AbsolutePathHeader" gebo-ai-text>Absolute path</th>
+                    <th id="DeleteHeader" gebo-ai-text>Delete</th>
 
                 </tr>
             </ng-template>
@@ -35,7 +32,7 @@
                     <td>{{ share.code }}</td>
                     <td>{{ share.description }}</td>
                     <td>{{ share.reference?.path?.absolutePath?share.reference?.path?.absolutePath:share.reference?.root?.absolutePath }}</td>
-                    <td><p-button [disabled]="share.readonly || share.notUsed!==true" (onClick)="deletePath(share)" label="Remove path"
+                    <td><p-button [disabled]="share.readonly || share.notUsed!==true" (onClick)="deletePath(share)" id="RemovePathBtn" gebo-ai-label label="Remove path"
                             icon="pi pi-trash" severity="danger" [text]="true"></p-button></td>
                 </tr>
             </ng-template>
@@ -43,7 +40,7 @@
         <div class="grid geboLargeButtonsBar">
             
             <div class="col-6">
-                <p-button [outlined]="true" label="Add folder" (onClick)="openAddFolderDialog()" icon="pi pi-plus"
+                <p-button [outlined]="true" label="Add folder" id="AddFolderBtn" gebo-ai-label (onClick)="openAddFolderDialog()" icon="pi pi-plus"
                      [disabled]="settingEnabled!==true"
                     styleClass="w-full"></p-button>
             </div>
@@ -55,38 +52,30 @@
 
         <div class="grid">
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="reference">Add a root folder of a shared filesystem</label>
+                <gebo-ai-field id="path" label="Add a root folder of a shared filesystem" help="Choose a server folder that is a root path for the shared filesystem used in your organization as a document repository" [required]="true">
                     <gebo-ai-vfilesystem-selector-component
                         [loadRootsObservable]="loadRootsObservable"
                         [readonly]="settingEnabled!==true" formControlName="reference" selectionMode="single" id="path"
-                        aria-describedby="reference-help"
-                        [browsePathObservable]="browsePathObservable" [required]="true"
+                        [browsePathObservable]="browsePathObservable"
+                        gebo-ai-field-element
                         class="col-12"></gebo-ai-vfilesystem-selector-component>
-                    <small id="reference-help">
-                        Choose a server folder that is a root path for the shared filesystem used in your
-                        organization as a document repository
-                    </small>
-                </div>
+                </gebo-ai-field>
             </div>
             <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter filesystem entry description
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter filesystem entry description" [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120"
+                        gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
         </div>
         <div class="grid geboLargeButtonsBar">
-         
             <div class="col-6">
-                <p-button [outlined]="true" label="Add folder" (onClick)="saveNewPath()" icon="pi pi-save"
+                <p-button [outlined]="true" label="Add folder" id="AddFolderBtn2" gebo-ai-label (onClick)="saveNewPath()" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid"
                     styleClass="w-full"></p-button>
             </div>
         </div>
     </form>
 </p-dialog>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
