@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Daxil ol"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Sənədlərinizi yükləyin və ya seçin",
         "help" : "İstifadəçi sahənizdən sənədləri seçin və ya yükləyin"
+      },
+      "fileSearchBtn" : {
+        "label" : "Axtar"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Axtar"
+      },
+      "query" : {
+        "label" : "Semantik axtarış ifadəsi",
+        "help" : "Axtarışınıza aid mənalı ifadə daxil edin"
+      },
+      "choosenBrowsing" : {
+        "label" : "Faylları bili bazalarında seçin",
+        "help" : "Şirkətə məxsus paylaşılmış bili bazalarında faylları seçin"
+      },
+      "filename" : {
+        "label" : "Axtarılan fayl adı",
+        "help" : "Axtardığınız məzmuna aid fayl adının bir hissəsini daxil edin"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Bilik bazaları və istifadəçi faylları"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproyekt və ya element",
+        "help" : "subproyekt və ya element əlavə et"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+fayl yüklə",
+        "help" : "yüklənən fayllar məlumat mənbəsini əlavə et"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+fayl sistemi",
+        "help" : "paylaşılan fayl sistemi məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github və ya digər git repozitorisi məlumat mənbəsi əlavə et"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Quraşdırma"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "profilim"
+      },
+      "logout" : {
+        "label" : "çıxış"
       }
     }
   }

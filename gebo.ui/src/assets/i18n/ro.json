@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Autentificare"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operațiune realizată cu succes"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Încarcă sau alege documentele tale",
         "help" : "Alege/încarcă documente din spațiul tău de utilizator"
+      },
+      "fileSearchBtn" : {
+        "label" : "Caută"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Caută"
+      },
+      "query" : {
+        "label" : "Frază de căutare semantică",
+        "help" : "Introduceți o frază relevantă pentru căutarea dumneavoastră"
+      },
+      "choosenBrowsing" : {
+        "label" : "Alegeți fișiere din bazele de cunoștințe",
+        "help" : "Alegeți fișiere din bazele de cunoștințe partajate ale companiei"
+      },
+      "filename" : {
+        "label" : "Numele fișierului căutat",
+        "help" : "Introduceți o parte din numele fișierului pentru conținutul căutat"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Baze de cunoștințe și fișiere utilizator"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproiect sau element",
+        "help" : "adaugă subproiect sau element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+încarcă fișiere",
+        "help" : "adaugă sursă de date cu fișiere încărcate"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "adaugă o sursă de date Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "adaugă o sursă de date Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "adaugă sursa de date din filesystem partajat"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "adaugă o sursă de date Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "adaugă o sursă de date dintr-un repository git precum bitbucket, github sau altele"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Configurare"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "profilul meu"
+      },
+      "logout" : {
+        "label" : "deconectare"
       }
     }
   }

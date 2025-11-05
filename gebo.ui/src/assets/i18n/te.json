@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "లాగిన్"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "సరే!",
+        "detail" : "ఆపరేషన్ విజయవంతంగా పూర్తయింది"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "మీ డాక్యుమెంట్లు అప్‌లోడ్ చేయండి లేదా ఎంచుకోండి",
         "help" : "మీ యూజర్ స్పేస్ నుండి డాక్యుమెంట్లు ఎంచుకోండి/అప్‌లోడ్ చేయండి"
+      },
+      "fileSearchBtn" : {
+        "label" : "వెతకండి"
+      },
+      "semanticSearchBtn" : {
+        "label" : "వెతకండి"
+      },
+      "query" : {
+        "label" : "అర్థవంతమైన శోధన పదబంధం",
+        "help" : "మీ శోధనకు సంబంధించిన అర్థవంతమైన పదబంధాన్ని నమోదు చేయండి"
+      },
+      "choosenBrowsing" : {
+        "label" : "ఫైళ్లను ఎన్నుకోండి జ్ఞానాన్ని అన్వేషించండి",
+        "help" : "సంస్థ పంచుకున్న జ్ఞానము ఆధారాలను అన్వేషిస్తూ ఫైళ్లను ఎన్నుకోండి"
+      },
+      "filename" : {
+        "label" : "వెతికిన ఫైల్ పేరు",
+        "help" : "మీరు వెతుకుతున్న విషయానికి సంబంధించి ఫైల్ పేరులోని భాగాన్ని నమోదు చేయండి"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "నాలెడ్జ్ బేస్‌లు మరియు వాడుకరి ఫైళ్లు"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ఉపప్రాజెక్ట్ లేదా అంశం",
+        "help" : "ఉపప్రాజెక్ట్ లేదా అంశం జోడించండి"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ఫైళ్లను అప్‌లోడ్ చేయండి",
+        "help" : "అప్‌లోడ్ చేయబడిన ఫైళ్ల డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ఫైల్ సిస్టమ్",
+        "help" : "పంచుకున్న ఫైల్ సిస్టమ్ డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github లేదా ఇతర git రెపోజిటరీ డేటా సోర్స్‌ను జోడించండి"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai చాట్"
+      },
+      "setup" : {
+        "label" : "సెట్టప్"
+      },
+      "admin" : {
+        "label" : "Gebo.ai అడ్మిన్"
+      },
+      "currentProfile" : {
+        "label" : "నా ప్రొఫైల్"
+      },
+      "logout" : {
+        "label" : "లాగ్అవుట్"
       }
     }
   }

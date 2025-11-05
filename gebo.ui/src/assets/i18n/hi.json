@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "लॉगिन"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ठीक है!",
+        "detail" : "सफलतापूर्वक ऑपरेशन पूरा हुआ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "अपने दस्तावेज़ अपलोड करें या चुनें",
         "help" : "अपने यूज़र स्पेस से दस्तावेज़ चुनें/अपलोड करें"
+      },
+      "fileSearchBtn" : {
+        "label" : "खोजें"
+      },
+      "semanticSearchBtn" : {
+        "label" : "खोजें"
+      },
+      "query" : {
+        "label" : "सार्थक खोज वाक्यांश",
+        "help" : "अपनी खोज से संबंधित एक सार्थक वाक्यांश दर्ज करें"
+      },
+      "choosenBrowsing" : {
+        "label" : "ज्ञान केंद्र ब्राउज़ करते हुए फाइलें चुनें",
+        "help" : "कंपनी के साझा ज्ञान केंद्र ब्राउज़ करते हुए फाइलें चुनें"
+      },
+      "filename" : {
+        "label" : "खोजी गई फाइल का नाम",
+        "help" : "अपनी खोजी गई सामग्री के लिए फाइल का भाग दर्ज करें"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "ज्ञान आधार और उपयोगकर्ता फ़ाइलें"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+सब-प्रोजेक्ट या आइटम",
+        "help" : "सब-प्रोजेक्ट या आइटम जोड़ें"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+फाइलें अपलोड करें",
+        "help" : "अपलोड की गई फाइलों का डेटा स्रोत जोड़ें"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+SharePoint/OneDrive",
+        "help" : "Microsoft SharePoint/OneDrive डेटा स्रोत जोड़ें"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+Confluence",
+        "help" : "Atlassian Confluence डेटा स्रोत जोड़ें"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+फाइल सिस्टम",
+        "help" : "साझा फाइल सिस्टम डेटा स्रोत जोड़ें"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+Jira",
+        "help" : "Atlassian Jira डेटा स्रोत जोड़ें"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+Git रिपॉजिटरी",
+        "help" : "Bitbucket, GitHub या अन्य जैसे git रिपॉजिटरी डेटा स्रोत जोड़ें"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai चैट"
+      },
+      "setup" : {
+        "label" : "सेटअप"
+      },
+      "admin" : {
+        "label" : "Gebo.ai एडमिन"
+      },
+      "currentProfile" : {
+        "label" : "मेरी प्रोफाइल"
+      },
+      "logout" : {
+        "label" : "लॉगआउट"
       }
     }
   }

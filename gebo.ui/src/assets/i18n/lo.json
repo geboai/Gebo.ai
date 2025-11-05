@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "ເຂົ້າລະບົບ"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ຮຽບຮ້ອຍ!",
+        "detail" : "ດຳເນີນການສຳເລັດແລ້ວ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "ອັບໂຫຼດ ຫຼື ເລືອກເອກະສານຂອງທ່ານ",
         "help" : "ເລືອກ/ອັບໂຫຼດເອກະສານຈາກພື້ນທີ່ຂອງຜູ້ໃຊ້ທ່ານ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ຄົ້ນຫາ"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ຄົ້ນຫາ"
+      },
+      "query" : {
+        "label" : "ຄຳຄົ້ນຫາແບບ semantic",
+        "help" : "ໃສ່ປະໂຫຍກທີ່ກົງກັບສິ່ງທີ່ທ່ານຕ້ອງການຄົ້ນຫາ"
+      },
+      "choosenBrowsing" : {
+        "label" : "ເລືອກເອກະສານຈາກຄວາມຮູ້ບັນທຶກ",
+        "help" : "ເລືອກເອກະສານຈາກຄວາມຮູ້ບັນທຶກຂອງບໍລິສັດ"
+      },
+      "filename" : {
+        "label" : "ຊື່ເອກະສານທີ່ຄົ້ນຫາ",
+        "help" : "ໃສ່ສ່ວນໜຶ່ງຂອງຊື່ເອກະສານທີ່ທ່ານຕ້ອງການ"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "ຖານຄວາມຮູ້ & ໄຟລ໌ຜູ້ໃຊ້"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ໂຄງການຍ່ອຍ ຫຼື ລາຍການ",
+        "help" : "ເພີ່ມໂຄງການຍ່ອຍ ຫຼື ລາຍການ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ອັບໂຫຼດເອກະສານ",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນເອກະສານທີ່ອັບໂຫຼດ"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ filesystem ຮ່ວມກັນ"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ git repository ເຊັ່ນ bitbucket, github ຫຼື ອື່ນໆ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "ຕັ້ງຄ່າ"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "ໂປຣໄຟລ໌ຂອງຂ້ອຍ"
+      },
+      "logout" : {
+        "label" : "ອອກຈາກລະບົບ"
       }
     }
   }

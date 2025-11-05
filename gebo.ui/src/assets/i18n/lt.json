@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Prisijungti"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Gerai!",
+        "detail" : "Operacija sėkmingai atlikta"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Įkelkite arba pasirinkite savo dokumentus",
         "help" : "Pasirinkite/įkelkite dokumentus iš savo vartotojo erdvės"
+      },
+      "fileSearchBtn" : {
+        "label" : "Ieškoti"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Ieškoti"
+      },
+      "query" : {
+        "label" : "Semantinė paieškos frazė",
+        "help" : "Įveskite prasmingą frazę, susijusią su jūsų paieška"
+      },
+      "choosenBrowsing" : {
+        "label" : "Pasirinkite failus naršydami žinių bazes",
+        "help" : "Pasirinkite failus naršydami bendrąsias įmonės žinių bazes"
+      },
+      "filename" : {
+        "label" : "Ieškomo failo pavadinimas",
+        "help" : "Įveskite failo pavadinimo dalį, kurią norite rasti"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Žinių bazės ir naudotojų failai"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojektas arba elementas",
+        "help" : "pridėti subprojektą ar elementą"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+įkelti failus",
+        "help" : "pridėti įkeltų failų duomenų šaltinį"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "pridėti Microsoft SharePoint/OneDrive duomenų šaltinį"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "pridėti Atlassian Confluence duomenų šaltinį"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+failų sistema",
+        "help" : "pridėti bendros failų sistemos duomenų šaltinį"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "pridėti Atlassian Jira duomenų šaltinį"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repozitorija",
+        "help" : "pridėti git saugyklos duomenų šaltinį, pvz., bitbucket, github ar kitus"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai pokalbis"
+      },
+      "setup" : {
+        "label" : "Nustatymai"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administravimas"
+      },
+      "currentProfile" : {
+        "label" : "mano profilis"
+      },
+      "logout" : {
+        "label" : "atsijungti"
       }
     }
   }

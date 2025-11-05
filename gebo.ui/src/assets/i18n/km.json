@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "ចូល"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "អំណោយពិសេស!",
+        "detail" : "ប្រតិបត្តិការបានជោគជ័យ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "ផ្ទុកឡើង ឬជ្រើសឯកសាររបស់អ្នក",
         "help" : "ជ្រើស/ផ្ទុកឯកសារពីផ្ទៃអ្នកប្រើ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ស្វែងរក"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ស្វែងរក"
+      },
+      "query" : {
+        "label" : "ពាក្យស្វែងរកអត្ថន័យ",
+        "help" : "បញ្ចូលប្រយោគដែលមានន័យទាក់ទងនឹងការស្វែងរករបស់អ្នក"
+      },
+      "choosenBrowsing" : {
+        "label" : "ជ្រើសរើសឯកសារតាមមូលដ្ឋានចំណេះដឹង",
+        "help" : "ជ្រើសរើសឯកសារតាមមូលដ្ឋានចំណេះដឹងរបស់ក្រុមហ៊ុន"
+      },
+      "filename" : {
+        "label" : "ឈ្មោះឯកសារស្វែងរក",
+        "help" : "បញ្ចូលផ្នែកឈ្មោះឯកសារសម្រាប់អត្ថន័យដែលអ្នកស្វែងរក"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "មូលដ្ឋានចំណេះដឹង និងឯកសារអ្នកប្រើ"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+គម្រោងរង ឬធាតុ",
+        "help" : "បន្ថែមគម្រោងរង ឬធាតុ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ផ្ទុកឯកសារ",
+        "help" : "បន្ថែមប្រភពទិន្នន័យឯកសារផ្ទុកឡើង"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "បន្ថែមប្រភពទិន្នន័យ Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "បន្ថែមប្រភពទិន្នន័យ Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ប្រព័ន្ធឯកសារ",
+        "help" : "បន្ថែមប្រភពទិន្នន័យប្រព័ន្ធឯកសារចែករំលែក"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "បន្ថែមប្រភពទិន្នន័យ Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "បន្ថែមប្រភពទិន្នន័យ git repository ដូចជា bitbucket, github ឬផ្សេងទៀត"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ជជែក"
+      },
+      "setup" : {
+        "label" : "បញ្ចូលការកំណត់"
+      },
+      "admin" : {
+        "label" : "Gebo.ai រដ្ឋបាល"
+      },
+      "currentProfile" : {
+        "label" : "ប្រវត្តិរូបរបស់ខ្ញុំ"
+      },
+      "logout" : {
+        "label" : "ចេញ"
       }
     }
   }

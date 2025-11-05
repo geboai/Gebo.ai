@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "ਲੌਗਇਨ"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋਇਆ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "ਆਪਣੇ ਡੌਕਯੂਮੈਂਟ ਅੱਪਲੋਡ ਜਾਂ ਚੁਣੋ",
         "help" : "ਆਪਣੀ ਯੂਜ਼ਰ ਸਪੇਸ ਤੋਂ ਡੌਕਯੂਮੈਂਟ ਚੁਣੋ/ਅੱਪਲੋਡ ਕਰੋ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ਖੋਜੋ"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ਖੋਜੋ"
+      },
+      "query" : {
+        "label" : "ਸੈਮਾਂਟਿਕ ਖੋਜ ਵਾਕ",
+        "help" : "ਆਪਣੀ ਖੋਜ ਨਾਲ ਸੰਬੰਧਿਤ ਇਕ ਅਰਥਪੂਰਨ ਵਾਕ ਦਰਜ ਕਰੋ"
+      },
+      "choosenBrowsing" : {
+        "label" : "ਫਾਈਲਾਂ ਦੀ ਬ੍ਰਾਉਜ਼ਿੰਗ ਨੌਲਜ ਬੇਸ ਚੁਣੋ",
+        "help" : "ਕੰਪਨੀ ਦੇ ਸਾਂਝੇ ਨੌਲਜ ਬੇਸਾਂ ਵਿੱਚੋਂ ਫਾਈਲਾਂ ਦੀ ਬ੍ਰਾਉਜ਼ਿੰਗ ਚੁਣੋ"
+      },
+      "filename" : {
+        "label" : "ਖੋਜੀ ਗਈ ਫਾਈਲ ਦਾ ਨਾਮ",
+        "help" : "ਆਪਣੀ ਖੋਜੀ ਸਮੱਗਰੀ ਲਈ ਫਾਈਲ ਨਾਮ ਦਾ ਹਿੱਸਾ ਦਰਜ ਕਰੋ"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "ਨਾਲੇਜ ਬੇਸ ਅਤੇ ਯੂਜ਼ਰ ਫਾਈਲਾਂ"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ਉਪਪਰੋਜੈਕਟ ਜਾਂ ਆਈਟਮ",
+        "help" : "ਉਪਪਰੋਜੈਕਟ ਜਾਂ ਆਈਟਮ ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ਫਾਈਲਾਂ ਅੱਪਲੋਡ ਕਰੋ",
+        "help" : "ਅੱਪਲੋਡ ਕੀਤੇ ਫਾਈਲ ਡੇਟਾ ਸੋורס ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive ਡੇਟਾ ਸੋурс ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence ਡੇਟਾ ਸੋурс ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ਫਾਇਲ ਸਿਸਟਮ",
+        "help" : "ਸਾਂਝਾ ਕੀਤੀ ਫਾਇਲ ਸਿਸਟਮ ਡੇਟਾ ਸੋורס ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira ਡੇਟਾ ਸੋурс ਸ਼ਾਮਲ ਕਰੋ"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "Bitbucket, GitHub ਜਾਂ ਹੋਰਾਂ ਵਰਗੇ git ਰਿਪੋਜ਼ਿਟਰੀ ਡੇਟਾ ਸੋурс ਸ਼ਾਮਲ ਕਰੋ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ਚੈਟ"
+      },
+      "setup" : {
+        "label" : "ਸੈਟਅੱਪ"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ਐਡਮਿਨ"
+      },
+      "currentProfile" : {
+        "label" : "ਮੇਰਾ ਪ੍ਰੋਫਾਈਲ"
+      },
+      "logout" : {
+        "label" : "ਲਾੱਗ ਆਉਟ"
       }
     }
   }

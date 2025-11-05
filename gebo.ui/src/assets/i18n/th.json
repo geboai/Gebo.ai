@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "เข้าสู่ระบบ"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ตกลง!",
+        "detail" : "ดำเนินการสำเร็จ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "อัปโหลดหรือเลือกเอกสารของคุณ",
         "help" : "เลือกหรืออัปโหลดเอกสารจากพื้นที่ของคุณ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ค้นหา"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ค้นหา"
+      },
+      "query" : {
+        "label" : "วลีค้นหาเชิงความหมาย",
+        "help" : "ระบุวลีที่เกี่ยวข้องกับสิ่งที่คุณต้องการค้นหา"
+      },
+      "choosenBrowsing" : {
+        "label" : "เลือกไฟล์จากฐานความรู้",
+        "help" : "เลือกไฟล์จากฐานความรู้ที่แชร์ในบริษัท"
+      },
+      "filename" : {
+        "label" : "ชื่อไฟล์ที่ค้นหา",
+        "help" : "ใส่ส่วนหนึ่งของชื่อไฟล์ที่คุณต้องการค้นหา"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "ฐานความรู้ & ไฟล์ของผู้ใช้"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+โครงการย่อยหรือรายการ",
+        "help" : "เพิ่มโครงการย่อยหรือรายการ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+อัปโหลดไฟล์",
+        "help" : "เพิ่มแหล่งข้อมูลจากไฟล์ที่อัปโหลด"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "เพิ่มแหล่งข้อมูลจาก Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "เพิ่มแหล่งข้อมูล Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "เพิ่มแหล่งข้อมูลจากไฟล์ระบบที่แชร์"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "เพิ่มแหล่งข้อมูล Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "เพิ่มแหล่งข้อมูล repository git เช่น bitbucket, github หรืออื่นๆ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "ตั้งค่า"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "โปรไฟล์ของฉัน"
+      },
+      "logout" : {
+        "label" : "ออกจากระบบ"
       }
     }
   }

@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Inicia sessió"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Puja o tria els teus documents",
         "help" : "Tria o puja documents des del teu espai d'usuari"
+      },
+      "fileSearchBtn" : {
+        "label" : "Cerca"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Cerca"
+      },
+      "query" : {
+        "label" : "Frase de cerca semàntica",
+        "help" : "Introdueix una frase significativa relacionada amb la teva cerca"
+      },
+      "choosenBrowsing" : {
+        "label" : "Tria fitxers explorant bases de coneixement",
+        "help" : "Tria fitxers explorant les bases de coneixement compartides de l'empresa"
+      },
+      "filename" : {
+        "label" : "Nom del fitxer cercat",
+        "help" : "Introdueix una part del nom del fitxer pel contingut que busques"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Bases de coneixement i fitxers d'usuari"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojecte o element",
+        "help" : "afegeix subprojecte o element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+pujar fitxers",
+        "help" : "afegeix una font de dades de fitxers pujats"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "afegeix una font de dades de Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "afegeix una font de dades d'Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+sistema d'arxius",
+        "help" : "afegeix una font de dades compartida del sistema d'arxius"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "afegeix una font de dades d'Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "afegeix una font de dades de repositori git com bitbucket, github o altres"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Xat"
+      },
+      "setup" : {
+        "label" : "Configuració"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administració"
+      },
+      "currentProfile" : {
+        "label" : "el meu perfil"
+      },
+      "logout" : {
+        "label" : "tanca sessió"
       }
     }
   }

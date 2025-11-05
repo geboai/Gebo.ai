@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "ログイン"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "ドキュメントをアップロードまたは選択",
         "help" : "ユーザースペースからドキュメントを選択またはアップロードしてください"
+      },
+      "fileSearchBtn" : {
+        "label" : "検索"
+      },
+      "semanticSearchBtn" : {
+        "label" : "検索"
+      },
+      "query" : {
+        "label" : "セマンティック検索フレーズ",
+        "help" : "検索に関連する意味のあるフレーズを入力してください"
+      },
+      "choosenBrowsing" : {
+        "label" : "ナレッジベースからファイルを選択",
+        "help" : "会社の共有ナレッジベースを閲覧してファイルを選択してください"
+      },
+      "filename" : {
+        "label" : "検索したファイル名",
+        "help" : "検索するコンテンツのファイル名の一部を入力してください"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "ナレッジベースとユーザーファイル"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+サブプロジェクトまたは項目",
+        "help" : "サブプロジェクトまたは項目を追加"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ファイルをアップロード",
+        "help" : "アップロードファイルのデータソースを追加"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive データソースを追加"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence データソースを追加"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ファイルシステム",
+        "help" : "共有ファイルシステムのデータソースを追加"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira データソースを追加"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git リポジトリ",
+        "help" : "bitbucket、github などの git リポジトリのデータソースを追加"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai チャット"
+      },
+      "setup" : {
+        "label" : "設定"
+      },
+      "admin" : {
+        "label" : "Gebo.ai 管理"
+      },
+      "currentProfile" : {
+        "label" : "マイプロフィール"
+      },
+      "logout" : {
+        "label" : "ログアウト"
       }
     }
   }

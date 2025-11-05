@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Mewngofnodi"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi'i gwblhau'n llwyddiannus"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Uwchlwytho neu ddewis eich dogfennau",
         "help" : "Dewiswch/uwchlwythwch ddogfennau o'ch gofod defnyddiwr"
+      },
+      "fileSearchBtn" : {
+        "label" : "Chwilio"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Chwilio"
+      },
+      "query" : {
+        "label" : "Ymadrodd chwilio semantig",
+        "help" : "Rhowch ymadrodd ystyrlon sy’n gysylltiedig â’ch chwiliad"
+      },
+      "choosenBrowsing" : {
+        "label" : "Dewiswch ffeiliau wrth bori sylfaen wybodaeth",
+        "help" : "Dewiswch ffeiliau wrth bori sylfaen wybodaeth a rennir gan y cwmni"
+      },
+      "filename" : {
+        "label" : "Enw ffeil a chwiliwyd",
+        "help" : "Rhowch ran o enw ffeil am eich cynnwys chwilio"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Sylfaen wybodaeth a ffeiliau defnyddiwr"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+is-brosiect neu eitem",
+        "help" : "ychwanegu is-brosiect neu eitem"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+uwchlwytho ffeiliau",
+        "help" : "ychwanegu ffynhonnell data o ffeiliau a uwchlwythwyd"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ychwanegu ffynhonnell data Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ychwanegu ffynhonnell data Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+system ffeiliau",
+        "help" : "ychwanegu ffynhonnell data system ffeiliau a rennir"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ychwanegu ffynhonnell data Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+repo git",
+        "help" : "ychwanegu ffynhonnell data rep Git fel bitbucket, github neu eraill"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Ffurfweddiad"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "fy mhroffil"
+      },
+      "logout" : {
+        "label" : "allgofnodi"
       }
     }
   }

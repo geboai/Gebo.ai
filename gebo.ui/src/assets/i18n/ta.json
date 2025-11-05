@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "உள்நுழையவும்"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "சரி!",
+        "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "உங்கள் ஆவணங்களைப் பதிவேற்று அல்லது தேர்ந்தெடுக்கவும்",
         "help" : "உங்கள் பயனர் இடைவெளியிலிருந்து ஆவணங்களை தேர்வு/பதிவேற்றவும்"
+      },
+      "fileSearchBtn" : {
+        "label" : "தேடு"
+      },
+      "semanticSearchBtn" : {
+        "label" : "தேடு"
+      },
+      "query" : {
+        "label" : "அர்த்தமுள்ள தேடல் சொல்",
+        "help" : "உங்களின் தேடலுடன் தொடர்புடைய அர்த்தமுள்ள சொற்றொடரை உள்ளிடவும்"
+      },
+      "choosenBrowsing" : {
+        "label" : "கோப்புகளை உலாவி அறிவு தரவுத்தளங்களை தேர்ந்தெடுக்கவும்",
+        "help" : "நிறுவனம் பகிர்ந்த அறிவுத் தரவுத்தளங்களை உலாவி கோப்புகளை தேர்ந்தெடுக்கவும்"
+      },
+      "filename" : {
+        "label" : "தேடப்பட்ட கோப்புப்பெயர்",
+        "help" : "நீங்கள் தேடும் உள்ளடக்கத்திற்கு ஒரு கோப்புப் பெயர் பகுதியை உள்ளிடவும்"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "அறிவுத் தளங்கள் மற்றும் பயனர் கோப்புகள்"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+உப திட்டம் அல்லது உருப்படி",
+        "help" : "உப திட்டம் அல்லது உருப்படி சேர்க்க"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+கோப்புகளை பதிவேற்று",
+        "help" : "பதிவேற்றிய கோப்புகளுக்கான தரவு மூலத்தை சேர்க்கவும்"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive தரவு மூலத்தை சேர்க்க"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence தரவு மூலத்தை சேர்க்க"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+கோப்பு அமைப்பு",
+        "help" : "பகிரப்பட்ட கோப்பு அமைப்பு தரவு மூலம் சேர்க்கவும்"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira தரவு மூலத்தை சேர்க்க"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github போன்ற git repository தரவு மூலத்தை சேர்க்க"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai உரையாடல்"
+      },
+      "setup" : {
+        "label" : "அமைவை"
+      },
+      "admin" : {
+        "label" : "Gebo.ai நிர்வாகம்"
+      },
+      "currentProfile" : {
+        "label" : "என் پروஃபைல்"
+      },
+      "logout" : {
+        "label" : "வெளியேறு"
       }
     }
   }

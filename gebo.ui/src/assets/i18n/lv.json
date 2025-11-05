@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Pieslēgties"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Labi!",
+        "detail" : "Darbība veiksmīgi pabeigta"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Augšupielādējiet vai izvēlieties savus dokumentus",
         "help" : "Izvēlieties/augšupielādējiet dokumentus no savas lietotāja zonas"
+      },
+      "fileSearchBtn" : {
+        "label" : "Meklēt"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Meklēt"
+      },
+      "query" : {
+        "label" : "Semantiskās meklēšanas frāze",
+        "help" : "Ievadiet jēgpilnu frāzi, kas attiecas uz jūsu meklējumu"
+      },
+      "choosenBrowsing" : {
+        "label" : "Izvēlieties failus, pārlūkojot zināšanu bāzes",
+        "help" : "Izvēlieties failus, pārlūkojot uzņēmuma kopīgās zināšanu bāzes"
+      },
+      "filename" : {
+        "label" : "Meklētā faila nosaukums",
+        "help" : "Ievadiet daļu faila nosaukuma meklējamajam saturam"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Zināšanu bāzes un lietotāju faili"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+apakšprojekts vai vienība",
+        "help" : "pievienot apakšprojektu vai vienību"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+augšupielādēt failus",
+        "help" : "pievienot augšupielādēto failu datu avotu"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "pievienot Microsoft SharePoint/OneDrive datu avotu"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "pievienot Atlassian Confluence datu avotu"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+failu sistēma",
+        "help" : "pievienot koplietotās failu sistēmas datu avotu"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "pievienot Atlassian Jira datu avotu"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repozitorijs",
+        "help" : "pievienot git repozitorija datu avotu, piemēram, bitbucket,github vai citi"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai čats"
+      },
+      "setup" : {
+        "label" : "Uzstādījumi"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administrācija"
+      },
+      "currentProfile" : {
+        "label" : "mans profils"
+      },
+      "logout" : {
+        "label" : "iziet"
       }
     }
   }

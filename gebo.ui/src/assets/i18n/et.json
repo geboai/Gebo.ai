@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Logi sisse"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Toiming õnnestus"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Laadi üles või vali oma dokumendid",
         "help" : "Vali/laadi üles dokumendid oma kasutajaruumist"
+      },
+      "fileSearchBtn" : {
+        "label" : "Otsi"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Otsi"
+      },
+      "query" : {
+        "label" : "Semantiline otsingufraas",
+        "help" : "Sisesta otsinguga seotud tähendusrikas fraas"
+      },
+      "choosenBrowsing" : {
+        "label" : "Vali faile teadmistebaaside sirvimiseks",
+        "help" : "Vali faile ettevõtte jagatud teadmistebaaside sirvimiseks"
+      },
+      "filename" : {
+        "label" : "Otsitava faili nimi",
+        "help" : "Sisesta otsitava sisu failinime osa"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Teadmistebaasid ja kasutajate failid"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+alamprojekt või üksus",
+        "help" : "lisa alamprojekt või üksus"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+laadi failid üles",
+        "help" : "lisa üleslaetud failide andmeallikas"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "lisa Microsoft SharePoint/OneDrive andmeallikas"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "lisa Atlassian Confluence andmeallikas"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+failisüsteem",
+        "help" : "lisa jagatud failisüsteemi andmeallikas"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "lisa Atlassian Jira andmeallikas"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "lisa git repositooriumi andmeallikas, nagu bitbucket, github või muud"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai vestlus"
+      },
+      "setup" : {
+        "label" : "Seadistamine"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "minu profiil"
+      },
+      "logout" : {
+        "label" : "logi välja"
       }
     }
   }

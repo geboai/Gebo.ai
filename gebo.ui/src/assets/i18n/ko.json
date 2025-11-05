@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "로그인"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "확인!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "문서 업로드 또는 선택",
         "help" : "내 공간에서 문서를 선택/업로드하세요"
+      },
+      "fileSearchBtn" : {
+        "label" : "검색"
+      },
+      "semanticSearchBtn" : {
+        "label" : "검색"
+      },
+      "query" : {
+        "label" : "의미 기반 검색 문구",
+        "help" : "검색과 관련된 의미 있는 문구를 입력하세요"
+      },
+      "choosenBrowsing" : {
+        "label" : "지식 베이스 파일 선택",
+        "help" : "회사에서 공유하는 지식 베이스의 파일을 선택하세요"
+      },
+      "filename" : {
+        "label" : "검색된 파일명",
+        "help" : "검색할 파일 이름 일부를 입력하세요"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "지식베이스 및 사용자 파일"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+하위 프로젝트 또는 항목",
+        "help" : "하위 프로젝트 또는 항목 추가"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+파일 업로드",
+        "help" : "업로드된 파일 데이터 소스 추가"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive 데이터 소스 추가"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence 데이터 소스 추가"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+파일 시스템",
+        "help" : "공유 파일 시스템 데이터 소스 추가"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira 데이터 소스 추가"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git 저장소",
+        "help" : "bitbucket, github 등과 같은 git 저장소 데이터 소스 추가"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai 채팅"
+      },
+      "setup" : {
+        "label" : "설정"
+      },
+      "admin" : {
+        "label" : "Gebo.ai 관리자"
+      },
+      "currentProfile" : {
+        "label" : "내 프로필"
+      },
+      "logout" : {
+        "label" : "로그아웃"
       }
     }
   }

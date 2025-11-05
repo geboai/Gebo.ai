@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "ورود"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "باشه!",
+        "detail" : "عملیات با موفقیت انجام شد"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "فایل‌های خود را بارگذاری یا انتخاب کنید",
         "help" : "بارگذاری یا انتخاب اسناد از فضای کاربری شما"
+      },
+      "fileSearchBtn" : {
+        "label" : "جستجو"
+      },
+      "semanticSearchBtn" : {
+        "label" : "جستجو"
+      },
+      "query" : {
+        "label" : "عبارت جستجوی معنایی",
+        "help" : "یک عبارت مرتبط و معنی‌دار برای جستجو وارد کنید"
+      },
+      "choosenBrowsing" : {
+        "label" : "انتخاب فایل‌ها از پایگاه‌های دانش",
+        "help" : "فایل‌ها را از پایگاه‌های دانش اشتراکی شرکت انتخاب کنید"
+      },
+      "filename" : {
+        "label" : "نام فایل جستجو شده",
+        "help" : "بخشی از نام فایل مورد نظر خود را وارد کنید"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "پایگاه‌های دانش و فایل‌های کاربر"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+زیرپروژه یا مورد",
+        "help" : "اضافه کردن زیرپروژه یا مورد"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+بارگذاری فایل",
+        "help" : "افزودن منبع داده فایل‌های بارگذاری‌شده"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "افزودن یک منبع داده Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "افزودن منبع داده Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+فایل‌سیستم",
+        "help" : "افزودن منبع داده فایل‌سیستم اشتراکی"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "افزودن منبع داده Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+مخزن git",
+        "help" : "افزودن منبع داده مخزن git مانند bitbucket، github یا دیگران"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai گفت‌وگو"
+      },
+      "setup" : {
+        "label" : "راه‌اندازی"
+      },
+      "admin" : {
+        "label" : "مدیریت Gebo.ai"
+      },
+      "currentProfile" : {
+        "label" : "پروفایل من"
+      },
+      "logout" : {
+        "label" : "خروج"
       }
     }
   }

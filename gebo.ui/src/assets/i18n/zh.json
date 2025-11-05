@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "登录"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "好的！",
+        "detail" : "操作成功完成"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "上传或选择您的文档",
         "help" : "从您的用户空间选择或上传文档"
+      },
+      "fileSearchBtn" : {
+        "label" : "搜索"
+      },
+      "semanticSearchBtn" : {
+        "label" : "搜索"
+      },
+      "query" : {
+        "label" : "语义搜索短语",
+        "help" : "输入与您的搜索相关的有意义短语"
+      },
+      "choosenBrowsing" : {
+        "label" : "选择文件浏览知识库",
+        "help" : "选择文件，浏览公司共享知识库"
+      },
+      "filename" : {
+        "label" : "已搜索文件名",
+        "help" : "输入您要搜索内容的文件名片段"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "知识库和用户文件"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+子项目或条目",
+        "help" : "添加子项目或条目"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+上传文件",
+        "help" : "添加上传的文件数据源"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "添加 Microsoft SharePoint/OneDrive 数据源"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "添加 Atlassian Confluence 数据源"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+文件系统",
+        "help" : "添加共享文件系统数据源"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "添加 Atlassian Jira 数据源"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git 仓库",
+        "help" : "添加 git 仓库数据源，例如 bitbucket、github 或其他"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai 聊天"
+      },
+      "setup" : {
+        "label" : "设置"
+      },
+      "admin" : {
+        "label" : "Gebo.ai 管理"
+      },
+      "currentProfile" : {
+        "label" : "我的资料"
+      },
+      "logout" : {
+        "label" : "退出登录"
       }
     }
   }

@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "ይግቡ"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "እሺ!",
+        "detail" : "እባየቱ በተሳካ ሁኔታ ተከናውኗል"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "የእርስዎን ሰነዶች ይጫኑ ወይም ይምረጡ",
         "help" : "ከተጠቃሚ ቦታዎ ሰነዶችን ይምረጡ/ይጫኑ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ፈልግ"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ፈልግ"
+      },
+      "query" : {
+        "label" : "የስምንት ፍለጋ ሐረግ",
+        "help" : "ከፍለጋዎ ጋር የተያያዘ ትርጉም ያለው ንግግር ያስገቡ"
+      },
+      "choosenBrowsing" : {
+        "label" : "የማውጫ መረጃ መዝገቦችን ይምረጡ",
+        "help" : "የኩባንያው የተጋሩ መረጃ መዝገቦችን በማውጫ ይምረጡ"
+      },
+      "filename" : {
+        "label" : "የተፈለገው የፋይል ስም",
+        "help" : "ለየተፈለጉት ይዞታዎ የፋይል አካል ያስገቡ"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "የእውቀት መሰብሰቢያዎች፣ የተጠቃሚ ፋይሎች"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ንዑስ ፕሮጀክት ወይም እቃ",
+        "help" : "ንዑስ ፕሮጀክት ወይም እቃ ያክሉ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ፋይሎች ይጫኑ",
+        "help" : "የተጫኑ ፋይሎች መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "የMicrosoft SharePoint/OneDrive መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "የAtlassian Confluence መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ፋይል ሲሰስተም",
+        "help" : "የተጋሩ ፋይል ሲሰስተም መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "የAtlassian Jira መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "እንደ bitbucket, github ወይም ሌሎች የgit መዝገቦች መረጃ ምንጭ ያክሉ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ቻት"
+      },
+      "setup" : {
+        "label" : "ቅንብር"
+      },
+      "admin" : {
+        "label" : "Gebo.ai አስተዳዳሪ"
+      },
+      "currentProfile" : {
+        "label" : "የኔ መገለጫ"
+      },
+      "logout" : {
+        "label" : "ውጣ"
       }
     }
   }

@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Innskráning"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Allt í lagi!",
+        "detail" : "Aðgerð tókst"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Hladdu upp eða veldu skjölin þín",
         "help" : "Veldu eða hlaða upp skjölum úr þínu notendaumhverfi"
+      },
+      "fileSearchBtn" : {
+        "label" : "Leita"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Leita"
+      },
+      "query" : {
+        "label" : "Merkingarleit setning",
+        "help" : "Sláðu inn lýsandi setningu sem tengist leitinni þinni"
+      },
+      "choosenBrowsing" : {
+        "label" : "Velja skrár við skoðun á þekkingargrunnum",
+        "help" : "Veldu skrár við skoðun á þekkingargrunnum fyrirtækisins"
+      },
+      "filename" : {
+        "label" : "Nafn á skrá sem leitað er að",
+        "help" : "Sláðu inn hluta af skrárnafni fyrir efnið sem þú ert að leita að"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Þekkingargrunnur og notendaskrár"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+undirverkefni eða atriði",
+        "help" : "bæta við undirverkefni eða atriði"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+hlaða upp skrám",
+        "help" : "bæta við gagnagjafa úr hlaðnum skrám"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "bæta við Microsoft SharePoint/OneDrive gagnagjafa"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "bæta við Atlassian Confluence gagnagjafa"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+skráakerfi",
+        "help" : "bæta við sameiginlegum gagnagjafa úr skráakerfi"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "bæta við Atlassian Jira gagnagjafa"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bæta við git forritasafni eins og bitbucket, github eða öðrum"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai spjall"
+      },
+      "setup" : {
+        "label" : "Uppsetning"
+      },
+      "admin" : {
+        "label" : "Gebo.ai stjórnborð"
+      },
+      "currentProfile" : {
+        "label" : "mín prófíll"
+      },
+      "logout" : {
+        "label" : "skrá mig út"
       }
     }
   }

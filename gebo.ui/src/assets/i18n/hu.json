@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Bejelentkezés"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "A művelet sikeresen befejeződött"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Dokumentumok feltöltése vagy kiválasztása",
         "help" : "Válasszon vagy töltsön fel dokumentumokat a saját tárhelyéről"
+      },
+      "fileSearchBtn" : {
+        "label" : "Keresés"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Keresés"
+      },
+      "query" : {
+        "label" : "Szemantikus keresési kifejezés",
+        "help" : "Adj meg egy releváns kifejezést a kereséshez"
+      },
+      "choosenBrowsing" : {
+        "label" : "Fájlok kiválasztása tudásbázis böngészéséhez",
+        "help" : "Válassz fájlokat a vállalati megosztott tudásbázisok böngészéséhez"
+      },
+      "filename" : {
+        "label" : "Keresett fájlnév",
+        "help" : "Add meg a keresett tartalom fájlnevének egy részét"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Tudásbázisok és felhasználói fájlok"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+alprojekt vagy elem",
+        "help" : "alprojekt vagy elem hozzáadása"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+fájlok feltöltése",
+        "help" : "feltöltött fájlok adatforrás hozzáadása"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive adatforrás hozzáadása"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence adatforrás hozzáadása"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+fájlrendszer",
+        "help" : "megosztott fájlrendszer adatforrás hozzáadása"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira adatforrás hozzáadása"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "git adattár adatforrás hozzáadása, például bitbucket, github vagy más"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai chat"
+      },
+      "setup" : {
+        "label" : "Beállítások"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "saját profilom"
+      },
+      "logout" : {
+        "label" : "kijelentkezés"
       }
     }
   }

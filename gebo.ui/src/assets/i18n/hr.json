@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Prijava"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operacija je uspješno izvršena"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Učitajte ili odaberite svoje dokumente",
         "help" : "Odaberite ili učitajte dokumente iz svog korisničkog prostora"
+      },
+      "fileSearchBtn" : {
+        "label" : "Pretraži"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Pretraži"
+      },
+      "query" : {
+        "label" : "Semantička fraza za pretragu",
+        "help" : "Unesite smislen izraz povezan s vašom pretragom"
+      },
+      "choosenBrowsing" : {
+        "label" : "Odaberite datoteke iz baze znanja",
+        "help" : "Odaberite datoteke pretraživanjem dijeljenih baza znanja tvrtke"
+      },
+      "filename" : {
+        "label" : "Naziv tražene datoteke",
+        "help" : "Unesite dio naziva datoteke koji tražite"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Baze znanja i korisničke datoteke"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+podprojekt ili stavka",
+        "help" : "dodajte podprojekt ili stavku"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+dodaj datoteke",
+        "help" : "dodajte izvor podataka s učitanim datotekama"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "dodajte izvor podataka s Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "dodajte Atlassian Confluence izvor podataka"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+datotečni sustav",
+        "help" : "dodajte izvor podataka s dijeljenog datotečnog sustava"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "dodajte Atlassian Jira izvor podataka"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "dodajte izvor podataka iz git repozitorija kao što su bitbucket, github ili drugi"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Postavke"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administracija"
+      },
+      "currentProfile" : {
+        "label" : "moj profil"
+      },
+      "logout" : {
+        "label" : "odjava"
       }
     }
   }

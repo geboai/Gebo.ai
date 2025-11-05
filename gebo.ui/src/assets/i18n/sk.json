@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Prihlásiť sa"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Nahrajte alebo vyberte svoje dokumenty",
         "help" : "Vyberte alebo nahrajte dokumenty z vášho používateľského priestoru"
+      },
+      "fileSearchBtn" : {
+        "label" : "Hľadať"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Hľadať"
+      },
+      "query" : {
+        "label" : "Frazová semantická hľadanie",
+        "help" : "Zadajte zmysluplnú frázu súvisiacu s vaším hľadaním"
+      },
+      "choosenBrowsing" : {
+        "label" : "Vyberte súbory prehliadaním znalostných báz",
+        "help" : "Vyberte súbory prehliadaním zdieľaných znalostných báz spoločnosti"
+      },
+      "filename" : {
+        "label" : "Hľadaný názov súboru",
+        "help" : "Zadajte časť názvu súboru pre váš hľadaný obsah"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Znalostné bázy a používateľské súbory"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojekt alebo položka",
+        "help" : "pridať subprojekt alebo položku"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+nahrať súbory",
+        "help" : "pridať novú zdrojovú súborovú dátovú základňu"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "pridať zdroj z Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "pridať zdroj z Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+súborový systém",
+        "help" : "pridať zdroj zdieľaného súborového systému"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "pridať zdroj z Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "pridať zdroj git repozitára ako bitbucket, github alebo iné"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Nastavenie"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "môj profil"
+      },
+      "logout" : {
+        "label" : "odhlásiť sa"
       }
     }
   }

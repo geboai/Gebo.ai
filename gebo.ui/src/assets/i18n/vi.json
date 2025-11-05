@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Đăng nhập"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Thao tác đã thực hiện thành công"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Tải lên hoặc chọn tài liệu của bạn",
         "help" : "Chọn hoặc tải lên tài liệu từ không gian cá nhân của bạn"
+      },
+      "fileSearchBtn" : {
+        "label" : "Tìm kiếm"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Tìm kiếm"
+      },
+      "query" : {
+        "label" : "Cụm từ tìm kiếm ngữ nghĩa",
+        "help" : "Nhập một cụm từ có ý nghĩa liên quan đến tìm kiếm của bạn"
+      },
+      "choosenBrowsing" : {
+        "label" : "Chọn tệp duyệt cơ sở tri thức",
+        "help" : "Chọn tệp từ cơ sở tri thức chia sẻ của công ty"
+      },
+      "filename" : {
+        "label" : "Tên tệp đã tìm kiếm",
+        "help" : "Nhập một phần tên tệp cho nội dung bạn tìm"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Cơ sở kiến thức & tệp người dùng"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+dự án con hoặc mục",
+        "help" : "thêm dự án con hoặc mục"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+tải lên tệp",
+        "help" : "thêm nguồn dữ liệu từ tệp đã tải lên"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "thêm nguồn dữ liệu Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "thêm nguồn dữ liệu Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+hệ thống tệp",
+        "help" : "thêm nguồn dữ liệu hệ thống tệp chia sẻ"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "thêm nguồn dữ liệu Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "thêm nguồn dữ liệu kho git như bitbucket, github hoặc khác"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Cài đặt"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "hồ sơ của tôi"
+      },
+      "logout" : {
+        "label" : "đăng xuất"
       }
     }
   }

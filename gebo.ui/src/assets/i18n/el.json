@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Είσοδος"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Εντάξει!",
+        "detail" : "Η ενέργεια ολοκληρώθηκε με επιτυχία"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Ανεβάστε ή επιλέξτε τα έγγραφά σας",
         "help" : "Επιλέξτε ή ανεβάστε έγγραφα από τον προσωπικό σας χώρο"
+      },
+      "fileSearchBtn" : {
+        "label" : "Αναζήτηση"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Αναζήτηση"
+      },
+      "query" : {
+        "label" : "Φράση σημασιολογικής αναζήτησης",
+        "help" : "Εισάγετε μια σχετική φράση για την αναζήτησή σας"
+      },
+      "choosenBrowsing" : {
+        "label" : "Επιλέξτε αρχεία από βάσεις γνώσης",
+        "help" : "Επιλέξτε αρχεία από κοινόχρηστες εταιρικές βάσεις γνώσης"
+      },
+      "filename" : {
+        "label" : "Όνομα αρχείου αναζήτησης",
+        "help" : "Εισάγετε μέρος του ονόματος του αρχείου που αναζητάτε"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Βάσεις γνώσεων & αρχεία χρηστών"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+υποέργο ή αντικείμενο",
+        "help" : "προσθήκη υποέργου ή αντικειμένου"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ανέβασμα αρχείων",
+        "help" : "προσθήκη πηγής δεδομένων από ανεβασμένα αρχεία"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "προσθήκη πηγής δεδομένων Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "προσθήκη πηγής δεδομένων Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "προσθήκη πηγής δεδομένων από κοινόχρηστο σύστημα αρχείων"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "προσθήκη πηγής δεδομένων Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "προσθήκη πηγής δεδομένων αποθετηρίου git όπως bitbucket, github ή άλλα"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Ρύθμιση"
+      },
+      "admin" : {
+        "label" : "Gebo.ai διαχείριση"
+      },
+      "currentProfile" : {
+        "label" : "το προφίλ μου"
+      },
+      "logout" : {
+        "label" : "αποσύνδεση"
       }
     }
   }

@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "လော့ဂ်အင်ဝင်မည်"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "အိုကေ! ",
+        "detail" : "လုပ်ဆောင်မှု အောင်မြင်ပါသည်"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "သင့်စာရွက်စာတမ်းများ တင်ပါ သို့မဟုတ် ရွေးပါ",
         "help" : "သင့် အသုံးပြုသူနေရာမှ စာရွက်စာတမ်းများ ရွေးပါ/တင်ပါ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ရှာဖွေရန်"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ရှာဖွေရန်"
+      },
+      "query" : {
+        "label" : "အဓိပ္ပါယ်ပါတဲ့ ရှာဖွေရေးစကားစု",
+        "help" : "သင့်ရှာဖွေလိုသော အကြောင်းအရာနှင့် သက်ဆိုင်သော သေချာသောစကားစု ထည့်ပါ"
+      },
+      "choosenBrowsing" : {
+        "label" : "ဖိုင်များရွေးချယ်၍ အသိပညာအခြေခံများ သုံးကြည့်ခြင်း",
+        "help" : "ကုမ္ပဏီ ဝေမျှထားသော အသိပညာအခြေခံများမှ ဖိုင်များရွေးချယ်ပါ"
+      },
+      "filename" : {
+        "label" : "ရှာဖွေသောဖိုင်အမည်",
+        "help" : "ရှာလိုသောအကြောင်းအရာအတွက် ဖိုင်အမည်အပိုင်းကို ထည့်ပေးပါ"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "အသိပညာစုများ နှင့် အသုံးပြုသူဖိုင်များ"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ဌာနခွဲခေါင်းစဥ် သို့မဟုတ် အိုင်တင်",
+        "help" : "ဌာနခွဲခေါင်းစဥ် သို့မဟုတ် အိုင်တင် ထည့်ရန်"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ဖိုင်များ တင်ရန်",
+        "help" : "တင်ထားသောဖိုင်များ ဒေတာရင်းမြစ် ထည့်ရန်"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive ဒေတာရင်းမြစ်ထည့်ရန်"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence ဒေတာရင်းမြစ်ထည့်ရန်"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ဖိုင်စနစ်",
+        "help" : "မျှဝေထားသော ဖိုင်စနစ် ဒေတာရင်းမြစ် ထည့်ရန်"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira ဒေတာရင်းမြစ်ထည့်ရန်"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket၊ github သို့မဟုတ် အခြား git repository ဒေတာရင်းမြစ် ထည့်ရန်"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "ဆက်တပ်ရန်"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "ကျွန်ုပ်၏ ကိုယ်ရေးအချက်အလက်"
+      },
+      "logout" : {
+        "label" : "ထွက်ရန်"
       }
     }
   }

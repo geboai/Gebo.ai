@@ -1,1 +1,2504 @@
-{"FastSetupModule":{"FastSetupComponent":{"langCode":{"label":"لغة النظام الافتراضية","help":"لغة النظام الافتراضية لهذا التثبيت من Gebo.ai"},"username":{"label":"البريد الإلكتروني","help":"البريد الإلكتروني كاسم مستخدم لتسجيل الدخول"},"passwordC":{"label":"تأكيد كلمة المرور","help":"تأكيد كلمة المرور"},"password":{"label":"كلمة المرور","help":"كلمة المرور لتسجيل الدخول (8 أحرف على الأقل)"},"PasswordNotMatching":{"label":" كلمات المرور غير متطابقة "},"LocalAdmin":{"label":"أنشئ حساب المسؤول المحلي الخاص بك"},"LocalAdminExplanation":{"label":"ستستخدم هذا الحساب مستقبلاً لإعداد/إدارة البرنامج. ستبقى هذه البيانات محلية على نظامك ولن تُرسل عبر الشبكة"},"EnterBtn":{"label":"انتقل إلى صفحة تسجيل الدخول"},"SetupPage":{"label":"إعداد تثبيت gebo.ai الخاص بك"},"CreateBtn":{"label":"إنشاء إعداد النظام"},"LicenceFieldSet":{"label":"اقرأ ووافق على الرخصة"},"AcceptMark":{"label":"أوافق على الشروط","help":"بالنقر هنا، أنت توافق على الشروط والأحكام في الرخصة"}}},"LoginModule":{"LoginComponent":{"username":{"label":"البريد الإلكتروني","help":"البريد الإلكتروني كاسم مستخدم لتسجيل الدخول"},"password":{"label":"كلمة المرور","help":"كلمة المرور لتسجيل الدخول"}}},"SetupWizardPanelModule":{"Oauth2WizardComponent":{"Oauth2ConfigBtn":{"label":"إعدادات Oauth2"},"ProviderNameHeader":{"label":"اسم المزود"},"DescriptionHeader":{"label":"الوصف"},"MainPanel":{"label":"إعدادات أمان Oauth2"},"IdHeader":{"label":"المعرف"}},"SetupWizardPanelComponent":{"WizardBackBtn":{"label":"العودة إلى صفحة الإعداد الرئيسية"},"WizardUi":{"label":"اختر قسم الإعداد"}},"ConfluenceWizardComponent":{"MainPanel":{"label":"إعداد أنظمة الشركة Atlassian Confluence"},"DescriptionHeader":{"label":"الوصف"},"SystemTypeHeader":{"label":"نوع النظام"},"ConfigCodeHeader":{"label":"رمز الإعداد"},"ConfluenceSystemBtn":{"label":"نظام Confluence"}},"JiraWizardComponent":{"JiraSystemBtn":{"label":"نظام Jira"},"DescriptionHeader":{"label":"الوصف"},"ConfigCodeHeader":{"label":"رمز الإعداد"},"MainPanel":{"label":"إعداد أنظمة الشركة Atlassian Jira"},"SystemTypeHeader":{"label":"نوع النظام"}},"SharepointWizardComponent":{"DescriptionHeader":{"label":"الوصف"},"ConfigCodeHeader":{"label":"رمز الإعداد"},"MainPanel":{"label":"إعداد أنظمة شركة Microsoft Sharepoint"},"SystemTypeHeader":{"label":"نوع النظام"},"SharepointSystemBtn":{"label":"نظام Sharepoint"}},"LLMSetupWizardComponent":{"InstructionText":{"label":"قدم مفتاح api مع رصيد متاح كافٍ. إذا تم اختيار OpenAI يجب إضافة رصيد محدد (من 10 إلى 30 دولار كافٍ عادةً) إلى خطتك المعتادة لاستخدام واجهة api، وإلا لن يتوفر نقل llms في هذا التطبيق."},"MainPanel":{"label":"إعداد وصول مزودي Gebo.ai llms بمفتاح api الخاص بك"},"provider":{"label":"مورد نموذج اللغة الكبير","help":"اختر مورداً واحداً من بين OpenAI (chatgpt)، Google (Gemini)،Anthropic (Claude)"},"user":{"label":"المستخدم","help":"أدخل المستخدم المرتبط بمفتاح api"},"ConfigureBtn":{"label":"تهيئة"},"apiKey":{"label":"مفتاح api","help":"مفتاح api الخاص بك من مزود LLMS المراد استخدامه"}},"GraphRagWizardComponent":{"DescriptionHeader":{"label":"الوصف"},"CreateGraphRagConfigBtn":{"label":"إنشاء إعداد graph rag"},"MainPanel":{"label":"إعداد إعدادات Graph Rag واستخلاص المعرفة الافتراضية"},"ConfigCodeHeader":{"label":"رمز الإعداد"}},"KnowledgeBaseWizardComponent":{"ProjectHeader":{"label":"المشروع"},"AddAKnowledgeBaseBtn":{"label":"إضافة قاعدة معرفة"},"KnowledgeBaseHeader":{"label":"قاعدة المعرفة"},"MainPanel":{"label":"إعدادات قواعد المعرفة والمحتوى"},"ContentsSourceHeader":{"label":"مصدر المحتوى"},"PublishedHeader":{"label":"منشور"},"NrOfDocumentsHeader":{"label":"عدد المستندات"},"AddAProjectItemBtn":{"label":"إضافة مشروع/عنصر","help":"إنشاء مشروع جديد"},"Button1":{"help":"فتح قاعدة المعرفة"},"Button2":{"help":"فتح نموذج المشروع"}},"WorkFolderWizardComponent":{"MainPanel":{"label":"إعداد مجلد عمل Gebo.ai"},"ConfigureBtn":{"label":"تهيئة"},"workDirectory":{"label":"اختر مجلداً كمجلد عمل Gebo.ai","help":"اختر مجلد السيرفر الذي ستستخدمه هذه النسخة كمجلد عمل لتخزين إعداداتها ومحتواها."}}},"GeboAIOauth2RegistrationModule":{"Oauth2ProviderRegistration":{"code":{"label":"الرمز","help":"أدخل وصف رمز مصادقة/تكامل OAUTH2 (registrationId)."},"description":{"label":"الوصف","help":"أدخل وصف معلومات مصادقة/تكامل OAUTH2."},"configurationType":{"label":"غرض الإعداد","help":"اختر إذا كان سيتم استخدام هذا الإعداد للمصادقة في Gebo.ai أو للسماح لـ Gebo.ai بالاتصال كنظام عميل بطرف ثالث."},"authProvider":{"label":"الموفر","help":"أدخل مزود مصادقة OAUTH2"},"issuerUri":{"label":"رابط المُصدر","help":"أدخل عنوان URL للمصدر الخاص بمزود OAUTH2"},"authorizationUri":{"label":"رابط التفويض","help":"أدخل عنوان URL الخاص بتفويض OAUTH2 للمزود"},"jwkSetUri":{"label":"رابط مجموعة Jwk","help":"أدخل عنوان URL الخاص بمجموعة Jwk في OAUTH2 للمزود"},"userInfoUri":{"label":"رابط معلومات المستخدم","help":"أدخل عنوان URL الخاص بمعلومات المستخدم في OAUTH2 للمزود"},"introspectionUri":{"label":"رابط الفحص","help":"أدخل عنوان URL الخاص بفحص OAUTH2 للمزود"},"tokenUri":{"label":"رابط الرمز","help":"أدخل عنوان URL الخاص برمز OAUTH2 للمزود"},"SaveBtn":{"label":"حفظ"},"Oauth2ProviderUrls":{"label":"عناوين مزود OAUTH2"},"MainPanel":{"label":"إدخال معلومات مصادقة/تكامل OAUTH2 جديدة"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"}}},"GeboOauth2SecretModule":{"GeboOauth2SecretComponent":{"clientId":{"label":"معرف العميل","help":"معرف العميل لبروتوكول oauth2 (يتم الحصول عليه من منطقة إدارة البرنامج الخارجي المصادق عليه عبر oauth2)"},"secret":{"label":"المفتاح السري","help":"المفتاح السري للعميل لبروتوكول oauth2 (يتم الحصول عليه من منطقة إدارة البرنامج الخارجي المصادق عليه عبر oauth2)"}}},"GeboAIConfluenceModule":{"GeboAIConfluenceSystemFastComponent":{"MainPanel":{"label":"إنشاء إعدادات نظام confluence"},"CancelBtn":{"label":"إلغاء"},"description":{"label":"الوصف","help":"أدخل وصف نظام confluence."},"CreateBtn":{"label":"إنشاء"},"username":{"label":"اسم مستخدم Confluence","help":"اسم مستخدم Confluence"},"confluenceVersion":{"label":"إصدار Confluence","help":"إصدار Confluence"},"baseUri":{"label":"العنوان الأساسي للإنترنت","help":"رابط عنوان نظام confluence الأساسي للتثبيت الداخلي أو رابط مؤسستك في أنظمة confluence السحابية"},"password":{"label":"كلمة مرور Confluence","help":"كلمة مرور Confluence"},"token":{"label":"مفتاح API لخدمة Confluence cloud","help":"مفتاح API لخدمة Confluence CLOUD الذي يتم الحصول عليه من confluence backoffic، هنا يجب إدخال \"API Token for your Atlassian Account\"."}},"GConfluenceProjectEndpoint":{"PublishBtn":{"label":"انشر!","help":"يقوم بالحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لنظام LLm"},"SaveBtn":{"label":"حفظ"},"DeleteBtn":{"label":"حذف"},"CancelBtn":{"label":"إلغاء"},"SettingsTab":{"label":"الإعدادات"},"MainPanel":{"label":"مشاركة محتويات confluence"},"LogsTab":{"label":"السجلات"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا للمحتويات."},"description":{"label":"الوصف","help":"أدخل وصف المحتوى المرفوع من إدخالات confluence."},"confluenceSystemCode":{"label":"نظام Confluence","help":"مرجع نظام confluence المعد مسبقًا."},"parentProjectCode":{"label":"المشروع","help":"مرجع المشروع الأساسي."},"openZips":{"label":"فتح ملفات zip","help":"تفعيل فتح ملفات zip واستخراج محتواها"},"tree":{"label":"المساحات أو الصفحات/الصفحات الفرعية المختارة","help":"المحتوى المشترك لمساحات وصفحات confluence"},"programmedTables":{"label":"جدولة التحقق من تحديثات المحتوى","help":"ضبط جدولة مراجعة المحتويات المتغيرة للحفاظ على تحديث نظام إنتاج الإجابات المعزز بالاسترجاع"},"catalogingCriteria":{"label":"معايير تنظيم المساحات، الصفحات والصفحات الفرعية","help":"يرجى شرح هنا كيف تمت عملية تنظيم المساحات والصفحات والصفحات الفرعية في محتويات confluence التي تمت مشاركتها مع Gebo.ai"}},"GConfluenceSystem":{"GeneralSettingsTab":{"label":"الإعدادات العامة"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"MainPanel":{"label":"تحرير نظام confluence"},"SaveBtn":{"label":"حفظ"},"baseUri":{"label":"العنوان الأساسي للإنترنت","help":"رابط عنوان نظام confluence الأساسي"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لنظام confluence."},"description":{"label":"الوصف","help":"أدخل وصف نظام confluence."},"confluenceVersion":{"label":"إصدار Confluence","help":"إصدار Confluence"},"secretCode":{"label":"الهوية المستخدمة","help":"حدد أو أنشئ هوية للوصول إلى نظام confluence"}}},"GeboAIUsersGroupPanelModule":{"GeboAIUsersManagementComponent":{"NewGroupBtn":{"label":"مجموعة جديدة"},"NewUserBtn":{"label":"مستخدم جديد"},"UsersListPanel":{"label":"قائمة المستخدمين"},"GroupsListPanel":{"label":"قائمة المجموعات"},"SournameHeader":{"label":"اسم العائلة"},"UsernameHeader":{"label":"اسم المستخدم"},"RolesHeader":{"label":"الأدوار"},"NameHeader":{"label":"الاسم"},"EditBtn":{"label":"تعديل"},"DisabledHeader":{"label":"معطل"}}},"GeboAIUsersGroupModule":{"UsersGroup":{"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"UserIds":{"placeholder":"اختر المستخدمين"},"CancelBtn":{"label":"إلغاء"},"MainPanel":{"label":"تعديل مجموعة المستخدمين"},"description":{"label":"الوصف","help":"أدخل وصف مجموعة المستخدمين"},"code":{"label":"رمز فريد","help":"أدخل رمز مجموعة المستخدمين"},"userIds":{"label":"قائمة المستخدمين","help":"اختر المستخدمين المشاركين في المجموعة"}}},"GeboAIJiraModule":{"GeboAIJiraSystemFastComponent":{"CreateBtn":{"label":"إنشاء"},"description":{"label":"الوصف","help":"أدخل وصف نظام jira."},"MainPanel":{"label":"إنشاء تهيئة نظام jira"},"CancelBtn":{"label":"إلغاء"},"username":{"label":"اسم مستخدم jira","help":"اسم مستخدم jira"},"token":{"label":"مفتاح api لسحابة jira","help":"مفتاح apikey لسحابة jira الذي تم الحصول عليه من backoffic jira، هنا يجب إدخال \"API Token for your Atlassian Account\"."},"baseUri":{"label":"عنوان الإنترنت الأساسي","help":"رابط العنوان الأساسي لنظام jira لتثبيت onpremise أو العنوان الأساسي لمؤسستك لنظام jira cloud"}},"GJiraProjectEndpoint":{"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"PublishBtn":{"label":"انشر!","help":"يحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لـ LLm's"},"CancelBtn":{"label":"إلغاء"},"SettingsTab":{"label":"الإعدادات"},"LogsTab":{"label":"السجلات"},"MainPanel":{"label":"مشاركة محتويات jira"},"code":{"label":"رمز فريد","help":"الكود الفريد الذي تم إنشاؤه تلقائيًا للمحتوى."},"jiraSystemCode":{"label":"نظام jira","help":"مرجع نظام jira المُعد مسبقًا."},"parentProjectCode":{"label":"المشروع","help":"مرجع المشروع الرئيسي."},"description":{"label":"الوصف","help":"أدخل وصف محتوى الإدخالات المرفوعة في jira."},"programmedTables":{"label":"جدول فحص تحديثات المحتويات","help":"اضبط جدولة تحديث المحتوى للحفاظ على تحديث نظام الاسترجاع الداعم."},"openZips":{"label":"فتح ملفات zip","help":"تمكين فتح ملفات zip واستخراج المحتوى"},"tree":{"label":"المساحات أو الصفحات/الصفحات الفرعية المختارة","help":"محتويات المشاريع والتذاكر المشتركة في jira بشكل هرمي"},"catalogingCriteria":{"label":"معايير تنظيم المساحات، الصفحات، والصفحات الفرعية","help":"يرجى شرح هنا كيفية تنظيم المساحات، الصفحات، والصفحات الفرعية للمحتوى الذي تمت مشاركته في jira مع Gebo.ai"}},"GJiraSystem":{"description":{"label":"الوصف","help":"أدخل وصف نظام jira."},"DeleteBtn":{"label":"حذف"},"MainPanel":{"label":"تعديل نظام jira"},"CancelBtn":{"label":"إلغاء"},"SaveBtn":{"label":"حفظ"},"baseUri":{"label":"عنوان الإنترنت الأساسي","help":"رابط العنوان الأساسي لنظام jira"},"code":{"label":"رمز فريد","help":"الكود الفريد الذي تم إنشاؤه تلقائيًا لنظام jira."},"secretCode":{"label":"الهوية المستخدمة","help":"اختر أو أنشئ الهوية للوصول إلى نظام jira"}}},"GeboAISharepointModule":{"GeboAISharepointSystemFastComponent":{"description":{"label":"الوصف","help":"أدخل وصف نظام SharePoint/OneDrive."},"sharepointVersion":{"label":"إصدار SharePoint","help":"إصدار SharePoint"},"secret":{"label":"مفتاح سري","help":"السر الخاص بـ Oauth2 لهذا التطبيق المسجل في منتج Microsoft \"entra\" ‏(يمكن الحصول عليه من وحدة تحكم إدارة سحابة Microsoft)"},"clientId":{"label":"معرف العميل","help":"معرف Oauth2 لهذا التطبيق المسجل في منتج Microsoft \"entra\" ‏(يمكن الحصول عليه من وحدة تحكم إدارة سحابة Microsoft)"},"tenantId":{"label":"معرف المستأجر","help":"معرف Oauth2 لمؤسستك في منتج Microsoft \"entra\" ‏(يمكن الحصول عليه من وحدة تحكم إدارة سحابة Microsoft)"},"MicrosofOauth2Fieldset":{"label":"معلومات تسجيل تطبيق Microsof oauth2 لـ Gebo.ai"},"CreateBtn":{"label":"إنشاء"},"CancelBtn":{"label":"إلغاء"},"MainPanel":{"label":"إنشاء إعدادات نظام SharePoint/OneDrive"}},"GSharepointProjectEndpoint":{"CancelBtn":{"label":"إلغاء"},"SaveBtn":{"label":"حفظ"},"PublishBtn":{"label":"نشر!","help":"يحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لـ LLm's"},"SettingsTab":{"label":"الإعدادات"},"MainPanel":{"label":"مشاركة محتويات SharePoint/OneDrive"},"LogsTab":{"label":"السجلات"},"DeleteBtn":{"label":"حذف"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا للمحتويات."},"parentProjectCode":{"label":"المشروع","help":"مرجع مشروع الأصل."},"description":{"label":"الوصف","help":"أدخل وصف مصادر بيانات إدخالات SharePoint/OneDrive."},"sharePointSystemCode":{"label":"نظام sharepoint","help":"مرجع نظام SharePoint/OneDrive الذي تم إعداده مسبقاً."},"openZips":{"label":"فتح ملفات zip","help":"تمكين فتح واستخراج محتوى ملفات zip"},"tree":{"label":"المواقع/الصفحات/الصفحات الفرعية في SharePoint أو محركات/مجلدات/ملفات OneDrive المختارة","help":"محتويات SharePoint/OneDrive المشتركة"},"programmedTables":{"label":"جدولة فحص تحديثات المحتوى","help":"قم بتكوين جدولة المحتويات المتغيرة للحفاظ على تحديث نظام التوليد المعزز للاسترجاع"},"catalogingCriteria":{"label":"معايير تنظيم المساحات، الصفحات والصفحات الفرعية","help":"يرجى شرح هنا كيفية تنظيم المساحات، الصفحات والصفحات الفرعية في محتويات sharepoint المشتركة مع Gebo.ai"}},"GSharepointContentManagementSystem":{"MainPanel":{"label":"تعديل نظام SharePoint"},"GeneralSettingsTab":{"label":"الإعدادات العامة"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"secretCode":{"label":"الهوية المستخدمة","help":"اختر أو أنشئ هوية للوصول إلى نظام SharePoint"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لنظام SharePoint."},"description":{"label":"الوصف","help":"أدخل وصف نظام SharePoint."},"sharepointVersion":{"label":"إصدار SharePoint","help":"إصدار SharePoint"}}},"GeboAIGraphRagExtractionModule":{"GraphRagExtractionConfig":{"graphRagConfigUI_Delete":{"label":"حذف"},"graphRagConfigUI_Save":{"label":"حفظ"},"graphRagConfigUI_Cancel":{"label":"إلغاء"},"graphRagConfigUI_ContextSettings":{"label":"إعدادات المعلومات/المحتوى العامة"},"graphRagConfigUI_LLMSSettings":{"label":"إعدادات LLms"},"code":{"label":"رمز فريد","help":"رمز فريد يُنشأ تلقائيًا لمرحلة استخراج بيانات رسم المعرفة"},"MainPanel":{"label":"إعدادات استخراج المعرفة Graphrag"},"description":{"label":"الوصف","help":"أدخل وصفًا لإعدادات مرحلة استخراج بيانات رسم المعرفة هذه"},"extractionPrompt":{"label":"موجه استخراج المعلومات","help":"موجه نموذج اللغة الكبير لاستخراج الكيانات/الأحداث/العلاقات والأسماء المستعارة"},"usedModelConfiguration":{"label":"نموذج LLM المستخدم للاستخراج","help":"حدد نموذج اللغة الكبير المستخدم لاستخراج المعرفة، سيتم استخدام النموذج الافتراضي إذا لم يتم اختيار واحد."},"graphRagAllSources":{"label":"تطبيق رسم المعرفة على جميع مصادر البيانات","help":"إذا كان صحيحًا، سيتم معالجة جميع قواعد المعرفة/المشاريع/مصادر البيانات لاستخراج المعرفة، وإلا سيتم معالجة المصادر التي تم إعدادها فقط"},"defaultModel":{"label":"نموذج اللغة الكبير الافتراضي","help":"سيتم استخدام نموذج اللغة الكبير الافتراضي لاستخراج المعرفة"},"processEveryDocument":{"label":"تطبيق رسم المعرفة على جميع الملفات","help":"سيتم تطبيق خوارزميات الرسم المعرفي على جميع الملفات مما يعزز تفاصيل التحليل التي يمكن للنظام القيام بها ولكن سيزيد من التكلفة والوقت المطلوبين لمعالجة المستندات"},"contentSelectionFilter":{"label":"معايير اختيار الملفات لمعالجة رسم المعرفة","help":"حرر معايير الملفات التي سيتم إرسالها إلى خط استخراج المعلومات لـ Graphrag، حدد على الأقل اسم ملف ومعيار أو نوع ملف أو الحد الأقصى لحجم الملف بالبايت أو عمر آخر تعديل بالأيام"}}},"GeboAIContentSelectionFilterModule":{"SelectionFilterCriteria":{"extensions":{"placeholder":"اختر أنواع الملفات"},"nameFilterCriteria":{"placeholder":"معايير تصفية اسم الملف"},"maxModificationAgeInDays":{"placeholder":"آخر تعديل للملف، قبل عدد من الأيام"},"nameFilter":{"placeholder":"اسم الملف"},"maxFileSize":{"placeholder":"أقصى حجم للملف بالبايت"}}},"GeboAiKnowledgeBaseModule":{"GKnowledgeBase":{"GeneralInfosTab":{"label":"المعلومات العامة"},"MainPanel":{"label":"تعديل قاعدة المعرفة"},"AccessSettingsTab":{"label":"إعدادات وصول قاعدة المعرفة"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائياً لقاعدة المعرفة."},"description":{"label":"الوصف","help":"أدخل وصف قاعدة المعرفة."},"embeddingModelReferences":{"label":"نماذج التضمين المستخدمة (اتركها فارغة لاستخدام الافتراضي للنظام)","help":"نماذج التضمين لقاعدة المعرفة، تركها فارغة سيستخدم النموذج الافتراضي."},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"IndexBtn":{"label":"فهرسة","help":"إعادة فهرسة المحتوى"}},"GProject":{"MainPanel":{"label":"تعديل مشروع أو عنصر"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائياً للمشروع."},"description":{"label":"الوصف","help":"أدخل وصف المشروع."},"rootKnowledgeBaseCode":{"label":"قاعدة المعرفة","help":"قاعدة المعرفة."},"DeleteBtn":{"label":"حذف"},"IndexBtn":{"label":"فهرسة","help":"إعادة فهرسة المحتوى"},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"}},"GeboAiKnowledgeBaseTreeComponent":{"addNewAnchor":{"label":"+ إضافة عنصر/مشروع","help":"إضافة جديد..."}}},"GeboAIAccessControlModule":{"GeboAIAccessControlComponent":{"accessibleToAll":{"label":"يستخدمه الجميع","help":"يمكن للجميع الاستخدام"},"accessibleGroups":{"label":"قائمة المجموعات","help":"اختر المجموعات المسموح بها"},"accessibleUsers":{"label":"قائمة المستخدمين","help":"اختر المستخدمين المسموح لهم"}}},"GeboAiAdminPanelModule":{"GeboAiAdminComponent":{"DashboardTab":{"label":"لوحة المعلومات"},"LLMSTab":{"label":"نماذج المحادثة والت嶤嶖嶛嶜嶞嶝嶓崑嶒嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶢嶖嶛嶜嶞嶝嶓崑嶒嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀 嵏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀"},"RagChatConfigTab":{"label":"ملفات محادثة راغ/تلقين النماذج"},"KnowledgeBaseTab":{"label":"قواعد المعرفة والمشاريع"},"UsersGroupTab":{"label":"المستخدمون والمجموعات"},"GeboModulesTab":{"label":"إعداد وحدات Gebo.ai"},"LogsTab":{"label":"السجلات"}}},"SystemsPanelModule":{"SystemsComponent":{"CodeHeader":{"label":"رمز"},"DescriptionHeader":{"label":"الوصف"},"ConfigureBtn2":{"label":"إعداد"},"ConfigureBtn":{"label":"إعداد"}}},"ChatProfilesPanelModule":{"ChatProfilesComponent":{"NewPromptConfigurationBtn":{"label":"تكوين مطالبة جديد"},"NewChatProfileBtn":{"label":"ملف محادثة جديد"},"MainPanel":{"label":"ملفات محادثة توليد معزز بالاسترجاع"},"PromptsPanel":{"label":"مجموعة المطالبات والمطالبات الافتراضية"},"KnowledgeBasesHeader":{"label":"قواعد المعرفة"},"DescriptionHeader":{"label":"الوصف"},"ConfigureBtn1":{"label":"إعداد"},"CodeHeader":{"label":"رمز"}}},"KnowledgeBasesPanelModule":{"KnowledgeBasesComponent":{"NewKnowledgeBaseBtn":{"label":"قاعدة معرفة جديدة"}}},"LlmsPanelModule":{"LlmsSystemsComponent":{"NewEmbeddingModelConfigurationBtn":{"label":"إعداد نموذج تضمين جديد"},"NewChatModelConfigurationBtn":{"label":"إعداد نموذج محادثة جديد"},"DescriptionHeader":{"label":"الوصف"},"CodeHeader":{"label":"الرمز"},"ModelHeader":{"label":"النموذج "},"ModelProviderHeader":{"label":"مزود النموذج"},"ConfigureBtn":{"label":"إعداد"},"CodeHeader2":{"label":"الرمز"},"DescriptionHeader2":{"label":"الوصف"},"ModelProviderHeader2":{"label":"مزود النموذج"},"ConfigureBtn2":{"label":"إعداد"},"ModelHeader2":{"label":"النموذج "}}},"GeboAiLargeLanguageModelsModule":{"GeboAITestChatComponent":{"TestingModelDialog":{"label":"اختبار النموذج"},"TestChatBtn":{"label":"اختبار الدردشة"}},"GOpenAIChatModelConfig":{"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"apiSecretCode":{"label":"OpenAI token","help":"اختر رمز OpenAI لاستخدامه مع هذا النموذج"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"choosedModel":{"label":"اختيار نموذج دردشة OpenAI","help":"اختر نموذج دردشة OpenAI للعمل عليه."},"GeneralInfosTab":{"label":"معلومات عامة"},"AdvancedSettingsTab":{"label":"إعدادات متقدمة"},"MainPanel":{"label":"تعديل إعدادات نموذج دردشة OpenAI"},"ModelAccessSettingsTab":{"label":"إعدادات وصول النموذج"}},"GOpenAIEmbeddingModelConfig":{"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"MainPanel":{"label":"تعديل إعدادات نموذج تضمين OpenAI"},"apiSecretCode":{"label":"OpenAI token","help":"اختر رمز OpenAI لاستخدامه مع هذا النموذج"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات نموذج التضمين"},"choosedModel":{"label":"اختيار نموذج تضمين OpenAI","help":"اختر نموذج تضمين OpenAI للعمل عليه."},"defaultModel":{"label":"تعيين كنموذج تضمين افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"}},"GOllamaChatModelConfig":{"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"DeleteBtn":{"label":"حذف"},"baseUrl":{"label":"عنوان خادم ollama الأساسي","help":"العنوان الأساسي (مثل http://servername:234/) الذي يستجيب له خادم ollama المحلي أو على الشبكة المحلية."},"choosedModel":{"label":"اختيار نموذج دردشة Ollama","help":"اختر نموذج دردشة Ollama للعمل عليه.","placeholder":"اختر نموذج"},"apiSecretCode":{"label":"Ollama token","help":"اختر رمز Ollama لاستخدامه مع هذا النموذج (اختياري)"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"MainPanel":{"label":"تعديل إعدادات نموذج محادثة خادم Ollama المحلي (أو على الشبكة)"}},"GAnthropicChatModelConfig":{"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"apiSecretCode":{"label":"Anthropic token","help":"اختر رمز Anthropic لاستخدامه مع هذا النموذج"},"choosedModel":{"label":"اختيار نموذج دردشة Anthropic","help":"اختر نموذج دردشة Anthropic للعمل عليه.","placeholder":"اختر نموذج"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"AdvancedSettingsTab":{"label":"إعدادات متقدمة"},"GeneralInfosTab":{"label":"معلومات عامة"},"ModelAccessSettingsTab":{"label":"إعدادات وصول النموذج"},"MainPanel":{"label":"تعديل إعدادات نموذج دردشة Anthropic"}},"GMistralChatModelConfig":{"SaveBtn":{"label":"حفظ"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"DeleteBtn":{"label":"حذف"},"CancelBtn":{"label":"إلغاء"},"apiSecretCode":{"label":"MistralAI token","help":"اختر رمز MistralAI لاستخدامه مع هذا النموذج"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"choosedModel":{"label":"اختيار نموذج دردشة MistralAI","help":"اختر نموذج دردشة MistralAI للعمل عليه."},"GeneralInfosTab":{"label":"معلومات عامة"},"AdvancedSettingsTab":{"label":"إعدادات متقدمة"},"ModelAccessSettingsTab":{"label":"إعدادات وصول النموذج"},"MainPanel":{"label":"تعديل إعدادات نموذج دردشة MistralAI"}},"GGoogleVertexChatModelConfig":{"SaveBtn":{"label":"حفظ"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"choosedModel":{"label":"اختيار نموذج دردشة Google Vertex AI","help":"اختر نموذج دردشة Google Vertex AI للعمل عليه."},"apiSecretCode":{"label":"Google Vertex AI token","help":"اختر رمز Google Vertex AI لاستخدامه مع هذا النموذج"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"DeleteBtn":{"label":"حذف"},"CancelBtn":{"label":"إلغاء"},"TabGeneralInfos":{"label":"معلومات عامة"},"TabModelAccessSettings":{"label":"إعدادات وصول النموذج"},"TabAdvancedSettings":{"label":"إعدادات متقدمة"},"MainPanel":{"label":"تعديل إعدادات نموذج دردشة Google Vertex AI"}},"GDeepseekChatModelConfig":{"DeleteBtn":{"label":"حذف"},"CancelBtn":{"label":"إلغاء"},"SaveBtn":{"label":"حفظ"},"apiSecretCode":{"label":"Deepseek token","help":"اختر رمز Deepseek لاستخدامه مع هذا النموذج"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"choosedModel":{"label":"اختيار نموذج دردشة Deepseek","help":"اختر نموذج دردشة Deepseek للعمل عليه.","placeholder":"اختر نموذج"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"AdvancedSettingsTab":{"label":"إعدادات متقدمة"},"GeneralInfosTab":{"label":"معلومات عامة"},"MainPanel":{"label":"تعديل إعدادات نموذج دردشة Deepseek"},"ModelAccessSettingsTab":{"label":"إعدادات وصول النموذج"}},"GenericOpenAIAPIChatModelConfig":{"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات النموذج"},"DeleteBtn":{"label":"حذف"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"},"baseUrl":{"label":"عنوان خادم واجهة برمجة تطبيقات نموذج الدردشة","help":"العنوان الأساسي لنموذج الدردشة."},"apiSecretCode":{"label":"رمز واجهة برمجة تطبيقات نموذج الدردشة","help":"اختر رمز واجهة برمجة تطبيقات نموذج الدردشة لاستخدامه مع هذا النموذج (اختياري)"},"defaultModel":{"label":"تعيين كنموذج دردشة افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"},"choosedModel":{"label":"اختيار نموذج دردشة Chat model","help":"اختر نموذج دردشة Chat model للعمل عليه."},"GeneralInfosTab":{"label":"معلومات عامة"},"TitleFragment":{"label":"تعديل مزود نموذج الدردشة:"},"AdvancedSettingsTab":{"label":"إعدادات متقدمة"},"ModelAccessSettingsTab":{"label":"إعدادات وصول النموذج"}},"GOllamaEmbeddingModelConfig":{"CancelBtn":{"label":"إلغاء"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات نموذج التضمين"},"SaveBtn":{"label":"حفظ"},"DeleteBtn":{"label":"حذف"},"MainPanel":{"label":"تعديل إعدادات نموذج تضمين Ollama المحلي (أو على الشبكة)"},"apiSecretCode":{"label":"Ollama token","help":"اختر رمز Ollama لاستخدامه مع هذا النموذج"},"choosedModel":{"label":"اختيار نموذج تضمين Ollama","help":"اختر نموذج تضمين Ollama للعمل عليه."},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"},"defaultModel":{"label":"تعيين كنموذج تضمين افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"},"baseUrl":{"label":"عنوان خادم ollama الأساسي","help":"العنوان الأساسي (مثل http://servername:234/) الذي يستجيب له خادم ollama المحلي أو على الشبكة المحلية."}},"GMistralEmbeddingModelConfig":{"description":{"label":"الوصف","help":"أدخل وصف إعدادات نموذج التضمين"},"MainPanel":{"label":"تعديل إعدادات نموذج تضمين MistralAI"},"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"},"choosedModel":{"label":"اختيار نموذج تضمين MistralAI","help":"اختر نموذج تضمين MistralAI للعمل عليه."},"defaultModel":{"label":"تعيين كنموذج تضمين افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"},"apiSecretCode":{"label":"MistralAI token","help":"اختر رمز MistralAI لاستخدامه مع هذا النموذج"}},"GGoogleVertexEmbeddingModelConfig":{"MainPanel":{"label":"تعديل إعدادات نموذج تضمين Google Vertex AI"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات نموذج التضمين"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"choosedModel":{"label":"اختيار نموذج تضمين Google Vertex AI","help":"اختر نموذج تضمين Google Vertex AI للعمل عليه."},"defaultModel":{"label":"تعيين كنموذج تضمين افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"},"apiSecretCode":{"label":"Google Vertex AI token","help":"اختر رمز Google Vertex AI لاستخدامه مع هذا النموذج"}},"GenericOpenAIAPIEmbeddingModelConfig":{"CancelBtn":{"label":"إلغاء"},"SaveBtn":{"label":"حفظ"},"DeleteBtn":{"label":"حذف"},"TitleFragment":{"label":"تعديل مزود نموذج التضمين:"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات نموذج التضمين"},"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"},"choosedModel":{"label":"اختيار نموذج تضمين Embedding model","help":"اختر نموذج تضمين Embedding model للعمل عليه."},"baseUrl":{"label":"عنوان خادم واجهة برمجة تطبيقات نموذج التضمين","help":"العنوان الأساسي لخادم نموذج التضمين."},"defaultModel":{"label":"تعيين كنموذج تضمين افتراضي","help":"إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"},"apiSecretCode":{"label":"رمز واجهة برمجة تطبيقات نموذج التضمين","help":"اختر رمز واجهة برمجة تطبيقات نموذج التضمين لاستخدامه مع هذا النموذج"}}},"GeboAIChatControlModule":{"GeboAIReusableChatComponent":{"chatConfigInfosBtn":{"help":"معلومات إعدادات المحادثة"},"chaDeleteBtn":{"help":"حذف هذه الجلسة"},"chatNameChangeBtn":{"help":"تغيير اسم الجلسة"}},"ChangeDescriptionComponent":{"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"description":{"label":"وصف المحادثة","help":"أدخل وصف جلسة المحادثة."}},"GeboChatUserInfoComponent":{"usedModel":{"label":"النموذج المستخدم","help":"رمز النموذج"},"providerId":{"label":"موفر نموذج الدردشة","help":"مزود LLms"},"functions":{"label":"وظائف يمكن استدعاؤها في نموذج الدردشة","help":"قائمة الوظائف المتاحة لنموذج الدردشة"},"NameCol":{"label":"الاسم"},"DescriptionCol":{"label":"الوصف"}}},"GeboAIAudioControlModule":{"GeboAIAudioControlComponent":{"RecordBtn":{"label":"تسجيل","help":"ابدأ تسجيل مقطع صوتي وأرسله"}}},"GeboAIJobStatusModule":{"LogTableComponent":{"ReloadDataBtn":{"label":"إعادة تحميل البيانات"},"DeleteBtn":{"label":"حذف"},"SelectHeader":{"label":"اختيار"},"EndDateTimeHeader":{"label":"تاريخ/وقت الانتهاء"},"StartDateTimeHeader":{"label":"تاريخ/وقت البدء"},"ProcessingHeader":{"label":"جارٍ المعالجة"},"DescriptionHeader":{"label":"الوصف"},"CodeHeader":{"label":"الرمز"},"FinishedHeader":{"label":"تم الانتهاء"},"WithErrorHeader":{"label":"بخطأ"},"LogTableComponent":{"help":"سجل استيراد منطقة نظام الملفات المشتركة هذه"}}},"GeboAIDashboardPanelModule":{"GeboAIDashboardComponent":{"SpanEmbedding":{"label":"التضمين مقابل العدد الإجمالي للمستندات"},"MoreDetailsBtn":{"label":"مزيد من التفاصيل"}}},"GeboAIPromptWizardModule":{"GeboAIPromptWizardComponent":{"generatePrompt":{"label":"إنشاء مطالبة"},"PromptWizardBtn":{"label":"معالج المطالبات","help":"استخدم هذا الخيار لاستخدام نموذج لغوي كبير لإنشاء مطالبة لأهدافك"},"acceptPrompt":{"label":"قبول المطالبة"},"promptWizardUI":{"label":"معالج إنشاء قالب المطالبة"},"cancel":{"label":"إلغاء"},"response":{"label":"قالب مطالبة مقترح","help":"تم إنشاء نص القالب لهدفك (يمكنك تغييره أو تصحيحه أو تعديله)"},"modelCode":{"label":"نموذج الدردشة للاستخدام","help":"اختر نموذج الدردشة الذي ترغب في طلب إنشاء قالب المطالبة منه"},"query":{"label":"طلب قالب المطالبة","help":"حدد بصيغة المخاطب ما الهدف الذي ستدعمه الذكاء الاصطناعي للمستخدم"}}},"GeboAIStandardChatModelModule":{"GeboAIStandardChatModelSettings":{"temperature":{"label":"درجة الحرارة","help":"درجة حرارة استجابة النموذج، من 0 إلى 1 (إذا لم تكن متأكدًا اتركها فارغة)"},"contextLength":{"label":"طول السياق (رموز)","help":"كمية النص التي يمكن لنموذج الذكاء الاصطناعي معالجتها (إذا لم يتم التحديد سيتم استخدام 4096)"},"topP":{"label":"TopP","help":"معامل TopP، من 0 إلى 1 (إذا لم تكن متأكدًا اتركها فارغة)"}}},"GeboAIAdvancedChatModelModule":{"GeboAIAdvancedChatModelGroupComponent":{"enabledFunctions":{"label":"استدعاء الوظائف المفعلة لهذا النموذج","help":"الوظائف التي يمكن للنموذج استخدامها أثناء المحادثة"},"defaultModelPrompt":{"label":"مطالبة النموذج الافتراضية","help":"تعديل المطالبة الافتراضية لنموذج الدردشة."}}},"GeboAiSecretsAdminModule":{"SecretWrapper":{"description":{"label":"الوصف","help":"أدخل وصف الهوية."},"code":{"label":"رمز فريد","help":"رمز هوية فريد يُنشأ تلقائيًا."},"secretType":{"label":"نوع الهوية","help":"حدد نوع الهوية المراد إنشاؤها للنظام البعيد"},"InsertBtn":{"label":"إدراج"},"token":{"label":"رمز","help":"أدخل الرمز."},"user":{"label":"المستخدم","help":"أدخل المستخدم المشار إليه بالرمز."},"MainPanel":{"label":"إنشاء هوية"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"username":{"label":"اسم المستخدم","help":"أدخل اسم المستخدم."},"password":{"label":"كلمة المرور","help":"أدخل كلمة المرور."},"email":{"label":"البريد الإلكتروني/اسم المستخدم","help":"أدخل البريد الإلكتروني أو اسم المستخدم المرتبط بمفتاح ssh."},"key":{"label":"المفتاح السري","help":"افتح ملف المفتاح الخاص و انسخ محتواه في هذه المنطقة."},"passphrase":{"label":"عبارة مرور المفتاح","help":"أدخل عبارة مرور المفتاح."},"pub":{"label":"المفتاح العام","help":"افتح ملف المفتاح العام و انسخ محتواه في هذه المنطقة."}}},"GeboAIUploadsModule":{"GUploadsProjectEndpoint":{"code":{"label":"رمز فريد","help":"رمز فريد يتم إنشاؤه تلقائيًا للمحتوى."},"description":{"label":"الوصف","help":"أدخل وصف المحتوى المرفوع من مدخل نظام الملفات."},"parentProjectCode":{"label":"المشروع","help":"مرجع المشروع الرئيسي."},"upload":{"label":"رفع المحتوى","help":"اضغط على زر التصفح وحدد ملفات zip أو ملفات أخرى"},"openZips":{"label":"فتح ملفات zip","help":"تفعيل فتح ملفات zip واستخراج المحتوى"},"PublishBtn":{"label":"انشر!","help":"يحفظ ويجعل هذا المحتوى متاحًا في قاعدة المعرفة لنموذج اللغة"},"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"LogsTab":{"label":"السجلات"},"MainPanel":{"label":"تعديل المحتوى المرفوع"},"SettingsTab":{"label":"الإعدادات"},"buildSystemsRefs":{"label":"تهيئة أنظمة البناء","help":"قائمة أنظمة البناء/التغليف التي سيتم فحصها لمعلومات التعريف وبيانات القطع الإضافية (اتركها فارغة إذا لم يتضمن الكود البرمجي)"}}},"VFilesystemSelectorModule":{"VFilesystemSelectorComponent":{"ChoosedElementsArea":{"label":"العناصر المختارة"},"ChooseOk":{"label":"موافق"},"ChooseCancel":{"label":"إلغاء"},"EditBtn":{"help":"تعديل المحدد"},"ChooseElementsArea":{"label":"اختر العناصر"},"VFileSystemSelector":{"label":"اختر العناصر"}}},"GeboAIContentReindexModule":{"GeboAIContentReindexScheduleComponent":{"EditBtn":{"help":"تعديل الجدولة"},"ConfirmBtn":{"label":"تأكيد"},"AddBtn":{"label":"+إضافة"}}},"GeboAIFileSystemModule":{"GFilesystemProjectEndpoint":{"PublishBtn":{"label":"نشر!","help":"يحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لـ LLm's"},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"SettingsTab":{"label":"الإعدادات"},"SourceCodeTreatmentTab":{"label":"معالجة الشيفرة المصدرية"},"LogsTab":{"label":"السجلات"},"MainPanel":{"label":"تعديل محتوى نظام الملفات الحالي"},"description":{"label":"الوصف","help":"أدخل وصف المحتوى الذي تم تحميله لإدخال نظام الملفات."},"openZips":{"label":"فتح ملفات zip","help":"تفعيل فتح واستخراج محتوى ملفات zip"},"code":{"label":"رمز فريد","help":"رمز فريد يتم توليده تلقائياً للمحتويات."},"tree":{"label":"الملفات أو المجلدات المختارة","help":"ملفات أو مجلدات نظم الملفات المشتركة المتوفرة على الخادم"},"parentProjectCode":{"label":"المشروع","help":"مرجع المشروع الرئيسي."},"programmedTables":{"label":"جدولة فحص تحديثات المحتويات","help":"قم بتكوين جدول تحديث المحتويات المحَدة للحفاظ على تحديث نظام استرجاع المعلومات"},"catalogingCriteria":{"label":"معايير تنظيم المجلدات","help":"يرجى شرح كيفية تنظيم معايير المجلدات في منطقة نظام الملفات التي تشاركها مع Gebo.ai"},"buildSystemsRefs":{"label":"إعداد أنظمة البناء","help":"قائمة بأنظمة البناء/التعبئة التي سيتم فحصها للحصول على معلومات وصفية وبيانات إضافية (اتركها فارغة إذا لم يكن هناك كود برمجي مضمّن)"}},"GeboAISharedFilesystemsComponent":{"NewFileShareAreaBtn":{"label":"منطقة مشاركة ملفات جديدة"},"AbsolutePathHeader":{"label":"المسار المطلق"},"DbOrYmlFileConfigHeader":{"label":"إعداد ملف db أو yml"},"DescriptionHeader":{"label":"الوصف"},"CodeHeader":{"label":"الرمز"},"ModifyHeader":{"label":"تعديل"}},"GFileSystemShareReference":{"reference":{"label":"مجلد نظام الملفات المشترك المختار","help":"اختر مجلد على الخادم ليكون مساراً أساسياً لنظام الملفات المشترك المستخدم بمؤسستك كمستودع مستندات"},"description":{"label":"الوصف","help":"أدخل وصف منطقة نظام الملفات المشتركة في مؤسستك"},"code":{"label":"رمز فريد","help":"رمز فريد يتم توليده تلقائياً للمحتويات."},"InsertBtn":{"label":"إدراج"},"CancelBtn":{"label":"إلغاء"},"MainPanel":{"label":"تعديل مجلد الملفات المشترك على الخادم"},"DeleteBtn":{"label":"حذف"}}},"GeboAiGitModule":{"GGitProjectEndpoint":{"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"DeleteBtn":{"label":"حذف"},"PublishBtn":{"label":"انشر!","help":"احفظ واجعل هذه المحتويات متاحة في قاعدة المعرفة لنظام LLm"},"MainPanel":{"label":"تعديل مستودع مصدر/توثيق git"},"description":{"label":"الوصف","help":"أدخل وصف مستودع git."},"code":{"label":"رمز فريد","help":"الرمز الفريد الذي تم إنشاؤه تلقائيًا لمستودع git."},"parentProjectCode":{"label":"المشروع","help":"مرجع المشروع الأب."},"contentManagementSystem":{"label":"نظام Git","help":"مرجع نظام git الذي تم تكوينه بالفعل."},"branch":{"label":"فرع","help":"اسم الفرع المراد التحقق منه (عادةً master أو main أو develop)"},"identityCode":{"label":"الهوية المستخدمة","help":"حدد الهوية لاستخدامها في الاستنساخ/التحقق من النظام"},"repositoryUri":{"label":"عنوان المستودع","help":"العنوان الكامل لمستودع git البعيد (عادةً يبدأ بـ http: أو https: أو ssh:)"},"publicAccess":{"label":"عام","help":"إذا كانت صحيحة، لا يتطلب الوصول للمستودع المصادقة"},"openZips":{"label":"فتح ملفات zip","help":"تمكين فتح ملفات zip واستخراج المحتوى"},"programmedTables":{"label":"جدولة فحوصات تحديث المحتوى","help":"قم بتهيئة جدولة المحتوى المتغير للحفاظ على تحديث نظام التوليد المعزز"},"buildSystemsRefs":{"label":"تهيئة أنظمة البناء","help":"قائمة أنظمة البناء/التغليف التي سيتم فحصها للحصول على معلومات وقطع إضافية"}}},"GeboAIChatProfileModule":{"GChatProfileConfiguration":{"CancelBtn":{"label":"إلغاء"},"SaveBtn":{"label":"حفظ"},"DeleteBtn":{"label":"حذف"},"GeneralInfosTab":{"label":"المعلومات العامة"},"UseChatModelLabel":{"label":"استخدم نموذج الدردشة"},"ChooseChatModelRadio":{"label":"اختر"},"ChatModelSelect":{"placeholder":"اختر إعداد تكوين نموذج الدردشة"},"EmbeddingModelSelect":{"placeholder":"اختر إعداد تكوين نموذج التضمين"},"ChooseEmbeddingModelRadio":{"label":"اختر"},"RagSettingsTab":{"label":"إعدادات RAG"},"LanguageModelTab":{"label":"إعدادات النموذج اللغوي الكبير والأدوات المتاحة"},"UseEmbeddingModelLabel":{"label":"استخدم نموذج التضمين"},"SecurityAccessSettingsTab":{"label":"إعدادات وصول الأمان"},"MainPanel":{"label":"تحرير ملف دردشة RAG"},"code":{"label":"رمز فريد","help":"رمز فريد يُنشأ تلقائيًا لملف الدردشة."},"description":{"label":"الوصف","help":"أدخل وصف ملف الدردشة."},"userChoosesKnowledgeBases":{"label":"المستخدم يختار قواعد المعرفة","help":"يمكن للمستخدم الاختيار من بين قواعد المعرفة المتاحة و/أو رفع ملفاته الخاصة."},"knowledgeBaseCodes":{"label":"قواعد المعرفة","help":"قواعد المعرفة المستخدمة لاسترجاع المستندات."},"similaritySearchThreshold":{"label":"عتبة التشابه","help":"عتبة التشابه لعمليات البحث الدلالي، 0.60–0.65 تصفية منخفضة، 0.70-0.75 تصفية متوسطة، 0.80–0.85 دقيقة"},"otherSearchSimilarityThreshold":{"label":"عتبة التشابه للبحث الثاني","help":"عتبة التشابه لعمليات البحث الدلالي، 0.60–0.65 تصفية منخفضة، 0.70-0.75 تصفية متوسطة، 0.80–0.85 دقيقة يُستخدم من البحث الثاني في عدة خطوات RAG"},"disableMultiHopRag":{"label":"تعطيل 'البحث متعدد الخطوات' RAG","help":"تعطيل وظيفة 'البحث متعدد الخطوات' RAG. البحث متعدد الخطوات يبدأ ببحث دلالي أولي ثم يستخدم المستندات التي تم العثور عليها كسياق لبحث دلالي آخر لتوفير سياق أوسع."},"topK":{"label":"أجزاء المستندات المعتبرة (TopK)","help":"في استرجاع الدردشة المعززة، يعتبر البحث الدلالي أفضل N أجزاء تم العثور عليها من المستندات"},"enabledFunctions":{"label":"الوظائف المفعلة لهذه الدردشة RAG","help":"الوظائف التي يمكن أن يستخدمها نموذج اللغة أثناء الدردشة مع المستخدم مع إمكانية التفاعل مع قاعدة المعرفة المحددة"},"prompt":{"label":"الموجه","help":"حرر الموجه لجلسات استرجاع الدردشة المعززة."}}},"GeboAIPromptAdminModule":{"GPromptConfig":{"DeleteBtn":{"label":"حذف"},"SaveBtn":{"label":"حفظ"},"CancelBtn":{"label":"إلغاء"},"PromptCategorySelect":{"placeholder":"أدخل أو اختر فئة الطلب"},"MainPanel":{"label":"تعديل الطلب"},"promptCategory":{"label":"فئة الطلب","help":"اختر أو أدخل فئة الطلب."},"prompt":{"label":"الطلب","help":"قم بتعديل الطلب للمحادثة، استخدم {query} للدلالة على سؤال المستخدم و{context} للدلالة على سياق الوثائق/السجل المرسل إلى LLM."},"code":{"label":"رمز فريد","help":"الرمز الفريد للطلب يتم إنشاؤه تلقائيًا."},"description":{"label":"الوصف","help":"أدخل وصف الطلب."}}},"GeboAIUserProfileModule":{"GeboAIUserProfileComponent":{"ChangePasswdBtn":{"label":"تغيير كلمة المرور"}},"GeboAIChangePasswordComponent":{"oldPassword":{"label":"كلمة المرور القديمة","help":"كلمة المرور الحالية لتسجيل الدخول"},"newPassword":{"label":"كلمة المرور الجديدة","help":"كلمة المرور الجديدة"},"username":{"label":"البريد الإلكتروني","help":"البريد الإلكتروني كاسم مستخدم لتسجيل الدخول"},"ChangePasswordUI":{"label":"نموذج تغيير كلمة المرور"},"CancelBtn":{"label":"إلغاء"},"ChangePwdBtn":{"label":"تغيير كلمة المرور"},"newPassword1":{"label":"تأكيد كلمة المرور الجديدة","help":"تأكيد كلمة المرور الجديدة"}}},"GeboAIGoogleSearchAccountModule":{"GGoogleSearchApiCredentials":{"DeleteBtn":{"label":"حذف"},"CancelBtn":{"label":"إلغاء"},"SaveBtn":{"label":"حفظ"},"ForMoreInformations":{"label":"لمزيد من المعلومات حول Google custom search API أو للحصول على مفتاح API (مجانا) قم بزيارة: https://developers.google.com/custom-search"},"code":{"label":"رمز فريد","help":"الرمز الفريد لإعدادات google search api."},"MainPanel":{"label":"تعديل بيانات اعتماد google custom search api"},"secretCode":{"label":"رمز Google search api","help":"اختر أو أدخل رمز google search api"},"customSearchEngineId":{"label":"معرف محرك بحث Google","help":"معرف محرك بحث Google"},"description":{"label":"الوصف","help":"أدخل وصف إعدادات google search api."}}}}
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "لغة النظام الافتراضية",
+        "help" : "لغة النظام الافتراضية لهذا التثبيت من Gebo.ai"
+      },
+      "username" : {
+        "label" : "البريد الإلكتروني",
+        "help" : "البريد الإلكتروني كاسم مستخدم لتسجيل الدخول"
+      },
+      "passwordC" : {
+        "label" : "تأكيد كلمة المرور",
+        "help" : "تأكيد كلمة المرور"
+      },
+      "password" : {
+        "label" : "كلمة المرور",
+        "help" : "كلمة المرور لتسجيل الدخول (8 أحرف على الأقل)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " كلمات المرور غير متطابقة "
+      },
+      "LocalAdmin" : {
+        "label" : "أنشئ حساب المسؤول المحلي الخاص بك"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "ستستخدم هذا الحساب مستقبلاً لإعداد/إدارة البرنامج. ستبقى هذه البيانات محلية على نظامك ولن تُرسل عبر الشبكة"
+      },
+      "EnterBtn" : {
+        "label" : "انتقل إلى صفحة تسجيل الدخول"
+      },
+      "SetupPage" : {
+        "label" : "إعداد تثبيت gebo.ai الخاص بك"
+      },
+      "CreateBtn" : {
+        "label" : "إنشاء إعداد النظام"
+      },
+      "LicenceFieldSet" : {
+        "label" : "اقرأ ووافق على الرخصة"
+      },
+      "AcceptMark" : {
+        "label" : "أوافق على الشروط",
+        "help" : "بالنقر هنا، أنت توافق على الشروط والأحكام في الرخصة"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "البريد الإلكتروني",
+        "help" : "البريد الإلكتروني كاسم مستخدم لتسجيل الدخول"
+      },
+      "password" : {
+        "label" : "كلمة المرور",
+        "help" : "كلمة المرور لتسجيل الدخول"
+      },
+      "LoginPanel" : {
+        "label" : "تسجيل الدخول إلى gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "تسجيل الدخول"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "تم!",
+        "detail" : "تمت العملية بنجاح"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "إعدادات Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "اسم المزود"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "MainPanel" : {
+        "label" : "إعدادات أمان Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "المعرف"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "العودة إلى صفحة الإعداد الرئيسية"
+      },
+      "WizardUi" : {
+        "label" : "اختر قسم الإعداد"
+      },
+      "adminUserSetupSection" : {
+        "label" : "إعداد حساب المشرف والآخرين",
+        "description" : "يتطلب وجود حساب إدارة واحد على الأقل لضمان إدارة تثبيت gebo.ai بشكل صحيح، أضف مستخدمين آخرين إذا لزم الأمر"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "دليل عمل Gebo.ai",
+        "description" : "قم بتكوين دليل العمل، سيكون هو المجلد الذي يتم فيه حفظ جميع ملفات التكوين والعمل لهذا التثبيت. من الجيد أيضًا نسخه احتياطيًا بشكل دوري."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "تكوين قاعدة بيانات المتجهات",
+        "description" : "يجب تكوين قاعدة بيانات متجهات لـ Gebo.ai لتقديم خدمات توليد معزز بالاسترجاع، يمكنك الاختيار بين قاعدة بيانات متجهات محلية أو Qdrant أو Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "تسجيل الدخول الموحد، مصادقة oauth2",
+        "description" : "مصادقة تسجيل الدخول الموحد بنظام oauth2 وتكوين عملاء oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "إعداد نماذج اللغة الكبيرة",
+        "description" : "قم بتكوين نماذج اللغة الكبيرة المختلفة باستخدام خدمات سحابية أو محلية / ضمن شبكة الشركة، يجب تكوين نموذج محادثة واحد على الأقل ونموذج تضمين واحد ليعمل البرنامج بشكل صحيح."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "إعداد استخراج المعرفة/Graph rag",
+        "description" : "تكوين نظام استخراج المعرفة و graph rag"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "إعداد مسارات أنظمة الملفات المشتركة",
+        "description" : "تكوين مسارات أنظمة الملفات المشتركة للشركة لاستخدامها كمناطق مستندات لاسترجاع المعرفة المعززة في قواعد المعرفة المختلفة"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "تكامل Atlassian Confluence",
+        "description" : "قم بتكوين Gebo.ai للوصول إلى تثبيتات Atlassian Confluence السحابية أو المحلية لديك"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "تكامل Atlassian Jira",
+        "description" : "قم بتكوين Gebo.ai للوصول إلى تثبيتات Atlassian Jira السحابية لديك"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "تكامل Microsoft Sharepoint",
+        "description" : "قم بتكوين Gebo.ai للوصول إلى تثبيتات Microsoft Sharepoint السحابية أو المحلية لديك"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "تكوين قاعدة معرفة واحدة على الأقل",
+        "description" : "قم بتكوين قاعدة معرفة واحدة على الأقل ليستمتع المستخدمون بخدمات التوليد المعزز بالاسترجاع لـ Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "تكوين ملف محادثة \"R.A.G.\" واحد على الأقل",
+        "description" : "قم بتكوين ملف محادثة واحد على الأقل معزز بالاسترجاع لمستخدميك استنادًا إلى واحدة من قواعد المعرفة التي تم تكوينها"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "إعداد أنظمة الشركة Atlassian Confluence"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "SystemTypeHeader" : {
+        "label" : "نوع النظام"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "رمز الإعداد"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "نظام Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "نظام Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "رمز الإعداد"
+      },
+      "MainPanel" : {
+        "label" : "إعداد أنظمة الشركة Atlassian Jira"
+      },
+      "SystemTypeHeader" : {
+        "label" : "نوع النظام"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "رمز الإعداد"
+      },
+      "MainPanel" : {
+        "label" : "إعداد أنظمة شركة Microsoft Sharepoint"
+      },
+      "SystemTypeHeader" : {
+        "label" : "نوع النظام"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "نظام Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "قدم مفتاح api مع رصيد متاح كافٍ. إذا تم اختيار OpenAI يجب إضافة رصيد محدد (من 10 إلى 30 دولار كافٍ عادةً) إلى خطتك المعتادة لاستخدام واجهة api، وإلا لن يتوفر نقل llms في هذا التطبيق."
+      },
+      "MainPanel" : {
+        "label" : "إعداد وصول مزودي Gebo.ai llms بمفتاح api الخاص بك"
+      },
+      "provider" : {
+        "label" : "مورد نموذج اللغة الكبير",
+        "help" : "اختر مورداً واحداً من بين OpenAI (chatgpt)، Google (Gemini)،Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "المستخدم",
+        "help" : "أدخل المستخدم المرتبط بمفتاح api"
+      },
+      "ConfigureBtn" : {
+        "label" : "تهيئة"
+      },
+      "apiKey" : {
+        "label" : "مفتاح api",
+        "help" : "مفتاح api الخاص بك من مزود LLMS المراد استخدامه"
+      },
+      "ProviderHeader" : {
+        "label" : "المزود"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "رمز التكوين"
+      },
+      "ModelHeader" : {
+        "label" : "النموذج"
+      },
+      "ModelTypeHeader" : {
+        "label" : "نوع النموذج"
+      },
+      "DefaultModelHeader" : {
+        "label" : "النموذج الافتراضي"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "إنشاء إعداد graph rag"
+      },
+      "MainPanel" : {
+        "label" : "إعداد إعدادات Graph Rag واستخلاص المعرفة الافتراضية"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "رمز الإعداد"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "المشروع"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "إضافة قاعدة معرفة"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "قاعدة المعرفة"
+      },
+      "MainPanel" : {
+        "label" : "إعدادات قواعد المعرفة والمحتوى"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "مصدر المحتوى"
+      },
+      "PublishedHeader" : {
+        "label" : "منشور"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "عدد المستندات"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "إضافة مشروع/عنصر",
+        "help" : "إنشاء مشروع جديد"
+      },
+      "Button1" : {
+        "help" : "فتح قاعدة المعرفة"
+      },
+      "Button2" : {
+        "help" : "فتح نموذج المشروع"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "إعداد مجلد عمل Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "تهيئة"
+      },
+      "workDirectory" : {
+        "label" : "اختر مجلداً كمجلد عمل Gebo.ai",
+        "help" : "اختر مجلد السيرفر الذي ستستخدمه هذه النسخة كمجلد عمل لتخزين إعداداتها ومحتواها."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "إضافة مجلد"
+      },
+      "AddFolderBtn" : {
+        "label" : "إضافة مجلد"
+      },
+      "CodeHeader" : {
+        "label" : "الرمز"
+      },
+      "MainPanel" : {
+        "label" : "مسارات أنظمة الملفات المشتركة على الخادم"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "المسار المطلق"
+      },
+      "DeleteHeader" : {
+        "label" : "حذف"
+      },
+      "path" : {
+        "label" : "أضف مجلد جذر لنظام ملفات مشترك",
+        "help" : "اختر مجلد خادم ليكون مسار الجذر لنظام ملفات مشترك يستخدم كمستودع مستندات في مؤسستك"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف مدخل نظام الملفات"
+      },
+      "RemovePathBtn" : {
+        "label" : "إزالة المسار"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "تكوين"
+      },
+      "MainPanel" : {
+        "label" : "تكوين قاعدة بيانات المتجهات"
+      },
+      "host" : {
+        "label" : "مضيف Qdrant",
+        "help" : "اسم مضيف أو عنوان IP الخاص بـ Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "إعدادات الاتصال بـ Qdrant"
+      },
+      "port" : {
+        "label" : "منفذ Qdrant",
+        "help" : "منفذ الاتصال بـ Qdrant (6334 هو الافتراضي)"
+      },
+      "apiKey" : {
+        "label" : "مفتاح Qdrant API",
+        "help" : "مفتاح API لمصادقة Qdrant"
+      },
+      "tls" : {
+        "label" : "معامل Qdrant TLS",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "تمت خطوات الإعداد الأساسية لـ Gebo.ai...",
+        "detail" : "تمت الخطوات الإلزامية ولكن بعض الخطوات المفقودة تمنع مؤسستك من الاستفادة الكاملة من هذا البرنامج"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "يوجد خطوات أساسية مفقودة في إعداد Gebo.ai",
+        "detail" : "يرجى مراجعة الخطوات الحمراء في عملية الإعداد"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "إعداد Gebo.ai تم بنجاح!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "الرمز",
+        "help" : "أدخل وصف رمز مصادقة/تكامل OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف معلومات مصادقة/تكامل OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "غرض الإعداد",
+        "help" : "اختر إذا كان سيتم استخدام هذا الإعداد للمصادقة في Gebo.ai أو للسماح لـ Gebo.ai بالاتصال كنظام عميل بطرف ثالث."
+      },
+      "authProvider" : {
+        "label" : "الموفر",
+        "help" : "أدخل مزود مصادقة OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "رابط المُصدر",
+        "help" : "أدخل عنوان URL للمصدر الخاص بمزود OAUTH2"
+      },
+      "authorizationUri" : {
+        "label" : "رابط التفويض",
+        "help" : "أدخل عنوان URL الخاص بتفويض OAUTH2 للمزود"
+      },
+      "jwkSetUri" : {
+        "label" : "رابط مجموعة Jwk",
+        "help" : "أدخل عنوان URL الخاص بمجموعة Jwk في OAUTH2 للمزود"
+      },
+      "userInfoUri" : {
+        "label" : "رابط معلومات المستخدم",
+        "help" : "أدخل عنوان URL الخاص بمعلومات المستخدم في OAUTH2 للمزود"
+      },
+      "introspectionUri" : {
+        "label" : "رابط الفحص",
+        "help" : "أدخل عنوان URL الخاص بفحص OAUTH2 للمزود"
+      },
+      "tokenUri" : {
+        "label" : "رابط الرمز",
+        "help" : "أدخل عنوان URL الخاص برمز OAUTH2 للمزود"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "عناوين مزود OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "إدخال معلومات مصادقة/تكامل OAUTH2 جديدة"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "معرف العميل",
+        "help" : "معرف العميل لبروتوكول oauth2 (يتم الحصول عليه من منطقة إدارة البرنامج الخارجي المصادق عليه عبر oauth2)"
+      },
+      "secret" : {
+        "label" : "المفتاح السري",
+        "help" : "المفتاح السري للعميل لبروتوكول oauth2 (يتم الحصول عليه من منطقة إدارة البرنامج الخارجي المصادق عليه عبر oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "إنشاء إعدادات نظام confluence"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام confluence."
+      },
+      "CreateBtn" : {
+        "label" : "إنشاء"
+      },
+      "username" : {
+        "label" : "اسم مستخدم Confluence",
+        "help" : "اسم مستخدم Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "إصدار Confluence",
+        "help" : "إصدار Confluence"
+      },
+      "baseUri" : {
+        "label" : "العنوان الأساسي للإنترنت",
+        "help" : "رابط عنوان نظام confluence الأساسي للتثبيت الداخلي أو رابط مؤسستك في أنظمة confluence السحابية"
+      },
+      "password" : {
+        "label" : "كلمة مرور Confluence",
+        "help" : "كلمة مرور Confluence"
+      },
+      "token" : {
+        "label" : "مفتاح API لخدمة Confluence cloud",
+        "help" : "مفتاح API لخدمة Confluence CLOUD الذي يتم الحصول عليه من confluence backoffic، هنا يجب إدخال \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "انشر!",
+        "help" : "يقوم بالحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لنظام LLm"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SettingsTab" : {
+        "label" : "الإعدادات"
+      },
+      "MainPanel" : {
+        "label" : "مشاركة محتويات confluence"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا للمحتويات."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف المحتوى المرفوع من إدخالات confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "نظام Confluence",
+        "help" : "مرجع نظام confluence المعد مسبقًا."
+      },
+      "parentProjectCode" : {
+        "label" : "المشروع",
+        "help" : "مرجع المشروع الأساسي."
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تفعيل فتح ملفات zip واستخراج محتواها"
+      },
+      "tree" : {
+        "label" : "المساحات أو الصفحات/الصفحات الفرعية المختارة",
+        "help" : "المحتوى المشترك لمساحات وصفحات confluence"
+      },
+      "programmedTables" : {
+        "label" : "جدولة التحقق من تحديثات المحتوى",
+        "help" : "ضبط جدولة مراجعة المحتويات المتغيرة للحفاظ على تحديث نظام إنتاج الإجابات المعزز بالاسترجاع"
+      },
+      "catalogingCriteria" : {
+        "label" : "معايير تنظيم المساحات، الصفحات والصفحات الفرعية",
+        "help" : "يرجى شرح هنا كيف تمت عملية تنظيم المساحات والصفحات والصفحات الفرعية في محتويات confluence التي تمت مشاركتها مع Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "الإعدادات العامة"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "تحرير نظام confluence"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "baseUri" : {
+        "label" : "العنوان الأساسي للإنترنت",
+        "help" : "رابط عنوان نظام confluence الأساسي"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لنظام confluence."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "إصدار Confluence",
+        "help" : "إصدار Confluence"
+      },
+      "secretCode" : {
+        "label" : "الهوية المستخدمة",
+        "help" : "حدد أو أنشئ هوية للوصول إلى نظام confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "مجموعة جديدة"
+      },
+      "NewUserBtn" : {
+        "label" : "مستخدم جديد"
+      },
+      "UsersListPanel" : {
+        "label" : "قائمة المستخدمين"
+      },
+      "GroupsListPanel" : {
+        "label" : "قائمة المجموعات"
+      },
+      "SournameHeader" : {
+        "label" : "اسم العائلة"
+      },
+      "UsernameHeader" : {
+        "label" : "اسم المستخدم"
+      },
+      "RolesHeader" : {
+        "label" : "الأدوار"
+      },
+      "NameHeader" : {
+        "label" : "الاسم"
+      },
+      "EditBtn" : {
+        "label" : "تعديل"
+      },
+      "DisabledHeader" : {
+        "label" : "معطل"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "UserIds" : {
+        "placeholder" : "اختر المستخدمين"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "MainPanel" : {
+        "label" : "تعديل مجموعة المستخدمين"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف مجموعة المستخدمين"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "أدخل رمز مجموعة المستخدمين"
+      },
+      "userIds" : {
+        "label" : "قائمة المستخدمين",
+        "help" : "اختر المستخدمين المشاركين في المجموعة"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "إنشاء"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام jira."
+      },
+      "MainPanel" : {
+        "label" : "إنشاء تهيئة نظام jira"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "username" : {
+        "label" : "اسم مستخدم jira",
+        "help" : "اسم مستخدم jira"
+      },
+      "token" : {
+        "label" : "مفتاح api لسحابة jira",
+        "help" : "مفتاح apikey لسحابة jira الذي تم الحصول عليه من backoffic jira، هنا يجب إدخال \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "عنوان الإنترنت الأساسي",
+        "help" : "رابط العنوان الأساسي لنظام jira لتثبيت onpremise أو العنوان الأساسي لمؤسستك لنظام jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "PublishBtn" : {
+        "label" : "انشر!",
+        "help" : "يحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لـ LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SettingsTab" : {
+        "label" : "الإعدادات"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      },
+      "MainPanel" : {
+        "label" : "مشاركة محتويات jira"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "الكود الفريد الذي تم إنشاؤه تلقائيًا للمحتوى."
+      },
+      "jiraSystemCode" : {
+        "label" : "نظام jira",
+        "help" : "مرجع نظام jira المُعد مسبقًا."
+      },
+      "parentProjectCode" : {
+        "label" : "المشروع",
+        "help" : "مرجع المشروع الرئيسي."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف محتوى الإدخالات المرفوعة في jira."
+      },
+      "programmedTables" : {
+        "label" : "جدول فحص تحديثات المحتويات",
+        "help" : "اضبط جدولة تحديث المحتوى للحفاظ على تحديث نظام الاسترجاع الداعم."
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تمكين فتح ملفات zip واستخراج المحتوى"
+      },
+      "tree" : {
+        "label" : "المساحات أو الصفحات/الصفحات الفرعية المختارة",
+        "help" : "محتويات المشاريع والتذاكر المشتركة في jira بشكل هرمي"
+      },
+      "catalogingCriteria" : {
+        "label" : "معايير تنظيم المساحات، الصفحات، والصفحات الفرعية",
+        "help" : "يرجى شرح هنا كيفية تنظيم المساحات، الصفحات، والصفحات الفرعية للمحتوى الذي تمت مشاركته في jira مع Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام jira."
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "تعديل نظام jira"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "baseUri" : {
+        "label" : "عنوان الإنترنت الأساسي",
+        "help" : "رابط العنوان الأساسي لنظام jira"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "الكود الفريد الذي تم إنشاؤه تلقائيًا لنظام jira."
+      },
+      "secretCode" : {
+        "label" : "الهوية المستخدمة",
+        "help" : "اختر أو أنشئ الهوية للوصول إلى نظام jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام SharePoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "إصدار SharePoint",
+        "help" : "إصدار SharePoint"
+      },
+      "secret" : {
+        "label" : "مفتاح سري",
+        "help" : "السر الخاص بـ Oauth2 لهذا التطبيق المسجل في منتج Microsoft \"entra\" ‏(يمكن الحصول عليه من وحدة تحكم إدارة سحابة Microsoft)"
+      },
+      "clientId" : {
+        "label" : "معرف العميل",
+        "help" : "معرف Oauth2 لهذا التطبيق المسجل في منتج Microsoft \"entra\" ‏(يمكن الحصول عليه من وحدة تحكم إدارة سحابة Microsoft)"
+      },
+      "tenantId" : {
+        "label" : "معرف المستأجر",
+        "help" : "معرف Oauth2 لمؤسستك في منتج Microsoft \"entra\" ‏(يمكن الحصول عليه من وحدة تحكم إدارة سحابة Microsoft)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "معلومات تسجيل تطبيق Microsof oauth2 لـ Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "إنشاء"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "MainPanel" : {
+        "label" : "إنشاء إعدادات نظام SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "PublishBtn" : {
+        "label" : "نشر!",
+        "help" : "يحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لـ LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "الإعدادات"
+      },
+      "MainPanel" : {
+        "label" : "مشاركة محتويات SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا للمحتويات."
+      },
+      "parentProjectCode" : {
+        "label" : "المشروع",
+        "help" : "مرجع مشروع الأصل."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف مصادر بيانات إدخالات SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "نظام sharepoint",
+        "help" : "مرجع نظام SharePoint/OneDrive الذي تم إعداده مسبقاً."
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تمكين فتح واستخراج محتوى ملفات zip"
+      },
+      "tree" : {
+        "label" : "المواقع/الصفحات/الصفحات الفرعية في SharePoint أو محركات/مجلدات/ملفات OneDrive المختارة",
+        "help" : "محتويات SharePoint/OneDrive المشتركة"
+      },
+      "programmedTables" : {
+        "label" : "جدولة فحص تحديثات المحتوى",
+        "help" : "قم بتكوين جدولة المحتويات المتغيرة للحفاظ على تحديث نظام التوليد المعزز للاسترجاع"
+      },
+      "catalogingCriteria" : {
+        "label" : "معايير تنظيم المساحات، الصفحات والصفحات الفرعية",
+        "help" : "يرجى شرح هنا كيفية تنظيم المساحات، الصفحات والصفحات الفرعية في محتويات sharepoint المشتركة مع Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "تعديل نظام SharePoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "الإعدادات العامة"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "secretCode" : {
+        "label" : "الهوية المستخدمة",
+        "help" : "اختر أو أنشئ هوية للوصول إلى نظام SharePoint"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لنظام SharePoint."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام SharePoint."
+      },
+      "sharepointVersion" : {
+        "label" : "إصدار SharePoint",
+        "help" : "إصدار SharePoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "حذف"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "حفظ"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "إلغاء"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "إعدادات المعلومات/المحتوى العامة"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "إعدادات LLms"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يُنشأ تلقائيًا لمرحلة استخراج بيانات رسم المعرفة"
+      },
+      "MainPanel" : {
+        "label" : "إعدادات استخراج المعرفة Graphrag"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصفًا لإعدادات مرحلة استخراج بيانات رسم المعرفة هذه"
+      },
+      "extractionPrompt" : {
+        "label" : "موجه استخراج المعلومات",
+        "help" : "موجه نموذج اللغة الكبير لاستخراج الكيانات/الأحداث/العلاقات والأسماء المستعارة"
+      },
+      "usedModelConfiguration" : {
+        "label" : "نموذج LLM المستخدم للاستخراج",
+        "help" : "حدد نموذج اللغة الكبير المستخدم لاستخراج المعرفة، سيتم استخدام النموذج الافتراضي إذا لم يتم اختيار واحد."
+      },
+      "graphRagAllSources" : {
+        "label" : "تطبيق رسم المعرفة على جميع مصادر البيانات",
+        "help" : "إذا كان صحيحًا، سيتم معالجة جميع قواعد المعرفة/المشاريع/مصادر البيانات لاستخراج المعرفة، وإلا سيتم معالجة المصادر التي تم إعدادها فقط"
+      },
+      "defaultModel" : {
+        "label" : "نموذج اللغة الكبير الافتراضي",
+        "help" : "سيتم استخدام نموذج اللغة الكبير الافتراضي لاستخراج المعرفة"
+      },
+      "processEveryDocument" : {
+        "label" : "تطبيق رسم المعرفة على جميع الملفات",
+        "help" : "سيتم تطبيق خوارزميات الرسم المعرفي على جميع الملفات مما يعزز تفاصيل التحليل التي يمكن للنظام القيام بها ولكن سيزيد من التكلفة والوقت المطلوبين لمعالجة المستندات"
+      },
+      "contentSelectionFilter" : {
+        "label" : "معايير اختيار الملفات لمعالجة رسم المعرفة",
+        "help" : "حرر معايير الملفات التي سيتم إرسالها إلى خط استخراج المعلومات لـ Graphrag، حدد على الأقل اسم ملف ومعيار أو نوع ملف أو الحد الأقصى لحجم الملف بالبايت أو عمر آخر تعديل بالأيام"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "اختر أنواع الملفات"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "معايير تصفية اسم الملف"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "آخر تعديل للملف، قبل عدد من الأيام"
+      },
+      "nameFilter" : {
+        "placeholder" : "اسم الملف"
+      },
+      "maxFileSize" : {
+        "placeholder" : "أقصى حجم للملف بالبايت"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "المعلومات العامة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل قاعدة المعرفة"
+      },
+      "AccessSettingsTab" : {
+        "label" : "إعدادات وصول قاعدة المعرفة"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائياً لقاعدة المعرفة."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف قاعدة المعرفة."
+      },
+      "embeddingModelReferences" : {
+        "label" : "نماذج التضمين المستخدمة (اتركها فارغة لاستخدام الافتراضي للنظام)",
+        "help" : "نماذج التضمين لقاعدة المعرفة، تركها فارغة سيستخدم النموذج الافتراضي."
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "IndexBtn" : {
+        "label" : "فهرسة",
+        "help" : "إعادة فهرسة المحتوى"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "تعديل مشروع أو عنصر"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائياً للمشروع."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف المشروع."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "قاعدة المعرفة",
+        "help" : "قاعدة المعرفة."
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "IndexBtn" : {
+        "label" : "فهرسة",
+        "help" : "إعادة فهرسة المحتوى"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ إضافة عنصر/مشروع",
+        "help" : "إضافة جديد..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "يستخدمه الجميع",
+        "help" : "يمكن للجميع الاستخدام"
+      },
+      "accessibleGroups" : {
+        "label" : "قائمة المجموعات",
+        "help" : "اختر المجموعات المسموح بها"
+      },
+      "accessibleUsers" : {
+        "label" : "قائمة المستخدمين",
+        "help" : "اختر المستخدمين المسموح لهم"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "لوحة المعلومات"
+      },
+      "LLMSTab" : {
+        "label" : "نماذج المحادثة والت嶤嶖嶛嶜嶞嶝嶓崑嶒嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶢嶖嶛嶜嶞嶝嶓崑嶒嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀 嵏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎 嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀嶏嶎嶁嶇嶆嶅嶄嶃嶂嶁嶀"
+      },
+      "RagChatConfigTab" : {
+        "label" : "ملفات محادثة راغ/تلقين النماذج"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "قواعد المعرفة والمشاريع"
+      },
+      "UsersGroupTab" : {
+        "label" : "المستخدمون والمجموعات"
+      },
+      "GeboModulesTab" : {
+        "label" : "إعداد وحدات Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "رمز"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "ConfigureBtn2" : {
+        "label" : "إعداد"
+      },
+      "ConfigureBtn" : {
+        "label" : "إعداد"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "تكوين مطالبة جديد"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "ملف محادثة جديد"
+      },
+      "MainPanel" : {
+        "label" : "ملفات محادثة توليد معزز بالاسترجاع"
+      },
+      "PromptsPanel" : {
+        "label" : "مجموعة المطالبات والمطالبات الافتراضية"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "قواعد المعرفة"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "ConfigureBtn1" : {
+        "label" : "إعداد"
+      },
+      "CodeHeader" : {
+        "label" : "رمز"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "قاعدة معرفة جديدة"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "إعداد نموذج تضمين جديد"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "إعداد نموذج محادثة جديد"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "CodeHeader" : {
+        "label" : "الرمز"
+      },
+      "ModelHeader" : {
+        "label" : "النموذج "
+      },
+      "ModelProviderHeader" : {
+        "label" : "مزود النموذج"
+      },
+      "ConfigureBtn" : {
+        "label" : "إعداد"
+      },
+      "CodeHeader2" : {
+        "label" : "الرمز"
+      },
+      "DescriptionHeader2" : {
+        "label" : "الوصف"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "مزود النموذج"
+      },
+      "ConfigureBtn2" : {
+        "label" : "إعداد"
+      },
+      "ModelHeader2" : {
+        "label" : "النموذج "
+      },
+      "ChatmodelsZone" : {
+        "label" : "نماذج المحادثة المكونة"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "نماذج التضمين المكونة"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "اختبار النموذج"
+      },
+      "TestChatBtn" : {
+        "label" : "اختبار الدردشة"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "اختر رمز OpenAI لاستخدامه مع هذا النموذج"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة OpenAI",
+        "help" : "اختر نموذج دردشة OpenAI للعمل عليه."
+      },
+      "GeneralInfosTab" : {
+        "label" : "معلومات عامة"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "إعدادات متقدمة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج دردشة OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "إعدادات وصول النموذج"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج تضمين OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "اختر رمز OpenAI لاستخدامه مع هذا النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات نموذج التضمين"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج تضمين OpenAI",
+        "help" : "اختر نموذج تضمين OpenAI للعمل عليه."
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج تضمين افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "baseUrl" : {
+        "label" : "عنوان خادم ollama الأساسي",
+        "help" : "العنوان الأساسي (مثل http://servername:234/) الذي يستجيب له خادم ollama المحلي أو على الشبكة المحلية."
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة Ollama",
+        "help" : "اختر نموذج دردشة Ollama للعمل عليه.",
+        "placeholder" : "اختر نموذج"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "اختر رمز Ollama لاستخدامه مع هذا النموذج (اختياري)"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج محادثة خادم Ollama المحلي (أو على الشبكة)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "اختر رمز Anthropic لاستخدامه مع هذا النموذج"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة Anthropic",
+        "help" : "اختر نموذج دردشة Anthropic للعمل عليه.",
+        "placeholder" : "اختر نموذج"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "إعدادات متقدمة"
+      },
+      "GeneralInfosTab" : {
+        "label" : "معلومات عامة"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "إعدادات وصول النموذج"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج دردشة Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "اختر رمز MistralAI لاستخدامه مع هذا النموذج"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة MistralAI",
+        "help" : "اختر نموذج دردشة MistralAI للعمل عليه."
+      },
+      "GeneralInfosTab" : {
+        "label" : "معلومات عامة"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "إعدادات متقدمة"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "إعدادات وصول النموذج"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج دردشة MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة Google Vertex AI",
+        "help" : "اختر نموذج دردشة Google Vertex AI للعمل عليه."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "اختر رمز Google Vertex AI لاستخدامه مع هذا النموذج"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "TabGeneralInfos" : {
+        "label" : "معلومات عامة"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "إعدادات وصول النموذج"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "إعدادات متقدمة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج دردشة Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "اختر رمز Deepseek لاستخدامه مع هذا النموذج"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة Deepseek",
+        "help" : "اختر نموذج دردشة Deepseek للعمل عليه.",
+        "placeholder" : "اختر نموذج"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "إعدادات متقدمة"
+      },
+      "GeneralInfosTab" : {
+        "label" : "معلومات عامة"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج دردشة Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "إعدادات وصول النموذج"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات النموذج"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات النموذج"
+      },
+      "baseUrl" : {
+        "label" : "عنوان خادم واجهة برمجة تطبيقات نموذج الدردشة",
+        "help" : "العنوان الأساسي لنموذج الدردشة."
+      },
+      "apiSecretCode" : {
+        "label" : "رمز واجهة برمجة تطبيقات نموذج الدردشة",
+        "help" : "اختر رمز واجهة برمجة تطبيقات نموذج الدردشة لاستخدامه مع هذا النموذج (اختياري)"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج دردشة افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج دردشة افتراضي عند عدم تحديد نموذج دردشة"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج دردشة Chat model",
+        "help" : "اختر نموذج دردشة Chat model للعمل عليه."
+      },
+      "GeneralInfosTab" : {
+        "label" : "معلومات عامة"
+      },
+      "TitleFragment" : {
+        "label" : "تعديل مزود نموذج الدردشة:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "إعدادات متقدمة"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "إعدادات وصول النموذج"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات نموذج التضمين"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج تضمين Ollama المحلي (أو على الشبكة)"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "اختر رمز Ollama لاستخدامه مع هذا النموذج"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج تضمين Ollama",
+        "help" : "اختر نموذج تضمين Ollama للعمل عليه."
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج تضمين افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      },
+      "baseUrl" : {
+        "label" : "عنوان خادم ollama الأساسي",
+        "help" : "العنوان الأساسي (مثل http://servername:234/) الذي يستجيب له خادم ollama المحلي أو على الشبكة المحلية."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات نموذج التضمين"
+      },
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج تضمين MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج تضمين MistralAI",
+        "help" : "اختر نموذج تضمين MistralAI للعمل عليه."
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج تضمين افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "اختر رمز MistralAI لاستخدامه مع هذا النموذج"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "تعديل إعدادات نموذج تضمين Google Vertex AI"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات نموذج التضمين"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج تضمين Google Vertex AI",
+        "help" : "اختر نموذج تضمين Google Vertex AI للعمل عليه."
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج تضمين افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "اختر رمز Google Vertex AI لاستخدامه مع هذا النموذج"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "TitleFragment" : {
+        "label" : "تعديل مزود نموذج التضمين:"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات نموذج التضمين"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا لإعدادات نموذج التضمين"
+      },
+      "choosedModel" : {
+        "label" : "اختيار نموذج تضمين Embedding model",
+        "help" : "اختر نموذج تضمين Embedding model للعمل عليه."
+      },
+      "baseUrl" : {
+        "label" : "عنوان خادم واجهة برمجة تطبيقات نموذج التضمين",
+        "help" : "العنوان الأساسي لخادم نموذج التضمين."
+      },
+      "defaultModel" : {
+        "label" : "تعيين كنموذج تضمين افتراضي",
+        "help" : "إذا كان صحيحًا سيتم استخدامه كنموذج تضمين افتراضي عند عدم تحديد نموذج تضمين"
+      },
+      "apiSecretCode" : {
+        "label" : "رمز واجهة برمجة تطبيقات نموذج التضمين",
+        "help" : "اختر رمز واجهة برمجة تطبيقات نموذج التضمين لاستخدامه مع هذا النموذج"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "معلومات إعدادات المحادثة"
+      },
+      "chaDeleteBtn" : {
+        "help" : "حذف هذه الجلسة"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "تغيير اسم الجلسة"
+      },
+      "QueryControl" : {
+        "placeholder" : "اكتب رسالة للبوت"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "description" : {
+        "label" : "وصف المحادثة",
+        "help" : "أدخل وصف جلسة المحادثة."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "النموذج المستخدم",
+        "help" : "رمز النموذج"
+      },
+      "providerId" : {
+        "label" : "موفر نموذج الدردشة",
+        "help" : "مزود LLms"
+      },
+      "functions" : {
+        "label" : "وظائف يمكن استدعاؤها في نموذج الدردشة",
+        "help" : "قائمة الوظائف المتاحة لنموذج الدردشة"
+      },
+      "NameCol" : {
+        "label" : "الاسم"
+      },
+      "DescriptionCol" : {
+        "label" : "الوصف"
+      },
+      "kbases" : {
+        "label" : "قواعد المعرفة المتاحة",
+        "help" : "قائمة قواعد المعرفة المستخدمة في هذا الدردشة مع RAG"
+      },
+      "CloseBtn" : {
+        "help" : "إغلاق"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "تسجيل",
+        "help" : "ابدأ تسجيل مقطع صوتي وأرسله"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "إعادة تحميل البيانات"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SelectHeader" : {
+        "label" : "اختيار"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "تاريخ/وقت الانتهاء"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "تاريخ/وقت البدء"
+      },
+      "ProcessingHeader" : {
+        "label" : "جارٍ المعالجة"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "CodeHeader" : {
+        "label" : "الرمز"
+      },
+      "FinishedHeader" : {
+        "label" : "تم الانتهاء"
+      },
+      "WithErrorHeader" : {
+        "label" : "بخطأ"
+      },
+      "LogTableComponent" : {
+        "help" : "سجل استيراد منطقة نظام الملفات المشتركة هذه"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "إحصائيات العمليات"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CloseBtn" : {
+        "label" : "إغلاق"
+      },
+      "PublicationLogTab" : {
+        "label" : "سجل النشر"
+      },
+      "MainPanel" : {
+        "label" : "سجل النشر"
+      },
+      "actualStatus" : {
+        "label" : "الحالة",
+        "help" : "حالة المهمة، ما إذا كانت قيد التنفيذ، منتهية أو منتهية مع أخطاء."
+      },
+      "publishingSystem" : {
+        "label" : "تكوين المحتوى المنشور",
+        "help" : "معلومات المحتوى المنشور"
+      },
+      "startDateTime" : {
+        "label" : "تاريخ/وقت البدء",
+        "help" : "تاريخ ووقت بدء مهمة مزامنة المحتوى"
+      },
+      "endDateTime" : {
+        "label" : "تاريخ/وقت الانتهاء",
+        "help" : "تاريخ ووقت انتهاء مهمة مزامنة المحتوى"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "لم يتم المعالجة بالكامل"
+      },
+      "ProcessedCompletely" : {
+        "label" : "تمت المعالجة بالكامل"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "التضمين مقابل العدد الإجمالي للمستندات"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "مزيد من التفاصيل"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "إنشاء مطالبة"
+      },
+      "PromptWizardBtn" : {
+        "label" : "معالج المطالبات",
+        "help" : "استخدم هذا الخيار لاستخدام نموذج لغوي كبير لإنشاء مطالبة لأهدافك"
+      },
+      "acceptPrompt" : {
+        "label" : "قبول المطالبة"
+      },
+      "promptWizardUI" : {
+        "label" : "معالج إنشاء قالب المطالبة"
+      },
+      "cancel" : {
+        "label" : "إلغاء"
+      },
+      "response" : {
+        "label" : "قالب مطالبة مقترح",
+        "help" : "تم إنشاء نص القالب لهدفك (يمكنك تغييره أو تصحيحه أو تعديله)"
+      },
+      "modelCode" : {
+        "label" : "نموذج الدردشة للاستخدام",
+        "help" : "اختر نموذج الدردشة الذي ترغب في طلب إنشاء قالب المطالبة منه"
+      },
+      "query" : {
+        "label" : "طلب قالب المطالبة",
+        "help" : "حدد بصيغة المخاطب ما الهدف الذي ستدعمه الذكاء الاصطناعي للمستخدم"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "درجة الحرارة",
+        "help" : "درجة حرارة استجابة النموذج، من 0 إلى 1 (إذا لم تكن متأكدًا اتركها فارغة)"
+      },
+      "contextLength" : {
+        "label" : "طول السياق (رموز)",
+        "help" : "كمية النص التي يمكن لنموذج الذكاء الاصطناعي معالجتها (إذا لم يتم التحديد سيتم استخدام 4096)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "معامل TopP، من 0 إلى 1 (إذا لم تكن متأكدًا اتركها فارغة)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "استدعاء الوظائف المفعلة لهذا النموذج",
+        "help" : "الوظائف التي يمكن للنموذج استخدامها أثناء المحادثة"
+      },
+      "defaultModelPrompt" : {
+        "label" : "مطالبة النموذج الافتراضية",
+        "help" : "تعديل المطالبة الافتراضية لنموذج الدردشة."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف الهوية."
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز هوية فريد يُنشأ تلقائيًا."
+      },
+      "secretType" : {
+        "label" : "نوع الهوية",
+        "help" : "حدد نوع الهوية المراد إنشاؤها للنظام البعيد"
+      },
+      "InsertBtn" : {
+        "label" : "إدراج"
+      },
+      "token" : {
+        "label" : "رمز",
+        "help" : "أدخل الرمز."
+      },
+      "user" : {
+        "label" : "المستخدم",
+        "help" : "أدخل المستخدم المشار إليه بالرمز."
+      },
+      "MainPanel" : {
+        "label" : "إنشاء هوية"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "username" : {
+        "label" : "اسم المستخدم",
+        "help" : "أدخل اسم المستخدم."
+      },
+      "password" : {
+        "label" : "كلمة المرور",
+        "help" : "أدخل كلمة المرور."
+      },
+      "email" : {
+        "label" : "البريد الإلكتروني/اسم المستخدم",
+        "help" : "أدخل البريد الإلكتروني أو اسم المستخدم المرتبط بمفتاح ssh."
+      },
+      "key" : {
+        "label" : "المفتاح السري",
+        "help" : "افتح ملف المفتاح الخاص و انسخ محتواه في هذه المنطقة."
+      },
+      "passphrase" : {
+        "label" : "عبارة مرور المفتاح",
+        "help" : "أدخل عبارة مرور المفتاح."
+      },
+      "pub" : {
+        "label" : "المفتاح العام",
+        "help" : "افتح ملف المفتاح العام و انسخ محتواه في هذه المنطقة."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائيًا للمحتوى."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف المحتوى المرفوع من مدخل نظام الملفات."
+      },
+      "parentProjectCode" : {
+        "label" : "المشروع",
+        "help" : "مرجع المشروع الرئيسي."
+      },
+      "upload" : {
+        "label" : "رفع المحتوى",
+        "help" : "اضغط على زر التصفح وحدد ملفات zip أو ملفات أخرى"
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تفعيل فتح ملفات zip واستخراج المحتوى"
+      },
+      "PublishBtn" : {
+        "label" : "انشر!",
+        "help" : "يحفظ ويجعل هذا المحتوى متاحًا في قاعدة المعرفة لنموذج اللغة"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      },
+      "MainPanel" : {
+        "label" : "تعديل المحتوى المرفوع"
+      },
+      "SettingsTab" : {
+        "label" : "الإعدادات"
+      },
+      "buildSystemsRefs" : {
+        "label" : "تهيئة أنظمة البناء",
+        "help" : "قائمة أنظمة البناء/التغليف التي سيتم فحصها لمعلومات التعريف وبيانات القطع الإضافية (اتركها فارغة إذا لم يتضمن الكود البرمجي)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "العناصر المختارة"
+      },
+      "ChooseOk" : {
+        "label" : "موافق"
+      },
+      "ChooseCancel" : {
+        "label" : "إلغاء"
+      },
+      "EditBtn" : {
+        "help" : "تعديل المحدد"
+      },
+      "ChooseElementsArea" : {
+        "label" : "اختر العناصر"
+      },
+      "VFileSystemSelector" : {
+        "label" : "اختر العناصر"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "تعديل الجدولة"
+      },
+      "ConfirmBtn" : {
+        "label" : "تأكيد"
+      },
+      "AddBtn" : {
+        "label" : "+إضافة"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "نشر!",
+        "help" : "يحفظ ويجعل هذه المحتويات متاحة في قاعدة المعرفة لـ LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SettingsTab" : {
+        "label" : "الإعدادات"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "معالجة الشيفرة المصدرية"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      },
+      "MainPanel" : {
+        "label" : "تعديل محتوى نظام الملفات الحالي"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف المحتوى الذي تم تحميله لإدخال نظام الملفات."
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تفعيل فتح واستخراج محتوى ملفات zip"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم توليده تلقائياً للمحتويات."
+      },
+      "tree" : {
+        "label" : "الملفات أو المجلدات المختارة",
+        "help" : "ملفات أو مجلدات نظم الملفات المشتركة المتوفرة على الخادم"
+      },
+      "parentProjectCode" : {
+        "label" : "المشروع",
+        "help" : "مرجع المشروع الرئيسي."
+      },
+      "programmedTables" : {
+        "label" : "جدولة فحص تحديثات المحتويات",
+        "help" : "قم بتكوين جدول تحديث المحتويات المحَدة للحفاظ على تحديث نظام استرجاع المعلومات"
+      },
+      "catalogingCriteria" : {
+        "label" : "معايير تنظيم المجلدات",
+        "help" : "يرجى شرح كيفية تنظيم معايير المجلدات في منطقة نظام الملفات التي تشاركها مع Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "إعداد أنظمة البناء",
+        "help" : "قائمة بأنظمة البناء/التعبئة التي سيتم فحصها للحصول على معلومات وصفية وبيانات إضافية (اتركها فارغة إذا لم يكن هناك كود برمجي مضمّن)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "منطقة مشاركة ملفات جديدة"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "المسار المطلق"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "إعداد ملف db أو yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "CodeHeader" : {
+        "label" : "الرمز"
+      },
+      "ModifyHeader" : {
+        "label" : "تعديل"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "مجلد نظام الملفات المشترك المختار",
+        "help" : "اختر مجلد على الخادم ليكون مساراً أساسياً لنظام الملفات المشترك المستخدم بمؤسستك كمستودع مستندات"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف منطقة نظام الملفات المشتركة في مؤسستك"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم توليده تلقائياً للمحتويات."
+      },
+      "InsertBtn" : {
+        "label" : "إدراج"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "MainPanel" : {
+        "label" : "تعديل مجلد الملفات المشترك على الخادم"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "PublishBtn" : {
+        "label" : "انشر!",
+        "help" : "احفظ واجعل هذه المحتويات متاحة في قاعدة المعرفة لنظام LLm"
+      },
+      "MainPanel" : {
+        "label" : "تعديل مستودع مصدر/توثيق git"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف مستودع git."
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "الرمز الفريد الذي تم إنشاؤه تلقائيًا لمستودع git."
+      },
+      "parentProjectCode" : {
+        "label" : "المشروع",
+        "help" : "مرجع المشروع الأب."
+      },
+      "contentManagementSystem" : {
+        "label" : "نظام Git",
+        "help" : "مرجع نظام git الذي تم تكوينه بالفعل."
+      },
+      "branch" : {
+        "label" : "فرع",
+        "help" : "اسم الفرع المراد التحقق منه (عادةً master أو main أو develop)"
+      },
+      "identityCode" : {
+        "label" : "الهوية المستخدمة",
+        "help" : "حدد الهوية لاستخدامها في الاستنساخ/التحقق من النظام"
+      },
+      "repositoryUri" : {
+        "label" : "عنوان المستودع",
+        "help" : "العنوان الكامل لمستودع git البعيد (عادةً يبدأ بـ http: أو https: أو ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "عام",
+        "help" : "إذا كانت صحيحة، لا يتطلب الوصول للمستودع المصادقة"
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تمكين فتح ملفات zip واستخراج المحتوى"
+      },
+      "programmedTables" : {
+        "label" : "جدولة فحوصات تحديث المحتوى",
+        "help" : "قم بتهيئة جدولة المحتوى المتغير للحفاظ على تحديث نظام التوليد المعزز"
+      },
+      "buildSystemsRefs" : {
+        "label" : "تهيئة أنظمة البناء",
+        "help" : "قائمة أنظمة البناء/التغليف التي سيتم فحصها للحصول على معلومات وقطع إضافية"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "GeneralInfosTab" : {
+        "label" : "المعلومات العامة"
+      },
+      "UseChatModelLabel" : {
+        "label" : "استخدم نموذج الدردشة"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "اختر"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "اختر إعداد تكوين نموذج الدردشة"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "اختر إعداد تكوين نموذج التضمين"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "اختر"
+      },
+      "RagSettingsTab" : {
+        "label" : "إعدادات RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "إعدادات النموذج اللغوي الكبير والأدوات المتاحة"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "استخدم نموذج التضمين"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "إعدادات وصول الأمان"
+      },
+      "MainPanel" : {
+        "label" : "تحرير ملف دردشة RAG"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يُنشأ تلقائيًا لملف الدردشة."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف ملف الدردشة."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "المستخدم يختار قواعد المعرفة",
+        "help" : "يمكن للمستخدم الاختيار من بين قواعد المعرفة المتاحة و/أو رفع ملفاته الخاصة."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "قواعد المعرفة",
+        "help" : "قواعد المعرفة المستخدمة لاسترجاع المستندات."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "عتبة التشابه",
+        "help" : "عتبة التشابه لعمليات البحث الدلالي، 0.60–0.65 تصفية منخفضة، 0.70-0.75 تصفية متوسطة، 0.80–0.85 دقيقة"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "عتبة التشابه للبحث الثاني",
+        "help" : "عتبة التشابه لعمليات البحث الدلالي، 0.60–0.65 تصفية منخفضة، 0.70-0.75 تصفية متوسطة، 0.80–0.85 دقيقة يُستخدم من البحث الثاني في عدة خطوات RAG"
+      },
+      "disableMultiHopRag" : {
+        "label" : "تعطيل 'البحث متعدد الخطوات' RAG",
+        "help" : "تعطيل وظيفة 'البحث متعدد الخطوات' RAG. البحث متعدد الخطوات يبدأ ببحث دلالي أولي ثم يستخدم المستندات التي تم العثور عليها كسياق لبحث دلالي آخر لتوفير سياق أوسع."
+      },
+      "topK" : {
+        "label" : "أجزاء المستندات المعتبرة (TopK)",
+        "help" : "في استرجاع الدردشة المعززة، يعتبر البحث الدلالي أفضل N أجزاء تم العثور عليها من المستندات"
+      },
+      "enabledFunctions" : {
+        "label" : "الوظائف المفعلة لهذه الدردشة RAG",
+        "help" : "الوظائف التي يمكن أن يستخدمها نموذج اللغة أثناء الدردشة مع المستخدم مع إمكانية التفاعل مع قاعدة المعرفة المحددة"
+      },
+      "prompt" : {
+        "label" : "الموجه",
+        "help" : "حرر الموجه لجلسات استرجاع الدردشة المعززة."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "أدخل أو اختر فئة الطلب"
+      },
+      "MainPanel" : {
+        "label" : "تعديل الطلب"
+      },
+      "promptCategory" : {
+        "label" : "فئة الطلب",
+        "help" : "اختر أو أدخل فئة الطلب."
+      },
+      "prompt" : {
+        "label" : "الطلب",
+        "help" : "قم بتعديل الطلب للمحادثة، استخدم {query} للدلالة على سؤال المستخدم و{context} للدلالة على سياق الوثائق/السجل المرسل إلى LLM."
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "الرمز الفريد للطلب يتم إنشاؤه تلقائيًا."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف الطلب."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "تغيير كلمة المرور"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "كلمة المرور القديمة",
+        "help" : "كلمة المرور الحالية لتسجيل الدخول"
+      },
+      "newPassword" : {
+        "label" : "كلمة المرور الجديدة",
+        "help" : "كلمة المرور الجديدة"
+      },
+      "username" : {
+        "label" : "البريد الإلكتروني",
+        "help" : "البريد الإلكتروني كاسم مستخدم لتسجيل الدخول"
+      },
+      "ChangePasswordUI" : {
+        "label" : "نموذج تغيير كلمة المرور"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "ChangePwdBtn" : {
+        "label" : "تغيير كلمة المرور"
+      },
+      "newPassword1" : {
+        "label" : "تأكيد كلمة المرور الجديدة",
+        "help" : "تأكيد كلمة المرور الجديدة"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "ForMoreInformations" : {
+        "label" : "لمزيد من المعلومات حول Google custom search API أو للحصول على مفتاح API (مجانا) قم بزيارة: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "الرمز الفريد لإعدادات google search api."
+      },
+      "MainPanel" : {
+        "label" : "تعديل بيانات اعتماد google custom search api"
+      },
+      "secretCode" : {
+        "label" : "رمز Google search api",
+        "help" : "اختر أو أدخل رمز google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "معرف محرك بحث Google",
+        "help" : "معرف محرك بحث Google"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف إعدادات google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "محادثة بدون قواعد معرفة",
+        "help" : "اختر LLMs لجلسة المحادثة",
+        "placeholder" : "اختر LLMs لجلسة المحادثة"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "فتح خيارات المحادثة"
+      },
+      "CreateChatBtn" : {
+        "label" : "محادثة جديدة"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "جلسة محادثة جديدة"
+      },
+      "chatProfileCode" : {
+        "label" : "محادثة مع قواعد معرفة",
+        "help" : "اختر ملف المحادثة الخاص بالشركة للتفاعل مع مستندات الشركة (ومستنداتك) و LLMs",
+        "placeholder" : "اختر ملف المحادثة الخاص بالشركة للتفاعل مع مستندات الشركة (ومستنداتك) و LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "محادثة جديدة"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "المحادثة مع المستندات",
+        "help" : "تصفح أو ابحث وحدد المستندات للعمل معها"
+      },
+      "chooseFilesDialog" : {
+        "label" : "اختر ملفات للمحادثة معها"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "تأكيد"
+      },
+      "userspaceBrowsing" : {
+        "label" : "تحميل أو اختيار مستنداتك",
+        "help" : "اختر أو حمّل مستندات من مساحة المستخدم"
+      },
+      "fileSearchBtn" : {
+        "label" : "بحث"
+      },
+      "semanticSearchBtn" : {
+        "label" : "بحث"
+      },
+      "query" : {
+        "label" : "عبارة البحث الدلالي",
+        "help" : "أدخل عبارة ذات معنى تتعلق ببحثك"
+      },
+      "choosenBrowsing" : {
+        "label" : "اختر ملفات بتصفح قواعد المعرفة",
+        "help" : "اختر ملفات بتصفح قواعد المعرفة المشتركة في الشركة"
+      },
+      "filename" : {
+        "label" : "اسم الملف المطلوب",
+        "help" : "أدخل جزءًا من اسم الملف للمحتوى الذي تبحث عنه"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "تعديل المحدد"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "اختر ملفات المستخدمين"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "okBtn" : {
+        "label" : "موافق"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "اختر المحتوى الذي تم تحميله"
+      },
+      "UserspaceBrowser" : {
+        "label" : "قواعد المعرفة وملفات المستخدم"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+مشروع فرعي أو عنصر",
+        "help" : "إضافة مشروع فرعي أو عنصر"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+تحميل ملفات",
+        "help" : "إضافة مصدر بيانات للملفات المحملة"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+SharePoint/OneDrive",
+        "help" : "إضافة مصدر بيانات Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+Confluence",
+        "help" : "إضافة مصدر بيانات Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+نظام ملفات",
+        "help" : "إضافة مصدر بيانات نظام ملفات مشترك"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+Jira",
+        "help" : "إضافة مصدر بيانات Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+مستودع Git",
+        "help" : "إضافة مصدر بيانات مستودع git مثل bitbucket أو github أو غيرها"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "دردشة Gebo.ai"
+      },
+      "setup" : {
+        "label" : "الإعداد"
+      },
+      "admin" : {
+        "label" : "إدارة Gebo.ai"
+      },
+      "currentProfile" : {
+        "label" : "ملفي الشخصي"
+      },
+      "logout" : {
+        "label" : "تسجيل الخروج"
+      }
+    }
+  }
+}

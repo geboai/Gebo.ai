@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "შესვლა"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "კარგია!",
+        "detail" : "ოპერაცია წარმატებით შესრულდა"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "ატვირთე ან აარჩიე შენი დოკუმენტები",
         "help" : "აირჩიე/ატვირთე დოკუმენტები შენი მომხმარებლის სივრციდან"
+      },
+      "fileSearchBtn" : {
+        "label" : "ძებნა"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ძებნა"
+      },
+      "query" : {
+        "label" : "სემანტიკური საძიებო ფრაზა",
+        "help" : "შეიყვანეთ თქვენი ძიებისთვის აქტუალური მნიშვნელობის ფრაზა"
+      },
+      "choosenBrowsing" : {
+        "label" : "აირჩიეთ ფაილების ძიება ცოდნის ბაზებში",
+        "help" : "აირჩიეთ ფაილების ძიება კომპანიის გაზიარებული ცოდნის ბაზებიდან"
+      },
+      "filename" : {
+        "label" : "საძიებო ფაილის სახელი",
+        "help" : "შეიყვანეთ სიტყვის ნაწილი თქვენი სასურველი ფაილის დასახელებიდან"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "ცოდნის ბაზები და მომხმარებლის ფაილები"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ქვეპროექტი ან ელემენტი",
+        "help" : "დაამატეთ ქვეპროექტი ან ელემენტი"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ფაილების ატვირთვა",
+        "help" : "დაამატეთ ატვირთული ფაილების მონაცემების წყარო"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+SharePoint/OneDrive",
+        "help" : "დაამატეთ Microsoft SharePoint/OneDrive მონაცემების წყარო"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+Confluence",
+        "help" : "დაამატეთ Atlassian Confluence მონაცემების წყარო"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ფაილური სისტემა",
+        "help" : "დაამატეთ გაზიარებული ფაილური სისტემის მონაცემების წყარო"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+Jira",
+        "help" : "დაამატეთ Atlassian Jira მონაცემების წყარო"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git რეპო",
+        "help" : "დაამატეთ git საცავის მონაცემების წყარო, მაგალითად Bitbucket, GitHub ან სხვა"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ჩატი"
+      },
+      "setup" : {
+        "label" : "პარამეტრები"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ადმინისტრირება"
+      },
+      "currentProfile" : {
+        "label" : "ჩემი პროფილი"
+      },
+      "logout" : {
+        "label" : "გასვლა"
       }
     }
   }

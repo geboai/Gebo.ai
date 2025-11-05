@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Увайсці"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Добра!",
+        "detail" : "Аперацыя паспяхова завершана"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Загрузіце або абярыце свае дакументы",
         "help" : "Абярыце або загрузіце дакументы з вашай прасторы карыстальніка"
+      },
+      "fileSearchBtn" : {
+        "label" : "Пошук"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Пошук"
+      },
+      "query" : {
+        "label" : "Фраза для семантычнага пошуку",
+        "help" : "Увядзіце змястоўную фразу, звязаную з вашым пошукам"
+      },
+      "choosenBrowsing" : {
+        "label" : "Выберыце файлы для агляду ведаў",
+        "help" : "Выберыце файлы для агляду агульных ведаў кампаніі"
+      },
+      "filename" : {
+        "label" : "Імя шукаемага файла",
+        "help" : "Увядзіце частку імя файла для вашага пошуку"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Базы ведаў і файлы карыстальніка"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+падпраект або элемент",
+        "help" : "дадаць падпраект або элемент"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+загрузка файлаў",
+        "help" : "дадаць крыніцу дадзеных загружаных файлаў"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "дадаць крыніцу дадзеных Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "дадаць крыніцу дадзеных Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+файлавая сістэма",
+        "help" : "дадаць крыніцу агульнадоступнай файлавай сістэмы"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "дадаць крыніцу дадзеных Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git рэпазіторый",
+        "help" : "дадаць крыніцу дадзеных git-рэпазіторыя, напрыклад bitbucket, github ці інш."
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai чат"
+      },
+      "setup" : {
+        "label" : "Налады"
+      },
+      "admin" : {
+        "label" : "Gebo.ai адміністраванне"
+      },
+      "currentProfile" : {
+        "label" : "мой профіль"
+      },
+      "logout" : {
+        "label" : "выйсці"
       }
     }
   }

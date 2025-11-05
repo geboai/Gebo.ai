@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "התחבר"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "בסדר!",
+        "detail" : "הפעולה הושלמה בהצלחה"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "העלה או בחר את המסמכים שלך",
         "help" : "בחר/העלה מסמכים מהמרחב האישי שלך"
+      },
+      "fileSearchBtn" : {
+        "label" : "חיפוש"
+      },
+      "semanticSearchBtn" : {
+        "label" : "חיפוש"
+      },
+      "query" : {
+        "label" : "ביטוי חיפוש סמנטי",
+        "help" : "הזן ביטוי משמעותי שקשור לחיפוש שלך"
+      },
+      "choosenBrowsing" : {
+        "label" : "בחר קבצים לדפדוף במאגרי ידע",
+        "help" : "בחר קבצים לדפדוף במאגרי הידע השיתופיים של החברה"
+      },
+      "filename" : {
+        "label" : "שם הקובץ שחיפשת",
+        "help" : "הזן חלק משם הקובץ שאתה מחפש"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "מאגרי ידע וקבצי משתמש"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+תת-פרויקט או פריט",
+        "help" : "הוסף תת-פרויקט או פריט"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+העלה קבצים",
+        "help" : "הוסף מקור נתונים של קבצים שהועלו"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "הוסף מקור נתונים של Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "הוסף מקור נתונים של Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+מערכת קבצים",
+        "help" : "הוסף מקור נתונים של מערכת קבצים משותפת"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "הוסף מקור נתונים של Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+מאגר git",
+        "help" : "הוסף מקור נתונים של מאגר git כמו bitbucket, github או אחרים"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai צ'אט"
+      },
+      "setup" : {
+        "label" : "הגדרות"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ניהול"
+      },
+      "currentProfile" : {
+        "label" : "הפרופיל שלי"
+      },
+      "logout" : {
+        "label" : "התנתקות"
       }
     }
   }

@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Mag-login"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na naisagawa ang operasyon"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "I-upload o piliin ang iyong mga dokumento",
         "help" : "Pumili/mag-upload ng mga dokumento mula sa iyong user space"
+      },
+      "fileSearchBtn" : {
+        "label" : "Maghanap"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Maghanap"
+      },
+      "query" : {
+        "label" : "Parirala para sa semantic na paghahanap",
+        "help" : "Maglagay ng makahulugang parirala na may kaugnayan sa iyong hinahanap"
+      },
+      "choosenBrowsing" : {
+        "label" : "Piliin ang mga file sa pag-browse ng knowledge bases",
+        "help" : "Piliin ang mga file mula sa mga company shared knowledge bases"
+      },
+      "filename" : {
+        "label" : "Hinahanap na pangalan ng file",
+        "help" : "Maglagay ng bahagi ng filename para sa iyong hinahanap na nilalaman"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Mga knowledge base at file ng user"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproject o item",
+        "help" : "magdagdag ng subproject o item"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+mag-upload ng files",
+        "help" : "magdagdag ng pinagmulan ng data ng na-upload na files"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "magdagdag ng Microsoft SharePoint/OneDrive na pinagmulan ng data"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "magdagdag ng Atlassian Confluence na pinagmulan ng data"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "magdagdag ng shared filesystem na pinagmulan ng data"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "magdagdag ng Atlassian Jira na pinagmulan ng data"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "magdagdag ng pinagmulan ng data ng git repository tulad ng bitbucket, github o iba pa"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Setup"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "aking profile"
+      },
+      "logout" : {
+        "label" : "logout"
       }
     }
   }

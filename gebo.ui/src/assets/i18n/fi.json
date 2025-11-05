@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Kirjaudu"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Lähetä tai valitse omat asiakirjat",
         "help" : "Valitse/lähetä asiakirjoja omasta tilasta"
+      },
+      "fileSearchBtn" : {
+        "label" : "Etsi"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Etsi"
+      },
+      "query" : {
+        "label" : "Semanttinen hakulauseke",
+        "help" : "Syötä hakua kuvaava merkityksellinen lause"
+      },
+      "choosenBrowsing" : {
+        "label" : "Valitse tiedostoja selaten tietopankkeja",
+        "help" : "Valitse tiedostoja selaten yrityksen jaettuja tietopankkeja"
+      },
+      "filename" : {
+        "label" : "Haettu tiedoston nimi",
+        "help" : "Syötä osa tiedostonimestä, jota haet"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Tietopankit ja käyttäjätiedostot"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+aliprojekti tai kohde",
+        "help" : "lisää aliprojekti tai kohde"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+lataa tiedostoja",
+        "help" : "lisää ladattujen tiedostojen tietolähde"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "lisää Microsoft SharePoint/OneDrive -tietolähde"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "lisää Atlassian Confluence -tietolähde"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+tiedostojärjestelmä",
+        "help" : "lisää jaettu tiedostojärjestelmän tietolähde"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "lisää Atlassian Jira -tietolähde"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "lisää git-repositorion tietolähde, kuten bitbucket, github tai muut"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Asetukset"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "oma profiili"
+      },
+      "logout" : {
+        "label" : "kirjaudu ulos"
       }
     }
   }

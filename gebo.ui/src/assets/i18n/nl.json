@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Inloggen"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operatie succesvol voltooid"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Upload of kies je documenten",
         "help" : "Kies/upload documenten uit je gebruikersruimte"
+      },
+      "fileSearchBtn" : {
+        "label" : "Zoeken"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Zoeken"
+      },
+      "query" : {
+        "label" : "Semantische zoekzin",
+        "help" : "Voer een relevante zin in met betrekking tot uw zoekopdracht"
+      },
+      "choosenBrowsing" : {
+        "label" : "Kies bestanden in kennisbanken",
+        "help" : "Kies bestanden uit gedeelde kennisbanken van het bedrijf"
+      },
+      "filename" : {
+        "label" : "Gezochte bestandsnaam",
+        "help" : "Voer een deel van de bestandsnaam in van uw gezochte inhoud"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Kennisbanken & gebruikersbestanden"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproject of item",
+        "help" : "subproject of item toevoegen"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+bestanden uploaden",
+        "help" : "gegevensbron van geüploade bestanden toevoegen"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "een Microsoft SharePoint/OneDrive gegevensbron toevoegen"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "een Atlassian Confluence gegevensbron toevoegen"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "gedeelde bestandssysteemgegevensbron toevoegen"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "een Atlassian Jira gegevensbron toevoegen"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "een git repository gegevensbron toevoegen zoals bitbucket, github of anderen"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Instellen"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "mijn profiel"
+      },
+      "logout" : {
+        "label" : "afmelden"
       }
     }
   }

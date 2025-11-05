@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Anmelden"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Vorgang erfolgreich abgeschlossen"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Eigene Dokumente hochladen oder auswählen",
         "help" : "Dokumente aus deinem Benutzerbereich auswählen/hochladen"
+      },
+      "fileSearchBtn" : {
+        "label" : "Suchen"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Suchen"
+      },
+      "query" : {
+        "label" : "Semantischer Suchbegriff",
+        "help" : "Geben Sie einen aussagekräftigen Begriff zu Ihrer Suche ein"
+      },
+      "choosenBrowsing" : {
+        "label" : "Dateien in Wissensdatenbanken auswählen",
+        "help" : "Wählen Sie Dateien aus gemeinsamen Wissensdatenbanken des Unternehmens"
+      },
+      "filename" : {
+        "label" : "Gesuchter Dateiname",
+        "help" : "Geben Sie einen Teil des Dateinamens für Ihren Suchinhalt ein"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Wissensbasen & Benutzerdaten"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+Unterprojekt oder Element",
+        "help" : "Unterprojekt oder Element hinzufügen"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+Dateien hochladen",
+        "help" : "Quelle für hochgeladene Dateien hinzufügen"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive Datenquelle hinzufügen"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence Datenquelle hinzufügen"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+Dateisystem",
+        "help" : "Geteilte Dateisystemquelle hinzufügen"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira Datenquelle hinzufügen"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "Git-Repository-Datenquelle wie bitbucket, github oder andere hinzufügen"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Setup"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "Mein Profil"
+      },
+      "logout" : {
+        "label" : "Abmelden"
       }
     }
   }

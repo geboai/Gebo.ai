@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Մուտք"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Բեռնեք կամ ընտրեք ձեր փաստաթղթերը",
         "help" : "Ընտրեք/բեռնեք փաստաթղթեր ձեր օգտատիրոջ տարածքից"
+      },
+      "fileSearchBtn" : {
+        "label" : "Փնտրել"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Փնտրել"
+      },
+      "query" : {
+        "label" : "Սեմանտիկ որոնման արտահայտություն",
+        "help" : "Մուտքագրեք ձեր որոնմանը համապատասխան արտահայտություն"
+      },
+      "choosenBrowsing" : {
+        "label" : "Ընտրեք ֆայլեր գիտելիքների բազայից",
+        "help" : "Ընտրեք ֆայլեր կորպորատիվ ընդհանուր գիտելիքների բազայից"
+      },
+      "filename" : {
+        "label" : "Փնտրվող ֆայլի անվանումը",
+        "help" : "Մուտքագրեք փնտրվող բովանդակության ֆայլի անվան մի մասը"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Գիտելիքների բազաներ և օգտատիրոջ ֆայլեր"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ենթանախագիծ կամ ապրանք",
+        "help" : "ավելացնել ենթանախագիծ կամ ապրանք"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+վերբեռնել ֆայլեր",
+        "help" : "ավելացնել վերբեռնված ֆայլին տեղեկության աղբյուր"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ավելացնել Microsoft SharePoint/OneDrive տվյալների աղբյուր"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ավելացնել Atlassian Confluence տվյալների աղբյուր"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ֆայլային համակարգ",
+        "help" : "ավելացնել համատեղված ֆայլային համակարգի տվյալների աղբյուր"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ավելացնել Atlassian Jira տվյալների աղբյուր"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "ավելացնել git պահոցների տվ. աղբյուր՝ օրինակ bitbucket, github կամ այլ"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai զրուցարան"
+      },
+      "setup" : {
+        "label" : "Կարգավորումներ"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ադմին"
+      },
+      "currentProfile" : {
+        "label" : "իմ պրոֆիլը"
+      },
+      "logout" : {
+        "label" : "ելք"
       }
     }
   }

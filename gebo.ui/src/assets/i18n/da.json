@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Login"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Handling udført med succes"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Upload eller vælg dine dokumenter",
         "help" : "Vælg/upload dokumenter fra dit brugerområde"
+      },
+      "fileSearchBtn" : {
+        "label" : "Søg"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Søg"
+      },
+      "query" : {
+        "label" : "Semantisk søgefrase",
+        "help" : "Indtast en meningsfuld sætning relateret til din søgning"
+      },
+      "choosenBrowsing" : {
+        "label" : "Vælg filer ved at gennemse vidensbaser",
+        "help" : "Vælg filer ved at gennemse virksomhedens delte vidensbaser"
+      },
+      "filename" : {
+        "label" : "Søgt filnavn",
+        "help" : "Indtast en del af filnavnet for det indhold, du søger"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Vidensbaser og brugerfiler"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+underrprojekt eller element",
+        "help" : "tilføj underprojekt eller element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+upload filer",
+        "help" : "tilføj datakilde for uploadede filer"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "tilføj en Microsoft SharePoint/OneDrive datakilde"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "tilføj en Atlassian Confluence datakilde"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filsystem",
+        "help" : "tilføj delt filsystem-datakilde"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "tilføj en Atlassian Jira datakilde"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "tilføj en git repository-datakilde såsom bitbucket,github eller andre"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Opsætning"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "min profil"
+      },
+      "logout" : {
+        "label" : "log ud"
       }
     }
   }

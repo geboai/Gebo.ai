@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Giriş yap"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Tamam!",
+        "detail" : "İşlem başarıyla tamamlandı"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Belgelerini yükle veya seç",
         "help" : "Kullanıcı alanından belgeleri seç/yükle"
+      },
+      "fileSearchBtn" : {
+        "label" : "Ara"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Ara"
+      },
+      "query" : {
+        "label" : "Anlamsal arama ifadesi",
+        "help" : "Aramanızla ilgili anlamlı bir ifade girin"
+      },
+      "choosenBrowsing" : {
+        "label" : "Dosyaları göz atarak bilgi tabanlarını seçin",
+        "help" : "Şirketin paylaşılan bilgi tabanlarında dosya seçin"
+      },
+      "filename" : {
+        "label" : "Aranan dosya adı",
+        "help" : "Aradığınız içerik için bir dosya adı parçası girin"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Bilgi tabanları ve kullanıcı dosyaları"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+alt proje veya öğe",
+        "help" : "alt proje veya öğe ekle"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+dosya yükle",
+        "help" : "yüklenen dosya veri kaynağı ekle"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive veri kaynağı ekle"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence veri kaynağı ekle"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+dosya sistemi",
+        "help" : "paylaşılan dosya sistemi veri kaynağı ekle"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira veri kaynağı ekle"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git deposu",
+        "help" : "bitbucket, github veya diğerleri gibi bir git deposu veri kaynağı ekle"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Kurulum"
+      },
+      "admin" : {
+        "label" : "Gebo.ai yönetici"
+      },
+      "currentProfile" : {
+        "label" : "profilim"
+      },
+      "logout" : {
+        "label" : "çıkış yap"
       }
     }
   }

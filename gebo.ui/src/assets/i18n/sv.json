@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Logga in"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden slutförd"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Ladda upp eller välj dina dokument",
         "help" : "Välj eller ladda upp dokument från din användaryta"
+      },
+      "fileSearchBtn" : {
+        "label" : "Sök"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Sök"
+      },
+      "query" : {
+        "label" : "Semantisk sökfras",
+        "help" : "Ange en meningsfull fras relaterad till din sökning"
+      },
+      "choosenBrowsing" : {
+        "label" : "Välj filer genom att bläddra bland kunskapsbaser",
+        "help" : "Välj filer genom att bläddra bland företagets delade kunskapsbaser"
+      },
+      "filename" : {
+        "label" : "Sökt filnamn",
+        "help" : "Ange en del av filnamnet för det du söker"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Kunskapsbaser & användarfiler"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+delprojekt eller post",
+        "help" : "lägg till delprojekt eller post"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ladda upp filer",
+        "help" : "lägg till datakälla från uppladdade filer"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "lägg till en Microsoft SharePoint/OneDrive-datakälla"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "lägg till en Atlassian Confluence-datakälla"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filsystem",
+        "help" : "lägg till delad filsystemsdatakälla"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "lägg till en Atlassian Jira-datakälla"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "lägg till en git-repositorium-datakälla som bitbucket, github eller andra"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Konfigurera"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "min profil"
+      },
+      "logout" : {
+        "label" : "logga ut"
       }
     }
   }

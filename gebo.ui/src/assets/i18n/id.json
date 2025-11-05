@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Masuk"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Unggah atau pilih dokumen Anda",
         "help" : "Pilih/unggah dokumen dari ruang pengguna Anda"
+      },
+      "fileSearchBtn" : {
+        "label" : "Cari"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Cari"
+      },
+      "query" : {
+        "label" : "Frasa pencarian semantik",
+        "help" : "Masukkan frasa yang bermakna terkait pencarian Anda"
+      },
+      "choosenBrowsing" : {
+        "label" : "Pilih file dengan menjelajahi basis pengetahuan",
+        "help" : "Pilih file dengan menjelajahi basis pengetahuan bersama perusahaan"
+      },
+      "filename" : {
+        "label" : "Nama file yang dicari",
+        "help" : "Masukkan sebagian nama file untuk konten yang Anda cari"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Basis pengetahuan & file pengguna"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproyek atau item",
+        "help" : "tambah subproyek atau item"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+unggah file",
+        "help" : "tambah sumber data file yang diunggah"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "tambah sumber data Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "tambah sumber data Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "tambah sumber data filesystem bersama"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "tambah sumber data Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "tambah sumber data repository git seperti bitbucket, github atau lainnya"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Setelan"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "profil saya"
+      },
+      "logout" : {
+        "label" : "keluar"
       }
     }
   }

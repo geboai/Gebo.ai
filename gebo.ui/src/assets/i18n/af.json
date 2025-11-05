@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Meld aan"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Laai op of kies jou dokumente",
         "help" : "Kies/laai dokumente op uit jou gebruikersruimte"
+      },
+      "fileSearchBtn" : {
+        "label" : "Soek"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Soek"
+      },
+      "query" : {
+        "label" : "Semantiese soekfrase",
+        "help" : "Voer 'n beskrywende frase in wat verband hou met jou soektog"
+      },
+      "choosenBrowsing" : {
+        "label" : "Kies lêers blaai kennisbasisse",
+        "help" : "Kies lêers deur maatskappy gesamentlike kennisbasisse te blaai"
+      },
+      "filename" : {
+        "label" : "Gesogte lêernaam",
+        "help" : "Voer 'n deel van die lêernaam in vir jou gesoekte inhoud"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Kennisbasisse & gebruikerslêers"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojek of item",
+        "help" : "voeg subprojek of item by"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+laai lêers op",
+        "help" : "voeg opgelaaide lêers databron by"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "voeg 'n Microsoft SharePoint/OneDrive databron by"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "voeg 'n Atlassian Confluence databron by"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+lêerstelsel",
+        "help" : "voeg gesamentlike lêerstelsel databron by"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "voeg 'n Atlassian Jira databron by"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "voeg 'n git-bewaarplek databron by soos bitbucket, github of ander"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Instel"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "my profiel"
+      },
+      "logout" : {
+        "label" : "meld af"
       }
     }
   }

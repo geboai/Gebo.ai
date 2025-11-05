@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "লগইন"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ঠিক আছে!",
+        "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "আপনার ডকুমেন্ট আপলোড বা বাছাই করুন",
         "help" : "আপনার ইউজার স্পেস থেকে ডকুমেন্ট বাছাই/আপলোড করুন"
+      },
+      "fileSearchBtn" : {
+        "label" : "অনুসন্ধান"
+      },
+      "semanticSearchBtn" : {
+        "label" : "অনুসন্ধান"
+      },
+      "query" : {
+        "label" : "সেমান্টিক অনুসন্ধান শব্দগুচ্ছ",
+        "help" : "আপনার অনুসন্ধানের সাথে প্রাসঙ্গিক একটি অর্থবোধক শব্দগুচ্ছ লিখুন"
+      },
+      "choosenBrowsing" : {
+        "label" : "জ্ঞানভাণ্ডারে ফাইল বাছাই করুন",
+        "help" : "কোম্পানির শেয়ারকৃত জ্ঞানভাণ্ডার থেকে ফাইল বাছাই করুন"
+      },
+      "filename" : {
+        "label" : "অনুসন্ধানকৃত ফাইলের নাম",
+        "help" : "আপনার খোঁজা বিষয়বস্তুর জন্য একটি ফাইলের অংশের নাম লিখুন"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "জ্ঞানভিত্তি ও ব্যবহারকারীর ফাইল"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+সাবপ্রোজেক্ট অথবা আইটেম",
+        "help" : "সাবপ্রোজেক্ট অথবা আইটেম যোগ করুন"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ফাইল আপলোড",
+        "help" : "আপলোড করা ফাইলের তথ্যসূত্র যোগ করুন"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "একটি Microsoft SharePoint/OneDrive তথ্যসূত্র যোগ করুন"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "একটি Atlassian Confluence তথ্যসূত্র যোগ করুন"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ফাইলসিস্টেম",
+        "help" : "শেয়ারকৃত ফাইলসিস্টেম তথ্যসূত্র যোগ করুন"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "একটি Atlassian Jira তথ্যসূত্র যোগ করুন"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket, github অথবা অন্য git repository তথ্যসূত্র যোগ করুন"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai চ্যাট"
+      },
+      "setup" : {
+        "label" : "সেটআপ"
+      },
+      "admin" : {
+        "label" : "Gebo.ai অ্যাডমিন"
+      },
+      "currentProfile" : {
+        "label" : "আমার প্রোফাইল"
+      },
+      "logout" : {
+        "label" : "লগআউট"
       }
     }
   }

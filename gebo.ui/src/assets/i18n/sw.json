@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Ingia"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Pakia au chagua hati zako",
         "help" : "Chagua/pakia hati kutoka eneo lako la mtumiaji"
+      },
+      "fileSearchBtn" : {
+        "label" : "Tafuta"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Tafuta"
+      },
+      "query" : {
+        "label" : "Neno la utafutaji wa maana",
+        "help" : "Ingiza kauli yenye maana inayohusiana na utafutaji wako"
+      },
+      "choosenBrowsing" : {
+        "label" : "Chagua faili kwa kuvinjari vyanzo vya maarifa",
+        "help" : "Chagua faili kwa kuvinjari vyanzo vya pamoja vya maarifa vya kampuni"
+      },
+      "filename" : {
+        "label" : "Jina la faili lililotafutwa",
+        "help" : "Ingiza sehemu ya jina la faili kwa yaliyomo unayotafuta"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Misingi ya maarifa & faili za mtumiaji"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+mradi tanzu au kipengele",
+        "help" : "ongeza mradi tanzu au kipengele"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+pakia faili",
+        "help" : "ongeza chanzo cha data ya faili zilizopakiwa"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ongeza chanzo cha data cha Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ongeza chanzo cha data cha Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+mfumo wa faili",
+        "help" : "ongeza chanzo cha data cha mfumo wa faili ulioshirikiwa"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ongeza chanzo cha data cha Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "ongeza chanzo cha data ya hazina ya git kama bitbucket, github au zingine"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Mipangilio"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "wasifu wangu"
+      },
+      "logout" : {
+        "label" : "ondoka"
       }
     }
   }

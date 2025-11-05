@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Hyr"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operacioni u krye me sukses"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Ngarko ose zgjidh dokumentet tua",
         "help" : "Zgjidh/ngarko dokumente nga hapësira jote"
+      },
+      "fileSearchBtn" : {
+        "label" : "Kërko"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Kërko"
+      },
+      "query" : {
+        "label" : "Fraza semantike e kërkimit",
+        "help" : "Shkruani një frazë me kuptim të lidhur me kërkimin tuaj"
+      },
+      "choosenBrowsing" : {
+        "label" : "Zgjidhni skedarë duke shfletuar bazat e dijes",
+        "help" : "Zgjidhni skedarë duke shfletuar bazat e dijes të kompanisë"
+      },
+      "filename" : {
+        "label" : "Emri i skedarit të kërkuar",
+        "help" : "Shkruani një pjesë të emrit të skedarit për përmbajtjen që kërkoni"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Baza e njohurive & skedarët e përdoruesit"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+nënprojekt ose artikull",
+        "help" : "shto nënprojekt ose artikull"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ngarko skedarë",
+        "help" : "shto burim të dhënash me skedarë të ngarkuar"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "shto një burim të dhënash Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "shto një burim të dhënash Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "shto burim të dhënash filesystem të përbashkët"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "shto një burim të dhënash Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "shto një burim të dhënash git repository si bitbucket, github ose të tjera"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Cilësime"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "profili im"
+      },
+      "logout" : {
+        "label" : "dil"
       }
     }
   }

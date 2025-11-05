@@ -60,6 +60,12 @@
       "LoginBtn" : {
         "label" : "Logáil isteach"
       }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Ceart go leor!",
+        "detail" : "Oibríocht críochnaithe go rathúil"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -2399,6 +2405,24 @@
       "userspaceBrowsing" : {
         "label" : "Uaslódáil nó roghnaigh do cháipéisí",
         "help" : "Roghnaigh/nó uaslódáil cáipéisí ó do spás úsáideora"
+      },
+      "fileSearchBtn" : {
+        "label" : "Cuardaigh"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Cuardaigh"
+      },
+      "query" : {
+        "label" : "Frása cuardaigh séimeantaigh",
+        "help" : "Iontráil frása bríoch a bhaineann le do chuardach"
+      },
+      "choosenBrowsing" : {
+        "label" : "Roghnaigh comhaid le brabhsáil i mbunachair eolais",
+        "help" : "Roghnaigh comhaid le brabhsáil i mbunachair eolais roinnte na cuideachta"
+      },
+      "filename" : {
+        "label" : "Ainm na comhaid á lorg",
+        "help" : "Iontráil cuid de ainm na comhaid le haghaidh do chuid ábhair cuardaigh"
       }
     }
   },
@@ -2423,6 +2447,57 @@
       },
       "UserspaceBrowser" : {
         "label" : "Bunachar eolais & comhaid úsáideora"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+fo-thionscadal nó mír",
+        "help" : "cuir fo-thionscadal nó mír leis"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+uaslódáil comhaid",
+        "help" : "cuir foinse sonraí ó chomhaid uaslódáilte leis"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "cuir foinse sonraí Microsoft SharePoint/OneDrive leis"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "cuir foinse sonraí Atlassian Confluence leis"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+córas comhad",
+        "help" : "cuir foinse sonraí ó chóras comhad roinnte leis"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "cuir foinse sonraí Atlassian Jira leis"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+giotán stór",
+        "help" : "cuir foinse sonraí stórtha git cosúil le bitbucket, github nó ceann eile leis"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai comhrá"
+      },
+      "setup" : {
+        "label" : "Socrú"
+      },
+      "admin" : {
+        "label" : "Gebo.ai riarthóir"
+      },
+      "currentProfile" : {
+        "label" : "mo phróifíl"
+      },
+      "logout" : {
+        "label" : "logáil amach"
       }
     }
   }
