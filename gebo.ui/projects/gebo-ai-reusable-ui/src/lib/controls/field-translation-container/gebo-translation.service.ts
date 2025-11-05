@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat, map } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText } from "@Gebo.ai/gebo-ai-rest-api";
-import { InterpolatableTranslationObject, TranslateService } from "@ngx-translate/core";
+import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
 import { ToastMessageOptions } from "primeng/api";
 import { findMatchingTranlations } from "./text-language-resources";
 
@@ -38,20 +38,16 @@ export class GeboAITranslationService {
         const url = this.assetsUrl + fileName;
         return this.httpClient.get<GeboLanguage[]>(url).pipe(map(data => data as GeboLanguage[]));
     }
+    public get browserLanguage():Language|undefined {
+        return this.translateService.getBrowserLang();
+    }
     public async tryInit() {
         if (GeboAITranslationService.initialized !== true) {
             try {
                 const moduleConfiguration = await this.uiTextResourcesService.getUiTextResourcesModule().toPromise();
                 GeboAITranslationService.recordingOn = moduleConfiguration?.enabled === true;
+                
                 try {
-                    /*this.loadLanguagesResource("languages-choice.json").subscribe({
-                        next: (langs) => {
-                            if (langs && langs.length) {
-                                GeboAITranslationService.languageChoices = langs;
-                                this.translateService.addLangs(langs.map(x => x.langCode));
-                            }
-                        }
-                    })*/
                     const langs = await this.loadLanguagesResource("languages-choice.json").toPromise();
                     if (langs && langs.length) {
                         GeboAITranslationService.languageChoices = langs;
@@ -85,6 +81,42 @@ export class GeboAITranslationService {
 
 
         return concat(of(GeboAITranslationService.currentTextResources), this.languageChanges);
+    }
+    public translateText(moduleId: string,entityId:string, componentId: string,resources:{fieldId:string,text:string}[]):Observable<{fieldId:string,translation:string}[]|undefined> {
+        const data:UIExistingText[]=[];
+        if (resources && resources.length) {
+            resources.forEach(x=>{
+                data.push({
+                    moduleId:moduleId,
+                    entityId:entityId,
+                    componentId:componentId,
+                    fieldId: x.fieldId,
+                    key:x.fieldId,
+                    text:x.text
+                });
+            });            
+        }
+        if (data && data.length) {
+            return of(undefined);
+        }else {
+            return this.translateOnActualLanguage(data).pipe(map(rc=>{
+                const outData:{fieldId:string,translation:string}[]=[];
+                if (rc) {
+                    const translations=findMatchingTranlations(data,rc);
+                    if (translations && translations.length) {
+                        translations.forEach(x=>{
+                            if (x.translation) {
+                                outData.push({
+                                    fieldId:x.fieldId,
+                                    translation:x.translation
+                                });
+                            }
+                        });
+                    }
+                }
+                return outData;
+            }));
+        }
     }
     public translateMessage(moduleId: string, componentId: string, option: ToastMessageOptions): Observable<ToastMessageOptions | undefined> {
         const textResource: UIExistingText[] = [];
