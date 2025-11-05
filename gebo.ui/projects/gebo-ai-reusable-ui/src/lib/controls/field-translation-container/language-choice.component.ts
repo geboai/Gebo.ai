@@ -55,7 +55,7 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
   async  ngOnInit(){
         await this.geboTranslationService.tryInit();
         const langs = this.geboTranslationService.getLanguages();
-        this.choosableLanguages = this.languages.filter(x => langs.includes(x.langCode));
+        this.choosableLanguages = this.geboTranslationService.languagesList;
         this.formGroup.controls["langCode"].valueChanges.subscribe({
             next: (data) => {
                 if (data) {
@@ -66,6 +66,7 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
     }
     writeValue(obj: any): void {
         this.currentLanguage = obj;
+        this.formGroup.setValue({langCode:this.currentLanguage},{emitEvent:false,onlySelf:true});
     }
     private onChange: (fn: any) => void = (fn: any) => { };
     registerOnChange(fn: any): void {

@@ -9,7 +9,10 @@
         </ng-template>
         <ng-template let-item #item>
             <div class="flex items-center">
+                <!-- 
                 <i [ngClass]="'flag flag-'+item.langCode"></i>
+                -->
+                <i [ngClass]="item.langCode+'-flag'"></i>
                 {{ item.description}}
             </div>
         </ng-template>
