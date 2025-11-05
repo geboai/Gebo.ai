@@ -60,6 +60,12 @@
             "LoginBtn": {
                 "label": "Login"
             }
+        },
+        "message": {
+            "LoginComponent": {
+                "summary": "OK!",
+                "detail": "Operation done successfully"
+            }
         }
     },
     "SetupWizardPanelModule": {
@@ -2399,6 +2405,24 @@
             "userspaceBrowsing": {
                 "label": "Upload or choose your documents",
                 "help": "Choose/upload documents from your user space"
+            },
+            "fileSearchBtn": {
+                "label": "Search"
+            },
+            "semanticSearchBtn": {
+                "label": "Search"
+            },
+            "query": {
+                "label": "Semantic search phrase",
+                "help": "Enter a meaningful phrase related to your search"
+            },
+            "choosenBrowsing": {
+                "label": "Choose files browsing knowledge bases",
+                "help": "Choose files browsing company shared knowledge bases"
+            },
+            "filename": {
+                "label": "Searched file name",
+                "help": "Enter a filename part for your searched content"
             }
         }
     },
@@ -2423,6 +2447,57 @@
             },
             "UserspaceBrowser": {
                 "label": "Knowledge bases & user files"
+            }
+        }
+    },
+    "AddProjectMenuModule": {
+        "AddProjectMenuComponent": {
+            "GProject": {
+                "label": "+subproject or item",
+                "help": "add subproject or item"
+            },
+            "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint": {
+                "label": "+upload files",
+                "help": "add uploaded files data source"
+            },
+            "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint": {
+                "label": "+sharePoint/oneDrive",
+                "help": "add a Microsoft SharePoint/OneDrive data source"
+            },
+            "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint": {
+                "label": "+confluence",
+                "help": "add an Atlassian Confluence data source"
+            },
+            "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint": {
+                "label": "+filesystem",
+                "help": "add shared filesystem data source"
+            },
+            "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint": {
+                "label": "+jira",
+                "help": "add an Atlassian Jira data source"
+            },
+            "ai_gebo_git_content_handler_GGitProjectEndpoint": {
+                "label": "+git repo",
+                "help": "add a git repository data source like bitbucket,github or others"
+            }
+        }
+    },
+    "AppModule": {
+        "AppComponent": {
+            "chat": {
+                "label": "Gebo.ai Chat"
+            },
+            "setup": {
+                "label": "Setup"
+            },
+            "admin": {
+                "label": "Gebo.ai admin"
+            },
+            "currentProfile": {
+                "label": "my profile"
+            },
+            "logout": {
+                "label": "logout"
             }
         }
     }

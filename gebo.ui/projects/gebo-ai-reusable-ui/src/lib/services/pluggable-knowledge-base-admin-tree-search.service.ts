@@ -269,60 +269,7 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
     }
     public generateAddToProjectMenu(subProjectAddEnabled: boolean, data: GProject, actionConsumer: (action: GeboUIActionRequest) => void, actionsCallback: (event: GeboActionPerformedEvent) => void, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): Observable<MenuItem[]> {
         const menuItems = this.generateAddToProjectMenuEnglish(subProjectAddEnabled, data, actionConsumer, actionsCallback, wizardStepsConfigurations, actualWizardStepConfigrationId);
-        const resources: UIExistingText[] = [];
-        if (menuItems) {
-            menuItems.forEach(x => {
-                if (x.label && x.id) {
-                    resources.push({
-                        moduleId: "AddProjectMenuModule",
-                        entityId: "AddProjectMenuComponent",
-                        componentId: x.id,
-                        fieldId: "label",
-                        key: "label",
-                        text: x.label
-                    });
-                }
-                if (x.title && x.id) {
-                    resources.push({
-                        moduleId: "AddProjectMenuModule",
-                        entityId: "AddProjectMenuComponent",
-                        componentId: x.id,
-                        fieldId: "help",
-                        key: "help",
-                        text: x.title
-                    });
-                }
-                if (x.tooltip && x.id) {
-                    resources.push({
-                        moduleId: "AddProjectMenuModule",
-                        entityId: "AddProjectMenuComponent",
-                        componentId: x.id,
-                        fieldId: "tooltip",
-                        key: "tooltip",
-                        text: x.tooltip
-                    });
-                }
-            });
-        }
-        return this.geboTranslationService.translateOnActualLanguage(resources).pipe(map(languageResource => {
-            if (languageResource) {
-                const translations = findMatchingTranlations(resources, languageResource);
-                if (translations && translations.length) {
-                    menuItems.forEach(menuEntry => {
-
-                        const found = translations.filter(translation => menuEntry.id === translation.componentId);
-                        if (found) {
-                            found.forEach(fieldTranslation => {
-                                if (fieldTranslation.translation)
-                                    (menuEntry as any)[fieldTranslation.fieldId] = fieldTranslation.translation;
-                            });
-                        }
-
-                    });
-                }
-            }
-            return menuItems;
-        }));
+        return this.geboTranslationService.translateMenuItems("AddProjectMenuModule", "AddProjectMenuComponent", menuItems);
     }
 
 }

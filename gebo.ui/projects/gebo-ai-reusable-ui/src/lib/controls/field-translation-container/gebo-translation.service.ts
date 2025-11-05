@@ -3,7 +3,7 @@ import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-la
 import { Observable, of, Subject, concat, map } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
-import { ToastMessageOptions } from "primeng/api";
+import { MegaMenuItem, MenuItem, ToastMessageOptions } from "primeng/api";
 import { findMatchingTranlations } from "./text-language-resources";
 
 import { HttpClient } from "@angular/common/http";
@@ -38,7 +38,7 @@ export class GeboAITranslationService {
         const url = this.assetsUrl + fileName;
         return this.httpClient.get<GeboLanguage[]>(url).pipe(map(data => data as GeboLanguage[]));
     }
-    public get browserLanguage():Language|undefined {
+    public get browserLanguage(): Language | undefined {
         return this.translateService.getBrowserLang();
     }
     public async tryInit() {
@@ -46,7 +46,7 @@ export class GeboAITranslationService {
             try {
                 const moduleConfiguration = await this.uiTextResourcesService.getUiTextResourcesModule().toPromise();
                 GeboAITranslationService.recordingOn = moduleConfiguration?.enabled === true;
-                
+
                 try {
                     const langs = await this.loadLanguagesResource("languages-choice.json").toPromise();
                     if (langs && langs.length) {
@@ -82,33 +82,33 @@ export class GeboAITranslationService {
 
         return concat(of(GeboAITranslationService.currentTextResources), this.languageChanges);
     }
-    public translateText(moduleId: string,entityId:string, componentId: string,resources:{fieldId:string,text:string}[]):Observable<{fieldId:string,translation:string}[]|undefined> {
-        const data:UIExistingText[]=[];
+    public translateText(moduleId: string, entityId: string, componentId: string, resources: { fieldId: string, text: string }[]): Observable<{ fieldId: string, translation: string }[] | undefined> {
+        const data: UIExistingText[] = [];
         if (resources && resources.length) {
-            resources.forEach(x=>{
+            resources.forEach(x => {
                 data.push({
-                    moduleId:moduleId,
-                    entityId:entityId,
-                    componentId:componentId,
+                    moduleId: moduleId,
+                    entityId: entityId,
+                    componentId: componentId,
                     fieldId: x.fieldId,
-                    key:x.fieldId,
-                    text:x.text
+                    key: x.fieldId,
+                    text: x.text
                 });
-            });            
+            });
         }
         if (data && data.length) {
             return of(undefined);
-        }else {
-            return this.translateOnActualLanguage(data).pipe(map(rc=>{
-                const outData:{fieldId:string,translation:string}[]=[];
+        } else {
+            return this.translateOnActualLanguage(data).pipe(map(rc => {
+                const outData: { fieldId: string, translation: string }[] = [];
                 if (rc) {
-                    const translations=findMatchingTranlations(data,rc);
+                    const translations = findMatchingTranlations(data, rc);
                     if (translations && translations.length) {
-                        translations.forEach(x=>{
+                        translations.forEach(x => {
                             if (x.translation) {
                                 outData.push({
-                                    fieldId:x.fieldId,
-                                    translation:x.translation
+                                    fieldId: x.fieldId,
+                                    translation: x.translation
                                 });
                             }
                         });
@@ -173,6 +173,109 @@ export class GeboAITranslationService {
             }
         })
 
+    }
+    public translateMegaMenuItems(moduleId: string, entityId: string, menuItems: MegaMenuItem[]): Observable<MegaMenuItem[]> {
+        const resources: UIExistingText[] = [];
+        if (menuItems) {
+            menuItems.forEach(x => {
+                if (x.label && x.id) {
+                    resources.push({
+                        moduleId: moduleId,
+                        entityId: entityId,
+                        componentId: x.id,
+                        fieldId: "label",
+                        key: "label",
+                        text: x.label
+                    });
+                }
+                if (x.title && x.id) {
+                    resources.push({
+                        moduleId: moduleId,
+                        entityId: entityId,
+                        componentId: x.id,
+                        fieldId: "help",
+                        key: "help",
+                        text: x.title
+                    });
+                }
+
+            });
+        }
+        return this.translateOnActualLanguage(resources).pipe(map(languageResource => {
+            if (languageResource) {
+                const translations = findMatchingTranlations(resources, languageResource);
+                if (translations && translations.length) {
+                    menuItems.forEach(menuEntry => {
+
+                        const found = translations.filter(translation => menuEntry.id === translation.componentId);
+                        if (found) {
+                            found.forEach(fieldTranslation => {
+                                if (fieldTranslation.translation)
+                                    (menuEntry as any)[fieldTranslation.fieldId] = fieldTranslation.translation;
+                            });
+                        }
+
+                    });
+                }
+            }
+            return menuItems;
+        }));
+    }
+    public translateMenuItems(moduleId: string, entityId: string, menuItems: MenuItem[]): Observable<MenuItem[]> {
+        const resources: UIExistingText[] = [];
+        if (menuItems) {
+            menuItems.forEach(x => {
+                if (x.label && x.id) {
+                    resources.push({
+                        moduleId: moduleId,
+                        entityId: entityId,
+                        componentId: x.id,
+                        fieldId: "label",
+                        key: "label",
+                        text: x.label
+                    });
+                }
+                if (x.title && x.id) {
+                    resources.push({
+                        moduleId: moduleId,
+                        entityId: entityId,
+                        componentId: x.id,
+                        fieldId: "help",
+                        key: "help",
+                        text: x.title
+                    });
+                }
+                if (x.tooltip && x.id) {
+                    resources.push({
+                        moduleId: moduleId,
+                        entityId: entityId,
+                        componentId: x.id,
+                        fieldId: "tooltip",
+                        key: "tooltip",
+                        text: x.tooltip
+                    });
+                }
+            });
+        }
+        return this.translateOnActualLanguage(resources).pipe(map(languageResource => {
+            if (languageResource) {
+                const translations = findMatchingTranlations(resources, languageResource);
+                if (translations && translations.length) {
+                    menuItems.forEach(menuEntry => {
+
+                        const found = translations.filter(translation => menuEntry.id === translation.componentId);
+                        if (found) {
+                            found.forEach(fieldTranslation => {
+                                if (fieldTranslation.translation)
+                                    (menuEntry as any)[fieldTranslation.fieldId] = fieldTranslation.translation;
+                            });
+                        }
+
+                    });
+                }
+            }
+            return menuItems;
+        }));
     }
     public getActualLanguage(): string {
         return this.translateService.getCurrentLang();

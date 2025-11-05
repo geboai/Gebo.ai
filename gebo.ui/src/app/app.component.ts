@@ -15,8 +15,9 @@ import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
 import { LoginService } from '../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/login/login.service';
 import { GeboSetupWizardService } from '@Gebo.ai/gebo-ai-admin-ui';
-import { resetAuth, saveAuth, SetupStatus } from '@Gebo.ai/reusable-ui';
+import { GeboAITranslationService, resetAuth, saveAuth, SetupStatus } from '@Gebo.ai/reusable-ui';
 import { PrimeNG } from 'primeng/config';
+import { Subscription } from 'rxjs';
 const menuItemsProtos: MegaMenuItem[] = [
   { icon: "pi pi-comments", label: "Gebo.ai Chat", routerLink: 'ui/chat', id: "chat" },
   { icon: "pi pi-wrench", label: "Setup", routerLink: "ui/admin-setup", id: "setup" },
@@ -41,6 +42,7 @@ export class AppComponent implements OnInit {
   constructor(
     private primengConfig: PrimeNG,
     private loginService: LoginService,
+    private geboTranslationService: GeboAITranslationService,
     private geboWizardSetupService: GeboSetupWizardService) {
     this.loginService.authDataSubject.subscribe({
       next: (securityHedaerData) => {
@@ -95,9 +97,10 @@ export class AppComponent implements OnInit {
       }
     });
   }
-   ngOnInit() {
+  private subscription?: Subscription;
+  ngOnInit() {
     this.primengConfig.ripple.set(true);
-    
+
     if (!this.loginService.isOauth2LandingPage()) {
       this.loginService.logged.subscribe(user => {
         this.userLogged = user ? true : false;
@@ -121,6 +124,18 @@ export class AppComponent implements OnInit {
           }
 
           this.menuItems = items;
+          if (this.subscription) {
+            this.subscription.unsubscribe();
+            this.subscription = undefined;
+          }
+          this.subscription = this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.menuItems).subscribe({
+            next: (translated) => {
+              if (translated) {
+                this.menuItems = translated;
+              }
+            }
+          }
+          );
           if (isAdmin === true) {
             this.pollSetupState();
           }
