@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { ChildVirtualFSParam, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, VDocumentInfo, VFolderInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { forkJoin, map, Observable, of } from "rxjs";
@@ -20,6 +20,8 @@ import { GeboAIModulesService } from "./gebo-ai-modules.service";
 import { GeboAIPluggableProjectEndpointsService } from "./pluggable-project-endpoint";
 import { GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest } from "../architecture/actions.model";
 import { GeboAIEntitiesSettingWizardConfiguration } from "../controls/base-entity-editing-component/entities-modification-wizard";
+import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
+import { findMatchingTranlations, UIExistingText } from "../controls/field-translation-container/text-language-resources";
 
 /**
  * AI generated comments
@@ -43,10 +45,11 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
         private modulesService: GeboAIModulesService,
         private knowledgeBaseService: KnowledgeBaseControllerService,
         private projectService: ProjectsControllerService,
+        private geboTranslationService: GeboAITranslationService,
         private endpointsService: GeboAIPluggableProjectEndpointsService) {
 
     }
-   
+
     /**
      * Retrieves all knowledge bases and transforms them into enriched child objects
      * that can be displayed in the tree structure.
@@ -87,9 +90,9 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
 
             const projectsObservable = this.projectService.findChildProjects(project.rootKnowledgeBaseCode, project.code).pipe(map(returned => returned.map(x => ({ info: x, isProject: true, isLeaf: false, className: "" } as EnrichedChild))));
             const endpointsObservable = this.endpointsService.findByProjectEndpoints(project.code).pipe(map(returned => returned.map(x => ({ info: x, isProjectEndpoint: true, isProject: false, isLeaf: false, className: x.className, icon: x.icon } as EnrichedChild))));
-          
+
             const services: Observable<EnrichedChild[]>[] = [projectsObservable, endpointsObservable];
-            
+
 
             return forkJoin(services).pipe(map((returned) => {
                 const out: EnrichedChild[] = [];
@@ -202,7 +205,7 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
      * @param actualWizardStepConfigrationId Optional ID of the current wizard step
      * @returns Array of menu items for adding content to a project
      */
-    public generateAddToProjectMenu(subProjectAddEnabled: boolean, data: GProject, actionConsumer: (action: GeboUIActionRequest) => void, actionsCallback: (event: GeboActionPerformedEvent) => void, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): MenuItem[] {
+    public generateAddToProjectMenuEnglish(subProjectAddEnabled: boolean, data: GProject, actionConsumer: (action: GeboUIActionRequest) => void, actionsCallback: (event: GeboActionPerformedEvent) => void, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): MenuItem[] {
         const items: MenuItem[] = [];
         if (subProjectAddEnabled === true) {
             items.push({
@@ -264,6 +267,62 @@ export class GeboAIPluggableKnowledgeAdminBaseTreeSearchService {
         }
         return items;
     }
+    public generateAddToProjectMenu(subProjectAddEnabled: boolean, data: GProject, actionConsumer: (action: GeboUIActionRequest) => void, actionsCallback: (event: GeboActionPerformedEvent) => void, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): Observable<MenuItem[]> {
+        const menuItems = this.generateAddToProjectMenuEnglish(subProjectAddEnabled, data, actionConsumer, actionsCallback, wizardStepsConfigurations, actualWizardStepConfigrationId);
+        const resources: UIExistingText[] = [];
+        if (menuItems) {
+            menuItems.forEach(x => {
+                if (x.label && x.id) {
+                    resources.push({
+                        moduleId: "AddProjectMenuModule",
+                        entityId: "AddProjectMenuComponent",
+                        componentId: x.id,
+                        fieldId: "label",
+                        key: "label",
+                        text: x.label
+                    });
+                }
+                if (x.title && x.id) {
+                    resources.push({
+                        moduleId: "AddProjectMenuModule",
+                        entityId: "AddProjectMenuComponent",
+                        componentId: x.id,
+                        fieldId: "help",
+                        key: "help",
+                        text: x.title
+                    });
+                }
+                if (x.tooltip && x.id) {
+                    resources.push({
+                        moduleId: "AddProjectMenuModule",
+                        entityId: "AddProjectMenuComponent",
+                        componentId: x.id,
+                        fieldId: "tooltip",
+                        key: "tooltip",
+                        text: x.tooltip
+                    });
+                }
+            });
+        }
+        return this.geboTranslationService.translateOnActualLanguage(resources).pipe(map(languageResource => {
+            if (languageResource) {
+                const translations = findMatchingTranlations(resources, languageResource);
+                if (translations && translations.length) {
+                    menuItems.forEach(menuEntry => {
 
-    
+                        const found = translations.filter(translation => menuEntry.id === translation.componentId);
+                        if (found) {
+                            found.forEach(fieldTranslation => {
+                                if (fieldTranslation.translation)
+                                    (menuEntry as any)[fieldTranslation.fieldId] = fieldTranslation.translation;
+                            });
+                        }
+
+                    });
+                }
+            }
+            return menuItems;
+        }));
+    }
+
 }

@@ -3,7 +3,7 @@
         class="w-full md:w-56">
         <ng-template #selectedItem let-selectedOption>
             <div class="flex items-center gap-2" *ngIf="selectedOption">
-                <i [ngClass]="'flag flag-' + selectedOption.langCode" style="width: 18px" ></i>
+                <i [ngClass]="selectedOption.langCode+'-flag'" style="width: 18px" ></i>
                 {{ selectedOption.description }}
             </div>
         </ng-template>

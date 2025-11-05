@@ -20,7 +20,7 @@
 import { Component, Injector } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { ChooseDataSourceType } from "./choose-data-source-type";
 import { ConfirmationService, MenuItem } from "primeng/api";
 import { GProject, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
@@ -69,7 +69,7 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
      * The project associated with this data source type selection
      */
     project?: GProject;
-
+    private subscription?:Subscription;
     /**
      * Component constructor that injects required services
      */
@@ -114,7 +114,19 @@ export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingCompon
                     this.project = p;
                     const actionConsumer = (action: GeboUIActionRequest) => { };
                     const actionsCallback = (event: GeboActionPerformedEvent) => { };
-                    this.items = this.kbTreeSearchService.generateAddToProjectMenu(false, this.project, actionConsumer, actionsCallback);
+                    if (this.subscription) {
+                        this.subscription.unsubscribe();
+                        this.subscription=undefined;
+                    }
+                    this.items = this.kbTreeSearchService.generateAddToProjectMenuEnglish(false, this.project, actionConsumer, actionsCallback);
+                    this.subscription=this.kbTreeSearchService.generateAddToProjectMenu(false, this.project, actionConsumer, actionsCallback).subscribe({
+                        next:(menuItems)=>{
+                            if (menuItems) {
+                                this.items=menuItems;
+                            }
+                        }    
+                    });
+                    
                 }
             })
         }
