@@ -5,7 +5,9 @@ import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingTe
 import { InterpolatableTranslationObject, TranslateService } from "@ngx-translate/core";
 import { ToastMessageOptions } from "primeng/api";
 import { findMatchingTranlations } from "./text-language-resources";
-import { TestMessage } from "rxjs/internal/testing/TestMessage";
+
+import { HttpClient } from "@angular/common/http";
+import { GeboLanguage } from "./language-choice.component";
 
 /*******************************************************************************
  * The actual UI resources are all written in english, used as a default language
@@ -20,15 +22,35 @@ export class GeboAITranslationService {
     public static recordingOn: boolean = false;
     private static initialized: boolean = false;
     private static currentTextResources: UILanguageResources | undefined;
+    private static languageChoices:GeboLanguage[]=[];
     constructor(private uiTextResourcesService: UiTextResourcesControllerService,
-        private translateService: TranslateService) {
-        this.translateService.addLangs(["ar", "cs", "de", "en", "es", "fi", "fr", "he", "hi", "it", "js", "ko", "nl", "no", "pt", "ro", "ru", "sv", "th", "tr", "vi", "zh"])
+        private translateService: TranslateService,
+        private httpClient: HttpClient) {
+        this.translateService.addLangs(["ar", "cs", "de", "en", "es", "fi", "fr", "he", "hi", "it", "js", "ko", "nl", "no", "pt", "ro", "ru", "sv", "th", "tr", "vi", "zh"]);
+    }
+    protected get assetsUrl(): string {
+        let host = document.location.hostname;
+        let port = document.location.port;
+        let protocol = document.location.protocol;
+        return protocol + "://" + host + (port ? ":" + port : "") + "/assets/";
+    }
+    private loadLanguagesResource(fileName: string): Promise<GeboLanguage[] | undefined> {
+        return this.httpClient.get(this.assetsUrl + fileName).pipe(map(data => data as GeboLanguage[])).toPromise();
     }
     public async tryInit() {
         if (GeboAITranslationService.initialized !== true) {
             try {
                 const moduleConfiguration = await this.uiTextResourcesService.getUiTextResourcesModule().toPromise();
                 GeboAITranslationService.recordingOn = moduleConfiguration?.enabled === true;
+                try {
+                    const langs=await this.loadLanguagesResource("languages-choice.json");
+                    if (langs && langs.length) {
+                        GeboAITranslationService.languageChoices=langs;
+                        this.translateService.addLangs(langs.map(x=>x.langCode));
+                    }
+                }catch(w) {
+
+                }
             } catch (e) {
 
             } finally {
@@ -52,7 +74,7 @@ export class GeboAITranslationService {
 
         return concat(of(GeboAITranslationService.currentTextResources), this.languageChanges);
     }
-    public translateMessage(moduleId: string, componentId: string, option: ToastMessageOptions): Observable<ToastMessageOptions|undefined> {
+    public translateMessage(moduleId: string, componentId: string, option: ToastMessageOptions): Observable<ToastMessageOptions | undefined> {
         const textResource: UIExistingText[] = [];
         if (option.summary) {
             const summary: UIExistingText = {
@@ -77,24 +99,24 @@ export class GeboAITranslationService {
             textResource.push(detail);
         }
         if (textResource && textResource.length) {
-            const observable=this.translateOnActualLanguage(textResource);
-            return observable.pipe(map(data=>{
+            const observable = this.translateOnActualLanguage(textResource);
+            return observable.pipe(map(data => {
                 if (data) {
-                    const matchings=findMatchingTranlations(textResource,data);
+                    const matchings = findMatchingTranlations(textResource, data);
                     if (matchings && matchings.length) {
-                        const outOption:ToastMessageOptions= {
+                        const outOption: ToastMessageOptions = {
                             ...option
                         };
-                        matchings.filter(d=>d.translation).forEach(t=>{
-                            (outOption as any)[t.key]=t.translation;
+                        matchings.filter(d => d.translation).forEach(t => {
+                            (outOption as any)[t.key] = t.translation;
                         });
                         return outOption;
                     }
                 }
-                return option;      
-                
+                return option;
+
             }));
-        }else return of(undefined);
+        } else return of(undefined);
     }
     public changeActualLanguage(language: string): void {
         GeboAITranslationService.actualLanguage = language;

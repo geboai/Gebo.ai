@@ -1,0 +1,2429 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "ພາສາຮະບົບເລີ່ມຕົ້ນ",
+        "help" : "ພາສາຮະບົບເລີ່ມຕົ້ນສໍາລັບການຕິດຕັ້ງ Gebo.ai ນີ້"
+      },
+      "username" : {
+        "label" : "ອີເມວ",
+        "help" : "ໃຊ້ອີເມວເປັນຊື່ເຂົ້າລະບົບ"
+      },
+      "passwordC" : {
+        "label" : "ຢືນຢັນລະຫັດຜ່ານ",
+        "help" : "ຢືນຢັນລະຫັດຜ່ານ"
+      },
+      "password" : {
+        "label" : "ລະຫັດຜ່ານ",
+        "help" : "ລະຫັດຜ່ານເພື່ອເຂົ້າລະບົບ (ຢ່າງນ້ອຍ 8 ຕົວອັກສອນ)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " ລະຫັດຜ່ານບໍ່ກົງກັນ "
+      },
+      "LocalAdmin" : {
+        "label" : "ສ້າງບັນຊີ admin ທ້ອງຖິ່ນຂອງທ່ານ"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "ທ່ານຈະໃຊ້ບັນຊີນີ້ໃນອະນາຄົດເພື່ອຕັ້ງຄ່າ/ບໍລິຫານຊອບແວ, ຂໍ້ມູນນີ້ຈະຢູ່ກັບລະບົບຂອງທ່ານແລະບໍ່ຖືກສົ່ງຜ່ານເຄືອຂ່າຍ"
+      },
+      "EnterBtn" : {
+        "label" : "ໄປຫນ້າເຂົ້າລະບົບເພື່ອເຂົ້າ"
+      },
+      "SetupPage" : {
+        "label" : "ການຕັ້ງຄ່າການຕິດຕັ້ງ Gebo.ai ຂອງທ່ານ"
+      },
+      "CreateBtn" : {
+        "label" : "ສ້າງການຕັ້ງຄ່າລະບົບ"
+      },
+      "LicenceFieldSet" : {
+        "label" : "ອ່ານ & ຍອມຮັບໃບອະນຸຍາດ"
+      },
+      "AcceptMark" : {
+        "label" : "ຂ້ອຍຍອມຮັບເງື່ອນໄຂ",
+        "help" : "ໂດຍກົດທີ່ນີ້ທ່ານຍອມຮັບເງື່ອນໄຂໃນໃບອະນຸຍາດ"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ອີເມວ",
+        "help" : "ໃຊ້ອີເມວເປັນຊື່ຜູ້ໃຊ້ເພື່ອເຂົ້າລະບົບ"
+      },
+      "password" : {
+        "label" : "ລະຫັດຜ່ານ",
+        "help" : "ໃສ່ລະຫັດຜ່ານເພື່ອເຂົ້າລະບົບ"
+      },
+      "LoginPanel" : {
+        "label" : "ເຂົ້າລະບົບໄປທີ່ gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "ເຂົ້າລະບົບ"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "ການຕັ້ງຄ່າ Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "ຊື່ຜູ້ໃຫ້ບໍລິການ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າຄວາມປອດໄພ Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "ໄອດີ"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "ກັບໄປໜ້າຫຼັກການຕັ້ງຄ່າ"
+      },
+      "WizardUi" : {
+        "label" : "ເລືອກສ່ວນການຕັ້ງຄ່າ"
+      },
+      "adminUserSetupSection" : {
+        "label" : "ຕັ້ງຄ່າບັນຊີຜູ້ບໍລິຫານ & ອື່ນໆ",
+        "description" : "ຈຳເປັນຕ້ອງມີຢ່າງໜ້ອຍບັນຊີບໍລິຫານເພື່ອໃຫ້ການຄຸ້ມຄອງ Gebo.ai ແມ່ນຖືກຕ້ອງ, ເພີ່ມຜູ້ໃຊ້ອື່ນໆຖ້າຈຳເປັນ"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "ໄດເລັກທີ່ທຳວຽກ Gebo.ai",
+        "description" : "ກຳນົດໄດເລັກທຳວຽກ, ຊຶ່ງຈະເປັນໂຟລເດີທີ່ເກັບການຕັ້ງຄ່າແລະໄຟລ໌ວຽກທັງໝົດ. ແນະນຳໃຫ້ສຳຮອງຂໍ້ມູນເປັນປະຈຳ."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "ການຕັ້ງຄ່າຖານຂໍ້ມູນແບບເວກເຕີ",
+        "description" : "ຈຳເປັນຕ້ອງກຳນົດຖານຂໍ້ມູນແບບເວກເຕີເພື່ອໃຫ້ Gebo.ai ໃຫ້ບໍລິການໃນເວລາຄົ້ນຫາ, ທ່ານສາມາດເລືອກຖານຂໍ້ມູນທ້ອງຖິ່ນ, Qdrant ຫຼື Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single signon, ການຢືນຢັນຕົວຕົນ Oauth2",
+        "description" : "Oauth2 Single signon ແລະການຕັ້ງຄ່າ Oauth2 clients"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "ຕັ້ງຄ່າ large language models",
+        "description" : "ຕັ້ງຄ່າ llms ຫຼາຍອັນ ດ້ວຍລະບົບ backend ເຄົາ cloud ຫຼືທ້ອງຖິ່ນ/ລານ, ຢ່າງໜ້ອຍຕ້ອງຕັ້ງຄ່າ chat model ແລະ embedding model ເພື່ອໃຫ້ software ທຳງານປົກກະຕິ."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "ຕັ້ງຄ່າ graph rag/ການສົກຄ້າຄວາມຮູ້",
+        "description" : "ຕັ້ງຄ່າ subsystems graph rag ແລະການສົກຄ້າຄວາມຮູ້"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "ຕັ້ງຄ່າທາງເຂົ້າໄປລະບົບແຟ້ມຮ່ວມກັນ",
+        "description" : "ກຳນົດທາງເຂົ້າໄປແຟ້ມຮ່ວມກັນ ຫຼາຍໆ ສຳລັບບໍລິການ retrieve augmented generation ໃນຄລັງຄວາມຮູ້"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "ການເຊື່ອມຕໍ່ Atlassian Confluence",
+        "description" : "ຕັ້ງຄ່າ Gebo.ai ເພື່ອເຂົ້າຫາ Atlassian Confluence ຂອງທ່ານໃນ cloud ຫຼືຕິດຕັ້ງໃນບ້ານ"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "ການເຊື່ອມຕໍ່ Atlassian Jira",
+        "description" : "ຕັ້ງຄ່າ Gebo.ai ເພື່ອເຂົ້າຫາ Atlassian Jira cloud ຂອງທ່ານ"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "ການເຊື່ອມຕໍ່ Microsoft Sharepoint",
+        "description" : "ຕັ້ງຄ່າ Gebo.ai ເພື່ອເຂົ້າຫາ Microsoft Sharepoint ຂອງທ່ານໃນ cloud ຫຼືຕິດຕັ້ງໃນບ້ານ"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "ຕັ້ງຄ່າຄລັງຄວາມຮູ້ຢ່າງໜ້ອຍໜຶ່ງ",
+        "description" : "ຕັ້ງຄ່າຄລັງຄວາມຮູ້ຢ່າງໜ້ອຍໜຶ່ງເພື່ອໃຫ້ຜູ້ໃຊ້ຂອງທ່ານໄດ້ປະສົບການການໃຊ້ບໍລິການ retrieve augmented generations ຂອງ Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "ຕັ້ງຄ່າໂປຣໄຟລ໌ສົນທະນາ \"R.A.G.\" ຢ່າງໜ້ອຍໜຶ່ງ",
+        "description" : "ຕັ້ງຄ່າໂປຣໄຟລ໌ສົນທະນາ retrieve augmented ຢ່າງໜ້ອຍໜຶ່ງສຳລັບຜູ້ໃຊ້ຂອງທ່ານຈາກຄລັງຄວາມຮູ້ທີ່ຕັ້ງຄ່າ"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າແລະຈັດການລະບົບ Atlassian Confluence ຂອງບໍລິສັດ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ປະເພດລະບົບ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "ລະບົບ Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "ລະບົບ Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      },
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າແລະຈັດການລະບົບ Atlassian Jira ຂອງບໍລິສັດ"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ປະເພດລະບົບ"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      },
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າແລະຈັດການລະບົບ Microsoft Sharepoint ຂອງບໍລິສັດ"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ປະເພດລະບົບ"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "ລະບົບ Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "ປ້ອນ api-key ທີ່ມີຫຼວງຄະແນນເວລານີ້. ຖ້າເລືອກ OpenAI ທ່ານຕ້ອງເພີ່ມຄະແນນ (10-30$ ພຽງພໍ) ໃສ່ແຜນ API ຂອງທ່ານ, ບໍ່ສະນັ້ນຈະບໍ່ສາມາດໃຊ້ llms ໃນແອັບນີ້ໄດ້."
+      },
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າການເຂົ້າເຖິງ llms ຂອງ Gebo.ai ດ້ວຍ api key ຂອງທ່ານ"
+      },
+      "provider" : {
+        "label" : "ຜູ້ສະໜອງ large language model",
+        "help" : "ເລືອກຜູ້ສະໜອງລະຫວ່າງ OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "ຜູ້ໃຊ້",
+        "help" : "ປ້ອນຜູ້ໃຊ້ທີ່ກ່ຽວຂ້ອງກັບ apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "ຕັ້ງຄ່າ"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "api key ຂອງຜູ້ສະໜອງ LLMS ທີ່ຈະນຳໃຊ້"
+      },
+      "ProviderHeader" : {
+        "label" : "ຜູ້ໃຫ້ບໍລິການ"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      },
+      "ModelHeader" : {
+        "label" : "ໂມເດວ"
+      },
+      "ModelTypeHeader" : {
+        "label" : "ປະເພດໂມເດວ"
+      },
+      "DefaultModelHeader" : {
+        "label" : "ໂມເດວຄ່າເລີ່ມຕົ້ນ"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "ສ້າງການຕັ້ງຄ່າ graph rag"
+      },
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າ Graph Rag & ການສົກຄ້າຄວາມຮູ້ເລີ່ມຕົ້ນ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "ໂຄງການ"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "ເພີ່ມຄລັງຄວາມຮູ້"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "ຄລັງຄວາມຮູ້"
+      },
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າຄລັງຄວາມຮູ້ & ເນື້ອຫາ"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "ແຫຼ່ງເນື້ອຫາ"
+      },
+      "PublishedHeader" : {
+        "label" : "ເຜີຍແຜ່"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "ຈຳນວນເອກະສານ"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "ເພີ່ມໂຄງການ/ລາຍການ",
+        "help" : "ສ້າງໂຄງການໃໝ່"
+      },
+      "Button1" : {
+        "help" : "ເປີດຄລັງຄວາມຮູ້"
+      },
+      "Button2" : {
+        "help" : "ເປີດແບບຟອມໂຄງການ"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າໂຟລເດີວຽກ Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "ຕັ້ງຄ່າ"
+      },
+      "workDirectory" : {
+        "label" : "ເລືອກໂຟລເດີເປັນທີ່ທຳວຽກ Gebo.ai",
+        "help" : "ເລືອກໂຟລເດີທີ່ server ແມ່ນໃຊ້ເປັນທີ່ທຳວຽກສຳລັບການຕັ້ງຄ່າແລະເນື້ອຫາ."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "ເພີ່ມໂຟລເດີ"
+      },
+      "AddFolderBtn" : {
+        "label" : "ເພີ່ມໂຟລເດີ"
+      },
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      },
+      "MainPanel" : {
+        "label" : "ທາງເຂົ້າໄປແຟ້ມຮ່ວມ server"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "ເສັ້ນທາງສຸດທ້າຍ"
+      },
+      "DeleteHeader" : {
+        "label" : "ລຶບ"
+      },
+      "path" : {
+        "label" : "ເພີ່ມ root folder ຂອງແຟ້ມຮ່ວມ",
+        "help" : "ເລືອກໂຟລເດີທີ່ຫຼັກໃສ່ server ເພື່ອເປັນ root ຂອງແຟ້ມຮ່ວມໃນອົງກອນ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍແຟ້ມ"
+      },
+      "RemovePathBtn" : {
+        "label" : "ລຶບເສັ້ນທາງ"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "ຕັ້ງຄ່າ"
+      },
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າຖານຂໍ້ມູນແບບເວກເຕີ"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "ຊື່ host Qdrant ຫຼື IP address"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "ຕັ້ງຄ່າການເຊື່ອມຕໍ່ Qdrant"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant ພອດການສື່ສານ (6334 ແມ່ນຄ່າມາດຕະຖານ)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Api key ສຳລັບການຢືນຢັນ Qdrant"
+      },
+      "tls" : {
+        "label" : "參數 TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "ຂັ້ນຕອນຕັ້ງຄ່າ Gebo.ai ທີ່ຈຳເປັນສຳເລັດແລ້ວ...",
+        "detail" : "ຂັ້ນຕອນຕັ້ງຄ່າຈຳເປັນສຳເລັດແລ້ວ ແຕ່ຍັງຂາດບາງຂັ້ນຕອນທີ່ຈະເຮັດໃຫ້ອົງກອນຂອງທ່ານໄດ້ປະສົບການໃນ software ນີ້ຢ່າງເຕັມທີ່"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "ການຕັ້ງຄ່າ Gebo.ai ຂາດຂັ້ນຕອນທີ່ຈຳເປັນ",
+        "detail" : "ກະລຸນາກວດສອບຂັ້ນຕອນສີແດງໃນການຕັ້ງຄ່າ"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "ການຕັ້ງຄ່າ Gebo.ai ສຳເລັດ!"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "ລະຫັດ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂອງລະຫັດ OAUTH2 Authentication/Integration (registrationId)."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂໍ້ມູນ OAUTH2 Authentication/Integration."
+      },
+      "configurationType" : {
+        "label" : "ເປົ້າໝາຍການຕັ້ງຄ່າ",
+        "help" : "ເລືອກວ່າການຕັ້ງຄ່ານີ້ຈະນຳໃຊ້ສຳລັບ Authenticate ໃນ Gebo.ai ຫຼືເພື່ອໃຫ້ Gebo.ai ເຊື່ອມຕໍ່ຫາລະບົບອື່ນ."
+      },
+      "authProvider" : {
+        "label" : "ຜູ້ໃຫ້ບໍລິການ",
+        "help" : "ໃສ່ຜູ້ໃຫ້ບໍລິການ OAUTH2 Authentication"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "ໃສ່ URL ຂອງ OAUTH2 issuer ຂອງຜູ້ໃຫ້ບໍລິການ"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "ໃສ່ OAUTH2 Authorization URL ຂອງຜູ້ໃຫ້ບໍລິການ"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "ໃສ່ OAUTH2 Jwk Set url ຂອງຜູ້ໃຫ້ບໍລິການ"
+      },
+      "userInfoUri" : {
+        "label" : "User info URL",
+        "help" : "ໃສ່ OAUTH2 User info Url URL ຂອງຜູ້ໃຫ້ບໍລິການ"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "ໃສ່ OAUTH2 introspection URL ຂອງຜູ້ໃຫ້ບໍລິການ"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "ໃສ່ OAUTH2 Token URL ຂອງຜູ້ໃຫ້ບໍລິການ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 provider URLS"
+      },
+      "MainPanel" : {
+        "label" : "ເພີ່ມຂໍ້ມູນ OAUTH2 Authentication/Integration ໃໝ່"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "ລະຫັດລູກຄ້າສຳລັບໂປຣໂຕຄໍ Oauth2 (ສາມາດຮັບໄດ້ໃນພື້ນທີ່ຈັດການຊອບແວ 3 ຝ່າຍທີ່ລົງທະບຽນ Oauth2)"
+      },
+      "secret" : {
+        "label" : "Key ລັບ",
+        "help" : "Key ລູກຄ້າສຳລັບໂປຣໂຕຄໍ Oauth2 (ສາມາດຮັບໄດ້ໃນພື້ນທີ່ຈັດການຊອບແວ 3 ຝ່າຍທີ່ລົງທະບຽນ Oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "ສ້າງການຕັ້ງຄ່າລະບົບ confluence"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂອງລະບົບ confluence."
+      },
+      "CreateBtn" : {
+        "label" : "ສ້າງ"
+      },
+      "username" : {
+        "label" : "Confluence username",
+        "help" : "Confluence user name"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence version",
+        "help" : "Confluence version"
+      },
+      "baseUri" : {
+        "label" : "ທີ່ຢູ່ອິນເຕີເນັດພື້ນຖານ",
+        "help" : "Url ຂອງທີ່ຢູ່ລະບົບ confluence ສຳລັບການຕິດຕັ້ງໃນອົງກອນ ຫຼື url ພື້ນຖານຂອງອົງກອນສຳລັບ confluence cloud system"
+      },
+      "password" : {
+        "label" : "Confluence password",
+        "help" : "Confluence password"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD apikey ທີ່ໄດ້ຮັບຈາກຫຼັງບ້ານ confluence, ນີ້ໃຫ້ໃສ່ \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ເຜີຍແຜ່!",
+        "help" : "ບັນທຶກ ແລະໃຫ້ເນື້ອຫານີ້ພ້ອມໃຊ້ໃນຄວາມຮູ້ພື້ນຖານສຳລັບ LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ"
+      },
+      "MainPanel" : {
+        "label" : "ແບ່ງປັນເນື້ອຫາ confluence"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກການເຮັດວຽກ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສຳພັນທີ່",
+        "help" : "ລະຫັດສຳພັນທີ່ສ້າງອັດຕະໂນມັດຂອງເນື້ອຫາ."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍເນື້ອຫາທີ່ອັບໂຫລດຂອງ confluence entries."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence system",
+        "help" : "ອ້າງອິງລະບົບ confluence ທີ່ຕັ້ງຄ່າແລ້ວ."
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ອ້າງອິງໂຄງການແມ່."
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ໌ zip",
+        "help" : "ເປີດໃຊ້ງານໄຟລ໌ zip ແລະດຶງເນື້ອຫາຈາກໄຟລ໌"
+      },
+      "tree" : {
+        "label" : "ເລືອກ spaces ຫຼື pages/subpages",
+        "help" : "ເນື້ອຫາຂອງ spaces ແລະ pages ທີ່ແບ່ງປັນ"
+      },
+      "programmedTables" : {
+        "label" : "ຕາຕະລາງກວດກາການອັບເດດເນື້ອຫາ",
+        "help" : "ຕັ້ງຕາຕະລາງການອັບເດດເນື້ອຫາໃໝ່ເພື່ອຮັບປະກັນການເວົ້າຖິງຊັບພະຍາກອນສຳລັບລະບົບ generation"
+      },
+      "catalogingCriteria" : {
+        "label" : "ເກັບກໍາພື້ນທີ່, ໜ້າ ແລະຫນ້າຍ່ອຍ",
+        "help" : "ອະທິບາຍວິທີການຈັດລຳດັບ spaces, pages ແລະ subpages ໃນເນື້ອຫາ confluence ທີ່ແບ່ງປັນກັບ Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າທົ່ວໄປ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "MainPanel" : {
+        "label" : "ກຳລັງແກ້ໄຂລະບົບ confluence"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "baseUri" : {
+        "label" : "ທີ່ຢູ່ອິນເຕີເນັດພື້ນຖານ",
+        "help" : "Url ຂອງທີ່ຢູ່ລະບົບ confluence ພື້ນຖານ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສຳພັນທີ່",
+        "help" : "ລະຫັດສຳພັນທີ່ສ້າງອັດຕະໂນມັດຂອງລະບົບ confluence."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂອງລະບົບ confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence version",
+        "help" : "Confluence version"
+      },
+      "secretCode" : {
+        "label" : "ຕົວຕົນທີ່ໃຊ້ງານ",
+        "help" : "ເລືອກ ຫຼື ສ້າງຕົວຕົນເພື່ອເຂົ້າເຖິງລະບົບ confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "ກຸ່ມໃໝ່"
+      },
+      "NewUserBtn" : {
+        "label" : "ຜູ້ໃຊ້ໃໝ່"
+      },
+      "UsersListPanel" : {
+        "label" : "ລາຍຊື່ຜູ້ໃຊ້"
+      },
+      "GroupsListPanel" : {
+        "label" : "ລາຍຊື່ກຸ່ມ"
+      },
+      "SournameHeader" : {
+        "label" : "ນາມສະກຸນ"
+      },
+      "UsernameHeader" : {
+        "label" : "ຊື່ຜູ້ໃຊ້"
+      },
+      "RolesHeader" : {
+        "label" : "ສິດທິ"
+      },
+      "NameHeader" : {
+        "label" : "ຊື່"
+      },
+      "EditBtn" : {
+        "label" : "ແກ້ໄຂ"
+      },
+      "DisabledHeader" : {
+        "label" : "ປິດການໃຊ້ງານ"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "UserIds" : {
+        "placeholder" : "ເລືອກຜູ້ໃຊ້"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂກຸ່ມຜູ້ໃຊ້"
+      },
+      "description" : {
+        "label" : "ລາຍລະອຽດ",
+        "help" : "ໃສ່ລາຍລະອຽດຂອງກຸ່ມຜູ້ໃຊ້"
+      },
+      "code" : {
+        "label" : "ລະຫັດພິເສດ",
+        "help" : "ໃສ່ລະຫັດຂອງກຸ່ມຜູ້ໃຊ້"
+      },
+      "userIds" : {
+        "label" : "ລາຍຊື່ຜູ້ໃຊ້",
+        "help" : "ເລືອກຜູ້ໃຊ້ທີ່ເຂົ້າຮ່ວມກຸ່ມ"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ສ້າງ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂອງລະບົບ jira."
+      },
+      "MainPanel" : {
+        "label" : "ສ້າງການຕັ້ງຄ່າລະບົບ jira"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "username" : {
+        "label" : "ຊື່ຜູ້ໃຊ້ jira",
+        "help" : "ຊື່ຜູ້ໃຊ້ jira"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira CLOUD apikey ທີ່ໄດ້ຮັບຈາກ jira backoffice, ຢູ່ນີ້ \"API Token for your Atlassian Account\" ຕ້ອງໃສ່."
+      },
+      "baseUri" : {
+        "label" : "ທີ່ຢູ່ອິນເຕີເນັດພື້ນຖານ",
+        "help" : "Url ຂອງທີ່ຢູ່ລະບົບ jira ພື້ນຖານສຳລັບການຕິດຕັ້ງ onpremise ຫຼື url ພື້ນຖານຂອງອົງກອນທ່ານສຳລັບ jira cloud system"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "PublishBtn" : {
+        "label" : "ເຜີຍແຜ່!",
+        "help" : "ບັນທຶກແລະໃຫ້ເນື້ອຫານີ້ເຂົ້າຫາແຫຼ່ງຄວາມຮູ້ໄດ້ແກ່ LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກ"
+      },
+      "MainPanel" : {
+        "label" : "ແບ່ງປັນເນື້ອຫາ jira"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ສ້າງຂຶ້ນແບບອັດຕະໂນມັດຂອງເນື້ອຫາ."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "ອ້າງອິງລະບົບ jira ທີ່ໄດ້ຕິດຕັ້ງໄວ້ແລ້ວ."
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ອ້າງອີງໂຄງການຫຼັກ."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍເນື້ອຫາທີ່ນຳເຂົ້າຂອງ jira entries."
+      },
+      "programmedTables" : {
+        "label" : "ຕາຕະລາງເຊັກເວລາອັບເດດເນື້ອຫາ",
+        "help" : "ຕັ້ງຕິດຕັ້ງການຕວດສອບເນື້ອຫາທີ່ປ່ຽນແປງເພື່ອໃຫ້ລະບົບ retrieve augmented generation ອັບເດດຕະຫຼອດເວລາ"
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ໌ zip",
+        "help" : "ເປີດໄຟລ໌ zip ແລະສະກັດເນື້ອຫາ"
+      },
+      "tree" : {
+        "label" : "ສະເລືອກເປັນພື້ນທີ່ ຫຼື ຫນ້າ/ຫນ້າຍ່ອຍ",
+        "help" : "ໂຄງສ້າງໂຄງການ jira ທີ່ແບ່ງປັນແລະບັດຫົວງານ"
+      },
+      "catalogingCriteria" : {
+        "label" : "ເກນການຈັດກຸ່ມພື້ນທີ່ ໜ້າ ແລະ ໜ້າຍ່ອຍ",
+        "help" : "ກະລຸນາອະທິບາຍວ່າເຮັດແນວໃດກັບເກນການຈັດກຸ່ມພື້ນທີ່ ໜ້າ ແລະ ຫນ້າຍ່ອຍໃນເນື້ອຫາ jira ທີ່ແບ່ງປັນກັບ Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂອງລະບົບ jira."
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂລະບົບ jira"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "baseUri" : {
+        "label" : "ທີ່ຢູ່ອິນເຕີເນັດພື້ນຖານ",
+        "help" : "Url ຂອງທີ່ຢູ່ລະບົບ jira ພື້ນຖານ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ສ້າງຂຶ້ນແບບອັດຕະໂນມັດຂອງລະບົບ jira."
+      },
+      "secretCode" : {
+        "label" : "ບັດປະຈຳຕົວທີ່ໃຊ້",
+        "help" : "ເລືອກ ຫຼື ສ້າງບັດປະຈຳຕົວເພື່ອເຂົ້າຫາລະບົບ jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍຂອງລະບົບ SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "ເວີຊັນ Sharepoint",
+        "help" : "ເວີຊັນ sharepoint"
+      },
+      "secret" : {
+        "label" : "ລະຫັດລັບ",
+        "help" : "Oauth2 client secret ສຳລັບແອັບນີ້ທີ່ລົງທະບຽນໃນຜະລິດຕະພັນ microsoft \"entra\" (ເອົາມາຈາກ microsoft cloud admin console)"
+      },
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "Oauth2 client identifier ສຳລັບແອັບນີ້ທີ່ລົງທະບຽນໃນຜະລິດຕະພັນ microsoft \"entra\" (ເອົາມາຈາກ microsoft cloud admin console)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID",
+        "help" : "Oauth2 tenant identifier ສຳລັບອົງກອນຂອງທ່ານໃນຜະລິດຕະພັນ microsoft \"entra\" (ເອົາມາຈາກ microsoft cloud admin console)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "ຂໍ້ມູນການລົງທະບຽນ Microsof oauth2 app ສຳລັບ Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "ສ້າງ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າລະບົບ SharePoint/OneDrive ໃໝ່"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "PublishBtn" : {
+        "label" : "ເຜີຍແຜ່!",
+        "help" : "ບັນທຶກແລະສົ່ງໃຫ້ເນື້ອຫານີ້ເຂົ້າຖານຄວາມຮູ້ໃຫ້ LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ"
+      },
+      "MainPanel" : {
+        "label" : "ແບ່ງປັນເນື້ອຫາ SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສຳຄັນ",
+        "help" : "ລະຫັດພິເສດທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບເນື້ອຫານີ້."
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ອ້າງອີງໂຄງການແມ່."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍແຫຼ່ງຂໍ້ມູນ SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint system",
+        "help" : "ອ້າງອີງລະບົບ SharePoint/OneDrive ທີ່ຕັ້ງຄ່າຮຽບຮ້ອຍແລ້ວ."
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ໌ zip",
+        "help" : "ເປີດໃຊ້ງານເພື່ອເປີດໄຟລ໌ zip ແລະດຶງເນື້ອຫາອອກ"
+      },
+      "tree" : {
+        "label" : "ເລືອກເວັບໄຊທ໌/ໜ້າ/ໜ້າຍ່ອຍ Sharepoint ຫຼື OneDrive drives/folder/files",
+        "help" : "ແບ່ງປັນເນື້ອຫາ sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "ກຳນົດການກວດເຊັກການອັບເດດເນື້ອຫາ",
+        "help" : "ຕັ້ງການກຳນົດໄວ້ເພື່ອອັບເດດລະບົບດຶງຂໍ້ມູນໃຫ້ທັນສະໄໝ"
+      },
+      "catalogingCriteria" : {
+        "label" : "ເກณฑ์ການຈັດລຳດັບພື້ນທີ່ ໜ້າ ແລະ ໜ້າຍ່ອຍ",
+        "help" : "ອະທິບາຍວິທີການຈັດລຳດັບພື້ນທີ່ ໜ້າ ແລະ ໜ້າຍ່ອຍຂອງເນື້ອຫາ sharepoint ທີ່ແບ່ງປັນໃຫ້ Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂລະບົບ sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າທົ່ວໄປ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "secretCode" : {
+        "label" : "ຕົວຕົນທີ່ໃຊ້",
+        "help" : "ເລືອກຫຼືສ້າງຕົວຕົນເພື່ອເຂົ້າເຖິງລະບົບ sharepoint"
+      },
+      "code" : {
+        "label" : "ລະຫັດສຳຄັນ",
+        "help" : "ລະຫັດພິເສດທີ່ສ້າງອັດຕະໂນມັດຂອງລະບົບ sharepoint."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍຂອງລະບົບ sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "ເວີຊັນ Sharepoint",
+        "help" : "ເວີຊັນ sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "ລຶບ"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "ບັນທຶກ"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "ການຕັ້ງຄ່າຂໍ້ມູນ/ເນື້ອໃນທົ່ວໄປ"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "ການຕັ້ງຄ່າ LLms"
+      },
+      "code" : {
+        "label" : "ລະຫັດສຳຄັນ",
+        "help" : "ລະຫັດສຳຄັນທີ່ຖືກສ້າງອັດຕະໂນມັດຂອງຂັ້ນຕອນດຶງຂໍ້ມູນກາຟຄວາມຮູ້"
+      },
+      "MainPanel" : {
+        "label" : "ການຕັ້ງຄ່າ Graphrag/ການດຶງຄວາມຮູ້"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າຂອງຂັ້ນຕອນດຶງຂໍ້ມູນກາຟຄວາມຮູ້ນີ້"
+      },
+      "extractionPrompt" : {
+        "label" : "ແນະນຳສຳລັບການດຶງຂໍ້ມູນ",
+        "help" : "ແນະນຳ large language model ສຳລັບການດຶງຂໍ້ມູນວັດຖຸ/ເຫດການ/ຄວາມສຳພັນ ແລະຊື່ທີ່ກ່ຽວຂ້ອງ"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM ທີ່ນຳໃຊ້ສຳລັບການດຶງຂໍ້ມູນ",
+        "help" : "ລະບຸ large language model ທີ່ນຳໃຊ້ສຳລັບການດຶງຄວາມຮູ້, ຈະໃຊ້ຄ່າເລີ່ມຕົ້ນຖ້າບໍ່ເລືອກ"
+      },
+      "graphRagAllSources" : {
+        "label" : "ນຳໃຊ້ graph rag ກັບແຫຼ່ງຂໍ້ມູນທັງຫມົດ",
+        "help" : "ຖ້າເປັນຈິງ, ຖານຄວາມຮູ້/ໂຄງການ/ແຫຼ່ງຂໍ້ມູນທັງຫມົດຈະຖືກປະມວນຜົນສຳລັບການດຶງຄວາມຮູ້, ບໍ່ຊັ້ນນັ້ນຈະມີພຽງແຕ່ທີ່ຕັ້ງຄ່າເປັນພິເສດເທົ່ານັ້ນ"
+      },
+      "defaultModel" : {
+        "label" : "large language model ເລີ່ມຕົ້ນ",
+        "help" : "ຈະນຳໃຊ້ large language model ເລີ່ມຕົ້ນ ສຳລັບການດຶງຄວາມຮູ້"
+      },
+      "processEveryDocument" : {
+        "label" : "ນຳໃຊ້ graph rag ກັບເອກະສານທັງຫມົດ",
+        "help" : "ອັນທີ່ຈະນຳ graph rag ປະມວນຜົນໃສ່ເອກະສານທຸກອັນ ຊ່ວຍໃຫ້ລະອຽດການວິເຄາະທີ່ລະບົບສາມາດເຮັດໄດ້ ແຕ່ຈະເພີ່ມຄ່າໃຊ້ຈ່າຍແລະເວລາທີ່ຕ້ອງໃຊ້ໃນການປະມວນຜົນເອກະສານ"
+      },
+      "contentSelectionFilter" : {
+        "label" : "ເງືອນໄຂການເລືອກໄຟລ໌ສຳລັບ Graphrag",
+        "help" : "ແກ້ໄຂເງືອນໄຂໄຟລ໌ທີ່ຈະສົ່ງເຂົ້າສາຍການດຶງຂໍ້ມູນ Graphrag, ເລືອກຢ່າງນ້ອຍຊື່ໄຟລ໌ ແລະເງືອນໄຂ ຫຼືປະເພດໄຟລ໌ ຫຼືຂະໜາດໄຟລ໌ (byte) ສູງສຸດ ຫຼືວັນທີ່ແກ້ໄຂຫຼ້າສຸດ (ມື້) "
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "ເລືອກປະເພດໄຟລ໌"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ເງື່ອນໄຂການກອງຊື່ໄຟລ໌"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "ແກ້ໄຂລ້າສຸດ, ມື້ຜ່ານມາ"
+      },
+      "nameFilter" : {
+        "placeholder" : "ຊື່ໄຟລ໌"
+      },
+      "maxFileSize" : {
+        "placeholder" : "ຂະໜາດໄຟລ໌ສູງສຸດ (Bytes)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂຖານຄວາມຮູ້"
+      },
+      "AccessSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າການເຂົ້າເຖິງຖານຄວາມຮູ້"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ສ້າງອັດຕະໂນມັດຂອງຖານຄວາມຮູ້."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍຂອງຖານຄວາມຮູ້."
+      },
+      "embeddingModelReferences" : {
+        "label" : "ໂມເດວຼການຝັງທີ່ໃຊ້ (ປະຫວ່າງໄວ້ຈະໃຊ້ຄ່າເລີ່ມຕົ້ນຂອງລະບົບ)",
+        "help" : "ໂມເດວຼຝັງສໍາລັບຖານຄວາມຮູ້, ປະຫວ່າງໄວ້ຈະໃຊ້ຄ່າເລີ່ມຕົ້ນ."
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "IndexBtn" : {
+        "label" : "ດັດສະນີ",
+        "help" : "ເຮັດດັດສະນີເນື້ອຫາໃໝ່"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂໂຄງການ ຫຼື ລາຍການ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ສ້າງອັດຕະໂນມັດຂອງໂຄງການ."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍຂອງໂຄງການ."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "ຖານຄວາມຮູ້",
+        "help" : "ຖານຄວາມຮູ້."
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "IndexBtn" : {
+        "label" : "ດັດສະນີ",
+        "help" : "ເຮັດດັດສະນີເນື້ອຫາໃໝ່"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ ເພີ່ມລາຍການ/ໂຄງການ",
+        "help" : "ເພີ່ມໃໝ່..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "ທຸກຄົນໃຊ້ງານ",
+        "help" : "ທຸກຄົນສາມາດໃຊ້ໄດ້"
+      },
+      "accessibleGroups" : {
+        "label" : "ລາຍຊື່ກຸ່ມ",
+        "help" : "ເລືອກກຸ່ມທີ່ອະນຸຍາດ"
+      },
+      "accessibleUsers" : {
+        "label" : "ລາຍຊື່ຜູ້ໃຊ້",
+        "help" : "ເລືອກຜູ້ໃຊ້ທີ່ອະນຸຍາດ"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "ແຜງຄວບຄຸມ"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs ສໍາລັບສົນທະນາ & ຝັງຕົວ"
+      },
+      "RagChatConfigTab" : {
+        "label" : "ໂປຣໄຟລ໌ Rag chat/ແບບແນະນໍາ Model"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "ຖານຄວາມຮູ້ & ໂຄງການ"
+      },
+      "UsersGroupTab" : {
+        "label" : "ຜູ້ໃຊ້ ແລະ ກຸ່ມ"
+      },
+      "GeboModulesTab" : {
+        "label" : "ການຕັ້ງຄ່າ Gebo.ai modules"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກ"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ລາຍລະອຽດ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ກຳນົດຄ່າ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ກຳນົດຄ່າ"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "ຕັ້ງຄ່າຄຳແນະນຳໃໝ່"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "ໂປຣໄຟລ໌ສົນທະນາໃໝ່"
+      },
+      "MainPanel" : {
+        "label" : "ໂປຣໄຟລ໌ສົນທະນາການສ້າງພາຍໃນການສືບຄົ້ນ"
+      },
+      "PromptsPanel" : {
+        "label" : "ຄັງຄຳແນະນຳ & ຄຳແນະນຳເລີ່ມຕົ້ນ"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "ຖານຄວາມຮູ້"
+      },
+      "DescriptionHeader" : {
+        "label" : "ລາຍລະອຽດ"
+      },
+      "ConfigureBtn1" : {
+        "label" : "ຕັ້ງຄ່າ"
+      },
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "ຖານຄວາມຮູ້ໃຫມ່"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "ການຕັ້ງຄ່າແບບຮູບ embedding ໃໝ່"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "ການຕັ້ງຄ່າແບບຮູບ chat ໃໝ່"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄໍາບັນຍາຍ"
+      },
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      },
+      "ModelHeader" : {
+        "label" : "ແບບຮູບ "
+      },
+      "ModelProviderHeader" : {
+        "label" : "ຜູ້ສະຫນອງແບບຮູບ"
+      },
+      "ConfigureBtn" : {
+        "label" : "ກຳນົດຄ່າ"
+      },
+      "CodeHeader2" : {
+        "label" : "ລະຫັດ"
+      },
+      "DescriptionHeader2" : {
+        "label" : "ຄໍາບັນຍາຍ"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "ຜູ້ສະຫນອງແບບຮູບ"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ກຳນົດຄ່າ"
+      },
+      "ModelHeader2" : {
+        "label" : "ແບບຮູບ "
+      },
+      "ChatmodelsZone" : {
+        "label" : "ແບບຮູບ chat ທີ່ຖືກຕັ້ງຄ່າແລ້ວ"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "ແບບຮູບ embedding ທີ່ຖືກຕັ້ງຄ່າແລ້ວ"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "ທົດສອບແບບຈຳລອງ"
+      },
+      "TestChatBtn" : {
+        "label" : "ທົດສອບສົນທະນາ"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "ເລືອກ OpenAI token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI chat model choice",
+        "help" : "ເລືອກ OpenAI chat model ເພື່ອເຮັດວຽກ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າຂັ້ນສູງ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ OpenAI chat model"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ OpenAI embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "ເລືອກ OpenAI token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding model choice",
+        "help" : "ເລືອກ OpenAI embedding model ເພື່ອເຮັດວຽກ."
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນ embedding model ຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນ embedding model ຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "baseUrl" : {
+        "label" : "ທີ່ຢູ່ພື້ນຖານຂອງ ຟ້າວິຊັນ Ollama",
+        "help" : "ທີ່ຢູ່ພື້ນຖານ (ເຊັ່ນ http://servername:234/) ທີ່ server ຂອງ Ollama ທ້ອງຖິ່ນ ຫຼື LAN ຕອບກັບ."
+      },
+      "choosedModel" : {
+        "label" : "Ollama chat model choice",
+        "help" : "ເລືອກ Ollama chat model ເພື່ອເຮັດວຽກ.",
+        "placeholder" : "ເລືອກແບບ"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "ເລືອກ Ollama token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້ (ທາງເລືອກ)"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Ollama ທ້ອງຖິ່ນ (ຫຼື LAN) chat model"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "ເລືອກ Anthropic token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic chat model choice",
+        "help" : "ເລືອກ Anthropic chat model ເພື່ອເຮັດວຽກ.",
+        "placeholder" : "ເລືອກແບບ"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າຂັ້ນສູງ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Anthropic chat model"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "ເລືອກ MistralAI token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI chat model choice",
+        "help" : "ເລືອກ MistralAI chat model ເພື່ອເຮັດວຽກ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າຂັ້ນສູງ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ MistralAI chat model"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI chat model choice",
+        "help" : "ເລືອກ Google Vertex AI chat model ເພື່ອເຮັດວຽກ."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "ເລືອກ Google Vertex AI token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "TabGeneralInfos" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "ຕັ້ງຄ່າຂັ້ນສູງ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Google Vertex AI chat model"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "ເລືອກ Deepseek token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek chat model choice",
+        "help" : "ເລືອກ Deepseek chat model ເພື່ອເຮັດວຽກ.",
+        "placeholder" : "ເລືອກແບບ"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າຂັ້ນສູງ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Deepseek chat model"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າແບບຈຳລອງ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າແບບພູມິສາດ"
+      },
+      "baseUrl" : {
+        "label" : "ທີ່ຢູ່ພື້ນຖານຂອງ Chat model API Server",
+        "help" : "ທີ່ຢູ່ພື້ນຖານຂອງ Chat model."
+      },
+      "apiSecretCode" : {
+        "label" : "Chat model API token",
+        "help" : "ເລືອກ Chat model API token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້ (ທາງເລືອກ)"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນແບບສົນທະນາຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນແບບສົນທະນາຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "choosedModel" : {
+        "label" : "Chat model chat model choice",
+        "help" : "ເລືອກ Chat model chat model ເພື່ອເຮັດວຽກ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "TitleFragment" : {
+        "label" : "ແກ້ໄຂຜູ້ໃຫ້ບໍລິການ chat model:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "ຕັ້ງຄ່າຂັ້ນສູງ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າເຂົ້າເຖິງແບບ"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Ollama ທ້ອງຖິ່ນ (ຫຼື LAN) embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "ເລືອກ Ollama token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding model choice",
+        "help" : "ເລືອກ Ollama embedding model ເພື່ອເຮັດວຽກ."
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນ embedding model ຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນ embedding model ຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "baseUrl" : {
+        "label" : "ທີ່ຢູ່ພື້ນຖານຂອງ ຟ້າວິຊັນ Ollama",
+        "help" : "ທີ່ຢູ່ພື້ນຖານ (ເຊັ່ນ http://servername:234/) ທີ່ server ຂອງ Ollama ທ້ອງຖິ່ນ ຫຼື LAN ຕອບກັບ."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ MistralAI embedding model"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding model choice",
+        "help" : "ເລືອກ MistralAI embedding model ເພື່ອເຮັດວຽກ."
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນ embedding model ຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນ embedding model ຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "ເລືອກ MistralAI token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການຕັ້ງຄ່າ Google Vertex AI embedding model"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding model choice",
+        "help" : "ເລືອກ Google Vertex AI embedding model ເພື່ອເຮັດວຽກ."
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນ embedding model ຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນ embedding model ຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າ embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "ເລືອກ Google Vertex AI token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "TitleFragment" : {
+        "label" : "ແກ້ໄຂຜູ້ໃຫ້ບໍລິການ embedding model:"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າ Embedding model"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບການຕັ້ງຄ່າ Embedding model"
+      },
+      "choosedModel" : {
+        "label" : "Embedding model embedding model choice",
+        "help" : "ເລືອກ Embedding model embedding model ເພື່ອເຮັດວຽກ."
+      },
+      "baseUrl" : {
+        "label" : "ທີ່ຢູ່ API Server Embedding model",
+        "help" : "ທີ່ຢູ່ພື້ນຖານຂອງ Embedding model server."
+      },
+      "defaultModel" : {
+        "label" : "ກຳນົດເປັນ embedding model ຕັ້ງຕົ້ນ",
+        "help" : "ຖ້າເປັນຈິງ ຈະນຳໃຊ້ເປັນ embedding model ຕັ້ງຕົ້ນໃນກໍລະນີທີ່ບໍ່ມີການລະບຸ"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding model API token",
+        "help" : "ເລືອກ Embedding model API token ທີ່ຈະນຳໃຊ້ກັບແບບນີ້"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "ຂໍ້ມູນການຕັ້ງຄ່າສົນທະນາ"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ລຶບການສົນທະນານີ້"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "ປ່ຽນຊື່ການສົນທະນາ"
+      },
+      "QueryControl" : {
+        "placeholder" : "ຂຽນຂໍ້ຄວາມສຳລັບບ໋ອດສົນທະນາ"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍການສົນທະນາ",
+        "help" : "ໃສ່ຄໍາອະທິບາຍສໍາລັບການສົນທະນານີ້."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "ແບບຈຳລອງທີ່ນໍາໃຊ້",
+        "help" : "ລະຫັດແບບຈຳລອງ"
+      },
+      "providerId" : {
+        "label" : "ຜູ້ໃຫ້ບໍລິການແບບຈຳລອງສົນທະນາ",
+        "help" : "ຜູ້ຂັບເຄື່ອນ LLms"
+      },
+      "functions" : {
+        "label" : "ຟັງຊັນທີ່ເອີ້ນໄດ້ໃນແບບຈຳລອງສົນທະນາ",
+        "help" : "ລາຍການຟັງຊັນທີ່ມີໃຫ້ໃນແບບຈຳລອງສົນທະນາ"
+      },
+      "NameCol" : {
+        "label" : "ຊື່"
+      },
+      "DescriptionCol" : {
+        "label" : "ຄໍາອະທິບາຍ"
+      },
+      "kbases" : {
+        "label" : "ຄວາມຮູ້ທີ່ມີຢູ່",
+        "help" : "ລາຍການຄວາມຮູ້ທີ່ນໍາໃຊ້ໃນສົນທະນາ RAG ນີ້"
+      },
+      "CloseBtn" : {
+        "help" : "ປິດ"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "ບັນທຶກ",
+        "help" : "ເລີ່ມບັນທຶກສຽງ ແລະສົ່ງອອກ"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "ໂຫຼດຂໍ້ມູນໃໝ່"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SelectHeader" : {
+        "label" : "ເລືອກ"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "ວັນແລະເວລາສິ້ນສຸດ"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "ວັນແລະເວລາເລີ່ມ"
+      },
+      "ProcessingHeader" : {
+        "label" : "ກຳລັງປະມວນຜົນ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      },
+      "FinishedHeader" : {
+        "label" : "ສຳເລັດ"
+      },
+      "WithErrorHeader" : {
+        "label" : "ມີຂໍ້ຜິດພາດ"
+      },
+      "LogTableComponent" : {
+        "help" : "ບັນທຶກການນຳເຂົ້າຂອງພື້ນທີ່ແບ່ງປັນໄຟລ໌ລະບົບນີ້"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "ສະຖິຕິການປະມວນຜົນ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "CloseBtn" : {
+        "label" : "ປິດ"
+      },
+      "PublicationLogTab" : {
+        "label" : "ບັນທຶກການຕີພິມ"
+      },
+      "MainPanel" : {
+        "label" : "ບັນທຶກການຕີພິມ"
+      },
+      "actualStatus" : {
+        "label" : "ສະຖານະ",
+        "help" : "ສະຖານະຂອງວຽກ, ກຳລັງເຮັດວຽກ, ສຳເລັດ ຫຼື ສຳເລັດມີຂໍ້ຜິດພາດ."
+      },
+      "publishingSystem" : {
+        "label" : "ການຕັ້ງຄ່າເນື້ອຫາທີ່ຕີພິມ",
+        "help" : "ຂໍ້ມູນເນື້ອຫາທີ່ຕີພິມ"
+      },
+      "startDateTime" : {
+        "label" : "ເວລາແລະວັນເລີ່ມ",
+        "help" : "ເວລາແລະວັນເລີ່ມຂອງວຽກຊິ້ນງານປັບປຸງຂໍ້ມູນ"
+      },
+      "endDateTime" : {
+        "label" : "ເວລາແລະວັນສິ້ນສຸດ",
+        "help" : "ເວລາແລະວັນສິ້ນສຸດຂອງວຽກຊິ້ນງານປັບປຸງຂໍ້ມູນ"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "ບໍ່ໄດ້ປະມວນຜົນສຳເລັດ"
+      },
+      "ProcessedCompletely" : {
+        "label" : "ປະມວນຜົນສຳເລັດ"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "ການ embedding ທຽບກັບຈຳນວນເອກະສານທັງໝົດ"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "ລາຍລະອຽດເພີ່ມເຕີມ"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "ສ້າງຄໍາສັ່ງ"
+      },
+      "PromptWizardBtn" : {
+        "label" : "ຕົວຊ່ວຍສ້າງຄໍາສັ່ງ",
+        "help" : "ໃຊ້ນີ້ເພື່ອໃຫ້ LLM ຊ່ວຍສ້າງຄໍາສັ່ງສໍາລັບວັດຖຸປະສົງຂອງທ່ານ"
+      },
+      "acceptPrompt" : {
+        "label" : "ຍອມຮັບຄໍາສັ່ງ"
+      },
+      "promptWizardUI" : {
+        "label" : "ຕົວຊ່ວຍສ້າງແບບຫນົດຄໍາສັ່ງ"
+      },
+      "cancel" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "response" : {
+        "label" : "ແບບຫນົດຄໍາສັ່ງທີ່ແນະນໍາ",
+        "help" : "ຂໍ້ຄວາມແບບຫນົດທີ່ສ້າງສໍາລັບວັດຖຸປະສົງຂອງທ່ານ (ທ່ານສາມາດປ່ຽນແປງ ຫຼື ແກ້ໄຂໄດ້)"
+      },
+      "modelCode" : {
+        "label" : "ເລືອກແບບຈຳລອງສົນທະນາທີ່ຈະໃຊ້",
+        "help" : "ເລືອກແບບຈຳລອງສົນທະນາທີ່ທ່ານຕ້ອງການໃຫ້ສ້າງແບບຫນົດຄໍາສັ່ງ"
+      },
+      "query" : {
+        "label" : "ຂໍຮູບແບບແບບຫນົດຄໍາສັ່ງ",
+        "help" : "ກະລຸນາລະບຸເປົ້າໝາຍທີ່ AI ສົມທົບການຊ່ວຍຂອງຜູ້ໃຊ້ໃນວິທີການທີ່ຊັດເຈນ"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "ອຸນ​​ຫະ​​ພູມ",
+        "help" : "ອຸນ​​ຫະ​​ພູມທີ່ແບບຈະຕອບກັບ, ຈາກ 0 ຫາ 1 (ຖ້າບໍ່ແນ່ໃຈ ໃຫ້ປ່ອຍວ່າງໄວ້)"
+      },
+      "contextLength" : {
+        "label" : "ຄວາມຍາວບໍ່ຕິດກັນ (tokens)",
+        "help" : "ຈຳນວນຂໍ້ຄວາມທີ່ແບບ AI ສາມາດຄິດເວລາປະມວນຜົນ (ຖ້າບໍ່ຕັ້ງຄ່າຈະໃຊ້ 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "ຄ່າພາລາມິເຕີ TopP, ຈາກ 0 ຫາ 1 (ຖ້າບໍ່ແນ່ໃຈ ໃຫ້ປ່ອຍວ່າງໄວ້)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "ເປີດໃຊ້ຟັງຊັນສຳລັບແບບນີ້",
+        "help" : "ຄວາມສາມາດທີ່ແບບນີ້ສາມາດນຳໃຊ້ໃນລະຫວ່າງການສົນທະນາ"
+      },
+      "defaultModelPrompt" : {
+        "label" : "ຄຳແນະນຳເລີ່ມຕົ້ນຂອງແບບ",
+        "help" : "ແກ້ໄຂຄຳແນະນຳເລີ່ມຕົ້ນສຳລັບແບບສົນທະນາ."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ປ້ອນລາຍລະອຽດຕົວຕົນ."
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະຂອງຕົວຕົນທີ່ສ້າງອັດຕະໂນມັດ."
+      },
+      "secretType" : {
+        "label" : "ປະເພດຕົວຕົນ",
+        "help" : "ເລືອກປະເພດຕົວຕົນທີ່ຈະສ້າງໃຫ້ລະບົບລະດັບໄກ"
+      },
+      "InsertBtn" : {
+        "label" : "ແຊກ"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "ປ້ອນ token."
+      },
+      "user" : {
+        "label" : "ຜູ້ໃຊ້",
+        "help" : "ປ້ອນຜູ້ໃຊ້ທີ່ສະແດງໂດຍ token."
+      },
+      "MainPanel" : {
+        "label" : "ກໍາລັງສ້າງຕົວຕົນ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລົບ"
+      },
+      "username" : {
+        "label" : "ຊື່ຜູ້ໃຊ້",
+        "help" : "ປ້ອນຊື່ຜູ້ໃຊ້."
+      },
+      "password" : {
+        "label" : "ລະຫັດຜ່ານ",
+        "help" : "ປ້ອນລະຫັດຜ່ານ."
+      },
+      "email" : {
+        "label" : "ອີເມວ/ຊື່ຜູ້ໃຊ້",
+        "help" : "ປ້ອນອີເມວ ຫຼື ຊື່ຜູ້ໃຊ້ທີ່ກ່ຽວຂ້ອງກັບ ssh key."
+      },
+      "key" : {
+        "label" : "ຄີລັບ",
+        "help" : "ເປີດໄຟລ໌ private key ແລະ ກົບສໍາເນາລົງໃນຊ່ອງນີ້."
+      },
+      "passphrase" : {
+        "label" : "Key passphrase",
+        "help" : "ປ້ອນລະຫັດຜ່ານ key."
+      },
+      "pub" : {
+        "label" : "ຄີສາທາລະນະ",
+        "help" : "ເປີດໄຟລ໌ public key ແລະ ກົບສໍາເນາລົງໃນຊ່ອງນີ້."
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "ລະຫັດພິເສດ",
+        "help" : "ລະຫັດພິເສດທີ່ສ້າງໂດຍອັດຕະໂນມັດຂອງເນື້ອຫາ."
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ປ້ອນຄໍາອະທິບາຍຂອງເນື້ອຫາທີ່ອັບໂຫຼດຂອງລາຍການເຂົ້າໄຟລ໌ຊີສເຕັມ."
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ອ້າງອີງໂຄງການຫຼັກ."
+      },
+      "upload" : {
+        "label" : "ອັບໂຫຼດເນື້ອຫາ",
+        "help" : "ຄລິກປຸ່ມເລືອກແລະເລືອກໄຟລ໌ zip ຫຼືໄຟລ໌ອື່ນໆ"
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ໌ zip",
+        "help" : "ເປີດໃຫ້ເປີດໄຟລ໌ zip ແລະແຍກເນື້ອຫາອອກ"
+      },
+      "PublishBtn" : {
+        "label" : "ເຜີຍແພ່!",
+        "help" : "ບັນທຶກແລະໃຫ້ເນື້ອຫາເຫຼົ່ານີ້ສາມາດເຂົ້າເຖິງໄດ້ໃນຄວາມຮູ້ພາຍໃນ ໃຫ້ LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂເນື້ອຫາທີ່ອັບໂຫຼດ"
+      },
+      "SettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ຕັ້ງຄ່າລະບົບ build",
+        "help" : "ລາຍຊື່ລະບົບ build/packaging ເພື່ອກວດເບິ່ງຂໍ້ມູນເພີ່ມເຕີມ ແລະຂໍ້ມູນອາທິຟາກເພີ່ມເຕີມ (ເປົາວ່າດື້ນຫາກບໍ່ມີໂຄດຊອບແວ)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "ລາຍການທີ່ເລືອກ"
+      },
+      "ChooseOk" : {
+        "label" : "ຕົກລົງ"
+      },
+      "ChooseCancel" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "EditBtn" : {
+        "help" : "ແກ້ໄຂລາຍການທີ່ເລືອກ"
+      },
+      "ChooseElementsArea" : {
+        "label" : "ເລືອກລາຍການ"
+      },
+      "VFileSystemSelector" : {
+        "label" : "ເລືອກລາຍການ"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "ແກ້ໄຂການນັດໝາຍ"
+      },
+      "ConfirmBtn" : {
+        "label" : "ຢืนຢັນ"
+      },
+      "AddBtn" : {
+        "label" : "+ເພີ່ມ"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "ເຜີຍແຜ່!",
+        "help" : "ບັນທຶກແລະໃຫ້ເນື້ອຫານີ້ສາມາດເຂົ້າເຖິງໃນຖານຄວາມຮູ້ສຳລັບ LLM"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "ການຈັດການຊອດໂຄດ"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂເນື້ອຫາລະບົບໄຟລ໌ທີ່ມີຢູ່"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບເນື້ອຫາທີ່ອັບໂຫຼດໃນລະບົບໄຟລ໌"
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ໌ zip",
+        "help" : "ເປີດໃຊ້ງານການເປີດໄຟລ໌ zip ແລະດຶງເນື້ອຫາ"
+      },
+      "code" : {
+        "label" : "ລະຫັດເພາະເພັງ",
+        "help" : "ລະຫັດສຸດພິເສດທີ່ຖືກສ້າງອັດຕະໂນມັດຂອງເນື້ອຫາ"
+      },
+      "tree" : {
+        "label" : "ໄຟລ໌ ຫຼື ໂຟນເດີທີ່ເລືອກ",
+        "help" : "ໄຟລ໌ຫຼືໂຟນເດີໃນລະບົບໄຟລ໌ທີ່ຖືກແຊຣ໌ຢູ່ເຊີບເວີ"
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ລະຫັດອ້າງອິງໂຄງການຕົ້ນຕໍ"
+      },
+      "programmedTables" : {
+        "label" : "ຕາຕະລາງກວດກາເວລາປັບປຸງເນື້ອຫາ",
+        "help" : "ກຳນົດຕາຕະລາງການຕວງກວດການປ່ຽນແປງເນື້ອຫາເພື່ອໃຫ້ລະບົບ retrieve augmented generation ທັນສະໄໝ"
+      },
+      "catalogingCriteria" : {
+        "label" : "ເກນການຈັດຫມວດໂຟນເດີ",
+        "help" : "ກະລຸນາອະທິບາຍວິທີການຈັດໂຟນເດີໃນບ່ອນທີ່ທ່ານແບ່ງປັນໃຫ້ກັບ Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ຕັ້ງຄ່າລະບົບ build",
+        "help" : "ລາຍຊື່ລະບົບ build/packaging ເພື່ອກວດສອບຂໍ້ມູນ meta ແລະ artifact ເພີ່ມເຕີມ (ທິ້ງໃຫ້ວ່າງຖ້າບໍ່ມີຊອດໂຄດ software)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "ເພີ່ມພື້ນທີ່ແຊຣ໌ໄຟລ໌ໃໝ່"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "ເສັ້ນທາງສົມບູນ"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "ການຕັ້ງຄ່າ db ຫຼື yml file"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄຳອະທິບາຍ"
+      },
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      },
+      "ModifyHeader" : {
+        "label" : "ແກ້ໄຂ"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "ໂຟນເດີແຊຣ໌ລະບົບໄຟລ໌ທີ່ເລືອກ",
+        "help" : "ເລືອກໂຟນເດີເຊີບເວີທີ່ເປັນ root ສຳລັບລະບົບໄຟລ໌ທີ່ແຊຣ໌ໃນອົງກອນຂອງທ່ານ ເພື່ອໃຊ້ເປັນຮູບແບບການເກັບເອກະສານ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍສຳລັບເນື້ອທີ້ບ່ອນແຊຣ໌ລະບົບໄຟລ໌ໃນອົງກອນ"
+      },
+      "code" : {
+        "label" : "ລະຫັດເພາະເພັງ",
+        "help" : "ລະຫັດສຸດພິເສດທີ່ຖືກສ້າງອັດຕະໂນມັດຂອງເນື້ອຫາ"
+      },
+      "InsertBtn" : {
+        "label" : "ເພີ່ມ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂໂຟນເດີແຊຣ໌ໄຟລ໌ເຊີບເວີ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລິກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "PublishBtn" : {
+        "label" : "ເຜີຍແຜ່!",
+        "help" : "ບັນທຶກແລະໃຫ້ເນື້ອຫາເຫຼົ່ານີ້ສາມາດໃຊ້ໃນຖານຄວາມຮູ້ໄດ້ແກ່ LLm's"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂແຫຼ່ງ git/ຄຳ້ປະກັນເອກະສານ"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ໃສ່ຄຳອະທິບາຍຂອງ git repo."
+      },
+      "code" : {
+        "label" : "ລະຫັດພິເສດ",
+        "help" : "ລະຫັດພິເສດທີ່ຖືກສ້າງອັດຕະໂນມັດສຳລັບ git repo."
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ອ້າງອີງໂຄງການຕົ້ນສະບັບ."
+      },
+      "contentManagementSystem" : {
+        "label" : "ລະບົບ Git",
+        "help" : "ການອ້າງອີງລະບົບ git ທີ່ກຳນົດໄວ້ແລ້ວ."
+      },
+      "branch" : {
+        "label" : "ກິ່ງ",
+        "help" : "ຊື່ກິ່ງທີ່ຈະ checkout (ປົກກະຕິ master, main ຫຼື develop)"
+      },
+      "identityCode" : {
+        "label" : "ບັນຊີທີ່ໃຊ້",
+        "help" : "ເລືອກບັນຊີເພື່ອເອົາໄປ clone/checkout ໃນລະບົບ"
+      },
+      "repositoryUri" : {
+        "label" : "ທີ່ຢູ່/ທີ່ຢູ່ url ຂອງ repository",
+        "help" : "ທີ່ຢູ່ເຕັມຂອງ git remote repository (ປົກກະຕິເລີ່ມຕົ້ນດ້ວຍ http: ຫຼື https: ຫຼື ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "ສາທາລະນະ",
+        "help" : "ຖ້າເປັນຈິງ ການເຂົ້າເຖິງ repository ບໍ່ຕ້ອງການການຢືນຢັນ"
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ໌ zip",
+        "help" : "ເປີດໃຊ້ງານການເປີດແລະດຶງເນື້ອຫາໃນໄຟລ໌ zip"
+      },
+      "programmedTables" : {
+        "label" : "ກຳນົດເວລາກວດເຊັກການປັບປຸງເນື້ອຫາ",
+        "help" : "ຕັ້ງຄ່າການກຳນົດເວລາຕວຈສອບເນື້ອຫາທີ່ມີການປ່ຽນແປງເພື່ອໃຫ້ລະບົບ retrieve augmented generation ໄດ້ຮັບການປັບປຸງ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "ຕັ້ງຄ່າລະບົບການສ້າງງານ",
+        "help" : "ລາຍການລະບົບການສ້າງ/ການບັນຈຸຫີບໃນເວລາກວດເຊັກຂໍ້ມູນ meta ແລະຂໍ້ມູນເພີ່ມເຕີມອື່ນໆ"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລົບ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ຂໍ້ມູນທົ່ວໄປ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ໃຊ້ແບບ Chat Model"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ເລືອກ"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ເລືອກຄ່າກຳນົດ chat model"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "ເລືອກຄ່າກຳນົດ embedding model"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "ເລືອກ"
+      },
+      "RagSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "ການຕັ້ງຄ່າ large language model & ເຄື່ອງມືທີ່ໃຊ້ໄດ້"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "ໃຊ້ embedding model"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າການເຂົ້າເຖິງຄວາມປອດໄພ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂໂປຣໄຟລ໌ chat retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະຂອງໂປຣໄຟລ໌ chat ຖືກສ້າງອັດຕະໂນມັດ."
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍໂປຣໄຟລ໌ chat."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "ຜູ້ໃຊ້ເລືອກ knowledge bases",
+        "help" : "ຜູ້ໃຊ້ສາມາດເລືອກ knowledge bases ທີ່ເຂົ້າເຖິງໄດ້ ຫຼືອັບໂຫຼດເອກະສານຂອງຕົນເອງ."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Knowledge bases",
+        "help" : "knowledge bases ທີ່ໃຊ້ສຳລັບຄົ້ນເອກະສານ."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "ຄ່າກຳນົດຄວາມເໝືອນກັນ",
+        "help" : "ຄ່າກຳນົດຄວາມເໝືອນກັນສຳລັບການຄົ້ນຫາ semantic, 0.60–0.65 ຄັດກອງນ້ອຍ, 0.70-0.75 ຄັດກອງປານກາງ, 0.80–0.85 ແມ່ນຄວາມແມ່ນຍຳ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2nd 'hop' similarity threshold",
+        "help" : "ຄ່າກຳນົດຄວາມເໝືອນກັນສຳລັບການຄົ້ນຫາ semantic, 0.60–0.65 ຄັດກອງນ້ອຍ, 0.70-0.75 ຄັດກອງປານກາງ, 0.80–0.85 ແມ່ນຄວາມແມ່ນຍຳ ຖືກໃຊ້ໃນການຄົ້ນຫາຄັ້ງທີ 2 ຂອງ multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "ປິດການໃຊ້ 'Multi Hop' rag",
+        "help" : "ປິດການໃຊ້ງານ 'multi hop rag' ຄຸນສົມບັດ. Multi hop search ຈະຄົ້ນຫາ semantic ຄັ້ງທຳອິດ ແລະໃຊ້ເອກະສານທີ່ພົບເປັນບໍ່ຟົດໃນການຄົ້ນຫາຄັ້ງຕໍ່ໄປ ເພື່ອສະໜອງ context ທີ່ໃຫຍ່ຂື້ນ."
+      },
+      "topK" : {
+        "label" : "ສ່ວນຂອງເອກະສານທີ່ຖືກພິຈາລະນາ (TopK)",
+        "help" : "ໃນ retrieve augmented generation, ເອກະສານ Top N ທີ່ຄົ້ນພົບໃນ semantic search ຖືກນຳມາພິຈາລະນາ"
+      },
+      "enabledFunctions" : {
+        "label" : "ເຄື່ອງມືທີ່ເປີດໃຊ້ສຳລັບ RAG chat ນີ້",
+        "help" : "ຄຸນສົມບັດທີ່ສາມາດໄດ້ກັບ llm model ຫຼະຄັ້ງທີ່ມີການຄຸຍກັບຜູ້ໃຊ້ລວມຖືກເລືອກກັບ knowledge base"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "ແກ້ໄຂ prompt ສຳລັບການຄົ້ນຫາ retrieve augmented generation."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "ປ້ອນ ຫຼື ເພີ່ມປະເພດຄຳສັ່ງ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂຄຳສັ່ງ"
+      },
+      "promptCategory" : {
+        "label" : "ປະເພດຄຳສັ່ງ",
+        "help" : "ເລືອກ ຫຼື ເພີ່ມປະເພດຄຳສັ່ງ."
+      },
+      "prompt" : {
+        "label" : "ຄຳສັ່ງ",
+        "help" : "ແກ້ໄຂຄຳສັ່ງສຳລັບ chat, ໃຊ້ {query} ເພື່ອລະບຸຄຳຖາມຂອງຜູ້ໃຊ້ ແລະ {context} ເພື່ອລະບຸເນື້ອໃນເອກະສານ/ປະຫວັດທີ່ສົ່ງໃຫ້ LLM."
+      },
+      "code" : {
+        "label" : "ລະຫັດພິເສດ",
+        "help" : "ລະຫັດພິເສດຂອງຄຳສັ່ງທີ່ສ້າງອັດຕະໂນມັດ."
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ປ້ອນຄໍາອະທິບາຍຄຳສັ່ງ."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "ປ່ຽນລະຫັດຜ່ານ"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "ລະຫັດຜ່ານເກົ່າ",
+        "help" : "ລະຫັດຜ່ານປັດຈຸບັນເພື່ອເຂົ້າລະບົບ"
+      },
+      "newPassword" : {
+        "label" : "ລະຫັດຜ່ານໃໝ່",
+        "help" : "ລະຫັດຜ່ານໃໝ່"
+      },
+      "username" : {
+        "label" : "ອີເມວ",
+        "help" : "ອີເມວເປັນຊື່ໃຊ້ເພື່ອເຂົ້າລະບົບ"
+      },
+      "ChangePasswordUI" : {
+        "label" : "ແບບຟອມປ່ຽນລະຫັດຜ່ານ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "ChangePwdBtn" : {
+        "label" : "ປ່ຽນລະຫັດຜ່ານ"
+      },
+      "newPassword1" : {
+        "label" : "ຢືນຢັນລະຫັດຜ່ານໃໝ່",
+        "help" : "ຢືນຢັນລະຫັດຜ່ານໃໝ່"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "ForMoreInformations" : {
+        "label" : "ສຳລັບຂໍ້ມູນເພີ່ມເຕີມກ່ຽວກັບ Google custom search API ຫຼື ການຮັບ api key (ຟຣີ) ເຂົ້າຊົມ: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "ລະຫັດສະເພາະ",
+        "help" : "ລະຫັດສະເພາະສຳລັບການຕັ້ງຄ່າ google search api."
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂຂໍ້ມູນ google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Google search api token",
+        "help" : "ເລືອກ ຫຼື ໃສ່ google search api token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "ຄຳອະທິບາຍ",
+        "help" : "ປ້ອນຄຳອະທິບາຍສຳລັບການຕັ້ງຄ່າ google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "ສົນທະນາໂດຍບໍ່ໃຊ້ຖານຂໍ້ມູນຄວາມຮູ້",
+        "help" : "ເລືອກ LLM ສໍາລັບເວົ້າສົນທະນາ",
+        "placeholder" : "ເລືອກ LLM ສໍາລັບເວົ້າສົນທະນາ"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "ເປີດຕົວເລືອກສົນທະນາ"
+      },
+      "CreateChatBtn" : {
+        "label" : "ສົນທະນາໃໝ່"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "ເວົ້າສົນທະນາໃໝ່"
+      },
+      "chatProfileCode" : {
+        "label" : "ສົນທະນາກັບຖານຂໍ້ມູນຄວາມຮູ້",
+        "help" : "ເລືອກໂປຣໄຟລ໌ສົນທະນາບໍລິສັດເພື່ອໂຕ້ຕອບກັບເອກະສານບໍລິສັດ (ແລະຂອງທ່ານ) ແລະ LLM",
+        "placeholder" : "ເລືອກໂປຣໄຟລ໌ສົນທະນາບໍລິສັດເພື່ອໂຕ້ຕອບກັບເອກະສານບໍລິສັດ (ແລະຂອງທ່ານ) ແລະ LLM"
+      },
+      "NewChatBtn" : {
+        "label" : "ສົນທະນາໃໝ່"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "ສນທນາກັບເອກະສານ",
+        "help" : "ເບິ່ງຫຼືຄົ້ນຫາ ແລະເລືອກເອກະສານເພື່ອເຮັດວຽກ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ເລືອກໄຟລ໌ທີ່ຈະສນທນາກັບ"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "ຢືນຢັນ"
+      },
+      "userspaceBrowsing" : {
+        "label" : "ອັບໂຫຼດ ຫຼື ເລືອກເອກະສານຂອງທ່ານ",
+        "help" : "ເລືອກ/ອັບໂຫຼດເອກະສານຈາກພື້ນທີ່ຂອງຜູ້ໃຊ້ທ່ານ"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "ແກ້ໄຂທີ່ເລືອກ"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "ເລືອກໄຟລ໌ຂອງຜູ້ໃຊ້"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "okBtn" : {
+        "label" : "ຕົກລົງ"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "ເລືອກເນື້ອຫາທີ່ຜູ້ໃຊ້ອັບໂຫຼດ"
+      },
+      "UserspaceBrowser" : {
+        "label" : "ຖານຄວາມຮູ້ & ໄຟລ໌ຜູ້ໃຊ້"
+      }
+    }
+  }
+}

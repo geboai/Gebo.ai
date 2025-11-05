@@ -1,7 +1,7 @@
 import { Component, forwardRef, OnInit } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
-interface Language { langCode: string, description: string };
+export interface GeboLanguage { langCode: string, description: string };
 @Component({
     selector: "gebo-ai-language-choice-component",
     templateUrl: "language-choice.component.html",
@@ -15,7 +15,7 @@ interface Language { langCode: string, description: string };
 })
 export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccessor {
     private currentLanguage: string = "en";
-    private languages: Language[] = [
+    private languages: GeboLanguage[] = [
         { "langCode": "en", "description": "English" },
         { "langCode": "it", "description": "Italiano" },
         { "langCode": "es", "description": "Español" },
@@ -45,7 +45,7 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
         { "langCode": "th", "description": "ไทย" },
         { "langCode": "uk", "description": "Українська" }
     ];
-    protected choosableLanguages: Language[] = [];
+    protected choosableLanguages: GeboLanguage[] = [];
     protected formGroup: FormGroup = new FormGroup({
         langCode: new FormControl()
     });
