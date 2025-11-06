@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Codice configurazione"
+      },
+      "EditConfigBtn" : {
+        "label" : "Modifica configurazione"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "esci"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analisi elenco documenti"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizzazione dei documenti"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Token elaborati",
+        "dataset-1-label" : "Errore nell'elaborazione dei token"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
+      },
+      "EMBEDDING" : {
+        "description" : "Indicizzazione semantica (embedding per semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Token elaborati",
+        "dataset-1-label" : "Errore nell'elaborazione dei token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indicizzazione entità/relazioni/eventi (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
       }
     }
   }

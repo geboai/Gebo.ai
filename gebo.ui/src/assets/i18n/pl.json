@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Kod konfiguracji"
+      },
+      "EditConfigBtn" : {
+        "label" : "Edytuj konfigurację"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "wyloguj"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiza listy dokumentów"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizacja dokumentów"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd przetwarzania tokenów"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Indeksowanie semantyczne (embedding dla semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Przetworzone tokeny",
+        "dataset-1-label" : "Błąd przetwarzania tokenów"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksowanie encji/relacji/zdarzeń (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nieprzetworzone dokumenty",
+        "label-1" : "Błąd przetwarzania dokumentów",
+        "label-2" : "Przetworzone dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Otrzymane dokumenty",
+        "dataset-1-label" : "Przetworzone dokumenty",
+        "dataset-2-label" : "Dokumenty z błędem",
+        "dataset-3-label" : "Odrzucone dokumenty"
       }
     }
   }

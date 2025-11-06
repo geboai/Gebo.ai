@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfiqurasiya kodu"
+      },
+      "EditConfigBtn" : {
+        "label" : "Konfiqurasiyanı redaktə et"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "çıxış"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sənədlər siyahısı təhlil edilir"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "TOKENIZATION" : {
+        "description" : "Sənədlərin tokenizasiya prosesi"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalı zamanı səhv"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantik indeksləşdirmə (semantic rag üçün embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalı zamanı səhv"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Əlaqələr/Qurumlar/Hadisələr üzrə indeksləşdirmə (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Emal olunmayan sənədlər",
+        "label-1" : "Sənədlərin emalı zamanı səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Qəbul olunan sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhv olan sənədlər",
+        "dataset-3-label" : "İmtina olunan sənədlər"
       }
     }
   }

@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "کنفیگ کوڈ"
+      },
+      "EditConfigBtn" : {
+        "label" : "کنفیگریشن میں ترمیم کریں"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "لاگ آؤٹ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "دستاویزات کی فہرست کا تجزیہ کیا جا رہا ہے"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "غیر عمل شدہ دستاویزات",
+        "label-1" : "دستاویزات پر کارروائی میں خرابی",
+        "label-2" : "عمل شدہ دستاویزات",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "موصول شدہ دستاویزات",
+        "dataset-1-label" : "عمل شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کی گئی دستاویزات"
+      },
+      "TOKENIZATION" : {
+        "description" : "دستاویزات کی tokenization"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "غیر عمل شدہ دستاویزات",
+        "label-1" : "دستاویزات پر کارروائی میں خرابی",
+        "label-2" : "عمل شدہ دستاویزات",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "عمل شدہ ٹوکن",
+        "dataset-1-label" : "ٹوکن کی کارروائی میں خرابی"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "موصول شدہ دستاویزات",
+        "dataset-1-label" : "عمل شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کی گئی دستاویزات"
+      },
+      "EMBEDDING" : {
+        "description" : "سمینٹک انڈیکسنگ (سمینٹک rag کے لیے embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "غیر عمل شدہ دستاویزات",
+        "label-1" : "دستاویزات پر کارروائی میں خرابی",
+        "label-2" : "عمل شدہ دستاویزات",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "عمل شدہ ٹوکن",
+        "dataset-1-label" : "ٹوکن کی کارروائی میں خرابی"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "موصول شدہ دستاویزات",
+        "dataset-1-label" : "عمل شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کی گئی دستاویزات"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "اینٹیٹی/ریلیشنز/ایونٹس انڈیکسنگ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "غیر عمل شدہ دستاویزات",
+        "label-1" : "دستاویزات پر کارروائی میں خرابی",
+        "label-2" : "عمل شدہ دستاویزات"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "موصول شدہ دستاویزات",
+        "dataset-1-label" : "عمل شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کی گئی دستاویزات"
       }
     }
   }

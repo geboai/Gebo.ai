@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Código de configuração"
+      },
+      "EditConfigBtn" : {
+        "label" : "Editar configuração"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "sair"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analisando lista de documentos"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documentos não tratados",
+        "label-1" : "Erro ao processar documentos",
+        "label-2" : "Documentos processados",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documentos recebidos",
+        "dataset-1-label" : "Documentos processados",
+        "dataset-2-label" : "Documentos com erro",
+        "dataset-3-label" : "Documentos descartados"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenização de documentos"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documentos não tratados",
+        "label-1" : "Erro ao processar documentos",
+        "label-2" : "Documentos processados",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokens processados",
+        "dataset-1-label" : "Erro ao processar tokens"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documentos recebidos",
+        "dataset-1-label" : "Documentos processados",
+        "dataset-2-label" : "Documentos com erro",
+        "dataset-3-label" : "Documentos descartados"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexação semântica (embedding para semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documentos não tratados",
+        "label-1" : "Erro ao processar documentos",
+        "label-2" : "Documentos processados",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokens processados",
+        "dataset-1-label" : "Erro ao processar tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documentos recebidos",
+        "dataset-1-label" : "Documentos processados",
+        "dataset-2-label" : "Documentos com erro",
+        "dataset-3-label" : "Documentos descartados"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexação de entidades/relações/eventos (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documentos não tratados",
+        "label-1" : "Erro ao processar documentos",
+        "label-2" : "Documentos processados"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documentos recebidos",
+        "dataset-1-label" : "Documentos processados",
+        "dataset-2-label" : "Documentos com erro",
+        "dataset-3-label" : "Documentos descartados"
       }
     }
   }

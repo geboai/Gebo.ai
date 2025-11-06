@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "EditConfigBtn" : {
+        "label" : " ಸಂರಚನೆಯನ್ನು ಸಂಪಾದಿಸಿ"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "ಲಾಗ್‌ಔಟ್"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ಡಾಕ್ಯುಮೆಂಟ್ ಪೈಪಿಧಿಯ ವೈಶ್ಲೇಷಣೆ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ಸಂಸ್ಕರಣೆಯಾಗದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಗಳು ಪ್ರಕ್ರಿಯೆಯ ದೋಷ",
+        "label-2" : "ಸಂಸ್ಕರಿಸಲಾದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-1-label" : "ಸಂಸ್ಕರಿಸಲಾದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-2-label" : "ದೋಷದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
+      },
+      "TOKENIZATION" : {
+        "description" : "ಡಾಕ್ಯುಮೆಂಟ್ಗಳ ಟೋಕನೈಜೆಷನ್"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ಸಂಸ್ಕರಣೆಯಾಗದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಗಳು ಪ್ರಕ್ರಿಯೆಯ ದೋಷ",
+        "label-2" : "ಸಂಸ್ಕರಿಸಲಾದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ಸಂಸ್ಕರಿಸಲಾದ ಟೋಕನ್‌ಗಳು",
+        "dataset-1-label" : "ಟೋಕನ್‌ಗಳನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸುವ ದೋಷ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-1-label" : "ಸಂಸ್ಕರಿಸಲಾದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-2-label" : "ದೋಷದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
+      },
+      "EMBEDDING" : {
+        "description" : "ಅರ್ಥಗರ್ಭ ಚಿಹ್ನೆಯ ಕ್ರಮಬದ್ಧತೆ (ಅರ್ಥಶಾಸ್ತ್ರದ rag ಗಾಗಿ embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ಸಂಸ್ಕರಣೆಯಾಗದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಗಳು ಪ್ರಕ್ರಿಯೆಯ ದೋಷ",
+        "label-2" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ಸಂಸ್ಕರಿಸಿದ ಟೋಕನ್‌ಗಳು",
+        "dataset-1-label" : "ಟೋಕನ್‌ಗಳನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸುವ ದೋಷ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-1-label" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-2-label" : "ದೋಷದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ಎಂಟಿಟಿ/ಸಂಬಂಧಗಳು/ಈವೆಂಟ್‌ಗಳ ಕ್ರಮಬದ್ಧತೆ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ಸಂಸ್ಕರಣೆಯಾಗದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಗಳು ಪ್ರಕ್ರಿಯೆಯ ದೋಷ",
+        "label-2" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-1-label" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-2-label" : "ದೋಷದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
       }
     }
   }

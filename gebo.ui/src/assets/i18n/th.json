@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "รหัส config"
+      },
+      "EditConfigBtn" : {
+        "label" : "แก้ไขการตั้งค่า"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "ออกจากระบบ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "กำลังวิเคราะห์รายการเอกสาร"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "TOKENIZATION" : {
+        "description" : "การแบ่งโทเค็นเอกสาร"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "โทเค็นที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดระหว่างประมวลผลโทเค็น"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "EMBEDDING" : {
+        "description" : "การจัดทำดัชนีความหมาย (embedding สำหรับ semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "โทเค็นที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดระหว่างประมวลผลโทเค็น"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "การจัดทำดัชนีเอนทิตี้/ความสัมพันธ์/เหตุการณ์ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
       }
     }
   }

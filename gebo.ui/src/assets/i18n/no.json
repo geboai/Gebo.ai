@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Oppsettskoden"
+      },
+      "EditConfigBtn" : {
+        "label" : "Rediger konfigurasjon"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "logg ut"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyserer dokumentliste"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil på dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumenttokenisering"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil på dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantisk indeksering (embedding for semantisk rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil på dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksering av enheter/relasjoner/hendelser (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil på dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
       }
     }
   }

@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Mã cấu hình"
+      },
+      "EditConfigBtn" : {
+        "label" : "Chỉnh sửa cấu hình"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "đăng xuất"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Đang phân tích danh sách tài liệu"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "TOKENIZATION" : {
+        "description" : "Phân tích token tài liệu"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Token đã xử lý",
+        "dataset-1-label" : "Lỗi khi xử lý token"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "EMBEDDING" : {
+        "description" : "Lập chỉ mục ngữ nghĩa (embedding cho semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Token đã xử lý",
+        "dataset-1-label" : "Lỗi khi xử lý token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Lập chỉ mục thực thể/Mối quan hệ/Sự kiện (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
       }
     }
   }

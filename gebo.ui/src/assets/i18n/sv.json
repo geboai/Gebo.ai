@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfigurationskod"
+      },
+      "EditConfigBtn" : {
+        "label" : "Redigera konfiguration"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "logga ut"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyserar dokumentlista"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid behandling av dokument",
+        "label-2" : "Behandlade dokument",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Kasserade dokument"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumenttokenisering"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid behandling av dokument",
+        "label-2" : "Behandlade dokument",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Behandlade token",
+        "dataset-1-label" : "Fel vid tokenbehandling"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Kasserade dokument"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantisk indexering (embedding för semantisk rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid behandling av dokument",
+        "label-2" : "Behandlade dokument",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Behandlade token",
+        "dataset-1-label" : "Fel vid tokenbehandling"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Kasserade dokument"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexering av entiteter, relationer, händelser (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid behandling av dokument",
+        "label-2" : "Behandlade dokument"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Kasserade dokument"
       }
     }
   }

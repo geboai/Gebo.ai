@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "कॉन्फिग कोड"
+      },
+      "EditConfigBtn" : {
+        "label" : "कॉन्फिग संपादित करा"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "लॉगआउट"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "दस्तऐवजांची यादी विश्लेषित करत आहे"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "प्रक्रिया न झालेली कागदपत्रे",
+        "label-1" : "कागदपत्रे प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "प्राप्त कागदपत्रे",
+        "dataset-1-label" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-2-label" : "त्रुटी असलेली कागदपत्रे",
+        "dataset-3-label" : "फेकलेली कागदपत्रे"
+      },
+      "TOKENIZATION" : {
+        "description" : "दस्तऐवजांचे टोकनायझेशन"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "प्रक्रिया न झालेली कागदपत्रे",
+        "label-1" : "कागदपत्रे प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "प्रक्रिया केलेली टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रक्रिया करताना त्रुटी"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "प्राप्त कागदपत्रे",
+        "dataset-1-label" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-2-label" : "त्रुटी असलेली कागदपत्रे",
+        "dataset-3-label" : "फेकलेली कागदपत्रे"
+      },
+      "EMBEDDING" : {
+        "description" : "समानार्थी अनुक्रमणिका (semantic rag साठी embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "प्रक्रिया न झालेली कागदपत्रे",
+        "label-1" : "कागदपत्रे प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "प्रक्रिया केलेली टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रक्रिया करताना त्रुटी"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त कागदपत्रे",
+        "dataset-1-label" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-2-label" : "त्रुटी असलेली कागदपत्रे",
+        "dataset-3-label" : "फेकलेली कागदपत्रे"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "घटना/संबंध/घटना अनुक्रमणिका (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "प्रक्रिया न झालेली कागदपत्रे",
+        "label-1" : "कागदपत्रे प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया झालेली कागदपत्रे"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त कागदपत्रे",
+        "dataset-1-label" : "प्रक्रिया झालेली कागदपत्रे",
+        "dataset-2-label" : "त्रुटी असलेली कागदपत्रे",
+        "dataset-3-label" : "फेकलेली कागदपत्रे"
       }
     }
   }

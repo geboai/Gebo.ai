@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Код конфігурації"
+      },
+      "EditConfigBtn" : {
+        "label" : "Редагувати конфігурацію"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "вийти"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Аналіз списку документів"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Не опрацьовані документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Опрацьовані документи",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Опрацьовані документи",
+        "dataset-2-label" : "Документи з помилкою",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "TOKENIZATION" : {
+        "description" : "Токенізація документів"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Не опрацьовані документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Опрацьовані документи",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Опрацьовані токени",
+        "dataset-1-label" : "Помилка обробки токенів"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Опрацьовані документи",
+        "dataset-2-label" : "Документи з помилкою",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "EMBEDDING" : {
+        "description" : "Семантична індексація (ембедінг для semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Не опрацьовані документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Опрацьовані документи",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Опрацьовані токени",
+        "dataset-1-label" : "Помилка обробки токенів"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Опрацьовані документи",
+        "dataset-2-label" : "Документи з помилкою",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Індексація сутностей/зв'язків/подій (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Не опрацьовані документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Опрацьовані документи"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Опрацьовані документи",
+        "dataset-2-label" : "Документи з помилкою",
+        "dataset-3-label" : "Відхилені документи"
       }
     }
   }

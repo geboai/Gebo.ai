@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Asetuskoodi"
+      },
+      "EditConfigBtn" : {
+        "label" : "Muokkaa asetuksia"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "kirjaudu ulos"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analysoidaan asiakirjalistaa"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Käsittelemättömät asiakirjat",
+        "label-1" : "Virhe asiakirjojen käsittelyssä",
+        "label-2" : "Käsitellyt asiakirjat",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Vastaanotetut asiakirjat",
+        "dataset-1-label" : "Käsitellyt asiakirjat",
+        "dataset-2-label" : "Virheelliset asiakirjat",
+        "dataset-3-label" : "Hylätyt asiakirjat"
+      },
+      "TOKENIZATION" : {
+        "description" : "Asiakirjojen tokenisointi"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Käsittelemättömät asiakirjat",
+        "label-1" : "Virhe asiakirjojen käsittelyssä",
+        "label-2" : "Käsitellyt asiakirjat",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Käsitellyt tokenit",
+        "dataset-1-label" : "Virhe tokenien käsittelyssä"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Vastaanotetut asiakirjat",
+        "dataset-1-label" : "Käsitellyt asiakirjat",
+        "dataset-2-label" : "Virheelliset asiakirjat",
+        "dataset-3-label" : "Hylätyt asiakirjat"
+      },
+      "EMBEDDING" : {
+        "description" : "Semanttinen indeksointi (semanttinen embedding ragille)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Käsittelemättömät asiakirjat",
+        "label-1" : "Virhe asiakirjojen käsittelyssä",
+        "label-2" : "Käsitellyt asiakirjat",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Käsitellyt tokenit",
+        "dataset-1-label" : "Virhe tokenien käsittelyssä"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut asiakirjat",
+        "dataset-1-label" : "Käsitellyt asiakirjat",
+        "dataset-2-label" : "Virheelliset asiakirjat",
+        "dataset-3-label" : "Hylätyt asiakirjat"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entiteetti/Suhde/Tapahtuma indeksointi (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Käsittelemättömät asiakirjat",
+        "label-1" : "Virhe asiakirjojen käsittelyssä",
+        "label-2" : "Käsitellyt asiakirjat"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut asiakirjat",
+        "dataset-1-label" : "Käsitellyt asiakirjat",
+        "dataset-2-label" : "Virheelliset asiakirjat",
+        "dataset-3-label" : "Hylätyt asiakirjat"
       }
     }
   }

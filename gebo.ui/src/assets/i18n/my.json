@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "ပြင်ဆင်ရေးကုဒ်"
+      },
+      "EditConfigBtn" : {
+        "label" : "ပြင်ဆင်မှု ပြုလုပ်ရန်"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "ထွက်ရန်"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "စာရွက်စာတမ်းစာရင်းကို စိစစ်နေသည်"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "မကုသရသေးသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများကို လုပ်ဆောင်စဉ်အမှားတက်သည်",
+        "label-2" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "၀၉:၁၁",
+        "dataset-0-label" : "လက်ခံရရှိသောစာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "အမှားပါသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "စစ်ထုတ်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "TOKENIZATION" : {
+        "description" : "စာရွက်စာတမ်းများကို token ဖြင့်ခွဲခြမ်းခြင်း"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "မကုသရသေးသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများကို လုပ်ဆောင်စဉ်အမှားတက်သည်",
+        "label-2" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "၀၉:၁၁",
+        "dataset-0-label" : "လုပ်ငန်းလုပ်ပြီးသော token များ",
+        "dataset-1-label" : "token များကို လုပ်စဉ်အမှားတက်သည်"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "၀၉:၁၁",
+        "dataset-0-label" : "လက်ခံရရှိသောစာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "အမှားပါသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "စစ်ထုတ်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "EMBEDDING" : {
+        "description" : "အဓိပ္ပါယ်ပြည့်သောညွှန်းတစ်ခုတည်း (semantic rag အတွက် embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "မကုသရသေးသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများကို လုပ်ဆောင်စဉ်အမှားတက်သည်",
+        "label-2" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "၀၉:၁၁",
+        "dataset-0-label" : "လုပ်ငန်းလုပ်ပြီးသော token များ",
+        "dataset-1-label" : "token များကို လုပ်စဉ်အမှားတက်သည်"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "လက်ခံရရှိသောစာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "အမှားပါသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "စစ်ထုတ်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entity/Relations/Events ညွှန်း (graphrag အတွက်)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "မကုသရသေးသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများကို လုပ်ဆောင်စဉ်အမှားတက်သည်",
+        "label-2" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "လက်ခံရရှိသောစာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "အမှားပါသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "စစ်ထုတ်ထားသောစာရွက်စာတမ်းများ"
       }
     }
   }

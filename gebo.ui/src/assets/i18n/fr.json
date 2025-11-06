@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Code de configuration"
+      },
+      "EditConfigBtn" : {
+        "label" : "Modifier la configuration"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "déconnexion"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyse de la liste des documents"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documents non traités",
+        "label-1" : "Erreur lors du traitement des documents",
+        "label-2" : "Documents traités",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documents reçus",
+        "dataset-1-label" : "Documents traités",
+        "dataset-2-label" : "Documents en erreur",
+        "dataset-3-label" : "Documents écartés"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenisation des documents"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documents non traités",
+        "label-1" : "Erreur lors du traitement des documents",
+        "label-2" : "Documents traités",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Jetons traités",
+        "dataset-1-label" : "Erreur lors du traitement des jetons"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documents reçus",
+        "dataset-1-label" : "Documents traités",
+        "dataset-2-label" : "Documents en erreur",
+        "dataset-3-label" : "Documents écartés"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexation sémantique (embedding pour semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documents non traités",
+        "label-1" : "Erreur lors du traitement des documents",
+        "label-2" : "Documents traités",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Jetons traités",
+        "dataset-1-label" : "Erreur lors du traitement des jetons"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documents reçus",
+        "dataset-1-label" : "Documents traités",
+        "dataset-2-label" : "Documents en erreur",
+        "dataset-3-label" : "Documents écartés"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexation des entités/relations/évènements (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documents non traités",
+        "label-1" : "Erreur lors du traitement des documents",
+        "label-2" : "Documents traités"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documents reçus",
+        "dataset-1-label" : "Documents traités",
+        "dataset-2-label" : "Documents en erreur",
+        "dataset-3-label" : "Documents écartés"
       }
     }
   }

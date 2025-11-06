@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Код за конфигурация"
+      },
+      "EditConfigBtn" : {
+        "label" : "Редактиране на конфигурация"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "изход"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Анализиране на списъка с документи"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Нетретирани документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Получени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи с грешка",
+        "dataset-3-label" : "Отхвърлени документи"
+      },
+      "TOKENIZATION" : {
+        "description" : "Токенизиране на документи"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Нетретирани документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Обработени токени",
+        "dataset-1-label" : "Грешка при обработка на токени"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Получени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи с грешка",
+        "dataset-3-label" : "Отхвърлени документи"
+      },
+      "EMBEDDING" : {
+        "description" : "Семантичен индексиране (ембединг за семантичен rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Нетретирани документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Обработени токени",
+        "dataset-1-label" : "Грешка при обработка на токени"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Получени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи с грешка",
+        "dataset-3-label" : "Отхвърлени документи"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Индексиране на обекти/връзки/събития (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Нетретирани документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Получени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи с грешка",
+        "dataset-3-label" : "Отхвърлени документи"
       }
     }
   }

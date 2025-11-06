@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Κωδικός ρύθμισης"
+      },
+      "EditConfigBtn" : {
+        "label" : "Επεξεργασία ρυθμίσεων"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "αποσύνδεση"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Ανάλυση λίστας εγγράφων"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "TOKENIZATION" : {
+        "description" : "Διαίρεση εγγράφων σε σύνολα λέξεων"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Επεξεργασμένα σύνολα λέξεων",
+        "dataset-1-label" : "Σφάλμα στην επεξεργασία συνόλων λέξεων"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "EMBEDDING" : {
+        "description" : "Σημασιολογική ευρετηρίαση (συσχέτιση για semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Επεξεργασμένα σύνολα λέξεων",
+        "dataset-1-label" : "Σφάλμα στην επεξεργασία συνόλων λέξεων"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Ευρετηρίαση οντοτήτων/σχέσεων/γεγονότων (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
       }
     }
   }

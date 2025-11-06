@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "კონფიგურაციის კოდი"
+      },
+      "EditConfigBtn" : {
+        "label" : "კონფიგურაციის რედაქტირება"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "გასვლა"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "დოკუმენტების სიის ანალიზი"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "TOKENIZATION" : {
+        "description" : "დოკუმენტების ტოკენიზაცია"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "ტოკენების დამუშავების შეცდომა"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "EMBEDDING" : {
+        "description" : "სემანტიკური ინდექსაცია (სემანტიკური rag-ის ემბედინგი)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "ტოკენების დამუშავების შეცდომა"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ობიექტების/ურთიერთობების/მოვლენების ინდექსირება (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
       }
     }
   }

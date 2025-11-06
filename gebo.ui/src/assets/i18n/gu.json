@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "કંફિગ કોડ"
+      },
+      "EditConfigBtn" : {
+        "label" : "કન્ફિગ સંપાદિત કરો"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "લૉગઆઉટ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "દસ્તાવેજોની સૂચિ વિશ્લેષણ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "TOKENIZATION" : {
+        "description" : "દસ્તાવેજોનું ટોકનાઈઝેશન"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "પ્રક્રિયા કરેલા ટોકન",
+        "dataset-1-label" : "ટોકન પ્રક્રિયા કરતી વખતે ભૂલ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "EMBEDDING" : {
+        "description" : "સેમેન્ટિક અનુક્રમણિકા બનાવવી (સેમેન્ટિક રેગ માટે એમ્બેડીંગ)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "પ્રક્રિયા કરેલા ટોકન",
+        "dataset-1-label" : "ટોકન પ્રક્રિયા કરતી વખતે ભૂલ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "એકમ/સંબંધ/ واقعات અનુક્રમણિકા (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
       }
     }
   }

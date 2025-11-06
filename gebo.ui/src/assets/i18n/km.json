@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "លេខកូដកំណត់"
+      },
+      "EditConfigBtn" : {
+        "label" : "កែសម្រួលកំណត់"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "ចេញ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "កំពុងវិភាគបញ្ជីឯកសារ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "មានបញ្ហាក្នុងការប្រតិបត្តិឯកសារ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "០៩:១១",
+        "dataset-0-label" : "ឯកសារដែលបានទទួល",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "TOKENIZATION" : {
+        "description" : "បំបែកឯកសារ"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "មានបញ្ហាក្នុងការប្រតិបត្តិឯកសារ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "០៩:១១",
+        "dataset-0-label" : "តូខិនដែលបានដំណើរការ",
+        "dataset-1-label" : "មានបញ្ហាក្នុងការដំណើរការតូខិន"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "០៩:១១",
+        "dataset-0-label" : "ឯកសារដែលបានទទួល",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "EMBEDDING" : {
+        "description" : "លិបិក្រម​សេមង់ទិក (embedding សម្រាប់ semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "មានបញ្ហាក្នុងការប្រតិបត្តិឯកសារ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "០៩:១១",
+        "dataset-0-label" : "តូខិនដែលបានដំណើរការ",
+        "dataset-1-label" : "មានបញ្ហាក្នុងការដំណើរការតូខិន"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ឯកសារដែលបានទទួល",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "លិបិក្រមអង្គភាព/ទំនាក់ទំនង/ព្រឹត្តិការណ៍ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "មានបញ្ហាក្នុងការប្រតិបត្តិឯកសារ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ឯកសារដែលបានទទួល",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
       }
     }
   }

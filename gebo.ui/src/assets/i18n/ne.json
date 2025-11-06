@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "कन्फिग कोड"
+      },
+      "EditConfigBtn" : {
+        "label" : "कन्फिग सम्पादन गर्नुहोस्"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "लगआउट"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "कागजातहरूको सूची विश्लेषण गर्दै"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "संसाधन नगरिएको कागजातहरू",
+        "label-1" : "कागजातहरू प्रक्रिया गर्न त्रुटि",
+        "label-2" : "संसाधित कागजातहरू",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "प्राप्त कागजातहरू",
+        "dataset-1-label" : "संसाधित कागजातहरू",
+        "dataset-2-label" : "त्रुटि भएका कागजातहरू",
+        "dataset-3-label" : "फालेका कागजातहरू"
+      },
+      "TOKENIZATION" : {
+        "description" : "कागजात टोकनाइजेसन"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "संसाधन नगरिएको कागजातहरू",
+        "label-1" : "कागजातहरू प्रक्रिया गर्न त्रुटि",
+        "label-2" : "संसाधित कागजातहरू",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "संसाधित टोकनहरू",
+        "dataset-1-label" : "टोकनहरू प्रक्रिया गर्न त्रुटि"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "प्राप्त कागजातहरू",
+        "dataset-1-label" : "संसाधित कागजातहरू",
+        "dataset-2-label" : "त्रुटि भएका कागजातहरू",
+        "dataset-3-label" : "फालेका कागजातहरू"
+      },
+      "EMBEDDING" : {
+        "description" : "सेमान्टिक अनुक्रमणिका (सेमान्टिक र्यागका लागि embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "संसाधन नगरिएको कागजातहरू",
+        "label-1" : "कागजातहरू प्रक्रिया गर्न त्रुटि",
+        "label-2" : "संसाधित कागजातहरू",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "०९:११",
+        "dataset-0-label" : "संसाधित टोकनहरू",
+        "dataset-1-label" : "टोकनहरू प्रक्रिया गर्न त्रुटि"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त कागजातहरू",
+        "dataset-1-label" : "संसाधित कागजातहरू",
+        "dataset-2-label" : "त्रुटि भएका कागजातहरू",
+        "dataset-3-label" : "फालेका कागजातहरू"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "इकाइ/सम्बन्ध/घटना अनुक्रमणिका (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "संसाधन नगरिएको कागजातहरू",
+        "label-1" : "कागजातहरू प्रक्रिया गर्न त्रुटि",
+        "label-2" : "संसाधित कागजातहरू"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त कागजातहरू",
+        "dataset-1-label" : "संसाधित कागजातहरू",
+        "dataset-2-label" : "त्रुटि भएका कागजातहरू",
+        "dataset-3-label" : "फालेका कागजातहरू"
       }
     }
   }

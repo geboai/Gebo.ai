@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Cod configurare"
+      },
+      "EditConfigBtn" : {
+        "label" : "Editează configurarea"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "deconectare"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiză listă documente"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizare documente"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea token-urilor"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexare semantică (embedding pentru semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea token-urilor"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexare entități/relații/evenimente (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
       }
     }
   }

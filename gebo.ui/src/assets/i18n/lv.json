@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfigurācijas kods"
+      },
+      "EditConfigBtn" : {
+        "label" : "Rediģēt konfigurāciju"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "iziet"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Tiek analizēts dokumentu saraksts"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentu tokenizācija"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Apstrādātie tokeni",
+        "dataset-1-label" : "Kļūda tokenu apstrādē"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiskā indeksēšana (semantiskajam rag iegūšanai)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Apstrādātie tokeni",
+        "dataset-1-label" : "Kļūda tokenu apstrādē"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entitāšu/attiecību/notikumu indeksēšana (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
       }
     }
   }

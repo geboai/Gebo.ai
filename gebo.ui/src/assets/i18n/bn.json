@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "কনফিগ কোড"
+      },
+      "EditConfigBtn" : {
+        "label" : "কনফিগ সম্পাদনা করুন"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "লগআউট"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "নথির তালিকা বিশ্লেষণ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "অবশ্যকরণ হয়নি এমন নথি",
+        "label-1" : "নথি প্রসেসে ত্রুটি",
+        "label-2" : "প্রসেস করা নথি",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "০৯:১১",
+        "dataset-0-label" : "গৃহীত নথি",
+        "dataset-1-label" : "প্রসেস করা নথি",
+        "dataset-2-label" : "ত্রুটিপূর্ণ নথি",
+        "dataset-3-label" : "বাতিল নথি"
+      },
+      "TOKENIZATION" : {
+        "description" : "নথির টোকেনাইজেশন"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "অবশ্যকরণ হয়নি এমন নথি",
+        "label-1" : "নথি প্রসেসে ত্রুটি",
+        "label-2" : "প্রসেস করা নথি",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "০৯:১১",
+        "dataset-0-label" : "প্রসেস করা টোকেন",
+        "dataset-1-label" : "টোকেন প্রসেসে ত্রুটি"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "০৯:১১",
+        "dataset-0-label" : "গৃহীত নথি",
+        "dataset-1-label" : "প্রসেস করা নথি",
+        "dataset-2-label" : "ত্রুটিপূর্ণ নথি",
+        "dataset-3-label" : "বাতিল নথি"
+      },
+      "EMBEDDING" : {
+        "description" : "অর্থবহ সূচীকরণ (semantic rag-এর জন্য embedding)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "অবশ্যকরণ হয়নি এমন নথি",
+        "label-1" : "নথি প্রসেসে ত্রুটি",
+        "label-2" : "প্রসেস করা নথি",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "০৯:১১",
+        "dataset-0-label" : "প্রসেস করা টোকেন",
+        "dataset-1-label" : "টোকেন প্রসেসে ত্রুটি"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "গৃহীত নথি",
+        "dataset-1-label" : "প্রসেস করা নথি",
+        "dataset-2-label" : "ত্রুটিপূর্ণ নথি",
+        "dataset-3-label" : "বাতিল নথি"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "উত্তরাধিকার/সম্পর্ক/ইভেন্ট সূচীকরণ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "অবশ্যকরণ হয়নি এমন নথি",
+        "label-1" : "নথি প্রসেসে ত্রুটি",
+        "label-2" : "প্রসেস করা নথি"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "গৃহীত নথি",
+        "dataset-1-label" : "প্রসেস করা নথি",
+        "dataset-2-label" : "ত্রুটিপূর্ণ নথি",
+        "dataset-3-label" : "বাতিল নথি"
       }
     }
   }

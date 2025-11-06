@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfigurasiekode"
+      },
+      "EditConfigBtn" : {
+        "label" : "Wysig konfigurasie"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "meld af"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiseer dokumentelys"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nie verwerkte dokumente",
+        "label-1" : "Fout met verwerking van dokumente",
+        "label-2" : "Verwerkte dokumente",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Fout dokumente",
+        "dataset-3-label" : "Verwerpte dokumente"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumente-tokenisering"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nie verwerkte dokumente",
+        "label-1" : "Fout met verwerking van dokumente",
+        "label-2" : "Verwerkte dokumente",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Verwerkte tokens",
+        "dataset-1-label" : "Fout met verwerking van tokens"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Fout dokumente",
+        "dataset-3-label" : "Verwerpte dokumente"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiese indeksasie (embedding vir semantiese rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nie verwerkte dokumente",
+        "label-1" : "Fout met verwerking van dokumente",
+        "label-2" : "Verwerkte dokumente",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Verwerkte tokens",
+        "dataset-1-label" : "Fout met verwerking van tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Fout dokumente",
+        "dataset-3-label" : "Verwerpte dokumente"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entiteit/Relasies/Gebeure-indeksasie (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nie verwerkte dokumente",
+        "label-1" : "Fout met verwerking van dokumente",
+        "label-2" : "Verwerkte dokumente"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Fout dokumente",
+        "dataset-3-label" : "Verwerpte dokumente"
       }
     }
   }

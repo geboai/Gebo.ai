@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfigurációs kód"
+      },
+      "EditConfigBtn" : {
+        "label" : "Beállítás szerkesztése"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "kijelentkezés"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Dokumentumlista elemzése"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozásakor",
+        "label-2" : "Feldolgozott dokumentumok",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentumok tokenizálása"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozásakor",
+        "label-2" : "Feldolgozott dokumentumok",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "EMBEDDING" : {
+        "description" : "Szemantikus indexelés (embedding szemantikus rag-hez)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozásakor",
+        "label-2" : "Feldolgozott dokumentumok",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entitás/kapcsolat/esemény indexelés (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozásakor",
+        "label-2" : "Feldolgozott dokumentumok"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
       }
     }
   }

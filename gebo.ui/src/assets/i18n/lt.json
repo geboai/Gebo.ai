@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfigūracijos kodas"
+      },
+      "EditConfigBtn" : {
+        "label" : "Redaguoti konfigūraciją"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "atsijungti"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analizuojamas dokumentų sąrašas"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentų tokenizavimas"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Apdoroti tokenai",
+        "dataset-1-label" : "Klaida apdorojant tokenus"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantinis indeksavimas (semantinis rag įterpimas)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Apdoroti tokenai",
+        "dataset-1-label" : "Klaida apdorojant tokenus"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Subjektų/ryšių/įvykių indeksavimas (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
       }
     }
   }

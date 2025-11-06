@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "కాన్ఫిగ్ కోడ్"
+      },
+      "EditConfigBtn" : {
+        "label" : "కాన్ఫిగ్‌ను సవరించండి"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "లాగ్అవుట్"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "పత్రాల జాబితాను విశ్లేషిస్తోంది"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "పరిగణించని పత్రాలు",
+        "label-1" : "పత్రాలు ప్రాసెస్ చేసే过程中 దోషం",
+        "label-2" : "ప్రాసessed పత్రాలు",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "స్వీకరించిన పత్రాలు",
+        "dataset-1-label" : "ప్రాసessed పత్రాలు",
+        "dataset-2-label" : "దోషపూరిత పత్రాలు",
+        "dataset-3-label" : "విస్మరించిన పత్రాలు"
+      },
+      "TOKENIZATION" : {
+        "description" : "పత్రాల టోకెనైజేషన్"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "పరిగణించని పత్రాలు",
+        "label-1" : "పత్రాలు ప్రాసెస్ చేసే过程中 దోషం",
+        "label-2" : "ప్రాసessed పత్రాలు",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ప్రాసessed టోకెన్లు",
+        "dataset-1-label" : "టోకెన్లు ప్రాసెస్ చేసే过程中 దోషం"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "స్వీకరించిన పత్రాలు",
+        "dataset-1-label" : "ప్రాసessed పత్రాలు",
+        "dataset-2-label" : "దోషపూరిత పత్రాలు",
+        "dataset-3-label" : "విస్మరించిన పత్రాలు"
+      },
+      "EMBEDDING" : {
+        "description" : "సెమాంటిక్ ఇండెక్స్ చేయడం (సెమాంటిక్ రాగ్ కోసం ఎంబెడింగ్)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "పరిగణించని పత్రాలు",
+        "label-1" : "పత్రాలు ప్రాసెస్ చేసే过程中 దోషం",
+        "label-2" : "ప్రాసessed పత్రాలు",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ప్రాసessed టోకెన్లు",
+        "dataset-1-label" : "టోకెన్లు ప్రాసెస్ చేసే过程中 దోషం"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "స్వీకరించిన పత్రాలు",
+        "dataset-1-label" : "ప్రాసessed పత్రాలు",
+        "dataset-2-label" : "దోషపూరిత పత్రాలు",
+        "dataset-3-label" : "విస్మరించిన పత్రాలు"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ఎంటిటీ/సంబంధాలు/ఈవెంట్లు ఇండెక్స్ చేయడం (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "పరిగణించని పత్రాలు",
+        "label-1" : "పత్రాలు ప్రాసెస్ చేసే过程中 దోషం",
+        "label-2" : "ప్రాసessed పత్రాలు"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "స్వీకరించిన పత్రాలు",
+        "dataset-1-label" : "ప్రాసessed పత్రాలు",
+        "dataset-2-label" : "దోషపూరిత పత్రాలు",
+        "dataset-3-label" : "విస్మరించిన పత్రాలు"
       }
     }
   }

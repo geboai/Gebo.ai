@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "配置代码"
+      },
+      "EditConfigBtn" : {
+        "label" : "编辑配置"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "退出登录"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "正在分析文档列表"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "处理文档出错",
+        "label-2" : "已处理文档",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "接收的文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "TOKENIZATION" : {
+        "description" : "文档分词"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "处理文档出错",
+        "label-2" : "已处理文档",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "已处理分词",
+        "dataset-1-label" : "分词处理出错"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "接收的文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "EMBEDDING" : {
+        "description" : "语义索引 (语义 rag 嵌入)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "处理文档出错",
+        "label-2" : "已处理文档",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "已处理分词",
+        "dataset-1-label" : "分词处理出错"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "接收的文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "实体/关系/事件索引 (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "处理文档出错",
+        "label-2" : "已处理文档"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "接收的文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
       }
     }
   }

@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Configuratiecode"
+      },
+      "EditConfigBtn" : {
+        "label" : "Config bewerken"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "afmelden"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Documentenlijst analyseren"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Niet behandelde documenten",
+        "label-1" : "Fout bij verwerken documenten",
+        "label-2" : "Verwerkte documenten",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ontvangen documenten",
+        "dataset-1-label" : "Verwerkte documenten",
+        "dataset-2-label" : "Foutieve documenten",
+        "dataset-3-label" : "Verworpen documenten"
+      },
+      "TOKENIZATION" : {
+        "description" : "Documenten tokeniseren"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Niet behandelde documenten",
+        "label-1" : "Fout bij verwerken documenten",
+        "label-2" : "Verwerkte documenten",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Verwerkte tokens",
+        "dataset-1-label" : "Fout bij verwerken tokens"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ontvangen documenten",
+        "dataset-1-label" : "Verwerkte documenten",
+        "dataset-2-label" : "Foutieve documenten",
+        "dataset-3-label" : "Verworpen documenten"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantische indexering (embedding voor semantische rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Niet behandelde documenten",
+        "label-1" : "Fout bij verwerken documenten",
+        "label-2" : "Verwerkte documenten",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Verwerkte tokens",
+        "dataset-1-label" : "Fout bij verwerken tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ontvangen documenten",
+        "dataset-1-label" : "Verwerkte documenten",
+        "dataset-2-label" : "Foutieve documenten",
+        "dataset-3-label" : "Verworpen documenten"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entiteit/Relaties/Evenementen indexering (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Niet behandelde documenten",
+        "label-1" : "Fout bij verwerken documenten",
+        "label-2" : "Verwerkte documenten"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ontvangen documenten",
+        "dataset-1-label" : "Verwerkte documenten",
+        "dataset-2-label" : "Foutieve documenten",
+        "dataset-3-label" : "Verworpen documenten"
       }
     }
   }

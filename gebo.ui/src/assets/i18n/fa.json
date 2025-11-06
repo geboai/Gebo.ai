@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "کد پیکربندی"
+      },
+      "EditConfigBtn" : {
+        "label" : "ویرایش تنظیمات"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "خروج"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "در حال تحلیل لیست اسناد"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد کنار گذاشته‌شده"
+      },
+      "TOKENIZATION" : {
+        "description" : "توکنیزه کردن اسناد"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "توکن‌های پردازش‌شده",
+        "dataset-1-label" : "خطا در پردازش توکن‌ها"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد کنار گذاشته‌شده"
+      },
+      "EMBEDDING" : {
+        "description" : "ایندکس‌گذاری معنایی (ایجاد embedding برای rag معنایی)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "توکن‌های پردازش‌شده",
+        "dataset-1-label" : "خطا در پردازش توکن‌ها"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد کنار گذاشته‌شده"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ایندکس‌گذاری موجودیت‌ها/روابط/رویدادها (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد کنار گذاشته‌شده"
       }
     }
   }

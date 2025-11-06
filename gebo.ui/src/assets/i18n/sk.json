@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfiguračný kód"
+      },
+      "EditConfigBtn" : {
+        "label" : "Upraviť nastavenie"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "odhlásiť sa"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyzovanie zoznamu dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizácia dokumentov"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Sémantický index (embedding pre sémantický rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexovanie entít/vzťahov/udalostí (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
       }
     }
   }

@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "구성 코드"
+      },
+      "EditConfigBtn" : {
+        "label" : "설정 편집"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "로그아웃"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "문서 목록 분석 중"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "처리되지 않은 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
+      },
+      "TOKENIZATION" : {
+        "description" : "문서 토큰화"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "처리되지 않은 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "처리된 토큰",
+        "dataset-1-label" : "토큰 처리 오류"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
+      },
+      "EMBEDDING" : {
+        "description" : "의미 기반 색인(시맨틱 래그 임베딩)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "처리되지 않은 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "처리된 토큰",
+        "dataset-1-label" : "토큰 처리 오류"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "엔터티/관계/이벤트 색인(그래프래그)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "처리되지 않은 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
       }
     }
   }

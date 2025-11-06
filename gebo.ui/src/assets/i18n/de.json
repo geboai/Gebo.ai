@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfigurationscode"
+      },
+      "EditConfigBtn" : {
+        "label" : "Konfiguration bearbeiten"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "Abmelden"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Dokumentenliste wird analysiert"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten der Dokumente",
+        "label-2" : "Verarbeitete Dokumente",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Ausgeschlossene Dokumente"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumententokenisierung"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten der Dokumente",
+        "label-2" : "Verarbeitete Dokumente",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Verarbeitete Tokens",
+        "dataset-1-label" : "Fehler beim Verarbeiten der Tokens"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Ausgeschlossene Dokumente"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantische Indexierung (Embedding für semantisches Rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten der Dokumente",
+        "label-2" : "Verarbeitete Dokumente",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Verarbeitete Tokens",
+        "dataset-1-label" : "Fehler beim Verarbeiten der Tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Ausgeschlossene Dokumente"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexierung von Entitäten/Beziehungen/Ereignissen (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten der Dokumente",
+        "label-2" : "Verarbeitete Dokumente"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Ausgeschlossene Dokumente"
       }
     }
   }

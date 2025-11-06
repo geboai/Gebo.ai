@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "कॉन्फ़िग कोड"
+      },
+      "EditConfigBtn" : {
+        "label" : "कॉन्फ़िग संपादित करें"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "लॉगआउट"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "दस्तावेज़ सूची का विश्लेषण किया जा रहा है"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "अप्रकाशित दस्तावेज़",
+        "label-1" : "प्रोसेसिंग में त्रुटि वाले दस्तावेज़",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटि वाले दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "TOKENIZATION" : {
+        "description" : "दस्तावेज़ टोकनाइज़ेशन"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "अप्रकाशित दस्तावेज़",
+        "label-1" : "प्रोसेसिंग में त्रुटि वाले दस्तावेज़",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "प्रोसेस किए गए टोकन",
+        "dataset-1-label" : "टोकन प्रोसेसिंग में त्रुटि"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटि वाले दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "EMBEDDING" : {
+        "description" : "समानार्थी अनुक्रमण (समानार्थी रैग के लिए एम्बेडिंग)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "अप्रकाशित दस्तावेज़",
+        "label-1" : "प्रोसेसिंग में त्रुटि वाले दस्तावेज़",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "प्रोसेस किए गए टोकन",
+        "dataset-1-label" : "टोकन प्रोसेसिंग में त्रुटि"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटि वाले दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "इकाई/संबंध/घटनाओं का अनुक्रमण (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "अप्रकाशित दस्तावेज़",
+        "label-1" : "प्रोसेसिंग में त्रुटि वाले दस्तावेज़",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटि वाले दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
       }
     }
   }

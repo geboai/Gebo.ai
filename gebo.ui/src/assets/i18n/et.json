@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Konfiguratsiooni kood"
+      },
+      "EditConfigBtn" : {
+        "label" : "Muuda seadeid"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "logi välja"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analüüsin dokumentide loendit"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Töötlemata dokumendid",
+        "label-1" : "Töötlemisel ilmnes viga",
+        "label-2" : "Töödeldud dokumendid",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Saabunud dokumendid",
+        "dataset-1-label" : "Töödeldud dokumendid",
+        "dataset-2-label" : "Vigased dokumendid",
+        "dataset-3-label" : "Kõrvale jäetud dokumendid"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentide tokeniseerimine"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Töötlemata dokumendid",
+        "label-1" : "Töötlemisel ilmnes viga",
+        "label-2" : "Töödeldud dokumendid",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Töödeldud tokenid",
+        "dataset-1-label" : "Viga tokenite töötlemisel"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Saabunud dokumendid",
+        "dataset-1-label" : "Töödeldud dokumendid",
+        "dataset-2-label" : "Vigased dokumendid",
+        "dataset-3-label" : "Kõrvale jäetud dokumendid"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiline indekseerimine (embedding semantiliseks rag-iks)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Töötlemata dokumendid",
+        "label-1" : "Töötlemisel ilmnes viga",
+        "label-2" : "Töödeldud dokumendid",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Töödeldud tokenid",
+        "dataset-1-label" : "Viga tokenite töötlemisel"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Saabunud dokumendid",
+        "dataset-1-label" : "Töödeldud dokumendid",
+        "dataset-2-label" : "Vigased dokumendid",
+        "dataset-3-label" : "Kõrvale jäetud dokumendid"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entiteetide/suhete/sündmuste indekseerimine (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Töötlemata dokumendid",
+        "label-1" : "Töötlemisel ilmnes viga",
+        "label-2" : "Töödeldud dokumendid"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Saabunud dokumendid",
+        "dataset-1-label" : "Töödeldud dokumendid",
+        "dataset-2-label" : "Vigased dokumendid",
+        "dataset-3-label" : "Kõrvale jäetud dokumendid"
       }
     }
   }

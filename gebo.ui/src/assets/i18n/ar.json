@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "رمز الإعداد"
+      },
+      "EditConfigBtn" : {
+        "label" : "تعديل الإعدادات"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "تسجيل الخروج"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "تحليل قائمة المستندات"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "مستندات لم تتم معالجتها",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات تمت معالجتها",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "٠٩:١١",
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "مستندات تمت معالجتها",
+        "dataset-2-label" : "مستندات تحتوي على أخطاء",
+        "dataset-3-label" : "مستندات تم تجاهلها"
+      },
+      "TOKENIZATION" : {
+        "description" : "تحليل المستندات إلى وحدات"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "مستندات لم تتم معالجتها",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات تمت معالجتها",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "٠٩:١١",
+        "dataset-0-label" : "وحدات معالجة",
+        "dataset-1-label" : "خطأ في معالجة الوحدات"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "٠٩:١١",
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "مستندات تمت معالجتها",
+        "dataset-2-label" : "مستندات تحتوي على أخطاء",
+        "dataset-3-label" : "مستندات تم تجاهلها"
+      },
+      "EMBEDDING" : {
+        "description" : "الفهرسة الدلالية (تضمين للراغ الدلالي)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "مستندات لم تتم معالجتها",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات تمت معالجتها",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "٠٩:١١",
+        "dataset-0-label" : "وحدات معالجة",
+        "dataset-1-label" : "خطأ في معالجة الوحدات"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "مستندات تمت معالجتها",
+        "dataset-2-label" : "مستندات تحتوي على أخطاء",
+        "dataset-3-label" : "مستندات تم تجاهلها"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "فهرسة الكيانات/العلاقات/الأحداث (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "مستندات لم تتم معالجتها",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات تمت معالجتها"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "مستندات تمت معالجتها",
+        "dataset-2-label" : "مستندات تحتوي على أخطاء",
+        "dataset-3-label" : "مستندات تم تجاهلها"
       }
     }
   }

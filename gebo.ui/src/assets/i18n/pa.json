@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "ਕੰਫਿਗ ਕੋਡ"
+      },
+      "EditConfigBtn" : {
+        "label" : "ਕੰਫਿਗ ਸੋਧੋ"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "ਲਾੱਗ ਆਉਟ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ਦਸਤਾਵੇਜ਼ ਸੂਚੀ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ਨਾਮਨਜ਼ੂਰ ਦਸਤਾਵੇਜ਼",
+        "label-1" : "ਦਸਤਾਵੇਜ਼ ਪ੍ਰੋਸੈਸਿੰਗ 'ਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ਪ੍ਰਾਪਤ ਦਸਤਾਵੇਜ਼",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-2-label" : "ਗਲਤੀ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "TOKENIZATION" : {
+        "description" : "ਦਸਤਾਵੇਜ਼ਾਂ ਦੀ ਟੋਕਨਾਈਜ਼ੇਸ਼ਨ"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ਨਾਮਨਜ਼ੂਰ ਦਸਤਾਵੇਜ਼",
+        "label-1" : "ਦਸਤਾਵੇਜ਼ ਪ੍ਰੋਸੈਸਿੰਗ 'ਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਟੋਕਨ",
+        "dataset-1-label" : "ਟੋਕਨ ਪ੍ਰੋਸੈਸਿੰਗ 'ਚ ਗਲਤੀ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ਪ੍ਰਾਪਤ ਦਸਤਾਵੇਜ਼",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-2-label" : "ਗਲਤੀ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "EMBEDDING" : {
+        "description" : "ਸੈਮਾਂਟਿਕ ਇੰਡੈਕਸਿੰਗ (ਸੈਮਾਂਟਿਕ ਰੈਗ ਲਈ ਇੰਬੈਡਿੰਗ)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ਨਾਮਨਜ਼ੂਰ ਦਸਤਾਵੇਜ਼",
+        "label-1" : "ਦਸਤਾਵੇਜ਼ ਪ੍ਰੋਸੈਸਿੰਗ 'ਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਟੋਕਨ",
+        "dataset-1-label" : "ਟੋਕਨ ਪ੍ਰੋਸੈਸਿੰਗ 'ਚ ਗਲਤੀ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ਪ੍ਰਾਪਤ ਦਸਤਾਵੇਜ਼",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-2-label" : "ਗਲਤੀ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ਇਕਾਈ/ਸੰਬੰਧ/ਘਟਨਾ ਇੰਡੈਕਸਿੰਗ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ਨਾਮਨਜ਼ੂਰ ਦਸਤਾਵੇਜ਼",
+        "label-1" : "ਦਸਤਾਵੇਜ਼ ਪ੍ਰੋਸੈਸਿੰਗ 'ਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ਪ੍ਰਾਪਤ ਦਸਤਾਵੇਜ਼",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-2-label" : "ਗਲਤੀ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
+        "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
       }
     }
   }

@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Nambari ya usanidi"
+      },
+      "EditConfigBtn" : {
+        "label" : "Hariri usanidi"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "ondoka"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Inachanganua orodha ya hati"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "TOKENIZATION" : {
+        "description" : "Ugawaji wa hati katika tokeni"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokeni zilizochakatwa",
+        "dataset-1-label" : "Hitilafu katika kuchakata tokeni"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "EMBEDDING" : {
+        "description" : "Kuorodhesha kisemantiki (embedding kwa semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokeni zilizochakatwa",
+        "dataset-1-label" : "Hitilafu katika kuchakata tokeni"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Kuorodhesha vitambulisho/mahusiano/matukio (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
       }
     }
   }

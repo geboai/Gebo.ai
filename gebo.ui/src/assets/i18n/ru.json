@@ -243,6 +243,9 @@
       },
       "ConfigCodeHeader" : {
         "label" : "Код конфигурации"
+      },
+      "EditConfigBtn" : {
+        "label" : "Редактировать конфигурацию"
       }
     },
     "KnowledgeBaseWizardComponent" : {
@@ -2498,6 +2501,81 @@
       },
       "logout" : {
         "label" : "выйти"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Анализ списка документов"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка при обработке документов",
+        "label-2" : "Обработанные документы",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибкой",
+        "dataset-3-label" : "Отклонённые документы"
+      },
+      "TOKENIZATION" : {
+        "description" : "Токенизация документов"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка при обработке документов",
+        "label-2" : "Обработанные документы",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Обработанные токены",
+        "dataset-1-label" : "Ошибка при обработке токенов"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибкой",
+        "dataset-3-label" : "Отклонённые документы"
+      },
+      "EMBEDDING" : {
+        "description" : "Семантическая индексация (эмбеддинг для semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка при обработке документов",
+        "label-2" : "Обработанные документы",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Обработанные токены",
+        "dataset-1-label" : "Ошибка при обработке токенов"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибкой",
+        "dataset-3-label" : "Отклонённые документы"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Индексация сущностей/отношений/событий (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка при обработке документов",
+        "label-2" : "Обработанные документы"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибкой",
+        "dataset-3-label" : "Отклонённые документы"
       }
     }
   }
