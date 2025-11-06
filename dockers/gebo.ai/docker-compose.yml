@@ -97,6 +97,7 @@ services:
       JAVA_TOOL_OPTIONS: --enable-native-access=ALL-UNNAMED
         -Dsun.jnu.encoding=UTF-8
         -Dfile.encoding=UTF-8
+        -Dai.gebo.neo4j.enabled=true       
         -XX:+AggressiveHeap
         -XX:+PrintGCDetails
         -Xlog:gc:/opt/gebo.ai/logs/gc.log
