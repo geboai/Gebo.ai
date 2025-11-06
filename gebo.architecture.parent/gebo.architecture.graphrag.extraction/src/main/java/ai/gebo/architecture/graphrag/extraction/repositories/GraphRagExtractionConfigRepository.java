@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import ai.gebo.application.messaging.workflow.model.WorkflowContext;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
+
 @ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 public interface GraphRagExtractionConfigRepository extends IGBaseMongoDBRepository<GraphRagExtractionConfig> {
 	@Override
@@ -32,6 +33,14 @@ public interface GraphRagExtractionConfigRepository extends IGBaseMongoDBReposit
 	public long countByKnowledgeBaseCodeAndProjectCode(String knowledgeBaseCode, String projectCode);
 
 	public default boolean hasConfiguration(WorkflowContext context) {
+		List<GraphRagExtractionConfig> defaultConfiguration = findByDefaultConfiguration(true);
+		if (!defaultConfiguration.isEmpty()) {
+			GraphRagExtractionConfig defaultconfiguration = defaultConfiguration.get(0);
+			if (defaultconfiguration.getGraphRagAllSources() != null
+					&& defaultconfiguration.getGraphRagAllSources()) {
+				return true;
+			}
+		}
 		if (context == null)
 			return countByDefaultConfiguration(true) > 0;
 		return ((context.getKnowledgeBaseCode() != null
