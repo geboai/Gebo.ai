@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "D'acord!",
         "detail" : "Operació realitzada amb èxit"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Benvingut a Gebo.ai",
+        "detail" : "Introdueix el teu nom d'usuari i contrasenya per iniciar sessió"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "L'operació ha fallat",
+        "detail" : "No es pot autenticar amb les credencials introduïdes"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
       }
     }
   },

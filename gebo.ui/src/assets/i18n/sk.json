@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operácia bola úspešne dokončená"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Vitajte v gebo.ai",
+        "detail" : "Zadajte svoje používateľské meno a heslo pre prihlásenie"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operácia zlyhala",
+        "detail" : "Nie je možné overiť zadané prihlasovacie údaje"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
       }
     }
   },

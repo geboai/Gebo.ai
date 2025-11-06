@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ຮຽບຮ້ອຍ!",
         "detail" : "ດຳເນີນການສຳເລັດແລ້ວ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "ຍິນດີຕ້ອນຮັບສູ່ gebo.ai",
+        "detail" : "ປ້ອນຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານຂອງທ່ານເພື່ອເຂົ້າສູ່ລະບົບ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ການດຳເນີນການລົ້ມເຫຼວ",
+        "detail" : "ບໍ່ສາມາດຢືນຢັນຕົວຕົນດ້ວຍຂໍ້ມູນທີ່ໃຫ້"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ຮູ້ແລ້ວ!",
+        "detail" : "ການດຳເນີນການສຳເລັດສົມບູນ"
       }
     }
   },

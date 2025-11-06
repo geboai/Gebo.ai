@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Tamam!",
         "detail" : "İşlem başarıyla tamamlandı"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai'ye hoş geldiniz",
+        "detail" : "Giriş yapmak için kullanıcı adınızı ve şifrenizi girin"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "İşlem başarısız",
+        "detail" : "Sağlanan bilgilerle kimlik doğrulaması yapılamıyor"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Tamam!",
+        "detail" : "İşlem başarıyla tamamlandı"
       }
     }
   },

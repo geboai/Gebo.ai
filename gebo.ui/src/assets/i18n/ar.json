@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "تم!",
         "detail" : "تمت العملية بنجاح"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "مرحبًا بك في gebo.ai",
+        "detail" : "أدخل اسم المستخدم وكلمة المرور لتسجيل الدخول"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "فشلت العملية",
+        "detail" : "لا يمكن التحقق من صحة البيانات المدخلة"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "تم بنجاح!",
+        "detail" : "تمت العملية بنجاح"
       }
     }
   },

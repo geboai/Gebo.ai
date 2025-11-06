@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Toiminto suoritettu onnistuneesti"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Tervetuloa gebo.ai:hin",
+        "detail" : "Syötä käyttäjätunnuksesi ja salasanasi kirjautuaksesi sisään"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Toiminto epäonnistui",
+        "detail" : "Tunnistautuminen annetuilla tiedoilla epäonnistui"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto onnistui"
       }
     }
   },

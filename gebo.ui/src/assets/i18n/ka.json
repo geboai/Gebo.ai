@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "კარგია!",
         "detail" : "ოპერაცია წარმატებით შესრულდა"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "კეთილი მოხმობათ gebo.ai-ზე",
+        "detail" : "შეიყვანეთ თქვენი მომხმარებლის სახელი და პაროლი შესასვლელად"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ოპერაცია ვერ განხორციელდა",
+        "detail" : "მითითებული მონაცემებით ავტორიზაცია შეუძლებელია"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "კარგია!",
+        "detail" : "ოპერაციამ წარმატებით ჩაიარა"
       }
     }
   },

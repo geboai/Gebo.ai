@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Gerai!",
         "detail" : "Operacija sėkmingai atlikta"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Sveiki atvykę į gebo.ai",
+        "detail" : "Įveskite savo vartotojo vardą ir slaptažodį prisijungimui"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operacija nepavyko",
+        "detail" : "Nepavyksta autentifikuotis su pateiktais duomenimis"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Gerai!",
+        "detail" : "Operacija sėkmingai atlikta"
       }
     }
   },

@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Բարի գալուստ gebo.ai",
+        "detail" : "Մուտքագրեք ձեր օգտանունը և գաղտնաբառը մուտք գործելու համար"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Գործողությունը ձախողվեց",
+        "detail" : "Հնարավոր չէ հաստատել օգտվողի մուտքագրած տվյալներով"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Լավ է!",
+        "detail" : "Գործողությունը հաջողությամբ իրականացվել է"
       }
     }
   },

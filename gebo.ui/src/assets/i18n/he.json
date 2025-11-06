@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "בסדר!",
         "detail" : "הפעולה הושלמה בהצלחה"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "ברוך הבא ל-gebo.ai",
+        "detail" : "הזן שם משתמש וסיסמה כדי להיכנס"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "הפעולה נכשלה",
+        "detail" : "לא ניתן לאמת את הפרטים שסופקו"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "הצלחה!",
+        "detail" : "הפעולה בוצעה בהצלחה"
       }
     }
   },

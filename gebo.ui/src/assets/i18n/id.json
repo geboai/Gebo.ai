@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operasi berhasil dilakukan"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Selamat datang di gebo.ai",
+        "detail" : "Masukkan nama pengguna dan kata sandi Anda untuk masuk"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operasi gagal",
+        "detail" : "Tidak dapat mengautentikasi dengan kredensial yang diberikan"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
       }
     }
   },

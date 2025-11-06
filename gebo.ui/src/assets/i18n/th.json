@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ตกลง!",
         "detail" : "ดำเนินการสำเร็จ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "ยินดีต้อนรับสู่ gebo.ai",
+        "detail" : "กรุณาใส่ชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ดำเนินการไม่สำเร็จ",
+        "detail" : "ไม่สามารถยืนยันตัวตนด้วยข้อมูลที่ให้มา"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "เรียบร้อย!",
+        "detail" : "ดำเนินการสำเร็จแล้ว"
       }
     }
   },

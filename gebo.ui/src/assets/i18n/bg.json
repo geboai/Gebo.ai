@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ОК!",
         "detail" : "Операцията беше успешна"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Добре дошли в gebo.ai",
+        "detail" : "Въведете вашето потребителско име и парола, за да влезете"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Операцията не беше успешна",
+        "detail" : "Не може да се удостовери с предоставените данни"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ОК!",
+        "detail" : "Операцията завърши успешно"
       }
     }
   },

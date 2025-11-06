@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Handling udført med succes"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Velkommen til gebo.ai",
+        "detail" : "Indtast dit brugernavn og adgangskode for at logge ind"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Handlingen mislykkedes",
+        "detail" : "Kan ikke godkende med de angivne oplysninger"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Handlingen blev udført succesfuldt"
       }
     }
   },

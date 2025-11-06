@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "சரி!",
         "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai இற்குப் வருக",
+        "detail" : "உங்கள் பயனர் பெயர் மற்றும் கடவுச்சொல்லை உள்ளிட்டு உள்நுழையவும்"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "செயல் தோல்வியுற்றது",
+        "detail" : "கொடுக்கப்பட்ட சான்றுகள் மூலம் அங்கீகரிக்க இயலவில்லை"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "சரி!",
+        "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
       }
     }
   },

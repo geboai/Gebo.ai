@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "సరే!",
         "detail" : "ఆపరేషన్ విజయవంతంగా పూర్తయింది"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.aiకు స్వాగతం",
+        "detail" : "లాగిన్ చేయడానికి మీ వినియోగదారు పేరు మరియు పాస్‌వర్డ్ నమోదు చేయండి"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ప్రక్రియ విఫలమైంది",
+        "detail" : "ఇచ్చిన ప్రమాణాలతో ధృవీకరించలేకపోయాం"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "సరే!",
+        "detail" : "ప్రక్రియ విజయవంతంగా పూర్తయింది"
       }
     }
   },

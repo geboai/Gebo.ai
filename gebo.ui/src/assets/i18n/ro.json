@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operațiune realizată cu succes"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Bun venit la Gebo.ai",
+        "detail" : "Introduceți numele de utilizator și parola pentru a vă conecta"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operațiunea a eșuat",
+        "detail" : "Nu se poate autentifica cu datele furnizate"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operațiunea a fost finalizată cu succes"
       }
     }
   },

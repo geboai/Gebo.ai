@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Əməliyyat uğurla tamamlandı"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Gebo.ai-ya xoş gəlmisiniz",
+        "detail" : "Daxil olmaq üçün istifadəçi adınızı və şifrənizi daxil edin"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Əməliyyat uğursuz oldu",
+        "detail" : "Göstərilən məlumatlarla təsdiqləmə mümkün olmadı"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Oldu!",
+        "detail" : "Əməliyyat uğurla tamamlandı"
       }
     }
   },

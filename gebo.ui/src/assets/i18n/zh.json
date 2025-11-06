@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "好的！",
         "detail" : "操作成功完成"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "欢迎来到gebo.ai",
+        "detail" : "请输入用户名和密码登录"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "操作失败",
+        "detail" : "无法使用提供的凭证进行身份验证"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "成功！",
+        "detail" : "操作已成功完成"
       }
     }
   },

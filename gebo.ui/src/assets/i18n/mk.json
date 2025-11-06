@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Во ред!",
         "detail" : "Операцијата беше успешно завршена"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Добредојдовте во Gebo.ai",
+        "detail" : "Внесете го вашето корисничко име и лозинка за најава"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Операцијата не успеа",
+        "detail" : "Не можеме да ве најавиме со дадените податоци"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Во ред!",
+        "detail" : "Операцијата е успешно завршена"
       }
     }
   },

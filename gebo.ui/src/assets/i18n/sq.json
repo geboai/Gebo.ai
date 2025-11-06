@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operacioni u krye me sukses"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Mirë se vini në gebo.ai",
+        "detail" : "Shkruani emrin tuaj të përdoruesit dhe fjalëkalimin për t'u identifikuar"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operacioni dështoi",
+        "detail" : "Nuk mund të autentifikoheni me kredencialet e dhëna"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operacioni u krye me sukses"
       }
     }
   },

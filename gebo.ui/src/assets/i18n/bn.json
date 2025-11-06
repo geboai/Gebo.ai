@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ঠিক আছে!",
         "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai-তে স্বাগতম",
+        "detail" : "লগইন করতে আপনার ব্যবহারকারীর নাম এবং পাসওয়ার্ড প্রবেশ করুন"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "অপারেশন ব্যর্থ হয়েছে",
+        "detail" : "প্রদত্ত তথ্য দিয়ে প্রমাণীকরণ করা যাচ্ছে না"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ঠিক আছে!",
+        "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
       }
     }
   },

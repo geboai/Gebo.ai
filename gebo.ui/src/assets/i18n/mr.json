@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ठीक आहे!",
         "detail" : "ऑपरेशन यशस्वीरित्या पूर्ण झाले"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai मध्ये स्वागत आहे",
+        "detail" : "लॉगिनसाठी आपले वापरकर्तानाव आणि पासवर्ड प्रविष्ट करा"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ऑपरेशन अयशस्वी",
+        "detail" : "पुरवलेल्या क्रेडेन्शियल्ससह प्रमाणीकरण करू शकत नाही"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ठीक आहे!",
+        "detail" : "ऑपरेशन यशस्वीपणे पूर्ण झाले"
       }
     }
   },

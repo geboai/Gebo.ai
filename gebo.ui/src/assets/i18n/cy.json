@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Iawn!",
         "detail" : "Gweithred wedi'i gwblhau'n llwyddiannus"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Croeso i gebo.ai",
+        "detail" : "Nodwch eich enw defnyddiwr a chyfrinair i fewngofnodi"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Methiant gweithred",
+        "detail" : "Methu dilysu gyda’r manylion a ddarparwyd"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi cwblhau’n llwyddiannus"
       }
     }
   },

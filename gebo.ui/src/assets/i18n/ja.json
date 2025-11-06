@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK！",
         "detail" : "操作が正常に完了しました"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.aiへようこそ",
+        "detail" : "ユーザー名とパスワードを入力してログインしてください"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "操作に失敗しました",
+        "detail" : "入力された認証情報で認証できません"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK！",
+        "detail" : "操作が正常に完了しました"
       }
     }
   },

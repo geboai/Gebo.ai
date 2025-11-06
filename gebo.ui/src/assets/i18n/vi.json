@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Thao tác đã thực hiện thành công"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Chào mừng đến với gebo.ai",
+        "detail" : "Nhập tên người dùng và mật khẩu của bạn để đăng nhập"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Thao tác thất bại",
+        "detail" : "Không thể xác thực với thông tin đăng nhập đã cung cấp"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Thành công!",
+        "detail" : "Thao tác thực hiện thành công"
       }
     }
   },

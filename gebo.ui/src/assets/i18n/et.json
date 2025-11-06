@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Toiming õnnestus"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Tere tulemast palvelesse gebo.ai",
+        "detail" : "Sisselogimiseks sisesta oma kasutajanimi ja parool"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Tegevus ebaõnnestus",
+        "detail" : "Sisestatud andmetega ei õnnestunud autentida"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Tegevus õnnestus edukalt"
       }
     }
   },

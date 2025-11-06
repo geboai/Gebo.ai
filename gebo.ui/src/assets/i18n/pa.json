@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ਠੀਕ ਹੈ!",
         "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋਇਆ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ",
+        "detail" : "ਲਾਗਇਨ ਕਰਨ ਲਈ ਆਪਣਾ ਉਪਯੋਗਕਰਤਾ ਨਾਮ ਅਤੇ ਪਾਸਵਰਡ ਦਿਓ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ਓਪਰੇਸ਼ਨ ਅਸਫਲ ਹੋ ਗਿਆ",
+        "detail" : "ਦਿੱਤੇ ਗਏ ਪਾਸਵਰਡ ਨਾਲ ਪਰਮਾਣੀਕਰਨ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋਇਆ"
       }
     }
   },

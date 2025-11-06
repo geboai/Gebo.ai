@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "እሺ!",
         "detail" : "እባየቱ በተሳካ ሁኔታ ተከናውኗል"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "እንኳን ወደ gebo.ai በደህና መጡ",
+        "detail" : "ለመግባት የተጠቃሚ ስምዎን እና የሚስጥር ቁልፎትን ያስገቡ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "እርምጃው አልተሳካም",
+        "detail" : "በቀረበው መረጃ ማረጋገጥ አልተቻለም"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "እሺ!",
+        "detail" : "እርምጃው በተሳካ ሁኔታ ተጠናቋል"
       }
     }
   },

@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operasjonen ble utført"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Velkommen til gebo.ai",
+        "detail" : "Skriv inn brukernavn og passord for å logge inn"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operasjonen mislyktes",
+        "detail" : "Kan ikke autentisere med oppgitte legitimasjon"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble fullført"
       }
     }
   },

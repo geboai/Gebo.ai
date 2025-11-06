@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ശരി!",
         "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയാക്കി"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai ലേക്ക് സ്വാഗതം",
+        "detail" : "ലോഗിൻ ചെയ്യാൻ ഉപയോക്തൃനാമവും പാസ്വേർഡും നൽകുക"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "പ്രവർത്തനം പരാജയപ്പെട്ടു",
+        "detail" : "നൽകിയ ക്രെഡൻഷ്യലുകൾ ഉപയോഗിച്ച് തിരിച്ചറിയൽ സാധ്യമായില്ല"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ശരി!",
+        "detail" : "പ്രവർത്തനം വിജയകരമായി പൂര്‍ത്തിയായി"
       }
     }
   },

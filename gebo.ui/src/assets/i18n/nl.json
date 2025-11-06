@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operatie succesvol voltooid"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Welkom bij gebo.ai",
+        "detail" : "Voer je gebruikersnaam en wachtwoord in om in te loggen"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Actie mislukt",
+        "detail" : "Kan niet inloggen met de opgegeven gegevens"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Actie succesvol voltooid"
       }
     }
   },

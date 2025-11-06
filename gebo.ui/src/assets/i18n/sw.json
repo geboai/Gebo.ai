@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Sawa!",
         "detail" : "Operesheni imekamilika kwa mafanikio"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Karibu kwenye gebo.ai",
+        "detail" : "Weka jina lako la mtumiaji na nenosiri ili kuingia"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Hatua imeshindikana",
+        "detail" : "Haiwezekani kuthibitisha kwa taarifa ulizotoa"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Sawa!",
+        "detail" : "Hatua imekamilika kwa mafanikio"
       }
     }
   },

@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ಸರಿ!",
         "detail" : "ಕಾರ್ಯಾಚರಣೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai ಗೆ స్వಾಗತ",
+        "detail" : "ಲಾಗಿನ್ ಮಾಡಲು ನಿಮ್ಮ ಬಳಕೆದಾರಹೆಸರು ಮತ್ತು ಪಾಸ್ವರ್ಡ್ ನಮೂದಿಸಿ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ಆಪರೇಶನ್ ವಿಫಲವಾಯಿತು",
+        "detail" : "ನೀಡಿದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ದೃಢೀಕರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ಸರಿ!",
+        "detail" : "ಆಪರೇಶನ್ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     }
   },

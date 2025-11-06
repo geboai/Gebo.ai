@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Allt í lagi!",
         "detail" : "Aðgerð tókst"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Velkomin á gebo.ai",
+        "detail" : "Sláðu inn notandanafn og lykilorð til að skrá þig inn"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Aðgerð mistókst",
+        "detail" : "Ekki tókst að auðkenna með gefnum upplýsingum"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Í lagi!",
+        "detail" : "Aðgerð tókst"
       }
     }
   },

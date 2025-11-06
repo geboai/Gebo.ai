@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "ٹھیک ہے!",
         "detail" : "عمل کامیابی سے مکمل ہو گیا"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai میں خوش آمدید",
+        "detail" : "لاگ ان کرنے کے لیے اپنا صارف نام اور پاس ورڈ درج کریں"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "عمل ناکام ہوگیا",
+        "detail" : "دی گئی معلومات سے تصدیق نہیں ہو سکی"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ٹھیک ہے!",
+        "detail" : "عمل کامیابی سے مکمل ہو گیا"
       }
     }
   },

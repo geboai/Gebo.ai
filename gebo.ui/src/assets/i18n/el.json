@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Εντάξει!",
         "detail" : "Η ενέργεια ολοκληρώθηκε με επιτυχία"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Καλώς ήρθατε στο gebo.ai",
+        "detail" : "Εισαγάγετε το όνομα χρήστη και τον κωδικό πρόσβασης για σύνδεση"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Η λειτουργία απέτυχε",
+        "detail" : "Αδυναμία αυθεντικοποίησης με τα παρεχόμενα στοιχεία"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Εντάξει!",
+        "detail" : "Η λειτουργία ολοκληρώθηκε με επιτυχία"
       }
     }
   },

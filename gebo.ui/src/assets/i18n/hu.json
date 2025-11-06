@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "A művelet sikeresen befejeződött"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Üdvözlünk a gebo.ai-nál",
+        "detail" : "Add meg a felhasználóneved és jelszavad a bejelentkezéshez"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "A művelet nem sikerült",
+        "detail" : "Nem sikerült azonosítani a megadott adatokkal"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Rendben!",
+        "detail" : "A művelet sikeresen befejeződött"
       }
     }
   },

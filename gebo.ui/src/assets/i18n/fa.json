@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "باشه!",
         "detail" : "عملیات با موفقیت انجام شد"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "به gebo.ai خوش آمدید",
+        "detail" : "نام کاربری و رمز عبور خود را وارد کنید تا وارد شوید"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "عملیات ناموفق بود",
+        "detail" : "امکان احراز هویت با اطلاعات وارد شده وجود ندارد"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "باشه!",
+        "detail" : "عملیات با موفقیت انجام شد"
       }
     }
   },

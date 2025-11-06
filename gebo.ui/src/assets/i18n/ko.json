@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "확인!",
         "detail" : "작업이 성공적으로 완료되었습니다"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.ai에 오신 것을 환영합니다",
+        "detail" : "로그인하려면 사용자 이름과 비밀번호를 입력하세요"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "작업 실패",
+        "detail" : "입력한 자격 증명으로 인증할 수 없습니다"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "완료!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
       }
     }
   },

@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Labi!",
         "detail" : "Darbība veiksmīgi pabeigta"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Laipni lūdzam gebo.ai",
+        "detail" : "Ievadiet savu lietotājvārdu un paroli, lai pieteiktos"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Darbība neveiksmīga",
+        "detail" : "Nevar autentificēt ar norādītajiem akreditācijas datiem"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Labi!",
+        "detail" : "Darbība veiksmīgi pabeigta"
       }
     }
   },

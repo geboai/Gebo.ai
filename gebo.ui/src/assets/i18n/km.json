@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "អំណោយពិសេស!",
         "detail" : "ប្រតិបត្តិការបានជោគជ័យ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "សូមស្វាគមន៍មកកាន់ gebo.ai",
+        "detail" : "បញ្ចូលឈ្មោះអ្នកប្រើ និងពាក្យសម្ងាត់របស់អ្នក ដើម្បីចូលប្រើ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ប្រតិបត្តិការបរាជ័យ",
+        "detail" : "មិនអាចផ្ទៀងផ្ទាត់ដោយប្រើព័ត៌មានចូលដែលបានផ្តល់ទេ"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "ជោគជ័យ!",
+        "detail" : "ប្រតិបត្តិការបានបញ្ចប់ដោយជោគជ័យ"
       }
     }
   },

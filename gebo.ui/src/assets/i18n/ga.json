@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "Ceart go leor!",
         "detail" : "Oibríocht críochnaithe go rathúil"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Fáilte chuig Gebo.ai",
+        "detail" : "Iontráil d’ainm úsáideora agus do phasfhocal chun logáil isteach"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Theip ar an oibríocht",
+        "detail" : "Ní féidir fíordheimhniú leis na dintiúir seo"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "D'éirigh leis an oibríocht"
       }
     }
   },

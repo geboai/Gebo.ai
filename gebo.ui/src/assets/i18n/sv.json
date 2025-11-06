@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Åtgärden slutförd"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Välkommen till gebo.ai",
+        "detail" : "Ange ditt användarnamn och lösenord för att logga in"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Åtgärden misslyckades",
+        "detail" : "Kan inte autentisera med angivna uppgifter"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden slutfördes"
       }
     }
   },

@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Matagumpay na naisagawa ang operasyon"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Maligayang pagdating sa gebo.ai",
+        "detail" : "Ilagay ang iyong username at password para mag-login"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Nabigo ang operasyon",
+        "detail" : "Hindi ma-authenticate gamit ang ibinigay na credentials"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na natapos ang operasyon"
       }
     }
   },

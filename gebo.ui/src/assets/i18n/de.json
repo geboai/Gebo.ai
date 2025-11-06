@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Vorgang erfolgreich abgeschlossen"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Willkommen bei gebo.ai",
+        "detail" : "Geben Sie Ihren Benutzernamen und Ihr Passwort ein, um sich anzumelden"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Vorgang fehlgeschlagen",
+        "detail" : "Authentifizierung mit den angegebenen Anmeldedaten nicht möglich"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Vorgang erfolgreich abgeschlossen"
       }
     }
   },

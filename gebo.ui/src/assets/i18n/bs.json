@@ -65,6 +65,18 @@
       "LoginComponent" : {
         "summary" : "OK!",
         "detail" : "Operacija uspješno završena"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Dobrodošli u gebo.ai",
+        "detail" : "Unesite svoje korisničko ime i lozinku za prijavu"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operacija nije uspjela",
+        "detail" : "Ne možemo vas prijaviti s datim akreditivima"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "U redu!",
+        "detail" : "Operacija je uspješno završena"
       }
     }
   },
