@@ -71,23 +71,32 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
             next: (value) => {
                 const actualValue:boolean=value === true
                 if (this.formGroup.controls["defaultConfiguration"].value===true) {
-                    if (this.graphRagAllSources===true && actualValue!==true) {
+                    if ( actualValue!==true) {
                         this.formGroup.controls["processEveryDocument"].setValue(false);
                         this.formGroup.controls["contentSelectionFilter"].setValue(undefined);
+                        this.formGroup.controls["processEveryDocument"].disable();
+                        this.formGroup.controls["contentSelectionFilter"].disable();
+                    }else {
+                        this.formGroup.controls["processEveryDocument"].enable();
+                        this.formGroup.controls["contentSelectionFilter"].enable();
                     }
                 }
                 this.graphRagAllSources = actualValue;
+                this.formGroup.updateValueAndValidity();
             }
         });
         this.formGroup.controls["processEveryDocument"].valueChanges.subscribe({
             next:(processEveryDocument:boolean|undefined)=>{
                 this.processEveryDocument=processEveryDocument;
                 if (processEveryDocument===true) {
-                    this.formGroup.controls["contentSelectionFilter"].clearValidators();
+                    //this.formGroup.controls["contentSelectionFilter"].clearValidators();
                     this.formGroup.controls["contentSelectionFilter"].setValue(null);
+                    this.formGroup.controls["contentSelectionFilter"].disable();
                 }else {
-                    this.formGroup.controls["contentSelectionFilter"].clearValidators();
+                    this.formGroup.controls["contentSelectionFilter"].enable();
                     this.formGroup.controls["contentSelectionFilter"].addValidators(Validators.required);
+                    //this.formGroup.controls["contentSelectionFilter"].clearValidators();
+                    //this.formGroup.controls["contentSelectionFilter"].addValidators(Validators.required);
                 }
                 this.formGroup.updateValueAndValidity();
             }
