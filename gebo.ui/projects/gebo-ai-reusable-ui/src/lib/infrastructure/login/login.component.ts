@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
       this.subscription.unsubscribe();
       this.subscription = undefined;
     }
-    this.subscription = this.geboTranslationService.translateMessage("LoginModule", "LoginComponent", welcomeMessage).subscribe({
+    this.subscription = this.geboTranslationService.translateMessage("LoginModule", "LoginComponent-welcome", welcomeMessage).subscribe({
       next: (message) => {
         if (message) this.userMessages = [message];
       }
@@ -136,7 +136,8 @@ export class LoginComponent implements OnInit {
         this.subscription = undefined;
       }
       if (this.userMessages && this.userMessages.length) {
-        this.subscription = this.geboTranslationService.translateMessage("LoginModule", "LoginComponent", this.userMessages[0]).subscribe({
+        const observable = x.userInfo ? this.geboTranslationService.translateMessage("LoginModule", "LoginComponent-login-ok", this.userMessages[0]) : this.geboTranslationService.translateMessage("LoginModule", "LoginComponent-login-error", this.userMessages[0]);
+        this.subscription = observable.subscribe({
           next: (message) => {
             if (message) this.userMessages = [message];
           }
