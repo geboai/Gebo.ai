@@ -86,6 +86,7 @@ export * from "./lib/controls/content-selection-filter-component/content-selecti
 
 export * from "./lib/controls/field-translation-container/field-container.module";
 export * from "./lib/controls/field-translation-container/gebo-translation.service";
+export * from "./lib/controls/field-translation-container/text-language-resources";
 
 export * from "./lib/controls/field-host-component-iface/field-host-component-iface";
 

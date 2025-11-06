@@ -3,25 +3,26 @@ function n(d?: number): number {
   if (d && d > 0) return d;
   else return 0;
 }
-function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieChart | undefined {
+function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary, workflowStepId?: string): NGPieChart | undefined {
   const chart: NGPieChart = {
+    id: workflowStepId + "-documents-chart",
     labels: [],
     datasets: [{
       label: "Received docs",
       data: [],
-      backgroundColor:[]
+      backgroundColor: []
     }, {
       label: "Processed docs",
       data: [],
-      backgroundColor:[]
+      backgroundColor: []
     }, {
       label: "Error docs",
       data: [],
-      backgroundColor:[]
+      backgroundColor: []
     }, {
       label: "Discarded docs",
       data: [],
-      backgroundColor:[]
+      backgroundColor: []
     }]
   };
   if (foundProcessStepSummary) {
@@ -43,20 +44,21 @@ function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPie
   return undefined;
 
 }
-function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieChart | undefined {
+function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary, workflowStepId?: string): NGPieChart | undefined {
   const chart: NGPieChart = {
+    id: workflowStepId + "-tokens-processing",
     labels: [],
     datasets: [{
       label: "Processed tokens",
       data: [],
-      backgroundColor:[]
-    },{
-      label:"Error processing tokens",
+      backgroundColor: []
+    }, {
+      label: "Error processing tokens",
       data: [],
-      backgroundColor:[]
+      backgroundColor: []
     }]
   };
-  let hasNotZeroTokens = foundProcessStepSummary?.timesamples?.filter(ts => (ts.tokensProcessed && ts.tokensProcessed > 0 ) || (ts.errorChunks && ts.errorChunks>0) );
+  let hasNotZeroTokens = foundProcessStepSummary?.timesamples?.filter(ts => (ts.tokensProcessed && ts.tokensProcessed > 0) || (ts.errorChunks && ts.errorChunks > 0));
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
@@ -80,7 +82,9 @@ function tokensChart(foundProcessStepSummary?: JobWorkflowStepSummary): NGPieCha
 export function renderData(result: ComputedWorkflowStatus, workflowStepsSummaries: JobWorkflowStepSummary[] | undefined): StatusRendering {
   const foundProcessStepSummary = workflowStepsSummaries?.find(x => x.workflowId === result.workflowId && x.workflowType === result.workflowType && x.workflowStepId === result.workflowStepId);
   const out: StatusRendering = {
+    id: result.workflowStepId,
     ...result, piechart: {
+      id: result.workflowStepId + "-docs-histogram",
       labels: ["Not treated docs", "Error processing docs", "Processed docs"],
       datasets: [{
         label: "",
@@ -91,8 +95,8 @@ export function renderData(result: ComputedWorkflowStatus, workflowStepsSummarie
         backgroundColor: ["orange", "red", "green"]
       }]
     },
-    documentsChart: documentsChart(foundProcessStepSummary),
-    tokensChart: tokensChart(foundProcessStepSummary),
+    documentsChart: documentsChart(foundProcessStepSummary, result.workflowStepId),
+    tokensChart: tokensChart(foundProcessStepSummary, result.workflowStepId),
     childs: result?.childs?.map(x => {
       return renderData(x, workflowStepsSummaries);
     })
@@ -106,20 +110,22 @@ export function renderData(result: ComputedWorkflowStatus, workflowStepsSummarie
 export type NGPieChart = {
   labels: string[];
   datasets: { label: string; data: number[]; backgroundColor?: string[]; borderColor?: string[]; borderWith?: number; }[];
+  id?: string;
 };
 export interface StatusRendering extends ComputedWorkflowStatus {
   piechart: NGPieChart;
   documentsChart?: NGPieChart;
   tokensChart?: NGPieChart;
   childs?: StatusRendering[];
+  id?: string;
 }
 
 function shortTime(startDateTime: Date): string {
-  const input:Date|undefined=startDateTime?new Date(startDateTime):undefined;
+  const input: Date | undefined = startDateTime ? new Date(startDateTime) : undefined;
   if (input) {
-    const hour= input.getHours();
-    const minutes=input.getMinutes();
-    return (hour<10?"0"+hour:""+hour)+":"+(minutes<10?"0"+minutes:""+minutes);
-  }else return "";
+    const hour = input.getHours();
+    const minutes = input.getMinutes();
+    return (hour < 10 ? "0" + hour : "" + hour) + ":" + (minutes < 10 ? "0" + minutes : "" + minutes);
+  } else return "";
 }
 

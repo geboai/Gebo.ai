@@ -92,6 +92,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
     private logViewControllerService: LogViewControllerService,
     geboUIActionRoutingService: GeboUIActionRoutingService,
     private companySystemsControllerService: CompanySystemsControllerService,
+    
     outputForwardingService?: GeboUIOutputForwardingService) {
     super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService)
     this.refreshGraphics();
