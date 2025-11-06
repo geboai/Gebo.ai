@@ -1,11 +1,8 @@
 import {
-  ChangeDetectorRef,
   Directive,
-  Host,
-  Inject,
-  InjectionToken,
+  Host, InjectionToken,
   Optional,
-  Self,
+  Self
 } from '@angular/core';
 
 // PrimeNG component classes (importa solo quelli che usi davvero nel progetto)
@@ -15,9 +12,9 @@ import { Panel } from 'primeng/panel';
 import { Dialog } from 'primeng/dialog';
 import { Sidebar } from 'primeng/sidebar';
 import { Card } from 'primeng/card';
-import { TabView, TabPanel } from 'primeng/tabview';
+import { TabPanel } from 'primeng/tabview';
 
-import { Accordion, AccordionTab } from 'primeng/accordion';
+import { AccordionTab } from 'primeng/accordion';
 import { Toolbar } from 'primeng/toolbar';
 import { Chip } from 'primeng/chip';
 import { Badge } from 'primeng/badge';
@@ -37,11 +34,7 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Steps } from 'primeng/steps';
 
 import { Galleria } from 'primeng/galleria';
-import { BaseComponent } from 'primeng/basecomponent';
-// Nota: i componenti *menu-based* (Menubar, Menu, TieredMenu, ContextMenu, MegaMenu, Steps) usano "model" con label dentro gli item;
-// li gestiamo più sotto in modo specifico.
 
-// =========== Contract & Token ===========
 export interface LabelTarget {
   set(key: string, value: string): void;
 }

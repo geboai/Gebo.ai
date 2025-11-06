@@ -82,27 +82,35 @@
         <div class="col-12 geboThirdHeight">
             <div class="grid" [formGroup]="createChoices">
                 <div class="col-3">
-                    <geboai-editable-listbox-component formControlName="chat"
-                        placeholder="Select the chat model provider" [data]="chatModelsTypes">
-                    </geboai-editable-listbox-component>
-                </div>
-                <div class="col-3">
+                    <gebo-ai-field id="chat" label="New chat model"
+                        help="Select the supplier to add a new chat model capable of chatting with user or executing automations"
+                        placeholder="Select the chat model provider">
+                        <geboai-editable-listbox-component formControlName="chat" [data]="chatModelsTypes"
+                            gebo-ai-field-element>
+                        </geboai-editable-listbox-component>
+                    </gebo-ai-field>
                     <p-button id="NewChatModelConfigurationBtn" gebo-ai-label label="New chat model configuration"
                         [outlined]="true" icon="pi pi-microchip-ai"
                         [disabled]="createChoices.controls['chat'].value?false:true"
                         (onClick)="configureChatModel()"></p-button>
                 </div>
-
                 <div class="col-3">
-                    <geboai-editable-listbox-component formControlName="embed"
-                        placeholder="Select the embedding model provider" [data]="embeddingModelsTypes">
+                    <gebo-ai-field id="embed"  label="New embedding model" help="Select the supplier to add a new embedding model capable of doing semantical indexing of contents" placeholder="Select the embedding model provider">
+                        <geboai-editable-listbox-component formControlName="embed"
+                         [data]="embeddingModelsTypes" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
-                </div>
-                <div class="col-3">
+                    </gebo-ai-field>
                     <p-button id="NewEmbeddingModelConfigurationBtn" gebo-ai-label
                         label="New embedding model configuration" [outlined]="true" icon="pi pi-microchip-ai"
                         [disabled]="createChoices.controls['embed'].value?false:true"
                         (onClick)="configureEmbeddingModel();"></p-button>
+                </div>
+
+                <div class="col-3">
+                    
+                </div>
+                <div class="col-3">
+                    
 
                 </div>
             </div>
