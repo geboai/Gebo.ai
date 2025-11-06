@@ -65,6 +65,18 @@
             "LoginComponent": {
                 "summary": "OK!",
                 "detail": "Operation done successfully"
+            },
+            "LoginComponent-welcome": {
+                "summary": "Welcome to gebo.ai",
+                "detail": "Enter your username and password to login"
+            },
+            "LoginComponent-login-error": {
+                "summary": "Operation failed",
+                "detail": "Cannot authenticate with supplied credentials"
+            },
+            "LoginComponent-login-ok": {
+                "summary": "OK!",
+                "detail": "Operation done successfully"
             }
         }
     },
