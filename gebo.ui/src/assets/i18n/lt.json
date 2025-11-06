@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigūruoti įterpimo modeliai"
+      },
+      "chat" : {
+        "label" : "Naujas pokalbių modelis",
+        "help" : "Pasirinkite tiekėją, kad pridėtumėte naują pokalbių modelį, galintį bendrauti su vartotoju arba vykdyti automatizacijas",
+        "placeholder" : "Pasirinkite tiekėją, kad pridėtumėte naują pokalbių modelį, galintį bendrauti su vartotoju arba vykdyti automatizacijas"
+      },
+      "embed" : {
+        "label" : "Naujas įterpimo modelis",
+        "help" : "Pasirinkite tiekėją, kad pridėtumėte naują įterpimo modelį, galintį semantiškai indeksuoti turinį",
+        "placeholder" : "Pasirinkite tiekėją, kad pridėtumėte naują įterpimo modelį, galintį semantiškai indeksuoti turinį"
       }
     }
   },

@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Modelli di embedding configurati"
+      },
+      "chat" : {
+        "label" : "Nuovo modello di chat",
+        "help" : "Seleziona il provider per aggiungere un nuovo modello di chat capace di conversare con l'utente o eseguire automazioni",
+        "placeholder" : "Seleziona il provider per aggiungere un nuovo modello di chat capace di conversare con l'utente o eseguire automazioni"
+      },
+      "embed" : {
+        "label" : "Nuovo modello di embedding",
+        "help" : "Seleziona il provider per aggiungere un nuovo modello di embedding capace di effettuare l'indicizzazione semantica dei contenuti",
+        "placeholder" : "Seleziona il provider per aggiungere un nuovo modello di embedding capace di effettuare l'indicizzazione semantica dei contenuti"
       }
     }
   },

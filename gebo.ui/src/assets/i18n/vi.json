@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Các mô hình nhúng đã cấu hình"
+      },
+      "chat" : {
+        "label" : "Mô hình trò chuyện mới",
+        "help" : "Chọn nhà cung cấp để thêm mô hình trò chuyện mới có thể trò chuyện với người dùng hoặc thực hiện tự động hóa",
+        "placeholder" : "Chọn nhà cung cấp để thêm mô hình trò chuyện mới có thể trò chuyện với người dùng hoặc thực hiện tự động hóa"
+      },
+      "embed" : {
+        "label" : "Mô hình nhúng mới",
+        "help" : "Chọn nhà cung cấp để thêm mô hình nhúng mới có khả năng lập chỉ mục ngữ nghĩa cho nội dung",
+        "placeholder" : "Chọn nhà cung cấp để thêm mô hình nhúng mới có khả năng lập chỉ mục ngữ nghĩa cho nội dung"
       }
     }
   },

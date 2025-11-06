@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Model embedding yang dikonfigurasi"
+      },
+      "chat" : {
+        "label" : "Model chat baru",
+        "help" : "Pilih penyedia untuk menambah model chat baru yang dapat mengobrol dengan pengguna atau menjalankan otomasi",
+        "placeholder" : "Pilih penyedia untuk menambah model chat baru yang dapat mengobrol dengan pengguna atau menjalankan otomasi"
+      },
+      "embed" : {
+        "label" : "Model embedding baru",
+        "help" : "Pilih penyedia untuk menambah model embedding baru yang dapat melakukan pengindeksan semantik pada konten",
+        "placeholder" : "Pilih penyedia untuk menambah model embedding baru yang dapat melakukan pengindeksan semantik pada konten"
       }
     }
   },

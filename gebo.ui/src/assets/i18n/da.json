@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigurerede embedding-modeller"
+      },
+      "chat" : {
+        "label" : "Ny chatmodel",
+        "help" : "Vælg leverandøren for at tilføje en ny chatmodel, der kan chatte med brugeren eller udføre automatiseringer",
+        "placeholder" : "Vælg leverandøren for at tilføje en ny chatmodel, der kan chatte med brugeren eller udføre automatiseringer"
+      },
+      "embed" : {
+        "label" : "Ny embedding-model",
+        "help" : "Vælg leverandøren for at tilføje en ny embedding-model, der kan udføre semantisk indeksering af indhold",
+        "placeholder" : "Vælg leverandøren for at tilføje en ny embedding-model, der kan udføre semantisk indeksering af indhold"
       }
     }
   },

@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Nastavljeni modeli za vdelavo"
+      },
+      "chat" : {
+        "label" : "Nov model za klepet",
+        "help" : "Izberite ponudnika za dodajanje novega modela za klepet, ki lahko klepeta z uporabnikom ali izvaja avtomatizacije",
+        "placeholder" : "Izberite ponudnika za dodajanje novega modela za klepet, ki lahko klepeta z uporabnikom ali izvaja avtomatizacije"
+      },
+      "embed" : {
+        "label" : "Nov model za vdelavo",
+        "help" : "Izberite ponudnika za dodajanje novega modela za vdelavo, ki omogoča semantično indeksiranje vsebin",
+        "placeholder" : "Izberite ponudnika za dodajanje novega modela za vdelavo, ki omogoča semantično indeksiranje vsebin"
       }
     }
   },

@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigurētie iegulšanas modeļi"
+      },
+      "chat" : {
+        "label" : "Jauns čata modelis",
+        "help" : "Izvēlieties piegādātāju, lai pievienotu jaunu čata modeli, kas var sarunāties ar lietotāju vai veikt automatizāciju",
+        "placeholder" : "Izvēlieties piegādātāju, lai pievienotu jaunu čata modeli, kas var sarunāties ar lietotāju vai veikt automatizāciju"
+      },
+      "embed" : {
+        "label" : "Jauns iegulšanas modelis",
+        "help" : "Izvēlieties piegādātāju, lai pievienotu jaunu iegulšanas modeli, kas var veikt satura semantisko indeksēšanu",
+        "placeholder" : "Izvēlieties piegādātāju, lai pievienotu jaunu iegulšanas modeli, kas var veikt satura semantisko indeksēšanu"
       }
     }
   },

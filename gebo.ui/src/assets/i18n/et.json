@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Seadistatud sisestusmudelid"
+      },
+      "chat" : {
+        "label" : "Uus vestlusmudel",
+        "help" : "Vali tarnija, et lisada uus vestlusmudel, mis suudab kasutajaga vestelda või automatsioone käivitada",
+        "placeholder" : "Vali tarnija, et lisada uus vestlusmudel, mis suudab kasutajaga vestelda või automatsioone käivitada"
+      },
+      "embed" : {
+        "label" : "Uus sisseehitamise mudel",
+        "help" : "Vali tarnija, et lisada uus sisseehitamise mudel, mis võimaldab sisu semantilist indekseerimist",
+        "placeholder" : "Vali tarnija, et lisada uus sisseehitamise mudel, mis võimaldab sisu semantilist indekseerimist"
       }
     }
   },

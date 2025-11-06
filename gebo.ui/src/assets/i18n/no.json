@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigurerte innebyggingsmodeller"
+      },
+      "chat" : {
+        "label" : "Ny chat-modell",
+        "help" : "Velg leverandør for å legge til en ny chat-modell som kan chatte med brukeren eller utføre automatiseringer",
+        "placeholder" : "Velg leverandør for å legge til en ny chat-modell som kan chatte med brukeren eller utføre automatiseringer"
+      },
+      "embed" : {
+        "label" : "Ny embedding-modell",
+        "help" : "Velg leverandør for å legge til en ny embedding-modell som kan utføre semantisk indeksering av innhold",
+        "placeholder" : "Velg leverandør for å legge til en ny embedding-modell som kan utføre semantisk indeksering av innhold"
       }
     }
   },

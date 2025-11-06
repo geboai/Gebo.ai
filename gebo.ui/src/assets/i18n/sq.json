@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Modelet e konfiguruara embedding"
+      },
+      "chat" : {
+        "label" : "Model i ri bisede",
+        "help" : "Zgjidhni furnizuesin për të shtuar një model të ri bisede që mund të bisedojë me përdoruesin ose të ekzekutojë automatizime",
+        "placeholder" : "Zgjidhni furnizuesin për të shtuar një model të ri bisede që mund të bisedojë me përdoruesin ose të ekzekutojë automatizime"
+      },
+      "embed" : {
+        "label" : "Model i ri për përfshirje",
+        "help" : "Zgjidhni furnizuesin për të shtuar një model të ri për përfshirje që mund të kryejë indeksim semantik të përmbajtjeve",
+        "placeholder" : "Zgjidhni furnizuesin për të shtuar një model të ri për përfshirje që mund të kryejë indeksim semantik të përmbajtjeve"
       }
     }
   },

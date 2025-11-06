@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Yapılandırılmış yerleştirme modelleri"
+      },
+      "chat" : {
+        "label" : "Yeni sohbet modeli",
+        "help" : "Kullanıcıyla sohbet edebilen veya otomasyonlar çalıştırabilen yeni bir sohbet modeli eklemek için sağlayıcıyı seçin",
+        "placeholder" : "Kullanıcıyla sohbet edebilen veya otomasyonlar çalıştırabilen yeni bir sohbet modeli eklemek için sağlayıcıyı seçin"
+      },
+      "embed" : {
+        "label" : "Yeni gömme modeli",
+        "help" : "İçeriklerin semantik olarak dizinlenmesini yapabilen yeni bir gömme modeli eklemek için sağlayıcıyı seçin",
+        "placeholder" : "İçeriklerin semantik olarak dizinlenmesini yapabilen yeni bir gömme modeli eklemek için sağlayıcıyı seçin"
       }
     }
   },

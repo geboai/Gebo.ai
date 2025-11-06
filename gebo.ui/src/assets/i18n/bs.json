@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigurisani modeli za ugradnju"
+      },
+      "chat" : {
+        "label" : "Novi model za razgovor",
+        "help" : "Odaberite dobavljača za dodavanje novog modela za razgovor koji može komunicirati s korisnikom ili izvršavati automatizacije",
+        "placeholder" : "Odaberite dobavljača za dodavanje novog modela za razgovor koji može komunicirati s korisnikom ili izvršavati automatizacije"
+      },
+      "embed" : {
+        "label" : "Novi model za ugradnju",
+        "help" : "Odaberite dobavljača za dodavanje novog modela za ugradnju koji može vršiti semantičko indeksiranje sadržaja",
+        "placeholder" : "Odaberite dobavljača za dodavanje novog modela za ugradnju koji može vršiti semantičko indeksiranje sadržaja"
       }
     }
   },

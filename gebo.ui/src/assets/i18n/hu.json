@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigurált beágyazási modellek"
+      },
+      "chat" : {
+        "label" : "Új csevegő modell",
+        "help" : "Válaszd ki a szolgáltatót, hogy új csevegő modellt adj hozzá, amely képes felhasználóval beszélgetni vagy automatizálásokat végrehajtani",
+        "placeholder" : "Válaszd ki a szolgáltatót, hogy új csevegő modellt adj hozzá, amely képes felhasználóval beszélgetni vagy automatizálásokat végrehajtani"
+      },
+      "embed" : {
+        "label" : "Új beágyazó modell",
+        "help" : "Válaszd ki a szolgáltatót, hogy új beágyazó modellt adj hozzá, amely képes tartalmak szemantikus indexelésére",
+        "placeholder" : "Válaszd ki a szolgáltatót, hogy új beágyazó modellt adj hozzá, amely képes tartalmak szemantikus indexelésére"
       }
     }
   },

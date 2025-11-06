@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Uppsett innföld líkön"
+      },
+      "chat" : {
+        "label" : "Nýtt spjalllíkani",
+        "help" : "Veldu birgja til að bæta við nýju spjalllíkani sem getur spjallað við notanda eða framkvæmt sjálfvirkni",
+        "placeholder" : "Veldu birgja til að bæta við nýju spjalllíkani sem getur spjallað við notanda eða framkvæmt sjálfvirkni"
+      },
+      "embed" : {
+        "label" : "Nýtt innfelld líkön",
+        "help" : "Veldu birgja til að bæta við nýju innfelldu líkön sem getur gert merkingarvísu skráaskráningu efnis",
+        "placeholder" : "Veldu birgja til að bæta við nýju innfelldu líkön sem getur gert merkingarvísu skráaskráningu efnis"
       }
     }
   },

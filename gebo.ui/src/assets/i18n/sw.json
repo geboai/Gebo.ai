@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Mifano ya kuweka mwingiliano zilizosanikishwa"
+      },
+      "chat" : {
+        "label" : "Mfano mpya wa gumzo",
+        "help" : "Chagua msambazaji kuongeza mfano mpya wa gumzo unaoweza kufanya mazungumzo na mtumiaji au kutekeleza kazi otomatiki",
+        "placeholder" : "Chagua msambazaji kuongeza mfano mpya wa gumzo unaoweza kufanya mazungumzo na mtumiaji au kutekeleza kazi otomatiki"
+      },
+      "embed" : {
+        "label" : "Mfano mpya wa kuweka viungo",
+        "help" : "Chagua msambazaji kuongeza mfano mpya wa kuweka viungo unaoweza kufanya kuorodhesha yaliyomo kisemantiki",
+        "placeholder" : "Chagua msambazaji kuongeza mfano mpya wa kuweka viungo unaoweza kufanya kuorodhesha yaliyomo kisemantiki"
       }
     }
   },

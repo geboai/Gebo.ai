@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Skonfigurowane modele osadzania"
+      },
+      "chat" : {
+        "label" : "Nowy model czatu",
+        "help" : "Wybierz dostawcę, aby dodać nowy model czatu umożliwiający rozmowę z użytkownikiem lub wykonywanie automatyzacji",
+        "placeholder" : "Wybierz dostawcę, aby dodać nowy model czatu umożliwiający rozmowę z użytkownikiem lub wykonywanie automatyzacji"
+      },
+      "embed" : {
+        "label" : "Nowy model osadzania",
+        "help" : "Wybierz dostawcę, aby dodać nowy model osadzania umożliwiający indeksowanie semantyczne treści",
+        "placeholder" : "Wybierz dostawcę, aby dodać nowy model osadzania umożliwiający indeksowanie semantyczne treści"
       }
     }
   },

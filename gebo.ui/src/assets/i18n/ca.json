@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Models d'incorporació configurats"
+      },
+      "chat" : {
+        "label" : "Nou model de xat",
+        "help" : "Selecciona el proveïdor per afegir un nou model de xat capaç de xatejar amb l'usuari o executar automatitzacions",
+        "placeholder" : "Selecciona el proveïdor per afegir un nou model de xat capaç de xatejar amb l'usuari o executar automatitzacions"
+      },
+      "embed" : {
+        "label" : "Nou model d'incrustació",
+        "help" : "Selecciona el proveïdor per afegir un nou model d'incrustació capaç de fer indexació semàntica de continguts",
+        "placeholder" : "Selecciona el proveïdor per afegir un nou model d'incrustació capaç de fer indexació semàntica de continguts"
       }
     }
   },

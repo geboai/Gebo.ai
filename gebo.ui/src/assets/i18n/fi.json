@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Määritetyt upotusmallit"
+      },
+      "chat" : {
+        "label" : "Uusi keskustelumalli",
+        "help" : "Valitse toimittaja lisätäksesi uuden keskustelumallin, joka voi keskustella käyttäjän kanssa tai suorittaa automaatioita",
+        "placeholder" : "Valitse toimittaja lisätäksesi uuden keskustelumallin, joka voi keskustella käyttäjän kanssa tai suorittaa automaatioita"
+      },
+      "embed" : {
+        "label" : "Uusi upotusmalli",
+        "help" : "Valitse toimittaja lisätäksesi uuden upotusmallin, joka osaa tehdä sisällön semanttista indeksointia",
+        "placeholder" : "Valitse toimittaja lisätäksesi uuden upotusmallin, joka osaa tehdä sisällön semanttista indeksointia"
       }
     }
   },

@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Modèles d'intégration configurés"
+      },
+      "chat" : {
+        "label" : "Nouveau modèle de chat",
+        "help" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle de chat capable de discuter avec l'utilisateur ou d'exécuter des automatisations",
+        "placeholder" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle de chat capable de discuter avec l'utilisateur ou d'exécuter des automatisations"
+      },
+      "embed" : {
+        "label" : "Nouveau modèle d'intégration",
+        "help" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle d'intégration capable d'effectuer l'indexation sémantique de contenus",
+        "placeholder" : "Sélectionnez le fournisseur pour ajouter un nouveau modèle d'intégration capable d'effectuer l'indexation sémantique de contenus"
       }
     }
   },

@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Nakonfigurované embedding modely"
+      },
+      "chat" : {
+        "label" : "Nový chatovací model",
+        "help" : "Vyberte dodávateľa na pridanie nového chatovacieho modelu schopného komunikácie s používateľom alebo vykonávania automatizácií",
+        "placeholder" : "Vyberte dodávateľa na pridanie nového chatovacieho modelu schopného komunikácie s používateľom alebo vykonávania automatizácií"
+      },
+      "embed" : {
+        "label" : "Nový model pre vkladanie",
+        "help" : "Vyberte dodávateľa na pridanie nového modelu pre vkladanie schopného semantického indexovania obsahu",
+        "placeholder" : "Vyberte dodávateľa na pridanie nového modelu pre vkladanie schopného semantického indexovania obsahu"
       }
     }
   },

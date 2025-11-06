@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Mga na-configure na embedding model"
+      },
+      "chat" : {
+        "label" : "Bagong chat model",
+        "help" : "Piliin ang supplier upang magdagdag ng bagong chat model na kayang makipag-chat sa user o magsagawa ng automations",
+        "placeholder" : "Piliin ang supplier upang magdagdag ng bagong chat model na kayang makipag-chat sa user o magsagawa ng automations"
+      },
+      "embed" : {
+        "label" : "Bagong embedding model",
+        "help" : "Piliin ang supplier upang magdagdag ng bagong embedding model na kayang magsagawa ng semantical indexing ng mga nilalaman",
+        "placeholder" : "Piliin ang supplier upang magdagdag ng bagong embedding model na kayang magsagawa ng semantical indexing ng mga nilalaman"
       }
     }
   },

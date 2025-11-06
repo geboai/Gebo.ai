@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Gekonfigureerde inbeddingsmodelle"
+      },
+      "chat" : {
+        "label" : "Nuwe kletsmodel",
+        "help" : "Kies die verskaffer om 'n nuwe kletsmodel by te voeg wat met die gebruiker kan klets of outomasies kan uitvoer",
+        "placeholder" : "Kies die verskaffer om 'n nuwe kletsmodel by te voeg wat met die gebruiker kan klets of outomasies kan uitvoer"
+      },
+      "embed" : {
+        "label" : "Nuwe inbedmodel",
+        "help" : "Kies die verskaffer om 'n nuwe inbedmodel by te voeg wat semantiese indeksering van inhoud kan doen",
+        "placeholder" : "Kies die verskaffer om 'n nuwe inbedmodel by te voeg wat semantiese indeksering van inhoud kan doen"
       }
     }
   },

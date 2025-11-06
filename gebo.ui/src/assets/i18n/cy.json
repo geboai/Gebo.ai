@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Modelau mewnblannu wedi’u ffurfweddu"
+      },
+      "chat" : {
+        "label" : "Model sgwrsio newydd",
+        "help" : "Dewiswch y cyflenwr i ychwanegu model sgwrsio newydd sy’n gallu sgwrsio â’r defnyddiwr neu gyflawni awtomeiddio",
+        "placeholder" : "Dewiswch y cyflenwr i ychwanegu model sgwrsio newydd sy’n gallu sgwrsio â’r defnyddiwr neu gyflawni awtomeiddio"
+      },
+      "embed" : {
+        "label" : "Model mewnblannu newydd",
+        "help" : "Dewiswch y cyflenwr i ychwanegu model mewnblannu newydd sy’n gallu mynegeio cynnwys yn semantig",
+        "placeholder" : "Dewiswch y cyflenwr i ychwanegu model mewnblannu newydd sy’n gallu mynegeio cynnwys yn semantig"
       }
     }
   },

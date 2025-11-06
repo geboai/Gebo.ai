@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Múnlaí leabaithe cumraithe"
+      },
+      "chat" : {
+        "label" : "Samhail chomhrá nua",
+        "help" : "Roghnaigh an soláthraí chun samhail chomhrá nua a chur leis atá in ann comhrá a dhéanamh le húsáideoir nó uathoibrithe a chur i bhfeidhm",
+        "placeholder" : "Roghnaigh an soláthraí chun samhail chomhrá nua a chur leis atá in ann comhrá a dhéanamh le húsáideoir nó uathoibrithe a chur i bhfeidhm"
+      },
+      "embed" : {
+        "label" : "Samhail chódaithe nua",
+        "help" : "Roghnaigh an soláthraí chun samhail chódaithe nua a chur leis atá in ann inneachair a innéacsú go seamantach",
+        "placeholder" : "Roghnaigh an soláthraí chun samhail chódaithe nua a chur leis atá in ann inneachair a innéacsú go seamantach"
       }
     }
   },

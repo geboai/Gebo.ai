@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfigurisani modeli za ugrađivanje"
+      },
+      "chat" : {
+        "label" : "Novi model za ćaskanje",
+        "help" : "Izaberite dobavljača da biste dodali novi model za ćaskanje koji može da ćaska sa korisnikom ili izvršava automatizacije",
+        "placeholder" : "Izaberite dobavljača da biste dodali novi model za ćaskanje koji može da ćaska sa korisnikom ili izvršava automatizacije"
+      },
+      "embed" : {
+        "label" : "Novi model za ugradnju",
+        "help" : "Izaberite dobavljača da biste dodali novi model za ugradnju koji može da vrši semantičko indeksiranje sadržaja",
+        "placeholder" : "Izaberite dobavljača da biste dodali novi model za ugradnju koji može da vrši semantičko indeksiranje sadržaja"
       }
     }
   },

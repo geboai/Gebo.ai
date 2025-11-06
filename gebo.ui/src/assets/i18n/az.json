@@ -1156,6 +1156,16 @@
       },
       "EmneddingModelsZone" : {
         "label" : "Konfiqurasiya olunmuş embedding modelləri"
+      },
+      "chat" : {
+        "label" : "Yeni çat modeli",
+        "help" : "İstifadəçi ilə söhbət edə və ya avtomatlaşdırmaları yerinə yetirə bilən yeni çat modeli əlavə etmək üçün təchizatçını seçin",
+        "placeholder" : "İstifadəçi ilə söhbət edə və ya avtomatlaşdırmaları yerinə yetirə bilən yeni çat modeli əlavə etmək üçün təchizatçını seçin"
+      },
+      "embed" : {
+        "label" : "Yeni embedding modeli",
+        "help" : "Məzmunların semantik indeksləşdirilməsini edə bilən yeni embedding modeli əlavə etmək üçün təchizatçını seçin",
+        "placeholder" : "Məzmunların semantik indeksləşdirilməsini edə bilən yeni embedding modeli əlavə etmək üçün təchizatçını seçin"
       }
     }
   },
