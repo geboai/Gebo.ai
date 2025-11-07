@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-package ai.gebo.fastsetup.controllers;
+package ai.gebo.llms.setup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,16 +18,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ai.gebo.fastsetup.llms.config.FastLLMSSetupConfig;
-import ai.gebo.fastsetup.llms.model.FastLLMSSetupData;
-import ai.gebo.fastsetup.llms.model.LLMSSetupConfigurationData;
-import ai.gebo.fastsetup.llms.model.LLMSSetupConfigurationData.LLMSSetupConfiguration;
-import ai.gebo.fastsetup.llms.model.LLMSSetupConfigurationModificationData;
-import ai.gebo.fastsetup.llms.model.LLMSSetupModificationResult;
-import ai.gebo.fastsetup.model.ComponentLLMSStatus;
-import ai.gebo.fastsetup.services.GeboFastLLMSSetupService;
+import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.llms.setup.config.LLMSVendorsSetupConfig;
+import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
+import ai.gebo.llms.setup.model.LLMSSetupConfigurationModificationData;
+import ai.gebo.llms.setup.model.LLMSSetupModificationResult;
+import ai.gebo.llms.setup.services.GeboLLMSSetupService;
 import ai.gebo.model.OperationStatus;
-import jakarta.validation.Valid;
 
 /**
  * AI generated comments
@@ -44,7 +42,7 @@ public class GeboFastLLMSSetupController {
 	 * Service to handle the main logic for the LLMS setup.
 	 */
 	@Autowired
-	GeboFastLLMSSetupService service;
+	GeboLLMSSetupService service;
 
 	/**
 	 * Default constructor for GeboFastLLMSSetupController.
@@ -53,18 +51,7 @@ public class GeboFastLLMSSetupController {
 
 	}
 
-	/**
-	 * Endpoint to create and configure an LLMS setup.
-	 *
-	 * @param llmsSetupData The data required to setup LLMS, validated for
-	 *                      correctness.
-	 * @return The status of the operation indicating success or failure.
-	 */
-	@PostMapping(value = "createLLMSSetup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public OperationStatus<Boolean> createLLMSSetup(@Valid @RequestBody FastLLMSSetupData llmsSetupData) {
-		// Delegate to the service to handle the setup configuration logic.
-		return service.configureLLMS(llmsSetupData);
-	}
+	
 
 	/**
 	 * Endpoint to retrieve the current status of the LLMS setup.
@@ -78,12 +65,12 @@ public class GeboFastLLMSSetupController {
 	}
 
 	@GetMapping(value = "getLLMSSetupPresets", produces = MediaType.APPLICATION_JSON_VALUE)
-	public FastLLMSSetupConfig getLLMSSetupPresets() {
+	public LLMSVendorsSetupConfig getLLMSSetupPresets() {
 		return service.getSetupPresets();
 	}
 
 	@GetMapping(value = "getActualLLMSConfiguration", produces = MediaType.APPLICATION_JSON_VALUE)
-	public LLMSSetupConfigurationData getActualLLMSConfiguration() {
+	public LLMSSetupConfigurationData getActualLLMSConfiguration() throws GeboCryptSecretException {
 		return service.getActualConfiguration();
 	}
 

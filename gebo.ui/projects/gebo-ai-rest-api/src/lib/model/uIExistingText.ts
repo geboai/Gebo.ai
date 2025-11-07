@@ -11,11 +11,11 @@
  */
 
 export interface UIExistingText { 
+    id?: string;
     moduleId: string;
     entityId: string;
     componentId: string;
     key?: string;
     fieldId: string;
     text: string;
-    id?: string;
 }

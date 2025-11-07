@@ -17,8 +17,8 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboOauth2TokenSecretContent;
+import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.secrets.services.IGeboSecretsAccessService.SecretInfo;
 
 /**
  * Implements the OAuth2AuthorizedClientService to manage storing and retrieving

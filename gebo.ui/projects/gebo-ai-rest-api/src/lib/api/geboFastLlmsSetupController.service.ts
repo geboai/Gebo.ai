@@ -18,11 +18,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ComponentLLMSStatus } from '../model/componentLLMSStatus';
-import { FastLLMSSetupConfig } from '../model/fastLLMSSetupConfig';
-import { FastLLMSSetupData } from '../model/fastLLMSSetupData';
 import { LLMSSetupConfigurationData } from '../model/lLMSSetupConfigurationData';
 import { LLMSSetupConfigurationModificationData } from '../model/lLMSSetupConfigurationModificationData';
-import { OperationStatusBoolean } from '../model/operationStatusBoolean';
+import { LLMSVendorsSetupConfig } from '../model/lLMSVendorsSetupConfig';
 import { OperationStatusLLMSSetupModificationResult } from '../model/operationStatusLLMSSetupModificationResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -111,53 +109,6 @@ export class GeboFastLlmsSetupControllerService {
     /**
      * 
      * 
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createLLMSSetup(body: FastLLMSSetupData, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusBoolean>;
-    public createLLMSSetup(body: FastLLMSSetupData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusBoolean>>;
-    public createLLMSSetup(body: FastLLMSSetupData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusBoolean>>;
-    public createLLMSSetup(body: FastLLMSSetupData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createLLMSSetup.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<OperationStatusBoolean>('post',`${this.basePath}/api/admin/GeboFastLLMSSetupController/createLLMSSetup`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -197,9 +148,9 @@ export class GeboFastLlmsSetupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getLLMSSetupPresets(observe?: 'body', reportProgress?: boolean): Observable<FastLLMSSetupConfig>;
-    public getLLMSSetupPresets(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<FastLLMSSetupConfig>>;
-    public getLLMSSetupPresets(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<FastLLMSSetupConfig>>;
+    public getLLMSSetupPresets(observe?: 'body', reportProgress?: boolean): Observable<LLMSVendorsSetupConfig>;
+    public getLLMSSetupPresets(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<LLMSVendorsSetupConfig>>;
+    public getLLMSSetupPresets(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<LLMSVendorsSetupConfig>>;
     public getLLMSSetupPresets(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -217,7 +168,7 @@ export class GeboFastLlmsSetupControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<FastLLMSSetupConfig>('get',`${this.basePath}/api/admin/GeboFastLLMSSetupController/getLLMSSetupPresets`,
+        return this.httpClient.request<LLMSVendorsSetupConfig>('get',`${this.basePath}/api/admin/GeboFastLLMSSetupController/getLLMSSetupPresets`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

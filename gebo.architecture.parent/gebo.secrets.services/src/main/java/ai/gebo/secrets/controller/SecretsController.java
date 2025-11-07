@@ -30,8 +30,8 @@ import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.secrets.model.GeboSshKeySecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
+import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.secrets.services.IGeboSecretsAccessService.SecretInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 

@@ -12,6 +12,7 @@
 
 package ai.gebo.fastsetup.model;
 
+import ai.gebo.architecture.setup.model.ComponentSetupStatus;
 import ai.gebo.llms.abstraction.layer.vectorstores.model.VectorStoreProduct;
 import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.redis.model.RedisConfig;

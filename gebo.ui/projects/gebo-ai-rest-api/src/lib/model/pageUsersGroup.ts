@@ -19,10 +19,10 @@ export interface PageUsersGroup {
     size?: number;
     content?: Array<UsersGroup>;
     number?: number;
-    sort?: SortObject;
-    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
+    numberOfElements?: number;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

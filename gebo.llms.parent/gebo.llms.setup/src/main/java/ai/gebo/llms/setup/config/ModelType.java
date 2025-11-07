@@ -1,4 +1,4 @@
-package ai.gebo.fastsetup.llms.config;
+package ai.gebo.llms.setup.config;
 
 public enum ModelType {
 	CHAT,EMBEDDING

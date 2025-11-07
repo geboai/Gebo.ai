@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.fastsetup.model;
+package ai.gebo.llms.setup.model;
 
 /**
  * The ComponentLLMSStatus class extends ComponentSetupStatus and is used to track
@@ -18,7 +18,7 @@ package ai.gebo.fastsetup.model;
  *
  * Gebo.ai Commentor AI generated comments
  */
-public class ComponentLLMSStatus extends ComponentSetupStatus {
+public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.ComponentSetupStatus {
 
     // Boolean flag indicating whether the chat model setup is complete
     public boolean chatModelSetup;

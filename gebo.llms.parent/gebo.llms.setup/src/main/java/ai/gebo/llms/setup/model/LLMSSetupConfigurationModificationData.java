@@ -1,4 +1,4 @@
-package ai.gebo.fastsetup.llms.model;
+package ai.gebo.llms.setup.model;
 
 public class LLMSSetupConfigurationModificationData {
 

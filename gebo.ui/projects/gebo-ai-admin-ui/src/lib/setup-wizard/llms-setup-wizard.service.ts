@@ -11,7 +11,7 @@
  
 
 import { Injectable } from "@angular/core";
-import { ComponentLLMSStatus, FastLLMSSetupData, GeboAdvancedSetupStatusControllerService, GeboFastLlmsSetupControllerService, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
+import { ComponentLLMSStatus, GeboAdvancedSetupStatusControllerService, GeboFastLlmsSetupControllerService, LLMSSetupConfigurationData, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 
@@ -48,13 +48,8 @@ export class LLMSetupWizardService extends AbstractStatusService {
     public getLLMSSetupStatus(): Observable<ComponentLLMSStatus> {
         return this.statusService.getLLMSSetupStatus();
     }
-    
-    /**
-     * Creates a new LLMS setup using the provided configuration data.
-     * @param data The configuration data needed to set up LLMS
-     * @returns An Observable of OperationStatusBoolean that indicates whether the operation was successful
-     */
-    public createLLMSSetup(data:FastLLMSSetupData):Observable<OperationStatusBoolean>{
-        return this.statusService.createLLMSSetup(data);
+    public getActualLLMSConfiguration() : Observable<LLMSSetupConfigurationData> {
+        return this.statusService.getActualLLMSConfiguration();
     }
+    
 }

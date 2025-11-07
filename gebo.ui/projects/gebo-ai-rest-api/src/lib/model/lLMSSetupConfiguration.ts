@@ -9,12 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GBaseModelConfig } from './gBaseModelConfig';
+import { LLMExistingConfiguration } from './lLMExistingConfiguration';
 import { LLMSModelsPresets } from './lLMSModelsPresets';
-import { LLMSVendor } from './lLMSVendor';
+import { LLMSVendorInfo } from './lLMSVendorInfo';
 
 export interface LLMSSetupConfiguration { 
-    parentModel?: LLMSVendor;
-    libraryModel?: LLMSModelsPresets;
-    runtimeConfigs?: Array<GBaseModelConfig>;
+    parentModel: LLMSVendorInfo;
+    libraryModel: Array<LLMSModelsPresets>;
+    runtimeConfigs?: Array<LLMExistingConfiguration>;
 }

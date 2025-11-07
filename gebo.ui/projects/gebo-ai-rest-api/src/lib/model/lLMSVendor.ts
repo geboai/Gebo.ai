@@ -10,15 +10,9 @@
  * Do not edit the class manually.
  */
 import { LLMSModelsPresets } from './lLMSModelsPresets';
+import { LLMSVendorInfo } from './lLMSVendorInfo';
 
 export interface LLMSVendor { 
-    vendorId?: string;
-    requiresCustomUrl?: boolean;
-    defaultCustomUrl?: string;
-    requiresApiKey?: boolean;
-    description?: string;
-    name?: string;
-    webSite?: string;
-    acquireKeyUrl?: string;
+    vendorInfo?: LLMSVendorInfo;
     presets?: Array<LLMSModelsPresets>;
 }

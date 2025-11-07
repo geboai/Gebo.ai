@@ -17,12 +17,11 @@
  */
 
 import { Component } from "@angular/core";
-import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, FastLLMSSetupData, OperationStatusBoolean, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, LLMSSetupConfigurationData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { forkJoin, Observable } from "rxjs";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ToastMessageOptions } from "primeng/api";
 
 /**
  * Interface defining the structure of LLM entries displayed in the component.
@@ -44,29 +43,13 @@ interface LLMSEntry {
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSetupWizardComponent") }]
 })
 export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
-    /**
-     * List of available LLM providers that can be configured in the system.
-     * Currently supports OpenAI and Nvidia, with Xai (Grok) commented out.
-     */
-    public providersList: any[] = [
-        { code: "openai", description: "openai (ChatGpt) provider" },
-        { code: "nvidia", description: "Nvidia nim provider" } /*,
-        {code:"xai",description:"Xai (Grok) provider"}*/];
-
-    /**
-     * Form group for capturing user input during LLM setup.
-     * Contains fields for user, provider, and API key.
-     */
-    formGroup: FormGroup = new FormGroup({
-        user: new FormControl(),
-        provider: new FormControl(),
-        apiKey: new FormControl()
-    });
+    
 
     /**
      * Array to store configured LLM models fetched from the backend.
      */
     public modelsList: LLMSEntry[] = [];
+    actualProvidersConfiguration?: LLMSSetupConfigurationData;
 
     /**
      * Constructor initializes services required for LLM setup functionality.
@@ -91,7 +74,7 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
     public override reloadData(): void {
         this.loading = true;
 
-        const observables: [Observable<boolean>, Observable<Array<ConfigurationEntry>>, Observable<Array<ConfigurationEntry>>, Observable<UserInfo>] = [this.llmsSetupWizardService.getBooleanStatus(), this.chatModelsService.getRuntimeConfiguredChatModels(), this.embeddingModelsService.getRuntimeConfiguredEmbeddingModels(), this.userService.getCurrentUser()];
+        const observables: [Observable<boolean>, Observable<Array<ConfigurationEntry>>, Observable<Array<ConfigurationEntry>>, Observable<UserInfo>,Observable<LLMSSetupConfigurationData>] = [this.llmsSetupWizardService.getBooleanStatus(), this.chatModelsService.getRuntimeConfiguredChatModels(), this.embeddingModelsService.getRuntimeConfiguredEmbeddingModels(), this.userService.getCurrentUser(),this.llmsSetupWizardService.getActualLLMSConfiguration()];
         forkJoin(observables).subscribe({
             next: (value) => {
                 this.isSetupCompleted = value[0] === true;
@@ -135,10 +118,9 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
                 }
                 this.modelsList = modelsList;
                 if (value[3]) {
-                    if (!this.isSetupCompleted && !this.formGroup.controls["user"].value) {
-                        this.formGroup.controls["user"].setValue(value[3].username);
-                    }
+                    
                 }
+                this.actualProvidersConfiguration=value[4];
             },
             complete: () => {
                 this.loading = false;
@@ -152,20 +134,9 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
      * On successful setup, closes the wizard.
      */
     setupLLMS() {
-        const data: FastLLMSSetupData = this.formGroup.value;
+        
         this.loading = true;
-        this.llmsSetupWizardService.createLLMSSetup(data).subscribe({
-            next: (opstatus: OperationStatusBoolean) => {
-                this.isSetupCompleted = opstatus.result === true;
-                this.userMessages = opstatus.messages as ToastMessageOptions[];
-                if (this.isSetupCompleted === true) {
-                    this.closeWizard();
-                }
-            },
-            complete: () => {
-                this.loading = false;
-            }
-        });
+       
     }
 
 }

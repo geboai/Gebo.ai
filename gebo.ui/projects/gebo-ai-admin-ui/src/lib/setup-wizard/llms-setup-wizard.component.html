@@ -12,51 +12,28 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel id="MainPanel" gebo-ai-label #instModeUI header="Setup Gebo.ai llms providers access with your own api key">
+<p-panel id="MainPanelHeader" gebo-ai-label #instModeUI header="Setup Gebo.ai llms providers access">
 
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <form [formGroup]="formGroup">
-        <div class="grid " *ngIf="isSetupCompleted!==true">
+    <form>
+        <div class="grid " *ngIf="actualProvidersConfiguration">
             <div class="col-12">
-                <p id="InstructionText" gebo-ai-text>Provide an api-key with proper available credit. If OpenAI is choosen you must add some specific credit (10-30$ can be enough) to your usual plan for api use, otherwise no available llms traffic will be available in this application.   </p>
-            </div>
-            <div class="col-12">
-                <gebo-ai-field id="provider" label="Large language model supplier" help="Choose one supplier between OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)" [required]="true">
-                    <geboai-editable-listbox-component
-                        id="provider"
-                        formControlName="provider"
-                        [data]="providersList"
-                        [required]="true"
-                        gebo-ai-field-element
-                    >
-                    </geboai-editable-listbox-component>
-                </gebo-ai-field>
-            </div>
-            <div class="col-12">
-                <gebo-ai-field id="user" label="User" help="Enter the user associated to the apiKey" [required]="true">
-                    <input
-                        pInputText
-                        id="user"
-                        formControlName="user"
-                        [required]="true"
-                        gebo-ai-field-element
-                    />
-                </gebo-ai-field>
-            </div>
-            <div class="col-12">
-                <gebo-ai-field id="apiKey" label="Api key" help="Your api key of the LLMS providers to be used" [required]="true">
-                    <input
-                        pInputText
-                        id="apiKey"
-                        formControlName="apiKey"
-                        class="col-12"
-                        [required]="true"
-                        gebo-ai-field-element
-                    >
-                    
-                </gebo-ai-field>
+            <p-accordion [value]="0">
+                <p-accordion-panel
+                    *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
+                    [value]="i">
+                    <p-accordion-header >
+                            <div style="font-weight: bolder;color:black" *ngIf="(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">{{providerSituation.parentModel?.name}} ({{providerSituation.runtimeConfigs?.length}})</div> 
+                            <div style="font-weight: bolder;color:gray" *ngIf="!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">{{providerSituation.parentModel?.name}}</div>
+                        </p-accordion-header>
+                    <p-accordion-content>
+                        <gebo-ai-llms-vendor-configuration [vendorConfiguration]="providerSituation"></gebo-ai-llms-vendor-configuration>
+                    </p-accordion-content>
+                </p-accordion-panel>
+            </p-accordion>
             </div>
         </div>
+        <!-- 
         <div class="grid " *ngIf="isSetupCompleted===true">
 
             <p-table id="ModelsListTable" gebo-ai-label [value]="modelsList" [tableStyle]="{ 'min-width': '50rem' }">
@@ -80,13 +57,12 @@
                 </ng-template>
             </p-table>
         </div>
-
+        -->
     </form>
     <div class="grid geboLargeButtonsBar">
 
         <div class="col-6">
-            <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="setupLLMS()" icon="pi pi-save" severity="success"
-                [disabled]="this.formGroup.invalid " styleClass="w-full" *ngIf="isSetupCompleted!==true"></p-button>
+
 
         </div>
     </div>

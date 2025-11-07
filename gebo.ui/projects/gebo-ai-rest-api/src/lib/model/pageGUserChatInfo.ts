@@ -19,10 +19,10 @@ export interface PageGUserChatInfo {
     size?: number;
     content?: Array<GUserChatInfo>;
     number?: number;
-    sort?: SortObject;
-    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
+    numberOfElements?: number;
     pageable?: PageableObject;
+    sort?: SortObject;
     empty?: boolean;
 }

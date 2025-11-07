@@ -1,4 +1,4 @@
-package ai.gebo.fastsetup.llms.config;
+package ai.gebo.llms.setup.config;
 
 import java.util.ArrayList;
 import java.util.List;

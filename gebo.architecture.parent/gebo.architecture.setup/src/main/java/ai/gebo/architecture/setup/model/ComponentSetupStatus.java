@@ -10,7 +10,7 @@
  
  
 
-package ai.gebo.fastsetup.model;
+package ai.gebo.architecture.setup.model;
 
 /**
  * This class represents the setup status of a component.

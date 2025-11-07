@@ -35,8 +35,8 @@ import ai.gebo.googleworkspaces.model.GeboGoogleWorkspaceAccessSecret;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
+import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
-import ai.gebo.secrets.services.IGeboSecretsAccessService.SecretInfo;
 
 /**
  * Service for managing Google Workspace credentials.

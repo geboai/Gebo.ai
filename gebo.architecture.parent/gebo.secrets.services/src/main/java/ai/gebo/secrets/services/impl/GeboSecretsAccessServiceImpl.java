@@ -33,6 +33,7 @@ import ai.gebo.secrets.model.GeboSecret;
 import ai.gebo.secrets.model.GeboSshKeySecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
+import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.repository.GeboSecretRepository;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 

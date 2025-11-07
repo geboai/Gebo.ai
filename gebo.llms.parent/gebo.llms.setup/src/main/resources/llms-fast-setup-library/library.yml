@@ -1,12 +1,13 @@
-ai.gebo.fastsetup.config:
+ai.gebo.llms.vendors.setup.config:
   vendors:
-    - vendorId: openai
-      name: OpenAI
-      description: OpenAI chatgpt
-      acquireKeyUrl: https://platform.openai.com/api-keys
-      requiresApiKeY: true
-      requiresCustomUrl: false
-      webSite: https://openai.com/
+    - vendorInfo:
+        vendorId: openai
+        name: OpenAI
+        description: OpenAI chatgpt
+        acquireKeyUrl: https://platform.openai.com/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://openai.com/
       presets:
         - type: CHAT
           serviceHandler: chatgpt-OpenAI
@@ -26,13 +27,14 @@ ai.gebo.fastsetup.config:
           choices:
             - code: text-embedding-3-large
               description: text embedding 3 large
-    - vendorId: anthropic
-      name: Anthropic
-      description: Anthropic
-      acquireKeyUrl: https://console.anthropic.com/settings/keys
-      requiresApiKeY: true
-      requiresCustomUrl: false
-      webSite: https://anthropic.com/
+    - vendorInfo:
+        vendorId: anthropic
+        name: Anthropic
+        description: Anthropic
+        acquireKeyUrl: https://console.anthropic.com/settings/keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://anthropic.com/
       presets:
         - type: CHAT
           serviceHandler: chat-anthropic
@@ -47,25 +49,27 @@ ai.gebo.fastsetup.config:
               description: Claude Opus 4
             - code: claude-opus-4-1
               description: Claude Opus 4.1
-    - vendorId: deepseek
-      name: Deepseek
-      description: Deepseek
-      acquireKeyUrl: https://platform.deepseek.com/api_keys
-      requiresApiKeY: true
-      requiresCustomUrl: false
-      webSite: https://www.deepseek.com/
+    - vendorInfo:
+        vendorId: deepseek
+        name: Deepseek
+        description: Deepseek
+        acquireKeyUrl: https://platform.deepseek.com/api_keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://www.deepseek.com/
       presets:
         - type: CHAT
           serviceHandler: chat-deepseek
           apiKeySecretContext: chat-deepseek
           doModelsLookup: true
-    - vendorId: xai
-      name: XaI
-      description: XaI (grok)
-      acquireKeyUrl: https://console.x.ai/
-      requiresApiKeY: true
-      requiresCustomUrl: false
-      webSite: https://xai.com/
+    - vendorInfo:
+        vendorId: xai
+        name: XaI
+        description: XaI (grok)
+        acquireKeyUrl: https://console.x.ai/
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://xai.com/
       presets:
         - type: CHAT
           serviceHandler: chatmodel-xai
@@ -83,13 +87,14 @@ ai.gebo.fastsetup.config:
           choices:
             - code: embedding
               description: embedding model
-    - vendorId: nvidia
-      name: NVidia
-      description: NVidia cloud AI services
-      acquireKeyUrl: https://build.nvidia.com/
-      requiresApiKeY: true
-      requiresCustomUrl: false
-      webSite: https://build.nvidia.com/models
+    - vendorInfo:
+        vendorId: nvidia
+        name: NVidia
+        description: NVidia cloud AI services
+        acquireKeyUrl: https://build.nvidia.com/
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://build.nvidia.com/models
       presets:
         - type: CHAT
           serviceHandler: chatmodel-nvidia
@@ -107,13 +112,14 @@ ai.gebo.fastsetup.config:
           choices:
             - code: nvidia/nv-embed-v1
               description: nvidia embed v1
-    - vendorId: regolo.ai
-      name: Regolo.ai
-      description: Regolo.ai Italian AI provider
-      acquireKeyUrl: https://dashboard.regolo.ai/api-keys
-      requiresApiKeY: true
-      requiresCustomUrl: false
-      webSite: https://regolo.ai
+    - vendorInfo:
+        vendorId: regolo.ai
+        name: Regolo.ai
+        description: Regolo.ai Italian AI provider
+        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://regolo.ai
       presets:
         - type: CHAT
           serviceHandler: chatmodel-regolo.ai
@@ -124,13 +130,14 @@ ai.gebo.fastsetup.config:
           apiKeySecretContext: embedding-regolo.ai
           doModelsLookup: true
 
-    - vendorId: ollama
-      name: Ollama
-      description: Ollama, large language model server that runs on your infrastructure
-      requiresApiKeY: false
-      requiresCustomUrl: true
-      defaultCustomUrl: http://localhost:11434
-      webSite: https://ollama.com/
+    - vendorInfo:
+        vendorId: ollama
+        name: Ollama
+        description: Ollama, large language model server that runs on your infrastructure
+        requiresApiKeY: false
+        requiresCustomUrl: true
+        defaultCustomUrl: http://localhost:11434
+        webSite: https://ollama.com/
       presets:
         - type: CHAT
           serviceHandler: chat-ollama
