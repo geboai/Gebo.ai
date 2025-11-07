@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GAzureOpenAIEmbeddingModelConfig } from './gAzureOpenAIEmbeddingModelConfig';
+import { GBaseModelChoice } from './gBaseModelChoice';
 import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGAzureOpenAIEmbeddingModelConfig { 
-    result?: GAzureOpenAIEmbeddingModelConfig;
+export interface OperationStatusListGBaseModelChoice { 
+    result?: Array<GBaseModelChoice>;
     messages?: Array<GUserMessage>;
     hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;

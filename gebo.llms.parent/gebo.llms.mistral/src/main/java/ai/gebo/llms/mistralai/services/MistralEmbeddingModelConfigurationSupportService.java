@@ -221,4 +221,10 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		return clean;
 	}
 
+	@Override
+	public OperationStatus<GMistralEmbeddingModelConfig> insertAndConfigure(GMistralEmbeddingModelConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

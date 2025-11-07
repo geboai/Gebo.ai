@@ -18,10 +18,14 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ComponentLLMSStatus } from '../model/componentLLMSStatus';
+import { LLMApiKeyCreationData } from '../model/lLMApiKeyCreationData';
+import { LLMCredentials } from '../model/lLMCredentials';
 import { LLMSSetupConfigurationData } from '../model/lLMSSetupConfigurationData';
 import { LLMSSetupConfigurationModificationData } from '../model/lLMSSetupConfigurationModificationData';
 import { LLMSVendorsSetupConfig } from '../model/lLMSVendorsSetupConfig';
 import { OperationStatusLLMSSetupModificationResult } from '../model/operationStatusLLMSSetupModificationResult';
+import { OperationStatusListGBaseModelChoice } from '../model/operationStatusListGBaseModelChoice';
+import { OperationStatusSecretInfo } from '../model/operationStatusSecretInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -96,6 +100,53 @@ export class GeboFastLlmsSetupControllerService {
         }
 
         return this.httpClient.request<OperationStatusLLMSSetupModificationResult>('post',`${this.basePath}/api/admin/GeboFastLLMSSetupController/applyLLMSSetupModification`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createLLMCredentials(body: LLMApiKeyCreationData, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusSecretInfo>;
+    public createLLMCredentials(body: LLMApiKeyCreationData, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusSecretInfo>>;
+    public createLLMCredentials(body: LLMApiKeyCreationData, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusSecretInfo>>;
+    public createLLMCredentials(body: LLMApiKeyCreationData, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling createLLMCredentials.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusSecretInfo>('post',`${this.basePath}/api/admin/GeboFastLLMSSetupController/createLLMCredentials`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -206,6 +257,53 @@ export class GeboFastLlmsSetupControllerService {
 
         return this.httpClient.request<ComponentLLMSStatus>('get',`${this.basePath}/api/admin/GeboFastLLMSSetupController/getLLMSSetupStatus`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGBaseModelChoice>;
+    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGBaseModelChoice>>;
+    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGBaseModelChoice>>;
+    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling verifyCredentialsAndDownloadModels.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusListGBaseModelChoice>('post',`${this.basePath}/api/admin/GeboFastLLMSSetupController/verifyCredentialsAndDownloadModels`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

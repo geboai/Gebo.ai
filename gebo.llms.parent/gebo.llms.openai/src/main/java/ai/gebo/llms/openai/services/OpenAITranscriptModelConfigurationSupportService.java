@@ -166,4 +166,10 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 		tModel.initialize(config, type);
 		return tModel;
 	}
+
+	@Override
+	public OperationStatus<GOpenAITranscriptModelConfig> insertAndConfigure(GOpenAITranscriptModelConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

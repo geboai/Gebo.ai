@@ -9,12 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
-import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
-    hasErrorMessages?: boolean;
+export interface LLMCredentials { 
+    type: LLMCredentials.TypeEnum;
+    serviceHandler: string;
+    secretId: string;
+    baseUrl?: string;
+}
+export namespace LLMCredentials {
+    export type TypeEnum = 'CHAT' | 'EMBEDDING';
+    export const TypeEnum = {
+        CHAT: 'CHAT' as TypeEnum,
+        EMBEDDING: 'EMBEDDING' as TypeEnum
+    };
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { LLMSModelsPresets, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 @Component({
     selector: "gebo-ai-llms-vendor-model-type-config",
@@ -17,16 +17,38 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         newApiSecret: new FormControl(),
         newUserName: new FormControl()
     });
-    useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" },{ label: "New credentials", value: "NEW" }];
+    useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
     modelChoiceFormGroup: FormGroup = new FormGroup({
         choosedModel: new FormControl()
     });
-    existingOrNewReadOnly: boolean = false;
+    existingOrNewShow: boolean = false;
     constructor(private secretController: SecretsControllerService) {
+        this.secretFormGroup.controls["useExistingOrNew"].setValidators(Validators.required);
+        this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
+            next: (value) => {
+                const allCtrls = ["selectedSecret", "newApiSecret", "newUserName"];
+                this.switchControlsRequired(allCtrls,false);
 
+                if (value === "EXISTING") {
+                    this.switchControlsRequired(["selectedSecret"],true);
+                }
+                if (value === "NEW") {
+                    this.switchControlsRequired(["newApiSecret", "newUserName"],true);
+                }
+            }
+        })
     }
     ngOnInit(): void {
 
+    }
+    
+    private switchControlsRequired(ctrls: string[], required: boolean) {
+        ctrls.forEach(ctrName => {
+            this.secretFormGroup.controls[ctrName].clearValidators();
+            if (required === true) {
+                this.secretFormGroup.controls[ctrName].addValidators(Validators.required);
+            }
+        });
     }
     reloadSecrets(): void {
         if (this.presets?.apiKeySecretContext) {
@@ -37,7 +59,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                         this.secrets = infos;
                         if (infos.length) {
                             this.secretFormGroup.controls["selectedSecret"].setValue(infos[0].code);
-                            this.existingOrNewReadOnly = false;
+                            this.existingOrNewShow = true;
                             this.secretFormGroup.controls["useExistingOrNew"].setValue("EXISTING");
 
                         }
@@ -45,7 +67,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     }
                     if (!infos || infos.length === 0) {
                         this.secretFormGroup.controls["useExistingOrNew"].setValue("NEW");
-                        this.existingOrNewReadOnly = true;
+                        this.existingOrNewShow = false;
                     }
                 },
                 complete: () => {

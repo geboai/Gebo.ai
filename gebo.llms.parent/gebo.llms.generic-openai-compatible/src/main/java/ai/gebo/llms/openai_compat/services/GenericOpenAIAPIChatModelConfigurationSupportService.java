@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -32,6 +29,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.retry.support.RetryTemplate;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
@@ -40,6 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIChatModelChoice;
@@ -59,58 +58,63 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	 * Configuration for the OpenAI-compatible model type
 	 */
 	final GenericOpenAIChatModelTypeConfig type;
-	
+
 	/**
 	 * Service for accessing secrets like API keys
 	 */
 	final IGeboSecretsAccessService secretService;
-	
+
 	/**
 	 * Utility for working with OpenAI API
 	 */
 	final IGOpenAIApiUtil openaiApiUtil;
-	
+
 	/**
 	 * Repository for tool/function callbacks
 	 */
 	final IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+
 	/**
 	 * Service for retrieving model lists from providers
 	 */
 	final ModelsListProviderProxyService modelsListProxyService;
-	
+
 	/**
 	 * Factory for creating service clients
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Constructor that initializes all required dependencies
 	 * 
-	 * @param type The configuration for the OpenAI-compatible model type
-	 * @param secretService Service for accessing API keys and other secrets
-	 * @param openaiApiUtil Utility for OpenAI API operations
-	 * @param functionsRepo Repository for tool callbacks/functions
-	 * @param modelsListProxyService Service to get available models
+	 * @param type                          The configuration for the
+	 *                                      OpenAI-compatible model type
+	 * @param secretService                 Service for accessing API keys and other
+	 *                                      secrets
+	 * @param openaiApiUtil                 Utility for OpenAI API operations
+	 * @param functionsRepo                 Repository for tool callbacks/functions
+	 * @param modelsListProxyService        Service to get available models
 	 * @param serviceClientsProviderFactory Factory for HTTP clients
 	 */
 	public GenericOpenAIAPIChatModelConfigurationSupportService(GenericOpenAIChatModelTypeConfig type,
 			IGeboSecretsAccessService secretService, IGOpenAIApiUtil openaiApiUtil,
-			IGToolCallbackSourceRepositoryPattern functionsRepo,
-			ModelsListProviderProxyService modelsListProxyService,
-			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory) {
+			IGToolCallbackSourceRepositoryPattern functionsRepo, ModelsListProviderProxyService modelsListProxyService,
+			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
+			ModelRuntimeConfigureHandler configureHandler) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
 		this.openaiApiUtil = openaiApiUtil;
 		this.modelsListProxyService = modelsListProxyService;
-		this.serviceClientsProviderFactory=serviceClientsProviderFactory;
+		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
+		this.configureHandler=configureHandler;
 
 	}
 
 	/**
-	 * Inner class that implements the configurable chat model for OpenAI-compatible APIs
+	 * Inner class that implements the configurable chat model for OpenAI-compatible
+	 * APIs
 	 */
 	class GenericOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
@@ -119,7 +123,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		 * Configures the OpenAI-compatible chat model with the provided configuration
 		 * 
 		 * @param config The configuration to apply to the model
-		 * @param type The type of chat model
+		 * @param type   The type of chat model
 		 * @return Configured OpenAiChatModel instance
 		 * @throws LLMConfigException If configuration fails
 		 */
@@ -190,8 +194,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			OpenAiChatOptions options = builder.build();
 
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
-			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager,
-					retryTemplate, ObservationRegistry.create());
+			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
+					ObservationRegistry.create());
 			return model;
 		}
 
@@ -281,6 +285,12 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		clean.setDescription(type.getDescription() + " " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GenericOpenAIAPIChatModelConfig> insertAndConfigure(GenericOpenAIAPIChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		
+		return configureHandler.insertAndConfigure(config, type);
 	}
 
 }

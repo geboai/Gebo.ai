@@ -231,4 +231,10 @@ public class MistralChatModelConfigurationSupportService
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
 	}
+
+	@Override
+	public OperationStatus<GMistralChatModelConfig> insertAndConfigure(GMistralChatModelConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

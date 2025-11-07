@@ -23,7 +23,6 @@ import org.springframework.ai.azure.openai.AzureOpenAiChatOptions;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +30,7 @@ import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
@@ -40,6 +40,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.azure.openai.model.GAzureOpenAIChatModelChoice;
 import ai.gebo.llms.azure.openai.model.GAzureOpenAIChatModelConfig;
 import ai.gebo.llms.azure.openai.services.AzureOpenAIConfigFactory.AzureOpenAIBaseConfig;
@@ -49,9 +50,11 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
+import lombok.AllArgsConstructor;
 
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "azureOpenAIEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class AzureOpenAIChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GAzureOpenAIChatModelChoice, GAzureOpenAIChatModelConfig> {
 	/**
@@ -70,21 +73,15 @@ public class AzureOpenAIChatModelConfigurationSupportService
 	static final List<GAzureOpenAIChatModelChoice> choices = GBaseModelChoice.of(GAzureOpenAIChatModelChoice.class,
 			OpenAiApi.ChatModel.values());
 
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	@Autowired
-	IGOpenAIApiUtil openaiApiUtil;
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
+	final IGeboSecretsAccessService secretService;
+	final IGOpenAIApiUtil openaiApiUtil;
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
 
-	@Autowired
-	IGTextToSpeechModelRuntimeConfigurationDao ttsDao;
-	@Autowired
-	IGTranscriptModelRuntimeConfigurationDao transcriptDao;
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
-	@Autowired
-	AzureOpenAIConfigFactory azureClientBuilderFactory;
+	final IGTextToSpeechModelRuntimeConfigurationDao ttsDao;
+	final IGTranscriptModelRuntimeConfigurationDao transcriptDao;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final AzureOpenAIConfigFactory azureClientBuilderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Implementation of a configurable chat model for OpenAI. This class handles
@@ -180,11 +177,7 @@ public class AzureOpenAIChatModelConfigurationSupportService
 
 	};
 
-	/**
-	 * Default constructor for the OpenAIChatModelConfigurationSupportService.
-	 */
-	public AzureOpenAIChatModelConfigurationSupportService() {
-	}
+	 
 
 	/**
 	 * Gets the model type supported by this service.
@@ -241,8 +234,14 @@ public class AzureOpenAIChatModelConfigurationSupportService
 		clean.setChoosedModel(new GAzureOpenAIChatModelChoice());
 		clean.getChoosedModel().setCode(presetModel);
 		clean.getChoosedModel().setDescription("chat model " + presetModel);
-		clean.setDescription("OpenAI chat model " + presetModel);
+		clean.setDescription("Azure/OpenAI chat model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GAzureOpenAIChatModelConfig> insertAndConfigure(GAzureOpenAIChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

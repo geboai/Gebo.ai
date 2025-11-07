@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai_compat.services;
 
@@ -25,6 +22,7 @@ import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
@@ -33,6 +31,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupp
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
@@ -51,9 +50,9 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 /**
  * AI generated comments
  * 
- * Service to configure and support OpenAI-compatible embedding models.
- * This class implements the embedding model configuration support interface
- * for generic OpenAI API embedding models.
+ * Service to configure and support OpenAI-compatible embedding models. This
+ * class implements the embedding model configuration support interface for
+ * generic OpenAI API embedding models.
  */
 public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GenericOpenAIAPIEmbeddingModelChoice, GenericOpenAIAPIEmbeddingModelConfig> {
@@ -71,23 +70,25 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	final ModelsListProviderProxyService modelsListProxyService;
 	/** Factory for LLM service clients */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Constructor initializing the service with required dependencies.
 	 *
-	 * @param type The embedding model type configuration
-	 * @param secretService Service for accessing API keys
-	 * @param openaiApiUtil Utility for OpenAI API operations
-	 * @param functionsRepo Repository for tool callbacks
-	 * @param storeFactoryProvider Provider for vector store factories
-	 * @param modelsListProxyService Service to retrieve models list
+	 * @param type                          The embedding model type configuration
+	 * @param secretService                 Service for accessing API keys
+	 * @param openaiApiUtil                 Utility for OpenAI API operations
+	 * @param functionsRepo                 Repository for tool callbacks
+	 * @param storeFactoryProvider          Provider for vector store factories
+	 * @param modelsListProxyService        Service to retrieve models list
 	 * @param serviceClientsProviderFactory Factory for client providers
 	 */
 	public GenericOpenAIAPIEmbeddingModelConfigurationSupportService(GenericOpenAIEmbeddingModelTypeConfig type,
 			IGeboSecretsAccessService secretService, IGOpenAIApiUtil openaiApiUtil,
 			IGToolCallbackSourceRepositoryPattern functionsRepo, IGVectorStoreFactoryProvider storeFactoryProvider,
 			ModelsListProviderProxyService modelsListProxyService,
-			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory) {
+			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
+			ModelRuntimeConfigureHandler configureHandler) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -95,17 +96,20 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		this.storeFactoryProvider = storeFactoryProvider;
 		this.modelsListProxyService = modelsListProxyService;
 		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
+		this.configureHandler=configureHandler;
 	}
 
 	/**
 	 * Inner class that implements the configurable embedding model for OpenAI API.
-	 * Extends the abstract configurable embedding model with OpenAI-specific implementation.
+	 * Extends the abstract configurable embedding model with OpenAI-specific
+	 * implementation.
 	 */
 	class GenericOpenAIConfigurableEmbeddingModel
 			extends GAbstractConfigurableEmbeddingModel<GenericOpenAIAPIEmbeddingModelConfig, OpenAiEmbeddingModel> {
 
 		/**
-		 * Constructor initializing the embedding model with a vector store factory provider.
+		 * Constructor initializing the embedding model with a vector store factory
+		 * provider.
 		 */
 		public GenericOpenAIConfigurableEmbeddingModel() {
 			super(storeFactoryProvider);
@@ -116,7 +120,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		 * Configures the OpenAI embedding model with the provided configuration.
 		 *
 		 * @param config The configuration for the embedding model
-		 * @param type The type of embedding model
+		 * @param type   The type of embedding model
 		 * @return Configured OpenAiEmbeddingModel
 		 * @throws LLMConfigException If configuration fails
 		 */
@@ -235,6 +239,13 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		clean.setDescription(type.getDescription() + " " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GenericOpenAIAPIEmbeddingModelConfig> insertAndConfigure(
+			GenericOpenAIAPIEmbeddingModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		
+		return configureHandler.insertAndConfigure(config, type);
 	}
 
 }

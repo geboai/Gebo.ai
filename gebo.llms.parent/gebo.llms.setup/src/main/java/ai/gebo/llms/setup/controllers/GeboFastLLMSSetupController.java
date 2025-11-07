@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.setup.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,13 +21,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.setup.config.LLMSVendorsSetupConfig;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMApiKeyCreationData;
+import ai.gebo.llms.setup.model.LLMCredentials;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationModificationData;
 import ai.gebo.llms.setup.model.LLMSSetupModificationResult;
 import ai.gebo.llms.setup.services.GeboLLMSSetupService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.secrets.model.SecretInfo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * AI generated comments
@@ -74,10 +82,17 @@ public class GeboFastLLMSSetupController {
 		return service.getActualConfiguration();
 	}
 
-	@PostMapping(value = "applyLLMSSetupModification", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "applyLLMSSetupModification", produces = MediaType.APPLICATION_JSON_VALUE,consumes=MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<LLMSSetupModificationResult> applyLLMSSetupModification(
 			@RequestBody LLMSSetupConfigurationModificationData modification) {
 		return service.applyModification(modification);
 	}
-
+	@PostMapping(value="createLLMCredentials", produces = MediaType.APPLICATION_JSON_VALUE,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<SecretInfo> createLLMCredentials(@RequestBody @Valid @NotNull LLMApiKeyCreationData apiKeyData) throws GeboCryptSecretException {
+		return service.createLLMCredentials(apiKeyData);
+	}
+	@PostMapping(value="verifyCredentialsAndDownloadModels", produces = MediaType.APPLICATION_JSON_VALUE,consumes=MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(@RequestBody @Valid @NotNull LLMCredentials credentials) throws GeboCryptSecretException {
+		return service.verifyCredentialsAndDownloadModels(credentials);
+	}
 }

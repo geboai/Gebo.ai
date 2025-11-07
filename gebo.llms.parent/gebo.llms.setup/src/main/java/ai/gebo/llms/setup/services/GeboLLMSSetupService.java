@@ -11,15 +11,20 @@ package ai.gebo.llms.setup.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
@@ -29,6 +34,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.setup.config.LLMSModelsPresets;
@@ -36,6 +42,9 @@ import ai.gebo.llms.setup.config.LLMSVendor;
 import ai.gebo.llms.setup.config.LLMSVendorsSetupConfig;
 import ai.gebo.llms.setup.config.ModelType;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
+import ai.gebo.llms.setup.model.LLMApiKeyCreationData;
+import ai.gebo.llms.setup.model.LLMCreateModelData;
+import ai.gebo.llms.setup.model.LLMCredentials;
 import ai.gebo.llms.setup.model.LLMExistingConfiguration;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData.LLMSSetupConfiguration;
@@ -44,9 +53,12 @@ import ai.gebo.llms.setup.model.LLMSSetupModificationResult;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.security.services.IGSecurityService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
 /**
@@ -178,4 +190,138 @@ public class GeboLLMSSetupService {
 		status.isSetup = status.chatModelSetup && status.embeddedModelSetup;
 		return status;
 	}
+
+	public OperationStatus<SecretInfo> createLLMCredentials(@Valid @NotNull LLMApiKeyCreationData apiKeyData)
+			throws GeboCryptSecretException {
+		GeboTokenContent geboToken = new GeboTokenContent();
+		geboToken.setToken(apiKeyData.getNewApiSecret());
+		geboToken.setUser(apiKeyData.getNewUserName());
+
+		switch (apiKeyData.getType()) {
+		case CHAT: {
+			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+			OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+			if (modelsLookupStatus.isHasErrorMessages()) {
+				secretService.deleteSecret(secretId);
+				return OperationStatus.ofError("Invalid credentials",
+						"Cannot access provider service with entered credentials");
+			} else {
+				return OperationStatus.of(secretService.getSecretInfoById(secretId));
+			}
+
+		}
+
+		case EMBEDDING: {
+			IGEmbeddingModelConfigurationSupportService supportLogic = this.embedModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+			OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+			if (modelsLookupStatus.isHasErrorMessages()) {
+				secretService.deleteSecret(secretId);
+				return OperationStatus.ofError("Invalid credentials",
+						"Cannot access provider service with entered credentials");
+			} else {
+				return OperationStatus.of(secretService.getSecretInfoById(secretId));
+			}
+		}
+
+		}
+		return null;
+	}
+
+	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
+			@Valid @NotNull LLMCredentials credentials) {
+		switch (credentials.getType()) {
+		case CHAT: {
+			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
+
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+
+		}
+
+		case EMBEDDING: {
+			IGEmbeddingModelConfigurationSupportService supportLogic = this.embedModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
+
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+		}
+
+		}
+		return null;
+	}
+
+	public OperationStatus<GBaseModelConfig> createLLM(LLMCreateModelData config)
+			throws GeboPersistenceException, LLMConfigException {
+		switch (config.getType()) {
+		case CHAT: {
+			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
+					.findByCode(config.getServiceHandler());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+			configuration.setApiSecretCode(config.getSecretId());
+			configuration.setBaseUrl(config.getBaseUrl());
+			configuration.setDefaultModel(config.getSetAsDefaultModel());
+			OperationStatus<List<GBaseModelChoice>> models = supportLogic.getModelChoices(configuration);
+			if (models.isHasErrorMessages()) {
+				return OperationStatus.of(null, models.getMessages());
+			} else {
+				Optional<GBaseModelChoice> model = models.getResult().stream()
+						.filter(x -> x.getCode() != null && x.getCode().equals(config.getModelCode())).findFirst();
+				if (model.isEmpty()) {
+					return OperationStatus.ofError("Cannot find the selected model",
+							"While interrogating the llms supplier the selected model has not been found");
+				}
+				GBaseModelChoice choice = model.get();
+				configuration.setChoosedModel(choice);
+				configuration.setDefaultModel(config.getSetAsDefaultModel());
+				return supportLogic.insertAndConfigure(configuration);
+			}
+
+		}
+
+		case EMBEDDING: {
+			IGEmbeddingModelConfigurationSupportService supportLogic = this.embedModelsSupportRepo
+					.findByCode(config.getServiceHandler());
+
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+			configuration.setApiSecretCode(config.getSecretId());
+			configuration.setBaseUrl(config.getBaseUrl());
+			configuration.setDefaultModel(config.getSetAsDefaultModel());
+			OperationStatus<List<GBaseModelChoice>> models = supportLogic.getModelChoices(configuration);
+			if (models.isHasErrorMessages()) {
+				return OperationStatus.of(null, models.getMessages());
+			} else {
+				Optional<GBaseModelChoice> model = models.getResult().stream()
+						.filter(x -> x.getCode() != null && x.getCode().equals(config.getModelCode())).findFirst();
+				if (model.isEmpty()) {
+					return OperationStatus.ofError("Cannot find the selected model",
+							"While interrogating the llms supplier the selected model has not been found");
+				}
+				GBaseModelChoice choice = model.get();
+				configuration.setChoosedModel(choice);
+				configuration.setDefaultModel(config.getSetAsDefaultModel());
+				return supportLogic.insertAndConfigure(configuration);
+			}
+		}
+
+		}
+		return null;
+	}
+
 }
