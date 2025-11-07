@@ -1,0 +1,39 @@
+<p-blockUI id="BlockUIButton" [target]="modelTypePanel" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #modelTypePanel id="ModelTypePanel" [showHeader]="false">
+    <br />
+    <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
+        <div class="grid">
+            <div class="col-3">
+                <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new"
+                    help="Use existing or create new credentials for this provider">
+                    <p-selectbutton [options]="useExistingOrNewOptions" optionLabel="label" optionValue="value"
+                        formControlName="useExistingOrNew" />
+                </gebo-ai-field>
+            </div>
+            <div class="col-9" *ngIf="secretFormGroup.controls['useExistingOrNew'].value==='EXISTING'">
+                <gebo-ai-field id="ExistingApiKey" label="Api key/credentials"
+                    help="Choose api key or credentials for this provider">
+                    <geboai-editable-listbox-component formControlName="selectedSecret" [data]="secrets"
+                        gebo-ai-field-element></geboai-editable-listbox-component>
+                </gebo-ai-field>
+            </div>
+            <div class="col-9 grid" *ngIf="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
+                <div class="col-4">
+                    <gebo-ai-field id="NewUserName" label="User name"
+                        help="User name used to access provider services">
+                        <input pInputText type="text" gebo-ai-field-element formControlName="newUserName">
+                    </gebo-ai-field>
+                </div>
+                <div class="col-8">
+                    <gebo-ai-field id="NewApiKey" label="New api key"
+                        help="Insert a new api key to be used with this provider">
+                        <input pInputText type="text" gebo-ai-field-element formControlName="newApiSecret">
+                    </gebo-ai-field>
+                </div>
+
+            </div>
+        </div>
+    </p-fieldset>
+</p-panel>

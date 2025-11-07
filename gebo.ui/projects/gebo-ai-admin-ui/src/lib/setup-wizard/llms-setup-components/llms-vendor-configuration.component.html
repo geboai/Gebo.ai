@@ -26,9 +26,9 @@
         <br />
         <div class="col-12 grid">
 
-            <div class="col-4" ><b id="ExistingModelCode" gebo-ai-text>Code</b></div>
-            <div class="col-4" ><b id="ExistingModelDesc" gebo-ai-text>Description</b></div>
-            <div class="col-2" ><b id="ExistingModelType" gebo-ai-text>Model type</b></div>
+            <div class="col-4"><b id="ExistingModelCode" gebo-ai-text>Code</b></div>
+            <div class="col-4"><b id="ExistingModelDesc" gebo-ai-text>Description</b></div>
+            <div class="col-2"><b id="ExistingModelType" gebo-ai-text>Model type</b></div>
             <div class="col-2"></div>
             @for (config of vendorConfiguration?.runtimeConfigs; track $index) {
             <div class="col-4">{{config.existingModelConfig.code}}</div>
@@ -45,7 +45,18 @@
 
         </div>
     </p-fieldset>
-    <p-fieldset id="NewModelSettings" legend="Configure new model">
+    <p-fieldset id="NewModelSettings" legend="Configure new model for this provider" *ngIf="vendorConfiguration?.libraryModel">
+        <p-tabView>
+
+            
         
+        @for(preset of vendorConfiguration?.libraryModel;track $index) {
+            <p-tabPanel [id]="preset.type+'TabItem'" gebo-ai-label [header]="preset.type==='CHAT'?'New Chat model':'New Embedding model'">
+                <gebo-ai-llms-vendor-model-type-config [presets]="preset"
+            [requiresApiKey]="vendorConfiguration?.parentModel?.requiresApiKey===true"></gebo-ai-llms-vendor-model-type-config>
+        
+            </p-tabPanel> 
+        }
+        </p-tabView>
     </p-fieldset>
 </p-panel>

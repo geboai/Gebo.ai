@@ -11,7 +11,7 @@ ai.gebo.llms.vendors.setup.config:
       presets:
         - type: CHAT
           serviceHandler: chatgpt-OpenAI
-          apiKeySecretContext: chatgpt-OpenAI
+          apiKeySecretContext: openai
           doModelsLookup: true
           choices:
             - code: gpt-4o
@@ -22,7 +22,7 @@ ai.gebo.llms.vendors.setup.config:
               description: Gpt 5
         - type: EMBEDDING
           serviceHandler: embedding-OpenAI
-          apiKeySecretContext: embedding-OpenAI
+          apiKeySecretContext: openai
           doModelsLookup: true
           choices:
             - code: text-embedding-3-large
