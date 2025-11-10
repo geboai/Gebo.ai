@@ -211,6 +211,7 @@ public class GeboLLMSSetupService {
 			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
 			configuration.setApiSecretCode(secretId);
 			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+
 			if (apiKeyData.getDoModelsLookup() != null && apiKeyData.getDoModelsLookup()) {
 				OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
 				if (modelsLookupStatus.isHasErrorMessages()) {
@@ -224,7 +225,7 @@ public class GeboLLMSSetupService {
 		}
 
 		}
-		return null;
+		throw new RuntimeException("This code zone has not to be reached");
 
 	}
 
@@ -253,7 +254,7 @@ public class GeboLLMSSetupService {
 		}
 
 		}
-		return null;
+		throw new RuntimeException("This code zone has not to be reached");
 	}
 
 	public OperationStatus<List<GBaseModelConfig>> createLLMS(List<LLMCreateModelData> configs) {
@@ -269,22 +270,7 @@ public class GeboLLMSSetupService {
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					OperationStatus<List<GBaseModelChoice>> models = supportLogic.getModelChoices(configuration);
-					if (models.isHasErrorMessages()) {
-						return OperationStatus.of(null, models.getMessages());
-					} else {
-						Optional<GBaseModelChoice> model = models.getResult().stream()
-								.filter(x -> x.getCode() != null && x.getCode().equals(config.getModelCode()))
-								.findFirst();
-						if (model.isEmpty()) {
-							return OperationStatus.ofError("Cannot find the selected model",
-									"While interrogating the llms supplier the selected model has not been found");
-						}
-						GBaseModelChoice choice = model.get();
-						configuration.setChoosedModel(choice);
-						configuration.setDefaultModel(config.getSetAsDefaultModel());
-						operationsOutput.add(supportLogic.insertAndConfigure(configuration));
-					}
+					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}
@@ -296,27 +282,11 @@ public class GeboLLMSSetupService {
 				try {
 					IGEmbeddingModelConfigurationSupportService supportLogic = this.embedModelsSupportRepo
 							.findByCode(config.getServiceHandler());
-
 					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
-					OperationStatus<List<GBaseModelChoice>> models = supportLogic.getModelChoices(configuration);
-					if (models.isHasErrorMessages()) {
-						return OperationStatus.of(null, models.getMessages());
-					} else {
-						Optional<GBaseModelChoice> model = models.getResult().stream()
-								.filter(x -> x.getCode() != null && x.getCode().equals(config.getModelCode()))
-								.findFirst();
-						if (model.isEmpty()) {
-							return OperationStatus.ofError("Cannot find the selected model",
-									"While interrogating the llms supplier the selected model has not been found");
-						}
-						GBaseModelChoice choice = model.get();
-						configuration.setChoosedModel(choice);
-						configuration.setDefaultModel(config.getSetAsDefaultModel());
-						operationsOutput.add(supportLogic.insertAndConfigure(configuration));
-					}
+					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));
 				}

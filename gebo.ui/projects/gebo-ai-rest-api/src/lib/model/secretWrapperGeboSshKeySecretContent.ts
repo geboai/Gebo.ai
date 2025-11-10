@@ -12,7 +12,7 @@
 import { GeboSshKeySecretContent } from './geboSshKeySecretContent';
 
 export interface SecretWrapperGeboSshKeySecretContent { 
-    contextCode?: string;
-    description?: string;
-    secretContent?: GeboSshKeySecretContent;
+    contextCode: string;
+    description: string;
+    secretContent: GeboSshKeySecretContent;
 }

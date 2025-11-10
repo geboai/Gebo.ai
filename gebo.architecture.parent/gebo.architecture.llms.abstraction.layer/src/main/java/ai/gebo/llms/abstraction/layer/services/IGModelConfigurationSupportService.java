@@ -10,6 +10,8 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeModuleComponent;
@@ -20,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Gebo.ai comment agent This interface defines the model configuration support
@@ -74,6 +77,24 @@ public interface IGModelConfigurationSupportService<ModelType extends GModelType
 		return List.of(mod); // Return a list containing the module use information
 	}
 
-	public OperationStatus<ModelConfig> insertAndConfigure(ModelConfig config) throws GeboPersistenceException, LLMConfigException;
+	public OperationStatus<ModelConfig> insertAndConfigure(ModelConfig config)
+			throws GeboPersistenceException, LLMConfigException;
+
+	public default OperationStatus<ModelConfig> insertAndConfigureModel(ModelConfig config, @NotNull String modelCode)
+			throws GeboPersistenceException, LLMConfigException {
+		OperationStatus<List<ModelChoice>> choices = getModelChoices(config);
+		if (!choices.isHasErrorMessages() && choices.getResult() != null && (!choices.getResult().isEmpty())) {
+			Stream<ModelChoice> stream = choices.getResult().stream();
+			Optional<ModelChoice> choice = stream.filter(x -> x.getCode().equalsIgnoreCase(modelCode)).findFirst();
+			if (choice.isPresent()) {
+				config.setChoosedModel(choice.get());
+				return insertAndConfigure(config);
+			} else {
+				return OperationStatus.ofError("The model " + modelCode + " has not been found",
+						"The list of models returned by the server does not include " + modelCode);
+			}
+		}
+		return OperationStatus.of(null, choices.getMessages());
+	}
 
 }
