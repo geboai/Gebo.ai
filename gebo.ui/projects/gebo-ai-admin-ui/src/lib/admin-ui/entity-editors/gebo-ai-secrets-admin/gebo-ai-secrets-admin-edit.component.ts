@@ -12,7 +12,7 @@
 
 import { Component, forwardRef, Injector, Input, SimpleChanges } from "@angular/core";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent } from "@Gebo.ai/gebo-ai-rest-api"
+import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent } from "@Gebo.ai/gebo-ai-rest-api"
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { map, Observable, of } from "rxjs";
 import { ConfirmationService } from "primeng/api";
@@ -295,49 +295,51 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
         }
         switch (value.secretType) {
             case "USERNAME_PASSWORD": {
-                return this.secretControllerService.createUsernamePasswordSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.usernamePasswordContent }).pipe(map(returned => {
+                return this.secretControllerService.createUsernamePasswordSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.usernamePasswordContent } as SecretWrapperGeboUsernamePasswordContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;
                 }));
             } break;
             case "TOKEN": {
-                return this.secretControllerService.createTokenSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.tokenContent }).pipe(map(returned => {
+                return this.secretControllerService.createTokenSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.tokenContent } as SecretWrapperGeboTokenContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;
                 }));
             } break;
             case "SSH_KEY": {
-                return this.secretControllerService.createSshKeySecret({ contextCode: value.contextCode, description: value.description, secretContent: value.sshContent }).pipe(map(returned => {
+                return this.secretControllerService.createSshKeySecret({ contextCode: value.contextCode, description: value.description, secretContent: value.sshContent } as SecretWrapperGeboSshKeySecretContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;
                 }));
             } break;
             case "CUSTOM_SECRET": {
-                return this.secretControllerService.createCustomSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.customContent }).pipe(map(returned => {
+                return this.secretControllerService.createCustomSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.customContent } as SecretWrapperGeboCustomSecretContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;
                 }));
             }
             case "OAUTH2_STANDARD": {
-                return this.secretControllerService.createOauth2StandardSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.oauth2StandardContent }).pipe(map(returned => {
+                return this.secretControllerService.createOauth2StandardSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.oauth2StandardContent } as SecretWrapperGeboOauth2SecretContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;
                 }));
             }
             case "OAUTH2_GOOGLE": {
-                return this.secretControllerService.createGoogleOauth2Secret({ contextCode: value.contextCode, description: value.description, secretContent: value.googleOauth2Content }).pipe(map(returned => {
+                
+                return this.secretControllerService.createGoogleOauth2Secret({ contextCode: value.contextCode, description: value.description, secretContent: value.googleOauth2Content } as SecretWrapperGeboGoogleOauth2SecretContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;
                 }));
+                
             }
             case "GOOGLE_CLOUD_JSON_CREDENTIALS": {
-                return this.secretControllerService.createGoogleJsonCredentialsSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.googleJsonContent }).pipe(map(returned => {
+                return this.secretControllerService.createGoogleJsonCredentialsSecret({ contextCode: value.contextCode, description: value.description, secretContent: value.googleJsonContent } as SecretWrapperGeboGoogleJsonSecretContent).pipe(map(returned => {
                     value.code = returned.code;
                     value.description = returned.description;
                     return value;

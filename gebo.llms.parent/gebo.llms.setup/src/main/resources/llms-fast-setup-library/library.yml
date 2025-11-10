@@ -56,10 +56,10 @@ ai.gebo.llms.vendors.setup.config:
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://www.deepseek.com/
-        serviceHandler: deepseek
         apiKeySecretContext: deepseek
       presets:
         - type: CHAT
+          serviceHandler: chat-deepseek          
           doModelsLookup: true
     - vendorInfo:
         vendorId: xai

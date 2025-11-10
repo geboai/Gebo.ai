@@ -1,12 +1,12 @@
 <p-blockUI id="BlockUIButton" [target]="modelTypePanel" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #modelTypePanel id="ModelTypePanel" [showHeader]="false">
+<p-panel #modelTypePanel id="ModelTypePanel"  header="Add new models" gebo-ai-label >
     <br />
     <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
         <div class="grid">
             <div class="col-3" *ngIf="existingOrNewShow">
-                <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new"
+                <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new" 
                     help="Use existing or create new credentials for this provider">
                     <p-selectbutton [options]="useExistingOrNewOptions" optionLabel="label" optionValue="value"
                         formControlName="useExistingOrNew" />
