@@ -5,9 +5,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class LLMApiKeyCreationData {
+public class LLMCredentialsCreationData {
 	@NotNull
 	private ModelType type = null;
+	private Boolean doModelsLookup = false;
 	@NotNull
 	private String serviceHandler = null;
 	@NotNull

@@ -22,16 +22,14 @@
         </div>
     </p-fieldset>
     <div class="grid">
-        @for(preset of vendorConfiguration?.libraryModel;track $index) {
+        
         <div class="col-3">
-            <p-button id="NewChatModel" gebo-ai-label [outlined]="true" label="New Chat model"
-                *ngIf="preset.type==='CHAT'" title="Create a new chat model configuration" severity="success"
-                icon="pi pi-microchip-ai" (onClick)="openModal(preset)" styleClass="w-full" />
-            <p-button id="NewEmbeddingModel" gebo-ai-label [outlined]="true" label="New embedding model"
-                *ngIf="preset.type==='EMBEDDING'" title="Create a new embedding model configuration" severity="success"
-                icon="pi pi-microchip-ai" (onClick)="openModal(preset)" styleClass="w-full" />
+            <p-button id="NewModelsButton" gebo-ai-label [outlined]="true" label="New models"
+                 title="Create new models configuration" severity="success"
+                icon="pi pi-microchip-ai" (onClick)="openModal()" styleClass="w-full" />
+            
         </div>
-        }
+        
     </div>
     <p-fieldset *ngIf="vendorConfiguration?.runtimeConfigs && vendorConfiguration?.runtimeConfigs?.length"
         id="ExistingModelsSection" gebo-ai-label legend="Existing configurations">
@@ -57,25 +55,9 @@
 
         </div>
     </p-fieldset>
-    <!-- 
-    <p-fieldset id="NewModelSettings" legend="Configure new model for this provider"
-        *ngIf="vendorConfiguration?.libraryModel">
-        <p-tabView>
-
-
-
-            @for(preset of vendorConfiguration?.libraryModel;track $index) {
-            <p-tabPanel [id]="preset.type+'TabItem'" gebo-ai-label
-                [header]="preset.type==='CHAT'?'New Chat model':'New Embedding model'">
-                <gebo-ai-llms-vendor-model-type-config [presets]="preset"
-                    [requiresApiKey]="vendorConfiguration?.parentModel?.requiresApiKey===true"></gebo-ai-llms-vendor-model-type-config>
-
-            </p-tabPanel>
-            }
-        </p-tabView>
-    </p-fieldset> -->
+    
 </p-panel>
-<p-dialog id="NewModelDialog" header="Add new model" gebo-ai-label [modal]="true" [visible]="editablePreset?true:false" (visibleChange)="editablePreset=undefined" [style]="{width:'98%',height:'100%'}" [maximizable]="true">
-    <gebo-ai-llms-vendor-model-type-config [presets]="editablePreset"
-                    [requiresApiKey]="vendorConfiguration?.parentModel?.requiresApiKey===true"></gebo-ai-llms-vendor-model-type-config>
+<p-dialog id="NewModelsDialog" header="Add new models" gebo-ai-label [modal]="true" [visible]="openModalCreateModel" (visibleChange)="openModalCreateModel=false" [style]="{width:'98%',height:'100%'}" [maximizable]="true">
+    <gebo-ai-llms-vendor-model-type-config [vendorConfiguration]="vendorConfiguration"
+                    ></gebo-ai-llms-vendor-model-type-config>
 </p-dialog>

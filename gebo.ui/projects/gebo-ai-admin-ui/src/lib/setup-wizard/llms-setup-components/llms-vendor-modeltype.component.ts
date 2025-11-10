@@ -1,27 +1,26 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { LLMSModelsPresets, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { LLMSModelsPresets, LLMSSetupConfiguration, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 @Component({
     selector: "gebo-ai-llms-vendor-model-type-config",
     templateUrl: "llms-vendor-modeltype.component.html",
     standalone: false
 })
 export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
-    @Input() presets?: LLMSModelsPresets;
-    @Input() requiresApiKey: boolean = false;
-    loading: boolean = false;
-    secrets: SecretInfo[] = [];
-    secretFormGroup: FormGroup = new FormGroup({
+    @Input() vendorConfiguration?: LLMSSetupConfiguration;
+    protected loading: boolean = false;
+    protected secrets: SecretInfo[] = [];
+    protected secretFormGroup: FormGroup = new FormGroup({
         useExistingOrNew: new FormControl(),
         selectedSecret: new FormControl(),
         newApiSecret: new FormControl(),
         newUserName: new FormControl()
     });
-    useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
-    modelChoiceFormGroup: FormGroup = new FormGroup({
+    protected useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
+    protected modelChoiceFormGroup: FormGroup = new FormGroup({
         choosedModel: new FormControl()
     });
-    existingOrNewShow: boolean = false;
+    protected existingOrNewShow: boolean = false;
     constructor(private secretController: SecretsControllerService) {
         this.secretFormGroup.controls["useExistingOrNew"].setValidators(Validators.required);
         this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
@@ -51,9 +50,9 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         });
     }
     reloadSecrets(): void {
-        if (this.presets?.apiKeySecretContext) {
+        if (this.vendorConfiguration?.parentModel?.apiKeySecretContext) {
             this.loading = true;
-            this.secretController.getSecretsByContextCode(this.presets.apiKeySecretContext).subscribe({
+            this.secretController.getSecretsByContextCode(this.vendorConfiguration?.parentModel?.apiKeySecretContext).subscribe({
                 next: (infos) => {
                     if (infos) {
                         this.secrets = infos;
@@ -77,7 +76,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         }
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["presets"] && this.presets) {
+        if (changes["vendorConfiguration"] && this.vendorConfiguration) {
             this.reloadSecrets();
         }
     }

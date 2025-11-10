@@ -10,15 +10,16 @@
  * Do not edit the class manually.
  */
 
-export interface LLMApiKeyCreationData { 
-    type: LLMApiKeyCreationData.TypeEnum;
+export interface LLMCredentialsCreationData { 
+    type: LLMCredentialsCreationData.TypeEnum;
+    doModelsLookup?: boolean;
     serviceHandler: string;
     apiKeySecretContext: string;
     newApiSecret: string;
     newUserName: string;
     baseUrl?: string;
 }
-export namespace LLMApiKeyCreationData {
+export namespace LLMCredentialsCreationData {
     export type TypeEnum = 'CHAT' | 'EMBEDDING';
     export const TypeEnum = {
         CHAT: 'CHAT' as TypeEnum,

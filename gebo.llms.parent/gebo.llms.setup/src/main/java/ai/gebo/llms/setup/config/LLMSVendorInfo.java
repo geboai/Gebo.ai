@@ -18,5 +18,6 @@ public class LLMSVendorInfo {
 	@NotNull
 	private String webSite = null;
 	private String acquireKeyUrl = null;
+	private String apiKeySecretContext=null;
 
 }

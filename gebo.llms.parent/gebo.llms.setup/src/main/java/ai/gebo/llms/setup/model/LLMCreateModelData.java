@@ -9,6 +9,7 @@ public class LLMCreateModelData {
 
 	@NotNull
 	private ModelType type = null;
+	private Boolean doModelsLookup = false;
 	@NotNull
 	private String serviceHandler = null;
 	private Boolean setAsDefaultModel = null;

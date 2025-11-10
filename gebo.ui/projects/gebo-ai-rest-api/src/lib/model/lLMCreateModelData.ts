@@ -9,15 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { LLMModelPresetChoice } from './lLMModelPresetChoice';
 
-export interface LLMSModelsPresets { 
+export interface LLMCreateModelData { 
+    type: LLMCreateModelData.TypeEnum;
     doModelsLookup?: boolean;
-    type?: LLMSModelsPresets.TypeEnum;
-    serviceHandler?: string;
-    choices?: Array<LLMModelPresetChoice>;
+    serviceHandler: string;
+    setAsDefaultModel?: boolean;
+    secretId?: string;
+    modelCode: string;
+    baseUrl?: string;
 }
-export namespace LLMSModelsPresets {
+export namespace LLMCreateModelData {
     export type TypeEnum = 'CHAT' | 'EMBEDDING';
     export const TypeEnum = {
         CHAT: 'CHAT' as TypeEnum,

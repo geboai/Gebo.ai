@@ -9,7 +9,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionP
 })
 export class GeboAILLMSVendorConfiguration implements OnInit, OnChanges {
     
-    protected editablePreset?:LLMSModelsPresets;
+    protected openModalCreateModel:boolean=false;
     @Input() vendorConfiguration?: LLMSSetupConfiguration;
     @Output() vendorConfigurationChanged: EventEmitter<LLMSSetupConfiguration> = new EventEmitter();
     protected loading: boolean = false;
@@ -26,8 +26,8 @@ export class GeboAILLMSVendorConfiguration implements OnInit, OnChanges {
             //this.vendorConfiguration.parentModel.vendorId
         }
     }
-    openModal(preset: LLMSModelsPresets) {
-        this.editablePreset=preset;
+    openModal() {
+        this.openModalCreateModel=true;
     }
     doModify(configuration: LLMExistingConfiguration) {
         const objectToOpen: GBaseModelConfig = {

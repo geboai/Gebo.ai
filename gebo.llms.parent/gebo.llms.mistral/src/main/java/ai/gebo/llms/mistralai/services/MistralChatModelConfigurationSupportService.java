@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.mistralai.services;
 
@@ -19,19 +16,21 @@ import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
-import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.mistralai.model.GMistralChatModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralChatModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -40,14 +39,16 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
+import lombok.AllArgsConstructor;
 
 /**
- * AI generated comments
- * Service class responsible for configuring and creating Mistral AI chat models.
- * This service is conditional on the 'ai.gebo.llms.config.mistralAIEnabled' property being set to 'true'.
+ * AI generated comments Service class responsible for configuring and creating
+ * Mistral AI chat models. This service is conditional on the
+ * 'ai.gebo.llms.config.mistralAIEnabled' property being set to 'true'.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class MistralChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GMistralChatModelChoice, GMistralChatModelConfig> {
 	/**
@@ -59,30 +60,26 @@ public class MistralChatModelConfigurationSupportService
 		type.setDescription("chat model service hosted on Mistral AI");
 		type.setModelConfigurationClass(GMistralChatModelConfig.class.getName());
 	}
-	
-	/**
-	 * List of available Mistral AI chat model choices based on MistralAiApi.ChatModel values.
-	 */
-	static final List<GMistralChatModelChoice> choices = GBaseModelChoice.of(GMistralChatModelChoice.class,
-			MistralAiApi.ChatModel.values());
 
 	/**
 	 * Service to access secret credentials for API authentication.
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
+	final IGeboSecretsAccessService secretService;
 	/*
 	 * @Autowired IGOpenAIApiUtil openaiApiUtil;
 	 */
-	
+
 	/**
 	 * Repository providing access to function call definitions.
 	 */
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+	final MistralModelsLookupService mistralModelsLookupService;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
+
 	/**
-	 * Inner class that implements the configuration and creation of Mistral AI chat models.
+	 * Inner class that implements the configuration and creation of Mistral AI chat
+	 * models.
 	 */
 	class MistralConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
@@ -91,9 +88,10 @@ public class MistralChatModelConfigurationSupportService
 		 * Configures a MistralAiChatModel instance based on the provided configuration.
 		 * 
 		 * @param config The Mistral AI configuration
-		 * @param type The chat model type
+		 * @param type   The chat model type
 		 * @return A configured MistralAiChatModel instance
-		 * @throws LLMConfigException If there are errors in configuration or credentials
+		 * @throws LLMConfigException If there are errors in configuration or
+		 *                            credentials
 		 */
 		@Override
 		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type)
@@ -116,6 +114,12 @@ public class MistralChatModelConfigurationSupportService
 			}
 			MistralAiApi openaiApi = new MistralAiApi(apiKey);
 			org.springframework.ai.mistralai.MistralAiChatOptions.Builder builder = MistralAiChatOptions.builder();
+			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
+			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
+			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
+					.getWebClientBuilder();
+			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
+			
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -125,10 +129,10 @@ public class MistralChatModelConfigurationSupportService
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
 			}
-			
+
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
-			
+
 				builder = builder.toolCallbacks(functions);
 				List<String> names = functions.stream().map(x -> {
 					return x.getToolDefinition().name();
@@ -139,7 +143,7 @@ public class MistralChatModelConfigurationSupportService
 
 			MistralAiChatOptions options = builder.build();
 			MistralAiChatModel model = new MistralAiChatModel(openaiApi, options,
-					functionsRepo.createToolCallingManager(), RetryTemplate.defaultInstance(),
+					functionsRepo.createToolCallingManager(), retryTemplate,
 					ObservationRegistry.NOOP);
 			return model;
 		}
@@ -165,12 +169,6 @@ public class MistralChatModelConfigurationSupportService
 			return true;
 		}
 	};
-
-	/**
-	 * Default constructor.
-	 */
-	public MistralChatModelConfigurationSupportService() {
-	}
 
 	/**
 	 * Returns the type of this chat model service.
@@ -205,14 +203,8 @@ public class MistralChatModelConfigurationSupportService
 	 */
 	@Override
 	public OperationStatus<List<GMistralChatModelChoice>> getModelChoices(GMistralChatModelConfig config) {
-		/*
-		 * OpenAIApiConfig providerConfig = new OpenAIApiConfig();
-		 * providerConfig.setProviderId("openai");
-		 * 
-		 * return this.openaiApiUtil.getChatModels(GMistralChatModelChoice.class,
-		 * providerConfig, config);
-		 */
-		return OperationStatus.of(choices);
+
+		return mistralModelsLookupService.getChatModelChoices(config);
 	}
 
 	/**
@@ -233,8 +225,8 @@ public class MistralChatModelConfigurationSupportService
 	}
 
 	@Override
-	public OperationStatus<GMistralChatModelConfig> insertAndConfigure(GMistralChatModelConfig config) {
-		// TODO Auto-generated method stub
-		return null;
+	public OperationStatus<GMistralChatModelConfig> insertAndConfigure(GMistralChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

@@ -8,10 +8,10 @@ ai.gebo.llms.vendors.setup.config:
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://openai.com/
+        apiKeySecretContext: openai
       presets:
         - type: CHAT
           serviceHandler: chatgpt-OpenAI
-          apiKeySecretContext: openai
           doModelsLookup: true
           choices:
             - code: gpt-4o
@@ -22,7 +22,6 @@ ai.gebo.llms.vendors.setup.config:
               description: Gpt 5
         - type: EMBEDDING
           serviceHandler: embedding-OpenAI
-          apiKeySecretContext: openai
           doModelsLookup: true
           choices:
             - code: text-embedding-3-large
@@ -35,10 +34,10 @@ ai.gebo.llms.vendors.setup.config:
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://anthropic.com/
+        apiKeySecretContext: anthropic
       presets:
         - type: CHAT
           serviceHandler: chat-anthropic
-          apiKeySecretContext: chat-anthropic
           doModelsLookup: true
           choices:
             - code: claude-3-7-sonnet-latest
@@ -57,10 +56,10 @@ ai.gebo.llms.vendors.setup.config:
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://www.deepseek.com/
+        serviceHandler: deepseek
+        apiKeySecretContext: deepseek
       presets:
         - type: CHAT
-          serviceHandler: chat-deepseek
-          apiKeySecretContext: chat-deepseek
           doModelsLookup: true
     - vendorInfo:
         vendorId: xai
@@ -95,10 +94,10 @@ ai.gebo.llms.vendors.setup.config:
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://build.nvidia.com/models
+        apiKeySecretContext: nvidia
       presets:
         - type: CHAT
           serviceHandler: chatmodel-nvidia
-          apiKeySecretContext: chatmodel-nvidia
           doModelsLookup: true
           choices:
             - code: meta/llama-3.1-405b-instruct
@@ -107,27 +106,55 @@ ai.gebo.llms.vendors.setup.config:
               description: deepseek R1 0528 on nvidia infrastructures
         - type: EMBEDDING
           serviceHandler: embedding-nvidia
-          apiKeySecretContext: embedding-nvidia
           doModelsLookup: true
           choices:
             - code: nvidia/nv-embed-v1
               description: nvidia embed v1
     - vendorInfo:
+        vendorId: mistral.ai
+        name: Mistral.ai
+        description: Mistral AI provider (France)
+        acquireKeyUrl: https://console.mistral.ai/home
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        apiKeySecretContext: mistralai
+        webSite: https://mistral.ai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-mistral
+          doModelsLookup: true
+          choices:
+            - code: magistral-medium-latest
+              description: Magistral medium Latest
+            - code: devstral-medium-latest
+              description: Devstral medium
+            - code: mistral-medium-latest
+              description: Mistral Medium Latest
+            - code: mistral-large-latest
+              description: Mistral Large Latest
+        - type: EMBEDDING
+          serviceHandler: embedding-mistral
+          doModelsLookup: true
+          choices:
+            - code: mistral-embed
+              description: mistral-embed
+            - code: codestral-embed
+              description: codestral-embed code extraction embedding model
+    - vendorInfo:
         vendorId: regolo.ai
         name: Regolo.ai
-        description: Regolo.ai Italian AI provider
+        description: Regolo.ai AI provider (Italian)
         acquireKeyUrl: https://dashboard.regolo.ai/api-keys
         requiresApiKeY: true
         requiresCustomUrl: false
         webSite: https://regolo.ai
+        apiKeySecretContext: regolo.ai
       presets:
         - type: CHAT
           serviceHandler: chatmodel-regolo.ai
-          apiKeySecretContext: chatmodel-regolo.ai
           doModelsLookup: true
         - type: EMBEDDING
           serviceHandler: embedding-regolo.ai
-          apiKeySecretContext: embedding-regolo.ai
           doModelsLookup: true
 
     - vendorInfo:
@@ -138,13 +165,12 @@ ai.gebo.llms.vendors.setup.config:
         requiresCustomUrl: true
         defaultCustomUrl: http://localhost:11434
         webSite: https://ollama.com/
+        apiKeySecretContext: ollama
       presets:
         - type: CHAT
           serviceHandler: chat-ollama
-          apiKeySecretContext: chat-ollama
           doModelsLookup: true
 
         - type: EMBEDDING
           serviceHandler: embedding-ollama
-          apiKeySecretContext: embedding-ollama
           doModelsLookup: true

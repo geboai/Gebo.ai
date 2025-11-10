@@ -9,8 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { LLMSVendor } from './lLMSVendor';
+import { GUserMessage } from './gUserMessage';
 
-export interface FastLLMSSetupConfig { 
-    vendors?: Array<LLMSVendor>;
+export interface OperationStatusList { 
+    result?: Array<any>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

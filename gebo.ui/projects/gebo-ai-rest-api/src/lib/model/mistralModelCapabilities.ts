@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { LLMSModelsPresets } from './lLMSModelsPresets';
-import { LLMSVendorInfo } from './lLMSVendorInfo';
 
-export interface LLMSVendor { 
-    vendorInfo?: LLMSVendorInfo;
-    presets?: Array<LLMSModelsPresets>;
+export interface MistralModelCapabilities { 
+    completionChat?: boolean;
+    completionFim?: boolean;
+    functionCalling?: boolean;
+    fineTuning?: boolean;
+    vision?: boolean;
+    classification?: boolean;
 }
