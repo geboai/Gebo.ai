@@ -22,6 +22,18 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         newUserName: new FormControl(),
         baseUrl: new FormControl()
     });
+    protected chatModelPresetsFormGroup:FormGroup=new FormGroup({
+        choosedModel:new FormControl()
+    });
+    protected embeddingModelPresetsFormGroup:FormGroup=new FormGroup({
+        choosedModel:new FormControl()
+    });
+    protected chatModelAdvancedFormGroup:FormGroup=new FormGroup({
+        choosedModel:new FormControl()
+    });
+    protected embeddingModelAdvancedFormGroup:FormGroup=new FormGroup({
+        choosedModel:new FormControl()
+    });
     protected useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
     protected chatPresets: LLMModelPresetChoice[] = [];
     protected embeddingPresets: LLMModelPresetChoice[] = [];
