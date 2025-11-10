@@ -69,15 +69,13 @@ public class MistralModelsLookupService {
 	private OperationStatus<List<MistralBaseModelCard>> invokeModels(GBaseModelConfig config) {
 		try {
 			HttpHeaders header = createHeader(config);
-			HttpEntity<?> entity = new HttpEntity<>(header);
-			ResponseEntity<MistralBaseModelCards> cards = restTemplateWrapperService.exchange(MISTRAL_MODELS_URL,
+			HttpEntity<MistralBaseModelCards> entity = new HttpEntity<MistralBaseModelCards>(header);
+
+			MistralBaseModelCards cards = restTemplateWrapperService.exchangeAndReturn(MISTRAL_MODELS_URL,
 					HttpMethod.GET, entity, MistralBaseModelCards.class);
-			if (cards.hasBody())
-				return OperationStatus.of((ArrayList<MistralBaseModelCard>) cards.getBody());
-			else {
-				return OperationStatus.ofError("Mistral.ai service problem",
-						"Errors invoking the Mistral.ai models list service");
-			}
+
+			return OperationStatus.of(cards.getData());
+
 		} catch (GeboRestIntegrationException e) {
 			GUserMessage message = restTemplateWrapperService.toMessage(e, "Mistral provider", "models list");
 			return OperationStatus.of(null, message);
@@ -99,7 +97,8 @@ public class MistralModelsLookupService {
 						choice.setModelCard(filtered);
 						choice.setCode(filtered.getId());
 						choice.setDescription(
-								filtered.getDescription() != null ? filtered.getDescription() : filtered.getId());
+								filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
+										: filtered.getId());
 						if (filtered.getMax_context_length() != null) {
 							choice.setContextLength(filtered.getMax_context_length());
 						}
@@ -128,7 +127,8 @@ public class MistralModelsLookupService {
 						choice.setModelCard(filtered);
 						choice.setCode(filtered.getId());
 						choice.setDescription(
-								filtered.getDescription() != null ? filtered.getDescription() : filtered.getId());
+								filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
+										: filtered.getId());
 						if (filtered.getMax_context_length() != null) {
 							choice.setContextLength(filtered.getMax_context_length());
 						}

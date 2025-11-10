@@ -126,62 +126,67 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
     constructor(injector: Injector, private secretControllerService: SecretsControllerService, confirmService: ConfirmationService, private geboFsService: GeboFormGroupsService, geboUIActionRoutingService: GeboUIActionRoutingService, outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFsService, confirmService, geboUIActionRoutingService, outputForwardingService);
         this.formGroup.controls["secretType"].valueChanges.subscribe(type => {
-            this.actualSecretType = type;
-            this.switchRequired("sshContent", false);
-            this.switchRequired("tokenContent", false);
-            this.switchRequired("usernamePasswordContent", false);
-            this.switchRequired("oauth2StandardContent", false);
-            this.switchRequired("googleOauth2Content", false);
-            this.switchRequired("googleJsonContent", false);
-            const googleJsonContent: FormGroup = this.formGroup.controls["googleJsonContent"] as FormGroup;
-            if (googleJsonContent) {
-                const jsonContent = googleJsonContent.controls["jsonContent"];
-                if (jsonContent)
-                    jsonContent.clearValidators();
-            }
-            if (type) {
-                switch (type) {
-                    case SecretInfo.SecretTypeEnum.SSHKEY: {
-                        this.switchRequired("sshContent", true);
-                    }; break;
-                    case SecretInfo.SecretTypeEnum.TOKEN: {
-                        this.switchRequired("tokenContent", true);
-                    }; break;
-                    case SecretInfo.SecretTypeEnum.USERNAMEPASSWORD: {
-                        this.switchRequired("usernamePasswordContent", true);
-                    }; break;
-                    case SecretInfo.SecretTypeEnum.OAUTH2STANDARD: {
-                        this.switchRequired("oauth2StandardContent", true);
-                    }; break;
-                    case SecretInfo.SecretTypeEnum.OAUTH2GOOGLE: {
-                        this.switchRequired("googleOauth2Content", true);
-                    }; break;
-                    case SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS: {
-                        this.switchRequired("googleJsonContent", true);
-                        const validJson: ValidatorFn = (control: AbstractControl) => {
-                            let returned: ValidationErrors | null = { "jsonContent": "Not valid json" };
-                            const value = control.value;
-                            try {
-                                const jsonObject = JSON.parse(value);
-                                console.log(jsonObject);
-                                returned = null;
-                            } catch (e) {
+            if (this.actualSecretType !== type) {
+                this.actualSecretType = type;
+                this.switchRequired("sshContent", false);
+                this.switchRequired("tokenContent", false);
+                this.switchRequired("usernamePasswordContent", false);
+                this.switchRequired("oauth2StandardContent", false);
+                this.switchRequired("googleOauth2Content", false);
+                this.switchRequired("googleJsonContent", false);
+                const googleJsonContent: FormGroup = this.formGroup.controls["googleJsonContent"] as FormGroup;
+                if (googleJsonContent) {
+                    const jsonContent = googleJsonContent.controls["jsonContent"];
+                    if (jsonContent)
+                        jsonContent.clearValidators();
+                }
+                if (type) {
+                    switch (type) {
+                        case SecretInfo.SecretTypeEnum.SSHKEY: {
+                            this.switchRequired("sshContent", true);
+                        }; break;
+                        case SecretInfo.SecretTypeEnum.TOKEN: {
+                            this.switchRequired("tokenContent", true);
+                        }; break;
+                        case SecretInfo.SecretTypeEnum.USERNAMEPASSWORD: {
+                            this.switchRequired("usernamePasswordContent", true);
+                        }; break;
+                        case SecretInfo.SecretTypeEnum.OAUTH2STANDARD: {
+                            this.switchRequired("oauth2StandardContent", true);
+                        }; break;
+                        case SecretInfo.SecretTypeEnum.OAUTH2GOOGLE: {
+                            this.switchRequired("googleOauth2Content", true);
+                        }; break;
+                        case SecretInfo.SecretTypeEnum.GOOGLECLOUDJSONCREDENTIALS: {
+                            this.switchRequired("googleJsonContent", true);
+                            const validJson: ValidatorFn = (control: AbstractControl) => {
+                                let returned: ValidationErrors | null = { "jsonContent": "Not valid json" };
+                                const value = control.value;
+                                try {
+                                    const jsonObject = JSON.parse(value);
+                                    console.log(jsonObject);
+                                    returned = null;
+                                } catch (e) {
 
+                                }
+                                return returned;
+                            };
+                            const googleJsonContent: FormGroup = this.formGroup.controls["googleJsonContent"] as FormGroup;
+                            if (googleJsonContent) {
+                                const jsonContent = googleJsonContent.controls["jsonContent"];
+                                if (jsonContent) {
+                                    jsonContent.clearValidators();
+                                    jsonContent.setValidators([Validators.required, validJson]);
+                                }
                             }
-                            return returned;
-                        };
-                        const googleJsonContent: FormGroup = this.formGroup.controls["googleJsonContent"] as FormGroup;
-                        if (googleJsonContent) {
-                            const jsonContent = googleJsonContent.controls["jsonContent"];
-                            if (jsonContent) { jsonContent.clearValidators(); jsonContent.setValidators([Validators.required, validJson]); }
+                        }; break;
 
-                        }
-                    }; break;
+                    }
 
                 }
-
+                this.formGroup.updateValueAndValidity();
             }
-            this.formGroup.updateValueAndValidity();
+
         });
 
     }
@@ -200,8 +205,10 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
             const fc = object as FormControl;
             fc.enable();
             if (required === true) {
-                fc.setValidators(Validators.required);
                 fc.enable();
+                fc.clearValidators();
+                fc.setValidators(Validators.required);
+                fc.updateValueAndValidity();
             } else {
                 fc.clearValidators();
                 fc.disable();
@@ -209,29 +216,35 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
 
         } else {
             const fg: FormGroup = this.formGroup.controls[formName] as FormGroup;
-            fg.enable();
+            if (required === true) {
+                fg.enable();
+            } else {
+                fg.disable();
+            }
 
             if (fg && fg.controls) {
                 const keys = Object.keys(fg.controls);
                 if (keys) {
                     keys.forEach(k => {
                         if (required === true) {
+                            fg.controls[k].enable();
+                            fg.controls[k].clearValidators();
                             fg.controls[k].setValidators(Validators.required);
                         } else {
+                            fg.controls[k].disable();
                             fg.controls[k].clearValidators();
                         }
                     });
                 }
             }
+
+
             fg.updateValueAndValidity();
-            if (required === true) {
-                fg.enable();
-            } else {
-                fg.disable();
-            }
         }
     }
-
+    protected getFormGroupChild(name:string):FormGroup {
+        return this.formGroup.controls[name] as FormGroup;
+    }
     /**
      * Handles input property changes, specifically to update the available secret types
      * based on the allowedTypes input property.

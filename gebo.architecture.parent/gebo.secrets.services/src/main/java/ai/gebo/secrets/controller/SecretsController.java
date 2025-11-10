@@ -56,9 +56,12 @@ public class SecretsController {
 	 * @param <SecretContentType> the type of the secret content
 	 */
 	public static class SecretWrapper<SecretContentType extends AbstractGeboSecretContent> implements Serializable {
-
+		@NotNull
 		private String contextCode = null;
+		@NotNull
 		private String description = null;
+		@NotNull
+		@Valid
 		private SecretContentType secretContent = null;
 
 		/**
@@ -142,7 +145,7 @@ public class SecretsController {
 	 * @throws GeboCryptSecretException if an error occurs during secret creation
 	 */
 	@PostMapping(value = "createUsernamePasswordSecret", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SecretInfo createUsernamePasswordSecret(@RequestBody SecretWrapper<GeboUsernamePasswordContent> content)
+	public SecretInfo createUsernamePasswordSecret(@RequestBody  @Valid  SecretWrapper<GeboUsernamePasswordContent> content)
 			throws GeboCryptSecretException {
 		String id = this.secretsService.storeSecret(content.getSecretContent(), content.getDescription(),
 				content.getContextCode());
@@ -157,7 +160,7 @@ public class SecretsController {
 	 * @throws GeboCryptSecretException if an error occurs during secret creation
 	 */
 	@PostMapping(value = "createTokenSecret", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SecretInfo createTokenSecret(@RequestBody SecretWrapper<GeboTokenContent> content)
+	public SecretInfo createTokenSecret(@RequestBody @Valid SecretWrapper<GeboTokenContent> content)
 			throws GeboCryptSecretException {
 		String id = this.secretsService.storeSecret(content.getSecretContent(), content.getDescription(),
 				content.getContextCode());
@@ -172,7 +175,7 @@ public class SecretsController {
 	 * @throws GeboCryptSecretException if an error occurs during secret creation
 	 */
 	@PostMapping(value = "createSshKeySecret", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SecretInfo createSshKeySecret(@RequestBody SecretWrapper<GeboSshKeySecretContent> content)
+	public SecretInfo createSshKeySecret(@RequestBody @Valid SecretWrapper<GeboSshKeySecretContent> content)
 			throws GeboCryptSecretException {
 		String id = this.secretsService.storeSecret(content.getSecretContent(), content.getDescription(),
 				content.getContextCode());
@@ -225,8 +228,6 @@ public class SecretsController {
 				content.getContextCode());
 		return secretsService.getSecretInfoById(id);
 	}
-
-	
 
 	/**
 	 * Creates a new Google JSON credentials secret.
