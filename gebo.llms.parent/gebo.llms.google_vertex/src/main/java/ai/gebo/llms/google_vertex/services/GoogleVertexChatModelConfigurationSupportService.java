@@ -30,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelChoice;
@@ -77,7 +78,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 */
 	final VertexAIConfigurator configurator;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	/**
 	 * Inner class that handles the configuration and initialization of Google
 	 * Vertex chat models

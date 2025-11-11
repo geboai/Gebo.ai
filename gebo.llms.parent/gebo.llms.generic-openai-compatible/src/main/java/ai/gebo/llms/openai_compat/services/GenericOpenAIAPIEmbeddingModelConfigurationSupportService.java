@@ -30,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
@@ -71,6 +72,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	/** Factory for LLM service clients */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 
 	/**
 	 * Constructor initializing the service with required dependencies.
@@ -88,7 +90,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			IGToolCallbackSourceRepositoryPattern functionsRepo, IGVectorStoreFactoryProvider storeFactoryProvider,
 			ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
-			ModelRuntimeConfigureHandler configureHandler) {
+			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
@@ -96,7 +98,8 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 		this.storeFactoryProvider = storeFactoryProvider;
 		this.modelsListProxyService = modelsListProxyService;
 		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
-		this.configureHandler=configureHandler;
+		this.configureHandler = configureHandler;
+		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
 	}
 
 	/**
@@ -208,19 +211,20 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	@Override
 	public OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> getModelChoices(
 			GenericOpenAIAPIEmbeddingModelConfig config) {
-
+		OperationStatus<List<GenericOpenAIAPIEmbeddingModelChoice>> result = null;
 		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
 		providerConfig.setProviderId(type.getProviderId());
 		if (providerConfig.getBasePath() == null)
 			providerConfig.setBasePath(type.getBaseUrl());
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
-			return this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
-					GenericOpenAIAPIEmbeddingModelChoice.class);
+			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPIEmbeddingModelChoice.class, type);
 		} else
-			return this.openaiApiUtil.getEmbeddingModels(GenericOpenAIAPIEmbeddingModelChoice.class, providerConfig,
+			result = this.openaiApiUtil.getEmbeddingModels(GenericOpenAIAPIEmbeddingModelChoice.class, providerConfig,
 					config, (choice) -> {
 						return new ModelMetaInfo();
-					});
+					}, type);
+		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(type, result);
 	}
 
 	/**
@@ -244,7 +248,7 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 	@Override
 	public OperationStatus<GenericOpenAIAPIEmbeddingModelConfig> insertAndConfigure(
 			GenericOpenAIAPIEmbeddingModelConfig config) throws GeboPersistenceException, LLMConfigException {
-		
+
 		return configureHandler.insertAndConfigure(config, type);
 	}
 

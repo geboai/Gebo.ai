@@ -186,7 +186,7 @@ public class AzureOpenAIEmbeddingModelConfigurationSupportService implements
 					ModelMetaInfo meta = new ModelMetaInfo();
 					meta.setInformativeUrl("https://platform.openai.com/docs/guides/embeddings");
 					return meta;
-				});
+				}, type);
 	}
 
 	/**

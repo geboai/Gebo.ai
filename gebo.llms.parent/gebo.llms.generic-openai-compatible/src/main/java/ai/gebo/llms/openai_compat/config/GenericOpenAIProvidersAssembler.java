@@ -24,6 +24,7 @@ import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
@@ -84,7 +85,7 @@ public class GenericOpenAIProvidersAssembler {
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	/**
 	 * Initializes and registers all configured OpenAI-compatible providers. This
 	 * method creates provider instances for both chat and embedding models and adds
@@ -97,7 +98,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIChatModelTypeConfig pc : config.getChatModelProviders()) {
 				GenericOpenAIAPIChatModelConfigurationSupportService provider = new GenericOpenAIAPIChatModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, modelsListProxyService,
-						serviceClientsProviderFactory, configureHandler);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
 				chatModelProvidersRepo.addImplementation(provider);
 			}
 		}
@@ -107,7 +108,7 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIEmbeddingModelTypeConfig pc : config.getEmbeddingModelProviders()) {
 				GenericOpenAIAPIEmbeddingModelConfigurationSupportService provider = new GenericOpenAIAPIEmbeddingModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, storeFactoryProvider, modelsListProxyService,
-						serviceClientsProviderFactory, configureHandler);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
 				embeddingModelProvidersRepo.addImplementation(provider);
 			}
 		}

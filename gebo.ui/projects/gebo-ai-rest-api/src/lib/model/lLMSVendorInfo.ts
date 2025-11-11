@@ -16,11 +16,12 @@ export interface LLMSVendorInfo {
     defaultCustomUrl?: string;
     requiresApiKey?: boolean;
     secretType?: LLMSVendorInfo.SecretTypeEnum;
+    authProvider?: LLMSVendorInfo.AuthProviderEnum;
     description: string;
     name: string;
     webSite: string;
     acquireKeyUrl?: string;
-    apiKeySecretContext?: string;
+    apiKeySecretContext: string;
 }
 export namespace LLMSVendorInfo {
     export type SecretTypeEnum = 'USERNAME_PASSWORD' | 'TOKEN' | 'SSH_KEY' | 'CUSTOM_SECRET' | 'OAUTH2_STANDARD' | 'OAUTH2_GOOGLE' | 'GOOGLE_CLOUD_JSON_CREDENTIALS' | 'OAUTH2_AUTHORIZED_CLIENT';
@@ -33,5 +34,15 @@ export namespace LLMSVendorInfo {
         OAUTH2GOOGLE: 'OAUTH2_GOOGLE' as SecretTypeEnum,
         GOOGLECLOUDJSONCREDENTIALS: 'GOOGLE_CLOUD_JSON_CREDENTIALS' as SecretTypeEnum,
         OAUTH2AUTHORIZEDCLIENT: 'OAUTH2_AUTHORIZED_CLIENT' as SecretTypeEnum
+    };
+    export type AuthProviderEnum = 'local' | 'google' | 'microsoft' | 'microsoft_multitenant' | 'aws_cognito' | 'oauth2_generic' | 'ldap';
+    export const AuthProviderEnum = {
+        Local: 'local' as AuthProviderEnum,
+        Google: 'google' as AuthProviderEnum,
+        Microsoft: 'microsoft' as AuthProviderEnum,
+        MicrosoftMultitenant: 'microsoft_multitenant' as AuthProviderEnum,
+        AwsCognito: 'aws_cognito' as AuthProviderEnum,
+        Oauth2Generic: 'oauth2_generic' as AuthProviderEnum,
+        Ldap: 'ldap' as AuthProviderEnum
     };
 }

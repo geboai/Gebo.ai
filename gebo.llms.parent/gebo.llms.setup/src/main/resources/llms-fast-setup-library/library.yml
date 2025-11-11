@@ -18,6 +18,7 @@ ai.gebo.llms.vendors.setup.config:
               description: Gpt 4o
             - code: gpt-4.1
               description: Gpt 4.1
+              defaultChoice: true
             - code: gpt-5
               description: Gpt 5
         - type: EMBEDDING
@@ -26,6 +27,7 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             - code: text-embedding-3-large
               description: text embedding 3 large
+              defaultChoice: true
     - vendorInfo:
         vendorId: anthropic
         name: Anthropic
@@ -48,6 +50,7 @@ ai.gebo.llms.vendors.setup.config:
               description: Claude Opus 4
             - code: claude-opus-4-1
               description: Claude Opus 4.1
+              defaultChoice: true
     - vendorInfo:
         vendorId: deepseek
         name: Deepseek
@@ -79,6 +82,7 @@ ai.gebo.llms.vendors.setup.config:
               description: Grok 3
             - code: grok-4
               description: Grok 4
+              defaultChoice: true
         - type: EMBEDDING
           serviceHandler: embedding-xai
           apiKeySecretContext: embedding-xai
@@ -86,6 +90,7 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             - code: embedding
               description: embedding model
+              defaultChoice: true
     - vendorInfo:
         vendorId: nvidia
         name: NVidia
@@ -104,12 +109,14 @@ ai.gebo.llms.vendors.setup.config:
               description: meta llama 3.1 405b instruct model on nvidia infrastructures
             - code: deepseek-ai/deepseek-r1-0528
               description: deepseek R1 0528 on nvidia infrastructures
+              defaultChoice: true
         - type: EMBEDDING
           serviceHandler: embedding-nvidia
           doModelsLookup: true
           choices:
             - code: nvidia/nv-embed-v1
               description: nvidia embed v1
+              defaultChoice: true
     - vendorInfo:
         vendorId: mistral.ai
         name: Mistral.ai
@@ -132,12 +139,14 @@ ai.gebo.llms.vendors.setup.config:
               description: Mistral Medium Latest
             - code: mistral-large-latest
               description: Mistral Large Latest
+              defaultChoice: true
         - type: EMBEDDING
           serviceHandler: embedding-mistral
           doModelsLookup: true
           choices:
             - code: mistral-embed
               description: mistral-embed
+              defaultChoice: true
             - code: codestral-embed
               description: codestral-embed code extraction embedding model
     - vendorInfo:

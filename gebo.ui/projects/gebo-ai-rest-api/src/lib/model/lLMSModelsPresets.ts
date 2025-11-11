@@ -13,8 +13,8 @@ import { LLMModelPresetChoice } from './lLMModelPresetChoice';
 
 export interface LLMSModelsPresets { 
     doModelsLookup?: boolean;
-    type?: LLMSModelsPresets.TypeEnum;
-    serviceHandler?: string;
+    type: LLMSModelsPresets.TypeEnum;
+    serviceHandler: string;
     choices?: Array<LLMModelPresetChoice>;
 }
 export namespace LLMSModelsPresets {

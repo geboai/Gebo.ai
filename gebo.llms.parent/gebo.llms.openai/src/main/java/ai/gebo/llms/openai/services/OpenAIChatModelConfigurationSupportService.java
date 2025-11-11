@@ -300,7 +300,7 @@ public class OpenAIChatModelConfigurationSupportService
 			ModelMetaInfo meta = new ModelMetaInfo();
 			meta.setInformativeUrl("https://platform.openai.com/docs/models/");
 			return meta;
-		});
+		}, type);
 	}
 
 	/**

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai.api.utils.impl;
 
@@ -32,7 +29,10 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
@@ -48,49 +48,36 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	/**
 	 * API endpoint path for retrieving the list of available models
 	 */
 	private static final String MODELS_LIST_PATH = "v1/models";
-	
+
 	/**
 	 * Data access object for models library
 	 */
 	final IGModelsLibraryDao libraryDao;
-	
+
 	/**
 	 * Service for accessing secrets like API keys
 	 */
 	final IGeboSecretsAccessService secretService;
-	
+
 	/**
 	 * Service for enriching model metadata
 	 */
 	final IGModelChoiceMetaInfoEnricherService enricherService;
-	
+
 	/**
 	 * Service for making REST API calls
 	 */
 	final RestTemplateWrapperService restTemplateWrapper;
-
-	/**
-	 * Constructor for dependency injection
-	 * 
-	 * @param libraryDao DAO for model library access
-	 * @param secretService Service for accessing API keys and other secrets
-	 * @param enricherService Service for enriching model metadata
-	 * @param restTemplateWrapper Service for making REST API calls
-	 */
-	public GOpenAIApiUtilImpl(IGModelsLibraryDao libraryDao, IGeboSecretsAccessService secretService,
-			IGModelChoiceMetaInfoEnricherService enricherService, RestTemplateWrapperService restTemplateWrapper) {
-		this.libraryDao = libraryDao;
-		this.secretService = secretService;
-		this.enricherService = enricherService;
-		this.restTemplateWrapper = restTemplateWrapper;
-	}
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 
 	/**
 	 * Inner class representing a list of OpenAI models
@@ -103,19 +90,19 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	 * 
 	 * @param config the OpenAI API configuration
 	 * @return List of OpenAI models
-	 * @throws OpenAIApiException if there's an issue with the API request
-	 * @throws GeboRestIntegrationException if there's an issue with the REST integration
+	 * @throws OpenAIApiException           if there's an issue with the API request
+	 * @throws GeboRestIntegrationException if there's an issue with the REST
+	 *                                      integration
 	 */
 	@Override
 	public List<OpenAIModel> getModels(OpenAIApiConfig config) throws OpenAIApiException, GeboRestIntegrationException {
 		String url = getUrl(config, MODELS_LIST_PATH);
-		
+
 		HttpEntity<String> request = new HttpEntity<String>(getHeaders(config));
 		ResponseEntity<OpenAIModelsList> response;
-		
-			response = restTemplateWrapper.exchange(url, HttpMethod.GET, request,
-					OpenAIModelsList.class);
-		
+
+		response = restTemplateWrapper.exchange(url, HttpMethod.GET, request, OpenAIModelsList.class);
+
 		List<OpenAIModel> result = response.hasBody() ? response.getBody().getData() : new ArrayList<OpenAIModel>();
 
 		return result;
@@ -141,7 +128,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	/**
 	 * Constructs the full URL for API requests
 	 * 
-	 * @param config the OpenAI API configuration
+	 * @param config   the OpenAI API configuration
 	 * @param relative the relative path to append
 	 * @return complete URL string
 	 * @throws OpenAIApiException if the base path is missing
@@ -161,10 +148,10 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	/**
 	 * Generic method to handle operations that require API key access
 	 * 
-	 * @param <ReturnType> the type of data to return
+	 * @param <ReturnType>     the type of data to return
 	 * @param functionByApiKey function to execute with the API key
-	 * @param apiSecretCode the secret code for retrieving the API key
-	 * @param apiKeyMandatory whether the API key is required
+	 * @param apiSecretCode    the secret code for retrieving the API key
+	 * @param apiKeyMandatory  whether the API key is required
 	 * @return operation status with result or error details
 	 */
 	private <ReturnType> OperationStatus<ReturnType> doWithRemoteSystem(Function<String, ReturnType> functionByApiKey,
@@ -217,19 +204,19 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	/**
 	 * Retrieves available chat models from OpenAI API
 	 * 
-	 * @param <ChatModelChoiceType> type parameter for chat model choices
-	 * @param type class of ChatModelChoiceType
-	 * @param config API configuration
-	 * @param modelConfig model configuration
+	 * @param <ChatModelChoiceType>  type parameter for chat model choices
+	 * @param type                   class of ChatModelChoiceType
+	 * @param config                 API configuration
+	 * @param modelConfig            model configuration
 	 * @param defaultMetainfoFactory factory for creating default model metadata
 	 * @return operation status with list of chat models or error details
 	 */
 	@Override
 	public <ChatModelChoiceType extends GBaseChatModelChoice> OperationStatus<List<ChatModelChoiceType>> getChatModels(
 			Class<ChatModelChoiceType> type, OpenAIApiConfig config, GBaseChatModelConfig modelConfig,
-			Function<ChatModelChoiceType, ModelMetaInfo> defaultMetainfoFactory) {
+			Function<ChatModelChoiceType, ModelMetaInfo> defaultMetainfoFactory, GChatModelType modelType) {
 
-		return doWithRemoteSystem(apiKey -> {
+		OperationStatus<List<ChatModelChoiceType>> returnValue = doWithRemoteSystem(apiKey -> {
 			OpenAIApiConfig apiconfig = new OpenAIApiConfig(config);
 			apiconfig.setApiKey(apiKey);
 			try {
@@ -263,23 +250,25 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 			}
 
 		}, modelConfig.getApiSecretCode(), config.isApiKeyMandatory());
+
+		return llmTypeFiltrerRepoPattern.filterChatModels(modelType, returnValue);
 	}
 
 	/**
 	 * Retrieves available embedding models from OpenAI API
 	 * 
 	 * @param <EmbeddingModelChoiceType> type parameter for embedding model choices
-	 * @param type class of EmbeddingModelChoiceType
-	 * @param config API configuration
-	 * @param modelConfig model configuration
-	 * @param defaultMetainfoFactory factory for creating default model metadata
+	 * @param type                       class of EmbeddingModelChoiceType
+	 * @param config                     API configuration
+	 * @param modelConfig                model configuration
+	 * @param defaultMetainfoFactory     factory for creating default model metadata
 	 * @return operation status with list of embedding models or error details
 	 */
 	@Override
 	public <EmbeddingModelChoiceType extends GBaseEmbeddingModelChoice> OperationStatus<List<EmbeddingModelChoiceType>> getEmbeddingModels(
 			Class<EmbeddingModelChoiceType> type, OpenAIApiConfig config, GBaseEmbeddingModelConfig modelConfig,
-			Function<EmbeddingModelChoiceType, ModelMetaInfo> defaultMetainfoFactory) {
-		return doWithRemoteSystem(apiKey -> {
+			Function<EmbeddingModelChoiceType, ModelMetaInfo> defaultMetainfoFactory, GEmbeddingModelType modelType) {
+		OperationStatus<List<EmbeddingModelChoiceType>> returnValue = doWithRemoteSystem(apiKey -> {
 			OpenAIApiConfig apiconfig = new OpenAIApiConfig(config);
 			apiconfig.setApiKey(apiKey);
 			if (modelConfig.getBaseUrl() != null) {
@@ -317,6 +306,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 			}
 
 		}, modelConfig.getApiSecretCode(), config.isApiKeyMandatory());
+		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(modelType, returnValue);
 	}
 
 }

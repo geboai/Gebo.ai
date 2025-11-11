@@ -3,6 +3,7 @@
 </p-blockUI>
 <p-panel #modelTypePanel id="ModelTypePanel" header="Add new models" gebo-ai-label>
     <br />
+    <h4><span id="ProviderNameField" gebo-ai-text>Provider</span>&nbsp;&nbsp;{{vendorConfiguration?.parentModel?.name}}</h4>
     <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
         <div class="grid">
             <div class="col-3" *ngIf="existingOrNewShow">
@@ -52,66 +53,100 @@
         *ngIf="chatPresets.length>0 || embeddingPresets.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
         <p-tabView class="geboFullHeight">
 
-            <p-tabPanel id="PresetsAccordionPanel" gebo-ai-label header="Suggested models selection" *ngIf="chatPresets.length>0 || embeddingPresets.length>0">
+            <p-tabPanel id="PresetsAccordionPanel" gebo-ai-label header="Suggested models selection"
+                *ngIf="chatPresets.length>0 || embeddingPresets.length>0">
                 <div class="grid">
-                        <div class="col-12">
-                            <p id="PresedAccordionDesc" gebo-ai-text>
-                                We suggest you the following models list
-                            </p>
-                        </div>
-                        <div class="col-6" *ngIf="chatPresets.length>0" [formGroup]="chatModelPresetsFormGroup">
-                            <gebo-ai-field id="chatPresetChoice" label="Chat model"
-                                help="Select one of the predefined chat models">
-                                <geboai-editable-listbox-component formControlName="choosedModel" [data]="chatPresets"
-                                    gebo-ai-field-element></geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6" *ngIf="chatPresets.length>0">
-
-                        </div>
-                        <div class="col-6" *ngIf="embeddingPresets.length>0"
-                            [formGroup]="embeddingModelPresetsFormGroup">
-                            <gebo-ai-field id="embeddingPresetChoice" label="Embedding model"
-                                help="Select one of the predefined embedding models">
-                                <geboai-editable-listbox-component formControlName="choosedModel"
-                                    [data]="embeddingPresets" gebo-ai-field-element></geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6" *ngIf="embeddingPresets.length>0">
-
-                        </div>
+                    <div class="col-12">
+                        <p id="PresetAccordionDesc" gebo-ai-text>
+                            We suggest you the following models list
+                        </p>
                     </div>
+                    <div class="col-6" *ngIf="chatPresets.length>0" [formGroup]="chatModelPresetsFormGroup">
+                        <gebo-ai-field id="chatPresetChoice" label="Chat model"
+                            help="Select one of the predefined chat models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="chatPresets"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="chatPresets.length>0">
+                        <gebo-ai-field id="chatPresetSetAsDefault" label="set as default chat model"
+                            help="Set this model as the default one, this will be used for every task no other chat model is configured for">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    
+                    <div class="col-6" *ngIf="embeddingPresets.length>0" [formGroup]="embeddingModelPresetsFormGroup">
+                        <gebo-ai-field id="embeddingPresetChoice" label="Embedding model"
+                            help="Select one of the predefined embedding models">
+                            <geboai-editable-listbox-component formControlName="choosedModel" [data]="embeddingPresets"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="embeddingPresets.length>0">
+                        <gebo-ai-field id="embeddingPresetSetAsDefault" label="set as default embedding model"
+                            help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    
+                    <div class="col-3">
+                        <p-button id="CreatePresetBtn" gebo-ai-label [outlined]="true" label="Create and activate"
+                            (onClick)="createPresetLLMS()" [disabled]="!presetCreateBtnEnabled" icon="pi pi-save"
+                            severity="success" styleClass="w-full"></p-button>
+                    </div>
+
+                </div>
             </p-tabPanel>
-            <p-tabPanel id="AdvancedAccordionPanel" gebo-ai-label header="Advanced models selection" *ngIf="lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
+            <p-tabPanel id="AdvancedAccordionPanel" gebo-ai-label header="Advanced models selection"
+                *ngIf="lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
                 <div class="grid">
-                        <div class="col-12"><p id="PresedAccordionDesc" gebo-ai-text>
-                                Use this selection mode only if you are expert or by checking on the supplier site wich models fit your needs.
-                            </p></div>
-                        <div class="col-6" *ngIf="lookedUpChatModels.length>0" [formGroup]="chatModelAdvancedFormGroup">
-                            <gebo-ai-field id="chatAdvancedChoice" label="Chat model"
-                                help="Select one of the supplier published chat models">
-                                <geboai-editable-listbox-component formControlName="choosedModel"
-                                    [data]="lookedUpChatModels"
-                                    gebo-ai-field-element></geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6" *ngIf="chatPresets.length>0">
-
-                        </div>
-                        <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"
-                            [formGroup]="embeddingModelAdvancedFormGroup">
-                            <gebo-ai-field id="embeddingAdvancedChoice" label="Embedding model"
-                                help="Select one of the  supplier published  embedding models">
-                                <geboai-editable-listbox-component formControlName="choosedModel"
-                                    [data]="lookedUpEmbeddingModels"
-                                    gebo-ai-field-element></geboai-editable-listbox-component>
-                            </gebo-ai-field>
-                        </div>
-                        <div class="col-6" *ngIf="embeddingPresets.length>0">
-
-                        </div>
+                    <div class="col-12">
+                        <p id="AdvancedAccordionDesc" gebo-ai-text>
+                            Use this selection mode only if you are expert or by checking on the supplier site wich
+                            models fit your needs.
+                        </p>
                     </div>
+                    <div class="col-6" *ngIf="lookedUpChatModels.length>0" [formGroup]="chatModelAdvancedFormGroup">
+                        <gebo-ai-field id="chatAdvancedChoice" label="Chat model"
+                            help="Select one of the supplier published chat models">
+                            <geboai-editable-listbox-component formControlName="choosedModel"
+                                [data]="lookedUpChatModels" gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="lookedUpChatModels.length>0">
+                        <gebo-ai-field id="chatAdvancedSetAsDefault" label="set as default chat model"
+                            help="Set this model as the default one, this will be used for every task no other chat model is configured for">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    
+                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"
+                        [formGroup]="embeddingModelAdvancedFormGroup">
+                        <gebo-ai-field id="embeddingAdvancedChoice" label="Embedding model"
+                            help="Select one of the  supplier published  embedding models">
+                            <geboai-editable-listbox-component formControlName="choosedModel"
+                                [data]="lookedUpEmbeddingModels"
+                                gebo-ai-field-element></geboai-editable-listbox-component>
+                        </gebo-ai-field>
+                    </div>
+                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0">
+                        <gebo-ai-field id="embeddingAdvancedSetAsDefault" label="set as default embedding model"
+                            help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
+                            <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
+                    
+                    <div class="col-3">
+                        <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
+                            (onClick)="createAdvancedLLMS()" [disabled]="!advancedCreateBtnEnabled" icon="pi pi-save"
+                            severity="success" styleClass="w-full"></p-button>
+                    </div>
+                </div>
             </p-tabPanel></p-tabView>
-        
+
     </p-fieldset>
 </p-panel>

@@ -29,6 +29,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.mistralai.model.GMistralChatModelChoice;
@@ -76,7 +77,7 @@ public class MistralChatModelConfigurationSupportService
 	final MistralModelsLookupService mistralModelsLookupService;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
 	 * models.

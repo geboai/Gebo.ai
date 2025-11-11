@@ -22,17 +22,21 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         newUserName: new FormControl(),
         baseUrl: new FormControl()
     });
-    protected chatModelPresetsFormGroup:FormGroup=new FormGroup({
-        choosedModel:new FormControl()
+    protected chatModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
     });
-    protected embeddingModelPresetsFormGroup:FormGroup=new FormGroup({
-        choosedModel:new FormControl()
+    protected embeddingModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
     });
-    protected chatModelAdvancedFormGroup:FormGroup=new FormGroup({
-        choosedModel:new FormControl()
+    protected chatModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
     });
-    protected embeddingModelAdvancedFormGroup:FormGroup=new FormGroup({
-        choosedModel:new FormControl()
+    protected embeddingModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
     });
     protected useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
     protected chatPresets: LLMModelPresetChoice[] = [];
@@ -184,14 +188,40 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     switch (x.type) {
                         case "CHAT": {
                             this.chatPresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.chatModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
                         } break;
                         case "EMBEDDING": {
                             this.embeddingPresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.embeddingModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
                         } break;
                     }
             });
             this.reloadSecrets();
         }
+    }
+    protected get presetCreateBtnEnabled():boolean {
+        const modelChoices:{ choosedModel?: string }[]=[this.chatModelPresetsFormGroup.value,this.embeddingModelPresetsFormGroup.value];
+
+        return modelChoices.filter(x=>x.choosedModel?true:false)?.length>0;
+
+    }
+    protected get advancedCreateBtnEnabled():boolean {
+        const modelChoices:{ choosedModel?: string }[]=[this.chatModelAdvancedFormGroup.value,this.embeddingModelAdvancedFormGroup.value];
+
+        return modelChoices.filter(x=>x.choosedModel?true:false)?.length>0;
+
+    }
+    protected createPresetLLMS() {
+
+    }
+    protected createAdvancedLLMS(){
+
     }
 
 }

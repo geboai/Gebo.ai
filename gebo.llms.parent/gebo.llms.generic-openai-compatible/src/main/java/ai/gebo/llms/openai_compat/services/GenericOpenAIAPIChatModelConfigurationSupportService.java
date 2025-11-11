@@ -37,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -84,6 +85,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	 */
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 
 	/**
 	 * Constructor that initializes all required dependencies
@@ -101,14 +103,15 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			IGeboSecretsAccessService secretService, IGOpenAIApiUtil openaiApiUtil,
 			IGToolCallbackSourceRepositoryPattern functionsRepo, ModelsListProviderProxyService modelsListProxyService,
 			IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory,
-			ModelRuntimeConfigureHandler configureHandler) {
+			ModelRuntimeConfigureHandler configureHandler, ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern) {
 		this.type = type;
 		this.secretService = secretService;
 		this.functionsRepo = functionsRepo;
 		this.openaiApiUtil = openaiApiUtil;
 		this.modelsListProxyService = modelsListProxyService;
 		this.serviceClientsProviderFactory = serviceClientsProviderFactory;
-		this.configureHandler=configureHandler;
+		this.configureHandler = configureHandler;
+		this.llmTypeFiltrerRepoPattern = llmTypeFiltrerRepoPattern;
 
 	}
 
@@ -256,18 +259,21 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	@Override
 	public OperationStatus<List<GenericOpenAIAPIChatModelChoice>> getModelChoices(
 			GenericOpenAIAPIChatModelConfig config) {
+		OperationStatus<List<GenericOpenAIAPIChatModelChoice>> result = null;
 		OpenAIApiConfig providerConfig = OpenAIApiConfig.of(config, false);
 		providerConfig.setProviderId(type.getProviderId());
 		if (providerConfig.getBasePath() == null)
 			providerConfig.setBasePath(type.getBaseUrl());
 		if (type.getModelsListProvider() != null && type.getModelsListProvider().trim().length() > 0) {
-			return this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
-					GenericOpenAIAPIChatModelChoice.class);
+			result = this.modelsListProxyService.geModels(type.getModelsListProvider(), config,
+					GenericOpenAIAPIChatModelChoice.class, type);
 		} else
-			return this.openaiApiUtil.getChatModels(GenericOpenAIAPIChatModelChoice.class, providerConfig, config,
+			result = this.openaiApiUtil.getChatModels(GenericOpenAIAPIChatModelChoice.class, providerConfig, config,
 					(choice) -> {
 						return new ModelMetaInfo();
-					});
+					}, type);
+
+		return llmTypeFiltrerRepoPattern.filterChatModels(type, result);
 	}
 
 	/**
@@ -288,8 +294,9 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<GenericOpenAIAPIChatModelConfig> insertAndConfigure(GenericOpenAIAPIChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
-		
+	public OperationStatus<GenericOpenAIAPIChatModelConfig> insertAndConfigure(GenericOpenAIAPIChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
 		return configureHandler.insertAndConfigure(config, type);
 	}
 

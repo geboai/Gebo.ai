@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.mistralai.model.GMistralChatModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralChatModelConfig;
@@ -36,6 +37,7 @@ import lombok.AllArgsConstructor;
 public class MistralModelsLookupService {
 	final IGeboSecretsAccessService secretService;
 	final RestTemplateWrapperService restTemplateWrapperService;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	private final static String MISTRAL_MODELS_URL = "https://api.mistral.ai/v1/models";
 
 	private HttpHeaders createHeader(GBaseModelConfig config) throws LLMConfigException {
@@ -87,59 +89,56 @@ public class MistralModelsLookupService {
 
 	public OperationStatus<List<GMistralChatModelChoice>> getChatModelChoices(GMistralChatModelConfig config) {
 		OperationStatus<List<MistralBaseModelCard>> models = invokeModels(config);
+		OperationStatus<List<GMistralChatModelChoice>> result = null;
 		if (models.isHasErrorMessages()) {
-			return OperationStatus.of(null, models.getMessages());
+			result = OperationStatus.of(null, models.getMessages());
 		} else if (models.getResult() != null) {
-			return OperationStatus.of(models.getResult().stream().filter(x -> x.getCapabilities() != null
-					&& x.getCapabilities().getCompletion_chat() != null && x.getCapabilities().getCompletion_chat())
-					.map(filtered -> {
-						GMistralChatModelChoice choice = new GMistralChatModelChoice();
-						choice.setModelCard(filtered);
-						choice.setCode(filtered.getId());
-						choice.setDescription(
-								filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
-										: filtered.getId());
-						if (filtered.getMax_context_length() != null) {
-							choice.setContextLength(filtered.getMax_context_length());
-						}
-						choice.setMetaInfos(new ModelMetaInfo());
-						choice.getMetaInfos().setContextLength(filtered.getMax_context_length());
-						choice.getMetaInfos().setChatModel(true);
-						choice.getMetaInfos().setProviderId("mistral.ai");
-						return choice;
-					}).toList());
+			result = OperationStatus.of(models.getResult().stream().map(filtered -> {
+				GMistralChatModelChoice choice = new GMistralChatModelChoice();
+				choice.setModelCard(filtered);
+				choice.setCode(filtered.getId());
+				choice.setDescription(
+						filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
+								: filtered.getId());
+				if (filtered.getMax_context_length() != null) {
+					choice.setContextLength(filtered.getMax_context_length());
+				}
+				choice.setMetaInfos(new ModelMetaInfo());
+				choice.getMetaInfos().setContextLength(filtered.getMax_context_length());
+				choice.getMetaInfos().setChatModel(true);
+				choice.getMetaInfos().setProviderId("mistral.ai");
+				return choice;
+			}).toList());
 		}
-		return OperationStatus.ofError("Mistral Ai service error", "Mistral AI did not return a valid list of models");
+		return llmTypeFiltrerRepoPattern.filterChatModels(MistralChatModelConfigurationSupportService.type, result);
 	}
 
 	public OperationStatus<List<GMistralEmbeddingModelChoice>> getEmbeddingModelsChoices(
 			GMistralEmbeddingModelConfig config) {
+		OperationStatus<List<GMistralEmbeddingModelChoice>> result = null;
 		OperationStatus<List<MistralBaseModelCard>> models = invokeModels(config);
 		if (models.isHasErrorMessages()) {
-			return OperationStatus.of(null, models.getMessages());
+			result = OperationStatus.of(null, models.getMessages());
 		} else if (models.getResult() != null) {
-			return OperationStatus.of(models.getResult().stream()
-					.filter(x -> x.getCapabilities() != null && (x.getCapabilities().getCompletion_chat() == null
-							&& !x.getCapabilities().getCompletion_chat() && x.getId() != null
-							&& x.getId().toLowerCase().indexOf("embed") >= 0))
-					.map(filtered -> {
-						GMistralEmbeddingModelChoice choice = new GMistralEmbeddingModelChoice();
-						choice.setModelCard(filtered);
-						choice.setCode(filtered.getId());
-						choice.setDescription(
-								filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
-										: filtered.getId());
-						if (filtered.getMax_context_length() != null) {
-							choice.setContextLength(filtered.getMax_context_length());
-						}
-						choice.setMetaInfos(new ModelMetaInfo());
-						choice.getMetaInfos().setContextLength(filtered.getMax_context_length());
-						choice.getMetaInfos().setChatModel(true);
-						choice.getMetaInfos().setProviderId("mistral.ai");
-						return choice;
-					}).toList());
+			result = OperationStatus.of(models.getResult().stream().map(filtered -> {
+				GMistralEmbeddingModelChoice choice = new GMistralEmbeddingModelChoice();
+				choice.setModelCard(filtered);
+				choice.setCode(filtered.getId());
+				choice.setDescription(
+						filtered.getDescription() != null ? filtered.getId() + " " + filtered.getDescription()
+								: filtered.getId());
+				if (filtered.getMax_context_length() != null) {
+					choice.setContextLength(filtered.getMax_context_length());
+				}
+				choice.setMetaInfos(new ModelMetaInfo());
+				choice.getMetaInfos().setContextLength(filtered.getMax_context_length());
+				choice.getMetaInfos().setChatModel(true);
+				choice.getMetaInfos().setProviderId("mistral.ai");
+				return choice;
+			}).toList());
 		}
-		return OperationStatus.ofError("Mistral Ai service error", "Mistral AI did not return a valid list of models");
+		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(MistralEmbeddingModelConfigurationSupportService.type,
+				result);
 	}
 
 }

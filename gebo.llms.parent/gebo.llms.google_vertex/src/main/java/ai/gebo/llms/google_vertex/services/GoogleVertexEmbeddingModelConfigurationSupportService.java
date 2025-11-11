@@ -24,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
@@ -75,7 +76,7 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 	 */
 	final VertexAIConfigurator configurator;
 	final ModelRuntimeConfigureHandler configureHandler;
-
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	/**
 	 * Inner class that implements a configurable Google Vertex embedding model.
 	 */

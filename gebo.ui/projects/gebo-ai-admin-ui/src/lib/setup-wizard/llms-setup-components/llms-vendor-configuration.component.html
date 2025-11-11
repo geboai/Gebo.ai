@@ -57,7 +57,7 @@
     </p-fieldset>
     
 </p-panel>
-<p-dialog  [modal]="true" [visible]="openModalCreateModel" (visibleChange)="openModalCreateModel=false" [style]="{width:'98%',height:'100%'}" [maximizable]="true" [showHeader]="true" [closable]="true">
+<p-dialog  [modal]="true" [visible]="openModalCreateModel" (visibleChange)="openModalCreateModel=false" [style]="{width:'98%',height:'70%'}" [maximizable]="true" [showHeader]="true" [closable]="true">
     <gebo-ai-llms-vendor-model-type-config [vendorConfiguration]="vendorConfiguration" *ngIf="openModalCreateModel===true"
                     ></gebo-ai-llms-vendor-model-type-config>
 </p-dialog>
