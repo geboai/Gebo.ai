@@ -84,7 +84,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	 */
 	public static class OpenAIModelsList extends OpenAIResultList<OpenAIModel> {
 	};
-
+	
 	/**
 	 * Retrieves available models from OpenAI API
 	 * 
@@ -193,7 +193,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 					"Provider is up and running and successfully configured"));
 			return os;
 
-		} catch (GeboCryptSecretException e) {
+		} catch (Throwable e) {
 			OperationStatus<ReturnType> os = new OperationStatus<ReturnType>();
 			os.getMessages().clear();
 			os.getMessages().add(GUserMessage.errorMessage("Problems in api key retrieve", e));
@@ -215,7 +215,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	public <ChatModelChoiceType extends GBaseChatModelChoice> OperationStatus<List<ChatModelChoiceType>> getChatModels(
 			Class<ChatModelChoiceType> type, OpenAIApiConfig config, GBaseChatModelConfig modelConfig,
 			Function<ChatModelChoiceType, ModelMetaInfo> defaultMetainfoFactory, GChatModelType modelType) {
-
+		final List<Throwable> throwed=new ArrayList<>();
 		OperationStatus<List<ChatModelChoiceType>> returnValue = doWithRemoteSystem(apiKey -> {
 			OpenAIApiConfig apiconfig = new OpenAIApiConfig(config);
 			apiconfig.setApiKey(apiKey);
@@ -246,12 +246,13 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 				this.enricherService.enrichChatModelMetaInfos(config.getProviderId(), list, defaultMetainfoFactory);
 				return list;
 			} catch (Throwable e) {
-				throw new RuntimeException(e);
+				throwed.add(e);
+				return List.of();
 			}
 
 		}, modelConfig.getApiSecretCode(), config.isApiKeyMandatory());
 
-		return llmTypeFiltrerRepoPattern.filterChatModels(modelType, returnValue);
+		return throwed.isEmpty()?llmTypeFiltrerRepoPattern.filterChatModels(modelType, returnValue):OperationStatus.of(throwed.get(0));
 	}
 
 	/**
@@ -268,6 +269,7 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 	public <EmbeddingModelChoiceType extends GBaseEmbeddingModelChoice> OperationStatus<List<EmbeddingModelChoiceType>> getEmbeddingModels(
 			Class<EmbeddingModelChoiceType> type, OpenAIApiConfig config, GBaseEmbeddingModelConfig modelConfig,
 			Function<EmbeddingModelChoiceType, ModelMetaInfo> defaultMetainfoFactory, GEmbeddingModelType modelType) {
+		final List<Throwable> throwed=new ArrayList<>();
 		OperationStatus<List<EmbeddingModelChoiceType>> returnValue = doWithRemoteSystem(apiKey -> {
 			OpenAIApiConfig apiconfig = new OpenAIApiConfig(config);
 			apiconfig.setApiKey(apiKey);
@@ -302,11 +304,12 @@ public class GOpenAIApiUtilImpl implements IGOpenAIApiUtil {
 						defaultMetainfoFactory);
 				return list;
 			} catch (Throwable e) {
-				throw new RuntimeException(e);
+				throwed.add(e);
+				return List.of();
 			}
 
 		}, modelConfig.getApiSecretCode(), config.isApiKeyMandatory());
-		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(modelType, returnValue);
+		return throwed.isEmpty()?llmTypeFiltrerRepoPattern.filterEmbeddingModels(modelType, returnValue):OperationStatus.of(throwed.get(0));
 	}
 
 }

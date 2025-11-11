@@ -2,6 +2,7 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel #modelTypePanel id="ModelTypePanel" header="Add new models" gebo-ai-label>
+    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <h4><span id="ProviderNameField" gebo-ai-text>Provider</span>&nbsp;&nbsp;{{vendorConfiguration?.parentModel?.name}}</h4>
     <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
         <div class="grid">
@@ -67,7 +68,7 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="chatPresets.length>0">
+                    <div class="col-6" *ngIf="chatPresets.length>0"  [formGroup]="chatModelPresetsFormGroup">
                         <gebo-ai-field id="chatPresetSetAsDefault" label="set as default chat model"
                             help="Set this model as the default one, this will be used for every task no other chat model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
@@ -82,7 +83,7 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="embeddingPresets.length>0">
+                    <div class="col-6" *ngIf="embeddingPresets.length>0" [formGroup]="embeddingModelPresetsFormGroup">
                         <gebo-ai-field id="embeddingPresetSetAsDefault" label="set as default embedding model"
                             help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
@@ -114,7 +115,7 @@
                                 [data]="lookedUpChatModels" gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="lookedUpChatModels.length>0">
+                    <div class="col-6" *ngIf="lookedUpChatModels.length>0" [formGroup]="chatModelAdvancedFormGroup">
                         <gebo-ai-field id="chatAdvancedSetAsDefault" label="set as default chat model"
                             help="Set this model as the default one, this will be used for every task no other chat model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
@@ -131,7 +132,7 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0">
+                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"  [formGroup]="embeddingModelAdvancedFormGroup">
                         <gebo-ai-field id="embeddingAdvancedSetAsDefault" label="set as default embedding model"
                             help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element

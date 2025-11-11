@@ -62,7 +62,7 @@ ai.gebo.llms.vendors.setup.config:
         apiKeySecretContext: deepseek
       presets:
         - type: CHAT
-          serviceHandler: chat-deepseek          
+          serviceHandler: chat-deepseek
           doModelsLookup: true
     - vendorInfo:
         vendorId: xai
@@ -167,6 +167,23 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
 
     - vendorInfo:
+        vendorId: groq
+        name: Groq
+        description: Groq AI provider
+        acquireKeyUrl: https://dashboard.regolo.ai/api-keys
+        requiresApiKeY: true
+        requiresCustomUrl: false
+        webSite: https://groq.com/
+        apiKeySecretContext: groq
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-groq
+          doModelsLookup: true
+        - type: EMBEDDING
+          serviceHandler: embedding-groq
+          doModelsLookup: true
+
+    - vendorInfo:
         vendorId: ollama
         name: Ollama
         description: Ollama, large language model server that runs on your infrastructure
@@ -182,4 +199,22 @@ ai.gebo.llms.vendors.setup.config:
 
         - type: EMBEDDING
           serviceHandler: embedding-ollama
+          doModelsLookup: true
+
+    - vendorInfo:
+        vendorId: generic-openai
+        name: OpenAI compliant API provider
+        description: Generic OpenAI compliant API provider
+        requiresApiKeY: true
+        requiresCustomUrl: true
+        defaultCustomUrl:
+        webSite:
+        apiKeySecretContext: generic-openai
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-generic-openai
+          doModelsLookup: true
+
+        - type: EMBEDDING
+          serviceHandler: embedding-generic-openai
           doModelsLookup: true

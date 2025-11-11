@@ -58,6 +58,6 @@
     
 </p-panel>
 <p-dialog  [modal]="true" [visible]="openModalCreateModel" (visibleChange)="openModalCreateModel=false" [style]="{width:'98%',height:'70%'}" [maximizable]="true" [showHeader]="true" [closable]="true">
-    <gebo-ai-llms-vendor-model-type-config [vendorConfiguration]="vendorConfiguration" *ngIf="openModalCreateModel===true"
+    <gebo-ai-llms-vendor-model-type-config [vendorConfiguration]="vendorConfiguration" *ngIf="openModalCreateModel===true" (vendorConfigurationChanged)="vendorConfigurationChanged.emit($event)"
                     ></gebo-ai-llms-vendor-model-type-config>
 </p-dialog>

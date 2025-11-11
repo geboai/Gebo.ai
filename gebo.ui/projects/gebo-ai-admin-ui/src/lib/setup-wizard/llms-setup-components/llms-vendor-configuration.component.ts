@@ -11,7 +11,7 @@ export class GeboAILLMSVendorConfiguration implements OnInit, OnChanges {
     
     protected openModalCreateModel:boolean=false;
     @Input() vendorConfiguration?: LLMSSetupConfiguration;
-    @Output() vendorConfigurationChanged: EventEmitter<LLMSSetupConfiguration> = new EventEmitter();
+    @Output() vendorConfigurationChanged: EventEmitter<boolean> = new EventEmitter();
     protected loading: boolean = false;
     constructor(private geboTranslationService: GeboAITranslationService,
         private setupService: GeboFastLlmsSetupControllerService,
@@ -46,7 +46,7 @@ export class GeboAILLMSVendorConfiguration implements OnInit, OnChanges {
                         next: (updatedSetup) => {
                             const data = updatedSetup.configurations?.find(x => x.parentModel.vendorId === this.vendorConfiguration?.parentModel.vendorId);
                             if (data) {
-                                this.vendorConfigurationChanged.emit(data);
+                                this.vendorConfigurationChanged.emit(true);
                                 this.vendorConfiguration = data;
                             }
                         },

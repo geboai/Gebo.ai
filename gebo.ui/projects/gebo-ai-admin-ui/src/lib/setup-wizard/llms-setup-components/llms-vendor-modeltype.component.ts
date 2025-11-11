@@ -1,10 +1,17 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { LLMSSetupConfiguration, SecretInfo, SecretsControllerService, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCredentials } from "@Gebo.ai/gebo-ai-rest-api";
+import { LLMSSetupConfiguration, SecretInfo, SecretsControllerService, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCredentials, LLMCreateModelData, ComponentLLMSStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { IOperationStatus } from "@Gebo.ai/reusable-ui";
-import { ToastMessageOptions } from "primeng/api";
+import { MessageService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable } from "rxjs";
-
+interface IModelChoice {
+    setAsDefault?: boolean;
+    choosedModel?: string;
+};
+interface IProviderAccess {
+    selectedSecret?: string;
+    baseUrl?: string;
+}
 @Component({
     selector: "gebo-ai-llms-vendor-model-type-config",
     templateUrl: "llms-vendor-modeltype.component.html",
@@ -12,6 +19,7 @@ import { forkJoin, Observable } from "rxjs";
 })
 export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     @Input() vendorConfiguration?: LLMSSetupConfiguration;
+    @Output() vendorConfigurationChanged: EventEmitter<boolean> = new EventEmitter();
     protected userMessages: ToastMessageOptions[] = [];
     protected loading: boolean = false;
     protected secrets: SecretInfo[] = [];
@@ -46,7 +54,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected existingOrNewShow: boolean = false;
     private oldCredentialId?: string;
     private oldBaseUrl?: string;
-    constructor(private secretController: SecretsControllerService, private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService) {
+    protected llmsStatus!: ComponentLLMSStatus;
+    constructor(private secretController: SecretsControllerService,
+        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
+        private messagesService: MessageService) {
         this.secretFormGroup.controls["useExistingOrNew"].setValidators(Validators.required);
         this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
             next: (value) => {
@@ -65,7 +76,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             next: (secretId) => {
                 if (secretId) {
                     const baseUrl = this.secretFormGroup.controls["baseUrl"].value?.baseUrl;
-                    if (secretId !== this.oldCredentialId || baseUrl !== this.oldCredentialId) {
+                    if (secretId !== this.oldCredentialId || baseUrl !== this.oldBaseUrl) {
 
                         this.loadModels(secretId, baseUrl);
                         this.oldCredentialId = secretId;
@@ -108,6 +119,9 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                             this.lookedUpEmbeddingModels = current.result ? current.result : [];
                         }
                     });
+                    if (toastMessages?.length) {
+                        this.userMessages = toastMessages;
+                    } else this.userMessages = [];
                 },
                 complete: () => {
                     this.loading = false;
@@ -117,7 +131,22 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
 
     }
     ngOnInit(): void {
-
+        this.loadLLMSStatus();
+    }
+    private loadLLMSStatus(): void {
+        this.loading = true;
+        this.geboFastLLMSSetupService.getLLMSSetupStatus().subscribe({
+            next: (value) => {
+                this.llmsStatus = value;
+                this.chatModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.chatModelSetup !== true);
+                this.embeddingModelPresetsFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.embeddedModelSetup !== true);
+                this.chatModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.chatModelSetup !== true);
+                this.embeddingModelAdvancedFormGroup.controls["setAsDefault"].setValue(this.llmsStatus?.embeddedModelSetup !== true);
+            },
+            complete: () => {
+                this.loading = false;
+            }
+        })
     }
     protected createCredentials(): void {
         const credentials = this.secretFormGroup.value;
@@ -205,23 +234,86 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             this.reloadSecrets();
         }
     }
-    protected get presetCreateBtnEnabled():boolean {
-        const modelChoices:{ choosedModel?: string }[]=[this.chatModelPresetsFormGroup.value,this.embeddingModelPresetsFormGroup.value];
+    protected get presetCreateBtnEnabled(): boolean {
+        const modelChoices: { choosedModel?: string }[] = [this.chatModelPresetsFormGroup.value, this.embeddingModelPresetsFormGroup.value];
 
-        return modelChoices.filter(x=>x.choosedModel?true:false)?.length>0;
-
-    }
-    protected get advancedCreateBtnEnabled():boolean {
-        const modelChoices:{ choosedModel?: string }[]=[this.chatModelAdvancedFormGroup.value,this.embeddingModelAdvancedFormGroup.value];
-
-        return modelChoices.filter(x=>x.choosedModel?true:false)?.length>0;
+        return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
 
     }
+    protected get advancedCreateBtnEnabled(): boolean {
+        const modelChoices: { choosedModel?: string }[] = [this.chatModelAdvancedFormGroup.value, this.embeddingModelAdvancedFormGroup.value];
+
+        return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
+
+    }
+
     protected createPresetLLMS() {
-
+        const modelDataCreationArray: Array<LLMCreateModelData> = [];
+        const chatModelChoice: IModelChoice = this.chatModelPresetsFormGroup.value;
+        const embeddingModelChoice: IModelChoice = this.embeddingModelPresetsFormGroup.value;
+        if (chatModelChoice?.choosedModel) {
+            const value = this.buildCreateModelData(chatModelChoice, "CHAT");
+            if (value) modelDataCreationArray.push(value);
+        }
+        if (embeddingModelChoice?.choosedModel) {
+            const value = this.buildCreateModelData(embeddingModelChoice, "EMBEDDING");
+            if (value) modelDataCreationArray.push(value);
+        }
+        this.createLLMS(modelDataCreationArray);
     }
-    protected createAdvancedLLMS(){
+    protected createAdvancedLLMS() {
+        const modelDataCreationArray: Array<LLMCreateModelData> = [];
+        const chatModelChoice: IModelChoice = this.chatModelAdvancedFormGroup.value;
+        const embeddingModelChoice: IModelChoice = this.embeddingModelAdvancedFormGroup.value;
+        if (chatModelChoice?.choosedModel) {
+            const value = this.buildCreateModelData(chatModelChoice, "CHAT");
+            if (value) modelDataCreationArray.push(value);
+        }
+        if (embeddingModelChoice?.choosedModel) {
+            const value = this.buildCreateModelData(embeddingModelChoice, "EMBEDDING");
+            if (value) modelDataCreationArray.push(value);
+        }
+        this.createLLMS(modelDataCreationArray);
+    }
+    private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum): LLMCreateModelData | undefined {
+        if (this.vendorConfiguration?.libraryModel) {
+            const preset = this.vendorConfiguration.libraryModel.find(providerPreset => providerPreset.type === type);
+            const providerAccess: IProviderAccess = this.secretFormGroup.value;
+            if (modelChoice?.choosedModel && preset) {
+                const out: LLMCreateModelData = {
+                    modelCode: modelChoice.choosedModel,
+                    setAsDefaultModel: modelChoice.setAsDefault === true,
+                    serviceHandler: preset.serviceHandler,
+                    type: type,
+                    baseUrl: providerAccess.baseUrl,
+                    doModelsLookup: preset.doModelsLookup === true,
+                    secretId: providerAccess.selectedSecret
+                };
+                return out;
+            }
 
+        }
+        return undefined;
+    }
+
+    private createLLMS(modelDataCreationArray: Array<LLMCreateModelData>) {
+        if (modelDataCreationArray?.length) {
+            this.loading = true;
+            this.geboFastLLMSSetupService.createLLMS(modelDataCreationArray).subscribe({
+                next: (operationStatusList) => {
+                    const messages: ToastMessageOptions[] | undefined = operationStatusList?.messages ? operationStatusList.messages as ToastMessageOptions[] : undefined;
+                    if (messages?.length) {
+                        this.userMessages = messages;
+                    } else this.userMessages = [];
+                    if (operationStatusList.hasErrorMessages !== true) {
+                        this.vendorConfigurationChanged.emit(true);
+                    }
+
+                }, complete: () => {
+                    this.loading = false;
+                }
+            });
+        }
     }
 
 }

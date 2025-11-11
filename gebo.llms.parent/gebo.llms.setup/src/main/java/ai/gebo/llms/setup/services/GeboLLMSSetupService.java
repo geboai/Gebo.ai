@@ -231,6 +231,7 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
 			@Valid @NotNull LLMCredentials credentials) {
+		
 		switch (credentials.getType()) {
 		case CHAT: {
 			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
@@ -295,7 +296,21 @@ public class GeboLLMSSetupService {
 			}
 
 		}
-		return null;
+		OperationStatus<List<GBaseModelConfig>> out=new OperationStatus<>();	
+		for(OperationStatus<GBaseModelConfig> res:operationsOutput) {
+			if (res.getResult()!=null) {
+				if (out.getResult()==null) {
+					out.setResult(new ArrayList<>());
+				}
+				out.getResult().add(res.getResult());
+			}
+			if (res.isHasErrorMessages()) {
+				out.getMessages().addAll(res.getMessages());
+			}
+		}
+		
+		
+		return out;
 	}
 
 }

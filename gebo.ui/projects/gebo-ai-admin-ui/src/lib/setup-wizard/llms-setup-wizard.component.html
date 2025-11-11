@@ -13,27 +13,33 @@
 </p-blockUI>
 
 <p-panel id="MainPanelHeader" gebo-ai-label #instModeUI header="Setup Gebo.ai llms providers access">
-
+    
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <form>
         <div class="grid " *ngIf="actualProvidersConfiguration">
             <div class="col-12">
-            <p-accordion [value]="0">
-                <p-accordion-panel
-                    *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
-                    [value]="i">
-                    <p-accordion-header >
-                            <div style="font-weight: bolder;color:black" *ngIf="(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">{{providerSituation.parentModel?.name}} ({{providerSituation.runtimeConfigs?.length}})</div> 
-                            <div style="font-weight: bolder;color:gray" *ngIf="!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">{{providerSituation.parentModel?.name}}</div>
+                <p-accordion [value]="currentIndex" (activeIndexChange)="currentIndex">
+                    <p-accordion-panel
+                        *ngFor="let providerSituation of actualProvidersConfiguration.configurations;index as i;"
+                        [value]="i">
+                        <p-accordion-header>
+                            <div style="font-weight: bolder;color:black"
+                                *ngIf="(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
+                                {{providerSituation.parentModel?.name}} ({{providerSituation.runtimeConfigs?.length}})
+                            </div>
+                            <div style="font-weight: bolder;color:gray"
+                                *ngIf="!(providerSituation.runtimeConfigs && providerSituation.runtimeConfigs?.length)">
+                                {{providerSituation.parentModel?.name}}</div>
                         </p-accordion-header>
-                    <p-accordion-content>
-                        <gebo-ai-llms-vendor-configuration [vendorConfiguration]="providerSituation"></gebo-ai-llms-vendor-configuration>
-                    </p-accordion-content>
-                </p-accordion-panel>
-            </p-accordion>
+                        <p-accordion-content>
+                            <gebo-ai-llms-vendor-configuration
+                                [vendorConfiguration]="providerSituation" (vendorConfigurationChanged)="onVendorConfigurationChanged($event,i)"></gebo-ai-llms-vendor-configuration>
+                        </p-accordion-content>
+                    </p-accordion-panel>
+                </p-accordion>
             </div>
         </div>
-       
+
     </form>
     <div class="grid geboLargeButtonsBar">
 
