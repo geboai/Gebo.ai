@@ -3,7 +3,7 @@
 </p-blockUI>
 <p-panel #mainPanel id="VendorConfigPanel" [showHeader]="false">
     <p-fieldset id="ProviderInfos" gebo-ai-label legend="Provider informations">
-        <br />
+       
         <div class="grid">
             <div class="col-12">
                 <label id="ProviderWWW" gebo-ai-text>Web site link</label>&nbsp;&nbsp;<a
@@ -33,7 +33,7 @@
     </div>
     <p-fieldset *ngIf="vendorConfiguration?.runtimeConfigs && vendorConfiguration?.runtimeConfigs?.length"
         id="ExistingModelsSection" gebo-ai-label legend="Existing configurations">
-        <br />
+        
         <div class="col-12 grid">
 
             <div class="col-4"><b id="ExistingModelCode" gebo-ai-text>Code</b></div>

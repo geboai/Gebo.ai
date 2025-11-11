@@ -2,7 +2,6 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-panel #modelTypePanel id="ModelTypePanel" header="Add new models" gebo-ai-label>
-    <br />
     <h4><span id="ProviderNameField" gebo-ai-text>Provider</span>&nbsp;&nbsp;{{vendorConfiguration?.parentModel?.name}}</h4>
     <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
         <div class="grid">
@@ -51,7 +50,7 @@
     </p-fieldset>
     <p-fieldset id="ModelsChoices" legend="Models choices" gebo-ai-label
         *ngIf="chatPresets.length>0 || embeddingPresets.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
-        <p-tabView class="geboFullHeight">
+        <p-tabView >
 
             <p-tabPanel id="PresetsAccordionPanel" gebo-ai-label header="Suggested models selection"
                 *ngIf="chatPresets.length>0 || embeddingPresets.length>0">
