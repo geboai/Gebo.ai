@@ -24,16 +24,17 @@
 import { Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControlStatus, FormGroup } from "@angular/forms";
 import { ToastMessageOptions } from "primeng/api";
-import { Observable, of, Subject } from "rxjs";
+import { Observable, of, Subject, Subscription } from "rxjs";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { ConfirmationService } from "primeng/api";
-import { GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { GObjectRef, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIEntitiesSettingWizardConfiguration, WizardButtonsBarData } from "./entities-modification-wizard";
 import { errorStatus, IOperationStatus } from "./operation-status";
 import { GeboActionType, GeboUIActionRequest, GeboWizardActionPerformedCallback, GeboWizardActionPerformedEvent, GeboWizardActionType } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 
 
 /**
@@ -106,6 +107,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   /** Timer for periodic validation checks */
   private programmed?: any = undefined;
 
+  private _msgsSubscription?: Subscription;
   /**
    * Returns the name of the entity being edited
    */
@@ -227,7 +229,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    * @param opStatus - The operation status to update
    */
   protected updateLastOperationStatus(opStatus: IOperationStatus<RecordType>) {
-    this.userMessages = opStatus?.messages as ToastMessageOptions[];
+    this.assignBackendMessages(opStatus?.messages);
     this.lastOperationStatus = opStatus;
   }
 
@@ -745,7 +747,47 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
       this.callUpdate(value, successfulActionCallback);
     }
   }
+  /******************************
+   * Translates standard messages and show them to user if found or 
+   * assigns the original one if no translation is present or the translation
+   * service is not reachable
+   */
+  protected assignBackendMessages(messages?: GUserMessage[]) {
+    if (this._msgsSubscription) {
+      this._msgsSubscription.unsubscribe();
+    }
+    if (messages && messages.length) {
+      if (this.injector) {
+        try {
+          const geboAITranslationService: GeboAITranslationService = this.injector.get(GeboAITranslationService);
+          if (geboAITranslationService) {
+            const withoutDuplicates: GUserMessage[] = [];
+            messages.forEach(msg => {
+              if (!withoutDuplicates.find(x => x.id === msg.id)) {
+                withoutDuplicates.push(msg);
+              }
+            });
+            this._msgsSubscription = geboAITranslationService.translateBackendMessages(withoutDuplicates).subscribe({
+              next: (msgs) => {
+                if (msgs)
+                  this.userMessages = msgs;
+                else 
+                  this.userMessages = withoutDuplicates;
+              }
+            });
+          }
+        } catch (e) {
+          console.error(e);
+          this.userMessages = messages;
+        }
+      }else {
+        this.userMessages = messages;
+      }
 
+    } else {
+      this.userMessages = [];
+    }
+  }
   /**
    * Deletes the entity after confirmation
    * 

@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { LLMSSetupConfiguration, SecretInfo, SecretsControllerService, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCredentials, LLMCreateModelData, ComponentLLMSStatus } from "@Gebo.ai/gebo-ai-rest-api";
-import { IOperationStatus } from "@Gebo.ai/reusable-ui";
-import { MessageService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, Observable } from "rxjs";
+import { LLMSSetupConfiguration, SecretInfo, SecretsControllerService, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboAITranslationService, IOperationStatus } from "@Gebo.ai/reusable-ui";
+import { ToastMessageOptions } from "primeng/api";
+import { forkJoin, Observable, Subscription } from "rxjs";
 interface IModelChoice {
     setAsDefault?: boolean;
     choosedModel?: string;
@@ -55,9 +55,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     private oldCredentialId?: string;
     private oldBaseUrl?: string;
     protected llmsStatus!: ComponentLLMSStatus;
+    protected subscription?: Subscription;
     constructor(private secretController: SecretsControllerService,
         private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
-        private messagesService: MessageService) {
+        private geboAITranslationService: GeboAITranslationService) {
         this.secretFormGroup.controls["useExistingOrNew"].setValidators(Validators.required);
         this.secretFormGroup.controls["useExistingOrNew"].valueChanges.subscribe({
             next: (value) => {
@@ -86,6 +87,27 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             }
         });
     }
+    private assignBackendMessages(messages?: GUserMessage[]) {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+        if (messages && messages.length) {
+            const withoutDuplicates: GUserMessage[] = [];
+            messages.forEach(msg => {
+                if (!withoutDuplicates.find(x => x.id === msg.id)) {
+                    withoutDuplicates.push(msg);
+                }
+            });
+            this.subscription = this.geboAITranslationService.translateBackendMessages(withoutDuplicates).subscribe({
+                next: (msgs) => {
+                    if (msgs)
+                        this.userMessages = msgs;
+                }
+            });
+        }else {
+            this.userMessages=[];
+        }
+    }
     private loadModels(secretId?: string, baseUrl?: string) {
 
         if (!secretId && this.vendorConfiguration?.parentModel.requiresApiKey === true) {
@@ -106,7 +128,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             this.loading = true;
             forkJoin(observables).subscribe({
                 next: (operationStatusArray) => {
-                    let toastMessages: ToastMessageOptions[] = [];
+                    let toastMessages: GUserMessage[] = [];
                     this.vendorConfiguration?.libraryModel.forEach((x, index) => {
                         let current = operationStatusArray[index];
                         if (current.messages) {
@@ -119,9 +141,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                             this.lookedUpEmbeddingModels = current.result ? current.result : [];
                         }
                     });
-                    if (toastMessages?.length) {
-                        this.userMessages = toastMessages;
-                    } else this.userMessages = [];
+                    this.assignBackendMessages(toastMessages);
                 },
                 complete: () => {
                     this.loading = false;
@@ -163,7 +183,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
 
             }).subscribe({
                 next: (value) => {
-                    this.userMessages = value.messages as ToastMessageOptions[];
+                    this.assignBackendMessages(value?.messages);
                     if (value.hasErrorMessages !== true && value.result) {
                         this.secrets = [...this.secrets, value.result];
                         this.secretFormGroup.controls["useExistingOrNew"].setValue("EXISTING");
@@ -301,11 +321,8 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             this.loading = true;
             this.geboFastLLMSSetupService.createLLMS(modelDataCreationArray).subscribe({
                 next: (operationStatusList) => {
-                    const messages: ToastMessageOptions[] | undefined = operationStatusList?.messages ? operationStatusList.messages as ToastMessageOptions[] : undefined;
-                    if (messages?.length) {
-                        this.userMessages = messages;
-                    } else this.userMessages = [];
-                    if (operationStatusList.hasErrorMessages !== true) {
+                    this.assignBackendMessages(operationStatusList?.messages);
+                    if (operationStatusList && operationStatusList.hasErrorMessages !== true) {
                         this.vendorConfigurationChanged.emit(true);
                     }
 
