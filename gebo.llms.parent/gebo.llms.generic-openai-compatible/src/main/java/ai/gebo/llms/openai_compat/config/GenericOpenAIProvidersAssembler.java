@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -27,6 +24,8 @@ import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai_compat.model.GenericOpenAIChatModelTypeConfig;
@@ -36,67 +35,61 @@ import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIEmbeddingModelConfigu
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.annotation.PostConstruct;
+import lombok.AllArgsConstructor;
 
 @Configuration
+@AllArgsConstructor
 public class GenericOpenAIProvidersAssembler {
 	/**
 	 * Configuration containing OpenAI-compatible providers settings
 	 */
-	@Autowired
-	GenericOpenAICompatibleProvidersConfig config;
-	
+	final GenericOpenAICompatibleProvidersConfig config;
+
 	/**
 	 * Repository for chat model configuration support services
 	 */
-	@Autowired
-	IGChatModelConfigurationSupportServiceRepositoryPattern chatModelProvidersRepo;
-	
+	final IGChatModelConfigurationSupportServiceRepositoryPattern chatModelProvidersRepo;
+
 	/**
 	 * Repository for embedding model configuration support services
 	 */
-	@Autowired
-	IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingModelProvidersRepo;
-	
+	final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embeddingModelProvidersRepo;
+
 	/**
 	 * Service for accessing secrets required by model providers
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
+	final IGeboSecretsAccessService secretService;
+
 	/**
 	 * Utility for interacting with OpenAI API
 	 */
-	@Autowired
-	IGOpenAIApiUtil openaiApiUtil;
-	
+	final IGOpenAIApiUtil openaiApiUtil;
+
 	/**
 	 * Repository for tool/function callbacks
 	 */
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+
 	/**
 	 * Provider for vector store factories
 	 */
-	@Autowired
-	IGVectorStoreFactoryProvider storeFactoryProvider;
-	
+	final IGVectorStoreFactoryProvider storeFactoryProvider;
+
 	/**
 	 * Service that provides model listing capabilities
 	 */
-	@Autowired
-	ModelsListProviderProxyService modelsListProxyService;
-	
+	final ModelsListProviderProxyService modelsListProxyService;
+
 	/**
 	 * Factory for creating LLM service clients
 	 */
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
-
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	/**
-	 * Initializes and registers all configured OpenAI-compatible providers.
-	 * This method creates provider instances for both chat and embedding models
-	 * and adds them to their respective repositories.
+	 * Initializes and registers all configured OpenAI-compatible providers. This
+	 * method creates provider instances for both chat and embedding models and adds
+	 * them to their respective repositories.
 	 */
 	@PostConstruct
 	public void assemble() {
@@ -105,17 +98,17 @@ public class GenericOpenAIProvidersAssembler {
 			for (GenericOpenAIChatModelTypeConfig pc : config.getChatModelProviders()) {
 				GenericOpenAIAPIChatModelConfigurationSupportService provider = new GenericOpenAIAPIChatModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, modelsListProxyService,
-						serviceClientsProviderFactory);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
 				chatModelProvidersRepo.addImplementation(provider);
 			}
 		}
-		
+
 		// Initialize embedding model providers if configured
 		if (config.getEmbeddingModelProviders() != null) {
 			for (GenericOpenAIEmbeddingModelTypeConfig pc : config.getEmbeddingModelProviders()) {
 				GenericOpenAIAPIEmbeddingModelConfigurationSupportService provider = new GenericOpenAIAPIEmbeddingModelConfigurationSupportService(
 						pc, secretService, openaiApiUtil, functionsRepo, storeFactoryProvider, modelsListProxyService,
-						serviceClientsProviderFactory);
+						serviceClientsProviderFactory, configureHandler, llmTypeFiltrerRepoPattern);
 				embeddingModelProvidersRepo.addImplementation(provider);
 			}
 		}

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.google_vertex.services;
 
@@ -27,25 +24,31 @@ import org.springframework.stereotype.Service;
 import com.google.cloud.vertexai.VertexAI;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelConfig;
 import ai.gebo.model.OperationStatus;
 import io.micrometer.observation.ObservationRegistry;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  * 
- * Service responsible for configuring and managing Google Vertex AI chat models.
- * This service is only active when googleVertexEnabled property is set to true.
+ * Service responsible for configuring and managing Google Vertex AI chat
+ * models. This service is only active when googleVertexEnabled property is set
+ * to true.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class GoogleVertexChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GGoogleVertexChatModelChoice, GGoogleVertexChatModelConfig> {
 	/**
@@ -57,27 +60,28 @@ public class GoogleVertexChatModelConfigurationSupportService
 		type.setDescription("Google vertex (Gemini models)");
 		type.setModelConfigurationClass(GGoogleVertexChatModelConfig.class.getName());
 	}
-	
+
 	/**
-	 * List of available Google Vertex chat model choices based on ChatModel enum values
+	 * List of available Google Vertex chat model choices based on ChatModel enum
+	 * values
 	 */
 	static final List<GGoogleVertexChatModelChoice> choices = GBaseModelChoice.of(GGoogleVertexChatModelChoice.class,
 			ChatModel.values());
-			
+
 	/**
 	 * Repository for tool callbacks used by the models
 	 */
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+
 	/**
 	 * Helper service to configure VertexAI instances
 	 */
-	@Autowired
-	VertexAIConfigurator configurator;
-
+	final VertexAIConfigurator configurator;
+	final ModelRuntimeConfigureHandler configureHandler;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	/**
-	 * Inner class that handles the configuration and initialization of Google Vertex chat models
+	 * Inner class that handles the configuration and initialization of Google
+	 * Vertex chat models
 	 */
 	class GoogleVertexConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GGoogleVertexChatModelConfig, VertexAiGeminiChatModel> {
@@ -86,7 +90,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 		 * Configures a VertexAiGeminiChatModel based on the provided configuration
 		 * 
 		 * @param config The Google Vertex chat model configuration
-		 * @param type The chat model type
+		 * @param type   The chat model type
 		 * @return A configured VertexAiGeminiChatModel instance
 		 * @throws LLMConfigException if there's an error during configuration
 		 */
@@ -97,17 +101,17 @@ public class GoogleVertexChatModelConfigurationSupportService
 			VertexAI vertexAI = configurator.createVertexAI(config.getApiSecretCode(), config.getBaseUrl());
 			VertexAiGeminiChatOptions options = null;
 			VertexAiGeminiChatOptions.Builder builder = new VertexAiGeminiChatOptions.Builder();
-			
+
 			// Configure model selection if specified
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
-			
+
 			// Configure temperature if specified and valid
 			if (config.getTemperature() != null && config.getTemperature() > 0) {
 				builder = builder.temperature(config.getTemperature());
 			}
-			
+
 			// Configure topP if specified and valid
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
@@ -123,7 +127,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
 			}
-			
+
 			options = builder.build();
 			VertexAiGeminiChatModel model = new VertexAiGeminiChatModel(vertexAI, options,
 					functionsRepo.createToolCallingManager(), RetryTemplate.defaultInstance(),
@@ -131,12 +135,6 @@ public class GoogleVertexChatModelConfigurationSupportService
 			return model;
 		}
 	};
-
-	/**
-	 * Default constructor
-	 */
-	public GoogleVertexChatModelConfigurationSupportService() {
-	}
 
 	/**
 	 * Returns the model type for Google Vertex chat models
@@ -175,7 +173,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 	}
 
 	/**
-	 * Creates a base configuration for a Google Vertex chat model with the specified preset model
+	 * Creates a base configuration for a Google Vertex chat model with the
+	 * specified preset model
 	 * 
 	 * @param presetModel The code of the preset model to use
 	 * @return A base configuration for a Google Vertex chat model
@@ -189,5 +188,12 @@ public class GoogleVertexChatModelConfigurationSupportService
 		clean.setDescription("Google vertex  chat model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GGoogleVertexChatModelConfig> insertAndConfigure(GGoogleVertexChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

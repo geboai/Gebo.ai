@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.google_vertex.services;
 
@@ -27,24 +24,30 @@ import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexEmbeddingModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  * 
- * Service responsible for configuring and creating Google Vertex AI embedding models.
- * This service is conditionally enabled when the property ai.gebo.llms.config.googleVertexEnabled is set to true.
+ * Service responsible for configuring and creating Google Vertex AI embedding
+ * models. This service is conditionally enabled when the property
+ * ai.gebo.llms.config.googleVertexEnabled is set to true.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "googleVertexEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GGoogleVertexEmbeddingModelChoice, GGoogleVertexEmbeddingModelConfig> {
 	/**
@@ -56,25 +59,24 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		type.setDescription("Google vertex embedding models");
 		type.setModelConfigurationClass(GGoogleVertexEmbeddingModelConfig.class.getName());
 	}
-	
+
 	/**
 	 * List of available Google Vertex embedding model choices.
 	 */
 	static final List<GGoogleVertexEmbeddingModelChoice> choices = GBaseModelChoice
 			.of(GGoogleVertexEmbeddingModelChoice.class, VertexAiTextEmbeddingModelName.values());
-	
+
 	/**
 	 * Provider for vector store factories.
 	 */
-	@Autowired
-	IGVectorStoreFactoryProvider vectorStoreFactoryProvider;
-	
+	final IGVectorStoreFactoryProvider vectorStoreFactoryProvider;
+
 	/**
 	 * Utility for configuring Vertex AI connections.
 	 */
-	@Autowired
-	VertexAIConfigurator configurator;
-
+	final VertexAIConfigurator configurator;
+	final ModelRuntimeConfigureHandler configureHandler;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 	/**
 	 * Inner class that implements a configurable Google Vertex embedding model.
 	 */
@@ -92,10 +94,11 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		}
 
 		/**
-		 * Configures the Vertex AI text embedding model based on the provided configuration.
+		 * Configures the Vertex AI text embedding model based on the provided
+		 * configuration.
 		 * 
 		 * @param config the configuration for the model
-		 * @param type the embedding model type
+		 * @param type   the embedding model type
 		 * @return a configured VertexAiTextEmbeddingModel
 		 * @throws LLMConfigException if there's an issue with the model configuration
 		 */
@@ -117,12 +120,7 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 
 	};
 
-	/**
-	 * Default constructor.
-	 */
-	public GoogleVertexEmbeddingModelConfigurationSupportService() {
-
-	}
+	
 
 	/**
 	 * Returns the embedding model type for Google Vertex.
@@ -164,7 +162,8 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 	}
 
 	/**
-	 * Creates a base configuration for a Google Vertex embedding model with the specified model name.
+	 * Creates a base configuration for a Google Vertex embedding model with the
+	 * specified model name.
 	 * 
 	 * @param presetModel the name of the model to use
 	 * @return a basic configuration for the specified model
@@ -179,6 +178,13 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		clean.setDescription("Google vertex  embedding model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GGoogleVertexEmbeddingModelConfig> insertAndConfigure(
+			GGoogleVertexEmbeddingModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		
+		return configureHandler.insertAndConfigure(config, type);
 	}
 
 }

@@ -42,5 +42,6 @@
   	<module>gebo.architecture.graphrag.persistence</module>
   	<module>gebo.architecture.documents.cache</module>
   	<module>gebo.architecture.neo4j</module>
+  	<module>gebo.architecture.setup</module>
   </modules>
 </project>

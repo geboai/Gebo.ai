@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -155,8 +156,8 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 	 * @return An OperationStatus containing a list of available models or error information
 	 */
 	@Override
-	public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>> OperationStatus<List<ModelChoice>> geModels(
-			String providerId, ModelConfig config, String clearApiKey, Class<ModelChoice> choiceType) {
+	public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>,ModelType extends GModelType> OperationStatus<List<ModelChoice>> geModels(
+			String providerId, ModelConfig config, String clearApiKey, Class<ModelChoice> choiceType,ModelType type) {
 		List<ModelChoice> models = new ArrayList<ModelChoice>();
 		try {
 			if (GBaseEmbeddingModelChoice.class.isAssignableFrom(choiceType)) {

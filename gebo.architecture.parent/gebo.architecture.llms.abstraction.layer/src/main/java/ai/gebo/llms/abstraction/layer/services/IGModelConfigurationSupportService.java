@@ -6,32 +6,34 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeModuleComponent;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo;
 import ai.gebo.architecture.patterns.model.GModuleUseInfo.MInfoType;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
+import jakarta.validation.constraints.NotNull;
 
 /**
- * Gebo.ai comment agent
- * This interface defines the model configuration support services.
- * It provides methods to fetch model types, retrieve model choices based on configuration,
- * create base configurations for models, and get module use information.
+ * Gebo.ai comment agent This interface defines the model configuration support
+ * services. It provides methods to fetch model types, retrieve model choices
+ * based on configuration, create base configurations for models, and get module
+ * use information.
  *
  * @param <ModelType>   The type of the model extending GModelType
  * @param <ModelChoice> The choice of the model extending GBaseModelChoice
- * @param <ModelConfig> The configuration of the model extending GBaseModelConfig
+ * @param <ModelConfig> The configuration of the model extending
+ *                      GBaseModelConfig
  */
 public interface IGModelConfigurationSupportService<ModelType extends GModelType, ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig>
 		extends IGRuntimeModuleComponent {
@@ -52,7 +54,8 @@ public interface IGModelConfigurationSupportService<ModelType extends GModelType
 	public OperationStatus<List<ModelChoice>> getModelChoices(ModelConfig config);
 
 	/**
-	 * Create a base configuration for the model using the provided preset model identifier.
+	 * Create a base configuration for the model using the provided preset model
+	 * identifier.
 	 *
 	 * @param presetModel the identifier of the preset model
 	 * @return the base model configuration
@@ -60,8 +63,8 @@ public interface IGModelConfigurationSupportService<ModelType extends GModelType
 	public ModelConfig createBaseConfiguration(String presetModel);
 
 	/**
-	 * Provides module use information for existing instances.
-	 * It sets the module ID, handler ID, and information type for the module.
+	 * Provides module use information for existing instances. It sets the module
+	 * ID, handler ID, and information type for the module.
 	 *
 	 * @return a list of module use information instances
 	 */
@@ -72,6 +75,26 @@ public interface IGModelConfigurationSupportService<ModelType extends GModelType
 		mod.setHandlerId(getType().getCode()); // Set the handler ID with the code of the model type
 		mod.setInfoType(MInfoType.EXISTENCE); // Set the information type to EXISTENCE
 		return List.of(mod); // Return a list containing the module use information
+	}
+
+	public OperationStatus<ModelConfig> insertAndConfigure(ModelConfig config)
+			throws GeboPersistenceException, LLMConfigException;
+
+	public default OperationStatus<ModelConfig> insertAndConfigureModel(ModelConfig config, @NotNull String modelCode)
+			throws GeboPersistenceException, LLMConfigException {
+		OperationStatus<List<ModelChoice>> choices = getModelChoices(config);
+		if (!choices.isHasErrorMessages() && choices.getResult() != null && (!choices.getResult().isEmpty())) {
+			Stream<ModelChoice> stream = choices.getResult().stream();
+			Optional<ModelChoice> choice = stream.filter(x -> x.getCode().equalsIgnoreCase(modelCode)).findFirst();
+			if (choice.isPresent()) {
+				config.setChoosedModel(choice.get());
+				return insertAndConfigure(config);
+			} else {
+				return OperationStatus.ofError("The model " + modelCode + " has not been found",
+						"The list of models returned by the server does not include " + modelCode);
+			}
+		}
+		return OperationStatus.of(null, choices.getMessages());
 	}
 
 }

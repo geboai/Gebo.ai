@@ -17,7 +17,6 @@ import org.springframework.ai.azure.openai.AzureOpenAiEmbeddingOptions;
 import org.springframework.ai.azure.openai.AzureOpenAiEmbeddingOptions.Builder;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.openai.api.OpenAiApi.EmbeddingModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +24,14 @@ import com.azure.ai.openai.OpenAIClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.azure.openai.model.GAzureOpenAIEmbeddingModelChoice;
 import ai.gebo.llms.azure.openai.model.GAzureOpenAIEmbeddingModelConfig;
@@ -40,6 +41,7 @@ import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -49,6 +51,7 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "azureOpenAIEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class AzureOpenAIEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GAzureOpenAIEmbeddingModelChoice, GAzureOpenAIEmbeddingModelConfig> {
 
@@ -80,28 +83,24 @@ public class AzureOpenAIEmbeddingModelConfigurationSupportService implements
 	/**
 	 * Service for accessing secrets like API keys
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
+	final IGeboSecretsAccessService secretService;
 
 	/**
 	 * Provider for vector store factories
 	 */
-	@Autowired
-	IGVectorStoreFactoryProvider storeFactoryProvider;
+	final IGVectorStoreFactoryProvider storeFactoryProvider;
 
 	/**
 	 * Utility for OpenAI API operations
 	 */
-	@Autowired
-	IGOpenAIApiUtil openaiApiUtil;
+	final IGOpenAIApiUtil openaiApiUtil;
 
 	/**
 	 * Factory for LLM service clients
 	 */
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
-	@Autowired
-	AzureOpenAIConfigFactory azureClientBuilderFactory;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final AzureOpenAIConfigFactory azureClientBuilderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Inner class that implements the configurable embedding model for OpenAI
@@ -146,12 +145,6 @@ public class AzureOpenAIEmbeddingModelConfigurationSupportService implements
 	};
 
 	/**
-	 * Default constructor
-	 */
-	public AzureOpenAIEmbeddingModelConfigurationSupportService() {
-	}
-
-	/**
 	 * Returns the embedding model type supported by this service
 	 * 
 	 * @return The OpenAI embedding model type
@@ -193,7 +186,7 @@ public class AzureOpenAIEmbeddingModelConfigurationSupportService implements
 					ModelMetaInfo meta = new ModelMetaInfo();
 					meta.setInformativeUrl("https://platform.openai.com/docs/guides/embeddings");
 					return meta;
-				});
+				}, type);
 	}
 
 	/**
@@ -212,5 +205,12 @@ public class AzureOpenAIEmbeddingModelConfigurationSupportService implements
 		clean.setDescription("OpenAI embedding model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GAzureOpenAIEmbeddingModelConfig> insertAndConfigure(GAzureOpenAIEmbeddingModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

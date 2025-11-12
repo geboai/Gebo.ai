@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -150,6 +151,13 @@ public class TestKnowledgeExtractionChatModelSupportServiceImpl extends Abstract
 		TestConfigurableKnowledgeExtractionChatModel out = new TestConfigurableKnowledgeExtractionChatModel();
 		out.initialize(config, type);
 		return out;
+	}
+
+	@Override
+	public OperationStatus<TestKnowledgeExtractionModelConfiguration> insertAndConfigure(
+			TestKnowledgeExtractionModelConfiguration config) throws GeboPersistenceException, LLMConfigException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -12,6 +12,8 @@
 
 package ai.gebo.secrets.model;
 
+import jakarta.validation.constraints.NotNull;
+
 /**
  * Gebo.ai comment agent
  * Represents a username and password secret content.
@@ -21,7 +23,10 @@ package ai.gebo.secrets.model;
 public class GeboUsernamePasswordContent extends AbstractGeboSecretContent {
     
     // Fields to store username and password
-    private String username = null, password = null;
+	@NotNull
+    private String username = null;
+	@NotNull
+	private String password = null;
 
     /**
      * Gets the username.

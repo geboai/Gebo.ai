@@ -14,12 +14,10 @@
 			<artifactId>spring-ai-mistral-ai</artifactId>
 			<version>${spring.ai.version}</version>
 		</dependency>
-		
-		<!-- 
 		<dependency>
-			<groupId>ai.gebo.ragsystem</groupId>
-			<artifactId>gebo.ragsystem.openai.api.utils</artifactId>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.restintegration.abstraction.layer</artifactId>
 			<version>${project.version}</version>
-		</dependency> -->
+		</dependency>
 	</dependencies>
 </project>

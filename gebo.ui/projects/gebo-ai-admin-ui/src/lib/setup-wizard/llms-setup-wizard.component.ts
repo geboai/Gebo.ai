@@ -17,12 +17,10 @@
  */
 
 import { Component } from "@angular/core";
-import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, FastLLMSSetupData, OperationStatusBoolean, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { LLMSSetupConfiguration, LLMSSetupConfigurationData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { forkJoin, Observable } from "rxjs";
-import { FormControl, FormGroup } from "@angular/forms";
-import { ToastMessageOptions } from "primeng/api";
 
 /**
  * Interface defining the structure of LLM entries displayed in the component.
@@ -44,38 +42,22 @@ interface LLMSEntry {
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSetupWizardComponent") }]
 })
 export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
-    /**
-     * List of available LLM providers that can be configured in the system.
-     * Currently supports OpenAI and Nvidia, with Xai (Grok) commented out.
-     */
-    public providersList: any[] = [
-        { code: "openai", description: "openai (ChatGpt) provider" },
-        { code: "nvidia", description: "Nvidia nim provider" } /*,
-        {code:"xai",description:"Xai (Grok) provider"}*/];
 
-    /**
-     * Form group for capturing user input during LLM setup.
-     * Contains fields for user, provider, and API key.
-     */
-    formGroup: FormGroup = new FormGroup({
-        user: new FormControl(),
-        provider: new FormControl(),
-        apiKey: new FormControl()
-    });
+
 
     /**
      * Array to store configured LLM models fetched from the backend.
      */
-    public modelsList: LLMSEntry[] = [];
+
+    protected actualProvidersConfiguration?: LLMSSetupConfigurationData;
+    protected currentIndex:number=0;
 
     /**
      * Constructor initializes services required for LLM setup functionality.
      */
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private userService: UserControllerService,
-        private llmsSetupWizardService: LLMSetupWizardService,
-        private chatModelsService: ChatModelsControllerService,
-        private embeddingModelsService: EmbeddingModelsControllersService) {
+        private llmsSetupWizardService: LLMSetupWizardService) {
         super(setupWizardComunicationService);
     }
 
@@ -90,8 +72,7 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
      */
     public override reloadData(): void {
         this.loading = true;
-
-        const observables: [Observable<boolean>, Observable<Array<ConfigurationEntry>>, Observable<Array<ConfigurationEntry>>, Observable<UserInfo>] = [this.llmsSetupWizardService.getBooleanStatus(), this.chatModelsService.getRuntimeConfiguredChatModels(), this.embeddingModelsService.getRuntimeConfiguredEmbeddingModels(), this.userService.getCurrentUser()];
+        const observables: [Observable<boolean>, Observable<UserInfo>, Observable<LLMSSetupConfigurationData>] = [this.llmsSetupWizardService.getBooleanStatus(), this.userService.getCurrentUser(), this.llmsSetupWizardService.getActualLLMSConfiguration()];
         forkJoin(observables).subscribe({
             next: (value) => {
                 this.isSetupCompleted = value[0] === true;
@@ -100,72 +81,25 @@ export class LLMSetupWizardComponent extends BaseWizardSectionComponent {
                 } else {
                     this.userMessages = [{ severity: "error", summary: "Large language models setup not yet done", detail: "At least a default chat bot model and a default embedding model both correctly configured are required" }];
                 }
-                const modelsList: LLMSEntry[] = [];
-                if (value[1]) {
-                    const chatModels = value[1];
-                    if (chatModels && chatModels.length) {
-                        chatModels.forEach(x => {
-                            const newEntry: LLMSEntry = {
-                                configurationCode: x.configuration?.code,
-                                modelCode: x.configuration?.choosedModel?.code,
-                                modelType: "chat model",
-                                provider: x.configuration?.modelTypeCode,
-                                defaultModel: x.configuration?.defaultModel,
-                                description: x.configuration?.description
-                            };
-                            modelsList.push(newEntry);
-                        });
-                    }
-                }
-                if (value[2]) {
-                    const embeddingModels = value[2];
-                    if (embeddingModels && embeddingModels.length) {
-                        embeddingModels.forEach(x => {
-                            const newEntry: LLMSEntry = {
-                                configurationCode: x.configuration?.code,
-                                modelCode: x.configuration?.choosedModel?.code,
-                                modelType: "embedding model",
-                                provider: x.configuration?.modelTypeCode,
-                                defaultModel: x.configuration?.defaultModel,
-                                description: x.configuration?.description
-                            };
-                            modelsList.push(newEntry);
-                        });
-                    }
-                }
-                this.modelsList = modelsList;
-                if (value[3]) {
-                    if (!this.isSetupCompleted && !this.formGroup.controls["user"].value) {
-                        this.formGroup.controls["user"].setValue(value[3].username);
-                    }
-                }
+                this.actualProvidersConfiguration = value[2];
             },
             complete: () => {
                 this.loading = false;
             }
         });
     }
-
+    onVendorConfigurationChanged(changedFlag:boolean, index: number) {
+       this.reloadData();
+    }
     /**
      * Submits the LLM setup form data to the backend service.
      * Creates new LLM configurations based on user input.
      * On successful setup, closes the wizard.
      */
     setupLLMS() {
-        const data: FastLLMSSetupData = this.formGroup.value;
+
         this.loading = true;
-        this.llmsSetupWizardService.createLLMSSetup(data).subscribe({
-            next: (opstatus: OperationStatusBoolean) => {
-                this.isSetupCompleted = opstatus.result === true;
-                this.userMessages = opstatus.messages as ToastMessageOptions[];
-                if (this.isSetupCompleted === true) {
-                    this.closeWizard();
-                }
-            },
-            complete: () => {
-                this.loading = false;
-            }
-        });
+
     }
 
 }

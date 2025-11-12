@@ -19,6 +19,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
@@ -52,11 +54,12 @@ public interface IGOpenAIApiUtil {
      * @param config The OpenAI API configuration
      * @param modelConfig The chat model configuration
      * @param defaultMetainfoFactory Function to create default model meta information
+     * @param modelType TODO
      * @return An operation status containing a list of chat models if successful
      */
 	public <ChatModelChoiceType extends GBaseChatModelChoice> OperationStatus<List<ChatModelChoiceType>> getChatModels(
 			Class<ChatModelChoiceType> type, OpenAIApiConfig config, GBaseChatModelConfig modelConfig,
-			Function<ChatModelChoiceType, ModelMetaInfo> defaultMetainfoFactory);
+			Function<ChatModelChoiceType, ModelMetaInfo> defaultMetainfoFactory, GChatModelType modelType);
 
     /**
      * Retrieves a list of embedding models of the specified type using the provided configuration.
@@ -66,9 +69,10 @@ public interface IGOpenAIApiUtil {
      * @param config The OpenAI API configuration
      * @param modelConfig The embedding model configuration
      * @param defaultMetainfoFactory Function to create default model meta information
+     * @param modelType TODO
      * @return An operation status containing a list of embedding models if successful
      */
 	public <EmbeddingModelChoiceType extends GBaseEmbeddingModelChoice> OperationStatus<List<EmbeddingModelChoiceType>> getEmbeddingModels(
 			Class<EmbeddingModelChoiceType> type, OpenAIApiConfig config, GBaseEmbeddingModelConfig modelConfig,
-			Function<EmbeddingModelChoiceType, ModelMetaInfo> defaultMetainfoFactory);
+			Function<EmbeddingModelChoiceType, ModelMetaInfo> defaultMetainfoFactory, GEmbeddingModelType modelType);
 }

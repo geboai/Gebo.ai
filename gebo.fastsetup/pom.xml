@@ -30,6 +30,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.setup</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.jobs.services</artifactId>
 			<version>${project.version}</version>

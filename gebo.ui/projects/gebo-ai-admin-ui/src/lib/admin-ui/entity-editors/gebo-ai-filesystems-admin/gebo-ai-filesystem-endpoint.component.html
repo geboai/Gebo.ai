@@ -8,21 +8,22 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
+
+
 <p-blockUI id="BlockUI" gebo-ai-label [target]="endPointUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label  #endPointUI header="Editing existing filesystem content" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label #endPointUI header="Editing existing filesystem content" [formGroup]="formGroup">
   <div class="geboDialogContent">
     <p-messages id="UserMessages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <p-toast id="Toast" gebo-ai-label />
     <p-tabView id="TabView" gebo-ai-label class="standardTabDialogueHeight">
       <p-tabPanel id="SettingsTab" gebo-ai-label header="Settings">
         <div class="grid">
-          
+
           <div class="col-6">
-            <gebo-ai-field id="description" label="Description" [required]="true" help="Enter the description of the uploaded content of filesystem entry.">
+            <gebo-ai-field id="description" label="Description" [required]="true"
+              help="Enter the description of the uploaded content of filesystem entry.">
               <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
                 gebo-ai-field-element />
             </gebo-ai-field>
@@ -35,23 +36,23 @@
           <div class="col-6">
             <gebo-ai-field id="parentProjectCode" label="Project" [required]="true" help="Parent project reference.">
               <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
-                [optionsObservable]="projectsObservable" [readonly]="cantModifyProject"
-                gebo-ai-field-element>
+                [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
               </geboai-editable-listbox-component>
             </gebo-ai-field>
           </div>
           <div class="col-6"></div>
           <div class="col-12">
-            <gebo-ai-field id="tree" label="Choosed files or folders" [required]="true" help="Shared filesystems files or directories available on the server">
+            <gebo-ai-field id="tree" label="Choosed files or folders" [required]="true"
+              help="Shared filesystems files or directories available on the server">
               <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable"
                 [readonly]="mode==='EDIT'" formControlName="path" selectionMode="multiple"
-                [browsePathObservable]="browsePathObservable" 
-                [reconstructNavigationCallback]="reconstructNavigationObservableCallback" [canChooseFolders]="true" [canChooseFiles]="true"
-                class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
+                [browsePathObservable]="browsePathObservable"
+                [reconstructNavigationCallback]="reconstructNavigationObservableCallback" [canChooseFolders]="true"
+                [canChooseFiles]="true" class="col-12" gebo-ai-field-element></gebo-ai-vfilesystem-selector-component>
             </gebo-ai-field>
           </div>
-          
-         
+
+
           <div class="col-2">
             <gebo-ai-field id="openZips" label="Open zip files" help="Enable zip files opening and content extraction">
               <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true"
@@ -59,15 +60,16 @@
             </gebo-ai-field>
           </div>
           <div class="col-10">
-            <gebo-ai-field id="catalogingCriteria" label="Folders organization criteria" help="Please explain here how the folders organization criteria has been done in the file system area you are sharing with Gebo.ai">
-              <textarea formControlName="catalogingCriteria" id="catalogingCriteria"
-                cols="200" rows="2" gebo-ai-field-element></textarea>
+            <gebo-ai-field id="catalogingCriteria" label="Folders organization criteria"
+              help="Please explain here how the folders organization criteria has been done in the file system area you are sharing with Gebo.ai">
+              <textarea formControlName="catalogingCriteria" id="catalogingCriteria" cols="200" rows="2"
+                gebo-ai-field-element></textarea>
             </gebo-ai-field>
           </div>
           <div class="col-12">
-            <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated">
-              <gebo-ai-content-reindex-scheduler-component
-                formControlName="programmedTables" id="programmedTables"
+            <gebo-ai-field id="programmedTables" label="Contents updates checks schedule"
+              help="Configure the scheduling of changed contents to maintain the retrieve augmented generation system updated">
+              <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables"
                 gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
             </gebo-ai-field>
           </div>
@@ -75,14 +77,16 @@
       </p-tabPanel>
       <p-tabPanel id="SourceCodeTreatmentTab" gebo-ai-label header="Source code treatment">
         <div class="col-12">
-          <gebo-ai-field id="buildSystemsRefs" label="Configure build systems" help="List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)">
-            <gebo-ai-build-systems-chooser id="buildSystemsRefs"
-              formControlName="buildSystemsRefs" gebo-ai-field-element></gebo-ai-build-systems-chooser>
+          <gebo-ai-field id="buildSystemsRefs" label="Configure build systems"
+            help="List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)">
+            <gebo-ai-build-systems-chooser id="buildSystemsRefs" formControlName="buildSystemsRefs"
+              gebo-ai-field-element></gebo-ai-build-systems-chooser>
           </gebo-ai-field>
         </div>
       </p-tabPanel>
       <p-tabPanel id="LogsTab" gebo-ai-label header="Logs" [disabled]="!objectReference">
-        <gebo-ai-log-table-component id="LogTableComponent" gebo-ai-label [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference"
+        <gebo-ai-log-table-component id="LogTableComponent" gebo-ai-label [jobType]="'CONTENTS_READING_VECTORIZING'"
+          [endPointReference]="objectReference"
           title="This shared filesystem area ingestion log"></gebo-ai-log-table-component>
       </p-tabPanel></p-tabView>
   </div>
@@ -94,22 +98,25 @@
   <div class="geboLargeButtonsBar" style="vertical-align: baseline;" *ngIf="!isWizardMode">
     <div class="grid">
       <div class="col-3">
-        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"   styleClass="w-full"  
+        <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+          severity="success" styleClass="w-full"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true"></p-button>
       </div>
       <div class="col-3">
         <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
-          title="Saves and let these contents being available in knowledge base to LLm's" severity="success"   styleClass="w-full" 
-          icon="pi pi-microchip-ai" (onClick)="doPublish()"
+          title="Saves and let these contents being available in knowledge base to LLm's" severity="success"
+          styleClass="w-full" icon="pi pi-microchip-ai" (onClick)="doPublish()"
           [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" />
 
       </div>
       <div class="col-3">
-        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast"
+          (onClick)="cancelAction.emit(true)" styleClass="w-full" />
       </div>
       <div class="col-3">
-        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
-          [disabled]="canDelete===false || relatedBackendProcessingRunning===true"   styleClass="w-full"  />
+        <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash"
+          (onClick)="doDelete()" [disabled]="canDelete===false || relatedBackendProcessingRunning===true"
+          styleClass="w-full" />
       </div>
 
     </div>

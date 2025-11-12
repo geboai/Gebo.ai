@@ -17,6 +17,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
@@ -144,6 +145,13 @@ public class TestEmbeddingModelSupportServiceImpl extends AbstractTestingBusines
 		TestConfigurableEmbeddingModel em = new TestConfigurableEmbeddingModel(factoryProvider);
 		em.initialize(config, type);
 		return em;
+	}
+
+	@Override
+	public OperationStatus<TestEmbeddingModelConfiguration> insertAndConfigure(TestEmbeddingModelConfiguration config)
+			throws GeboPersistenceException, LLMConfigException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

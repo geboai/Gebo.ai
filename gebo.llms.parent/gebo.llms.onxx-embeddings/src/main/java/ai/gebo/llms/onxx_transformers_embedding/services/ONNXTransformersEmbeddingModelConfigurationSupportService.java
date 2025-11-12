@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.onxx_transformers_embedding.services;
 
@@ -19,29 +16,30 @@ import java.util.Set;
 
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.transformers.TransformersEmbeddingModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
-import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactory;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelChoice;
 import ai.gebo.llms.onxx_transformers_embedding.model.GONNXTransformersEmbeddingModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.el.MethodNotFoundException;
+import lombok.AllArgsConstructor;
 
 /**
- * AI generated comments
- * Service for configuring and managing ONNX Transformers embedding models.
- * This class provides support for creating and configuring embedding models
- * that use the ONNX Transformers backend.
+ * AI generated comments Service for configuring and managing ONNX Transformers
+ * embedding models. This class provides support for creating and configuring
+ * embedding models that use the ONNX Transformers backend.
  */
 @Service
+@AllArgsConstructor
 public class ONNXTransformersEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GONNXTransformersEmbeddingModelChoice, GONNXTransformersEmbeddingModelConfig> {
 	/**
@@ -53,27 +51,26 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		type.setDescription("embedding service hosted local ONNX Transformers system");
 		type.setModelConfigurationClass(GONNXTransformersEmbeddingModelConfig.class.getName());
 	}
-	
+
 	/**
 	 * Service for looking up available ONNX Transformers models
 	 */
-	@Autowired
-	ONNXTransformersModelsLookupService modelsService;
-	
+	final ONNXTransformersModelsLookupService modelsService;
+
 	/**
 	 * Provider for vector store factories
 	 */
-	@Autowired
-	IGVectorStoreFactoryProvider storeFactoryProvider;
-	
+	final IGVectorStoreFactoryProvider storeFactoryProvider;
+
 	/**
 	 * Service for accessing secrets
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
+	final IGeboSecretsAccessService secretService;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
-	 * Inner class that implements the configurable embedding model for ONNX Transformers
+	 * Inner class that implements the configurable embedding model for ONNX
+	 * Transformers
 	 */
 	class OllamaConfigurableEmbeddingModel extends
 			GAbstractConfigurableEmbeddingModel<GONNXTransformersEmbeddingModelConfig, TransformersEmbeddingModel> {
@@ -86,10 +83,11 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		}
 
 		/**
-		 * Configures the underlying TransformersEmbeddingModel based on the provided configuration
+		 * Configures the underlying TransformersEmbeddingModel based on the provided
+		 * configuration
 		 * 
 		 * @param config The ONNX Transformers embedding model configuration
-		 * @param type The embedding model type
+		 * @param type   The embedding model type
 		 * @return Configured TransformersEmbeddingModel instance
 		 * @throws LLMConfigException If there's an error in configuration
 		 */
@@ -123,9 +121,10 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		}
 
 		/**
-		 * Finds a parameter in the model details where the key ends with the specified name
+		 * Finds a parameter in the model details where the key ends with the specified
+		 * name
 		 * 
-		 * @param choosedModel The chosen model configuration
+		 * @param choosedModel  The chosen model configuration
 		 * @param endingKeyName The ending of the key to look for
 		 * @return The parameter value as an Integer, or null if not found
 		 */
@@ -137,7 +136,7 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 		/**
 		 * Recursively searches a map for a key ending with the specified string
 		 * 
-		 * @param details The map to search
+		 * @param details       The map to search
 		 * @param endingKeyName The ending of the key to look for
 		 * @return The parameter value as an Integer, or null if not found
 		 */
@@ -158,12 +157,6 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 			return null;
 		}
 	};
-
-	/**
-	 * Default constructor
-	 */
-	public ONNXTransformersEmbeddingModelConfigurationSupportService() {
-	}
 
 	/**
 	 * Gets the model type for ONNX Transformers embedding
@@ -207,10 +200,25 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 	 * 
 	 * @param presetModel The name of the preset model
 	 * @return A base configuration
-	 * @throws MethodNotFoundException This method is not implemented for this provider
+	 * @throws MethodNotFoundException This method is not implemented for this
+	 *                                 provider
 	 */
 	@Override
 	public GONNXTransformersEmbeddingModelConfig createBaseConfiguration(String presetModel) {
-		throw new MethodNotFoundException("createBaseConfiguration() is not implemented for ollama embedding provider");
+		GONNXTransformersEmbeddingModelConfig clean = new GONNXTransformersEmbeddingModelConfig();
+		clean.setModelTypeCode(getType().getCode());
+		clean.setChoosedModel(new GONNXTransformersEmbeddingModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription("chat model " + presetModel);
+		clean.setDescription("ONNX embedding model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
+	}
+
+	@Override
+	public OperationStatus<GONNXTransformersEmbeddingModelConfig> insertAndConfigure(
+			GONNXTransformersEmbeddingModelConfig config) throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

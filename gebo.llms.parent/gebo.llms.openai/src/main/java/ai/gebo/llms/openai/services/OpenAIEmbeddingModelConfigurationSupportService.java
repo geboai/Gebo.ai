@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai.services;
 
@@ -33,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupp
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactory;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -44,8 +42,10 @@ import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -55,9 +55,10 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class OpenAIEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GOpenAIEmbeddingModelChoice, GOpenAIEmbeddingModelConfig> {
-	
+
 	/**
 	 * Static embedding model type definition for OpenAI
 	 */
@@ -67,10 +68,10 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		type.setDescription("embedding service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIEmbeddingModelConfig.class.getName());
 	}
-	
+
 	/**
-	 * List of available OpenAI embedding model choices
-	 * Populated from OpenAI's EmbeddingModel enum values
+	 * List of available OpenAI embedding model choices Populated from OpenAI's
+	 * EmbeddingModel enum values
 	 */
 	static final List<GOpenAIEmbeddingModelChoice> choices = new ArrayList<GOpenAIEmbeddingModelChoice>();
 	static {
@@ -82,31 +83,28 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 			choices.add(choice);
 		}
 	}
-	
+
 	/**
 	 * Service for accessing secrets like API keys
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
+	final IGeboSecretsAccessService secretService;
+
 	/**
 	 * Provider for vector store factories
 	 */
-	@Autowired
-	IGVectorStoreFactoryProvider storeFactoryProvider;
-	
+	final IGVectorStoreFactoryProvider storeFactoryProvider;
+
 	/**
 	 * Utility for OpenAI API operations
 	 */
-	@Autowired
-	IGOpenAIApiUtil openaiApiUtil;
-	
+	final IGOpenAIApiUtil openaiApiUtil;
+
 	/**
 	 * Factory for LLM service clients
 	 */
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
-	
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
+
 	/**
 	 * Inner class that implements the configurable embedding model for OpenAI
 	 */
@@ -121,10 +119,11 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		}
 
 		/**
-		 * Configures and creates an OpenAI embedding model based on the provided configuration
+		 * Configures and creates an OpenAI embedding model based on the provided
+		 * configuration
 		 * 
 		 * @param config The OpenAI embedding model configuration
-		 * @param type The embedding model type
+		 * @param type   The embedding model type
 		 * @return Configured OpenAiEmbeddingModel instance
 		 * @throws LLMConfigException If configuration fails
 		 */
@@ -156,7 +155,7 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 			apiBuilder.webClientBuilder(webClient);
 			apiBuilder.restClientBuilder(restClient);
 			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).build();
-			
+
 			Builder builder = OpenAiEmbeddingOptions.builder();
 
 			if (config.getChoosedModel() != null) {
@@ -172,12 +171,6 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		}
 
 	};
-
-	/**
-	 * Default constructor
-	 */
-	public OpenAIEmbeddingModelConfigurationSupportService() {
-	}
 
 	/**
 	 * Returns the embedding model type supported by this service
@@ -215,11 +208,12 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		OpenAIApiConfig providerConfig = new OpenAIApiConfig();
 		providerConfig.setProviderId("openai");
 
-		return this.openaiApiUtil.getEmbeddingModels(GOpenAIEmbeddingModelChoice.class, providerConfig, config, (choice) -> {
-			ModelMetaInfo meta = new ModelMetaInfo();
-			meta.setInformativeUrl("https://platform.openai.com/docs/guides/embeddings");
-			return meta;
-		});
+		return this.openaiApiUtil.getEmbeddingModels(GOpenAIEmbeddingModelChoice.class, providerConfig, config,
+				(choice) -> {
+					ModelMetaInfo meta = new ModelMetaInfo();
+					meta.setInformativeUrl("https://platform.openai.com/docs/guides/embeddings");
+					return meta;
+				}, type);
 	}
 
 	/**
@@ -238,5 +232,12 @@ public class OpenAIEmbeddingModelConfigurationSupportService implements
 		clean.setDescription("OpenAI embedding model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GOpenAIEmbeddingModelConfig> insertAndConfigure(GOpenAIEmbeddingModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

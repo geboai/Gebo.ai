@@ -23,7 +23,7 @@ import { Component, OnInit } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "primeng/api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboFastInstallationSetupControllerService, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboFastInstallationSetupControllerService, GUserMessage, Oauth2ClientAuthorizativeInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 import { Subscription } from "rxjs";
@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
       this.subscription.unsubscribe();
       this.subscription = undefined;
     }
-    this.subscription = this.geboTranslationService.translateMessage("LoginModule", "LoginComponent-welcome", welcomeMessage).subscribe({
+    this.subscription = this.geboTranslationService.translateMessage("LoginModule", "Login", "LoginComponent", welcomeMessage).subscribe({
       next: (message) => {
         if (message) this.userMessages = [message];
       }
@@ -135,11 +135,11 @@ export class LoginComponent implements OnInit {
         this.subscription.unsubscribe();
         this.subscription = undefined;
       }
-      if (this.userMessages && this.userMessages.length) {
-        const observable = x.userInfo ? this.geboTranslationService.translateMessage("LoginModule", "LoginComponent-login-ok", this.userMessages[0]) : this.geboTranslationService.translateMessage("LoginModule", "LoginComponent-login-error", this.userMessages[0]);
+      if (x.messages) {
+        const observable = this.geboTranslationService.translateBackendMessages(x.messages as GUserMessage[]);
         this.subscription = observable.subscribe({
-          next: (message) => {
-            if (message) this.userMessages = [message];
+          next: (messages) => {
+            if (messages) this.userMessages = messages;
           }
         });
       }

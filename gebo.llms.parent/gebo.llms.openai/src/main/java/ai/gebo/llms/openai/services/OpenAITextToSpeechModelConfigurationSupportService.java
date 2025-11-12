@@ -162,4 +162,10 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 		return model;
 	}
 
+	@Override
+	public OperationStatus<GOpenAITextToSpeechModelConfig> insertAndConfigure(GOpenAITextToSpeechModelConfig config) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

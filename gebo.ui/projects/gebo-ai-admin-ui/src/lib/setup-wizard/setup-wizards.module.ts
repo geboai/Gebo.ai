@@ -23,7 +23,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { LLMSetupWizardComponent } from "./llms-setup-wizard.component";
-import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTransationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI } from "@Gebo.ai/reusable-ui";
+import { AlwaysTrueStatusService, EditableListboxModule, GEBO_AI_MODULE, GeboAIFieldTransationContainerModule, ProjectAddContextMenuModule, SetupWizardPanelModule, SetupWizardsSection, VFilesystemSelectorModule, WIZARD_SECTION, WizardSectionWithNoUI, TranslableModule } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { SetupWizardsComponent } from "./setup-wizards.component";
 import { DialogModule } from "primeng/dialog";
@@ -53,7 +53,13 @@ import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, 
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
 import { Oauth2SetupEnabledService, Oauth2SetupWizardService, Oauth2WizardComponent } from "./oauth2-wizard.component";
 import { GraphRagStatusService, GraphRagWizardComponent, Neo4jModuleEnabledService } from "./graphrag-wizard.component";
-
+import { AccordionModule } from 'primeng/accordion';
+import { GeboAILLMSVendorConfiguration } from "./llms-setup-components/llms-vendor-configuration.component";
+import { GeboAILlmsVendorModelTypeConfig } from "./llms-setup-components/llms-vendor-modeltype.component";
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TabViewModule } from 'primeng/tabview';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from "primeng/api";
 /**
  * Setup section for administrator user account configuration.
  * This is a mandatory section that appears first in the setup sequence.
@@ -274,10 +280,11 @@ const firstChatProfileBaseSetupSection: SetupWizardsSection = {
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTransationContainerModule],
-    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, MessagesModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTransationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabViewModule, ToastModule],
+    declarations: [LLMSetupWizardComponent, SetupWizardsComponent, VectorStoreWizardComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent,GeboAILLMSVendorConfiguration,GeboAILlmsVendorModelTypeConfig],
     exports: [SetupWizardsComponent],
     providers: [
+        MessageService,
         Oauth2SetupWizardService,
         Oauth2SetupEnabledService,
         LLMSetupWizardService,

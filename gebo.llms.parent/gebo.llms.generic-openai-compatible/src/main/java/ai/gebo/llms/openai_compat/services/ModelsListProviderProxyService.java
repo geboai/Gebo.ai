@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -28,6 +25,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProvider;
 import ai.gebo.llms.abstraction.layer.services.IGModelsListProviderRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -44,7 +42,7 @@ public class ModelsListProviderProxyService {
 	 */
 	@Autowired
 	IGModelsListProviderRepositoryPattern modelsListProviders;
-	
+
 	/**
 	 * Service to access secrets like API keys
 	 */
@@ -61,24 +59,25 @@ public class ModelsListProviderProxyService {
 	/**
 	 * Retrieves a list of available models from a specified provider
 	 * 
-	 * @param <ModelChoice> The type of model choice
-	 * @param <ModelConfig> The type of model configuration
+	 * @param <ModelChoice>     The type of model choice
+	 * @param <ModelConfig>     The type of model configuration
 	 * @param modelListProvider The identifier for the models list provider
-	 * @param config The configuration for the model retrieval request
-	 * @param choiceType The class type of the model choice
-	 * @return An OperationStatus containing either the list of models or error information
+	 * @param config            The configuration for the model retrieval request
+	 * @param choiceType        The class type of the model choice
+	 * @return An OperationStatus containing either the list of models or error
+	 *         information
 	 * @throws RuntimeException if the specified model list provider is not found
 	 */
-	public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>> OperationStatus<List<ModelChoice>> geModels(
-			String modelListProvider, ModelConfig config, Class<ModelChoice> choiceType) {
+	public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>, ModelType extends GModelType> OperationStatus<List<ModelChoice>> geModels(
+			String modelListProvider, ModelConfig config, Class<ModelChoice> choiceType, ModelType type) {
 		// Find the appropriate handler for the requested provider
 		IGModelsListProvider handler = modelsListProviders.findByCode(modelListProvider);
 		if (handler == null)
 			throw new RuntimeException("Models list provider with id=>" + modelListProvider + " is unkown");
-		
+
 		List<ModelChoice> out = new ArrayList<ModelChoice>();
 		String clearApiKey = null;
-		
+
 		// Retrieve and decrypt API key if specified in the config
 		if (config.getApiSecretCode() != null) {
 			try {
@@ -94,7 +93,7 @@ public class ModelsListProviderProxyService {
 
 		// Call the provider handler to get the list of models
 		try {
-			return handler.geModels(null, config, clearApiKey, choiceType);
+			return handler.geModels(null, config, clearApiKey, choiceType, type);
 		} catch (Throwable th) {
 			return OperationStatus.ofError("Problem retrieving models list", th.getLocalizedMessage());
 		}

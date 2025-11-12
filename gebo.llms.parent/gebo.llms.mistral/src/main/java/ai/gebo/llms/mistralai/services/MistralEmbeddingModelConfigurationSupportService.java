@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -19,24 +16,25 @@
  */
 package ai.gebo.llms.mistralai.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.mistralai.MistralAiEmbeddingModel;
 import org.springframework.ai.mistralai.MistralAiEmbeddingOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelChoice;
 import ai.gebo.llms.mistralai.model.GMistralEmbeddingModelConfig;
@@ -45,9 +43,11 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class MistralEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GMistralEmbeddingModelChoice, GMistralEmbeddingModelConfig> {
 	/**
@@ -59,34 +59,21 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		type.setDescription("embedding service hosted on Mistral AI");
 		type.setModelConfigurationClass(GMistralEmbeddingModelConfig.class.getName());
 	}
+
 	
-	/**
-	 * List of available Mistral AI embedding model choices.
-	 * Populated with all available models from the Mistral AI API.
-	 */
-	static final List<GMistralEmbeddingModelChoice> choices = new ArrayList<GMistralEmbeddingModelChoice>();
-	static {
-		org.springframework.ai.mistralai.api.MistralAiApi.EmbeddingModel[] models = org.springframework.ai.mistralai.api.MistralAiApi.EmbeddingModel
-				.values();
-		for (org.springframework.ai.mistralai.api.MistralAiApi.EmbeddingModel embeddingModel : models) {
-			GMistralEmbeddingModelChoice choice = new GMistralEmbeddingModelChoice();
-			choice.setCode(embeddingModel.getValue());
-			choice.setDescription(embeddingModel.getValue());
-			choices.add(choice);
-		}
-	}
-	
+
 	/**
 	 * Service for accessing secrets, used to retrieve API keys.
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
+	final IGeboSecretsAccessService secretService;
+
 	/**
 	 * Provider for vector store factories.
 	 */
-	@Autowired
-	IGVectorStoreFactoryProvider storeFactoryProvider;
+	final IGVectorStoreFactoryProvider storeFactoryProvider;
+	final MistralModelsLookupService mistralModelsLookupService;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 	/*
 	 * @Autowired IGOpenAIApiUtil openaiApiUtil;
 	 */
@@ -99,7 +86,8 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 			extends GAbstractConfigurableEmbeddingModel<GMistralEmbeddingModelConfig, MistralAiEmbeddingModel> {
 
 		/**
-		 * Constructor that initializes the model with the vector store factory provider.
+		 * Constructor that initializes the model with the vector store factory
+		 * provider.
 		 */
 		public MistralConfigurableEmbeddingModel() {
 			super(storeFactoryProvider);
@@ -111,9 +99,10 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		 * Retrieves the API key from secrets service and sets up the model options.
 		 *
 		 * @param config The Mistral AI embedding model configuration
-		 * @param type The embedding model type
+		 * @param type   The embedding model type
 		 * @return Configured MistralAiEmbeddingModel instance
-		 * @throws LLMConfigException if configuration fails or required API key is missing
+		 * @throws LLMConfigException if configuration fails or required API key is
+		 *                            missing
 		 */
 		@Override
 		protected MistralAiEmbeddingModel configureModel(GMistralEmbeddingModelConfig config, GEmbeddingModelType type)
@@ -151,12 +140,7 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 
 	};
 
-	/**
-	 * Default constructor.
-	 */
-	public MistralEmbeddingModelConfigurationSupportService() {
-
-	}
+	
 
 	/**
 	 * Returns the embedding model type supported by this service.
@@ -170,7 +154,8 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 	}
 
 	/**
-	 * Creates and initializes a configurable embedding model with the given configuration.
+	 * Creates and initializes a configurable embedding model with the given
+	 * configuration.
 	 * 
 	 * @param config The Mistral AI embedding model configuration
 	 * @return Configured embedding model instance
@@ -192,19 +177,13 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 	 */
 	@Override
 	public OperationStatus<List<GMistralEmbeddingModelChoice>> getModelChoices(GMistralEmbeddingModelConfig config) {
-		/*
-		 * OpenAIApiConfig providerConfig = new OpenAIApiConfig();
-		 * providerConfig.setProviderId("openai");
-		 * 
-		 * return
-		 * this.openaiApiUtil.getEmbeddingModels(GMistralEmbeddingModelChoice.class,
-		 * providerConfig, config);
-		 */
-		return OperationStatus.of(choices);
+		
+		return mistralModelsLookupService.getEmbeddingModelsChoices(config);
 	}
 
 	/**
-	 * Creates a base configuration for a Mistral AI embedding model with the specified preset model.
+	 * Creates a base configuration for a Mistral AI embedding model with the
+	 * specified preset model.
 	 * 
 	 * @param presetModel The code of the preset model to use
 	 * @return Basic configuration for a Mistral AI embedding model
@@ -219,6 +198,12 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		clean.setDescription("Mistral AI embedding model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GMistralEmbeddingModelConfig> insertAndConfigure(GMistralEmbeddingModelConfig config) throws GeboPersistenceException, LLMConfigException {
+		
+		return configureHandler.insertAndConfigure(config, type);
 	}
 
 }

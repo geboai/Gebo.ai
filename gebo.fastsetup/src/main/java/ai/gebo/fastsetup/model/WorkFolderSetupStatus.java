@@ -12,6 +12,7 @@
 
 package ai.gebo.fastsetup.model;
 
+import ai.gebo.architecture.setup.model.ComponentSetupStatus;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 
 /**

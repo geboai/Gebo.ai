@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat, map } from "rxjs";
-import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText } from "@Gebo.ai/gebo-ai-rest-api";
+import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
 import { MegaMenuItem, MenuItem, ToastMessageOptions } from "primeng/api";
 import { findMatchingTranlations } from "./text-language-resources";
 
 import { HttpClient } from "@angular/common/http";
 import { GeboLanguage } from "./language-choice.component";
+import { text } from "mermaid/dist/rendering-util/rendering-elements/shapes/text";
 
 /*******************************************************************************
  * The actual UI resources are all written in english, used as a default language
@@ -118,13 +119,60 @@ export class GeboAITranslationService {
             }));
         }
     }
-    public translateMessage(moduleId: string, componentId: string, option: ToastMessageOptions): Observable<ToastMessageOptions | undefined> {
+    public translateBackendMessage(message: GUserMessage): Observable<GUserMessage | undefined> {
+        return this.translateBackendMessages([message]).pipe(map(x => x && x.length ? x[0] : undefined));
+    }
+    private declareBackendMessage(componentId: string, fieldId: string, text: string): UIExistingText {
+        const data: UIExistingText = {
+            moduleId: "BackendMSGSModule",
+            entityId: "GUserMessage",
+            componentId: componentId,
+            fieldId: fieldId,
+            key: fieldId,
+            text: text
+        };
+        return data;
+    }
+    public translateBackendMessages(messages: GUserMessage[]): Observable<GUserMessage[] | undefined> {
+        const textResource: UIExistingText[] = [];
+        if (messages && messages.length) {
+            messages.forEach(msg => {
+                if (msg.summary) {
+                    textResource.push(this.declareBackendMessage(msg.id, "summary", msg.summary));
+                }
+                if (msg.detail) {
+                    textResource.push(this.declareBackendMessage(msg.id, "detail", msg.detail));
+                }
+            });
+        }
+        if (textResource && textResource.length) {
+            return this.translateOnActualLanguage(textResource).pipe(map(resources => {
+                if (resources) {
+                    const matching = findMatchingTranlations(textResource, resources);
+                    const clonedMessages: GUserMessage[] = [...messages];
+                    if (matching && matching.length) {
+                        matching.forEach(match => {
+                            const found: any = clonedMessages.find(x => x.id === match.componentId);
+                            if (found) {
+                                found[match.fieldId] = match.translation;
+                            }
+                        });
+                    }
+                    return clonedMessages;
+                } else { return undefined; }
+            }));
+        } else {
+            return of(undefined);
+        }
+
+    }
+    public translateMessage(moduleId: string, entityId: string, componentId: string, option: ToastMessageOptions): Observable<ToastMessageOptions | undefined> {
         const textResource: UIExistingText[] = [];
         if (option.summary) {
             const summary: UIExistingText = {
                 moduleId: moduleId,
                 componentId: componentId,
-                entityId: "message",
+                entityId: entityId,
                 fieldId: "summary",
                 key: "summary",
                 text: option.summary
@@ -135,7 +183,7 @@ export class GeboAITranslationService {
             const detail: UIExistingText = {
                 moduleId: moduleId,
                 componentId: componentId,
-                entityId: "message",
+                entityId: entityId,
                 fieldId: "detail",
                 key: "detail",
                 text: option.detail

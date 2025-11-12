@@ -160,11 +160,11 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
                 this.setupStatusRefresh.emit(this.actualSetupStatus);
                 let messageObservable: Observable<ToastMessageOptions | undefined> | undefined = undefined;
                 const completeMessage: ToastMessageOptions = { summary: "Gebo.ai setup mandatory steps done...", detail: "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software", severity: "warn" };
-                const completeMessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId + "-mandatory-done", completeMessage);
+                const completeMessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId, "mandatory-done", completeMessage);
                 const incompleteMessage: ToastMessageOptions = { summary: "Gebo.ai setup is missing some mandatory step", detail: "Please review the red steps of the setup process", severity: "error" };
-                const incompletemessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId + "-mandatory-missing", incompleteMessage);
+                const incompletemessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId, "mandatory-missing", incompleteMessage);
                 const okMessage: ToastMessageOptions = { summary: "Gebo.ai setup OK!", detail: "", severity: "success" };
-                const okmessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId + "-setup-ok", okMessage);
+                const okmessageObservable = this.geboLanguageService.translateMessage(moduleId, fieldHostId, "setup-ok", okMessage);
                 this.viewSelectedStep(this.stepId);
                 switch (this.actualSetupStatus) {
                     case "complete": {

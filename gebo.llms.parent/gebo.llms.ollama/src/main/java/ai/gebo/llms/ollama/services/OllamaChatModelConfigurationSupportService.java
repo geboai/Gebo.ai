@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.ollama.services;
 
@@ -20,12 +17,12 @@ import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.ai.ollama.api.OllamaOptions.Builder;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
@@ -34,6 +31,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
@@ -41,16 +39,19 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  * 
- * This service provides configuration support for Ollama chat models.
- * It enables the creation and configuration of Ollama chat models based on provided configurations.
- * The service is only active when the 'ollamaEnabled' property is set to true.
+ * This service provides configuration support for Ollama chat models. It
+ * enables the creation and configuration of Ollama chat models based on
+ * provided configurations. The service is only active when the 'ollamaEnabled'
+ * property is set to true.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class OllamaChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GOllamaChatModelChoice, GOllamaChatModelConfig> {
 	/**
@@ -62,47 +63,44 @@ public class OllamaChatModelConfigurationSupportService
 		type.setDescription("Chat models hosted on local Ollama server");
 		type.setModelConfigurationClass(GOllamaChatModelConfig.class.getName());
 	}
-	
+
 	/**
 	 * Service for looking up available Ollama models
 	 */
-	@Autowired
-	OllamaModelsLookupService modelsService;
-	
+	final OllamaModelsLookupService modelsService;
+
 	/**
 	 * Repository for accessing tool/function callbacks
 	 */
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+
 	/**
 	 * Service for enriching model choice metadata
 	 */
-	@Autowired
-	IGModelChoiceMetaInfoEnricherService choiceEnricher;
+	final IGModelChoiceMetaInfoEnricherService choiceEnricher;
 
 	/**
 	 * Service for accessing secrets
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
+	final IGeboSecretsAccessService secretService;
+
 	/**
 	 * Factory for creating LLM service clients
 	 */
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory; 
-	
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
+
 	/**
 	 * Inner class that implements the configurable chat model for Ollama
 	 */
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
 
 		/**
-		 * Configures and creates an Ollama chat model based on the provided configuration
+		 * Configures and creates an Ollama chat model based on the provided
+		 * configuration
 		 * 
 		 * @param config The configuration for the Ollama chat model
-		 * @param type The type of chat model
+		 * @param type   The type of chat model
 		 * @return The configured Ollama chat model
 		 * @throws LLMConfigException If configuration fails
 		 */
@@ -110,7 +108,7 @@ public class OllamaChatModelConfigurationSupportService
 		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type)
 				throws LLMConfigException {
 			org.springframework.ai.ollama.api.OllamaApi.Builder apiBuilder = OllamaApi.builder();
-			apiBuilder.baseUrl(config.getBaseUrl());			
+			apiBuilder.baseUrl(config.getBaseUrl());
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
@@ -120,17 +118,17 @@ public class OllamaChatModelConfigurationSupportService
 			apiBuilder.webClientBuilder(webClient);
 			OllamaApi ollamaapi = apiBuilder.build();
 			Builder builder = OllamaOptions.builder();
-			
+
 			// Set the model if specified
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
-			
+
 			// Configure temperature if specified
 			if (config.getTemperature() != null && config.getTemperature() > 0) {
 				builder = builder.temperature(config.getTemperature());
 			}
-			
+
 			// Configure topP if specified
 			if (config.getTopP() != null && config.getTopP() > 0) {
 				builder = builder.topP(config.getTopP());
@@ -159,12 +157,6 @@ public class OllamaChatModelConfigurationSupportService
 	};
 
 	/**
-	 * Default constructor
-	 */
-	public OllamaChatModelConfigurationSupportService() {
-	}
-
-	/**
 	 * Returns the type of chat model this service supports
 	 * 
 	 * @return The Ollama chat model type
@@ -175,7 +167,8 @@ public class OllamaChatModelConfigurationSupportService
 	}
 
 	/**
-	 * Creates and initializes a configurable chat model based on the provided configuration
+	 * Creates and initializes a configurable chat model based on the provided
+	 * configuration
 	 * 
 	 * @param config The configuration for the Ollama chat model
 	 * @return A configured chat model
@@ -190,7 +183,8 @@ public class OllamaChatModelConfigurationSupportService
 	}
 
 	/**
-	 * Retrieves the available model choices for Ollama and enriches them with metadata
+	 * Retrieves the available model choices for Ollama and enriches them with
+	 * metadata
 	 * 
 	 * @param config The configuration to use for retrieving model choices
 	 * @return An operation status containing the list of model choices
@@ -212,6 +206,20 @@ public class OllamaChatModelConfigurationSupportService
 	 */
 	@Override
 	public GOllamaChatModelConfig createBaseConfiguration(String presetModel) {
-		throw new MethodNotFoundException("createBaseConfiguration() is not implemented for ollama chat provider");
+		GOllamaChatModelConfig clean = new GOllamaChatModelConfig();
+		clean.setModelTypeCode(getType().getCode());
+		clean.setChoosedModel(new GOllamaChatModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription("chat model " + presetModel);
+		clean.setDescription("Ollama chat model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
+	}
+
+	@Override
+	public OperationStatus<GOllamaChatModelConfig> insertAndConfigure(GOllamaChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MistralBaseModelCard } from './mistralBaseModelCard';
 import { ModelMetaInfo } from './modelMetaInfo';
 
 export interface GMistralChatModelChoice { 
@@ -26,4 +27,5 @@ export interface GMistralChatModelChoice {
     contextLength?: number;
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
+    modelCard?: MistralBaseModelCard;
 }
