@@ -19,6 +19,7 @@
 </p-blockUI>
 
 <p-panel id="MainPanel" gebo-ai-label  #ragProfilesUI header="Retrivial augmented generation chat profiles">
+    <p-button id="NewChatProfileBtn" gebo-ai-label (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
     <p-table *ngIf="chatprofiles?.content?.length" [value]="(chatprofiles.content?chatprofiles.content:[])">
         <ng-template pTemplate="header">
             <tr>
@@ -41,10 +42,12 @@
     <p-paginator id="Paginator1" gebo-ai-label (onPageChange)="onChatProfilePageChange($event)" [first]="0" [rows]="profilesPage.pageSize"
         *ngIf="chatprofiles?.content?.length" [totalRecords]="chatprofiles?.totalElements"
         [rowsPerPageOptions]="[10, 20, 30]" />
-    <p-button id="NewChatProfileBtn" gebo-ai-label (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
+    
 </p-panel>
 
 <p-panel id="PromptsPanel" gebo-ai-label  #promptUI header="Prompts collection & default prompts">
+    <p-button id="NewPromptConfigurationBtn" gebo-ai-label (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
+        [outlined]="true"></p-button>
     <p-table *ngIf="prompts?.content?.length" [value]="(prompts.content?prompts.content:[])">
         <ng-template pTemplate="header">
             <tr>
@@ -66,8 +69,7 @@
     </p-table>
     <p-paginator id="Paginator2" gebo-ai-label (onPageChange)="onPromptPageChange($event)" [first]="0" [rows]="promptsPage.pageSize"
         *ngIf="prompts?.content?.length" [totalRecords]="prompts?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
-    <p-button id="NewPromptConfigurationBtn" gebo-ai-label (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
-        [outlined]="true"></p-button>
+    
 
 </p-panel>
 

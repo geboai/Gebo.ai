@@ -17,6 +17,13 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Google Drive/Workspaces systems">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button id="GoogleDriveBtn" gebo-ai-label icon="pi pi-plus" label="Google Drive" styleClass="w-full" [outlined]="true"
+                (onClick)="createSystem()"></p-button>
+        </div>
+    </div>
     <div class=" grid">
 
         <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
@@ -39,13 +46,7 @@
             </p-table></div>
 
     </div>
-    <div class="grid geboLargeButtonsBar">
-
-        <div class="col-6">
-            <p-button id="GoogleDriveBtn" gebo-ai-label icon="pi pi-plus" label="Google Drive" styleClass="w-full" [outlined]="true"
-                (onClick)="createSystem()"></p-button>
-        </div>
-    </div>
+    
 </p-panel>
 <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createGoogleDriveWorkspacesWindowOpen" [modal]="true"
      (visibleChange)="closeDialog()">

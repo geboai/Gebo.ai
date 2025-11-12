@@ -17,6 +17,13 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Atlassian Confluence systems">
   <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+  <div class="grid geboLargeButtonsBar">
+
+    <div class="col-6">
+      <p-button id="ConfluenceSystemBtn" gebo-ai-label icon="pi pi-plus" label="Confluence system" styleClass="w-full" [outlined]="true"
+        (onClick)="createConfluenceSystem()"></p-button>
+    </div>
+  </div>
   <div class=" grid">
 
     <div class="col-12"><p-table id="Table" gebo-ai-label [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
@@ -41,13 +48,7 @@
       </p-table></div>
 
   </div>
-  <div class="grid geboLargeButtonsBar">
-
-    <div class="col-6">
-      <p-button id="ConfluenceSystemBtn" gebo-ai-label icon="pi pi-plus" label="Confluence system" styleClass="w-full" [outlined]="true"
-        (onClick)="createConfluenceSystem()"></p-button>
-    </div>
-  </div>
+  
 </p-panel>
 <p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createConfluenceWindowOpen" [modal]="true"  (visibleChange)="closeDialog()">
 

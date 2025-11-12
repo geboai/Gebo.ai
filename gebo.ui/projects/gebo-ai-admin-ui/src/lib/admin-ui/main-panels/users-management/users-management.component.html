@@ -17,7 +17,11 @@
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="grid">
-
+         <div class="col-3">
+            <p-button id="NewUserBtn" gebo-ai-label [outlined]="true" label="new user" (onClick)="newUser()"
+                                icon="pi pi-user-plus"></p-button>
+        </div>
+        <div class="col-9"></div>
         <div class="col-12">
             <p-table *ngIf="usersPaged?.content?.length?true:false" [value]=" usersPaged.content?usersPaged.content:[]"
                 [tableStyle]="{ 'min-width': '50rem' }">
@@ -51,10 +55,7 @@
             <p-paginator id="PaginatorUsers" gebo-ai-label (onPageChange)="onUsersPageChange($event)" [first]="0" [rows]="usersPage.pageSize" *ngIf="usersPaged?.content?.length"
     [totalRecords]="usersPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
-        <div class="col-3">
-            <p-button id="NewUserBtn" gebo-ai-label [outlined]="true" label="new user" (onClick)="newUser()"
-                                icon="pi pi-user-plus"></p-button>
-        </div>
+       
     </div>
 </p-panel>
 <p-panel id="GroupsListPanel" gebo-ai-label  #groups header="Groups list">
@@ -62,7 +63,11 @@
         <i class="pi pi-user-plus" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="grid">
-
+        <div class="col-3">
+            <p-button id="NewGroupBtn" gebo-ai-label [outlined]="true" label="new group" (onClick)="newGroup()"
+                                icon="pi pi-users"></p-button>
+        </div>
+        <div class="col-9"></div>
         <div class="col-12">
             <p-table *ngIf="groupsPaged?.content?.length?true:false" [value]=" groupsPaged.content?groupsPaged.content:[]"
                 [tableStyle]="{ 'min-width': '50rem' }">
@@ -92,10 +97,7 @@
             <p-paginator id="PaginatorGroups" gebo-ai-label (onPageChange)="onGroupsPageChange($event)" [first]="0" [rows]="groupsPage.pageSize" *ngIf="groupsPaged?.content?.length"
     [totalRecords]="groupsPaged?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
-        <div class="col-3">
-            <p-button id="NewGroupBtn" gebo-ai-label [outlined]="true" label="new group" (onClick)="newGroup()"
-                                icon="pi pi-users"></p-button>
-        </div>
+        
     </div>
     <gebo-ai-user-component [mode]="editedUserMode" [user]="editedUser" *ngIf="openUserEditing" (changedData)="editedUserChange($event)"></gebo-ai-user-component>
 </p-panel>

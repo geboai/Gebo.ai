@@ -14,6 +14,13 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Atlassian Jira systems">
   <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+  <div class="grid geboLargeButtonsBar">
+
+    <div class="col-6">
+      <p-button id="JiraSystemBtn" gebo-ai-label icon="pi pi-plus" label="Jira system" styleClass="w-full" [outlined]="true"
+        (onClick)="createJiraSystem()"></p-button>
+    </div>
+  </div>
   <div class=" grid">
 
     <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
@@ -38,13 +45,7 @@
       </p-table></div>
 
   </div>
-  <div class="grid geboLargeButtonsBar">
-
-    <div class="col-6">
-      <p-button id="JiraSystemBtn" gebo-ai-label icon="pi pi-plus" label="Jira system" styleClass="w-full" [outlined]="true"
-        (onClick)="createJiraSystem()"></p-button>
-    </div>
-  </div>
+  
 </p-panel>
 <p-dialog  [maximizable]="true" [visible]="createConfluenceWindowOpen" [modal]="true"  (visibleChange)="closeDialog()">
 

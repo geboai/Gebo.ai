@@ -8,6 +8,12 @@
         <p>The augmented generation features of <b>Gebo.ai</b> require the use of a vector database to perform semantic
             search, please choose wich of the supported products you'ld like to use</p>
         <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <div class="grid geboLargeButtonsBar">
+            <div class="col-6">
+                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
+                    severity="success" [disabled]="this.formGroup.invalid" styleClass="w-full"></p-button>
+            </div>
+        </div>
         <div style="height: 500px;">
             <p *ngFor="let item of vectorStoreProducts;">
                 <p-radioButton id="RadioButton" gebo-ai-label formControlName="product" [value]="item.code" [required]="true"
@@ -64,12 +70,7 @@
                 </div>
             </p-fieldset>
         </div>
-        <div class="grid geboLargeButtonsBar">
-            <div class="col-6">
-                <p-button id="ConfigureBtn" gebo-ai-label [outlined]="true" label="Configure" (onClick)="updateVectorStoreConfig()" icon="pi pi-save"
-                    severity="success" [disabled]="this.formGroup.invalid" styleClass="w-full"></p-button>
-            </div>
-        </div>
+        
     </p-panel>
 </form>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

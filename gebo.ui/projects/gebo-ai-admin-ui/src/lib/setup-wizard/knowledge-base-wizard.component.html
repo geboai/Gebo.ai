@@ -14,6 +14,13 @@
 
 <p-panel id="MainPanel" gebo-ai-label  #kbUI header="Knowledge bases & contents configurations">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button id="AddAKnowledgeBaseBtn" gebo-ai-label icon="pi pi-plus" label="Add a Knowledge base" [outlined]="true"
+                (onClick)="newKnowledgeBase()"></p-button>
+        </div>
+    </div>
     <div class=" grid">
 
         <div class="col-12"><p-table [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
@@ -63,13 +70,7 @@
 
 
 
-    <div class="grid geboLargeButtonsBar">
-
-        <div class="col-6">
-            <p-button id="AddAKnowledgeBaseBtn" gebo-ai-label icon="pi pi-plus" label="Add a Knowledge base" [outlined]="true"
-                (onClick)="newKnowledgeBase()"></p-button>
-        </div>
-    </div>
+    
 </p-panel>
 
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
