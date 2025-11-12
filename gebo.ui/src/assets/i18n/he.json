@@ -78,6 +78,12 @@
         "summary" : "הצלחה!",
         "detail" : "הפעולה בוצעה בהצלחה"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "ברוכים הבאים ל-gebo.ai",
+        "detail" : "הזן שם משתמש וסיסמה כדי להיכנס"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "הגדר לפחות פרופיל צ'אט \"R.A.G.\" אחד",
         "description" : "הגדר לפחות פרופיל צ'אט רטריב אוגמנטד למשתמשים שלך בהתבסס על אחד ממאגרים שהגדרת"
+      },
+      "mandatory-done" : {
+        "summary" : "הגדרת Gebo.ai - שלבים הכרחיים הושלמו...",
+        "detail" : "השלבים ההכרחיים הושלמו אך ישנם שלבים חסרים שמונעים מהארגון שלך להפיק את המרב מהתוכנה"
+      },
+      "setup-ok" : {
+        "summary" : "הגדרת Gebo.ai תקינה!"
+      },
+      "mandatory-missing" : {
+        "summary" : "הגדרת Gebo.ai חסרה שלב הכרחי",
+        "detail" : "אנא בדוק את השלבים האדומים בתהליך ההגדרה"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "מודל ברירת מחדל"
+      },
+      "MainPanelHeader" : {
+        "label" : "הגדר גישה לספקי llms של Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "פתח טופס פרויקט"
+      },
+      "Button3" : {
+        "help" : "פתח מקור נתונים"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "הגדרת Gebo.ai הושלמה בהצלחה!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "הוסף פרופיל צ'אט R.A.G. חדש"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "הוסף פרופיל צ'אט R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "קבל הגדרות פרופילי צ'אט ל-R.A.G."
+      },
+      "CodeHeader" : {
+        "label" : "קוד"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "פרופילי צ'אט R.A.G. קיימים"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "ערוך פרופיל צ'אט R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "קודי מאגר ידע"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "מסמכים שעובדו",
         "dataset-2-label" : "מסמכים עם שגיאה",
         "dataset-3-label" : "מסמכים שנפסלו"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "קישור רכישת אשראי מפתח Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "ערוך",
+        "help" : "הצג/ערוך את הגדרת המודל"
+      },
+      "ExistingModelCode" : {
+        "label" : "קוד"
+      },
+      "ExistingModelDesc" : {
+        "label" : "תיאור"
+      },
+      "ExistingModelType" : {
+        "label" : "סוג מודל"
+      },
+      "ExistingModelsSection" : {
+        "label" : "הגדרות קיימות"
+      },
+      "ProviderWWW" : {
+        "label" : "קישור לאתר"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "אישורי ספק"
+      },
+      "ProviderInfos" : {
+        "label" : "פרטי ספק"
+      },
+      "ExistingApiKey" : {
+        "label" : "מפתח api / אישורי גישה",
+        "help" : "בחר מפתח api או אישורים לספק זה"
+      },
+      "NewApiKey" : {
+        "label" : "מפתח api חדש",
+        "help" : "הכנס מפתח api חדש לשימוש עם ספק זה"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "השתמש בקיים או צור חדש",
+        "help" : "השתמש באישורים קיימים או צור חדשים לספק זה"
+      },
+      "NewUserName" : {
+        "label" : "שם משתמש",
+        "help" : "שם המשתמש המשמש לגישה לשירותי הספק"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "מודל embedding חדש",
+        "help" : "צור הגדרות מודל embedding חדשה"
+      },
+      "NewChatModel" : {
+        "label" : "מודל צ'אט חדש",
+        "help" : "צור הגדרות מודל צ'אט חדשה"
+      },
+      "NewModelDialog" : {
+        "label" : "הוסף מודל חדש"
+      },
+      "PiSave" : {
+        "label" : "שמור"
+      },
+      "NewModelsButton" : {
+        "label" : "מודלים חדשים",
+        "help" : "צור הגדרות מודלים חדשות"
+      },
+      "NewModelsDialog" : {
+        "label" : "הוסף מודלים חדשים"
+      },
+      "baseUrl" : {
+        "label" : "כתובת בסיס api",
+        "help" : "כתובת בסיס לשירותי api של הספק"
+      },
+      "ModelTypePanel" : {
+        "label" : "הוסף מודלים חדשים"
+      },
+      "ModelsChoices" : {
+        "label" : "בחירת מודלים"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "בחירת מודלים מוצעים"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "מודל embedding",
+        "help" : "בחר אחד ממודלי embedding המוגדרים מראש"
+      },
+      "chatPresetChoice" : {
+        "label" : "מודל צ'אט",
+        "help" : "בחר אחד ממודלי הצ'אט המוגדרים מראש"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "בחירת מודלים מתקדמים"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "מודל embedding",
+        "help" : "בחר אחד ממודלי embedding שפורסמו על ידי הספק"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "מודל צ'אט",
+        "help" : "בחר אחד ממודלי הצ'אט שפורסמו על ידי הספק"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " השתמש במצב בחירה זה רק אם יש לך ניסיון או לאחר בדיקה באתר הספק אילו מודלים מתאימים לצרכיך. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "הגדר כמודל צ'אט ברירת מחדל",
+        "help" : "הגדר מודל זה כברירת מחדל — ישמש לכל משימה אם לא הוגדר מודל צ'אט אחר"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " אנו ממליצים על רשימת המודלים הבאה "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "הגדר כמודל embedding ברירת מחדל",
+        "help" : "הגדר מודל זה כברירת מחדל — ישמש לכל משימה אם לא הוגדר מודל embedding אחר"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "הגדר כמודל צ'אט ברירת מחדל",
+        "help" : "הגדר מודל זה כברירת מחדל — ישמש לכל משימה אם לא הוגדר מודל צ'אט אחר"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "הגדר כמודל embedding ברירת מחדל",
+        "help" : "הגדר מודל זה כברירת מחדל — ישמש לכל משימה אם לא הוגדר מודל embedding אחר"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " השתמש במצב בחירה זה רק אם יש לך ניסיון או לאחר בדיקה באתר הספק אילו מודלים מתאימים לצרכיך. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "צור והפעל"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "צור והפעל"
+      },
+      "ProviderNameField" : {
+        "label" : "ספק"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ספק AI מרוחק תקין",
+        "detail" : "הספק פעיל ומוגדר בהצלחה"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "הפעולה נכשלה",
+        "detail" : "לא ניתן לאמת עם האישורים שסופקו"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "הצליח!",
+        "detail" : "הפעולה בוצעה בהצלחה"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "เรียบร้อย!",
         "detail" : "ดำเนินการสำเร็จแล้ว"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "ยินดีต้อนรับสู่ Gebo.ai",
+        "detail" : "กรอกชื่อผู้ใช้และรหัสผ่านของคุณเพื่อเข้าสู่ระบบ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "ตั้งค่าโปรไฟล์แชท \"R.A.G.\" อย่างน้อย 1 รายการ",
         "description" : "ตั้งโปรไฟล์แชท retrieve augmented อย่างน้อยหนึ่งรายการสำหรับผู้ใช้ของคุณโดยอิงจากฐานความรู้ที่คุณได้ตั้งไว้"
+      },
+      "mandatory-done" : {
+        "summary" : "ดำเนินการติดตั้ง Gebo.ai ขั้นตอนที่จำเป็นเรียบร้อยแล้ว...",
+        "detail" : "ได้ดำเนินขั้นตอนติดตั้งที่จำเป็นครบถ้วนแล้ว แต่ยังมีบางขั้นตอนที่ขาดทำให้องค์กรของคุณไม่สามารถใช้งานซอฟต์แวร์นี้ได้เต็มที่"
+      },
+      "setup-ok" : {
+        "summary" : "ตั้งค่า Gebo.ai เรียบร้อย!"
+      },
+      "mandatory-missing" : {
+        "summary" : "การติดตั้ง Gebo.ai ขาดบางขั้นตอนที่จำเป็น",
+        "detail" : "กรุณาตรวจสอบขั้นตอนที่แสดงเป็นสีแดงในกระบวนการตั้งค่า"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "โมเดลเริ่มต้น"
+      },
+      "MainPanelHeader" : {
+        "label" : "ตั้งค่าการเข้าถึงผู้ให้บริการ llms ของ Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "เปิดฟอร์มโปรเจกต์"
+      },
+      "Button3" : {
+        "help" : "เปิดแหล่งข้อมูล"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "ตั้งค่า Gebo.ai เรียบร้อย!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "เพิ่มโปรไฟล์แชท R.A.G. ใหม่"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "เพิ่มโปรไฟล์แชท R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "เรียกคืนการตั้งค่าโปรไฟล์แชทแบบ augmented generation (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "โปรไฟล์แชท R.A.G. ที่มีอยู่"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "แก้ไขโปรไฟล์แชท R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "รหัสคลังความรู้"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
         "dataset-2-label" : "เอกสารผิดพลาด",
         "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "ลิงก์ซื้อคีย์ Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "แก้ไข",
+        "help" : "ดู/แก้ไขการตั้งค่ารุ่น"
+      },
+      "ExistingModelCode" : {
+        "label" : "รหัส"
+      },
+      "ExistingModelDesc" : {
+        "label" : "คำอธิบาย"
+      },
+      "ExistingModelType" : {
+        "label" : "ประเภทโมเดล"
+      },
+      "ExistingModelsSection" : {
+        "label" : "การตั้งค่าที่มีอยู่"
+      },
+      "ProviderWWW" : {
+        "label" : "ลิงก์เว็บไซต์"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ข้อมูลรับรองผู้ให้บริการ"
+      },
+      "ProviderInfos" : {
+        "label" : "ข้อมูลผู้ให้บริการ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ข้อมูลรับรอง",
+        "help" : "เลือก api key หรือข้อมูลรับรองสำหรับผู้ให้บริการนี้"
+      },
+      "NewApiKey" : {
+        "label" : "Api key ใหม่",
+        "help" : "กรอก api key ใหม่เพื่อใช้กับผู้ให้บริการนี้"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ใช้ที่มีอยู่หรือสร้างใหม่",
+        "help" : "ใช้หรือสร้างข้อมูลรับรองใหม่สำหรับผู้ให้บริการนี้"
+      },
+      "NewUserName" : {
+        "label" : "ชื่อผู้ใช้",
+        "help" : "ชื่อผู้ใช้สำหรับเข้าสู่บริการผู้ให้บริการ"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "สร้างโมเดล embedding ใหม่",
+        "help" : "สร้างการตั้งค่าโมเดล embedding ใหม่"
+      },
+      "NewChatModel" : {
+        "label" : "สร้าง Chat model ใหม่",
+        "help" : "สร้างการตั้งค่าโมเดลแชทใหม่"
+      },
+      "NewModelDialog" : {
+        "label" : "เพิ่มโมเดลใหม่"
+      },
+      "PiSave" : {
+        "label" : "บันทึก"
+      },
+      "NewModelsButton" : {
+        "label" : "โมเดลใหม่",
+        "help" : "สร้างการตั้งค่าโมเดลใหม่"
+      },
+      "NewModelsDialog" : {
+        "label" : "เพิ่มโมเดลใหม่"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url สำหรับบริการ api ของผู้ให้บริการ"
+      },
+      "ModelTypePanel" : {
+        "label" : "เพิ่มโมเดลใหม่"
+      },
+      "ModelsChoices" : {
+        "label" : "ตัวเลือกโมเดล"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "รายการโมเดลที่แนะนำ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "โมเดล embedding",
+        "help" : "เลือกจากโมเดล embedding ที่กำหนดไว้ล่วงหน้า"
+      },
+      "chatPresetChoice" : {
+        "label" : "โมเดลแชท",
+        "help" : "เลือกจากโมเดลแชทที่กำหนดไว้ล่วงหน้า"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "เลือกรุ่นขั้นสูง"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "โมเดล embedding",
+        "help" : "เลือกหนึ่งในโมเดล embedding ที่ผู้จำหน่ายเผยแพร่"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "โมเดลแชท",
+        "help" : "เลือกหนึ่งในโมเดลแชทที่ผู้จำหน่ายเผยแพร่"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ใช้โหมดนี้เฉพาะเมื่อคุณเชี่ยวชาญ หรือเช็คบนเว็บไซต์ผู้จำหน่ายว่ารุ่นไหนเหมาะกับคุณ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดลแชทเริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนดโมเดลแชทอื่น"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " เราแนะนำรายชื่อโมเดลต่อไปนี้ "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดล embedding เริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนด embedding อื่น"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดลแชทเริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนดโมเดลแชทอื่น"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดล embedding เริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนด embedding อื่น"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ใช้โหมดนี้เฉพาะเมื่อคุณเชี่ยวชาญ หรือเช็คบนเว็บไซต์ผู้จำหน่ายว่ารุ่นไหนเหมาะกับคุณ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "สร้างและเปิดใช้งาน"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "สร้างและเปิดใช้งาน"
+      },
+      "ProviderNameField" : {
+        "label" : "ผู้ให้บริการ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ผู้ให้บริการ AI ระยะไกลพร้อมใช้งาน",
+        "detail" : "ผู้ให้บริการพร้อมและได้รับการตั้งค่าสำเร็จแล้ว"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ดำเนินการล้มเหลว",
+        "detail" : "ไม่สามารถยืนยันตัวตนด้วยข้อมูลรับรองที่ให้มา"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "เรียบร้อย!",
+        "detail" : "ดำเนินการสำเร็จ"
       }
     }
   }

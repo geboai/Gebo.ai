@@ -78,6 +78,12 @@
         "summary" : "ठिक छ!",
         "detail" : "कार्य सफलतापूर्वक सम्पन्न भयो"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai मा स्वागत छ",
+        "detail" : "लगइन गर्नको लागि आफ्नो प्रयोगकर्ता नाम र पासवर्ड प्रविष्ट गर्नुहोस्"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "कम्तिमा एउटा \"R.A.G.\" च्याट प्रोफाइल कन्फिगर गर्नुहोस्",
         "description" : "तपाईंले कन्फिगर गर्नुभएको कुनै एक ज्ञान आधारमा आधारित गर्दै प्रयोगकर्ताहरूका लागि कम्तिमा एउटा retrieve augmented chat प्रोफाइल कन्फिगर गर्नुहोस्"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai सेटअपका अनिवार्य चरणहरू सम्पन्न भयो...",
+        "detail" : "अनिवार्य सेटअप चरणहरू पूरा भएका छन् तर केही छुटेका चरणहरूले तपाईंको संस्थालाई यो सफ्टवेयरको पूर्ण अनुभव लिनबाट रोक्दैछ"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai सेटअप सफल छ!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai सेटअपमा केही अनिवार्य चरणहरू छुटेका छन्",
+        "detail" : "कृपया सेटअप प्रक्रियाका रातो चरणहरू समीक्षा गर्नुहोस्"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "डिफल्ट मोडेल"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms प्रदायकहरूको पहुँच सेटअप गर्नुहोस्"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "परियोजना फारम खोल्नुहोस्"
+      },
+      "Button3" : {
+        "help" : "डेटा स्रोत खोल्नुहोस्"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai सेटअप ठीक छ!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "नयाँ R.A.G. च्याट प्रोफाइल थप्नुहोस्"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. च्याट प्रोफाइल थप्नुहोस्"
+      },
+      "MainPanel" : {
+        "label" : "रिट्रीभ गरिएका अर्गमेन्टेड जेनेरेसन (r.a.g.) च्याट प्रोफाइल सेटिङहरू"
+      },
+      "CodeHeader" : {
+        "label" : "कोड"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "हालका R.A.G. च्याट प्रोफाइलहरू"
+      },
+      "DescriptionHeader" : {
+        "label" : "विवरण"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. च्याट प्रोफाइल सम्पादन गर्नुहोस्"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "नलेजबेस कोडहरू"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "संसाधित कागजातहरू",
         "dataset-2-label" : "त्रुटि भएका कागजातहरू",
         "dataset-3-label" : "फालेका कागजातहरू"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy key क्रेडिट लिन्क किन्नुहोस्"
+      },
+      "ModifyBtn" : {
+        "label" : "परिवर्तन गर्नुहोस्",
+        "help" : "मोडेल कन्फिगरेसन हेर्नुहोस्/परिवर्तन गर्नुहोस्"
+      },
+      "ExistingModelCode" : {
+        "label" : "कोड"
+      },
+      "ExistingModelDesc" : {
+        "label" : "विवरण"
+      },
+      "ExistingModelType" : {
+        "label" : "मोडेल प्रकार"
+      },
+      "ExistingModelsSection" : {
+        "label" : "हालका कन्फिगरेसनहरू"
+      },
+      "ProviderWWW" : {
+        "label" : "वेबसाइट लिङ्क"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "प्रदायक प्रमाणिकरण"
+      },
+      "ProviderInfos" : {
+        "label" : "प्रदायक जानकारीहरू"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/प्रमाणिकरण",
+        "help" : "यो प्रदायकको लागि api key वा प्रमाणिकरण छान्नुहोस्"
+      },
+      "NewApiKey" : {
+        "label" : "नयाँ api key",
+        "help" : "यो प्रदायकसँग प्रयोग गर्नका लागि नयाँ api key राख्नुहोस्"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "हालको वा नयाँ प्रयोग गर्नुहोस्",
+        "help" : "यो प्रदायकका लागि हालकै वा नयाँ प्रमाणिकरण प्रयोग गर्नुहोस्"
+      },
+      "NewUserName" : {
+        "label" : "प्रयोगकर्ता नाम",
+        "help" : "प्रदायक सेवा पहुँच गर्न प्रयोग गरिएको प्रयोगकर्ता नाम"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "नयाँ एम्बेडिङ मोडेल",
+        "help" : "नयाँ एम्बेडिङ मोडेल कन्फिगरेसन सिर्जना गर्नुहोस्"
+      },
+      "NewChatModel" : {
+        "label" : "नयाँ च्याट मोडेल",
+        "help" : "नयाँ च्याट मोडेल कन्फिगरेसन सिर्जना गर्नुहोस्"
+      },
+      "NewModelDialog" : {
+        "label" : "नयाँ मोडेल थप्नुहोस्"
+      },
+      "PiSave" : {
+        "label" : "सेभ गर्नुहोस्"
+      },
+      "NewModelsButton" : {
+        "label" : "नयाँ मोडेलहरू",
+        "help" : "नयाँ मोडेल कन्फिगरेसन सिर्जना गर्नुहोस्"
+      },
+      "NewModelsDialog" : {
+        "label" : "नयाँ मोडेलहरू थप्नुहोस्"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "प्रदायकका api सेवा को लागि base url"
+      },
+      "ModelTypePanel" : {
+        "label" : "नयाँ मोडेलहरू थप्नुहोस्"
+      },
+      "ModelsChoices" : {
+        "label" : "मोडेल चयन"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "सुझाव गरिएका मोडेल चयन"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "एम्बेडिङ मोडेल",
+        "help" : "पहिलेबाट परिभाषित गरिएका एम्बेडिङ मोडेलहरू मध्ये एक छान्नुहोस्"
+      },
+      "chatPresetChoice" : {
+        "label" : "च्याट मोडेल",
+        "help" : "पहिलेबाट परिभाषित गरिएका च्याट मोडेलहरू मध्ये एक छान्नुहोस्"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "एडभान्स्ड मोडेल चयन"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "एम्बेडिङ मोडेल",
+        "help" : "प्रदायकले प्रकाशित गरेका एम्बेडिङ मोडेलहरू मध्य एक छान्नुहोस्"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "च्याट मोडेल",
+        "help" : "प्रदायकले प्रकाशित गरेका च्याट मोडेलहरू मध्य एक छान्नुहोस्"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " यो चयन विकल्प केवल तपाईं विशेषज्ञ भए वा प्रदायकको साइटमा कुन मोडेल तपाईंको आवश्यकता अनुसार फिट हुन्छ जाँच गरेर मात्र प्रयोग गर्नुहोस्। "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "पूर्वनिर्धारित च्याट मोडेल सेट गर्नुहोस्",
+        "help" : "यो मोडेललाई पूर्वनिर्धारित बनाउनुहोस्, अन्य च्याट मोडेल कन्फिगर नभएको कार्यमा यो प्रयोग हुनेछ"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " हामीले तपाईंलाई तलका मोडेलहरू सुझाव गरेका छौं "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "पूर्वनिर्धारित एम्बेडिङ मोडेल सेट गर्नुहोस्",
+        "help" : "यो मोडेललाई पूर्वनिर्धारित बनाउनुहोस्, अन्य एम्बेडिङ मोडेल कन्फिगर नभएको कार्यमा यो प्रयोग हुनेछ"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "पूर्वनिर्धारित च्याट मोडेल सेट गर्नुहोस्",
+        "help" : "यो मोडेललाई पूर्वनिर्धारित बनाउनुहोस्, अन्य च्याट मोडेल कन्फिगर नभएको कार्यमा यो प्रयोग हुनेछ"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "पूर्वनिर्धारित एम्बेडिङ मोडेल सेट गर्नुहोस्",
+        "help" : "यो मोडेललाई पूर्वनिर्धारित बनाउनुहोस्, अन्य एम्बेडिङ मोडेल कन्फिगर नभएको कार्यमा यो प्रयोग हुनेछ"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " यो चयन विकल्प केवल तपाईं विशेषज्ञ भए वा प्रदायकको साइटमा कुन मोडेल तपाईंको आवश्यकता अनुसार फिट हुन्छ जाँच गरेर मात्र प्रयोग गर्नुहोस्। "
+      },
+      "CreatePresetBtn" : {
+        "label" : "सिर्जना गर्नुहोस् र सक्रिय बनाउनुहोस्"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "सिर्जना गर्नुहोस् र सक्रिय बनाउनुहोस्"
+      },
+      "ProviderNameField" : {
+        "label" : "प्रदायक"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI रिमोट प्रदायक सफल छ",
+        "detail" : "प्रदायक चलिरहेको छ र सफलतापूर्वक कन्फिगर गरिएको छ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "अपरेशन असफल भयो",
+        "detail" : "दिईएको प्रमाणिकरणसँग प्रमाणिकृत गर्न सकिएन"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "सफल छ!",
+        "detail" : "अपरेशन सफलतापूर्वक सम्पन्न भयो"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operasie suksesvol voltooi"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Welkom by gebo.ai",
+        "detail" : "Voer jou gebruikersnaam en wagwoord in om aan te meld"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Stel ten minste 'n \"R.A.G.\" geselsprofiel op",
         "description" : "Stel ten minste 'n verbeterde generasie geselsprofiel vir jou gebruikers op, gebaseer op een van jou opgestelde kennisbasisse"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai opstel verpligte stappe voltooi...",
+        "detail" : "Verpligte opstelstappe is voltooi maar sommige ontbrekende stappe verhoed dat jou organisasie die meeste uit hierdie sagteware ervaar"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai opstelling OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai opstelling kort 'n verpligte stap",
+        "detail" : "Gaan asseblief die rooi stappe van die opstelproses na"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Verstekmodel"
+      },
+      "MainPanelHeader" : {
+        "label" : "Stel Gebo.ai llms verskafferstoegang op"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "open projekvorm"
+      },
+      "Button3" : {
+        "help" : "maak databron oop"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai opstel OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Voeg nuwe R.A.G. kletsprofiel by"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Voeg R.A.G. kletsprofiel by"
+      },
+      "MainPanel" : {
+        "label" : "Haal aangevulde generasie (r.a.g.) kletsprofielinstellings in"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Bestaande R.A.G. kletsprofiele"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Redigeer R.A.G. kletsprofiel"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kennisbasis kodes"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Verwerkte dokumente",
         "dataset-2-label" : "Fout dokumente",
         "dataset-3-label" : "Verwerpte dokumente"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Koop API sleutel kredietskakel"
+      },
+      "ModifyBtn" : {
+        "label" : "Wysig",
+        "help" : "Sien/wysig modelkonfigurasie"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kode"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Beskrywing"
+      },
+      "ExistingModelType" : {
+        "label" : "Modeltipe"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Bestaande konfigurasies"
+      },
+      "ProviderWWW" : {
+        "label" : "Webwerf skakel"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Verskafferbewyse"
+      },
+      "ProviderInfos" : {
+        "label" : "Verskafferinligting"
+      },
+      "ExistingApiKey" : {
+        "label" : "API sleutel/bewyse",
+        "help" : "Kies API sleutel of bewys vir hierdie verskaffer"
+      },
+      "NewApiKey" : {
+        "label" : "Nuwe API sleutel",
+        "help" : "Voeg 'n nuwe API sleutel in om saam met hierdie verskaffer te gebruik"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Gebruik bestaand of nuut",
+        "help" : "Gebruik bestaande of skep nuwe bewys vir hierdie verskaffer"
+      },
+      "NewUserName" : {
+        "label" : "Gebruikersnaam",
+        "help" : "Gebruikersnaam wat gebruik word om by die verskaffer se dienste aan te sluit"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nuwe embedding model",
+        "help" : "Skep 'n nuwe embedding model konfigurasie"
+      },
+      "NewChatModel" : {
+        "label" : "Nuwe kletsmodel",
+        "help" : "Skep 'n nuwe kletsmodel konfigurasie"
+      },
+      "NewModelDialog" : {
+        "label" : "Voeg nuwe model by"
+      },
+      "PiSave" : {
+        "label" : "Stoor"
+      },
+      "NewModelsButton" : {
+        "label" : "Nuwe Modelle",
+        "help" : "Skep nuwe modelle konfigurasie"
+      },
+      "NewModelsDialog" : {
+        "label" : "Voeg nuwe modelle by"
+      },
+      "baseUrl" : {
+        "label" : "Basis API url",
+        "help" : "Basis url vir die API dienste van die verskaffer"
+      },
+      "ModelTypePanel" : {
+        "label" : "Voeg nuwe modelle by"
+      },
+      "ModelsChoices" : {
+        "label" : "Modelkeuses"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Voorgestelde modelseleksie"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Kies een van die voorafbepaalde embedding modelle"
+      },
+      "chatPresetChoice" : {
+        "label" : "Kletsmodel",
+        "help" : "Kies een van die voorafbepaalde kletsmodelle"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Gevorderde modelseleksie"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Kies een van die verskaffer gepubliseerde embedding modelle"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Kletsmodel",
+        "help" : "Kies een van die verskaffer gepubliseerde kletsmodelle"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Gebruik hierdie seleksiemodus slegs as jy 'n kundige is of deur op die verskaffer se webwerf te kyk watter modelle aan jou behoeftes voldoen. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "stel as standaard kletsmodel",
+        "help" : "Stel hierdie model as standaard, dit sal gebruik word vir elke taak waarvoor geen ander kletsmodel gekonfigureer is nie"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Ons stel die volgende modelllys voor "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "stel as standaard embedding model",
+        "help" : "Stel hierdie model as standaard, dit sal gebruik word vir elke taak waarvoor geen ander embedding model gekonfigureer is nie"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "stel as standaard kletsmodel",
+        "help" : "Stel hierdie model as standaard, dit sal gebruik word vir elke taak waarvoor geen ander kletsmodel gekonfigureer is nie"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "stel as standaard embedding model",
+        "help" : "Stel hierdie model as standaard, dit sal gebruik word vir elke taak waarvoor geen ander embedding model gekonfigureer is nie"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Gebruik hierdie seleksiemodus slegs as jy 'n kundige is of deur op die verskaffer se webwerf te kyk watter modelle aan jou behoeftes voldoen. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Skep en aktiveer"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Skep en aktiveer"
+      },
+      "ProviderNameField" : {
+        "label" : "Verskaffer"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI afgeleë verskaffer OK",
+        "detail" : "Verskaffer is aktief en suksesvol gekonfigureer"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasie het misluk",
+        "detail" : "Kan nie met die verskafde bewysstukke verifieer nie"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasie suksesvol voltooi"
       }
     }
   }

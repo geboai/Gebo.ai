@@ -78,6 +78,12 @@
         "summary" : "Iawn!",
         "detail" : "Gweithred wedi cwblhau’n llwyddiannus"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Croeso i gebo.ai",
+        "detail" : "Nodwch eich enw defnyddiwr a chyfrinair i fewngofnodi"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Ffurfweddu o leiaf un proffil sgwrs \"R.A.G.\"",
         "description" : "Ffurfweddu o leiaf un proffil sgwrs cynhyrchu gyda chwilio uwch ar gyfer eich defnyddwyr yn seiliedig ar un o'ch cronfeydd gwybodaeth wedi'u ffurfweddu"
+      },
+      "mandatory-done" : {
+        "summary" : "Camau gorfodol setup Gebo.ai wedi'u cwblhau...",
+        "detail" : "Mae'r camau setup gorfodol wedi'u cwblhau ond mae rhai camau ar goll sy'n atal eich sefydliad rhag cael y gorau o'r feddalwedd hon"
+      },
+      "setup-ok" : {
+        "summary" : "Setup Gebo.ai yn iawn!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Mae setup Gebo.ai ar goll cam gorfodol",
+        "detail" : "Adolygwch y camau coch yn y broses setup"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Model rhagosodedig"
+      },
+      "MainPanelHeader" : {
+        "label" : "Setup mynediad darparwyr llms Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "agor ffurflen prosiect"
+      },
+      "Button3" : {
+        "help" : "agor ffynhonnell ddata"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gosodiad Gebo.ai: Iawn!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Ychwanegu proffil sgwrsio R.A.G. newydd"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Ychwanegu proffil sgwrsio R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Adfer gosodiadau proffiliau sgwrsio cenedlaethau atodol (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Proffiliau sgwrsio R.A.G. presennol"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Golygu proffil sgwrsio R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Codau cronfa wybodaeth"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Dogfennau wedi'u prosesu",
         "dataset-2-label" : "Dogfennau gyda gwallau",
         "dataset-3-label" : "Dogfennau wedi'u taflu"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Prynu dolen credyd allwedd Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Newid",
+        "help" : "Gweld/newid ffurfweddiad y model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Cod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Disgrifiad"
+      },
+      "ExistingModelType" : {
+        "label" : "Math o fodel"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Ffurfweddiadau presennol"
+      },
+      "ProviderWWW" : {
+        "label" : "Dolen gwefan"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Credydau darparwr"
+      },
+      "ProviderInfos" : {
+        "label" : "Gwybodaeth darparwr"
+      },
+      "ExistingApiKey" : {
+        "label" : "Allwedd api/credydau",
+        "help" : "Dewiswch allwedd api neu gredydau ar gyfer y darparwr hwn"
+      },
+      "NewApiKey" : {
+        "label" : "Allwedd api newydd",
+        "help" : "Mewnosodwch allwedd api newydd i'w defnyddio gyda'r darparwr hwn"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Defnyddio presennol neu greu newydd",
+        "help" : "Defnyddiwch neu crëwch danysgrifiadau newydd ar gyfer y darparwr hwn"
+      },
+      "NewUserName" : {
+        "label" : "Enw defnyddiwr",
+        "help" : "Enw defnyddiwr a ddefnyddir i gael mynediad at wasanaethau'r darparwr"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Model ymgorffori newydd",
+        "help" : "Creu ffurfweddiad model ymgorffori newydd"
+      },
+      "NewChatModel" : {
+        "label" : "Model Sgwrsio newydd",
+        "help" : "Creu ffurfweddiad model sgwrsio newydd"
+      },
+      "NewModelDialog" : {
+        "label" : "Ychwanegu model newydd"
+      },
+      "PiSave" : {
+        "label" : "Cadw"
+      },
+      "NewModelsButton" : {
+        "label" : "Modelau newydd",
+        "help" : "Creu ffurfweddiad modelau newydd"
+      },
+      "NewModelsDialog" : {
+        "label" : "Ychwanegu modelau newydd"
+      },
+      "baseUrl" : {
+        "label" : "Sylfaen url api",
+        "help" : "Url sylfaen ar gyfer gwasanaethau api y darparwr"
+      },
+      "ModelTypePanel" : {
+        "label" : "Ychwanegu modelau newydd"
+      },
+      "ModelsChoices" : {
+        "label" : "Dewisiadau modelau"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Dewis modelau a awgrymir"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model ymgorffori",
+        "help" : "Dewiswch un o'r modelau ymgorffori parod"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model sgwrsio",
+        "help" : "Dewiswch un o'r modelau sgwrsio parod"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Dewis modelau uwch"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model ymgorffori",
+        "help" : "Dewiswch un o'r modelau ymgorffori a gyhoeddwyd gan y cyflenwr"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model sgwrsio",
+        "help" : "Dewiswch un o'r modelau sgwrsio a gyhoeddwyd gan y cyflenwr"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Defnyddiwch y modd dewis hwn dim ond os ydych yn arbenigwr neu drwy wirio ar safle'r cyflenwr pa fodelau sy'n addas i chi. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "gosod fel model sgwrsio rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model sgwrsio arall wedi'i ffurfweddu"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Rydym yn awgrymu'r rhestr modelau canlynol "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "gosod fel model ymgorffori rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model ymgorffori arall wedi'i ffurfweddu"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "gosod fel model sgwrsio rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model sgwrsio arall wedi'i ffurfweddu"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "gosod fel model ymgorffori rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model ymgorffori arall wedi'i ffurfweddu"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Defnyddiwch y modd dewis hwn dim ond os ydych yn arbenigwr neu drwy wirio ar safle'r cyflenwr pa fodelau sy'n addas i chi. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Creu a gweithredu"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Creu a gweithredu"
+      },
+      "ProviderNameField" : {
+        "label" : "Darparwr"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Darparwr AI o bell yn iawn",
+        "detail" : "Mae'r darparwr ar waith ac wedi'i ffurfweddu'n llwyddiannus"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Methiant gweithred",
+        "detail" : "Methu dilysu gyda'r tanysgrifiadau a ddarparwyd"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi'i gwneud gyda llwyddiant"
       }
     }
   }

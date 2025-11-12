@@ -78,6 +78,12 @@
         "summary" : "Լավ է!",
         "detail" : "Գործողությունը հաջողությամբ իրականացվել է"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Բարի գալուստ gebo.ai",
+        "detail" : "Մուտք գործելու համար մուտքագրեք ձեր օգտանունը և գաղտնաբառը"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Կարգավորեք առնվազն մեկ \"R.A.G.\" զրուցարանային պրոֆիլ",
         "description" : "Կարգավորեք առնվազն մեկ հավելյալ զրուցարանային պրոֆիլ օգտվողների համար, հիմնված ընտրված գիտելիքի բազաների վրա"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai կարգավորման պարտադիր քայլերը ավարտված են...",
+        "detail" : "Պարտադիր կարգավորման քայլերը ավարտված են, սակայն որոշ բացակայող քայլեր խանգարում են ձեր կազմակերպությանը առավելագույնը օգտվելու այս ծրագրից"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai կարգավորումը հաջողված է։"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai կարգավորումը բացում է պարտադիր քայլ",
+        "detail" : "Խնդրում ենք վերանայել կարգավորման գործընթացի կարմիր քայլերը"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Պաշտոնական մոդել"
+      },
+      "MainPanelHeader" : {
+        "label" : "Կարգավորել Gebo.ai llms մատակարարների հասանելիությունը"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "բացել նախագծի ձևը"
+      },
+      "Button3" : {
+        "help" : "բացել տվյալների աղբյուրը"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai-ի կարգաբերումն ավարտված է"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Ավելացնել նոր R.A.G. զրույցի պրոֆիլ"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Ավելացնել R.A.G. զրույցի պրոֆիլ"
+      },
+      "MainPanel" : {
+        "label" : "Բերել հարստացված գեներացիայի (r.a.g.) զրույցի պրոֆիլների կարգավորումները"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Գոյություն ունեցող R.A.G. զրույցի պրոֆիլներ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Խմբագրել R.A.G. զրույցի պրոֆիլ"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Գիտելիքների բազայի կոդեր"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Մշակված փաստաթղթեր",
         "dataset-2-label" : "Սխալներով փաստաթղթեր",
         "dataset-3-label" : "Մերժված փաստաթղթեր"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Գնել Apy key կրեդիտի հղումը"
+      },
+      "ModifyBtn" : {
+        "label" : "Փոփոխել",
+        "help" : "Դիտել/փոփոխել մոդելի կարգավորումները"
+      },
+      "ExistingModelCode" : {
+        "label" : "Կոդ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Նկարագրություն"
+      },
+      "ExistingModelType" : {
+        "label" : "Մոդելի տեսակը"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Գոյություն ունեցող կարգավորումներ"
+      },
+      "ProviderWWW" : {
+        "label" : "Վեբ կայքի հղում"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Մատակարարի հավաստագրեր"
+      },
+      "ProviderInfos" : {
+        "label" : "Մատակարարի տեղեկատվություն"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/հավաստագրեր",
+        "help" : "Ընտրեք api key կամ հավաստագրեր այս մատակարարի համար"
+      },
+      "NewApiKey" : {
+        "label" : "Նոր api key",
+        "help" : "Մուտքագրեք նոր api key այս մատակարարի համար"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Օգտագործել առկա կամ նոր",
+        "help" : "Օգտագործել առկա կամ ստեղծել նոր հավաստագրեր այս մատակարարի համար"
+      },
+      "NewUserName" : {
+        "label" : "Օգտագործողի անվանումը",
+        "help" : "Օգտագործողի անունը՝ մատակարարի ծառայություններ մուտք գործելու համար"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Նոր embedding մոդել",
+        "help" : "Ստեղծել embedding մոդելի նոր կարգավորում"
+      },
+      "NewChatModel" : {
+        "label" : "Նոր Chat մոդել",
+        "help" : "Ստեղծել chat մոդելի նոր կարգավորում"
+      },
+      "NewModelDialog" : {
+        "label" : "Ավելացնել նոր մոդել"
+      },
+      "PiSave" : {
+        "label" : "Պահպանել"
+      },
+      "NewModelsButton" : {
+        "label" : "Նոր մոդելներ",
+        "help" : "Ստեղծել նոր մոդելների կարգավորում"
+      },
+      "NewModelsDialog" : {
+        "label" : "Ավելացնել նոր մոդելներ"
+      },
+      "baseUrl" : {
+        "label" : "Հիմնական api url",
+        "help" : "Մատակարարի api ծառայությունների հիմնական url-ը"
+      },
+      "ModelTypePanel" : {
+        "label" : "Ավելացնել նոր մոդելներ"
+      },
+      "ModelsChoices" : {
+        "label" : "Մոդելների ընտրություն"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Առաջարկվող մոդելների ընտրության"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding մոդել",
+        "help" : "Ընտրել նախապես սահմանված embedding մոդելներից մեկը"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat մոդել",
+        "help" : "Ընտրել նախապես սահմանված chat մոդելներից մեկը"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Խորացված մոդելների ընտրություն"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding մոդել",
+        "help" : "Ընտրել մատակարարի հրապարակած embedding մոդելներից մեկը"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat մոդել",
+        "help" : "Ընտրել մատակարարի հրապարակած chat մոդելներից մեկը"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Օգտագործեք այս ընտրության տարբերակը միայն եթե փորձառու եք կամ ստուգել եք մատակարարի կայքում, թե որ մոդելներն են հարմար ձեզ։ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "նշել որպես chat մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ chat մոդել չի կարգավորվել"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Մենք առաջարկում ենք հետևյալ մոդելների ցանկը "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "նշել որպես embedding մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ embedding մոդել չի կարգավորվել"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "նշել որպես chat մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ chat մոդել չի կարգավորվել"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "նշել որպես embedding մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ embedding մոդել չի կարգավորվել"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Օգտագործեք այս ընտրության տարբերակը միայն եթե փորձառու եք կամ ստուգել եք մատակարարի կայքում, թե որ մոդելներն են հարմար ձեզ։ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Ստեղծել և ակտիվացնել"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Ստեղծել և ակտիվացնել"
+      },
+      "ProviderNameField" : {
+        "label" : "Մատակարար"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI հեռավոր մատակարարն OK է",
+        "detail" : "Մատակարարը գործում է և հաջողությամբ կարգավորվել է"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Գործողությունը ձախողվեց",
+        "detail" : "Չհաջողվեց նույնականանալ տրամադրված հավաստագրերով"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
       }
     }
   }

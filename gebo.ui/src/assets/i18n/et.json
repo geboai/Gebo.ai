@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Tegevus õnnestus edukalt"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Tere tulemast gebo.ai-sse",
+        "detail" : "Sisselogimiseks sisestage oma kasutajanimi ja parool"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Seadista vähemalt üks \"R.A.G.\" vestlusprofiil",
         "description" : "Seadista vähemalt üks retrieve augmented vestlusprofiil oma kasutajatele, tuginedes ühelegi juba seadistatud teadmistebaasile"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai seadistuse kohustuslikud etapid on tehtud...",
+        "detail" : "Kohustuslikud seadistusetapid on lõpetatud, kuid mõned puuduvad sammud takistavad teie organisatsioonil selle tarkvara täielikku kasutamist"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai seadistus on korras!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai seadistusest on mõni kohustuslik samm puudu",
+        "detail" : "Vaadake üle seadistusprotsessi punased sammud"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Vaikimisi mudel"
+      },
+      "MainPanelHeader" : {
+        "label" : "Seadista Gebo.ai LLM pakkujate ligipääs"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "ava projektivorm"
+      },
+      "Button3" : {
+        "help" : "ava andmeallikas"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai seadistus on korras!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Lisa uus R.A.G. vestlusprofiil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Lisa R.A.G. vestlusprofiil"
+      },
+      "MainPanel" : {
+        "label" : "Too esile täiustatud genereerimise (r.a.g.) vestlusprofiili seaded"
+      },
+      "CodeHeader" : {
+        "label" : "Kood"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Olemasolevad R.A.G. vestlusprofiilid"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Muuda R.A.G. vestlusprofiili"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Teadmusbaasi koodid"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Töödeldud dokumendid",
         "dataset-2-label" : "Vigased dokumendid",
         "dataset-3-label" : "Kõrvale jäetud dokumendid"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Osta API võtme krediidi link"
+      },
+      "ModifyBtn" : {
+        "label" : "Muuda",
+        "help" : "Vaata/muuda mudeli seadistust"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kood"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Kirjeldus"
+      },
+      "ExistingModelType" : {
+        "label" : "Mudeli tüüp"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Olemasolevad seadistused"
+      },
+      "ProviderWWW" : {
+        "label" : "Veebilehe link"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Pakkuja mandaadid"
+      },
+      "ProviderInfos" : {
+        "label" : "Pakkuja info"
+      },
+      "ExistingApiKey" : {
+        "label" : "API võti/mandaadid",
+        "help" : "Vali selle pakkuja API võti või mandaadid"
+      },
+      "NewApiKey" : {
+        "label" : "Uus API võti",
+        "help" : "Sisesta uus API võti selle pakkujaga kasutamiseks"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Kasuta olemasolevaid või loo uued",
+        "help" : "Kasuta olemasolevaid või loo selle pakkuja jaoks uusi mandaate"
+      },
+      "NewUserName" : {
+        "label" : "Kasutajanimi",
+        "help" : "Pakkuja teenustele ligipääsemiseks kasutatav kasutajanimi"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Uus sisseehituse mudel",
+        "help" : "Loo uus sisseehituse mudeli seadistus"
+      },
+      "NewChatModel" : {
+        "label" : "Uus vestlusmudel",
+        "help" : "Loo uus vestlusmudeli seadistus"
+      },
+      "NewModelDialog" : {
+        "label" : "Lisa uus mudel"
+      },
+      "PiSave" : {
+        "label" : "Salvesta"
+      },
+      "NewModelsButton" : {
+        "label" : "Uued mudelid",
+        "help" : "Loo uute mudelite seadistus"
+      },
+      "NewModelsDialog" : {
+        "label" : "Lisa uued mudelid"
+      },
+      "baseUrl" : {
+        "label" : "API baasaadress",
+        "help" : "Pakkuja API teenuste baasaadress"
+      },
+      "ModelTypePanel" : {
+        "label" : "Lisa uued mudelid"
+      },
+      "ModelsChoices" : {
+        "label" : "Mudelivalikud"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Soovitatud mudelite valik"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Sisseehituse mudel",
+        "help" : "Vali üks eelmääratletud sisseehituse mudelitest"
+      },
+      "chatPresetChoice" : {
+        "label" : "Vestlusmudel",
+        "help" : "Vali üks eelmääratletud vestlusmudelitest"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Täiustatud mudelite valik"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Sisseehituse mudel",
+        "help" : "Vali üks pakkuja avaldatud sisseehituse mudelitest"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Vestlusmudel",
+        "help" : "Vali üks pakkuja avaldatud vestlusmudelitest"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Kasuta seda valikurežiimi ainult juhul, kui oled ekspert või oled pakkuja kodulehelt vaadanud, millised mudelid sobivad sinu vajadustele. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "määra vaikimisi vestlusmudeliks",
+        "help" : "Määra see mudel vaikimisi mudeliks. Seda kasutatakse kõikides ülesannetes, mille jaoks muud vestlusmudelit pole seadistatud"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Soovitame järgmist mudelite nimekirja "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "määra vaikimisi sisseehituse mudeliks",
+        "help" : "Määra see mudel vaikimisi mudeliks. Seda kasutatakse kõikides ülesannetes, mille jaoks muud sisseehituse mudelit pole seadistatud"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "määra vaikimisi vestlusmudeliks",
+        "help" : "Määra see mudel vaikimisi mudeliks. Seda kasutatakse kõikides ülesannetes, mille jaoks muud vestlusmudelit pole seadistatud"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "määra vaikimisi sisseehituse mudeliks",
+        "help" : "Määra see mudel vaikimisi mudeliks. Seda kasutatakse kõikides ülesannetes, mille jaoks muud sisseehituse mudelit pole seadistatud"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Kasuta seda valikurežiimi ainult juhul, kui oled ekspert või oled pakkuja kodulehelt vaadanud, millised mudelid sobivad sinu vajadustele. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Loo ja aktiveeri"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Loo ja aktiveeri"
+      },
+      "ProviderNameField" : {
+        "label" : "Pakkuja"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI kaugpakkuja OK",
+        "detail" : "Pakkuja töötab ja on edukalt seadistatud"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Tegevus ebaõnnestus",
+        "detail" : "Ei saanud esitatud mandaate autentida"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Tegevus õnnestus"
       }
     }
   }

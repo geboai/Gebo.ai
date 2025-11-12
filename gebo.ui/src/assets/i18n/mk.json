@@ -78,6 +78,12 @@
         "summary" : "Во ред!",
         "detail" : "Операцијата е успешно завршена"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Добредојдовте во Gebo.ai",
+        "detail" : "Внесете корисничко име и лозинка за најавување"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Конфигурирај барем еден \"R.A.G.\" профил за разговор",
         "description" : "Конфигурирајте барем еден профил за збогатен разговор за вашите корисници врз основа на некоја од конфигурираните бази на знаење"
+      },
+      "mandatory-done" : {
+        "summary" : "Задолжителните чекори за подесување на Gebo.ai се завршени...",
+        "detail" : "Задолжителните чекори за подесување се завршени, но некои пропуштени чекори го спречуваат вашето организација да ги искористи сите предности од овој софтвер"
+      },
+      "setup-ok" : {
+        "summary" : "Подесувањето на Gebo.ai е успешно!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Недостасува задолжителен чекор во подесувањето на Gebo.ai",
+        "detail" : "Прегледајте ги обележаните (црвени) чекори во процесот на подесување"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Основен модел"
+      },
+      "MainPanelHeader" : {
+        "label" : "Поставете пристап до добавувачи на llms за Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "отвори форма за проект"
+      },
+      "Button3" : {
+        "help" : "отвори извор на податоци"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai подесувањето е успешно!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Додади нов R.A.G. чет профил"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Додади R.A.G. чет профил"
+      },
+      "MainPanel" : {
+        "label" : "Поставки за профили за R.A.G. (дополнето генерирање) чет"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Постоечки R.A.G. чет профили"
+      },
+      "DescriptionHeader" : {
+        "label" : "Опис"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Уреди R.A.G. чет профил"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Кодови на бази на знаење"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Обработени документи",
         "dataset-2-label" : "Документи со грешка",
         "dataset-3-label" : "Одбиени документи"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Купи линк за apy клуч кредит"
+      },
+      "ModifyBtn" : {
+        "label" : "Измени",
+        "help" : "Види/измени конфигурација на модел"
+      },
+      "ExistingModelCode" : {
+        "label" : "Код"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Опис"
+      },
+      "ExistingModelType" : {
+        "label" : "Тип на модел"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Постоечки конфигурации"
+      },
+      "ProviderWWW" : {
+        "label" : "Линк до веб страница"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Пријава на добавувач"
+      },
+      "ProviderInfos" : {
+        "label" : "Информации за добавувачот"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api клуч/пријава",
+        "help" : "Изберете api клуч или пријава за овој добавувач"
+      },
+      "NewApiKey" : {
+        "label" : "Нов api клуч",
+        "help" : "Внесете нов api клуч кој ќе се користи за овој добавувач"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Користи постоечки или нови",
+        "help" : "Користете постоечки или креирајте нови податоци за најавување за овој добавувач"
+      },
+      "NewUserName" : {
+        "label" : "Корисничко име",
+        "help" : "Корисничко име за пристап до услуги на давателот"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Нов embedding модел",
+        "help" : "Креирајте нова конфигурација за embedding модел"
+      },
+      "NewChatModel" : {
+        "label" : "Нов чет модел",
+        "help" : "Креирајте нова конфигурација за чет модел"
+      },
+      "NewModelDialog" : {
+        "label" : "Додади нов модел"
+      },
+      "PiSave" : {
+        "label" : "Зачувај"
+      },
+      "NewModelsButton" : {
+        "label" : "Нови модели",
+        "help" : "Креирајте нова конфигурација за модели"
+      },
+      "NewModelsDialog" : {
+        "label" : "Додади нови модели"
+      },
+      "baseUrl" : {
+        "label" : "Основен api url",
+        "help" : "Основен url за api услуги на добавувачот"
+      },
+      "ModelTypePanel" : {
+        "label" : "Додади нови модели"
+      },
+      "ModelsChoices" : {
+        "label" : "Избор на модели"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Препорачана селекција на модели"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding модел",
+        "help" : "Изберете еден од предефинираните embedding модели"
+      },
+      "chatPresetChoice" : {
+        "label" : "Модел за чет",
+        "help" : "Изберете еден од предефинираните чет модели"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Напредна селекција на модели"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding модел",
+        "help" : "Изберете еден од embedding моделите објавени од добавувачот"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Модел за чет",
+        "help" : "Изберете еден од чет моделите објавени од добавувачот"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Користете го овој режим на избор само ако сте експерт или со проверка на сајтот на добавувачот кои модели одговараат за вашите потреби. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "постави како стандардeн чет модел",
+        "help" : "Поставете го овој модел како стандард, ќе се користи за сите задачи за кои не е конфигуриран друг чет модел"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Ги препорачуваме следните модели "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "постави како стандардeн embedding модел",
+        "help" : "Поставете го овој модел како стандард, ќе се користи за сите задачи за кои не е конфигуриран друг embedding модел"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "постави како стандардeн чет модел",
+        "help" : "Поставете го овој модел како стандард, ќе се користи за сите задачи за кои не е конфигуриран друг чет модел"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "постави како стандардeн embedding модел",
+        "help" : "Поставете го овој модел како стандард, ќе се користи за сите задачи за кои не е конфигуриран друг embedding модел"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Користете го овој режим на избор само ако сте експерт или со проверка на сајтот на добавувачот кои модели одговараат за вашите потреби. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Креирај и активирај"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Креирај и активирај"
+      },
+      "ProviderNameField" : {
+        "label" : "Давател"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI оддалечениот давател е во ред",
+        "detail" : "Давателот работи и е успешно конфигуриран"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Операцијата не успеа",
+        "detail" : "Не може да се автентифицира со дадените податоци"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Во ред!",
+        "detail" : "Операцијата е успешно завршена"
       }
     }
   }

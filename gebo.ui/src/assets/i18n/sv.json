@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Åtgärden slutfördes"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Välkommen till gebo.ai",
+        "detail" : "Ange ditt användarnamn och lösenord för att logga in"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Konfigurera minst en \"R.A.G.\" chattprofil",
         "description" : "Konfigurera minst en retrieval augmented chattprofil för dina användare baserad på någon av dina konfigurerade kunskapsbaser"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai inställningar obligatoriska steg klara...",
+        "detail" : "Obligatoriska installationssteg har slutförts, men några saknade steg förhindrar din organisation från att få ut det mesta av denna programvara"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai inställning OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai inställningar saknar något obligatoriskt steg",
+        "detail" : "Vänligen granska de röda stegen i installationsprocessen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Standardmodell"
+      },
+      "MainPanelHeader" : {
+        "label" : "Ställ in Gebo.ai llms leverantörsåtkomst"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "öppna projektformulär"
+      },
+      "Button3" : {
+        "help" : "öppna datakälla"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai installation OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Lägg till ny R.A.G. chattprofil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Lägg till R.A.G. chattprofil"
+      },
+      "MainPanel" : {
+        "label" : "Hämta inställningar för augmented generation (r.a.g.) chattprofiler"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Befintliga R.A.G. chattprofiler"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivning"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Redigera R.A.G. chattprofil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kunskapsbaskoder"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Behandlade dokument",
         "dataset-2-label" : "Feldokument",
         "dataset-3-label" : "Kasserade dokument"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Köp länk till Apy key kredit"
+      },
+      "ModifyBtn" : {
+        "label" : "Ändra",
+        "help" : "Visa/ändra modellkonfiguration"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Beskrivning"
+      },
+      "ExistingModelType" : {
+        "label" : "Modelltyp"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Befintliga konfigurationer"
+      },
+      "ProviderWWW" : {
+        "label" : "Webbplatslänk"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Leverantörsinloggningar"
+      },
+      "ProviderInfos" : {
+        "label" : "Leverantörsinformation"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-nyckel/inloggningar",
+        "help" : "Välj api-nyckel eller inloggning för denna leverantör"
+      },
+      "NewApiKey" : {
+        "label" : "Ny api-nyckel",
+        "help" : "Ange en ny api-nyckel som ska användas för denna leverantör"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Använd befintliga eller nya",
+        "help" : "Använd befintliga eller skapa nya inloggningar till denna leverantör"
+      },
+      "NewUserName" : {
+        "label" : "Användarnamn",
+        "help" : "Användarnamn som används för att komma åt leverantörstjänster"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Ny embeddingmodell",
+        "help" : "Skapa en ny embeddingmodellkonfiguration"
+      },
+      "NewChatModel" : {
+        "label" : "Ny chattmodell",
+        "help" : "Skapa en ny chattmodellkonfiguration"
+      },
+      "NewModelDialog" : {
+        "label" : "Lägg till ny modell"
+      },
+      "PiSave" : {
+        "label" : "Spara"
+      },
+      "NewModelsButton" : {
+        "label" : "Nya modeller",
+        "help" : "Skapa ny modellkonfiguration"
+      },
+      "NewModelsDialog" : {
+        "label" : "Lägg till nya modeller"
+      },
+      "baseUrl" : {
+        "label" : "Bas-url för api",
+        "help" : "Bas-url för leverantörens api-tjänster"
+      },
+      "ModelTypePanel" : {
+        "label" : "Lägg till nya modeller"
+      },
+      "ModelsChoices" : {
+        "label" : "Modellval"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Föreslagen modellval"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embeddingmodell",
+        "help" : "Välj en av de fördefinierade embeddingmodellerna"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chattmodell",
+        "help" : "Välj en av de fördefinierade chattmodellerna"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Avancerad modellval"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embeddingmodell",
+        "help" : "Välj en av leverantörens publicerade embeddingmodeller"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chattmodell",
+        "help" : "Välj en av leverantörens publicerade chattmodeller"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Använd detta val endast om du är expert eller genom att kontrollera på leverantörens webbplats vilka modeller som passar dina behov. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "sätt som standardchattmodell",
+        "help" : "Ställ in denna modell som standard, den används för alla uppgifter där ingen annan chattmodell är vald"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Vi föreslår följande modeller "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "sätt som standard embeddingmodell",
+        "help" : "Ställ in denna modell som standard, den används för alla uppgifter där ingen annan embeddingmodell är vald"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "sätt som standardchattmodell",
+        "help" : "Ställ in denna modell som standard, den används för alla uppgifter där ingen annan chattmodell är vald"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "sätt som standard embeddingmodell",
+        "help" : "Ställ in denna modell som standard, den används för alla uppgifter där ingen annan embeddingmodell är vald"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Använd detta val endast om du är expert eller genom att kontrollera på leverantörens webbplats vilka modeller som passar dina behov. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Skapa och aktivera"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Skapa och aktivera"
+      },
+      "ProviderNameField" : {
+        "label" : "Leverantör"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjärrleverantör OK",
+        "detail" : "Leverantören är igång och framgångsrikt konfigurerad"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Åtgärden misslyckades",
+        "detail" : "Kan inte autentisera med angivna inloggningar"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Åtgärden genomfördes framgångsrikt"
       }
     }
   }

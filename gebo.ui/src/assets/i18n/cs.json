@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operace byla úspěšná"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Vítejte v gebo.ai",
+        "detail" : "Zadejte své uživatelské jméno a heslo pro přihlášení"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Nastavte alespoň jeden \"R.A.G.\" chat profil",
         "description" : "Nastavte alespoň jeden retrieve augmented chat profil pro uživatele na základě jedné z vašich nakonfigurovaných znalostních bází"
+      },
+      "mandatory-done" : {
+        "summary" : "Povinné kroky nastavení Gebo.ai hotovy...",
+        "detail" : "Povinné kroky nastavení byly dokončeny, ale některé chybějící kroky brání vaší organizaci využít tento software naplno"
+      },
+      "setup-ok" : {
+        "summary" : "Nastavení Gebo.ai je v pořádku!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Nastavení Gebo.ai chybí nějaký povinný krok",
+        "detail" : "Zkontrolujte červené kroky v procesu nastavení"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Výchozí model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Nastavení přístupu poskytovatelů llms pro Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "otevřít projektový formulář"
+      },
+      "Button3" : {
+        "help" : "otevřít zdroj dat"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Nastavení Gebo.ai je v pořádku!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Přidat nový R.A.G. chat profil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Přidat R.A.G. chat profil"
+      },
+      "MainPanel" : {
+        "label" : "Nastavení profilů chatů s rozšířenou generací (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Existující R.A.G. chat profily"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Upravit R.A.G. chat profil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kódy znalostní báze"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Zpracované dokumenty",
         "dataset-2-label" : "Chybné dokumenty",
         "dataset-3-label" : "Vyřazené dokumenty"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Odkaz na koupi kreditu Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Upravit",
+        "help" : "Zobrazit/upravit konfiguraci modelu"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kód"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Popis"
+      },
+      "ExistingModelType" : {
+        "label" : "Typ modelu"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Existující konfigurace"
+      },
+      "ProviderWWW" : {
+        "label" : "Odkaz na web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Přihlašovací údaje poskytovatele"
+      },
+      "ProviderInfos" : {
+        "label" : "Informace o poskytovateli"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api klíč/přihlašovací údaje",
+        "help" : "Vyberte api klíč nebo přihlašovací údaje pro tohoto poskytovatele"
+      },
+      "NewApiKey" : {
+        "label" : "Nový api klíč",
+        "help" : "Zadejte nový api klíč pro tohoto poskytovatele"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Použít existující nebo nové",
+        "help" : "Použijte existující nebo vytvořte nové údaje pro tohoto poskytovatele"
+      },
+      "NewUserName" : {
+        "label" : "Uživatelské jméno",
+        "help" : "Uživatelské jméno používané pro přístup ke službám poskytovatele"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nový embedding model",
+        "help" : "Vytvořit novou konfiguraci embedding modelu"
+      },
+      "NewChatModel" : {
+        "label" : "Nový chat model",
+        "help" : "Vytvořit novou konfiguraci chat modelu"
+      },
+      "NewModelDialog" : {
+        "label" : "Přidat nový model"
+      },
+      "PiSave" : {
+        "label" : "Uložit"
+      },
+      "NewModelsButton" : {
+        "label" : "Nové modely",
+        "help" : "Vytvořit novou konfiguraci modelů"
+      },
+      "NewModelsDialog" : {
+        "label" : "Přidat nové modely"
+      },
+      "baseUrl" : {
+        "label" : "Základní api url",
+        "help" : "Základní url pro api služby poskytovatele"
+      },
+      "ModelTypePanel" : {
+        "label" : "Přidat nové modely"
+      },
+      "ModelsChoices" : {
+        "label" : "Výběr modelů"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Doporučený výběr modelů"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Vyberte jeden z předdefinovaných embedding modelů"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat model",
+        "help" : "Vyberte jeden z předdefinovaných chat modelů"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Pokročilý výběr modelů"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Vyberte jeden z embedding modelů zveřejněných poskytovatelem"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat model",
+        "help" : "Vyberte jeden z chat modelů zveřejněných poskytovatelem"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Tento režim výběru používejte pouze pokud jste zkušený nebo si ověřte na webu poskytovatele, které modely vyhovují vašim potřebám. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "nastavit jako výchozí chat model",
+        "help" : "Nastavit tento model jako výchozí, bude použit pro všechny úlohy, pro které není nastaven jiný chat model"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Doporučujeme vám tento seznam modelů "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "nastavit jako výchozí embedding model",
+        "help" : "Nastavit tento model jako výchozí, bude použit pro všechny úlohy, pro které není nastaven jiný embedding model"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "nastavit jako výchozí chat model",
+        "help" : "Nastavit tento model jako výchozí, bude použit pro všechny úlohy, pro které není nastaven jiný chat model"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "nastavit jako výchozí embedding model",
+        "help" : "Nastavit tento model jako výchozí, bude použit pro všechny úlohy, pro které není nastaven jiný embedding model"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Tento režim výběru používejte pouze pokud jste zkušený nebo si ověřte na webu poskytovatele, které modely vyhovují vašim potřebám. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Vytvořit a aktivovat"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Vytvořit a aktivovat"
+      },
+      "ProviderNameField" : {
+        "label" : "Poskytovatel"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Vzdálený AI poskytovatel je v pořádku",
+        "detail" : "Poskytovatel je v provozu a úspěšně nakonfigurován"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operace selhala",
+        "detail" : "Nelze se ověřit pomocí zadaných údajů"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operace byla úspěšně dokončena"
       }
     }
   }

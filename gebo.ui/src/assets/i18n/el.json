@@ -78,6 +78,12 @@
         "summary" : "Εντάξει!",
         "detail" : "Η λειτουργία ολοκληρώθηκε με επιτυχία"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Καλωσήρθατε στο gebo.ai",
+        "detail" : "Εισάγετε το όνομα χρήστη και τον κωδικό σας για να συνδεθείτε"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Ρυθμίστε τουλάχιστον ένα προφίλ συνομιλίας \"R.A.G.\"",
         "description" : "Ρυθμίστε τουλάχιστον ένα προφίλ augmented συνομιλίας για τους χρήστες σας βασισμένο σε μία από τις ρυθμισμένες βάσεις γνώσης"
+      },
+      "mandatory-done" : {
+        "summary" : "Οι υποχρεωτικές ρυθμίσεις του Gebo.ai ολοκληρώθηκαν...",
+        "detail" : "Οι υποχρεωτικές ρυθμίσεις έχουν ολοκληρωθεί, αλλά κάποιες ελλείψεις εμποδίζουν την οργάνωσή σας να αξιοποιήσει πλήρως αυτή την εφαρμογή"
+      },
+      "setup-ok" : {
+        "summary" : "Η ρύθμιση του Gebo.ai ολοκληρώθηκε!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Λείπουν κάποιες υποχρεωτικές ρυθμίσεις του Gebo.ai",
+        "detail" : "Παρακαλώ ελέγξτε τα βήματα με κόκκινο στη διαδικασία ρύθμισης"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Προεπιλεγμένο μοντέλο"
+      },
+      "MainPanelHeader" : {
+        "label" : "Ρύθμιση πρόσβασης παρόχων llms σε Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "άνοιγμα φόρμας έργου"
+      },
+      "Button3" : {
+        "help" : "άνοιγμα πηγής δεδομένων"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Η εγκατάσταση του Gebo.ai ΟΚ!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Προσθήκη νέου προφίλ συνομιλίας R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Προσθήκη προφίλ συνομιλίας R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Ανάκτηση ρυθμίσεων προφίλ συνομιλίας augmented generation (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Κωδικός"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Υπάρχοντα προφίλ συνομιλίας R.A.G."
+      },
+      "DescriptionHeader" : {
+        "label" : "Περιγραφή"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Επεξεργασία προφίλ συνομιλίας R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Κωδικοί γνωσιακής βάσης"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Επεξεργασμένα έγγραφα",
         "dataset-2-label" : "Έγγραφα με σφάλμα",
         "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Σύνδεσμος αγοράς credit για Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Τροποποίηση",
+        "help" : "Προβολή/τροποποίηση ρύθμισης μοντέλου"
+      },
+      "ExistingModelCode" : {
+        "label" : "Κωδικός"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Περιγραφή"
+      },
+      "ExistingModelType" : {
+        "label" : "Τύπος μοντέλου"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Υπάρχουσες ρυθμίσεις"
+      },
+      "ProviderWWW" : {
+        "label" : "Σύνδεσμος ιστότοπου"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Διαπιστευτήρια παρόχου"
+      },
+      "ProviderInfos" : {
+        "label" : "Πληροφορίες παρόχου"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/διαπιστευτήρια",
+        "help" : "Επιλέξτε api key ή διαπιστευτήρια για αυτόν τον πάροχο"
+      },
+      "NewApiKey" : {
+        "label" : "Νέο api key",
+        "help" : "Εισάγετε ένα νέο api key για χρήση με αυτόν τον πάροχο"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Χρήση υπαρχόντων ή νέων",
+        "help" : "Χρησιμοποιήστε υπάρχοντα ή δημιουργήστε νέα διαπιστευτήρια για αυτόν τον πάροχο"
+      },
+      "NewUserName" : {
+        "label" : "Όνομα χρήστη",
+        "help" : "Το όνομα χρήστη για πρόσβαση στις υπηρεσίες του παρόχου"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Νέο embedding μοντέλο",
+        "help" : "Δημιουργήστε νέα ρύθμιση embedding μοντέλου"
+      },
+      "NewChatModel" : {
+        "label" : "Νέο μοντέλο συνομιλίας",
+        "help" : "Δημιουργήστε νέα ρύθμιση chat μοντέλου"
+      },
+      "NewModelDialog" : {
+        "label" : "Προσθήκη νέου μοντέλου"
+      },
+      "PiSave" : {
+        "label" : "Αποθήκευση"
+      },
+      "NewModelsButton" : {
+        "label" : "Νέα μοντέλα",
+        "help" : "Δημιουργία ρύθμισης νέων μοντέλων"
+      },
+      "NewModelsDialog" : {
+        "label" : "Προσθήκη νέων μοντέλων"
+      },
+      "baseUrl" : {
+        "label" : "Βασικό api url",
+        "help" : "Βασική διεύθυνση url για τα api του παρόχου"
+      },
+      "ModelTypePanel" : {
+        "label" : "Προσθήκη νέων μοντέλων"
+      },
+      "ModelsChoices" : {
+        "label" : "Επιλογές μοντέλων"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Επιλογή προτεινόμενων μοντέλων"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding μοντέλο",
+        "help" : "Επιλέξτε ένα από τα προκαθορισμένα embedding μοντέλα"
+      },
+      "chatPresetChoice" : {
+        "label" : "Μοντέλο συνομιλίας",
+        "help" : "Επιλέξτε ένα από τα προκαθορισμένα chat μοντέλα"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Επιλογή προχωρημένων μοντέλων"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding μοντέλο",
+        "help" : "Επιλέξτε ένα από τα embedding μοντέλα που έχει δημοσιεύσει ο πάροχος"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Μοντέλο συνομιλίας",
+        "help" : "Επιλέξτε ένα από τα chat μοντέλα που έχει δημοσιεύσει ο πάροχος"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Χρησιμοποιήστε αυτή τη λειτουργία επιλογής μόνο αν είστε ειδικός ή αν ελέγχετε στον ιστότοπο του προμηθευτή ποια μοντέλα καλύπτουν τις ανάγκες σας. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ορισμός ως προεπιλεγμένο μοντέλο συνομιλίας",
+        "help" : "Ορίστε αυτό το μοντέλο ως προεπιλογή. Θα χρησιμοποιείται για κάθε εργασία που δεν έχει ρυθμιστεί άλλο μοντέλο συνομιλίας"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Σας προτείνουμε την παρακάτω λίστα μοντέλων "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ορισμός ως προεπιλεγμένο embedding μοντέλο",
+        "help" : "Ορίστε αυτό το μοντέλο ως προεπιλογή. Θα χρησιμοποιείται για κάθε εργασία που δεν έχει ρυθμιστεί άλλο embedding μοντέλο"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ορισμός ως προεπιλεγμένο μοντέλο συνομιλίας",
+        "help" : "Ορίστε αυτό το μοντέλο ως προεπιλογή. Θα χρησιμοποιείται για κάθε εργασία που δεν έχει ρυθμιστεί άλλο μοντέλο συνομιλίας"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ορισμός ως προεπιλεγμένο embedding μοντέλο",
+        "help" : "Ορίστε αυτό το μοντέλο ως προεπιλογή. Θα χρησιμοποιείται για κάθε εργασία που δεν έχει ρυθμιστεί άλλο embedding μοντέλο"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Χρησιμοποιήστε αυτή τη λειτουργία επιλογής μόνο αν είστε ειδικός ή αν ελέγχετε στον ιστότοπο του προμηθευτή ποια μοντέλα καλύπτουν τις ανάγκες σας. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Δημιουργία και ενεργοποίηση"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Δημιουργία και ενεργοποίηση"
+      },
+      "ProviderNameField" : {
+        "label" : "Πάροχος"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Απομακρυσμένος πάροχος AI OK",
+        "detail" : "Ο πάροχος λειτουργεί και διαμορφώθηκε με επιτυχία"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Η λειτουργία απέτυχε",
+        "detail" : "Αδυναμία ταυτοποίησης με τα δοθέντα διαπιστευτήρια"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
       }
     }
   }

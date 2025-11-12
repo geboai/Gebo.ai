@@ -78,6 +78,12 @@
         "summary" : "Í lagi!",
         "detail" : "Aðgerð tókst"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Velkomin í gebo.ai",
+        "detail" : "Sláðu inn notendanafn og lykilorð til að skrá þig inn"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Setja upp að minnsta kosti „R.A.G.“ spjallprófíl",
         "description" : "Stilltu að minnsta kosti einn aukinn spjallprófíl fyrir notendur byggðum á einum af þínum stilltu þekkingargrunnum"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai uppsetningar-skylduskref kláruð...",
+        "detail" : "Skylduuppsetningarskrefunum hefur verið lokið en einhver vantar sem koma í veg fyrir að ykkar fyrirtæki fái sem mest út úr hugbúnaðinum"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai uppsetning í lagi!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Það vantar skylduskref í gebo.ai uppsetningu",
+        "detail" : "Vinsamlega skoðaðu rauðu skrefin í uppsetningarferlinu"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Sjálfgefið módel"
+      },
+      "MainPanelHeader" : {
+        "label" : "Stilla aðgang að Gebo.ai llms veitendum"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "opna verkefnaform"
+      },
+      "Button3" : {
+        "help" : "opna gagnaveitu"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai uppsetning í lagi!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Bæta við nýjum R.A.G. spjallprófíl"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Bæta við R.A.G. spjallprófíl"
+      },
+      "MainPanel" : {
+        "label" : "Ná í stillingar fyrir aukna kynslóð (r.a.g.) spjallprófíla"
+      },
+      "CodeHeader" : {
+        "label" : "Kóði"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Núverandi R.A.G. spjallprófílar"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Breyta R.A.G. spjallprófíl"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kóðar þekkingargrunns"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Meðhöndluð skjöl",
         "dataset-2-label" : "Skjöl með villu",
         "dataset-3-label" : "Feld skjöl"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Kaupa Apy lykilsinneign tengil"
+      },
+      "ModifyBtn" : {
+        "label" : "Breyta",
+        "help" : "Skoða/breyta stillingum líkans"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kóði"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Lýsing"
+      },
+      "ExistingModelType" : {
+        "label" : "Líkangerð"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Núverandi stillingar"
+      },
+      "ProviderWWW" : {
+        "label" : "Vefslóð"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Aðgangsupplýsingar veitanda"
+      },
+      "ProviderInfos" : {
+        "label" : "Upplýsingar um veitanda"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api lykill/aðgangsuppl.",
+        "help" : "Veldu api lykil eða aðgangsupplýsingar fyrir þennan veitanda"
+      },
+      "NewApiKey" : {
+        "label" : "Nýr api lykill",
+        "help" : "Settu inn nýjan api lykil fyrir þennan veitanda"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Nota núverandi eða búa til nýtt",
+        "help" : "Notaðu núverandi eða búðu til nýjar aðgangsupplýsingar fyrir þennan veitanda"
+      },
+      "NewUserName" : {
+        "label" : "Notandanafn",
+        "help" : "Notandanafn sem er notað til að fá aðgang að þjónustu veitanda"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nýtt niðursetningarlíkan",
+        "help" : "Búa til nýjar stillingar fyrir niðursetningarlíkan"
+      },
+      "NewChatModel" : {
+        "label" : "Nýtt spjalllíkan",
+        "help" : "Búa til nýtt samtalslíkan"
+      },
+      "NewModelDialog" : {
+        "label" : "Bæta við nýju líkani"
+      },
+      "PiSave" : {
+        "label" : "Vista"
+      },
+      "NewModelsButton" : {
+        "label" : "Ný líkön",
+        "help" : "Búa til nýja líkansstillingu"
+      },
+      "NewModelsDialog" : {
+        "label" : "Bæta við nýjum líkönum"
+      },
+      "baseUrl" : {
+        "label" : "Grunn api slóð",
+        "help" : "Grunnslóð fyrir api þjónustu veitandans"
+      },
+      "ModelTypePanel" : {
+        "label" : "Bæta við nýjum líkönum"
+      },
+      "ModelsChoices" : {
+        "label" : "Valmöguleikar líkans"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Mælt er með vali á líkönum"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Niðursetningarlíkan",
+        "help" : "Veldu eitt af fyrirfram skilgreindum niðursetningarlíkönum"
+      },
+      "chatPresetChoice" : {
+        "label" : "Spjalllíkan",
+        "help" : "Veldu eitt af fyrirfram skilgreindum spjalllíkönum"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Ítarlegt líkanaval"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Niðursetningarlíkan",
+        "help" : "Veldu eitt af þeim niðursetningarlíkönum sem veitandi hefur birt"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Spjalllíkan",
+        "help" : "Veldu eitt af þeim spjalllíkönum sem veitandi hefur birt"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Notaðu þennan valmöguleika aðeins ef þú hefur reynslu eða skoðar á vef veitanda hvaða líkön henta þínum þörfum. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið spjalllíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað spjalllíkan er skilgreint"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Við mælum með eftirfarandi línasafni "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið niðursetningarlíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað niðursetningarlíkan er valið"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið spjalllíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað spjalllíkan er skilgreint"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið niðursetningarlíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað niðursetningarlíkan er valið"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Notaðu þennan valmöguleika aðeins ef þú hefur reynslu eða skoðar á vef veitanda hvaða líkön henta þínum þörfum. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Búa til og virkja"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Búa til og virkja"
+      },
+      "ProviderNameField" : {
+        "label" : "Veirandi"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjaraðgangsveita í lagi",
+        "detail" : "Veitandi er í gagni og hefur verið rétt stilltur"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Aðgerð mistókst",
+        "detail" : "Ekki tókst að auðkenna með gefnum aðgangsupplýsingum"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Í lagi!",
+        "detail" : "Aðgerð heppnaðist"
       }
     }
   }

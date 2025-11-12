@@ -78,6 +78,12 @@
         "summary" : "V redu!",
         "detail" : "Operacija je bila uspešno izvedena"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Dobrodošli v gebo.ai",
+        "detail" : "Vnesite svoje uporabniško ime in geslo za prijavo"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Nastavite vsaj en \"R.A.G.\" profil za klepet",
         "description" : "Nastavite vsaj en profil za razširjeni klepet glede na eno izmed vaših konfiguriranih baz znanja"
+      },
+      "mandatory-done" : {
+        "summary" : "Obvezni koraki nastavitve Gebo.ai so opravljeni...",
+        "detail" : "Obvezni koraki nastavitve so zaključeni, vendar nekateri manjkajoči koraki vaši organizaciji preprečujejo polno izkušnjo s to programsko opremo"
+      },
+      "setup-ok" : {
+        "summary" : "Nastavitev Gebo.ai je uspešna!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Pri nastavitvi Gebo.ai manjka kakšen obvezen korak",
+        "detail" : "Preglejte rdeče korake postopka nastavitve"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Privzeti model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Nastavite dostop do ponudnikov llms za Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "odpri obrazec projekta"
+      },
+      "Button3" : {
+        "help" : "odpri vir podatkov"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Nastavitev Gebo.ai je uspešna!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Dodaj nov R.A.G. profil za klepet"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Dodaj R.A.G. profil za klepet"
+      },
+      "MainPanel" : {
+        "label" : "Pridobi nastavitve za profile klepeta z razširjeno generacijo (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Koda"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Obstoječi R.A.G. profili za klepet"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Uredi R.A.G. profil za klepet"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kode baze znanja"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Obdelani dokumenti",
         "dataset-2-label" : "Dokumenti z napako",
         "dataset-3-label" : "Zavrnjeni dokumenti"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Povezava za nakup kredita za apy ključ"
+      },
+      "ModifyBtn" : {
+        "label" : "Spremeni",
+        "help" : "Poglej/uredi konfiguracijo modela"
+      },
+      "ExistingModelCode" : {
+        "label" : "Koda"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Opis"
+      },
+      "ExistingModelType" : {
+        "label" : "Tip modela"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Obstoječe konfiguracije"
+      },
+      "ProviderWWW" : {
+        "label" : "Povezava na spletno stran"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Poverilnice ponudnika"
+      },
+      "ProviderInfos" : {
+        "label" : "Informacije o ponudniku"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ključ/pooblastila",
+        "help" : "Izberite api ključ ali pooblastila za tega ponudnika"
+      },
+      "NewApiKey" : {
+        "label" : "Nov api ključ",
+        "help" : "Vnesite nov api ključ, ki bo uporabljen s tem ponudnikom"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Uporabi obstoječe ali ustvari nove",
+        "help" : "Uporabite obstoječe ali ustvarite nova pooblastila za tega ponudnika"
+      },
+      "NewUserName" : {
+        "label" : "Uporabniško ime",
+        "help" : "Uporabniško ime za dostop do storitev ponudnika"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nov model za vdelavo",
+        "help" : "Ustvarite novo konfiguracijo modela za vdelavo"
+      },
+      "NewChatModel" : {
+        "label" : "Nov model za klepet",
+        "help" : "Ustvarite novo konfiguracijo modela za klepet"
+      },
+      "NewModelDialog" : {
+        "label" : "Dodaj nov model"
+      },
+      "PiSave" : {
+        "label" : "Shrani"
+      },
+      "NewModelsButton" : {
+        "label" : "Novi modeli",
+        "help" : "Ustvari novo konfiguracijo modelov"
+      },
+      "NewModelsDialog" : {
+        "label" : "Dodaj nove modele"
+      },
+      "baseUrl" : {
+        "label" : "Osnovni url za api",
+        "help" : "Osnovni url za storitve api tega ponudnika"
+      },
+      "ModelTypePanel" : {
+        "label" : "Dodaj nove modele"
+      },
+      "ModelsChoices" : {
+        "label" : "Izbira modelov"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Priporočena izbira modelov"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model za vdelavo",
+        "help" : "Izberite enega od vnaprej določenih modelov za vdelavo"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model za klepet",
+        "help" : "Izberite enega od vnaprej določenih modelov za klepet"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Napredna izbira modelov"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model za vdelavo",
+        "help" : "Izberite enega od modelov za vdelavo, ki jih je objavil ponudnik"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model za klepet",
+        "help" : "Izberite enega od modelov za klepet, ki jih je objavil ponudnik"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " To možnost izbire uporabite samo, če ste strokovnjak ali če preverite na spletni strani ponudnika, kateri modeli ustrezajo vašim potrebam. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "nastavi kot privzeti model za klepet",
+        "help" : "Nastavite ta model kot privzet, uporabljen bo za vsako nalogo, za katero ni posebej nastavljen drug model za klepet"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Priporočamo vam naslednji seznam modelov "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "nastavi kot privzeti model za vdelavo",
+        "help" : "Nastavite ta model kot privzet, uporabljen bo za vsako nalogo, za katero ni posebej nastavljen drug model za vdelavo"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "nastavi kot privzeti model za klepet",
+        "help" : "Nastavite ta model kot privzet, uporabljen bo za vsako nalogo, za katero ni posebej nastavljen drug model za klepet"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "nastavi kot privzeti model za vdelavo",
+        "help" : "Nastavite ta model kot privzet, uporabljen bo za vsako nalogo, za katero ni posebej nastavljen drug model za vdelavo"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " To možnost izbire uporabite samo, če ste strokovnjak ali če preverite na spletni strani ponudnika, kateri modeli ustrezajo vašim potrebam. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Ustvari in aktiviraj"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Ustvari in aktiviraj"
+      },
+      "ProviderNameField" : {
+        "label" : "Ponudnik"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI oddaljeni ponudnik OK",
+        "detail" : "Ponudnik je aktiven in uspešno nastavljen"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacija ni uspela",
+        "detail" : "Ni mogoče potrditi pristnosti s podanimi pooblastili"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "V redu!",
+        "detail" : "Operacija je bila uspešno izvedena"
       }
     }
   }

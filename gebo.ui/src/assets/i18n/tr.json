@@ -78,6 +78,12 @@
         "summary" : "Tamam!",
         "detail" : "İşlem başarıyla tamamlandı"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Gebo.ai'ye hoş geldiniz",
+        "detail" : "Giriş yapmak için kullanıcı adınızı ve şifrenizi girin"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "En az bir \"R.A.G.\" sohbet profili yapılandırın",
         "description" : "Kullanıcılarınız için yapılandırılmış bilgi tabanlarınızdan birine dayalı olarak en az bir retrieve augmented sohbet profili yapılandırın"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai kurulumu zorunlu adımlar tamamlandı...",
+        "detail" : "Zorunlu kurulum adımları tamamlandı ancak bazı eksik adımlar, kuruluşunuzun bu yazılımdan en iyi şekilde yararlanmasını engelliyor"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai kurulumu tamam!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai kurulumu bazı zorunlu adımları eksik",
+        "detail" : "Lütfen kurulum sürecinin kırmızı adımlarını inceleyin"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Varsayılan model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms sağlayıcılarına erişimi yapılandır"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "proje formunu aç"
+      },
+      "Button3" : {
+        "help" : "veri kaynağını aç"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai kurulumu tamamlandı!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Yeni R.A.G. sohbet profili ekle"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. sohbet profili ekle"
+      },
+      "MainPanel" : {
+        "label" : "Artırılmış üretim (r.a.g.) sohbet profili ayarlarını getir"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Mevcut R.A.G. sohbet profilleri"
+      },
+      "DescriptionHeader" : {
+        "label" : "Açıklama"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. sohbet profilini düzenle"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Bilgi tabanı kodları"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "İşlenen belgeler",
         "dataset-2-label" : "Hatalı belgeler",
         "dataset-3-label" : "Atılan belgeler"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Api anahtarı kredi bağlantısı satın al"
+      },
+      "ModifyBtn" : {
+        "label" : "Düzenle",
+        "help" : "Model yapılandırmasını görüntüle/düzenle"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Açıklama"
+      },
+      "ExistingModelType" : {
+        "label" : "Model türü"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Mevcut yapılandırmalar"
+      },
+      "ProviderWWW" : {
+        "label" : "Web sitesi bağlantısı"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Sağlayıcı kimlik bilgileri"
+      },
+      "ProviderInfos" : {
+        "label" : "Sağlayıcı bilgileri"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api anahtarı/kimlik bilgileri",
+        "help" : "Bu sağlayıcı için api anahtarı veya kimlik bilgilerini seçin"
+      },
+      "NewApiKey" : {
+        "label" : "Yeni api anahtarı",
+        "help" : "Bu sağlayıcı ile kullanılacak yeni bir api anahtarı girin"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Mevcut veya yeni kullan",
+        "help" : "Bu sağlayıcı için mevcut kimlik bilgilerini kullanın veya yenisini oluşturun"
+      },
+      "NewUserName" : {
+        "label" : "Kullanıcı adı",
+        "help" : "Sağlayıcı hizmetlerine erişmek için kullanılan kullanıcı adı"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Yeni gömme modeli",
+        "help" : "Yeni bir gömme modeli yapılandırması oluşturun"
+      },
+      "NewChatModel" : {
+        "label" : "Yeni sohbet modeli",
+        "help" : "Yeni bir sohbet modeli yapılandırması oluşturun"
+      },
+      "NewModelDialog" : {
+        "label" : "Yeni model ekle"
+      },
+      "PiSave" : {
+        "label" : "Kaydet"
+      },
+      "NewModelsButton" : {
+        "label" : "Yeni modeller",
+        "help" : "Yeni model yapılandırmaları oluştur"
+      },
+      "NewModelsDialog" : {
+        "label" : "Yeni modeller ekle"
+      },
+      "baseUrl" : {
+        "label" : "Temel api url",
+        "help" : "Sağlayıcının api hizmetleri için temel url"
+      },
+      "ModelTypePanel" : {
+        "label" : "Yeni modeller ekle"
+      },
+      "ModelsChoices" : {
+        "label" : "Model seçenekleri"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Önerilen modeller seçimi"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Gömme modeli",
+        "help" : "Önceden tanımlı gömme modellerinden birini seçin"
+      },
+      "chatPresetChoice" : {
+        "label" : "Sohbet modeli",
+        "help" : "Önceden tanımlı sohbet modellerinden birini seçin"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Gelişmiş modeller seçimi"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Gömme modeli",
+        "help" : "Sağlayıcı tarafından yayınlanan gömme modellerinden birini seçin"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Sohbet modeli",
+        "help" : "Sağlayıcı tarafından yayınlanan sohbet modellerinden birini seçin"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Bu seçme modunu yalnızca uzmansanız ya da sağlayıcı sitesinde hangi modellerin ihtiyaçlarınıza uygun olduğunu kontrol ederek kullanın. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "varsayılan sohbet modeli olarak ayarla",
+        "help" : "Bu modeli varsayılan olarak ayarlayın, başka bir sohbet modeli yapılandırılmazsa tüm görevlerde bu kullanılacak"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Size aşağıdaki model listesini öneriyoruz "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "varsayılan gömme modeli olarak ayarla",
+        "help" : "Bu modeli varsayılan olarak ayarlayın, başka bir gömme modeli yapılandırılmazsa tüm görevlerde bu kullanılacak"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "varsayılan sohbet modeli olarak ayarla",
+        "help" : "Bu modeli varsayılan olarak ayarlayın, başka bir sohbet modeli yapılandırılmazsa tüm görevlerde bu kullanılacak"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "varsayılan gömme modeli olarak ayarla",
+        "help" : "Bu modeli varsayılan olarak ayarlayın, başka bir gömme modeli yapılandırılmazsa tüm görevlerde bu kullanılacak"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Bu seçme modunu yalnızca uzmansanız ya da sağlayıcı sitesinde hangi modellerin ihtiyaçlarınıza uygun olduğunu kontrol ederek kullanın. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Oluştur ve etkinleştir"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Oluştur ve etkinleştir"
+      },
+      "ProviderNameField" : {
+        "label" : "Sağlayıcı"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Yapay zeka uzaktan sağlayıcı tamam",
+        "detail" : "Sağlayıcı çalışıyor ve başarıyla yapılandırıldı"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "İşlem başarısız",
+        "detail" : "Sağlanan kimlik bilgileri ile kimlik doğrulama yapılamadı"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Tamam!",
+        "detail" : "İşlem başarıyla tamamlandı"
       }
     }
   }

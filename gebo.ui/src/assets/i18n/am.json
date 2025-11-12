@@ -78,6 +78,12 @@
         "summary" : "እሺ!",
         "detail" : "እርምጃው በተሳካ ሁኔታ ተጠናቋል"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "እንኳን ወደ gebo.ai በደህና መጡ",
+        "detail" : "ለመግባት የተጠቃሚ ስምዎንና የይለፍ ቃሉን ያስገቡ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "ቢያንስ አንድ \"R.A.G.\" የቻት ፕሮፋይል ያቅኑ",
         "description" : "ተጠቃሚዎችዎ በትክክል ከተዘጋጀ የዕውቀት መሠረቶች መካከል ቢያንስ አንድ የተሻሻለ የቻት ፕሮፋይል ያቅኑ"
+      },
+      "mandatory-done" : {
+        "summary" : "የ Gebo.ai ቅንብር አስፈላጊ ደረጃዎች ተጠናቀቁ...",
+        "detail" : "የአስፈላጊ ቅንብሮች ተጠናቀቁ ነገር ግን አንዳንድ የሚጎዱ እርምጃዎች ያሉበት ስለሆነ ድርጅትዎ ከዚህ ሶፍትዌር በሙሉ ልማት ማግኘት እንዳይችል ይከለክላሉ"
+      },
+      "setup-ok" : {
+        "summary" : "የ Gebo.ai ቅንብር ሁሉ ደረጃዎች ተሟል!"
+      },
+      "mandatory-missing" : {
+        "summary" : "በ Gebo.ai ቅንብር አንዳንድ አስፈላጊ ደረጃ ይጎድመዋል",
+        "detail" : "እባክዎ በቀይ የተሰየመውን የቅንብር ሂደት ደረጃዎች ይመልከቱ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ነባር ሞዴል"
+      },
+      "MainPanelHeader" : {
+        "label" : "የ Gebo.ai llms አቅራቢዎች መዳረሻ አዘጋጅ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "ፕሮጀክት ቅጽ ክፈት"
+      },
+      "Button3" : {
+        "help" : "የውሂብ ምንጭ ክፈት"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "የGebo.ai ቅንብር ዝግጅት ተሳክቷል!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "አዲስ R.A.G. የውይይት መገለጫ አክል"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "የ R.A.G. ውይይት መገለጫ አክል"
+      },
+      "MainPanel" : {
+        "label" : "የታደሰ ልማት (r.a.g.) የውይይት መገለጫዎችን ቅንብር አውርድ"
+      },
+      "CodeHeader" : {
+        "label" : "ኮድ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "የነበሩት R.A.G. የውይይት መገለጫዎች"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "የ R.A.G. የውይይት መገለጫ አስተካክል"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "የ እውቀት መሠረት ኮዶች"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "ተደርጓል ዶክዩመንቶች",
         "dataset-2-label" : "እንደማይታወቅ ዶክዩመንቶች",
         "dataset-3-label" : "የተጥለው ዶክዩመንት"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "የኪሬ ቁጥር መግዢ ሊንክ"
+      },
+      "ModifyBtn" : {
+        "label" : "ቀይር",
+        "help" : "የሞዴል ቅንብርን ይመልከቱ/ይቀይሩ"
+      },
+      "ExistingModelCode" : {
+        "label" : "ኮድ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "መግለጫ"
+      },
+      "ExistingModelType" : {
+        "label" : "የሞዴል አይነት"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ያሉት ቅንብሮች"
+      },
+      "ProviderWWW" : {
+        "label" : "የድር ጣቢያ ሊንክ"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "የአቅራቢ ክልተት መረጃዎች"
+      },
+      "ProviderInfos" : {
+        "label" : "የአቅራቢ መረጃዎች"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/credentials",
+        "help" : "በዚህ አቅራቢ የታወቀ የኪሬ ቁጥር ወይም ድርሻ ይምረጡ"
+      },
+      "NewApiKey" : {
+        "label" : "አዲስ የኪሬ ቁጥር",
+        "help" : "በዚህ አቅራቢ የሚገባ አዲስ የኪሬ ቁጥር አስገባ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ያለውን ወይም አዲስ ይጠቀሙ",
+        "help" : "ለዚህ አቅራቢ አዲስ ይፍጠሩ ወይም ያለውን ይጠቀሙ"
+      },
+      "NewUserName" : {
+        "label" : "የተጠቃሚ ስም",
+        "help" : "አቅራቢውን ለመድረስ የሚጠቀሙት የተጠቃሚ ስም"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "አዲስ የእተያየት ሞዴል",
+        "help" : "አዲስ የእተያየት ሞዴል ቅንብር ፍጠር"
+      },
+      "NewChatModel" : {
+        "label" : "አዲስ የውይይት ሞዴል",
+        "help" : "አዲስ የውይይት ሞዴል ቅንብር ፍጠር"
+      },
+      "NewModelDialog" : {
+        "label" : "አዲስ ሞዴል አክል"
+      },
+      "PiSave" : {
+        "label" : "አስቀምጥ"
+      },
+      "NewModelsButton" : {
+        "label" : "አዲስ ሞዴሎች",
+        "help" : "አዲስ የሞዴል ቅንብር ፍጠር"
+      },
+      "NewModelsDialog" : {
+        "label" : "አዲስ ሞዴሎች አክል"
+      },
+      "baseUrl" : {
+        "label" : "ዋና api url",
+        "help" : "ለ api አገልግሎቶች ዋና url ያስገቡ"
+      },
+      "ModelTypePanel" : {
+        "label" : "አዲስ ሞዴሎች አክል"
+      },
+      "ModelsChoices" : {
+        "label" : "የሞዴሎች ምርጫዎች"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "የተጠየቁ ሞዴሎች ምርጫ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "የእተያየት ሞዴል",
+        "help" : "አንዱን ከቀድሞ ተዘጋጁ ያሉት የእተያየት ሞዴሎች ይምረጡ"
+      },
+      "chatPresetChoice" : {
+        "label" : "የውይይት ሞዴል",
+        "help" : "አንዱን ከቀድሞ ተዘጋጁ ያሉት የውይይት ሞዴሎች ይምረጡ"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "አሻሻይ የሞዴሎች ምርጫ"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "የእተያየት ሞዴል",
+        "help" : "ከአቅራቢ የታተመ የእተያየት ሞዴሎች ውስጥ ይምረጡ"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "የውይይት ሞዴል",
+        "help" : "ከአቅራቢ የታተመ የውይይት ሞዴሎች ውስጥ ይምረጡ"
+      },
+      "PresedAccordionDesc" : {
+        "label" : "ይህን የምርጫ ሁነታ ከባለሙያዎች ጋር ወይም በአቅራቢው ጣቢያ አስፈላጊ ሞዴሎችን በመፈተሽ ብቻ ይጠቀሙ።"
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "በነባሪ የውይይት ሞዴል አድርግ",
+        "help" : "ይህን ሞዴል ነባሪ ማድረግ፣ ለማናቸውም ተግባር ሌላ የውይይት ሞዴል ካለ አይጠቀሙም"
+      },
+      "PresetAccordionDesc" : {
+        "label" : "እኛ የሚቀጥሉትን ሞዴሎች እንመክራችኋለን"
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "በነባሪ የእተያየት ሞዴል አድርግ",
+        "help" : "ይህን ሞዴል ነባሪ ማድረግ፣ ለማናቸውም ተግባር ሌላ የእተያየት ሞዴል ካለ አይጠቀሙም"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "በነባሪ የውይይት ሞዴል አድርግ",
+        "help" : "ይህን ሞዴል ነባሪ ማድረግ፣ ለማናቸውም ተግባር ሌላ የውይይት ሞዴል ካለ አይጠቀሙም"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "በነባሪ የእተያየት ሞዴል አድርግ",
+        "help" : "ይህን ሞዴል ነባሪ ማድረግ፣ ለማናቸውም ተግባር ሌላ የእተያየት ሞዴል ካለ አይጠቀሙም"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : "ይህን የምርጫ ሁነታ ከባለሙያዎች ጋር ወይም በአቅራቢው ጣቢያ አስፈላጊ ሞዴሎችን በመፈተሽ ብቻ ይጠቀሙ።"
+      },
+      "CreatePresetBtn" : {
+        "label" : "ፍጠር እና አንቃ"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "ፍጠር እና አንቃ"
+      },
+      "ProviderNameField" : {
+        "label" : "አቅራቢ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI የርቀት አቅራቢ ዝግጁ ነው",
+        "detail" : "አቅራቢው ስኬታማ ሆኖ ተቀይሯልና እየተሰራ ነው"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ተግባሩ አልተሳካም",
+        "detail" : "በቀረበው የማረጋገጫ መረጃ ማረጋገጥ አልተቻለም"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "እሺ!",
+        "detail" : "ተግባሩ በተሳካ ሁኔታ ተጠናቀቀ"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "D'acord!",
         "detail" : "Operació realitzada amb èxit"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Benvingut a gebo.ai",
+        "detail" : "Introdueix el teu nom d’usuari i contrasenya per iniciar sessió"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Configura almenys un perfil de xat \"R.A.G.\"",
         "description" : "Configura almenys un perfil de xat augmentat per recuperació per als teus usuaris basat en una de les teves bases de coneixement configurades"
+      },
+      "mandatory-done" : {
+        "summary" : "Els passos obligatoris de configuració de Gebo.ai s’han completat...",
+        "detail" : "S’han completat els passos obligatoris, però falten alguns passos que impedeixen a la teva organització aprofitar al màxim aquest programari"
+      },
+      "setup-ok" : {
+        "summary" : "Configuració de Gebo.ai OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Falta algun pas obligatori de la configuració de Gebo.ai",
+        "detail" : "Revisa els passos en vermell del procés de configuració"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Model per defecte"
+      },
+      "MainPanelHeader" : {
+        "label" : "Configura l’accés als proveïdors llms de Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "obre formulari del projecte"
+      },
+      "Button3" : {
+        "help" : "obre la font de dades"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Configuració de Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Afegeix un nou perfil de xat R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Afegeix perfil de xat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Configura els perfils de xat de generació augmentada (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Perfils de xat R.A.G. existents"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Edita el perfil de xat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Codis de la base de coneixement"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Documents processats",
         "dataset-2-label" : "Documents amb error",
         "dataset-3-label" : "Documents descartats"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Enllaç per comprar crèdits d’Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Modifica",
+        "help" : "Visualitza/modifica la configuració del model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Codi"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Descripció"
+      },
+      "ExistingModelType" : {
+        "label" : "Tipus de model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Configuracions existents"
+      },
+      "ProviderWWW" : {
+        "label" : "Enllaç al lloc web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Credencials del proveïdor"
+      },
+      "ProviderInfos" : {
+        "label" : "Informació del proveïdor"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/credencials",
+        "help" : "Tria api key o credencials per a aquest proveïdor"
+      },
+      "NewApiKey" : {
+        "label" : "Nova api key",
+        "help" : "Introdueix una nova api key per utilitzar amb aquest proveïdor"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Utilitza existents o noves",
+        "help" : "Utilitza credencials existents o crea’n de noves per a aquest proveïdor"
+      },
+      "NewUserName" : {
+        "label" : "Nom d’usuari",
+        "help" : "Nom d’usuari per accedir als serveis del proveïdor"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nou model d’embeddings",
+        "help" : "Crea una nova configuració de model d’embeddings"
+      },
+      "NewChatModel" : {
+        "label" : "Nou model de xat",
+        "help" : "Crea una nova configuració de model de xat"
+      },
+      "NewModelDialog" : {
+        "label" : "Afegeix nou model"
+      },
+      "PiSave" : {
+        "label" : "Desa"
+      },
+      "NewModelsButton" : {
+        "label" : "Nous models",
+        "help" : "Crea una nova configuració de models"
+      },
+      "NewModelsDialog" : {
+        "label" : "Afegeix nous models"
+      },
+      "baseUrl" : {
+        "label" : "URL base de l’api",
+        "help" : "URL base pels serveis d’api del proveïdor"
+      },
+      "ModelTypePanel" : {
+        "label" : "Afegeix nous models"
+      },
+      "ModelsChoices" : {
+        "label" : "Opcions de models"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Selecció de models suggerits"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model d’embeddings",
+        "help" : "Selecciona un dels models d’embeddings predefinits"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model de xat",
+        "help" : "Selecciona un dels models de xat predefinits"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Selecció avançada de models"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model d’embeddings",
+        "help" : "Selecciona un dels models d’embeddings publicats pel proveïdor"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model de xat",
+        "help" : "Selecciona un dels models de xat publicats pel proveïdor"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Utilitza aquest mode de selecció només si ets expert o consultant la pàgina del proveïdor per saber quin model encaixa amb les teves necessitats. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre de configurat"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Et suggerim la següent llista de models "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "estableix com a model d’embeddings per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre d’embeddings configurat"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre de configurat"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "estableix com a model d’embeddings per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre d’embeddings configurat"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Utilitza aquest mode de selecció només si ets expert o consultant la pàgina del proveïdor per saber quin model encaixa amb les teves necessitats. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Crea i activa"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Crea i activa"
+      },
+      "ProviderNameField" : {
+        "label" : "Proveïdor"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Proveïdor remot d’AI OK",
+        "detail" : "El proveïdor està actiu i s’ha configurat correctament"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "L’operació ha fallat",
+        "detail" : "No es pot autenticar amb les credencials proporcionades"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "L’operació s’ha completat correctament"
       }
     }
   }

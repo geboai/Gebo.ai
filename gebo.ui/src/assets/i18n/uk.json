@@ -78,6 +78,12 @@
         "summary" : "Готово!",
         "detail" : "Операцію успішно виконано"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Ласкаво просимо до gebo.ai",
+        "detail" : "Введіть ім’я користувача та пароль для входу"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Налаштуйте хоча б один \"R.A.G.\" профіль чату",
         "description" : "Налаштуйте хоча б один профіль чату з підтримкою пошуку для користувачів на основі однієї із створених баз знань"
+      },
+      "mandatory-done" : {
+        "summary" : "Обов'язкові кроки налаштування Gebo.ai виконано...",
+        "detail" : "Обов'язкові кроки налаштування виконані, але деякі відсутні кроки заважають вашій організації використати всю функціональність цього програмного забезпечення"
+      },
+      "setup-ok" : {
+        "summary" : "Налаштування Gebo.ai завершено!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Пропущено обов'язковий крок налаштування Gebo.ai",
+        "detail" : "Будь ласка, перегляньте позначені червоним кроки процесу налаштування"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Модель за замовчуванням"
+      },
+      "MainPanelHeader" : {
+        "label" : "Налаштування доступу до провайдерів llms Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "відкрити форму проєкту"
+      },
+      "Button3" : {
+        "help" : "відкрити джерело даних"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Налаштування Gebo.ai виконано!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Додати новий R.A.G. чат-профіль"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Додати R.A.G. чат-профіль"
+      },
+      "MainPanel" : {
+        "label" : "Налаштування профілів чату з розширеним генерацією (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Існуючі R.A.G. чат-профілі"
+      },
+      "DescriptionHeader" : {
+        "label" : "Опис"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Редагувати R.A.G. чат-профіль"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Коди бази знань"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Опрацьовані документи",
         "dataset-2-label" : "Документи з помилкою",
         "dataset-3-label" : "Відхилені документи"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Посилання для купівлі кредиту Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Змінити",
+        "help" : "Переглянути/змінити конфігурацію моделі"
+      },
+      "ExistingModelCode" : {
+        "label" : "Код"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Опис"
+      },
+      "ExistingModelType" : {
+        "label" : "Тип моделі"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Існуючі конфігурації"
+      },
+      "ProviderWWW" : {
+        "label" : "Посилання на сайт"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Облікові дані провайдера"
+      },
+      "ProviderInfos" : {
+        "label" : "Інформація про провайдера"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/облікові дані",
+        "help" : "Оберіть api key або облікові дані для цього провайдера"
+      },
+      "NewApiKey" : {
+        "label" : "Новий api key",
+        "help" : "Введіть новий api key для використання з цим провайдером"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Використати існуючі або нові",
+        "help" : "Використовуйте існуючі або створіть нові облікові дані для цього провайдера"
+      },
+      "NewUserName" : {
+        "label" : "Ім'я користувача",
+        "help" : "Ім'я користувача для доступу до послуг провайдера"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Нова embedding-модель",
+        "help" : "Створити нову конфігурацію embedding-моделі"
+      },
+      "NewChatModel" : {
+        "label" : "Нова Chat-модель",
+        "help" : "Створити нову конфігурацію чат-моделі"
+      },
+      "NewModelDialog" : {
+        "label" : "Додати нову модель"
+      },
+      "PiSave" : {
+        "label" : "Зберегти"
+      },
+      "NewModelsButton" : {
+        "label" : "Нові моделі",
+        "help" : "Створити нову конфігурацію моделей"
+      },
+      "NewModelsDialog" : {
+        "label" : "Додати нові моделі"
+      },
+      "baseUrl" : {
+        "label" : "Базовий api url",
+        "help" : "Базова url для api сервісів провайдера"
+      },
+      "ModelTypePanel" : {
+        "label" : "Додати нові моделі"
+      },
+      "ModelsChoices" : {
+        "label" : "Вибір моделей"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Рекомендований вибір моделей"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding-модель",
+        "help" : "Оберіть одну з попередньо визначених embedding-моделей"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat-модель",
+        "help" : "Оберіть одну з попередньо визначених чат-моделей"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Вибір розширених моделей"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding-модель",
+        "help" : "Оберіть одну з embedding-моделей, опублікованих постачальником"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat-модель",
+        "help" : "Оберіть одну з чат-моделей, опублікованих постачальником"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Використовуйте цей режим вибору лише якщо ви експерт або перевірте на сайті постачальника, які моделі підходять для ваших потреб. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "встановити як модель чату за замовчуванням",
+        "help" : "Встановіть цю модель як модель чату за замовчуванням, вона буде використовуватися для всіх завдань, для яких не налаштовано іншу чат-модель"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Ми рекомендуємо наступний список моделей "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "встановити як embedding-модель за замовчуванням",
+        "help" : "Встановіть цю модель як embedding-модель за замовчуванням, вона буде використовуватися для всіх завдань, для яких не налаштовано іншу embedding-модель"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "встановити як модель чату за замовчуванням",
+        "help" : "Встановіть цю модель як модель чату за замовчуванням, вона буде використовуватися для всіх завдань, для яких не налаштовано іншу чат-модель"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "встановити як embedding-модель за замовчуванням",
+        "help" : "Встановіть цю модель як embedding-модель за замовчуванням, вона буде використовуватися для всіх завдань, для яких не налаштовано іншу embedding-модель"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Використовуйте цей режим вибору лише якщо ви експерт або перевірте на сайті постачальника, які моделі підходять для ваших потреб. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Створити та активувати"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Створити та активувати"
+      },
+      "ProviderNameField" : {
+        "label" : "Провайдер"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Віддалений AI-провайдер працює",
+        "detail" : "Провайдер працює та успішно налаштований"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Операція не виконана",
+        "detail" : "Не вдалося пройти автентифікацію із вказаними обліковими даними"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Готово!",
+        "detail" : "Операцію виконано успішно"
       }
     }
   }

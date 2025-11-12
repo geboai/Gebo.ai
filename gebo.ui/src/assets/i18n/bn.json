@@ -78,6 +78,12 @@
         "summary" : "ঠিক আছে!",
         "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai-তে স্বাগতম",
+        "detail" : "লগইন করতে আপনার ব্যবহারকারীর নাম ও পাসওয়ার্ড লিখুন"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "কমপক্ষে একটি \"R.A.G.\" চ্যাট প্রোফাইল কনফিগার করুন",
         "description" : "আপনার কনফিগারকৃত নলেজ বেসের যেকোনো একটি ভিত্তিতে কমপক্ষে একটি রিট্রিভ অক্সিলিয়ারি চ্যাট প্রোফাইল কনফিগার করুন"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai সেটআপের বাধ্যতামূলক ধাপ সম্পন্ন হয়েছে...",
+        "detail" : "বাধ্যতামূলক সেটআপ ধাপ সম্পন্ন হয়েছে কিন্তু কিছু অপূর্ণ ধাপ আপনার সংস্থাকে সফটওয়্যারটির সম্পূর্ণ সুবিধা নিতে বাধা দিচ্ছে"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai সেটআপ ঠিক আছে!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai সেটআপে কিছু বাধ্যতামূলক ধাপ অনুপস্থিত",
+        "detail" : "অনুগ্রহ করে সেটআপ প্রক্রিয়ার লাল চিহ্নিত ধাপগুলো দেখুন"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ডিফল্ট মডেল"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms প্রদানকারীর অ্যাক্সেস সেটআপ করুন"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "প্রকল্প ফর্ম খুলুন"
+      },
+      "Button3" : {
+        "help" : "ডেটা সোর্স খুলুন"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai সেটআপ সম্পন্ন!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "নতুন R.A.G. চ্যাট প্রোফাইল যোগ করুন"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. চ্যাট প্রোফাইল যোগ করুন"
+      },
+      "MainPanel" : {
+        "label" : "অগমেন্টেড জেনারেশন (r.a.g.) চ্যাট প্রোফাইল সেটিংসমূহ সংগ্রহ করুন"
+      },
+      "CodeHeader" : {
+        "label" : "কোড"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "বর্তমান R.A.G. চ্যাট প্রোফাইলসমূহ"
+      },
+      "DescriptionHeader" : {
+        "label" : "বর্ণনা"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. চ্যাট প্রোফাইল সম্পাদনা করুন"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "নলেজ বেস কোডসমূহ"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "প্রসেস করা নথি",
         "dataset-2-label" : "ত্রুটিপূর্ণ নথি",
         "dataset-3-label" : "বাতিল নথি"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "এপি কী ক্রেডিট লিংক কিনুন"
+      },
+      "ModifyBtn" : {
+        "label" : "পরিবর্তন করুন",
+        "help" : "মডেল কনফিগারেশন দেখুন/পরিবর্তন করুন"
+      },
+      "ExistingModelCode" : {
+        "label" : "কোড"
+      },
+      "ExistingModelDesc" : {
+        "label" : "বর্ণনা"
+      },
+      "ExistingModelType" : {
+        "label" : "মডেল টাইপ"
+      },
+      "ExistingModelsSection" : {
+        "label" : "বর্তমান কনফিগারেশনসমূহ"
+      },
+      "ProviderWWW" : {
+        "label" : "ওয়েবসাইট লিংক"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "প্রদানকারীর ক্রেডেনশিয়ালস"
+      },
+      "ProviderInfos" : {
+        "label" : "প্রদানকারীর তথ্যাবলী"
+      },
+      "ExistingApiKey" : {
+        "label" : "এপি কী/ক্রেডেনশিয়ালস",
+        "help" : "এই প্রদানকারীর জন্য এপি কী বা ক্রেডেনশিয়ালস নির্বাচন করুন"
+      },
+      "NewApiKey" : {
+        "label" : "নতুন এপি কী",
+        "help" : "এই প্রদানকারীর জন্য ব্যবহারের জন্য একটি নতুন এপি কী লিখুন"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "বিদ্যমান বা নতুন ব্যবহার করুন",
+        "help" : "এই প্রদানকারীর জন্য বিদ্যমান বা নতুন ক্রেডেনশিয়ালস ব্যবহার করুন"
+      },
+      "NewUserName" : {
+        "label" : "ইউজার নাম",
+        "help" : "প্রদানকারীর সেবাগুলোতে প্রবেশের জন্য ব্যবহারকারী নাম"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "নতুন এম্বেডিং মডেল",
+        "help" : "একটি নতুন এম্বেডিং মডেল কনফিগারেশন তৈরি করুন"
+      },
+      "NewChatModel" : {
+        "label" : "নতুন চ্যাট মডেল",
+        "help" : "একটি নতুন চ্যাট মডেল কনফিগারেশন তৈরি করুন"
+      },
+      "NewModelDialog" : {
+        "label" : "নতুন মডেল যোগ করুন"
+      },
+      "PiSave" : {
+        "label" : "সংরক্ষণ করুন"
+      },
+      "NewModelsButton" : {
+        "label" : "নতুন মডেলসমূহ",
+        "help" : "নতুন মডেল কনফিগারেশন তৈরি করুন"
+      },
+      "NewModelsDialog" : {
+        "label" : "নতুন মডেলসমূহ যোগ করুন"
+      },
+      "baseUrl" : {
+        "label" : "বেস এপি ইউআরএল",
+        "help" : "প্রদানকারীর এপি সেবার জন্য বেস ইউআরএল"
+      },
+      "ModelTypePanel" : {
+        "label" : "নতুন মডেলসমূহ যোগ করুন"
+      },
+      "ModelsChoices" : {
+        "label" : "মডেল বিকল্পসমূহ"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "সাজেস্টেড মডেল নির্বাচনের অপশন"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "এম্বেডিং মডেল",
+        "help" : "প্রি-ডিফাইন্ড এম্বেডিং মডেলগুলোর একটি বেছে নিন"
+      },
+      "chatPresetChoice" : {
+        "label" : "চ্যাট মডেল",
+        "help" : "প্রি-ডিফাইন্ড চ্যাট মডেলগুলোর একটি বেছে নিন"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "উন্নত মডেল নির্বাচন"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "এম্বেডিং মডেল",
+        "help" : "সরবরাহকারী প্রকাশিত এম্বেডিং মডেলসমূহের একটি বেছে নিন"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "চ্যাট মডেল",
+        "help" : "সরবরাহকারী প্রকাশিত চ্যাট মডেলসমূহের একটি বেছে নিন"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " কেবলমাত্র আপনি বিশেষজ্ঞ হলে বা সরবরাহকারীর ওয়েবসাইট দেখে কোন মডেলগুলি আপনার জন্য উপযুক্ত তা নিশ্চিত করে এই নির্বাচন মাধ্যমটি ব্যবহার করুন। "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ডিফল্ট চ্যাট মডেল হিসেবে সেট করুন",
+        "help" : "এই মডেলটিকে ডিফল্ট হিসেবে নির্ধারণ করুন, এটি প্রতিটি টাস্কের জন্য ব্যবহৃত হবে যদি অন্য কোনো চ্যাট মডেল কনফিগার করা না থাকে"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " আমরা আপনাকে নিম্নলিখিত মডেলগুলোর তালিকা সাজেস্ট করছি "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ডিফল্ট এম্বেডিং মডেল হিসেবে সেট করুন",
+        "help" : "এই মডেলটিকে ডিফল্ট হিসেবে নির্ধারণ করুন, এটি প্রতিটি টাস্কের জন্য ব্যবহৃত হবে যদি অন্য কোনো এম্বেডিং মডেল কনফিগার করা না থাকে"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ডিফল্ট চ্যাট মডেল হিসেবে সেট করুন",
+        "help" : "এই মডেলটিকে ডিফল্ট হিসেবে নির্ধারণ করুন, এটি প্রতিটি টাস্কের জন্য ব্যবহৃত হবে যদি অন্য কোনো চ্যাট মডেল কনফিগার করা না থাকে"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ডিফল্ট এম্বেডিং মডেল হিসেবে সেট করুন",
+        "help" : "এই মডেলটিকে ডিফল্ট হিসেবে নির্ধারণ করুন, এটি প্রতিটি টাস্কের জন্য ব্যবহৃত হবে যদি অন্য কোনো এম্বেডিং মডেল কনফিগার করা না থাকে"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " কেবলমাত্র আপনি বিশেষজ্ঞ হলে বা সরবরাহকারীর ওয়েবসাইট দেখে কোন মডেলগুলি আপনার জন্য উপযুক্ত তা নিশ্চিত করে এই নির্বাচন মাধ্যমটি ব্যবহার করুন। "
+      },
+      "CreatePresetBtn" : {
+        "label" : "তৈরি করে সক্রিয় করুন"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "তৈরি করে সক্রিয় করুন"
+      },
+      "ProviderNameField" : {
+        "label" : "প্রদানকারী"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI রিমোট প্রদানকারী ঠিক আছে",
+        "detail" : "প্রদানকারী সক্রিয় এবং সফলভাবে কনফিগার করা হয়েছে"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "অপারেশন ব্যর্থ হয়েছে",
+        "detail" : "প্রদত্ত ক্রেডেনশিয়ালস দিয়ে প্রমাণীকরণ করা যাচ্ছে না"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ঠিক আছে!",
+        "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
       }
     }
   }

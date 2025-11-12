@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operațiunea a fost finalizată cu succes"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Bun venit la gebo.ai",
+        "detail" : "Introduceți numele de utilizator și parola pentru a vă autentifica"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Configurează cel puțin un profil de chat \"R.A.G.\"",
         "description" : "Configurează cel puțin un profil de chat augmentat pentru utilizatori, bazat pe una dintre bazele de cunoștințe configurate"
+      },
+      "mandatory-done" : {
+        "summary" : "Configurarea Gebo.ai pași obligatorii finalizați...",
+        "detail" : "Pașii de configurare obligatorii au fost finalizați, dar lipsesc unii pași care împiedică organizația să beneficieze la maximum de acest software"
+      },
+      "setup-ok" : {
+        "summary" : "Configurarea Gebo.ai OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Configurarea Gebo.ai nu are unii pași obligatorii",
+        "detail" : "Vă rugăm să verificați pașii roșii ai procesului de configurare"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Model implicit"
+      },
+      "MainPanelHeader" : {
+        "label" : "Setați accesul la furnizorii llms Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "deschide formularul proiectului"
+      },
+      "Button3" : {
+        "help" : "deschide sursa de date"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Configurare Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Adăugați un profil nou de chat R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Adăugați profil de chat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Preia setările profilurilor de chat generare augmentată (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Profiluri de chat R.A.G. existente"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Editează profilul de chat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Coduri bază de cunoștințe"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Documente procesate",
         "dataset-2-label" : "Documente cu erori",
         "dataset-3-label" : "Documente eliminate"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Link pentru achiziție credit cheie Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Modifică",
+        "help" : "Vezi/modifică configurația modelului"
+      },
+      "ExistingModelCode" : {
+        "label" : "Cod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Descriere"
+      },
+      "ExistingModelType" : {
+        "label" : "Tip model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Configurații existente"
+      },
+      "ProviderWWW" : {
+        "label" : "Link site web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Date de autentificare furnizor"
+      },
+      "ProviderInfos" : {
+        "label" : "Informații furnizor"
+      },
+      "ExistingApiKey" : {
+        "label" : "Cheie API/credentțiale",
+        "help" : "Alege cheie API sau date de autentificare pentru acest furnizor"
+      },
+      "NewApiKey" : {
+        "label" : "Cheie API nouă",
+        "help" : "Introduceți o cheie API nouă pentru a fi folosită cu acest furnizor"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Folosește existente sau creează noi",
+        "help" : "Folosește datele existente sau creează date noi de autentificare pentru acest furnizor"
+      },
+      "NewUserName" : {
+        "label" : "Nume utilizator",
+        "help" : "Numele de utilizator folosit pentru accesarea serviciilor furnizorului"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Model nou de embedding",
+        "help" : "Creează o nouă configurație de model embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Model Chat nou",
+        "help" : "Creează o nouă configurație de model chat"
+      },
+      "NewModelDialog" : {
+        "label" : "Adaugă model nou"
+      },
+      "PiSave" : {
+        "label" : "Salvează"
+      },
+      "NewModelsButton" : {
+        "label" : "Modele noi",
+        "help" : "Creează o nouă configurație de modele"
+      },
+      "NewModelsDialog" : {
+        "label" : "Adaugă modele noi"
+      },
+      "baseUrl" : {
+        "label" : "URL API de bază",
+        "help" : "URL de bază pentru serviciile API ale furnizorului"
+      },
+      "ModelTypePanel" : {
+        "label" : "Adaugă modele noi"
+      },
+      "ModelsChoices" : {
+        "label" : "Alege modele"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Selecție modele sugerate"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model embedding",
+        "help" : "Selectați unul dintre modelele embedding predefinite"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model Chat",
+        "help" : "Selectați unul dintre modelele de chat predefinite"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Selecție modele avansate"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model embedding",
+        "help" : "Selectați unul dintre modelele embedding publicate de furnizor"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model Chat",
+        "help" : "Selectați unul dintre modelele de chat publicate de furnizor"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Folosiți acest mod de selecție doar dacă aveți experiență sau verificați pe site-ul furnizorului ce modele se potrivesc nevoilor dvs. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model de chat"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Vă sugerăm următoarea listă de modele "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model embedding"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model de chat"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model embedding"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Folosiți acest mod de selecție doar dacă aveți experiență sau verificați pe site-ul furnizorului ce modele se potrivesc nevoilor dvs. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Creează și activează"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Creează și activează"
+      },
+      "ProviderNameField" : {
+        "label" : "Furnizor"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI la distanță OK",
+        "detail" : "Furnizorul este activ și configurat cu succes"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operațiune eșuată",
+        "detail" : "Nu se poate autentifica cu datele furnizate"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operațiune realizată cu succes"
       }
     }
   }

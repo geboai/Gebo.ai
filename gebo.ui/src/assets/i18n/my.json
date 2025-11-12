@@ -78,6 +78,12 @@
         "summary" : "အိုကေ!",
         "detail" : "လုပ်ဆောင်မှု အောင်မြင်စွာ ပြီးမြောက်ပါသည်"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai သို့ ကြိုဆိုပါသည်",
+        "detail" : "လော့ဂ်အင် ဝင်ရန် သင့်အသုံးပြုသူနာမည်နှင့် စကားဝှက် ထည့်ပါ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "\"R.A.G.\" ဆွေးနွေးရန်ပရိုဖိုင် တစ်ခု ပြင်ဆင်ပါ",
         "description" : "သင့် knowledge base များအနက် တစ်ခုအပေါ်အခြေခံ၍ retrieve augmented chat profile တစ်ခု ပြင်ဆင်နိုင်ပါသည်။"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai အတွက် မဖြစ်မနေလိုအပ်သောဆောင်ရွက်မှုများ ပြီးဆုံးခဲ့သည်...",
+        "detail" : "မဖြစ်မနေလိုအပ်သောစနစ် တချို့ ပြီးဆုံးသော်လည်း၊ ခြောင်းလွတ်နေသည့် အဆင့်အချို့ကြောင့် သင့်အဖွဲ့အစည်းသည် ဒီဆော့ဖ်ဝဲမှ အကောင်းဆုံးအတွေ့အကြုံကို မရရှိနိုင်ပါ"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai စနစ်တပ်ဆင်မှု OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai အတွက် မဖြစ်မနေလိုအပ်သောအဆင့် တချို့ လက်လွတ်နေသည်",
+        "detail" : "စနစ်တပ်ဆင်မှု လုပ်ငန်းစဉ်ရှိ အနီရောင်အဆင့်များကို ပြန်လည်စစ်ဆေးပါ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "မူလမော်ဒယ်"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms ပံ့ပိုးသူများသို့ ဝင်ရောက်ခွင့် တပ်ဆင်ပါ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "ပရောဂျက်ဖောင်ဖွင့်ပါ"
+      },
+      "Button3" : {
+        "help" : "ဒေတာရင်းမြစ် ဖွင့်ပါ"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai ဆက်တင် အောင်မြင်ပါသည်!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "R.A.G. စကားပြောပရိုဖိုင် အသစ် ထည့်ပါ"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. စကားပြောပရိုဖိုင် ထည့်ပါ"
+      },
+      "MainPanel" : {
+        "label" : "Augmented generation (r.a.g.) စကားပြောပရိုဖိုင် ဆက်တင်များ ရယူပါ"
+      },
+      "CodeHeader" : {
+        "label" : "ကုဒ်"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ရှိပြီးသား R.A.G. စကားပြောပရိုဖိုင်များ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. စကားပြောပရိုဖိုင် တည်းဖြတ်ရန်"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Knowledge base codes"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
         "dataset-2-label" : "အမှားပါသောစာရွက်စာတမ်းများ",
         "dataset-3-label" : "စစ်ထုတ်ထားသောစာရွက်စာတမ်းများ"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy key credit ဝယ်ပါ"
+      },
+      "ModifyBtn" : {
+        "label" : "ပြင်ဆင်ရန်",
+        "help" : "မော်ဒယ်ဆက်တင်ကို ကြည့်ရန်/ပြင်ရန်"
+      },
+      "ExistingModelCode" : {
+        "label" : "ကုဒ်"
+      },
+      "ExistingModelDesc" : {
+        "label" : "ဖော်ပြချက်"
+      },
+      "ExistingModelType" : {
+        "label" : "မော်ဒယ်အမျိုးအစား"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ရှိပြီးသား ဆက်တင်များ"
+      },
+      "ProviderWWW" : {
+        "label" : "ဝဘ်ဆိုက်လင့်ခ်"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ပံ့ပိုးသူ အချက်အလက်"
+      },
+      "ProviderInfos" : {
+        "label" : "ပံ့ပိုးသူ အထွေထွေနသိကြောင်းများ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/အသုံးပြုခွင့်",
+        "help" : "ဤပံ့ပိုးသူအတွက် api key သို့မဟုတ် အသုံးပြုခွင့် ရွေးချယ်ပါ"
+      },
+      "NewApiKey" : {
+        "label" : "Api key အသစ်",
+        "help" : "ဤပံ့ပိုးသူနှင့် အသုံးပြုရန် api key အသစ် ထည့်သွင်းပါ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ရှိပြီးသား သို့မဟုတ် အသစ်အသုံးပြုပါ",
+        "help" : "ဤပံ့ပိုးသူအတွက် ရှိပြီးသား credentials အသုံးပြုပါ သို့မဟုတ် အသစ် တစ်ခု ဖန်တီးပါ"
+      },
+      "NewUserName" : {
+        "label" : "အသုံးပြုသူအမည်",
+        "help" : "ပံ့ပိုးသူဝန်ဆောင်မှုများ အသုံးပြုရန် အသုံးပြုသူအမည်"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "embedding မော်ဒယ်အသစ်",
+        "help" : "embedding မော်ဒယ်ဆက်တင်အသစ်တစ်ခု ဖန်တီးပါ"
+      },
+      "NewChatModel" : {
+        "label" : "Chat မော်ဒယ် အသစ်",
+        "help" : "chat မော်ဒယ်ဆက်တင်အသစ်တစ်ခု ဖန်တီးပါ"
+      },
+      "NewModelDialog" : {
+        "label" : "မော်ဒယ်အသစ် ထည့်ပါ"
+      },
+      "PiSave" : {
+        "label" : "သိမ်းမည်"
+      },
+      "NewModelsButton" : {
+        "label" : "မော်ဒယ်အသစ်များ",
+        "help" : "မော်ဒယ်ဆက်တင်အသစ်များ ဖန်တီးရန်"
+      },
+      "NewModelsDialog" : {
+        "label" : "မော်ဒယ်အသစ်များ ထည့်ပါ"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "ပံ့ပိုးသူ၏ api ဝန်ဆောင်မှုများအတွက် base url"
+      },
+      "ModelTypePanel" : {
+        "label" : "မော်ဒယ်အသစ်များ ထည့်ပါ"
+      },
+      "ModelsChoices" : {
+        "label" : "မော်ဒယ်ရွေးချယ်မှုများ"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "ညွှန်ကြားထားသော မော်ဒယ်ရွေးချယ်မှု"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "embedding မော်ဒယ်",
+        "help" : "ကြိုတင်သတ်မှတ်ထားသော embedding မော်ဒယ်များထဲမှ သန်းရွေးပါ"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat မော်ဒယ်",
+        "help" : "ကြိုတင်သတ်မှတ်ထားသော chat မော်ဒယ်များထဲမှ ရွေးချယ်ပါ"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "အဆင့်မြင့် မော်ဒယ်ရွေးချယ်မှု"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "embedding မော်ဒယ်",
+        "help" : "ပံ့ပိုးသူမှ ထုတ်မြင်ထားသော embedding မော်ဒယ်များထဲမှ ရွေးချယ်ပါ"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat မော်ဒယ်",
+        "help" : "ပံ့ပိုးသူမှ ထုတ်မြင်ထားသော chat မော်ဒယ်များထဲမှ ရွေးချယ်ပါ"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ဤရွေးချယ်မှုနည်းကို အတတ်ပျော်မြောက်သူများသာ သုံးသင့်ပါသည် သို့မဟုတ် ပံ့ပိုးသူဝဘ်ဆိုက်တွင် မော်ဒယ်ကောင်းကောင်းကိုစစ်ကြည့်ပြီးသာအသုံးပြုပါ။ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "မူလ chat မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "ဤမော်ဒယ်ကို မူလ chat မော်ဒယ်အဖြစ် သတ်မှတ်ပါ၊ အခြား chat မော်ဒယ်ကို မရှိပါက လူကြီးမင်းလုပ်ငန်းအားလုံးအတွက် ဤမော်ဒယ်ကို အသုံးပြုမည်"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " ငယ်ပေးသည့် မော်ဒယ်များစာရင်းသည် အောက်ပါဖြစ်သည် "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "ဤမော်ဒယ်ကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ၊ အခြား embedding မော်ဒယ်ကို မရှိပါက လူကြီးမင်းလုပ်ငန်းအားလုံးအတွက် ဤမော်ဒယ်ကို အသုံးပြုမည်"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "မူလ chat မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "ဤမော်ဒယ်ကို မူလ chat မော်ဒယ်အဖြစ် သတ်မှတ်ပါ၊ အခြား chat မော်ဒယ်ကို မရှိပါက လူကြီးမင်းလုပ်ငန်းအားလုံးအတွက် ဤမော်ဒယ်ကို အသုံးပြုမည်"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ",
+        "help" : "ဤမော်ဒယ်ကို မူလ embedding မော်ဒယ်အဖြစ် သတ်မှတ်ပါ၊ အခြား embedding မော်ဒယ်ကို မရှိပါက လူကြီးမင်းလုပ်ငန်းအားလုံးအတွက် ဤမော်ဒယ်ကို အသုံးပြုမည်"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ဤရွေးချယ်မှုနည်းကို အတတ်ပျော်မြောက်သူများသာ သုံးသင့်ပါသည် သို့မဟုတ် ပံ့ပိုးသူဝဘ်ဆိုက်တွင် မော်ဒယ်ကောင်းကောင်းကိုစစ်ကြည့်ပြီးသာအသုံးပြုပါ။ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "ဖန်တီးပြီး အသက်သွင်းပါ"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "ဖန်တီးပြီး အသက်သွင်းပါ"
+      },
+      "ProviderNameField" : {
+        "label" : "ပံ့ပိုးသူ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider OK",
+        "detail" : "ပံ့ပိုးသူသည် မိမိဝန်ဆောင်မှုကို အောင်မြင်စွာဖွင့်ထားပြီး စနစ်မှာ တပ်ဆင်ပြီးပါပြီ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "လုပ်ဆောင်မှု မအောင်မြင်ပါ",
+        "detail" : "ဖြန့်ချိထားသော အသုံးပြုခွင့်ဖြင့် အတည်ပြုမရပါ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "အိုကေ!",
+        "detail" : "လုပ်ဆောင်မှုကိုအောင်မြင်စွာ ပြီးမြောက်ပါသည်"
       }
     }
   }

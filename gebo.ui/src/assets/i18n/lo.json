@@ -78,6 +78,12 @@
         "summary" : "ຮູ້ແລ້ວ!",
         "detail" : "ການດຳເນີນການສຳເລັດສົມບູນ"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "ຍິນດີຕ້ອນຮັບສູ່ gebo.ai",
+        "detail" : "ກະລຸນາໃສ່ຊື່ຜູ້ໃຊ້ແລະລະຫັດຜ່ານເພື່ອເຂົ້າລະບົບ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "ຕັ້ງຄ່າໂປຣໄຟລ໌ສົນທະນາ \"R.A.G.\" ຢ່າງໜ້ອຍໜຶ່ງ",
         "description" : "ຕັ້ງຄ່າໂປຣໄຟລ໌ສົນທະນາ retrieve augmented ຢ່າງໜ້ອຍໜຶ່ງສຳລັບຜູ້ໃຊ້ຂອງທ່ານຈາກຄລັງຄວາມຮູ້ທີ່ຕັ້ງຄ່າ"
+      },
+      "mandatory-done" : {
+        "summary" : "ການຕິດຕັ້ງ Gebo.ai ຂັ້ນຕອນຈຳເປັນເສັດສຳເລັດແລ້ວ...",
+        "detail" : "ຂັ້ນຕອນການຕິດຕັ້ງທີ່ຈຳເປັນສຳເລັດແລ້ວ ແຕ່ຍັງຂາດບາງຂັ້ນຕອນທີ່ກໍາລັງກັ້ນບໍ່ໃຫ້ອົງກອນຂອງທ່ານໄດ້ປະສົບການໃຊ້ງານໄດ້ເຕັມທີ່"
+      },
+      "setup-ok" : {
+        "summary" : "ການຕິດຕັ້ງ Gebo.ai ສຳເລັດ!"
+      },
+      "mandatory-missing" : {
+        "summary" : "ການຕິດຕັ້ງ Gebo.ai ຂາດຂັ້ນຕອນທີ່ຈຳເປັນບາງຢ່າງ",
+        "detail" : "ກະລຸນາກວດເບິ່ງຂັ້ນຕອນສີແດງໃນການຕິດຕັ້ງ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ໂມເດວຄ່າເລີ່ມຕົ້ນ"
+      },
+      "MainPanelHeader" : {
+        "label" : "ຕັ້ງຄ່າສິດເຂົ້າໃຊ້ Gebo.ai llms providers"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "ເປີດແບບຟອມໂຄງການ"
+      },
+      "Button3" : {
+        "help" : "ເປີດແຫຼ່ງຂໍ້ມູນ"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "ການຕັ້ງຄ່າ Gebo.ai ສຳເລັດ!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "ເພີ່ມໂປຣໄຟລ໌ chat R.A.G. ໃໝ່"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "ເພີ່ມໂປຣໄຟລ໌ chat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "ດຶງຕັ້ງຄ່າໂປຣໄຟລ໌ chat r.a.g."
+      },
+      "CodeHeader" : {
+        "label" : "ລະຫັດ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ໂປຣໄຟລ໌ chat R.A.G. ທີ່ມີຢູ່"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄໍາອະທິບາຍ"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "ແກ້ໄຂໂປຣໄຟລ໌ chat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "ລະຫັດຖານຄວາມຮູ້"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "ເອກະສານທີ່ປະມວນຜົນແລ້ວ",
         "dataset-2-label" : "ເອກະສານທີ່ຜິດພາດ",
         "dataset-3-label" : "ເອກະສານທີ່ຖືກປະຕິເສດ"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "ຊື້ລິ້ງສິດທິ Apy key credit"
+      },
+      "ModifyBtn" : {
+        "label" : "ແກ້ໄຂ",
+        "help" : "ເບິ່ງ/ແກ້ໄຂການຕັ້ງຄ່າໂມເດວ"
+      },
+      "ExistingModelCode" : {
+        "label" : "ລະຫັດ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "ຄໍາອະທິບາຍ"
+      },
+      "ExistingModelType" : {
+        "label" : "ປະເພດໂມເດວ"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ການຕັ້ງຄ່າທີ່ມີຢູ່"
+      },
+      "ProviderWWW" : {
+        "label" : "ລິ້ງເວັບໄຊ"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ຂໍ້ມູນປະຈຳຜູ້ສະຫນອງ"
+      },
+      "ProviderInfos" : {
+        "label" : "ຂໍ້ມູນກ່ຽວກັບຜູ້ສະຫນອງ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ຂໍ້ມູນສິດເຂົ້າໃຊ້",
+        "help" : "ກວດເລືອກ api key ຫຼືຂໍ້ມູນສິດເຂົ້າໃຊ້ສໍາລັບຜູ້ສະຫນອງນີ້"
+      },
+      "NewApiKey" : {
+        "label" : "Api key ໃໝ່",
+        "help" : "ໃສ່ api key ໃໝ່ທີ່ຈະໃຊ້ກັບຜູ້ສະຫນອງນີ້"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ໃຊ້ທີ່ມີຢູ່ ຫຼືໃໝ່",
+        "help" : "ໃຊ້ຂໍ້ມູນທີ່ມີຢູ່ ຫຼືສ້າງໃໝ່ສໍາລັບຜູ້ສະຫນອງນີ້"
+      },
+      "NewUserName" : {
+        "label" : "ຊື່ຜູ້ໃຊ້",
+        "help" : "ຊື່ຜູ້ໃຊ້ທີ່ໃຊ້ເຂົ້າບໍລິການຜູ້ສະຫນອງ"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "ໂມເດວ embedding ໃໝ່",
+        "help" : "ສ້າງການຕັ້ງຄ່າໂມເດວ embedding ໃໝ່"
+      },
+      "NewChatModel" : {
+        "label" : "ໂມເດວ Chat ໃໝ່",
+        "help" : "ສ້າງການຕັ້ງຄ່າໂມເດວ chat ໃໝ່"
+      },
+      "NewModelDialog" : {
+        "label" : "ເພີ່ມໂມເດວໃໝ່"
+      },
+      "PiSave" : {
+        "label" : "ບັນທຶກ"
+      },
+      "NewModelsButton" : {
+        "label" : "ໂມເດວໃໝ່",
+        "help" : "ສ້າງການຕັ້ງຄ່າໂມເດວໃໝ່"
+      },
+      "NewModelsDialog" : {
+        "label" : "ເພີ່ມໂມເດວໃໝ່"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "url ພື້ນຖານສໍາລັບບໍລິການ api ຂອງຜູ້ສະຫນອງນີ້"
+      },
+      "ModelTypePanel" : {
+        "label" : "ເພີ່ມໂມເດວໃໝ່"
+      },
+      "ModelsChoices" : {
+        "label" : "ເລືອກໂມເດວ"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "ເລືອກໂມເດວທີ່ແນະນຳ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "ໂມເດວ embedding",
+        "help" : "ເລືອກໜື່ງໃນ ໂມເດວ embedding ທີ່ກຳນົດໄວ້ລ່ວງໜ້າ"
+      },
+      "chatPresetChoice" : {
+        "label" : "ໂມເດວ chat",
+        "help" : "ເລືອກໜື່ງໃນໂມເດວ chat ທີ່ກຳນົດໄວ້ລ່ວງໜ້າ"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "ເລືອກໂມເດວສູງ"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "ໂມເດວ embedding",
+        "help" : "ເລືອກໜື່ງໃນໂມເດວ embedding ທີ່ຜູ້ສະຫນອງເຜີຍແຜ່"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "ໂມເດວ chat",
+        "help" : "ເລືອກໜື່ງໃນໂມເດວ chat ທີ່ຜູ້ສະຫນອງເຜີຍແຜ່"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ໃຊ້ໂໝດນີ້ເທົ່ານັ້ນຖ້າທ່ານເປັນຜູ້ເຊີ້ຍຊານ ຫຼືໄດ້ກວດເບິ່ງທີ່ເວັບໄຊຜູ້ສະຫນອງແລ້ວວ່າໂມເດວໃດເໝາະບັດກັບຄວາມຕ້ອງການຂອງທ່ານ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ຕັ້ງເປັນໂມເດວ chat ເລີ່ມຕົ້ນ",
+        "help" : "ຕັ້ງໂມເດວນີ້ເປັນຄ່າຕັ້ງຕົ້ນ ທຸກອະນຸບົດຈະໃຊ້ຖ້າບໍ່ໄດ້ຕັ້ງຄ່າ chat ໂມເດວອື່ນ"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " ພວກເຮົາຂໍແນະນຳລາຍການໂມເດວຕໍ່ໄປນີ້ "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ຕັ້ງເປັນໂມເດວ embedding ເລີ່ມຕົ້ນ",
+        "help" : "ຕັ້ງໂມເດວນີ້ເປັນຄ່າຕັ້ງຕົ້ນ ຈະໃຊ້ທຸກອະນຸບົດຖ້າບໍ່ເລືອກ embedding ໂມເດວອື່ນ"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ຕັ້ງເປັນໂມເດວ chat ເລີ່ມຕົ້ນ",
+        "help" : "ຕັ້ງໂມເດວນີ້ເປັນຄ່າຕັ້ງຕົ້ນ ທຸກອະນຸບົດຈະໃຊ້ຖ້າບໍ່ໄດ້ຕັ້ງຄ່າ chat ໂມເດວອື່ນ"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ຕັ້ງເປັນໂມເດວ embedding ເລີ່ມຕົ້ນ",
+        "help" : "ຕັ້ງໂມເດວນີ້ເປັນຄ່າຕັ້ງຕົ້ນ ຈະໃຊ້ທຸກອະນຸບົດຖ້າບໍ່ເລືອກ embedding ໂມເດວອື່ນ"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ໃຊ້ໂໝດນີ້ເທົ່ານັ້ນຖ້າທ່ານເປັນຜູ້ເຊີ້ຍຊານ ຫຼືໄດ້ກວດເບິ່ງທີ່ເວັບໄຊຜູ້ສະຫນອງແລ້ວວ່າໂມເດວໃດເໝາະບັດກັບຄວາມຕ້ອງການຂອງທ່ານ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "ສ້າງແລະເປີດໃຊ້"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "ສ້າງແລະເປີດໃຊ້"
+      },
+      "ProviderNameField" : {
+        "label" : "ຜູ້ສະຫນອງ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider ພ້ອມໃຊ້ງານ",
+        "detail" : "ຜູ້ສະຫນອງຢູ່ໃນສະພາບພ້ອມແລະຕັ້ງຄ່າສຳເລັດ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ປະຕິບັດງານລົ້ມເຫຼວ",
+        "detail" : "ບໍ່ສາມາດຢືນຢັນພາບດ້ວຍຂໍ້ມູນສິດເຂົ້າໃຊ້"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ສຳເລັດ!",
+        "detail" : "ດຳເນີນການສຳເລັດສໍາເລັດດີ"
       }
     }
   }

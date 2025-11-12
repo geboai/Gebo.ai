@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operacija je uspešno završena"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Dobrodošli u Gebo.ai",
+        "detail" : "Unesite korisničko ime i lozinku za prijavu"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Podesite najmanje jedan \"R.A.G.\" chat profil",
         "description" : "Podesite najmanje jedan profil za prošireni chat zasnovan na jednoj od podešenih baza znanja za svoje korisnike"
+      },
+      "mandatory-done" : {
+        "summary" : "Obavezni koraci podešavanja Gebo.ai su završeni...",
+        "detail" : "Obavezni koraci podešavanja su završeni, ali neki nedostajući koraci sprečavaju vašu organizaciju da iskoristi ovaj softver u potpunosti"
+      },
+      "setup-ok" : {
+        "summary" : "Podešavanje Gebo.ai je uspešno!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Nedostaje neki obavezan korak pri podešavanju Gebo.ai",
+        "detail" : "Pregledajte korake označene crvenom bojom u procesu podešavanja"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Podrazumevani model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Podešavanje pristupa Gebo.ai llms provajderima"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "otvori formu projekta"
+      },
+      "Button3" : {
+        "help" : "otvori izvor podataka"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai podešavanje uspešno!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Dodaj novi R.A.G. chat profil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Dodaj R.A.G. chat profil"
+      },
+      "MainPanel" : {
+        "label" : "Podešavanja profila za augmented generation (r.a.g.) chat"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Postojeći R.A.G. chat profili"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Izmeni R.A.G. chat profil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kodovi baze znanja"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Obrađeni dokumenti",
         "dataset-2-label" : "Dokumenti sa greškom",
         "dataset-3-label" : "Odbijeni dokumenti"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Kupi link za Apy key kredit"
+      },
+      "ModifyBtn" : {
+        "label" : "Izmeni",
+        "help" : "Pregled/izmena podešavanja modela"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Opis"
+      },
+      "ExistingModelType" : {
+        "label" : "Tip modela"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Postojeće konfiguracije"
+      },
+      "ProviderWWW" : {
+        "label" : "Link ka web sajtu"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Podaci o provajderu"
+      },
+      "ProviderInfos" : {
+        "label" : "Podaci o provajderu"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ključ/podaci za prijavu",
+        "help" : "Izaberite api ključ ili podatke za prijavu za ovog provajdera"
+      },
+      "NewApiKey" : {
+        "label" : "Novi api ključ",
+        "help" : "Unesite novi api ključ za korišćenje sa ovim provajderom"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Koristi postojeće ili novo",
+        "help" : "Koristite postojeće ili kreirajte nove podatke za prijavu za ovog provajdera"
+      },
+      "NewUserName" : {
+        "label" : "Korisničko ime",
+        "help" : "Korisničko ime za pristup servisima provajdera"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Novi embedding model",
+        "help" : "Kreirajte novu konfiguraciju embedding modela"
+      },
+      "NewChatModel" : {
+        "label" : "Novi chat model",
+        "help" : "Kreirajte novu konfiguraciju chat modela"
+      },
+      "NewModelDialog" : {
+        "label" : "Dodaj novi model"
+      },
+      "PiSave" : {
+        "label" : "Sačuvaj"
+      },
+      "NewModelsButton" : {
+        "label" : "Novi modeli",
+        "help" : "Kreiraj novu konfiguraciju modela"
+      },
+      "NewModelsDialog" : {
+        "label" : "Dodaj nove modele"
+      },
+      "baseUrl" : {
+        "label" : "Osnovni api url",
+        "help" : "Osnovni url za api servise provajdera"
+      },
+      "ModelTypePanel" : {
+        "label" : "Dodaj nove modele"
+      },
+      "ModelsChoices" : {
+        "label" : "Izbor modela"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Preporučeni izbor modela"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Izaberite jedan od unapred definisanih embedding modela"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat model",
+        "help" : "Izaberite jedan od unapred definisanih chat modela"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Napredni izbor modela"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Izaberite jedan od embedding modela koje je objavio provajder"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat model",
+        "help" : "Izaberite jedan od chat modela koje je objavio provajder"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Ovaj način izbora koristite samo ako ste stručnjak ili proverite kod provajdera koji modeli odgovaraju vašim potrebama. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "postavi kao podrazumevani chat model",
+        "help" : "Postavite ovaj model kao podrazumevani — koristiće se za svaki zadatak za koji nije definisan drugi chat model"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Predlažemo sledeću listu modela "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "postavi kao podrazumevani embedding model",
+        "help" : "Postavite ovaj model kao podrazumevani — koristiće se za svaki zadatak za koji nije definisan drugi embedding model"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "postavi kao podrazumevani chat model",
+        "help" : "Postavite ovaj model kao podrazumevani — koristiće se za svaki zadatak za koji nije definisan drugi chat model"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "postavi kao podrazumevani embedding model",
+        "help" : "Postavite ovaj model kao podrazumevani — koristiće se za svaki zadatak za koji nije definisan drugi embedding model"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Ovaj način izbora koristite samo ako ste stručnjak ili proverite kod provajdera koji modeli odgovaraju vašim potrebama. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Kreiraj i aktiviraj"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Kreiraj i aktiviraj"
+      },
+      "ProviderNameField" : {
+        "label" : "Provajder"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI udaljeni provajder je OK",
+        "detail" : "Provajder je aktivan i uspešno podešen"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacija nije uspela",
+        "detail" : "Nije moguće izvršiti autentifikaciju sa unetim podacima"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Uspešno!",
+        "detail" : "Operacija je uspešno završena"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "Gerai!",
         "detail" : "Operacija sėkmingai atlikta"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Sveiki atvykę į Gebo.ai",
+        "detail" : "Įveskite naudotojo vardą ir slaptažodį prisijungimui"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Nustatykite bent vieną „R.A.G.“ pokalbio profilį",
         "description" : "Nustatykite bent vieną papildytą paieška pagrįstą pokalbio profilį naudotojams pagal pasirinktą žinių bazę"
+      },
+      "mandatory-done" : {
+        "summary" : "Privalomi Gebo.ai diegimo žingsniai įvykdyti...",
+        "detail" : "Privalomi diegimo žingsniai yra užbaigti, tačiau kai kurių trūksta, todėl jūsų organizacija negalės pilnai išnaudoti šios programinės įrangos"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai diegimas pavyko!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai diegime trūksta privalomų žingsnių",
+        "detail" : "Peržiūrėkite nustatymo proceso raudonai pažymėtus žingsnius"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Numatytas modelis"
+      },
+      "MainPanelHeader" : {
+        "label" : "Nustatykite Gebo.ai llms teikėjų prieigą"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "atidaryti projekto formą"
+      },
+      "Button3" : {
+        "help" : "atverti duomenų šaltinį"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai nustatymai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Pridėti naują R.A.G. pokalbio profilį"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Pridėti R.A.G. pokalbio profilį"
+      },
+      "MainPanel" : {
+        "label" : "Gauti patobulintos generacijos (r.a.g.) pokalbio profilių nustatymus"
+      },
+      "CodeHeader" : {
+        "label" : "Kodas"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Egzistuojantys R.A.G. pokalbio profiliai"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Redaguoti R.A.G. pokalbio profilį"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Žinių bazės kodai"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Apdoroti dokumentai",
         "dataset-2-label" : "Dokumentai su klaidomis",
         "dataset-3-label" : "Atmesti dokumentai"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy raktų įsigijimo nuoroda"
+      },
+      "ModifyBtn" : {
+        "label" : "Keisti",
+        "help" : "Peržiūrėti/keisti modelio konfigūraciją"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kodas"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Aprašymas"
+      },
+      "ExistingModelType" : {
+        "label" : "Modelio tipas"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Esamos konfigūracijos"
+      },
+      "ProviderWWW" : {
+        "label" : "Svetainės nuoroda"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Teikėjo prisijungimo duomenys"
+      },
+      "ProviderInfos" : {
+        "label" : "Teikėjo informacija"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api raktas/prisijungimo duomenys",
+        "help" : "Pasirinkite šio teikėjo api raktą arba prisijungimo duomenis"
+      },
+      "NewApiKey" : {
+        "label" : "Naujas api raktas",
+        "help" : "Įveskite naują api raktą, kuris bus naudojamas šiam teikėjui"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Naudoti esamus arba naujus",
+        "help" : "Naudoti esamus arba sukurti naujus prisijungimo duomenis šiam teikėjui"
+      },
+      "NewUserName" : {
+        "label" : "Naudotojo vardas",
+        "help" : "Naudotojo vardas, naudojamas prisijungti prie teikėjo paslaugų"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Naujas embedding modelis",
+        "help" : "Sukurti naują embedding modelio konfigūraciją"
+      },
+      "NewChatModel" : {
+        "label" : "Naujas Chat modelis",
+        "help" : "Sukurti naują pokalbio modelio konfigūraciją"
+      },
+      "NewModelDialog" : {
+        "label" : "Pridėti naują modelį"
+      },
+      "PiSave" : {
+        "label" : "Išsaugoti"
+      },
+      "NewModelsButton" : {
+        "label" : "Nauji modeliai",
+        "help" : "Sukurti naujų modelių konfigūraciją"
+      },
+      "NewModelsDialog" : {
+        "label" : "Pridėti naujus modelius"
+      },
+      "baseUrl" : {
+        "label" : "Pagrindinis api adresas",
+        "help" : "Pagrindinis url teikėjo api paslaugoms"
+      },
+      "ModelTypePanel" : {
+        "label" : "Pridėti naujus modelius"
+      },
+      "ModelsChoices" : {
+        "label" : "Modelių pasirinkimai"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Siūloma modelių atranka"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding modelis",
+        "help" : "Pasirinkite vieną iš iš anksto nustatytų embedding modelių"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat modelis",
+        "help" : "Pasirinkite vieną iš iš anksto nustatytų pokalbio modelių"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Išplėstinė modelių atranka"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding modelis",
+        "help" : "Pasirinkite vieną iš tiekėjo publikuotų embedding modelių"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat modelis",
+        "help" : "Pasirinkite vieną iš tiekėjo publikuotų pokalbio modelių"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Šį pasirinkimo būdą naudokite tik būdami ekspertu arba tikrinant tiekėjo svetainėje, kurie modeliai geriausiai atitinka jūsų poreikius. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Nustatyti šį modelį kaip pagrindinį; bus naudojamas visoms užduotims, kurioms nenurodytas kitas pokalbio modelis"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Rekomenduojame šiuos modelius "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Nustatyti šį modelį kaip pagrindinį; bus naudojamas kiekvienai užduočiai, kuriai nenurodytas kitas embedding modelis"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "nustatyti kaip numatytąjį pokalbio modelį",
+        "help" : "Nustatyti šį modelį kaip pagrindinį; bus naudojamas visoms užduotims, kurioms nenurodytas kitas pokalbio modelis"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "nustatyti kaip numatytąjį embedding modelį",
+        "help" : "Nustatyti šį modelį kaip pagrindinį; bus naudojamas kiekvienai užduočiai, kuriai nenurodytas kitas embedding modelis"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Šį pasirinkimo būdą naudokite tik būdami ekspertu arba tikrinant tiekėjo svetainėje, kurie modeliai geriausiai atitinka jūsų poreikius. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Sukurti ir aktyvuoti"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Sukurti ir aktyvuoti"
+      },
+      "ProviderNameField" : {
+        "label" : "Teikėjas"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI nuotolinis teikėjas veikia",
+        "detail" : "Teikėjas veikia ir sėkmingai sukonfigūruotas"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Veiksmas nepavyko",
+        "detail" : "Nepavyko autentifikuoti su pateiktais duomenimis"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "GERAI!",
+        "detail" : "Veiksmas atliktas sėkmingai"
       }
     }
   }

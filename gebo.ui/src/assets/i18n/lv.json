@@ -78,6 +78,12 @@
         "summary" : "Labi!",
         "detail" : "Darbība veiksmīgi pabeigta"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Laipni lūdzam gebo.ai",
+        "detail" : "Ievadiet savu lietotājvārdu un paroli, lai pieteiktos"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Konfigurējiet vismaz vienu \"R.A.G.\" čata profilu",
         "description" : "Konfigurējiet vismaz vienu retrieve augmented čata profilu saviem lietotājiem, pamatojoties uz kādu no jūsu konfigurētām zināšanu bāzēm"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai obligātie iestatījumi ir pabeigti...",
+        "detail" : "Obligātie iestatīšanas soļi ir izpildīti, bet dažas trūkstošās darbības neļauj jūsu organizācijai pilnībā izmantot šo programmatūru"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai iestatīšana ir veiksmīga!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai iestatīšanai trūkst kāds obligāts solis",
+        "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Noklusējuma modelis"
+      },
+      "MainPanelHeader" : {
+        "label" : "Iestatiet Gebo.ai llms nodrošinātāju piekļuvi"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "atvērt projekta formu"
+      },
+      "Button3" : {
+        "help" : "atvērt datu avotu"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai iestatīšana OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Pievienot jaunu R.A.G. tērzēšanas profilu"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Pievienot R.A.G. tērzēšanas profilu"
+      },
+      "MainPanel" : {
+        "label" : "Ielādēt paplašinātās ģenerācijas (r.a.g.) tērzēšanas profilu iestatījumus"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Esošie R.A.G. tērzēšanas profili"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Rediģēt R.A.G. tērzēšanas profilu"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Zināšanu bāzes kodi"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Apstrādātie dokumenti",
         "dataset-2-label" : "Kļūdainie dokumenti",
         "dataset-3-label" : "Noraidītie dokumenti"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Pirkt Apy atslēgas kredītu saite"
+      },
+      "ModifyBtn" : {
+        "label" : "Mainīt",
+        "help" : "Skatīt/mainīt modeļa konfigurāciju"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kods"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Apraksts"
+      },
+      "ExistingModelType" : {
+        "label" : "Modeļa tips"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Esošās konfigurācijas"
+      },
+      "ProviderWWW" : {
+        "label" : "Mājaslapas saite"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Pakalpojumu sniedzēja akreditācijas dati"
+      },
+      "ProviderInfos" : {
+        "label" : "Pakalpojumu sniedzēja informācija"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api atslēga/akreditācijas dati",
+        "help" : "Izvēlieties api atslēgu vai akreditācijas datus šim nodrošinātājam"
+      },
+      "NewApiKey" : {
+        "label" : "Jauna api atslēga",
+        "help" : "Ievadiet jaunu api atslēgu, ko izmantot ar šo nodrošinātāju"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Izmantot esošos vai jaunus",
+        "help" : "Izmantot esošos vai izveidot jaunus akreditācijas datus šim nodrošinātājam"
+      },
+      "NewUserName" : {
+        "label" : "Lietotājvārds",
+        "help" : "Lietotājvārds piekļuvei pakalpojuma sniedzēja pakalpojumiem"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Jauns embedding modelis",
+        "help" : "Izveidot jaunu embedding modeļa konfigurāciju"
+      },
+      "NewChatModel" : {
+        "label" : "Jauns Chat modelis",
+        "help" : "Izveidot jaunu tērzēšanas modeļa konfigurāciju"
+      },
+      "NewModelDialog" : {
+        "label" : "Pievienot jaunu modeli"
+      },
+      "PiSave" : {
+        "label" : "Saglabāt"
+      },
+      "NewModelsButton" : {
+        "label" : "Jauni modeļi",
+        "help" : "Izveidot jaunu modeļu konfigurāciju"
+      },
+      "NewModelsDialog" : {
+        "label" : "Pievienot jaunus modeļus"
+      },
+      "baseUrl" : {
+        "label" : "Bāzes api URL",
+        "help" : "Bāzes URL nodrošinātāja api pakalpojumiem"
+      },
+      "ModelTypePanel" : {
+        "label" : "Pievienot jaunus modeļus"
+      },
+      "ModelsChoices" : {
+        "label" : "Modeļu izvēle"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Ieteiktā modeļu izvēle"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding modelis",
+        "help" : "Izvēlieties vienu no iepriekšdefinētajiem embedding modeļiem"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat modelis",
+        "help" : "Izvēlieties vienu no iepriekšdefinētajiem tērzēšanas modeļiem"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Paplašināta modeļu izvēle"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding modelis",
+        "help" : "Izvēlieties vienu no piegādātāja publicētajiem embedding modeļiem"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat modelis",
+        "help" : "Izvēlieties vienu no piegādātāja publicētajiem tērzēšanas modeļiem"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Izmantojiet šo izvēles režīmu tikai tad, ja esat eksperts vai pārbaudiet piegādātāja vietnē, kuri modeļi atbilst jūsu vajadzībām. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma tērzēšanas modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits tērzēšanas modelis"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Mēs iesakām jums šādu modeļu sarakstu "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma embedding modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits embedding modelis"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma tērzēšanas modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits tērzēšanas modelis"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma embedding modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits embedding modelis"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Izmantojiet šo izvēles režīmu tikai tad, ja esat eksperts vai pārbaudiet piegādātāja vietnē, kuri modeļi atbilst jūsu vajadzībām. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Izveidot un aktivizēt"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Izveidot un aktivizēt"
+      },
+      "ProviderNameField" : {
+        "label" : "Paklpojumu sniedzējs"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālinātais pakalpojumu sniedzējs OK",
+        "detail" : "Pakalpojumu sniedzējs darbojas un ir veiksmīgi konfigurēts"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Darbība neveiksmīga",
+        "detail" : "Nav iespējams autentificēties ar norādītajiem akreditācijas datiem"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Labi!",
+        "detail" : "Darbība veiksmīgi pabeigta"
       }
     }
   }

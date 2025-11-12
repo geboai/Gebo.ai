@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Actie succesvol voltooid"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Welkom bij gebo.ai",
+        "detail" : "Voer je gebruikersnaam en wachtwoord in om in te loggen"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Configureer ten minste een \"R.A.G.\" chatprofiel",
         "description" : "Configureer een retrieve augmented chatprofiel voor je gebruikers op basis van een van je geconfigureerde kennisbanken"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai installatie verplichte stappen voltooid...",
+        "detail" : "Verplichte installatiestappen zijn voltooid, maar enkele ontbrekende stappen voorkomen dat je organisatie het maximale uit deze software haalt"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai installatie OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai installatie mist een verplichte stap",
+        "detail" : "Controleer de rode stappen in het installatieproces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Standaardmodel"
+      },
+      "MainPanelHeader" : {
+        "label" : "Toegang tot Gebo.ai llms providers instellen"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "projectformulier openen"
+      },
+      "Button3" : {
+        "help" : "gegevensbron openen"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai installatie OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Nieuw R.A.G. chatprofiel toevoegen"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. chatprofiel toevoegen"
+      },
+      "MainPanel" : {
+        "label" : "Instellingen voor chatprofielen met retrieval augmented generation (r.a.g.) ophalen"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Bestaande R.A.G. chatprofielen"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beschrijving"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. chatprofiel bewerken"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kennisbank-codes"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Verwerkte documenten",
         "dataset-2-label" : "Foutieve documenten",
         "dataset-3-label" : "Verworpen documenten"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Koop Apy key krediet-link"
+      },
+      "ModifyBtn" : {
+        "label" : "Wijzigen",
+        "help" : "Modelconfiguratie bekijken/wijzigen"
+      },
+      "ExistingModelCode" : {
+        "label" : "Code"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Beschrijving"
+      },
+      "ExistingModelType" : {
+        "label" : "Modeltype"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Bestaande configuraties"
+      },
+      "ProviderWWW" : {
+        "label" : "Website-link"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Provider-referenties"
+      },
+      "ProviderInfos" : {
+        "label" : "Provider-informatie"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/referenties",
+        "help" : "Kies api key of referenties voor deze provider"
+      },
+      "NewApiKey" : {
+        "label" : "Nieuwe api key",
+        "help" : "Voer een nieuwe api key in voor deze provider"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Bestaande of nieuwe gebruiken",
+        "help" : "Gebruik bestaande of maak nieuwe referenties aan voor deze provider"
+      },
+      "NewUserName" : {
+        "label" : "Gebruikersnaam",
+        "help" : "Gebruikersnaam voor toegang tot providerservices"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nieuw embedding-model",
+        "help" : "Maak een nieuwe embedding-modelconfiguratie"
+      },
+      "NewChatModel" : {
+        "label" : "Nieuw chatmodel",
+        "help" : "Maak een nieuwe chatmodelconfiguratie"
+      },
+      "NewModelDialog" : {
+        "label" : "Nieuw model toevoegen"
+      },
+      "PiSave" : {
+        "label" : "Opslaan"
+      },
+      "NewModelsButton" : {
+        "label" : "Nieuwe modellen",
+        "help" : "Nieuwe modelconfiguraties maken"
+      },
+      "NewModelsDialog" : {
+        "label" : "Nieuwe modellen toevoegen"
+      },
+      "baseUrl" : {
+        "label" : "Basis api-url",
+        "help" : "Basis-url voor de api-services van de provider"
+      },
+      "ModelTypePanel" : {
+        "label" : "Nieuwe modellen toevoegen"
+      },
+      "ModelsChoices" : {
+        "label" : "Modellenkeuze"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Voorgestelde modellenselectie"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding-model",
+        "help" : "Selecteer een van de vooraf ingestelde embedding-modellen"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chatmodel",
+        "help" : "Selecteer een van de vooraf ingestelde chatmodellen"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Geavanceerde modellenselectie"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding-model",
+        "help" : "Selecteer een van de embedding-modellen die door de provider gepubliceerd zijn"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chatmodel",
+        "help" : "Selecteer een van de chatmodellen die door de provider gepubliceerd zijn"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Gebruik deze selectiemodus alleen als je een expert bent of door op de website van de provider te controleren welke modellen bij je behoeften passen. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "instellen als standaard chatmodel",
+        "help" : "Stel dit model in als het standaardmodel, dit wordt gebruikt voor elke taak waarvoor geen ander chatmodel is geconfigureerd"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " We raden je de volgende modellen aan "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "instellen als standaard embedding-model",
+        "help" : "Stel dit model in als het standaardmodel, dit wordt gebruikt voor elke taak waarvoor geen ander embedding-model is geconfigureerd"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "instellen als standaard chatmodel",
+        "help" : "Stel dit model in als het standaardmodel, dit wordt gebruikt voor elke taak waarvoor geen ander chatmodel is geconfigureerd"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "instellen als standaard embedding-model",
+        "help" : "Stel dit model in als het standaardmodel, dit wordt gebruikt voor elke taak waarvoor geen ander embedding-model is geconfigureerd"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Gebruik deze selectiemodus alleen als je een expert bent of door op de website van de provider te controleren welke modellen bij je behoeften passen. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Aanmaken en activeren"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Aanmaken en activeren"
+      },
+      "ProviderNameField" : {
+        "label" : "Provider"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider OK",
+        "detail" : "Provider is actief en succesvol geconfigureerd"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Actie mislukt",
+        "detail" : "Kan niet verifiëren met de opgegeven referenties"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Actie succesvol uitgevoerd"
       }
     }
   }

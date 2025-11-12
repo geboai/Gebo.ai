@@ -78,6 +78,12 @@
         "summary" : "U redu!",
         "detail" : "Operacija je uspješno završena"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Dobrodošli u gebo.ai",
+        "detail" : "Unesite korisničko ime i lozinku za prijavu"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Konfigurišite barem jedan \"R.A.G.\" chat profil",
         "description" : "Konfigurišite barem jedan profil za prošireni chat za vaše korisnike na osnovu jedne od vaših konfiguriranih baza znanja"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai podešavanje obaveznih koraka završeno...",
+        "detail" : "Obavezni koraci za podešavanje su završeni, ali neki nedostajući koraci sprečavaju vašu organizaciju da iskoristi pun potencijal ovog softvera"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai podešavanje je OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai podešavanje nedostaje neki obavezan korak",
+        "detail" : "Pregledajte crvene korake procesa podešavanja"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Podrazumijevani model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Postavite pristup za Gebo.ai llms provajdere"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "otvori formu projekta"
+      },
+      "Button3" : {
+        "help" : "otvori izvor podataka"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai podešavanje je uspješno!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Dodaj novi R.A.G. chat profil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Dodaj R.A.G. chat profil"
+      },
+      "MainPanel" : {
+        "label" : "Preuzmi postavke augmentirane generacije (r.a.g.) chat profila"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Postojeći R.A.G. chat profili"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Uredi R.A.G. chat profil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kodovi baze znanja"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Obrađeni dokumenti",
         "dataset-2-label" : "Dokumenti sa greškom",
         "dataset-3-label" : "Odbijeni dokumenti"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Kupi vezu za Apy key kredit"
+      },
+      "ModifyBtn" : {
+        "label" : "Izmijeni",
+        "help" : "Prikaži/izmijeni konfiguraciju modela"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Opis"
+      },
+      "ExistingModelType" : {
+        "label" : "Tip modela"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Postojeće konfiguracije"
+      },
+      "ProviderWWW" : {
+        "label" : "Link web stranice"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Podaci provajdera"
+      },
+      "ProviderInfos" : {
+        "label" : "Informacije o provajderu"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ključ/podaci",
+        "help" : "Odaberite api ključ ili podatke za ovog provajdera"
+      },
+      "NewApiKey" : {
+        "label" : "Novi api ključ",
+        "help" : "Unesite novi api ključ za ovog provajdera"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Koristi postojeće ili nove",
+        "help" : "Koristi postojeće ili kreiraj nove podatke za ovog provajdera"
+      },
+      "NewUserName" : {
+        "label" : "Korisničko ime",
+        "help" : "Korisničko ime koje se koristi za pristup uslugama provajdera"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Novi embedding model",
+        "help" : "Kreirajte novu konfiguraciju embedding modela"
+      },
+      "NewChatModel" : {
+        "label" : "Novi Chat model",
+        "help" : "Kreirajte novu konfiguraciju chat modela"
+      },
+      "NewModelDialog" : {
+        "label" : "Dodaj novi model"
+      },
+      "PiSave" : {
+        "label" : "Sačuvaj"
+      },
+      "NewModelsButton" : {
+        "label" : "Novi modeli",
+        "help" : "Kreiraj konfiguraciju novih modela"
+      },
+      "NewModelsDialog" : {
+        "label" : "Dodaj nove modele"
+      },
+      "baseUrl" : {
+        "label" : "Osnovni api url",
+        "help" : "Osnovni url za api usluge provajdera"
+      },
+      "ModelTypePanel" : {
+        "label" : "Dodaj nove modele"
+      },
+      "ModelsChoices" : {
+        "label" : "Izbor modela"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Predloženi izbor modela"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Odaberite jedan od unaprijed definiranih embedding modela"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat model",
+        "help" : "Odaberite jedan od unaprijed definiranih chat modela"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Napredni izbor modela"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Odaberite jedan od modela za embedding koje je objavio dobavljač"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat model",
+        "help" : "Odaberite jedan od chat modela koje je objavio dobavljač"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Koristite ovaj način odabira samo ako ste stručnjak ili provjerite na web stranici dobavljača koji modeli odgovaraju vašim potrebama. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "postavi kao zadani chat model",
+        "help" : "Postavite ovaj model kao zadani, koristiće se za svaki zadatak za koji nije podešen drugi chat model"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Preporučujemo vam sljedeću listu modela "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "postavi kao zadani embedding model",
+        "help" : "Postavite ovaj model kao zadani, koristiće se za svaki zadatak za koji nije podešen drugi embedding model"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "postavi kao zadani chat model",
+        "help" : "Postavite ovaj model kao zadani, koristiće se za svaki zadatak za koji nije podešen drugi chat model"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "postavi kao zadani embedding model",
+        "help" : "Postavite ovaj model kao zadani, koristiće se za svaki zadatak za koji nije podešen drugi embedding model"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Koristite ovaj način odabira samo ako ste stručnjak ili provjerite na web stranici dobavljača koji modeli odgovaraju vašim potrebama. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Kreiraj i aktiviraj"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Kreiraj i aktiviraj"
+      },
+      "ProviderNameField" : {
+        "label" : "Provajder"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI udaljeni provajder OK",
+        "detail" : "Provajder je pokrenut i uspješno konfigurisan"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacija nije uspjela",
+        "detail" : "Ne mogu se autentifikovati s dostavljenim podacima"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operacija uspješno završena"
       }
     }
   }

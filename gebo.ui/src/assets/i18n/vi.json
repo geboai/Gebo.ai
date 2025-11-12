@@ -78,6 +78,12 @@
         "summary" : "Thành công!",
         "detail" : "Thao tác thực hiện thành công"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Chào mừng đến với Gebo.ai",
+        "detail" : "Nhập tên người dùng và mật khẩu để đăng nhập"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Cấu hình ít nhất một hồ sơ chat \"R.A.G.\"",
         "description" : "Cấu hình ít nhất một hồ sơ chat truy xuất tăng cường dựa trên một trong các cơ sở tri thức đã cấu hình"
+      },
+      "mandatory-done" : {
+        "summary" : "Đã hoàn thành các bước cài đặt bắt buộc Gebo.ai...",
+        "detail" : "Các bước cài đặt bắt buộc đã hoàn thành nhưng một số bước còn thiếu khiến tổ chức của bạn chưa tận dụng tối đa phần mềm này"
+      },
+      "setup-ok" : {
+        "summary" : "Cài đặt Gebo.ai đã hoàn tất!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Cài đặt Gebo.ai thiếu một số bước bắt buộc",
+        "detail" : "Vui lòng xem lại các bước màu đỏ trong quá trình cài đặt"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Mô hình mặc định"
+      },
+      "MainPanelHeader" : {
+        "label" : "Thiết lập quyền truy cập nhà cung cấp llms của Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "mở biểu mẫu dự án"
+      },
+      "Button3" : {
+        "help" : "mở nguồn dữ liệu"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Cài đặt Gebo.ai thành công!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Thêm hồ sơ trò chuyện R.A.G. mới"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Thêm hồ sơ trò chuyện R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Cài đặt hồ sơ trò chuyện r.a.g. lấy dữ liệu hỗ trợ"
+      },
+      "CodeHeader" : {
+        "label" : "Mã"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Các hồ sơ trò chuyện R.A.G. hiện có"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Chỉnh sửa hồ sơ trò chuyện R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Mã cơ sở kiến thức"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Tài liệu đã xử lý",
         "dataset-2-label" : "Tài liệu lỗi",
         "dataset-3-label" : "Tài liệu bị loại bỏ"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Mua liên kết tín dụng khóa Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Chỉnh sửa",
+        "help" : "Xem/chỉnh sửa cấu hình mô hình"
+      },
+      "ExistingModelCode" : {
+        "label" : "Mã"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Mô tả"
+      },
+      "ExistingModelType" : {
+        "label" : "Loại mô hình"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Cấu hình hiện có"
+      },
+      "ProviderWWW" : {
+        "label" : "Liên kết trang web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Thông tin xác thực nhà cung cấp"
+      },
+      "ProviderInfos" : {
+        "label" : "Thông tin nhà cung cấp"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/thông tin xác thực",
+        "help" : "Chọn api key hoặc thông tin xác thực cho nhà cung cấp này"
+      },
+      "NewApiKey" : {
+        "label" : "Api key mới",
+        "help" : "Nhập api key mới để dùng với nhà cung cấp này"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Dùng thông tin hiện có hoặc mới",
+        "help" : "Sử dụng hoặc tạo thông tin xác thực mới cho nhà cung cấp này"
+      },
+      "NewUserName" : {
+        "label" : "Tên người dùng",
+        "help" : "Tên người dùng để truy cập dịch vụ nhà cung cấp"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Mô hình embedding mới",
+        "help" : "Tạo cấu hình mô hình embedding mới"
+      },
+      "NewChatModel" : {
+        "label" : "Mô hình Chat mới",
+        "help" : "Tạo cấu hình mô hình chat mới"
+      },
+      "NewModelDialog" : {
+        "label" : "Thêm mô hình mới"
+      },
+      "PiSave" : {
+        "label" : "Lưu"
+      },
+      "NewModelsButton" : {
+        "label" : "Mô hình mới",
+        "help" : "Tạo cấu hình mô hình mới"
+      },
+      "NewModelsDialog" : {
+        "label" : "Thêm mô hình mới"
+      },
+      "baseUrl" : {
+        "label" : "Địa chỉ api cơ bản",
+        "help" : "Địa chỉ url cơ bản cho dịch vụ api của nhà cung cấp"
+      },
+      "ModelTypePanel" : {
+        "label" : "Thêm mô hình mới"
+      },
+      "ModelsChoices" : {
+        "label" : "Lựa chọn mô hình"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Chọn mô hình đề xuất"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Mô hình embedding",
+        "help" : "Chọn một trong các mô hình embedding được xác định trước"
+      },
+      "chatPresetChoice" : {
+        "label" : "Mô hình chat",
+        "help" : "Chọn một trong các mô hình chat được xác định trước"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Chọn mô hình nâng cao"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Mô hình embedding",
+        "help" : "Chọn một trong các mô hình embedding do nhà cung cấp xuất bản"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Mô hình chat",
+        "help" : "Chọn một trong các mô hình chat do nhà cung cấp xuất bản"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Chỉ sử dụng chế độ chọn này nếu bạn là chuyên gia hoặc kiểm tra trên trang nhà cung cấp để chọn mô hình phù hợp nhu cầu của bạn. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "đặt làm mô hình chat mặc định",
+        "help" : "Đặt mô hình này làm mặc định, sẽ dùng cho mọi tác vụ chưa cấu hình mô hình chat khác"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Chúng tôi gợi ý bạn danh sách mô hình sau "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Đặt mô hình này làm mặc định, sẽ dùng cho mọi tác vụ chưa cấu hình mô hình embedding khác"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "đặt làm mô hình chat mặc định",
+        "help" : "Đặt mô hình này làm mặc định, sẽ dùng cho mọi tác vụ chưa cấu hình mô hình chat khác"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "đặt làm mô hình embedding mặc định",
+        "help" : "Đặt mô hình này làm mặc định, sẽ dùng cho mọi tác vụ chưa cấu hình mô hình embedding khác"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Chỉ sử dụng chế độ chọn này nếu bạn là chuyên gia hoặc kiểm tra trên trang nhà cung cấp để chọn mô hình phù hợp nhu cầu của bạn. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Tạo và kích hoạt"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Tạo và kích hoạt"
+      },
+      "ProviderNameField" : {
+        "label" : "Nhà cung cấp"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Nhà cung cấp AI từ xa OK",
+        "detail" : "Nhà cung cấp đang hoạt động và cấu hình thành công"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Thao tác thất bại",
+        "detail" : "Không thể xác thực với thông tin xác thực đã cung cấp"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Thành công!",
+        "detail" : "Thao tác thành công"
       }
     }
   }

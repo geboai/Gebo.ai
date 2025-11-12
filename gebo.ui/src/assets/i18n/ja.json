@@ -78,6 +78,12 @@
         "summary" : "OK！",
         "detail" : "操作が正常に完了しました"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.aiへようこそ",
+        "detail" : "ユーザー名とパスワードを入力してログインしてください"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "少なくとも1つの「R.A.G.」チャットプロファイルを設定",
         "description" : "設定済みのナレッジベースを使ってユーザー向けに少なくとも1つの検索拡張チャットプロファイルを設定してください"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.aiの必須セットアップ手順が完了しました...",
+        "detail" : "必須のセットアップ手順は完了しましたが、一部の未完了手順があり、このソフトウェアを最大限に活用できません"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.aiのセットアップが完了しました！"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.aiのセットアップで必須手順が不足しています",
+        "detail" : "セットアップ手順の赤いステップを確認してください"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "デフォルトモデル"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llmsプロバイダーアクセスの設定"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "プロジェクトフォームを開く"
+      },
+      "Button3" : {
+        "help" : "データソースを開く"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.aiセットアップ完了！"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "新しいR.A.G.チャットプロファイルを追加"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G.チャットプロファイルを追加"
+      },
+      "MainPanel" : {
+        "label" : "強化生成（r.a.g.）チャットプロファイル設定を取得"
+      },
+      "CodeHeader" : {
+        "label" : "コード"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "既存のR.A.G.チャットプロファイル"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G.チャットプロファイルを編集"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "ナレッジベースコード"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "処理済みのドキュメント",
         "dataset-2-label" : "エラードキュメント",
         "dataset-3-label" : "破棄されたドキュメント"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apyキーのクレジット購入リンク"
+      },
+      "ModifyBtn" : {
+        "label" : "変更",
+        "help" : "モデル設定の表示/編集"
+      },
+      "ExistingModelCode" : {
+        "label" : "コード"
+      },
+      "ExistingModelDesc" : {
+        "label" : "説明"
+      },
+      "ExistingModelType" : {
+        "label" : "モデルタイプ"
+      },
+      "ExistingModelsSection" : {
+        "label" : "既存の構成"
+      },
+      "ProviderWWW" : {
+        "label" : "ウェブサイトリンク"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "プロバイダー認証情報"
+      },
+      "ProviderInfos" : {
+        "label" : "プロバイダー情報"
+      },
+      "ExistingApiKey" : {
+        "label" : "APIキー／認証情報",
+        "help" : "このプロバイダーのAPIキーまたは認証情報を選択してください"
+      },
+      "NewApiKey" : {
+        "label" : "新しいAPIキー",
+        "help" : "このプロバイダーで使用する新しいAPIキーを入力してください"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "既存または新規を使用",
+        "help" : "このプロバイダーの既存認証情報を使うか新規作成します"
+      },
+      "NewUserName" : {
+        "label" : "ユーザー名",
+        "help" : "プロバイダーサービスへアクセスする際に使用されるユーザー名"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "新しいエンベディングモデル",
+        "help" : "新しいエンベディングモデル構成を作成します"
+      },
+      "NewChatModel" : {
+        "label" : "新しいチャットモデル",
+        "help" : "新しいチャットモデル構成を作成します"
+      },
+      "NewModelDialog" : {
+        "label" : "新しいモデルを追加"
+      },
+      "PiSave" : {
+        "label" : "保存"
+      },
+      "NewModelsButton" : {
+        "label" : "新しいモデル",
+        "help" : "新しいモデルの構成を作成します"
+      },
+      "NewModelsDialog" : {
+        "label" : "新しいモデルを追加"
+      },
+      "baseUrl" : {
+        "label" : "ベースAPI URL",
+        "help" : "プロバイダーのAPIサービスのベースURL"
+      },
+      "ModelTypePanel" : {
+        "label" : "新しいモデルを追加"
+      },
+      "ModelsChoices" : {
+        "label" : "モデルの選択肢"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "おすすめモデルの選択"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "エンベディングモデル",
+        "help" : "定義済みエンベディングモデルの中から選択"
+      },
+      "chatPresetChoice" : {
+        "label" : "チャットモデル",
+        "help" : "定義済みチャットモデルの中から選択"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "高度なモデル選択"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "エンベディングモデル",
+        "help" : "サプライヤーが公開したエンベディングモデルから選択"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "チャットモデル",
+        "help" : "サプライヤーが公開したチャットモデルから選択"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " 上級者、またはサプライヤーサイトでどのモデルが必要か確認した場合のみこの選択モードを使用してください。 "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "デフォルトのチャットモデルに設定",
+        "help" : "このモデルをデフォルトとして設定します。他にチャットモデルが設定されていないタスクで使用されます"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " 次のモデルリストをおすすめします "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "デフォルトのエンベディングモデルに設定",
+        "help" : "このモデルをデフォルトとして設定します。他にエンベディングモデルが設定されていないタスクで使用されます"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "デフォルトのチャットモデルに設定",
+        "help" : "このモデルをデフォルトとして設定します。他にチャットモデルが設定されていないタスクで使用されます"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "デフォルトのエンベディングモデルに設定",
+        "help" : "このモデルをデフォルトとして設定します。他にエンベディングモデルが設定されていないタスクで使用されます"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " 上級者、またはサプライヤーサイトでどのモデルが必要か確認した場合のみこの選択モードを使用してください。 "
+      },
+      "CreatePresetBtn" : {
+        "label" : "作成して有効化"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "作成して有効化"
+      },
+      "ProviderNameField" : {
+        "label" : "プロバイダー"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AIリモートプロバイダーOK",
+        "detail" : "プロバイダーが稼働中で正常に設定されています"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "操作に失敗しました",
+        "detail" : "入力された認証情報で認証できませんでした"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "操作が正常に完了しました"
       }
     }
   }

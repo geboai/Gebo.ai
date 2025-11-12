@@ -78,6 +78,12 @@
         "summary" : "ជោគជ័យ!",
         "detail" : "ប្រតិបត្តិការបានបញ្ចប់ដោយជោគជ័យ"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "សូមស្វាគមន៍មកកាន់ gebo.ai",
+        "detail" : "បញ្ចូលឈ្មោះអ្នកប្រើ និងពាក្យសម្ងាត់របស់អ្នកដើម្បីចូល"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "កំណត់យ៉ាងហោចណាស់ប្រវត្តិរូបសន្ទនាដើម្បី \"R.A.G.\"",
         "description" : "កំណត់យ៉ាងហោចណាស់ប្រវត្តិរូបសន្ទនាបង្កើតសមាសភាពមួយសម្រាប់អ្នកប្រើប្រាស់របស់អ្នកផ្អែកលើមូលដ្ឋានចំណេះដឹងដែលបានកំណត់"
+      },
+      "mandatory-done" : {
+        "summary" : "ជំហានតំឡើង Gebo.ai ដែលត្រូវធ្វើត្រូវបានបញ្ចប់ហើយ...",
+        "detail" : "ជំហានតំឡើងដ៏ចាំបាច់ត្រូវបានបញ្ចប់ ប៉ុន្តែមានជំហានខ្វះខាតខ្លះៗដែលអាចធ្វើឲ្យក្រុមហ៊ុនរបស់អ្នកមិនទទូលបទពិសោធន៍ពេញលេញនៃកម្មវិធីនេះ"
+      },
+      "setup-ok" : {
+        "summary" : "ការតំឡើង Gebo.ai ជោគជ័យ!"
+      },
+      "mandatory-missing" : {
+        "summary" : "ការតំឡើង Gebo.ai ខ្វះជំហានចាំបាច់ខ្លះ",
+        "detail" : "សូមពិនិត្យជំហានពណ៌ក្រហមក្នុងដំណើរការតំឡើង"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ម៉ូឌែលលំនាំដើម"
+      },
+      "MainPanelHeader" : {
+        "label" : "ផ្ដល់ការចូលដំណើរការផ្នែកផ្គត់ផ្គង់ llms របស់ Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "បើកសំណុំបែបបទគម្រោង"
+      },
+      "Button3" : {
+        "help" : "បើកប្រភពទិន្នន័យ"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "ការតំឡើង Gebo.ai រួចរាល់!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "បន្ថែមប្រវត្តិរូបការជជែក R.A.G. ថ្មី"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "បន្ថែមប្រវត្តិរូបការជជែក R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "កំណត់ការបង្ហាញភាពរួមបញ្ចូល (r.a.g.) សម្រាប់ប្រវត្តិរូបជជែក"
+      },
+      "CodeHeader" : {
+        "label" : "កូដ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ប្រវត្តិរូបការជជែក R.A.G. ដែលមានរួច"
+      },
+      "DescriptionHeader" : {
+        "label" : "សេចក្ដីពិពណ៌នា"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "កែសម្រួលប្រវត្តិរូបការជជែក R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "កូដមូលដ្ឋានចំណេះដឹង"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
         "dataset-2-label" : "ឯកសារមានបញ្ហា",
         "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "តំណភ្ជាប់ទិញក្រីឌីតសោភាពApy"
+      },
+      "ModifyBtn" : {
+        "label" : "កែប្រែ",
+        "help" : "មើល/កែប្រែការកំណត់ម៉ូដែល"
+      },
+      "ExistingModelCode" : {
+        "label" : "កូដ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "សេចក្ដីពិពណ៌នា"
+      },
+      "ExistingModelType" : {
+        "label" : "ប្រភេទម៉ូដែល"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ការកំណត់មានរួច"
+      },
+      "ProviderWWW" : {
+        "label" : "តំណគេហទំព័រ"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ព័ត៌មានភ្ជាប់របស់អ្នកផ្គត់ផ្គង់"
+      },
+      "ProviderInfos" : {
+        "label" : "ព័ត៌មានអំពីអ្នកផ្គត់ផ្គង់"
+      },
+      "ExistingApiKey" : {
+        "label" : "សោភាព api/ព័ត៌មានភ្ជាប់",
+        "help" : "ជ្រើសរើសសោភាព api ឬព័ត៌មានភ្ជាប់សម្រាប់អ្នកផ្គត់ផ្គង់នេះ"
+      },
+      "NewApiKey" : {
+        "label" : "សោ​ភាព api ថ្មី",
+        "help" : "បញ្ចូលសោ​ភាព api ថ្មីដើម្បីប្រើជាមួយអ្នកផ្គត់ផ្គង់នេះ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ប្រើមានរួច ឬ បង្កើតថ្មី",
+        "help" : "ប្រើឯកសារភ្ជាប់មានរួចឬបង្កើតថ្មីសម្រាប់អ្នកផ្គត់ផ្គង់នេះ"
+      },
+      "NewUserName" : {
+        "label" : "ឈ្មោះអ្នកប្រើ",
+        "help" : "ឈ្មោះអ្នកប្រើដែលប្រើសម្រាប់ចូលដំណើរការប្រសិទ្ធភាពអ្នកផ្គត់ផ្គង់"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "ម៉ូដែល embedding ថ្មី",
+        "help" : "បង្កើតការកំណត់ម៉ូដែល embedding ថ្មី"
+      },
+      "NewChatModel" : {
+        "label" : "ម៉ូដែលជជែកថ្មី",
+        "help" : "បង្កើតការកំណត់ម៉ូដែលជជែកថ្មី"
+      },
+      "NewModelDialog" : {
+        "label" : "បន្ថែមម៉ូដែលថ្មី"
+      },
+      "PiSave" : {
+        "label" : "រក្សាទុក"
+      },
+      "NewModelsButton" : {
+        "label" : "ម៉ូដែលថ្មីៗ",
+        "help" : "បង្កើតការកំណត់ម៉ូដែលថ្មី"
+      },
+      "NewModelsDialog" : {
+        "label" : "បន្ថែមម៉ូដែលថ្មីៗ"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url សម្រាប់សេវាកម្ម api របស់អ្នកផ្គត់ផ្គង់"
+      },
+      "ModelTypePanel" : {
+        "label" : "បន្ថែមម៉ូដែលថ្មី"
+      },
+      "ModelsChoices" : {
+        "label" : "ជម្រើសម៉ូដែល"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "ជ្រើសរើសម៉ូដែលណែនាំ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "ម៉ូដែល embedding",
+        "help" : "ជ្រើសរើសពីម៉ូដែល embedding ដោយបានកំណត់ជាមុន"
+      },
+      "chatPresetChoice" : {
+        "label" : "ម៉ូដែលជជែក",
+        "help" : "ជ្រើសរើសពីម៉ូដែលជជែកដែលបានកំណត់ជាមុន"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "ជ្រើសរើសម៉ូដែលខ្ពស់"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "ម៉ូដែល embedding",
+        "help" : "ជ្រើសរើសពីម៉ូដែល embedding ដែលអ្នកផ្គត់ផ្គង់បានផ្សព្វផ្សាយ"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "ម៉ូដែលជជែក",
+        "help" : "ជ្រើសរើសពីម៉ូដែលជជែកដែលបានផ្សព្វផ្សាយដោយអ្នកផ្គត់ផ្គង់"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ប្រើរបៀបជ្រើសរើសនេះតែប៉ុណ្ណឹងប៉ុណ្ណោះប្រសិនបើអ្នកជាអ្នកជំនាញឬពិនិត្យពីគេហទំព័រអ្នកផ្គត់ផ្គង់ថា ម៉ូដែលណាដែលសមនឹងតម្រូវការរបស់អ្នក។ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "កំណត់ជាម៉ូដែលជជែកលំនាំដើម",
+        "help" : "កំណត់ម៉ូដែលនេះជាលំនាំដើម ហើយវានឹងត្រូវបានប្រើសម្រាប់សកម្មភាពអ្វីៗផ្សេងទៀតដែលមិនបានកំណត់ម៉ូដែលជជែក"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " ណែនាំជម្រើសម៉ូដែលដូចខាងក្រោម "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "កំណត់ជា embedding ម៉ូដែលលំនាំដើម",
+        "help" : "កំណត់ម៉ូដែលនេះជាលំនាំដើម សម្រាប់សកម្មភាពដែលមិនបានកំណត់ម៉ូដែល embedding"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "កំណត់ជាម៉ូដែលជជែកលំនាំដើម",
+        "help" : "កំណត់ម៉ូដែលនេះជាលំនាំដើម ហើយវានឹងត្រូវបានប្រើសម្រាប់សកម្មភាពអ្វីៗផ្សេងទៀតដែលមិនបានកំណត់ម៉ូដែលជជែក"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "កំណត់ជា embedding ម៉ូដែលលំនាំដើម",
+        "help" : "កំណត់ម៉ូដែលនេះជាលំនាំដើមសម្រាប់សកម្មភាពដែលមិនបានកំណត់ម៉ូដែល embedding"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ប្រើរបៀបជ្រើសរើសនេះតែប៉ុណ្ណឹងប៉ុណ្ណោះប្រសិនបើអ្នកជាអ្នកជំនាញ ឬពិនិត្យពីគេហទំព័រអ្នកផ្គត់ផ្គង់ថា ម៉ូដែលណាសមស្របសម្រាប់អ្នក។ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "បង្កើត និងធ្វើឲ្យសកម្ម"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "បង្កើត និងធ្វើឲ្យសកម្ម"
+      },
+      "ProviderNameField" : {
+        "label" : "អ្នកផ្គត់ផ្គង់"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "អ្នកផ្ដល់សេវា AI ពីចម្ងាយរួចរាល់",
+        "detail" : "អ្នកផ្ដល់សេវានេះកំពុងដំណើរការ និងបានកំណត់ដោយជោគជ័យ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ប្រតិបត្តិការបរាជ័យ",
+        "detail" : "មិនអាចផ្ទៀងផ្ទាត់សមាសភាពជាមួយព័ត៌មានភ្ជាប់ដែលបានផ្គត់ផ្គង់"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ជោគជ័យ!",
+        "detail" : "ប្រតិបត្តិការបានបញ្ចប់ដោយជោគជ័យ"
       }
     }
   }

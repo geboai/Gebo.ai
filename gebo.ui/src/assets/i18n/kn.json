@@ -78,6 +78,12 @@
         "summary" : "ಸರಿ!",
         "detail" : "ಆಪರೇಶನ್ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai ಗೆ ಸುಸ್ವಾಗತ",
+        "detail" : "ಲಾಗಿನ್ ಮಾಡಲು ನಿಮ್ಮ ಬಳಕೆದಾರ ಹೆಸರು ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "ಕನಿಷ್ಠ ಒಂದು \"R.A.G.\" ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸೆಟಪ್ ಮಾಡಿ",
         "description" : "ನೀವು ಸಂಯೋಜಿಸಿರುವ ಜ್ಞಾನ ಆಧಾರಗಳಲ್ಲಿ ಒಂದನ್ನು ಆಧರಿಸಿ ಕನಿಷ್ಠ ಒಂದು ರಿಟ್ರೀವ್ ಆಗ್ಮೆಂಟೆಡ್ ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಅನ್ನು ನಿಮ್ಮ ಬಳಕೆದಾರರಿಗಾಗಿ ಸ್ಥಾಪಿಸಿ"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ ಅಗತ್ಯವಾದ ಹಂತಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ...",
+        "detail" : "ಅಗತ್ಯವಾದ ಸೆಟಪ್ ಹಂತಗಳು ಪೂರ್ಣಗೊಂಡಿವೆ ಆದರೆ ಕೆಲವು ಹಂತಗಳು ಕಾಣೆಯಾಗಿವೆ ಎಂಬ ಕಾರಣದಿಂದ ನಿಮ್ಮ ಸಂಸ್ಥೆಗೆ ಈ ಸಾಫ್ಟ್‌ವೇರ್‌ನ ಸಂಪೂರ್ಣ ಅನುಭವ ಸಿಗುವುದಿಲ್ಲ"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ ಸರಿ ಆಯಿತು!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai ಸೆಟಪ್ನಲ್ಲಿ ಕೆಲವು ಅಗತ್ಯವಾದ ಹಂತಗಳು ಕಾಣೆಯಾಗಿವೆ",
+        "detail" : "ದಯವಿಟ್ಟು ಸೆಟಪ್ ಪ್ರಕ್ರಿಯೆಯ ಕೆಂಪು ಹಂತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ಡೀಫಾಲ್ಟ್ ಮಾದರಿ"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms ಪೂರೈಕೆದಾರರ ಪ್ರವೇಶವನ್ನು ಸಜ್ಜುಗೊಳಿಸಿ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "ಪ್ರಾಜೆಕ್ಟ್ ಫಾರ್ಮ್ ತೆರೆಯಿರಿ"
+      },
+      "Button3" : {
+        "help" : "ಡೇಟಾ ಮೂಲವನ್ನು ತೆರೆಯಿರಿ"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai ಸೆಟಪ್ ಒಕೆ!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "ಹೊಸ R.A.G. ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸೇರಿಸಿ"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸೇರಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "ಅಗ್ಮೆಂಟೆಡ್ ಜನರೇಶನ್ (r.a.g.) ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸಿದ್ದತೆಗಳನ್ನು ಪಡೆಯಿರಿ"
+      },
+      "CodeHeader" : {
+        "label" : "ಕೋಡ್"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ಈಗಿರುವ R.A.G. ಚಾಟ್ ಪ್ರೊಫೈಲ್‌ಗಳು"
+      },
+      "DescriptionHeader" : {
+        "label" : "વಿವರಣೆ"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. ಚಾಟ್ ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "ನಾಲಿಕಾ ಕೋಡ್‌ಗಳು"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
         "dataset-2-label" : "ದೋಷದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
         "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy ಕೀ ಕ್ರೆಡಿಟ್ ಲಿಂಕ್ ಖರೀದಿಸಿ"
+      },
+      "ModifyBtn" : {
+        "label" : "ಬದಲಿಸಿ",
+        "help" : "ಮಾಡೆಲ್ ಸಂರಚನೆಅನ್ನು ನೋಡಿರಿ/ಬದಲಿಸಿ"
+      },
+      "ExistingModelCode" : {
+        "label" : "ಕೋಡ್"
+      },
+      "ExistingModelDesc" : {
+        "label" : "ವಿವರಣೆ"
+      },
+      "ExistingModelType" : {
+        "label" : "ಮಾಡೆಲ್ ಪ್ರಕಾರ"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ಈಗಿರುವ ಸಂರಚನೆಗಳು"
+      },
+      "ProviderWWW" : {
+        "label" : "ವೆಬ್ ಸೈಟ್ ಲಿಂಕ್"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ಪೂರೈಕೆದಾರ ಚಿಹ್ನೆಗಳು"
+      },
+      "ProviderInfos" : {
+        "label" : "ಪೂರೈಕೆದಾರ ಮಾಹಿತಿಗಳು"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ಕೀ/ಚಿಹ್ನೆಗಳು",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಕ್ಕಾಗಿ api ಕೀ ಅಥವಾ ಚಿಹ್ನೆಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "NewApiKey" : {
+        "label" : "ಹೊಸ api ಕೀ",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಕ್ಕಾಗಿ ಬಳಸಲು ಹೊಸ api ಕೀ ನಮೂದಿಸಿ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ಈಗಿರುವ ಅಥವಾ ಹೊಸದು ಬಳಸಿ",
+        "help" : "ಈ ಪೂರೈಕೆದಾರಕ್ಕಾಗಿ ಈಗಿರುವ ಅಥವಾ ಹೊಸ ಚಿಹ್ನೆಗಳನ್ನು ಬಳಸಿ"
+      },
+      "NewUserName" : {
+        "label" : "ಬಳಕೆದಾರ ಹೆಸರು",
+        "help" : "ಪೂರೈಕೆದಾರ ಸೇವೆಗಳಿಗೆ ಪ್ರವೇಶಿಸಲು ಬಳಸುವ ಬಳಕೆದಾರ ಹೆಸರು"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "ಹೊಸ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್",
+        "help" : "ಹೊಸ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್ ಸಂರಚನೆಯನ್ನು ರಚಿಸಿ"
+      },
+      "NewChatModel" : {
+        "label" : "ಹೊಸ ಚಾಟ್ ಮಾಡೆಲ್",
+        "help" : "ಹೊಸ ಚಾಟ್ ಮಾಡೆಲ್ ಸಂರಚನೆಯನ್ನು ರಚಿಸಿ"
+      },
+      "NewModelDialog" : {
+        "label" : "ಹೊಸ ಮಾಡೆಲ್ ಸೇರಿಸಿ"
+      },
+      "PiSave" : {
+        "label" : "ಉಳಿಸಿ"
+      },
+      "NewModelsButton" : {
+        "label" : "ಹೊಸ ಮಾಡೆಲ್‌ಗಳು",
+        "help" : "ಹೊಸ ಮಾಡೆಲ್‌ಗಳ ಸಂರಚನೆಯನ್ನು ರಚಿಸಿ"
+      },
+      "NewModelsDialog" : {
+        "label" : "ಹೊಸ ಮಾಡೆಲ್‌ಗಳನ್ನು ಸೇರಿಸಿ"
+      },
+      "baseUrl" : {
+        "label" : "ಮೂಲ api url",
+        "help" : "ಪೂರೈಕೆದಾರನ api ಸೇವೆಗಳ ಮೂಲ url"
+      },
+      "ModelTypePanel" : {
+        "label" : "ಹೊಸ ಮಾಡೆಲ್‌ಗಳನ್ನು ಸೇರಿಸಿ"
+      },
+      "ModelsChoices" : {
+        "label" : "ಮಾಡೆಲ್ ಆಯ್ಕೆಗಳು"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "ಶಿಫಾರಸು ಮಾಡಿದ ಮಾಡೆಲ್ ಆಯ್ಕೆ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್",
+        "help" : "ಮನೆಮಾಡಿದ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್‌ಗಳಲ್ಲಿ ಒಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "chatPresetChoice" : {
+        "label" : "ಚಾಟ್ ಮಾಡೆಲ್",
+        "help" : "ಮನೆಮಾಡಿದ ಚಾಟ್ ಮಾಡೆಲ್‌ಗಳಲ್ಲಿ ಒಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "ಸುಧಾರಿತ ಮಾಡೆಲ್ ಆಯ್ಕೆ"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್",
+        "help" : "ಪೂರೈಕೆದಾರ ಪ್ರಕಟಿಸಿದ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್‌ಗಳಲ್ಲಿ ಒಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "ಚಾಟ್ ಮಾಡೆಲ್",
+        "help" : "ಪೂರೈಕೆದಾರ ಪ್ರಕಟಿಸಿದ ಚಾಟ್ ಮಾಡೆಲ್‌ಗಳಲ್ಲಿ ಒಂದನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ಈ ಆಯ್ಕೆ ವಿಧಾನವನ್ನು ನೀವು ತಜ್ಞರಾಗಿದ್ದರೆ ಅಥವಾ ಪೂರೈಕೆದಾರನ ಸೈಟ್‌ನಲ್ಲಿ ನಿಮ್ಮ ಅಗತ್ಯಗಳಿಗೆ ಯಾವ ಮಾಡೆಲ್ ಪೂರೈಸುತ್ತೆ ಎಂದು ಪರಿಶೀಲಿಸಿರುವಿರಿ ಎಂದು ಮಾತ್ರ ಬಳಸಿ. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ಡಿಫಾಲ್ಟ್ ಚಾಟ್ ಮಾಡೆಲ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ",
+        "help" : "ಈ ಮಾಡೆಲ್ ಅನ್ನು ಡಿಫಾಲ್ಟ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ, ಇದು ಬೇರೆ ಯಾವುದೇ ಚಾಟ್ ಮಾಡೆಲ್ ಸಂರಚಿಸಲ್ಪಡದ ಪ್ರತಿಯೊಂದು ಕಾರ್ಯಕ್ಕೂ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " ನಾವು ನಿಮಗೆ ಕೆಳಗಿನ ಮಾಡೆಲ್ ಪಟ್ಟಿ ಶಿಫಾರಸು ಮಾಡುತ್ತೇವೆ "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ಡಿಫಾಲ್ಟ್ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ",
+        "help" : "ಈ ಮಾಡೆಲ್ ಅನ್ನು ಡಿಫಾಲ್ಟ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ, ಇದು ಬೇರೆ ಯಾವುದೇ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್ ಸಂರಚಿಸಲ್ಪಡದ ಪ್ರತಿಯೊಂದು ಕಾರ್ಯಕ್ಕೂ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ಡಿಫಾಲ್ಟ್ ಚಾಟ್ ಮಾಡೆಲ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ",
+        "help" : "ಈ ಮಾಡೆಲ್ ಅನ್ನು ಡಿಫಾಲ್ಟ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ, ಇದು ಬೇರೆ ಯಾವುದೇ ಚಾಟ್ ಮಾಡೆಲ್ ಸಂರಚಿಸಲ್ಪಡದ ಪ್ರತಿಯೊಂದು ಕಾರ್ಯಕ್ಕೂ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ಡಿಫಾಲ್ಟ್ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ",
+        "help" : "ಈ ಮಾಡೆಲ್ ಅನ್ನು ಡಿಫಾಲ್ಟ್ ಆಗಿ ಸೆಟ್ ಮಾಡಿ, ಇದು ಬೇರೆ ಯಾವುದೇ ಇಂಬೆಡ್ಡಿಂಗ್ ಮಾಡೆಲ್ ಸಂರಚಿಸಲ್ಪಡದ ಪ್ರತಿಯೊಂದು ಕಾರ್ಯಕ್ಕೂ ಬಳಸಲಾಗುತ್ತದೆ"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ಈ ಆಯ್ಕೆ ವಿಧಾನವನ್ನು ನೀವು ತಜ್ಞರಾಗಿದ್ದರೆ ಅಥವಾ ಪೂರೈಕೆದಾರನ ಸೈಟ್ ನಲ್ಲಿ ನಿಮ್ಮ ಅಗತ್ಯಗಳಿಗೆ ಯಾವ ಮಾಡೆಲ್ ಪೂರೈಸುತ್ತದೆ ಎಂದು ಪರಿಶೀಲಿಸಿದ ನಂತರ ಮಾತ್ರ ಬಳಸಿ. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "ರಚಿಸಿ ಮತ್ತು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "ರಚಿಸಿ ಮತ್ತು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "ProviderNameField" : {
+        "label" : "ಪೂರೈಕೆದಾರ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ದೂರದ ಪೂರೈಕೆದಾರ ಸರಿ",
+        "detail" : "ಪೂರೈಕೆದಾರ ಚಾಲನೆಯಲ್ಲಿದೆ ಹಾಗೂ ಯಶಸ್ವಿಯಾಗಿ ಸಂರಚಿಸಲಾಗಿದೆ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ಕ್ರಿಯೆ ವಿಫಲವಾಗಿದೆ",
+        "detail" : "ನೀಡಲಾದ ಚಿಹ್ನೆಗಳಿಂದ ದೃಢೀಕರಣೆ ಸಾಧ್ಯವಿಲ್ಲ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ಸರಿ!",
+        "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
       }
     }
   }

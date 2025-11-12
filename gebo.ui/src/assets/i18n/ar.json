@@ -78,6 +78,12 @@
         "summary" : "تم بنجاح!",
         "detail" : "تمت العملية بنجاح"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "مرحبًا بك في gebo.ai",
+        "detail" : "أدخل اسم المستخدم وكلمة المرور لتسجيل الدخول"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "تكوين ملف محادثة \"R.A.G.\" واحد على الأقل",
         "description" : "قم بتكوين ملف محادثة واحد على الأقل معزز بالاسترجاع لمستخدميك استنادًا إلى واحدة من قواعد المعرفة التي تم تكوينها"
+      },
+      "mandatory-done" : {
+        "summary" : "تم إكمال الخطوات الإلزامية لإعداد Gebo.ai...",
+        "detail" : "تم إكمال الخطوات الإلزامية للإعداد ولكن هناك بعض الخطوات الناقصة التي تمنع مؤسستك من الاستفادة الكاملة من هذا البرنامج"
+      },
+      "setup-ok" : {
+        "summary" : "إعداد Gebo.ai تم بنجاح!"
+      },
+      "mandatory-missing" : {
+        "summary" : "إعداد Gebo.ai ينقصه بعض الخطوات الإلزامية",
+        "detail" : "يرجى مراجعة الخطوات المميزة باللون الأحمر في عملية الإعداد"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "النموذج الافتراضي"
+      },
+      "MainPanelHeader" : {
+        "label" : "إعداد وصول مقدمي llms على Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "فتح نموذج المشروع"
+      },
+      "Button3" : {
+        "help" : "فتح مصدر البيانات"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "إعداد Gebo.ai تم بنجاح!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "إضافة ملف دردشة جديد R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "إضافة ملف دردشة R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "إعدادات ملفات الدردشة المدعمة بالتوليد (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "الرمز"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ملفات الدردشة R.A.G. الموجودة"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "تعديل ملف دردشة R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "رموز قاعدة المعرفة"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "مستندات تمت معالجتها",
         "dataset-2-label" : "مستندات تحتوي على أخطاء",
         "dataset-3-label" : "مستندات تم تجاهلها"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "رابط شراء رصيد مفتاح Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "تعديل",
+        "help" : "عرض أو تعديل إعدادات النموذج"
+      },
+      "ExistingModelCode" : {
+        "label" : "الرمز"
+      },
+      "ExistingModelDesc" : {
+        "label" : "الوصف"
+      },
+      "ExistingModelType" : {
+        "label" : "نوع النموذج"
+      },
+      "ExistingModelsSection" : {
+        "label" : "الإعدادات الموجودة"
+      },
+      "ProviderWWW" : {
+        "label" : "رابط الموقع الإلكتروني"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "بيانات اعتماد المزود"
+      },
+      "ProviderInfos" : {
+        "label" : "معلومات المزود"
+      },
+      "ExistingApiKey" : {
+        "label" : "مفتاح api / بيانات الاعتماد",
+        "help" : "اختر مفتاح api أو بيانات الاعتماد لهذا المزود"
+      },
+      "NewApiKey" : {
+        "label" : "مفتاح api جديد",
+        "help" : "إدخال مفتاح api جديد لاستخدامه مع هذا المزود"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "استخدم الحالي أو أنشئ جديدًا",
+        "help" : "استخدم بيانات الاعتماد الموجودة أو أنشئ بيانات جديدة لهذا المزود"
+      },
+      "NewUserName" : {
+        "label" : "اسم المستخدم",
+        "help" : "اسم المستخدم المستخدم للوصول إلى خدمات المزود"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "نموذج تضمين جديد",
+        "help" : "إنشاء إعدادات نموذج تضمين جديدة"
+      },
+      "NewChatModel" : {
+        "label" : "نموذج دردشة جديد",
+        "help" : "إنشاء إعدادات نموذج دردشة جديدة"
+      },
+      "NewModelDialog" : {
+        "label" : "إضافة نموذج جديد"
+      },
+      "PiSave" : {
+        "label" : "حفظ"
+      },
+      "NewModelsButton" : {
+        "label" : "نماذج جديدة",
+        "help" : "إنشاء إعدادات نماذج جديدة"
+      },
+      "NewModelsDialog" : {
+        "label" : "إضافة نماذج جديدة"
+      },
+      "baseUrl" : {
+        "label" : "رابط api الأساسي",
+        "help" : "عنوان الرابط الأساسي لخدمات api الخاصة بالمزود"
+      },
+      "ModelTypePanel" : {
+        "label" : "إضافة نماذج جديدة"
+      },
+      "ModelsChoices" : {
+        "label" : "اختيارات النماذج"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "اختيار النماذج المقترحة"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "نموذج التضمين",
+        "help" : "اختر واحدًا من نماذج التضمين المعرفة مسبقًا"
+      },
+      "chatPresetChoice" : {
+        "label" : "نموذج الدردشة",
+        "help" : "اختر واحدًا من نماذج الدردشة المعرفة مسبقًا"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "اختيار النماذج المتقدمة"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "نموذج التضمين",
+        "help" : "اختر واحدًا من نماذج التضمين المنشورة من المزود"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "نموذج الدردشة",
+        "help" : "اختر واحدًا من نماذج الدردشة المنشورة من المزود"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " استخدم وضع الاختيار هذا فقط إذا كنت خبيرًا أو بعد مراجعة موقع المزود لمعرفة النماذج المناسبة لاحتياجاتك. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "تعيين كنموذج الدردشة الافتراضي",
+        "help" : "عيّن هذا النموذج كنموذج افتراضي، سيتم استخدامه لكل مهمة لم يتم إعداد نموذج دردشة آخر لها"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " نقترح لك قائمة النماذج التالية "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "تعيين كنموذج التضمين الافتراضي",
+        "help" : "عيّن هذا النموذج كنموذج افتراضي، سيتم استخدامه لكل مهمة لم يتم إعداد نموذج تضمين آخر لها"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "تعيين كنموذج الدردشة الافتراضي",
+        "help" : "عيّن هذا النموذج كنموذج افتراضي، سيتم استخدامه لكل مهمة لم يتم إعداد نموذج دردشة آخر لها"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "تعيين كنموذج التضمين الافتراضي",
+        "help" : "عيّن هذا النموذج كنموذج افتراضي، سيتم استخدامه لكل مهمة لم يتم إعداد نموذج تضمين آخر لها"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " استخدم وضع الاختيار هذا فقط إذا كنت خبيرًا أو بعد مراجعة موقع المزود لمعرفة النماذج المناسبة لاحتياجاتك. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "إنشاء وتفعيل"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "إنشاء وتفعيل"
+      },
+      "ProviderNameField" : {
+        "label" : "المزود"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "موفر الذكاء الاصطناعي عن بُعد متاح",
+        "detail" : "المزود يعمل وتمت تهيئته بنجاح"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "فشلت العملية",
+        "detail" : "تعذر المصادقة باستخدام بيانات الاعتماد المقدمة"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "تم بنجاح!",
+        "detail" : "تم تنفيذ العملية بنجاح"
       }
     }
   }

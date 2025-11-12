@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operasi berhasil dilakukan"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Selamat datang di Gebo.ai",
+        "detail" : "Masukkan nama pengguna dan kata sandi Anda untuk masuk"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Konfigurasikan setidaknya satu profil chat \"R.A.G.\"",
         "description" : "Konfigurasikan setidaknya satu profil chat retrieve augmented untuk pengguna Anda berdasarkan salah satu knowledge base yang telah dikonfigurasi"
+      },
+      "mandatory-done" : {
+        "summary" : "Langkah wajib pengaturan Gebo.ai selesai...",
+        "detail" : "Langkah pengaturan wajib telah selesai tetapi beberapa langkah yang belum dilakukan mencegah organisasi Anda mendapatkan manfaat penuh dari perangkat lunak ini"
+      },
+      "setup-ok" : {
+        "summary" : "Pengaturan Gebo.ai OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Pengaturan Gebo.ai ada langkah penting yang belum selesai",
+        "detail" : "Silakan periksa langkah berwarna merah pada proses pengaturan"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Model default"
+      },
+      "MainPanelHeader" : {
+        "label" : "Atur akses penyedia llms Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "buka form proyek"
+      },
+      "Button3" : {
+        "help" : "buka sumber data"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Setup Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Tambah profil chat R.A.G. baru"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Tambah profil chat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Ambil pengaturan profil chat augmented generation (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Profil chat R.A.G. yang ada"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsi"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Edit profil chat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kode basis pengetahuan"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Dokumen diproses",
         "dataset-2-label" : "Dokumen bermasalah",
         "dataset-3-label" : "Dokumen dibuang"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Tautan pembelian kredit Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Ubah",
+        "help" : "Lihat/ubah konfigurasi model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kode"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Deskripsi"
+      },
+      "ExistingModelType" : {
+        "label" : "Tipe model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Konfigurasi yang ada"
+      },
+      "ProviderWWW" : {
+        "label" : "Tautan situs web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Kredensial penyedia"
+      },
+      "ProviderInfos" : {
+        "label" : "Informasi penyedia"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/kredensial",
+        "help" : "Pilih api key atau kredensial untuk penyedia ini"
+      },
+      "NewApiKey" : {
+        "label" : "Api key baru",
+        "help" : "Masukkan api key baru yang akan digunakan dengan penyedia ini"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Gunakan yang ada atau yang baru",
+        "help" : "Gunakan atau buat kredensial baru untuk penyedia ini"
+      },
+      "NewUserName" : {
+        "label" : "Nama pengguna",
+        "help" : "Nama pengguna yang digunakan untuk mengakses layanan penyedia"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Model embedding baru",
+        "help" : "Buat konfigurasi model embedding baru"
+      },
+      "NewChatModel" : {
+        "label" : "Model Chat baru",
+        "help" : "Buat konfigurasi model chat baru"
+      },
+      "NewModelDialog" : {
+        "label" : "Tambah model baru"
+      },
+      "PiSave" : {
+        "label" : "Simpan"
+      },
+      "NewModelsButton" : {
+        "label" : "Model baru",
+        "help" : "Buat konfigurasi model baru"
+      },
+      "NewModelsDialog" : {
+        "label" : "Tambah model baru"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url untuk layanan api dari penyedia"
+      },
+      "ModelTypePanel" : {
+        "label" : "Tambah model baru"
+      },
+      "ModelsChoices" : {
+        "label" : "Pilihan model"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Pilihan model yang disarankan"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model embedding",
+        "help" : "Pilih salah satu model embedding yang sudah ditentukan"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model chat",
+        "help" : "Pilih salah satu model chat yang sudah ditentukan"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Pilihan model lanjutan"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model embedding",
+        "help" : "Pilih salah satu model embedding yang diterbitkan oleh pemasok"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model chat",
+        "help" : "Pilih salah satu model chat yang diterbitkan oleh pemasok"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Gunakan mode ini hanya jika Anda ahli atau dengan memeriksa situs pemasok untuk mengetahui model mana yang sesuai kebutuhan Anda. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "jadikan model chat default",
+        "help" : "Jadikan model ini sebagai default, akan digunakan untuk semua tugas yang tidak dikonfigurasi model chat lain"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Kami menyarankan daftar model berikut "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "jadikan model embedding default",
+        "help" : "Jadikan model ini sebagai default, akan digunakan untuk semua tugas yang tidak dikonfigurasi model embedding lain"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "jadikan model chat default",
+        "help" : "Jadikan model ini sebagai default, akan digunakan untuk semua tugas yang tidak dikonfigurasi model chat lain"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "jadikan model embedding default",
+        "help" : "Jadikan model ini sebagai default, akan digunakan untuk semua tugas yang tidak dikonfigurasi model embedding lain"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Gunakan mode ini hanya jika Anda ahli atau dengan memeriksa situs pemasok untuk mengetahui model mana yang sesuai kebutuhan Anda. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Buat dan aktifkan"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Buat dan aktifkan"
+      },
+      "ProviderNameField" : {
+        "label" : "Penyedia"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Penyedia AI jarak jauh OK",
+        "detail" : "Penyedia aktif dan berhasil dikonfigurasi"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasi gagal",
+        "detail" : "Tidak dapat mengautentikasi dengan kredensial yang diberikan"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasi berhasil dilakukan"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Toiminto onnistui"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Tervetuloa gebo.ai:hin",
+        "detail" : "Anna käyttäjätunnuksesi ja salasanasi kirjautuaksesi sisään"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Määritä vähintään yksi \"R.A.G.\"-chatprofiili",
         "description" : "Määritä vähintään yksi generointihakuun perustuva chat-profiili käyttäjillesi yhden tietokantojesi pohjalta"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai-perusasetukset tehty...",
+        "detail" : "Pakolliset asetukset on suoritettu, mutta joitakin puuttuvia vaiheita rajoittaa organisaatiotasi hyödyntämästä tätä ohjelmistoa täysimääräisesti"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai-asetus OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai-asetuksista puuttuu pakollinen vaihe",
+        "detail" : "Tarkista käyttöönoton punaisella merkeillä merkityt vaiheet"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Oletusmalli"
+      },
+      "MainPanelHeader" : {
+        "label" : "Aseta Gebo.ai llms-palveluntarjoajien käyttöoikeus"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "Avaa projektin lomake"
+      },
+      "Button3" : {
+        "help" : "avaa tietolähde"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai-asennus OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Lisää uusi R.A.G. keskusteluprofiili"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Lisää R.A.G. keskusteluprofiili"
+      },
+      "MainPanel" : {
+        "label" : "Nouda augmented generation (r.a.g.) keskusteluprofiilien asetukset"
+      },
+      "CodeHeader" : {
+        "label" : "Koodi"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Olemassa olevat R.A.G. keskusteluprofiilit"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Muokkaa R.A.G. keskusteluprofiilia"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Tietopohjan koodit"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Käsitellyt asiakirjat",
         "dataset-2-label" : "Virheelliset asiakirjat",
         "dataset-3-label" : "Hylätyt asiakirjat"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Osta API-avaimen luotto-linkki"
+      },
+      "ModifyBtn" : {
+        "label" : "Muokkaa",
+        "help" : "Näytä/muokkaa mallin asetuksia"
+      },
+      "ExistingModelCode" : {
+        "label" : "Koodi"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Kuvaus"
+      },
+      "ExistingModelType" : {
+        "label" : "Mallitunniste"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Olemassa olevat asetukset"
+      },
+      "ProviderWWW" : {
+        "label" : "Verkkosivulinkki"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Palveluntarjoajan tunnukset"
+      },
+      "ProviderInfos" : {
+        "label" : "Tarjoajan tiedot"
+      },
+      "ExistingApiKey" : {
+        "label" : "API-avain/tunnukset",
+        "help" : "Valitse tämän tarjoajan API-avain tai tunnukset"
+      },
+      "NewApiKey" : {
+        "label" : "Uusi API-avain",
+        "help" : "Syötä uusi API-avain tämän tarjoajan kanssa käytettäväksi"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Käytä nykyisiä tai uusia",
+        "help" : "Käytä nykyisiä tai luo uudet tunnukset tälle tarjoajalle"
+      },
+      "NewUserName" : {
+        "label" : "Käyttäjänimi",
+        "help" : "Käyttäjänimi palveluntarjoajan palveluihin kirjautumiseen"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Uusi embedding-malli",
+        "help" : "Luo uusi embedding-mallin asetus"
+      },
+      "NewChatModel" : {
+        "label" : "Uusi chat-malli",
+        "help" : "Luo uusi chat-mallin asetus"
+      },
+      "NewModelDialog" : {
+        "label" : "Lisää uusi malli"
+      },
+      "PiSave" : {
+        "label" : "Tallenna"
+      },
+      "NewModelsButton" : {
+        "label" : "Uudet mallit",
+        "help" : "Luo uudet malliasetukset"
+      },
+      "NewModelsDialog" : {
+        "label" : "Lisää uudet mallit"
+      },
+      "baseUrl" : {
+        "label" : "Perus-API-url-osoite",
+        "help" : "Tarjoajan API-palvelujen perusosoite"
+      },
+      "ModelTypePanel" : {
+        "label" : "Lisää uusia malleja"
+      },
+      "ModelsChoices" : {
+        "label" : "Mallivalinnat"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Ehdotetut mallit"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding-malli",
+        "help" : "Valitse yksi ennalta määritellyistä embedding-malleista"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat-malli",
+        "help" : "Valitse yksi ennalta määritellyistä chat-malleista"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Edistyneet mallit"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding-malli",
+        "help" : "Valitse yksi tarjoajan julkaisemista embedding-malleista"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat-malli",
+        "help" : "Valitse yksi tarjoajan julkaisemista chat-malleista"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Käytä tätä valintaa vain jos olet asiantuntija tai tarkista palveluntarjoajan sivuilta, mitkä mallit sopivat tarpeisiisi. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "aseta oletuschattimalliksi",
+        "help" : "Aseta tämä malli oletukseksi, sitä käytetään kaikkiin tehtäviin joissa muuta chat-mallia ei ole määritetty"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Suosittelemme sinulle seuraavia malleja "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "aseta oletusembedding-malliksi",
+        "help" : "Aseta tämä malli oletukseksi, sitä käytetään kaikkiin tehtäviin joissa muuta embedding-mallia ei ole määritetty"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "aseta oletuschattimalliksi",
+        "help" : "Aseta tämä malli oletukseksi, sitä käytetään kaikkiin tehtäviin joissa muuta chat-mallia ei ole määritetty"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "aseta oletusembedding-malliksi",
+        "help" : "Aseta tämä malli oletukseksi, sitä käytetään kaikkiin tehtäviin joissa muuta embedding-mallia ei ole määritetty"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Käytä tätä valintaa vain jos olet asiantuntija tai tarkista palveluntarjoajan sivuilta, mitkä mallit sopivat tarpeisiisi. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Luo ja aktivoi"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Luo ja aktivoi"
+      },
+      "ProviderNameField" : {
+        "label" : "Tarjoaja"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI-etätarjoaja OK",
+        "detail" : "Tarjoaja toimii ja on onnistuneesti määritetty"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Toiminto epäonnistui",
+        "detail" : "Todennusta ei voitu tehdä annetuilla tunnuksilla"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Toiminto suoritettu onnistuneesti"
       }
     }
   }

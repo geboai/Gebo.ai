@@ -78,6 +78,12 @@
         "summary" : "成功！",
         "detail" : "操作已成功完成"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "欢迎来到 gebo.ai",
+        "detail" : "请输入您的用户名和密码进行登录"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "至少配置一个“R.A.G.” 聊天配置",
         "description" : "为用户配置至少一个基于已设置知识库的检索增强聊天配置"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai 设置必需步骤已完成…",
+        "detail" : "必需的设置步骤已完成，但有些缺失的步骤会影响您的组织更好地体验本软件"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai 设置完成！"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai 设置缺少某些必需步骤",
+        "detail" : "请检查设置流程中标红的步骤"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "默认模型"
+      },
+      "MainPanelHeader" : {
+        "label" : "设置 Gebo.ai llms 提供商访问权限"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "打开项目表单"
+      },
+      "Button3" : {
+        "help" : "打开数据源"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai 安装成功！"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "添加新的 R.A.G. 聊天配置"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "添加 R.A.G. 聊天配置"
+      },
+      "MainPanel" : {
+        "label" : "获取增强生成 (r.a.g.) 聊天配置设置"
+      },
+      "CodeHeader" : {
+        "label" : "代码"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "已有 R.A.G. 聊天配置"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "编辑 R.A.G. 聊天配置"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "知识库代码"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "已处理文档",
         "dataset-2-label" : "出错文档",
         "dataset-3-label" : "已丢弃文档"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "购买 Apy key 积分链接"
+      },
+      "ModifyBtn" : {
+        "label" : "修改",
+        "help" : "查看/修改模型配置"
+      },
+      "ExistingModelCode" : {
+        "label" : "代码"
+      },
+      "ExistingModelDesc" : {
+        "label" : "描述"
+      },
+      "ExistingModelType" : {
+        "label" : "模型类型"
+      },
+      "ExistingModelsSection" : {
+        "label" : "已有配置"
+      },
+      "ProviderWWW" : {
+        "label" : "网站链接"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "提供商凭证"
+      },
+      "ProviderInfos" : {
+        "label" : "提供商信息"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/凭证",
+        "help" : "为此提供商选择 api key 或凭证"
+      },
+      "NewApiKey" : {
+        "label" : "新 api key",
+        "help" : "输入一个新的 api key，用于此提供商"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "使用已有或新建",
+        "help" : "为此提供商使用现有凭证或新建凭证"
+      },
+      "NewUserName" : {
+        "label" : "用户名",
+        "help" : "用于访问提供商服务的用户名"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "新嵌入模型",
+        "help" : "创建新的嵌入模型配置"
+      },
+      "NewChatModel" : {
+        "label" : "新聊天模型",
+        "help" : "创建新的聊天模型配置"
+      },
+      "NewModelDialog" : {
+        "label" : "添加新模型"
+      },
+      "PiSave" : {
+        "label" : "保存"
+      },
+      "NewModelsButton" : {
+        "label" : "新建模型",
+        "help" : "创建新的模型配置"
+      },
+      "NewModelsDialog" : {
+        "label" : "添加新模型"
+      },
+      "baseUrl" : {
+        "label" : "基础 api url",
+        "help" : "提供商 api 服务的基础 url"
+      },
+      "ModelTypePanel" : {
+        "label" : "添加新模型"
+      },
+      "ModelsChoices" : {
+        "label" : "模型选项"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "推荐模型选择"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "嵌入模型",
+        "help" : "选择一个预置的嵌入模型"
+      },
+      "chatPresetChoice" : {
+        "label" : "聊天模型",
+        "help" : "选择一个预置的聊天模型"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "高级模型选择"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "嵌入模型",
+        "help" : "选择一个供应商发布的嵌入模型"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "聊天模型",
+        "help" : "选择一个供应商发布的聊天模型"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " 仅当您是专家或在供应商网站上确认哪些模型符合您的需求时，才建议使用此选择模式。 "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "设为默认聊天模型",
+        "help" : "将此模型设置为默认，每当未为任务配置其他聊天模型时会使用该模型"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " 推荐您以下模型列表 "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "设为默认嵌入模型",
+        "help" : "将此模型设置为默认，每当未为任务配置其他嵌入模型时会使用该模型"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "设为默认聊天模型",
+        "help" : "将此模型设置为默认，每当未为任务配置其他聊天模型时会使用该模型"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "设为默认嵌入模型",
+        "help" : "将此模型设置为默认，每当未为任务配置其他嵌入模型时会使用该模型"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " 仅当您是专家或在供应商网站上确认哪些模型符合您的需求时，才建议使用此选择模式。 "
+      },
+      "CreatePresetBtn" : {
+        "label" : "创建并激活"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "创建并激活"
+      },
+      "ProviderNameField" : {
+        "label" : "提供商"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI 远程提供商正常",
+        "detail" : "提供商已正常运行并配置成功"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "操作失败",
+        "detail" : "无法使用提供的凭证进行身份验证"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "成功！",
+        "detail" : "操作已成功完成"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "Rendben!",
         "detail" : "A művelet sikeresen befejeződött"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Üdvözöljük a gebo.ai-nál",
+        "detail" : "Adja meg felhasználónevét és jelszavát a bejelentkezéshez"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Legalább egy \"R.A.G.\" chat profil beállítása",
         "description" : "Állítson be legalább egy retrieve augmented chat profilt felhasználói számára valamelyik beállított tudásbázison alapulva"
+      },
+      "mandatory-done" : {
+        "summary" : "A Gebo.ai kötelező telepítési lépései készen vannak...",
+        "detail" : "A kötelező beállítási lépések befejeződtek, de néhány hiányzó lépés megakadályozza, hogy szervezete a legtöbbet hozza ki ebből a szoftverből"
+      },
+      "setup-ok" : {
+        "summary" : "A Gebo.ai beállítása rendben!"
+      },
+      "mandatory-missing" : {
+        "summary" : "A Gebo.ai beállításából hiányzik néhány kötelező lépés",
+        "detail" : "Kérjük, nézze át a beállítási folyamat pirossal jelölt lépéseit"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Alapértelmezett modell"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms szolgáltatók elérésének beállítása"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "projekt űrlap megnyitása"
+      },
+      "Button3" : {
+        "help" : "adatforrás megnyitása"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai beállítás rendben!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Új R.A.G. chat profil hozzáadása"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. chat profil hozzáadása"
+      },
+      "MainPanel" : {
+        "label" : "Augmentált generációs (r.a.g.) chat profil beállítások lekérése"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Meglévő R.A.G. chat profilok"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. chat profil szerkesztése"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Tudásbázis kódok"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Feldolgozott dokumentumok",
         "dataset-2-label" : "Hibás dokumentumok",
         "dataset-3-label" : "Elvetett dokumentumok"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy kulcs kreditek vásárlása"
+      },
+      "ModifyBtn" : {
+        "label" : "Módosítás",
+        "help" : "Modell konfiguráció megtekintése/módosítása"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kód"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Leírás"
+      },
+      "ExistingModelType" : {
+        "label" : "Modell típus"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Meglévő konfigurációk"
+      },
+      "ProviderWWW" : {
+        "label" : "Weboldal link"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Szolgáltatói hitelesítő adatok"
+      },
+      "ProviderInfos" : {
+        "label" : "Szolgáltatói információk"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api kulcs/hitelesítő adatok",
+        "help" : "Válassza ki az ehhez a szolgáltatóhoz tartozó api kulcsot vagy hitelesítő adatokat"
+      },
+      "NewApiKey" : {
+        "label" : "Új api kulcs",
+        "help" : "Adjon meg egy új api kulcsot, amelyet ezzel a szolgáltatóval használ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Meglévő vagy új használata",
+        "help" : "Használja a meglévő vagy hozzon létre új hitelesítő adatokat ehhez a szolgáltatóhoz"
+      },
+      "NewUserName" : {
+        "label" : "Felhasználónév",
+        "help" : "A szolgáltatások eléréséhez használt felhasználónév"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Új embedding modell",
+        "help" : "Új embedding modell konfiguráció létrehozása"
+      },
+      "NewChatModel" : {
+        "label" : "Új Chat modell",
+        "help" : "Új chat modell konfiguráció létrehozása"
+      },
+      "NewModelDialog" : {
+        "label" : "Új modell hozzáadása"
+      },
+      "PiSave" : {
+        "label" : "Mentés"
+      },
+      "NewModelsButton" : {
+        "label" : "Új modellek",
+        "help" : "Új modellek konfiguráció létrehozása"
+      },
+      "NewModelsDialog" : {
+        "label" : "Új modellek hozzáadása"
+      },
+      "baseUrl" : {
+        "label" : "Alap api url",
+        "help" : "Az api szolgáltatások alap url címe ehhez a szolgáltatóhoz"
+      },
+      "ModelTypePanel" : {
+        "label" : "Új modellek hozzáadása"
+      },
+      "ModelsChoices" : {
+        "label" : "Modell választék"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Javasolt modellek kiválasztása"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding modell",
+        "help" : "Válasszon egyet az előre definiált embedding modellek közül"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat modell",
+        "help" : "Válasszon egyet az előre definiált chat modellek közül"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Haladó modellek kiválasztása"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding modell",
+        "help" : "Válasszon egyet a szolgáltató által közzétett embedding modellek közül"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat modell",
+        "help" : "Válasszon egyet a szolgáltató által közzétett chat modellek közül"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Ezt a kiválasztási módot csak akkor használja, ha szakértő, vagy ellenőrzi a szolgáltató oldalán, mely modellek felelnek meg az Ön igényeinek. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "beállítás alapértelmezett chat modellként",
+        "help" : "Állítsa be ezt a modellt alapértelmezettként, minden olyan feladathoz ezt fogjuk használni, amelyhez nincs más chat modell beállítva"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " A következő modelleket javasoljuk "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "beállítás alapértelmezett embedding modellként",
+        "help" : "Állítsa be ezt a modellt alapértelmezettként, minden olyan feladathoz ezt fogjuk használni, amelyhez nincs más embedding modell beállítva"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "beállítás alapértelmezett chat modellként",
+        "help" : "Állítsa be ezt a modellt alapértelmezettként, minden olyan feladathoz ezt fogjuk használni, amelyhez nincs más chat modell beállítva"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "beállítás alapértelmezett embedding modellként",
+        "help" : "Állítsa be ezt a modellt alapértelmezettként, minden olyan feladathoz ezt fogjuk használni, amelyhez nincs más embedding modell beállítva"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Ezt a kiválasztási módot csak akkor használja, ha szakértő, vagy ellenőrzi a szolgáltató oldalán, mely modellek felelnek meg az Ön igényeinek. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Létrehozás és aktiválás"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Létrehozás és aktiválás"
+      },
+      "ProviderNameField" : {
+        "label" : "Szolgáltató"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI távoli szolgáltató rendben",
+        "detail" : "A szolgáltató működik és sikeresen konfigurálták"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "A művelet sikertelen",
+        "detail" : "A megadott hitelesítő adatokkal nem sikerült hitelesíteni"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Rendben!",
+        "detail" : "A művelet sikeresen befejeződött"
       }
     }
   }

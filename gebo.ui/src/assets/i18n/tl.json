@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Matagumpay na natapos ang operasyon"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Maligayang pagdating sa gebo.ai",
+        "detail" : "Ilagay ang iyong username at password para mag-login"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Mag-configure ng kahit isang \"R.A.G.\" chat profile",
         "description" : "Mag-configure ng kahit isang retrieve augmented chat profile para sa iyong mga user batay sa isa sa iyong mga na-configure na knowledge bases"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai setup mandatory steps tapos na...",
+        "detail" : "Natapos na ang mga kinakailangang hakbang sa setup ngunit may ilang kulang na hakbang na pumipigil sa iyong organisasyon na maabot ang buong potensyal ng software na ito"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai setup OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Kulang ng ilang mandatoryong hakbang ang Gebo.ai setup",
+        "detail" : "Pakitignan ang mga pulang hakbang sa proseso ng setup"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Default na model"
+      },
+      "MainPanelHeader" : {
+        "label" : "I-setup ang access ng Gebo.ai llms providers"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "buksan ang project form"
+      },
+      "Button3" : {
+        "help" : "buksan ang data source"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai setup OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Magdagdag ng bagong R.A.G. chat profile"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Magdagdag ng R.A.G. chat profile"
+      },
+      "MainPanel" : {
+        "label" : "Makuha ang settings ng augmented generation (r.a.g.) chat profiles"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Umiiral na mga R.A.G. chat profile"
+      },
+      "DescriptionHeader" : {
+        "label" : "Paglalarawan"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "I-edit ang R.A.G. chat profile"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Mga code ng knowledge base"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Na-prosesong dokumento",
         "dataset-2-label" : "Mga dokumentong may error",
         "dataset-3-label" : "Itinapong dokumento"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Link para bumili ng Apy key credit"
+      },
+      "ModifyBtn" : {
+        "label" : "Baguhin",
+        "help" : "Tingnan/baguhin ang configuration ng model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Code"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Paglalarawan"
+      },
+      "ExistingModelType" : {
+        "label" : "Uri ng model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Umiiral na mga configuration"
+      },
+      "ProviderWWW" : {
+        "label" : "Web site link"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Mga kredensyal ng provider"
+      },
+      "ProviderInfos" : {
+        "label" : "Mga impormasyon ng provider"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/kredensyal",
+        "help" : "Pumili ng api key o kredensyal para sa provider na ito"
+      },
+      "NewApiKey" : {
+        "label" : "Bagong api key",
+        "help" : "Ilagay ang bagong api key na gagamitin sa provider na ito"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Gamitin ang umiiral o bago",
+        "help" : "Gamitin ang umiiral o gumawa ng bagong kredensyal para sa provider na ito"
+      },
+      "NewUserName" : {
+        "label" : "Username",
+        "help" : "Username na ginagamit para mag-access ng provider services"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Bagong embedding model",
+        "help" : "Gumawa ng bagong embedding model configuration"
+      },
+      "NewChatModel" : {
+        "label" : "Bagong Chat model",
+        "help" : "Gumawa ng bagong chat model configuration"
+      },
+      "NewModelDialog" : {
+        "label" : "Magdagdag ng bagong model"
+      },
+      "PiSave" : {
+        "label" : "I-save"
+      },
+      "NewModelsButton" : {
+        "label" : "Bagong mga model",
+        "help" : "Gumawa ng bagong models configuration"
+      },
+      "NewModelsDialog" : {
+        "label" : "Magdagdag ng bagong mga model"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url para sa mga api services ng provider"
+      },
+      "ModelTypePanel" : {
+        "label" : "Magdagdag ng bagong mga model"
+      },
+      "ModelsChoices" : {
+        "label" : "Mga pagpipilian ng model"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Iminungkahing pagpili ng mga model"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Pumili ng isa sa mga nakahandang embedding models"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat model",
+        "help" : "Pumili ng isa sa mga nakahandang chat models"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Advanced na pagpili ng mga model"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Pumili ng isa sa mga inilathalang embedding model ng supplier"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat model",
+        "help" : "Pumili ng isa sa mga inilathalang chat model ng supplier"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Gamitin lamang ang selection mode na ito kung ikaw ay eksperto o kung sisilipin mo sa supplier site kung alin sa mga modelo ang angkop sa iyong pangangailangan. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "gawin default na chat model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang chat model na naka-configure"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Inirerekomenda namin ang sumusunod na listahan ng mga model "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "gawin default na embedding model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang embedding model na naka-configure"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "gawin default na chat model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang chat model na naka-configure"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "gawin default na embedding model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang embedding model na naka-configure"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Gamitin lamang ang selection mode na ito kung ikaw ay eksperto o kung sisilipin mo sa supplier site kung alin sa mga modelo ang angkop sa iyong pangangailangan. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Gumawa at i-activate"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Gumawa at i-activate"
+      },
+      "ProviderNameField" : {
+        "label" : "Provider"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider OK",
+        "detail" : "Maayos na gumagana at naayos ang provider"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Nabigo ang operasyon",
+        "detail" : "Hindi makapag-authenticate gamit ang mga ibinigay na kredensyal"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na naisagawa ang operasyon"
       }
     }
   }

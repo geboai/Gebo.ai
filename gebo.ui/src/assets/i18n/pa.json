@@ -78,6 +78,12 @@
         "summary" : "ਠੀਕ ਹੈ!",
         "detail" : "ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ ਹੋਇਆ"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Gebo.ai ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ",
+        "detail" : "ਲੌਗਇਨ ਕਰਨ ਲਈ ਆਪਣਾ ਯੂਜ਼ਰਨੇਮ ਅਤੇ ਪਾਸਵਰਡ ਦਰਜ ਕਰੋ"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "ਘੱਟੋ-ਘੱਟ ਇੱਕ \"R.A.G.\" ਚੈਟ ਪ੍ਰੋਫਾਇਲ ਸੰਰਚਿਤ ਕਰੋ",
         "description" : "ਤੁਹਾਡੇ ਉਪਭੋਗਤਿਆਂ ਲਈ ਘੱਟੋ-ਘੱਟ ਇੱਕ retrieve augmented ਚੈਟ ਪ੍ਰੋਫਾਇਲ ਸੰਰਚਿਤ ਕਰੋ ਜੋ ਕਿ ਤੁਹਾਡੇ ਸੰਰਚਿਤ ਨੋਲੇਜ ਬੇਸ 'ਤੇ ਆਧਾਰਿਤ ਹੋਵੇ"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai ਸੈੱਟਅੱਪ ਦੇ ਲਾਜ਼ਮੀ ਕਦਮ ਪੂਰੇ ਹੋ ਗਏ...",
+        "detail" : "ਲਾਜ਼ਮੀ ਸੈੱਟਅੱਪ ਕਦਮ ਪੂਰੇ ਹੋ ਚੁੱਕੇ ਹਨ, ਪਰ ਕੁਝ ਕਦਮ ਗੱਲ ਜਾਣ ਕਾਰਨ ਤੁਹਾਡੀ ਆਰਗੇਨਾਈਜ਼ੇਸ਼ਨ ਇਸ ਸਾਫਟਵੇਅਰ ਦਾ ਪੂਰਾ ਲਾਭ ਨਹੀਂ ਲੈ ਸਕਦੀ"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai ਸੈੱਟਅੱਪ ਠੀਕ ਹੈ!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai ਸੈੱਟਅੱਪ ਵਿੱਚ ਕੁਝ ਲਾਜ਼ਮੀ ਕਦਮ ਗੱਲ ਹਨ",
+        "detail" : "ਕਿਰਪਾ ਕਰਕੇ ਸੈੱਟਅੱਪ ਪ੍ਰਕਿਰਿਆ ਦੇ ਲਾਲ ਕਦਮਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ਡਿਫਾਲਟ ਮਾਡਲ"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms ਪ੍ਰੋਵਾਇਡਰ ਦੀ ਐਕਸੈੱਸ ਸੈੱਟਅੱਪ ਕਰੋ"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "ਪ੍ਰੋਜੈਕਟ ਫਾਰਮ ਖੋਲ੍ਹੋ"
+      },
+      "Button3" : {
+        "help" : "ਡਾਟਾ ਸਰੋਤ ਖੋਲ੍ਹੋ"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai ਸੈਟਅੱਪ ਠੀਕ ਹੈ!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "ਨਵਾਂ R.A.G. ਚੈਟ ਪ੍ਰੋਫ਼ਾਈਲ ਜੋੜੋ"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. ਚੈਟ ਪ੍ਰੋਫ਼ਾਈਲ ਜੋੜੋ"
+      },
+      "MainPanel" : {
+        "label" : "ਆਗਮੈਂਟਡ ਜਨਰੇਸ਼ਨ (r.a.g.) ਚੈਟ ਪ੍ਰੋਫਾਈਲ ਸੈਟਿੰਗਾਂ ਪ੍ਰਾਪਤ ਕਰੋ"
+      },
+      "CodeHeader" : {
+        "label" : "ਕੋਡ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ਮੌਜੂਦਾ R.A.G. ਚੈਟ ਪ੍ਰੋਫ਼ਾਈਲ"
+      },
+      "DescriptionHeader" : {
+        "label" : "ਵਿਆਖਿਆ"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. ਚੈਟ ਪ੍ਰੋਫ਼ਾਈਲ ਸੰਪਾਦਿਤ ਕਰੋ"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "ਨੋਲਜ ਬੇਸ ਕੋਡ"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
         "dataset-2-label" : "ਗਲਤੀ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
         "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "ਏਪੀ ਕੀ ਕ੍ਰੈਡਿਟ ਲਿੰਕ ਖਰੀਦੋ"
+      },
+      "ModifyBtn" : {
+        "label" : "ਤਬਦੀਲ ਕਰੋ",
+        "help" : "ਮਾਡਲ ਸੰਰਚਨਾ ਵੇਖੋ/ਤਬਦੀਲ ਕਰੋ"
+      },
+      "ExistingModelCode" : {
+        "label" : "ਕੋਡ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "ਵਿਆਖਿਆ"
+      },
+      "ExistingModelType" : {
+        "label" : "ਮਾਡਲ ਕਿਸਮ"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ਮੌਜੂਦਾ ਸੰਰਚਨਾਵਾਂ"
+      },
+      "ProviderWWW" : {
+        "label" : "ਵੈੱਬਸਾਈਟ ਲਿੰਕ"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ਪ੍ਰੋਵਾਇਡਰ ਕਰੀਡੈਂਸ਼ੀਅਲਜ਼"
+      },
+      "ProviderInfos" : {
+        "label" : "ਪ੍ਰੋਵਾਇਡਰ ਜਾਣਕਾਰੀਆਂ"
+      },
+      "ExistingApiKey" : {
+        "label" : "ਏਪੀ ਕੀ/ਕਰੀਡੈਂਸ਼ੀਅਲਜ਼",
+        "help" : "ਇਸ ਪ੍ਰੋਵਾਇਡਰ ਲਈ ਏਪੀ ਕੀ ਜਾਂ ਕਰੀਡੈਂਸ਼ੀਅਲਜ਼ ਚੁਣੋ"
+      },
+      "NewApiKey" : {
+        "label" : "ਨਵੀਂ ਏਪੀ ਕੀ",
+        "help" : "ਇਸ ਪ੍ਰੋਵਾਇਡਰ ਨਾਲ ਵਰਤਣ ਵਾਸਤੇ ਨਵੀਂ ਏਪੀ ਕੀ ਦਾਖਲ ਕਰੋ"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ਮੌਜੂਦਾ ਜਾਂ ਨਵੇਂ ਵਰਤੋ",
+        "help" : "ਇਸ ਪ੍ਰੋਵਾਇਡਰ ਲਈ ਮੌਜੂਦਾ ਵਰਤੋ ਜਾਂ ਨਵੀਨ ਕਰੀਡੈਂਸ਼ੀਅਲਜ਼ ਬਣਾਓ"
+      },
+      "NewUserName" : {
+        "label" : "ਯੂਜ਼ਰ ਨਾਂ",
+        "help" : "ਪ੍ਰੋਵਾਇਡਰ ਸਰਵਿਸ ਐਕਸੈੱਸ ਕਰਨ ਵਾਸਤੇ ਯੂਜ਼ਰ ਨਾਂ"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "ਨਵਾਂ ਐਮਬੈਡਿੰਗ ਮਾਡਲ",
+        "help" : "ਨਵੀਂ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਸੰਰਚਨਾ ਬਣਾਓ"
+      },
+      "NewChatModel" : {
+        "label" : "ਨਵਾਂ ਚੈਟ ਮਾਡਲ",
+        "help" : "ਨਵੀਂ ਚੈਟ ਮਾਡਲ ਸੰਰਚਨਾ ਬਣਾਓ"
+      },
+      "NewModelDialog" : {
+        "label" : "ਨਵਾਂ ਮਾਡਲ ਜੋੜੋ"
+      },
+      "PiSave" : {
+        "label" : "ਸੰਭਾਲੋ"
+      },
+      "NewModelsButton" : {
+        "label" : "ਨਵੇਂ ਮਾਡਲ",
+        "help" : "ਨਵੀਨ ਮਾਡਲ ਸੰਰਚਨਾ ਬਣਾਓ"
+      },
+      "NewModelsDialog" : {
+        "label" : "ਨਵੇਂ ਮਾਡਲ ਜੋੜੋ"
+      },
+      "baseUrl" : {
+        "label" : "ਬੇਸ ਏਪੀ ਯੂਆਰਐਲ",
+        "help" : "ਪ੍ਰੋਵਾਇਡਰ ਦੀ ਏਪੀ ਸਰਵਿਸ ਲਈ ਬੇਸ ਯੂਆਰਐਲ"
+      },
+      "ModelTypePanel" : {
+        "label" : "ਨਵੇਂ ਮਾਡਲ ਜੋੜੋ"
+      },
+      "ModelsChoices" : {
+        "label" : "ਮਾਡਲ ਚੋਣ"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "ਸੁਝਾਏ ਮਾਡਲ ਚੋਣ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "ਐਮਬੈਡਿੰਗ ਮਾਡਲ",
+        "help" : "ਪਹਿਲਾਂ-ਤਿਆਰ ਕੀਤੇ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਵਿੱਚੋਂ ਇੱਕ ਚੁਣੋ"
+      },
+      "chatPresetChoice" : {
+        "label" : "ਚੈਟ ਮਾਡਲ",
+        "help" : "ਪਹਿਲਾਂ-ਤਿਆਰ ਕੀਤੇ ਚੈਟ ਮਾਡਲ ਵਿੱਚੋਂ ਇੱਕ ਚੁਣੋ"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "ਏਡਵਾਂਸਡ ਮਾਡਲ ਚੋਣ"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "ਐਮਬੈਡਿੰਗ ਮਾਡਲ",
+        "help" : "ਸਪਲਾਇਰ ਵੱਲੋਂ ਪ੍ਰਕਾਸ਼ਿਤ ਕੀਤੇ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਵਿੱਚੋਂ ਇੱਕ ਚੁਣੋ"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "ਚੈਟ ਮਾਡਲ",
+        "help" : "ਸਪਲਾਇਰ ਵੱਲੋਂ ਪ੍ਰਕਾਸ਼ਿਤ ਕੀਤੇ ਚੈਟ ਮਾਡਲ ਵਿੱਚੋਂ ਇੱਕ ਚੁਣੋ"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ਇਹ ਚੋਣ ਮੋਡ ਸਿਰਫ ਤਦ ਹੀ ਵਰਤੋ ਜਦੋਂ ਤੁਸੀਂ ਮਹਿਰ ਹੋ ਜਾਂ ਸਪਲਾਇਰ ਸਾਈਟ ਚ ਜਾਂਚ ਕਰਕੇ ਜਾਣੋ ਕਿ ਕਿਹੜੇ ਮਾਡਲ ਤੁਹਾਡੀਆਂ ਲੋੜਾਂ ਲਈ ਠੀਕ ਹਨ। "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ਮੂਲ ਚੈਟ ਮਾਡਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ",
+        "help" : "ਇਸ ਮਾਡਲ ਨੂੰ ਮੂਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ, ਜਦੋ ਕਿਸੇ ਹੋਰ ਚੈਟ ਮਾਡਲ ਦੀ ਸੰਰਚਨਾ ਨਾ ਹੋਵੇ ਤਾਂ ਇਹ ਹਰ ਕੰਮ ਲਈ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " ਅਸੀਂ ਤੁਹਾਨੂੰ ਹੇਠਾਂ ਦਿੱਤੇ ਮਾਡਲ ਸੁਝਾਉਂਦੇ ਹਾਂ "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ਮੂਲ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ",
+        "help" : "ਇਸ ਮਾਡਲ ਨੂੰ ਮੂਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ, ਜਦੋ ਕਿਸੇ ਹੋਰ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਦੀ ਸੰਰਚਨਾ ਨਾ ਹੋਵੇ ਤਾਂ ਇਹ ਹਰ ਕੰਮ ਲਈ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ਮੂਲ ਚੈਟ ਮਾਡਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ",
+        "help" : "ਇਸ ਮਾਡਲ ਨੂੰ ਮੂਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ, ਜਦੋ ਕਿਸੇ ਹੋਰ ਚੈਟ ਮਾਡਲ ਦੀ ਸੰਰਚਨਾ ਨਾ ਹੋਵੇ ਤਾਂ ਇਹ ਹਰ ਕੰਮ ਲਈ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ਮੂਲ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ",
+        "help" : "ਇਸ ਮਾਡਲ ਨੂੰ ਮੂਲ ਵਜੋਂ ਸੈੱਟ ਕਰੋ, ਜਦੋ ਕਿਸੇ ਹੋਰ ਐਮਬੈਡਿੰਗ ਮਾਡਲ ਦੀ ਸੰਰਚਨਾ ਨਾ ਹੋਵੇ ਤਾਂ ਇਹ ਹਰ ਕੰਮ ਲਈ ਵਰਤਿਆ ਜਾਵੇਗਾ"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ਇਹ ਚੋਣ ਮੋਡ ਸਿਰਫ ਤਦ ਹੀ ਵਰਤੋ ਜਦੋਂ ਤੁਸੀਂ ਮਹਿਰ ਹੋ ਜਾਂ ਸਪਲਾਇਰ ਸਾਈਟ ਚ ਜਾਂਚ ਕਰਕੇ ਜਾਣੋ ਕਿ ਕਿਹੜੇ ਮਾਡਲ ਤੁਹਾਡੀਆਂ ਲੋੜਾਂ ਲਈ ਠੀਕ ਹਨ। "
+      },
+      "CreatePresetBtn" : {
+        "label" : "ਬਣਾਓ ਅਤੇ ਐਕਟਿਵ ਕਰੋ"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "ਬਣਾਓ ਅਤੇ ਐਕਟਿਵ ਕਰੋ"
+      },
+      "ProviderNameField" : {
+        "label" : "ਪ੍ਰੋਵਾਇਡਰ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ਦੂਰ-ਦਰਾਜ ਪ੍ਰੋਵਾਇਡਰ ਠੀਕ ਹੈ",
+        "detail" : "ਪ੍ਰੋਵਾਇਡਰ ਚੱਲ ਰਿਹਾ ਹੈ ਅਤੇ ਸਫਲਤਾਪੂਰਵਕ ਸੰਰਚਿਤ ਕੀਤਾ ਗਿਆ ਹੈ"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ਕਾਰਵਾਈ ਅਸਫ਼ਲ ਰਹੀ",
+        "detail" : "ਦਿੱਤੇ ਕਰੀਡੈਂਸ਼ੀਅਲਜ਼ ਨਾਲ ਪ੍ਰਮਾਣਿਕਤਾ ਨਹੀਂ ਹੋ ਸਕੀ"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ਠੀਕ ਹੈ!",
+        "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋ ਗਈ"
       }
     }
   }

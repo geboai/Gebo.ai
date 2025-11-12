@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "D'éirigh leis an oibríocht"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Fáilte chuig Gebo.ai",
+        "detail" : "Iontráil d’ainm úsáideora agus do phasfhocal chun logáil isteach"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Cumraigh próifíl chomhrá \"R.A.G.\" amháin ar a laghad",
         "description" : "Cumraigh próifíl chomhrá threisithe amháin ar a laghad do d’úsáideoirí bunaithe ar cheann de do bhunachair eolais cumraithe"
+      },
+      "mandatory-done" : {
+        "summary" : "Gach céim riachtanach do shocrú Gebo.ai críochnaithe...",
+        "detail" : "Tá na céimeanna socraithe riachtanacha críochnaithe ach tá roinnt céimeanna ar iarraidh a chuireann cosc ar do eagraíocht an leas is fearr a bhaint as an mbogearra seo"
+      },
+      "setup-ok" : {
+        "summary" : "Socrú Gebo.ai ceart go leor!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Tá céim riachtanach ar iarraidh do shocrú Gebo.ai",
+        "detail" : "Athbhreithnigh na céimeanna dearga sa phróiseas socraithe le do thoil"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Samhail réamhshocraithe"
+      },
+      "MainPanelHeader" : {
+        "label" : "Rochtain sholáthraithe Gebo.ai llms a shocrú"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "oscail foirm thogra"
+      },
+      "Button3" : {
+        "help" : "oscail foinse sonraí"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Socrú Gebo.ai ceart go leor!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Cuir próifíl chomhrá nua R.A.G. leis"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Cuir próifíl chomhrá R.A.G. leis"
+      },
+      "MainPanel" : {
+        "label" : "Socruithe próifíle comhrá r.a.g. giniúna aischurtha a fháil"
+      },
+      "CodeHeader" : {
+        "label" : "Cód"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Próifílí comhrá R.A.G. atá ann cheana"
+      },
+      "DescriptionHeader" : {
+        "label" : "Cur síos"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Cuir próifíl chomhrá R.A.G. in eagar"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Cóid an bhunachair eolais"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Doiciméid próiseáilte",
         "dataset-2-label" : "Doiciméid le hearráid",
         "dataset-3-label" : "Doiciméid tréigthe"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Nasc creidmheasa le haghaidh eochair Apy a cheannach"
+      },
+      "ModifyBtn" : {
+        "label" : "Athraigh",
+        "help" : "Féach nó athraigh cumraíocht an mhúnla"
+      },
+      "ExistingModelCode" : {
+        "label" : "Cód"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Cur síos"
+      },
+      "ExistingModelType" : {
+        "label" : "Cineál múnla"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Cumraíochtaí atá ann cheana"
+      },
+      "ProviderWWW" : {
+        "label" : "Nasc suíomh gréasáin"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Dintiúir an tsoláthraí"
+      },
+      "ProviderInfos" : {
+        "label" : "Eolas an tsoláthraí"
+      },
+      "ExistingApiKey" : {
+        "label" : "Eochair/phríomhdintiúir Api",
+        "help" : "Roghnaigh eochair nó dintiúir api don tsoláthraí seo"
+      },
+      "NewApiKey" : {
+        "label" : "Eochair api nua",
+        "help" : "Cuir isteach eochair api nua le húsáid leis an tsoláthraí seo"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Úsáid sean-nó nua",
+        "help" : "Úsáid dintiúir atá ann nó cruthaigh ceann nua don tsoláthraí seo"
+      },
+      "NewUserName" : {
+        "label" : "Ainm úsáideora",
+        "help" : "Ainm úsáideora a úsáidtear chun seirbhísí an tsoláthraí a rochtain"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Múnla leabaithe nua",
+        "help" : "Cruthaigh cumraíocht nua don mhúnla leabaithe"
+      },
+      "NewChatModel" : {
+        "label" : "Múnla comhrá nua",
+        "help" : "Cruthaigh cumraíocht nua don mhúnla comhrá"
+      },
+      "NewModelDialog" : {
+        "label" : "Cuir múnla nua leis"
+      },
+      "PiSave" : {
+        "label" : "Sábháil"
+      },
+      "NewModelsButton" : {
+        "label" : "Múnlaí nua",
+        "help" : "Cruthaigh cumraíocht múnlaí nua"
+      },
+      "NewModelsDialog" : {
+        "label" : "Cuir múnlaí nua leis"
+      },
+      "baseUrl" : {
+        "label" : "Bun-url an api",
+        "help" : "Bun-url do sheirbhísí api an tsoláthraí"
+      },
+      "ModelTypePanel" : {
+        "label" : "Cuir múnlaí nua leis"
+      },
+      "ModelsChoices" : {
+        "label" : "Roghanna múnlaí"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Roghnú múnlaí molta"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Múnla leabaithe",
+        "help" : "Roghnaigh ceann de na múnlaí leabaithe atá réamhshainithe"
+      },
+      "chatPresetChoice" : {
+        "label" : "Múnla comhrá",
+        "help" : "Roghnaigh ceann de na múnlaí comhrá atá réamhshainithe"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Roghnú múnlaí casta"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Múnla leabaithe",
+        "help" : "Roghnaigh ceann de na múnlaí leabaithe atá foilsithe ag an soláthraí"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Múnla comhrá",
+        "help" : "Roghnaigh ceann de na múnlaí comhrá atá foilsithe ag an soláthraí"
+      },
+      "PresedAccordionDesc" : {
+        "label" : "Úsáid an modh roghnaithe seo ach amháin más saineolaí thú nó má sheiceálann tú ar shuíomh an tsoláthraí cé na múnlaí a oireann duit."
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "socraigh mar mhúnla comhrá réamhshocraithe",
+        "help" : "Socraigh an múnla seo mar an múnla réamhshocraithe, úsáidfear é do gach tasc mura bhfuil múnla comhrá eile cumraithe"
+      },
+      "PresetAccordionDesc" : {
+        "label" : "Molaimid na múnlaí seo duit"
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "socraigh mar mhúnla leabaithe réamhshocraithe",
+        "help" : "Socraigh an múnla seo mar an ceann réamhshocraithe, úsáidfear é do gach tasc mura bhfuil múnla leabaithe eile cumraithe"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "socraigh mar mhúnla comhrá réamhshocraithe",
+        "help" : "Socraigh an múnla seo mar an múnla réamhshocraithe, úsáidfear é do gach tasc mura bhfuil múnla comhrá eile cumraithe"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "socraigh mar mhúnla leabaithe réamhshocraithe",
+        "help" : "Socraigh an múnla seo mar an ceann réamhshocraithe, úsáidfear é do gach tasc mura bhfuil múnla leabaithe eile cumraithe"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : "Úsáid an modh roghnaithe seo ach amháin más saineolaí thú nó má sheiceálann tú ar shuíomh an tsoláthraí cé na múnlaí a oireann duit."
+      },
+      "CreatePresetBtn" : {
+        "label" : "Cruthaigh agus gníomhaigh"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Cruthaigh agus gníomhaigh"
+      },
+      "ProviderNameField" : {
+        "label" : "Soláthraí"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Soláthraí cianda AI ceart go leor",
+        "detail" : "Tá an soláthraí ar fáil agus cumraithe go rathúil"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Theip ar an oibríocht",
+        "detail" : "Níorbh fhéidir fíordheimhniú leis na dintiúir a cuireadh ar fáil"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Ceart go leor!",
+        "detail" : "D’éirigh leis an oibríocht"
       }
     }
   }

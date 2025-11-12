@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operasjonen ble fullført"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Velkommen til gebo.ai",
+        "detail" : "Skriv inn brukernavn og passord for å logge inn"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Sett opp minst én \"R.A.G.\" chatprofil",
         "description" : "Konfigurer minst én retrieve augmented chatprofil for brukerne, basert på en av dine konfigurerte kunnskapsbaser"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai obligatoriske oppsettstrinn fullført...",
+        "detail" : "Obligatoriske oppsettstrinn er fullført, men noen manglende trinn hindrer organisasjonen din fra å få mest mulig ut av denne programvaren"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai oppsett OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai oppsett mangler et obligatorisk trinn",
+        "detail" : "Vennligst se over de røde trinnene i oppsettprosessen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Standardmodell"
+      },
+      "MainPanelHeader" : {
+        "label" : "Sett opp Gebo.ai llms-tilgang til leverandører"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "åpne prosjekt-skjema"
+      },
+      "Button3" : {
+        "help" : "åpne datakilde"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai-oppsettet er klart!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Legg til ny R.A.G. chatprofil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Legg til R.A.G. chatprofil"
+      },
+      "MainPanel" : {
+        "label" : "Hent innstillinger for augmented generation (r.a.g.) chatprofiler"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Eksisterende R.A.G. chatprofiler"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Rediger R.A.G. chatprofil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kunnskapsbasekoder"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Behandlede dokumenter",
         "dataset-2-label" : "Feil på dokumenter",
         "dataset-3-label" : "Forkastede dokumenter"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Kjøp Apy nøkkelkredittlenke"
+      },
+      "ModifyBtn" : {
+        "label" : "Endre",
+        "help" : "Se/endre modellkonfigurasjon"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kode"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Beskrivelse"
+      },
+      "ExistingModelType" : {
+        "label" : "Modelltype"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Eksisterende konfigurasjoner"
+      },
+      "ProviderWWW" : {
+        "label" : "Nettstedslenke"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Leverandørlegitimasjon"
+      },
+      "ProviderInfos" : {
+        "label" : "Leverandørinformasjon"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-nøkkel/legitimasjon",
+        "help" : "Velg api-nøkkel eller legitimasjon for denne leverandøren"
+      },
+      "NewApiKey" : {
+        "label" : "Ny api-nøkkel",
+        "help" : "Legg inn en ny api-nøkkel som skal brukes med denne leverandøren"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Bruk eksisterende eller nye",
+        "help" : "Bruk eksisterende eller opprett nye legitimasjoner for denne leverandøren"
+      },
+      "NewUserName" : {
+        "label" : "Brukernavn",
+        "help" : "Brukernavn for tilgang til leverandørtjenester"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Ny embedding-modell",
+        "help" : "Opprett en ny embedding-modellkonfigurasjon"
+      },
+      "NewChatModel" : {
+        "label" : "Ny chatmodell",
+        "help" : "Opprett en ny chatmodellkonfigurasjon"
+      },
+      "NewModelDialog" : {
+        "label" : "Legg til ny modell"
+      },
+      "PiSave" : {
+        "label" : "Lagre"
+      },
+      "NewModelsButton" : {
+        "label" : "Nye modeller",
+        "help" : "Opprett ny modellkonfigurasjon"
+      },
+      "NewModelsDialog" : {
+        "label" : "Legg til nye modeller"
+      },
+      "baseUrl" : {
+        "label" : "Base api-url",
+        "help" : "Base-url for api-tjenestene til leverandøren"
+      },
+      "ModelTypePanel" : {
+        "label" : "Legg til nye modeller"
+      },
+      "ModelsChoices" : {
+        "label" : "Modellvalg"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Foreslått modellvalg"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding-modell",
+        "help" : "Velg en av de forhåndsdefinerte embedding-modellene"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chatmodell",
+        "help" : "Velg en av de forhåndsdefinerte chatmodellene"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Avansert modellvalg"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding-modell",
+        "help" : "Velg en av leverandørens publiserte embedding-modeller"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chatmodell",
+        "help" : "Velg en av leverandørens publiserte chatmodeller"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Bruk denne valgmodusen kun hvis du er ekspert eller sjekk på leverandørens nettsted hvilke modeller som passer for deg. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "sett som standard chatmodell",
+        "help" : "Sett denne modellen som standard. Den brukes til alle oppgaver som ikke har en annen chatmodell konfigurert"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Vi foreslår følgende modelliste "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "sett som standard embedding-modell",
+        "help" : "Sett denne modellen som standard. Den brukes til alle oppgaver som ikke har en annen embedding-modell konfigurert"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "sett som standard chatmodell",
+        "help" : "Sett denne modellen som standard. Den brukes til alle oppgaver som ikke har en annen chatmodell konfigurert"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "sett som standard embedding-modell",
+        "help" : "Sett denne modellen som standard. Den brukes til alle oppgaver som ikke har en annen embedding-modell konfigurert"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Bruk denne valgmodusen kun hvis du er ekspert eller sjekk på leverandørens nettsted hvilke modeller som passer for deg. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Opprett og aktiver"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Opprett og aktiver"
+      },
+      "ProviderNameField" : {
+        "label" : "Leverandør"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ekstern leverandør OK",
+        "detail" : "Leverandøren er oppe og kjører og er riktig konfigurert"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operasjonen mislyktes",
+        "detail" : "Kan ikke autentisere med oppgitte legitimasjoner"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operasjonen ble fullført"
       }
     }
   }

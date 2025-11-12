@@ -78,6 +78,12 @@
         "summary" : "Гатова!",
         "detail" : "Аперацыя паспяхова завершана"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Вітаем у gebo.ai",
+        "detail" : "Увядзіце ваш лагін і пароль для ўваходу"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Наладзьце як мінімум профіль чату \"R.A.G.\"",
         "description" : "Наладзьце як мінімум адзін профіль retrieve augmented chat для вашых карыстальнікаў на аснове адной з наладжаных баз ведаў"
+      },
+      "mandatory-done" : {
+        "summary" : "Абавязковыя крокі наладкі Gebo.ai завершаны...",
+        "detail" : "Абавязковыя крокі налады выкананыя, але некаторыя прапушчаныя крокі не дазваляюць вашай арганізацыі максімальна выкарыстоўваць гэты софт"
+      },
+      "setup-ok" : {
+        "summary" : "Наладка Gebo.ai прайшла паспяхова!"
+      },
+      "mandatory-missing" : {
+        "summary" : "У наладцы Gebo.ai прапушчаны адзін з абавязковых крокаў",
+        "detail" : "Калі ласка, праверце выдзеленыя чырвоным крокі ў працэсе налады"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Мадэль па змаўчанні"
+      },
+      "MainPanelHeader" : {
+        "label" : "Наладзьце доступ да пастаўшчыкоў llms у Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "адкрыць форму праекта"
+      },
+      "Button3" : {
+        "help" : "адкрыць крыніцу дадзеных"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Наладка Gebo.ai паспяхова завершана!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Дадаць новы профіль чата R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Дадаць профіль чата R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Налады профіляў чатаў з дапоўненай генерацыяй (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Існуючыя профілі чатаў R.A.G."
+      },
+      "DescriptionHeader" : {
+        "label" : "Апісанне"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Рэдагаваць профіль чата R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Коды базы ведаў"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Апрацаваныя дакументы",
         "dataset-2-label" : "Дакументы з памылкай",
         "dataset-3-label" : "Адхіленыя дакументы"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Спасылка для куплі крэдыту ключа Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Змяніць",
+        "help" : "Праглядзець/змяніць канфігурацыю мадэлі"
+      },
+      "ExistingModelCode" : {
+        "label" : "Код"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Апісанне"
+      },
+      "ExistingModelType" : {
+        "label" : "Тып мадэлі"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Існуючыя канфігурацыі"
+      },
+      "ProviderWWW" : {
+        "label" : "Спасылка на сайт"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Дадзеныя пастаўшчыка"
+      },
+      "ProviderInfos" : {
+        "label" : "Інфармацыя пра пастаўшчыка"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ключ/дадзеныя",
+        "help" : "Абярыце api ключ або дадзеныя для гэтага пастаўшчыка"
+      },
+      "NewApiKey" : {
+        "label" : "Новы api ключ",
+        "help" : "Увядзіце новы api ключ для выкарыстання з гэтым пастаўшчыком"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Выкарыстоўваць існуючыя ці новыя",
+        "help" : "Выкарыстоўвайце існуючыя або стварыце новыя дадзеныя для гэтага пастаўшчыка"
+      },
+      "NewUserName" : {
+        "label" : "Імя карыстальніка",
+        "help" : "Імя карыстальніка для доступу да сэрвісаў пастаўшчыка"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Новая мадэль embedding",
+        "help" : "Стварыць новую канфігурацыю embedding мадэлі"
+      },
+      "NewChatModel" : {
+        "label" : "Новая чат-мадэль",
+        "help" : "Стварыць новую канфігурацыю чат-мадэлі"
+      },
+      "NewModelDialog" : {
+        "label" : "Дадаць новую мадэль"
+      },
+      "PiSave" : {
+        "label" : "Захаваць"
+      },
+      "NewModelsButton" : {
+        "label" : "Новыя мадэлі",
+        "help" : "Стварыць новую канфігурацыю мадэляў"
+      },
+      "NewModelsDialog" : {
+        "label" : "Дадаць новыя мадэлі"
+      },
+      "baseUrl" : {
+        "label" : "Базавы api url",
+        "help" : "Базавы url для api-сэрвісаў пастаўшчыка"
+      },
+      "ModelTypePanel" : {
+        "label" : "Дадаць новыя мадэлі"
+      },
+      "ModelsChoices" : {
+        "label" : "Варыянты мадэляў"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Рэкамендаваны выбар мадэляў"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Мадэль embedding",
+        "help" : "Абраць адну з прапанаваных embedding-мадэляў"
+      },
+      "chatPresetChoice" : {
+        "label" : "Чат-мадэль",
+        "help" : "Абраць адну з прапанаваных чат-мадэляў"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Пашыраны выбар мадэляў"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Мадэль embedding",
+        "help" : "Абраць адну з мадэляў embedding, апублікаваных пастаўшчыком"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Чат-мадэль",
+        "help" : "Абраць адну з чат-мадэляў, апублікаваных пастаўшчыком"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Выкарыстоўвайце гэты рэжым выбару толькі калі вы дасведчаны, або параўнайце на сайце пастаўшчыка, якія мадэлі падыходзяць для вашых патрэбаў. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "усталяваць як чат-мадэль па змаўчанні",
+        "help" : "Зрабіць гэтую мадэль асноўнай для ўсіх задач, калі іншыя чат-мадэлі не наладжаны"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Мы рэкамендуем вам наступны спіс мадэляў "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "усталяваць як embedding-мадэль па змаўчанні",
+        "help" : "Зрабіць гэтую мадэль асноўнай для ўсіх задач, калі іншыя embedding-мадэлі не наладжаны"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "усталяваць як чат-мадэль па змаўчанні",
+        "help" : "Зрабіць гэтую мадэль асноўнай для ўсіх задач, калі іншыя чат-мадэлі не наладжаны"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "усталяваць як embedding-мадэль па змаўчанні",
+        "help" : "Зрабіць гэтую мадэль асноўнай для ўсіх задач, калі іншыя embedding-мадэлі не наладжаны"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Выкарыстоўвайце гэты рэжым выбару толькі калі вы дасведчаны, або параўнайце на сайце пастаўшчыка, якія мадэлі падыходзяць для вашых патрэбаў. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Стварыць і актываваць"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Стварыць і актываваць"
+      },
+      "ProviderNameField" : {
+        "label" : "Пастаўшчык"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI аддалены пастаўшчык у парадку",
+        "detail" : "Пастаўшчык працуе і паспяхова наладжаны"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Памылка аперацыі",
+        "detail" : "Не ўдалося прайсці аўтэнтыфікацыю з указанымі дадзенымі"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Упэўнена!",
+        "detail" : "Аперацыя паспяхова выканана"
       }
     }
   }

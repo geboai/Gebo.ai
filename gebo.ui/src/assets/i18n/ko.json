@@ -78,6 +78,12 @@
         "summary" : "완료!",
         "detail" : "작업이 성공적으로 완료되었습니다"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai에 오신 것을 환영합니다",
+        "detail" : "로그인하려면 사용자 이름과 비밀번호를 입력하세요"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "\"R.A.G.\" 채팅 프로필을 최소 1개 구성",
         "description" : "설정한 지식 베이스 중 하나를 기반으로 사용자용 RAG 채팅 프로필을 최소 1개 구성하세요."
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai 필수 설정 완료...",
+        "detail" : "필수 설정 단계는 완료되었지만 일부 누락된 단계로 인해 조직에서 소프트웨어를 최대한 활용하지 못할 수 있습니다"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai 설정 완료!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai 설정에 일부 필수 단계가 누락됨",
+        "detail" : "설정 과정의 빨간 단계들을 확인하세요"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "기본 모델"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms 공급자 접근 설정"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "프로젝트 양식 열기"
+      },
+      "Button3" : {
+        "help" : "데이터 소스 열기"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai 설정 완료!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "새 R.A.G. 채팅 프로필 추가"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. 채팅 프로필 추가"
+      },
+      "MainPanel" : {
+        "label" : "증강 생성(r.a.g.) 채팅 프로필 설정 가져오기"
+      },
+      "CodeHeader" : {
+        "label" : "코드"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "기존 R.A.G. 채팅 프로필"
+      },
+      "DescriptionHeader" : {
+        "label" : "설명"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. 채팅 프로필 편집"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "지식베이스 코드"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "처리된 문서",
         "dataset-2-label" : "오류 문서",
         "dataset-3-label" : "폐기된 문서"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy 키 크레딧 구매 링크"
+      },
+      "ModifyBtn" : {
+        "label" : "수정",
+        "help" : "모델 구성 보기/수정"
+      },
+      "ExistingModelCode" : {
+        "label" : "코드"
+      },
+      "ExistingModelDesc" : {
+        "label" : "설명"
+      },
+      "ExistingModelType" : {
+        "label" : "모델 유형"
+      },
+      "ExistingModelsSection" : {
+        "label" : "기존 구성"
+      },
+      "ProviderWWW" : {
+        "label" : "웹사이트 링크"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "공급자 자격 증명"
+      },
+      "ProviderInfos" : {
+        "label" : "공급자 정보"
+      },
+      "ExistingApiKey" : {
+        "label" : "API 키/자격 증명",
+        "help" : "이 공급자에 사용할 api 키 또는 자격 증명을 선택하세요"
+      },
+      "NewApiKey" : {
+        "label" : "새 API 키",
+        "help" : "이 공급자와 함께 사용할 새 api 키를 입력하세요"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "기존 또는 새 사용",
+        "help" : "이 공급자에 사용할 기존 자격 증명을 사용하거나 새로 생성하세요"
+      },
+      "NewUserName" : {
+        "label" : "사용자 이름",
+        "help" : "공급자 서비스에 접근하는 데 사용하는 사용자 이름"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "새 임베딩 모델",
+        "help" : "새 임베딩 모델 구성을 생성하세요"
+      },
+      "NewChatModel" : {
+        "label" : "새 챗 모델",
+        "help" : "새 챗 모델 구성을 생성하세요"
+      },
+      "NewModelDialog" : {
+        "label" : "새 모델 추가"
+      },
+      "PiSave" : {
+        "label" : "저장"
+      },
+      "NewModelsButton" : {
+        "label" : "새 모델",
+        "help" : "새 모델 구성 생성"
+      },
+      "NewModelsDialog" : {
+        "label" : "새 모델 추가"
+      },
+      "baseUrl" : {
+        "label" : "기본 API URL",
+        "help" : "공급자 API 서비스의 기본 URL"
+      },
+      "ModelTypePanel" : {
+        "label" : "새 모델 추가"
+      },
+      "ModelsChoices" : {
+        "label" : "모델 선택"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "추천 모델 선택"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "임베딩 모델",
+        "help" : "미리 정의된 임베딩 모델 중 하나를 선택하세요"
+      },
+      "chatPresetChoice" : {
+        "label" : "챗 모델",
+        "help" : "미리 정의된 챗 모델 중 하나를 선택하세요"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "고급 모델 선택"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "임베딩 모델",
+        "help" : "공급자가 게시한 임베딩 모델 중 하나를 선택하세요"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "챗 모델",
+        "help" : "공급자가 게시한 챗 모델 중 하나를 선택하세요"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " 이 선택 모드는 전문가이거나 공급자 사이트에서 본인에게 맞는 모델을 확인할 때만 사용하세요. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "기본 챗 모델로 설정",
+        "help" : "이 모델을 기본값으로 설정합니다. 다른 챗 모델이 구성되지 않은 모든 작업에 사용됩니다"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " 다음 모델 목록을 추천합니다 "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "기본 임베딩 모델로 설정",
+        "help" : "이 모델을 기본값으로 설정합니다. 다른 임베딩 모델이 구성되지 않은 모든 작업에 사용됩니다"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "기본 챗 모델로 설정",
+        "help" : "이 모델을 기본값으로 설정합니다. 다른 챗 모델이 구성되지 않은 모든 작업에 사용됩니다"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "기본 임베딩 모델로 설정",
+        "help" : "이 모델을 기본값으로 설정합니다. 다른 임베딩 모델이 구성되지 않은 모든 작업에 사용됩니다"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " 이 선택 모드는 전문가이거나 공급자 사이트에서 본인에게 맞는 모델을 확인할 때만 사용하세요. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "생성 및 활성화"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "생성 및 활성화"
+      },
+      "ProviderNameField" : {
+        "label" : "공급자"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI 원격 공급자 정상",
+        "detail" : "공급자가 실행 중이며 성공적으로 구성되었습니다"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "작업 실패",
+        "detail" : "제공된 자격 증명으로 인증할 수 없습니다"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "완료!",
+        "detail" : "작업이 성공적으로 완료되었습니다"
       }
     }
   }

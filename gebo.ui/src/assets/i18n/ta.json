@@ -78,6 +78,12 @@
         "summary" : "சரி!",
         "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai-க்கு வரவேற்கிறோம்",
+        "detail" : "உங்கள் பயனர்பெயர் மற்றும் கடவுச்சொல்லை உள்ளிட்டு உள்நுழைக"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "குறைந்தபட்சம் ஒரு \"R.A.G.\" உரையாடல் சுயவிவரத்தை அமைக்கவும்",
         "description" : "உங்கள் அறிவு கருக்களில் ஒன்றை வைத்து குறைந்தபட்சம் ஒரு ரீட்ரீவ் ஆக்மென்டட் உரையாடல் சுயவிவரத்தை உங்கள் பயனர்களுக்காக அமைக்கவும்"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai அமைப்பிற்கான கட்டாய படிகள் முடிந்துவிட்டது...",
+        "detail" : "கட்டாய அமைவு படிகள் முடிந்துவிட்டது, ஆனால் சில தப்பான படிகள் உங்கள் நிறுவனத்திற்கு இந்த மென்பொருளில் முழுமையான அனுபவத்தை தவிர்க்கின்றன"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai அமைவு வெற்றிகரமாக உள்ளது!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai அமைவில் சில கட்டாய படிகள் இல்லை",
+        "detail" : "அமைவு செயல்முறை உள்ள சிவப்பு படிகளை சோதிக்கவும்"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "பொது மாதிரி"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms வழங்குநர்களுக்கான அணுகலை அமைக்கவும்"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "திட்டப் படிவத்தைத் திறக்கவும்"
+      },
+      "Button3" : {
+        "help" : "தரவு மூலத்தைத் திற"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai அமைப்பு சரி!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "புதிய R.A.G. அரட்டை சுயவிவரம் சேர்க்கவும்"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. அரட்டை சுயவிவரம் சேர்க்கவும்"
+      },
+      "MainPanel" : {
+        "label" : "அதிர்ச்சி மூலம் உருவாக்கும் (r.a.g.) அரட்டை சுயவிவர அமைப்புகள் பெறவும்"
+      },
+      "CodeHeader" : {
+        "label" : "குறியீடு"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "ஏற்கனவே உள்ள R.A.G. அரட்டை சுயவிவரங்கள்"
+      },
+      "DescriptionHeader" : {
+        "label" : "விவரம்"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. அரட்டை சுயவிவரத்தை திருத்து"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "அறிவுத்தள குறியீடுகள்"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
         "dataset-2-label" : "பிழை வந்த ஆவணங்கள்",
         "dataset-3-label" : "நிராகரிக்கப்பட்ட ஆவணங்கள்"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy சாவி கிரெடிட் வாங்கும் இணைப்பு"
+      },
+      "ModifyBtn" : {
+        "label" : "மாற்று",
+        "help" : "மாதிரி உள்ளமைவை பார்க்க/மாற்று"
+      },
+      "ExistingModelCode" : {
+        "label" : "குறியீடு"
+      },
+      "ExistingModelDesc" : {
+        "label" : "விவரம்"
+      },
+      "ExistingModelType" : {
+        "label" : "மாதிரி வகை"
+      },
+      "ExistingModelsSection" : {
+        "label" : "ஏற்கனவே உள்ள உள்ளமைப்புகள்"
+      },
+      "ProviderWWW" : {
+        "label" : "இணையதள இணைப்பு"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "வழங்குநர் சான்றிதழ்கள்"
+      },
+      "ProviderInfos" : {
+        "label" : "வழங்குநர் தகவல்கள்"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api சாவி/சான்றிதழ்கள்",
+        "help" : "இந்த வழங்குநருக்கு api சாவி அல்லது சான்றிதழ்களைத் தேர்ந்தெடுக்கவும்"
+      },
+      "NewApiKey" : {
+        "label" : "புதிய api சாவி",
+        "help" : "இந்த வழங்குநருடன் பயன்படுத்த புதிய api சாவியை உள்ளிடவும்"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ஏற்கனவே உள்ளதை அல்லது புதிதாக பயன்படுத்தவும்",
+        "help" : "இந்த வழங்குநருக்காக ஏற்கனவே உள்ள சான்றிதழ்கள் பயன்படுத்த அல்லது புதியதை உருவாக்கவும்"
+      },
+      "NewUserName" : {
+        "label" : "பயனர்பெயர்",
+        "help" : "வழங்குநர் சேவைகளை அணுக பயன்படும் பயனர்பெயர்"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "புதிய embedding மாதிரி",
+        "help" : "புதிய embedding மாதிரி உள்ளமைப்பை உருவாக்கவும்"
+      },
+      "NewChatModel" : {
+        "label" : "புதிய அரட்டை மாதிரி",
+        "help" : "புதிய அரட்டை மாதிரி உள்ளமைப்பை உருவாக்கவும்"
+      },
+      "NewModelDialog" : {
+        "label" : "புதிய மாதிரியைச் சேர்க்கவும்"
+      },
+      "PiSave" : {
+        "label" : "சேமிக்க"
+      },
+      "NewModelsButton" : {
+        "label" : "புதிய மாதிரிகள்",
+        "help" : "புதிய மாதிரிகள் உள்ளமைப்பை உருவாக்கவும்"
+      },
+      "NewModelsDialog" : {
+        "label" : "புதிய மாதிரிகள் சேர்க்கவும்"
+      },
+      "baseUrl" : {
+        "label" : "அடிப்படை api url",
+        "help" : "வழங்குநரின் api சேவைகளுக்கான அடிப்படை url"
+      },
+      "ModelTypePanel" : {
+        "label" : "புதிய மாதிரிகள் சேர்க்கவும்"
+      },
+      "ModelsChoices" : {
+        "label" : "மாதிரி தேர்வுகள்"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "பரிந்துரைக்கப்பட்ட மாதிரிகள் தேர்வு"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding மாதிரி",
+        "help" : "முன்னிலையில் உள்ள embedding மாதிரிகளில் ஒன்றை தேர்ந்தெடுக்கவும்"
+      },
+      "chatPresetChoice" : {
+        "label" : "அரட்டை மாதிரி",
+        "help" : "முன்னிலையில் உள்ள அரட்டை மாதிரிகளில் ஒன்றை தேர்ந்தெடுக்கவும்"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "முன்னேற்றப்பட்ட மாதிரி தேர்வு"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding மாதிரி",
+        "help" : "வழங்குநர் வெளியிட்ட embedding மாதிரிகளில் ஒன்றைத் தேர்ந்தெடுக்கவும்"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "அரட்டை மாதிரி",
+        "help" : "வழங்குநர் வெளியிட்ட அரட்டை மாதிரிகளில் ஒன்றைத் தேர்ந்தெடுக்கவும்"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " இந்த தேர்வு முறையை நீங்கள் நிபுணர் என்றால் மட்டும் அல்லது வழங்குநர் தளத்தில் எந்த மாதிரிகள் உங்களுக்கு பொருந்தும் என்று பார்த்து உபயோகிக்கவும். "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "உயிரின் அமைப்பாக அரட்டை மாதிரியை அமைக்கவும்",
+        "help" : "இந்த மாதிரியை இயல்பாக அமைக்கவும், பிற chat மாதிரி அமைக்கப்படாத எந்த பணிக்காகவும் இது பயன்படுத்தப்படும்"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " நாங்கள் பரிந்துரைக்கும் மாதிரிகள் பட்டியல் "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "உயிரின் அமைப்பாக embedding மாதிரியை அமைக்கவும்",
+        "help" : "இந்த மாதிரியை இயல்பாக அமைக்கவும், பிற embedding மாதிரி அமைக்கப்படாத எந்த பணிக்காகவும் இது பயன்படுத்தப்படும்"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "உயிரின் அமைப்பாக அரட்டை மாதிரியை அமைக்கவும்",
+        "help" : "இந்த மாதிரியை இயல்பாக அமைக்கவும், பிற chat மாதிரி அமைக்கப்படாத எந்த பணிக்காகவும் இது பயன்படுத்தப்படும்"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "உயிரின் அமைப்பாக embedding மாதிரியை அமைக்கவும்",
+        "help" : "இந்த மாதிரியை இயல்பாக அமைக்கவும், பிற embedding மாதிரி அமைக்கப்படாத எந்த பணிக்காகவும் இது பயன்படுத்தப்படும்"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " இந்த தேர்வு முறையை நீங்கள் நிபுணர் என்றால் மட்டும் அல்லது வழங்குநர் தளத்தில் எந்த மாதிரிகள் உங்களுக்கு பொருந்தும் என்று பார்த்து உபயோகிக்கவும். "
+      },
+      "CreatePresetBtn" : {
+        "label" : "உருவாக்கி செயல்படுத்தவும்"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "உருவாக்கி செயல்படுத்தவும்"
+      },
+      "ProviderNameField" : {
+        "label" : "வழங்குநர்"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI தொலைவிலுள்ள வழங்குநர் OK",
+        "detail" : "வழங்குநர் செயல்பட்டு, வெற்றிகரமாக கட்டமைக்கப்பட்டுள்ளது"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "செயல் தோல்வியடைந்தது",
+        "detail" : "கொடுக்கப்பட்ட சான்றிதழ்களுடன் அங்கீகரிக்க முடியவில்லை"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "வெற்றி!",
+        "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
       }
     }
   }

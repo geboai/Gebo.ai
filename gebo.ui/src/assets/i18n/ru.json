@@ -78,6 +78,12 @@
         "summary" : "ОК!",
         "detail" : "Операция успешно выполнена"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Добро пожаловать в gebo.ai",
+        "detail" : "Введите имя пользователя и пароль для входа"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Настройте хотя бы один профиль чата \"R.A.G.\"",
         "description" : "Настройте хотя бы один профиль чата retrieve augmented для пользователей на основе одной из ваших баз знаний"
+      },
+      "mandatory-done" : {
+        "summary" : "Обязательные шаги настройки Gebo.ai выполнены...",
+        "detail" : "Обязательные шаги настройки завершены, но отсутствие некоторых шагов не позволяет вашей организации использовать все возможности этого программного обеспечения"
+      },
+      "setup-ok" : {
+        "summary" : "Настройка Gebo.ai завершена!"
+      },
+      "mandatory-missing" : {
+        "summary" : "В настройке Gebo.ai отсутствует обязательный шаг",
+        "detail" : "Пожалуйста, проверьте отмеченные красным шаги процесса настройки"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Модель по умолчанию"
+      },
+      "MainPanelHeader" : {
+        "label" : "Настройка доступа провайдеров llms Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "открыть форму проекта"
+      },
+      "Button3" : {
+        "help" : "открыть источник данных"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Настройка Gebo.ai завершена!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Добавить новый профиль чата R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Добавить профиль чата R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Получить настройки профилей чата с расширенной генерацией (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Существующие профили чата R.A.G."
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Редактировать профиль чата R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Коды базы знаний"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Обработанные документы",
         "dataset-2-label" : "Документы с ошибкой",
         "dataset-3-label" : "Отклонённые документы"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Купить кредит на ключ Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Изменить",
+        "help" : "Просмотр/изменение конфигурации модели"
+      },
+      "ExistingModelCode" : {
+        "label" : "Код"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Описание"
+      },
+      "ExistingModelType" : {
+        "label" : "Тип модели"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Существующие конфигурации"
+      },
+      "ProviderWWW" : {
+        "label" : "Ссылка на веб-сайт"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Учетные данные провайдера"
+      },
+      "ProviderInfos" : {
+        "label" : "Информация о провайдере"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-ключ/учетные данные",
+        "help" : "Выберите api-ключ или учетные данные для этого провайдера"
+      },
+      "NewApiKey" : {
+        "label" : "Новый api-ключ",
+        "help" : "Введите новый api-ключ для использования с этим провайдером"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Использовать существующие или новые",
+        "help" : "Используйте существующие или создайте новые учетные данные для этого провайдера"
+      },
+      "NewUserName" : {
+        "label" : "Имя пользователя",
+        "help" : "Имя пользователя для доступа к сервисам провайдера"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Новая embedding-модель",
+        "help" : "Создать новую конфигурацию embedding-модели"
+      },
+      "NewChatModel" : {
+        "label" : "Новая Chat-модель",
+        "help" : "Создать новую конфигурацию chat-модели"
+      },
+      "NewModelDialog" : {
+        "label" : "Добавить новую модель"
+      },
+      "PiSave" : {
+        "label" : "Сохранить"
+      },
+      "NewModelsButton" : {
+        "label" : "Новые модели",
+        "help" : "Создать новую конфигурацию моделей"
+      },
+      "NewModelsDialog" : {
+        "label" : "Добавить новые модели"
+      },
+      "baseUrl" : {
+        "label" : "Базовый api url",
+        "help" : "Базовый url для api сервисов провайдера"
+      },
+      "ModelTypePanel" : {
+        "label" : "Добавить новые модели"
+      },
+      "ModelsChoices" : {
+        "label" : "Выбор моделей"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Выбор предлагаемых моделей"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding-модель",
+        "help" : "Выберите одну из предустановленных embedding-моделей"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat-модель",
+        "help" : "Выберите одну из предустановленных chat-моделей"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Расширенный выбор моделей"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding-модель",
+        "help" : "Выберите одну из embedding-моделей, опубликованных поставщиком"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat-модель",
+        "help" : "Выберите одну из chat-моделей, опубликованных поставщиком"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Используйте этот режим выбора только если вы эксперт или после проверки на сайте поставщика, какие модели соответствуют вашим потребностям. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Сделать эту модель моделью чата по умолчанию, она будет использоваться для всех задач, для которых не задана другая chat-модель"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Мы предлагаем вам следующий список моделей "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Сделать эту модель embedding-моделью по умолчанию, она будет использоваться для всех задач, для которых не задана другая embedding-модель"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "установить как модель чата по умолчанию",
+        "help" : "Сделать эту модель моделью чата по умолчанию, она будет использоваться для всех задач, для которых не задана другая chat-модель"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "установить как embedding-модель по умолчанию",
+        "help" : "Сделать эту модель embedding-моделью по умолчанию, она будет использоваться для всех задач, для которых не задана другая embedding-модель"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Используйте этот режим выбора только если вы эксперт или после проверки на сайте поставщика, какие модели соответствуют вашим потребностям. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Создать и активировать"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Создать и активировать"
+      },
+      "ProviderNameField" : {
+        "label" : "Провайдер"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Удаленный AI провайдер: OK",
+        "detail" : "Провайдер работает и успешно настроен"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Ошибка операции",
+        "detail" : "Не удалось выполнить аутентификацию с предоставленными учетными данными"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Операция успешно выполнена"
       }
     }
   }

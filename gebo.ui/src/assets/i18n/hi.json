@@ -78,6 +78,12 @@
         "summary" : "ठीक है!",
         "detail" : "क्रिया सफलतापूर्वक पूर्ण हुई"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Gebo.ai में आपका स्वागत है",
+        "detail" : "लॉगिन करने के लिए अपना उपयोगकर्ता नाम और पासवर्ड दर्ज करें"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "कम से कम एक \"R.A.G.\" चैट प्रोफ़ाइल कॉन्फ़िगर करें",
         "description" : "अपने उपयोगकर्ताओं के लिए आपकी किसी भी कॉन्फ़िगर्ड नॉलेज बेस पर आधारित कम से कम एक रिट्रीव ऑगमेंटेड चैट प्रोफ़ाइल कॉन्फ़िगर करें"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai सेटअप के आवश्यक चरण पूरे हो गए...",
+        "detail" : "आवश्यक सेटअप चरण पूरे कर लिए गए हैं, लेकिन कुछ छूटे हुए चरणों के कारण आपकी संस्था इस सॉफ़्टवेयर का पूरा अनुभव नहीं ले पाएगी"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai सेटअप ठीक है!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai सेटअप में कुछ आवश्यक चरण गायब हैं",
+        "detail" : "कृपया सेटअप प्रक्रिया के लाल चरणों की समीक्षा करें"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "डिफ़ॉल्ट मॉडल"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms प्रदाताओं की पहुँच सेट करें"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "परियोजना फ़ॉर्म खोलें"
+      },
+      "Button3" : {
+        "help" : "डेटा स्रोत खोलें"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai सेटअप सफल!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "नया R.A.G. चैट प्रोफ़ाइल जोड़ें"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. चैट प्रोफ़ाइल जोड़ें"
+      },
+      "MainPanel" : {
+        "label" : "रिट्रीव ऑगमेंटेड जेनरेशन (r.a.g.) चैट प्रोफाइल सेटिंग्स"
+      },
+      "CodeHeader" : {
+        "label" : "कोड"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "मौजूदा R.A.G. चैट प्रोफ़ाइल्स"
+      },
+      "DescriptionHeader" : {
+        "label" : "विवरण"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. चैट प्रोफ़ाइल संपादित करें"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "नॉलेज बेस कोड्स"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
         "dataset-2-label" : "त्रुटि वाले दस्तावेज़",
         "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy कुंजी क्रेडिट लिंक खरीदें"
+      },
+      "ModifyBtn" : {
+        "label" : "परिवर्तित करें",
+        "help" : "मॉडल कॉन्फ़िगरेशन देखें/परिवर्तित करें"
+      },
+      "ExistingModelCode" : {
+        "label" : "कोड"
+      },
+      "ExistingModelDesc" : {
+        "label" : "विवरण"
+      },
+      "ExistingModelType" : {
+        "label" : "मॉडल प्रकार"
+      },
+      "ExistingModelsSection" : {
+        "label" : "मौजूदा कॉन्फ़िगरेशन"
+      },
+      "ProviderWWW" : {
+        "label" : "वेबसाइट लिंक"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "प्रदाता क्रेडेंशियल"
+      },
+      "ProviderInfos" : {
+        "label" : "प्रदाता जानकारी"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api कुंजी/क्रेडेंशियल",
+        "help" : "इस प्रदाता के लिए api कुंजी या क्रेडेंशियल चुनें"
+      },
+      "NewApiKey" : {
+        "label" : "नई api कुंजी",
+        "help" : "इस प्रदाता के साथ उपयोग के लिए एक नई api कुंजी डालें"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "मौजूदा या नई का उपयोग करें",
+        "help" : "इस प्रदाता के लिए मौजूदा का उपयोग करें या नया बनाएँ"
+      },
+      "NewUserName" : {
+        "label" : "उपयोगकर्ता नाम",
+        "help" : "प्रदाता सेवाओं का उपयोग करने के लिए उपयोगकर्ता नाम"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "नया एम्बेडिंग मॉडल",
+        "help" : "नया एम्बेडिंग मॉडल कॉन्फ़िगरेशन बनाएं"
+      },
+      "NewChatModel" : {
+        "label" : "नया चैट मॉडल",
+        "help" : "नया चैट मॉडल कॉन्फ़िगरेशन बनाएं"
+      },
+      "NewModelDialog" : {
+        "label" : "नया मॉडल जोड़ें"
+      },
+      "PiSave" : {
+        "label" : "सहेजें"
+      },
+      "NewModelsButton" : {
+        "label" : "नए मॉडल्स",
+        "help" : "नया मॉडल्स कॉन्फ़िगरेशन बनाएं"
+      },
+      "NewModelsDialog" : {
+        "label" : "नया मॉडल्स जोड़ें"
+      },
+      "baseUrl" : {
+        "label" : "बेस api url",
+        "help" : "प्रदाता के api सेवाओं के लिए बेस url"
+      },
+      "ModelTypePanel" : {
+        "label" : "नया मॉडल्स जोड़ें"
+      },
+      "ModelsChoices" : {
+        "label" : "मॉडल्स विकल्प"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "सुझाए गए मॉडल्स चयन"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "एम्बेडिंग मॉडल",
+        "help" : "पूर्वनिर्धारित एम्बेडिंग मॉडल्स में से एक चुनें"
+      },
+      "chatPresetChoice" : {
+        "label" : "चैट मॉडल",
+        "help" : "पूर्वनिर्धारित चैट मॉडल्स में से एक चुनें"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "उन्नत मॉडल्स चयन"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "एम्बेडिंग मॉडल",
+        "help" : "प्रदाता द्वारा प्रकाशित एम्बेडिंग मॉडल्स में से एक चुनें"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "चैट मॉडल",
+        "help" : "प्रदाता द्वारा प्रकाशित चैट मॉडल्स में से एक चुनें"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " इस चयन मोड का उपयोग केवल तभी करें जब आप विशेषज्ञ हों या आप सप्लायर साइट पर यह जांच लें कि कौन से मॉडल आपकी आवश्यकताओं के अनुरूप हैं। "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "डिफ़ॉल्ट चैट मॉडल के रूप में सेट करें",
+        "help" : "इसे डिफ़ॉल्ट मॉडल के रूप में सेट करें, यह हर कार्य में उपयोग होगा जहाँ कोई अन्य चैट मॉडल कॉन्फ़िगर नहीं है"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " हम आपको निम्नलिखित मॉडल्स सूची सुझाते हैं "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "डिफ़ॉल्ट एम्बेडिंग मॉडल के रूप में सेट करें",
+        "help" : "इसे डिफ़ॉल्ट मॉडल के रूप में सेट करें, यह हर कार्य में उपयोग होगा जहाँ कोई अन्य एम्बेडिंग मॉडल कॉन्फ़िगर नहीं है"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "डिफ़ॉल्ट चैट मॉडल के रूप में सेट करें",
+        "help" : "इसे डिफ़ॉल्ट मॉडल के रूप में सेट करें, यह हर कार्य में उपयोग होगा जहाँ कोई अन्य चैट मॉडल कॉन्फ़िगर नहीं है"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "डिफ़ॉल्ट एम्बेडिंग मॉडल के रूप में सेट करें",
+        "help" : "इसे डिफ़ॉल्ट मॉडल के रूप में सेट करें, यह हर कार्य में उपयोग होगा जहाँ कोई अन्य एम्बेडिंग मॉडल कॉन्फ़िगर नहीं है"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " इस चयन मोड का उपयोग केवल तभी करें जब आप विशेषज्ञ हों या आप सप्लायर साइट पर यह जांच लें कि कौन से मॉडल आपकी आवश्यकताओं के अनुरूप हैं। "
+      },
+      "CreatePresetBtn" : {
+        "label" : "बनाएँ और सक्रिय करें"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "बनाएँ और सक्रिय करें"
+      },
+      "ProviderNameField" : {
+        "label" : "प्रदाता"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI रिमोट प्रदाता ठीक है",
+        "detail" : "प्रदाता चालू है और सफलतापूर्वक कॉन्फ़िगर हुआ है"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ऑपरेशन असफल रहा",
+        "detail" : "दिए गए क्रेडेंशियल्स से प्रमाणित नहीं कर सकते"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ठीक है!",
+        "detail" : "ऑपरेशन सफलतापूर्वक पूरा हुआ"
       }
     }
   }

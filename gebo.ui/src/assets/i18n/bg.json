@@ -78,6 +78,12 @@
         "summary" : "ОК!",
         "detail" : "Операцията завърши успешно"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Добре дошли в gebo.ai",
+        "detail" : "Въведете вашето потребителско име и парола, за да влезете"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Конфигурирайте поне един \"R.A.G.\" чат профил",
         "description" : "Конфигурирайте поне един чат профил с обогатено извличане за потребителите ви, базиран на някоя от вашите конфигурирани бази знания"
+      },
+      "mandatory-done" : {
+        "summary" : "Задължителните стъпки за настройка на Gebo.ai са изпълнени...",
+        "detail" : "Задължителните стъпки са завършени, но липсващи стъпки ви пречат да използвате напълно този софтуер"
+      },
+      "setup-ok" : {
+        "summary" : "Настройката на Gebo.ai е ОК!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Липсва задължителна стъпка в настройката на Gebo.ai",
+        "detail" : "Моля, прегледайте червените стъпки в процеса на настройка"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Стандартен модел"
+      },
+      "MainPanelHeader" : {
+        "label" : "Настройте достъп на Gebo.ai llms доставчици"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "отвори формата на проекта"
+      },
+      "Button3" : {
+        "help" : "отвори източник на данни"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai настройката е ОК!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Добави нов R.A.G. чат профил"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Добави R.A.G. чат профил"
+      },
+      "MainPanel" : {
+        "label" : "Настройки за чат профили с разширено генериране (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Код"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Съществуващи R.A.G. чат профили"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Редактирай R.A.G. чат профил"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Кодове на база знания"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Обработени документи",
         "dataset-2-label" : "Документи с грешка",
         "dataset-3-label" : "Отхвърлени документи"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Купи Apy ключ кредитен линк"
+      },
+      "ModifyBtn" : {
+        "label" : "Промени",
+        "help" : "Виж/промени конфигурация на модел"
+      },
+      "ExistingModelCode" : {
+        "label" : "Код"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Описание"
+      },
+      "ExistingModelType" : {
+        "label" : "Тип модел"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Съществуващи конфигурации"
+      },
+      "ProviderWWW" : {
+        "label" : "Линк към уебсайт"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Данни за доставчика"
+      },
+      "ProviderInfos" : {
+        "label" : "Информация за доставчика"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api ключ/данни за достъп",
+        "help" : "Избери api ключ или данни за достъп за този доставчик"
+      },
+      "NewApiKey" : {
+        "label" : "Нов api ключ",
+        "help" : "Въведете нов api ключ за този доставчик"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Използвай съществуващи или нови",
+        "help" : "Използвай съществуващи или създай нови данни за достъп за този доставчик"
+      },
+      "NewUserName" : {
+        "label" : "Потребителско име",
+        "help" : "Потребителско име за достъп до услугите на доставчика"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Нов embedding модел",
+        "help" : "Създай нова конфигурация за embedding модел"
+      },
+      "NewChatModel" : {
+        "label" : "Нов чат модел",
+        "help" : "Създай нова конфигурация за чат модел"
+      },
+      "NewModelDialog" : {
+        "label" : "Добави нов модел"
+      },
+      "PiSave" : {
+        "label" : "Запази"
+      },
+      "NewModelsButton" : {
+        "label" : "Нови модели",
+        "help" : "Създай нова конфигурация на модели"
+      },
+      "NewModelsDialog" : {
+        "label" : "Добави нови модели"
+      },
+      "baseUrl" : {
+        "label" : "Базов api url",
+        "help" : "Базов url за api услугите на доставчика"
+      },
+      "ModelTypePanel" : {
+        "label" : "Добави нови модели"
+      },
+      "ModelsChoices" : {
+        "label" : "Избор на модели"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Препоръчани модели"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding модел",
+        "help" : "Изберете един от предварително дефинираните embedding модели"
+      },
+      "chatPresetChoice" : {
+        "label" : "Чат модел",
+        "help" : "Изберете един от предварително дефинираните чат модели"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Разширен избор на модели"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding модел",
+        "help" : "Изберете някой от embedding моделите, публикувани от доставчика"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Чат модел",
+        "help" : "Изберете чат модел, публикуван от доставчика"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Използвайте този режим само ако сте експерт или след справка в сайта на доставчика, за да изберете подходящ модел. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "задай по подразбиране чат модел",
+        "help" : "Задай този модел като стандартен; той ще се използва при всяка задача, ако не е конфигуриран друг чат модел"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Препоръчваме ви следния списък с модели "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "задай по подразбиране embedding модел",
+        "help" : "Задай този модел като стандартен; той ще се използва при всяка задача, ако не е конфигуриран друг embedding модел"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "задай по подразбиране чат модел",
+        "help" : "Задай този модел като стандартен; той ще се използва при всяка задача, ако не е конфигуриран друг чат модел"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "задай по подразбиране embedding модел",
+        "help" : "Задай този модел като стандартен; той ще се използва при всяка задача, ако не е конфигуриран друг embedding модел"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Използвайте този режим само ако сте експерт или проверете на сайта на доставчика кой модел отговаря на вашите нужди. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Създай и активирай"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Създай и активирай"
+      },
+      "ProviderNameField" : {
+        "label" : "Доставчик"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI отдалечен доставчик OK",
+        "detail" : "Доставчикът работи и е конфигуриран успешно"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Операцията не бе успешна",
+        "detail" : "Неуспешно удостоверяване с предоставените данни за достъп"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "ОК!",
+        "detail" : "Операцията е завършена успешно"
       }
     }
   }

@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operacioni u krye me sukses"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Mirësevini në gebo.ai",
+        "detail" : "Shkruani emrin e përdoruesit dhe fjalëkalimin për të hyrë"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Konfiguro të paktën një profil chati \"R.A.G.\"",
         "description" : "Konfiguro të paktën një profil chati të krijimit të shtuar për përdoruesit tuaj bazuar në njërën nga bazat e njohurive të konfiguruara"
+      },
+      "mandatory-done" : {
+        "summary" : "Hapat e detyrueshme të konfigurimit të Gebo.ai u përfunduan...",
+        "detail" : "Hapat e detyrueshëm të konfigurimit janë përfunduar, por disa hapa që mungojnë pengojnë organizatën tuaj nga përfitimi maksimal nga ky program"
+      },
+      "setup-ok" : {
+        "summary" : "Konfigurimi i Gebo.ai është në rregull!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Konfigurimit të Gebo.ai i mungon një hap i detyrueshëm",
+        "detail" : "Ju lutemi kontrolloni hapat e kuq të procesit të konfigurimit"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Modeli parazgjedhur"
+      },
+      "MainPanelHeader" : {
+        "label" : "Konfiguro qasjen te ofruesit e llms të Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "hap formularin e projektit"
+      },
+      "Button3" : {
+        "help" : "hap burimin e të dhënave"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Konfigurimi i Gebo.ai është në rregull!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Shto profil të ri bisede R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Shto profil bisede R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Konfigurimet e profileve të bisedës me gjenerim të përforcuar (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Kodi"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Profilet ekzistuese të bisedës R.A.G."
+      },
+      "DescriptionHeader" : {
+        "label" : "Përshkrimi"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Përditëso profilin e bisedës R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kodat e bazës së njohurive"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Dokumente të përpunuara",
         "dataset-2-label" : "Dokumente me gabime",
         "dataset-3-label" : "Dokumente të hedhura"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Lidhje për blerjen e kreditit të çelësit Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Modifiko",
+        "help" : "Shiko/modifiko konfigurimin e modelit"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kodi"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Përshkrimi"
+      },
+      "ExistingModelType" : {
+        "label" : "Lloji i modelit"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Konfigurimet ekzistuese"
+      },
+      "ProviderWWW" : {
+        "label" : "Lidhje e faqes së internetit"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Kredencialet e ofruesit"
+      },
+      "ProviderInfos" : {
+        "label" : "Informacionet e ofruesit"
+      },
+      "ExistingApiKey" : {
+        "label" : "Çelës/ kredenciale Api",
+        "help" : "Zgjidh çelës ose kredenciale për këtë ofrues"
+      },
+      "NewApiKey" : {
+        "label" : "Çelës i ri api",
+        "help" : "Vendos një çelës të ri api për t'u përdorur me këtë ofrues"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Përdor ekzistuese ose të reja",
+        "help" : "Përdor kredencialet ekzistuese ose krijo të reja për këtë ofrues"
+      },
+      "NewUserName" : {
+        "label" : "Emri i përdoruesit",
+        "help" : "Emri i përdoruesit për të hyrë në shërbimet e ofruesit"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Model i ri embedding",
+        "help" : "Krijo një konfigurim të ri për modelin embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Model i ri Chat",
+        "help" : "Krijo një konfigurim të ri për modelin e bisedës"
+      },
+      "NewModelDialog" : {
+        "label" : "Shto model të ri"
+      },
+      "PiSave" : {
+        "label" : "Ruaj"
+      },
+      "NewModelsButton" : {
+        "label" : "Modele të reja",
+        "help" : "Krijo konfigurim të ri për modelet"
+      },
+      "NewModelsDialog" : {
+        "label" : "Shto modele të reja"
+      },
+      "baseUrl" : {
+        "label" : "Url bazë api",
+        "help" : "Url bazë për shërbimet api të ofruesit"
+      },
+      "ModelTypePanel" : {
+        "label" : "Shto modele të reja"
+      },
+      "ModelsChoices" : {
+        "label" : "Zgjedhjet e modeleve"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Zgjedhja e modeleve të sugjeruara"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model embedding",
+        "help" : "Zgjidh një nga modelet embedding të paracaktuara"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model Chat",
+        "help" : "Zgjidh një nga modelet për bisedë të paracaktuara"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Zgjedhja e modeleve të avancuara"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model embedding",
+        "help" : "Zgjidh një nga modelet embedding të publikuara nga ofruesi"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model Chat",
+        "help" : "Zgjidh një nga modelet për bisedë të publikuara nga ofruesi"
+      },
+      "PresedAccordionDesc" : {
+        "label" : "Përdorni këtë mënyrë përzgjedhjeje vetëm nëse jeni ekspert ose duke kontrolluar te faqja e ofruesit se cilët modele ju përshtaten."
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "vendose si model bisede parazgjedhur",
+        "help" : "Vendoseni këtë model si parazgjedhje, ky do të përdoret për çdo detyrë ku nuk është konfiguruar ndonjë model tjetër për bisedë"
+      },
+      "PresetAccordionDesc" : {
+        "label" : "Ju sugjerojmë listën e mëposhtme të modeleve"
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "vendose si model embedding parazgjedhur",
+        "help" : "Vendoseni këtë model si parazgjedhje, ky do të përdoret për çdo detyrë ku nuk është konfiguruar ndonjë model tjetër embedding"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "vendose si model bisede parazgjedhur",
+        "help" : "Vendoseni këtë model si parazgjedhje, ky do të përdoret për çdo detyrë ku nuk është konfiguruar ndonjë model tjetër për bisedë"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "vendose si model embedding parazgjedhur",
+        "help" : "Vendoseni këtë model si parazgjedhje, ky do të përdoret për çdo detyrë ku nuk është konfiguruar ndonjë model tjetër embedding"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : "Përdorni këtë mënyrë përzgjedhjeje vetëm nëse jeni ekspert ose duke kontrolluar te faqja e ofruesit se cilët modele ju përshtaten."
+      },
+      "CreatePresetBtn" : {
+        "label" : "Krijo dhe aktivizo"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Krijo dhe aktivizo"
+      },
+      "ProviderNameField" : {
+        "label" : "Ofruesi"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Ofruesi i largët AI është në rregull",
+        "detail" : "Ofruesi është aktiv dhe i konfiguruar me sukses"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operacioni dështoi",
+        "detail" : "Nuk mund të bëhet autentikimi me kredencialet e dhëna"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Në rregull!",
+        "detail" : "Operacioni u përfundua me sukses"
       }
     }
   }

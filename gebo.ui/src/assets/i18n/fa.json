@@ -78,6 +78,12 @@
         "summary" : "باشه!",
         "detail" : "عملیات با موفقیت انجام شد"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "به gebo.ai خوش آمدید",
+        "detail" : "نام کاربری و رمز عبور خود را وارد کنید"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "حداقل یک پروفایل چت \"R.A.G.\" را پیکربندی کنید",
         "description" : "برای کاربران‌تان حداقل یک پروفایل چت بازیابی بر اساس یکی از پایگاه‌دانش‌های پیکربندی‌شده خود ایجاد کنید"
+      },
+      "mandatory-done" : {
+        "summary" : "مراحل اجباری راه‌اندازی Gebo.ai انجام شد...",
+        "detail" : "مراحل اجباری راه‌اندازی کامل شده‌اند اما برخی مراحل ناقص مانع استفاده کامل سازمان شما از این نرم‌افزار می‌شود"
+      },
+      "setup-ok" : {
+        "summary" : "راه‌اندازی Gebo.ai موفقیت‌آمیز بود!"
+      },
+      "mandatory-missing" : {
+        "summary" : "برخی مراحل اجباری راه‌اندازی Gebo.ai ناقص است",
+        "detail" : "لطفاً مراحل قرمز رنگ فرآیند راه‌اندازی را بررسی کنید"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "مدل پیش‌فرض"
+      },
+      "MainPanelHeader" : {
+        "label" : "دسترسی ارائه‌دهندگان llms برای Gebo.ai را تنظیم کنید"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "باز کردن فرم پروژه"
+      },
+      "Button3" : {
+        "help" : "منبع داده را باز کنید"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "راه‌اندازی Gebo.ai با موفقیت انجام شد!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "افزودن پروفایل جدید چت R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "افزودن پروفایل چت R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "دریافت تنظیمات پروفایل‌های چت افزوده شده (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "کد"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "پروفایل‌های چت R.A.G. موجود"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "ویرایش پروفایل چت R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "کدهای پایگاه دانش"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "اسناد پردازش‌شده",
         "dataset-2-label" : "اسناد دارای خطا",
         "dataset-3-label" : "اسناد کنار گذاشته‌شده"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "لینک خرید اعتبار کلید Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "ویرایش",
+        "help" : "مشاهده/ویرایش تنظیمات مدل"
+      },
+      "ExistingModelCode" : {
+        "label" : "کد"
+      },
+      "ExistingModelDesc" : {
+        "label" : "توضیحات"
+      },
+      "ExistingModelType" : {
+        "label" : "نوع مدل"
+      },
+      "ExistingModelsSection" : {
+        "label" : "پیکربندی‌های موجود"
+      },
+      "ProviderWWW" : {
+        "label" : "لینک وب‌سایت"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "اطلاعات ورود ارائه‌دهنده"
+      },
+      "ProviderInfos" : {
+        "label" : "اطلاعات ارائه‌دهنده"
+      },
+      "ExistingApiKey" : {
+        "label" : "کلید API/اطلاعات ورود",
+        "help" : "کلید API یا اطلاعات ورود برای این ارائه‌دهنده را انتخاب کنید"
+      },
+      "NewApiKey" : {
+        "label" : "کلید API جدید",
+        "help" : "یک کلید API جدید برای این ارائه‌دهنده وارد کنید"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "استفاده از موجود یا جدید",
+        "help" : "از اطلاعات ورود موجود استفاده کنید یا اطلاعات جدید برای این ارائه‌دهنده بسازید"
+      },
+      "NewUserName" : {
+        "label" : "نام کاربری",
+        "help" : "نام کاربری برای استفاده از خدمات ارائه‌دهنده"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "مدل embedding جدید",
+        "help" : "پیکربندی مدل embedding جدید ایجاد کنید"
+      },
+      "NewChatModel" : {
+        "label" : "مدل چت جدید",
+        "help" : "پیکربندی مدل چت جدید ایجاد کنید"
+      },
+      "NewModelDialog" : {
+        "label" : "افزودن مدل جدید"
+      },
+      "PiSave" : {
+        "label" : "ذخیره"
+      },
+      "NewModelsButton" : {
+        "label" : "مدل‌های جدید",
+        "help" : "پیکربندی مدل‌های جدید ایجاد کنید"
+      },
+      "NewModelsDialog" : {
+        "label" : "افزودن مدل‌های جدید"
+      },
+      "baseUrl" : {
+        "label" : "نشانی پایه api",
+        "help" : "نشانی پایه سرویس‌های api این ارائه‌دهنده"
+      },
+      "ModelTypePanel" : {
+        "label" : "افزودن مدل‌های جدید"
+      },
+      "ModelsChoices" : {
+        "label" : "انتخاب مدل‌ها"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "انتخاب مدل‌های پیشنهادی"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "مدل embedding",
+        "help" : "یکی از مدل‌های embedding از پیش تعریف‌شده را انتخاب کنید"
+      },
+      "chatPresetChoice" : {
+        "label" : "مدل چت",
+        "help" : "یکی از مدل‌های چت از پیش تعریف‌شده را انتخاب کنید"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "انتخاب مدل‌های پیشرفته"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "مدل embedding",
+        "help" : "یکی از مدل‌های embedding منتشر شده توسط تامین‌کننده را انتخاب کنید"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "مدل چت",
+        "help" : "یکی از مدل‌های چت منتشر شده توسط تامین‌کننده را انتخاب کنید"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " از این روش انتخاب فقط اگر متخصص هستید یا پس از بررسی سایت تامین‌کننده و تطابق مدل‌ها با نیاز خود، استفاده کنید. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "این مدل را به عنوان پیش‌فرض تنظیم کنید. هر کاری که مدل چت دیگری برایش تعیین نشده باشد از این مدل استفاده خواهد کرد"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " مدل‌های زیر به شما پیشنهاد می‌شوند "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "تنظیم به عنوان مدل embedding پیش‌فرض",
+        "help" : "این مدل را به عنوان پیش‌فرض تنظیم کنید. هر کاری که مدل embedding دیگری برایش تعیین نشده باشد از این مدل استفاده خواهد کرد"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "تنظیم به عنوان مدل چت پیش‌فرض",
+        "help" : "این مدل را به عنوان پیش‌فرض تنظیم کنید. هر کاری که مدل چت دیگری برایش تعیین نشده باشد از این مدل استفاده خواهد کرد"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "تنظیم به عنوان مدل embedding پیش‌فرض",
+        "help" : "این مدل را به عنوان پیش‌فرض تنظیم کنید. هر کاری که مدل embedding دیگری برایش تعیین نشده باشد از این مدل استفاده خواهد کرد"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " از این روش انتخاب فقط اگر متخصص هستید یا پس از بررسی سایت تامین‌کننده و تطابق مدل‌ها با نیاز خود، استفاده کنید. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "ایجاد و فعال‌سازی"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "ایجاد و فعال‌سازی"
+      },
+      "ProviderNameField" : {
+        "label" : "ارائه‌دهنده"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ارائه‌دهنده دوردست هوش مصنوعی فعال است",
+        "detail" : "ارائه‌دهنده با موفقیت پیکربندی و راه‌اندازی شد"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "عملیات ناموفق",
+        "detail" : "اعتبارنامه‌های وارد شده معتبر نیستند"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "موفق!",
+        "detail" : "عملیات با موفقیت انجام شد"
       }
     }
   }

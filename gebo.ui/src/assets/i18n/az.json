@@ -78,6 +78,12 @@
         "summary" : "Oldu!",
         "detail" : "Əməliyyat uğurla tamamlandı"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Gebo.ai-ya xoş gəlmisiniz",
+        "detail" : "Daxil olmaq üçün istifadəçi adınızı və şifrənizi daxil edin"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Ən azı bir \"R.A.G.\" çat profilini qurun",
         "description" : "İstifadəçiləriniz üçün konfiqurasiya etdiyiniz bilik bazalarından biri əsasında ən azı bir genişlənmiş çat profilini qurun"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai quraşdırmasının məcburi addımları tamamlandı...",
+        "detail" : "Məcburi quraşdırma addımları tamamlanıb, amma bəzi çatışmayan addımlar təşkilatınızın proqramdan tam istifadə etməsinə mane olur"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai quraşdırması TAMAM!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai quraşdırmasında bəzi məcburi addım çatışmır",
+        "detail" : "Quraşdırma prosesinin qırmızı addımlarını yoxlayın"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Standart model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms təminatçılarına girişin qurulması"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "layihə formasını aç"
+      },
+      "Button3" : {
+        "help" : "məlumat mənbəyini aç"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai quraşdırması uğurla tamamlandı!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Yeni R.A.G. çat profili əlavə et"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. çat profili əlavə et"
+      },
+      "MainPanel" : {
+        "label" : "Genişləndirilmiş generasiya (R.A.G.) çat profillərinin tənzimləmələrini əldə et"
+      },
+      "CodeHeader" : {
+        "label" : "Kod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Mövcud R.A.G. çat profilləri"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. çat profilini düzəlt"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Bilik bazası kodları"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Emal olunmuş sənədlər",
         "dataset-2-label" : "Səhv olan sənədlər",
         "dataset-3-label" : "İmtina olunan sənədlər"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy açarı üçün kredit linki al"
+      },
+      "ModifyBtn" : {
+        "label" : "Dəyiş",
+        "help" : "Model konfiqurasiyasına bax/dəyiş"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Təsvir"
+      },
+      "ExistingModelType" : {
+        "label" : "Model tipi"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Mövcud konfiqurasiyalar"
+      },
+      "ProviderWWW" : {
+        "label" : "Veb sayt linki"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Təminatçı məlumatları"
+      },
+      "ProviderInfos" : {
+        "label" : "Təminatçı haqqında məlumat"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api açarı/giriş məlumatları",
+        "help" : "Bu təminatçı üçün api açarını və ya giriş məlumatlarını seçin"
+      },
+      "NewApiKey" : {
+        "label" : "Yeni api açarı",
+        "help" : "Bu təminatçı ilə istifadə etmək üçün yeni api açarı daxil edin"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Mövcudu və ya yenisini istifadə et",
+        "help" : "Bu təminatçı üçün mövcud və ya yeni giriş məlumatları yaradın"
+      },
+      "NewUserName" : {
+        "label" : "İstifadəçi adı",
+        "help" : "Təminatçı xidmətlərinə giriş üçün istifadə olunan ad"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Yeni embedding modeli",
+        "help" : "Yeni embedding modelinin konfiqurasiyasını yaradın"
+      },
+      "NewChatModel" : {
+        "label" : "Yeni Çat modeli",
+        "help" : "Yeni çat modelinin konfiqurasiyasını yaradın"
+      },
+      "NewModelDialog" : {
+        "label" : "Yeni model əlavə et"
+      },
+      "PiSave" : {
+        "label" : "Yadda saxla"
+      },
+      "NewModelsButton" : {
+        "label" : "Yeni modellər",
+        "help" : "Yeni modellər konfiqurasiyası yaradın"
+      },
+      "NewModelsDialog" : {
+        "label" : "Yeni modellər əlavə et"
+      },
+      "baseUrl" : {
+        "label" : "Əsas api url",
+        "help" : "Təminatçının api xidmətləri üçün əsas url"
+      },
+      "ModelTypePanel" : {
+        "label" : "Yeni modellər əlavə et"
+      },
+      "ModelsChoices" : {
+        "label" : "Modellər seçimi"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Təklif olunan modellərin seçimi"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding modeli",
+        "help" : "Əvvəlcədən təyin olunmuş embedding modellərindən birini seçin"
+      },
+      "chatPresetChoice" : {
+        "label" : "Çat modeli",
+        "help" : "Əvvəlcədən təyin olunmuş çat modellərindən birini seçin"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Təkmil modellərin seçimi"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding modeli",
+        "help" : "Təminatçı tərəfindən yayımlanmış embedding modellərindən birini seçin"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Çat modeli",
+        "help" : "Təminatçı tərəfindən yayımlanmış çat modellərindən birini seçin"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Bu seçim rejimini yalnız mütəxəssis isəniz və ya təminatçı saytında ehtiyaclarınıza uyğun modelləri yoxlayaraq istifadə edin. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "çatı standart model kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa çat modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Aşağıdakı modelləri tövsiyə edirik "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "embedding modelini standart kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa embedding modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "çatı standart model kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa çat modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "embedding modelini standart kimi təyin et",
+        "help" : "Bu modeli standart model kimi təyin edin, əgər başqa embedding modeli qurulmayıbsa, bütün tapşırıqlar üçün istifadə olunacaq"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Bu seçim rejimini yalnız mütəxəssis isəniz və ya təminatçı saytında ehtiyaclarınıza uyğun modelləri yoxlayaraq istifadə edin. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Yaradın və aktiv edin"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Yaradın və aktiv edin"
+      },
+      "ProviderNameField" : {
+        "label" : "Təminatçı"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI uzaq təminatçı TAMAM",
+        "detail" : "Təminatçı aktivdir və uğurla qurulub"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Əməliyyat uğursuz oldu",
+        "detail" : "Verilmiş giriş məlumatları ilə autentifikasiya mümkün deyil"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "TAMAM!",
+        "detail" : "Əməliyyat uğurla yerinə yetirildi"
       }
     }
   }

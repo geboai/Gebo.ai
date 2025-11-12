@@ -78,6 +78,12 @@
                 "summary": "OK!",
                 "detail": "Operation done successfully"
             }
+        },
+        "Login": {
+            "LoginComponent": {
+                "summary": "Welcome to gebo.ai",
+                "detail": "Enter your username and password to login"
+            }
         }
     },
     "SetupWizardPanelModule": {
@@ -152,6 +158,17 @@
             "firstChatProfileBaseSetupSection": {
                 "label": "Configure at least a \"R.A.G.\" chat profile",
                 "description": "Configure at least a retrieve augmented chat profile for your users based on one of your configured knowledge bases"
+            },
+            "mandatory-done": {
+                "summary": "Gebo.ai setup mandatory steps done...",
+                "detail": "Mandatory setup steps have been completed but some missing steps prevents your organization from experiencing the most from this software"
+            },
+            "setup-ok": {
+                "summary": "Gebo.ai setup OK!"
+            },
+            "mandatory-missing": {
+                "summary": "Gebo.ai setup is missing some mandatory step",
+                "detail": "Please review the red steps of the setup process"
             }
         },
         "ConfluenceWizardComponent": {
@@ -241,6 +258,9 @@
             },
             "DefaultModelHeader": {
                 "label": "Default model"
+            },
+            "MainPanelHeader": {
+                "label": "Setup Gebo.ai llms providers access"
             }
         },
         "GraphRagWizardComponent": {
@@ -291,6 +311,9 @@
             },
             "Button2": {
                 "help": "open project form"
+            },
+            "Button3": {
+                "help": "open data source"
             }
         },
         "WorkFolderWizardComponent": {
@@ -377,6 +400,32 @@
             },
             "SetupWizardPanelComponent-setup-ok": {
                 "summary": "Gebo.ai setup OK!"
+            }
+        },
+        "ChatProfileWizardComponent": {
+            "AddNewRAGChatProfileFieldset": {
+                "label": "Add new R.A.G. chat profile"
+            },
+            "AddRAGChatProfileBtn": {
+                "label": "Add R.A.G. chat profile"
+            },
+            "MainPanel": {
+                "label": "Retrieve augmented generation (r.a.g.) chat profiles settings"
+            },
+            "CodeHeader": {
+                "label": "Code"
+            },
+            "ExistingRAGChatProfilesFieldset": {
+                "label": "Existing R.A.G. chat profiles"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
+            },
+            "EditRAGChatProfileBtn": {
+                "label": "Edit R.A.G. chat profile"
+            },
+            "KnowledgeBaseCodesHeader": {
+                "label": "Knowledge base codes"
             }
         }
     },
@@ -1861,7 +1910,7 @@
             },
             "contextLength": {
                 "label": "Context length (tokens)",
-                "help": "Amount of text an AI model can consider when processing (if not set 1047576 will be used)"
+                "help": "Amount of text an AI model can consider when processing (if not set 4096 will be used)"
             },
             "topP": {
                 "label": "TopP",
@@ -2598,6 +2647,157 @@
                 "dataset-1-label": "Processed docs",
                 "dataset-2-label": "Error docs",
                 "dataset-3-label": "Discarded docs"
+            }
+        }
+    },
+    "GeboSetupWizardsModule": {
+        "GeboAILLMSVendorConfiguration": {
+            "ProviderBuy": {
+                "label": "Buy Apy key credit link"
+            },
+            "ModifyBtn": {
+                "label": "Modify",
+                "help": "View/modify model configuration"
+            },
+            "ExistingModelCode": {
+                "label": "Code"
+            },
+            "ExistingModelDesc": {
+                "label": "Description"
+            },
+            "ExistingModelType": {
+                "label": "Model type"
+            },
+            "ExistingModelsSection": {
+                "label": "Existing configurations"
+            },
+            "ProviderWWW": {
+                "label": "Web site link"
+            },
+            "ModelTypeFieldSet": {
+                "label": "Provider credentials"
+            },
+            "ProviderInfos": {
+                "label": "Provider informations"
+            },
+            "ExistingApiKey": {
+                "label": "Api key/credentials",
+                "help": "Choose api key or credentials for this provider"
+            },
+            "NewApiKey": {
+                "label": "New api key",
+                "help": "Insert a new api key to be used with this provider"
+            },
+            "UseExistingOrNewCredentials": {
+                "label": "Use existing or new",
+                "help": "Use existing or create new credentials for this provider"
+            },
+            "NewUserName": {
+                "label": "User name",
+                "help": "User name used to access provider services"
+            },
+            "NewEmbeddingModel": {
+                "label": "New embedding model",
+                "help": "Create a new embedding model configuration"
+            },
+            "NewChatModel": {
+                "label": "New Chat model",
+                "help": "Create a new chat model configuration"
+            },
+            "NewModelDialog": {
+                "label": "Add new model"
+            },
+            "PiSave": {
+                "label": "Save"
+            },
+            "NewModelsButton": {
+                "label": "New models",
+                "help": "Create new models configuration"
+            },
+            "NewModelsDialog": {
+                "label": "Add new models"
+            },
+            "baseUrl": {
+                "label": "Base api url",
+                "help": "Base url for the api services of the provider"
+            },
+            "ModelTypePanel": {
+                "label": "Add new models"
+            },
+            "ModelsChoices": {
+                "label": "Models choices"
+            },
+            "PresetsAccordionPanel": {
+                "label": "Suggested models selection"
+            },
+            "embeddingPresetChoice": {
+                "label": "Embedding model",
+                "help": "Select one of the predefined embedding models"
+            },
+            "chatPresetChoice": {
+                "label": "Chat model",
+                "help": "Select one of the predefined chat models"
+            },
+            "AdvancedAccordionPanel": {
+                "label": "Advanced models selection"
+            },
+            "embeddingAdvancedChoice": {
+                "label": "Embedding model",
+                "help": "Select one of the  supplier published  embedding models"
+            },
+            "chatAdvancedChoice": {
+                "label": "Chat model",
+                "help": "Select one of the supplier published chat models"
+            },
+            "PresedAccordionDesc": {
+                "label": " Use this selection mode only if you are expert or by checking on the supplier site wich models fit your needs. "
+            },
+            "chatPresetSetAsDefault": {
+                "label": "set as default chat model",
+                "help": "Set this model as the default one, this will be used for every task no other chat model is configured for"
+            },
+            "PresetAccordionDesc": {
+                "label": " We suggest you the following models list "
+            },
+            "embeddingPresetSetAsDefault": {
+                "label": "set as default embedding model",
+                "help": "Set this model as the default one, this will be used for every task no other embedding model is configured for"
+            },
+            "chatAdvancedSetAsDefault": {
+                "label": "set as default chat model",
+                "help": "Set this model as the default one, this will be used for every task no other chat model is configured for"
+            },
+            "embeddingAdvancedSetAsDefault": {
+                "label": "set as default embedding model",
+                "help": "Set this model as the default one, this will be used for every task no other embedding model is configured for"
+            },
+            "AdvancedAccordionDesc": {
+                "label": " Use this selection mode only if you are expert or by checking on the supplier site wich models fit your needs. "
+            },
+            "CreatePresetBtn": {
+                "label": "Create and activate"
+            },
+            "CreateAdvancedBtn": {
+                "label": "Create and activate"
+            },
+            "ProviderNameField": {
+                "label": "Provider"
+            }
+        }
+    },
+    "BackendMSGSModule": {
+        "GUserMessage": {
+            "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2": {
+                "summary": "AI remote provider OK",
+                "detail": "Provider is up and running and successfully configured"
+            },
+            "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f": {
+                "summary": "Operation failed",
+                "detail": "Cannot authenticate with supplied credentials"
+            },
+            "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
+                "summary": "OK!",
+                "detail": "Operation done successfully"
             }
         }
     }

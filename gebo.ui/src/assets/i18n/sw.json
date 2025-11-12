@@ -78,6 +78,12 @@
         "summary" : "Sawa!",
         "detail" : "Hatua imekamilika kwa mafanikio"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Karibu kwenye gebo.ai",
+        "detail" : "Weka jina lako la mtumiaji na nenosiri ili kuingia"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Sanidi angalau wasifu mmoja wa gumzo \"R.A.G.\"",
         "description" : "Sanidi angalau wasifu mmoja wa retrieve augmented chat kwa watumiaji wako kulingana na mojawapo ya hazina za maarifa ulizosanidi"
+      },
+      "mandatory-done" : {
+        "summary" : "Hatua za lazima za usanidi wa Gebo.ai zimekamilika...",
+        "detail" : "Hatua za lazima za usanidi zimekamilika lakini baadhi ya hatua zilizokosekana zinazuia shirika lako kupata manufaa kamili ya programu hii"
+      },
+      "setup-ok" : {
+        "summary" : "Usanidi wa Gebo.ai upo sawa!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Usanidi wa Gebo.ai umekosa hatua fulani ya lazima",
+        "detail" : "Tafadhali kagua hatua nyekundu kwenye mchakato wa usanidi"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Mfano chaguomsingi"
+      },
+      "MainPanelHeader" : {
+        "label" : "Sanidi ufikiaji wa watoa huduma wa Gebo.ai llms"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "fungua fomu ya mradi"
+      },
+      "Button3" : {
+        "help" : "fungua chanzo cha data"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Usanidi wa Gebo.ai uko sawa!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Ongeza wasifu mpya wa gumzo la R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Ongeza wasifu wa gumzo la R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Pata mipangilio ya wasifu wa gumzo la r.a.g."
+      },
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Wasifu wa gumzo la R.A.G. zilizopo"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Hariri wasifu wa gumzo la R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Misimbo ya msingi ya maarifa"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Hati zilizochakatwa",
         "dataset-2-label" : "Hati zilizo na hitilafu",
         "dataset-3-label" : "Hati zilizokataliwa"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Nunua kiungo cha mkopo wa apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Badilisha",
+        "help" : "Tazama/badilisha mipangilio ya muundo wa mfano"
+      },
+      "ExistingModelCode" : {
+        "label" : "Msimbo"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Maelezo"
+      },
+      "ExistingModelType" : {
+        "label" : "Aina ya mfano"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Mipangilio iliyopo"
+      },
+      "ProviderWWW" : {
+        "label" : "Kiungo cha tovuti"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Vithibitisho vya mtoa huduma"
+      },
+      "ProviderInfos" : {
+        "label" : "Maelezo ya mtoa huduma"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/vithibitisho",
+        "help" : "Chagua api key au vithibitisho kwa mtoa huduma huyu"
+      },
+      "NewApiKey" : {
+        "label" : "Api key mpya",
+        "help" : "Weka api key mpya itakayotumiwa na mtoa huduma huyu"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Tumia vilivyopo au vipya",
+        "help" : "Tumia vithibitisho vilivyopo au tengeneza vipya kwa mtoa huduma huyu"
+      },
+      "NewUserName" : {
+        "label" : "Jina la mtumiaji",
+        "help" : "Jina la mtumiaji linalotumika kufikia huduma za mtoa huduma"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Mfano mpya wa embedding",
+        "help" : "Tengeneza usanidi mpya wa mfano wa embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Mfano mpya wa gumzo",
+        "help" : "Tengeneza usanidi mpya wa mfano wa gumzo"
+      },
+      "NewModelDialog" : {
+        "label" : "Ongeza mfano mpya"
+      },
+      "PiSave" : {
+        "label" : "Hifadhi"
+      },
+      "NewModelsButton" : {
+        "label" : "Miundo mipya",
+        "help" : "Tengeneza usanidi mpya wa mifano"
+      },
+      "NewModelsDialog" : {
+        "label" : "Ongeza mifano mipya"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url kwa huduma za api za mtoa huduma"
+      },
+      "ModelTypePanel" : {
+        "label" : "Ongeza mifano mipya"
+      },
+      "ModelsChoices" : {
+        "label" : "Chaguo za mifano"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Uteuzi wa mifano iliyopendekezwa"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Mfano wa embedding",
+        "help" : "Chagua moja ya mifano ya embedding iliyofafanuliwa tayari"
+      },
+      "chatPresetChoice" : {
+        "label" : "Mfano wa gumzo",
+        "help" : "Chagua moja ya mifano ya gumzo iliyofafanuliwa tayari"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Uteuzi wa mifano ya juu"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Mfano wa embedding",
+        "help" : "Chagua moja ya mifano ya embedding iliyochapishwa na mtoa huduma"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Mfano wa gumzo",
+        "help" : "Chagua moja ya mifano ya gumzo iliyochapishwa na mtoa huduma"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Tumia hali hii ya uteuzi ikiwa wewe ni mtaalam au kwa kuangalia kwenye tovuti ya mtoa huduma ni mifano ipi inafaa mahitaji yako. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa gumzo",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa gumzo uliosanidiwa"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Tunapendekeza orodha ifuatayo ya mifano "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa embedding",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa embedding uliosanidiwa"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa gumzo",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa gumzo uliosanidiwa"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa embedding",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa embedding uliosanidiwa"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Tumia hali hii ya uteuzi ikiwa wewe ni mtaalam au kwa kuangalia kwenye tovuti ya mtoa huduma ni mifano ipi inafaa mahitaji yako. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Unda na wezesha"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Unda na wezesha"
+      },
+      "ProviderNameField" : {
+        "label" : "Mtoa huduma"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Mtoa huduma wa AI wa mbali yuko sawa",
+        "detail" : "Mtoa huduma yuko hewani na amesanidiwa ipasavyo"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operesheni imeshindikana",
+        "detail" : "Haiwezi kuthibitisha kwa vithibitisho vilivyowekwa"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
       }
     }
   }

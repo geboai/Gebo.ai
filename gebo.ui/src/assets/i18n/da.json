@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Handlingen blev udført succesfuldt"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Velkommen til gebo.ai",
+        "detail" : "Indtast dit brugernavn og adgangskode for at logge ind"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Konfigurer mindst én \"R.A.G.\" chatprofil",
         "description" : "Konfigurer mindst én retrieve augmented chatprofil for dine brugere baseret på en af de konfigurerede vidensbaser"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai opsætning obligatoriske trin udført...",
+        "detail" : "Obligatoriske opsætningstrin er fuldført, men manglende trin forhindrer din organisation i at få det fulde udbytte af denne software"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai opsætning OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai opsætning mangler et obligatorisk trin",
+        "detail" : "Gennemgå de røde trin i opsætningsprocessen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Standardmodel"
+      },
+      "MainPanelHeader" : {
+        "label" : "Opsæt adgang til Gebo.ai llms-udbydere"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "åbn projektformular"
+      },
+      "Button3" : {
+        "help" : "åbn datakilde"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai opsætning OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Tilføj ny R.A.G. chatprofil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Tilføj R.A.G. chatprofil"
+      },
+      "MainPanel" : {
+        "label" : "Hent indstillinger for augmented generation (r.a.g.) chatprofiler"
+      },
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Eksisterende R.A.G. chatprofiler"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Rediger R.A.G. chatprofil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Vidensbasekoder"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Behandlede dokumenter",
         "dataset-2-label" : "Fejldokumenter",
         "dataset-3-label" : "Kassér dokumenter"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Køb Apy-nøgle kreditlink"
+      },
+      "ModifyBtn" : {
+        "label" : "Rediger",
+        "help" : "Vis/rediger modelkonfiguration"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kode"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Beskrivelse"
+      },
+      "ExistingModelType" : {
+        "label" : "Modeltype"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Eksisterende konfigurationer"
+      },
+      "ProviderWWW" : {
+        "label" : "Website-link"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Udbyderoplysninger"
+      },
+      "ProviderInfos" : {
+        "label" : "Udbyderinformationer"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api-nøgle/oplysninger",
+        "help" : "Vælg api-nøgle eller oplysninger til denne udbyder"
+      },
+      "NewApiKey" : {
+        "label" : "Ny api-nøgle",
+        "help" : "Indsæt en ny api-nøgle, der skal bruges med denne udbyder"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Brug eksisterende eller ny",
+        "help" : "Brug eksisterende eller opret nye oplysninger til denne udbyder"
+      },
+      "NewUserName" : {
+        "label" : "Brugernavn",
+        "help" : "Brugernavn til adgang til udbyderens tjenester"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Ny embedding-model",
+        "help" : "Opret en ny embedding-model konfiguration"
+      },
+      "NewChatModel" : {
+        "label" : "Ny chatmodel",
+        "help" : "Opret en ny chatmodel konfiguration"
+      },
+      "NewModelDialog" : {
+        "label" : "Tilføj ny model"
+      },
+      "PiSave" : {
+        "label" : "Gem"
+      },
+      "NewModelsButton" : {
+        "label" : "Nye modeller",
+        "help" : "Opret ny modelkonfiguration"
+      },
+      "NewModelsDialog" : {
+        "label" : "Tilføj nye modeller"
+      },
+      "baseUrl" : {
+        "label" : "Base api-url",
+        "help" : "Basis-url for api-tjenester hos udbyderen"
+      },
+      "ModelTypePanel" : {
+        "label" : "Tilføj nye modeller"
+      },
+      "ModelsChoices" : {
+        "label" : "Modelvalg"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Foreslået modelvalg"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding-model",
+        "help" : "Vælg en af de foruddefinerede embedding-modeller"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chatmodel",
+        "help" : "Vælg en af de foruddefinerede chatmodeller"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Avanceret modelvalg"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding-model",
+        "help" : "Vælg en af udbyderens offentliggjorte embedding-modeller"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chatmodel",
+        "help" : "Vælg en af udbyderens offentliggjorte chatmodeller"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Brug kun denne valgmulighed hvis du er ekspert eller efter at have tjekket hos udbyderen hvilke modeller, der passer til dine behov. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "sæt som standard chatmodel",
+        "help" : "Sæt denne model som standard, denne bliver brugt til alle opgaver, hvor der ikke er valgt en anden chatmodel"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Vi foreslår dig følgende modeller "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "sæt som standard embedding-model",
+        "help" : "Sæt denne model som standard, denne bliver brugt til alle opgaver, hvor der ikke er valgt en anden embedding-model"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "sæt som standard chatmodel",
+        "help" : "Sæt denne model som standard, denne bliver brugt til alle opgaver, hvor der ikke er valgt en anden chatmodel"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "sæt som standard embedding-model",
+        "help" : "Sæt denne model som standard, denne bliver brugt til alle opgaver, hvor der ikke er valgt en anden embedding-model"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Brug kun denne valgmulighed hvis du er ekspert eller efter at have tjekket hos udbyderen hvilke modeller, der passer til dine behov. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Opret og aktiver"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Opret og aktiver"
+      },
+      "ProviderNameField" : {
+        "label" : "Udbyder"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjernudbyder OK",
+        "detail" : "Udbyderen kører og er korrekt konfigureret"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Handlingen mislykkedes",
+        "detail" : "Kunne ikke godkende med de angivne oplysninger"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Handlingen er udført korrekt"
       }
     }
   }

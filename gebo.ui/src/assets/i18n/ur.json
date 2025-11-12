@@ -78,6 +78,12 @@
         "summary" : "ٹھیک ہے!",
         "detail" : "عمل کامیابی سے مکمل ہو گیا"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "gebo.ai میں خوش آمدید",
+        "detail" : "لاگ ان کے لئے اپنا صارف نام اور پاس ورڈ درج کریں"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "کم از کم ایک \"R.A.G.\" چیٹ پروفائل کنفیگر کریں",
         "description" : "اپنے یوزرز کے لیے اپنے کنفیگر شدہ نالج بیسز میں سے کسی ایک کی بنیاد پر کم از کم ایک رٹریو اگمینٹڈ چیٹ پروفائل کنفیگر کریں"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai سیٹ اپ کے لازمی مراحل مکمل ہو گئے...",
+        "detail" : "لازمی سیٹ اپ مراحل مکمل ہو گئے ہیں، لیکن کچھ باقی مراحل آپ کی تنظیم کو اس سافٹ ویئر کے مکمل فوائد حاصل کرنے سے روک رہے ہیں"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai سیٹ اپ اوکے!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai سیٹ اپ میں کچھ لازمی مرحلہ غائب ہے",
+        "detail" : "براہ کرم سیٹ اپ کے سرخ مراحل چیک کریں"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "ڈیفالٹ ماڈل"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms فراہم کنندگان تک رسائی سیٹ اپ کریں"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "پروجیکٹ فارم کھولیں"
+      },
+      "Button3" : {
+        "help" : "ڈیٹا سورس کھولیں"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Gebo.ai سیٹ اپ مکمل!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "نیا R.A.G. چیٹ پروفائل شامل کریں"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. چیٹ پروفائل شامل کریں"
+      },
+      "MainPanel" : {
+        "label" : "آگمینٹڈ جنریشن (r.a.g.) چیٹ پروفائل سیٹنگز حاصل کریں"
+      },
+      "CodeHeader" : {
+        "label" : "کوڈ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "موجودہ R.A.G. چیٹ پروفائلز"
+      },
+      "DescriptionHeader" : {
+        "label" : "تفصیل"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. چیٹ پروفائل میں ترمیم کریں"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "نالوج بیس کوڈز"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "عمل شدہ دستاویزات",
         "dataset-2-label" : "خرابی والی دستاویزات",
         "dataset-3-label" : "رد کی گئی دستاویزات"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy key کریڈٹ لنک خریدیں"
+      },
+      "ModifyBtn" : {
+        "label" : "ترمیم کریں",
+        "help" : "ماڈل کنفیگریشن دیکھیں/ترمیم کریں"
+      },
+      "ExistingModelCode" : {
+        "label" : "کوڈ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "تفصیل"
+      },
+      "ExistingModelType" : {
+        "label" : "ماڈل قسم"
+      },
+      "ExistingModelsSection" : {
+        "label" : "موجودہ کنفیگریشنز"
+      },
+      "ProviderWWW" : {
+        "label" : "ویب سائٹ لنک"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "فراہم کنندہ اسناد"
+      },
+      "ProviderInfos" : {
+        "label" : "فراہم کنندہ معلومات"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/اسناد",
+        "help" : "اس فراہم کنندہ کے لئے api key یا اسناد منتخب کریں"
+      },
+      "NewApiKey" : {
+        "label" : "نیا api key",
+        "help" : "اس فراہم کنندہ کے ساتھ استعمال کے لئے نیا api key درج کریں"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "موجودہ یا نیا استعمال کریں",
+        "help" : "اس فراہم کنندہ کے لئے موجودہ اسناد استعمال کریں یا نئی بنائیں"
+      },
+      "NewUserName" : {
+        "label" : "صارف نام",
+        "help" : "فراہم کنندہ سروسز تک رسائی کے لئے استعمال ہونے والا صارف نام"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "نیا embedding ماڈل",
+        "help" : "نیا embedding ماڈل کنفیگریشن بنائیں"
+      },
+      "NewChatModel" : {
+        "label" : "نیا چیٹ ماڈل",
+        "help" : "نیا چیٹ ماڈل کنفیگریشن بنائیں"
+      },
+      "NewModelDialog" : {
+        "label" : "نیا ماڈل شامل کریں"
+      },
+      "PiSave" : {
+        "label" : "محفوظ کریں"
+      },
+      "NewModelsButton" : {
+        "label" : "نئے ماڈلز",
+        "help" : "نئے ماڈلز کنفیگریشن بنائیں"
+      },
+      "NewModelsDialog" : {
+        "label" : "نئے ماڈلز شامل کریں"
+      },
+      "baseUrl" : {
+        "label" : "بنیادی api یو آر ایل",
+        "help" : "فراہم کنندہ کی api سروسز کے لئے بنیادی یو آر ایل"
+      },
+      "ModelTypePanel" : {
+        "label" : "نئے ماڈلز شامل کریں"
+      },
+      "ModelsChoices" : {
+        "label" : "ماڈلز کے اختیارات"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "تجویز کردہ ماڈلز کا انتخاب"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding ماڈل",
+        "help" : "پری ڈیفائنڈ embedding ماڈلز میں سے ایک منتخب کریں"
+      },
+      "chatPresetChoice" : {
+        "label" : "چیٹ ماڈل",
+        "help" : "پری ڈیفائنڈ چیٹ ماڈلز میں سے ایک منتخب کریں"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "ایڈوانسڈ ماڈلز کا انتخاب"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding ماڈل",
+        "help" : "فراہم کنندہ کی شائع کردہ embedding ماڈلز میں سے ایک منتخب کریں"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "چیٹ ماڈل",
+        "help" : "فراہم کنندہ کی شائع کردہ چیٹ ماڈلز میں سے ایک منتخب کریں"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " یہ انتخاب کا موڈ صرف اس وقت استعمال کریں جب آپ ماہر ہوں یا فراہم کنندہ کی سائٹ پر چیک کر لیں کہ کون سے ماڈلز آپ کی ضرورت کے مطابق ہیں۔ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ڈیفالٹ چیٹ ماڈل کے طور پر سیٹ کریں",
+        "help" : "اس ماڈل کو ڈیفالٹ کے طور پر سیٹ کریں، یہ ہر اس کام کے لئے استعمال ہو گا جس کے لئے کوئی اور چیٹ ماڈل کنفیگر نہیں کیا گیا"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " ہم آپ کے لئے مندرجہ ذیل ماڈلز کی فہرست تجویز کرتے ہیں "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ڈیفالٹ embedding ماڈل کے طور پر سیٹ کریں",
+        "help" : "اس ماڈل کو ڈیفالٹ کے طور پر سیٹ کریں، یہ ہر اس کام کے لئے استعمال ہو گا جس کے لئے کوئی اور embedding ماڈل کنفیگر نہیں کیا گیا"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ڈیفالٹ چیٹ ماڈل کے طور پر سیٹ کریں",
+        "help" : "اس ماڈل کو ڈیفالٹ کے طور پر سیٹ کریں، یہ ہر اس کام کے لئے استعمال ہو گا جس کے لئے کوئی اور چیٹ ماڈل کنفیگر نہیں کیا گیا"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ڈیفالٹ embedding ماڈل کے طور پر سیٹ کریں",
+        "help" : "اس ماڈل کو ڈیفالٹ کے طور پر سیٹ کریں، یہ ہر اس کام کے لئے استعمال ہو گا جس کے لئے کوئی اور embedding ماڈل کنفیگر نہیں کیا گیا"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " یہ انتخاب کا موڈ صرف اس وقت استعمال کریں جب آپ ماہر ہوں یا فراہم کنندہ کی سائٹ پر چیک کر لیں کہ کون سے ماڈلز آپ کی ضرورت کے مطابق ہیں۔ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "بنائیں اور فعال کریں"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "بنائیں اور فعال کریں"
+      },
+      "ProviderNameField" : {
+        "label" : "فراہم کنندہ"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI ریموٹ فراہم کنندہ اوکے",
+        "detail" : "فراہم کنندہ فعال ہے اور کامیابی سے کنفیگر کر دیا گیا ہے"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "عمل ناکام",
+        "detail" : "دی گئی اسناد کے ساتھ توثیق نہیں ہو سکی"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "اوکے!",
+        "detail" : "عمل کامیابی سے مکمل ہو گیا"
       }
     }
   }

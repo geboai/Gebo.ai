@@ -78,6 +78,12 @@
         "summary" : "OK!",
         "detail" : "Operação realizada com sucesso"
       }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Bem-vindo ao gebo.ai",
+        "detail" : "Digite seu nome de usuário e senha para fazer login"
+      }
     }
   },
   "SetupWizardPanelModule" : {
@@ -152,6 +158,17 @@
       "firstChatProfileBaseSetupSection" : {
         "label" : "Configure pelo menos um perfil de chat \"R.A.G.\"",
         "description" : "Configure ao menos um perfil de chat por recuperação aumentada para seus usuários, baseado em uma de suas bases de conhecimento configuradas"
+      },
+      "mandatory-done" : {
+        "summary" : "Configuração obrigatória do Gebo.ai concluída...",
+        "detail" : "As etapas obrigatórias da configuração foram concluídas, mas algumas etapas ausentes impedem sua organização de aproveitar ao máximo este software"
+      },
+      "setup-ok" : {
+        "summary" : "Configuração do Gebo.ai OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Falta alguma etapa obrigatória da configuração do Gebo.ai",
+        "detail" : "Revise as etapas em vermelho do processo de configuração"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -241,6 +258,9 @@
       },
       "DefaultModelHeader" : {
         "label" : "Modelo padrão"
+      },
+      "MainPanelHeader" : {
+        "label" : "Configurar acesso aos provedores de llms do Gebo.ai"
       }
     },
     "GraphRagWizardComponent" : {
@@ -291,6 +311,9 @@
       },
       "Button2" : {
         "help" : "abrir formulário de projeto"
+      },
+      "Button3" : {
+        "help" : "abrir fonte de dados"
       }
     },
     "WorkFolderWizardComponent" : {
@@ -377,6 +400,32 @@
       },
       "SetupWizardPanelComponent-setup-ok" : {
         "summary" : "Configuração Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Adicionar novo perfil de chat R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Adicionar perfil de chat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Recuperar configurações dos perfis de chat r.a.g."
+      },
+      "CodeHeader" : {
+        "label" : "Código"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Perfis de chat R.A.G. existentes"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrição"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Editar perfil de chat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Códigos da base de conhecimento"
       }
     }
   },
@@ -2598,6 +2647,157 @@
         "dataset-1-label" : "Documentos processados",
         "dataset-2-label" : "Documentos com erro",
         "dataset-3-label" : "Documentos descartados"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Link para compra de crédito de chave Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Modificar",
+        "help" : "Visualizar/modificar configuração do modelo"
+      },
+      "ExistingModelCode" : {
+        "label" : "Código"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Descrição"
+      },
+      "ExistingModelType" : {
+        "label" : "Tipo de modelo"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Configurações existentes"
+      },
+      "ProviderWWW" : {
+        "label" : "Link para site"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Credenciais do provedor"
+      },
+      "ProviderInfos" : {
+        "label" : "Informações do provedor"
+      },
+      "ExistingApiKey" : {
+        "label" : "Chave api/credenciais",
+        "help" : "Escolha uma chave api ou credenciais para este provedor"
+      },
+      "NewApiKey" : {
+        "label" : "Nova chave api",
+        "help" : "Insira uma nova chave api para ser usada com este provedor"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Usar existente ou nova",
+        "help" : "Utilize credenciais existentes ou crie novas para este provedor"
+      },
+      "NewUserName" : {
+        "label" : "Nome de usuário",
+        "help" : "Nome de usuário utilizado para acessar os serviços do provedor"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Novo modelo de embedding",
+        "help" : "Crie uma nova configuração de modelo de embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Novo modelo de Chat",
+        "help" : "Crie uma nova configuração de modelo de chat"
+      },
+      "NewModelDialog" : {
+        "label" : "Adicionar novo modelo"
+      },
+      "PiSave" : {
+        "label" : "Salvar"
+      },
+      "NewModelsButton" : {
+        "label" : "Novos modelos",
+        "help" : "Criar nova configuração de modelos"
+      },
+      "NewModelsDialog" : {
+        "label" : "Adicionar novos modelos"
+      },
+      "baseUrl" : {
+        "label" : "URL base da api",
+        "help" : "URL base para os serviços de api do provedor"
+      },
+      "ModelTypePanel" : {
+        "label" : "Adicionar novos modelos"
+      },
+      "ModelsChoices" : {
+        "label" : "Escolhas de modelos"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Seleção de modelos sugeridos"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Modelo de embedding",
+        "help" : "Selecione um dos modelos de embedding predefinidos"
+      },
+      "chatPresetChoice" : {
+        "label" : "Modelo de chat",
+        "help" : "Selecione um dos modelos de chat predefinidos"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Seleção avançada de modelos"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Modelo de embedding",
+        "help" : "Selecione um dos modelos de embedding publicados pelo fornecedor"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Modelo de chat",
+        "help" : "Selecione um dos modelos de chat publicados pelo fornecedor"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Use este modo de seleção somente se você for expert ou ao verificar no site do fornecedor quais modelos atendem às suas necessidades. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Defina este modelo como padrão, ele será utilizado para toda tarefa sem outro modelo de chat configurado"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Sugerimos a você a seguinte lista de modelos "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Defina este modelo como padrão, ele será utilizado para toda tarefa sem outro modelo de embedding configurado"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "definir como modelo de chat padrão",
+        "help" : "Defina este modelo como padrão, ele será utilizado para toda tarefa sem outro modelo de chat configurado"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "definir como modelo de embedding padrão",
+        "help" : "Defina este modelo como padrão, ele será utilizado para toda tarefa sem outro modelo de embedding configurado"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Use este modo de seleção somente se você for expert ou ao verificar no site do fornecedor quais modelos atendem às suas necessidades. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Criar e ativar"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Criar e ativar"
+      },
+      "ProviderNameField" : {
+        "label" : "Provedor"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Provedor remoto de IA OK",
+        "detail" : "Provedor está funcionando e configurado com sucesso"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Falha na operação",
+        "detail" : "Não é possível autenticar com as credenciais fornecidas"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operação realizada com sucesso"
       }
     }
   }
