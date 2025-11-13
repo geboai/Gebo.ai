@@ -249,8 +249,9 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         }
     }
     protected get saveDisabled():boolean {
-        const ctrlsInvalid=this.secretFormGroup.controls["newApiSecret"].invalid || this.secretFormGroup.controls["newUserName"].invalid;
-        return ctrlsInvalid && (this.vendorConfiguration?.parentModel?.requiresApiKey===true || (this.secretFormGroup.controls["requireApiKeyAniway"].value===true));
+        //|| this.secretFormGroup.controls["newApiSecret"].disabled || this.secretFormGroup.controls["newUserName"].disabled
+        const ctrlsValid=this.secretFormGroup.controls["newApiSecret"].valid && this.secretFormGroup.controls["newUserName"].valid ;
+        return !(ctrlsValid && (this.vendorConfiguration?.parentModel?.requiresApiKey===true || this.secretFormGroup.controls["requireApiKeyAniway"].value===true));
         
     }
     ngOnChanges(changes: SimpleChanges): void {
