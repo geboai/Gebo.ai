@@ -19,8 +19,8 @@ import { Observable }                                        from 'rxjs';
 
 import { ComponentLLMSStatus } from '../model/componentLLMSStatus';
 import { LLMCreateModelData } from '../model/lLMCreateModelData';
-import { LLMCredentials } from '../model/lLMCredentials';
 import { LLMCredentialsCreationData } from '../model/lLMCredentialsCreationData';
+import { LLMModelsLookupParameter } from '../model/lLMModelsLookupParameter';
 import { LLMSSetupConfigurationData } from '../model/lLMSSetupConfigurationData';
 import { OperationStatusList } from '../model/operationStatusList';
 import { OperationStatusListGBaseModelChoice } from '../model/operationStatusListGBaseModelChoice';
@@ -235,10 +235,10 @@ export class GeboFastLlmsSetupControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGBaseModelChoice>;
-    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGBaseModelChoice>>;
-    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGBaseModelChoice>>;
-    public verifyCredentialsAndDownloadModels(body: LLMCredentials, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public verifyCredentialsAndDownloadModels(body: LLMModelsLookupParameter, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListGBaseModelChoice>;
+    public verifyCredentialsAndDownloadModels(body: LLMModelsLookupParameter, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListGBaseModelChoice>>;
+    public verifyCredentialsAndDownloadModels(body: LLMModelsLookupParameter, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListGBaseModelChoice>>;
+    public verifyCredentialsAndDownloadModels(body: LLMModelsLookupParameter, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling verifyCredentialsAndDownloadModels.');

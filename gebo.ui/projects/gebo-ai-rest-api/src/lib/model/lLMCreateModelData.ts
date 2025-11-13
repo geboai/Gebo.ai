@@ -15,6 +15,7 @@ export interface LLMCreateModelData {
     doModelsLookup?: boolean;
     serviceHandler: string;
     setAsDefaultModel?: boolean;
+    enableAllFunctions?: boolean;
     secretId?: string;
     modelCode: string;
     baseUrl?: string;

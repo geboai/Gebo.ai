@@ -81,14 +81,20 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="chatPresets.length>0" [formGroup]="chatModelPresetsFormGroup">
+                    <div class="col-3" *ngIf="chatPresets.length>0" [formGroup]="chatModelPresetsFormGroup">
                         <gebo-ai-field id="chatPresetSetAsDefault" label="set as default chat model"
                             help="Set this model as the default one, this will be used for every task no other chat model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-
+                    <div class="col-3" *ngIf="chatPresets.length>0" [formGroup]="chatModelPresetsFormGroup">
+                         <gebo-ai-field id="enableAllFunctions" label="enable all function calls"
+                            help="Enable all available tools and function calls, if not set it will possible to enable them later in the llms admin panel">
+                            <p-checkbox formControlName="enableAllFunctions" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
                     <div class="col-6" *ngIf="embeddingPresets.length>0" [formGroup]="embeddingModelPresetsFormGroup">
                         <gebo-ai-field id="embeddingPresetChoice" label="Embedding model"
                             help="Select one of the predefined embedding models">
@@ -96,14 +102,14 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="embeddingPresets.length>0" [formGroup]="embeddingModelPresetsFormGroup">
+                    <div class="col-3" *ngIf="embeddingPresets.length>0" [formGroup]="embeddingModelPresetsFormGroup">
                         <gebo-ai-field id="embeddingPresetSetAsDefault" label="set as default embedding model"
                             help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-
+                    <div class="col-3" *ngIf="embeddingPresets.length>0"></div>
                     <div class="col-3">
                         <p-button id="CreatePresetBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createPresetLLMS()" [disabled]="!presetCreateBtnEnabled" icon="pi pi-save"
@@ -128,14 +134,20 @@
                                 [data]="lookedUpChatModels" gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="lookedUpChatModels.length>0" [formGroup]="chatModelAdvancedFormGroup">
+                    <div class="col-3" *ngIf="lookedUpChatModels.length>0" [formGroup]="chatModelAdvancedFormGroup">
                         <gebo-ai-field id="chatAdvancedSetAsDefault" label="set as default chat model"
                             help="Set this model as the default one, this will be used for every task no other chat model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-
+                    <div class="col-3" *ngIf="lookedUpChatModels.length>0" [formGroup]="chatModelAdvancedFormGroup">
+                         <gebo-ai-field id="enableAllFunctions" label="enable all function calls"
+                            help="Enable all available tools and function calls, if not set it will possible to enable them later in the llms admin panel">
+                            <p-checkbox formControlName="enableAllFunctions" [binary]="true" gebo-ai-field-element
+                                [trueValue]="true" [falseValue]="false"></p-checkbox>
+                        </gebo-ai-field>
+                    </div>
                     <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"
                         [formGroup]="embeddingModelAdvancedFormGroup">
                         <gebo-ai-field id="embeddingAdvancedChoice" label="Embedding model"
@@ -145,7 +157,7 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"
+                    <div class="col-3" *ngIf="lookedUpEmbeddingModels.length>0"
                         [formGroup]="embeddingModelAdvancedFormGroup">
                         <gebo-ai-field id="embeddingAdvancedSetAsDefault" label="set as default embedding model"
                             help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
@@ -153,7 +165,7 @@
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-
+                    <div class="col-3" *ngIf="lookedUpEmbeddingModels.length>0"></div>
                     <div class="col-3">
                         <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createAdvancedLLMS()" [disabled]="!advancedCreateBtnEnabled" icon="pi pi-save"

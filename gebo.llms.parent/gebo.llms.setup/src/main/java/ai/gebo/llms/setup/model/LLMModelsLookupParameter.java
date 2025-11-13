@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class LLMCredentials {
+public class LLMModelsLookupParameter {
 
 	@NotNull
 	private ModelType type = null;

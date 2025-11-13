@@ -25,8 +25,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
-import ai.gebo.llms.setup.model.LLMCredentials;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
+import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.services.GeboLLMSSetupService;
 import ai.gebo.model.OperationStatus;
@@ -88,7 +88,7 @@ public class GeboFastLLMSSetupController {
 
 	@PostMapping(value = "verifyCredentialsAndDownloadModels", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
-			@RequestBody @Valid @NotNull LLMCredentials credentials) throws GeboCryptSecretException {
+			@RequestBody @Valid @NotNull LLMModelsLookupParameter credentials) throws GeboCryptSecretException {
 		return service.verifyCredentialsAndDownloadModels(credentials);
 	}
 }

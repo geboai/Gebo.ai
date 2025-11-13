@@ -10,13 +10,13 @@
  * Do not edit the class manually.
  */
 
-export interface LLMCredentials { 
-    type: LLMCredentials.TypeEnum;
+export interface LLMModelsLookupParameter { 
+    type: LLMModelsLookupParameter.TypeEnum;
     serviceHandler: string;
-    secretId: string;
+    secretId?: string;
     baseUrl?: string;
 }
-export namespace LLMCredentials {
+export namespace LLMModelsLookupParameter {
     export type TypeEnum = 'CHAT' | 'EMBEDDING';
     export const TypeEnum = {
         CHAT: 'CHAT' as TypeEnum,

@@ -11,15 +11,16 @@ package ai.gebo.llms.setup.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GModelType;
@@ -39,9 +40,9 @@ import ai.gebo.llms.setup.config.LLMSVendorsSetupConfig;
 import ai.gebo.llms.setup.config.ModelType;
 import ai.gebo.llms.setup.model.ComponentLLMSStatus;
 import ai.gebo.llms.setup.model.LLMCreateModelData;
-import ai.gebo.llms.setup.model.LLMCredentials;
 import ai.gebo.llms.setup.model.LLMCredentialsCreationData;
 import ai.gebo.llms.setup.model.LLMExistingConfiguration;
+import ai.gebo.llms.setup.model.LLMModelsLookupParameter;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData;
 import ai.gebo.llms.setup.model.LLMSSetupConfigurationData.LLMSSetupConfiguration;
 import ai.gebo.model.GUserMessage;
@@ -76,6 +77,7 @@ public class GeboLLMSSetupService {
 	final IGChatProfileManagementService chatProfileManagementService;
 	final IGRuntimeChatProfileChatModelDao chatProfileChatModelDao;
 	final LLMSVendorsSetupConfig vendorsSetupConfig;
+	final IGToolCallbackSourceRepositoryPattern toolsRepo;
 	// Sample text for testing embedding model configurations.
 	static final String embeddingText4Test = "By default, the length of the embedding vector will be 1536 for text-embedding-3-small or 3072 for text-embedding-3-large. You can reduce the dimensions of the embedding by passing in the dimensions parameter without the embedding losing its concept-representing properties. We go into more detail on embedding dimensions in the embedding use case section.";
 	// Logger instance to log messages.
@@ -230,7 +232,7 @@ public class GeboLLMSSetupService {
 	}
 
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
-			@Valid @NotNull LLMCredentials credentials) {
+			@Valid @NotNull LLMModelsLookupParameter credentials) {
 		
 		switch (credentials.getType()) {
 		case CHAT: {
@@ -267,10 +269,18 @@ public class GeboLLMSSetupService {
 				try {
 					IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
 							.findByCode(config.getServiceHandler());
-					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+					GBaseChatModelConfig configuration =(GBaseChatModelConfig) supportLogic.createBaseConfiguration(config.getModelCode());
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
+					configuration.setAccessibleToAll(true);
+					if (config.getEnableAllFunctions()!=null && config.getEnableAllFunctions()) {
+						List<ToolCallback> tools = this.toolsRepo.getTools();
+						List<String> names = tools.stream().map(x -> {
+							return x.getToolDefinition().name();
+						}).toList();
+						configuration.setEnabledFunctions(names);
+					}
 					operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, config.getModelCode()));
 				} catch (Throwable th) {
 					operationsOutput.add(OperationStatus.of(th));

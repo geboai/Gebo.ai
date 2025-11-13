@@ -3,7 +3,6 @@ package ai.gebo.llms.setup.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import ai.gebo.secrets.model.GeboSecretType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
