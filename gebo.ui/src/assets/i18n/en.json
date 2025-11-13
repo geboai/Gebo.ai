@@ -2782,6 +2782,18 @@
             },
             "ProviderNameField": {
                 "label": "Provider"
+            },
+            "requireApiKeyAniway": {
+                "label": "The provider requires credentials",
+                "help": "The provider/server application is configured for authenticated access via api key or other credentials"
+            },
+            "baseUrl1": {
+                "label": "Base api url",
+                "help": "Provider Base url for api services"
+            },
+            "enableAllFunctions": {
+                "label": "enable all function calls",
+                "help": "Enable all available tools and function calls, if not set it will possible to enable them later in the llms admin panel"
             }
         }
     },
