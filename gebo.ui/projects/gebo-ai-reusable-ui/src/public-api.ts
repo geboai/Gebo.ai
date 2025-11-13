@@ -91,4 +91,5 @@ export * from "./lib/controls/field-translation-container/text-language-resource
 export * from "./lib/controls/field-host-component-iface/field-host-component-iface";
 
 export * from "./lib/controls/choose-llm-functions/choose-llm-functions.module";
+export * from "./lib/architecture/validation";
 

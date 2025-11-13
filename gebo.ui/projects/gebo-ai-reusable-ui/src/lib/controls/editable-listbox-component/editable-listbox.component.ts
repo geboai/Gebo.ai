@@ -252,6 +252,7 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
      */
     setDisabledState?(isDisabled: boolean): void {
         this.disabled=isDisabled===true;
+       
     }
 
     /**

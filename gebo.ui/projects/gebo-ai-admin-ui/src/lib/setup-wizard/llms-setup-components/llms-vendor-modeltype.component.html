@@ -3,9 +3,21 @@
 </p-blockUI>
 <p-panel #modelTypePanel id="ModelTypePanel" header="Add new models" gebo-ai-label>
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <h4><span id="ProviderNameField" gebo-ai-text>Provider</span>&nbsp;&nbsp;{{vendorConfiguration?.parentModel?.name}}</h4>
+    <h4><span id="ProviderNameField" gebo-ai-text>Provider</span>&nbsp;&nbsp;{{vendorConfiguration?.parentModel?.name}}
+    </h4>
     <p-fieldset id="ModelTypeFieldSet" gebo-ai-label legend="Provider credentials" [formGroup]="secretFormGroup">
+
         <div class="grid">
+            <div class="col-3" *ngIf="vendorConfiguration?.parentModel?.requiresApiKey!==true">
+                <gebo-ai-field id="requireApiKeyAniway" label="The provider requires credentials"
+                    help="The provider/server application is configured for authenticated access via api key or other credentials">
+                    <p-checkbox formControlName="requireApiKeyAniway" [binary]="true" gebo-ai-field-element
+                        [trueValue]="true" [falseValue]="false"></p-checkbox>
+                </gebo-ai-field>
+            </div>
+            <div class="col-9" *ngIf="vendorConfiguration?.parentModel?.requiresApiKey!==true">
+
+            </div>
             <div class="col-3" *ngIf="existingOrNewShow">
                 <gebo-ai-field id="UseExistingOrNewCredentials" label="Use existing or new"
                     help="Use existing or create new credentials for this provider">
@@ -19,6 +31,7 @@
                     <geboai-editable-listbox-component formControlName="selectedSecret" [data]="secrets"
                         gebo-ai-field-element></geboai-editable-listbox-component>
                 </gebo-ai-field>
+
             </div>
             <div class="col-9 grid" *ngIf="secretFormGroup.controls['useExistingOrNew'].value==='NEW'">
                 <div class="col-3">
@@ -37,12 +50,12 @@
                 <div class="col-1" style="vertical-align: middle;">
                     <gebo-ai-field id="PiSave" label="Save" help="">
                         <p-button icon="pi pi-save" [outlined]="true" gebo-ai-field-element
-                            [disabled]="secretFormGroup.invalid" (onClick)="createCredentials()"></p-button>
+                            [disabled]="saveDisabled" (onClick)="createCredentials()"></p-button>
                     </gebo-ai-field>
                 </div>
             </div>
             <div class="col-12" *ngIf="vendorConfiguration?.parentModel?.requiresCustomUrl===true">
-                <gebo-ai-field id="baseUrl" label="Base api url" help="Base url for the api services of the provider"
+                <gebo-ai-field id="baseUrl1" label="Base api url" help="Provider Base url for api services"
                     [required]="vendorConfiguration?.parentModel?.requiresCustomUrl===true">
                     <input pInputText type="text" gebo-ai-field-element formControlName="baseUrl">
                 </gebo-ai-field>
@@ -51,7 +64,7 @@
     </p-fieldset>
     <p-fieldset id="ModelsChoices" legend="Models choices" gebo-ai-label
         *ngIf="chatPresets.length>0 || embeddingPresets.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpChatModels.length>0">
-        <p-tabView >
+        <p-tabView>
 
             <p-tabPanel id="PresetsAccordionPanel" gebo-ai-label header="Suggested models selection"
                 *ngIf="chatPresets.length>0 || embeddingPresets.length>0">
@@ -68,14 +81,14 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="chatPresets.length>0"  [formGroup]="chatModelPresetsFormGroup">
+                    <div class="col-6" *ngIf="chatPresets.length>0" [formGroup]="chatModelPresetsFormGroup">
                         <gebo-ai-field id="chatPresetSetAsDefault" label="set as default chat model"
                             help="Set this model as the default one, this will be used for every task no other chat model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-                    
+
                     <div class="col-6" *ngIf="embeddingPresets.length>0" [formGroup]="embeddingModelPresetsFormGroup">
                         <gebo-ai-field id="embeddingPresetChoice" label="Embedding model"
                             help="Select one of the predefined embedding models">
@@ -90,7 +103,7 @@
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-                    
+
                     <div class="col-3">
                         <p-button id="CreatePresetBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createPresetLLMS()" [disabled]="!presetCreateBtnEnabled" icon="pi pi-save"
@@ -122,7 +135,7 @@
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-                    
+
                     <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"
                         [formGroup]="embeddingModelAdvancedFormGroup">
                         <gebo-ai-field id="embeddingAdvancedChoice" label="Embedding model"
@@ -132,14 +145,15 @@
                                 gebo-ai-field-element></geboai-editable-listbox-component>
                         </gebo-ai-field>
                     </div>
-                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"  [formGroup]="embeddingModelAdvancedFormGroup">
+                    <div class="col-6" *ngIf="lookedUpEmbeddingModels.length>0"
+                        [formGroup]="embeddingModelAdvancedFormGroup">
                         <gebo-ai-field id="embeddingAdvancedSetAsDefault" label="set as default embedding model"
                             help="Set this model as the default one, this will be used for every task no other embedding model is configured for">
                             <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
                                 [trueValue]="true" [falseValue]="false"></p-checkbox>
                         </gebo-ai-field>
                     </div>
-                    
+
                     <div class="col-3">
                         <p-button id="CreateAdvancedBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                             (onClick)="createAdvancedLLMS()" [disabled]="!advancedCreateBtnEnabled" icon="pi pi-save"
