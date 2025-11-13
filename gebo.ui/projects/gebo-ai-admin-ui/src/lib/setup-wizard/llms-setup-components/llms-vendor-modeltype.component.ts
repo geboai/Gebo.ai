@@ -104,6 +104,20 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 }
             }
         });
+        this.secretFormGroup.controls["baseUrl"].valueChanges.subscribe({
+            next: (baseUrl) => {
+                if (this.secretFormGroup.controls["baseUrl"].invalid) return;
+                if (baseUrl) {
+                    const secretId = this.secretFormGroup.controls["selectedSecret"].value;
+                    if (secretId !== this.oldCredentialId || baseUrl !== this.oldBaseUrl) {
+
+                        this.loadModels(secretId, baseUrl);
+                        this.oldCredentialId = secretId;
+                        this.oldBaseUrl = baseUrl;
+                    }
+                }
+            }
+        });
     }
     private assignBackendMessages(messages?: GUserMessage[]) {
         if (this.subscription) {
@@ -248,11 +262,11 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             });
         }
     }
-    protected get saveDisabled():boolean {
+    protected get saveDisabled(): boolean {
         //|| this.secretFormGroup.controls["newApiSecret"].disabled || this.secretFormGroup.controls["newUserName"].disabled
-        const ctrlsValid=this.secretFormGroup.controls["newApiSecret"].valid && this.secretFormGroup.controls["newUserName"].valid ;
-        return !(ctrlsValid && (this.vendorConfiguration?.parentModel?.requiresApiKey===true || this.secretFormGroup.controls["requireApiKeyAniway"].value===true));
-        
+        const ctrlsValid = this.secretFormGroup.controls["newApiSecret"].valid && this.secretFormGroup.controls["newUserName"].valid;
+        return !(ctrlsValid && (this.vendorConfiguration?.parentModel?.requiresApiKey === true || this.secretFormGroup.controls["requireApiKeyAniway"].value === true));
+
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["vendorConfiguration"] && this.vendorConfiguration) {

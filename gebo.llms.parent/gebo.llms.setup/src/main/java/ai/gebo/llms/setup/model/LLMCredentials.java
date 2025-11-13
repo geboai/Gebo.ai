@@ -11,9 +11,7 @@ public class LLMCredentials {
 	private ModelType type = null;
 	@NotNull
 	private String serviceHandler = null;
-	@NotNull
 	private String secretId = null;
-
 	private String baseUrl = null;
 
 }

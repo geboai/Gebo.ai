@@ -16,7 +16,7 @@ export class GeboAIValidators extends Validators {
                 return null;
             try {
                 const urlValue: URL = new URL(actualValue);
-                if (!(urlValue.protocol && urlValue.protocol.toLowerCase() in ["http","https"])) {
+                if (!(urlValue.protocol && (urlValue.protocol.toLowerCase() ==="http:" || urlValue.protocol.toLowerCase() ==="https:"))) {
                     return wrongProtocolErrorMessage;
                 }
             } catch (e) {
