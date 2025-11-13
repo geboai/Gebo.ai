@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Leverandør"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Leverandøren krever legitimasjon",
+        "help" : "Leverandøren/serverapplikasjonen er konfigurert for autentisert tilgang via api-nøkkel eller annen legitimasjon"
+      },
+      "baseUrl1" : {
+        "label" : "Grunnleggende api-url",
+        "help" : "Leverandørens grunnleggende url for api-tjenester"
+      },
+      "enableAllFunctions" : {
+        "label" : "aktiver alle funksjonskall",
+        "help" : "Aktiver alle tilgjengelige verktøy og funksjonskall. Hvis dette ikke er satt, er det mulig å aktivere dem senere i llms administrasjonspanelet"
       }
     }
   },

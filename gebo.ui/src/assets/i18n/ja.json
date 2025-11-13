@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "プロバイダー"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "プロバイダーには認証情報が必要です",
+        "help" : "プロバイダー／サーバーアプリケーションは、APIキーまたはその他の認証情報による認証されたアクセス用に設定されています"
+      },
+      "baseUrl1" : {
+        "label" : "ベースAPI URL",
+        "help" : "APIサービス用のプロバイダーベースURL"
+      },
+      "enableAllFunctions" : {
+        "label" : "すべての機能呼び出しを有効化",
+        "help" : "すべての利用可能なツールや機能呼び出しを有効化します。設定しない場合は、後でLLMS管理パネルで有効化できます"
       }
     }
   },

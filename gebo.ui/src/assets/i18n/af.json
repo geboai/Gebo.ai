@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Verskaffer"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Die verskaffer vereis geloofsbriewe",
+        "help" : "Die verskaffer/bediener-toepassing is opgestel vir geverifieerde toegang via api-sleutel of ander geloofsbriewe"
+      },
+      "baseUrl1" : {
+        "label" : "Basis api url",
+        "help" : "Verskaffer se basis url vir api-dienste"
+      },
+      "enableAllFunctions" : {
+        "label" : "aktiveer alle funksie-oproepe",
+        "help" : "Aktiveer alle beskikbare gereedskap en funksie-oproepe; indien nie gestel nie, kan dit later in die llms admin paneel geaktiveer word"
       }
     }
   },

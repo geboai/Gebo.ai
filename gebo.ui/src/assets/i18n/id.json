@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Penyedia"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Penyedia memerlukan kredensial",
+        "help" : "Aplikasi penyedia/server dikonfigurasi untuk akses autentikasi melalui api key atau kredensial lainnya"
+      },
+      "baseUrl1" : {
+        "label" : "Base api url",
+        "help" : "Base url penyedia untuk layanan api"
+      },
+      "enableAllFunctions" : {
+        "label" : "aktifkan semua panggilan fungsi",
+        "help" : "Aktifkan semua alat dan panggilan fungsi yang tersedia, jika tidak diatur maka dapat diaktifkan nanti di panel admin llms"
       }
     }
   },

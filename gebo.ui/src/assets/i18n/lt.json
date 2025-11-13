@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Teikėjas"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Paslaugų teikėjui reikia prisijungimo duomenų",
+        "help" : "Paslaugų teikėjo/serverio programa sukonfigūruota naudoti autentifikuotą prieigą per api raktą arba kitus prisijungimo duomenis"
+      },
+      "baseUrl1" : {
+        "label" : "Pagrindinis api url",
+        "help" : "Paslaugų teikėjo pagrindinis url api paslaugoms"
+      },
+      "enableAllFunctions" : {
+        "label" : "įjungti visas funkcijas",
+        "help" : "Įjungia visus galimus įrankius ir funkcijų iškvietimus. Jei nepažymėta, juos bus galima įjungti vėliau llms administravimo skydelyje"
       }
     }
   },

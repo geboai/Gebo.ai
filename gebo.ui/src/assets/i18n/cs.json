@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Poskytovatel"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Poskytovatel vyžaduje přihlašovací údaje",
+        "help" : "Aplikační server/poskytovatel je nastaven pro ověřený přístup pomocí api klíče nebo jiných údajů"
+      },
+      "baseUrl1" : {
+        "label" : "Základní api url",
+        "help" : "Základní url poskytovatele pro api služby"
+      },
+      "enableAllFunctions" : {
+        "label" : "povolit všechny funkce",
+        "help" : "Povolit všechny dostupné nástroje a volání funkcí, pokud není nastaveno, bude možné je povolit později v administračním rozhraní llms"
       }
     }
   },

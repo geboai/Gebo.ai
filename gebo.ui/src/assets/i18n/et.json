@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Pakkuja"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Pakkuja nõuab volitusi",
+        "help" : "Pakkuja/serveri rakendus on seadistatud autentitud juurdepääsu jaoks api võtme või muude volituste kaudu"
+      },
+      "baseUrl1" : {
+        "label" : "API baas-URL",
+        "help" : "Pakkuja API teenuste baas-URL"
+      },
+      "enableAllFunctions" : {
+        "label" : "luba kõik funktsioonikutsed",
+        "help" : "Luba kõik saadaolevad tööriistad ja funktsioonikutsed; kui pole määratud, saab neid hiljem llms-i halduspaneelis lubada"
       }
     }
   },

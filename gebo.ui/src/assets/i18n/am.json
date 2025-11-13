@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "አቅራቢ"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "አቅራቢው የመታወቂያ መረጃ ያስፈልጋል",
+        "help" : "አቅራቢው/ሰርቨር መተግበሪያ በ api key ወይም በሌላ መታወቂያ መረጃ የታመነ መዳረሻ ነው"
+      },
+      "baseUrl1" : {
+        "label" : "ዋና api url",
+        "help" : "ለ api አገልግሎት የአቅራቢ ዋና url"
+      },
+      "enableAllFunctions" : {
+        "label" : "ሁሉንም የስራ ጥሪዎች አንቃ",
+        "help" : "ሁሉንም ያሉትን መሳሪያዎች እና የስራ ጥሪዎች አንቃ፣ ካልተመረጠ በኋላ በ llms አስተዳዳሪ ፓነል ማንቃት ይችላሉ"
       }
     }
   },

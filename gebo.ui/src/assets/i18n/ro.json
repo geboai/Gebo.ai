@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Furnizor"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Furnizorul necesită credențiale",
+        "help" : "Aplicația furnizor/server este configurată pentru acces autentificat prin cheie API sau alte credențiale"
+      },
+      "baseUrl1" : {
+        "label" : "Url-ul de bază al API-ului",
+        "help" : "Url de bază al furnizorului pentru serviciile API"
+      },
+      "enableAllFunctions" : {
+        "label" : "activează toate apelurile de funcții",
+        "help" : "Activează toate instrumentele și apelurile de funcții disponibile, dacă nu este setat, va fi posibil să le activezi mai târziu din panoul de administrare llms"
       }
     }
   },

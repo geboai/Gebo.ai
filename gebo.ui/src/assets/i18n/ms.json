@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Pembekal"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Penyedia memerlukan kelayakan",
+        "help" : "Aplikasi pelayan/penyedia dikonfigurasikan untuk akses yang diautentikasi melalui kunci api atau kelayakan lain"
+      },
+      "baseUrl1" : {
+        "label" : "Url asas api",
+        "help" : "Url asas penyedia untuk perkhidmatan api"
+      },
+      "enableAllFunctions" : {
+        "label" : "aktifkan semua panggilan fungsi",
+        "help" : "Aktifkan semua alat dan panggilan fungsi yang tersedia, jika tidak ditetapkan ia boleh diaktifkan kemudian di panel pentadbiran llms"
       }
     }
   },

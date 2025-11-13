@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Dostawca"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Dostawca wymaga poświadczeń",
+        "help" : "Aplikacja dostawcy/serwera jest skonfigurowana do uwierzytelnionego dostępu za pomocą klucza API lub innych poświadczeń"
+      },
+      "baseUrl1" : {
+        "label" : "Podstawowy adres url API",
+        "help" : "Podstawowy adres url dostawcy do usług API"
+      },
+      "enableAllFunctions" : {
+        "label" : "włącz wszystkie wywołania funkcji",
+        "help" : "Włącz wszystkie dostępne narzędzia i wywołania funkcji; jeśli nie ustawione, będzie można je włączyć później w panelu administracyjnym llms"
       }
     }
   },

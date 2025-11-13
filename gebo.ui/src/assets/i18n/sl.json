@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Ponudnik"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Ponudnik zahteva poverilnice",
+        "help" : "Aplikacija ponudnika/strežnika je konfigurirana za overjen dostop prek api ključa ali drugih poverilnic"
+      },
+      "baseUrl1" : {
+        "label" : "Osnovni api url",
+        "help" : "Osnovni url ponudnika za api storitve"
+      },
+      "enableAllFunctions" : {
+        "label" : "omogoči vse funkcije",
+        "help" : "Omogoči vsa razpoložljiva orodja in klice funkcij; če ni nastavljeno, jih je mogoče omogočiti kasneje v administraciji llms"
       }
     }
   },

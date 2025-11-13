@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Ofruesi"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Ofruesi kërkon kredenciale",
+        "help" : "Aplikacioni ofrues/server është konfiguruar për akses të autentikuar përmes api key ose kredencialeve të tjera"
+      },
+      "baseUrl1" : {
+        "label" : "Url bazë e api",
+        "help" : "Url bazë e ofruesit për shërbimet api"
+      },
+      "enableAllFunctions" : {
+        "label" : "aktivizo të gjitha thirrjet e funksioneve",
+        "help" : "Aktivizo të gjitha mjetet dhe thirrjet e funksioneve të disponueshme; nëse nuk caktohet, mund t’i aktivizoni më vonë në panelin e administrimit të llms"
       }
     }
   },

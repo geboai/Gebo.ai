@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Təminatçı"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Təchizatçı giriş məlumatları tələb edir",
+        "help" : "Təchizatçı/server tətbiqi api açarı və ya digər giriş məlumatları ilə autentifikasiya üçün qurulub"
+      },
+      "baseUrl1" : {
+        "label" : "Əsas api url",
+        "help" : "API xidmətləri üçün təchizatçının əsas url-i"
+      },
+      "enableAllFunctions" : {
+        "label" : "bütün funksiya çağırışlarını aktiv et",
+        "help" : "Bütün mövcud alətləri və funksiya çağırışlarını aktiv edin, əgər qurulmayıbsa, sonradan llms admin panelində aktiv etmək mümkün olacaq"
       }
     }
   },

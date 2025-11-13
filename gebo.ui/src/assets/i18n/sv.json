@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Leverantör"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Leverantören kräver inloggningsuppgifter",
+        "help" : "Leverantören/serverapplikationen är konfigurerad för autentiserad åtkomst via api-nyckel eller andra inloggningsuppgifter"
+      },
+      "baseUrl1" : {
+        "label" : "Bas-API-url",
+        "help" : "Leverantörens bas-URL för API-tjänster"
+      },
+      "enableAllFunctions" : {
+        "label" : "aktivera alla funktioner",
+        "help" : "Aktivera alla tillgängliga verktyg och funktionsanrop. Om det inte är valt går det att aktivera dem senare i llms administrationspanel"
       }
     }
   },

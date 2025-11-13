@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Nhà cung cấp"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Nhà cung cấp yêu cầu thông tin xác thực",
+        "help" : "Ứng dụng nhà cung cấp/máy chủ được cấu hình để truy cập xác thực qua api key hoặc thông tin xác thực khác"
+      },
+      "baseUrl1" : {
+        "label" : "Url api cơ bản",
+        "help" : "Url cơ bản của nhà cung cấp cho các dịch vụ api"
+      },
+      "enableAllFunctions" : {
+        "label" : "bật tất cả cuộc gọi chức năng",
+        "help" : "Bật tất cả công cụ và cuộc gọi chức năng khả dụng, nếu chưa được đặt bạn có thể bật chúng sau trong bảng quản trị llms"
       }
     }
   },

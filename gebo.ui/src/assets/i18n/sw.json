@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Mtoa huduma"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Mtoa huduma anahitaji kitambulisho",
+        "help" : "Programu ya mtoa huduma/server imepangwa kwa ufikiaji ulioidhinishwa kupitia kingo ya api au kitambulisho kingine"
+      },
+      "baseUrl1" : {
+        "label" : "Base api url",
+        "help" : "Base url ya mtoa huduma kwa huduma za api"
+      },
+      "enableAllFunctions" : {
+        "label" : "wezesha simu zote za kazi",
+        "help" : "Washa zana zote na simu za kazi zinazopatikana, kama haitowekwa itawezekana kuzianisha baadaye kwenye paneli ya utawala wa llms"
       }
     }
   },

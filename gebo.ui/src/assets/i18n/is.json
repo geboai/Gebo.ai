@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Veirandi"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Þjónustan krefst auðkenningar",
+        "help" : "Þjónustan/forritið er stillt fyrir auðkenndan aðgang með api-lykli eða öðrum skilríkjum"
+      },
+      "baseUrl1" : {
+        "label" : "Grunnslóð api",
+        "help" : "Grunnslóð þjónustuveitanda fyrir api þjónustur"
+      },
+      "enableAllFunctions" : {
+        "label" : "virkja allar aðgerðir",
+        "help" : "Virkja öll tiltæk verkfæri og aðgerðir, ef það er ekki valið er hægt að virkja þau síðar í llms stjórnborði"
       }
     }
   },

@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Poskytovateľ"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Poskytovateľ vyžaduje prihlasovacie údaje",
+        "help" : "Aplikačný server poskytovateľa je nastavený na overený prístup pomocou api kľúča alebo iných prihlasovacích údajov"
+      },
+      "baseUrl1" : {
+        "label" : "Základná api adresa",
+        "help" : "Základná adresa poskytovateľa pre api služby"
+      },
+      "enableAllFunctions" : {
+        "label" : "povoliť všetky funkčné volania",
+        "help" : "Povoľte všetky dostupné nástroje a funkčné volania, ak nie je nastavené, bude ich možné povoliť neskôr v llms administračnom paneli"
       }
     }
   },

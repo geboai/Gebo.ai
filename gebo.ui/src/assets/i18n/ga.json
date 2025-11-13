@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Soláthraí"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Teastaíonn dintiúir ón soláthraí",
+        "help" : "Tá an soláthraí/nó an feidhmchlár freastalaí cumraithe le haghaidh rochtain fhíordheimhnithe trí eochair api nó dintiúir eile"
+      },
+      "baseUrl1" : {
+        "label" : "Bun-url api",
+        "help" : "Bun-url an tsoláthraí do sheirbhísí api"
+      },
+      "enableAllFunctions" : {
+        "label" : "cumasaigh gach glao feidhme",
+        "help" : "Cumasaigh gach uirlis agus glao feidhme atá ar fáil, mura mbíonn sé socraithe, beidh sé indéanta iad a chumasú níos déanaí sa phainéal riaracháin llms"
       }
     }
   },

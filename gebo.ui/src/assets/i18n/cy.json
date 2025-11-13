@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Darparwr"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Mae angen manylion mewngofnodi ar y darparwr",
+        "help" : "Mae'r darparwr/cymhwysiad gweinydd wedi'i ffurfweddu ar gyfer mynediad wedi'i ddilysu trwy allwedd api neu fanylion mewngofnodi eraill"
+      },
+      "baseUrl1" : {
+        "label" : "Prif url api",
+        "help" : "Prif url y darparwr ar gyfer gwasanaethau api"
+      },
+      "enableAllFunctions" : {
+        "label" : "galluogi pob galwad swyddogaeth",
+        "help" : "Galluogwch bob offeryn a galwad swyddogaeth sydd ar gael; os na chaiff ei osod, bydd modd eu galluogi’n ddiweddarach yn y panel gweinyddu llms"
       }
     }
   },

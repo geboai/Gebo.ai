@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Tarjoaja"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Palveluntarjoaja vaatii tunnistetiedot",
+        "help" : "Palveluntarjoaja/palvelinsovellus on määritetty käyttämään tunnistautumista api-avaimen tai muiden tunnistetietojen avulla"
+      },
+      "baseUrl1" : {
+        "label" : "Perus api-osoite",
+        "help" : "Palveluntarjoajan perusosoite api-palveluille"
+      },
+      "enableAllFunctions" : {
+        "label" : "ota käyttöön kaikki toimintokutsut",
+        "help" : "Ota käyttöön kaikki saatavilla olevat työkalut ja toimintokutsut, jos ei valittu, ne voi ottaa käyttöön myöhemmin llms-hallintapaneelissa"
       }
     }
   },

@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Sağlayıcı"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Sağlayıcı kimlik bilgileri gerektiriyor",
+        "help" : "Sağlayıcı/sunucu uygulaması, api anahtarı veya diğer kimlik bilgileri ile kimlik doğrulamalı erişim için yapılandırılmıştır"
+      },
+      "baseUrl1" : {
+        "label" : "Temel api url'si",
+        "help" : "Api servisleri için sağlayıcı temel url'si"
+      },
+      "enableAllFunctions" : {
+        "label" : "Tüm fonksiyon çağrılarını etkinleştir",
+        "help" : "Mevcut tüm araçları ve fonksiyon çağrılarını etkinleştir. Eğer ayarlanmazsa, daha sonra llms yönetici panelinde etkinleştirilebilir"
       }
     }
   },

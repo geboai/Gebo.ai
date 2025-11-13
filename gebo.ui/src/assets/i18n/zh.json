@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "提供商"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "该提供商需要凭证",
+        "help" : "该提供商/服务器应用已配置为通过api key或其他凭证进行认证访问"
+      },
+      "baseUrl1" : {
+        "label" : "API基础网址",
+        "help" : "用于API服务的提供商基础网址"
+      },
+      "enableAllFunctions" : {
+        "label" : "启用所有功能调用",
+        "help" : "启用所有可用工具和功能调用，若未设置，可在llms管理面板后续启用"
       }
     }
   },

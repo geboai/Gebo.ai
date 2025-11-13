@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Provedor"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "O provedor requer credenciais",
+        "help" : "O provedor/aplicativo do servidor está configurado para acesso autenticado via chave de API ou outras credenciais"
+      },
+      "baseUrl1" : {
+        "label" : "URL base da API",
+        "help" : "URL base do provedor para serviços de API"
+      },
+      "enableAllFunctions" : {
+        "label" : "ativar todas as chamadas de função",
+        "help" : "Ative todas as ferramentas e chamadas de função disponíveis; se não definido, será possível ativá-las depois no painel de administração do llms"
       }
     }
   },

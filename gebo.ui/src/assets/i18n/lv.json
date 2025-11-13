@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Paklpojumu sniedzējs"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Pakalpojumu sniedzējam ir nepieciešamas autentifikācijas dati",
+        "help" : "Pakalpojumu sniedzējs/servera lietotne ir iestatīta piekļuvei ar api atslēgu vai citiem autentifikācijas datiem"
+      },
+      "baseUrl1" : {
+        "label" : "Bāzes api adrese",
+        "help" : "Pakalpojumu sniedzēja bāzes adrese api pakalpojumiem"
+      },
+      "enableAllFunctions" : {
+        "label" : "iespējot visas funkciju izsaukšanas",
+        "help" : "Iespējo visus pieejamos rīkus un funkciju izsaukšanas; ja nav atzīmēts, tos varēs aktivizēt vēlāk llms administrēšanas panelī"
       }
     }
   },

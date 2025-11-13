@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Provider"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Der Anbieter erfordert Zugangsdaten",
+        "help" : "Die Anbieter- oder Serveranwendung ist für den authentifizierten Zugriff per API-Schlüssel oder andere Zugangsdaten eingerichtet"
+      },
+      "baseUrl1" : {
+        "label" : "Basis-API-URL",
+        "help" : "Anbieter-Basis-URL für API-Dienste"
+      },
+      "enableAllFunctions" : {
+        "label" : "Alle Funktionsaufrufe aktivieren",
+        "help" : "Alle verfügbaren Tools und Funktionsaufrufe aktivieren; falls nicht gesetzt, können sie später im LLMS-Adminbereich aktiviert werden"
       }
     }
   },

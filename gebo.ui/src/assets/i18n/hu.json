@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Szolgáltató"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "A szolgáltató hitelesítést igényel",
+        "help" : "A szolgáltató/szerver alkalmazás hitelesített hozzáférést igényel api kulccsal vagy más hitelesítő adatokkal"
+      },
+      "baseUrl1" : {
+        "label" : "Alap api url",
+        "help" : "Szolgáltató alap url az api szolgáltatásokhoz"
+      },
+      "enableAllFunctions" : {
+        "label" : "minden funkció engedélyezése",
+        "help" : "Minden elérhető eszköz és funkcióhívás engedélyezése, ha nincs beállítva, később az llms admin panelen is lehetséges aktiválni"
       }
     }
   },

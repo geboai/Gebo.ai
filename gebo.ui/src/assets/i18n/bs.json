@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Provajder"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Pružalac zahtijeva akreditive",
+        "help" : "Aplikacija/server pružaoca je podešena za autentificirani pristup putem api ključa ili drugih akreditiva"
+      },
+      "baseUrl1" : {
+        "label" : "Osnovni api url",
+        "help" : "Osnovni url pružaoca za api usluge"
+      },
+      "enableAllFunctions" : {
+        "label" : "omogući sve pozive funkcija",
+        "help" : "Omogućite sve dostupne alate i pozive funkcija, ako nije postavljeno biće moguće omogućiti ih kasnije u llms administratorskom panelu"
       }
     }
   },

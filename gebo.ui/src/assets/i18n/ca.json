@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Proveïdor"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "El proveïdor requereix credencials",
+        "help" : "L'aplicació del proveïdor/servidor està configurada per accés autenticat mitjançant clau api o altres credencials"
+      },
+      "baseUrl1" : {
+        "label" : "Url base de l'api",
+        "help" : "Url base del proveïdor per als serveis d'api"
+      },
+      "enableAllFunctions" : {
+        "label" : "activa totes les trucades de funció",
+        "help" : "Activa totes les eines i trucades de funció disponibles, si no s'activa es podrà fer més endavant des del panell d'administració de llms"
       }
     }
   },

@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Provider"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Kailangan ng kredensyal ng provider",
+        "help" : "Ang provider/server application ay nakaayos para sa authenticated na access gamit ang api key o ibang kredensyal"
+      },
+      "baseUrl1" : {
+        "label" : "Base api url",
+        "help" : "Base url ng provider para sa mga serbisyo ng api"
+      },
+      "enableAllFunctions" : {
+        "label" : "i-enable lahat ng function calls",
+        "help" : "I-enable lahat ng available na tools at function calls; kung hindi itatakda, maaari itong i-enable sa llms admin panel sa ibang pagkakataon"
       }
     }
   },

@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Provider"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Il provider richiede credenziali",
+        "help" : "L'applicazione provider/server è configurata per l'accesso autenticato tramite api key o altre credenziali"
+      },
+      "baseUrl1" : {
+        "label" : "Url base api",
+        "help" : "Url base del provider per i servizi api"
+      },
+      "enableAllFunctions" : {
+        "label" : "Abilita tutte le funzioni",
+        "help" : "Abilita tutti gli strumenti e le funzioni disponibili; se non selezionato potrai abilitarli successivamente dal pannello di amministrazione LLMS"
       }
     }
   },

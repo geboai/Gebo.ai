@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Provider"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "De aanbieder vereist inloggegevens",
+        "help" : "De aanbieder/servertoepassing is geconfigureerd voor geauthenticeerde toegang via api-sleutel of andere inloggegevens"
+      },
+      "baseUrl1" : {
+        "label" : "Basis-api-url",
+        "help" : "Provider basis-url voor api-diensten"
+      },
+      "enableAllFunctions" : {
+        "label" : "alle functies inschakelen",
+        "help" : "Schakel alle beschikbare tools en functieaanroepen in. Als dit niet is ingesteld, kun je ze later inschakelen in het llms-beheerpanel"
       }
     }
   },

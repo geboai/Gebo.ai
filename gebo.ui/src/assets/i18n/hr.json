@@ -2782,6 +2782,18 @@
       },
       "ProviderNameField" : {
         "label" : "Pružatelj"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Pružatelj zahtijeva vjerodajnice",
+        "help" : "Pružatelj/server aplikacija je konfigurirana za pristup uz autentikaciju putem API ključa ili drugih vjerodajnica"
+      },
+      "baseUrl1" : {
+        "label" : "Osnovni API url",
+        "help" : "Osnovni url pružatelja za API usluge"
+      },
+      "enableAllFunctions" : {
+        "label" : "omogući sve funkcije",
+        "help" : "Omogućite sve dostupne alate i funkcije; ako nije postavljeno, moguće ih je omogućiti kasnije u llms administracijskom panelu"
       }
     }
   },
