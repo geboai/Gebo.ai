@@ -46,14 +46,19 @@ export class LoginService {
   private actualAuthProviderId?: string;
   private subscription?: Subscription;
   private tokenRenewPollingPeriodMsec: number = 60000;
+  public loginActivated: Subject<boolean> = new Subject();
+  /**
+   * Subject that emits the current logged-in user information or undefined when logged out
+   */
+  logged: Subject<UserInfo | undefined> = new Subject();
 
   /**
-   * Constructor for the LoginService
-   * @param activatedRouter Current active route for navigation purposes
-   * @param router Router for navigating between routes
-   * @param authControllerService Service for authentication operations
-   * @param userController Service for user profile operations
-   */
+ * Constructor for the LoginService
+ * @param activatedRouter Current active route for navigation purposes
+ * @param router Router for navigating between routes
+ * @param authControllerService Service for authentication operations
+ * @param userController Service for user profile operations
+ */
   public constructor(
     @Inject(BASE_PATH) private basePath: string,
     private oauth2Service: Oauth2LoginService,
@@ -90,10 +95,6 @@ export class LoginService {
     }
   }
   public authDataSubject: Subject<SecurityHeaderData | undefined> = new Subject<SecurityHeaderData | undefined>();
-  /**
-   * Subject that emits the current logged-in user information or undefined when logged out
-   */
-  logged: Subject<UserInfo | undefined> = new Subject();
 
   /**
    * Authenticates a user with the provided credentials on local JWT

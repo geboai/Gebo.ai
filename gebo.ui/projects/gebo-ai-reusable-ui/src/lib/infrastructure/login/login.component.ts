@@ -120,6 +120,7 @@ export class LoginComponent implements OnInit {
         if (message) this.userMessages = [message];
       }
     });
+    this.loginService.loginActivated.next(true);
   }
 
   /**

@@ -98,14 +98,8 @@ export class AppComponent implements OnInit {
     });
   }
   private subscription?: Subscription;
-  ngOnInit() {
-    this.primengConfig.ripple.set(true);
-
-    if (!this.loginService.isOauth2LandingPage()) {
-      this.loginService.logged.subscribe(user => {
-        this.userLogged = user ? true : false;
-      });
-      this.loginService.loadUserProfile().subscribe(x => {
+  private loadUserAndMenu():void {
+    this.loginService.loadUserProfile().subscribe(x => {
         this.userLogged = x ? true : false;
         const items: MegaMenuItem[] = [];
         if (this.userLogged) {
@@ -142,7 +136,22 @@ export class AppComponent implements OnInit {
         }
         this.userInfo = x;
       });
+  }
+  ngOnInit() {
+    this.primengConfig.ripple.set(true);
+
+    if (!this.loginService.isOauth2LandingPage()) {
+      this.loginService.logged.subscribe(user => {
+        this.userLogged = user ? true : false;
+      });
+      this.loadUserAndMenu();
     }
+    this.loginService.loginActivated.subscribe({
+      next: (activated) => {
+        this.menuItems=[];
+        this.userLogged=false;
+      }
+    });
   }
   title = 'Gebo.ai, the RAG system for software developers';
 }
