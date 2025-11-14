@@ -46,6 +46,7 @@ export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy
     public playPaused: boolean = false;
     /** Input to disable the audio control component */
     @Input() public disabled: boolean = false;
+    @Input() public viewLabels:boolean=true;
     /** Input for audio blob to be played */
     @Input() public playAudioTrack?: Blob;
     /** Event emitter that fires when audio recording is completed */

@@ -14,11 +14,11 @@
 
 <div class="grid">
     <div class="col-12" style="height: 250px;">
-        <p-tabs>
+        <p-tabs value="0">
             <p-tablist>
-                <p-tab *ngIf="hasKnowledgeBases" value="0">Browse company files</p-tab>
-                <p-tab *ngIf="hasKnowledgeBases" value="1">Semantic search</p-tab>
-                <p-tab *ngIf="hasKnowledgeBases" value="2">Filename search</p-tab>
+                <p-tab *ngIf="hasKnowledgeBases" value="0" id="BrowseCompanyFilesLabel" gebo-ai-text>Browse company files</p-tab>
+                <p-tab *ngIf="hasKnowledgeBases" value="1" id="SemanticSearchFilesLabel" gebo-ai-text>Semantic search</p-tab>
+                <p-tab *ngIf="hasKnowledgeBases" value="2" id="SearchFilesLabel" gebo-ai-text>Filename search</p-tab>
                 <p-tab value="3">Your folders/files</p-tab>
             </p-tablist>
             <p-tabpanels>

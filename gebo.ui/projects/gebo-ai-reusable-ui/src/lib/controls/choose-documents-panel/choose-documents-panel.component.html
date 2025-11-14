@@ -16,12 +16,12 @@
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <div class="col-6 lg:col-2 xl:col-2 md:col-6 sm:col-12" style="vertical-align: top;">
+    <div class="lg:col-1 xl:col-1 md:col-1 sm:col-2" style="vertical-align: top;">
 
-        <p-button id="ChatWithDocsBtn"  gebo-ai-label   icon="pi pi-search" title="Browse or search and select documents to work with" [outlined]="true" styleClass="w-full" [disabled]="readonly || interactionDisabled"
-            label="Chat with docs" (onClick)="openSelectDocumentsWindow()"></p-button>
+        <p-button id="ChatWithDocsBtnNew" [text]="true"  gebo-ai-label   icon="pi pi-search" title="Browse or search and select documents to chat with"   [disabled]="readonly || interactionDisabled"
+             (onClick)="openSelectDocumentsWindow()"></p-button>
     </div>
-    <div class="col-6 lg:col-10 xl:col-10 md:col-6 sm:col-12">
+    <div class="lg:col-11 xl:col-11 md:col-11 sm:col-10">
         <span *ngFor="let doc of listedDocuments" style="list-style: none;break-after: avoid;">
             <p-button  id="ChatWithDocsRemoveBtn"  gebo-ai-label  icon="pi pi-times-circle" [text]="true" (onClick)="doRemoveFile(doc)" *ngIf="readonly===false && interactionDisabled===false"></p-button>
             <gebo-ui-document-opener-button [document]="doc"></gebo-ui-document-opener-button>
