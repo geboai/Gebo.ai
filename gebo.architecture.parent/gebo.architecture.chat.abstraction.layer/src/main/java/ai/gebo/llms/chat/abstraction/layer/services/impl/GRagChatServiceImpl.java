@@ -202,8 +202,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 					interactions = new ArrayList<ChatInteractions>();
 				}
 				ChatInteractions interaction = new ChatInteractions();
-				interaction.request = request;
-				interaction.response = response;
+				interaction.setRequest(request);
+				interaction.setResponse(response);
 				interactions.add(interaction);
 				userContext.setInteractions(interactions);
 				persistenceManager.update(userContext);
@@ -506,7 +506,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setDocumentsRef(docrefs);
 				request.setDocuments(extractedDocuments);
 				Prompt prompt = promptTemplate.create();
-				return streamChatClient(chatHandler, prompt, context, request, response, userContext, history,contextdocs);
+				return streamChatClient(chatHandler, prompt, context, request, response, userContext, history,
+						contextdocs);
 			} catch (Throwable th) {
 				response.getBackendMessages().add(GUserMessage.errorMessage("Error on service provider", th));
 				LOGGER.error("Error chat handling", th);

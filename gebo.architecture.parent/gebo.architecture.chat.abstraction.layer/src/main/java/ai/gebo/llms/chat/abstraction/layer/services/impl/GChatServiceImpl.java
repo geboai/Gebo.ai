@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
@@ -53,25 +50,25 @@ import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 
 /**
- * Service implementation for handling chat interactions within the system.
- * It extends {@link AbstractChatService} and implements the {@link IGChatService} interface.
- * AI generated comments
+ * Service implementation for handling chat interactions within the system. It
+ * extends {@link AbstractChatService} and implements the {@link IGChatService}
+ * interface. AI generated comments
  */
 @Service
 public class GChatServiceImpl extends AbstractChatService implements IGChatService {
-	
+
 	@Autowired
 	protected IGChatModelRuntimeConfigurationDao chatModelConfigurations;
-	
+
 	@Autowired
 	protected IGPromptConfigDao promptsDao;
-	
+
 	@Autowired
 	protected InteractionsContextService interactionsContext;
-	
+
 	@Autowired
 	protected IGSecurityService securityService;
-	
+
 	@Autowired
 	protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
 
@@ -83,18 +80,19 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	}
 
 	/**
-	 * Handles the chat interaction using the specified chat model handler, user context, request, and response type.
-	 * This is a generic method supporting different response types.
+	 * Handles the chat interaction using the specified chat model handler, user
+	 * context, request, and response type. This is a generic method supporting
+	 * different response types.
 	 *
-	 * @param <T> the type parameter for response type
-	 * @param handler the chat model handler
-	 * @param userContext the user chat context
-	 * @param request the chat request object
+	 * @param <T>          the type parameter for response type
+	 * @param handler      the chat model handler
+	 * @param userContext  the user chat context
+	 * @param request      the chat request object
 	 * @param responseType the class type of the expected response
 	 * @return a templated chat response
 	 * @throws GeboPersistenceException if persistence fails
-	 * @throws GeboChatException if there is an error in chat processing
-	 * @throws LLMConfigException if there is a configuration error
+	 * @throws GeboChatException        if there is an error in chat processing
+	 * @throws LLMConfigException       if there is a configuration error
 	 */
 	private <T> GeboTemplatedChatResponse<T> chat(IGConfigurableChatModel handler, GUserChatContext userContext,
 			GeboChatRequest request, Class<T> responseType)
@@ -144,8 +142,8 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 		// Update interactions
 		ChatInteractions interaction = new ChatInteractions();
-		interaction.request = request;
-		interaction.response = gresponse;
+		interaction.setRequest(request);
+		interaction.setResponse(gresponse);
 		interactions.add(interaction);
 		userContext.setInteractions(interactions);
 		persistenceManager.update(userContext);
@@ -181,7 +179,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			// Check access rights for each configuration
 			if (!securityService.isCanAccess((GBaseChatModelConfig) mconfig.getConfig(), true))
 				continue;
-				
+
 			GShortModelInfo object = new GShortModelInfo();
 			object.setCode(mconfig.getCode());
 			object.setDescription(mconfig.getDescription());
@@ -195,8 +193,8 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	/**
 	 * Initiates a templated chat process.
 	 *
-	 * @param <T> the type parameter for response type
-	 * @param request the chat request
+	 * @param <T>          the type parameter for response type
+	 * @param request      the chat request
 	 * @param responseType the class type of the expected response
 	 * @return a templated chat response
 	 */
@@ -264,14 +262,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	/**
 	 * Provides a templated chat implementation that is currently not configured.
 	 * 
-	 * @param <T> the type parameter for response type
-	 * @param request the chat request
-	 * @param prompt the prompt for the chat
+	 * @param <T>               the type parameter for response type
+	 * @param request           the chat request
+	 * @param prompt            the prompt for the chat
 	 * @param customEnvironment custom environment variables
-	 * @param contents custom contents
-	 * @param responseType the class type of the expected response
+	 * @param contents          custom contents
+	 * @param responseType      the class type of the expected response
 	 * @return always returns null as it is not implemented
-	 * @throws GeboChatException if there is an error in chat processing
+	 * @throws GeboChatException  if there is an error in chat processing
 	 * @throws LLMConfigException if there is a configuration error
 	 */
 	@Override
@@ -305,7 +303,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	/**
 	 * Transcribes the input stream using the specified model code.
 	 *
-	 * @param is the input stream
+	 * @param is        the input stream
 	 * @param modelCode the code of the model to use for transcription
 	 * @return the transcribed text
 	 * @throws LLMConfigException if there is a problem with the model configuration
@@ -322,7 +320,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	/**
 	 * Converts text to speech using the specified model code.
 	 *
-	 * @param text the text to convert
+	 * @param text      the text to convert
 	 * @param modelCode the code of the model to use for conversion
 	 * @return an input stream with the speech data
 	 * @throws LLMConfigException if there is a problem with the model configuration

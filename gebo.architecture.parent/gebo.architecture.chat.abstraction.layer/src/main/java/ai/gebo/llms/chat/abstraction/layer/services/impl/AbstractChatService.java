@@ -44,7 +44,6 @@ import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
-import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -185,12 +184,12 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		List<Message> message_list = new ArrayList<>();
 		if (messages != null) {
 			for (ChatInteractions chatInteraction : messages) {
-				GeboChatRequest request = chatInteraction.request;
+				GeboChatRequest request = chatInteraction.getRequest();
 				if (request != null) {
 					UserMessage _request = new UserMessage(request.getQuery());
 					message_list.add(_request);
 				}
-				GeboTemplatedChatResponse response = chatInteraction.response;
+				GeboTemplatedChatResponse response = chatInteraction.getResponse();
 				if (response != null) {
 					AssistantMessage _response = new AssistantMessage(stringhify(response.getQueryResponse()));
 					message_list.add(_response);
@@ -424,8 +423,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 					interactions = new ArrayList<ChatInteractions>();
 				}
 				ChatInteractions interaction = new ChatInteractions();
-				interaction.request = request;
-				interaction.response = response;
+				interaction.setRequest(request);
+				interaction.setResponse(response);
 				interactions.add(interaction);
 				userContext.setInteractions(interactions);
 				userContext.setDateModified(new Date());
@@ -459,7 +458,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			cf.setFunctionName(toolCall.name());
 			cf.setParamsDescription(List.of(toolCall.arguments()));
 			out.add(cf);
-		}
+		} 
 		return out;
 	}
 

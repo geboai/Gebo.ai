@@ -106,25 +106,24 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		if (userContext.getInteractions() != null) {
 			for (ChatInteractions interaction : userContext.getInteractions()) {
-				if (interaction.requestNTokens == null && interaction.request != null) {
-					interaction.requestNTokens = tokenEstimator.estimate(interaction.request.getQuery());
+				if (interaction.getRequestNTokens() == null && interaction.getRequest() != null) {
+					interaction.setRequestNTokens(tokenEstimator.estimate(interaction.getRequest().getQuery()));
 				}
 
-				if (interaction.responseNTokens == null && interaction.response != null
-						&& interaction.response.getQueryResponse() != null) {
-					interaction.responseNTokens = tokenEstimator
-							.estimate(interaction.response.getQueryResponse().toString());
+				if (interaction.getResponseNTokens() == null && interaction.getResponse() != null
+						&& interaction.getResponse().getQueryResponse() != null) {
+					interaction.setResponseNTokens(
+							tokenEstimator.estimate(interaction.getResponse().getQueryResponse().toString()));
 				}
-				if (interaction.requestNTokens != null) {
-					nhistoryTokens += interaction.requestNTokens;
+				if (interaction.getRequestNTokens() != null) {
+					nhistoryTokens += interaction.getRequestNTokens();
 				}
 
-				if (interaction.responseNTokens != null) {
-					nhistoryTokens += interaction.responseNTokens;
+				if (interaction.getResponseNTokens() != null) {
+					nhistoryTokens += interaction.getResponseNTokens();
 				}
-				if (interaction.response.getQueryResponse() != null) {
-					history.add(interaction);
-				}
+
+				history.add(interaction);
 
 			}
 		}
@@ -336,8 +335,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	private int integrateDeltaContent(RagDocumentsCachedDaoResult delta, ChatInteractions interaction,
 			Map<String, Boolean> alreadyInFragments, int budget) throws CloneNotSupportedException {
 		int remainingBudget = budget;
-		if (interaction.request != null && interaction.request.getDocuments() != null) {
-			RagDocumentsCachedDaoResult current = interaction.request.getDocuments();
+		if (interaction.getRequest() != null && interaction.getRequest().getDocuments() != null) {
+			RagDocumentsCachedDaoResult current = interaction.getRequest().getDocuments();
 			for (RagDocumentReferenceItem doc : current.getDocumentItems()) {
 				// shallow clone the docreference to recompose one doc with fragments not yet in
 				// the out contents
@@ -453,8 +452,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 				boolean goingFurther = true;
 				for (int i = userContext.getInteractions().size() - 1; i >= 0 && goingFurther; i--) {
 					ChatInteractions interaction = userContext.getInteractions().get(i);
-					int reqRespSize = (interaction.requestNTokens != null ? interaction.requestNTokens : 0)
-							+ (interaction.responseNTokens != null ? interaction.responseNTokens : 0);
+					int reqRespSize = (interaction.getRequestNTokens() != null ? interaction.getRequestNTokens() : 0)
+							+ (interaction.getResponseNTokens() != null ? interaction.getResponseNTokens() : 0);
 					if ((tokensCount + reqRespSize) <= tokensBudget) {
 						tokensCount += reqRespSize;
 						documents.add(interaction);
