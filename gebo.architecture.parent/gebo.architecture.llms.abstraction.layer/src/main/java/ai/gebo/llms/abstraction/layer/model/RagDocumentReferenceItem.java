@@ -20,7 +20,7 @@ import ai.gebo.model.ExtractedDocumentMetaData;
  * Retrieval-Augmented Generation (RAG) model, holding metadata and a list of
  * document fragments.
  */
-public class RagDocumentReferenceItem implements IRagContent {
+public class RagDocumentReferenceItem implements IRagContent,Cloneable {
 
 	// Number of tokens in the document.
 	private long NTokens;
@@ -330,5 +330,8 @@ public class RagDocumentReferenceItem implements IRagContent {
 		this.weightedResultsRanking = weightedResultsRanking;
 	}
 
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	
 }

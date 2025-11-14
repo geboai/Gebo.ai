@@ -34,12 +34,12 @@ import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
@@ -74,7 +74,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	@Autowired
 	protected InteractionsContextService interactionsContext;
 	@Autowired
-	protected IGSecurityService securityService; 
+	protected IGSecurityService securityService;
 	@Autowired
 	protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
 
@@ -199,7 +199,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				response.setCalledFunctions(context.getCalledFunctions());
 				List<ChatInteractions> interactions = userContext.getInteractions();
 				if (interactions == null) {
-					interactions = new ArrayList<GUserChatContext.ChatInteractions>();
+					interactions = new ArrayList<ChatInteractions>();
 				}
 				ChatInteractions interaction = new ChatInteractions();
 				interaction.request = request;
@@ -426,7 +426,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				}
 			}
 			// Returns the chat stream for the request, profile and context
-			return this.streamChat(request, chatProfile, userContext,user);
+			return this.streamChat(request, chatProfile, userContext, user);
 		} catch (GeboPersistenceException e) {
 			throw new GeboChatException("Problems with mongodb", e);
 		} finally {
@@ -441,7 +441,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @param request     GeboChatRequest
 	 * @param chatProfile GChatProfileConfiguration
 	 * @param userContext GUserChatContext
-	 * @param user 
+	 * @param user
 	 * @return Flux of GeboChatMessageEnvelope
 	 * @throws LLMConfigException If configuration is not properly set
 	 */
@@ -490,7 +490,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			try {
 
 				ChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRequest(chatProfile,
-						userContext,user, request, embeddingHandler, chatHandler, visibleKnowledgeBaseCodes);
+						userContext, user, request, embeddingHandler, chatHandler, visibleKnowledgeBaseCodes);
 				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				if (chatHandler.getConfig() != null && chatHandler.getConfig().getChoosedModel() != null) {
 					response.setUsedChatModelCode(chatHandler.getConfig().getChoosedModel().getCode());
@@ -500,13 +500,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				}
 				List<ChatInteractions> history = limitedResourcesRequest.getHistory().getValue();
 				RagDocumentsCachedDaoResult extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
+				RagDocumentsCachedDaoResult contextDocuments = limitedResourcesRequest.getContextDocuments().getValue();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
-				List<Document> docs = extractedDocuments.aiDocumentsList();
+				List<Document> contextdocs = contextDocuments != null ? contextDocuments.aiDocumentsList() : List.of();
 				response.setDocumentsRef(docrefs);
+				request.setDocuments(extractedDocuments);
 				Prompt prompt = promptTemplate.create();
-
-				return streamChatClient(chatHandler, prompt, context, request, response, userContext, history, docrefs,
-						docs);
+				return streamChatClient(chatHandler, prompt, context, request, response, userContext, history,contextdocs);
 			} catch (Throwable th) {
 				response.getBackendMessages().add(GUserMessage.errorMessage("Error on service provider", th));
 				LOGGER.error("Error chat handling", th);

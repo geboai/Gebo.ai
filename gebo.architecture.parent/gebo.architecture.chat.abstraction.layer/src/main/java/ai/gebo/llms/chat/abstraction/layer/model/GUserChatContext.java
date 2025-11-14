@@ -31,17 +31,6 @@ import ai.gebo.model.base.GObjectRef;
 @Document
 public class GUserChatContext extends GBaseObject {
 
-    /**
-     * Inner class to represent individual interactions within a chat session.
-     * Captures both the request and response aspects of a chat interaction.
-     */
-    public static class ChatInteractions {
-        public GeboChatRequest request = null; // Stores the chat request
-        public Integer requestNTokens = null; // Number of tokens in the request
-        public GeboTemplatedChatResponse response = null; // Stores the chat response
-        public Integer responseNTokens = null; // Number of tokens in the response
-    };
-
     private Date chatCreationDateTime = null; // Timestamp for chat creation
     @HashIndexed
     private String username = null; // Username for the chat context

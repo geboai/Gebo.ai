@@ -6,19 +6,20 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
 /**
  * Gebo.ai comment agent
  *
- * Represents a chat request specific to the Gebo application that handles templated chat requests.
- * This class extends the functionality of the GeboTemplatedChatRequest for a specific type of data (String).
+ * Represents a chat request specific to the Gebo application that handles
+ * templated chat requests. This class extends the functionality of the
+ * GeboTemplatedChatRequest for a specific type of data (String).
  */
-public class GeboChatRequest extends GeboTemplatedChatRequest<String> {
-    // No additional fields or methods are currently defined for this class,
-    // it simply specializes the base class for use with String-type data.
+public class GeboChatRequest extends GeboTemplatedChatRequest<String> implements Cloneable {
+	// No additional fields or methods are currently defined for this class,
+	// it simply specializes the base class for use with String-type data.
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }

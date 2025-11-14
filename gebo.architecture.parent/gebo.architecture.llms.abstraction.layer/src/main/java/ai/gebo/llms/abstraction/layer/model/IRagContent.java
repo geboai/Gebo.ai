@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.model;
 
@@ -18,10 +15,10 @@ import java.util.stream.Stream;
 /**
  * Gebo.ai comment agent
  * 
- * Interface representing content with methods to manage token and byte counts, 
+ * Interface representing content with methods to manage token and byte counts,
  * and recalculate size based on child content.
  */
-public interface IRagContent {
+public interface IRagContent  {
 
 	/**
 	 * Gets the number of tokens.
@@ -52,14 +49,14 @@ public interface IRagContent {
 	public void setNBytes(long n);
 
 	/**
-	 * A Consumer implementation that calculates the total number of tokens and bytes
-	 * by iterating over a collection of IRagContent objects.
+	 * A Consumer implementation that calculates the total number of tokens and
+	 * bytes by iterating over a collection of IRagContent objects.
 	 */
 	class CounterConsumer implements Consumer<IRagContent> {
 		long nTokenTotal = 0, nBytesTotal = 0;
 
 		/**
-		 * Accepts an IRagContent instance, recalculates its size, and accumulates the 
+		 * Accepts an IRagContent instance, recalculates its size, and accumulates the
 		 * total number of tokens and bytes.
 		 * 
 		 * @param t the IRagContent instance
@@ -80,8 +77,8 @@ public interface IRagContent {
 	Stream<IRagContent> streamChilds();
 
 	/**
-	 * Recalculates the size of the content by iterating through its children 
-	 * with a CounterConsumer to update the total content size in tokens and bytes.
+	 * Recalculates the size of the content by iterating through its children with a
+	 * CounterConsumer to update the total content size in tokens and bytes.
 	 */
 	public default void recalculateSize() {
 		CounterConsumer consumer = new CounterConsumer();
@@ -91,4 +88,5 @@ public interface IRagContent {
 		setNBytes(consumer.nBytesTotal);
 		setNTokens(consumer.nTokenTotal);
 	}
+
 }

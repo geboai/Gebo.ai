@@ -17,8 +17,8 @@ import java.util.List;
 import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext.ChatInteractions;
 
 /**
  * Gebo.ai comment agent

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,11 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.ContextWindowLengthRangeSettings;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.HistoryStrategy;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
@@ -60,6 +61,10 @@ import ai.gebo.security.repository.UserRepository.UserInfos;
  */
 @Service
 public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResourcesUsePolicy {
+	private static final String GRAPH_RAG = "GRAPH-RAG";
+
+	private static final String SEMANTIC_RAG = "SEMANTIC-RAG";
+
 	private static final ObjectMapper mapper4logging = new ObjectMapper();
 	static {
 		mapper4logging.registerModule(new JavaTimeModule());
@@ -94,7 +99,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @return A TokenLimitedContent object containing the chat history and
 	 *         corresponding token count.
 	 */
-	protected TokenLimitedContent<List<ChatInteractions>> completeHistoryTokenEstimationAndComputeTotalNTokens(
+	private TokenLimitedContent<List<ChatInteractions>> completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(
 			GUserChatContext userContext) {
 		TokenLimitedContent<List<ChatInteractions>> _history = new TokenLimitedContent<List<ChatInteractions>>();
 		int nhistoryTokens = 0;
@@ -120,6 +125,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 				if (interaction.response.getQueryResponse() != null) {
 					history.add(interaction);
 				}
+
 			}
 		}
 		_history.setValue(history);
@@ -196,7 +202,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		int requestSize = lrequest.getQuery().getNToken();
 		// adding history history and the
 		// available tokens for documents will be already decreased from this allocation
-		lrequest.setHistory(completeHistoryTokenEstimationAndComputeTotalNTokens(userContext));
+		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
 		ChatModelRequestContextWindowStats stats = lrequest.getStats();
 		int availableTokensForDocuments = 0;
 		boolean historyToBeShrinked = false;
@@ -257,7 +263,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			}
 		}
 		extractedDocuments.getDocumentItems().forEach(x -> x.getFragments().forEach(y -> {
-			y.setOrigin("SEMANTIC-RAG");
+			y.setOrigin(SEMANTIC_RAG);
 		}));
 		lrequest.setDocuments(new TokenLimitedContent<RagDocumentsCachedDaoResult>());
 		lrequest.getDocuments().setValue(extractedDocuments);
@@ -278,6 +284,17 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			}
 
 		}
+		int historicDocumentsBudget = availableTokensForDocuments - lrequest.getDocuments().getNToken();
+		// i add all documents from the history untill fitting the maximum docs size
+		if (historicDocumentsBudget > 0) {
+			lrequest.setContextDocuments(new TokenLimitedContent<RagDocumentsCachedDaoResult>());
+			try {
+				lrequest.getContextDocuments().setValue(
+						createHistoricContextDocuments(userContext, extractedDocuments, historicDocumentsBudget));
+			} catch (Throwable t) {
+				LOGGER.error("Error in createHistoricContextDocuments", t);
+			}
+		}
 		stats = lrequest.getStats();
 		if (stats.availableNTokens < toolsTokensSpaceReservation) {
 			// now check real documents size allocations and recalculate
@@ -290,6 +307,75 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			LOGGER.debug("End manageRequest(.....) stats=>" + logObject(stats));
 		}
 		return lrequest;
+	}
+
+	private RagDocumentsCachedDaoResult createHistoricContextDocuments(GUserChatContext userContext,
+			RagDocumentsCachedDaoResult actualDocuments, int historicDocumentsBudget)
+			throws CloneNotSupportedException {
+		Map<String, Boolean> alreadyInFragments = new HashMap<>();
+		if (actualDocuments != null && actualDocuments.getDocumentItems() != null) {
+			List<Document> docs = actualDocuments.aiDocumentsList();
+			docs.forEach((d) -> {
+				alreadyInFragments.put(d.getId(), true);
+			});
+		}
+		int budget = historicDocumentsBudget;
+		RagDocumentsCachedDaoResult delta = new RagDocumentsCachedDaoResult();
+		if (userContext.getInteractions() != null) {
+			List<ChatInteractions> interactionsList = userContext.getInteractions();
+			for (int i = interactionsList.size() - 1; i >= 0; i--) {
+				ChatInteractions interaction = interactionsList.get(i);
+				budget = this.integrateDeltaContent(delta, interaction, alreadyInFragments, budget);
+				if (budget <= 0)
+					break;
+			}
+		}
+		return delta;
+	}
+
+	private int integrateDeltaContent(RagDocumentsCachedDaoResult delta, ChatInteractions interaction,
+			Map<String, Boolean> alreadyInFragments, int budget) throws CloneNotSupportedException {
+		int remainingBudget = budget;
+		if (interaction.request != null && interaction.request.getDocuments() != null) {
+			RagDocumentsCachedDaoResult current = interaction.request.getDocuments();
+			for (RagDocumentReferenceItem doc : current.getDocumentItems()) {
+				// shallow clone the docreference to recompose one doc with fragments not yet in
+				// the out contents
+				RagDocumentReferenceItem outDoc = (RagDocumentReferenceItem) doc.clone();
+				// clear its fragments list
+				outDoc.setFragments(new ArrayList<>());
+				outDoc.recalculateSize();
+				for (RagDocumentFragment fragment : doc.getFragments()) {
+					// if the fragment is not yet in the list
+					if (!alreadyInFragments.containsKey(fragment.getCode())) {
+
+						if (fragment.getNTokens() <= remainingBudget) {
+							// if this fragment is coherent with the actual budget
+							// i add this to the actual document
+							remainingBudget -= fragment.getNTokens();
+							outDoc.getFragments().add(fragment);
+							outDoc.recalculateSize();
+						} else {
+							// if it is not then the remaining budget is too low for a single
+							// fragment to be included, so there is no reason to continue
+							remainingBudget = 0;
+						}
+						alreadyInFragments.put(fragment.getCode(), true);
+					}
+					if (remainingBudget <= 0) {
+						break;
+					}
+				}
+				if (!outDoc.getFragments().isEmpty()) {
+					delta.getDocumentItems().add(outDoc);
+					delta.recalculateSize();
+				}
+				if (remainingBudget <= 0) {
+					break;
+				}
+			}
+		}
+		return remainingBudget;
 	}
 
 	private void mergeGraphRagResults(TokenLimitedContent<RagDocumentsCachedDaoResult> documents,
@@ -307,7 +393,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 				fragments.put(documentCode, new ArrayList<RagDocumentFragment>());
 			}
 			RagDocumentFragment fragment = new RagDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
-			fragment.setOrigin("GRAPH-RAG");
+			fragment.setOrigin(GRAPH_RAG);
 			RagDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
 			boolean fragmentAlreadyFound = existingDoc != null && existingDoc.getFragments().stream()
 					.anyMatch(f -> f.getCode() != null && f.getCode().equals(fragment.getCode()));

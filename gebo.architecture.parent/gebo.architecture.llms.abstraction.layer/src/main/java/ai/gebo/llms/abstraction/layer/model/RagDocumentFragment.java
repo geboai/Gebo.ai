@@ -25,7 +25,7 @@ import ai.gebo.model.ExtractedDocumentMetaData;
  * 
  * @author AI generated comments
  */
-public class RagDocumentFragment implements IRagContent {
+public class RagDocumentFragment implements IRagContent,Cloneable {
 	
 	// Number of tokens in the document fragment
 	private long NTokens;
@@ -239,5 +239,8 @@ public class RagDocumentFragment implements IRagContent {
 
 	public void setOrigin(String origin) {
 		this.origin = origin;
+	}
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
 }

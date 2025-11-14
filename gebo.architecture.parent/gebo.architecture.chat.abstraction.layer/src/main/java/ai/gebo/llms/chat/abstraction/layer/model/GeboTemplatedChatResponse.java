@@ -48,7 +48,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	public GeboTemplatedChatResponse() {
 
 	}
-
+	
 	/**
 	 * Copy constructor for GeboTemplatedChatResponse.
 	 * Initializes a new response by copying properties from an existing response.

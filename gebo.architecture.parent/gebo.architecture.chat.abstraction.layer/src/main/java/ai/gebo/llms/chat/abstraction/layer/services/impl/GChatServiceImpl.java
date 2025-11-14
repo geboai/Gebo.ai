@@ -35,10 +35,10 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
@@ -108,7 +108,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		// Initialize interactions list if null
 		List<ChatInteractions> interactions = userContext.getInteractions();
 		if (interactions == null) {
-			interactions = new ArrayList<GUserChatContext.ChatInteractions>();
+			interactions = new ArrayList<ChatInteractions>();
 		}
 		gresponse.setUserChatContextCode(userContext.getCode());
 
@@ -397,8 +397,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 				Prompt prompt = null;
 				promptTemplate = new PromptTemplate(promptTemplateText);
 				prompt = promptTemplate.create();
-				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, null, null,
-						context);
+				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, null, context);
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux
