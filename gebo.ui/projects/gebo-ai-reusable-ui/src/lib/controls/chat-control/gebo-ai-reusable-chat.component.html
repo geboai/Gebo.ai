@@ -51,8 +51,8 @@
 
 
                 </p-blockUI>
-
-                <p-scrollPanel [style]="{ width: '100%', height: '100%', minHeight:'800px' }" #chatScroller>
+                <!-- minHeight:'800px'-->
+                <p-scrollPanel [style]="{ width: '100%', height: '100%',minHeight:'500px'}" #chatScroller>
                     <div class="grid" style="width: 100%;">
                         <div class="col-12" style="text-align: right;">
                             <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true"
@@ -116,48 +116,53 @@
                     <div class="col-8"><gebo-ai-choose-documents-panel-component
                             *ngIf="ragsystem && chatUserInfos?.knowledgeBases" [interactionDisabled]="loading"
                             [knowledgeBaseCodes]="knowledgeBaseCodes"
+                            [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
+                            [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
                             formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component></div>
+                    
                     <div class="col-2">
 
                     </div>
-                    <div class="col-2"></div>
-                    <div class="col-8">
-                        <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query"
-                            class="chat-textbox h-full w-full" gebo-ai-label id="QueryControl"
-                            placeholder="Write a message for the chat bot">
-                        </textarea>
-                    </div>
-                    <div class="col-2 grid">
+                    <div class="col-2">
 
-                        <div class="col-12 grid">
+                    </div>
+                    <div class="col-8 grid">
+                        <div class="col-2 grid">
+                            <div class="col-6"><p-button id="UploadFileBtn" [text]="true" gebo-ai-label
+                                    icon="pi pi-cloud-upload" title="Upload a file to chat or work with"
+                                    (onClick)="openedUploadDocumentsWindow=true"></p-button></div>
+                            <div class="col-6"><p-button id="ChatWithDocsBtnNew" [text]="true" gebo-ai-label
+                                    icon="pi pi-search" title="Browse or search and select documents to chat with"
+                                    (onClick)="openSelectDocumentsWindow=true"></p-button></div>
+                        </div>
+                        <div class="col-8">
+                            <textarea rows="2" cols="250" [required]="true" pTextarea formControlName="query"
+                                class="chat-textbox w-full" gebo-ai-label id="QueryControl" 
+                                placeholder="Write a message for the chat bot">
+                        </textarea>
+                        </div>
+                        <div class="col-2 grid">
                             <div class="col-6">
-                            <p-button (onClick)="sendMessage()"  
-                                gebo-ai-label [disabled]="formGroup.invalid || loading" [outlined]="true"
-                                icon="pi pi-arrow-up" [rounded]="true" title="Sumbit your question"></p-button>
+                                <gebo-ai-audio-component 
+                                    [disabled]="capabilities?.supportsTranscript!==true || loading"
+                                    (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
+                                    [playAudioTrack]="currentAudioTrack" [viewLabels]="true"></gebo-ai-audio-component>
+                            </div>
+                            <div class="col-6">
+                                <p-button id="SubmiQuestion" (onClick)="sendMessage()" gebo-ai-label
+                                    [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
+                                    title="Sumbit your question" [text]="false"></p-button>
                             </div>
                             <div class="col-6"></div>
+
+                            <div class="col-12">
+                            </div>
                         </div>
-                        <div class="col-12"><gebo-ai-audio-component class="lg:col-3 xl:col-3 md:col-6 sm:col-6"
-                                [disabled]="capabilities?.supportsTranscript!==true || loading"
-                                (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
-                                [playAudioTrack]="currentAudioTrack" [viewLabels]="true"></gebo-ai-audio-component></div>
-                    </div>
-
-                </div>
-
-
-
-                <div class="col-12 grid">
-                    <div class="lg:col-6 xl:col-6 md:col-3 sm:col-12"></div>
-
-                    <div class="lg:col-3 xl:col-3 md:col-6 sm:col-6" style="text-align: right;">
-
                     </div>
 
 
-
-
                 </div>
+
             </form>
         </div>
         <div class="col-2"></div>

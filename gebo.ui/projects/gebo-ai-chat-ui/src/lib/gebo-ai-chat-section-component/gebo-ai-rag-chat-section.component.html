@@ -13,7 +13,7 @@
 
 
 <p-sidebar [(visible)]="chatsListAndOptionsVisible" (visibleChange)="chatsListAndOptionsVisible=$event;"
-    [dismissible]="false" [modal]="true" baseZIndex="10000" styleClass="lg:col-6 xl:col-6 md:col-6 sm:col-12">
+    [dismissible]="false" [modal]="false" baseZIndex="10000" styleClass="lg:col-6 xl:col-6 md:col-6 sm:col-12">
     <ng-template pTemplate="headless">
         <div class="flex flex-column h-full">
             <div class="grid">
@@ -49,6 +49,7 @@
                                     [disabled]="formGroup.invalid" styleClass="w-full" severity="success"
                                     [outlined]="true" icon="pi pi-microchip-ai"></p-button>
                             </div>
+                            <!-- standard chatting, i don't think it is usefull or differentiating
                             <div class="col-12" [formGroup]="chatFormGroup">
                                 <gebo-ai-field id="chatModelCode" label="Chat without knowledge bases"
                                     help="Choose the LLMs for a chat session"
@@ -65,6 +66,7 @@
                                     [disabled]="chatFormGroup.invalid" styleClass="w-full" severity="success"
                                     [outlined]="true" icon="pi pi-microchip-ai"></p-button>
                             </div>
+                            -->
                         </div>
                     </p-panel>
                     <p-panel id="ChatSessionsPanel" gebo-ai-label #chatHistoryUI header="Chat sessions"

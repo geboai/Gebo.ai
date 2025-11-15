@@ -131,7 +131,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges,GeboAIFiel
      * Flag indicating if an error occurred during chat streaming
      */
     private chatStreamingErrorOccurred: boolean = false;
-    
+    protected openSelectDocumentsWindow:boolean=false;
+    protected openedUploadDocumentsWindow:boolean=false;
     /**
      * Determines if the chat streaming might be failing based on timeout
      */
