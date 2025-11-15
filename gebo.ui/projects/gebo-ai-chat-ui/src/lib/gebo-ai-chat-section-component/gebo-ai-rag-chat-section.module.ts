@@ -34,6 +34,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModel, GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
 import { SidebarModule } from 'primeng/sidebar';
 import { PanelModule } from "primeng/panel";
+import { LayoutComponent } from "./layout.component";
+import { ScrollPanelModule } from "primeng/scrollpanel";
 
 /**
  * The GeboAiChatModule provides a self-contained feature module for chat functionality.
@@ -49,8 +51,8 @@ import { PanelModule } from "primeng/panel";
  * - Custom Gebo.ai components (EditableListboxModule, GeboAIReusableChatModel)
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModel, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTransationContainerModule],
-    declarations: [GeboAiChatSectionComponent],
+    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModel, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTransationContainerModule,  ScrollPanelModule],
+    declarations: [GeboAiChatSectionComponent,LayoutComponent],
     exports: [GeboAiChatSectionComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }]
 })
