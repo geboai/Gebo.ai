@@ -23,8 +23,7 @@ const menuItemsProtos: MegaMenuItem[] = [
   { icon: "pi pi-wrench", label: "Setup", routerLink: "ui/admin-setup", id: "setup" },
   { icon: "pi pi-cog", label: "Gebo.ai admin", routerLink: 'ui/admin', id: "admin" },
 
-  { icon: "pi pi-user", label: "my profile", routerLink: 'ui/currentProfile', id: "currentProfile" },
-  { icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logout" }];
+  ];
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -36,6 +35,8 @@ export class AppComponent implements OnInit {
   public userLogged: boolean = false;
   public userInfo?: UserInfo;
   public menuItems: MegaMenuItem[] = menuItemsProtos;
+  public servicesMenu:MegaMenuItem[]=[{ icon: "pi pi-user", label: "my profile", routerLink: 'ui/currentProfile', id: "currentProfile" },
+  { icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logout" }];
   private blinkState: boolean = false;
   private stopBlink: boolean = true;
   private setupStatus?: SetupStatus;

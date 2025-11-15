@@ -8,26 +8,26 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
-<div class="grid " >
-    <div class="col-3">
-            <img src="assets/Gebo.png" width="240" height="60">        
-    </div>
-    <div class="col-7">
 
+<div class="grid ">
+    <div class="col-8 grid" >
+        <div ><img src="assets/Gebo.png" width="240" height="60"></div>
+        <div class="align-self-end"><p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal" class="megaMenuWhite"
+                [style]="{border:'0px solid'}" /></div>
     </div>
+
     <div class="col-1"><gebo-ai-language-resource-download></gebo-ai-language-resource-download></div>
-    <div class="col-1">
-        
+    <div class="col-2 align-self-end">
+        <p-megaMenu *ngIf="userLogged" [model]="servicesMenu" orientation="horizontal" class="megaMenuWhite"
+            [style]="{border:'0px solid'}" />
+    </div>
+    <div class="col-1 align-self-end">
         <gebo-ai-main-language-choice></gebo-ai-main-language-choice>
     </div>
-    <div class="col-12" *ngIf="userLogged">
-        <p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal" class="megaMenuWhite" />
-        
-    </div>
+
     <div class="col-12 " style="height: 100%;">
         <router-outlet />
-        
+
     </div>
-    
+
 </div><p-confirmDialog header="Confirmation" width="425"></p-confirmDialog>
