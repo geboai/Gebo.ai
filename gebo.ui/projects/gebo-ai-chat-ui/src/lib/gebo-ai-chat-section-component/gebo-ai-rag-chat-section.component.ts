@@ -10,13 +10,14 @@
 
 
 
-import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { Observable, of } from "rxjs";
+import { ChangeDetectorRef, Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration, GeboChatControllerService, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PageGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
-import { ActivatedRoute } from "@angular/router";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { TreeNode } from "primeng/api";
+import { TreeNodeSelectEvent } from "primeng/tree";
+
 /* AI generated comments */
 /**
  * GeboAiChatSectionComponent is responsible for managing the chat interface section.
@@ -30,9 +31,10 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Geb
     selector: "gebo-ai-chat-section-component",
     templateUrl: "gebo-ai-rag-chat-section.component.html",
     standalone: false,
-    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
 })
 export class GeboAiChatSectionComponent implements OnInit, OnChanges {
+
 
     /** Flag indicating if the chats page is currently loading */
     public chatsPageLoading: boolean = false;
@@ -62,6 +64,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         page: 0,
         pageSize: 10
     };
+    chatsTree!: TreeNode[];
     /** Form group for RAG chat profile selection */
     public formGroup: FormGroup = new FormGroup({
         chatProfileCode: new FormControl()
@@ -86,11 +89,12 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * @param geboChatModelsControllerService Service for accessing chat models
      */
     constructor(
-        private activatedRoute: ActivatedRoute,
+        private cd: ChangeDetectorRef,
         private geboRagChatControllerService: GeboRagChatControllerService,
         private geboChatControllerService: GeboChatControllerService,
         private geboUserChatsControllerService: GeboUserChatsControllerService,
-        private geboChatModelsControllerService: ChatModelsLookupControllerService) {
+        private geboChatModelsControllerService: ChatModelsLookupControllerService,
+        private geboTranslationService: GeboAITranslationService) {
 
     }
 
@@ -146,11 +150,25 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Updates the chatsPage property with the retrieved data
      */
     public loadChatList(): void {
+        if (!this.chatsTree) {
+            this.chatsTree = [{ label: "Chats", leaf: false, children: [],expanded:true }];
+
+        }
         this.chatsPageLoading = true;
         if (this.page.page !== undefined && this.page.pageSize !== undefined) {
             this.geboUserChatsControllerService.getMyChatsPaged(this.page.page, this.page.pageSize).subscribe({
                 next: (page) => {
                     this.chatsPage = page;
+                    this.chatsTree[0].children = (this.chatsPage.content ? this.chatsPage.content : []).map(x => {
+                        const item: TreeNode = {
+                            label: x.description,
+                            leaf: true,
+                            data: x,
+                            icon: "pi pi-comments"
+                        };
+
+                        return item;
+                    });
                 }, error: (err) => {
 
                 },
@@ -160,7 +178,11 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
             });
         }
     }
-
+    openChatItem(event: TreeNodeSelectEvent) {
+        if (event && event.node.data) {
+            this.activateChat(event.node.data );
+        }
+    }
     /**
      * Closes the current chat, returns to the chat list view, and refreshes the chat history
      */
