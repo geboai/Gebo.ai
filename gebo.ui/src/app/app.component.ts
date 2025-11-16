@@ -30,7 +30,8 @@ const profilesSubMenuOptions: MegaMenuItem[] = [{ icon: "pi pi-user", label: "ed
 
 
 const profileChilds: any[] = [{
-  label: "Options",
+  id:"ProfileOptions",
+  label: "Profile options",
   items: profilesSubMenuOptions
 
 }];
