@@ -10,20 +10,20 @@
  -->
 
 <div class="grid " style="height: 100%;">
-    <div class="col-8 grid">
+    <div class="col-9 grid">
         <div><img src="assets/Gebo.png" width="240" height="60"></div>
         <div class="align-self-end"><p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal"
                 class="megaMenuWhite" [style]="{border:'0px solid'}" /></div>
     </div>
-    <div class="col-4 align-self-end text-right" #serviceMenuArea >
-            
+    <div class="col-3 align-self-end " #serviceMenuArea style="text-align: right;">
+            <gebo-ai-main-language-choice [menuItem]="languagesMenuItem" [appendTo]="serviceMenuArea"
+                (languageChange)="onChangedLanguage($event)"></gebo-ai-main-language-choice>
             <gebo-ai-language-resource-download></gebo-ai-language-resource-download>
             <p-megaMenu *ngIf="userLogged" [model]="servicesMenuLogged" orientation="horizontal" 
                 [style]="{border:'0px solid'}" />
             <p-megaMenu *ngIf="!userLogged" [model]="servicesMenuUnlogged" orientation="horizontal" 
                   [style]="{border:'0px solid'}" />
-            <gebo-ai-main-language-choice [menuItem]="languagesMenuItem" [appendTo]="serviceMenuArea"
-                (languageChange)="onChangedLanguage($event)"></gebo-ai-main-language-choice>
+            
             
     </div>
 
