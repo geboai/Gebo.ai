@@ -44,6 +44,9 @@ import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choo
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
 import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 @NgModule({
   imports: [CommonModule,
     ReactiveFormsModule,
@@ -68,6 +71,8 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
     GeboAIContentViewerModule,
     BrowseContentModule,
     GeboAIViewTableModule,
+    IconFieldModule,
+    InputIconModule,
     MarkdownModule.forChild(), GeboAIFieldTransationContainerModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
     ReactiveRagChatService,

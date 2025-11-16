@@ -8,7 +8,88 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
+<p-sidebar [(visible)]="chatsListAndOptionsVisible" (visibleChange)="chatsListAndOptionsVisible=$event;"
+    [dismissible]="false" [modal]="true" baseZIndex="10000" styleClass="lg:col-6 xl:col-6 md:col-6 sm:col-12">
+    <ng-template pTemplate="headless">
+        <div class="flex flex-column h-full">
+            <div class="grid">
+                <div class="col-3">
 
+                    <img src="assets/Gebo.png" width="240" height="60">
+
+                </div>
+                <div class="col-6"></div>
+                <div class="col-3" style="text-align: right;">
+                    <p-button id="TimesBtn" gebo-ai-label icon="pi pi-times" text="true" outlined="true"
+                        (onClick)="chatsListAndOptionsVisible=false;"></p-button>
+                </div>
+                <div class="col-12">
+                    <p-blockUI id="BlockUIIcon" gebo-ai-label [blocked]="loading">
+                        <i class="pi pi-lock" style="font-size: 3rem"></i>
+                    </p-blockUI>
+                    <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" label="Chat with knowledge base"
+                        title="Create a new RAG chat with company contents" *ngIf="chatProfilesData?.length"
+                        gebo-ai-label [text]="true"
+                        (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):createRagChat()"></p-button>
+                    <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" label="Chat"
+                        title="Create a new chat with large language models"
+                        *ngIf="(!chatProfilesData?.length) && chatModelsData.length" gebo-ai-label [text]="true"
+                        (onClick)="chatModelsData.length>1?newChatDialog.toggle($event):createChat()"></p-button>
+                    <p-popover #newRagChatDialog>
+                        <div class="grid">
+                            <div class="col-12" [formGroup]="formGroup">
+                                <gebo-ai-field id="chatProfileCode" label="Chat with knowledge bases"
+                                    help="Choose the company chat profile to interact with company (and your) documents and LLMs"
+                                    placeholder="Select a chat profile">
+                                    <geboai-editable-listbox-component formControlName="chatProfileCode"
+                                        [data]="chatProfilesData" [required]="true" gebo-ai-field-element>
+                                    </geboai-editable-listbox-component>
+                                </gebo-ai-field>
+
+                            </div>
+                            <div class="col-6">
+                                <p-button id="NewChatBtn" gebo-ai-label label="New chat" (onClick)="createRagChat()"
+                                    [disabled]="formGroup.invalid" styleClass="w-full" severity="success"
+                                    [outlined]="true" icon="pi pi-microchip-ai"></p-button>
+                            </div>
+                        </div>
+                    </p-popover>
+                    <p-popover #newChatDialog>
+                        <div class="grid">
+                            <div class="col-12" [formGroup]="chatFormGroup">
+                                <gebo-ai-field id="chatModelCode" label="Chat without knowledge bases"
+                                    help="Choose the LLMs for a chat session"
+                                    placeholder="Select a chat model"><geboai-editable-listbox-component
+                                        formControlName="chatModelCode" [data]="chatModelsData" [required]="true"
+                                        gebo-ai-field-element>
+                                    </geboai-editable-listbox-component></gebo-ai-field>
+
+
+                            </div>
+                            <div class="col-6">
+                                <p-button id="CreateChatBtn" gebo-ai-label label="New chat" (onClick)="createChat()"
+                                    [disabled]="chatFormGroup.invalid" styleClass="w-full" severity="success"
+                                    [outlined]="true" icon="pi pi-microchip-ai"></p-button>
+                            </div>
+
+                        </div>
+                    </p-popover>
+                </div>
+                <div class="col-12">
+                    <p-tree [value]="chatsTree" (onNodeSelect)="openChatItem($event)"
+                        (onNodeDoubleClick)="openChatItem($event)">
+                        <ng-template let-node pTemplate="default">
+                            <a (click)="node.data?activateChat(node.data):false" href="javascript:void(0)"
+                                style="text-decoration: none;color:black">{{node.label}}</a>
+
+                        </ng-template>
+                    </p-tree>
+                </div>
+            </div>
+
+        </div>
+    </ng-template>
+</p-sidebar>
 <ng-template #newChatsTemplate>
     <p-blockUI id="BlockUIIcon" gebo-ai-label [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
@@ -58,44 +139,26 @@
         </div>
     </p-popover>
 </ng-template>
-<gebo-ai-chat-layout [isCollapsed]="openChat||openRagChat">
-    <div slideBarContent #slideBarContent class="flex flex-column h-full">
+<div class="content">
 
-        <p-scrollPanel [style]="{ width: '100%', height: '100%',minHeight:'1000px'}">
-            <div class="grid">
-
-
-                <div class="col-12" style="height: 30% !important;">
-
-                    <ng-container *ngTemplateOutlet="newChatsTemplate"></ng-container>
-
-
-                </div>
-                <div class="col-12">
-                    <p-tree [value]="chatsTree"  (onNodeSelect)="openChatItem($event)"
-                        (onNodeDoubleClick)="openChatItem($event)">
-                        <ng-template let-node pTemplate="default">
-                            <a (click)="node.data?activateChat(node.data):false" href="javascript:void(0)"
-                                 style="text-decoration: none;color:black">{{node.label}}</a>
-                            
-                        </ng-template>
-                    </p-tree>                   
-                </div>
-            </div>
-        </p-scrollPanel>
-
+    <div class="grid">
+        <div style="width: 30px;">
+            <p-button id="ChevronLeftBtn" gebo-ai-label (onClick)="chatsListAndOptionsVisible=true;" [text]="true"
+                [outlined]="true" icon="pi pi-chevron-left" title="Open chat options section"></p-button>
+        </div>
+        <div style="width: 95%;">
+            <gebo-ai-reusable-chat-component *ngIf="openRagChat===true" [ragsystem]="true" [chatInfo]="currentChat"
+                (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+                [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+            <gebo-ai-reusable-chat-component *ngIf="openChat===true" [ragsystem]="false" [chatInfo]="currentChat"
+                (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+                [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
+        </div>
 
     </div>
-    <div collapsedContent #collapsedContent>
-        <ng-container *ngTemplateOutlet="newChatsTemplate"></ng-container>
-    </div>
-    <div bodyContent><gebo-ai-reusable-chat-component *ngIf="openRagChat===true" [ragsystem]="true"
-            [chatInfo]="currentChat" (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
-            [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
-        <gebo-ai-reusable-chat-component *ngIf="openChat===true" [ragsystem]="false" [chatInfo]="currentChat"
-            (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
-            [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
-    </div>
-</gebo-ai-chat-layout>
 
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+</div>
+<div style="width: 30px;align:fixed;bottom: 3%;">
+    <p-button id="ChevronLeftBtn2" gebo-ai-label (onClick)="chatsListAndOptionsVisible=true;" [text]="true"
+        [outlined]="true" icon="pi pi-chevron-left" title="Open chat options section"></p-button>
+</div>

@@ -15,7 +15,7 @@
         <div class="align-self-end"><p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal"
                 class="megaMenuWhite" [style]="{border:'0px solid'}" /></div>
     </div>
-    <div class="col-4 align-self-end text-right" #serviceMenuArea style="z-index: 10000;text-align: right;">
+    <div class="col-4 align-self-end text-right" #serviceMenuArea >
             
             <gebo-ai-language-resource-download></gebo-ai-language-resource-download>
             <p-megaMenu *ngIf="userLogged" [model]="servicesMenuLogged" orientation="horizontal" 
