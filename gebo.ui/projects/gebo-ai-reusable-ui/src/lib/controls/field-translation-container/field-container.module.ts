@@ -21,9 +21,10 @@ import {
     PCalendarLabelTarget, PSliderLabelTarget, PProgressBarLabelTarget,
     PStepsLabelTarget, PGalleriaLabelTarget
 } from "./primeng-components-multilanguage-adapters.directive";
+import { PopoverModule } from 'primeng/popover';
 import { POldTabPanelLabelTarget } from "./primeng-components-obsolete-multilanguage-adapters.directive";
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, Button, SelectModule],
+    imports: [CommonModule, ReactiveFormsModule, Button, SelectModule,PopoverModule],
     declarations: [GeboAIFieldContainerComponent, GeboAIFieldContainerDirective, GeboAILabelDirective, GeboAITextDirective, GeboAILanguageResourcesDownloadComponent, GeboAILanguageChoiceComponent, GeboAIMainLanguageChoiceComponent, PButtonLabelTarget, PFieldSetLabelTarget, PPanelLabelTarget, PDialogLabelTarget, PSidebarLabelTarget,
         PCardLabelTarget, PTabPanelLabelTarget, PAccordionTabLabelTarget, PToolbarLabelTarget,
         PBadgeLabelTarget, PTagLabelTarget, PChipLabelTarget,

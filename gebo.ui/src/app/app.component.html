@@ -10,20 +10,23 @@
  -->
 
 <div class="grid ">
-    <div class="col-8 grid" >
-        <div ><img src="assets/Gebo.png" width="240" height="60"></div>
-        <div class="align-self-end"><p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal" class="megaMenuWhite"
-                [style]="{border:'0px solid'}" /></div>
+    <div class="col-8 grid">
+        <div><img src="assets/Gebo.png" width="240" height="60"></div>
+        <div class="align-self-end"><p-megaMenu *ngIf="userLogged" [model]="menuItems" orientation="horizontal"
+                class="megaMenuWhite" [style]="{border:'0px solid'}" /></div>
+    </div>
+    <div class="col-4 align-self-end justify-content-end" #serviceMenuArea>
+        
+            <gebo-ai-language-resource-download></gebo-ai-language-resource-download>
+            <p-megaMenu *ngIf="userLogged" [model]="servicesMenuLogged" orientation="horizontal" class="justify-content-end"
+                [style]="{border:'0px solid'}" />
+            <p-megaMenu *ngIf="!userLogged" [model]="servicesMenuUnlogged" orientation="horizontal" 
+                 class="justify-content-end" [style]="{border:'0px solid'}" />
+            <gebo-ai-main-language-choice [menuItem]="languagesMenuItem" [appendTo]="serviceMenuArea"
+                (languageChange)="onChangedLanguage($event)"></gebo-ai-main-language-choice>
+            
     </div>
 
-    <div class="col-1"><gebo-ai-language-resource-download></gebo-ai-language-resource-download></div>
-    <div class="col-2 align-self-end">
-        <p-megaMenu *ngIf="userLogged" [model]="servicesMenu" orientation="horizontal" class="megaMenuWhite"
-            [style]="{border:'0px solid'}" />
-    </div>
-    <div class="col-1 align-self-end">
-        <gebo-ai-main-language-choice></gebo-ai-main-language-choice>
-    </div>
 
     <div class="col-12 " style="height: 100%;">
         <router-outlet />

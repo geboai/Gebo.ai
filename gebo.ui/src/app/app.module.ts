@@ -37,7 +37,7 @@ import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 import { CookieService } from 'ngx-cookie-service';
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { PopoverModule } from 'primeng/popover';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader();
 }
@@ -116,7 +116,8 @@ const GeboAIPreset = definePreset(Aura, {
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes), 
-    GeboAIFieldTransationContainerModule.forRoot()],
+    GeboAIFieldTransationContainerModule.forRoot(),PopoverModule],
+
   providers: [
     GeboBackendListService,
     CookieService,

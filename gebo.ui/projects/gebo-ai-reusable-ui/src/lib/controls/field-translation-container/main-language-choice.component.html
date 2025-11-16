@@ -1,0 +1,5 @@
+<!-- <p-button id="ChanteLanguageBtn" gebo-ai-label (click)="languageChoice.toggle($event)" [icon]="currentLanguageCodeIcon"
+    [text]="true" title="Change language" /> -->
+<p-popover #languageChoice [formGroup]='formGroup' [appendTo]="appendTo" >
+    <gebo-ai-language-choice-component formControlName='langCode' />
+</p-popover>
