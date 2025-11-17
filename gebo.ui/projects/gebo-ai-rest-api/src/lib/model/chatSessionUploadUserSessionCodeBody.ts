@@ -10,12 +10,6 @@
  * Do not edit the class manually.
  */
 
-export interface MimeType { 
-    type?: string;
-    subtype?: string;
-    charset?: string;
-    concrete?: boolean;
-    wildcardSubtype?: boolean;
-    wildcardType?: boolean;
-    subtypeSuffix?: string;
+export interface ChatSessionUploadUserSessionCodeBody { 
+    files: Array<Blob>;
 }

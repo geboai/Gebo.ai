@@ -9,13 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { GUserMessage } from './gUserMessage';
+import { UserUploadedContent } from './userUploadedContent';
 
-export interface MimeType { 
-    type?: string;
-    subtype?: string;
-    charset?: string;
-    concrete?: boolean;
-    wildcardSubtype?: boolean;
-    wildcardType?: boolean;
-    subtypeSuffix?: string;
+export interface OperationStatusListUserUploadedContent { 
+    result?: Array<UserUploadedContent>;
+    messages?: Array<GUserMessage>;
+    hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

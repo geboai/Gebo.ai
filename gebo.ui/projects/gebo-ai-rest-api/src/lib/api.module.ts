@@ -40,6 +40,7 @@ import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFold
 import { GeboModulesConfigControllerService } from './api/geboModulesConfigController.service';
 import { GeboNeo4jModuleSetupControllerService } from './api/geboNeo4jModuleSetupController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
+import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
@@ -130,6 +131,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboModulesConfigControllerService,
     GeboNeo4jModuleSetupControllerService,
     GeboRagChatControllerService,
+    GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
     GeboVectorStoreConfigurationControllerService,

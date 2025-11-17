@@ -11,6 +11,7 @@
  */
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
 import { RagDocumentsCachedDaoResult } from './ragDocumentsCachedDaoResult';
+import { UserUploadedContent } from './userUploadedContent';
 
 export interface GeboChatRequest { 
     id?: string;
@@ -23,4 +24,5 @@ export interface GeboChatRequest {
     choosedKnowledgeBases?: Array<string>;
     forcedRequestDocuments?: Array<string>;
     documents?: RagDocumentsCachedDaoResult;
+    userUploadedContents?: Array<UserUploadedContent>;
 }

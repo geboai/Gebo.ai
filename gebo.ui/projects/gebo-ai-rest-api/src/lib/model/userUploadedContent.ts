@@ -10,12 +10,17 @@
  * Do not edit the class manually.
  */
 
-export interface MimeType { 
-    type?: string;
-    subtype?: string;
-    charset?: string;
-    concrete?: boolean;
-    wildcardSubtype?: boolean;
-    wildcardType?: boolean;
-    subtypeSuffix?: string;
+export interface UserUploadedContent { 
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    fileName: string;
+    extension: string;
+    contentType: string;
+    fileSize: number;
+    tokensCount: number;
+    userContextCode: string;
 }

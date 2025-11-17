@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { OperationStatusPublishingStatus } from '../model/operationStatusPublishingStatus';
 import { PublishingStatus } from '../model/publishingStatus';
+import { UserUploadToUserSpaceParam } from '../model/userUploadToUserSpaceParam';
 import { UserspaceFileDto } from '../model/userspaceFileDto';
 import { UserspaceFolderDto } from '../model/userspaceFolderDto';
 import { UserspaceKnowledgebaseDto } from '../model/userspaceKnowledgebaseDto';
@@ -693,6 +694,53 @@ export class UserspaceControllerService {
         }
 
         return this.httpClient.request<OperationStatusPublishingStatus>('post',`${this.basePath}/api/user/UserspaceController/publishFolder`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public transferUploadsToUserSpaceAndPublish(body: UserUploadToUserSpaceParam, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusPublishingStatus>;
+    public transferUploadsToUserSpaceAndPublish(body: UserUploadToUserSpaceParam, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusPublishingStatus>>;
+    public transferUploadsToUserSpaceAndPublish(body: UserUploadToUserSpaceParam, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusPublishingStatus>>;
+    public transferUploadsToUserSpaceAndPublish(body: UserUploadToUserSpaceParam, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling transferUploadsToUserSpaceAndPublish.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<OperationStatusPublishingStatus>('post',`${this.basePath}/api/user/UserspaceController/transferUploadsToUserSpaceAndPublish`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

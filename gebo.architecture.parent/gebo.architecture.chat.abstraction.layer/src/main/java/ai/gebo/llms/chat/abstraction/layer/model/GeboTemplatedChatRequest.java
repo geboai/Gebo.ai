@@ -57,5 +57,6 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	protected List<String> forcedRequestDocuments = new ArrayList<String>();
 	/** documents retrieved on rag or "chat with document" **/
 	protected RagDocumentsCachedDaoResult documents = null;
+	protected List<UserUploadedContent> userUploadedContents = new ArrayList<>();
 
 }
