@@ -1,15 +1,14 @@
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, Inject } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GeboUserChatUploadsControllerService, UserUploadedContent, BASE_PATH, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Inject } from "@angular/core";
+import { ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { GeboUserChatUploadsControllerService, BASE_PATH, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "@Gebo.ai/reusable-ui";
-import { PrimeNG } from "primeng/config";
 import { MessageService } from "primeng/api";
 const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionUpload/";
 @Component({
     templateUrl: "upload-chat-document.component.html",
     selector: "gebo-ai-upload-chat-document",
-    
+
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -18,18 +17,20 @@ const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionU
         },
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false },
         {
-            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUploadChatDocumentComponent"),
+            provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUploadChatDocumentComponent),
             multi: false
         }
     ], standalone: false
 })
-export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, ControlValueAccessor, GeboAIFieldHost {
 
     @Input() showUpload: boolean = false;
     @Input() userSessionCode?: string;
     //protected uploadedFiles: UserUploadedContent[] = [];
     protected loading: boolean = false;
     protected filesExtensionsFlatList: string = "";
+    protected formGroup: FormGroup<any> = new FormGroup({
+    });
     //@Output() uploadedFilesChanged: EventEmitter<UserUploadedContent[]> = new EventEmitter();
     files: any[] = [];
 
@@ -47,8 +48,11 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         @Inject(BASE_PATH) private baseUrl: string) {
         this.url = baseUrl + "/" + urlPostfix;
     }
+    getEntityName(): string {
+        return "GeboAIUploadChatDocumentComponent";
+    }
     ngOnInit(): void {
-        this.loading=true;
+        this.loading = true;
         this.contentTypeService.getAllFileTypes().subscribe({
             next: (value) => {
                 const extensions: string[] = [];

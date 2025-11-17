@@ -2,11 +2,12 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-dialog [modal]="true" #uploadFilesArea [maximizable]="true" [visible]="showUpload" [modal]="true"
-    [style]="{width:'50%',height:'50%'}" [closable]="false" [showHeader]="false">
-    <p-panel>
-        <div class="card">
+    [style]="{width:'50%',height:'50%'}" [closable]="false" >
+    <p-panel id="FilesToChatHeader" header="Upload files to chat with" gebo-ai-label>
+        
+        <div class="card" [formGroup]="formGroup">
             <p-toast />
-            <p-fileupload name="myfile[]" [url]="url" [multiple]="true" method="post" mode="advanced"
+            <p-fileupload name="files[]" [url]="url" [multiple]="true" method="post" mode="advanced"
                 [accept]="filesExtensionsFlatList" maxFileSize="1000000" (onUpload)="onTemplatedUpload()"
                 (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback"
