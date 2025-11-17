@@ -10,7 +10,7 @@
 
 
 
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
 import { LoginService } from '../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/login/login.service';
@@ -19,24 +19,18 @@ import { GeboAITranslationService, resetAuth, saveAuth, SetupStatus } from '@Geb
 import { PrimeNG } from 'primeng/config';
 import { Subscription } from 'rxjs';
 import { TrashIcon } from 'primeng/icons';
+const editMyProfileMenuItemId: string = "editMyProfileMenuItem";
+const setupItemId: string = "setupMenuItem";
+const adminItemId: string = "adminMenuItem";
+const privilegedMenuIds: string[] = [setupItemId, adminItemId];
 const menuItemsProtos: MegaMenuItem[] = [
-  { icon: "pi pi-comments", label: "Gebo.ai Chat", routerLink: 'ui/chat', id: "chat" },
-  { icon: "pi pi-wrench", label: "Setup", routerLink: "ui/admin-setup", id: "setup" },
-  { icon: "pi pi-cog", label: "Gebo.ai admin", routerLink: 'ui/admin', id: "admin" },
-
+  { icon: "pi pi-comments", label: "Chat", routerLink: 'ui/chat', id: "chatMenuItem" },
+  { icon: "pi pi-wrench", label: "Setup", routerLink: "ui/admin-setup", id: setupItemId },
+  { icon: "pi pi-cog", label: "Admin", routerLink: 'ui/admin', id: adminItemId },
+  { icon: "pi pi-user", label: "edit profile", routerLink: "ui/currentProfile", id: editMyProfileMenuItemId },
+  { icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logoutMenuItem" }
 ];
-const profilesSubMenuOptions: MegaMenuItem[] = [{ icon: "pi pi-user", label: "edit profile", routerLink: 'ui/currentProfile', id: "editMyProfile" },
-{ icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logout" }];
 
-
-const profileChilds: any[] = [{
-  id:"ProfileOptions",
-  label: "Profile options",
-  items: profilesSubMenuOptions
-
-}];
-
-const changeLanguageMenuItem: MegaMenuItem = { id: "ChangeLanguageItem", label: "Change language" };
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -44,15 +38,11 @@ const changeLanguageMenuItem: MegaMenuItem = { id: "ChangeLanguageItem", label: 
   standalone: false
 })
 export class AppComponent implements OnInit {
+  @ViewChild("userEditProfile") userEditProfile: any;
   public loading: boolean = false;
   public userLogged: boolean = false;
   public userInfo?: UserInfo;
-  public menuItems: MegaMenuItem[] = menuItemsProtos;
-
-  public languagesMenuItem: MegaMenuItem = { ...changeLanguageMenuItem };
-  public userManagementMenuItem: MegaMenuItem = { id: "MyProfileItem", icon: "pi pi-user", label: "your profile", items: [profileChilds] };
-  public servicesMenuLogged: MegaMenuItem[] = [this.languagesMenuItem, this.userManagementMenuItem];
-  public servicesMenuUnlogged: MegaMenuItem[] = [this.languagesMenuItem];
+  public menuItems: MegaMenuItem[] = [];
   private blinkState: boolean = false;
   private stopBlink: boolean = true;
   private setupStatus?: SetupStatus;
@@ -76,31 +66,8 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  protected onChangedLanguage(icon: string): void {
-    this.languagesMenuItem = { ...changeLanguageMenuItem, icon: icon };
-    this.servicesMenuLogged = [this.languagesMenuItem, this.userManagementMenuItem];
-    this.servicesMenuUnlogged = [this.languagesMenuItem];
-    if (this.servicesMenuLoggedSubscription) {
-      this.servicesMenuLoggedSubscription.unsubscribe();
-    }
-    if (this.servicesMenuUnloggedSubscription) {
-      this.servicesMenuUnloggedSubscription.unsubscribe();
-    }
-    this.servicesMenuLoggedSubscription = this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.servicesMenuLogged).subscribe({
-      next: (transl) => {
-        if (transl)
-          this.servicesMenuLogged = transl;
-      }
-    });
-    this.servicesMenuUnloggedSubscription = this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.servicesMenuUnlogged).subscribe({
-      next: (transl) => {
-        if (transl)
-          this.servicesMenuUnlogged = transl;
-      }
-    });
-  }
   private startBlinkSetupState(): void {
-    const setupItem = this.menuItems.find(x => x.id === "setup");
+    const setupItem = this.menuItems.find(x => x.id === setupItemId);
     if (!setupItem) return;
     if (this.blinkState === false && this.stopBlink === false) {
       if (this.setupStatus === 'incomplete') {
@@ -155,13 +122,21 @@ export class AppComponent implements OnInit {
 
         } else {
           menuItemsProtos.forEach(entry => {
-            if (entry.id !== 'admin' && entry.id !== "setup") {
+            if (!privilegedMenuIds.find(x => x === entry.id)) {
               items.push(entry);
             }
           });
         }
 
         this.menuItems = items;
+        const editMyProfileMenuItem = this.menuItems.find(x => x.id === editMyProfileMenuItemId);
+        if (editMyProfileMenuItem) {
+          editMyProfileMenuItem.command = (evt) => {
+            if (this.userEditProfile && this.userEditProfile.toggle) {
+              this.userEditProfile.toggle(evt);
+            }
+          };
+        }
         if (this.subscription) {
           this.subscription.unsubscribe();
           this.subscription = undefined;

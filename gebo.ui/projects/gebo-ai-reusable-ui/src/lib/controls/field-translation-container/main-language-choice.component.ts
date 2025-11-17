@@ -22,20 +22,23 @@ export class GeboAIMainLanguageChoiceComponent implements OnInit, OnChanges {
         langCode: new FormControl()
     });
     protected currentLanguageCodeIcon: string = "pi pi-question-circle";
-    @Input() menuItem!: MegaMenuItem;
-    @Input() appendTo!: any;
-    @Output() languageChange:EventEmitter<string>=new EventEmitter();
+    protected currentLanguageCode: string = "en";
+    @Input() menuItem?: MegaMenuItem;
+    @Input() appendTo?: any;
+    @Output() languageChange: EventEmitter<string> = new EventEmitter();
     @ViewChild("languageChoice") languageChoice: any;
     constructor(private geboTranslationService: GeboAITranslationService) {
 
     }
     ngOnChanges(changes: SimpleChanges): void {
         if ((this.menuItem && changes["menuItem"]) || (this.appendTo && changes["appendTo"])) {
-            this.menuItem.icon = this.currentLanguageCodeIcon;
-            this.menuItem.command = (evt) => {
-                this.languageChoice?.toggle(evt);
-            };
-            
+            if (this.menuItem) {
+                this.menuItem.icon = this.currentLanguageCodeIcon;
+                this.menuItem.command = (evt) => {
+                    this.languageChoice?.toggle(evt);
+                };
+            }
+
         }
     }
 
@@ -64,9 +67,9 @@ export class GeboAIMainLanguageChoiceComponent implements OnInit, OnChanges {
             }
         }
         this.currentLanguageCodeIcon = language?.langCode + '-flag';
-        
+        this.currentLanguageCode = language?.langCode;
         if (this.menuItem) {
-            this.menuItem.icon = this.currentLanguageCodeIcon;            
+            this.menuItem.icon = this.currentLanguageCodeIcon;
         }
         this.languageChange.emit(this.currentLanguageCodeIcon);
         this.formGroup.setValue(language);
@@ -78,12 +81,14 @@ export class GeboAIMainLanguageChoiceComponent implements OnInit, OnChanges {
                 const langCode = data?.langCode;
                 if (langCode) {
                     this.currentLanguageCodeIcon = langCode + '-flag';
+                    this.currentLanguageCode = langCode;
                     if (this.menuItem) {
-                        this.menuItem.icon = this.currentLanguageCodeIcon;                        
+                        this.menuItem.icon = this.currentLanguageCodeIcon;
                     }
-                    this.languageChange.emit(this.currentLanguageCodeIcon);
+                    
                     this.geboTranslationService.changeActualLanguage(langCode);
                     localStorage.setItem(GEBO_AI_LOCAL_STORAGE_LANG, JSON.stringify(data));
+                    this.languageChange.emit(this.currentLanguageCode);
                 }
             }
         });

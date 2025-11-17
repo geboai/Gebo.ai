@@ -51,6 +51,7 @@ const routes:Routes=[{
         DialogModule,
         MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes),GeboAIFieldTransationContainerModule],
     declarations:[GeboAIUserProfileComponent,GeboAIChangePasswordComponent]
+    
 })
 export class GeboAIUserProfileModule {
 

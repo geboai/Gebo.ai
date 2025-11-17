@@ -112,7 +112,7 @@ const GeboAIPreset = definePreset(Aura, {
       fallbackLang: "en",
       loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
 
-    }),
+    }),    
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes), 

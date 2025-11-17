@@ -15,34 +15,37 @@
 <p-blockUI [target]="loginUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="LoginPanel" gebo-ai-label #loginUI header="Login to gebo.ai" [formGroup]="formGroup">
+<p-panel id="LoginPanel" gebo-ai-label #loginUI header="Login to gebo.ai">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <div class="grid">
-        <div class="col-12">
-            <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login" [required]="true"> <input pInputText
-                    formControlName="username" class="col-12" [required]="true" gebo-ai-field-element></gebo-ai-field>
-        </div>
-        <div class="col-12">
-            <gebo-ai-field id="password" label="Password" help="Password to login" [required]="true">
-                <p-password  formControlName="password" class="col-12" [required]="true"
-                     [feedback]="false"  gebo-ai-field-element></p-password>
-            </gebo-ai-field>
-            
-        </div>
-        <div class="col-4">
-            <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login" (onClick)="login()"
-                [disabled]="formGroup.invalid"></p-button>
-        </div>
-        <div class="col-12" *ngIf="providers.length">
-            <p-fieldset  id="OauthProviders" gebo-ai-label legend="Login using provider">
-                <div class="grid">
-                    <div *ngFor="let provider of providers" class="col-12">
-                        <p-button [icon]="'pi pi-'+provider.providerName" (onClick)="onOauth2Click(provider)"
-                            [label]="provider.description" [outlined]="true"></p-button>
+    <form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
+        <div class="grid">
+            <div class="col-12">
+                <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login" [required]="true"> <input
+                        pInputText formControlName="username" class="col-12" [required]="true"
+                        gebo-ai-field-element></gebo-ai-field>
+            </div>
+            <div class="col-12">
+                <gebo-ai-field id="password" label="Password" help="Password to login" [required]="true">
+                    <p-password formControlName="password" class="col-12" [required]="true" [feedback]="false"
+                        gebo-ai-field-element></p-password>
+                </gebo-ai-field>
 
+            </div>
+            <div class="col-4">
+                <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login"
+                    (onClick)="login()" [disabled]="formGroup.invalid" type="submit"></p-button>
+            </div>
+            <div class="col-12" *ngIf="providers.length">
+                <p-fieldset id="OauthProviders" gebo-ai-label legend="Login using provider">
+                    <div class="grid">
+                        <div *ngFor="let provider of providers" class="col-12">
+                            <p-button [icon]="'pi pi-'+provider.providerName" (onClick)="onOauth2Click(provider)"
+                                [label]="provider.description" [outlined]="true"></p-button>
+
+                        </div>
                     </div>
-                </div>
-            </p-fieldset>
+                </p-fieldset>
+            </div>
         </div>
-    </div>
+    </form>
 </p-panel>
