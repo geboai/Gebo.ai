@@ -36,11 +36,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.richresponse.model.RichResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
@@ -212,7 +212,7 @@ public class GeboChatController {
 				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}
 
-	@GetMapping(value = "suggestChatDescription", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GUserChatInfo suggestChatDescription(@RequestParam("id") @NotNull String id) throws GeboChatException, LLMConfigException {
 		return chatService.suggestChatDescription(id);
 	}

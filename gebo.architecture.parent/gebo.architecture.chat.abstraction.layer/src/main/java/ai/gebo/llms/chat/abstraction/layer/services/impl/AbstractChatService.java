@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,20 +48,27 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
-import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.security.services.IGSecurityService;
+import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -68,22 +76,28 @@ import reactor.core.publisher.Mono;
  * AI generated comments Provides an abstract implementation of chat services,
  * facilitating integration with different chat models.
  */
+@AllArgsConstructor
 public abstract class AbstractChatService implements IGGenericalChatService {
 	protected final static ObjectMapper mapper = new ObjectMapper(); // JSON object mapper for
 																		// serialization/deserialization
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass()); // Logger for logging events
 
-	@Autowired
-	protected IGChatModelRuntimeConfigurationDao chatModelConfigurations; // DAO for fetching chat model configurations
+	final protected IGChatModelRuntimeConfigurationDao chatModelConfigurations; // DAO for fetching chat model
+																				// configurations
 
-	@Autowired
-	protected IGToolCallbackSourceRepositoryPattern callbacksRepoPattern; // Repository pattern for tool callbacks
+	final protected IGToolCallbackSourceRepositoryPattern callbacksRepoPattern; // Repository pattern for tool callbacks
 
-	@Autowired
-	protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
+	final protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
 
-	@Autowired
-	protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
+	final protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
+	final protected GeboChatPromptsConfigs promptConfigs;
+	final protected IGPromptConfigDao promptsDao;
+
+	final protected InteractionsContextService interactionsContext;
+
+	final protected IGSecurityService securityService;
+
+	final protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
 
 	/**
 	 * Inner class representing a system message containing document data.
@@ -463,7 +477,5 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return out;
 	}
 
-	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException {
-		return null;
-	}
+	
 }

@@ -121,7 +121,7 @@
 
     </div>
     <div [class]="interactions && interactions.length?'floating-chat-area':'floating-chat-area-middle'">
-        <form [formGroup]="formGroup">
+        <form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
 
             <div class="col-12 grid">
 
@@ -161,7 +161,7 @@
                         </div>
                         <div class="col-6" style="text-align: right;">
                             <p-button id="SubmiQuestion" (onClick)="sendMessage()" gebo-ai-label
-                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
+                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true" type="submit"
                                 title="Sumbit your question" [text]="false"></p-button>
                         </div>
 

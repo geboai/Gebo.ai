@@ -30,6 +30,7 @@ import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { IGeboChatMessage, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 
 /**
  * Interface representing a single chat interaction between the user and the AI,
@@ -291,6 +292,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         private messageService: MessageService,
         private ragChatService: GeboRagChatControllerService,
         private reactiveChatService: ReactiveRagChatService,
+        private geboAiTranslationService:GeboAITranslationService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
 
@@ -580,9 +582,21 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                     recvd = msg as IGeboChatMessage;
                 }
 
-                if (recvd.contentObjectType === "GeboChatResponse") {
+                if (recvd && recvd.contentObjectType && (recvd.contentObjectType === "GeboChatResponse" || recvd.contentObjectType === "GUserMessage")) {
+                    if (recvd.contentObjectType === "GUserMessage") {
+                        const message = recvd.content as ToastMessageOptions;
+                        this.lastInteractionMessages = [message];
+                        this.geboAiTranslationService.translateBackendMessage(recvd.content).subscribe({
+                            next:(msg)=>{
+                                if (msg) {
+                                    this.lastInteractionMessages=[message];
+                                }
+                            }
+                        });
+                        
+                    }
                     interaction.response = recvd.content;
-                    if (interaction.response) {
+                    if (interaction.response && recvd.lastMessage === true) {
                         const response: GeboChatResponse = interaction.response;
                         if (r.userChatContextCode !== response.userChatContextCode) {
                             const newContext: GUserChatInfo = { ...this.chatInfo };
@@ -601,17 +615,17 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                                 }
                             }
                             newChatInfoObservable.subscribe({
-                                next:(value:GUserChatInfo)=>{
+                                next: (value: GUserChatInfo) => {
                                     if (this.chatInfo && value?.description) {
-                                        this.chatInfo.description=value?.description;
+                                        this.chatInfo.description = value?.description;
                                     }
                                     this.addedChatAction.emit(value);
                                 },
-                                error:()=>{
+                                error: () => {
                                     this.addedChatAction.emit(newContext);
                                 }
                             });
-                            
+
                         }
                         this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
                         this.messageService.addAll(this.lastInteractionMessages);
@@ -624,12 +638,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         this.formGroup.patchValue(dataUpdate);
 
 
-                        this.scrollDown();
+
 
                         if (doSpeach === true && recvd.lastMessage === true && response.queryResponse) {
                             this.speechPlay(response.queryResponse);
                         }
                     }
+                    this.scrollDown();
                 } else if (recvd.contentObjectType === "String") {
                     if (interaction.response) {
                         if (!interaction.response.queryResponse) {
@@ -637,9 +652,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         }
                         interaction.response.queryResponse += recvd.content;
                     }
-                } else if (recvd.contentObjectType === "GUserMessage") {
-                    const message = recvd.content as ToastMessageOptions;
-                    this.lastInteractionMessages = [message];
                 }
                 if (recvd.lastMessage === true) {
                     interaction.loading = false;
@@ -664,7 +676,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         }
 
     }
-
+    onSumbit(): void {
+        if (this.formGroup.valid) {
+            this.sendMessage();
+        }
+    }
     /**
      * Sends a message to the chat system
      * 

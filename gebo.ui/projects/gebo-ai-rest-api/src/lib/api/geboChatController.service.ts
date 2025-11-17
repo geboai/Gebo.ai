@@ -430,7 +430,7 @@ export class GeboChatControllerService {
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
-            'text/event-stream'
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {

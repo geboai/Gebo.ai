@@ -12,14 +12,13 @@
 
 package ai.gebo.llms.chat.abstraction.layer.repository;
 
-import java.util.Date;
-
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 
 /**
  * Gebo.ai comment agent
@@ -38,62 +37,6 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	@Override
 	default Class<GUserChatContext> getManagedType() {
 		return GUserChatContext.class;
-	}
-
-	/**
-	 * Interface for representing user chat information. 
-	 * Provides getter methods to access chat-related data.
-	 */
-	public static interface GUserChatInfo {
-
-		/**
-		 * Gets the code of the chat.
-		 *
-		 * @return a String representing the chat code.
-		 */
-		String getCode();
-
-		/**
-		 * Gets the username associated with the chat.
-		 *
-		 * @return a String representing the username.
-		 */
-		String getUsername();
-
-		/**
-		 * Gets the description of the chat.
-		 *
-		 * @return a String providing the chat description.
-		 */
-		String getDescription();
-
-		/**
-		 * Gets the creation date and time of the chat.
-		 *
-		 * @return a Date object representing when the chat was created.
-		 */
-		Date getChatCreationDateTime();
-
-		/**
-		 * Gets the profile code of the chat.
-		 *
-		 * @return a String representing the profile code.
-		 */
-		public String getChatProfileCode();
-
-		/**
-		 * Checks if the chat has a RAG (red-amber-green) status.
-		 *
-		 * @return a Boolean indicating if the chat has RAG status.
-		 */
-		public Boolean getRagChat();
-
-		/**
-		 * Gets the chat model code.
-		 *
-		 * @return a String representing the model code of the chat.
-		 */
-		public String getChatModelCode();
 	}
 
 	/**

@@ -22,39 +22,49 @@ import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.core.contents.security.services.IGKnowledgebaseVisibilityService;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
@@ -65,30 +75,28 @@ import reactor.core.publisher.Flux;
  */
 @Service
 public class GRagChatServiceImpl extends AbstractChatService implements IGRagChatService {
+	final protected ChatProfilesRepository chatProfilesRepository;
+	final protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
+	final protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
+	final protected IGChatProfileManagementService chatProfileManagementService;
+	final protected IGChatRequestResourcesUsePolicy requestLimitationPolicy;
 
-	// Injected dependencies for various services and repositories.
-	@Autowired
-	protected ChatProfilesRepository chatProfilesRepository;
-	@Autowired
-	protected IGRuntimeChatProfileChatModelDao chatProfileModelsDao;
-	@Autowired
-	protected InteractionsContextService interactionsContext;
-	@Autowired
-	protected IGSecurityService securityService;
-	@Autowired
-	protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
-
-	@Autowired
-	protected IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
-	@Autowired
-	protected IGChatProfileManagementService chatProfileManagementService;
-	@Autowired
-	protected IGChatRequestResourcesUsePolicy requestLimitationPolicy;
-
-	/**
-	 * Default constructor.
-	 */
-	public GRagChatServiceImpl() {
+	public GRagChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
+			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
+			GUserChatContextRepository userContextRepository, GeboChatPromptsConfigs promptConfigs,
+			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
+			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
+			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
+			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
+			IGChatProfileManagementService chatProfileManagementService,
+			IGChatRequestResourcesUsePolicy requestLimitationPolicy) {
+		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
+				promptsDao, interactionsContext, securityService, fixerServiceRepository);
+		this.chatProfilesRepository = chatProfilesRepository;
+		this.chatProfileModelsDao = chatProfileModelsDao;
+		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
+		this.chatProfileManagementService = chatProfileManagementService;
+		this.requestLimitationPolicy = requestLimitationPolicy;
 
 	}
 
@@ -520,6 +528,47 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		} else
 			throw new LLMConfigException("No chat handler and/or embedding handler");
 
+	}
+
+	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException {
+		GUserChatInfoData data = null;
+		Optional<GUserChatContext> repodata = this.userContextRepository.findById(id);
+		if (repodata.isPresent()) {
+			GUserChatContext context = repodata.get();
+			data = new GUserChatInfoData(context);
+			GPromptConfig prompt = this.promptConfigs.getSummarizeChatDescriptionPrompt();
+			IGConfigurableChatModel handler = chatModelConfigurations.defaultHandler();
+			try {
+				if (context.getChatProfileCode() != null) {
+					Optional<GChatProfileConfiguration> profileOpt = this.chatProfilesRepository
+							.findById(context.getChatProfileCode());
+					if (profileOpt.isPresent()) {
+						GChatProfileConfiguration profile = profileOpt.get();
+						GObjectRef<GBaseChatModelConfig> modelReference = profile.getChatModelReference();
+						if (modelReference != null) {
+							IGConfigurableChatModel refHandler = chatModelConfigurations
+									.findByModelReference(modelReference);
+							if (refHandler != null) {
+								handler = refHandler;
+							}
+						}
+					}
+				}
+				if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
+					String content = handler.getChatClient().prompt(prompt.getPrompt())
+							.user(context.getInteractions().get(0).getRequest().getQuery()).call().content();
+					data.setDescription(content);
+					context.setDescription(content);
+					this.userContextRepository.save(context);
+					return data;
+				}
+			} catch (Throwable th) {
+				LOGGER.error("Exception in suggestChatDescription", th);
+				return data;
+			}
+		} else
+			throw new RuntimeException("Id is not found");
+		return data;
 	}
 
 }

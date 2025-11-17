@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.ai.chat.prompt.Prompt;
@@ -23,23 +24,29 @@ import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
@@ -57,26 +64,13 @@ import reactor.core.publisher.Flux;
 @Service
 public class GChatServiceImpl extends AbstractChatService implements IGChatService {
 
-	@Autowired
-	protected IGChatModelRuntimeConfigurationDao chatModelConfigurations;
-
-	@Autowired
-	protected IGPromptConfigDao promptsDao;
-
-	@Autowired
-	protected InteractionsContextService interactionsContext;
-
-	@Autowired
-	protected IGSecurityService securityService;
-
-	@Autowired
-	protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
-
-	/**
-	 * Default constructor.
-	 */
-	public GChatServiceImpl() {
-
+	public GChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
+			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
+			GUserChatContextRepository userContextRepository, GeboChatPromptsConfigs promptConfigs,
+			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
+			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository) {
+		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
+				promptsDao, interactionsContext, securityService, fixerServiceRepository);
 	}
 
 	/**
@@ -407,5 +401,31 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			responseEnvelope.setLastMessage(true);
 			return Flux.just(responseEnvelope);
 		}
+	}
+
+	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException {
+		GUserChatInfoData data = null;
+		Optional<GUserChatContext> repodata = this.userContextRepository.findById(id);
+		if (repodata.isPresent()) {
+			GUserChatContext context = repodata.get();
+			data = new GUserChatInfoData(context);
+			GPromptConfig prompt = this.promptConfigs.getSummarizeChatDescriptionPrompt();
+			IGConfigurableChatModel handler = chatModelConfigurations.defaultHandler();
+			try {
+				if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
+					String content = handler.getChatClient().prompt(prompt.getPrompt())
+							.user(context.getInteractions().get(0).getRequest().getQuery()).call().content();
+					data.setDescription(content);
+					context.setDescription(content);
+					this.userContextRepository.save(context);
+					return data;
+				}
+			} catch (Throwable th) {
+				LOGGER.error("Exception in suggestChatDescription", th);
+				return data;
+			}
+		} else
+			throw new RuntimeException("Id is not found");
+		return data;
 	}
 }
