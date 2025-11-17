@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
@@ -24,17 +21,18 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository.GUserChatInfo;
 import reactor.core.publisher.Flux;
 
 /**
- * AI generated comments
- * Interface defining the general contract for a generic chat service.
+ * AI generated comments Interface defining the general contract for a generic
+ * chat service.
  */
 public interface IGGenericalChatService {
 
 	/**
 	 * Represents the capabilities of a model provider.
-	 */ 
+	 */
 	public static class ModelProviderCapabilities {
 
 		/** The configuration code identifying this provider's configuration. */
@@ -56,14 +54,15 @@ public interface IGGenericalChatService {
 		public final List<ToolCategoriesTree> functionsTreeList;
 
 		/**
-		 * Constructs a ModelProviderCapabilities instance with specified characteristics.
+		 * Constructs a ModelProviderCapabilities instance with specified
+		 * characteristics.
 		 *
-		 * @param configurationCode      The code for the configuration.
-		 * @param supportsTranscript     Does the model support transcripts?
-		 * @param supportsSpeech         Does the model support speech synthesis?
-		 * @param supportsStructuredOutput   Does the model support structured outputs?
-		 * @param supportsFunctionCalls  Does the model support function calls?
-		 * @param functionsTreeList      List of function categories.
+		 * @param configurationCode        The code for the configuration.
+		 * @param supportsTranscript       Does the model support transcripts?
+		 * @param supportsSpeech           Does the model support speech synthesis?
+		 * @param supportsStructuredOutput Does the model support structured outputs?
+		 * @param supportsFunctionCalls    Does the model support function calls?
+		 * @param functionsTreeList        List of function categories.
 		 */
 		public ModelProviderCapabilities(String configurationCode, boolean supportsTranscript, boolean supportsSpeech,
 				boolean supportsStructuredOutput, boolean supportsFunctionCalls,
@@ -81,9 +80,10 @@ public interface IGGenericalChatService {
 	/**
 	 * Streams chat messages as a reactive Flux sequence.
 	 *
-	 * @param request The chat request containing necessary parameters for the interaction.
+	 * @param request The chat request containing necessary parameters for the
+	 *                interaction.
 	 * @return A Flux of chat message envelopes.
-	 * @throws GeboChatException If there is an error processing the chat.
+	 * @throws GeboChatException  If there is an error processing the chat.
 	 * @throws LLMConfigException If there is an error with the LLM configuration.
 	 */
 	public Flux<GeboChatMessageEnvelope> streamChat(GeboChatRequest request)
@@ -92,11 +92,11 @@ public interface IGGenericalChatService {
 	/**
 	 * Conducts a chat based on provided template response type.
 	 *
-	 * @param <T> The type of the templated chat response.
-	 * @param request The chat request with interaction data.
+	 * @param <T>          The type of the templated chat response.
+	 * @param request      The chat request with interaction data.
 	 * @param responseType The class type of the response.
 	 * @return A templated chat response.
-	 * @throws GeboChatException If there is an error processing the chat.
+	 * @throws GeboChatException  If there is an error processing the chat.
 	 * @throws LLMConfigException If there is a configuration error.
 	 */
 	public <T> GeboTemplatedChatResponse<T> templatedChat(GeboChatRequest request, Class<T> responseType)
@@ -105,14 +105,14 @@ public interface IGGenericalChatService {
 	/**
 	 * Conducts a chat using custom environment settings and content functions.
 	 *
-	 * @param <T> The type of the templated chat response.
-	 * @param request The chat request with interaction details.
-	 * @param prompt The prompt guiding the chat interaction.
+	 * @param <T>               The type of the templated chat response.
+	 * @param request           The chat request with interaction details.
+	 * @param prompt            The prompt guiding the chat interaction.
 	 * @param customEnvironment Custom environment settings for the chat.
-	 * @param contents Content functions mapping context to objects.
-	 * @param responseType The class type for the response.
+	 * @param contents          Content functions mapping context to objects.
+	 * @param responseType      The class type for the response.
 	 * @return A templated chat response.
-	 * @throws GeboChatException If there is an error processing the chat.
+	 * @throws GeboChatException  If there is an error processing the chat.
 	 * @throws LLMConfigException If there is a configuration issue.
 	 */
 	public <T> GeboTemplatedChatResponse<T> templatedChat(GeboChatRequest request, String prompt,
@@ -124,7 +124,7 @@ public interface IGGenericalChatService {
 	 *
 	 * @param request The chat request containing chat parameters.
 	 * @return A response from the chat model.
-	 * @throws GeboChatException If chat processing encounters an error.
+	 * @throws GeboChatException  If chat processing encounters an error.
 	 * @throws LLMConfigException If there are configuration errors detected.
 	 */
 	public GeboChatResponse chat(GeboChatRequest request) throws GeboChatException, LLMConfigException;
@@ -134,8 +134,11 @@ public interface IGGenericalChatService {
 	 *
 	 * @param modelCode The code representing the model for which info is retrieved.
 	 * @return User information related to the chat model.
-	 * @throws GeboChatException If the request fails due to chat errors.
-	 * @throws LLMConfigException If configuration issues prevent information retrieval.
+	 * @throws GeboChatException  If the request fails due to chat errors.
+	 * @throws LLMConfigException If configuration issues prevent information
+	 *                            retrieval.
 	 */
 	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException;
+
+	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException;
 }

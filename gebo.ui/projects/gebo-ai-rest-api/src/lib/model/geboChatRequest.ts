@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
+import { RagDocumentsCachedDaoResult } from './ragDocumentsCachedDaoResult';
 
 export interface GeboChatRequest { 
     id?: string;
@@ -21,4 +22,5 @@ export interface GeboChatRequest {
     customRagConfig?: GeboRagRequestCustomConfig;
     choosedKnowledgeBases?: Array<string>;
     forcedRequestDocuments?: Array<string>;
+    documents?: RagDocumentsCachedDaoResult;
 }

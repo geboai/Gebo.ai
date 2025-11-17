@@ -9,11 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { RagDocumentReferenceItem } from './ragDocumentReferenceItem';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface RagDocumentsCachedDaoResult { 
+    documentItems?: Array<RagDocumentReferenceItem>;
+    ntokens?: number;
+    nbytes?: number;
 }

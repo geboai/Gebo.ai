@@ -10,10 +10,12 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface MimeType { 
+    type?: string;
+    subtype?: string;
+    charset?: string;
+    concrete?: boolean;
+    wildcardType?: boolean;
+    wildcardSubtype?: boolean;
+    subtypeSuffix?: string;
 }

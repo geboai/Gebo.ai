@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
@@ -39,25 +36,28 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.richresponse.model.RichResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService.ModelProviderCapabilities;
+import jakarta.validation.constraints.NotNull;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import reactor.core.publisher.Flux;
 
 /**
  * AI generated comments
  * 
- * REST controller for handling RAG (Retrieval-Augmented Generation) chat-related 
- * operations in the Gebo chat system. Provides endpoints for streaming responses,
- * retrieving chat profiles, and handling various chat interactions.
+ * REST controller for handling RAG (Retrieval-Augmented Generation)
+ * chat-related operations in the Gebo chat system. Provides endpoints for
+ * streaming responses, retrieving chat profiles, and handling various chat
+ * interactions.
  */
 @RestController
 @RequestMapping(path = "api/users/GeboChatController")
 public class GeboRagChatController {
 	/** Logger for this class */
 	final static Logger LOGGER = LoggerFactory.getLogger(GeboRagChatController.class);
-	
+
 	/** Service for handling RAG chat operations */
 	@Autowired
 	IGRagChatService chatService;
@@ -74,7 +74,7 @@ public class GeboRagChatController {
 	 * 
 	 * @param request The chat request containing messages and parameters
 	 * @return A flux of server-sent events containing the streaming response
-	 * @throws GeboChatException If there's an error processing the chat
+	 * @throws GeboChatException  If there's an error processing the chat
 	 * @throws LLMConfigException If there's a configuration error with the LLM
 	 */
 	@PostMapping(value = "streamRagResponse", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -125,7 +125,7 @@ public class GeboRagChatController {
 	 * 
 	 * @param request The chat request containing messages and parameters
 	 * @return The chat response from the LLM with RAG augmentation
-	 * @throws GeboChatException If there's an error processing the chat
+	 * @throws GeboChatException  If there's an error processing the chat
 	 * @throws LLMConfigException If there's a configuration error with the LLM
 	 */
 	@PostMapping(value = "ragChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -135,11 +135,12 @@ public class GeboRagChatController {
 	}
 
 	/**
-	 * Endpoint for rich RAG-based chat interactions that returns a templated response
+	 * Endpoint for rich RAG-based chat interactions that returns a templated
+	 * response
 	 * 
 	 * @param request The chat request containing messages and parameters
 	 * @return A templated chat response with rich formatted content
-	 * @throws GeboChatException If there's an error processing the chat
+	 * @throws GeboChatException  If there's an error processing the chat
 	 * @throws LLMConfigException If there's a configuration error with the LLM
 	 */
 	@PostMapping(value = "richRagChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -153,9 +154,11 @@ public class GeboRagChatController {
 	 * 
 	 * @param chatProfileCode The code identifying the chat profile
 	 * @return User information associated with the chat profile
-	 * @throws GeboChatException If there's an error processing the request
-	 * @throws LLMConfigException If there's a configuration error with the LLM
-	 * @throws GeboPersistenceException If there's an error accessing persistent data
+	 * @throws GeboChatException        If there's an error processing the request
+	 * @throws LLMConfigException       If there's a configuration error with the
+	 *                                  LLM
+	 * @throws GeboPersistenceException If there's an error accessing persistent
+	 *                                  data
 	 */
 	@GetMapping(value = "getChatModelUserInfoByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(
@@ -164,4 +167,9 @@ public class GeboRagChatController {
 		return chatService.getChatModelUserInfoByChatProfileCode(chatProfileCode);
 	}
 
+	@GetMapping(value = "suggestRagChatDescription", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public GUserChatInfo suggestRagChatDescription(@RequestParam("id") @NotNull String id)
+			throws GeboChatException, LLMConfigException {
+		return chatService.suggestChatDescription(id);
+	}
 }

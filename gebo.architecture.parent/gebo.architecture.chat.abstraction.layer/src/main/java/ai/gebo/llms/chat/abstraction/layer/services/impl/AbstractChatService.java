@@ -56,6 +56,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.model.DocumentMetaInfos;
@@ -458,26 +459,11 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			cf.setFunctionName(toolCall.name());
 			cf.setParamsDescription(List.of(toolCall.arguments()));
 			out.add(cf);
-		} 
+		}
 		return out;
 	}
 
-	/*
-	 * protected Flux<GeboChatMessageEnvelope> stream(ChatModel chatModel, final
-	 * Prompt prompt, final KBContext context, final GeboChatRequest request, final
-	 * GeboChatResponse response, final GUserChatContext userContext, final
-	 * List<GResponseDocumentRef> docrefs) { try { if (LOGGER.isDebugEnabled()) {
-	 * LOGGER.debug("Begin stream(....)"); }
-	 * 
-	 * Flux<ChatResponse> res = chatModel.stream(prompt);
-	 * 
-	 * if (LOGGER.isDebugEnabled()) { LOGGER.debug("End stream(....)"); } return
-	 * composeFlux(res, context, request, response, userContext, docrefs); } catch
-	 * (Throwable th) { response.getBackendMessages().add(GUserMessage.
-	 * errorMessage("Error on service provider", th));
-	 * LOGGER.error("Error chat handling", th);
-	 * GeboChatMessageEnvelope<GeboChatResponse> envelope = new
-	 * GeboChatMessageEnvelope<GeboChatResponse>(); envelope.setContent(response);
-	 * envelope.setLastMessage(true); return Flux.just(envelope); } }
-	 */
+	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException {
+		return null;
+	}
 }

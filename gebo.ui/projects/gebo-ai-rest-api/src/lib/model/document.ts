@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Media } from './media';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface Document { 
+    content?: string;
+    id?: string;
+    text?: string;
+    media?: Media;
+    score?: number;
 }

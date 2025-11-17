@@ -15,7 +15,7 @@ export interface PageableObject {
     offset?: number;
     sort?: SortObject;
     unpaged?: boolean;
-    pageNumber?: number;
-    pageSize?: number;
     paged?: boolean;
+    pageSize?: number;
+    pageNumber?: number;
 }

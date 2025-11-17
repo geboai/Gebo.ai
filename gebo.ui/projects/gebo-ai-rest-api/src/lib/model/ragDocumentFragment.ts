@@ -9,11 +9,16 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { Document } from './document';
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+export interface RagDocumentFragment { 
+    document?: Document;
+    code?: string;
+    rootKnowledgebaseCode?: string;
+    parentProjectCode?: string;
+    rankIndex?: number;
+    weightedResultsRanking?: number;
+    origin?: string;
+    ntokens?: number;
+    nbytes?: number;
 }

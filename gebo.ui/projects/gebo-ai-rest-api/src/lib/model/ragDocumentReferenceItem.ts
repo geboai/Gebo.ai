@@ -9,19 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { RagDocumentFragment } from './ragDocumentFragment';
 
-export interface DocumentReferenceView { 
-    name?: string;
-    extension?: string;
-    contentType?: string;
-    description?: string;
+export interface RagDocumentReferenceItem { 
+    totalFileNTokens?: number;
+    complete?: boolean;
     code?: string;
-    modificationDate?: Date;
     rootKnowledgebaseCode?: string;
-    messagingModuleId?: string;
-    parentVirtualFolderCode?: string;
-    relativePath?: string;
     parentProjectCode?: string;
-    creationDate?: Date;
-    deleted?: boolean;
+    fragments?: Array<RagDocumentFragment>;
+    contentType?: string;
+    extension?: string;
+    name?: string;
+    originalUrl?: string;
+    weightedResultsRanking?: number;
+    ntokens?: number;
+    nbytes?: number;
 }

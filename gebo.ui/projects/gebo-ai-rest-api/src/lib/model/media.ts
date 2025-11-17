@@ -9,11 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MimeType } from './mimeType';
 
-export interface UserInfos { 
+export interface Media { 
+    id?: string;
+    mimeType?: MimeType;
+    data?: any;
     name?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
-    sourname?: string;
+    dataAsByteArray?: Array<string>;
 }
