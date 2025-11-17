@@ -23,8 +23,8 @@
         </span>
     </div>
 </div>
-<p-dialog  id="chooseFilesDialog"  gebo-ai-label  [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true" [style]="{width:'95%',height:'95%'}" [closable]="true"
-    header="Choose files to chat with" [showHeader]="true" (onHide)="this.openedSearchDocumentsWindows=false;"
+<p-dialog  [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true" [style]="{width:'95%',height:'70%'}" [closable]="true"
+    [showHeader]="true" (onHide)="this.openedSearchDocumentsWindows=false;"
     (visibleChange)="this.openedSearchDocumentsWindowsChange.emit(false)" [formGroup]="editingFormGroup">
     <gebo-ai-search-documents-component [knowledgeBaseCodes]="knowledgeBaseCodes" formControlName="documentsList"
         (confirmed)="acceptedValues()"

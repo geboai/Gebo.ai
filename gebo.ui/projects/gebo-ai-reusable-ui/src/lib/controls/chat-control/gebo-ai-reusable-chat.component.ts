@@ -677,7 +677,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
     }
     onSumbit(): void {
-        if (this.formGroup.valid) {
+        if (this.formGroup.valid && !this.chatStreaming) {
             this.sendMessage();
         }
     }

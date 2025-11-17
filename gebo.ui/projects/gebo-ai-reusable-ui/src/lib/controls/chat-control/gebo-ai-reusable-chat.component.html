@@ -149,7 +149,7 @@
                     <div class="col-10">
 
                         <textarea rows="2" cols="250" [required]="true" pTextarea formControlName="query" class="w-full"
-                            gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot">
+                            gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot" (keydown.enter)="onSumbit()">
                         </textarea>
 
                     </div>
