@@ -6,13 +6,13 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { PanelModule } from "primeng/panel";
 import { GeboAIChooseDocumentsPanelComponent } from "./choose-documents-panel.component";
@@ -31,7 +31,13 @@ import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-s
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
-
+import { GeboAIUploadChatDocumentComponent } from "./upload-chat-document.component";
+import { FileUploadModule } from 'primeng/fileupload';
+import { BadgeModule } from "primeng/badge";
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { ProgressBarModule } from "primeng/progressbar";
+import { ToastModule } from "primeng/toast";
+import { MessagesModule } from "primeng/messages";
 /**
  * AI generated comments
  * 
@@ -51,11 +57,10 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
  * - GeboAIDocumentsListPanelComponent: Displays lists of selected documents
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, VFilesystemSelectorModule, PanelModule,  DialogModule, BlockUIModule, ButtonModule,TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule,GeboAIFieldTransationContainerModule],
-    declarations: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
-    exports: [GeboAIChooseDocumentsPanelComponent,GeboAISearchDocumentsComponent,GeboAIDocumentsListPanelComponent],
-    providers:[{provide: GEBO_AI_MODULE, useValue:"GeboAIChooseDocumentsPanelModule",multi: false}]
-    
+    imports: [CommonModule, ReactiveFormsModule,FormsModule, VFilesystemSelectorModule, PanelModule, DialogModule, BlockUIModule, ButtonModule, TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule, GeboAIFieldTransationContainerModule, FileUploadModule, BadgeModule, ToastModule, ProgressBarModule,MessagesModule,OverlayBadgeModule],
+    declarations: [GeboAIChooseDocumentsPanelComponent, GeboAISearchDocumentsComponent, GeboAIDocumentsListPanelComponent, GeboAIUploadChatDocumentComponent],
+    exports: [GeboAIChooseDocumentsPanelComponent, GeboAISearchDocumentsComponent, GeboAIDocumentsListPanelComponent, GeboAIUploadChatDocumentComponent],
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false }]
 })
 export class GeboAIChooseDocumentsPanelModule {
 

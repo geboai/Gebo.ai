@@ -16,7 +16,8 @@
         <div class="col-2"></div>
         <div class="col-8">
 
-            <p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title" [style]="{height: '100%',border:'0px'}">
+            <p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title"
+                [style]="{height: '100%',border:'0px'}">
 
                 <ng-template #icons name="icons" pTemplate="icons">
                     <div #anchorPoint>
@@ -128,14 +129,18 @@
                 <div class="col-3">
 
                 </div>
-                <div class="col-6 grid chat-area" >
+                <div class="col-6 grid chat-area">
                     <div class="col-1"></div>
                     <div class="col-10"><gebo-ai-choose-documents-panel-component
                             *ngIf="ragsystem && chatUserInfos?.knowledgeBases" [interactionDisabled]="loading"
                             [knowledgeBaseCodes]="knowledgeBaseCodes"
                             [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
                             [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
-                            formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component></div>
+                            formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
+                        <!-- 
+                        <gebo-ai-upload-chat-document [showUpload]="openedUploadDocumentsWindow"
+                            formControlName="userUploadedFiles"></gebo-ai-upload-chat-document> -->
+                    </div>
                     <div class="col-1"></div>
                     <div class="col-1 grid">
                         <div class="col-6" style="text-align: right;"><p-button id="UploadFileBtn" [text]="true"
@@ -149,7 +154,8 @@
                     <div class="col-10">
 
                         <textarea rows="2" cols="250" [required]="true" pTextarea formControlName="query" class="w-full"
-                            gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot" (keydown.enter)="onSumbit()">
+                            gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot"
+                            (keydown.enter)="onSumbit()">
                         </textarea>
 
                     </div>
@@ -161,8 +167,8 @@
                         </div>
                         <div class="col-6" style="text-align: right;">
                             <p-button id="SubmiQuestion" (onClick)="sendMessage()" gebo-ai-label
-                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true" type="submit"
-                                title="Sumbit your question" [text]="false"></p-button>
+                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
+                                type="submit" title="Sumbit your question" [text]="false"></p-button>
                         </div>
 
                     </div>
