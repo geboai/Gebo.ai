@@ -42,10 +42,10 @@ import { POldTabPanelLabelTarget } from "./primeng-components-obsolete-multilang
         PCalendarLabelTarget, PSliderLabelTarget, PProgressBarLabelTarget,
         PStepsLabelTarget, PGalleriaLabelTarget, POldTabPanelLabelTarget],
 })
-export class GeboAIFieldTransationContainerModule {
-    static forRoot(): ModuleWithProviders<GeboAIFieldTransationContainerModule> {
+export class GeboAIFieldTranslationContainerModule {
+    static forRoot(): ModuleWithProviders<GeboAIFieldTranslationContainerModule> {
         return {
-            ngModule: GeboAIFieldTransationContainerModule,
+            ngModule: GeboAIFieldTranslationContainerModule,
             providers: [GeboAITranslationService]
         };
     }

@@ -9,7 +9,7 @@ const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionU
 @Component({
     templateUrl: "upload-chat-document.component.html",
     selector: "gebo-ai-upload-chat-document",
-    standalone: false,
+    
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -21,7 +21,7 @@ const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionU
             provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUploadChatDocumentComponent"),
             multi: false
         }
-    ],
+    ], standalone: false
 })
 export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, ControlValueAccessor {
 

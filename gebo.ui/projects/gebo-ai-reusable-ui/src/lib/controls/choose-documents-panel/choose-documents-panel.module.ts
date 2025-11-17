@@ -29,7 +29,7 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { GeboAIUserspaceFilesModule } from "../userspace-files-component/userspace-files.module";
 import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-selector.module";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
-import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIUploadChatDocumentComponent } from "./upload-chat-document.component";
 import { FileUploadModule } from 'primeng/fileupload';
@@ -57,7 +57,7 @@ import { MessagesModule } from "primeng/messages";
  * - GeboAIDocumentsListPanelComponent: Displays lists of selected documents
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule,FormsModule, VFilesystemSelectorModule, PanelModule, DialogModule, BlockUIModule, ButtonModule, TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule, GeboAIFieldTransationContainerModule, FileUploadModule, BadgeModule, ToastModule, ProgressBarModule,MessagesModule,OverlayBadgeModule],
+    imports: [CommonModule, ReactiveFormsModule,FormsModule, VFilesystemSelectorModule, PanelModule, DialogModule, BlockUIModule, ButtonModule, TabsModule, GeboAIContentViewerModule, InputTextModule, CheckboxModule, PickListModule, DragDropModule, GeboAIUserspaceFilesModule, GeboAIFieldTranslationContainerModule, FileUploadModule, BadgeModule, ToastModule, ProgressBarModule,MessagesModule,OverlayBadgeModule],
     declarations: [GeboAIChooseDocumentsPanelComponent, GeboAISearchDocumentsComponent, GeboAIDocumentsListPanelComponent, GeboAIUploadChatDocumentComponent],
     exports: [GeboAIChooseDocumentsPanelComponent, GeboAISearchDocumentsComponent, GeboAIDocumentsListPanelComponent, GeboAIUploadChatDocumentComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChooseDocumentsPanelModule", multi: false }]

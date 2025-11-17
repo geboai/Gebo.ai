@@ -40,7 +40,7 @@ import { GeboAIOauth2LandingComponent } from "./oauth2/oauth2landing/oauth2-land
 import { LoggedComponent } from "./logged.component";
 import { LogoutComponent } from "./logout.component";
 import { GeboAIReloadForwardComponent } from "./reload-forward.component";
-import { GeboAIFieldTransationContainerModule } from "../../controls/field-translation-container/field-container.module";
+import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
 /**
  * Defines the route configuration for the login module.
  * Sets up the '/ui/login' path to be handled by the LoginComponent.
@@ -56,7 +56,7 @@ const routes: Routes = [
     imports: [CommonModule, PasswordModule, InputTextModule, ButtonModule,
         BlockUIModule,
         PanelModule,
-        MessagesModule, ReactiveFormsModule, FormsModule, RouterModule.forRoot(routes), FieldsetModule,GeboAIFieldTransationContainerModule],
+        MessagesModule, ReactiveFormsModule, FormsModule, RouterModule.forRoot(routes), FieldsetModule,GeboAIFieldTranslationContainerModule],
     declarations: [LoginComponent, GeboAIOauth2LandingComponent, LoggedComponent, LogoutComponent,GeboAIReloadForwardComponent],
     exports: [LoginComponent],
     providers: [LoginService, GenericOauth2ClientLoginService, GenericOauth2ServerSideLoginService]

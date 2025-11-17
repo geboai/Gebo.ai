@@ -12,11 +12,11 @@ import { InputTextModule } from "primeng/inputtext";
 import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 import { MultiSelect } from "primeng/multiselect";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
-import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, Fieldset, Button, InputNumber, InputTextModule, EditableListboxModule, MultiSelect, GeboAIFieldTransationContainerModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, Fieldset, Button, InputNumber, InputTextModule, EditableListboxModule, MultiSelect, GeboAIFieldTranslationContainerModule],
     declarations: [GeboAIContentSelectionFilterComponent, GeboAISelectionFilterCriteriaComponent],
     exports: [GeboAIContentSelectionFilterComponent],
     providers: [{
