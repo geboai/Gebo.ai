@@ -137,20 +137,22 @@
                             [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
                             [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
                             formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
-                            <!-- check why it does not work
-                        <gebo-ai-upload-chat-document [showUpload]="openedUploadDocumentsWindow"
-                            formControlName="userUploadedFiles"></gebo-ai-upload-chat-document>
-                            -->
+
+                        <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
+                            formControlName="userUploadedFiles"
+                            [userSessionCode]="userChatContextCode"></gebo-ai-upload-chat-documents-files>
+                        <!--  check why it does not work   -->
                     </div>
                     <div class="col-1"></div>
                     <div class="col-1 grid">
-                        <div class="col-6" style="text-align: right;"><p-button id="UploadFileBtn" [text]="true"
-                                gebo-ai-label icon="pi pi-cloud-upload" title="Upload a file to chat or work with"
-                                (onClick)="openedUploadDocumentsWindow=true"></p-button></div>
+                        <div class="col-6" style="text-align: right;"><p-button id="UploadFileBtn" [text]="false"
+                                [rounded]="true" gebo-ai-label icon="pi pi-cloud-upload"
+                                title="Upload a file to chat or work with" (onClick)="openedUploadDocumentsWindow=true"
+                                [disabled]="loading"></p-button></div>
                         <div class="col-6" style="text-align: right;"><p-button id="ChatWithDocsBtnNew" [text]="true"
                                 gebo-ai-label icon="pi pi-search"
                                 title="Browse or search and select documents to chat with"
-                                (onClick)="openSelectDocumentsWindow=true"></p-button></div>
+                                (onClick)="openSelectDocumentsWindow=true" [disabled]="loading"></p-button></div>
                     </div>
                     <div class="col-10">
 

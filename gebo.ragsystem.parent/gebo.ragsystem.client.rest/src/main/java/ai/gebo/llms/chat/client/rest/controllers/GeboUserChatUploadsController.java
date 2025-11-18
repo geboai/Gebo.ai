@@ -27,7 +27,7 @@ public class GeboUserChatUploadsController {
 	final IGUserUploadContentHandler uploadsHandler;
 
 	@PostMapping(value = "chatSessionUpload/{userSessionCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public OperationStatus<UserUploadedContent> chatSessionUpload(
+	public OperationStatus<List<UserUploadedContent>> chatSessionUpload(
 			@PathVariable("userSessionCode") String userSessionCode, @RequestParam("files[]") List<MultipartFile> files)
 			throws IOException {
 		return uploadsHandler.chatSessionUpload(userSessionCode, files);

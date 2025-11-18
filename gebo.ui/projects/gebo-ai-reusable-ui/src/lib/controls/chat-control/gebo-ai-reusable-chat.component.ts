@@ -67,7 +67,7 @@ interface GeboChatTemplatedResponse {
     selector: "gebo-ai-reusable-chat-component",
     templateUrl: "gebo-ai-reusable-chat.component.html",
     styleUrls: ["gebo-ai-reusable-chat.component.css"],
-    providers: [MessageService,
+    providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIReusableChatComponent),
@@ -87,6 +87,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * List of knowledge base codes available for this chat
      */
     public knowledgeBaseCodes: string[] = [];
+    protected userChatContextCode: string | undefined;
 
     /**
      * Determines if any loading operation is currently in progress
@@ -240,7 +241,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         chatModelCode: new FormControl(),
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
-        userUploadedFiles:new FormControl()
+        userUploadedFiles: new FormControl()
     });
 
     /**
@@ -293,10 +294,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         private messageService: MessageService,
         private ragChatService: GeboRagChatControllerService,
         private reactiveChatService: ReactiveRagChatService,
-        private geboAiTranslationService:GeboAITranslationService,
+        private geboAiTranslationService: GeboAITranslationService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
-
+        this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
+            next: (userChatContextCode: string | undefined) => {
+                this.userChatContextCode = userChatContextCode;
+            }
+        });
     }
     public getEntityName(): string {
         return "GeboAIReusableChatComponent";
@@ -588,13 +593,13 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                         const message = recvd.content as ToastMessageOptions;
                         this.lastInteractionMessages = [message];
                         this.geboAiTranslationService.translateBackendMessage(recvd.content).subscribe({
-                            next:(msg)=>{
+                            next: (msg) => {
                                 if (msg) {
-                                    this.lastInteractionMessages=[message];
+                                    this.lastInteractionMessages = [message];
                                 }
                             }
                         });
-                        
+
                     }
                     interaction.response = recvd.content;
                     if (interaction.response && recvd.lastMessage === true) {

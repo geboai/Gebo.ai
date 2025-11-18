@@ -10,7 +10,7 @@ import ai.gebo.model.OperationStatus;
 
 public interface IGUserUploadContentHandler {
 
-	public OperationStatus<UserUploadedContent> chatSessionUpload(String userSessionCode, List<MultipartFile> files);
+	public OperationStatus<List<UserUploadedContent>> chatSessionUpload(String userSessionCode, List<MultipartFile> files);
 
 	public default Document chatSessionUploadContent(UserUploadedContent content) {
 		return this.chatSessionUploadContentById(content.getCode());
