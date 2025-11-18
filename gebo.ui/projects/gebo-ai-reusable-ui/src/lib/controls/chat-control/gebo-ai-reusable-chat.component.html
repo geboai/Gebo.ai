@@ -70,7 +70,7 @@
                                     <b class="pi pi-cloud-upload" id="UploadedDocs" gebo-ai-text>Uploaded docs</b>
                                     <li *ngFor="let upl of interaction.request.userUploadedContents;"
                                         style="with: 100%;">
-                                        {{upl.fileName}}
+                                        <uploaded-document-ref [ref]="upl"></uploaded-document-ref>
                                     </li>
                                 </ul>
                             </li>
