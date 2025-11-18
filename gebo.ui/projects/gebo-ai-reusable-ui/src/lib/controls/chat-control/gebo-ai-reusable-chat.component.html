@@ -65,7 +65,14 @@
                             <li style="with: 100%;">
                                 <b>You:</b>
                                 <div style="overflow-wrap: break-word;">{{interaction.request.query}}</div>
-
+                                <ul
+                                    *ngIf="interaction.request.userUploadedContents && interaction.request.userUploadedContents.length">
+                                    <b class="pi pi-cloud-upload" id="UploadedDocs" gebo-ai-text>Uploaded docs</b>
+                                    <li *ngFor="let upl of interaction.request.userUploadedContents;"
+                                        style="with: 100%;">
+                                        {{upl.fileName}}
+                                    </li>
+                                </ul>
                             </li>
                             <li style="with: 100%;">
                                 <b>{{(interaction?.response?.usedChatModelCode?interaction?.response?.usedChatModelCode:modelName)}}</b>
@@ -82,7 +89,7 @@
                                     <li *ngIf="ragsystem && interaction?.response?.documentsRef && interaction?.response?.documentsRef?.length"
                                         style="with: 100%;">
                                         <ul style="with: 100%;">
-                                            <b class="pi pi-database">Used documents:</b>
+                                            <b class="pi pi-database" id="FoundRelatedDocs" gebo-ai-text>Found docs</b>
                                             <li *ngFor="let d of getDocs(interaction);" style="with: 100%;">
                                                 <gebo-ai-chat-docref [ref]="d" [choosed]="isChoosed(d)"
                                                     (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
@@ -139,7 +146,7 @@
                             formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
 
                         <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
-                            formControlName="userUploadedFiles"
+                            formControlName="userUploadedContents"
                             [userSessionCode]="userChatContextCode"></gebo-ai-upload-chat-documents-files>
                         <!--  check why it does not work   -->
                     </div>

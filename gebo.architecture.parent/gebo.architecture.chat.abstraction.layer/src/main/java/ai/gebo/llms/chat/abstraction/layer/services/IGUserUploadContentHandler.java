@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.ai.document.Document;
@@ -11,14 +13,8 @@ import ai.gebo.model.OperationStatus;
 public interface IGUserUploadContentHandler {
 
 	public OperationStatus<List<UserUploadedContent>> chatSessionUpload(String userSessionCode, List<MultipartFile> files);
-
-	public default Document chatSessionUploadContent(UserUploadedContent content) {
-		return this.chatSessionUploadContentById(content.getCode());
-	}
-
-	public Document chatSessionUploadContentById(String code);
-
 	public OperationStatus<List<UserUploadedContent>> deleteSessionUploads(String userSessionCode, List<String> id);
+	public InputStream getUploadContent(UserUploadedContent content) throws IOException;
 	
 	
 

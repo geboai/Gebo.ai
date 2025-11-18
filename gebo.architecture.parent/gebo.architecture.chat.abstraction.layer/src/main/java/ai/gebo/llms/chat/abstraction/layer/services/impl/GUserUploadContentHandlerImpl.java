@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +27,7 @@ import lombok.AllArgsConstructor;
 public class GUserUploadContentHandlerImpl implements IGUserUploadContentHandler {
 	final IGChatStorageAreaService storageAreaService;
 	final static Logger LOGGER = LoggerFactory.getLogger(GUserUploadContentHandlerImpl.class);
-	
+
 	@Override
 	public OperationStatus<List<UserUploadedContent>> chatSessionUpload(String userSessionCode,
 			List<MultipartFile> files) {
@@ -34,7 +36,13 @@ public class GUserUploadContentHandlerImpl implements IGUserUploadContentHandler
 		for (MultipartFile file : files) {
 			try {
 				UserUploadContentServerSide ssFile = storageAreaService.addUploadedFile(userSessionCode, file);
-				data.add(new UserUploadedContent(ssFile));
+				if (ssFile == null) {
+					GUserMessage message = GUserMessage.errorMessage("Unsupported file type",
+							"The file " + file.getOriginalFilename() + " cannot be read");
+					messages.add(message);
+				} else {
+					data.add(new UserUploadedContent(ssFile));
+				}
 			} catch (Throwable th) {
 				LOGGER.error("Handling file problem", th);
 				messages.add(GUserMessage.errorMessage("File cannot be handled or corrupt",
@@ -49,15 +57,15 @@ public class GUserUploadContentHandlerImpl implements IGUserUploadContentHandler
 	}
 
 	@Override
-	public Document chatSessionUploadContentById(String code) {
+	public OperationStatus<List<UserUploadedContent>> deleteSessionUploads(String userSessionCode, List<String> id) {
 
-		return null;
+		return storageAreaService.deleteUploadedContents(userSessionCode, id);
 	}
 
 	@Override
-	public OperationStatus<List<UserUploadedContent>> deleteSessionUploads(String userSessionCode, List<String> id) {
-		// TODO Auto-generated method stub
-		return null;
+	public InputStream getUploadContent(UserUploadedContent content) throws IOException {
+
+		return storageAreaService.getContent(content);
 	}
 
 }

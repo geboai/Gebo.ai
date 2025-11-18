@@ -241,7 +241,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         chatModelCode: new FormControl(),
         forcedRequestDocuments: new FormControl(),
         query: new FormControl(),
-        userUploadedFiles: new FormControl()
+        userUploadedContents: new FormControl()
     });
 
     /**
@@ -699,6 +699,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         qry.id = uuid;
         qry.streamResponse = true;
         this.formGroup.controls["query"].setValue(null);
+        this.formGroup.controls["userUploadedContents"].setValue([]);
         if (this.useRestOnly === true) {
             this.callRestChat(qry, doSpeach);
         } else {

@@ -15,6 +15,7 @@ public class UserUploadContentServerSide extends UserUploadedContent {
 	@NotNull
 	protected String relativeFilePath = null;
 	protected String geboDocumentCode = null;
+	protected String ingestedJsonPath=null;
 	protected GObjectRef<GProjectEndpoint> publishedEndpoint = null;
 	protected Boolean published = null;
 	

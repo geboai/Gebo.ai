@@ -12,9 +12,10 @@ import { BadgeModule } from "primeng/badge";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
+import { CdkDragPlaceholder } from "@angular/cdk/drag-drop";
 
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, FileUploadModule, ToastModule, MessagesModule, ButtonModule, ProgressBarModule, DialogModule, BadgeModule, PanelModule, BlockUIModule, GeboAIFieldTranslationContainerModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, FileUploadModule, ToastModule, MessagesModule, ButtonModule, ProgressBarModule, DialogModule, BadgeModule, PanelModule, BlockUIModule, GeboAIFieldTranslationContainerModule, CdkDragPlaceholder],
     declarations: [GeboAIUploadChatDocumentComponent],
     exports: [GeboAIUploadChatDocumentComponent]
 })

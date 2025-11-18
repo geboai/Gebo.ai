@@ -1,14 +1,19 @@
 package ai.gebo.llms.chat.abstraction.layer.services;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
 import org.springframework.ai.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
+import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
+import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
+import ai.gebo.model.OperationStatus;
+import ai.gebo.system.ingestion.GeboIngestionException;
 
 public interface IGChatStorageAreaService {
 	/************************************************************************************************
@@ -28,8 +33,10 @@ public interface IGChatStorageAreaService {
 	 * @param file
 	 * @return
 	 * @throws IOException
+	 * @throws GeboContentHandlerSystemException 
+	 * @throws GeboIngestionException 
 	 */
-	public UserUploadContentServerSide addUploadedFile(String userSessionCode, MultipartFile file) throws IOException;
+	public UserUploadContentServerSide addUploadedFile(String userSessionCode, MultipartFile file) throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
 	/*****************************************************************************************************
 	 * Deletes the file content
@@ -64,5 +71,9 @@ public interface IGChatStorageAreaService {
 	 * @throws IOException
 	 */
 	public List<Document> getIngestedContentsOf(UserUploadContentServerSide ss) throws IOException;
+
+	public OperationStatus<List<UserUploadedContent>> deleteUploadedContents(String userSessionCode, List<String> id);
+
+	public InputStream getContent(UserUploadedContent content);
 
 }

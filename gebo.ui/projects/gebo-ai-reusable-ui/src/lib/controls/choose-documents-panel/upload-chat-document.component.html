@@ -1,26 +1,41 @@
+<ng-template #viewDocumentChips>
+    <div class="grid">
+        <div class="col-12">
+            <span *ngFor="let doc of uploadedContents" style="list-style: none;break-after: avoid;">
+                <p-button id="DocRemoveBtn" gebo-ai-label icon="pi pi-times-circle" [text]="true"
+                    (onClick)="doRemoveUploaded(doc)"></p-button><i class="pi pi-cloud-upload"></i> {{doc.fileName}}
+            </span>
+        </div>
+    </div>
+</ng-template>
 <p-blockUI [blocked]="loading" [target]="uploadFilesArea">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 <p-dialog [modal]="true" #uploadFilesArea [maximizable]="true" [visible]="showUpload" [modal]="true"
     [style]="{width:'50%',height:'50%'}" [closable]="true" (visibleChange)="showUploadChange.emit(false)">
     <p-panel id="FilesToChatHeader" header="Upload files to chat with" gebo-ai-label>
+        <div class="card">
+            <ng-container *ngTemplateOutlet="viewDocumentChips"></ng-container>
+        </div>
 
         <div class="card" [formGroup]="formGroup">
             <p-toast />
             <p-fileupload name="files[]" [url]="url" [multiple]="true" method="post" mode="advanced" [headers]="headers"
-                [accept]="filesExtensionsFlatList" maxFileSize="1000000" (onUpload)="onUpload($event)"
-                (onSelect)="onSelectedFiles($event)">
+                [accept]="filesExtensionsFlatList" maxFileSize="10000000" (onUpload)="onUpload($event)"
+                (onProgress)="sendProgress($event)" (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback"
                     let-uploadCallback="uploadCallback">
                     <div class="grid w-full">
                         <div class="col-3 grid">
-                            <p-button (onClick)="choose($event, chooseCallback)" icon="pi pi-images" class="col-4"
+                            <p-button id="ChooseFile" gebo-ai-label title="Choose files"
+                                (onClick)="choose($event, chooseCallback)" icon="pi pi-images" class="col-4"
                                 [outlined]="true" />
-                            <p-button (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload"
-                                severity="success" [disabled]="!files || files.length === 0" class="col-4"
-                                [outlined]="true" />
-                            <p-button (onClick)="clearCallback()" icon="pi pi-times" severity="danger"
+                            <p-button id="UploadFile" gebo-ai-label title="Upload files"
+                                (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" severity="success"
                                 [disabled]="!files || files.length === 0" class="col-4" [outlined]="true" />
+                            <p-button id="RemoveAll" gebo-ai-label title="Remove all" (onClick)="clearCallback()"
+                                icon="pi pi-times" severity="danger" [disabled]="!files || files.length === 0"
+                                class="col-4" [outlined]="true" />
                         </div>
                         <div class="col-9">
                             <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full"
@@ -35,7 +50,7 @@
                     let-removeUploadedFileCallback="removeUploadedFileCallback">
                     <div class="flex flex-col gap-8 pt-4">
                         <div *ngIf="files?.length > 0">
-                            <h3>Pending for upload</h3>
+                            <h3 id="UploadPending" gebo-ai-text>Pending for upload</h3>
                             <div class="grid">
 
                                 <div *ngFor="let file of files; let i = index" class="col-12 grid">
@@ -45,32 +60,30 @@
                                             [outlined]="true" [rounded]="true" severity="danger" />
                                     </div>
                                     <div class="col-6">
-                                       {{
-                                            file.name }}
+                                        {{file.name}}
                                     </div>
                                     <div class="col-3"><p-badge value="Pending" severity="warn" /></div>
                                     <div class="col-2">{{ formatSize(file.size) }} bytes</div>
-                                    
+
 
                                 </div>
                             </div>
                         </div>
                         <div *ngIf="uploadedFiles?.length > 0">
-                            <h5>Completed</h5>
-                            <div class="flex flex-wrap gap-4">
-                                <div *ngFor="let file of uploadedFiles; let i = index"
-                                    class="card m-0 px-12 flex flex-col border border-surface items-center gap-4">
-                                    <div>
-                                        <img role="presentation" [alt]="file.name" [src]="file.objectURL" width="100"
-                                            height="50" />
+                            <h5 id="CompletedData" gebo-ai-text>Completed</h5>
+                            <div class="grid">
+                                <div *ngFor="let file of uploadedFiles; let i = index" class="col-12 grid">
+                                    <div class="col-1">
+                                        <p-button icon="pi pi-times" (onClick)="removeUploadedFileCallback(i)"
+                                            [outlined]="true" [rounded]="true" severity="danger" />
                                     </div>
-                                    <span
-                                        class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden">{{
-                                        file.name }}</span>
-                                    <div>{{ formatSize(file.size) }}</div>
-                                    <p-badge value="Completed" class="mt-4" severity="success" />
-                                    <p-button icon="pi pi-times" (onClick)="removeUploadedFileCallback(i)"
-                                        [outlined]="true" [rounded]="true" severity="danger" />
+                                    <div class="col-6">
+                                        {{file.name}}
+                                    </div>
+                                    <div class="col-3"> <p-badge value="Completed" class="mt-4" severity="success" />
+                                    </div>
+                                    <div class="col-2">{{ formatSize(file.size) }} bytes</div>
+
                                 </div>
                             </div>
                         </div>
@@ -90,3 +103,6 @@
         </div>
     </p-panel>
 </p-dialog>
+<div class="card" *ngIf="!showUpload">
+    <ng-container *ngTemplateOutlet="viewDocumentChips"></ng-container>
+</div>

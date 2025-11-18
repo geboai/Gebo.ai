@@ -6,7 +6,7 @@ import { GeboAITranslationService } from "../field-translation-container/gebo-tr
 import { MessageService } from "primeng/api";
 import { getAuth } from "../../infrastructure/gebo-credentials";
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
-import { FileUploadEvent } from "primeng/fileupload";
+import { FileProgressEvent, FileUploadEvent } from "primeng/fileupload";
 const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionUpload/";
 @Component({
     templateUrl: "upload-chat-document.component.html",
@@ -26,6 +26,8 @@ const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionU
     ]
 })
 export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, ControlValueAccessor, GeboAIFieldHost {
+
+
 
     @Input() showUpload: boolean = false;
     @Output() showUploadChange: EventEmitter<boolean> = new EventEmitter();
@@ -170,5 +172,11 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
 
         return formattedSize
+    }
+    sendProgress(evt: FileProgressEvent) {
+        
+    }
+    doRemoveUploaded(doc: UserUploadedContent) {
+            
     }
 }
