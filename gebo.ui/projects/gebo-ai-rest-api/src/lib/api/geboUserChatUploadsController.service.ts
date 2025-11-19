@@ -17,8 +17,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { OperationStatusChatSessionCreationWithUpload } from '../model/operationStatusChatSessionCreationWithUpload';
 import { OperationStatusListUserUploadedContent } from '../model/operationStatusListUserUploadedContent';
-import { OperationStatusUserUploadedContent } from '../model/operationStatusUserUploadedContent';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -59,14 +59,79 @@ export class GeboUserChatUploadsControllerService {
     /**
      * 
      * 
+     * @param modelCode 
+     * @param files 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public chatSessionCreateWithUploadForm(modelCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusChatSessionCreationWithUpload>;
+    public chatSessionCreateWithUploadForm(modelCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusChatSessionCreationWithUpload>>;
+    public chatSessionCreateWithUploadForm(modelCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusChatSessionCreationWithUpload>>;
+    public chatSessionCreateWithUploadForm(modelCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (modelCode === null || modelCode === undefined) {
+            throw new Error('Required parameter modelCode was null or undefined when calling chatSessionCreateWithUpload.');
+        }
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): void; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        }
+
+        if (files) {
+            files.forEach((element) => {
+                formParams = formParams.append('files[]', <any>element) as any || formParams;
+            })
+        }
+
+        return this.httpClient.request<OperationStatusChatSessionCreationWithUpload>('post',`${this.basePath}/api/users/GeboUserChatUploadsController/chatSessionCreateWithUpload/${encodeURIComponent(String(modelCode))}`,
+            {
+                body: convertFormParamsToString ? formParams.toString() : formParams,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param userSessionCode 
      * @param files 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusUserUploadedContent>;
-    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusUserUploadedContent>>;
-    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusUserUploadedContent>>;
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListUserUploadedContent>;
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListUserUploadedContent>>;
+    public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListUserUploadedContent>>;
     public chatSessionUploadForm(userSessionCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (userSessionCode === null || userSessionCode === undefined) {
@@ -110,7 +175,7 @@ export class GeboUserChatUploadsControllerService {
             })
         }
 
-        return this.httpClient.request<OperationStatusUserUploadedContent>('post',`${this.basePath}/api/users/GeboUserChatUploadsController/chatSessionUpload/${encodeURIComponent(String(userSessionCode))}`,
+        return this.httpClient.request<OperationStatusListUserUploadedContent>('post',`${this.basePath}/api/users/GeboUserChatUploadsController/chatSessionUpload/${encodeURIComponent(String(userSessionCode))}`,
             {
                 body: convertFormParamsToString ? formParams.toString() : formParams,
                 withCredentials: this.configuration.withCredentials,
@@ -154,6 +219,116 @@ export class GeboUserChatUploadsControllerService {
         ];
 
         return this.httpClient.request<OperationStatusListUserUploadedContent>('delete',`${this.basePath}/api/users/GeboUserChatUploadsController/deleteSessionUploads`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param chatProfileCode 
+     * @param files 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public ragChatSessionCreateWithUploadForm(chatProfileCode: string, files?: Array<Blob>, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusChatSessionCreationWithUpload>;
+    public ragChatSessionCreateWithUploadForm(chatProfileCode: string, files?: Array<Blob>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusChatSessionCreationWithUpload>>;
+    public ragChatSessionCreateWithUploadForm(chatProfileCode: string, files?: Array<Blob>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusChatSessionCreationWithUpload>>;
+    public ragChatSessionCreateWithUploadForm(chatProfileCode: string, files?: Array<Blob>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (chatProfileCode === null || chatProfileCode === undefined) {
+            throw new Error('Required parameter chatProfileCode was null or undefined when calling ragChatSessionCreateWithUpload.');
+        }
+
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            '*/*'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): void; };
+        let useForm = false;
+        let convertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        }
+
+        if (files) {
+            files.forEach((element) => {
+                formParams = formParams.append('files[]', <any>element) as any || formParams;
+            })
+        }
+
+        return this.httpClient.request<OperationStatusChatSessionCreationWithUpload>('post',`${this.basePath}/api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/${encodeURIComponent(String(chatProfileCode))}`,
+            {
+                body: convertFormParamsToString ? formParams.toString() : formParams,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param userSessionCode 
+     * @param uploadedContentId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public serveContent(userSessionCode: string, uploadedContentId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userSessionCode === null || userSessionCode === undefined) {
+            throw new Error('Required parameter userSessionCode was null or undefined when calling serveContent.');
+        }
+
+        if (uploadedContentId === null || uploadedContentId === undefined) {
+            throw new Error('Required parameter uploadedContentId was null or undefined when calling serveContent.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('get',`${this.basePath}/api/users/GeboUserChatUploadsController/serveContent/${encodeURIComponent(String(userSessionCode))}/${encodeURIComponent(String(uploadedContentId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

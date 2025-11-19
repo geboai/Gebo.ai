@@ -17,8 +17,10 @@ export interface ChatModelRequestContextWindowStats {
     queryNTokens?: number;
     documentsNTokens?: number;
     contextDocumentsNTokens?: number;
+    uploadedDocumentsNTokens?: number;
     availableSharePerc?: number;
     historySharePerc?: number;
     documentsSharePerc?: number;
     contextDocumentsSharePerc?: number;
+    uploadedDocumentsSharePerc?: number;
 }

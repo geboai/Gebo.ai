@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GAzureOpenAIEmbeddingModelConfig } from './gAzureOpenAIEmbeddingModelConfig';
+import { ChatSessionCreationWithUpload } from './chatSessionCreationWithUpload';
 import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGAzureOpenAIEmbeddingModelConfig { 
-    result?: GAzureOpenAIEmbeddingModelConfig;
+export interface OperationStatusChatSessionCreationWithUpload { 
+    result?: ChatSessionCreationWithUpload;
     messages?: Array<GUserMessage>;
     hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
