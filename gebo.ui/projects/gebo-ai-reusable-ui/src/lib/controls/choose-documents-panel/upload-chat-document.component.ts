@@ -4,7 +4,7 @@ import { GeboUserChatUploadsControllerService, BASE_PATH, IngestionFileTypesLibr
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { MessageService } from "primeng/api";
-import { getAuth } from "../../infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { FileProgressEvent, FileUploadEvent } from "primeng/fileupload";
 const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionUpload/";
@@ -61,10 +61,8 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         return "GeboAIUploadChatDocumentComponent";
     }
     ngOnInit(): void {
-        const auth = getAuth();
-        this.headers = new HttpHeaders({
-            "Authorization": "Bearer " + auth?.token
-        });
+        
+        this.headers = new HttpHeaders(getAuthHeader());
         this.loading = true;
         this.contentTypeService.getAllFileTypes().subscribe({
             next: (value) => {

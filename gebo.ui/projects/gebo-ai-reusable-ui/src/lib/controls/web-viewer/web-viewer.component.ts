@@ -6,7 +6,7 @@ import {
     SimpleChanges
 } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
-import { getAuth } from '../../infrastructure/gebo-credentials';
+import { getAuth, getAuthHeader } from '../../infrastructure/gebo-credentials';
 
 @Component({
     selector: 'gebo-ai-web-viewer',
@@ -22,7 +22,7 @@ export class WebViewerComponent implements OnChanges {
      */
     @Input() url: string | null = null;
     @Input() contentServedByGebo?: boolean;
-    @Input() geboServedFileName?:string;
+    @Input() geboServedFileName?: string;
     /**
      * URL sanificata da passare all'iframe.
      */
@@ -43,11 +43,10 @@ export class WebViewerComponent implements OnChanges {
     }
     private loadBody(): void {
 
-        const auth = getAuth();
-        if (this.safeUrl && auth?.token && this.url) {
-            const headers: HttpHeaders = new HttpHeaders({
-                "Authorization": "Bearer " + auth?.token
-            });
+
+        if (this.safeUrl && this.url) {
+            const headers: HttpHeaders = new HttpHeaders(getAuthHeader());
+            this.loading=true;
             this.httpClient
                 .get(this.url, {
                     headers,
@@ -63,7 +62,7 @@ export class WebViewerComponent implements OnChanges {
 
                         this.loading = false;
                     },
-                    complete:()=>{
+                    complete: () => {
                         this.loading = false;
                     }
                 });
