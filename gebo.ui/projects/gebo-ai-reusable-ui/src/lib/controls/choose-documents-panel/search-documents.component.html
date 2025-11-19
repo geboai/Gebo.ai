@@ -10,107 +10,114 @@
  -->
 
 
-
-
-<div class="grid">
-    <div class="col-12" style="height: 250px;">
-        <p-tabs>
-            <p-tablist>
-                <p-tab *ngIf="hasKnowledgeBases" value="0">Browse company files</p-tab>
-                <p-tab *ngIf="hasKnowledgeBases" value="1">Semantic search</p-tab>
-                <p-tab *ngIf="hasKnowledgeBases" value="2">Filename search</p-tab>
-                <p-tab value="3">Your folders/files</p-tab>
-            </p-tablist>
-            <p-tabpanels>
-                <p-tabpanel *ngIf="hasKnowledgeBases" value="0">
-                    <form [formGroup]="browseFormGroup">
-                        <div class="grid">
-                            <div class="col-12">
-                                <gebo-ai-field id="choosenBrowsing" label="Choose files browsing knowledge bases"
-                                    help="Choose files browsing company shared knowledge bases" [required]="true">
-                                    <gebo-ai-vfilesystem-selector-component id="choosenBrowsing"
-                                        [loadRootsObservable]="loadRootsObservable"
-                                        [browsePathObservable]="browsePathObservable" [canChooseFiles]="true"
-                                        [canChooseFolders]="false" selectionMode="multiple"
-                                        formControlName="choosenBrowsing"></gebo-ai-vfilesystem-selector-component>
-                                </gebo-ai-field>
-                            </div>
-                        </div>
-
-                    </form>
-                </p-tabpanel>
-                <p-tabpanel *ngIf="hasKnowledgeBases" value="1">
-                    <form [formGroup]="semanticSearchFormGroup">
-                        <div class="grid">
-                            <div class="col-12">
-                                <gebo-ai-field id="query" label="Semantic search phrase"
-                                    help="Enter a meaningful phrase related to your search" [required]="true">
-                                    <input pInputText id="query" formControlName="query"
-                                        aria-describedby="query-help" />
-                                </gebo-ai-field>
-
+<p-blockUI [blocked]="loading" [target]="chooseFilesDialog">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #chooseFilesDialog id="chooseFilesDialog" gebo-ai-label header="Choose files to chat with">
+    <div class="grid">
+        <div class="col-12" style="height: 250px;">
+            <p-tabs value="0">
+                <p-tablist>
+                    <p-tab *ngIf="hasKnowledgeBases" value="0" id="BrowseCompanyFilesLabel" gebo-ai-text>Browse company
+                        files</p-tab>
+                    <p-tab *ngIf="hasKnowledgeBases" value="1" id="SemanticSearchFilesLabel" gebo-ai-text>Semantic
+                        search</p-tab>
+                    <p-tab *ngIf="hasKnowledgeBases" value="2" id="SearchFilesLabel" gebo-ai-text>Filename
+                        search</p-tab>
+                    <p-tab value="3">Your folders/files</p-tab>
+                </p-tablist>
+                <p-tabpanels>
+                    <p-tabpanel *ngIf="hasKnowledgeBases" value="0">
+                        <form [formGroup]="browseFormGroup">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <gebo-ai-field id="choosenBrowsing" label="Choose files browsing knowledge bases"
+                                        help="Choose files browsing company shared knowledge bases" [required]="true">
+                                        <gebo-ai-vfilesystem-selector-component id="choosenBrowsing"
+                                            [loadRootsObservable]="loadRootsObservable"
+                                            [browsePathObservable]="browsePathObservable" [canChooseFiles]="true"
+                                            [canChooseFolders]="false" selectionMode="multiple"
+                                            formControlName="choosenBrowsing"></gebo-ai-vfilesystem-selector-component>
+                                    </gebo-ai-field>
+                                </div>
                             </div>
 
-                        </div>
-                        <div class="col-2">
-                            <p-button id="semanticSearchBtn" gebo-ai-label label="Search" icon="pi pi-search"
-                                [outlined]="true" styleClass="w-full" (onClick)="doSemanticSearch()"
-                                [disabled]="semanticSearchFormGroup.invalid"></p-button>
-                        </div>
-                    </form>
-                </p-tabpanel>
-                <p-tabpanel *ngIf="hasKnowledgeBases" value="2">
-                    <form [formGroup]="fileNameSearchFormGroup">
-                        <div class="grid">
-                            <div class="col-10">
-                                <gebo-ai-field id="filename" label="Searched file name"
-                                    help="Enter a filename part for your searched content" [required]="true">
-                                    <input pInputText id="filename" formControlName="filename" />
-                                </gebo-ai-field>
+                        </form>
+                    </p-tabpanel>
+                    <p-tabpanel *ngIf="hasKnowledgeBases" value="1">
+                        <form [formGroup]="semanticSearchFormGroup">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <gebo-ai-field id="query" label="Semantic search phrase"
+                                        help="Enter a meaningful phrase related to your search" [required]="true">
+                                        <input pInputText id="query" formControlName="query"
+                                            aria-describedby="query-help" />
+                                    </gebo-ai-field>
+
+                                </div>
 
                             </div>
-
-                        </div>
-                        <div class="col-2">
-                            <p-button id="fileSearchBtn" gebo-ai-label label="Search" icon="pi pi-search"
-                                [outlined]="true" styleClass="w-full" (onClick)="doSearchByFileName()"
-                                [disabled]="fileNameSearchFormGroup.invalid"></p-button>
-                        </div>
-                    </form>
-                </p-tabpanel>
-                <p-tabpanel value="3">
-                    <form [formGroup]="userspaceFilesFormGroup">
-                        <div class="grid">
-                            <div class="col-12">
-                                <gebo-ai-field id="userspaceBrowsing" label="Upload or choose your documents"
-                                    help="Choose/upload documents from your user space">
-                                    <gebo-ai-userspace-files-component formControlName="userspaceFiles"
-                                        id="userspaceBrowsing"
-                                        [knowledgeBaseCodes]="knowledgeBaseCodes?knowledgeBaseCodes:[]"
-                                        [noKnowledgeBases]="knowledgeBaseCodes && knowledgeBaseCodes.length?false:true"></gebo-ai-userspace-files-component>
-                                </gebo-ai-field>
+                            <div class="col-2">
+                                <p-button id="semanticSearchBtn" gebo-ai-label label="Search" icon="pi pi-search"
+                                    [outlined]="true" styleClass="w-full" (onClick)="doSemanticSearch()"
+                                    [disabled]="semanticSearchFormGroup.invalid"></p-button>
                             </div>
-                        </div>
-                    </form>
-                </p-tabpanel></p-tabpanels>
+                        </form>
+                    </p-tabpanel>
+                    <p-tabpanel *ngIf="hasKnowledgeBases" value="2">
+                        <form [formGroup]="fileNameSearchFormGroup">
+                            <div class="grid">
+                                <div class="col-10">
+                                    <gebo-ai-field id="filename" label="Searched file name"
+                                        help="Enter a filename part for your searched content" [required]="true">
+                                        <input pInputText id="filename" formControlName="filename" />
+                                    </gebo-ai-field>
 
-        </p-tabs>
+                                </div>
+
+                            </div>
+                            <div class="col-2">
+                                <p-button id="fileSearchBtn" gebo-ai-label label="Search" icon="pi pi-search"
+                                    [outlined]="true" styleClass="w-full" (onClick)="doSearchByFileName()"
+                                    [disabled]="fileNameSearchFormGroup.invalid"></p-button>
+                            </div>
+                        </form>
+                    </p-tabpanel>
+                    <p-tabpanel value="3">
+                        <form [formGroup]="userspaceFilesFormGroup">
+                            <div class="grid">
+                                <div class="col-12">
+                                    <gebo-ai-field id="userspaceBrowsing" label="Upload or choose your documents"
+                                        help="Choose/upload documents from your user space">
+                                        <gebo-ai-userspace-files-component formControlName="userspaceFiles"
+                                            id="userspaceBrowsing"
+                                            [knowledgeBaseCodes]="knowledgeBaseCodes?knowledgeBaseCodes:[]"
+                                            [noKnowledgeBases]="knowledgeBaseCodes && knowledgeBaseCodes.length?false:true"></gebo-ai-userspace-files-component>
+                                    </gebo-ai-field>
+                                </div>
+                            </div>
+                        </form>
+                    </p-tabpanel></p-tabpanels>
+
+            </p-tabs>
 
 
+        </div>
+        <div class="col-12">
+            <!-- [formGroup]="outFormGroup" formControlName="choosedFiles" [(ngModel)]="outputDocuments"-->
+            <p-picklist [source]="sourceDocuments" [target]="outputDocuments" [dragdrop]="true" [responsive]="true"
+                [sourceStyle]="{ height: '15rem' }" [targetStyle]="{ height: '15rem' }" breakpoint="1400px"
+                filterBy="name" sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name"
+                sourceHeader="Found documents" targetHeader="Selected documents">
+                <ng-template let-item #item pTemplate="item">
+                    <gebo-ui-document-opener-button [document]="item"></gebo-ui-document-opener-button>
+                </ng-template>
+            </p-picklist>
+        </div>
+        <div class="col-2">
+            <p-button id="confirmBtn" gebo-ai-label label="Confirm" icon="pi pi-check" [outlined]="true"
+                styleClass="w-full" (onClick)="confirmDocumentsPickList()"
+                [disabled]="!outputDocuments || (outputDocuments.length?false:true)"></p-button>
+        </div>
     </div>
-    <div class="col-12"> <!-- [formGroup]="outFormGroup" formControlName="choosedFiles" [(ngModel)]="outputDocuments"-->
-        <p-picklist [source]="sourceDocuments" [target]="outputDocuments" [dragdrop]="true" [responsive]="true"
-            [sourceStyle]="{ height: '15rem' }" [targetStyle]="{ height: '15rem' }" breakpoint="1400px" filterBy="name"
-            sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name"
-            sourceHeader="Found documents" targetHeader="Selected documents">
-            <ng-template let-item #item pTemplate="item">
-                <gebo-ui-document-opener-button [document]="item"></gebo-ui-document-opener-button>
-            </ng-template>
-        </p-picklist>
-    </div>
-    <div class="col-2">
-        <p-button id="confirmBtn" gebo-ai-label label="Confirm" icon="pi pi-check" [outlined]="true" styleClass="w-full"
-            (onClick)="confirmDocumentsPickList()"
-            [disabled]="!outputDocuments || (outputDocuments.length?false:true)"></p-button>
-    </div>
-</div>
+</p-panel>

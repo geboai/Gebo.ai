@@ -14,9 +14,9 @@
 
 <div class="grid">
   <div class="col-12">
-    <b>Hello:</b> {{user?.username}}
+    <b id="YourUserName" gebo-ai-text>Your user name</b> {{user?.username}}
   </div>
-  <div class="col-3">
+  <div class="col-12">
     <p-button id="ChangePasswdBtn" gebo-ai-label icon="pi pi-password" [outlined]="true" label="Change password"
       (onClick)="changePasswordWindowOpened=true"></p-button>
   </div>

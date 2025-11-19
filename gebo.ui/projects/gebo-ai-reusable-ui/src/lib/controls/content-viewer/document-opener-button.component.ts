@@ -11,7 +11,7 @@
  
 
 import { Component, Input } from "@angular/core";
-import { EnrichedDocumentReferenceView } from "./enriched-document-reference-view.service";
+import { EnrichedDocumentReferenceView, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 
 /**
  * AI generated comments
@@ -25,16 +25,18 @@ import { EnrichedDocumentReferenceView } from "./enriched-document-reference-vie
     standalone: false
 })
 export class GeboUIDocumentOpenerButton {
+
     /**
      * Input property that accepts an EnrichedDocumentReferenceView object
      * to be displayed and potentially opened by this component.
      */
     @Input() document?:EnrichedDocumentReferenceView;
-    
+    @Input() uploadedContent?:EnrichedUserUploadedContentView;
     /**
      * Stores the code/identifier of the currently viewed document.
      */
-    currentViewedDocumentCode?:string;
+    protected currentViewedDocumentCode?:string;
+    protected currentViewedUploadedContent?: EnrichedUserUploadedContentView;
     
     /**
      * Handles the click event when a file/document is selected.
@@ -44,5 +46,8 @@ export class GeboUIDocumentOpenerButton {
      */
     onClickFile(item:EnrichedDocumentReferenceView) {
         this.currentViewedDocumentCode=item.code;
+    }
+    onClickUploadedContent(arg0: EnrichedUserUploadedContentView) {
+        this.currentViewedUploadedContent=arg0;
     }
 }

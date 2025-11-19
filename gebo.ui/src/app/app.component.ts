@@ -10,7 +10,7 @@
 
 
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from 'primeng/api';
 import { LoginService } from '../../projects/gebo-ai-reusable-ui/src/lib/infrastructure/login/login.service';
@@ -18,13 +18,19 @@ import { GeboSetupWizardService } from '@Gebo.ai/gebo-ai-admin-ui';
 import { GeboAITranslationService, resetAuth, saveAuth, SetupStatus } from '@Gebo.ai/reusable-ui';
 import { PrimeNG } from 'primeng/config';
 import { Subscription } from 'rxjs';
+import { TrashIcon } from 'primeng/icons';
+const editMyProfileMenuItemId: string = "editMyProfileMenuItem";
+const setupItemId: string = "setupMenuItem";
+const adminItemId: string = "adminMenuItem";
+const privilegedMenuIds: string[] = [setupItemId, adminItemId];
 const menuItemsProtos: MegaMenuItem[] = [
-  { icon: "pi pi-comments", label: "Gebo.ai Chat", routerLink: 'ui/chat', id: "chat" },
-  { icon: "pi pi-wrench", label: "Setup", routerLink: "ui/admin-setup", id: "setup" },
-  { icon: "pi pi-cog", label: "Gebo.ai admin", routerLink: 'ui/admin', id: "admin" },
+  { icon: "pi pi-comments", label: "Chat", routerLink: 'ui/chat', id: "chatMenuItem" },
+  { icon: "pi pi-wrench", label: "Setup", routerLink: "ui/admin-setup", id: setupItemId },
+  { icon: "pi pi-cog", label: "Admin", routerLink: 'ui/admin', id: adminItemId },
+  { icon: "pi pi-user", label: "edit profile", routerLink: "ui/currentProfile", id: editMyProfileMenuItemId },
+  { icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logoutMenuItem" }
+];
 
-  { icon: "pi pi-user", label: "my profile", routerLink: 'ui/currentProfile', id: "currentProfile" },
-  { icon: "pi pi-sign-out", label: "logout", routerLink: 'ui/logout', id: "logout" }];
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -32,16 +38,21 @@ const menuItemsProtos: MegaMenuItem[] = [
   standalone: false
 })
 export class AppComponent implements OnInit {
+  @ViewChild("userEditProfile") userEditProfile: any;
   public loading: boolean = false;
   public userLogged: boolean = false;
   public userInfo?: UserInfo;
-  public menuItems: MegaMenuItem[] = menuItemsProtos;
+  public menuItems: MegaMenuItem[] = [];
   private blinkState: boolean = false;
   private stopBlink: boolean = true;
   private setupStatus?: SetupStatus;
+  private subscription?: Subscription;
+  private servicesMenuLoggedSubscription?: Subscription;
+  private servicesMenuUnloggedSubscription?: Subscription;
   constructor(
     private primengConfig: PrimeNG,
     private loginService: LoginService,
+    private changeRef: ChangeDetectorRef,
     private geboTranslationService: GeboAITranslationService,
     private geboWizardSetupService: GeboSetupWizardService) {
     this.loginService.authDataSubject.subscribe({
@@ -56,7 +67,7 @@ export class AppComponent implements OnInit {
     });
   }
   private startBlinkSetupState(): void {
-    const setupItem = this.menuItems.find(x => x.id === "setup");
+    const setupItem = this.menuItems.find(x => x.id === setupItemId);
     if (!setupItem) return;
     if (this.blinkState === false && this.stopBlink === false) {
       if (this.setupStatus === 'incomplete') {
@@ -97,45 +108,53 @@ export class AppComponent implements OnInit {
       }
     });
   }
-  private subscription?: Subscription;
-  private loadUserAndMenu():void {
+
+  private loadUserAndMenu(): void {
     this.loginService.loadUserProfile().subscribe(x => {
-        this.userLogged = x ? true : false;
-        const items: MegaMenuItem[] = [];
-        if (this.userLogged) {
-          const isAdmin: boolean = x.roles && x.roles.find(c => c === 'ADMIN') ? true : false;
-          if (isAdmin === true) {
-            menuItemsProtos.forEach(entry => {
+      this.userLogged = x ? true : false;
+      const items: MegaMenuItem[] = [];
+      if (this.userLogged) {
+        const isAdmin: boolean = x.roles && x.roles.find(c => c === 'ADMIN') ? true : false;
+        if (isAdmin === true) {
+          menuItemsProtos.forEach(entry => {
+            items.push(entry);
+          });
+
+        } else {
+          menuItemsProtos.forEach(entry => {
+            if (!privilegedMenuIds.find(x => x === entry.id)) {
               items.push(entry);
-            });
+            }
+          });
+        }
 
-          } else {
-            menuItemsProtos.forEach(entry => {
-              if (entry.id !== 'admin' && entry.id !== "setup") {
-                items.push(entry);
-              }
-            });
-          }
-
-          this.menuItems = items;
-          if (this.subscription) {
-            this.subscription.unsubscribe();
-            this.subscription = undefined;
-          }
-          this.subscription = this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.menuItems).subscribe({
-            next: (translated) => {
-              if (translated) {
-                this.menuItems = translated;
-              }
+        this.menuItems = items;
+        const editMyProfileMenuItem = this.menuItems.find(x => x.id === editMyProfileMenuItemId);
+        if (editMyProfileMenuItem) {
+          editMyProfileMenuItem.command = (evt) => {
+            if (this.userEditProfile && this.userEditProfile.toggle) {
+              this.userEditProfile.toggle(evt);
+            }
+          };
+        }
+        if (this.subscription) {
+          this.subscription.unsubscribe();
+          this.subscription = undefined;
+        }
+        this.subscription = this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.menuItems).subscribe({
+          next: (translated) => {
+            if (translated) {
+              this.menuItems = translated;
             }
           }
-          );
-          if (isAdmin === true) {
-            this.pollSetupState();
-          }
         }
-        this.userInfo = x;
-      });
+        );
+        if (isAdmin === true) {
+          this.pollSetupState();
+        }
+      }
+      this.userInfo = x;
+    });
   }
   ngOnInit() {
     this.primengConfig.ripple.set(true);
@@ -148,8 +167,8 @@ export class AppComponent implements OnInit {
     }
     this.loginService.loginActivated.subscribe({
       next: (activated) => {
-        this.menuItems=[];
-        this.userLogged=false;
+        this.menuItems = [];
+        this.userLogged = false;
       }
     });
   }

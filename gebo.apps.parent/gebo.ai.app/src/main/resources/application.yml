@@ -1,3 +1,10 @@
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.springframework.web: INFO
+    org.springframework.core: INFO
+    org.springframework.core.codec: INFO
 server:
   port: 12999
   compression:
@@ -129,7 +136,8 @@ ai.gebo.chat:
         ### Output Guidelines\n
         - Use markdown for structure when appropriate.\n
         - Include code blocks for technical outputs.\n
-        - End responses with a short actionable next step or summary when useful."""'
+        - End responses with a short actionable next step or summary when useful.\n
+        - Use the same language of user question"""'
 
     - ragPrompt: true
       defaultPrompt: true
@@ -162,6 +170,7 @@ ai.gebo.chat:
         - For **business or documentation queries**, use concise language and well-structured bullet points.\n
         - For **creative or strategic topics**, provide 2–3 alternative directions.\n
         - When **entities or documents** are involved, mention them naturally, e.g.  \n
+        - Use the same language of user question.\n
         “According to *Document A (KB: HR_Policies_2024)*, …”.\n
         ### Tone and Style\n
         - Professional, collaborative, and calm.  \n

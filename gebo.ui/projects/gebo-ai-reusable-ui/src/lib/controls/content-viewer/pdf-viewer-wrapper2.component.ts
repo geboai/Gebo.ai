@@ -94,21 +94,6 @@ export class PDFViewerWrapper2Component implements OnInit, OnChanges {
         if (this.pdfSrc && changes["pdfSrc"]) {
             console.log("PDF Viewer loading "+this.pdfSrc);
             
-            /*
-            this.httpClient.get<Blob>(this.pdfSrc,{headers:{accept:"application/pdf"}}).subscribe({
-                next: (data) => {
-                    this.pdfInfos = {
-                        data: data
-                    };
-                    console.log("PDF Viewer loaded=> "+this.pdfSrc);
-                },
-                error:(err)=>{
-                    console.error(err);
-                },
-                complete:()=>{
-
-                }
-            })*/
 
 
         }

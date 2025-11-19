@@ -42,8 +42,19 @@ import { ToastModule } from "primeng/toast";
 import { GeboAIAudioRecorderModule } from "../audio-control/audio-control.module";
 import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choose-documents-panel.module";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
-import { GeboAIFieldTransationContainerModule } from "../field-translation-container/field-container.module";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAIUploadChatDocumentModule } from "../choose-documents-panel/upload-chat-document.module";
+import { MessageService } from "primeng/api";
+import { GeboAIUploadedDocumentRefComponent } from "./uploaded-document-ref.component";
+console.log(
+  '[GeboAIReusableChatModule] declarations =',
+  GeboAIReusableChatComponent,
+  ChangeDescriptionComponent,
+  DocumentRefComponent,
+  GeboAIRichResponseViewerComponent,
+  GeboChatUserInfoComponent
+);
 @NgModule({
   imports: [CommonModule,
     ReactiveFormsModule,
@@ -68,9 +79,11 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
     GeboAIContentViewerModule,
     BrowseContentModule,
     GeboAIViewTableModule,
-    MarkdownModule.forChild(), GeboAIFieldTransationContainerModule],
+    MarkdownModule.forChild(),
+    GeboAIFieldTranslationContainerModule,
+    GeboAIUploadChatDocumentModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
-    ReactiveRagChatService,
+
   provideMarkdown({
     sanitize: SecurityContext.NONE,
     clipboardOptions: {
@@ -79,9 +92,8 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
         buttonComponent: ClipboardButtonComponent,
       }
     }
-  })],
-  declarations: [GeboAIReusableChatComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent],
-
+  }), ReactiveRagChatService, MessageService],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent],
   exports: [GeboAIReusableChatComponent]
 })
-export class GeboAIReusableChatModel { }
+export class GeboAIReusableChatModule { }

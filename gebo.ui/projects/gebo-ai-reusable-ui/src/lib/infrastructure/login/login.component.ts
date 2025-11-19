@@ -80,7 +80,11 @@ export class LoginComponent implements OnInit {
     private activatedRoute: ActivatedRoute) {
 
   }
-
+  onSumbit() {
+    if (this.formGroup.valid) {
+      this.login();
+    }
+  }
   /**
    * Verifies if the system has been properly set up
    * Redirects to setup page if installation is incomplete

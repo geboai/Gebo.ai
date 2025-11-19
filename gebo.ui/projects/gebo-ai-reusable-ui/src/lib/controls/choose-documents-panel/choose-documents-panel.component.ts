@@ -17,7 +17,7 @@
  * as a form control. The component displays a list of documents, allows viewing document details,
  * and supports adding/removing documents from the selection.
  */
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { EnrichedDocumentReferenceView, EnrichedDocumentReferenceViewRetrieveService } from "../content-viewer/enriched-document-reference-view.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -79,7 +79,10 @@ export class GeboAIChooseDocumentsPanelComponent implements OnInit, OnChanges, C
     /**
      * Flag to control the visibility of the search documents window
      */
-    public openedSearchDocumentsWindows: boolean = false;
+    @Input("openedSearchDocumentsWindows") public openedSearchDocumentsWindows: boolean = false;
+    @Output("openedSearchDocumentsWindowsChange") openedSearchDocumentsWindowsChange: EventEmitter<boolean> = new EventEmitter();
+    @Input("openedUploadDocumentsWindow") public openedUploadDocumentsWindow: boolean = false;
+    @Output("openedUploadDocumentsWindowChange") openedUploadDocumentsWindowChange: EventEmitter<boolean> = new EventEmitter();
 
     /**
      * Getter that returns the overall loading state by checking if documents or file types are loading

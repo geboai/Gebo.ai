@@ -20,7 +20,7 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor, GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
@@ -37,7 +37,7 @@ import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 import { CookieService } from 'ngx-cookie-service';
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+import { PopoverModule } from 'primeng/popover';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader();
 }
@@ -112,11 +112,12 @@ const GeboAIPreset = definePreset(Aura, {
       fallbackLang: "en",
       loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
 
-    }),
+    }),    
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
     RouterModule.forRoot(routes), 
-    GeboAIFieldTransationContainerModule.forRoot()],
+    GeboAIFieldTranslationContainerModule.forRoot(),PopoverModule],
+
   providers: [
     GeboBackendListService,
     CookieService,

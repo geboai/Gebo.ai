@@ -1,0 +1,36 @@
+<!-- layout.component.html -->
+<div class="grid app-layout d-flex">
+    <div class="col-2">
+
+        <div class="grid">
+            <div class="col-12" *ngIf="isCollapsed!==true" style="text-align: right;">
+                <p-button id="CloseSiderBarBtn" gebo-ai-label icon="pi pi-angle-left" (onClick)="toggleSidebar()"
+                    [text]="true" title="Close side bar"></p-button>
+            </div>
+            <div class="col-12" *ngIf="isCollapsed" style="text-align: left;">
+                <p-button icon="pi pi-angle-right" (onClick)="toggleSidebar()" [text]="true"
+                    title="Open side bar"></p-button>
+            </div>
+        </div>
+        <!-- SIDEBAR -->
+        <aside [class.sidebar-collapsed]="isCollapsed && !isMobile" [class.sidebar-mobile]="isMobile"
+            [class.sidebar-mobile-open]="isMobile && mobileOpen">
+            <div class="grid">
+                <div class="col-12">
+                    <ng-content *ngIf="isCollapsed!==true" select="[slideBarContent]"></ng-content>
+                    <ng-content *ngIf="isCollapsed===true" select="[collapsedContent]"></ng-content>
+                </div>
+            </div>
+
+        </aside>
+        <!-- OVERLAY SCURO SU MOBILE -->
+        <div class="sidebar-backdrop" *ngIf="isMobile && mobileOpen" (click)="toggleSidebar()">
+        </div>
+
+    </div>
+    <div class="col-9" >
+
+        <ng-content select="[bodyContent]"></ng-content>
+
+    </div>
+</div>

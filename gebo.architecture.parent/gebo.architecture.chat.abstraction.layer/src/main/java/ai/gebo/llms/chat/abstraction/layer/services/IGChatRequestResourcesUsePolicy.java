@@ -12,6 +12,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -47,8 +48,9 @@ public interface IGChatRequestResourcesUsePolicy {
 	 * @param visibleKnowledgeBaseCodes List of codes representing visible knowledge bases.
 	 * @return                         A limited request ready for processing by the chat model.
 	 * @throws LLMConfigException      Thrown when there is a configuration issue with LLM.
+	 * @throws IOException 
 	 */
 	public ChatModelLimitedRequest manageRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
 			UserInfos user, GeboChatRequest request, IGConfigurableEmbeddingModel  embeddingHandler, IGConfigurableChatModel chatHandler,
-			List<String> visibleKnowledgeBaseCodes) throws LLMConfigException;
+			List<String> visibleKnowledgeBaseCodes) throws LLMConfigException, IOException;
 }

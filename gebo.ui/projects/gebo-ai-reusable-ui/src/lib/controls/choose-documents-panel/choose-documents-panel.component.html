@@ -16,25 +16,16 @@
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <div class="col-6 lg:col-2 xl:col-2 md:col-6 sm:col-12" style="vertical-align: top;">
-
-        <p-button id="ChatWithDocsBtn"  gebo-ai-label   icon="pi pi-search" title="Browse or search and select documents to work with" [outlined]="true" styleClass="w-full" [disabled]="readonly || interactionDisabled"
-            label="Chat with docs" (onClick)="openSelectDocumentsWindow()"></p-button>
-    </div>
-    <div class="col-6 lg:col-10 xl:col-10 md:col-6 sm:col-12">
+    <div class="col-12">
         <span *ngFor="let doc of listedDocuments" style="list-style: none;break-after: avoid;">
             <p-button  id="ChatWithDocsRemoveBtn"  gebo-ai-label  icon="pi pi-times-circle" [text]="true" (onClick)="doRemoveFile(doc)" *ngIf="readonly===false && interactionDisabled===false"></p-button>
             <gebo-ui-document-opener-button [document]="doc"></gebo-ui-document-opener-button>
         </span>
     </div>
-
-
 </div>
-
-
-<p-dialog  id="chooseFilesDialog"  gebo-ai-label  [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true" [style]="{width:'95%',height:'95%'}" [closable]="true"
-    header="Choose files to chat with" [showHeader]="true" (onHide)="this.openedSearchDocumentsWindows=false;"
-    (visibleChange)="this.openedSearchDocumentsWindows=false;" [formGroup]="editingFormGroup">
+<p-dialog  [maximizable]="true" [visible]="openedSearchDocumentsWindows" [modal]="true" [style]="{width:'95%',height:'70%'}" [closable]="true"
+    [showHeader]="true" (onHide)="this.openedSearchDocumentsWindows=false;"
+    (visibleChange)="this.openedSearchDocumentsWindowsChange.emit(false)" [formGroup]="editingFormGroup">
     <gebo-ai-search-documents-component [knowledgeBaseCodes]="knowledgeBaseCodes" formControlName="documentsList"
         (confirmed)="acceptedValues()"
         (closeMe)="this.openedSearchDocumentsWindows=false;"></gebo-ai-search-documents-component>

@@ -15,7 +15,7 @@ import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { GeboAIAudioControlComponent } from "./audio-control.component";
 import { ButtonModule } from "primeng/button";
-import { GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
+import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
  * 
@@ -25,7 +25,7 @@ import { GeboAIFieldTransationContainerModule } from "@Gebo.ai/reusable-ui";
  * declares the audio control component, and exports it for use in other modules.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, ButtonModule, GeboAIFieldTransationContainerModule],
+    imports: [CommonModule, ReactiveFormsModule, ButtonModule, GeboAIFieldTranslationContainerModule],
     declarations:[GeboAIAudioControlComponent],
     exports:[GeboAIAudioControlComponent]
 })

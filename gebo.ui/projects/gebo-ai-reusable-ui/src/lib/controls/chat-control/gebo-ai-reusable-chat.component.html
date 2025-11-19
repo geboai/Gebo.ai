@@ -8,135 +8,190 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- <div class="card flex justify-center">
+<div class="card flex justify-center">
     <p-toast />
 </div>
-<p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title" >
-
-    <ng-template #icons name="icons" pTemplate="icons">
-        <div #anchorPoint>
-            <p-button icon="pi pi-info-circle" id="chatConfigInfosBtn" *ngIf="chatInfo" [rounded]="true" [text]="true" gebo-ai-label 
-                title="Chat configuration infos" (onClick)="userInfoOverlayVisible=true"></p-button>
-
-            <p-button *ngIf="chatInfo" id="chatNameChangeBtn" icon="pi pi-pencil" (onClick)="doChangeDescription();" gebo-ai-label
-                title="Rename the chat session" [rounded]="true" [text]="true"
-                [disabled]="chatInfo.code?false:true"></p-button>
-            <p-button  id="chatReloadBtn" *ngIf="chatInfo" icon="pi pi-undo" gebo-ai-label 
-                [disabled]="!((chatInfo.code?true:false) && ((chatStreaming!==true) || isChatStreamingProbabilyFailing===true))"
-                [text]="true" [rounded]="true" (onClick)="loadChatHistory()"></p-button>
-            <p-button  id="chaDeleteBtn" *ngIf="chatInfo" icon="pi pi-trash" severity="danger" (onClick)="doDeleteChat()" [rounded]="true" gebo-ai-label 
-                title="Delete this chat session" [text]="true"></p-button>
-        </div>
-        <p-overlay *ngIf="chatInfo" [(visible)]="userInfoOverlayVisible"
-            [responsive]="{ breakpoint: '640px', direction: 'bottom', contentStyleClass: 'h-20rem' }"
-            contentStyleClass="p-12 bg-surface-0 dark:bg-surface-900 shadow rounded-border" [appendTo]="anchorPoint">
-            <gebo-user-chat-info-component [data]="chatUserInfos"
-                (close)="userInfoOverlayVisible=false"></gebo-user-chat-info-component>
-
-        </p-overlay>
-    </ng-template>
-
+<p-scrollPanel [style]="{ width: '100%',minHeight:'800px', height: '100%'}" #chatScroller>
     <div class="grid">
-        <div class="col-12" *ngIf="false">
-            <p-messages *ngIf="lastInteractionMessages" [value]="lastInteractionMessages" [enableService]="true"
-                [closable]="true" />
-        </div>
-        <div class="col-12" style="height: 65%;">
-            <p-blockUI [target]="contentUI" [blocked]="loading">
+        <div class="col-2"></div>
+        <div class="col-8">
 
-                <i class="pi pi-microchip-ai" style="font-size: 3rem"></i>
+            <p-panel #chatUI [header]="chatInfo?.description? (chatInfo?.description):title"
+                [style]="{height: '100%',border:'0px'}">
 
+                <ng-template #icons name="icons" pTemplate="icons">
+                    <div #anchorPoint>
+                        <p-button icon="pi pi-info-circle" id="chatConfigInfosBtn" *ngIf="chatInfo" [rounded]="true"
+                            [text]="true" gebo-ai-label title="Chat configuration infos"
+                            (onClick)="userInfoOverlayVisible=true"></p-button>
 
-            </p-blockUI>
-            <p-panel [showHeader]="false" #contentUI>
-                <p-scrollPanel [style]="{ width: '100%', height: '450px' }" #chatScroller>
-                    <div class="grid" style="width: 100%;">
-                        <div class="col-12" style="text-align: right;">
-                            <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true"
-                                severity="contrast" title="Scroll down"></p-button>
-                        </div>
+                        <p-button *ngIf="chatInfo" id="chatNameChangeBtn" icon="pi pi-pencil"
+                            (onClick)="doChangeDescription();" gebo-ai-label title="Rename the chat session"
+                            [rounded]="true" [text]="true" [disabled]="chatInfo.code?false:true"></p-button>
+                        <p-button id="chatReloadBtn" *ngIf="chatInfo" icon="pi pi-undo" gebo-ai-label
+                            [disabled]="!((chatInfo.code?true:false) && ((chatStreaming!==true) || isChatStreamingProbabilyFailing===true))"
+                            [text]="true" [rounded]="true" (onClick)="loadChatHistory()"></p-button>
+                        <p-button id="chaDeleteBtn" *ngIf="chatInfo" icon="pi pi-trash" severity="danger"
+                            (onClick)="doDeleteChat()" [rounded]="true" gebo-ai-label title="Delete this chat session"
+                            [text]="true"></p-button>
                     </div>
-                    <ul *ngFor="let interaction of interactions;" style="with: 100%;">
-                        <li style="with: 100%;">
-                            <b>You:</b>
-                            <div style="overflow-wrap: break-word;">{{interaction.request.query}}</div>
-                            
-                        </li>
-                        <li style="with: 100%;">
-                            <b>{{(interaction?.response?.usedChatModelCode?interaction?.response?.usedChatModelCode:modelName)}}</b>
-                            <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
-                                [data]="interaction?.response?.queryResponse"></markdown>
-                            <p-progressSpinner strokeWidth="8" fill="transparent" *ngIf="interaction.loading===true"
-                                animationDuration="1.5s" [style]="{ width: '30px', height: '30px' }" />
-                           
-                            <p-button *ngIf="this.chatInfo?.code && isChatStreamingProbabilyFailing" icon="pi pi-undo"
-                                [text]="true" (onClick)="loadChatHistory()" [severity]="'danger'"></p-button>
-                            
-                            <ul style="with: 100%;">
-                                <li *ngIf="ragsystem && interaction?.response?.documentsRef && interaction?.response?.documentsRef?.length"
-                                    style="with: 100%;">
-                                    <ul style="with: 100%;">
-                                        <b class="pi pi-database">Used documents:</b>
-                                        <li *ngFor="let d of getDocs(interaction);" style="with: 100%;">
-                                            <gebo-ai-chat-docref [ref]="d" [choosed]="isChoosed(d)"
-                                                (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li
-                                    *ngIf="interaction?.response?.calledFunctions && interaction?.response?.calledFunctions?.length">
-                                    <ul class="pi pi-microchip">
-                                        <b id="CalledFunctionsCtl" gebo-ai-text>AI Called functions:</b>
-                                        <li *ngFor="let f of interaction.response?.calledFunctions;"
-                                            [title]="f.functionDescription">
-                                            <i class="pi pi-bolt"></i>
-                                            {{f.functionName}}<span id="WithParams" gebo-ai-text >with params:</span>{{f.paramsDescription}}
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <input #focusable readonly style="border: 0px solid white;">
-                    <p-scrollTop target="parent" [threshold]="100" icon="pi pi-arrow-up" />
-                </p-scrollPanel>
+                    <p-overlay *ngIf="chatInfo" [(visible)]="userInfoOverlayVisible"
+                        [responsive]="{ breakpoint: '640px', direction: 'bottom', contentStyleClass: 'h-20rem' }"
+                        contentStyleClass="p-12 bg-surface-0 dark:bg-surface-900 shadow rounded-border"
+                        [appendTo]="anchorPoint">
+                        <gebo-user-chat-info-component [data]="chatUserInfos"
+                            (close)="userInfoOverlayVisible=false"></gebo-user-chat-info-component>
+
+                    </p-overlay>
+                </ng-template>
+
+                <div class="grid" style="height: 100%;">
+
+
+                    <div class="col-12" *ngIf="false">
+                        <p-messages *ngIf="lastInteractionMessages" [value]="lastInteractionMessages"
+                            [enableService]="true" [closable]="true" />
+                    </div>
+                    <div class="col-12" style="height: 100%;">
+
+
+                        <div class="grid" style="width: 100%;">
+                            <div class="col-12" style="text-align: right;">
+                                <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true"
+                                    severity="contrast" title="Scroll down"></p-button>
+                            </div>
+                        </div>
+                        <ul *ngFor="let interaction of interactions;" style="with: 100%;">
+                            <li style="with: 100%;">
+                                <b>You:</b>
+                                <div style="overflow-wrap: break-word;">{{interaction.request.query}}</div>
+                                <ul
+                                    *ngIf="interaction.request.userUploadedContents && interaction.request.userUploadedContents.length">
+                                    <b class="pi pi-cloud-upload" id="UploadedDocs" gebo-ai-text>Uploaded docs</b>
+                                    <li *ngFor="let upl of interaction.request.userUploadedContents;"
+                                        style="with: 100%;">
+                                        <uploaded-document-ref [ref]="upl"></uploaded-document-ref>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li style="with: 100%;">
+                                <b>{{(interaction?.response?.usedChatModelCode?interaction?.response?.usedChatModelCode:modelName)}}</b>
+                                <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
+                                    [data]="interaction?.response?.queryResponse"></markdown>
+                                <p-progressSpinner strokeWidth="8" fill="transparent" *ngIf="interaction.loading===true"
+                                    animationDuration="1.5s" [style]="{ width: '30px', height: '30px' }" />
+
+                                <p-button *ngIf="this.chatInfo?.code && isChatStreamingProbabilyFailing"
+                                    icon="pi pi-undo" [text]="true" (onClick)="loadChatHistory()"
+                                    [severity]="'danger'"></p-button>
+
+                                <ul style="with: 100%;">
+                                    <li *ngIf="ragsystem && interaction?.response?.documentsRef && interaction?.response?.documentsRef?.length"
+                                        style="with: 100%;">
+                                        <ul style="with: 100%;">
+                                            <b class="pi pi-database" id="FoundRelatedDocs" gebo-ai-text>Found docs</b>
+                                            <li *ngFor="let d of getDocs(interaction);" style="with: 100%;">
+                                                <gebo-ai-chat-docref [ref]="d" [choosed]="isChoosed(d)"
+                                                    (addToChoosed)="addToChoosed($event)"></gebo-ai-chat-docref>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li
+                                        *ngIf="interaction?.response?.calledFunctions && interaction?.response?.calledFunctions?.length">
+                                        <ul class="pi pi-microchip">
+                                            <b id="CalledFunctionsCtl" gebo-ai-text>AI Called functions:</b>
+                                            <li *ngFor="let f of interaction.response?.calledFunctions;"
+                                                [title]="f.functionDescription">
+                                                <i class="pi pi-bolt"></i>
+                                                {{f.functionName}}<span id="WithParams" gebo-ai-text>with
+                                                    params:</span>{{f.paramsDescription}}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <input #focusable readonly style="border: 0px solid white;">
+                        <p-scrollTop target="parent" [threshold]="100" icon="pi pi-arrow-up" />
+
+
+                    </div>
+
+
+
+
+                </div>
+                <div style="height: 120px;"></div>
+
             </p-panel>
         </div>
+        <div class="col-2"></div>
 
-        <form [formGroup]="formGroup">
-            <div class="col-12">
-
-
-                <gebo-ai-choose-documents-panel-component *ngIf="ragsystem && chatUserInfos?.knowledgeBases"
-                    [interactionDisabled]="loading" [knowledgeBaseCodes]="knowledgeBaseCodes"
-                    formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
-                    
-                <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="h-full"  gebo-ai-label  id="QueryControl"
-                    placeholder="Write a message for the chat bot">
-                </textarea>
-
-            </div>
-
+    </div>
+    <div [class]="interactions && interactions.length?'floating-chat-area':'floating-chat-area-middle'">
+        <form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
 
             <div class="col-12 grid">
-                <div class="lg:col-6 xl:col-6 md:col-3 sm:col-12"></div>
-                <gebo-ai-audio-component class="lg:col-3 xl:col-3 md:col-6 sm:col-6"
-                    [disabled]="capabilities?.supportsTranscript!==true || loading"
-                    (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
-                    [playAudioTrack]="currentAudioTrack"></gebo-ai-audio-component>
-                <div class="lg:col-3 xl:col-3 md:col-6 sm:col-6" style="text-align: right;">
-                    <p-button (onClick)="sendMessage()" label="Send" styleClass="w-full"  gebo-ai-label  
-                        [disabled]="formGroup.invalid || loading" [outlined]="true" icon="pi pi-microchip-ai" 
-                        title="Sumbit your question to the chat bot"></p-button>
+
+                <div class="col-3">
+
+                </div>
+                <div class="col-6 grid chat-area">
+                    <div class="col-1"></div>
+                    <div class="col-10"><gebo-ai-choose-documents-panel-component
+                            *ngIf="ragsystem && chatUserInfos?.knowledgeBases" [interactionDisabled]="loading"
+                            [knowledgeBaseCodes]="knowledgeBaseCodes"
+                            [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
+                            [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
+                            formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
+
+                        <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
+                            formControlName="userUploadedContents"
+                            [userSessionCode]="userChatContextCode"></gebo-ai-upload-chat-documents-files>
+                        <!--  check why it does not work   -->
+                    </div>
+                    <div class="col-1"></div>
+                    <div class="col-1 grid">
+                        <div class="col-6" style="text-align: right;"><p-button id="UploadFileBtn" [text]="false"
+                                [rounded]="true" gebo-ai-label icon="pi pi-cloud-upload"
+                                title="Upload a file to chat or work with" (onClick)="openedUploadDocumentsWindow=true"
+                                [disabled]="loading"></p-button></div>
+                        <div class="col-6" style="text-align: right;"><p-button id="ChatWithDocsBtnNew" [text]="true"
+                                gebo-ai-label icon="pi pi-search"
+                                title="Browse or search and select documents to chat with"
+                                (onClick)="openSelectDocumentsWindow=true" [disabled]="loading"></p-button></div>
+                    </div>
+                    <div class="col-10">
+
+                        <textarea rows="2" cols="250" [required]="true" pTextarea formControlName="query" class="w-full"
+                            gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot"
+                            (keydown.enter)="onSumbit()">
+                        </textarea>
+
+                    </div>
+                    <div class="col-1 grid">
+                        <div class="col-6" style="text-align: right;">
+                            <gebo-ai-audio-component [disabled]="capabilities?.supportsTranscript!==true || loading"
+                                (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
+                                [playAudioTrack]="currentAudioTrack" [viewLabels]="true"></gebo-ai-audio-component>
+                        </div>
+                        <div class="col-6" style="text-align: right;">
+                            <p-button id="SubmiQuestion" (onClick)="sendMessage()" gebo-ai-label
+                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
+                                type="submit" title="Sumbit your question" [text]="false"></p-button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-3">
+
                 </div>
 
-
-
-
             </div>
+
         </form>
     </div>
-</p-panel>
+</p-scrollPanel>
 
 <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"
     (cancelAction)="changeDescriptionDialogOpened=false"

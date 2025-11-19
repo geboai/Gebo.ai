@@ -142,6 +142,14 @@ export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAI
     getEntityName(): string {
         return "GeboAISearchDocumentsComponent";
     }
+    protected get loading(): boolean {
+        return (this.loadingDocuments === true
+            ||
+            this.runningSemanticSearch === true
+            ||
+            this.runningFileNameSearch === true);
+    }
+
     /**
      * Determines if knowledge bases are available for searching
      * 

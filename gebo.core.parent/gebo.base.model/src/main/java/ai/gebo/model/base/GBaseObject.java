@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.model.base;
 
@@ -19,9 +16,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.annotation.Id;
 
 /**
- * AI generated comments
- * Represents a base object model containing common fields and methods for 
- * entity classes. Implements Serializable interface for object 
+ * AI generated comments Represents a base object model containing common fields
+ * and methods for entity classes. Implements Serializable interface for object
  * serialization.
  */
 public class GBaseObject implements Serializable {
@@ -38,6 +34,19 @@ public class GBaseObject implements Serializable {
 	private String userCreated = null; // Username of the user who created the object.
 	private Date dateModified = null; // Date when the object was last modified.
 	private Date dateCreated = null; // Date when the object was created.
+
+	public GBaseObject() {
+
+	}
+
+	public GBaseObject(GBaseObject o) {
+		code = o.code;
+		description = o.description;
+		dateCreated = o.dateCreated;
+		dateModified = o.dateModified;
+		userModified = o.userModified;
+		userCreated = o.userCreated;		
+	}
 
 	/**
 	 * Retrieves the owner of the object.

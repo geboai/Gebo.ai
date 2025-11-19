@@ -43,6 +43,10 @@ public class ChatModelRequestContextWindowStats {
 	 * context window.
 	 */
 	public double contextDocumentsNTokens = 0.0;
+	/***
+	 * User uploaded documents ntokens
+	 */
+	public double uploadedDocumentsNTokens = 0.0;
 
 	/**
 	 * Percentage of the context window's available tokens relative to its total
@@ -62,9 +66,13 @@ public class ChatModelRequestContextWindowStats {
 	 */
 	public double documentsSharePerc = 0.0;
 	/**
-	 * Percentage of the context window's tokens allocated context historic documents relative to
-	 * its total length.
+	 * Percentage of the context window's tokens allocated context historic
+	 * documents relative to its total length.
 	 */
 	public double contextDocumentsSharePerc = 0.0;
+	/***
+	 * User uploaded documents percentual
+	 */
+	public double uploadedDocumentsSharePerc = 0.0;
 
 }
