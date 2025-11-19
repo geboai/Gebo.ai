@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Scríobh teachtaireacht don bot comhrá"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Brabhsáil nó cuardaigh agus roghnaigh cáipéisí le comhrá leo"
+      },
+      "UploadFileBtn" : {
+        "help" : "Uaslódáil comhad le haghaidh comhrá nó oibre"
+      },
+      "SubmiQuestion" : {
+        "help" : "Cuir do cheist isteach"
+      },
+      "WithParams" : {
+        "label" : "le paraiméadair:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Feidhmeanna AI glaoite:"
+      },
+      "UploadedDocs" : {
+        "label" : "Cáipéisí uaslódáilte"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Taifead",
         "help" : "Tosaigh ag taifead fuaime agus seol é"
+      },
+      "StopBtn" : {
+        "label" : "Taifeadadh",
+        "help" : "Taifeadadh"
+      },
+      "AbortBtn" : {
+        "label" : "Stop taifeadadh",
+        "help" : "Stop taifeadadh"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Athraigh focal faire"
+      },
+      "YourUserName" : {
+        "label" : "Do ainm úsáideora"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Comhrá nua"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Seisiúin chomhrá"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Dún an barra taoibh"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Cruthaigh comhrá nua le samhlacha móra teanga"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Cruthaigh comhrá RAG nua le hábhar na cuideachta",
+        "label" : "Comhrá le bunachar eolais"
+      },
+      "ChatsTitle" : {
+        "label" : "Comhráite"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Oscail rannóg roghanna comhrá"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Roghnaigh comhaid le haghaidh comhrá"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Brabhsáil nó cuardaigh agus roghnaigh cáipéisí le comhrá leo"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Ainm na comhaid á lorg",
         "help" : "Iontráil cuid de ainm na comhaid le haghaidh do chuid ábhair cuardaigh"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Cuardach ainm comhaid"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Brabhsáil comhaid na cuideachta"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Cuardach sémantach"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Roghnaigh comhaid le comhrá leo"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "mo phróifíl"
       },
       "logout" : {
+        "label" : "logáil amach"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Athraigh an teanga"
+      },
+      "MyProfile" : {
+        "label" : "do phróifíl"
+      },
+      "MyProfileItem" : {
+        "label" : "do phróifíl"
+      },
+      "chatMenuItem" : {
+        "label" : "Comhrá"
+      },
+      "setupMenuItem" : {
+        "label" : "Socrú"
+      },
+      "adminMenuItem" : {
+        "label" : "Riarachán"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "cuir próifíl in eagar"
+      },
+      "logoutMenuItem" : {
         "label" : "logáil amach"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Ceart go leor!",
         "detail" : "D’éirigh leis an oibríocht"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Uaslódáil comhaid le comhrá leo"
+      },
+      "ChooseFile" : {
+        "help" : "Roghnaigh comhaid"
+      },
+      "UploadFile" : {
+        "help" : "Uaslódáil comhaid"
+      },
+      "DragDropHere" : {
+        "label" : "Tarraing agus scaoil comhaid anseo chun iad a uaslódáil"
+      },
+      "RemoveAll" : {
+        "help" : "Bain uile"
+      },
+      "UploadPending" : {
+        "label" : "Ag fanacht le huaslódáil"
       }
     }
   }

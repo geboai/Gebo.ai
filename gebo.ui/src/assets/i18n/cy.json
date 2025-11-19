@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Ysgrifennwch neges ar gyfer y bot sgwrsio"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pori neu chwilio a dewis dogfennau i sgwrsio â hwy"
+      },
+      "UploadFileBtn" : {
+        "help" : "Llwytho ffeil i fyny i sgwrsio neu weithio gyda hi"
+      },
+      "SubmiQuestion" : {
+        "help" : "Cyflwyno eich cwestiwn"
+      },
+      "WithParams" : {
+        "label" : "gyda pharamedrau:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Swyddogaethau AI a alwyd:"
+      },
+      "UploadedDocs" : {
+        "label" : "Dogfennau wedi’u llwytho i fyny"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Cofnodi",
         "help" : "Dechrau recordio trac sain a'i anfon"
+      },
+      "StopBtn" : {
+        "label" : "Cofnodi",
+        "help" : "Cofnodi"
+      },
+      "AbortBtn" : {
+        "label" : "Atal cofnodi",
+        "help" : "Atal cofnodi"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Newid cyfrinair"
+      },
+      "YourUserName" : {
+        "label" : "Eich enw defnyddiwr"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Sgwrs newydd"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesiynau sgwrsio"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Cau’r bar ochr"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Creu sgwrs newydd gyda modelau iaith mawr"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Creu sgwrs RAG newydd gyda chynnwys y cwmni",
+        "label" : "Sgwrsio gyda’r sylfaen wybodaeth"
+      },
+      "ChatsTitle" : {
+        "label" : "Sgyrsiau"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Agor adran opsiynau sgwrs"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Dewiswch ffeiliau i sgwrsio â nhw"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pori neu chwilio a dewis dogfennau i sgwrsio â hwy"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Enw ffeil a chwiliwyd",
         "help" : "Rhowch ran o enw ffeil am eich cynnwys chwilio"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Chwiliad enw ffeil"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Pori ffeiliau’r cwmni"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Chwiliad semantig"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Dewiswch ffeiliau i sgwrsio â hwy"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "fy mhroffil"
       },
       "logout" : {
+        "label" : "allgofnodi"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Newid iaith"
+      },
+      "MyProfile" : {
+        "label" : "eich proffil"
+      },
+      "MyProfileItem" : {
+        "label" : "eich proffil"
+      },
+      "chatMenuItem" : {
+        "label" : "Sgwrs"
+      },
+      "setupMenuItem" : {
+        "label" : "Gosod"
+      },
+      "adminMenuItem" : {
+        "label" : "Gweinyddwr"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "golygu proffil"
+      },
+      "logoutMenuItem" : {
         "label" : "allgofnodi"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Iawn!",
         "detail" : "Gweithred wedi'i gwneud gyda llwyddiant"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Llwytho ffeiliau i fyny i sgwrsio â hwy"
+      },
+      "ChooseFile" : {
+        "help" : "Dewis ffeiliau"
+      },
+      "UploadFile" : {
+        "help" : "Llwytho ffeiliau"
+      },
+      "DragDropHere" : {
+        "label" : "Llusgo a gollwng ffeiliau yma i’w llwytho i fyny"
+      },
+      "RemoveAll" : {
+        "help" : "Tynnu popeth"
+      },
+      "UploadPending" : {
+        "label" : "Arhosol i’w llwytho i fyny"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Skrifaðu skilaboð til spjallbotsins"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Fletta eða leita og velja skjöl til að spjalla við"
+      },
+      "UploadFileBtn" : {
+        "help" : "Hlaða upp skrá til að spjalla eða vinna með"
+      },
+      "SubmiQuestion" : {
+        "help" : "Senda inn spurningu þína"
+      },
+      "WithParams" : {
+        "label" : "með viðföngum:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI kölluð föll:"
+      },
+      "UploadedDocs" : {
+        "label" : "Upphlaðin skjöl"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Upptaka",
         "help" : "Hefja upptöku hljóðs og senda hana"
+      },
+      "StopBtn" : {
+        "label" : "Upptaka",
+        "help" : "Upptaka"
+      },
+      "AbortBtn" : {
+        "label" : "Hætta við upptöku",
+        "help" : "Hætta við upptöku"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Breyta lykilorði"
+      },
+      "YourUserName" : {
+        "label" : "Notandanafn þitt"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nýtt spjall"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Spjalllotur"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Loka hliðarslá"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Búa til nýtt spjall með stórum tungumálalíkönum"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Búa til nýtt RAG spjall með efni fyrirtækis",
+        "label" : "Spjall við þekkingargrunn"
+      },
+      "ChatsTitle" : {
+        "label" : "Spjöll"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Opna valmöguleika spjalls"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Veldu skjöl til að spjalla við"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Fletta eða leita og velja skjöl til að spjalla við"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Nafn á skrá sem leitað er að",
         "help" : "Sláðu inn hluta af skrárnafni fyrir efnið sem þú ert að leita að"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Leita að skráarnafni"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Fletta í skrám fyrirtækis"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Merkingaleit"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Velja skrár til að spjalla við"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "skrá mig út"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Skipta um tungumál"
+      },
+      "MyProfile" : {
+        "label" : "prófíll þinn"
+      },
+      "MyProfileItem" : {
+        "label" : "prófíll þinn"
+      },
+      "chatMenuItem" : {
+        "label" : "Spjall"
+      },
+      "setupMenuItem" : {
+        "label" : "Uppsetning"
+      },
+      "adminMenuItem" : {
+        "label" : "Stjórnandi"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "breyta prófíl"
+      },
+      "logoutMenuItem" : {
+        "label" : "útskrá"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Í lagi!",
         "detail" : "Aðgerð heppnaðist"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Hlaða inn skrám til að spjalla við"
+      },
+      "ChooseFile" : {
+        "help" : "Velja skrár"
+      },
+      "UploadFile" : {
+        "help" : "Hlaða upp skrám"
+      },
+      "DragDropHere" : {
+        "label" : "Dragðu og slepptu skrám hér til að hlaða upp"
+      },
+      "RemoveAll" : {
+        "help" : "Fjarlægja allt"
+      },
+      "UploadPending" : {
+        "label" : "Bíður eftir upphleðslu"
       }
     }
   }
