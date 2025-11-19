@@ -23,13 +23,14 @@
 
       <gebo-ai-code-editor *ngIf="visible && sourceCodeContent===true || plainTextContent===true" [language]="sourceCodeLanguage"
         [contentObject]="contentObject" componentHeight="650px"></gebo-ai-code-editor>
+        <!-- 
       <gebo-ai-browse-content-component *ngIf="visible && browsableContent===true "
-        [url]="externalContentUrl"></gebo-ai-browse-content-component>
+        [url]="externalContentUrl"></gebo-ai-browse-content-component> -->
       <gebo-ai-pdf-viewer-wrapper2 *ngIf="visible && pdfContent" [pdfSrc]="externalContentUrl"></gebo-ai-pdf-viewer-wrapper2>
 
       <gebo-ai-download-link-viewer-wrapper *ngIf="visible && downloadableContent" [externalContentUrl]="externalContentUrl"
         [contentMetaInfo]="contentMetaInfo"></gebo-ai-download-link-viewer-wrapper>
-
+      <gebo-ai-web-viewer *ngIf="visible && browsableContent===true " [url]="externalContentUrl" [contentServedByGebo]="contentServedByGebo"></gebo-ai-web-viewer>
     </div>
   </p-panel>
 </p-dialog>

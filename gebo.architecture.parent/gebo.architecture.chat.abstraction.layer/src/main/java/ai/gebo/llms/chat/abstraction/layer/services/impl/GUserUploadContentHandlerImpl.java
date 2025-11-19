@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -20,12 +21,16 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class GUserUploadContentHandlerImpl implements IGUserUploadContentHandler {
 	final IGChatStorageAreaService storageAreaService;
+	final IGSecurityService securityService;
+	final UserUploadContentServerSideRepository repository;
 	final static Logger LOGGER = LoggerFactory.getLogger(GUserUploadContentHandlerImpl.class);
 
 	@Override
@@ -65,6 +70,30 @@ public class GUserUploadContentHandlerImpl implements IGUserUploadContentHandler
 	@Override
 	public InputStream getUploadContent(UserUploadedContent content) throws IOException {
 
+		return storageAreaService.getContent(content);
+	}
+
+	@Override
+	public UserUploadedContent findByUserSessionCodeAndUploadedContentId(String userSessionCode,
+			String uploadedContentId) throws IOException {
+		UserInfos user = this.securityService.getCurrentUser();
+		Optional<UserUploadContentServerSide> data = this.repository.findById(uploadedContentId);
+		if (data.isPresent()) {
+			UserUploadContentServerSide returnedServerSide = data.get();
+			if (returnedServerSide.getUserContextCode() != null && userSessionCode != null
+					&& returnedServerSide.getUserContextCode().equals(userSessionCode)
+					&& (returnedServerSide.getUserCreated().equals(user.getUsername()))) {
+				return new UserUploadedContent(returnedServerSide);
+			} else
+				throw new SecurityException("User not allowed");
+		}
+		return null;
+	}
+
+	@Override
+	public InputStream streamContent(UserUploadedContent content) throws IOException {
+		if (content == null)
+			return InputStream.nullInputStream();
 		return storageAreaService.getContent(content);
 	}
 

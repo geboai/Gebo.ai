@@ -28,8 +28,9 @@ import { GeboUIDocumentOpenerButton } from "./document-opener-button.component";
 import { ButtonModule } from "primeng/button";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
 import { EnrichedDocumentReferenceViewRetrieveService } from "./enriched-document-reference-view.service";
+import { WebViewerModule } from "../web-viewer/web-viewer.module";
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,PanelModule,BlockUIModule,BrowseContentModule,MonacoEditorModule,DialogModule,NgxExtendedPdfViewerModule,ButtonModule],
+    imports: [CommonModule, ReactiveFormsModule, PanelModule, BlockUIModule, BrowseContentModule, MonacoEditorModule, DialogModule, NgxExtendedPdfViewerModule, ButtonModule, WebViewerModule],
     declarations:[GeboAIContentViewerComponent,CodeEditorWrapperComponent,DownloadLinkViewerWrapperComponent,PDFViewerWrapper2Component,GeboUIDocumentOpenerButton],
     exports:[GeboAIContentViewerComponent,CodeEditorWrapperComponent,GeboUIDocumentOpenerButton],
     providers:[EnrichedDocumentReferenceViewRetrieveService]

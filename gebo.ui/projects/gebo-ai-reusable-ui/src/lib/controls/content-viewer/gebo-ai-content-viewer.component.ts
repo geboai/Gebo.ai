@@ -19,12 +19,13 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
 import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
+import { EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 
 /**
  * URL for the content controller API endpoint
  */
 const contentControllerUrl: string = "/api/users/ContentController";
-
+const uploadedContentControllerUrl: string = "/api/users/GeboUserChatUploadsController/serveContent/"
 /**
  * @Component GeboAIContentViewerComponent
  * A component responsible for rendering different types of content based on their file type.
@@ -41,47 +42,49 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
   /** Unique identifier for the content to be displayed */
   @Input() code: string = "";
 
-  @Input() userUploadedContent?: UserUploadedContent;
+  @Input() userUploadedContent?: EnrichedUserUploadedContentView;
 
   /** Flag to determine if the viewer should be active */
   @Input() activate: boolean = false;
 
   /** Controls the visibility of the content viewer */
-  public visible: boolean = false;
+  protected visible: boolean = false;
 
   /** Indicates if content is being loaded */
-  public loading: boolean = false;
+  protected loading: boolean = false;
 
   /** Metadata information about the content */
-  public contentMetaInfo?: ContentMetaInfo;
+  protected contentMetaInfo?: ContentMetaInfo;
 
   /** Information about the file type of the content */
-  public ingestionFileType?: IngestionFileType;
+  protected ingestionFileType?: IngestionFileType;
 
   /** Programming language of the source code content */
-  public sourceCodeLanguage: string = "";
+  protected sourceCodeLanguage: string = "";
 
   /** Flag indicating if the content is source code */
-  public sourceCodeContent: boolean = false;
+  protected sourceCodeContent: boolean = false;
 
   /** Flag indicating if the content is browsable web content */
-  public browsableContent: boolean = false;
+  protected browsableContent: boolean = false;
 
   /** Flag indicating if the content should be downloaded rather than viewed */
-  public downloadableContent: boolean = false;
+  protected downloadableContent: boolean = false;
 
   /** Flag indicating if the content is plain text */
-  public plainTextContent: boolean = false;
+  protected plainTextContent: boolean = false;
 
   /** Flag indicating if the content is a PDF document */
-  public pdfContent: boolean = false;
+  protected pdfContent: boolean = false;
 
   /** The actual content object with data */
-  public contentObject?: ContentObject;
+  protected contentObject?: ContentObject;
 
   /** URL for external content viewing */
-  public externalContentUrl: string = "javascript:void(0)";
+  protected externalContentUrl: string = "javascript:void(0)";
 
+  /*** if true the url is served by gebo and requires an authorization token */
+  protected contentServedByGebo: boolean = false;
   /** Event emitter that fires when the content viewer is closed */
   @Output() close: EventEmitter<boolean> = new EventEmitter();
 
@@ -113,7 +116,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * 
    * @param evt The event that triggered the close action
    */
-  public closeMe(evt: any) {
+  protected closeMe(evt: any) {
     this.visible = false;
     this.close.emit(true);
   }
@@ -124,30 +127,23 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    */
   private handleMetaInfo() {
     if (this.userUploadedContent) {
-      this.loading = true;
-      this.ingestionMetaInfoService.getIngestionFileTypeByExtension(this.userUploadedContent.extension).subscribe({
-        next: (fileType) => {
-          this.externalContentUrl = this.path + contentControllerUrl + "?code=" + encodeURIComponent(this.code);
-          this.ingestionFileType = fileType;
-          if (this.ingestionFileType.uiViewable === true) {
-            this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
-            this.plainTextContent = fileType?.treatAs === 'plainText';
-            this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
-            this.browsableContent = this.contentMetaInfo?.moduleId === 'webcrawler-module';
-            if (this.browsableContent && this.contentMetaInfo?.url) {
-              this.externalContentUrl = this.contentMetaInfo.url;
-            }
-          }
-          this.downloadableContent = fileType?.uiViewable === false;
-          this.visible = fileType?.uiViewable === true;
-          console.log("Content: " + this.externalContentUrl);
-          console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
-          console.log("content viewer url:" + this.externalContentUrl);
-        },
-        complete: () => {
-          this.loading = false;
+      const fileType = this.userUploadedContent.fileType;
+      if (fileType) {
+        this.ingestionFileType = this.userUploadedContent.fileType;
+        if (this.ingestionFileType?.uiViewable === true) {
+          this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
+          this.plainTextContent = fileType?.treatAs === 'plainText';
+          this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
+          this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
+          this.externalContentUrl = this.path + uploadedContentControllerUrl + this.userUploadedContent?.userContextCode + "/" + this.userUploadedContent?.code;
+          this.contentServedByGebo = true;
         }
-      })
+        this.downloadableContent = fileType?.uiViewable === false;
+        this.visible = fileType?.uiViewable === true;
+        console.log("Content: " + this.externalContentUrl);
+        console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
+        console.log("content viewer url:" + this.externalContentUrl);
+      }
     }
     if (this.contentMetaInfo) {
       if (this.contentMetaInfo.extension) {
@@ -155,6 +151,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
         this.ingestionMetaInfoService.getIngestionFileTypeByExtension(this.contentMetaInfo.extension).subscribe({
           next: (fileType) => {
             this.externalContentUrl = this.path + contentControllerUrl + "?code=" + encodeURIComponent(this.code);
+            this.contentServedByGebo = true;
             this.ingestionFileType = fileType;
             if (this.ingestionFileType.uiViewable === true) {
               this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
@@ -164,6 +161,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
               this.browsableContent = this.contentMetaInfo?.moduleId === 'webcrawler-module';
               if (this.browsableContent && this.contentMetaInfo?.url) {
                 this.externalContentUrl = this.contentMetaInfo.url;
+                this.contentServedByGebo = false;
               }
             }
             this.downloadableContent = fileType?.uiViewable === false;
@@ -205,8 +203,6 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (this.code && this.code.length && changes["code"] && this.activate === true) {
-
-
       this.loading = true;
       this.contentMetaControllerService.getContentMetaInfos(this.code).subscribe({
         next: (value) => {

@@ -74,6 +74,6 @@ public interface IGChatStorageAreaService {
 
 	public OperationStatus<List<UserUploadedContent>> deleteUploadedContents(String userSessionCode, List<String> id);
 
-	public InputStream getContent(UserUploadedContent content);
+	public InputStream getContent(UserUploadedContent content) throws IOException;
 
 }

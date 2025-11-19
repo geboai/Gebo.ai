@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +59,7 @@ import reactor.core.publisher.Flux;
  * text-to-speech conversions.
  */
 @RestController
+
 @RequestMapping(path = "api/users/GeboDirectModelChatController")
 public class GeboChatController {
 
