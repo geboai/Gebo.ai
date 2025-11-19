@@ -8,7 +8,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class SerializedDocumentContent {
-	String id = null;
-	String content = null;
-	Map<String, Object> metaData = null;
+
+	private String id = null;
+	private String content = null;
+	private Map<String, Object> metaData = null;
+
+	public SerializedDocumentContent() {
+	}
 }

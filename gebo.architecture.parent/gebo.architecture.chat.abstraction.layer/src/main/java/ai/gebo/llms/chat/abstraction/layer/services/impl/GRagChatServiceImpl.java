@@ -509,8 +509,15 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				List<ChatInteractions> history = limitedResourcesRequest.getHistory().getValue();
 				RagDocumentsCachedDaoResult extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
 				RagDocumentsCachedDaoResult contextDocuments = limitedResourcesRequest.getContextDocuments().getValue();
+				RagDocumentsCachedDaoResult uploadedDocuments = limitedResourcesRequest.getUploadedDocuments()
+						.getValue();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
 				List<Document> contextdocs = contextDocuments != null ? contextDocuments.aiDocumentsList() : List.of();
+				if (uploadedDocuments != null) {
+					List<Document> uploaded = uploadedDocuments.aiDocumentsList();
+					contextdocs = new ArrayList<>(contextdocs);
+					contextdocs.addAll(uploaded);
+				}
 				response.setDocumentsRef(docrefs);
 				request.setDocuments(extractedDocuments);
 				Prompt prompt = promptTemplate.create();

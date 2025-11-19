@@ -33,10 +33,11 @@ public interface IGChatStorageAreaService {
 	 * @param file
 	 * @return
 	 * @throws IOException
-	 * @throws GeboContentHandlerSystemException 
-	 * @throws GeboIngestionException 
+	 * @throws GeboContentHandlerSystemException
+	 * @throws GeboIngestionException
 	 */
-	public UserUploadContentServerSide addUploadedFile(String userSessionCode, MultipartFile file) throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
+	public UserUploadContentServerSide addUploadedFile(String userSessionCode, MultipartFile file)
+			throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
 	/*****************************************************************************************************
 	 * Deletes the file content
@@ -75,5 +76,14 @@ public interface IGChatStorageAreaService {
 	public OperationStatus<List<UserUploadedContent>> deleteUploadedContents(String userSessionCode, List<String> id);
 
 	public InputStream getContent(UserUploadedContent content) throws IOException;
+
+	/******************************************************************************************************
+	 * Get ingested contents for the user uploaded content
+	 * 
+	 * @param ss
+	 * @return
+	 * @throws IOException
+	 */
+	public List<Document> getIngestedContentsOf(UserUploadedContent uploaded) throws IOException;
 
 }

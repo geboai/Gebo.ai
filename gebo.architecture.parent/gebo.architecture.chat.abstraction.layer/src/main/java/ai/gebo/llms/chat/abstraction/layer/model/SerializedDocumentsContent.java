@@ -7,6 +7,9 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
+
 public class SerializedDocumentsContent {
-	List<SerializedDocumentContent> documents = null;
+	private List<SerializedDocumentContent> documents = null;
+	public SerializedDocumentsContent() {
+	}
 }

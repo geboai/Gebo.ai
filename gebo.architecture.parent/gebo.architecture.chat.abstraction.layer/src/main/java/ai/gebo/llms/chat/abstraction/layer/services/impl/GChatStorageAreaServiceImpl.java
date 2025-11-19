@@ -7,10 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.ai.document.Document;
+import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.repository.UserRepository.UserInfos;
@@ -48,6 +51,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final static String SESSIONS_PATH_PREFIX = "SESSIONS_AREA";
 	final static ObjectMapper objectMapper = new ObjectMapper();
+	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	@Override
 	public Path getSessionPath(GUserChatContext context) throws IOException {
@@ -106,15 +110,43 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		if (data.isUnmanagedContent())
 			return null;
 		else {
+			HashMap<String, Object> commonMetaData = this.createCommonMetaData(serverSide);
+
 			serverSide.setIngestedJsonPath(serverSide.getCode() + "-ingest.json");
 			Path jsonPath = Path.of(path.toString(), serverSide.getIngestedJsonPath());
-			List<SerializedDocumentContent> documents = data.getStream()
-					.map(x -> new SerializedDocumentContent(x.getId(), x.getText(), x.getMetadata())).toList();
+			List<SerializedDocumentContent> documents = data.getStream().map(x -> {
+				SerializedDocumentContent doc = new SerializedDocumentContent(x.getId(), x.getText(), x.getMetadata());
+				if (doc.getMetaData() == null) {
+					doc.setMetaData(new HashMap<>(commonMetaData));
+				} else {
+					HashMap newMeta = new HashMap<>(commonMetaData);
+					newMeta.putAll(newMeta);
+					doc.setMetaData(newMeta);
+				}
+				if (doc.getContent() != null && !doc.getContent().trim().isEmpty()) {
+					int tokens = this.tokenCountEstimator.estimate(doc.getContent());
+					doc.setMetaData(new HashMap<String, Object>(doc.getMetaData()));
+					doc.getMetaData().put(DocumentMetaInfos.GEBO_TOKEN_LENGTH, tokens);
+				}
+				return doc;
+			}).toList();
 			SerializedDocumentsContent content = new SerializedDocumentsContent(documents);
 			objectMapper.writeValue(jsonPath.toFile(), content);
 		}
 		serverSide = uploadContentsRepository.insert(serverSide);
 		return serverSide;
+	}
+
+	private HashMap<String, Object> createCommonMetaData(UserUploadContentServerSide serverSide) {
+		HashMap<String, Object> commonMetaData = new HashMap<>();
+		if (serverSide.getContentType() != null)
+			commonMetaData.put(DocumentMetaInfos.CONTENT_TYPE, serverSide.getContentType());
+		if (serverSide.getExtension() != null)
+			commonMetaData.put(DocumentMetaInfos.CONTENT_EXTENSION, serverSide.getExtension());
+		commonMetaData.put(DocumentMetaInfos.CONTENT_CODE, serverSide.getCode());
+		commonMetaData.put(DocumentMetaInfos.CONTENT_DESCRIPTION, "User uploaded file " + serverSide.getDescription());
+		commonMetaData.put(DocumentMetaInfos.GEBO_FILE_NAME, serverSide.getFileName());
+		return commonMetaData;
 	}
 
 	@Override
@@ -167,6 +199,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		Optional<GUserChatContext> contextData = userChatContextRepository.findById(ss.getUserContextCode());
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
+		this.securityService.checkBeingCreator(contextData.get());
 		Path path = getSessionPath(contextData.get());
 		if (!Files.exists(path))
 			return null;
@@ -190,7 +223,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		List<UserUploadedContent> list = new ArrayList<>();
 		List<GUserMessage> messages = new ArrayList<>();
 		List<UserUploadContentServerSide> data = uploadContentsRepository.findAllById(id);
-		for(UserUploadContentServerSide userUploadContentServerSide : data) {
+		for (UserUploadContentServerSide userUploadContentServerSide : data) {
 			this.securityService.checkBeingCreator(userUploadContentServerSide);
 		}
 		for (UserUploadContentServerSide userUploadContentServerSide : data) {
@@ -211,7 +244,8 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	@Override
 	public InputStream getContent(UserUploadedContent content) throws IOException {
 		Optional<GUserChatContext> contextData = userChatContextRepository.findById(content.getUserContextCode());
-		Optional<UserUploadContentServerSide> serverSideContent = this.uploadContentsRepository.findById(content.getCode());
+		Optional<UserUploadContentServerSide> serverSideContent = this.uploadContentsRepository
+				.findById(content.getCode());
 		if (contextData.isPresent() && serverSideContent.isPresent()) {
 			GUserChatContext ctx = contextData.get();
 			UserUploadContentServerSide ssc = serverSideContent.get();
@@ -219,6 +253,15 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 			this.securityService.checkBeingCreator(ssc);
 			Path path = this.getUploadedFilePath(ssc);
 			return Files.newInputStream(path);
+		}
+		return null;
+	}
+
+	@Override
+	public List<Document> getIngestedContentsOf(UserUploadedContent uploaded) throws IOException {
+		Optional<UserUploadContentServerSide> data = this.uploadContentsRepository.findById(uploaded.getCode());
+		if (data.isPresent()) {
+			return this.getIngestedContentsOf(data.get());
 		}
 		return null;
 	}

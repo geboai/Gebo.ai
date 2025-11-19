@@ -126,7 +126,7 @@ export class EnrichedDocumentReferenceViewRetrieveService {
             return of(EnrichedDocumentReferenceViewRetrieveService.fileTypes);
         else
             return this.filetypesControllerService.getAllFileTypes().pipe(map(x => {
-                EnrichedDocumentReferenceViewRetrieveService.fileTypes = x.map(this.enrichFileType);
+                EnrichedDocumentReferenceViewRetrieveService.fileTypes = x.map(y=>this.enrichFileType(y));
                 return EnrichedDocumentReferenceViewRetrieveService.fileTypes;
             }));
     }

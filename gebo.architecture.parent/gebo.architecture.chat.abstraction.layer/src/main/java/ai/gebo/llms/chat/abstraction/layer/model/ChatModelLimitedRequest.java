@@ -31,9 +31,10 @@ public class ChatModelLimitedRequest {
 	/** The cached documents limited by tokens */
 	private TokenLimitedContent<RagDocumentsCachedDaoResult> documents;
 	/**
-	 * The cached documents found on pasta and actual interactions limited by tokens
+	 * The cached documents found on paste and actual interactions limited by tokens
 	 */
 	private TokenLimitedContent<RagDocumentsCachedDaoResult> contextDocuments;
+	private TokenLimitedContent<RagDocumentsCachedDaoResult> uploadedDocuments;
 
 	/** The query string limited by tokens */
 	private TokenLimitedContent<String> query;
@@ -53,8 +54,9 @@ public class ChatModelLimitedRequest {
 		stats.documentsNTokens = documents != null ? documents.getNToken() : 0;
 		stats.historyNTokens = history != null ? history.getNToken() : 0;
 		stats.queryNTokens = query != null ? query.getNToken() : 0;
+		stats.uploadedDocumentsNTokens = uploadedDocuments != null ? uploadedDocuments.getNToken() : 0;
 		stats.contextDocumentsNTokens = contextDocuments != null ? contextDocuments.getNToken() : 0;
-
+		
 		if (stats.contextWindowLengthNTokens > 0.0) {
 			// Calculate available tokens and percentage shares for each component
 			stats.availableNTokens = stats.contextWindowLengthNTokens - (stats.documentsNTokens + stats.queryNTokens
@@ -65,6 +67,7 @@ public class ChatModelLimitedRequest {
 			stats.historySharePerc = 100.0 * stats.historyNTokens / stats.contextWindowLengthNTokens;
 			stats.availableSharePerc = 100.0 * stats.availableNTokens / stats.contextWindowLengthNTokens;
 			stats.contextDocumentsSharePerc = 100.0 * stats.contextDocumentsNTokens / stats.contextWindowLengthNTokens;
+			stats.uploadedDocumentsSharePerc=100.0 * stats.uploadedDocumentsNTokens/stats.contextWindowLengthNTokens;
 		}
 		return stats;
 	}

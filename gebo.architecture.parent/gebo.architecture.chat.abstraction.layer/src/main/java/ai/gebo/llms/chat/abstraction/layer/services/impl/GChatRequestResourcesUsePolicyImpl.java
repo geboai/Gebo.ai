@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +48,12 @@ import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
+import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.model.ExtractedDocumentMetaData;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
 /**
@@ -82,7 +86,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	IGModelsLibraryDao modelsLibraryDao;
 	@Autowired(required = false)
 	IKnowledgeGraphSearchService knowledgeGraphSearch;
-
+	@Autowired
+	IGChatStorageAreaService storageAreaService;
 	protected JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	/**
@@ -168,11 +173,13 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @param visibleKnowledgeBaseCodes List of visible knowledge base codes.
 	 * @return A ChatModelLimitedRequest object representing the optimized request.
 	 * @throws LLMConfigException In case of configuration errors.
+	 * @throws IOException
 	 */
 	@Override
 	public ChatModelLimitedRequest manageRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
 			UserInfos user, GeboChatRequest request, IGConfigurableEmbeddingModel embeddingHandler,
-			IGConfigurableChatModel chatHandler, List<String> visibleKnowledgeBaseCodes) throws LLMConfigException {
+			IGConfigurableChatModel chatHandler, List<String> visibleKnowledgeBaseCodes)
+			throws LLMConfigException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin manageRequest(.....)");
 		}
@@ -225,7 +232,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments = (int) stats.availableNTokens;
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
-
+		// first add explicitly uploaded documents
+		lrequest.setUploadedDocuments(
+				createLimitedUploadedDocumentsOnRequests(userContext, request, availableTokensForDocuments));
+		availableTokensForDocuments -= lrequest.getUploadedDocuments().getNToken();
 		RagDocumentsCachedDaoResult extractedDocuments = null;
 		RagQueryOptions ragQueryOptions = null;
 		ragQueryOptions = new RagQueryOptions();
@@ -306,6 +316,91 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			LOGGER.debug("End manageRequest(.....) stats=>" + logObject(stats));
 		}
 		return lrequest;
+	}
+
+	private TokenLimitedContent<RagDocumentsCachedDaoResult> createLimitedUploadedDocumentsOnRequests(
+			GUserChatContext userContext, GeboChatRequest request, int availableTokensForDocuments) throws IOException {
+		int budget = availableTokensForDocuments;
+		TokenLimitedContent<RagDocumentsCachedDaoResult> outValue = new TokenLimitedContent<>();
+		RagDocumentsCachedDaoResult value = new RagDocumentsCachedDaoResult();
+		boolean reachedBudgetLimit = false;
+		if (request.getUserUploadedContents() != null && !request.getUserUploadedContents().isEmpty()) {
+			for (UserUploadedContent uploaded : request.getUserUploadedContents()) {
+				List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
+				if (documents != null && !documents.isEmpty()) {
+					RagDocumentReferenceItem data = new RagDocumentReferenceItem();
+					data.setCode(uploaded.getCode());
+					data.setContentType(uploaded.getContentType());
+					data.setExtension(uploaded.getExtension());
+					data.setName(uploaded.getFileName());
+					List<RagDocumentFragment> fragments = new ArrayList<>();
+					for (Document document : documents) {
+						RagDocumentFragment fragment = new RagDocumentFragment(document,
+								ExtractedDocumentMetaData.of(document.getMetadata()));
+						fragment.recalculateSize();
+						if (fragment.getNTokens() <= budget) {
+							fragments.add(fragment);
+							budget -= fragment.getNTokens();
+						} else {
+							reachedBudgetLimit = true;
+							break;
+						}
+					}
+					data.setFragments(fragments);
+					data.recalculateSize();
+					if (!fragments.isEmpty()) {
+						value.getDocumentItems().add(data);
+						value.recalculateSize();
+					}
+					if (reachedBudgetLimit) {
+						break;
+					}
+				}
+			}
+		}
+		if (userContext.getInteractions() != null && !userContext.getInteractions().isEmpty()) {
+			for (int index = userContext.getInteractions().size() - 1; index >= 0; index--) {
+				ChatInteractions interaction = userContext.getInteractions().get(index);
+				if (interaction.getRequest() != null && interaction.getRequest().getUserUploadedContents() != null
+						&& !interaction.getRequest().getUserUploadedContents().isEmpty()) {
+					for (UserUploadedContent uploaded : interaction.getRequest().getUserUploadedContents()) {
+						List<Document> documents = this.storageAreaService.getIngestedContentsOf(uploaded);
+						if (documents != null && !documents.isEmpty()) {
+							RagDocumentReferenceItem data = new RagDocumentReferenceItem();
+							data.setCode(uploaded.getCode());
+							data.setContentType(uploaded.getContentType());
+							data.setExtension(uploaded.getExtension());
+							data.setName(uploaded.getFileName());
+							List<RagDocumentFragment> fragments = new ArrayList<>();
+							for (Document document : documents) {
+								RagDocumentFragment fragment = new RagDocumentFragment(document,
+										ExtractedDocumentMetaData.of(document.getMetadata()));
+								fragment.recalculateSize();
+								if (fragment.getNTokens() <= budget) {
+									fragments.add(fragment);
+									budget -= fragment.getNTokens();
+								} else {
+									reachedBudgetLimit = true;
+									break;
+								}
+							}
+							data.setFragments(fragments);
+							data.recalculateSize();
+							if (!fragments.isEmpty()) {
+								value.getDocumentItems().add(data);
+								value.recalculateSize();
+							}
+							if (reachedBudgetLimit) {
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		outValue.setValue(value);
+		outValue.setNToken((int) value.getNTokens());
+		return outValue;
 	}
 
 	private RagDocumentsCachedDaoResult createHistoricContextDocuments(GUserChatContext userContext,
