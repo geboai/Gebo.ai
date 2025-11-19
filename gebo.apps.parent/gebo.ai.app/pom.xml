@@ -36,15 +36,16 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.springframework.boot</groupId>
-						<artifactId>spring-boot-maven-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.5.4</version> <!-- mettila esplicita se non è nel parent -->
 						<configuration>
-							<jvmArguments>
-								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
-							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
-							<excludeDevtools>false</excludeDevtools>
-							<layout>JAR</layout>
-							<classifier>bootable+swagger</classifier>
+						<argLine>
+							--add-opens=java.base/java.nio.charset=ALL-UNNAMED
+							--enable-native-access=ALL-UNNAMED
+						</argLine>
+						<forkCount>1</forkCount>
+						<reuseForks>false</reuseForks>
 						</configuration>
 					</plugin>
 				</plugins>
