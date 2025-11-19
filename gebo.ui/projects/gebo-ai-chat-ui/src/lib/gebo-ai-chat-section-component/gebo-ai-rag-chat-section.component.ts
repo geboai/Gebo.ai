@@ -15,8 +15,8 @@ import { ChatModelsLookupControllerService, DataPage, GChatProfileConfiguration,
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
-import { TreeNode } from "primeng/api";
-import { TreeNodeSelectEvent } from "primeng/tree";
+import { ScrollerOptions, TreeNode } from "primeng/api";
+import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
 
 /* AI generated comments */
 /**
@@ -62,9 +62,10 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
     /** Pagination configuration for chat history */
     public page: DataPage = {
         page: 0,
-        pageSize: 10
+        pageSize: 100
     };
-    chatsTree!: TreeNode[];
+    protected chatsTree!: TreeNode[];
+    protected scrollOptions!: ScrollerOptions;
     /** Form group for RAG chat profile selection */
     public formGroup: FormGroup = new FormGroup({
         chatProfileCode: new FormControl()
@@ -95,7 +96,19 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         private geboUserChatsControllerService: GeboUserChatsControllerService,
         private geboChatModelsControllerService: ChatModelsLookupControllerService,
         private geboTranslationService: GeboAITranslationService) {
+        this.scrollOptions = {
+           
+            onLazyLoad: () => {
+                console.log("lazyLoad");
+            },
+            onScroll: () => {
+                console.log("lazyScroll");
+            },
+            onScrollIndexChange: () => {
+                console.log("indexChange");
+            }
 
+        };
     }
 
     /**
@@ -144,22 +157,28 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         this.openRagChat = false;
         this.chatsListAndOptionsVisible = false;
     }
+    scrollIndexChange(indexChange: TreeScrollIndexChangeEvent) {
+
+    }
 
     /**
      * Loads the user's chat history with pagination
      * Updates the chatsPage property with the retrieved data
      */
-    public loadChatList(): void {
+    public loadChatList(page: number = 0): void {
         if (!this.chatsTree) {
-            this.chatsTree = [{ label: "Chats", leaf: false, children: [],expanded:true }];
+            this.chatsTree = [{ label: "Chats", leaf: false, children: [], expanded: true }];
 
         }
-        this.chatsPageLoading = true;
+
         if (this.page.page !== undefined && this.page.pageSize !== undefined) {
+            this.page.page = page;
+            this.chatsPageLoading = true;
             this.geboUserChatsControllerService.getMyChatsPaged(this.page.page, this.page.pageSize).subscribe({
                 next: (page) => {
                     this.chatsPage = page;
-                    this.chatsTree[0].children = (this.chatsPage.content ? this.chatsPage.content : []).map(x => {
+                    const childrens: GUserChatInfo[] = page.content ? page.content : [];
+                    const newItems: TreeNode<GUserChatInfo>[] = childrens.map(x => {
                         const item: TreeNode = {
                             label: x.description,
                             leaf: true,
@@ -169,8 +188,13 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                         return item;
                     });
+                    if (!this.chatsTree[0].children) {
+                        this.chatsTree[0].children = newItems;
+                    } else {
+                        this.chatsTree[0].children = [...this.chatsTree[0].children, ...newItems];
+                    }
                 }, error: (err) => {
-
+                    this.chatsPageLoading = false;
                 },
                 complete: () => {
                     this.chatsPageLoading = false;
@@ -178,9 +202,22 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
             });
         }
     }
+    onUpdatedChat(chatInfo: GUserChatInfo) {
+        if (this.chatsTree && this.chatsTree.length) {
+            const childs = this.chatsTree[0].children as TreeNode<GUserChatInfo>[];
+            if (childs) {
+                for (let i: number = 0; i < childs.length; i++) {
+                    if (childs[i]?.data?.code === chatInfo?.code) {
+                        childs[i].data = chatInfo;
+                    }
+                }
+            }
+        }
+    }
+
     openChatItem(event: TreeNodeSelectEvent) {
         if (event && event.node.data) {
-            this.activateChat(event.node.data );
+            this.activateChat(event.node.data);
         }
     }
     /**

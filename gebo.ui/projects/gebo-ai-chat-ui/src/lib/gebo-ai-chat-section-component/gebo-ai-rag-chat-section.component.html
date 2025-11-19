@@ -77,7 +77,9 @@
                 </div>
                 <div class="col-12">
                     <p-tree [value]="chatsTree" (onNodeSelect)="openChatItem($event)"
-                        (onNodeDoubleClick)="openChatItem($event)">
+                        (onScrollIndexChange)="scrollIndexChange($event)" [virtualScrollOptions]="scrollOptions"
+                         [virtualScrollItemSize]="page.pageSize" [virtualNodeHeight]="20" styleClass="h-full w-full"
+                        (onNodeDoubleClick)="openChatItem($event)" [loading]="chatsPageLoading">
                         <ng-template let-node pTemplate="default">
                             <a (click)="node.data?activateChat(node.data):false" href="javascript:void(0)"
                                 style="text-decoration: none;color:black">{{node.label}}</a>
@@ -149,9 +151,11 @@
         <div style="width: 95%;">
             <gebo-ai-reusable-chat-component *ngIf="openRagChat===true" [ragsystem]="true" [chatInfo]="currentChat"
                 (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+                (updatedChatAction)="onUpdatedChat($event)"
                 [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
             <gebo-ai-reusable-chat-component *ngIf="openChat===true" [ragsystem]="false" [chatInfo]="currentChat"
                 (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
+                (updatedChatAction)="onUpdatedChat($event)"
                 [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
         </div>
 

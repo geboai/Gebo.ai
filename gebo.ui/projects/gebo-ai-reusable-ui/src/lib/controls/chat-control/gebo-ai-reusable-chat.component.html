@@ -147,7 +147,10 @@
 
                         <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
                             formControlName="userUploadedContents"
-                            [userSessionCode]="userChatContextCode"></gebo-ai-upload-chat-documents-files>
+                            [chatModelCode]="chatInfo?.chatModelCode"
+                            [chatProfileCode]="chatInfo?.chatProfileCode"
+                            [ragChat]="ragsystem"
+                            [userSessionCode]="userChatContextCode" (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"></gebo-ai-upload-chat-documents-files>
                         <!--  check why it does not work   -->
                     </div>
                     <div class="col-1"></div>

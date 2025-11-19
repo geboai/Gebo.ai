@@ -1,13 +1,17 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
 import { ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GeboUserChatUploadsControllerService, BASE_PATH, IngestionFileTypesLibraryControllerService, UserUploadedContent, OperationStatusListUserUploadedContent, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboUserChatUploadsControllerService, BASE_PATH, IngestionFileTypesLibraryControllerService, UserUploadedContent, OperationStatusListUserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { MessageService } from "primeng/api";
 import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { FileProgressEvent, FileUploadEvent } from "primeng/fileupload";
+import { IOperationStatus } from "../base-entity-editing-component/operation-status";
+
 const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionUpload/";
+const urlPostfixRagCreateSession = "api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/";
+const urlPostfixCreateSession = "api/users/GeboUserChatUploadsController/chatSessionCreateWithUpload/";
 @Component({
     templateUrl: "upload-chat-document.component.html",
     selector: "gebo-ai-upload-chat-documents-files",
@@ -30,9 +34,13 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
 
 
     @Input() showUpload: boolean = false;
+    @Input() ragChat: boolean = false;
+    @Input() chatModelCode?: string;
+    @Input() chatProfileCode?: string;
     @Output() showUploadChange: EventEmitter<boolean> = new EventEmitter();
     @Input() userSessionCode?: string;
-    protected response?: OperationStatusListUserUploadedContent;
+    @Output() newSessionCreatedOnUpload: EventEmitter<GUserChatInfo> = new EventEmitter();
+    protected response?: IOperationStatus<UserUploadedContent[] | { uploads?: UserUploadedContent[], chatInfo?: GUserChatInfo } | undefined>;
     protected loading: boolean = false;
     protected filesExtensionsFlatList: string = "";
     protected uploadedContents?: UserUploadedContent[] = [];
@@ -54,14 +62,14 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         private geboAITranslatorService: GeboAITranslationService,
         private chatDocumentsUploadService: GeboUserChatUploadsControllerService,
         @Inject(BASE_PATH) private baseUrl: string) {
-        this.url = baseUrl + "/" + urlPostfix;
+
 
     }
     getEntityName(): string {
         return "GeboAIUploadChatDocumentComponent";
     }
     ngOnInit(): void {
-        
+
         this.headers = new HttpHeaders(getAuthHeader());
         this.loading = true;
         this.contentTypeService.getAllFileTypes().subscribe({
@@ -89,8 +97,14 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         });
     }
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes["userSessionCode"] && this.userSessionCode) {
-            this.url = this.baseUrl + "/" + urlPostfix + this.userSessionCode;
+        if (this.userSessionCode) {
+            this.url = this.baseUrl + urlPostfix + this.userSessionCode;
+        } else if (this.ragChat === true && this.chatProfileCode) {
+            this.url = this.baseUrl + urlPostfixRagCreateSession + this.chatProfileCode;
+        } else if (this.chatModelCode) {
+            this.url = this.baseUrl + urlPostfixCreateSession + this.chatModelCode;
+        }else {
+            console.log("Incoherent data in upload config");
         }
     }
     writeValue(obj: any): void {
@@ -100,12 +114,27 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         if (evt.originalEvent.type === HttpEventType.Response) {
             this.response = evt.originalEvent.body;
             if (this.response?.result) {
-                if (this.uploadedContents) {
-                    this.uploadedContents = [...this.uploadedContents, ...this.response.result];
+                let receivedContents: UserUploadedContent[] | undefined = undefined;
+                const tryAsArray: UserUploadedContent[] = this.response.result as UserUploadedContent[];
+                if (tryAsArray.length) {
+                    receivedContents = tryAsArray;
                 } else {
-                    this.uploadedContents = this.response.result;
+                    const tryAsUploadsWithResoult: { uploads?: UserUploadedContent[], chatInfo?: GUserChatInfo } = this.response?.result as { uploads?: UserUploadedContent[], chatInfo?: GUserChatInfo };
+                    if (tryAsUploadsWithResoult.uploads) {
+                        receivedContents = tryAsUploadsWithResoult.uploads;
+                    }
+                    if (tryAsUploadsWithResoult.chatInfo) {
+                        this.newSessionCreatedOnUpload.emit(tryAsUploadsWithResoult.chatInfo);
+                    }
                 }
-                this.onChange(this.uploadedContents);
+                if (receivedContents) {
+                    if (this.uploadedContents) {
+                        this.uploadedContents = [...this.uploadedContents, ...receivedContents];
+                    } else {
+                        this.uploadedContents = receivedContents;
+                    }
+                    this.onChange(this.uploadedContents);
+                }
             }
             if (this.response?.messages) {
                 this.geboAITranslatorService.translateBackendMessages(this.response?.messages).subscribe({
@@ -172,9 +201,9 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         return formattedSize
     }
     sendProgress(evt: FileProgressEvent) {
-        
+
     }
     doRemoveUploaded(doc: UserUploadedContent) {
-            
+
     }
 }

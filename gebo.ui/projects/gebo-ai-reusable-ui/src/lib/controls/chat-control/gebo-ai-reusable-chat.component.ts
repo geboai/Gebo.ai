@@ -78,6 +78,7 @@ interface GeboChatTemplatedResponse {
 })
 export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFieldHost {
 
+
     /**
      * Stores the capabilities of the current model provider
      */
@@ -212,6 +213,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Event emitted when a new chat is added
      */
     @Output() addedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
+    @Output() updatedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
 
     /**
      * Reference to the chat scroll panel
@@ -566,7 +568,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      */
     private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
         this.loadingChatResponse = true;
-
+        const suggestChatDescription: boolean = this.interactions ? this.interactions.length == 0 : true;
         const interaction: GeboChatInteraction = {
             loading: true,
             request: r
@@ -602,52 +604,58 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
                     }
                     interaction.response = recvd.content;
-                    if (interaction.response && recvd.lastMessage === true) {
+                    if (interaction.response) {
                         const response: GeboChatResponse = interaction.response;
                         if (r.userChatContextCode !== response.userChatContextCode) {
+                            if (this.chatInfo) {
+                                this.chatInfo.code = response.userChatContextCode;
+                            }
                             const newContext: GUserChatInfo = { ...this.chatInfo };
                             newContext.code = response.userChatContextCode;
                             newContext.chatProfileCode = r.chatProfileCode;
                             newContext.ragChat = this.ragsystem;
-                            if (this.chatInfo) {
-                                this.chatInfo.code = response.userChatContextCode;
-                            }
-                            let newChatInfoObservable: Observable<GUserChatInfo> = of(newContext);
-                            if (response.userChatContextCode) {
-                                if (this.ragsystem === true) {
-                                    newChatInfoObservable = this.ragChatService.suggestRagChatDescription(response.userChatContextCode);
-                                } else {
-                                    newChatInfoObservable = this.chatService.suggestChatDescription(response.userChatContextCode);
-                                }
-                            }
-                            newChatInfoObservable.subscribe({
-                                next: (value: GUserChatInfo) => {
-                                    if (this.chatInfo && value?.description) {
-                                        this.chatInfo.description = value?.description;
-                                    }
-                                    this.addedChatAction.emit(value);
-                                },
-                                error: () => {
-                                    this.addedChatAction.emit(newContext);
-                                }
-                            });
-
+                            this.addedChatAction.emit(newContext);
                         }
-                        this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
-                        this.messageService.addAll(this.lastInteractionMessages);
-                        const dataUpdate: any = {
-                            chatProfileCode: r.chatProfileCode,
-                            chatModelCode: r.chatModelCode,
-                            userChatContextCode: response.userChatContextCode,
-                            query: null
-                        };
-                        this.formGroup.patchValue(dataUpdate);
+                        if (recvd.lastMessage === true) {
+
+                            if (suggestChatDescription === true) {
+                                if (response.userChatContextCode) {
+                                    let newChatInfoObservable: Observable<GUserChatInfo>;
+                                    if (this.ragsystem === true) {
+                                        newChatInfoObservable = this.ragChatService.suggestRagChatDescription(response.userChatContextCode);
+                                    } else {
+                                        newChatInfoObservable = this.chatService.suggestChatDescription(response.userChatContextCode);
+                                    }
+                                    newChatInfoObservable.subscribe({
+                                        next: (value: GUserChatInfo) => {
+                                            if (this.chatInfo && value?.description) {
+                                                this.chatInfo.description = value?.description;
+                                            }
+                                            this.updatedChatAction.emit(value);
+                                        },
+                                        error: () => {
+
+                                        }
+                                    });
+                                }
+                            }
+
+                            this.lastInteractionMessages = response?.backendMessages ? response.backendMessages as ToastMessageOptions[] : [];
+                            this.messageService.addAll(this.lastInteractionMessages);
+                            const dataUpdate: any = {
+                                chatProfileCode: r.chatProfileCode,
+                                chatModelCode: r.chatModelCode,
+                                userChatContextCode: response.userChatContextCode,
+                                query: null
+                            };
+                            this.formGroup.patchValue(dataUpdate);
 
 
 
 
-                        if (doSpeach === true && recvd.lastMessage === true && response.queryResponse) {
-                            this.speechPlay(response.queryResponse);
+                            if (doSpeach === true && recvd.lastMessage === true && response.queryResponse) {
+                                this.speechPlay(response.queryResponse);
+                            }
                         }
                     }
                     this.scrollDown();
@@ -765,7 +773,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
         }
     }
-
+    onNewSessionCreatedOnUpload(info: GUserChatInfo) {
+        this.chatInfo = info;
+        this.formGroup.controls["chatProfileCode"].setValue(info.chatProfileCode);
+        this.formGroup.controls["userChatContextCode"].setValue(info.code);
+        this.formGroup.controls["chatModelCode"].setValue(info.chatModelCode);
+        this.chatInfoFormGroup.patchValue(info);
+        this.addedChatAction.emit(info);
+    }
     /**
      * Handles speech-to-text conversion events
      * 
