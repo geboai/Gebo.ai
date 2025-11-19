@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Ieraksti ziņu tērzēšanas botam"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pārlūkot vai meklēt un izvēlēties dokumentus, ar kuriem tērzēt"
+      },
+      "UploadFileBtn" : {
+        "help" : "Augšupielādēt failu, lai tērzētu vai strādātu ar to"
+      },
+      "SubmiQuestion" : {
+        "help" : "Iesniegt savu jautājumu"
+      },
+      "WithParams" : {
+        "label" : "ar parametriem:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI izsauktās funkcijas:"
+      },
+      "UploadedDocs" : {
+        "label" : "Augšupielādētie dokumenti"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Ierakstīt",
         "help" : "Sāciet ierakstīt audio ierakstu un nosūtiet to"
+      },
+      "StopBtn" : {
+        "label" : "Ierakstīšana",
+        "help" : "Ierakstīšana"
+      },
+      "AbortBtn" : {
+        "label" : "Pārtraukt ierakstīšanu",
+        "help" : "Pārtraukt ierakstīšanu"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Mainīt paroli"
+      },
+      "YourUserName" : {
+        "label" : "Jūsu lietotājvārds"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Jauna tērzēšana"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Tērzēšanas sesijas"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Aizvērt sānu joslu"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Izveidot jaunu tērzēšanu ar lieliem valodu modeļiem"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Izveidot jaunu RAG tērzēšanu ar uzņēmuma saturu",
+        "label" : "Tērzēt ar zināšanu bāzi"
+      },
+      "ChatsTitle" : {
+        "label" : "Tērzēšanas"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Atvērt tērzēšanas opciju sadaļu"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Izvēlieties failus sarunai"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pārlūkot vai meklēt un izvēlēties dokumentus, ar kuriem tērzēt"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Meklētā faila nosaukums",
         "help" : "Ievadiet daļu faila nosaukuma meklējamajam saturam"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Faila nosaukuma meklēšana"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Pārlūkot uzņēmuma failus"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantiskā meklēšana"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Izvēlieties failus, ar kuriem tērzēt"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "mans profils"
       },
       "logout" : {
+        "label" : "iziet"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Mainīt valodu"
+      },
+      "MyProfile" : {
+        "label" : "jūsu profils"
+      },
+      "MyProfileItem" : {
+        "label" : "jūsu profils"
+      },
+      "chatMenuItem" : {
+        "label" : "Tērzēšana"
+      },
+      "setupMenuItem" : {
+        "label" : "Iestatīšana"
+      },
+      "adminMenuItem" : {
+        "label" : "Administrēšana"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "rediģēt profilu"
+      },
+      "logoutMenuItem" : {
         "label" : "iziet"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Labi!",
         "detail" : "Darbība veiksmīgi pabeigta"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Augšupielādēt failus tērzēšanai"
+      },
+      "ChooseFile" : {
+        "help" : "Izvēlēties failus"
+      },
+      "UploadFile" : {
+        "help" : "Augšupielādēt failus"
+      },
+      "DragDropHere" : {
+        "label" : "Velciet un nometiet failus šeit, lai augšupielādētu"
+      },
+      "RemoveAll" : {
+        "help" : "Noņemt visu"
+      },
+      "UploadPending" : {
+        "label" : "Gaida augšupielādi"
       }
     }
   }

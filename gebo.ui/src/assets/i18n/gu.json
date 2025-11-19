@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "ચેટ બોટ માટે સંદેશ લખો"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "દસ્તાવેજો શોધો અથવા બ્રાઉઝ કરો અને ચેટ કરવા માટે પસંદ કરો"
+      },
+      "UploadFileBtn" : {
+        "help" : "ચેટ માટે અથવા કામ કરવા માટે ફાઇલ અપલોડ કરો"
+      },
+      "SubmiQuestion" : {
+        "help" : "તમારો પ્રશ્ન મોકલો"
+      },
+      "WithParams" : {
+        "label" : "પેરામેટર્સ સાથે:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI દ્વારા બોલાવવામાં આવેલી ફંક્શન્સ:"
+      },
+      "UploadedDocs" : {
+        "label" : "અપલોડ કરેલ દસ્તાવેજો"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "રેકોર્ડ કરો",
         "help" : "ઑડિયો ટ્રેક રેકોર્ડ કરવાનું શરૂ કરો અને મોકલો"
+      },
+      "StopBtn" : {
+        "label" : "રેકોર્ડિંગ",
+        "help" : "રેકોર્ડિંગ"
+      },
+      "AbortBtn" : {
+        "label" : "રેકોર્ડિંગ રદ કરો",
+        "help" : "રેકોર્ડિંગ રદ કરો"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "પાસવર્ડ બદલો"
+      },
+      "YourUserName" : {
+        "label" : "તમારું યુઝર નામ"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "નવી ચેટ"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ચેટ સેશન"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "સાઈડ બાર બંધ કરો"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "મોટા ભાષા મોડલ્સ સાથે નવી ચેટ બનાવો"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "કંપની સામગ્રી સાથે નવી RAG ચેટ બનાવો",
+        "label" : "નોલેજ બેઝ સાથે ચેટ"
+      },
+      "ChatsTitle" : {
+        "label" : "ચેટ્સ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ચેટ વિકલ્પ વિભાગ ખોલો"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "વાત કરવા માટે ફાયદા પસંદ કરો"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "દસ્તાવેજો શોધો અથવા બ્રાઉઝ કરો અને ચેટ માટે પસંદ કરો"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "શોધેલી ફાઈલ નામ",
         "help" : "તમારી શોધેલી સામગ્રી માટે ફાઈલ નામનો ભાગ દાખલ કરો"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ફાઇલનામ શોધો"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "કંપની ફાઇલો બ્રાઉઝ કરો"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "સેમેન્ટિક શોધ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ચેટ કરવા માટે ફાઇલો પસંદ کریں"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "લૉગઆઉટ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ભાષા બદલો"
+      },
+      "MyProfile" : {
+        "label" : "તમારી પ્રોફાઇલ"
+      },
+      "MyProfileItem" : {
+        "label" : "તમારી પ્રોફાઇલ"
+      },
+      "chatMenuItem" : {
+        "label" : "ચેટ"
+      },
+      "setupMenuItem" : {
+        "label" : "સેટઅપ"
+      },
+      "adminMenuItem" : {
+        "label" : "એડમિન"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "પ્રોફાઇલ સુધારો"
+      },
+      "logoutMenuItem" : {
+        "label" : "લોગઆઉટ"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "બરાબર!",
         "detail" : "ઓપરેશન સફળતાપૂર્વક પૂર્ણ થયું"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ચેટ કરવા માટે ફાઇલો અપલોડ કરો"
+      },
+      "ChooseFile" : {
+        "help" : "ફાઇલો પસંદ કરો"
+      },
+      "UploadFile" : {
+        "help" : "ફાઇલો અપલોડ કરો"
+      },
+      "DragDropHere" : {
+        "label" : "અપલોડ કરવા માટે ફાઇલો અહીં ડ્રેગ અને ડ્રોપ કરો"
+      },
+      "RemoveAll" : {
+        "help" : "બધું દૂર કરો"
+      },
+      "UploadPending" : {
+        "label" : "અપલોડ માટે બાકી"
       }
     }
   }

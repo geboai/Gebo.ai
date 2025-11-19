@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Skriv en melding til chatbott"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Bla gjennom eller søk og velg dokumenter å chatte med"
+      },
+      "UploadFileBtn" : {
+        "help" : "Last opp en fil for å chatte eller jobbe med"
+      },
+      "SubmiQuestion" : {
+        "help" : "Send inn spørsmålet ditt"
+      },
+      "WithParams" : {
+        "label" : "med parametere:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI kallte funksjoner:"
+      },
+      "UploadedDocs" : {
+        "label" : "Opplastede dokumenter"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Ta opp",
         "help" : "Start opptak av et lydspor og send det"
+      },
+      "StopBtn" : {
+        "label" : "Opptak",
+        "help" : "Opptak"
+      },
+      "AbortBtn" : {
+        "label" : "Avbryt opptak",
+        "help" : "Avbryt opptak"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Bytt passord"
+      },
+      "YourUserName" : {
+        "label" : "Ditt brukernavn"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Ny chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chatøkter"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Lukk sidepanel"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Opprett en ny chat med store språkmodeller"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Opprett en ny RAG-chat med bedriftsinnhold",
+        "label" : "Chat med kunnskapsbase"
+      },
+      "ChatsTitle" : {
+        "label" : "Samtaler"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Åpne chatalternativer"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Velg filer å chatte med"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Bla gjennom eller søk og velg dokumenter å chatte med"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Søkt filnavn",
         "help" : "Skriv inn en del av filnavnet du søker etter"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Filnavnsøk"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Bla gjennom firmadokumenter"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantisk søk"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Velg filer å chatte med"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "min profil"
       },
       "logout" : {
+        "label" : "logg ut"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Bytt språk"
+      },
+      "MyProfile" : {
+        "label" : "din profil"
+      },
+      "MyProfileItem" : {
+        "label" : "din profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Oppsett"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "rediger profil"
+      },
+      "logoutMenuItem" : {
         "label" : "logg ut"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operasjonen ble fullført"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Last opp filer for å chatte med"
+      },
+      "ChooseFile" : {
+        "help" : "Velg filer"
+      },
+      "UploadFile" : {
+        "help" : "Last opp filer"
+      },
+      "DragDropHere" : {
+        "label" : "Dra og slipp filer hit for opplasting"
+      },
+      "RemoveAll" : {
+        "help" : "Fjern alle"
+      },
+      "UploadPending" : {
+        "label" : "Venter på opplasting"
       }
     }
   }

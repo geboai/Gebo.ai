@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "เขียนข้อความสำหรับบอทแชท"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "เรียกดูหรือค้นหาและเลือกเอกสารเพื่อแชทด้วย"
+      },
+      "UploadFileBtn" : {
+        "help" : "อัปโหลดไฟล์เพื่อแชทหรือทำงานด้วย"
+      },
+      "SubmiQuestion" : {
+        "help" : "ส่งคำถามของคุณ"
+      },
+      "WithParams" : {
+        "label" : "พร้อมพารามิเตอร์:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "ฟังก์ชันที่ AI เรียกใช้:"
+      },
+      "UploadedDocs" : {
+        "label" : "เอกสารที่อัปโหลด"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "บันทึกเสียง",
         "help" : "เริ่มบันทึกเสียงและส่ง"
+      },
+      "StopBtn" : {
+        "label" : "กำลังบันทึก",
+        "help" : "กำลังบันทึก"
+      },
+      "AbortBtn" : {
+        "label" : "ยกเลิกการบันทึก",
+        "help" : "ยกเลิกการบันทึก"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "เปลี่ยนรหัสผ่าน"
+      },
+      "YourUserName" : {
+        "label" : "ชื่อผู้ใช้ของคุณ"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "แชทใหม่"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "เซสชันแชท"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "ปิดแถบข้าง"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "สร้างแชทใหม่กับโมเดลภาษาขนาดใหญ่"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "สร้างแชท RAG ใหม่กับเนื้อหาของบริษัท",
+        "label" : "แชทกับฐานความรู้"
+      },
+      "ChatsTitle" : {
+        "label" : "แชท"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "เปิดตัวเลือกแชท"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "เลือกไฟล์เพื่อสนทนาด้วย"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "เรียกดูหรือค้นหาและเลือกเอกสารเพื่อแชทด้วย"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "ชื่อไฟล์ที่ค้นหา",
         "help" : "ใส่ส่วนหนึ่งของชื่อไฟล์ที่คุณต้องการค้นหา"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ค้นหาชื่อไฟล์"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "เรียกดูไฟล์บริษัท"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "การค้นหาเชิงความหมาย"
+      },
+      "chooseFilesDialog" : {
+        "label" : "เลือกไฟล์เพื่อแชทด้วย"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "โปรไฟล์ของฉัน"
       },
       "logout" : {
+        "label" : "ออกจากระบบ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "เปลี่ยนภาษา"
+      },
+      "MyProfile" : {
+        "label" : "โปรไฟล์ของคุณ"
+      },
+      "MyProfileItem" : {
+        "label" : "โปรไฟล์ของคุณ"
+      },
+      "chatMenuItem" : {
+        "label" : "แชท"
+      },
+      "setupMenuItem" : {
+        "label" : "ตั้งค่า"
+      },
+      "adminMenuItem" : {
+        "label" : "ผู้ดูแลระบบ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "แก้ไขโปรไฟล์"
+      },
+      "logoutMenuItem" : {
         "label" : "ออกจากระบบ"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "เรียบร้อย!",
         "detail" : "ดำเนินการสำเร็จ"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "อัปโหลดไฟล์เพื่อใช้ในการแชท"
+      },
+      "ChooseFile" : {
+        "help" : "เลือกไฟล์"
+      },
+      "UploadFile" : {
+        "help" : "อัปโหลดไฟล์"
+      },
+      "DragDropHere" : {
+        "label" : "ลากและวางไฟล์ที่นี่เพื่ออัปโหลด"
+      },
+      "RemoveAll" : {
+        "help" : "ลบทั้งหมด"
+      },
+      "UploadPending" : {
+        "label" : "รอการอัปโหลด"
       }
     }
   }

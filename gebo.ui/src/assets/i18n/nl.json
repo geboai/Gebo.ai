@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Schrijf een bericht voor de chatbot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Blader of zoek en selecteer documenten om mee te chatten"
+      },
+      "UploadFileBtn" : {
+        "help" : "Upload een bestand om mee te chatten of te werken"
+      },
+      "SubmiQuestion" : {
+        "help" : "Stel je vraag"
+      },
+      "WithParams" : {
+        "label" : "met params:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI opgeroepen functies:"
+      },
+      "UploadedDocs" : {
+        "label" : "Geüploade documenten"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Opnemen",
         "help" : "Begin met het opnemen van een audiotrack en stuur deze"
+      },
+      "StopBtn" : {
+        "label" : "Opname",
+        "help" : "Opname"
+      },
+      "AbortBtn" : {
+        "label" : "Opname annuleren",
+        "help" : "Opname annuleren"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Wachtwoord wijzigen"
+      },
+      "YourUserName" : {
+        "label" : "Je gebruikersnaam"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nieuw gesprek"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chatsessies"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Zijbalk sluiten"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Start een nieuw gesprek met grote taalmodellen"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Start een nieuwe RAG-chat met bedrijfsinhoud",
+        "label" : "Chat met kennisbank"
+      },
+      "ChatsTitle" : {
+        "label" : "Chats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Chatopties openen"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Kies bestanden om mee te chatten"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Blader of zoek en selecteer documenten om mee te chatten"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Gezochte bestandsnaam",
         "help" : "Voer een deel van de bestandsnaam in van uw gezochte inhoud"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Bestandsnaam zoeken"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Blader door bedrijfsbestanden"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantisch zoeken"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Kies bestanden om mee te chatten"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "afmelden"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Taal wijzigen"
+      },
+      "MyProfile" : {
+        "label" : "je profiel"
+      },
+      "MyProfileItem" : {
+        "label" : "je profiel"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Instellingen"
+      },
+      "adminMenuItem" : {
+        "label" : "Beheer"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "profiel bewerken"
+      },
+      "logoutMenuItem" : {
+        "label" : "uitloggen"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Actie succesvol uitgevoerd"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Upload bestanden om mee te chatten"
+      },
+      "ChooseFile" : {
+        "help" : "Bestanden kiezen"
+      },
+      "UploadFile" : {
+        "help" : "Bestanden uploaden"
+      },
+      "DragDropHere" : {
+        "label" : "Sleep bestanden hierheen om te uploaden"
+      },
+      "RemoveAll" : {
+        "help" : "Alles verwijderen"
+      },
+      "UploadPending" : {
+        "label" : "Wacht op upload"
       }
     }
   }

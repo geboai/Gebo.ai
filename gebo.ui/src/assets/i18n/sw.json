@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Andika ujumbe kwa roboti wa gumzo"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Vinza au tafuta na uchague nyaraka za kuzungumza nazo"
+      },
+      "UploadFileBtn" : {
+        "help" : "Pakia faili ili kuzungumza au kufanya kazi nalo"
+      },
+      "SubmiQuestion" : {
+        "help" : "Wasilisha swali lako"
+      },
+      "WithParams" : {
+        "label" : "na vigezo:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI iliita kazi:"
+      },
+      "UploadedDocs" : {
+        "label" : "Nyaraka zilizo pakizwa"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Rekodi",
         "help" : "Anza kurekodi sauti na uitume"
+      },
+      "StopBtn" : {
+        "label" : "Inarekodi",
+        "help" : "Inarekodi"
+      },
+      "AbortBtn" : {
+        "label" : "Katiza kurekodi",
+        "help" : "Katiza kurekodi"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Badilisha nenosiri"
+      },
+      "YourUserName" : {
+        "label" : "Jina lako la mtumiaji"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Soga mpya"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Vipindi vya gumzo"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Funga upau wa pembeni"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Unda gumzo jipya na mifano mikubwa ya lugha"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Unda gumzo jipya la RAG na maudhui ya kampuni",
+        "label" : "Zungumza na hazina ya maarifa"
+      },
+      "ChatsTitle" : {
+        "label" : "Gumzo"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Fungua sehemu ya Machaguo ya gumzo"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Chagua faili za kuzungumza nazo"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Vinza au tafuta na uchague nyaraka za kuzungumza nazo"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Jina la faili lililotafutwa",
         "help" : "Ingiza sehemu ya jina la faili kwa yaliyomo unayotafuta"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Tafuta jina la faili"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Vinza faili za kampuni"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Tafuta kimaudhui"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Chagua faili za kuzungumza nazo"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "wasifu wangu"
       },
       "logout" : {
+        "label" : "ondoka"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Badilisha lugha"
+      },
+      "MyProfile" : {
+        "label" : "wasifu wako"
+      },
+      "MyProfileItem" : {
+        "label" : "wasifu wako"
+      },
+      "chatMenuItem" : {
+        "label" : "Gumzo"
+      },
+      "setupMenuItem" : {
+        "label" : "Mipangilio"
+      },
+      "adminMenuItem" : {
+        "label" : "Msimamizi"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "hariri wasifu"
+      },
+      "logoutMenuItem" : {
         "label" : "ondoka"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Sawa!",
         "detail" : "Operesheni imekamilika kwa mafanikio"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Pakia faili za kuzungumza nazo"
+      },
+      "ChooseFile" : {
+        "help" : "Chagua faili"
+      },
+      "UploadFile" : {
+        "help" : "Pakia faili"
+      },
+      "DragDropHere" : {
+        "label" : "Buruta na udondoshe faili hapa ili kupakia"
+      },
+      "RemoveAll" : {
+        "help" : "Ondoa vyote"
+      },
+      "UploadPending" : {
+        "label" : "Inasubiri kupakiwa"
       }
     }
   }

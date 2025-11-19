@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "ຂຽນຂໍ້ຄວາມສຳລັບບ໋ອດສົນທະນາ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ເລືອກຫລືຄົ້ນຫາເອກະສານເພື່ອສົນທະນາ"
+      },
+      "UploadFileBtn" : {
+        "help" : "ອັບໂຫຼດໄຟລເພື່ອສົນທະນາຫຼືເຮັດວຽກດ້ວຍ"
+      },
+      "SubmiQuestion" : {
+        "help" : "ສົ່ງຄຳຖາມຂອງທ່ານ"
+      },
+      "WithParams" : {
+        "label" : "ກັບ params:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI ຮີບເກີນຟັງຊັ່ນ:"
+      },
+      "UploadedDocs" : {
+        "label" : "ເອກະສານທີ່ອັບໂຫຼດ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "ບັນທຶກ",
         "help" : "ເລີ່ມບັນທຶກສຽງ ແລະສົ່ງອອກ"
+      },
+      "StopBtn" : {
+        "label" : "ກຳລັງບັນທຶກສຽງ",
+        "help" : "ກຳລັງບັນທຶກສຽງ"
+      },
+      "AbortBtn" : {
+        "label" : "ຍົກເລີກການບັນທຶກສຽງ",
+        "help" : "ຍົກເລີກການບັນທຶກສຽງ"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "ປ່ຽນລະຫັດຜ່ານ"
+      },
+      "YourUserName" : {
+        "label" : "ຊື່ຜູ້ໃຊ້ຂອງທ່ານ"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "ສົນທະນາໃໝ່"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ເຊດຊັນສົນທະນາ"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "ປິດແຖບດ້ານຂ້າງ"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "ສ້າງສົນທະນາໃໝ່ກັບພາສາຂະໜາດໃຫຍ່"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "ສ້າງສົນທະນາ RAG ໃໝ່ກັບເນື້ອຫາບໍລິສັດ",
+        "label" : "ສົນທະນາກັບຄວາມຮູ້ພື້ນຖານ"
+      },
+      "ChatsTitle" : {
+        "label" : "ການສົນທະນາ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ເປີດສ່ວນຕົວເລືອກສົນທະນາ"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "ເລືອກໄຟລ໌ທີ່ຈະສນທນາກັບ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ເລືອກຫລືຄົ້ນຫາເອກະສານເພື່ອສົນທະນາ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "ຊື່ເອກະສານທີ່ຄົ້ນຫາ",
         "help" : "ໃສ່ສ່ວນໜຶ່ງຂອງຊື່ເອກະສານທີ່ທ່ານຕ້ອງການ"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ຄົ້ນຫາຊື່ໄຟລ"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "ເລືອກໄຟລບໍລິສັດ"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "ການຄົ້ນຫາແບບ semantic"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ເລືອກໄຟລເພື່ອສົນທະນາ"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "ໂປຣໄຟລ໌ຂອງຂ້ອຍ"
       },
       "logout" : {
+        "label" : "ອອກຈາກລະບົບ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ປ່ຽນພາສາ"
+      },
+      "MyProfile" : {
+        "label" : "ໂປຣໄຟລຂອງທ່ານ"
+      },
+      "MyProfileItem" : {
+        "label" : "ໂປຣໄຟລຂອງທ່ານ"
+      },
+      "chatMenuItem" : {
+        "label" : "ສົນທະນາ"
+      },
+      "setupMenuItem" : {
+        "label" : "ຕັ້ງຄ່າ"
+      },
+      "adminMenuItem" : {
+        "label" : "ຜູ້ດູແລ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ແກ້ໄຂໂປຣໄຟລ"
+      },
+      "logoutMenuItem" : {
         "label" : "ອອກຈາກລະບົບ"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ສຳເລັດ!",
         "detail" : "ດຳເນີນການສຳເລັດສໍາເລັດດີ"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ອັບໂຫຼດໄຟລເພື່ອສົນທະນາ"
+      },
+      "ChooseFile" : {
+        "help" : "ເລືອກໄຟລ"
+      },
+      "UploadFile" : {
+        "help" : "ອັບໂຫຼດໄຟລ"
+      },
+      "DragDropHere" : {
+        "label" : "ລາກແລະວາງໄຟລທີ່ນີ້ເພື່ອອັບໂຫຼດ"
+      },
+      "RemoveAll" : {
+        "help" : "ລຶບທັງໝົດ"
+      },
+      "UploadPending" : {
+        "label" : "ລໍຖ້າອັບໂຫຼດ"
       }
     }
   }

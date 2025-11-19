@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "ਚੈਟ ਬੋਟ ਲਈ ਸੁਨੇਹਾ ਲਿਖੋ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ਦਸਤਾਵੇਜ਼ਾਂ ਨੂੰ ਚੁਣੋ ਜਾਂ ਖੋਜੋ ਅਤੇ ਉਨ੍ਹਾਂ ਨਾਲ ਗੱਲਵਾਰਤਾ ਕਰੋ"
+      },
+      "UploadFileBtn" : {
+        "help" : "ਚੈਟ ਜਾਂ ਕੰਮ ਕਰਨ ਲਈ ਫਾਇਲ ਅੱਪਲੋਡ ਕਰੋ"
+      },
+      "SubmiQuestion" : {
+        "help" : "ਆਪਣਾ ਸਵਾਲ ਪੇਸ਼ ਕਰੋ"
+      },
+      "WithParams" : {
+        "label" : "ਪਰਾਮੀਟਰਾਂ ਨਾਲ:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI ਨੇ ਕਾਲ ਕੀਤੀਆਂ ਫੰਕਸ਼ਨਾਂ:"
+      },
+      "UploadedDocs" : {
+        "label" : "ਅੱਪਲੋਡ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "ਰਿਕਾਰਡ ਕਰੋ",
         "help" : "ਆਡੀਓ ਟਰੈਕ ਰਿਕਾਰਡ ਕਰਨਾ ਸ਼ੁਰੂ ਕਰੋ ਅਤੇ ਭੇਜੋ"
+      },
+      "StopBtn" : {
+        "label" : "ਰੇਕਾਰਡ ਹੋ ਰਿਹਾ ਹੈ",
+        "help" : "ਰੇਕਾਰਡ ਹੋ ਰਿਹਾ ਹੈ"
+      },
+      "AbortBtn" : {
+        "label" : "ਰੇਕਾਰਡਿੰਗ ਰੋਕੋ",
+        "help" : "ਰੇਕਾਰਡਿੰਗ ਰੋਕੋ"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "ਪਾਸਵਰਡ ਬਦਲੋ"
+      },
+      "YourUserName" : {
+        "label" : "ਤੁਹਾਡਾ ਯੂਜ਼ਰ ਨਾਂ"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "ਨਵੀਂ ਚੈਟ"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ਚੈਟ ਸੈਸ਼ਨ"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "ਸਾਈਡ ਬਾਰ ਬੰਦ ਕਰੋ"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "ਵੱਡੇ ਭਾਸ਼ਾ ਮੌਡਲ ਨਾਲ ਨਵੀਂ ਚੈਟ ਬਣਾਓ"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "ਕੰਪਨੀ ਸਮੱਗਰੀ ਨਾਲ ਨਵੀਂ RAG ਚੈਟ ਬਣਾਓ",
+        "label" : "ਨੌਲਜ ਬੇਸ ਨਾਲ ਗੱਲਵਾਰਤਾ ਕਰੋ"
+      },
+      "ChatsTitle" : {
+        "label" : "ਚੈਟਾਂ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ਚੈਟ ਵਿਕਲਪਾਂ ਭਾਗ ਖੋਲ੍ਹੋ"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "ਗੱਲ ਕਰਨ ਲਈ ਫਾਇਲਾਂ ਚੁਣੋ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ਦਸਤਾਵੇਜ਼ਾਂ ਨੂੰ ਚੁਣੋ ਜਾਂ ਖੋਜੋ ਅਤੇ ਉਨ੍ਹਾਂ ਨਾਲ ਗੱਲਵਾਰਤਾ ਕਰੋ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "ਖੋਜੀ ਗਈ ਫਾਈਲ ਦਾ ਨਾਮ",
         "help" : "ਆਪਣੀ ਖੋਜੀ ਸਮੱਗਰੀ ਲਈ ਫਾਈਲ ਨਾਮ ਦਾ ਹਿੱਸਾ ਦਰਜ ਕਰੋ"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ਫਾਇਲ ਨਾਂ ਲੱਭੋ"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "ਕੰਪਨੀ ਦੀਆਂ ਫਾਇਲਾਂ ਵੇਖੋ"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "ਸੈਮੈਂਟਿਕ ਖੋਜ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ਚੈਟ ਲਈ ਫਾਇਲਾਂ ਚੁਣੋ"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "ਲਾੱਗ ਆਉਟ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ਭਾਸ਼ਾ ਬਦਲੋ"
+      },
+      "MyProfile" : {
+        "label" : "ਤੁਹਾਡਾ ਪ੍ਰੋਫਾਈਲ"
+      },
+      "MyProfileItem" : {
+        "label" : "ਤੁਹਾਡਾ ਪ੍ਰੋਫਾਈਲ"
+      },
+      "chatMenuItem" : {
+        "label" : "ਚੈਟ"
+      },
+      "setupMenuItem" : {
+        "label" : "ਸੈੱਟਅੱਪ"
+      },
+      "adminMenuItem" : {
+        "label" : "ਐਡਮਿਨ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ਪ੍ਰੋਫਾਈਲ ਸੋਧੋ"
+      },
+      "logoutMenuItem" : {
+        "label" : "ਲੌਗਆਉਟ"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ਠੀਕ ਹੈ!",
         "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋ ਗਈ"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ਚੈਟ ਲਈ ਫਾਇਲਾਂ ਅੱਪਲੋਡ ਕਰੋ"
+      },
+      "ChooseFile" : {
+        "help" : "ਫਾਇਲਾਂ ਚੁਣੋ"
+      },
+      "UploadFile" : {
+        "help" : "ਫਾਇਲਾਂ ਅੱਪਲੋਡ ਕਰੋ"
+      },
+      "DragDropHere" : {
+        "label" : "ਫਾਇਲਾਂ ਅੱਪਲੋਡ ਕਰਨ ਲਈ ਇਥੇ ਡ੍ਰੈਗ ਤੇ ਡ੍ਰੌਪ ਕਰੋ"
+      },
+      "RemoveAll" : {
+        "help" : "ਸਭ ਹਟਾਓ"
+      },
+      "UploadPending" : {
+        "label" : "ਅੱਪਲੋਡ ਲਈ ਬਾਕੀ"
       }
     }
   }

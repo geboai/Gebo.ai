@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Skriv ett meddelande till chatbott"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Bläddra eller sök och välj dokument att chatta med"
+      },
+      "UploadFileBtn" : {
+        "help" : "Ladda upp en fil för att chatta eller arbeta med"
+      },
+      "SubmiQuestion" : {
+        "help" : "Skicka din fråga"
+      },
+      "WithParams" : {
+        "label" : "med parametrar:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI-anropade funktioner:"
+      },
+      "UploadedDocs" : {
+        "label" : "Uppladdade dokument"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Spela in",
         "help" : "Starta inspelning av ett ljudspår och skicka det"
+      },
+      "StopBtn" : {
+        "label" : "Spelar in",
+        "help" : "Spelar in"
+      },
+      "AbortBtn" : {
+        "label" : "Avbryt inspelning",
+        "help" : "Avbryt inspelning"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Byt lösenord"
+      },
+      "YourUserName" : {
+        "label" : "Ditt användarnamn"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Ny chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chattsessioner"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Stäng sidofältet"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Skapa en ny chatt med stora språkmodeller"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Skapa en ny RAG-chatt med företagsinnehåll",
+        "label" : "Chatta med kunskapsbas"
+      },
+      "ChatsTitle" : {
+        "label" : "Chattar"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Öppna chattalternativ"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Välj filer att chatta med"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Bläddra eller sök och välj dokument att chatta med"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Sökt filnamn",
         "help" : "Ange en del av filnamnet för det du söker"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Filnamnssökning"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Bläddra bland företagsfiler"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantisk sökning"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Välj filer att chatta med"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "min profil"
       },
       "logout" : {
+        "label" : "logga ut"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Byt språk"
+      },
+      "MyProfile" : {
+        "label" : "din profil"
+      },
+      "MyProfileItem" : {
+        "label" : "din profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chatt"
+      },
+      "setupMenuItem" : {
+        "label" : "Inställning"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "redigera profil"
+      },
+      "logoutMenuItem" : {
         "label" : "logga ut"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Åtgärden genomfördes framgångsrikt"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Ladda upp filer att chatta med"
+      },
+      "ChooseFile" : {
+        "help" : "Välj filer"
+      },
+      "UploadFile" : {
+        "help" : "Ladda upp filer"
+      },
+      "DragDropHere" : {
+        "label" : "Dra och släpp filer hit för att ladda upp"
+      },
+      "RemoveAll" : {
+        "help" : "Ta bort alla"
+      },
+      "UploadPending" : {
+        "label" : "Väntar på uppladdning"
       }
     }
   }

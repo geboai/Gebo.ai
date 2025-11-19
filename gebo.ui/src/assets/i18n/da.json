@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Skriv en besked til chatbotten"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Gennemse eller søg og vælg dokumenter at chatte med"
+      },
+      "UploadFileBtn" : {
+        "help" : "Upload en fil for at chatte eller arbejde med"
+      },
+      "SubmiQuestion" : {
+        "help" : "Indsend dit spørgsmål"
+      },
+      "WithParams" : {
+        "label" : "med parametre:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI kaldte funktioner:"
+      },
+      "UploadedDocs" : {
+        "label" : "Uploadede dokumenter"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Optag",
         "help" : "Start optagelse af et lydspor og send det"
+      },
+      "StopBtn" : {
+        "label" : "Optager",
+        "help" : "Optager"
+      },
+      "AbortBtn" : {
+        "label" : "Afbryd optagelse",
+        "help" : "Afbryd optagelse"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Skift adgangskode"
+      },
+      "YourUserName" : {
+        "label" : "Dit brugernavn"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Ny chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chatsessioner"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Luk sidepanel"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Opret en ny chat med store sprogmodeller"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Opret en ny RAG-chat med virksomhedsindhold",
+        "label" : "Chat med vidensbase"
+      },
+      "ChatsTitle" : {
+        "label" : "Chats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Åbn chatindstillinger"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Vælg filer til chat"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Gennemse eller søg og vælg dokumenter at chatte med"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Søgt filnavn",
         "help" : "Indtast en del af filnavnet for det indhold, du søger"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Filnavnesøgning"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Gennemse firmadokumenter"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantisk søgning"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vælg filer at chatte med"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "min profil"
       },
       "logout" : {
+        "label" : "log ud"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Skift sprog"
+      },
+      "MyProfile" : {
+        "label" : "din profil"
+      },
+      "MyProfileItem" : {
+        "label" : "din profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Opsætning"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "rediger profil"
+      },
+      "logoutMenuItem" : {
         "label" : "log ud"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Handlingen er udført korrekt"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Upload filer at chatte med"
+      },
+      "ChooseFile" : {
+        "help" : "Vælg filer"
+      },
+      "UploadFile" : {
+        "help" : "Upload filer"
+      },
+      "DragDropHere" : {
+        "label" : "Træk og slip filer her for at uploade"
+      },
+      "RemoveAll" : {
+        "help" : "Fjern alle"
+      },
+      "UploadPending" : {
+        "label" : "Afventer upload"
       }
     }
   }

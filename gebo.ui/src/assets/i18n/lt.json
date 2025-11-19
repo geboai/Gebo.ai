@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Parašykite žinutę pokalbių botui"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Naršykite arba ieškokite ir pasirinkite dokumentus pokalbiui"
+      },
+      "UploadFileBtn" : {
+        "help" : "Įkelkite failą pokalbiui ar darbui"
+      },
+      "SubmiQuestion" : {
+        "help" : "Pateikite savo klausimą"
+      },
+      "WithParams" : {
+        "label" : "su parametrais:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI iškviestos funkcijos:"
+      },
+      "UploadedDocs" : {
+        "label" : "Įkelti dokumentai"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Įrašyti",
         "help" : "Pradėti garso takelio įrašymą ir išsiųsti"
+      },
+      "StopBtn" : {
+        "label" : "Įrašoma",
+        "help" : "Įrašoma"
+      },
+      "AbortBtn" : {
+        "label" : "Nutraukti įrašymą",
+        "help" : "Nutraukti įrašymą"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Keisti slaptažodį"
+      },
+      "YourUserName" : {
+        "label" : "Jūsų naudotojo vardas"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Naujas pokalbis"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Pokalbių sesijos"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Uždaryti šoninę juostą"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Sukurti naują pokalbį su dideliais kalbos modeliais"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Sukurti naują RAG pokalbį su įmonės turiniu",
+        "label" : "Pokalbis su žinių baze"
+      },
+      "ChatsTitle" : {
+        "label" : "Pokalbiai"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Atidaryti pokalbių parinkčių skyrių"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Pasirinkite failus pokalbiui"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Naršykite arba ieškokite ir pasirinkite dokumentus pokalbiui"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Ieškomo failo pavadinimas",
         "help" : "Įveskite failo pavadinimo dalį, kurią norite rasti"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Failo pavadinimo paieška"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Naršyti įmonės failus"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantinė paieška"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Pasirinkite failus pokalbiui"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "mano profilis"
       },
       "logout" : {
+        "label" : "atsijungti"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Keisti kalbą"
+      },
+      "MyProfile" : {
+        "label" : "jūsų profilis"
+      },
+      "MyProfileItem" : {
+        "label" : "jūsų profilis"
+      },
+      "chatMenuItem" : {
+        "label" : "Pokalbis"
+      },
+      "setupMenuItem" : {
+        "label" : "Nustatymai"
+      },
+      "adminMenuItem" : {
+        "label" : "Administravimas"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "redaguoti profilį"
+      },
+      "logoutMenuItem" : {
         "label" : "atsijungti"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "GERAI!",
         "detail" : "Veiksmas atliktas sėkmingai"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Įkelkite failus pokalbiui"
+      },
+      "ChooseFile" : {
+        "help" : "Pasirinkite failus"
+      },
+      "UploadFile" : {
+        "help" : "Įkelti failus"
+      },
+      "DragDropHere" : {
+        "label" : "Vilkite ir numeskite failus čia, kad įkeltumėte"
+      },
+      "RemoveAll" : {
+        "help" : "Pašalinti viską"
+      },
+      "UploadPending" : {
+        "label" : "Laukiama įkėlimo"
       }
     }
   }

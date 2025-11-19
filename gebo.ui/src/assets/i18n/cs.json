@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Napište zprávu pro chatbota"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Procházejte nebo vyhledejte a vyberte dokumenty pro chat"
+      },
+      "UploadFileBtn" : {
+        "help" : "Nahrajte soubor pro chat nebo práci"
+      },
+      "SubmiQuestion" : {
+        "help" : "Odešlete svou otázku"
+      },
+      "WithParams" : {
+        "label" : "s parametry:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI volané funkce:"
+      },
+      "UploadedDocs" : {
+        "label" : "Nahrané dokumenty"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Nahrát",
         "help" : "Spusťte nahrávání zvukové stopy a odešlete ji"
+      },
+      "StopBtn" : {
+        "label" : "Nahrávání",
+        "help" : "Nahrávání"
+      },
+      "AbortBtn" : {
+        "label" : "Přerušit nahrávání",
+        "help" : "Přerušit nahrávání"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Změnit heslo"
+      },
+      "YourUserName" : {
+        "label" : "Vaše uživatelské jméno"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nový chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chatové relace"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Zavřít postranní panel"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Vytvořit nový chat s velkými jazykovými modely"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Vytvořit nový RAG chat s firemním obsahem",
+        "label" : "Chat s znalostní bází"
+      },
+      "ChatsTitle" : {
+        "label" : "Chaty"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Otevřít možnosti chatu"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Vyberte soubory pro chat"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Procházejte nebo vyhledejte a vyberte dokumenty pro chat"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Hledaný název souboru",
         "help" : "Zadejte část názvu souboru pro hledaný obsah"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Hledání názvu souboru"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Procházet firemní soubory"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Sémantické hledání"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vyberte soubory pro chat"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "můj profil"
       },
       "logout" : {
+        "label" : "odhlásit se"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Změnit jazyk"
+      },
+      "MyProfile" : {
+        "label" : "váš profil"
+      },
+      "MyProfileItem" : {
+        "label" : "váš profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Nastavení"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "upravit profil"
+      },
+      "logoutMenuItem" : {
         "label" : "odhlásit se"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operace byla úspěšně dokončena"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Nahrajte soubory pro chat"
+      },
+      "ChooseFile" : {
+        "help" : "Vyberte soubory"
+      },
+      "UploadFile" : {
+        "help" : "Nahrajte soubory"
+      },
+      "DragDropHere" : {
+        "label" : "Přetáhněte soubory sem pro nahrání"
+      },
+      "RemoveAll" : {
+        "help" : "Odstranit vše"
+      },
+      "UploadPending" : {
+        "label" : "Čeká na nahrání"
       }
     }
   }

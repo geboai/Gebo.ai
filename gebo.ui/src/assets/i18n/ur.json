@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "چیٹ بوٹ کے لیے پیغام لکھیں"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "دستاویزات کو براؤز کریں یا تلاش کریں اور چیٹ کے لیے منتخب کریں"
+      },
+      "UploadFileBtn" : {
+        "help" : "چیٹ یا کام کرنے کے لیے فائل اپ لوڈ کریں"
+      },
+      "SubmiQuestion" : {
+        "help" : "اپنا سوال جمع کریں"
+      },
+      "WithParams" : {
+        "label" : "کے ساتھ پیرامیٹرز:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI نے کال کیا فنکشنز:"
+      },
+      "UploadedDocs" : {
+        "label" : "اپ لوڈ شدہ دستاویزات"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "ریکارڈ کریں",
         "help" : "آڈیو ٹریک ریکارڈ کریں اور بھیجیں"
+      },
+      "StopBtn" : {
+        "label" : "ریکارڈنگ",
+        "help" : "ریکارڈنگ"
+      },
+      "AbortBtn" : {
+        "label" : "ریکارڈنگ منسوخ کریں",
+        "help" : "ریکارڈنگ منسوخ کریں"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "پاس ورڈ تبدیل کریں"
+      },
+      "YourUserName" : {
+        "label" : "آپ کا یوزر نیم"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "نئی چیٹ"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "چیٹ سیشنز"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "سائیڈ بار بند کریں"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "بڑے زبان ماڈلز کے ساتھ نئی چیٹ شروع کریں"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "کمپنی کے مواد کے ساتھ نئی RAG چیٹ شروع کریں",
+        "label" : "نالج بیس کے ساتھ چیٹ کریں"
+      },
+      "ChatsTitle" : {
+        "label" : "چیٹس"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "چیٹ آپشنز سیکشن کھولیں"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "بات چیت کے لیے فائلیں منتخب کریں"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "دستاویزات کو براؤز کریں یا تلاش کریں اور چیٹ کے لیے منتخب کریں"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "تلاش کی گئی فائل کا نام",
         "help" : "تلاش کردہ مواد کے لئے فائل نام کا حصہ درج کریں"
+      },
+      "SearchFilesLabel" : {
+        "label" : "فائل نام تلاش کریں"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "کمپنی کی فائلیں براؤز کریں"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "سیمینٹک تلاش"
+      },
+      "chooseFilesDialog" : {
+        "label" : "چیٹ کے لیے فائلیں منتخب کریں"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "میری پروفائل"
       },
       "logout" : {
+        "label" : "لاگ آؤٹ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "زبان تبدیل کریں"
+      },
+      "MyProfile" : {
+        "label" : "آپ کا پروفائل"
+      },
+      "MyProfileItem" : {
+        "label" : "آپ کا پروفائل"
+      },
+      "chatMenuItem" : {
+        "label" : "چیٹ"
+      },
+      "setupMenuItem" : {
+        "label" : "سیٹ اپ"
+      },
+      "adminMenuItem" : {
+        "label" : "ایڈمن"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "پروفائل میں ترمیم کریں"
+      },
+      "logoutMenuItem" : {
         "label" : "لاگ آؤٹ"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "اوکے!",
         "detail" : "عمل کامیابی سے مکمل ہو گیا"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "چیٹ کے لیے فائلیں اپ لوڈ کریں"
+      },
+      "ChooseFile" : {
+        "help" : "فائلیں منتخب کریں"
+      },
+      "UploadFile" : {
+        "help" : "فائلیں اپ لوڈ کریں"
+      },
+      "DragDropHere" : {
+        "label" : "اپ لوڈ کرنے کے لیے فائلیں یہاں ڈریگ اور ڈراپ کریں"
+      },
+      "RemoveAll" : {
+        "help" : "سب ہٹا دیں"
+      },
+      "UploadPending" : {
+        "label" : "اپ لوڈ کے منتظر"
       }
     }
   }

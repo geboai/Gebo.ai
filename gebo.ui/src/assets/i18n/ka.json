@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "დაწერეთ შეტყობინება ჩატ ბოტისთვის"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "დაათვალიერეთ ან მოძებნეთ და აირჩიეთ დოკუმენტები ჩატისთვის"
+      },
+      "UploadFileBtn" : {
+        "help" : "ატვირთეთ ფაილი ჩატისთვის ან სამუშაოდ"
+      },
+      "SubmiQuestion" : {
+        "help" : "დასვით თქვენი კითხვა"
+      },
+      "WithParams" : {
+        "label" : "პარამეტრებით:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI დაგმანული ფუნქციები:"
+      },
+      "UploadedDocs" : {
+        "label" : "ატვირთული დოკუმენტები"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "ჩაწერა",
         "help" : "დააწყე აუდიო ჩანაწერის ჩაწერა და გაგზავნა"
+      },
+      "StopBtn" : {
+        "label" : "ჩაწერა მიმდინარეობს",
+        "help" : "ჩაწერა მიმდინარეობს"
+      },
+      "AbortBtn" : {
+        "label" : "ჩაწერის შეწყვეტა",
+        "help" : "ჩაწერის შეწყვეტა"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "პაროლის შეცვლა"
+      },
+      "YourUserName" : {
+        "label" : "თქვენი მომხმარებლის სახელი"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "ახალი ჩეთი"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ჩატის სესიები"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "გვერდითი ზოლის დახურვა"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "შექმენით ახალი ჩატი დიდი ენის მოდელებით"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "შექმენით ახალი RAG ჩატი კომპანიის კონტენტით",
+        "label" : "ჩატი ცოდნის ბაზასთან"
+      },
+      "ChatsTitle" : {
+        "label" : "ჩატები"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ჩატის ოპციების სექციის გახსნა"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "აირჩიე ფაილები ჩატისთვის"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "დაათვალიერეთ ან მოძებნეთ და აირჩიეთ დოკუმენტები ჩატისთვის"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "საძიებო ფაილის სახელი",
         "help" : "შეიყვანეთ სიტყვის ნაწილი თქვენი სასურველი ფაილის დასახელებიდან"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ფაილის სახელის ძებნა"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "კომპანიის ფაილების დათვალიერება"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "სემანტიკური ძებნა"
+      },
+      "chooseFilesDialog" : {
+        "label" : "აირჩიეთ ფაილები ჩატისთვის"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "გასვლა"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ენის შეცვლა"
+      },
+      "MyProfile" : {
+        "label" : "თქვენი პროფილი"
+      },
+      "MyProfileItem" : {
+        "label" : "თქვენი პროფილი"
+      },
+      "chatMenuItem" : {
+        "label" : "ჩატი"
+      },
+      "setupMenuItem" : {
+        "label" : "მორგება"
+      },
+      "adminMenuItem" : {
+        "label" : "ადმინი"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "პროფილის რედაქტირება"
+      },
+      "logoutMenuItem" : {
+        "label" : "გამოსვლა"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "წარმატებით დასრულდა!",
         "detail" : "ოპერაცია წარმატებით შესრულდა"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ატვირთეთ ფაილები ჩატისთვის"
+      },
+      "ChooseFile" : {
+        "help" : "აირჩიეთ ფაილები"
+      },
+      "UploadFile" : {
+        "help" : "ფაილების ატვირთვა"
+      },
+      "DragDropHere" : {
+        "label" : "ჩააგდეთ ფაილები აქ ატვირთვისთვის"
+      },
+      "RemoveAll" : {
+        "help" : "ყველას წაშლა"
+      },
+      "UploadPending" : {
+        "label" : "მოლოდინში ატვირთვაზე"
       }
     }
   }

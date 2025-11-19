@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "یک پیام برای چت‌بات بنویسید"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "مرور یا جستجو و انتخاب اسناد برای گفتگو"
+      },
+      "UploadFileBtn" : {
+        "help" : "یک فایل را برای گفتگو یا کار بارگذاری کنید"
+      },
+      "SubmiQuestion" : {
+        "help" : "سوال خود را ارسال کنید"
+      },
+      "WithParams" : {
+        "label" : "با پارامترها:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "توابع فراخوانی شده توسط AI:"
+      },
+      "UploadedDocs" : {
+        "label" : "اسناد بارگذاری شده"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "ضبط",
         "help" : "ضبط یک قطعه صوتی را شروع کنید و ارسال نمایید"
+      },
+      "StopBtn" : {
+        "label" : "در حال ضبط",
+        "help" : "در حال ضبط"
+      },
+      "AbortBtn" : {
+        "label" : "لغو ضبط",
+        "help" : "لغو ضبط"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "تغییر گذرواژه"
+      },
+      "YourUserName" : {
+        "label" : "نام کاربری شما"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "گفتگوی جدید"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "جلسات گفتگو"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "بستن نوار جانبی"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "ایجاد گفتگوی جدید با مدل‌های زبانی بزرگ"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "ایجاد گفتگوی RAG جدید با محتوای شرکت",
+        "label" : "گفتگو با پایگاه دانش"
+      },
+      "ChatsTitle" : {
+        "label" : "گفتگوها"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "باز کردن بخش گزینه‌های گفتگو"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "انتخاب فایل‌ها برای گفتگو"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "مرور یا جستجو و انتخاب اسناد برای گفتگو"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "نام فایل جستجو شده",
         "help" : "بخشی از نام فایل مورد نظر خود را وارد کنید"
+      },
+      "SearchFilesLabel" : {
+        "label" : "جستجوی نام فایل"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "مرور فایل‌های شرکت"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "جستجوی معنایی"
+      },
+      "chooseFilesDialog" : {
+        "label" : "انتخاب فایل‌ها برای گفتگو"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "پروفایل من"
       },
       "logout" : {
+        "label" : "خروج"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "تغییر زبان"
+      },
+      "MyProfile" : {
+        "label" : "پروفایل شما"
+      },
+      "MyProfileItem" : {
+        "label" : "پروفایل شما"
+      },
+      "chatMenuItem" : {
+        "label" : "گفتگو"
+      },
+      "setupMenuItem" : {
+        "label" : "راه‌اندازی"
+      },
+      "adminMenuItem" : {
+        "label" : "مدیریت"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ویرایش پروفایل"
+      },
+      "logoutMenuItem" : {
         "label" : "خروج"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "موفق!",
         "detail" : "عملیات با موفقیت انجام شد"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "بارگذاری فایل‌ها برای گفتگو"
+      },
+      "ChooseFile" : {
+        "help" : "انتخاب فایل‌ها"
+      },
+      "UploadFile" : {
+        "help" : "بارگذاری فایل‌ها"
+      },
+      "DragDropHere" : {
+        "label" : "فایل‌ها را بکشید و اینجا رها کنید تا بارگذاری شوند"
+      },
+      "RemoveAll" : {
+        "help" : "حذف همه"
+      },
+      "UploadPending" : {
+        "label" : "در انتظار بارگذاری"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Schreibe eine Nachricht an den Chat-Bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Durchsuchen oder suchen und Dokumente auswählen, mit denen Sie chatten möchten"
+      },
+      "UploadFileBtn" : {
+        "help" : "Datei hochladen, um damit zu chatten oder zu arbeiten"
+      },
+      "SubmiQuestion" : {
+        "help" : "Frage absenden"
+      },
+      "WithParams" : {
+        "label" : "mit Parametern:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Von der KI aufgerufene Funktionen:"
+      },
+      "UploadedDocs" : {
+        "label" : "Hochgeladene Dokumente"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Aufnehmen",
         "help" : "Beginne mit der Aufnahme einer Audiospur und sende sie"
+      },
+      "StopBtn" : {
+        "label" : "Aufnahme",
+        "help" : "Aufnahme"
+      },
+      "AbortBtn" : {
+        "label" : "Aufnahme abbrechen",
+        "help" : "Aufnahme abbrechen"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Passwort ändern"
+      },
+      "YourUserName" : {
+        "label" : "Ihr Benutzername"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Neuer Chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chatsitzungen"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Seitenleiste schließen"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Neuen Chat mit großen Sprachmodellen erstellen"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Neuen RAG-Chat mit Unternehmensinhalten erstellen",
+        "label" : "Mit Wissensdatenbank chatten"
+      },
+      "ChatsTitle" : {
+        "label" : "Chats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Chatoptionen öffnen"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Dateien zum Chatten auswählen"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Durchsuchen oder suchen und Dokumente auswählen, mit denen Sie chatten möchten"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Gesuchter Dateiname",
         "help" : "Geben Sie einen Teil des Dateinamens für Ihren Suchinhalt ein"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Dateinamen-Suche"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Unternehmensdateien durchsuchen"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantische Suche"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Dateien zum Chatten auswählen"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "Mein Profil"
       },
       "logout" : {
+        "label" : "Abmelden"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Sprache ändern"
+      },
+      "MyProfile" : {
+        "label" : "Ihr Profil"
+      },
+      "MyProfileItem" : {
+        "label" : "Ihr Profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Einrichten"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "Profil bearbeiten"
+      },
+      "logoutMenuItem" : {
         "label" : "Abmelden"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Vorgang erfolgreich abgeschlossen"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Dateien zum Chatten hochladen"
+      },
+      "ChooseFile" : {
+        "help" : "Dateien auswählen"
+      },
+      "UploadFile" : {
+        "help" : "Dateien hochladen"
+      },
+      "DragDropHere" : {
+        "label" : "Dateien hierher ziehen und ablegen zum Hochladen"
+      },
+      "RemoveAll" : {
+        "help" : "Alle entfernen"
+      },
+      "UploadPending" : {
+        "label" : "Warten auf Upload"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "চ্যাটবটের জন্য একটি বার্তা লিখুন"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "দস্তাবেজ ব্রাউজ করুন বা অনুসন্ধান করুন এবং চ্যাট করার জন্য নির্বাচন করুন"
+      },
+      "UploadFileBtn" : {
+        "help" : "চ্যাট বা কাজ করার জন্য একটি ফাইল আপলোড করুন"
+      },
+      "SubmiQuestion" : {
+        "help" : "আপনার প্রশ্ন জমা দিন"
+      },
+      "WithParams" : {
+        "label" : "প্যারামিটার সহ:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI ডাকা ফাংশনসমূহ:"
+      },
+      "UploadedDocs" : {
+        "label" : "আপলোডকৃত ডকুমেন্ট"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "রেকর্ড করুন",
         "help" : "একটি অডিও ট্র্যাক রেকর্ড শুরু করুন এবং পাঠান"
+      },
+      "StopBtn" : {
+        "label" : "রেকর্ডিং",
+        "help" : "রেকর্ডিং"
+      },
+      "AbortBtn" : {
+        "label" : "রেকর্ডিং বাতিল করুন",
+        "help" : "রেকর্ডিং বাতিল করুন"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "পাসওয়ার্ড পরিবর্তন করুন"
+      },
+      "YourUserName" : {
+        "label" : "আপনার ব্যবহারকারীর নাম"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "নতুন চ্যাট"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "চ্যাট সেশন"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "সাইডবার বন্ধ করুন"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "বড় ভাষা মডেল দিয়ে নতুন চ্যাট তৈরি করুন"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "কোম্পানির বিষয়বস্তুর সাথে নতুন RAG চ্যাট তৈরি করুন",
+        "label" : "নলেজ বেসের সাথে চ্যাট"
+      },
+      "ChatsTitle" : {
+        "label" : "চ্যাট"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "চ্যাট অপশন বিভাগ খুলুন"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "চ্যাট করার জন্য ফাইল বাছাই করুন"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "দস্তাবেজ ব্রাউজ করুন বা অনুসন্ধান করুন এবং চ্যাট করার জন্য নির্বাচন করুন"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "অনুসন্ধানকৃত ফাইলের নাম",
         "help" : "আপনার খোঁজা বিষয়বস্তুর জন্য একটি ফাইলের অংশের নাম লিখুন"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ফাইলনেম অনুসন্ধান"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "কোম্পানির ফাইল ব্রাউজ করুন"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "সেমান্টিক অনুসন্ধান"
+      },
+      "chooseFilesDialog" : {
+        "label" : "চ্যাট করার জন্য ফাইল নির্বাচন করুন"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "আমার প্রোফাইল"
       },
       "logout" : {
+        "label" : "লগআউট"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ভাষা পরিবর্তন করুন"
+      },
+      "MyProfile" : {
+        "label" : "আপনার প্রোফাইল"
+      },
+      "MyProfileItem" : {
+        "label" : "আপনার প্রোফাইল"
+      },
+      "chatMenuItem" : {
+        "label" : "চ্যাট"
+      },
+      "setupMenuItem" : {
+        "label" : "সেটআপ"
+      },
+      "adminMenuItem" : {
+        "label" : "অ্যাডমিন"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "প্রোফাইল সম্পাদনা করুন"
+      },
+      "logoutMenuItem" : {
         "label" : "লগআউট"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ঠিক আছে!",
         "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "চ্যাট করার জন্য ফাইল আপলোড করুন"
+      },
+      "ChooseFile" : {
+        "help" : "ফাইল নির্বাচন করুন"
+      },
+      "UploadFile" : {
+        "help" : "ফাইল আপলোড করুন"
+      },
+      "DragDropHere" : {
+        "label" : "আপলোড করার জন্য এখানে ফাইল ড্র্যাগ ও ড্রপ করুন"
+      },
+      "RemoveAll" : {
+        "help" : "সব সরান"
+      },
+      "UploadPending" : {
+        "label" : "আপলোডের জন্য অপেক্ষমাণ"
       }
     }
   }

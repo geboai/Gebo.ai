@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Napišite poruku za chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pretražite ili odaberite dokumente za razgovor"
+      },
+      "UploadFileBtn" : {
+        "help" : "Prenesite datoteku za razgovor ili rad"
+      },
+      "SubmiQuestion" : {
+        "help" : "Pošaljite svoje pitanje"
+      },
+      "WithParams" : {
+        "label" : "s parametrima:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI pozvane funkcije:"
+      },
+      "UploadedDocs" : {
+        "label" : "Preneseni dokumenti"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Snimaj",
         "help" : "Započni snimanje audio zapisa i pošalji ga"
+      },
+      "StopBtn" : {
+        "label" : "Snimanje",
+        "help" : "Snimanje"
+      },
+      "AbortBtn" : {
+        "label" : "Prekini snimanje",
+        "help" : "Prekini snimanje"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Promijeni lozinku"
+      },
+      "YourUserName" : {
+        "label" : "Vaše korisničko ime"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Novi chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesije razgovora"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Zatvori bočnu traku"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Kreirajte novi razgovor s velikim jezičnim modelima"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Kreirajte novi RAG razgovor s sadržajem tvrtke",
+        "label" : "Razgovarajte s bazom znanja"
+      },
+      "ChatsTitle" : {
+        "label" : "Razgovori"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Otvori odjeljak opcija razgovora"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Odaberite datoteke za razgovor"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pretražite ili odaberite dokumente za razgovor"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Naziv tražene datoteke",
         "help" : "Unesite dio naziva datoteke koji tražite"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Pretraživanje naziva datoteke"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Pregledajte datoteke tvrtke"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantičko pretraživanje"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Odaberite datoteke za razgovor"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "moj profil"
       },
       "logout" : {
+        "label" : "odjava"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Promijeni jezik"
+      },
+      "MyProfile" : {
+        "label" : "vaš profil"
+      },
+      "MyProfileItem" : {
+        "label" : "vaš profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Razgovor"
+      },
+      "setupMenuItem" : {
+        "label" : "Postavke"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "uredi profil"
+      },
+      "logoutMenuItem" : {
         "label" : "odjava"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operacija je uspješno dovršena"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Prenesite datoteke za razgovor"
+      },
+      "ChooseFile" : {
+        "help" : "Odaberite datoteke"
+      },
+      "UploadFile" : {
+        "help" : "Prenesite datoteke"
+      },
+      "DragDropHere" : {
+        "label" : "Povucite i ispustite datoteke ovdje za prijenos"
+      },
+      "RemoveAll" : {
+        "help" : "Ukloni sve"
+      },
+      "UploadPending" : {
+        "label" : "Čeka se prijenos"
       }
     }
   }

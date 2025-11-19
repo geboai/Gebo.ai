@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "اكتب رسالة للبوت"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "تصفح أو ابحث وحدد مستندات للدردشة معها"
+      },
+      "UploadFileBtn" : {
+        "help" : "حمّل ملفًا للدردشة أو العمل"
+      },
+      "SubmiQuestion" : {
+        "help" : "أرسل سؤالك"
+      },
+      "WithParams" : {
+        "label" : "مع المعاملات:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "الوظائف التي نفذها الذكاء الاصطناعي:"
+      },
+      "UploadedDocs" : {
+        "label" : "المستندات المرفوعة"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "تسجيل",
         "help" : "ابدأ تسجيل مقطع صوتي وأرسله"
+      },
+      "StopBtn" : {
+        "label" : "تسجيل",
+        "help" : "تسجيل"
+      },
+      "AbortBtn" : {
+        "label" : "إيقاف التسجيل",
+        "help" : "إيقاف التسجيل"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "تغيير كلمة المرور"
+      },
+      "YourUserName" : {
+        "label" : "اسم المستخدم الخاص بك"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "محادثة جديدة"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "جلسات الدردشة"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "إغلاق الشريط الجانبي"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "ابدأ محادثة جديدة مع نماذج اللغة الكبيرة"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "ابدأ محادثة RAG مع محتوى الشركة",
+        "label" : "دردشة مع قاعدة المعرفة"
+      },
+      "ChatsTitle" : {
+        "label" : "الدردشات"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "فتح قسم خيارات الدردشة"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "اختر ملفات للمحادثة معها"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "تصفح أو ابحث وحدد مستندات للدردشة معها"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "اسم الملف المطلوب",
         "help" : "أدخل جزءًا من اسم الملف للمحتوى الذي تبحث عنه"
+      },
+      "SearchFilesLabel" : {
+        "label" : "بحث باسم الملف"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "تصفح ملفات الشركة"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "بحث دلالي"
+      },
+      "chooseFilesDialog" : {
+        "label" : "اختر ملفات للدردشة معها"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "ملفي الشخصي"
       },
       "logout" : {
+        "label" : "تسجيل الخروج"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "تغيير اللغة"
+      },
+      "MyProfile" : {
+        "label" : "ملفك الشخصي"
+      },
+      "MyProfileItem" : {
+        "label" : "ملفك الشخصي"
+      },
+      "chatMenuItem" : {
+        "label" : "دردشة"
+      },
+      "setupMenuItem" : {
+        "label" : "إعداد"
+      },
+      "adminMenuItem" : {
+        "label" : "إدارة"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "تعديل الملف الشخصي"
+      },
+      "logoutMenuItem" : {
         "label" : "تسجيل الخروج"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "تم بنجاح!",
         "detail" : "تم تنفيذ العملية بنجاح"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ارفع ملفات للدردشة معها"
+      },
+      "ChooseFile" : {
+        "help" : "اختر ملفات"
+      },
+      "UploadFile" : {
+        "help" : "ارفع ملفات"
+      },
+      "DragDropHere" : {
+        "label" : "اسحب وأسقط الملفات هنا للرفع"
+      },
+      "RemoveAll" : {
+        "help" : "إزالة الكل"
+      },
+      "UploadPending" : {
+        "label" : "بانتظار الرفع"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Sohbet botuna bir mesaj yaz"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Sohbet etmek için belgeleri göz atın veya arayın ve seçin"
+      },
+      "UploadFileBtn" : {
+        "help" : "Sohbet etmek veya çalışmak için dosya yükleyin"
+      },
+      "SubmiQuestion" : {
+        "help" : "Sorunuzu gönderin"
+      },
+      "WithParams" : {
+        "label" : "parametrelerle:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI tarafından çağrılan fonksiyonlar:"
+      },
+      "UploadedDocs" : {
+        "label" : "Yüklenen belgeler"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Kaydet",
         "help" : "Bir ses parçası kaydetmeye başla ve gönder"
+      },
+      "StopBtn" : {
+        "label" : "Kayıt yapılıyor",
+        "help" : "Kayıt yapılıyor"
+      },
+      "AbortBtn" : {
+        "label" : "Kaydı durdur",
+        "help" : "Kaydı durdur"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Şifreyi değiştir"
+      },
+      "YourUserName" : {
+        "label" : "Kullanıcı adınız"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Yeni sohbet"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sohbet oturumları"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Kenar çubuğunu kapat"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Büyük dil modelleriyle yeni bir sohbet oluştur"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Şirket içeriğiyle yeni bir RAG sohbeti oluştur",
+        "label" : "Bilgi tabanı ile sohbet"
+      },
+      "ChatsTitle" : {
+        "label" : "Sohbetler"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Sohbet seçenekleri bölümünü aç"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Sohbet etmek için dosyaları seç"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Sohbet etmek için belgeleri göz atın veya arayın ve seçin"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Aranan dosya adı",
         "help" : "Aradığınız içerik için bir dosya adı parçası girin"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Dosya adı arama"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Şirket dosyalarına göz at"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Anlamsal arama"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Sohbet etmek için dosya seçin"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "profilim"
       },
       "logout" : {
+        "label" : "çıkış yap"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Dili değiştir"
+      },
+      "MyProfile" : {
+        "label" : "profiliniz"
+      },
+      "MyProfileItem" : {
+        "label" : "profiliniz"
+      },
+      "chatMenuItem" : {
+        "label" : "Sohbet"
+      },
+      "setupMenuItem" : {
+        "label" : "Kurulum"
+      },
+      "adminMenuItem" : {
+        "label" : "Yönetici"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "profili düzenle"
+      },
+      "logoutMenuItem" : {
         "label" : "çıkış yap"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Tamam!",
         "detail" : "İşlem başarıyla tamamlandı"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Sohbet etmek için dosya yükle"
+      },
+      "ChooseFile" : {
+        "help" : "Dosya seç"
+      },
+      "UploadFile" : {
+        "help" : "Dosya yükle"
+      },
+      "DragDropHere" : {
+        "label" : "Yüklemek için dosyaları buraya sürükleyin ve bırakın"
+      },
+      "RemoveAll" : {
+        "help" : "Tümünü kaldır"
+      },
+      "UploadPending" : {
+        "label" : "Yükleme bekleniyor"
       }
     }
   }

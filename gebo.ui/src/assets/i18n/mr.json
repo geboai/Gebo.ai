@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "चॅट बॉटसाठी संदेश लिहा"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "चॅट करण्यासाठी दस्तऐवज ब्राउझ किंवा शोधा आणि निवडा"
+      },
+      "UploadFileBtn" : {
+        "help" : "चॅट किंवा काम करण्यासाठी फाईल अपलोड करा"
+      },
+      "SubmiQuestion" : {
+        "help" : "तुमचा प्रश्न सबमिट करा"
+      },
+      "WithParams" : {
+        "label" : "पर्यायांसह:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI ने कॉल केलेल्या फंक्शन्स:"
+      },
+      "UploadedDocs" : {
+        "label" : "अपलोड केलेले दस्तऐवज"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "रेकॉर्ड",
         "help" : "ऑडिओ ट्रॅक रेकॉर्ड करण्यास प्रारंभ करा आणि ते पाठवा"
+      },
+      "StopBtn" : {
+        "label" : "रेकॉर्डिंग",
+        "help" : "रेकॉर्डिंग"
+      },
+      "AbortBtn" : {
+        "label" : "रेकॉर्डिंग थांबवा",
+        "help" : "रेकॉर्डिंग थांबवा"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "पासवर्ड बदला"
+      },
+      "YourUserName" : {
+        "label" : "तुमचं वापरकर्ता नाव"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "नवीन चॅट"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "चॅट सत्रे"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "साइड बार बंद करा"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "मोठ्या भाषा मॉडेल्ससोबत नवीन चॅट तयार करा"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "कंपनीच्या सामग्रीसोबत नवीन RAG चॅट तयार करा",
+        "label" : "नॉलेज बेससह चॅट करा"
+      },
+      "ChatsTitle" : {
+        "label" : "चॅट्स"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "चॅट पर्याय विभाग उघडा"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "संवाद साधण्यासाठी फाइल्स निवडा"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "चॅट करण्यासाठी दस्तऐवज ब्राउझ किंवा शोधा आणि निवडा"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "शोधलेल्या फाईलचे नाव",
         "help" : "शोधलेल्या सामग्रीसाठी फाईल नावाचा भाग टाका"
+      },
+      "SearchFilesLabel" : {
+        "label" : "फाईलनाव शोधा"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "कंपनी फाईल्स ब्राउझ करा"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "सिमॅंटिक सर्च"
+      },
+      "chooseFilesDialog" : {
+        "label" : "चॅटसाठी फाईल्स निवडा"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "माझे प्रोफाइल"
       },
       "logout" : {
+        "label" : "लॉगआउट"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "भाषा बदला"
+      },
+      "MyProfile" : {
+        "label" : "तुमची प्रोफाइल"
+      },
+      "MyProfileItem" : {
+        "label" : "तुमची प्रोफाइल"
+      },
+      "chatMenuItem" : {
+        "label" : "चॅट"
+      },
+      "setupMenuItem" : {
+        "label" : "सेटअप"
+      },
+      "adminMenuItem" : {
+        "label" : "प्रशासन"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "प्रोफाइल संपादित करा"
+      },
+      "logoutMenuItem" : {
         "label" : "लॉगआउट"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ठीक आहे!",
         "detail" : "क्रिया यशस्वीरित्या पूर्ण झाली"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "चॅट करण्यासाठी फाईल्स अपलोड करा"
+      },
+      "ChooseFile" : {
+        "help" : "फाईल्स निवडा"
+      },
+      "UploadFile" : {
+        "help" : "फाईल्स अपलोड करा"
+      },
+      "DragDropHere" : {
+        "label" : "अपलोडसाठी येथे फाईल्स ड्रॅग आणि ड्रॉप करा"
+      },
+      "RemoveAll" : {
+        "help" : "सर्व काढून टाका"
+      },
+      "UploadPending" : {
+        "label" : "अपलोडसाठी प्रलंबित"
       }
     }
   }

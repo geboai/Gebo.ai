@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Напишіть повідомлення для чат-бота"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Перегляньте або знайдіть і виберіть документи для спілкування"
+      },
+      "UploadFileBtn" : {
+        "help" : "Завантажте файл для спілкування або роботи"
+      },
+      "SubmiQuestion" : {
+        "help" : "Надішліть ваше запитання"
+      },
+      "WithParams" : {
+        "label" : "з параметрами:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Викликані AI функції:"
+      },
+      "UploadedDocs" : {
+        "label" : "Завантажені документи"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Записати",
         "help" : "Почати запис аудіо та надіслати його"
+      },
+      "StopBtn" : {
+        "label" : "Запис",
+        "help" : "Запис"
+      },
+      "AbortBtn" : {
+        "label" : "Зупинити запис",
+        "help" : "Зупинити запис"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Змінити пароль"
+      },
+      "YourUserName" : {
+        "label" : "Ваше ім’я користувача"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Новий чат"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Сесії чату"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Закрити бокову панель"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Створити новий чат з великими мовними моделями"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Створити новий RAG чат з контентом компанії",
+        "label" : "Чат з базою знань"
+      },
+      "ChatsTitle" : {
+        "label" : "Чати"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Відкрити розділ налаштувань чату"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Виберіть файли для чату"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Перегляньте або знайдіть і виберіть документи для спілкування"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Назва шуканого файлу",
         "help" : "Введіть частину назви файлу для пошуку"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Пошук за назвою файлу"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Перегляд файлів компанії"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Семантичний пошук"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Виберіть файли для спілкування"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "мій профіль"
       },
       "logout" : {
+        "label" : "вийти"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Змінити мову"
+      },
+      "MyProfile" : {
+        "label" : "ваш профіль"
+      },
+      "MyProfileItem" : {
+        "label" : "ваш профіль"
+      },
+      "chatMenuItem" : {
+        "label" : "Чат"
+      },
+      "setupMenuItem" : {
+        "label" : "Налаштування"
+      },
+      "adminMenuItem" : {
+        "label" : "Адмін"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "редагувати профіль"
+      },
+      "logoutMenuItem" : {
         "label" : "вийти"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Готово!",
         "detail" : "Операцію виконано успішно"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Завантажте файли для спілкування"
+      },
+      "ChooseFile" : {
+        "help" : "Оберіть файли"
+      },
+      "UploadFile" : {
+        "help" : "Завантажити файли"
+      },
+      "DragDropHere" : {
+        "label" : "Перетягніть файли сюди для завантаження"
+      },
+      "RemoveAll" : {
+        "help" : "Видалити все"
+      },
+      "UploadPending" : {
+        "label" : "Очікує на завантаження"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "챗봇에 메시지를 입력하세요"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "문서를 검색하거나 선택하여 채팅하세요"
+      },
+      "UploadFileBtn" : {
+        "help" : "채팅이나 작업을 위해 파일을 업로드하세요"
+      },
+      "SubmiQuestion" : {
+        "help" : "질문을 제출하세요"
+      },
+      "WithParams" : {
+        "label" : "파라미터와 함께:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI 호출 함수:"
+      },
+      "UploadedDocs" : {
+        "label" : "업로드된 문서"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "녹음",
         "help" : "오디오 트랙 녹음을 시작하고 전송하세요"
+      },
+      "StopBtn" : {
+        "label" : "녹음 중",
+        "help" : "녹음 중"
+      },
+      "AbortBtn" : {
+        "label" : "녹음 중단",
+        "help" : "녹음 중단"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "비밀번호 변경"
+      },
+      "YourUserName" : {
+        "label" : "사용자 이름"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "새 채팅"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "채팅 세션"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "사이드바 닫기"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "대형 언어 모델로 새 채팅 만들기"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "회사 콘텐츠로 새로운 RAG 채팅 생성",
+        "label" : "지식 기반과 채팅"
+      },
+      "ChatsTitle" : {
+        "label" : "채팅"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "채팅 옵션 섹션 열기"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "대화할 파일 선택"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "문서를 검색하거나 선택하여 채팅하세요"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "검색된 파일명",
         "help" : "검색할 파일 이름 일부를 입력하세요"
+      },
+      "SearchFilesLabel" : {
+        "label" : "파일명 검색"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "회사 파일 탐색"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "의미 기반 검색"
+      },
+      "chooseFilesDialog" : {
+        "label" : "채팅할 파일 선택"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "내 프로필"
       },
       "logout" : {
+        "label" : "로그아웃"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "언어 변경"
+      },
+      "MyProfile" : {
+        "label" : "내 프로필"
+      },
+      "MyProfileItem" : {
+        "label" : "내 프로필"
+      },
+      "chatMenuItem" : {
+        "label" : "채팅"
+      },
+      "setupMenuItem" : {
+        "label" : "설정"
+      },
+      "adminMenuItem" : {
+        "label" : "관리자"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "프로필 수정"
+      },
+      "logoutMenuItem" : {
         "label" : "로그아웃"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "완료!",
         "detail" : "작업이 성공적으로 완료되었습니다"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "채팅할 파일 업로드"
+      },
+      "ChooseFile" : {
+        "help" : "파일 선택"
+      },
+      "UploadFile" : {
+        "help" : "파일 업로드"
+      },
+      "DragDropHere" : {
+        "label" : "파일을 드래그 앤 드롭하여 업로드하세요"
+      },
+      "RemoveAll" : {
+        "help" : "모두 제거"
+      },
+      "UploadPending" : {
+        "label" : "업로드 대기 중"
       }
     }
   }

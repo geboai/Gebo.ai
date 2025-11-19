@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Գրեք հաղորդագրություն զրույցի բոտին"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Թերթեք կամ որոնեք և ընտրեք փաստաթղթեր՝ զրուցելու համար"
+      },
+      "UploadFileBtn" : {
+        "help" : "Վերբեռնեք ֆայլ՝ զրույցի կամ աշխատանքի համար"
+      },
+      "SubmiQuestion" : {
+        "help" : "Ուղարկեք ձեր հարցը"
+      },
+      "WithParams" : {
+        "label" : "պարամետրերով․"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI կանչված գործառույթներ․"
+      },
+      "UploadedDocs" : {
+        "label" : "Վերբեռնված փաստաթղթեր"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Գրանցել",
         "help" : "Սկսել ձայնագրությունը և ուղարկել այն"
+      },
+      "StopBtn" : {
+        "label" : "Ձայնագրում",
+        "help" : "Ձայնագրում"
+      },
+      "AbortBtn" : {
+        "label" : "Դադարեցնել ձայնագրումը",
+        "help" : "Դադարեցնել ձայնագրումը"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Փոխել գաղտնաբառը"
+      },
+      "YourUserName" : {
+        "label" : "Ձեր օգտանունը"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Նոր զրույց"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Զրույցների նիստեր"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Փակել կողային վահանակը"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Ստեղծել նոր զրույց՝ մեծ լեզվաբառարանների օգնությամբ"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Ստեղծել նոր RAG զրույց ընկերության պարունակությամբ",
+        "label" : "Զրույց գիտելիքների բազայի հետ"
+      },
+      "ChatsTitle" : {
+        "label" : "Զրույցներ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Բացել զրույցի ընտրանքների բաժինը"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Ընտրեք ֆայլեր՝ զրուցելու համար"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Թերթեք կամ որոնեք և ընտրեք փաստաթղթեր՝ զրուցելու համար"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Փնտրվող ֆայլի անվանումը",
         "help" : "Մուտքագրեք փնտրվող բովանդակության ֆայլի անվան մի մասը"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Կայքի անվան որոնում"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Թերթել ընկերության ֆայլերը"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Սեմանտիկ որոնում"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Ընտրեք ֆայլեր՝ զրույցի համար"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "ելք"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Փոխել լեզուն"
+      },
+      "MyProfile" : {
+        "label" : "ձեր պրոֆիլը"
+      },
+      "MyProfileItem" : {
+        "label" : "ձեր պրոֆիլը"
+      },
+      "chatMenuItem" : {
+        "label" : "Զրույց"
+      },
+      "setupMenuItem" : {
+        "label" : "Կարգավորումներ"
+      },
+      "adminMenuItem" : {
+        "label" : "Ադմին"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "խմբագրել պրոֆիլը"
+      },
+      "logoutMenuItem" : {
+        "label" : "դուրս գալ"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Վերբեռնեք ֆայլեր՝ զրույցի համար"
+      },
+      "ChooseFile" : {
+        "help" : "Ընտրել ֆայլեր"
+      },
+      "UploadFile" : {
+        "help" : "Վերբեռնել ֆայլեր"
+      },
+      "DragDropHere" : {
+        "label" : "Քաշեք և թողեք ֆայլերը այստեղ՝ վերբեռնման համար"
+      },
+      "RemoveAll" : {
+        "help" : "Ջնջել բոլորը"
+      },
+      "UploadPending" : {
+        "label" : "Սպասում է վերբեռնման"
       }
     }
   }

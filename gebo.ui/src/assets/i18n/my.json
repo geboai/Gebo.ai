@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Chat bot အတွက် မက်ဆေ့ခ်ျရေးပါ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "စာရွက်စာတမ်းများရွေးချယ်ရန် သို့မဟုတ် ရှာဖွေပေးရန်နှင့် စကားပြောရန်"
+      },
+      "UploadFileBtn" : {
+        "help" : "ဖိုင်တစ်ခုတင်ပြီး စကားပြောရန် သို့မဟုတ် အလုပ်လုပ်ပါ"
+      },
+      "SubmiQuestion" : {
+        "help" : "မေးခွန်းကို တင်ပြပါ"
+      },
+      "WithParams" : {
+        "label" : "ပါဝင်သောအချက်များနှင့်:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI ခေါ်ယူထားသော functions:"
+      },
+      "UploadedDocs" : {
+        "label" : "တင်သွင်းထားသောစာရွက်စာတမ်းများ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "မှတ်တမ်းတင်ပါ",
         "help" : "အသံဖိုင်တစ်ခု မှတ်တမ်းတင်ပြီး ပေးပို့ပါ"
+      },
+      "StopBtn" : {
+        "label" : "မှတ်တမ်းတင်ခြင်း",
+        "help" : "မှတ်တမ်းတင်ခြင်း"
+      },
+      "AbortBtn" : {
+        "label" : "မှတ်တမ်းတင်ခြင်းရပ်ဆိုင်းပါ",
+        "help" : "မှတ်တမ်းတင်ခြင်းရပ်ဆိုင်းပါ"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "စကားဝှက် ပြောင်းရန်"
+      },
+      "YourUserName" : {
+        "label" : "အမည်အသုံးပြုသူ"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "စကားပြောအသစ်"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "စကားပြောဆွေးနွေးမှုများ"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "ဘေးသားဘားပိတ်မည်"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "စကားပြောအသစ်တစ်ခုပြုလုပ်ရန် (ကြီးမားသောဘာသာစကားမော်ဒယ်များနှင့်)"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "ကုမ္ပဏီအကြောင်းအရာများနှင့် RAG စကားပြောအသစ်တစ်ခုပြုလုပ်ရန်",
+        "label" : "ဖွင့်ထားသော အကြောင်းအရာဖြင့် စကားပြောရန်"
+      },
+      "ChatsTitle" : {
+        "label" : "စကားပြောမှုများ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "စကားပြော ရွေးချယ်စရာများဖွင့်ရန်"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "ဆွေးနွေးရန် ဖိုင်များ ရွေးချယ်ပါ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "စာရွက်စာတမ်းများရွေးချယ်ရန် သို့မဟုတ် ရှာဖွေပေးရန်နှင့် စကားပြောရန်"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "ရှာဖွေသောဖိုင်အမည်",
         "help" : "ရှာလိုသောအကြောင်းအရာအတွက် ဖိုင်အမည်အပိုင်းကို ထည့်ပေးပါ"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ဖိုင်အမည်ဖြင့် ရှာဖွေပါ"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "ကုမ္ပဏီဖိုင်များကြည့်ရှုရန်"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "အဓိပ္ပါယ်နှင့် ရှာဖွေရန်"
+      },
+      "chooseFilesDialog" : {
+        "label" : "စကားပြောရန် ဖိုင်များရွေးချယ်ပါ"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "ထွက်ရန်"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ဘာသာစကားပြောင်းပါ"
+      },
+      "MyProfile" : {
+        "label" : "သင်၏ ပရိုဖိုင်"
+      },
+      "MyProfileItem" : {
+        "label" : "သင်၏ ပရိုဖိုင်"
+      },
+      "chatMenuItem" : {
+        "label" : "စကားပြောရန်"
+      },
+      "setupMenuItem" : {
+        "label" : "စုံစမ်းတပ်ဆင်ရာ"
+      },
+      "adminMenuItem" : {
+        "label" : "အုပ်ချုပ်သူ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ပရိုဖိုင် တည်းဖြတ်ရန်"
+      },
+      "logoutMenuItem" : {
+        "label" : "ထွက်ပါ"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "အိုကေ!",
         "detail" : "လုပ်ဆောင်မှုကိုအောင်မြင်စွာ ပြီးမြောက်ပါသည်"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "စကားပြောရန် ဖိုင်များ တင်ပါ"
+      },
+      "ChooseFile" : {
+        "help" : "ဖိုင်များ ရွေးချယ်ပါ"
+      },
+      "UploadFile" : {
+        "help" : "ဖိုင်များ တင်ပါ"
+      },
+      "DragDropHere" : {
+        "label" : "ဖိုင်များကို ဤနေရာတွင် ဆွဲယူချပါ"
+      },
+      "RemoveAll" : {
+        "help" : "အားလုံး ဖယ်ရှားပါ"
+      },
+      "UploadPending" : {
+        "label" : "တင်ရန်ဆိုင်းထားသည်"
       }
     }
   }

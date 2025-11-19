@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Sumulat ng mensahe para sa chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Mag-browse o maghanap at pumili ng mga dokumentong pwedeng kausapin"
+      },
+      "UploadFileBtn" : {
+        "help" : "Mag-upload ng file para makipag-chat o magtrabaho dito"
+      },
+      "SubmiQuestion" : {
+        "help" : "Ipadala ang iyong tanong"
+      },
+      "WithParams" : {
+        "label" : "may mga params:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI Tinawag na mga function:"
+      },
+      "UploadedDocs" : {
+        "label" : "Na-upload na mga dokumento"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "I-record",
         "help" : "Simulan ang pag-record ng audio track at ipadala ito"
+      },
+      "StopBtn" : {
+        "label" : "Nagre-record",
+        "help" : "Nagre-record"
+      },
+      "AbortBtn" : {
+        "label" : "Itigil ang pag-record",
+        "help" : "Itigil ang pag-record"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Palitan ang password"
+      },
+      "YourUserName" : {
+        "label" : "Iyong username"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Bagong chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Mga chat session"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Isara ang sidebar"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Gumawa ng bagong chat gamit ang malalaking language model"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Gumawa ng bagong RAG chat gamit ang mga nilalaman ng kumpanya",
+        "label" : "Makipag-chat sa knowledge base"
+      },
+      "ChatsTitle" : {
+        "label" : "Mga chat"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Buksan ang seksyon ng mga chat option"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Pumili ng mga file na kakausapin"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Mag-browse o maghanap at pumili ng mga dokumentong pwedeng kausapin"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Hinahanap na pangalan ng file",
         "help" : "Maglagay ng bahagi ng filename para sa iyong hinahanap na nilalaman"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Paghahanap ng filename"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Mag-browse ng mga file ng kumpanya"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantic na paghahanap"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Pumili ng mga file na pwedeng kausapin"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "aking profile"
       },
       "logout" : {
+        "label" : "logout"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Palitan ang wika"
+      },
+      "MyProfile" : {
+        "label" : "iyong profile"
+      },
+      "MyProfileItem" : {
+        "label" : "iyong profile"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Setup"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "i-edit ang profile"
+      },
+      "logoutMenuItem" : {
         "label" : "logout"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Matagumpay na naisagawa ang operasyon"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Mag-upload ng mga file na pwedeng kausapin"
+      },
+      "ChooseFile" : {
+        "help" : "Pumili ng mga file"
+      },
+      "UploadFile" : {
+        "help" : "I-upload ang mga file"
+      },
+      "DragDropHere" : {
+        "label" : "I-drag at i-drop ang mga file dito para i-upload"
+      },
+      "RemoveAll" : {
+        "help" : "Tanggalin lahat"
+      },
+      "UploadPending" : {
+        "label" : "Naghihintay para ma-upload"
       }
     }
   }

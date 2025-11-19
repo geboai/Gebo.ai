@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Írjon üzenetet a csevegőrobotnak"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Böngésszen vagy keressen, és válasszon ki dokumentumokat a beszélgetéshez"
+      },
+      "UploadFileBtn" : {
+        "help" : "Töltsön fel egy fájlt, hogy beszélgethessen vagy dolgozhasson vele"
+      },
+      "SubmiQuestion" : {
+        "help" : "Küldje el a kérdését"
+      },
+      "WithParams" : {
+        "label" : "paraméterekkel:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI által meghívott funkciók:"
+      },
+      "UploadedDocs" : {
+        "label" : "Feltöltött dokumentumok"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Felvétel",
         "help" : "Hangfelvétel indítása és elküldése"
+      },
+      "StopBtn" : {
+        "label" : "Felvétel folyamatban",
+        "help" : "Felvétel folyamatban"
+      },
+      "AbortBtn" : {
+        "label" : "Felvétel megszakítása",
+        "help" : "Felvétel megszakítása"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Jelszó megváltoztatása"
+      },
+      "YourUserName" : {
+        "label" : "Felhasználóneved"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Új csevegés"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Beszélgetések"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Oldalsáv bezárása"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Új beszélgetés indítása nagy nyelvi modellekkel"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Új RAG beszélgetés indítása vállalati tartalommal",
+        "label" : "Beszélgetés tudásbázissal"
+      },
+      "ChatsTitle" : {
+        "label" : "Beszélgetések"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Beszélgetési beállítások megnyitása"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Válassza ki a dokumentumokat a csevegéshez"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Böngésszen vagy keressen, és válasszon ki dokumentumokat a beszélgetéshez"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Keresett fájlnév",
         "help" : "Add meg a keresett tartalom fájlnevének egy részét"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Fájlnév alapján keresés"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Vállalati fájlok böngészése"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Szemantikus keresés"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Válassza ki a fájlokat a beszélgetéshez"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "saját profilom"
       },
       "logout" : {
+        "label" : "kijelentkezés"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Nyelv megváltoztatása"
+      },
+      "MyProfile" : {
+        "label" : "profilod"
+      },
+      "MyProfileItem" : {
+        "label" : "profilod"
+      },
+      "chatMenuItem" : {
+        "label" : "Beszélgetés"
+      },
+      "setupMenuItem" : {
+        "label" : "Beállítások"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "profil szerkesztése"
+      },
+      "logoutMenuItem" : {
         "label" : "kijelentkezés"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Rendben!",
         "detail" : "A művelet sikeresen befejeződött"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Fájlok feltöltése beszélgetéshez"
+      },
+      "ChooseFile" : {
+        "help" : "Fájlok kiválasztása"
+      },
+      "UploadFile" : {
+        "help" : "Fájlok feltöltése"
+      },
+      "DragDropHere" : {
+        "label" : "Fogd és vidd ide a fájlokat feltöltéshez"
+      },
+      "RemoveAll" : {
+        "help" : "Összes eltávolítása"
+      },
+      "UploadPending" : {
+        "label" : "Feltöltésre vár"
       }
     }
   }

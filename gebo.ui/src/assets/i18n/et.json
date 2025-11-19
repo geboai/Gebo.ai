@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Kirjuta sõnum vestlusrobotile"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Sirvi või otsi ja vali dokumendid, millega vestelda"
+      },
+      "UploadFileBtn" : {
+        "help" : "Laadi üles fail, et vestelda või töötada selle kallal"
+      },
+      "SubmiQuestion" : {
+        "help" : "Esita oma küsimus"
+      },
+      "WithParams" : {
+        "label" : "parameetritega:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI kutsutud funktsioonid:"
+      },
+      "UploadedDocs" : {
+        "label" : "Üleslaetud dokumendid"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Salvesta",
         "help" : "Alusta heliriba salvestamist ja saada see"
+      },
+      "StopBtn" : {
+        "label" : "Salvestamine",
+        "help" : "Salvestamine"
+      },
+      "AbortBtn" : {
+        "label" : "Katkesta salvestus",
+        "help" : "Katkesta salvestus"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Muuda parooli"
+      },
+      "YourUserName" : {
+        "label" : "Sinu kasutajanimi"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Uus vestlus"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Vestlused"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Sulge külgriba"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Loo uus vestlus suurte keelemudelitega"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Loo uus RAG vestlus ettevõtte sisuga",
+        "label" : "Vestle teadmistebaasiga"
+      },
+      "ChatsTitle" : {
+        "label" : "Vestlused"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Ava vestluse valikute sektsioon"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Vali failid vestluseks"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Sirvi või otsi ja vali dokumendid, millega vestelda"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Otsitava faili nimi",
         "help" : "Sisesta otsitava sisu failinime osa"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Failinime otsing"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Sirvi ettevõtte faile"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantiline otsing"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vali failid, millega vestelda"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "minu profiil"
       },
       "logout" : {
+        "label" : "logi välja"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Muuda keelt"
+      },
+      "MyProfile" : {
+        "label" : "sinu profiil"
+      },
+      "MyProfileItem" : {
+        "label" : "sinu profiil"
+      },
+      "chatMenuItem" : {
+        "label" : "Vestlus"
+      },
+      "setupMenuItem" : {
+        "label" : "Seadistus"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "muuda profiili"
+      },
+      "logoutMenuItem" : {
         "label" : "logi välja"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Tegevus õnnestus"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Laadi üles failid, millega vestelda"
+      },
+      "ChooseFile" : {
+        "help" : "Vali failid"
+      },
+      "UploadFile" : {
+        "help" : "Laadi failid üles"
+      },
+      "DragDropHere" : {
+        "label" : "Lohista failid siia üleslaadimiseks"
+      },
+      "RemoveAll" : {
+        "help" : "Eemalda kõik"
+      },
+      "UploadPending" : {
+        "label" : "Ootel üleslaadimiseks"
       }
     }
   }

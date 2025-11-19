@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Scrie un mesaj pentru chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Răsfoiește sau caută și selectează documente pentru a conversa"
+      },
+      "UploadFileBtn" : {
+        "help" : "Încarcă un fișier pentru a conversa sau lucra cu el"
+      },
+      "SubmiQuestion" : {
+        "help" : "Trimite întrebarea ta"
+      },
+      "WithParams" : {
+        "label" : "cu parametri:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Funcții apelate de AI:"
+      },
+      "UploadedDocs" : {
+        "label" : "Documente încărcate"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Înregistrează",
         "help" : "Începe înregistrarea unei piese audio și trimite-o"
+      },
+      "StopBtn" : {
+        "label" : "Se înregistrează",
+        "help" : "Se înregistrează"
+      },
+      "AbortBtn" : {
+        "label" : "Oprește înregistrarea",
+        "help" : "Oprește înregistrarea"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Schimbă parola"
+      },
+      "YourUserName" : {
+        "label" : "Numele tău de utilizator"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Chat nou"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesiuni de chat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Închide bara laterală"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Creează un chat nou cu modele lingvistice mari"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Creează un chat RAG nou cu conținuturile companiei",
+        "label" : "Discută cu baza de cunoștințe"
+      },
+      "ChatsTitle" : {
+        "label" : "Conversații"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Deschide secțiunea de opțiuni chat"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Alege fișiere pentru a discuta"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Răsfoiește sau caută și selectează documente pentru a conversa"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Numele fișierului căutat",
         "help" : "Introduceți o parte din numele fișierului pentru conținutul căutat"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Căutare după numele fișierului"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Răsfoiește fișierele companiei"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Căutare semantică"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Alege fișiere pentru a conversa"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "profilul meu"
       },
       "logout" : {
+        "label" : "deconectare"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Schimbă limba"
+      },
+      "MyProfile" : {
+        "label" : "profilul tău"
+      },
+      "MyProfileItem" : {
+        "label" : "profilul tău"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Configurare"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "editează profilul"
+      },
+      "logoutMenuItem" : {
         "label" : "deconectare"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operațiune realizată cu succes"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Încarcă fișiere pentru a conversa"
+      },
+      "ChooseFile" : {
+        "help" : "Alege fișiere"
+      },
+      "UploadFile" : {
+        "help" : "Încarcă fișiere"
+      },
+      "DragDropHere" : {
+        "label" : "Trage și plasează fișiere aici pentru a le încărca"
+      },
+      "RemoveAll" : {
+        "help" : "Elimină tot"
+      },
+      "UploadPending" : {
+        "label" : "În așteptare pentru încărcare"
       }
     }
   }

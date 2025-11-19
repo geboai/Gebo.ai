@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Shkruaj një mesazh për chatbot-in"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Shfletoni ose kërkoni dhe zgjidhni dokumente për të biseduar"
+      },
+      "UploadFileBtn" : {
+        "help" : "Ngarkoni një skedar për të biseduar ose punuar me të"
+      },
+      "SubmiQuestion" : {
+        "help" : "Dërgo pyetjen tuaj"
+      },
+      "WithParams" : {
+        "label" : "me parametra:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Funksionet e thirrura nga AI:"
+      },
+      "UploadedDocs" : {
+        "label" : "Dokumentet e ngarkuara"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Regjistro",
         "help" : "Fillo regjistrimin e një audio dhe dërgoje"
+      },
+      "StopBtn" : {
+        "label" : "Duke regjistruar",
+        "help" : "Duke regjistruar"
+      },
+      "AbortBtn" : {
+        "label" : "Anulo regjistrimin",
+        "help" : "Anulo regjistrimin"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Ndrysho fjalëkalimin"
+      },
+      "YourUserName" : {
+        "label" : "Emri juaj i përdoruesit"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Bisedë e re"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Bisedat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Mbyll shiritin anësor"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Krijo një bisedë të re me modele të avancuara të gjuhës"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Krijo një bisedë të re RAG me përmbajtje të kompanisë",
+        "label" : "Bisedo me bazën e njohurive"
+      },
+      "ChatsTitle" : {
+        "label" : "Bisedat"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Hap seksionin e opsioneve të bisedës"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Zgjidh skedarë për të biseduar"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Shfletoni ose kërkoni dhe zgjidhni dokumente për të biseduar"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Emri i skedarit të kërkuar",
         "help" : "Shkruani një pjesë të emrit të skedarit për përmbajtjen që kërkoni"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Kërko emrin e skedarit"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Shfleto skedarët e kompanisë"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Kërkim semantik"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Zgjidhni skedarët për të biseduar"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "profili im"
       },
       "logout" : {
+        "label" : "dil"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Ndrysho gjuhën"
+      },
+      "MyProfile" : {
+        "label" : "profili juaj"
+      },
+      "MyProfileItem" : {
+        "label" : "profili juaj"
+      },
+      "chatMenuItem" : {
+        "label" : "Bisedë"
+      },
+      "setupMenuItem" : {
+        "label" : "Konfigurim"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ndrysho profilin"
+      },
+      "logoutMenuItem" : {
         "label" : "dil"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Në rregull!",
         "detail" : "Operacioni u përfundua me sukses"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Ngarkoni skedarë për të biseduar"
+      },
+      "ChooseFile" : {
+        "help" : "Zgjidhni skedarët"
+      },
+      "UploadFile" : {
+        "help" : "Ngarko skedarët"
+      },
+      "DragDropHere" : {
+        "label" : "Shtyni dhe lëshoni skedarët këtu për t’i ngarkuar"
+      },
+      "RemoveAll" : {
+        "help" : "Hiq të gjitha"
+      },
+      "UploadPending" : {
+        "label" : "Në pritje për ngarkim"
       }
     }
   }

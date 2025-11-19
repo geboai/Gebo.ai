@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "அரட்டை பாட்டிற்கு ஒரு செய்தி எழுதுங்கள்"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ஆவணங்களை உலாவிக் காணோ அல்லது தேடிக் தேர்ந்தெடுத்து உரையாடவும்"
+      },
+      "UploadFileBtn" : {
+        "help" : "உரையாடவோ அல்லது பணியாற்றவோ கோப்பை பதிவேற்றவும்"
+      },
+      "SubmiQuestion" : {
+        "help" : "உங்கள் கேள்வியை சமர்ப்பிக்கவும்"
+      },
+      "WithParams" : {
+        "label" : "அடிப்படையில்:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI அழைத்த செயலிகள்:"
+      },
+      "UploadedDocs" : {
+        "label" : "பதிவேற்றப்பட்ட ஆவணங்கள்"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "பதிவு செய்",
         "help" : "ஒரு ஒலி தொடரை பதிவு செய்து அனுப்ப தொடங்கு"
+      },
+      "StopBtn" : {
+        "label" : "பதிவை நிறுத்துக",
+        "help" : "பதிவை நிறுத்துக"
+      },
+      "AbortBtn" : {
+        "label" : "பதிவை நிறுத்தவும்",
+        "help" : "பதிவை நிறுத்தவும்"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "கடவுச்சொல்லை மாற்றவும்"
+      },
+      "YourUserName" : {
+        "label" : "உங்கள் பயனாளர் பெயர்"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "புதிய அரட்டை"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "உரையாடல் அமர்வுகள்"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "பக்க பட்டையைக் மூடவும்"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "பெரிய மொழி மாதிரிகளுடன் புதிய உரையாடலை தொடங்கவும்"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "நிறுவனத் தகவல்களுடன் புதிய RAG உரையாடலை தொடங்கவும்",
+        "label" : "அறிவு களத்துடன் உரையாடவும்"
+      },
+      "ChatsTitle" : {
+        "label" : "உரையாடல்கள்"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "உரையாடல் விருப்பங்கள் பகுதியைத் திறக்கவும்"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "அரட்டைக்கு கோப்புகளைத் தேர்ந்தெடுக்கவும்"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ஆவணங்களை உலாவிக் காணோ அல்லது தேடிக் தேர்ந்தெடுத்து உரையாடவும்"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "தேடப்பட்ட கோப்புப்பெயர்",
         "help" : "நீங்கள் தேடும் உள்ளடக்கத்திற்கு ஒரு கோப்புப் பெயர் பகுதியை உள்ளிடவும்"
+      },
+      "SearchFilesLabel" : {
+        "label" : "கோப்பு பெயரால் தேடுக"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "நிறுவனக் கோப்புகளை உலாவுக"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "அர்த்தவாய்ந்த தேடல்"
+      },
+      "chooseFilesDialog" : {
+        "label" : "உரையாட வேண்டிய கோப்புகளை தேர்ந்தெடுக்கவும்"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "என் پروஃபைல்"
       },
       "logout" : {
+        "label" : "வெளியேறு"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "மொழிய மாற்றவும்"
+      },
+      "MyProfile" : {
+        "label" : "உங்கள் சுய விவரம்"
+      },
+      "MyProfileItem" : {
+        "label" : "உங்கள் சுய விவரம்"
+      },
+      "chatMenuItem" : {
+        "label" : "உரையாடல்"
+      },
+      "setupMenuItem" : {
+        "label" : "அமைப்புகள்"
+      },
+      "adminMenuItem" : {
+        "label" : "நிர்வாகி"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "சுய விவரம் திருத்துக"
+      },
+      "logoutMenuItem" : {
         "label" : "வெளியேறு"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "வெற்றி!",
         "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "உரையாட கோப்புகளை பதிவேற்றவும்"
+      },
+      "ChooseFile" : {
+        "help" : "கோப்புகளை தேர்ந்தெடுக்கவும்"
+      },
+      "UploadFile" : {
+        "help" : "கோப்புகளை பதிவேற்றவும்"
+      },
+      "DragDropHere" : {
+        "label" : "பதிவேற்ற இது கோப்புகளை இங்கே இழுத்துவிட்டு விடவும்"
+      },
+      "RemoveAll" : {
+        "help" : "எல்லாவற்றையும் நீக்கு"
+      },
+      "UploadPending" : {
+        "label" : "பதிவேற்றுவதற்காக நிலுவையில் உள்ளது"
       }
     }
   }

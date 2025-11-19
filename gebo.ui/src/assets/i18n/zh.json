@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "为聊天机器人输入消息"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "浏览或搜索并选择要聊天的文档"
+      },
+      "UploadFileBtn" : {
+        "help" : "上传文件以进行聊天或处理"
+      },
+      "SubmiQuestion" : {
+        "help" : "提交你的问题"
+      },
+      "WithParams" : {
+        "label" : "参数："
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI 调用的函数："
+      },
+      "UploadedDocs" : {
+        "label" : "已上传文档"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "录音",
         "help" : "开始录制音频并发送"
+      },
+      "StopBtn" : {
+        "label" : "录音中",
+        "help" : "录音中"
+      },
+      "AbortBtn" : {
+        "label" : "停止录音",
+        "help" : "停止录音"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "更改密码"
+      },
+      "YourUserName" : {
+        "label" : "你的用户名"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "新建对话"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "聊天会话"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "关闭侧边栏"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "创建新的大语言模型聊天"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "使用公司内容创建新的RAG聊天",
+        "label" : "知识库聊天"
+      },
+      "ChatsTitle" : {
+        "label" : "聊天"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "打开聊天选项区域"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "选择要对话的文件"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "浏览或搜索并选择要聊天的文档"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "已搜索文件名",
         "help" : "输入您要搜索内容的文件名片段"
+      },
+      "SearchFilesLabel" : {
+        "label" : "文件名搜索"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "浏览公司文件"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "语义搜索"
+      },
+      "chooseFilesDialog" : {
+        "label" : "选择要聊天的文件"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "我的资料"
       },
       "logout" : {
+        "label" : "退出登录"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "切换语言"
+      },
+      "MyProfile" : {
+        "label" : "你的个人资料"
+      },
+      "MyProfileItem" : {
+        "label" : "你的个人资料"
+      },
+      "chatMenuItem" : {
+        "label" : "聊天"
+      },
+      "setupMenuItem" : {
+        "label" : "设置"
+      },
+      "adminMenuItem" : {
+        "label" : "管理员"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "编辑个人资料"
+      },
+      "logoutMenuItem" : {
         "label" : "退出登录"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "成功！",
         "detail" : "操作已成功完成"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "上传文件进行聊天"
+      },
+      "ChooseFile" : {
+        "help" : "选择文件"
+      },
+      "UploadFile" : {
+        "help" : "上传文件"
+      },
+      "DragDropHere" : {
+        "label" : "拖拽文件到此上传"
+      },
+      "RemoveAll" : {
+        "help" : "全部移除"
+      },
+      "UploadPending" : {
+        "label" : "等待上传"
       }
     }
   }

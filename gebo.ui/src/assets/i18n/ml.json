@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "ചാറ്റ് ബോട്ടിനായി ഒരു സന്ദേശം എഴുതുക"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ഡോക്യുമെന്റുകൾ ബ്രൗസ് ചെയ്യുക അല്ലെങ്കിൽ തിരയുകയും, ശ്രമിച്ച് തിരഞ്ഞെടുക്കുകയും ചെയ്‌തിട്ട് ചാറ്റ് ചെയ്യുക"
+      },
+      "UploadFileBtn" : {
+        "help" : "ചാറ്റിന് അല്ലെങ്കിൽ ജോലിക്ക് ഒരു ഫയൽ അപ്‌ലോഡ് ചെയ്യുക"
+      },
+      "SubmiQuestion" : {
+        "help" : "നിങ്ങളുടെ ചോദ്യ്യം സമർപ്പിക്കുക"
+      },
+      "WithParams" : {
+        "label" : "പരാമീറ്ററുകളോട് കൂടി:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI വിളിച്ച ഫംഗ്ഷനുകൾ:"
+      },
+      "UploadedDocs" : {
+        "label" : "അപ്പ്ലോഡ് ചെയ്ത ഡോക്യുമെന്റുകൾ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "റെകാര്ഡ് ചെയ്യുക",
         "help" : "ഓഡിയോ ട്രാക്ക് റെക്കോർഡ് ചെയ്ത് അയയ്ക്കാം"
+      },
+      "StopBtn" : {
+        "label" : "റെക്കോർഡിംഗ്",
+        "help" : "റെക്കോർഡിംഗ്"
+      },
+      "AbortBtn" : {
+        "label" : "റെക്കോർഡിംഗ് നിർത്തുക",
+        "help" : "റെക്കോർഡിംഗ് നിർത്തുക"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "പാസ്വേഡ് മാറ്റുക"
+      },
+      "YourUserName" : {
+        "label" : "നിങ്ങളുടെ യൂസർനേം"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "പുതിയ ചാറ്റ്"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ചാറ്റ് സെഷനുകൾ"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "സൈഡ്ബാർ അടയ്ക്കുക"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "വലിയ ഭാഷാ മാതൃകകളിൽ പുതിയ ചാറ്റ് ആരംഭിക്കുക"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "കമ്പനിയുടെ ഉള്ളടക്കങ്ങളോടു കൂടി പുതിയ RAG ചാറ്റ് സൃഷ്‌ടിക്കുക",
+        "label" : "നോളജ് ബേസുമായി ചാറ്റ് ചെയ്യുക"
+      },
+      "ChatsTitle" : {
+        "label" : "ചാറ്റുകൾ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ചാറ്റ് ഓപ്ഷനുകൾ വിഭാഗം തുറക്കുക"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "ചാറ്റിന് ഫയലുകൾ തിരഞ്ഞെടുക്കുക"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ഡോക്യുമെന്റുകൾ ബ്രൗസ് ചെയ്യുക അല്ലെങ്കിൽ തിരയുകയും, ശ്രമിച്ച് തിരഞ്ഞെടുക്കുകയും ചെയ്‌തിട്ട് ചാറ്റ് ചെയ്യുക"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "തിരഞ്ഞെടുത്ത ഫയലിന്റെ പേര്",
         "help" : "നിങ്ങളുടെ തിരയുന്നതിലുള്ള ഫയൽനെയിമിന്റെ ഭാഗം നൽകുക"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ഫയലിന്റെ പേര് തിരയുക"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "കമ്പനിയുടെ ഫയലുകൾ ബ്രൗസ് ചെയ്യുക"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "സെമാന്റിക് തിരയൽ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ചാറ്റ് ചെയ്യാൻ ഫയലുകൾ തിരഞ്ഞെടുക്കുക"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "പുറത്ത് പോകുക"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ഭാഷ മാറ്റുക"
+      },
+      "MyProfile" : {
+        "label" : "നിങ്ങളുടെ പ്രൊഫൈൽ"
+      },
+      "MyProfileItem" : {
+        "label" : "നിങ്ങളുടെ പ്രൊഫൈൽ"
+      },
+      "chatMenuItem" : {
+        "label" : "ചാറ്റ്"
+      },
+      "setupMenuItem" : {
+        "label" : "ക്രമീകരണം"
+      },
+      "adminMenuItem" : {
+        "label" : "അഡ്മിൻ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "പ്രൊഫൈൽ എഡിറ്റ് ചെയ്യുക"
+      },
+      "logoutMenuItem" : {
+        "label" : "ലോഗ്‌ഔട്ട്"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ശരി!",
         "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായി"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ചാറ്റ് ചെയ്യാൻ ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യുക"
+      },
+      "ChooseFile" : {
+        "help" : "ഫയലുകൾ തിരഞ്ഞെടുക്കുക"
+      },
+      "UploadFile" : {
+        "help" : "ഫയലുകൾ അപ്‌ലോഡ് ചെയ്യുക"
+      },
+      "DragDropHere" : {
+        "label" : "അപ്‌ലോഡ് ചെയ്യാൻ ഫയലുകൾ ഇവിടെ ഡ്രാഗ് ചെയ്ത് ഇടുക"
+      },
+      "RemoveAll" : {
+        "help" : "എല്ലാം നീക്കം ചെയ്യുക"
+      },
+      "UploadPending" : {
+        "label" : "അപ്‌ലോഡിനായി കാത്തിരിക്കുക"
       }
     }
   }

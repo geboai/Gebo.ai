@@ -1734,6 +1734,24 @@
             },
             "QueryControl": {
                 "placeholder": "Write a message for the chat bot"
+            },
+            "ChatWithDocsBtnNew": {
+                "help": "Browse or search and select documents to chat with"
+            },
+            "UploadFileBtn": {
+                "help": "Upload a file to chat or work with"
+            },
+            "SubmiQuestion": {
+                "help": "Sumbit your question"
+            },
+            "WithParams": {
+                "label": "with params:"
+            },
+            "CalledFunctionsCtl": {
+                "label": "AI Called functions:"
+            },
+            "UploadedDocs": {
+                "label": "Uploaded docs"
             }
         },
         "ChangeDescriptionComponent": {
@@ -1781,6 +1799,14 @@
             "RecordBtn": {
                 "label": "Record",
                 "help": "Start recording an audio track and send it"
+            },
+            "StopBtn": {
+                "label": "Recording",
+                "help": "Recording"
+            },
+            "AbortBtn": {
+                "label": "Abort recording",
+                "help": "Abort recording"
             }
         }
     },
@@ -2371,6 +2397,9 @@
         "GeboAIUserProfileComponent": {
             "ChangePasswdBtn": {
                 "label": "Change password"
+            },
+            "YourUserName": {
+                "label": "Your user name"
             }
         },
         "GeboAIChangePasswordComponent": {
@@ -2459,6 +2488,25 @@
             },
             "NewChatBtn": {
                 "label": "New chat"
+            },
+            "ChatSessionsPanel": {
+                "label": "Chat sessions"
+            },
+            "CloseSiderBarBtn": {
+                "help": "Close side bar"
+            },
+            "NewChatMiniBtn": {
+                "help": "Create a new chat with large language models"
+            },
+            "NewRagChatMiniBtn": {
+                "help": "Create a new RAG chat with company contents",
+                "label": "Chat with knowledge base"
+            },
+            "ChatsTitle": {
+                "label": "Chats"
+            },
+            "ChevronLeftBtn2": {
+                "help": "Open chat options section"
             }
         }
     },
@@ -2470,6 +2518,9 @@
             },
             "chooseFilesDialog": {
                 "label": "Choose files to chat with"
+            },
+            "ChatWithDocsBtnNew": {
+                "help": "Browse or search and select documents to chat with"
             }
         },
         "GeboAISearchDocumentsComponent": {
@@ -2497,6 +2548,18 @@
             "filename": {
                 "label": "Searched file name",
                 "help": "Enter a filename part for your searched content"
+            },
+            "SearchFilesLabel": {
+                "label": "Filename search"
+            },
+            "BrowseCompanyFilesLabel": {
+                "label": "Browse company files"
+            },
+            "SemanticSearchFilesLabel": {
+                "label": "Semantic search"
+            },
+            "chooseFilesDialog": {
+                "label": "Choose files to chat with"
             }
         }
     },
@@ -2571,6 +2634,30 @@
                 "label": "my profile"
             },
             "logout": {
+                "label": "logout"
+            },
+            "ChangeLanguageItem": {
+                "label": "Change language"
+            },
+            "MyProfile": {
+                "label": "your profile"
+            },
+            "MyProfileItem": {
+                "label": "your profile"
+            },
+            "chatMenuItem": {
+                "label": "Chat"
+            },
+            "setupMenuItem": {
+                "label": "Setup"
+            },
+            "adminMenuItem": {
+                "label": "Admin"
+            },
+            "editMyProfileMenuItem": {
+                "label": "edit profile"
+            },
+            "logoutMenuItem": {
                 "label": "logout"
             }
         }
@@ -2810,6 +2897,28 @@
             "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
                 "summary": "OK!",
                 "detail": "Operation done successfully"
+            }
+        }
+    },
+    "GeboAIUploadChatDocumentModule": {
+        "GeboAIUploadChatDocumentComponent": {
+            "FilesToChatHeader": {
+                "label": "Upload files to chat with"
+            },
+            "ChooseFile": {
+                "help": "Choose files"
+            },
+            "UploadFile": {
+                "help": "Upload files"
+            },
+            "DragDropHere": {
+                "label": "Drag and drop files to here to upload"
+            },
+            "RemoveAll": {
+                "help": "Remove all"
+            },
+            "UploadPending": {
+                "label": "Pending for upload"
             }
         }
     }

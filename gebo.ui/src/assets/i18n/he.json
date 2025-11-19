@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "כתוב הודעה לבוט השיחה"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "דפדף או חפש ובחר מסמכים לשיחה"
+      },
+      "UploadFileBtn" : {
+        "help" : "העלה קובץ לשיחה או עבודה"
+      },
+      "SubmiQuestion" : {
+        "help" : "שלח את השאלה שלך"
+      },
+      "WithParams" : {
+        "label" : "עם פרמטרים:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "פונקציות AI שהופעלו:"
+      },
+      "UploadedDocs" : {
+        "label" : "מסמכים שהועלו"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "הקלט",
         "help" : "התחל להקליט רצועת אודיו ושלח אותה"
+      },
+      "StopBtn" : {
+        "label" : "הקלטה",
+        "help" : "הקלטה"
+      },
+      "AbortBtn" : {
+        "label" : "בטל הקלטה",
+        "help" : "בטל הקלטה"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "החלפת סיסמה"
+      },
+      "YourUserName" : {
+        "label" : "שם המשתמש שלך"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "צ'אט חדש"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "שיחות"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "סגור סרגל צד"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "צור שיחה חדשה עם מודלי שפה גדולים"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "צור שיחה RAG חדשה עם תכני החברה",
+        "label" : "שיחה עם בסיס ידע"
+      },
+      "ChatsTitle" : {
+        "label" : "צ'אטים"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "פתח אפשרויות שיחה"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "בחר קבצים לשוחח איתם"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "דפדף או חפש ובחר מסמכים לשיחה"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "שם הקובץ שחיפשת",
         "help" : "הזן חלק משם הקובץ שאתה מחפש"
+      },
+      "SearchFilesLabel" : {
+        "label" : "חיפוש שם קובץ"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "עיון בקבצים של החברה"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "חיפוש סמנטי"
+      },
+      "chooseFilesDialog" : {
+        "label" : "בחר קבצים לשיחה"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "התנתקות"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "החלף שפה"
+      },
+      "MyProfile" : {
+        "label" : "הפרופיל שלך"
+      },
+      "MyProfileItem" : {
+        "label" : "הפרופיל שלך"
+      },
+      "chatMenuItem" : {
+        "label" : "צ'אט"
+      },
+      "setupMenuItem" : {
+        "label" : "הגדרות"
+      },
+      "adminMenuItem" : {
+        "label" : "ניהול"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ערוך פרופיל"
+      },
+      "logoutMenuItem" : {
+        "label" : "התנתק"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "הצליח!",
         "detail" : "הפעולה בוצעה בהצלחה"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "העלה קבצים לשיחה"
+      },
+      "ChooseFile" : {
+        "help" : "בחר קבצים"
+      },
+      "UploadFile" : {
+        "help" : "העלה קבצים"
+      },
+      "DragDropHere" : {
+        "label" : "גרור ושחרר קבצים לכאן להעלאה"
+      },
+      "RemoveAll" : {
+        "help" : "הסר הכל"
+      },
+      "UploadPending" : {
+        "label" : "ממתין להעלאה"
       }
     }
   }

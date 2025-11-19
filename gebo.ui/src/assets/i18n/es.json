@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Escribe un mensaje para el chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Explora o busca y selecciona documentos para chatear"
+      },
+      "UploadFileBtn" : {
+        "help" : "Sube un archivo para chatear o trabajar"
+      },
+      "SubmiQuestion" : {
+        "help" : "Envía tu pregunta"
+      },
+      "WithParams" : {
+        "label" : "con parámetros:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Funciones de IA llamadas:"
+      },
+      "UploadedDocs" : {
+        "label" : "Documentos subidos"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Grabar",
         "help" : "Comienza a grabar una pista de audio y envíala"
+      },
+      "StopBtn" : {
+        "label" : "Grabando",
+        "help" : "Grabando"
+      },
+      "AbortBtn" : {
+        "label" : "Abortar grabación",
+        "help" : "Abortar grabación"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Cambiar contraseña"
+      },
+      "YourUserName" : {
+        "label" : "Tu nombre de usuario"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nuevo chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesiones de chat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Cerrar barra lateral"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Crear un nuevo chat con modelos de lenguaje"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Crear un nuevo chat RAG con contenidos de la empresa",
+        "label" : "Chatear con la base de conocimientos"
+      },
+      "ChatsTitle" : {
+        "label" : "Chats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Abrir sección de opciones de chat"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Elige archivos para chatear"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Explora o busca y selecciona documentos para chatear"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Nombre del archivo buscado",
         "help" : "Introduce una parte del nombre del archivo para tu búsqueda"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Búsqueda por nombre de archivo"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Explorar archivos de la empresa"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Búsqueda semántica"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Elige archivos para chatear"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "mi perfil"
       },
       "logout" : {
+        "label" : "cerrar sesión"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Cambiar idioma"
+      },
+      "MyProfile" : {
+        "label" : "tu perfil"
+      },
+      "MyProfileItem" : {
+        "label" : "tu perfil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Configuración"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "editar perfil"
+      },
+      "logoutMenuItem" : {
         "label" : "cerrar sesión"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "¡OK!",
         "detail" : "Operación completada con éxito"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Sube archivos para chatear"
+      },
+      "ChooseFile" : {
+        "help" : "Elige archivos"
+      },
+      "UploadFile" : {
+        "help" : "Sube archivos"
+      },
+      "DragDropHere" : {
+        "label" : "Arrastra y suelta archivos aquí para subir"
+      },
+      "RemoveAll" : {
+        "help" : "Quitar todo"
+      },
+      "UploadPending" : {
+        "label" : "Pendiente para subir"
       }
     }
   }

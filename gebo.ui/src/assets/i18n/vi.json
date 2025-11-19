@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Nhập tin nhắn cho chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Duyệt hoặc tìm kiếm và chọn tài liệu để trò chuyện"
+      },
+      "UploadFileBtn" : {
+        "help" : "Tải lên tệp để trò chuyện hoặc làm việc với"
+      },
+      "SubmiQuestion" : {
+        "help" : "Gửi câu hỏi của bạn"
+      },
+      "WithParams" : {
+        "label" : "với tham số:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Chức năng AI đã gọi:"
+      },
+      "UploadedDocs" : {
+        "label" : "Tài liệu đã tải lên"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Ghi âm",
         "help" : "Bắt đầu ghi âm một đoạn âm thanh và gửi đi"
+      },
+      "StopBtn" : {
+        "label" : "Đang ghi âm",
+        "help" : "Đang ghi âm"
+      },
+      "AbortBtn" : {
+        "label" : "Hủy ghi âm",
+        "help" : "Hủy ghi âm"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Đổi mật khẩu"
+      },
+      "YourUserName" : {
+        "label" : "Tên người dùng của bạn"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Trò chuyện mới"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Phiên trò chuyện"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Đóng thanh bên"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Tạo cuộc trò chuyện mới với mô hình ngôn ngữ lớn"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Tạo cuộc trò chuyện RAG mới với nội dung công ty",
+        "label" : "Trò chuyện với kho kiến thức"
+      },
+      "ChatsTitle" : {
+        "label" : "Trò chuyện"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Mở mục tùy chọn trò chuyện"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Chọn tệp để trò chuyện"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Duyệt hoặc tìm kiếm và chọn tài liệu để trò chuyện"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Tên tệp đã tìm kiếm",
         "help" : "Nhập một phần tên tệp cho nội dung bạn tìm"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Tìm kiếm tên tệp"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Duyệt tệp công ty"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Tìm kiếm ngữ nghĩa"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Chọn tệp để trò chuyện"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "hồ sơ của tôi"
       },
       "logout" : {
+        "label" : "đăng xuất"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Đổi ngôn ngữ"
+      },
+      "MyProfile" : {
+        "label" : "hồ sơ của bạn"
+      },
+      "MyProfileItem" : {
+        "label" : "hồ sơ của bạn"
+      },
+      "chatMenuItem" : {
+        "label" : "Trò chuyện"
+      },
+      "setupMenuItem" : {
+        "label" : "Cài đặt"
+      },
+      "adminMenuItem" : {
+        "label" : "Quản trị"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "chỉnh sửa hồ sơ"
+      },
+      "logoutMenuItem" : {
         "label" : "đăng xuất"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Thành công!",
         "detail" : "Thao tác thành công"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Tải lên tệp để trò chuyện"
+      },
+      "ChooseFile" : {
+        "help" : "Chọn tệp"
+      },
+      "UploadFile" : {
+        "help" : "Tải lên tệp"
+      },
+      "DragDropHere" : {
+        "label" : "Kéo và thả tệp vào đây để tải lên"
+      },
+      "RemoveAll" : {
+        "help" : "Xóa tất cả"
+      },
+      "UploadPending" : {
+        "label" : "Đang chờ tải lên"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "చాట్ బాట్ కోసం సందేశాన్ని వ్రాయండి"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "చాట్ చేయడానికి డాక్యుమెంట్లను బ్రౌζ్ చేయండి లేదా శోధించండి మరియు ఎంచుకోండి"
+      },
+      "UploadFileBtn" : {
+        "help" : "ఫైల్‌ను అప్‌లోడ్ చేసి చాట్ చేయండి లేదా పనిచేయండి"
+      },
+      "SubmiQuestion" : {
+        "help" : "మీ ప్రశ్నను సమర్పించండి"
+      },
+      "WithParams" : {
+        "label" : "పెరామితులతో:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI పిలిచిన ఫంక్షన్లు:"
+      },
+      "UploadedDocs" : {
+        "label" : "అప్‌లోడ్ చేసిన డాక్యుమెంట్లు"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "రికార్డ్ చేయండి",
         "help" : "ఆడియో ట్రాక్ ను రికార్డ్ చేయడం ప్రారంభించండి మరియు పంపండి"
+      },
+      "StopBtn" : {
+        "label" : "రికార్డింగ్",
+        "help" : "రికార్డింగ్"
+      },
+      "AbortBtn" : {
+        "label" : "రికార్డింగ్ ఆపివేయి",
+        "help" : "రికార్డింగ్ ఆపివేయి"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "పాస్‌వర్డ్ మార్చు"
+      },
+      "YourUserName" : {
+        "label" : "మీ వినియోగదారు పేరు"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "కొత్త చాట్"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "చాట్ సెషన్లు"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "సైడ్ బార్‌ను మూసివేయి"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "పెద్ద భాషా మోడల్‌తో కొత్త చాట్ ప్రారంభించండి"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "కంపెనీ కంటెంట్‌తో కొత్త RAG చాట్ ప్రారంభించండి",
+        "label" : "నాలెడ్జ్ బేస్‌తో చాట్"
+      },
+      "ChatsTitle" : {
+        "label" : "చాట్స్"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "చాట్ ఆప్షన్స్ విభాగాన్ని తెరువు"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "చాట్ చేయడానికి ఫైళ్ళను ఎంచుకోండి"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "చాట్ చేయడానికి డాక్యుమెంట్లను బ్రౌజ్ చేయండి లేదా శోధించండి మరియు ఎంచుకోండి"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "వెతికిన ఫైల్ పేరు",
         "help" : "మీరు వెతుకుతున్న విషయానికి సంబంధించి ఫైల్ పేరులోని భాగాన్ని నమోదు చేయండి"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ఫైల్ పేరు శోధన"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "కంపెనీ ఫైళ్లను బ్రౌజ్ చేయండి"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "సెమాంటిక్ శోధన"
+      },
+      "chooseFilesDialog" : {
+        "label" : "చాట్ చేయడానికి ఫైళ్లు ఎంచుకోండి"
       }
     }
   },
@@ -2572,6 +2635,30 @@
       },
       "logout" : {
         "label" : "లాగ్అవుట్"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "భాషను మార్చు"
+      },
+      "MyProfile" : {
+        "label" : "మీ ప్రొఫైల్"
+      },
+      "MyProfileItem" : {
+        "label" : "మీ ప్రొఫైల్"
+      },
+      "chatMenuItem" : {
+        "label" : "చాట్"
+      },
+      "setupMenuItem" : {
+        "label" : "సెట్టప్"
+      },
+      "adminMenuItem" : {
+        "label" : "అడ్మిన్"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "ప్రొఫైల్ సవరించండి"
+      },
+      "logoutMenuItem" : {
+        "label" : "లాగ్ అవుట్"
       }
     }
   },
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "సరి!",
         "detail" : "కార్యాచరణ విజయవంతంగా పూర్తయింది"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "చాట్ చేయడానికి ఫైళ్లను అప్‌లోడ్ చేయండి"
+      },
+      "ChooseFile" : {
+        "help" : "ఫైళ్లు ఎంచుకోండి"
+      },
+      "UploadFile" : {
+        "help" : "ఫైళ్లు అప్‌లోడ్ చేయండి"
+      },
+      "DragDropHere" : {
+        "label" : "ఫైళ్లను ఇక్కడకు డ్రాగ్ చేసి వదిలి అప్‌లోడ్ చేయండి"
+      },
+      "RemoveAll" : {
+        "help" : "అన్నింటినీ తీసివేయి"
+      },
+      "UploadPending" : {
+        "label" : "అప్‌లోడ్ కోసం పెండింగ్‌లో ఉంది"
       }
     }
   }

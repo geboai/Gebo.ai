@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "សរសេរសារសម្រាប់ឆាតបុត្រា"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "រកមើល ឬស្វែងរក និងជ្រើសឯកសារដើម្បីជជែកជាមួយ"
+      },
+      "UploadFileBtn" : {
+        "help" : "បោះឯកសារឡើងដើម្បីជជែក ឬធ្វើការជាមួយ"
+      },
+      "SubmiQuestion" : {
+        "help" : "ដាក់សំណួររបស់អ្នក"
+      },
+      "WithParams" : {
+        "label" : "ជាមួយប៉ារ៉ាម៉ែត្រ៖"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "មុខងារ AI បានហៅ៖"
+      },
+      "UploadedDocs" : {
+        "label" : "ឯកសារបានបញ្ចូល"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "កត់សម្លេង",
         "help" : "ចាប់ផ្ដើមកត់សម្លេងនិងផ្ញើវា"
+      },
+      "StopBtn" : {
+        "label" : "កំពុងថតសំឡេង",
+        "help" : "កំពុងថតសំឡេង"
+      },
+      "AbortBtn" : {
+        "label" : "បញ្ឈប់ការថតសំឡេង",
+        "help" : "បញ្ឈប់ការថតសំឡេង"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "ផ្លាស់ប្ដូរពាក្យសម្ងាត់"
+      },
+      "YourUserName" : {
+        "label" : "ឈ្មោះប្រើប្រាស់របស់អ្នក"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "ជជែកថ្មី"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "វគ្គជជែក"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "បិទរបារចំហៀង"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "បង្កើតការជជែកថ្មីជាមួយម៉ូឌែលភាសធំៗ"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "បង្កើតការជជែក RAG ថ្មីជាមួយមាតិកាក្រុមហ៊ុន",
+        "label" : "ជជែកជាមួយមូលដ្ឋានចំណេះដឹង"
+      },
+      "ChatsTitle" : {
+        "label" : "ការជជែក"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "បើកជម្រើសការជជែក"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "ជ្រើសឯកសារដើម្បីជជែក"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "រកមើល ឬស្វែងរក និងជ្រើសឯកសារដើម្បីជជែកជាមួយ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "ឈ្មោះឯកសារស្វែងរក",
         "help" : "បញ្ចូលផ្នែកឈ្មោះឯកសារសម្រាប់អត្ថន័យដែលអ្នកស្វែងរក"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ស្វែងរកឈ្មោះឯកសារ"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "រកមើលឯកសារក្រុមហ៊ុន"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "ស្វែងរកស្វ័យស្រប"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ជ្រើសឯកសារដើម្បីជជែកជាមួយ"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "ប្រវត្តិរូបរបស់ខ្ញុំ"
       },
       "logout" : {
+        "label" : "ចេញ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ប្ដូរភាសា"
+      },
+      "MyProfile" : {
+        "label" : "ប្រវត្តិរូបរបស់អ្នក"
+      },
+      "MyProfileItem" : {
+        "label" : "ប្រវត្តិរូបរបស់អ្នក"
+      },
+      "chatMenuItem" : {
+        "label" : "ជជែក"
+      },
+      "setupMenuItem" : {
+        "label" : "កំណត់"
+      },
+      "adminMenuItem" : {
+        "label" : "រដ្ឋបាល"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "កែសម្រួលប្រវត្តិរូប"
+      },
+      "logoutMenuItem" : {
         "label" : "ចេញ"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ជោគជ័យ!",
         "detail" : "ប្រតិបត្តិការបានបញ្ចប់ដោយជោគជ័យ"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "បញ្ចូលឯកសារដើម្បីជជែកជាមួយ"
+      },
+      "ChooseFile" : {
+        "help" : "ជ្រើសឯកសារ"
+      },
+      "UploadFile" : {
+        "help" : "បញ្ចូលឯកសារ"
+      },
+      "DragDropHere" : {
+        "label" : "អូសនិងទំលាក់ឯកសារនៅទីនេះដើម្បីបញ្ចូល"
+      },
+      "RemoveAll" : {
+        "help" : "លុបចេញទាំងអស់"
+      },
+      "UploadPending" : {
+        "label" : "កំពុងរង់ចាំការបញ្ចូល"
       }
     }
   }

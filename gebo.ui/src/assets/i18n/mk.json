@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Напиши порака за разговор со ботот"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Прелистајте или пребарајте и изберете документи за разговор"
+      },
+      "UploadFileBtn" : {
+        "help" : "Прикачете датотека за разговор или работа"
+      },
+      "SubmiQuestion" : {
+        "help" : "Поставете го вашето прашање"
+      },
+      "WithParams" : {
+        "label" : "со параметри:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI повикани функции:"
+      },
+      "UploadedDocs" : {
+        "label" : "Прикачени документи"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Сними",
         "help" : "Започнете снимање на аудио и испратете го"
+      },
+      "StopBtn" : {
+        "label" : "Снимање",
+        "help" : "Снимање"
+      },
+      "AbortBtn" : {
+        "label" : "Прекини снимање",
+        "help" : "Прекини снимање"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Промени лозинка"
+      },
+      "YourUserName" : {
+        "label" : "Вашето корисничко име"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Нов разговор"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Сесии за разговор"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Затвори странична лента"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Креирај нов разговор со големи јазични модели"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Креирај нов RAG разговор со содржини од компанијата",
+        "label" : "Разговор со база на знаење"
+      },
+      "ChatsTitle" : {
+        "label" : "Разговори"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Отвори опции за разговор"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Избери датотеки за разговор"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Прелистајте или пребарајте и изберете документи за разговор"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Име на пребарана датотека",
         "help" : "Внесете дел од името на датотеката за вашето пребарување"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Пребарување по име на датотека"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Прелистување на датотеки од компанијата"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Семантичко пребарување"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Изберете датотеки за разговор"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "мој профил"
       },
       "logout" : {
+        "label" : "одјави се"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Промени јазик"
+      },
+      "MyProfile" : {
+        "label" : "вашиот профил"
+      },
+      "MyProfileItem" : {
+        "label" : "вашиот профил"
+      },
+      "chatMenuItem" : {
+        "label" : "Разговор"
+      },
+      "setupMenuItem" : {
+        "label" : "Поставки"
+      },
+      "adminMenuItem" : {
+        "label" : "Админ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "уреди профил"
+      },
+      "logoutMenuItem" : {
         "label" : "одјави се"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Во ред!",
         "detail" : "Операцијата е успешно завршена"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Прикачете датотеки за разговор"
+      },
+      "ChooseFile" : {
+        "help" : "Изберете датотеки"
+      },
+      "UploadFile" : {
+        "help" : "Прикачете датотеки"
+      },
+      "DragDropHere" : {
+        "label" : "Повлечете и пуштете датотеки овде за прикачување"
+      },
+      "RemoveAll" : {
+        "help" : "Отстрани ги сите"
+      },
+      "UploadPending" : {
+        "label" : "Чека на прикачување"
       }
     }
   }

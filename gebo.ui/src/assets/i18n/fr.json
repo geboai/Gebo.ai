@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Écrivez un message pour le chatbot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Parcourir ou rechercher et sélectionner des documents pour discuter"
+      },
+      "UploadFileBtn" : {
+        "help" : "Télécharger un fichier pour discuter ou travailler avec"
+      },
+      "SubmiQuestion" : {
+        "help" : "Envoyer votre question"
+      },
+      "WithParams" : {
+        "label" : "avec paramètres :"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Fonctions IA appelées :"
+      },
+      "UploadedDocs" : {
+        "label" : "Documents téléchargés"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Enregistrer",
         "help" : "Commencer à enregistrer une piste audio et l’envoyer"
+      },
+      "StopBtn" : {
+        "label" : "Enregistrement",
+        "help" : "Enregistrement"
+      },
+      "AbortBtn" : {
+        "label" : "Arrêter l'enregistrement",
+        "help" : "Arrêter l'enregistrement"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Changer le mot de passe"
+      },
+      "YourUserName" : {
+        "label" : "Votre nom d'utilisateur"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nouveau chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sessions de chat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Fermer la barre latérale"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Créer une nouvelle discussion avec des modèles de langage"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Créer un nouveau chat RAG avec le contenu de l'entreprise",
+        "label" : "Discuter avec la base de connaissances"
+      },
+      "ChatsTitle" : {
+        "label" : "Discussions"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Ouvrir la section d'options de chat"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Choisissez les fichiers avec lesquels discuter"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Parcourir ou rechercher et sélectionner des documents pour discuter"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Nom du fichier recherché",
         "help" : "Entrez une partie du nom de fichier pour votre contenu recherché"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Recherche par nom de fichier"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Parcourir les fichiers de l'entreprise"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Recherche sémantique"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Choisissez des fichiers pour discuter"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "mon profil"
       },
       "logout" : {
+        "label" : "déconnexion"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Changer la langue"
+      },
+      "MyProfile" : {
+        "label" : "votre profil"
+      },
+      "MyProfileItem" : {
+        "label" : "votre profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Discussion"
+      },
+      "setupMenuItem" : {
+        "label" : "Configuration"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "modifier le profil"
+      },
+      "logoutMenuItem" : {
         "label" : "déconnexion"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK !",
         "detail" : "Opération effectuée avec succès"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Téléchargez des fichiers pour discuter"
+      },
+      "ChooseFile" : {
+        "help" : "Choisissez des fichiers"
+      },
+      "UploadFile" : {
+        "help" : "Télécharger les fichiers"
+      },
+      "DragDropHere" : {
+        "label" : "Glissez-déposez des fichiers ici pour les télécharger"
+      },
+      "RemoveAll" : {
+        "help" : "Tout supprimer"
+      },
+      "UploadPending" : {
+        "label" : "En attente de téléchargement"
       }
     }
   }

@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Tulis mesej untuk bot chat"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Layari atau cari dan pilih dokumen untuk dibualkan"
+      },
+      "UploadFileBtn" : {
+        "help" : "Muat naik fail untuk berbual atau bekerja bersama"
+      },
+      "SubmiQuestion" : {
+        "help" : "Hantar soalan anda"
+      },
+      "WithParams" : {
+        "label" : "dengan parameter:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI fungsi dipanggil:"
+      },
+      "UploadedDocs" : {
+        "label" : "Dokumen dimuat naik"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Rakam",
         "help" : "Mulakan rakaman audio dan hantar"
+      },
+      "StopBtn" : {
+        "label" : "Merakam",
+        "help" : "Merakam"
+      },
+      "AbortBtn" : {
+        "label" : "Hentikan rakaman",
+        "help" : "Hentikan rakaman"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Tukar kata laluan"
+      },
+      "YourUserName" : {
+        "label" : "Nama pengguna anda"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Sembang baru"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesi chat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Tutup bar sisi"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Cipta chat baru dengan model bahasa besar"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Cipta chat RAG baru dengan kandungan syarikat",
+        "label" : "Chat dengan pangkalan pengetahuan"
+      },
+      "ChatsTitle" : {
+        "label" : "Chats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Buka bahagian pilihan chat"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Pilih fail untuk sembang"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Layari atau cari dan pilih dokumen untuk dibualkan"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Nama fail dicari",
         "help" : "Masukkan sebahagian nama fail untuk kandungan yang anda cari"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Cari nama fail"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Layari fail syarikat"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Cari semantik"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Pilih fail untuk berbual"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "profil saya"
       },
       "logout" : {
+        "label" : "log keluar"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Tukar bahasa"
+      },
+      "MyProfile" : {
+        "label" : "profil anda"
+      },
+      "MyProfileItem" : {
+        "label" : "profil anda"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Tetapan"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "edit profil"
+      },
+      "logoutMenuItem" : {
         "label" : "log keluar"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operasi berjaya diselesaikan"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Muat naik fail untuk berbual"
+      },
+      "ChooseFile" : {
+        "help" : "Pilih fail"
+      },
+      "UploadFile" : {
+        "help" : "Muat naik fail"
+      },
+      "DragDropHere" : {
+        "label" : "Seret dan lepas fail di sini untuk muat naik"
+      },
+      "RemoveAll" : {
+        "help" : "Padam semua"
+      },
+      "UploadPending" : {
+        "label" : "Menunggu untuk dimuat naik"
       }
     }
   }

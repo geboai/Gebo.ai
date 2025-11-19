@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Skryf 'n boodskap vir die kletsgids"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Blaai of soek en kies dokumente om mee te gesels"
+      },
+      "UploadFileBtn" : {
+        "help" : "Laai ’n lêer op om mee te gesels of te werk"
+      },
+      "SubmiQuestion" : {
+        "help" : "Dien jou vraag in"
+      },
+      "WithParams" : {
+        "label" : "met parameters:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI Geroepte funksies:"
+      },
+      "UploadedDocs" : {
+        "label" : "Opgelaaide dokumente"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Opneem",
         "help" : "Begin om 'n oudio snit op te neem en stuur dit"
+      },
+      "StopBtn" : {
+        "label" : "Opname",
+        "help" : "Opname"
+      },
+      "AbortBtn" : {
+        "label" : "Staak opname",
+        "help" : "Staak opname"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Verander wagwoord"
+      },
+      "YourUserName" : {
+        "label" : "Jou gebruikersnaam"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nuwe gesels"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Geselsessies"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Maak sybalk toe"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Skep 'n nuwe gesprek met groot taalmodelle"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Skep 'n nuwe RAG-gesprek met maatskappy-inhoud",
+        "label" : "Gesels met kennisbasis"
+      },
+      "ChatsTitle" : {
+        "label" : "Geselsies"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Maak geselsopsies oop"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Kies lêers om mee te gesels"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Blaai of soek en kies dokumente om mee te gesels"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Gesogte lêernaam",
         "help" : "Voer 'n deel van die lêernaam in vir jou gesoekte inhoud"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Lêernaam soek"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Blaai deur maatskappy-lêers"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantiese soektog"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Kies lêers om mee te gesels"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "my profiel"
       },
       "logout" : {
+        "label" : "meld af"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Verander taal"
+      },
+      "MyProfile" : {
+        "label" : "jou profiel"
+      },
+      "MyProfileItem" : {
+        "label" : "jou profiel"
+      },
+      "chatMenuItem" : {
+        "label" : "Gesels"
+      },
+      "setupMenuItem" : {
+        "label" : "Instellings"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "wysig profiel"
+      },
+      "logoutMenuItem" : {
         "label" : "meld af"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operasie suksesvol voltooi"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Laai lêers op om mee te gesels"
+      },
+      "ChooseFile" : {
+        "help" : "Kies lêers"
+      },
+      "UploadFile" : {
+        "help" : "Laai lêers op"
+      },
+      "DragDropHere" : {
+        "label" : "Sleep en los lêers hier om op te laai"
+      },
+      "RemoveAll" : {
+        "help" : "Verwyder alles"
+      },
+      "UploadPending" : {
+        "label" : "Wag om op te laai"
       }
     }
   }

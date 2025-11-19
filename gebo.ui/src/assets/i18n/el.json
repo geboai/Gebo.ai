@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Γράψτε ένα μήνυμα για το bot συνομιλίας"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Περιηγηθείτε ή αναζητήστε και επιλέξτε έγγραφα για να συνομιλήσετε μαζί τους"
+      },
+      "UploadFileBtn" : {
+        "help" : "Ανεβάστε ένα αρχείο για συνομιλία ή εργασία"
+      },
+      "SubmiQuestion" : {
+        "help" : "Υποβάλετε την ερώτησή σας"
+      },
+      "WithParams" : {
+        "label" : "με παραμέτρους:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Λειτουργίες που κάλεσε η AI:"
+      },
+      "UploadedDocs" : {
+        "label" : "Ανεβασμένα έγγραφα"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Εγγραφή",
         "help" : "Ξεκινήστε την εγγραφή ενός ηχητικού κομματιού και στείλτε το"
+      },
+      "StopBtn" : {
+        "label" : "Εγγραφή",
+        "help" : "Εγγραφή"
+      },
+      "AbortBtn" : {
+        "label" : "Διακοπή εγγραφής",
+        "help" : "Διακοπή εγγραφής"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Αλλαγή κωδικού πρόσβασης"
+      },
+      "YourUserName" : {
+        "label" : "Το όνομα χρήστη σας"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Νέα συνομιλία"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Συνεδρίες συνομιλίας"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Κλείσιμο πλευρικής μπάρας"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Δημιουργήστε νέα συνομιλία με μεγάλα γλωσσικά μοντέλα"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Δημιουργήστε νέα RAG συνομιλία με εταιρικό περιεχόμενο",
+        "label" : "Συνομιλία με βάση γνώσεων"
+      },
+      "ChatsTitle" : {
+        "label" : "Συνομιλίες"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Άνοιγμα επιλογών συνομιλίας"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Επιλέξτε αρχεία για συζήτηση"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Περιηγηθείτε ή αναζητήστε και επιλέξτε έγγραφα για να συνομιλήσετε μαζί τους"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Όνομα αρχείου αναζήτησης",
         "help" : "Εισάγετε μέρος του ονόματος του αρχείου που αναζητάτε"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Αναζήτηση ονόματος αρχείου"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Περιήγηση σε αρχεία εταιρείας"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Σημασιολογική αναζήτηση"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Επιλέξτε αρχεία για συνομιλία"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "το προφίλ μου"
       },
       "logout" : {
+        "label" : "αποσύνδεση"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Αλλαγή γλώσσας"
+      },
+      "MyProfile" : {
+        "label" : "το προφίλ σας"
+      },
+      "MyProfileItem" : {
+        "label" : "το προφίλ σας"
+      },
+      "chatMenuItem" : {
+        "label" : "Συνομιλία"
+      },
+      "setupMenuItem" : {
+        "label" : "Ρυθμίσεις"
+      },
+      "adminMenuItem" : {
+        "label" : "Διαχείριση"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "επεξεργασία προφίλ"
+      },
+      "logoutMenuItem" : {
         "label" : "αποσύνδεση"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Ανεβάστε αρχεία για συνομιλία"
+      },
+      "ChooseFile" : {
+        "help" : "Επιλέξτε αρχεία"
+      },
+      "UploadFile" : {
+        "help" : "Ανεβάστε αρχεία"
+      },
+      "DragDropHere" : {
+        "label" : "Σύρετε και αποθέστε αρχεία εδώ για ανέβασμα"
+      },
+      "RemoveAll" : {
+        "help" : "Αφαίρεση όλων"
+      },
+      "UploadPending" : {
+        "label" : "Αναμονή για ανέβασμα"
       }
     }
   }

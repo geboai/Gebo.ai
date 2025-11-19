@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Kirjoita viesti bottiin"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Selaa tai etsi ja valitse asiakirjoja keskusteluun"
+      },
+      "UploadFileBtn" : {
+        "help" : "Lataa tiedosto keskustelua tai työskentelyä varten"
+      },
+      "SubmiQuestion" : {
+        "help" : "Lähetä kysymyksesi"
+      },
+      "WithParams" : {
+        "label" : "parametreilla:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI kutsutut toiminnot:"
+      },
+      "UploadedDocs" : {
+        "label" : "Ladatut asiakirjat"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Tallenna",
         "help" : "Aloita ääniraidan tallennus ja lähetä se"
+      },
+      "StopBtn" : {
+        "label" : "Tallennus käynnissä",
+        "help" : "Tallennus käynnissä"
+      },
+      "AbortBtn" : {
+        "label" : "Keskeytä tallennus",
+        "help" : "Keskeytä tallennus"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Vaihda salasana"
+      },
+      "YourUserName" : {
+        "label" : "Käyttäjätunnuksesi"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Uusi keskustelu"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Keskustelut"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Sulje sivupalkki"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Aloita uusi keskustelu suurilla kielimalleilla"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Aloita uusi RAG-keskustelu yrityksen sisällöillä",
+        "label" : "Keskustele tietopankin kanssa"
+      },
+      "ChatsTitle" : {
+        "label" : "Keskustelut"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Avaa keskustelun asetukset"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Valitse tiedostot keskustelua varten"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Selaa tai etsi ja valitse asiakirjoja keskusteluun"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Haettu tiedoston nimi",
         "help" : "Syötä osa tiedostonimestä, jota haet"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Tiedostonimen haku"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Selaa yrityksen tiedostoja"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semanttinen haku"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Valitse keskusteluun liittyvät tiedostot"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "oma profiili"
       },
       "logout" : {
+        "label" : "kirjaudu ulos"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Vaihda kieltä"
+      },
+      "MyProfile" : {
+        "label" : "profiilisi"
+      },
+      "MyProfileItem" : {
+        "label" : "profiilisi"
+      },
+      "chatMenuItem" : {
+        "label" : "Keskustelu"
+      },
+      "setupMenuItem" : {
+        "label" : "Asetukset"
+      },
+      "adminMenuItem" : {
+        "label" : "Ylläpito"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "muokkaa profiilia"
+      },
+      "logoutMenuItem" : {
         "label" : "kirjaudu ulos"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Toiminto suoritettu onnistuneesti"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Lataa tiedostoja keskusteluun"
+      },
+      "ChooseFile" : {
+        "help" : "Valitse tiedostot"
+      },
+      "UploadFile" : {
+        "help" : "Lataa tiedostot"
+      },
+      "DragDropHere" : {
+        "label" : "Vedä ja pudota tiedostot tähän ladataksesi"
+      },
+      "RemoveAll" : {
+        "help" : "Poista kaikki"
+      },
+      "UploadPending" : {
+        "label" : "Odottaa latausta"
       }
     }
   }

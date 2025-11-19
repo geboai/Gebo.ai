@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "Escriu un missatge per al xat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Explora o cerca i selecciona documents per xatejar"
+      },
+      "UploadFileBtn" : {
+        "help" : "Carrega un fitxer per xatejar o treballar-hi"
+      },
+      "SubmiQuestion" : {
+        "help" : "Envia la teva pregunta"
+      },
+      "WithParams" : {
+        "label" : "amb paràmetres:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Funcions d’IA cridades:"
+      },
+      "UploadedDocs" : {
+        "label" : "Documents pujats"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "Grava",
         "help" : "Comença a gravar una pista d'àudio i envia-la"
+      },
+      "StopBtn" : {
+        "label" : "Enregistrant",
+        "help" : "Enregistrant"
+      },
+      "AbortBtn" : {
+        "label" : "Atura l'enregistrament",
+        "help" : "Atura l'enregistrament"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "Canvia la contrasenya"
+      },
+      "YourUserName" : {
+        "label" : "El teu nom d'usuari"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "Nou xat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sessions de xat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Tanca la barra lateral"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Crea un nou xat amb models de llenguatge"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Crea un nou xat RAG amb contingut de l'empresa",
+        "label" : "Xat amb la base de coneixement"
+      },
+      "ChatsTitle" : {
+        "label" : "Xats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Obre la secció d'opcions del xat"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "Tria fitxers per xatejar"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Explora o cerca i selecciona documents per xatejar"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "Nom del fitxer cercat",
         "help" : "Introdueix una part del nom del fitxer pel contingut que busques"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Cerca de noms de fitxer"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Explora els fitxers de l'empresa"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Cerca semàntica"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Tria fitxers per xatejar"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "el meu perfil"
       },
       "logout" : {
+        "label" : "tanca sessió"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Canvia la llengua"
+      },
+      "MyProfile" : {
+        "label" : "el teu perfil"
+      },
+      "MyProfileItem" : {
+        "label" : "el teu perfil"
+      },
+      "chatMenuItem" : {
+        "label" : "Xat"
+      },
+      "setupMenuItem" : {
+        "label" : "Configuració"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "edita el perfil"
+      },
+      "logoutMenuItem" : {
         "label" : "tanca sessió"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "L’operació s’ha completat correctament"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Carrega fitxers per xatejar"
+      },
+      "ChooseFile" : {
+        "help" : "Tria fitxers"
+      },
+      "UploadFile" : {
+        "help" : "Carrega fitxers"
+      },
+      "DragDropHere" : {
+        "label" : "Arrossega i deixa anar fitxers aquí per carregar-los"
+      },
+      "RemoveAll" : {
+        "help" : "Elimina-ho tot"
+      },
+      "UploadPending" : {
+        "label" : "Pendent de carregar"
       }
     }
   }

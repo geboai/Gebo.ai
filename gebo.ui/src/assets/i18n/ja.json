@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "チャットボットへのメッセージを入力してください"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "チャットするドキュメントをブラウズまたは検索して選択"
+      },
+      "UploadFileBtn" : {
+        "help" : "ファイルをアップロードしてチャットや作業を行う"
+      },
+      "SubmiQuestion" : {
+        "help" : "質問を送信"
+      },
+      "WithParams" : {
+        "label" : "パラメータ付き："
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AIが呼び出した関数："
+      },
+      "UploadedDocs" : {
+        "label" : "アップロード済みドキュメント"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "録音",
         "help" : "音声トラックの録音を開始して送信します"
+      },
+      "StopBtn" : {
+        "label" : "録音中",
+        "help" : "録音中"
+      },
+      "AbortBtn" : {
+        "label" : "録音中止",
+        "help" : "録音を中止"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "パスワードを変更する"
+      },
+      "YourUserName" : {
+        "label" : "ユーザー名"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "新しいチャット"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "チャットセッション"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "サイドバーを閉じる"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "大規模言語モデルで新しいチャットを作成"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "会社のコンテンツで新規RAGチャットを作成",
+        "label" : "ナレッジベースとのチャット"
+      },
+      "ChatsTitle" : {
+        "label" : "チャット"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "チャットオプションセクションを開く"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "チャットするファイルを選択"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "チャットするドキュメントをブラウズまたは検索して選択"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "検索したファイル名",
         "help" : "検索するコンテンツのファイル名の一部を入力してください"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ファイル名検索"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "会社ファイルをブラウズ"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "セマンティック検索"
+      },
+      "chooseFilesDialog" : {
+        "label" : "チャットするファイルを選択"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "マイプロフィール"
       },
       "logout" : {
+        "label" : "ログアウト"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "言語を変更"
+      },
+      "MyProfile" : {
+        "label" : "プロフィール"
+      },
+      "MyProfileItem" : {
+        "label" : "プロフィール"
+      },
+      "chatMenuItem" : {
+        "label" : "チャット"
+      },
+      "setupMenuItem" : {
+        "label" : "設定"
+      },
+      "adminMenuItem" : {
+        "label" : "管理"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "プロフィール編集"
+      },
+      "logoutMenuItem" : {
         "label" : "ログアウト"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "操作が正常に完了しました"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "チャット用ファイルをアップロード"
+      },
+      "ChooseFile" : {
+        "help" : "ファイルを選択"
+      },
+      "UploadFile" : {
+        "help" : "ファイルをアップロード"
+      },
+      "DragDropHere" : {
+        "label" : "ドラッグ＆ドロップでファイルをアップロード"
+      },
+      "RemoveAll" : {
+        "help" : "すべて削除"
+      },
+      "UploadPending" : {
+        "label" : "アップロード待ち"
       }
     }
   }

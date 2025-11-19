@@ -1734,6 +1734,24 @@
       },
       "QueryControl" : {
         "placeholder" : "ለቻት ቦት መልእክት ይጻፉ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ዶክዩመንቶችን ተመልከት ወይም ፈልገህ ምረጥ ከእነሱ ጋር ይወያዩ"
+      },
+      "UploadFileBtn" : {
+        "help" : "ፋይል ይስቀሉ ለመወያየት ወይም ለስራ"
+      },
+      "SubmiQuestion" : {
+        "help" : "ጥያቄዎን አስገባ"
+      },
+      "WithParams" : {
+        "label" : "በ parameter ይዘት:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI የጠራቸው ፋንክሽኖች:"
+      },
+      "UploadedDocs" : {
+        "label" : "የተስቀመጡ ዶክዩመንቶች"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1781,6 +1799,14 @@
       "RecordBtn" : {
         "label" : "መቅዳት",
         "help" : "የድምጽ አውድ መቅዳት ይጀመሩ እና ይላኩ"
+      },
+      "StopBtn" : {
+        "label" : "ቅዳ ቅዳ",
+        "help" : "ቅዳ ቅዳ"
+      },
+      "AbortBtn" : {
+        "label" : "ቅዳን ሰርዝ",
+        "help" : "ቅዳን ሰርዝ"
       }
     }
   },
@@ -2371,6 +2397,9 @@
     "GeboAIUserProfileComponent" : {
       "ChangePasswdBtn" : {
         "label" : "የይለፍ ቃል ለውጥ"
+      },
+      "YourUserName" : {
+        "label" : "የእርስዎ የተጠቃሚ ስም"
       }
     },
     "GeboAIChangePasswordComponent" : {
@@ -2459,6 +2488,25 @@
       },
       "NewChatBtn" : {
         "label" : "አዲስ ውይይት"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "የውይይት ስብስቦች"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "የጎን አሞሌዎችን ዝጋ"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "አዲስ ውይይት ከትልቅ ቋንቋ ሞዴሎች ጋር ጀምር"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "አዲስ RAG ውይይት ለድርጅቱ ይዘቶች",
+        "label" : "ከዕውቀት መሠረት ጋር ውይይት"
+      },
+      "ChatsTitle" : {
+        "label" : "ውይይቶች"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "የውይይት ምርጫዎች ክፍል ክፈት"
       }
     }
   },
@@ -2470,6 +2518,9 @@
       },
       "chooseFilesDialog" : {
         "label" : "ለውይይት ሰነዶችን ይምረጡ"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "ዶክዩመንቶችን ተመልከት ወይም ፈልገህ ምረጥ ከእነሱ ጋር ይወያዩ"
       }
     },
     "GeboAISearchDocumentsComponent" : {
@@ -2497,6 +2548,18 @@
       "filename" : {
         "label" : "የተፈለገው የፋይል ስም",
         "help" : "ለየተፈለጉት ይዞታዎ የፋይል አካል ያስገቡ"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ፋይል ስም ፈልግ"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "የኩባንያ ፋይሎችን ተመልከት"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "ሰማንቲክ ፍለጋ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ለውይይት ፋይሎችን ምረጥ"
       }
     }
   },
@@ -2571,6 +2634,30 @@
         "label" : "የኔ መገለጫ"
       },
       "logout" : {
+        "label" : "ውጣ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ቋንቋ ቀይር"
+      },
+      "MyProfile" : {
+        "label" : "የኔ መገለጫ"
+      },
+      "MyProfileItem" : {
+        "label" : "የኔ መገለጫ"
+      },
+      "chatMenuItem" : {
+        "label" : "ውይይት"
+      },
+      "setupMenuItem" : {
+        "label" : "ቅንብር"
+      },
+      "adminMenuItem" : {
+        "label" : "አስተዳዳሪ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "መገለጫ አስተካክል"
+      },
+      "logoutMenuItem" : {
         "label" : "ውጣ"
       }
     }
@@ -2810,6 +2897,28 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "እሺ!",
         "detail" : "ተግባሩ በተሳካ ሁኔታ ተጠናቀቀ"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ውይይት ለማድረግ ፋይሎችን  ስቀል"
+      },
+      "ChooseFile" : {
+        "help" : "ፋይሎችን ምረጥ"
+      },
+      "UploadFile" : {
+        "help" : "ፋይሎችን ስቀል"
+      },
+      "DragDropHere" : {
+        "label" : "ፋይሎችን ይጎትቱ እዚህ ያኑሩ ለመስቀል"
+      },
+      "RemoveAll" : {
+        "help" : "ሁሉንም አስወግድ"
+      },
+      "UploadPending" : {
+        "label" : "ለማስቀመጥ በመጠባበቅ ላይ"
       }
     }
   }
