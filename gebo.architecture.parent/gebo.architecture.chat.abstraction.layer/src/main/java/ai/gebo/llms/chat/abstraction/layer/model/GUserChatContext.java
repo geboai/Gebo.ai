@@ -44,7 +44,7 @@ public class GUserChatContext extends GBaseObject {
     private String chatModelCode = null; // Code for the chat model used
     private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
     private String summarizedHistory = null; // A summarized history of the chat interactions
-
+    
     /** Default constructor for GUserChatContext */
     public GUserChatContext() {
 

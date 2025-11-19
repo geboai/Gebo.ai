@@ -53,6 +53,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 
@@ -426,6 +427,26 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			}
 		} else
 			throw new RuntimeException("Id is not found");
+		return data;
+	}
+
+	@Override
+	public GUserChatInfo createNewChat(String referenceCode) throws GeboPersistenceException, LLMConfigException {
+		UserInfos user = securityService.getCurrentUser();
+		GUserChatContext userContext = new GUserChatContext();
+		IGConfigurableChatModel chatModel = this.chatModelConfigurations.findByCode(referenceCode);
+		if (chatModel == null)
+			throw new RuntimeException("Cannot create a chat with not existing chat model code");
+		userContext.setChatModelCode(referenceCode);
+		String description = "Chat with "
+				+ (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
+						? chatModel.getConfig().getChoosedModel().getCode()
+						: " chat bot");
+		userContext.setDescription(description);
+		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
+		GUserChatInfoData data = new GUserChatInfoData(userContext);
+
 		return data;
 	}
 }

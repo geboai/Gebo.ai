@@ -578,4 +578,24 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		return data;
 	}
 
+	@Override
+	public GUserChatInfo createNewChat(String referenceCode) throws GeboPersistenceException, LLMConfigException {
+		UserInfos user = securityService.getCurrentUser();
+		Optional<GChatProfileConfiguration> chatProfileData = this.chatProfilesRepository.findById(referenceCode);
+		if (chatProfileData.isEmpty())
+			throw new RuntimeException("Chat profile does not exist");
+		GChatProfileConfiguration chatProfile = chatProfileData.get();
+		boolean canAccess = securityService.isCanAccess(chatProfile, true);
+		if (!canAccess)
+			throw new SecurityException("Trying to access wrong chat profile");
+		String description = chatProfile.getDescription();
+		GUserChatContext userContext = new GUserChatContext();
+		userContext.setChatProfileCode(referenceCode);
+		userContext.setDescription(description);
+		userContext.setRagChat(true);
+		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
+		GUserChatInfoData data = new GUserChatInfoData(userContext);
+		return data;
+	}
 }

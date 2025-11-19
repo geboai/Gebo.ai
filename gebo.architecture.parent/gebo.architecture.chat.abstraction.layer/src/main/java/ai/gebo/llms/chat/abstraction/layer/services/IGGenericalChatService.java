@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.KBContext;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
@@ -141,4 +142,14 @@ public interface IGGenericalChatService {
 	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException;
 
 	public GUserChatInfo suggestChatDescription(String id) throws GeboChatException, LLMConfigException;
+
+	/***************************************************************************
+	 * Creates a new Chat user context
+	 * 
+	 * @param chatProfileCode
+	 * @return
+	 * @throws GeboPersistenceException
+	 * @throws LLMConfigException
+	 */
+	public GUserChatInfo createNewChat(String referenceCode) throws GeboPersistenceException, LLMConfigException;
 }
