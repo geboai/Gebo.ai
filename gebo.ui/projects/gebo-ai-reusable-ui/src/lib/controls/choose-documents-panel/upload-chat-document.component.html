@@ -8,21 +8,23 @@
         </div>
     </div>
 </ng-template>
-<p-blockUI [blocked]="loading" [target]="uploadFilesArea">
-    <i class="pi pi-lock" style="font-size: 3rem"></i>
-</p-blockUI>
-<p-dialog [modal]="true" #uploadFilesArea [maximizable]="true" [visible]="showUpload" [modal]="true"
-    [style]="{width:'50%',height:'50%'}" [closable]="true" (visibleChange)="showUploadChange.emit(false)">
-    <p-panel id="FilesToChatHeader" header="Upload files to chat with" gebo-ai-label>
+
+<p-dialog [modal]="true" [maximizable]="true" [visible]="showUpload" [modal]="true" [style]="{width:'50%',height:'50%'}"
+    [closable]="true" (visibleChange)="showUploadChange.emit(false)">
+    <p-blockUI [blocked]="loading" [target]="uploadFilesArea">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <p-panel id="FilesToChatHeader" #uploadFilesArea header="Upload files to chat with" gebo-ai-label>
         <div class="card">
             <ng-container *ngTemplateOutlet="viewDocumentChips"></ng-container>
         </div>
 
         <div class="card" [formGroup]="formGroup">
             <p-toast />
-            <p-fileupload name="files[]" [url]="url" [multiple]="true" method="post" mode="advanced" [headers]="headers"
-                [accept]="filesExtensionsFlatList" maxFileSize="10000000" (onUpload)="onUpload($event)"
-                (onProgress)="sendProgress($event)" (onSelect)="onSelectedFiles($event)">
+           
+            <p-fileupload name="files[]"  [url]="url" [multiple]="true" method="post" mode="advanced" [headers]="headers"  [accept]="filesExtensionsFlatList" maxFileSize="10000000"
+                
+                (onUpload)="onUpload($event)" (onProgress)="sendProgress($event)"   (onSelect)="onSelectedFiles($event)" (onBeforeUpload)="onBeforeUpload($event)" (onError)="onError($event)"  (onSend)="onSend($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback"
                     let-uploadCallback="uploadCallback">
                     <div class="grid w-full">
@@ -100,6 +102,7 @@
                     </div>
                 </ng-template>
             </p-fileupload>
+            
         </div>
     </p-panel>
 </p-dialog>

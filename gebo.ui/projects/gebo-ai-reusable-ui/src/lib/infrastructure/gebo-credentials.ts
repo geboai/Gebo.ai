@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-
+import { HttpEventType, HttpHeaders } from '@angular/common/http';
 
 
 /**
@@ -68,6 +68,19 @@ export function getAuthHeader(): any {
     return outValue;
   } else return undefined;
 }
+
+export function getHttpHeaders(): HttpHeaders {
+  const auth = getAuthHeader();
+  let httpHeaders: HttpHeaders = new HttpHeaders(auth);
+  if (auth) {
+  const keys = Object.keys(auth);
+    keys.forEach(key => {
+      httpHeaders = httpHeaders.set(key, auth[key]);
+    });
+  }
+  return httpHeaders;
+}
+
 export function resetAuth() {
   localStorage.removeItem(geboCredenditalString);
 }

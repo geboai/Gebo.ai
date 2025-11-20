@@ -1,13 +1,14 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
-import { ControlValueAccessor, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { GeboUserChatUploadsControllerService, BASE_PATH, IngestionFileTypesLibraryControllerService, UserUploadedContent, OperationStatusListUserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 import { MessageService } from "primeng/api";
-import { getAuth, getAuthHeader } from "../../infrastructure/gebo-credentials";
+import { getAuth, getAuthHeader, getHttpHeaders } from "../../infrastructure/gebo-credentials";
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
-import { FileProgressEvent, FileUploadEvent } from "primeng/fileupload";
+import { FileBeforeUploadEvent, FileProgressEvent, FileSelectEvent, FileSendEvent, FileUploadErrorEvent, FileUploadEvent } from "primeng/fileupload";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
+import { GeboAIBuildUrlService } from "../../services/build-gebo-url.service";
 
 const urlPostfix: string = "api/users/GeboUserChatUploadsController/chatSessionUpload/";
 const urlPostfixRagCreateSession = "api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/";
@@ -16,7 +17,7 @@ const urlPostfixCreateSession = "api/users/GeboUserChatUploadsController/chatSes
     templateUrl: "upload-chat-document.component.html",
     selector: "gebo-ai-upload-chat-documents-files",
     standalone: false,
-    providers: [MessageService,
+    providers: [MessageService, GeboAIBuildUrlService,
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIUploadChatDocumentComponent),
@@ -32,7 +33,6 @@ const urlPostfixCreateSession = "api/users/GeboUserChatUploadsController/chatSes
 export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, ControlValueAccessor, GeboAIFieldHost {
 
 
-
     @Input() showUpload: boolean = false;
     @Input() ragChat: boolean = false;
     @Input() chatModelCode?: string;
@@ -46,6 +46,7 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
     protected uploadedContents?: UserUploadedContent[] = [];
     protected headers: HttpHeaders = new HttpHeaders();
     protected formGroup: FormGroup<any> = new FormGroup({
+        fileUploads: new FormControl()
     });
     //@Output() uploadedFilesChanged: EventEmitter<UserUploadedContent[]> = new EventEmitter();
     files: any[] = [];
@@ -61,7 +62,7 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         private messageService: MessageService,
         private geboAITranslatorService: GeboAITranslationService,
         private chatDocumentsUploadService: GeboUserChatUploadsControllerService,
-        @Inject(BASE_PATH) private baseUrl: string) {
+        private urlBulder: GeboAIBuildUrlService) {
 
 
     }
@@ -69,8 +70,7 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         return "GeboAIUploadChatDocumentComponent";
     }
     ngOnInit(): void {
-
-        this.headers = new HttpHeaders(getAuthHeader());
+        this.headers = getHttpHeaders();
         this.loading = true;
         this.contentTypeService.getAllFileTypes().subscribe({
             next: (value) => {
@@ -97,19 +97,41 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         });
     }
     ngOnChanges(changes: SimpleChanges): void {
+
         if (this.userSessionCode) {
-            this.url = this.baseUrl + urlPostfix + this.userSessionCode;
+            this.url = this.urlBulder.buildUrl(urlPostfix, this.userSessionCode);
         } else if (this.ragChat === true && this.chatProfileCode) {
-            this.url = this.baseUrl + urlPostfixRagCreateSession + this.chatProfileCode;
+            this.url = this.urlBulder.buildUrl(urlPostfixRagCreateSession, this.chatProfileCode);
         } else if (this.chatModelCode) {
-            this.url = this.baseUrl + urlPostfixCreateSession + this.chatModelCode;
-        }else {
+            this.url = this.urlBulder.buildUrl(urlPostfixCreateSession, this.chatModelCode);
+        } else {
             console.log("Incoherent data in upload config");
         }
     }
     writeValue(obj: any): void {
         this.uploadedContents = obj;
     }
+
+    onError(evt: FileUploadErrorEvent) {
+        console.error('[UploadCmp] onError', evt);
+    }
+    onBeforeUpload(evt: FileBeforeUploadEvent) {
+        console.log('[UploadCmp] onBeforeUpload evt =', evt);
+        console.log('[UploadCmp] files =', this.files);
+        console.log('[UploadCmp] formData entries:');
+        if (evt.formData) {
+            (evt.formData as FormData).forEach(entry => {
+                console.log(' formData info:  ', entry);
+            })
+
+        }
+    }
+
+    onSend(evt: FileSendEvent) {
+        console.log('[UploadCmp] onSend (request sent)', evt);
+    }
+
+
     onUpload(evt: FileUploadEvent) {
         if (evt.originalEvent.type === HttpEventType.Response) {
             this.response = evt.originalEvent.body;
@@ -179,7 +201,8 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
     }
 
 
-    onSelectedFiles(event: any) {
+    onSelectedFiles(event: FileSelectEvent) {
+        console.log('[UploadCmp] onSelectedFiles', event);
         this.files = event.currentFiles;
         this.files.forEach((file) => {
             this.totalSize += parseInt(file.size);
@@ -188,9 +211,14 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
     }
 
     uploadEvent(callback: any) {
-        callback();
+        console.log('[UploadCmp] Upload button clicked, callback =', callback);
+        try {
+            callback && callback();
+            console.log('[UploadCmp] Upload callback invoked');
+        } catch (e) {
+            console.error('[UploadCmp] Error invoking upload callback', e);
+        }
     }
-
     formatSize(bytes: number | string | any) {
         const k = 1024;
         const dm = 3;
@@ -201,7 +229,7 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         return formattedSize
     }
     sendProgress(evt: FileProgressEvent) {
-
+        console.log('[UploadCmp] sendProgress', evt);
     }
     doRemoveUploaded(doc: UserUploadedContent) {
 
