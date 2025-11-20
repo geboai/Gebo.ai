@@ -137,8 +137,8 @@
 
                 </div>
                 <div class="col-6 grid chat-area">
-                    <div class="col-1"></div>
-                    <div class="col-10"><gebo-ai-choose-documents-panel-component
+                    <div class="col-2"></div>
+                    <div class="col-8"><gebo-ai-choose-documents-panel-component
                             *ngIf="ragsystem && chatUserInfos?.knowledgeBases" [interactionDisabled]="loading"
                             [knowledgeBaseCodes]="knowledgeBaseCodes"
                             [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
@@ -153,18 +153,18 @@
                             [userSessionCode]="userChatContextCode" (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"></gebo-ai-upload-chat-documents-files>
                         <!--  check why it does not work   -->
                     </div>
-                    <div class="col-1"></div>
-                    <div class="col-1 grid">
-                        <div class="col-6" style="text-align: right;"><p-button id="UploadFileBtn" [text]="false"
+                    <div class="col-2"></div>
+                    <div class="col-2 grid">
+                        <div class="col-6" style="text-align: center;"><p-button id="UploadFileBtn" [text]="false"
                                 [rounded]="true" gebo-ai-label icon="pi pi-cloud-upload"
                                 title="Upload a file to chat or work with" (onClick)="openedUploadDocumentsWindow=true"
-                                [disabled]="loading"></p-button></div>
-                        <div class="col-6" style="text-align: right;"><p-button id="ChatWithDocsBtnNew" [text]="true"
+                                [disabled]="loading" ></p-button></div>
+                        <div class="col-6" style="text-align: center;"><p-button id="ChatWithDocsBtnNew" [text]="true"
                                 gebo-ai-label icon="pi pi-search"
                                 title="Browse or search and select documents to chat with"
                                 (onClick)="openSelectDocumentsWindow=true" [disabled]="loading"></p-button></div>
                     </div>
-                    <div class="col-10">
+                    <div class="col-8">
 
                         <textarea rows="2" cols="250" [required]="true" pTextarea formControlName="query" class="w-full"
                             gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot"
@@ -172,13 +172,13 @@
                         </textarea>
 
                     </div>
-                    <div class="col-1 grid">
-                        <div class="col-6" style="text-align: right;">
+                    <div class="col-2 grid">
+                        <div class="col-6" style="text-align: center;">
                             <gebo-ai-audio-component [disabled]="capabilities?.supportsTranscript!==true || loading"
                                 (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
                                 [playAudioTrack]="currentAudioTrack" [viewLabels]="true"></gebo-ai-audio-component>
                         </div>
-                        <div class="col-6" style="text-align: right;">
+                        <div class="col-6" style="text-align: center;">
                             <p-button id="SubmiQuestion" (onClick)="sendMessage()" gebo-ai-label
                                 [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
                                 type="submit" title="Sumbit your question" [text]="false"></p-button>
