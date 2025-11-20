@@ -9,6 +9,7 @@ li {
   margin: 3px;
   padding: 3px;
 }
+
 pre {
   margin: 0.3em;
 }
@@ -18,21 +19,30 @@ blockquote {
   padding-left: 12px;
   color: rgba(0, 0, 0, 0.54);
 }
+
 .p-messages {
   padding: 0px;
   padding-left: 0px;
 }
+
 .p-textarea {
   border-radius: 5px !important
 }
+
 .floating-chat-area {
-  position: fixed;bottom: 3%;z-index: 8000;
+  position: fixed;
+  bottom: 3%;
+  z-index: 8000;
 }
+
 .floating-chat-area-middle {
-  position: fixed;bottom: 50%;z-index: 8000;
+  position: fixed;
+  bottom: 50%;
+  z-index: 8000;
 }
+
 .chat-area {
   background-color: white;
-   border: 1px solid #C0C0C0;
-   border-radius: 15px;
+  border: 1px solid #C0C0C0;
+  border-radius: 15px;
 }

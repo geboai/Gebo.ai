@@ -128,10 +128,11 @@
         <div class="col-2"></div>
 
     </div>
-    <div [class]="interactions && interactions.length?'floating-chat-area':'floating-chat-area-middle'">
+    <div [class]="interactions && interactions.length?'floating-chat-area':'floating-chat-area-middle'"
+        class="grid w-full">
         <form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
 
-            <div class="col-12 grid">
+            <div class="col-12 grid w-full">
 
                 <div class="col-3">
 
@@ -146,11 +147,10 @@
                             formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
 
                         <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
-                            formControlName="userUploadedContents"
-                            [chatModelCode]="chatInfo?.chatModelCode"
-                            [chatProfileCode]="chatInfo?.chatProfileCode"
-                            [ragChat]="ragsystem"
-                            [userSessionCode]="userChatContextCode" (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"></gebo-ai-upload-chat-documents-files>
+                            formControlName="userUploadedContents" [chatModelCode]="chatInfo?.chatModelCode"
+                            [chatProfileCode]="chatInfo?.chatProfileCode" [ragChat]="ragsystem"
+                            [userSessionCode]="userChatContextCode"
+                            (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"></gebo-ai-upload-chat-documents-files>
                         <!--  check why it does not work   -->
                     </div>
                     <div class="col-2"></div>
@@ -158,15 +158,15 @@
                         <div class="col-6" style="text-align: center;"><p-button id="UploadFileBtn" [text]="false"
                                 [rounded]="true" gebo-ai-label icon="pi pi-cloud-upload"
                                 title="Upload a file to chat or work with" (onClick)="openedUploadDocumentsWindow=true"
-                                [disabled]="loading" ></p-button></div>
+                                [disabled]="loading"></p-button></div>
                         <div class="col-6" style="text-align: center;"><p-button id="ChatWithDocsBtnNew" [text]="true"
                                 gebo-ai-label icon="pi pi-search"
                                 title="Browse or search and select documents to chat with"
                                 (onClick)="openSelectDocumentsWindow=true" [disabled]="loading"></p-button></div>
                     </div>
-                    <div class="col-8">
+                    <div class="col-8 grid">
 
-                        <textarea rows="2" cols="250" [required]="true" pTextarea formControlName="query" class="w-full"
+                        <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="col-12 w-full"
                             gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot"
                             (keydown.enter)="onSumbit()">
                         </textarea>
@@ -185,6 +185,9 @@
                         </div>
 
                     </div>
+                    <div class="col-2"></div>
+                    <div class="col-8"></div>
+                    <div class="col-2"></div>
                 </div>
                 <div class="col-3">
 
