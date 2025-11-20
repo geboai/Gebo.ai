@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Dokumentet e ngarkuara"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historia e bisedës u ngarkua",
+        "detail" : "Historia e bisedës u ngarkua me sukses"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Fjala juaj po ngarkohet"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "U mor përgjigjja me zë"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Anulo regjistrimin",
         "help" : "Anulo regjistrimin"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Ndalo regjistrimin"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Mbyll shiritin anësor"
       },
       "NewChatMiniBtn" : {
-        "help" : "Krijo një bisedë të re me modele të avancuara të gjuhës"
+        "help" : "Krijo një bisedë të re me modele të avancuara të gjuhës",
+        "label" : "Bisedë"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Krijo një bisedë të re RAG me përmbajtje të kompanisë",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Në pritje për ngarkim"
+      },
+      "CompletedData" : {
+        "label" : "Përfunduar"
       }
     }
   }

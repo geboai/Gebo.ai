@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "アップロード済みドキュメント"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "チャット履歴が読み込まれました",
+        "detail" : "チャット履歴が正常に読み込まれました"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "音声をアップロード中です"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "音声での回答を受信しました"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "録音中止",
+        "help" : "録音を中止"
+      },
+      "AbortRecordingBtn" : {
         "help" : "録音を中止"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "サイドバーを閉じる"
       },
       "NewChatMiniBtn" : {
-        "help" : "大規模言語モデルで新しいチャットを作成"
+        "help" : "大規模言語モデルで新しいチャットを作成",
+        "label" : "チャット"
       },
       "NewRagChatMiniBtn" : {
         "help" : "会社のコンテンツで新規RAGチャットを作成",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "アップロード待ち"
+      },
+      "CompletedData" : {
+        "label" : "完了"
       }
     }
   }

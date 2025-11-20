@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Preneseni dokumenti"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Povijest razgovora je učitana",
+        "detail" : "Povijest razgovora je uspješno učitana"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Vaš govor se prenosi"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Glasovni odgovor je primljen"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Prekini snimanje",
+        "help" : "Prekini snimanje"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Prekini snimanje"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Zatvori bočnu traku"
       },
       "NewChatMiniBtn" : {
-        "help" : "Kreirajte novi razgovor s velikim jezičnim modelima"
+        "help" : "Kreirajte novi razgovor s velikim jezičnim modelima",
+        "label" : "Razgovor"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Kreirajte novi RAG razgovor s sadržajem tvrtke",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Čeka se prijenos"
+      },
+      "CompletedData" : {
+        "label" : "Dovršeno"
       }
     }
   }

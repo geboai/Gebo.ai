@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Augšupielādētie dokumenti"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Tērzēšanas vēsture ielādēta",
+        "detail" : "Tērzēšanas vēsture veiksmīgi ielādēta"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Jūsu runa tiek augšupielādēta"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Saņemta balss atbilde"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Pārtraukt ierakstīšanu",
         "help" : "Pārtraukt ierakstīšanu"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Pārtraukt ierakstu"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Aizvērt sānu joslu"
       },
       "NewChatMiniBtn" : {
-        "help" : "Izveidot jaunu tērzēšanu ar lieliem valodu modeļiem"
+        "help" : "Izveidot jaunu tērzēšanu ar lieliem valodu modeļiem",
+        "label" : "Tērzēt"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Izveidot jaunu RAG tērzēšanu ar uzņēmuma saturu",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Gaida augšupielādi"
+      },
+      "CompletedData" : {
+        "label" : "Pabeigts"
       }
     }
   }

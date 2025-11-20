@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Cáipéisí uaslódáilte"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Stair an chomhrá luchtaithe",
+        "detail" : "Stair an chomhrá luchtaithe go rathúil"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Tá do óráid á huaslódáil"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Freagra gutha faighte"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Stop taifeadadh",
         "help" : "Stop taifeadadh"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Fág an taifeadadh"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Dún an barra taoibh"
       },
       "NewChatMiniBtn" : {
-        "help" : "Cruthaigh comhrá nua le samhlacha móra teanga"
+        "help" : "Cruthaigh comhrá nua le samhlacha móra teanga",
+        "label" : "Comhrá"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Cruthaigh comhrá RAG nua le hábhar na cuideachta",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Ag fanacht le huaslódáil"
+      },
+      "CompletedData" : {
+        "label" : "Críochnaithe"
       }
     }
   }

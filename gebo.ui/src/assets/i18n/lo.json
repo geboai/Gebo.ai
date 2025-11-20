@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "ເອກະສານທີ່ອັບໂຫຼດ"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ປະຫວັດການສົນທະນາໄດ້ຖືກໂຫຼດແລ້ວ",
+        "detail" : "ປະຫວັດການສົນທະນາໄດ້ໂຫຼດສຳເລັດແລ້ວ"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "ກຳລັງອັບໂຫຼດຄຳປາໄສຂອງທ່ານ"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "ໄດ້ຮັບຄຳຕອບແບບສຽງແລ້ວ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "ຍົກເລີກການບັນທຶກສຽງ",
         "help" : "ຍົກເລີກການບັນທຶກສຽງ"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "ຍົກເລີກການບັນທຶກ"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "ປິດແຖບດ້ານຂ້າງ"
       },
       "NewChatMiniBtn" : {
-        "help" : "ສ້າງສົນທະນາໃໝ່ກັບພາສາຂະໜາດໃຫຍ່"
+        "help" : "ສ້າງສົນທະນາໃໝ່ກັບພາສາຂະໜາດໃຫຍ່",
+        "label" : "ສົນທະນາ"
       },
       "NewRagChatMiniBtn" : {
         "help" : "ສ້າງສົນທະນາ RAG ໃໝ່ກັບເນື້ອຫາບໍລິສັດ",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "ລໍຖ້າອັບໂຫຼດ"
+      },
+      "CompletedData" : {
+        "label" : "ສຳເລັດແລ້ວ"
       }
     }
   }

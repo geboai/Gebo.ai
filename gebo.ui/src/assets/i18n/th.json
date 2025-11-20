@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "เอกสารที่อัปโหลด"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ประวัติแชทถูกโหลดแล้ว",
+        "detail" : "โหลดประวัติแชทสำเร็จ"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "กำลังอัปโหลดคำพูดของคุณ"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "ได้รับคำตอบเสียงแล้ว"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "ยกเลิกการบันทึก",
+        "help" : "ยกเลิกการบันทึก"
+      },
+      "AbortRecordingBtn" : {
         "help" : "ยกเลิกการบันทึก"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "ปิดแถบข้าง"
       },
       "NewChatMiniBtn" : {
-        "help" : "สร้างแชทใหม่กับโมเดลภาษาขนาดใหญ่"
+        "help" : "สร้างแชทใหม่กับโมเดลภาษาขนาดใหญ่",
+        "label" : "แชท"
       },
       "NewRagChatMiniBtn" : {
         "help" : "สร้างแชท RAG ใหม่กับเนื้อหาของบริษัท",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "รอการอัปโหลด"
+      },
+      "CompletedData" : {
+        "label" : "เสร็จสมบูรณ์"
       }
     }
   }

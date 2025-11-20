@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Documents pujats"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historial de xat carregat",
+        "detail" : "L'historial de xat s'ha carregat correctament"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "S'està pujant la teva veu"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Resposta vocal rebuda"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Atura l'enregistrament",
+        "help" : "Atura l'enregistrament"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Atura l'enregistrament"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Tanca la barra lateral"
       },
       "NewChatMiniBtn" : {
-        "help" : "Crea un nou xat amb models de llenguatge"
+        "help" : "Crea un nou xat amb models de llenguatge",
+        "label" : "Xat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Crea un nou xat RAG amb contingut de l'empresa",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Pendent de carregar"
+      },
+      "CompletedData" : {
+        "label" : "Completat"
       }
     }
   }

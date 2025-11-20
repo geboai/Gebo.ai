@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Загружаныя дакументы"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Гісторыя чата загружана",
+        "detail" : "Гісторыя чата паспяхова загружана"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ваш гаворка загружаецца"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Атрыманы вусны адказ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Спыніць запіс",
+        "help" : "Спыніць запіс"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Спыніць запіс"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Закрыць бакавую панэль"
       },
       "NewChatMiniBtn" : {
-        "help" : "Стварыць новы чат з вялікімі мовнымі мадэлямі"
+        "help" : "Стварыць новы чат з вялікімі мовнымі мадэлямі",
+        "label" : "Чат"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Стварыць новы RAG-чат з унутраным зместам кампаніі",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Чаканне загрузкі"
+      },
+      "CompletedData" : {
+        "label" : "Завершана"
       }
     }
   }

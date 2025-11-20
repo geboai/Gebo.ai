@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "የተስቀመጡ ዶክዩመንቶች"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "የቻት ታሪክ ተጫኗል",
+        "detail" : "የቻት ታሪክ በተሳካ ሁኔታ ተጫኗል"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "ንግግድዎ በመጭናት ላይ ነው"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "የድምፅ መልስ ተቀብሏል"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "ቅዳን ሰርዝ",
         "help" : "ቅዳን ሰርዝ"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "ቅጥ ቅዳ"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "የጎን አሞሌዎችን ዝጋ"
       },
       "NewChatMiniBtn" : {
-        "help" : "አዲስ ውይይት ከትልቅ ቋንቋ ሞዴሎች ጋር ጀምር"
+        "help" : "አዲስ ውይይት ከትልቅ ቋንቋ ሞዴሎች ጋር ጀምር",
+        "label" : "ቻት"
       },
       "NewRagChatMiniBtn" : {
         "help" : "አዲስ RAG ውይይት ለድርጅቱ ይዘቶች",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "ለማስቀመጥ በመጠባበቅ ላይ"
+      },
+      "CompletedData" : {
+        "label" : "ተጠናቋል"
       }
     }
   }

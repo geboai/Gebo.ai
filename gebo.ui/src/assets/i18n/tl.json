@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Na-upload na mga dokumento"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Nai-load ang kasaysayan ng chat",
+        "detail" : "Matagumpay na nai-load ang kasaysayan ng chat"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ina-upload ang iyong talumpati"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Natanggap ang sagot na boses"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Itigil ang pag-record",
         "help" : "Itigil ang pag-record"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Itigil ang pagre-record"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Isara ang sidebar"
       },
       "NewChatMiniBtn" : {
-        "help" : "Gumawa ng bagong chat gamit ang malalaking language model"
+        "help" : "Gumawa ng bagong chat gamit ang malalaking language model",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Gumawa ng bagong RAG chat gamit ang mga nilalaman ng kumpanya",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Naghihintay para ma-upload"
+      },
+      "CompletedData" : {
+        "label" : "Tapos na"
       }
     }
   }

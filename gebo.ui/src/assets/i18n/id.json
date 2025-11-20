@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Dokumen yang diunggah"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Riwayat chat dimuat",
+        "detail" : "Riwayat chat berhasil dimuat"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Rekaman suara Anda sedang diunggah"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Jawaban suara diterima"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Batalkan rekaman",
         "help" : "Batalkan rekaman"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Batalkan perekaman"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Tutup bilah samping"
       },
       "NewChatMiniBtn" : {
-        "help" : "Buat chat baru dengan large language models"
+        "help" : "Buat chat baru dengan large language models",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Buat RAG chat baru dengan konten perusahaan",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Menunggu diunggah"
+      },
+      "CompletedData" : {
+        "label" : "Selesai"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "ატვირთული დოკუმენტები"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ჩეთის ისტორია ჩაიტვირთა",
+        "detail" : "ჩეთის ისტორია წარმატებით ჩაიტვირთა"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "თქვენი საუბარი იტვირთება"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "მიღებული ხმოვანი პასუხი"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "ჩაწერის შეწყვეტა",
         "help" : "ჩაწერის შეწყვეტა"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "ჩანაწერის გაჩერება"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "გვერდითი ზოლის დახურვა"
       },
       "NewChatMiniBtn" : {
-        "help" : "შექმენით ახალი ჩატი დიდი ენის მოდელებით"
+        "help" : "შექმენით ახალი ჩატი დიდი ენის მოდელებით",
+        "label" : "ჩატი"
       },
       "NewRagChatMiniBtn" : {
         "help" : "შექმენით ახალი RAG ჩატი კომპანიის კონტენტით",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "მოლოდინში ატვირთვაზე"
+      },
+      "CompletedData" : {
+        "label" : "დასრულებულია"
       }
     }
   }

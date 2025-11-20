@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Ladatut asiakirjat"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Keskusteluhistoria ladattu",
+        "detail" : "Keskusteluhistoria ladattiin onnistuneesti"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Puhettasi ladataan"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Äänivastaus vastaanotettu"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Keskeytä tallennus",
+        "help" : "Keskeytä tallennus"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Keskeytä tallennus"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Sulje sivupalkki"
       },
       "NewChatMiniBtn" : {
-        "help" : "Aloita uusi keskustelu suurilla kielimalleilla"
+        "help" : "Aloita uusi keskustelu suurilla kielimalleilla",
+        "label" : "Keskustelu"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Aloita uusi RAG-keskustelu yrityksen sisällöillä",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Odottaa latausta"
+      },
+      "CompletedData" : {
+        "label" : "Valmis"
       }
     }
   }

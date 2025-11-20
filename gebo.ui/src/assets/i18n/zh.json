@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "已上传文档"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "聊天记录已加载",
+        "detail" : "聊天记录加载成功"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "语音正在上传"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "语音回复已收到"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "停止录音",
         "help" : "停止录音"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "取消录音"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "关闭侧边栏"
       },
       "NewChatMiniBtn" : {
-        "help" : "创建新的大语言模型聊天"
+        "help" : "创建新的大语言模型聊天",
+        "label" : "聊天"
       },
       "NewRagChatMiniBtn" : {
         "help" : "使用公司内容创建新的RAG聊天",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "等待上传"
+      },
+      "CompletedData" : {
+        "label" : "已完成"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "अपलोड की गई फ़ाइलें"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "चैट इतिहास लोड हुआ",
+        "detail" : "चैट इतिहास सफलतापूर्वक लोड हुआ"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "आपका भाषण अपलोड हो रहा है"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "वॉयस उत्तर प्राप्त हुआ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "रिकॉर्डिंग रोकें",
+        "help" : "रिकॉर्डिंग रोकें"
+      },
+      "AbortRecordingBtn" : {
         "help" : "रिकॉर्डिंग रोकें"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "साइड बार बंद करें"
       },
       "NewChatMiniBtn" : {
-        "help" : "बड़े भाषा मॉडल के साथ नई चैट प्रारंभ करें"
+        "help" : "बड़े भाषा मॉडल के साथ नई चैट प्रारंभ करें",
+        "label" : "चैट"
       },
       "NewRagChatMiniBtn" : {
         "help" : "कंपनी सामग्रियों के साथ नई RAG चैट प्रारंभ करें",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "अपलोड का इंतजार है"
+      },
+      "CompletedData" : {
+        "label" : "संपन्न"
       }
     }
   }

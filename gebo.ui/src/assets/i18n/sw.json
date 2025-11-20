@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Nyaraka zilizo pakizwa"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historia ya gumzo imepakia",
+        "detail" : "Historia ya gumzo imepakia kwa mafanikio"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Hotuba yako inapakia"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Jibu la sauti limepokelewa"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Katiza kurekodi",
+        "help" : "Katiza kurekodi"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Katiza kurekodi"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Funga upau wa pembeni"
       },
       "NewChatMiniBtn" : {
-        "help" : "Unda gumzo jipya na mifano mikubwa ya lugha"
+        "help" : "Unda gumzo jipya na mifano mikubwa ya lugha",
+        "label" : "Gumzo"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Unda gumzo jipya la RAG na maudhui ya kampuni",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Inasubiri kupakiwa"
+      },
+      "CompletedData" : {
+        "label" : "Imekamilika"
       }
     }
   }

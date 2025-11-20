@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Uppladdade dokument"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Chattens historik laddad",
+        "detail" : "Chattens historik har laddats"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Din inspelning laddas upp"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Röstsvaret har tagits emot"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Avbryt inspelning",
+        "help" : "Avbryt inspelning"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Avbryt inspelning"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Stäng sidofältet"
       },
       "NewChatMiniBtn" : {
-        "help" : "Skapa en ny chatt med stora språkmodeller"
+        "help" : "Skapa en ny chatt med stora språkmodeller",
+        "label" : "Chatta"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Skapa en ny RAG-chatt med företagsinnehåll",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Väntar på uppladdning"
+      },
+      "CompletedData" : {
+        "label" : "Klart"
       }
     }
   }

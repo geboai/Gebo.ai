@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "ਅੱਪਲੋਡ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ਚੈਟ ਇਤਿਹਾਸ ਲੋਡ ਹੋ ਗਿਆ",
+        "detail" : "ਚੈਟ ਇਤਿਹਾਸ ਸਫਲਤਾਪੂਰਵਕ ਲੋਡ ਹੋ ਗਿਆ"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "ਤੁਹਾਡੀ ਬੋਲਚਾਲ ਅੱਪਲੋਡ ਹੋ ਰਹੀ ਹੈ"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "ਬੋਲੀ ਜਵਾਬ ਮਿਲ ਗਿਆ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "ਰੇਕਾਰਡਿੰਗ ਰੋਕੋ",
         "help" : "ਰੇਕਾਰਡਿੰਗ ਰੋਕੋ"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "ਰਿਕਾਰਡਿੰਗ ਰੱਦ ਕਰੋ"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "ਸਾਈਡ ਬਾਰ ਬੰਦ ਕਰੋ"
       },
       "NewChatMiniBtn" : {
-        "help" : "ਵੱਡੇ ਭਾਸ਼ਾ ਮੌਡਲ ਨਾਲ ਨਵੀਂ ਚੈਟ ਬਣਾਓ"
+        "help" : "ਵੱਡੇ ਭਾਸ਼ਾ ਮੌਡਲ ਨਾਲ ਨਵੀਂ ਚੈਟ ਬਣਾਓ",
+        "label" : "ਚੈਟ"
       },
       "NewRagChatMiniBtn" : {
         "help" : "ਕੰਪਨੀ ਸਮੱਗਰੀ ਨਾਲ ਨਵੀਂ RAG ਚੈਟ ਬਣਾਓ",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "ਅੱਪਲੋਡ ਲਈ ਬਾਕੀ"
+      },
+      "CompletedData" : {
+        "label" : "ਪੂਰਾ ਹੋ ਗਿਆ"
       }
     }
   }

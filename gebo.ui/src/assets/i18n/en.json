@@ -1752,6 +1752,16 @@
             },
             "UploadedDocs": {
                 "label": "Uploaded docs"
+            },
+            "CHAT_HISTORY_LOADED": {
+                "summary": "Chat history loaded",
+                "detail": "Chat history loaded successfully"
+            },
+            "YOUR_SPEECH_IS_UPLOADING": {
+                "summary": "Your speech is uploading"
+            },
+            "LOADING_VOCAL_ANSWER": {
+                "summary": "Vocal answer received"
             }
         },
         "ChangeDescriptionComponent": {
@@ -1806,6 +1816,9 @@
             },
             "AbortBtn": {
                 "label": "Abort recording",
+                "help": "Abort recording"
+            },
+            "AbortRecordingBtn": {
                 "help": "Abort recording"
             }
         }
@@ -2496,7 +2509,8 @@
                 "help": "Close side bar"
             },
             "NewChatMiniBtn": {
-                "help": "Create a new chat with large language models"
+                "help": "Create a new chat with large language models",
+                "label": "Chat"
             },
             "NewRagChatMiniBtn": {
                 "help": "Create a new RAG chat with company contents",
@@ -2919,6 +2933,9 @@
             },
             "UploadPending": {
                 "label": "Pending for upload"
+            },
+            "CompletedData": {
+                "label": "Completed"
             }
         }
     }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Yüklenen belgeler"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Sohbet geçmişi yüklendi",
+        "detail" : "Sohbet geçmişi başarıyla yüklendi"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Konuşmanız yükleniyor"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Sesli yanıt alındı"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Kaydı durdur",
         "help" : "Kaydı durdur"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Kaydı iptal et"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Kenar çubuğunu kapat"
       },
       "NewChatMiniBtn" : {
-        "help" : "Büyük dil modelleriyle yeni bir sohbet oluştur"
+        "help" : "Büyük dil modelleriyle yeni bir sohbet oluştur",
+        "label" : "Sohbet"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Şirket içeriğiyle yeni bir RAG sohbeti oluştur",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Yükleme bekleniyor"
+      },
+      "CompletedData" : {
+        "label" : "Tamamlandı"
       }
     }
   }

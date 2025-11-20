@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Opgelaaide dokumente"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Kletsgeskiedenis gelaai",
+        "detail" : "Kletsgeskiedenis suksesvol gelaai"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Jou toespraak laai op"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Stemantwoord ontvang"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Staak opname",
+        "help" : "Staak opname"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Staak opname"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Maak sybalk toe"
       },
       "NewChatMiniBtn" : {
-        "help" : "Skep 'n nuwe gesprek met groot taalmodelle"
+        "help" : "Skep 'n nuwe gesprek met groot taalmodelle",
+        "label" : "Klets"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Skep 'n nuwe RAG-gesprek met maatskappy-inhoud",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Wag om op te laai"
+      },
+      "CompletedData" : {
+        "label" : "Voltooi"
       }
     }
   }

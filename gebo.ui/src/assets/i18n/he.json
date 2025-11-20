@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "מסמכים שהועלו"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "היסטוריית השיחה נטענה",
+        "detail" : "היסטוריית השיחה נטענה בהצלחה"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "הנאום שלך נטען"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "תשובה קולית התקבלה"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "בטל הקלטה",
+        "help" : "בטל הקלטה"
+      },
+      "AbortRecordingBtn" : {
         "help" : "בטל הקלטה"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "סגור סרגל צד"
       },
       "NewChatMiniBtn" : {
-        "help" : "צור שיחה חדשה עם מודלי שפה גדולים"
+        "help" : "צור שיחה חדשה עם מודלי שפה גדולים",
+        "label" : "צ'אט"
       },
       "NewRagChatMiniBtn" : {
         "help" : "צור שיחה RAG חדשה עם תכני החברה",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "ממתין להעלאה"
+      },
+      "CompletedData" : {
+        "label" : "הושלם"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Įkelti dokumentai"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Pokalbių istorija įkelta",
+        "detail" : "Pokalbių istorija sėkmingai įkelta"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Įkeliamas jūsų kalbos įrašas"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Gautas balso atsakymas"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Nutraukti įrašymą",
+        "help" : "Nutraukti įrašymą"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Nutraukti įrašymą"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Uždaryti šoninę juostą"
       },
       "NewChatMiniBtn" : {
-        "help" : "Sukurti naują pokalbį su dideliais kalbos modeliais"
+        "help" : "Sukurti naują pokalbį su dideliais kalbos modeliais",
+        "label" : "Pokalbis"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Sukurti naują RAG pokalbį su įmonės turiniu",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Laukiama įkėlimo"
+      },
+      "CompletedData" : {
+        "label" : "Užbaigta"
       }
     }
   }

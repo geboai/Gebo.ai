@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Загруженные документы"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "История чата загружена",
+        "detail" : "История чата успешно загружена"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ваше сообщение загружается"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Голосовой ответ получен"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Прервать запись",
+        "help" : "Прервать запись"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Прервать запись"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Закрыть боковую панель"
       },
       "NewChatMiniBtn" : {
-        "help" : "Создать новый чат с языковыми моделями"
+        "help" : "Создать новый чат с языковыми моделями",
+        "label" : "Чат"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Создать новый RAG-чат с материалами компании",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Ожидает загрузки"
+      },
+      "CompletedData" : {
+        "label" : "Завершено"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Yüklənmiş sənədlər"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Söhbət tarixi yükləndi",
+        "detail" : "Söhbət tarixi uğurla yükləndi"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Səsiniz yüklənir"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Səsli cavab alındı"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Yazını dayandır",
         "help" : "Yazını dayandır"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Yazmağı dayandır"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Yan menyunu bağla"
       },
       "NewChatMiniBtn" : {
-        "help" : "İri dil modelləri ilə yeni söhbət yaradın"
+        "help" : "İri dil modelləri ilə yeni söhbət yaradın",
+        "label" : "Söhbət"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Şirkət məzmunları ilə yeni RAG söhbəti yaradın",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Yükləmək üçün gözləyir"
+      },
+      "CompletedData" : {
+        "label" : "Tamamlandı"
       }
     }
   }

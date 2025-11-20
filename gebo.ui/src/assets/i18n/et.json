@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Üleslaetud dokumendid"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Vestluse ajalugu laaditud",
+        "detail" : "Vestluse ajalugu laaditi edukalt"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Sinu kõne laaditakse üles"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Vokaalvastus saadud"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Katkesta salvestus",
+        "help" : "Katkesta salvestus"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Katkesta salvestus"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Sulge külgriba"
       },
       "NewChatMiniBtn" : {
-        "help" : "Loo uus vestlus suurte keelemudelitega"
+        "help" : "Loo uus vestlus suurte keelemudelitega",
+        "label" : "Vestlus"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Loo uus RAG vestlus ettevõtte sisuga",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Ootel üleslaadimiseks"
+      },
+      "CompletedData" : {
+        "label" : "Valmis"
       }
     }
   }

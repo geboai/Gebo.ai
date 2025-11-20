@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "المستندات المرفوعة"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "تم تحميل سجل الدردشة",
+        "detail" : "تم تحميل سجل الدردشة بنجاح"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "يتم الآن رفع كلامك"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "تم استلام الإجابة الصوتية"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "إيقاف التسجيل",
+        "help" : "إيقاف التسجيل"
+      },
+      "AbortRecordingBtn" : {
         "help" : "إيقاف التسجيل"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "إغلاق الشريط الجانبي"
       },
       "NewChatMiniBtn" : {
-        "help" : "ابدأ محادثة جديدة مع نماذج اللغة الكبيرة"
+        "help" : "ابدأ محادثة جديدة مع نماذج اللغة الكبيرة",
+        "label" : "دردشة"
       },
       "NewRagChatMiniBtn" : {
         "help" : "ابدأ محادثة RAG مع محتوى الشركة",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "بانتظار الرفع"
+      },
+      "CompletedData" : {
+        "label" : "مكتمل"
       }
     }
   }

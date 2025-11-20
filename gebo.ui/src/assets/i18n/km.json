@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "ឯកសារបានបញ្ចូល"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ប្រវត្តិជជែកបានផ្ទុក",
+        "detail" : "ប្រវត្តិជជែកបានផ្ទុកដោយជោគជ័យ"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "សុន្ទរកថារបស់អ្នកកំពុងផ្ទុកឡើង"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "បានទទួលចម្លើយសំលេង"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "បញ្ឈប់ការថតសំឡេង",
         "help" : "បញ្ឈប់ការថតសំឡេង"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "បោះបង់ការថតសំឡេង"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "បិទរបារចំហៀង"
       },
       "NewChatMiniBtn" : {
-        "help" : "បង្កើតការជជែកថ្មីជាមួយម៉ូឌែលភាសធំៗ"
+        "help" : "បង្កើតការជជែកថ្មីជាមួយម៉ូឌែលភាសធំៗ",
+        "label" : "ជជែក"
       },
       "NewRagChatMiniBtn" : {
         "help" : "បង្កើតការជជែក RAG ថ្មីជាមួយមាតិកាក្រុមហ៊ុន",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "កំពុងរង់ចាំការបញ្ចូល"
+      },
+      "CompletedData" : {
+        "label" : "បានបញ្ចប់"
       }
     }
   }

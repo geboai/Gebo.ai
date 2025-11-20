@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Feltöltött dokumentumok"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Csevegési előzmények betöltve",
+        "detail" : "A csevegési előzmények sikeresen betöltve"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "A beszéd feltöltése folyamatban"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Vokális válasz érkezett"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Felvétel megszakítása",
+        "help" : "Felvétel megszakítása"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Felvétel megszakítása"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Oldalsáv bezárása"
       },
       "NewChatMiniBtn" : {
-        "help" : "Új beszélgetés indítása nagy nyelvi modellekkel"
+        "help" : "Új beszélgetés indítása nagy nyelvi modellekkel",
+        "label" : "Csevegés"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Új RAG beszélgetés indítása vállalati tartalommal",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Feltöltésre vár"
+      },
+      "CompletedData" : {
+        "label" : "Kész"
       }
     }
   }

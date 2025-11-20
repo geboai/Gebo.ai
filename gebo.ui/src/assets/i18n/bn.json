@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "আপলোডকৃত ডকুমেন্ট"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "চ্যাট ইতিহাস লোড হয়েছে",
+        "detail" : "চ্যাট ইতিহাস সফলভাবে লোড হয়েছে"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "আপনার কথা আপলোড হচ্ছে"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "ভয়েস উত্তর পাওয়া গেছে"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "রেকর্ডিং বাতিল করুন",
+        "help" : "রেকর্ডিং বাতিল করুন"
+      },
+      "AbortRecordingBtn" : {
         "help" : "রেকর্ডিং বাতিল করুন"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "সাইডবার বন্ধ করুন"
       },
       "NewChatMiniBtn" : {
-        "help" : "বড় ভাষা মডেল দিয়ে নতুন চ্যাট তৈরি করুন"
+        "help" : "বড় ভাষা মডেল দিয়ে নতুন চ্যাট তৈরি করুন",
+        "label" : "চ্যাট"
       },
       "NewRagChatMiniBtn" : {
         "help" : "কোম্পানির বিষয়বস্তুর সাথে নতুন RAG চ্যাট তৈরি করুন",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "আপলোডের জন্য অপেক্ষমাণ"
+      },
+      "CompletedData" : {
+        "label" : "সম্পন্ন হয়েছে"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Documente încărcate"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Istoric de chat încărcat",
+        "detail" : "Istoricul chat-ului a fost încărcat cu succes"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Discursul tău se încarcă"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Răspuns vocal primit"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Oprește înregistrarea",
         "help" : "Oprește înregistrarea"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Anulează înregistrarea"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Închide bara laterală"
       },
       "NewChatMiniBtn" : {
-        "help" : "Creează un chat nou cu modele lingvistice mari"
+        "help" : "Creează un chat nou cu modele lingvistice mari",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Creează un chat RAG nou cu conținuturile companiei",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "În așteptare pentru încărcare"
+      },
+      "CompletedData" : {
+        "label" : "Finalizat"
       }
     }
   }

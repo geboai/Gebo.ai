@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Opplastede dokumenter"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Chatthistorikk lastet",
+        "detail" : "Chatthistorikken ble lastet inn"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Talen din lastes opp"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Talsvar mottatt"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Avbryt opptak",
+        "help" : "Avbryt opptak"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Avbryt opptak"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Lukk sidepanel"
       },
       "NewChatMiniBtn" : {
-        "help" : "Opprett en ny chat med store språkmodeller"
+        "help" : "Opprett en ny chat med store språkmodeller",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Opprett en ny RAG-chat med bedriftsinnhold",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Venter på opplasting"
+      },
+      "CompletedData" : {
+        "label" : "Fullført"
       }
     }
   }

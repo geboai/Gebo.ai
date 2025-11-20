@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "અપલોડ કરેલ દસ્તાવેજો"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ચેટ ઇતિહાસ લોડ થઈ ગયો",
+        "detail" : "ચેટ ઇતિહાસ સફળતાપૂર્વક લોડ થયો"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "તમારી ભાષણ અપલોડ થઈ રહી છે"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "વરબલ જવાબ મળ્યુ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "રેકોર્ડિંગ રદ કરો",
         "help" : "રેકોર્ડિંગ રદ કરો"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "રેકોર્ડિંગ રોકો"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "સાઈડ બાર બંધ કરો"
       },
       "NewChatMiniBtn" : {
-        "help" : "મોટા ભાષા મોડલ્સ સાથે નવી ચેટ બનાવો"
+        "help" : "મોટા ભાષા મોડલ્સ સાથે નવી ચેટ બનાવો",
+        "label" : "ચેટ"
       },
       "NewRagChatMiniBtn" : {
         "help" : "કંપની સામગ્રી સાથે નવી RAG ચેટ બનાવો",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "અપલોડ માટે બાકી"
+      },
+      "CompletedData" : {
+        "label" : "પૂર્ણ"
       }
     }
   }

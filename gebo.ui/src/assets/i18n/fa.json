@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "اسناد بارگذاری شده"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "تاریخچه گفتگو بارگذاری شد",
+        "detail" : "تاریخچه گفتگو با موفقیت بارگذاری شد"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "در حال بارگذاری صدای شما"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "پاسخ صوتی دریافت شد"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "لغو ضبط",
+        "help" : "لغو ضبط"
+      },
+      "AbortRecordingBtn" : {
         "help" : "لغو ضبط"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "بستن نوار جانبی"
       },
       "NewChatMiniBtn" : {
-        "help" : "ایجاد گفتگوی جدید با مدل‌های زبانی بزرگ"
+        "help" : "ایجاد گفتگوی جدید با مدل‌های زبانی بزرگ",
+        "label" : "گفتگو"
       },
       "NewRagChatMiniBtn" : {
         "help" : "ایجاد گفتگوی RAG جدید با محتوای شرکت",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "در انتظار بارگذاری"
+      },
+      "CompletedData" : {
+        "label" : "تکمیل شد"
       }
     }
   }

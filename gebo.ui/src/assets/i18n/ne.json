@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "अपलोड गरिएका कागजातहरू"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "कुराकानी इतिहास लोड भयो",
+        "detail" : "कुराकानी इतिहास सफलतापूर्वक लोड भयो"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "तपाईंको बोली अपलोड हुँदैछ"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "आवाजमा उत्तर प्राप्त भयो"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "रेकर्डिङ रोक्नुहोस्",
         "help" : "रेकर्डिङ रोक्नुहोस्"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "रेकर्डिङ बन्द गर्नुहोस्"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "साइडबार बन्द गर्नुहोस्"
       },
       "NewChatMiniBtn" : {
-        "help" : "ठूलो भाषा मोडेलहरूसँग नयाँ च्याट बनाउनुहोस्"
+        "help" : "ठूलो भाषा मोडेलहरूसँग नयाँ च्याट बनाउनुहोस्",
+        "label" : "कुराकानी"
       },
       "NewRagChatMiniBtn" : {
         "help" : "कम्पनी सामग्रीहरूसँग नयाँ RAG च्याट बनाउनुहोस्",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "अपलोडको प्रतीक्षा गर्दै"
+      },
+      "CompletedData" : {
+        "label" : "पूरा भयो"
       }
     }
   }

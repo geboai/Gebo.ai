@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Nahrané dokumenty"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "História chatu načítaná",
+        "detail" : "História chatu bola úspešne načítaná"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Váš prejav sa nahráva"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Hlasová odpoveď prijatá"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Zrušiť nahrávanie",
+        "help" : "Zrušiť nahrávanie"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Zrušiť nahrávanie"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Zavrieť bočný panel"
       },
       "NewChatMiniBtn" : {
-        "help" : "Vytvorte nový chat s veľkými jazykovými modelmi"
+        "help" : "Vytvorte nový chat s veľkými jazykovými modelmi",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Vytvorte nový RAG chat s firemným obsahom",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Čaká na nahranie"
+      },
+      "CompletedData" : {
+        "label" : "Dokončené"
       }
     }
   }

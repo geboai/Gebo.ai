@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Качени документи"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Историята на чата е заредена",
+        "detail" : "Историята на чата е успешно заредена"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Вашата реч се качва"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Гласовият отговор е получен"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Прекрати запис",
         "help" : "Прекрати запис"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Прекратяване на записа"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Затвори страничната лента"
       },
       "NewChatMiniBtn" : {
-        "help" : "Създайте нов чат с големи езикови модели"
+        "help" : "Създайте нов чат с големи езикови модели",
+        "label" : "Чат"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Създайте нов RAG чат с фирмено съдържание",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Изчаква за качване"
+      },
+      "CompletedData" : {
+        "label" : "Завършено"
       }
     }
   }

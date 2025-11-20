@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Hochgeladene Dokumente"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Chatverlauf geladen",
+        "detail" : "Chatverlauf erfolgreich geladen"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ihre Sprache wird hochgeladen"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Sprachantwort empfangen"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Aufnahme abbrechen",
+        "help" : "Aufnahme abbrechen"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Aufnahme abbrechen"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Seitenleiste schließen"
       },
       "NewChatMiniBtn" : {
-        "help" : "Neuen Chat mit großen Sprachmodellen erstellen"
+        "help" : "Neuen Chat mit großen Sprachmodellen erstellen",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Neuen RAG-Chat mit Unternehmensinhalten erstellen",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Warten auf Upload"
+      },
+      "CompletedData" : {
+        "label" : "Abgeschlossen"
       }
     }
   }

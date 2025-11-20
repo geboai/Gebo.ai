@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Dogfennau wedi’u llwytho i fyny"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Hanes sgwrs wedi'i lwytho",
+        "detail" : "Hanes sgwrs wedi'i lwytho'n llwyddiannus"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Mae eich araith yn cael ei huwchlwytho"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Ateb llais wedi'i dderbyn"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Atal cofnodi",
         "help" : "Atal cofnodi"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Canslo recordiad"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Cau’r bar ochr"
       },
       "NewChatMiniBtn" : {
-        "help" : "Creu sgwrs newydd gyda modelau iaith mawr"
+        "help" : "Creu sgwrs newydd gyda modelau iaith mawr",
+        "label" : "Sgwrs"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Creu sgwrs RAG newydd gyda chynnwys y cwmni",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Arhosol i’w llwytho i fyny"
+      },
+      "CompletedData" : {
+        "label" : "Wedi’i gwblhau"
       }
     }
   }

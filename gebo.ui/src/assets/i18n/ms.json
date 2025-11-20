@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Dokumen dimuat naik"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Sejarah sembang dimuatkan",
+        "detail" : "Sejarah sembang berjaya dimuatkan"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ucapan anda sedang dimuat naik"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Jawapan suara diterima"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1807,6 +1817,9 @@
       "AbortBtn" : {
         "label" : "Hentikan rakaman",
         "help" : "Hentikan rakaman"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Batalkan rakaman"
       }
     }
   },
@@ -2496,7 +2509,8 @@
         "help" : "Tutup bar sisi"
       },
       "NewChatMiniBtn" : {
-        "help" : "Cipta chat baru dengan model bahasa besar"
+        "help" : "Cipta chat baru dengan model bahasa besar",
+        "label" : "Sembang"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Cipta chat RAG baru dengan kandungan syarikat",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Menunggu untuk dimuat naik"
+      },
+      "CompletedData" : {
+        "label" : "Selesai"
       }
     }
   }

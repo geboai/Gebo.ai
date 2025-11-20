@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Documenti caricati"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Cronologia chat caricata",
+        "detail" : "Cronologia chat caricata correttamente"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Il tuo intervento è in caricamento"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Risposta vocale ricevuta"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Interrompi registrazione",
+        "help" : "Interrompi registrazione"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Interrompi registrazione"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Chiudi barra laterale"
       },
       "NewChatMiniBtn" : {
-        "help" : "Crea una nuova chat con modelli linguistici avanzati"
+        "help" : "Crea una nuova chat con modelli linguistici avanzati",
+        "label" : "Chat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Crea una nuova chat RAG con contenuti aziendali",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "In attesa di caricamento"
+      },
+      "CompletedData" : {
+        "label" : "Completato"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Upphlaðin skjöl"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Spjallferill hlaðinn",
+        "detail" : "Tókst að hlaða inn spjallferil"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Tal þitt er að hlaðast inn"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Talandi svar móttekið"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Hætta við upptöku",
+        "help" : "Hætta við upptöku"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Hætta við upptöku"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Loka hliðarslá"
       },
       "NewChatMiniBtn" : {
-        "help" : "Búa til nýtt spjall með stórum tungumálalíkönum"
+        "help" : "Búa til nýtt spjall með stórum tungumálalíkönum",
+        "label" : "Spjall"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Búa til nýtt RAG spjall með efni fyrirtækis",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Bíður eftir upphleðslu"
+      },
+      "CompletedData" : {
+        "label" : "Lokið"
       }
     }
   }

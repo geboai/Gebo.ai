@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Tài liệu đã tải lên"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Lịch sử trò chuyện đã được tải",
+        "detail" : "Tải lịch sử trò chuyện thành công"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Đang tải lên bài nói của bạn"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Đã nhận câu trả lời bằng giọng nói"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Hủy ghi âm",
+        "help" : "Hủy ghi âm"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Hủy ghi âm"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Đóng thanh bên"
       },
       "NewChatMiniBtn" : {
-        "help" : "Tạo cuộc trò chuyện mới với mô hình ngôn ngữ lớn"
+        "help" : "Tạo cuộc trò chuyện mới với mô hình ngôn ngữ lớn",
+        "label" : "Trò chuyện"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Tạo cuộc trò chuyện RAG mới với nội dung công ty",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Đang chờ tải lên"
+      },
+      "CompletedData" : {
+        "label" : "Hoàn tất"
       }
     }
   }

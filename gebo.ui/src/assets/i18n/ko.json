@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "업로드된 문서"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "채팅 기록 불러옴",
+        "detail" : "채팅 기록이 정상적으로 불러와졌습니다"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "음성이 업로드되고 있습니다"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "음성 답변이 도착했습니다"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "녹음 중단",
+        "help" : "녹음 중단"
+      },
+      "AbortRecordingBtn" : {
         "help" : "녹음 중단"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "사이드바 닫기"
       },
       "NewChatMiniBtn" : {
-        "help" : "대형 언어 모델로 새 채팅 만들기"
+        "help" : "대형 언어 모델로 새 채팅 만들기",
+        "label" : "채팅"
       },
       "NewRagChatMiniBtn" : {
         "help" : "회사 콘텐츠로 새로운 RAG 채팅 생성",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "업로드 대기 중"
+      },
+      "CompletedData" : {
+        "label" : "완료됨"
       }
     }
   }

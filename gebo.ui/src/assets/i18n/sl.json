@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Naloženi dokumenti"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Zgodovina klepeta naložena",
+        "detail" : "Zgodovina klepeta je bila uspešno naložena"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Vaš govor se nalaga"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Prejet glasovni odgovor"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Prekini snemanje",
+        "help" : "Prekini snemanje"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Prekini snemanje"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Zapri stransko vrstico"
       },
       "NewChatMiniBtn" : {
-        "help" : "Ustvari nov pogovor z velikimi jezikovnimi modeli"
+        "help" : "Ustvari nov pogovor z velikimi jezikovnimi modeli",
+        "label" : "Klepet"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Ustvari novi RAG pogovor s podjetniškimi vsebinami",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Čaka na nalaganje"
+      },
+      "CompletedData" : {
+        "label" : "Dokončano"
       }
     }
   }

@@ -1752,6 +1752,16 @@
       },
       "UploadedDocs" : {
         "label" : "Przesłane dokumenty"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historia czatu została załadowana",
+        "detail" : "Historia czatu została pomyślnie załadowana"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Twoja wypowiedź jest przesyłana"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Otrzymano odpowiedź głosową"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1806,6 +1816,9 @@
       },
       "AbortBtn" : {
         "label" : "Przerwij nagrywanie",
+        "help" : "Przerwij nagrywanie"
+      },
+      "AbortRecordingBtn" : {
         "help" : "Przerwij nagrywanie"
       }
     }
@@ -2496,7 +2509,8 @@
         "help" : "Zamknij pasek boczny"
       },
       "NewChatMiniBtn" : {
-        "help" : "Utwórz nową rozmowę z dużymi modelami językowymi"
+        "help" : "Utwórz nową rozmowę z dużymi modelami językowymi",
+        "label" : "Czat"
       },
       "NewRagChatMiniBtn" : {
         "help" : "Utwórz nowy czat RAG z zawartością firmy",
@@ -2919,6 +2933,9 @@
       },
       "UploadPending" : {
         "label" : "Oczekuje na przesłanie"
+      },
+      "CompletedData" : {
+        "label" : "Zakończono"
       }
     }
   }
