@@ -232,6 +232,9 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         console.log('[UploadCmp] sendProgress', evt);
     }
     doRemoveUploaded(doc: UserUploadedContent) {
-
+        if (this.uploadedContents) {
+            this.uploadedContents=this.uploadedContents.filter(x=>!(x===doc || x.code===doc.code));
+            this.onChange(this.uploadedContents);
+        }
     }
 }

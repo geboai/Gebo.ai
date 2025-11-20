@@ -23,7 +23,7 @@ blockquote {
   padding-left: 0px;
 }
 .p-textarea {
-  border-radius: 400 !important
+  border-radius: 5px !important
 }
 .floating-chat-area {
   position: fixed;bottom: 3%;z-index: 8000;
