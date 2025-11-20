@@ -12,6 +12,7 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
@@ -36,6 +37,7 @@ public interface IGConfigurableTranscriptModel<ModelConfig extends GBaseTranscri
      * @param audioResource The InputStream of the audio resource to be transcribed.
      * @return The transcription result as a String.
      * @throws LLMConfigException If an error occurs due to misconfiguration.
+     * @throws IOException 
      */
-    public String call(InputStream audioResource) throws LLMConfigException;
+    public String call(InputStream audioResource) throws LLMConfigException, IOException;
 }

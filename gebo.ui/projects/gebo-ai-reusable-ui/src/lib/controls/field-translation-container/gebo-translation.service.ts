@@ -1,15 +1,17 @@
 import { Injectable } from "@angular/core";
-import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
+import { DEFAULT_LANGUAGE, findMatchingTranslation, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat, map } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
-import { MegaMenuItem, MenuItem, ToastMessageOptions } from "primeng/api";
+import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions } from "primeng/api";
 import { findMatchingTranlations } from "./text-language-resources";
 
 import { HttpClient } from "@angular/common/http";
 import { GeboLanguage } from "./language-choice.component";
 import { text } from "mermaid/dist/rendering-util/rendering-elements/shapes/text";
-
+export interface ExtendedConfirmation extends Confirmation {
+    id: string;
+}
 /*******************************************************************************
  * The actual UI resources are all written in english, used as a default language
  * resources source, once the language is changed this service will publish all
@@ -82,6 +84,62 @@ export class GeboAITranslationService {
 
 
         return concat(of(GeboAITranslationService.currentTextResources), this.languageChanges);
+    }
+    public translateConfirmation(moduleId: string, entityId: string, confirmation: ExtendedConfirmation): Observable<ExtendedConfirmation|undefined> {
+        const data: UIExistingText[] = [];
+        if (confirmation.message) {
+            data.push({
+                moduleId: moduleId,
+                entityId: entityId,
+                componentId: confirmation.id,
+                fieldId: "message",
+                key: "message",
+                text: confirmation.message
+            });
+        }
+        if (confirmation.header) {
+            data.push({
+                moduleId: moduleId,
+                entityId: entityId,
+                componentId: confirmation.id,
+                fieldId: "header",
+                key: "header",
+                text: confirmation.header
+            });
+        }
+         if (confirmation.acceptLabel) {
+            data.push({
+                moduleId: moduleId,
+                entityId: entityId,
+                componentId: confirmation.id,
+                fieldId: "acceptLabel",
+                key: "acceptLabel",
+                text: confirmation.acceptLabel
+            });
+        }
+        if (confirmation.rejectLabel) {
+            data.push({
+                moduleId: moduleId,
+                entityId: entityId,
+                componentId: confirmation.id,
+                fieldId: "rejectLabel",
+                key: "rejectLabel",
+                text: confirmation.rejectLabel
+            });
+        }
+        return this.translateOnActualLanguage(data).pipe(map(resources=>{
+            if (resources) {
+                const translations=findMatchingTranlations(data,resources);
+                if (translations) {
+                    translations.forEach(entry=>{
+                        (confirmation as any)[entry.fieldId]=entry.translation;
+                    });
+                }
+                return confirmation;
+            }else return undefined;
+
+        }));
+    
     }
     public translateText(moduleId: string, entityId: string, componentId: string, resources: { fieldId: string, text: string }[]): Observable<{ fieldId: string, translation: string }[] | undefined> {
         const data: UIExistingText[] = [];

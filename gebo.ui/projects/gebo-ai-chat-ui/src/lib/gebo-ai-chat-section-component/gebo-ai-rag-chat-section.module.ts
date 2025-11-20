@@ -34,7 +34,6 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 import { SidebarModule } from 'primeng/sidebar';
 import { PanelModule } from "primeng/panel";
-import { LayoutComponent } from "./layout.component";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { PopoverModule } from 'primeng/popover';
 
@@ -53,7 +52,7 @@ import { PopoverModule } from 'primeng/popover';
  */
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTranslationContainerModule,  ScrollPanelModule,PopoverModule],
-    declarations: [GeboAiChatSectionComponent,LayoutComponent],
+    declarations: [GeboAiChatSectionComponent],
     exports: [GeboAiChatSectionComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }]
 })

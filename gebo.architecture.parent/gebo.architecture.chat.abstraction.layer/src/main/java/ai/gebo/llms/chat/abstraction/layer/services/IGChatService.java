@@ -12,6 +12,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -61,8 +62,9 @@ public interface IGChatService extends IGGenericalChatService {
      * @param modelCode a unique code identifying the model to use for transcription.
      * @throws LLMConfigException if there is an issue with the model configuration.
      * @return a String containing the transcribed text.
+     * @throws IOException 
      */
-    public String transcript(InputStream is, String modelCode) throws LLMConfigException;
+    public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException;
 
     /**
      * Converts text to speech using a specific model identified by its code.

@@ -6,22 +6,26 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai.services;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionModel;
 import org.springframework.ai.openai.OpenAiAudioTranscriptionOptions;
 import org.springframework.ai.openai.api.OpenAiAudioApi;
 import org.springframework.ai.openai.api.OpenAiAudioApi.TranscriptResponseFormat;
 import org.springframework.ai.openai.api.OpenAiAudioApi.WhisperModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
@@ -39,14 +43,15 @@ import ai.gebo.model.OperationStatus;
 /**
  * AI generated comments
  * 
- * Service class responsible for configuring and supporting OpenAI transcript models.
- * This service provides functionality to create, configure, and manage OpenAI transcript models
- * that can convert audio to text using OpenAI's Whisper model.
+ * Service class responsible for configuring and supporting OpenAI transcript
+ * models. This service provides functionality to create, configure, and manage
+ * OpenAI transcript models that can convert audio to text using OpenAI's
+ * Whisper model.
  */
 @Service
 public class OpenAITranscriptModelConfigurationSupportService implements
 		IGTranscriptModelConfigurationSupportService<GOpenAITranscriptModelChoice, GOpenAITranscriptModelConfig> {
-	
+
 	/**
 	 * Static transcript model type for OpenAI transcript service
 	 */
@@ -55,7 +60,7 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 		type.setCode("openai-transcript");
 		type.setDescription("OpenAI transcript service");
 	}
-	
+
 	/**
 	 * Utility for reading API access information
 	 */
@@ -64,7 +69,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 
 	/**
 	 * Implementation of a configurable transcript model for OpenAI services.
-	 * Extends the abstract transcript model and provides OpenAI-specific functionality.
+	 * Extends the abstract transcript model and provides OpenAI-specific
+	 * functionality.
 	 */
 	public class OpenAIConfigurableTranscriptModel
 			extends GAbstractConfigurableTranscriptModel<GOpenAITranscriptModelConfig, OpenAiAudioTranscriptionModel> {
@@ -75,19 +81,44 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 		 * @param audioResource The input stream containing audio data to transcribe
 		 * @return The transcribed text from the audio
 		 * @throws LLMConfigException If there is an issue with the configuration
+		 * @throws IOException
 		 */
 		@Override
-		public String call(InputStream audioResource) throws LLMConfigException {
-			return model.call(new InputStreamResource(audioResource));
+		public String call(InputStream audioResource) throws LLMConfigException, IOException {
+			// receiving .webm format, saving and sending deleting after execution
+			Path created = null;
+			try {
+				created = Files.createTempFile("usr-audio", ".webm");
+				try (OutputStream os = Files.newOutputStream(created)) {
+					IOUtils.copy(audioResource, os);
+					Resource resource=new FileSystemResource(created);
+					return model.call(resource);
+				}
+			} catch (IOException exc) {
+				throw new IOException("Handled exception in call",exc);
+			} finally {
+				try {
+					audioResource.close();
+				} catch (Throwable t) {
+				}
+				try {
+					if (created!=null) {
+						Files.deleteIfExists(created);
+					}
+				} catch (Throwable t) {
+				}
+			}
 		}
 
 		/**
-		 * Configures the OpenAI audio transcription model based on the provided configuration
+		 * Configures the OpenAI audio transcription model based on the provided
+		 * configuration
 		 *
 		 * @param config The OpenAI transcript model configuration
-		 * @param type The transcript model type
+		 * @param type   The transcript model type
 		 * @return A configured OpenAI audio transcription model
-		 * @throws LLMConfigException If there is an issue with configuration or API access
+		 * @throws LLMConfigException If there is an issue with configuration or API
+		 *                            access
 		 */
 		@Override
 		protected OpenAiAudioTranscriptionModel configureModel(GOpenAITranscriptModelConfig config,
@@ -109,7 +140,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	}
 
 	/**
-	 * Default constructor for the OpenAI transcript model configuration support service
+	 * Default constructor for the OpenAI transcript model configuration support
+	 * service
 	 */
 	public OpenAITranscriptModelConfigurationSupportService() {
 	}
@@ -141,7 +173,8 @@ public class OpenAITranscriptModelConfigurationSupportService implements
 	/**
 	 * Creates a base configuration for an OpenAI transcript model
 	 *
-	 * @param presetModel Optional preset model identifier (not used in current implementation)
+	 * @param presetModel Optional preset model identifier (not used in current
+	 *                    implementation)
 	 * @return A new OpenAI transcript model configuration with default settings
 	 */
 	@Override

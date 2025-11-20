@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
@@ -302,9 +303,10 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	 * @param modelCode the code of the model to use for transcription
 	 * @return the transcribed text
 	 * @throws LLMConfigException if there is a problem with the model configuration
+	 * @throws IOException 
 	 */
 	@Override
-	public String transcript(InputStream is, String modelCode) throws LLMConfigException {
+	public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException {
 		IGConfigurableChatModel model = chatModelConfigurations.findByCode(modelCode);
 		if (model != null) {
 			return model.getTranscriptModel().call(is);

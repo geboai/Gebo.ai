@@ -24,14 +24,17 @@ import { Component, ElementRef, EventEmitter, forwardRef, Inject, Input, OnChang
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, CalledFunction, GBaseChatModelChoice, GeboChatControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, ModelProviderCapabilities, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
-import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions, MessageService, Confirmation } from "primeng/api";
 import { ScrollPanel } from "primeng/scrollpanel";
 import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { IGeboChatMessage, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
-import { GeboAITranslationService } from "@Gebo.ai/reusable-ui";
-
+import { ExtendedConfirmation, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
+const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
+const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
+const chat_history_loaded:ToastMessageOptions={id:"CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
@@ -56,7 +59,8 @@ interface GeboChatTemplatedResponse {
     documentsRef?: Array<GResponseDocumentRef>;
     calledFunctions?: Array<CalledFunction>;
 };
-
+const moduleId: string = "GeboAIChatControlModule";
+const entityId: string = "GeboAIReusableChatComponent";
 /**
  * Component that provides a reusable chat interface for Gebo.ai models.
  * Supports both standard chat and RAG-enabled conversations, with features like
@@ -306,7 +310,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         });
     }
     public getEntityName(): string {
-        return "GeboAIReusableChatComponent";
+        return entityId;
     }
 
     /**
@@ -400,8 +404,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 next: (value) => {
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
-                    this.lastInteractionMessages = [{ summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" }];
-                    this.messageService.addAll(this.lastInteractionMessages);
+                    const subscription=this.geboAiTranslationService.translateMessage(moduleId,entityId,chat_history_loaded.id,chat_history_loaded).subscribe({
+                        next:(msg)=>{
+                            if (msg) {
+                                this.lastInteractionMessages = [msg];
+                                this.messageService.addAll(this.lastInteractionMessages);
+                                subscription.unsubscribe();
+                            }
+                        }
+                    })
+                    
                     this.scrollDown();
 
                 },
@@ -473,7 +485,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     doDeleteChat(): void {
         const actualChat = this.chatInfoFormGroup.value;
         this.loadingChatHistory = true;
-        this.confirmService.confirm({
+        const confirmation: ExtendedConfirmation = {
+            id: "DELETE_CHAT_ACTION",
             header: "Delete chat action",
             message: "Are you shure you whant to delete this chat?",
             accept: () => {
@@ -487,7 +500,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 })
             }
 
+        };
+        const translateSubscription = this.geboAiTranslationService.translateConfirmation(moduleId, entityId, confirmation).subscribe({
+            next: (trconfirmation) => {
+                if (trconfirmation) {
+                    this.confirmService.confirm(trconfirmation);
+                    translateSubscription.unsubscribe();
+                }
+            }
         })
+
     }
 
     /**
@@ -753,13 +775,28 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
 
         if (chatModelCode) {
-            this.messageService.add({ severity: "info", summary: "Loading vocal answer" });
+            const loadingSub = this.geboAiTranslationService.translateMessage(moduleId, entityId, loading_vocal_answer.id, loading_vocal_answer).subscribe({
+                next: (msg) => {
+                    if (msg) {
+                        this.messageService.add(msg);
+                        loadingSub.unsubscribe();
+                    }
+                }
+            })
+
             this.waitingForAudiocontent = true;
             this.chatService.speechText(sr, chatModelCode).subscribe(
                 {
                     next: (value) => {
                         this.currentAudioTrack = value;
-                        this.messageService.add({ severity: "info", summary: "Vocal answer received" });
+                        const loadingSub = this.geboAiTranslationService.translateMessage(moduleId, entityId, loading_vocal_answer.id, loading_vocal_answer_received).subscribe({
+                            next: (msg) => {
+                                if (msg) {
+                                    this.messageService.add(msg);
+                                    loadingSub.unsubscribe();
+                                }
+                            }
+                        })
                     },
                     error: (err) => {
                         this.waitingForAudiocontent = false;
@@ -792,7 +829,15 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             chatModelCode = this.capabilities?.configurationCode;
         }
         if (chatModelCode) {
-            this.messageService.add({ severity: "info", summary: "Your speech is uploading" });
+            const subs=this.geboAiTranslationService.translateMessage(moduleId,entityId,your_speech_is_uploading.id,your_speech_is_uploading).subscribe({
+                next:(msg)=>{
+                    if (msg) {
+                         this.messageService.add(msg);
+                         subs.unsubscribe();
+                    }
+                }
+            })
+            
             const url: string = this.basePath + "/api/users/GeboDirectModelChatController/transcriptText";
             console.log("sending directly to model code:" + chatModelCode);
             if (event.data) {
