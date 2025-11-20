@@ -88,7 +88,12 @@ export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy
             this.playMode = true;
             const audioUrl = URL.createObjectURL(this.playAudioTrack);
             const audio = new Audio(audioUrl);
-            audio.play();
+            audio.play().then(()=>{
+                
+            },()=>{});
+            audio.onended=(ev)=>{
+                this.playMode=false;
+            }
 
             this.audio = audio;
         }
@@ -110,7 +115,9 @@ export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy
      */
     continuePlay(): void {
         if (this.audio) {
-            this.audio.play();
+            this.audio.play().then(()=>{
+                this.playMode=false;
+            },()=>{});
             this.playMode = true;
             this.playPaused = false;
         }
