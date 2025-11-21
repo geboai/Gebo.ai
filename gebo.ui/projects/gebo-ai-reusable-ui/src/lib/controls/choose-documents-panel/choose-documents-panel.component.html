@@ -16,7 +16,7 @@
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <div class="col-12">
+    <div class="col-12 justify-content-center" style="text-align: center;">
         <span *ngFor="let doc of listedDocuments" style="list-style: none;break-after: avoid;">
             <p-button  id="ChatWithDocsRemoveBtn"  gebo-ai-label  icon="pi pi-times-circle" [text]="true" (onClick)="doRemoveFile(doc)" *ngIf="readonly===false && interactionDisabled===false"></p-button>
             <gebo-ui-document-opener-button [document]="doc"></gebo-ui-document-opener-button>

@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.chat-input-shell {
+  width: 100%;
+}
+
+/* Se vuoi accentuare il max-width su schermi molto grandi
+   oltre a xxl:col-4, puoi aggiungere qualcosa tipo: */
+@media (min-width: 1920px) {
+  .chat-input-shell {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.floating-chat-area {
+  position: fixed;
+  bottom: 3%;
+  z-index: 8000;
+}
+
+.floating-chat-area-middle {
+  position: fixed;
+  bottom: 50%;
+  z-index: 8000;
+}
+
+.chat-area {
+  background-color: white;
+  border: 1px solid #C0C0C0;
+  border-radius: 15px;
+}

@@ -128,6 +128,7 @@
         <div class="col-2"></div>
 
     </div>
+    <!-- 
     <div [class]="interactions && interactions.length?'floating-chat-area':'floating-chat-area-middle'"
         class="grid w-full">
         <form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
@@ -151,7 +152,7 @@
                             [chatProfileCode]="chatInfo?.chatProfileCode" [ragChat]="ragsystem"
                             [userSessionCode]="userChatContextCode"
                             (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"></gebo-ai-upload-chat-documents-files>
-                        <!--  check why it does not work   -->
+                        
                     </div>
                     <div class="col-2"></div>
                     <div class="col-2 grid">
@@ -196,7 +197,16 @@
             </div>
 
         </form>
-    </div>
+    </div> -->
+    <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
+        [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
+        [userChatContextCode]="userChatContextCode" [capabilities]="capabilities"
+        [currentAudioTrack]="currentAudioTrack" [loading]="loading"
+        [(openSelectDocumentsWindow)]="openSelectDocumentsWindow"
+        [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
+        (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)" (speechEvent)="onSpeechEvent($event)"
+        (messageSubmit)="onSumbit()" (messageSend)="sendMessage()">
+    </gebo-ai-chat-input-shell>
 </p-scrollPanel>
 
 <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"
