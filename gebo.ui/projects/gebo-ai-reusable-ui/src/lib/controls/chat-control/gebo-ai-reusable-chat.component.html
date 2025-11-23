@@ -8,6 +8,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
+ <input #focusableTop readonly style="border: 0px solid white;">
 <div class="card flex justify-center">
     <p-toast />
 </div>
@@ -54,11 +55,11 @@
                     </div>
                     <div class="col-12" style="height: 100%;">
 
-
+                        
                         <div class="grid" style="width: 100%;">
                             <div class="col-12" style="text-align: right;">
-                                <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true"
-                                    severity="contrast" title="Scroll down"></p-button>
+                                <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true" id="ScrollDownBtn" gebo-ai-label
+                                    severity="contrast" title="Scroll down" *ngIf="(interactions && interactions.length)"></p-button>
                             </div>
                         </div>
                         <ul *ngFor="let interaction of interactions;" style="with: 100%;">
@@ -112,9 +113,15 @@
                             </li>
                         </ul>
                         <input #focusable readonly style="border: 0px solid white;">
+                        <!-- 
                         <p-scrollTop target="parent" [threshold]="100" icon="pi pi-arrow-up" />
-
-
+                        -->
+                        <div class="grid" style="width: 100%;">
+                            <div class="col-12" style="text-align: right;">
+                                <p-button (onClick)="scrollUp()" icon="pi pi-arrow-up"  id="ScrollUpBtn" gebo-ai-label [raised]="true"
+                                    severity="contrast" title="Scroll Up" *ngIf="(interactions && interactions.length)"></p-button>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -128,76 +135,7 @@
         <div class="col-2"></div>
 
     </div>
-    <!-- 
-    <div [class]="interactions && interactions.length?'floating-chat-area':'floating-chat-area-middle'"
-        class="grid w-full">
-        <form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
-
-            <div class="col-12 grid w-full">
-
-                <div class="col-3">
-
-                </div>
-                <div class="col-6 grid chat-area">
-                    <div class="col-2"></div>
-                    <div class="col-8"><gebo-ai-choose-documents-panel-component
-                            *ngIf="ragsystem && chatUserInfos?.knowledgeBases" [interactionDisabled]="loading"
-                            [knowledgeBaseCodes]="knowledgeBaseCodes"
-                            [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
-                            [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
-                            formControlName="forcedRequestDocuments"></gebo-ai-choose-documents-panel-component>
-
-                        <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
-                            formControlName="userUploadedContents" [chatModelCode]="chatInfo?.chatModelCode"
-                            [chatProfileCode]="chatInfo?.chatProfileCode" [ragChat]="ragsystem"
-                            [userSessionCode]="userChatContextCode"
-                            (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)"></gebo-ai-upload-chat-documents-files>
-                        
-                    </div>
-                    <div class="col-2"></div>
-                    <div class="col-2 grid">
-                        <div class="col-6" style="text-align: center;"><p-button id="UploadFileBtn" [text]="false"
-                                [rounded]="true" gebo-ai-label icon="pi pi-cloud-upload"
-                                title="Upload a file to chat or work with" (onClick)="openedUploadDocumentsWindow=true"
-                                [disabled]="loading"></p-button></div>
-                        <div class="col-6" style="text-align: center;"><p-button id="ChatWithDocsBtnNew" [text]="true"
-                                gebo-ai-label icon="pi pi-search"
-                                title="Browse or search and select documents to chat with"
-                                (onClick)="openSelectDocumentsWindow=true" [disabled]="loading"></p-button></div>
-                    </div>
-                    <div class="col-8 grid">
-
-                        <textarea rows="3" cols="250" [required]="true" pTextarea formControlName="query" class="col-12 w-full"
-                            gebo-ai-label id="QueryControl" placeholder="Write a message for the chat bot"
-                            (keydown.enter)="onSumbit()">
-                        </textarea>
-
-                    </div>
-                    <div class="col-2 grid">
-                        <div class="col-6" style="text-align: center;">
-                            <gebo-ai-audio-component [disabled]="capabilities?.supportsTranscript!==true || loading"
-                                (onAudioTrack)="onSpeechEvent({data:$event,url:'noUrl'})"
-                                [playAudioTrack]="currentAudioTrack" [viewLabels]="true"></gebo-ai-audio-component>
-                        </div>
-                        <div class="col-6" style="text-align: center;">
-                            <p-button id="SubmiQuestion" (onClick)="sendMessage()" gebo-ai-label
-                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
-                                type="submit" title="Sumbit your question" [text]="false"></p-button>
-                        </div>
-
-                    </div>
-                    <div class="col-2"></div>
-                    <div class="col-8"></div>
-                    <div class="col-2"></div>
-                </div>
-                <div class="col-3">
-
-                </div>
-
-            </div>
-
-        </form>
-    </div> -->
+    
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
         [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
         [userChatContextCode]="userChatContextCode" [capabilities]="capabilities"

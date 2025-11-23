@@ -34,7 +34,7 @@ import { ExtendedConfirmation, GeboAITranslationService } from "@Gebo.ai/reusabl
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
-const chat_history_loaded:ToastMessageOptions={id:"CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
+const chat_history_loaded: ToastMessageOptions = { id: "CHAT_HISTORY_LOADED", summary: "Chat history loaded", detail: "Chat history loaded successfully", severity: "success" };
 /**
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
@@ -81,6 +81,7 @@ const entityId: string = "GeboAIReusableChatComponent";
     standalone: false
 })
 export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFieldHost {
+
 
 
     /**
@@ -228,6 +229,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
      * Reference to the element that should receive focus
      */
     @ViewChild("focusable") focusable?: ElementRef<HTMLButtonElement>;
+
+    /**
+     * Reference to the element that should receive focus to scroll up
+     */
+    @ViewChild("focusableTop") focusableTop?: ElementRef<HTMLButtonElement>;
 
     /**
      * Configuration options for Mermaid diagrams
@@ -404,8 +410,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 next: (value) => {
                     this.interactions = value?.interactions ? value.interactions as GeboChatInteraction[] : [];
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
-                    const subscription=this.geboAiTranslationService.translateMessage(moduleId,entityId,chat_history_loaded.id,chat_history_loaded).subscribe({
-                        next:(msg)=>{
+                    const subscription = this.geboAiTranslationService.translateMessage(moduleId, entityId, chat_history_loaded.id, chat_history_loaded).subscribe({
+                        next: (msg) => {
                             if (msg) {
                                 this.lastInteractionMessages = [msg];
                                 this.messageService.addAll(this.lastInteractionMessages);
@@ -413,7 +419,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             }
                         }
                     })
-                    
+
                     this.scrollDown();
 
                 },
@@ -758,6 +764,24 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         }
         setTimeout(scrollFunction, 500);
     }
+    scrollUp() {
+         const scrollFunction = () => {
+
+            if (this.focusableTop) {
+                try {
+                    this.focusableTop.nativeElement.scrollTo();
+                } catch (e) {
+                    console.error(e);
+                }
+                try {
+                    this.focusableTop.nativeElement.scrollIntoView();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        }
+        setTimeout(scrollFunction, 500);
+    }
 
     /**
      * Sends a text-to-speech request and plays the audio
@@ -829,15 +853,15 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             chatModelCode = this.capabilities?.configurationCode;
         }
         if (chatModelCode) {
-            const subs=this.geboAiTranslationService.translateMessage(moduleId,entityId,your_speech_is_uploading.id,your_speech_is_uploading).subscribe({
-                next:(msg)=>{
+            const subs = this.geboAiTranslationService.translateMessage(moduleId, entityId, your_speech_is_uploading.id, your_speech_is_uploading).subscribe({
+                next: (msg) => {
                     if (msg) {
-                         this.messageService.add(msg);
-                         subs.unsubscribe();
+                        this.messageService.add(msg);
+                        subs.unsubscribe();
                     }
                 }
             })
-            
+
             const url: string = this.basePath + "/api/users/GeboDirectModelChatController/transcriptText";
             console.log("sending directly to model code:" + chatModelCode);
             if (event.data) {

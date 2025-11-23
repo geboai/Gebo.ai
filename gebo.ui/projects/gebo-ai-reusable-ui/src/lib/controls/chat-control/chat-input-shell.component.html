@@ -4,13 +4,13 @@
 
         <!-- wrapper centrato col box responsive -->
         <div class="grid justify-content-center w-full">
-            <div class="col-12 lg:col-6 xxl:col-4">
+            <div class="col-12 lg:col-8 xxl:col-8">
                 <!--
                     col-12: mobile/tutto schermo
                     lg:col-6: circa metà schermo (full HD)
                     xxl:col-4: circa 1/3 su schermi molto grandi
                 -->
-                <div class="col-12 lg:col-6 xxl:col-4 chat-input-shell chat-area">
+                <div class="col-12 lg:col-6 xxl:col-6 chat-input-shell chat-area">
 
                     <!-- Riga superiore: pannello documenti + upload list -->
                     <div class="grid w-full mb-2 ">
@@ -38,7 +38,7 @@
 
                         <!-- SINISTRA: bottoni upload & browse docs -->
                         <div
-                            class="col-3 md:col-3 flex justify-content-end md:justify-content-end mb-2 md:mb-0 gap-2">
+                            class="col-3  md:col-2 lg:col-1 xxl:col-1 flex justify-content-center md:justify-content-center mb-2 md:mb-0 gap-2">
                             <p-button id="UploadFileBtn" [text]="false" [rounded]="true" gebo-ai-label
                                 icon="pi pi-cloud-upload" title="Upload a file to chat or work with"
                                 (onClick)="openUploadDialog()" [disabled]="loading">
@@ -51,14 +51,14 @@
                         </div>
 
                         <!-- CENTRO: textarea -->
-                        <div class="col-6 md:col-6 mb-2 md:mb-0">
+                        <div class="col-6   md:col-8 lg:col-10 xxl:col-10  md:col-6 mb-2 md:mb-0">
                             <textarea rows="3" pTextarea formControlName="query" class="w-full" gebo-ai-label
                                 id="QueryControl" placeholder="Write a message for the chat bot"
                                 (keydown.enter)="onSubmit()" [required]="true"></textarea>
                         </div>
 
                         <!-- DESTRA: audio + submit (stessa larghezza della sinistra) -->
-                        <div class="col-3 md:col-3 flex justify-content-start md:justify-content-start gap-2">
+                        <div class="col-3   md:col-2 lg:col-1 xxl:col-1  flex justify-content-center md:justify-content-center gap-2">
                             <gebo-ai-audio-component class="flex align-items-center"
                                 [disabled]="capabilities?.supportsTranscript !== true || loading"
                                 (onAudioTrack)="onSpeechEventInternal($event)" [playAudioTrack]="currentAudioTrack"
