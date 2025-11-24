@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,7 +11,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.stereotype.Service;
@@ -23,11 +27,13 @@ import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactor
 import ai.gebo.config.service.IGGeboConfigService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.model.SerializedDocumentContent;
 import ai.gebo.llms.chat.abstraction.layer.model.SerializedDocumentsContent;
 import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.DocumentMetaInfos;
@@ -49,6 +55,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final IGSecurityService securityService;
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
 	final IGDocumentReferenceFactory documentReferenceFactory;
+	final LLMGeneratedResourceRepository llmGeneratedResourceRepository;
 	final static String SESSIONS_PATH_PREFIX = "SESSIONS_AREA";
 	final static ObjectMapper objectMapper = new ObjectMapper();
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -180,6 +187,8 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 			}
 		});
 		Files.deleteIfExists(path);
+		this.llmGeneratedResourceRepository.deleteByUserContextCode(context.getCode());
+		this.uploadContentsRepository.deleteByUserContextCode(context.getCode());
 	}
 
 	@Override
@@ -262,6 +271,51 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		Optional<UserUploadContentServerSide> data = this.uploadContentsRepository.findById(uploaded.getCode());
 		if (data.isPresent()) {
 			return this.getIngestedContentsOf(data.get());
+		}
+		return null;
+	}
+
+	@Override
+	public LLMGeneratedResource addMedia(Media media, GUserChatContext userContext) throws IOException {
+		securityService.checkBeingCreator(userContext);
+		LLMGeneratedResource resource = new LLMGeneratedResource();
+		resource.setCode(UUID.randomUUID().toString());
+		resource.setDescription(media.getName());
+		resource.setFileName(media.getName());
+		resource.setUserContextCode(userContext.getCode());
+		resource.setContentType(media.getMimeType() != null ? media.getMimeType().getType() : null);
+		Path path = getSessionPath(userContext);
+		Path out = Path.of(path.toString(), resource.getCode());
+		try (OutputStream os = Files.newOutputStream(out)) {
+			IOUtils.write(media.getDataAsByteArray(), os);
+			os.flush();
+		}
+		resource = llmGeneratedResourceRepository.insert(resource);
+		return resource;
+	}
+
+	@Override
+	public LLMGeneratedResource getGeneratedContent(String userSessionCode, String generatedResourceCode)
+			throws IOException {
+		Optional<GUserChatContext> contextData = userChatContextRepository.findById(userSessionCode);
+		if (contextData.isPresent()) {
+			securityService.checkBeingCreator(contextData.get());
+			Optional<LLMGeneratedResource> data = this.llmGeneratedResourceRepository.findById(generatedResourceCode);
+			if (data.isPresent())
+				return data.get();
+		}
+		return null;
+	}
+
+	@Override
+	public InputStream streamContent(LLMGeneratedResource generated) throws IOException {
+		Optional<GUserChatContext> contextData = userChatContextRepository.findById(generated.getUserContextCode());
+		if (contextData.isPresent()) {
+			securityService.checkBeingCreator(contextData.get());
+			Path path = getSessionPath(contextData.get());
+			Path outPath = Path.of(path.toString(), generated.getCode());
+
+			return Files.newInputStream(outPath);
 		}
 		return null;
 	}

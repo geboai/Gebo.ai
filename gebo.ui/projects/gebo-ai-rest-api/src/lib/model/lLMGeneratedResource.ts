@@ -10,10 +10,17 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    roles?: Array<string>;
-    disabled?: boolean;
-    sourname?: string;
-    username?: string;
+export interface LLMGeneratedResource { 
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    fileName: string;
+    extension?: string;
+    contentType?: string;
+    fileSize?: number;
+    tokensCount?: number;
+    userContextCode: string;
 }

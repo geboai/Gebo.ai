@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,9 +32,11 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GLookupEntry;
 import ai.gebo.security.services.IGSecurityService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -44,18 +47,11 @@ import ai.gebo.security.services.IGSecurityService;
  */
 @RestController
 @RequestMapping(path = "api/users/GeboUserChatsController")
+@AllArgsConstructor
 public class GeboUserChatsController {
-	@Autowired
-	GUserChatContextRepository repository;
-	@Autowired
-	IGSecurityService securityService;
-
-	/**
-	 * Default constructor for GeboUserChatsController.
-	 */
-	public GeboUserChatsController() {
-
-	}
+	final GUserChatContextRepository repository;
+	final IGSecurityService securityService;
+	final IGChatStorageAreaService chatStorageAreaService;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -117,7 +113,18 @@ public class GeboUserChatsController {
 	 */
 	@PostMapping(value = "deleteUserChats", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserChats(@RequestBody List<String> ids) {
-		repository.deleteAllById(ids);
+		List<GUserChatContext> data = repository.findAllById(ids);
+		for (GUserChatContext gUserChatContext : data) {
+			securityService.checkBeingCreator(gUserChatContext);
+		}
+		for (GUserChatContext gUserChatContext : data) {
+			try {
+				this.chatStorageAreaService.deleteSessionContents(gUserChatContext);
+			} catch (IOException e) {
+
+			}
+			repository.delete(gUserChatContext);
+		}
 	}
 
 	/**

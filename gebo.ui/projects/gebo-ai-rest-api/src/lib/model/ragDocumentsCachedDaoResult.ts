@@ -13,6 +13,6 @@ import { RagDocumentReferenceItem } from './ragDocumentReferenceItem';
 
 export interface RagDocumentsCachedDaoResult { 
     documentItems?: Array<RagDocumentReferenceItem>;
-    ntokens?: number;
     nbytes?: number;
+    ntokens?: number;
 }

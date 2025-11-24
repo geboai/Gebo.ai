@@ -48,9 +48,11 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
@@ -71,9 +73,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
 			GUserChatContextRepository userContextRepository, GeboChatPromptsConfigs promptConfigs,
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
-			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository) {
+			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
+			IGChatStorageAreaService chatStorageAreaService,
+			LLMGeneratedResourceRepository generatedResourceRepository) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
-				promptsDao, interactionsContext, securityService, fixerServiceRepository);
+				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
+				generatedResourceRepository);
 	}
 
 	/**
@@ -304,7 +309,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	 * @param modelCode the code of the model to use for transcription
 	 * @return the transcribed text
 	 * @throws LLMConfigException if there is a problem with the model configuration
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Override
 	public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException {

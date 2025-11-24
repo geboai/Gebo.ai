@@ -19,10 +19,10 @@ export interface PageDocumentReferenceView {
     size?: number;
     content?: Array<DocumentReferenceView>;
     number?: number;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 }

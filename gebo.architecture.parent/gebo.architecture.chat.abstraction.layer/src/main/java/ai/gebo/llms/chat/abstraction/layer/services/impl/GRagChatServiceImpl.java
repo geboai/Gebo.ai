@@ -54,11 +54,13 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
@@ -90,9 +92,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			IGChatProfileManagementService chatProfileManagementService,
-			IGChatRequestResourcesUsePolicy requestLimitationPolicy) {
+			IGChatRequestResourcesUsePolicy requestLimitationPolicy, IGChatStorageAreaService chatStorageAreaService,
+			LLMGeneratedResourceRepository generatedResourceRepository) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
-				promptsDao, interactionsContext, securityService, fixerServiceRepository);
+				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
+				generatedResourceRepository);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;

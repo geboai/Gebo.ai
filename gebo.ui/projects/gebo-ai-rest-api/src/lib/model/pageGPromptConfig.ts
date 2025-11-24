@@ -19,10 +19,10 @@ export interface PageGPromptConfig {
     size?: number;
     content?: Array<GPromptConfig>;
     number?: number;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 }

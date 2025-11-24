@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -30,6 +31,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -60,9 +62,12 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.DocumentMetaInfos;
@@ -98,6 +103,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGSecurityService securityService;
 
 	final protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
+
+	final protected IGChatStorageAreaService chatStorageAreaService;
+	
+	final protected LLMGeneratedResourceRepository generatedResourceRepository;
 
 	/**
 	 * Inner class representing a system message containing document data.
@@ -400,6 +409,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 						if (text != null) {
 							contentSegment.append(text);
 						}
+						List<Media> medias = rs.getOutput().getMedia();
+						if (medias != null && !medias.isEmpty()) {
+							for (Media media : medias) {
+							 LLMGeneratedResource generatedResource;
+							 try {
+								generatedResource = this.chatStorageAreaService.addMedia(media,userContext);
+								response.getGeneratedResources().add(generatedResource);
+							 } catch (Throwable e) {
+								LOGGER.error("Error receiving media",e);
+							 }
+							 
+							}
+						}
 					}
 				}
 			}
@@ -477,5 +499,4 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return out;
 	}
 
-	
 }

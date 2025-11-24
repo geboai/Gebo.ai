@@ -19,10 +19,10 @@ export interface PageGJobStatusItem {
     size?: number;
     content?: Array<GJobStatusItem>;
     number?: number;
+    sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
-    sort?: SortObject;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
 }
