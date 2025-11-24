@@ -118,6 +118,53 @@ export class GeboChatControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public createCleanChatByModelCode(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanChatByModelCode(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanChatByModelCode(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanChatByModelCode(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (modelCode === null || modelCode === undefined) {
+            throw new Error('Required parameter modelCode was null or undefined when calling createCleanChatByModelCode.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (modelCode !== undefined && modelCode !== null) {
+            queryParameters = queryParameters.set('modelCode', <any>modelCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GUserChatInfo>('get',`${this.basePath}/api/users/GeboDirectModelChatController/createCleanChatByModelCode`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param modelCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getChatModelMetaInfos(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GBaseChatModelChoice>;
     public getChatModelMetaInfos(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GBaseChatModelChoice>>;
     public getChatModelMetaInfos(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GBaseChatModelChoice>>;

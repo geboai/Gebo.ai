@@ -359,7 +359,7 @@ public class GResponseDocumentRef implements Serializable {
         final List<GResponseDocumentRef> out = new ArrayList<GResponseDocumentRef>();
         extractedDocuments.getDocumentItems().forEach(x -> {
             if (!x.getFragments().isEmpty()) {
-                GResponseDocumentRef documentRef = new GResponseDocumentRef(x.getFragments().get(0).getDocument());
+                GResponseDocumentRef documentRef = new GResponseDocumentRef(x.getFragments().get(0).toAIDocument());
                 out.add(documentRef);
                 documentRef.setNTokensRelevant(x.getNTokens());
                 documentRef.setNTotalContentTokens(x.getTotalFileNTokens());
@@ -371,9 +371,9 @@ public class GResponseDocumentRef implements Serializable {
                 }
                 x.getFragments().forEach(y -> {
                     DocInternalRef internalRef = new DocInternalRef();
-                    internalRef.setId(y.getDocument().getId());
-                    Object page = y.getDocument().getMetadata() != null
-                            ? y.getDocument().getMetadata().get(DocumentMetaInfos.CONTENT_PAGE)
+                    internalRef.setId(y.toAIDocument().getId());
+                    Object page = y.toAIDocument().getMetadata() != null
+                            ? y.toAIDocument().getMetadata().get(DocumentMetaInfos.CONTENT_PAGE)
                             : null;
                     if (page != null) {
                         internalRef.setPage(page.toString());

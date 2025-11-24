@@ -15,7 +15,7 @@ export interface MimeType {
     subtype?: string;
     charset?: string;
     concrete?: boolean;
+    subtypeSuffix?: string;
     wildcardSubtype?: boolean;
     wildcardType?: boolean;
-    subtypeSuffix?: string;
 }

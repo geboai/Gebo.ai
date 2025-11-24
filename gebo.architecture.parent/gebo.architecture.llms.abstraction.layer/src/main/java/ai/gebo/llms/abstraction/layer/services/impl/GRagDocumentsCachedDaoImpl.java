@@ -555,10 +555,10 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			RagDocumentsCachedDaoResult result, long maxTokens) {
 		Map<String, RagDocumentFragment> fragmentsMap = new HashMap<>();
 		for (RagDocumentFragment frag : alreadyIn.getFragments()) {
-			fragmentsMap.put(frag.getDocument().getId(), frag);
+			fragmentsMap.put(frag.toAIDocument().getId(), frag);
 		}
 		for (RagDocumentFragment nested : item.getFragments()) {
-			if (!fragmentsMap.containsKey(nested.getDocument().getId())) {
+			if (!fragmentsMap.containsKey(nested.toAIDocument().getId())) {
 				if (result.getNTokens() + nested.getNTokens() <= maxTokens) {
 					alreadyIn.getFragments().add(nested);
 					result.recalculateSize();

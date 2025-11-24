@@ -6,7 +6,7 @@ import { HttpUrlEncodingCodec } from '@angular/common/http';
 * See: https://github.com/angular/angular/issues/11058#issuecomment-247367318
 */
 export class CustomHttpUrlEncodingCodec extends HttpUrlEncodingCodec {
-    override  encodeKey(k: string): string {
+    override encodeKey(k: string): string {
         k = super.encodeKey(k);
         return k.replace(/\+/gi, '%2B');
     }

@@ -36,6 +36,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { PanelModule } from "primeng/panel";
 import { ScrollPanelModule } from "primeng/scrollpanel";
 import { PopoverModule } from 'primeng/popover';
+import { RouterLinkWithHref } from "@angular/router";
 
 /**
  * The GeboAiChatModule provides a self-contained feature module for chat functionality.
@@ -51,7 +52,7 @@ import { PopoverModule } from 'primeng/popover';
  * - Custom Gebo.ai components (EditableListboxModule, GeboAIReusableChatModel)
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTranslationContainerModule,  ScrollPanelModule,PopoverModule],
+    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTranslationContainerModule, ScrollPanelModule, PopoverModule, RouterLinkWithHref],
     declarations: [GeboAiChatSectionComponent],
     exports: [GeboAiChatSectionComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }]

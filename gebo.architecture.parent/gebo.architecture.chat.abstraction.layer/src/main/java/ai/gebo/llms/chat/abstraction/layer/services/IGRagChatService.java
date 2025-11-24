@@ -17,6 +17,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Gebo.ai comment agent
@@ -68,5 +69,8 @@ public interface IGRagChatService extends IGGenericalChatService {
 	 */
 	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode)
 			throws GeboPersistenceException, LLMConfigException;
-	
+
+	public GUserChatInfo createCleanRagChatByProfileCode(@NotNull String profileCode)
+			throws GeboPersistenceException, LLMConfigException;
+
 }

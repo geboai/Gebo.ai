@@ -56,6 +56,7 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
+import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 /**
@@ -447,6 +448,25 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		userContext.setDescription(description);
 		userContext.setUsername(user.getUsername());
 		userContext = persistenceManager.insert(userContext);
+		GUserChatInfoData data = new GUserChatInfoData(userContext);
+
+		return data;
+	}
+
+	@Override
+	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) {
+		UserInfos user = securityService.getCurrentUser();
+		GUserChatContext userContext = new GUserChatContext();
+		IGConfigurableChatModel chatModel = this.chatModelConfigurations.findByCode(modelCode);
+		if (chatModel == null)
+			throw new RuntimeException("Cannot create a chat with not existing chat model code");
+		userContext.setChatModelCode(modelCode);
+		String description = "Chat with "
+				+ (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
+						? chatModel.getConfig().getChoosedModel().getCode()
+						: " chat bot");
+		userContext.setDescription(description);
+		userContext.setUsername(user.getUsername());
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 
 		return data;

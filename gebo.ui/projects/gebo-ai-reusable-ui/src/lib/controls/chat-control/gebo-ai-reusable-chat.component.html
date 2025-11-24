@@ -59,7 +59,7 @@
                         <div class="grid" style="width: 100%;">
                             <div class="col-12" style="text-align: right;">
                                 <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true" id="ScrollDownBtn" gebo-ai-label
-                                    severity="contrast" title="Scroll down" *ngIf="(interactions && interactions.length)"></p-button>
+                                    severity="contrast" title="Scroll down" *ngIf="(interactions && interactions.length > 1)"></p-button>
                             </div>
                         </div>
                         <ul *ngFor="let interaction of interactions;" style="with: 100%;">
@@ -119,7 +119,7 @@
                         <div class="grid" style="width: 100%;">
                             <div class="col-12" style="text-align: right;">
                                 <p-button (onClick)="scrollUp()" icon="pi pi-arrow-up"  id="ScrollUpBtn" gebo-ai-label [raised]="true"
-                                    severity="contrast" title="Scroll Up" *ngIf="(interactions && interactions.length)"></p-button>
+                                    severity="contrast" title="Scroll Up" *ngIf="(interactions && interactions.length > 1)"></p-button>
                             </div>
                         </div>
                     </div>

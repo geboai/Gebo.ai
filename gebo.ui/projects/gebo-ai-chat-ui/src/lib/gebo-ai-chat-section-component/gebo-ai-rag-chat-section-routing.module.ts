@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
@@ -22,10 +22,26 @@ import { GeboAiChatModule } from "./gebo-ai-rag-chat-section.module";
  * This routes array contains a single route definition that maps the empty path ('') 
  * to the GeboAiChatSectionComponent with full path matching.
  */
-const routes:Routes=[
-    {path:'',
-     component: GeboAiChatSectionComponent,
-     pathMatch:"full"
+const routes: Routes = [
+    {
+        path: '',
+        component: GeboAiChatSectionComponent,
+        pathMatch: "full"
+    },
+    {
+        path: ':id/load',
+        component: GeboAiChatSectionComponent
+
+    },
+    {
+        path: ':chatProfile/newRagChat',
+        component: GeboAiChatSectionComponent
+
+    },
+    {
+        path: ':modelCode/newChat',
+        component: GeboAiChatSectionComponent
+
     }
 ];
 
@@ -37,8 +53,8 @@ const routes:Routes=[
  * path is accessed.
  */
 @NgModule({
-    imports:[GeboAiChatModule, RouterModule.forChild(routes)]
-    
+    imports: [GeboAiChatModule, RouterModule.forChild(routes)]
+
 })
 export class GeboAiChatRoutingModule {
 

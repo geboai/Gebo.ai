@@ -30,11 +30,11 @@
                     <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" label="Chat with knowledge base"
                         title="Create a new RAG chat with company contents" *ngIf="chatProfilesData?.length"
                         gebo-ai-label [text]="true"
-                        (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):createRagChat()"></p-button>
+                        (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):routeNewRagChat()"></p-button>
                     <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" label="Chat"
                         title="Create a new chat with large language models"
                         *ngIf="(!chatProfilesData?.length) && chatModelsData.length" gebo-ai-label [text]="true"
-                        (onClick)="chatModelsData.length>1?newChatDialog.toggle($event):createChat()"></p-button>
+                        (onClick)="chatModelsData.length>1?newChatDialog.toggle($event):routeNewChat()"></p-button>
                     <p-popover #newRagChatDialog>
                         <div class="grid">
                             <div class="col-12" [formGroup]="formGroup">
@@ -48,7 +48,7 @@
 
                             </div>
                             <div class="col-6">
-                                <p-button id="NewChatBtn" gebo-ai-label label="New chat" (onClick)="createRagChat()"
+                                <p-button id="NewChatBtn" gebo-ai-label label="New chat" (onClick)="routeNewRagChat()"
                                     [disabled]="formGroup.invalid" styleClass="w-full" severity="success"
                                     [outlined]="true" icon="pi pi-microchip-ai"></p-button>
                             </div>
@@ -67,7 +67,7 @@
 
                             </div>
                             <div class="col-6">
-                                <p-button id="CreateChatBtn" gebo-ai-label label="New chat" (onClick)="createChat()"
+                                <p-button id="CreateChatBtn" gebo-ai-label label="New chat" (onClick)="routeNewChat()"
                                     [disabled]="chatFormGroup.invalid" styleClass="w-full" severity="success"
                                     [outlined]="true" icon="pi pi-microchip-ai"></p-button>
                             </div>
@@ -81,9 +81,12 @@
                          [virtualScrollItemSize]="page.pageSize" [virtualNodeHeight]="20" styleClass="h-full w-full"
                         (onNodeDoubleClick)="openChatItem($event)" [loading]="chatsPageLoading">
                         <ng-template let-node pTemplate="default">
-                            <a (click)="node.data?activateChat(node.data):false" href="javascript:void(0)"
+                            <!-- 
+                            <p-button [text]="true" [routerLink]="node.data.routerLink" [label]="node.label"></p-button>
+                            -->
+                            <a (click)="node.data?routeToChat(node.data):false" href="javascript:void(0)" 
                                 style="text-decoration: none;color:black">{{node.label}}</a>
-
+                               
                         </ng-template>
                     </p-tree>
                 </div>
@@ -92,55 +95,7 @@
         </div>
     </ng-template>
 </p-sidebar>
-<ng-template #newChatsTemplate>
-    <p-blockUI id="BlockUIIcon" gebo-ai-label [blocked]="loading">
-        <i class="pi pi-lock" style="font-size: 3rem"></i>
-    </p-blockUI>
-    <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" title="Create a new RAG chat with company contents"
-        *ngIf="chatProfilesData?.length" gebo-ai-label [text]="true"
-        (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):createRagChat()"></p-button>
-    <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" title="Create a new chat with large language models"
-        *ngIf="(!chatProfilesData?.length) && chatModelsData.length" gebo-ai-label [text]="true"
-        (onClick)="chatModelsData.length>1?newChatDialog.toggle($event):createChat()"></p-button>
-    <p-popover #newRagChatDialog>
-        <div class="grid">
-            <div class="col-12" [formGroup]="formGroup">
-                <gebo-ai-field id="chatProfileCode" label="Chat with knowledge bases"
-                    help="Choose the company chat profile to interact with company (and your) documents and LLMs"
-                    placeholder="Select a chat profile">
-                    <geboai-editable-listbox-component formControlName="chatProfileCode" [data]="chatProfilesData"
-                        [required]="true" gebo-ai-field-element>
-                    </geboai-editable-listbox-component>
-                </gebo-ai-field>
 
-            </div>
-            <div class="col-6">
-                <p-button id="NewChatBtn" gebo-ai-label label="New chat" (onClick)="createRagChat()"
-                    [disabled]="formGroup.invalid" styleClass="w-full" severity="success" [outlined]="true"
-                    icon="pi pi-microchip-ai"></p-button>
-            </div>
-        </div>
-    </p-popover>
-    <p-popover #newChatDialog>
-        <div class="grid">
-            <div class="col-12" [formGroup]="chatFormGroup">
-                <gebo-ai-field id="chatModelCode" label="Chat without knowledge bases"
-                    help="Choose the LLMs for a chat session"
-                    placeholder="Select a chat model"><geboai-editable-listbox-component formControlName="chatModelCode"
-                        [data]="chatModelsData" [required]="true" gebo-ai-field-element>
-                    </geboai-editable-listbox-component></gebo-ai-field>
-
-
-            </div>
-            <div class="col-6">
-                <p-button id="CreateChatBtn" gebo-ai-label label="New chat" (onClick)="createChat()"
-                    [disabled]="chatFormGroup.invalid" styleClass="w-full" severity="success" [outlined]="true"
-                    icon="pi pi-microchip-ai"></p-button>
-            </div>
-
-        </div>
-    </p-popover>
-</ng-template>
 <div class="content">
 
     <div class="grid">
