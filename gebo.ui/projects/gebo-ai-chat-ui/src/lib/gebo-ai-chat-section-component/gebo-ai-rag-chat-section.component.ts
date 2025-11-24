@@ -42,6 +42,7 @@ function toExtended(chatInfo: GUserChatInfo): ExtendedGUserChatInfo {
 @Component({
     selector: "gebo-ai-chat-section-component",
     templateUrl: "gebo-ai-rag-chat-section.component.html",
+    styleUrl: "gebo-ai-rag-chat-section.component.css",
     standalone: false,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
 })
