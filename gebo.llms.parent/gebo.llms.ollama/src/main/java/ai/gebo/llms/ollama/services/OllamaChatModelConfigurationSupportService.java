@@ -13,8 +13,7 @@ import java.util.List;
 
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
-import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.ollama.api.OllamaOptions.Builder;
+import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -117,8 +116,7 @@ public class OllamaChatModelConfigurationSupportService
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
 			OllamaApi ollamaapi = apiBuilder.build();
-			Builder builder = OllamaOptions.builder();
-
+			org.springframework.ai.ollama.api.OllamaChatOptions.Builder builder = OllamaChatOptions.builder();
 			// Set the model if specified
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
@@ -139,7 +137,7 @@ public class OllamaChatModelConfigurationSupportService
 				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
 				builder = builder.toolCallbacks(functions);
 			}
-			OllamaOptions options = builder.build();
+			OllamaChatOptions options = builder.build();
 			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, functionsRepo.createToolCallingManager(),
 					ObservationRegistry.create(), ModelManagementOptions.defaults());
 			return model;
