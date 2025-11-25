@@ -47,6 +47,8 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
 import { GeboAIUploadChatDocumentModule } from "../choose-documents-panel/upload-chat-document.module";
 import { MessageService } from "primeng/api";
 import { GeboAIUploadedDocumentRefComponent } from "./uploaded-document-ref.component";
+import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
+import { GeboAIGeneratedDocumentRefComponent } from "./llm-generated-document-ref.component";
 console.log(
   '[GeboAIReusableChatModule] declarations =',
   GeboAIReusableChatComponent,
@@ -93,7 +95,7 @@ console.log(
       }
     }
   }), ReactiveRagChatService, MessageService],
-  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent,GeboAIChatInputShellComponent,GeboAIGeneratedDocumentRefComponent],
   exports: [GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

@@ -115,8 +115,8 @@ public class RagDocumentsCachedDaoResult implements IRagContent,IJsonClonable<Ra
 		final List<Document> documents = new ArrayList<Document>();
 		documentItems.forEach(x -> {
 			x.getFragments().forEach(y -> {
-				if (y.getDocument() != null)
-					documents.add(y.getDocument());
+				if (y.toAIDocument() != null)
+					documents.add(y.toAIDocument());
 			});
 		});
 		return documents;

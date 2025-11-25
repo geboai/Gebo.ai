@@ -172,4 +172,9 @@ public class GeboRagChatController {
 			throws GeboChatException, LLMConfigException {
 		return chatService.suggestChatDescription(id);
 	}
+
+	@GetMapping(value = "createCleanRagChatByProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanRagChatByProfileCode(@RequestParam("profileCode") @NotNull String profileCode) throws GeboPersistenceException, LLMConfigException {
+		return chatService.createCleanRagChatByProfileCode(profileCode);
+	}
 }

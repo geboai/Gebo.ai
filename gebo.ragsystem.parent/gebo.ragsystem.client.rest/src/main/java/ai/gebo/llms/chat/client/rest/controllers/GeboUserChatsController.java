@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +29,14 @@ import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GLookupEntry;
 import ai.gebo.security.services.IGSecurityService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -43,18 +47,11 @@ import ai.gebo.security.services.IGSecurityService;
  */
 @RestController
 @RequestMapping(path = "api/users/GeboUserChatsController")
+@AllArgsConstructor
 public class GeboUserChatsController {
-	@Autowired
-	GUserChatContextRepository repository;
-	@Autowired
-	IGSecurityService securityService;
-
-	/**
-	 * Default constructor for GeboUserChatsController.
-	 */
-	public GeboUserChatsController() {
-
-	}
+	final GUserChatContextRepository repository;
+	final IGSecurityService securityService;
+	final IGChatStorageAreaService chatStorageAreaService;
 
 	/**
 	 * Parameter class for filtering chat information using Query By Example
@@ -78,6 +75,17 @@ public class GeboUserChatsController {
 		param.filter.setUsername(securityService.getCurrentUser().getUsername());
 
 		return repository.findAllBy(Example.of(param.filter), param.page.toPageable());
+	}
+
+	@GetMapping(value = "getChatInfosByCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo getChatInfosByCode(@RequestParam("id") String id) {
+		Optional<GUserChatContext> optional = repository.findById(id);
+		if (optional.isPresent()) {
+			GUserChatContext data = optional.get();
+			securityService.checkBeingCreator(data);
+			return new GUserChatInfoData(data);
+		}
+		return null;
 	}
 
 	/**
@@ -105,7 +113,18 @@ public class GeboUserChatsController {
 	 */
 	@PostMapping(value = "deleteUserChats", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserChats(@RequestBody List<String> ids) {
-		repository.deleteAllById(ids);
+		List<GUserChatContext> data = repository.findAllById(ids);
+		for (GUserChatContext gUserChatContext : data) {
+			securityService.checkBeingCreator(gUserChatContext);
+		}
+		for (GUserChatContext gUserChatContext : data) {
+			try {
+				this.chatStorageAreaService.deleteSessionContents(gUserChatContext);
+			} catch (IOException e) {
+
+			}
+			repository.delete(gUserChatContext);
+		}
 	}
 
 	/**
@@ -128,7 +147,7 @@ public class GeboUserChatsController {
 		 * 
 		 * @param context The chat context to convert
 		 * @return A new UserChatHistory with data from the provided context
-		 * @throws CloneNotSupportedException 
+		 * @throws CloneNotSupportedException
 		 */
 		public static UserChatHistory from(GUserChatContext context) throws CloneNotSupportedException {
 			UserChatHistory history = new UserChatHistory();
@@ -138,12 +157,15 @@ public class GeboUserChatsController {
 			return history;
 		}
 
-		private static List<ChatInteractions> getClientViewOf(List<ChatInteractions> interactions) throws CloneNotSupportedException {
+		private static List<ChatInteractions> getClientViewOf(List<ChatInteractions> interactions)
+				throws CloneNotSupportedException {
 
 			List<ChatInteractions> cinteractions = new ArrayList<>();
-			for (ChatInteractions chatInteraction : interactions) {
-				ChatInteractions clientVision = chatInteraction.clientClone();
-				cinteractions.add(clientVision);
+			if (interactions != null) {
+				for (ChatInteractions chatInteraction : interactions) {
+					ChatInteractions clientVision = chatInteraction.clientClone();
+					cinteractions.add(clientVision);
+				}
 			}
 			return cinteractions;
 		}
@@ -155,9 +177,9 @@ public class GeboUserChatsController {
 	 * 
 	 * @param code The unique identifier of the chat
 	 * @return The chat history if found and accessible, null otherwise
-	 * @throws CloneNotSupportedException 
-	 * @throws SecurityException If the user tries to access a chat that doesn't
-	 *                           belong to them
+	 * @throws CloneNotSupportedException
+	 * @throws SecurityException          If the user tries to access a chat that
+	 *                                    doesn't belong to them
 	 */
 	@GetMapping(value = "getChatHistory", produces = MediaType.APPLICATION_JSON_VALUE)
 	public UserChatHistory getChatHistory(@RequestParam("code") String code) throws CloneNotSupportedException {

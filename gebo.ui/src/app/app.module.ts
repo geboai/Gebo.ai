@@ -55,7 +55,7 @@ export function getBaseUrl() {
 export const routes: Routes = [
   { path: 'ui', redirectTo: "ui/chat", pathMatch: "full" },
   { path: '', redirectTo: "ui/chat", pathMatch: "full" },
-  { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule), pathMatch: 'full' },
+  { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule) },
   { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
 

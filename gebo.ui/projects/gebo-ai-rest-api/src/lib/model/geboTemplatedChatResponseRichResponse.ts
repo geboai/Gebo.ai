@@ -14,6 +14,7 @@ import { ChatModelRequestContextWindowStats } from './chatModelRequestContextWin
 import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GUserMessage } from './gUserMessage';
 import { GeboWorkingMemoryWindowOccupation } from './geboWorkingMemoryWindowOccupation';
+import { LLMGeneratedResource } from './lLMGeneratedResource';
 import { RichResponse } from './richResponse';
 
 export interface GeboTemplatedChatResponseRichResponse { 
@@ -29,4 +30,5 @@ export interface GeboTemplatedChatResponseRichResponse {
     documentsRef?: Array<GResponseDocumentRef>;
     calledFunctions?: Array<CalledFunction>;
     contextWindowStats?: ChatModelRequestContextWindowStats;
+    generatedResources?: Array<LLMGeneratedResource>;
 }

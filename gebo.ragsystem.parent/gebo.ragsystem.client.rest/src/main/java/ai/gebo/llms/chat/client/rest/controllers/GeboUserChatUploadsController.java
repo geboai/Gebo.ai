@@ -91,12 +91,12 @@ public class GeboUserChatUploadsController {
 		UserUploadedContent content = this.uploadsHandler.findByUserSessionCodeAndUploadedContentId(userSessionCode,
 				uploadedContentId);
 		response.setContentLengthLong(content.getFileSize());
-		String contentType = response.getContentType();
+		String contentType = content.getContentType();
 		if (contentType != null) {
 			response.setContentType(contentType);
 		}
-		ServletOutputStream os = response.getOutputStream();
-		try (InputStream inputStream = this.uploadsHandler.streamContent(content)) {
+		
+		try (InputStream inputStream = this.uploadsHandler.streamContent(content);ServletOutputStream os = response.getOutputStream();) {
 			IOUtils.copy(inputStream, os);
 		}
 	}

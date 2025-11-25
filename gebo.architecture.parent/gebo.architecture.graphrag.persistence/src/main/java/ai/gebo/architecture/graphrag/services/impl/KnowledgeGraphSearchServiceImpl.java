@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -36,8 +37,10 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocume
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
 import jakarta.annotation.Nullable;
+
 @ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
 public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceService
@@ -115,7 +118,7 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 		addHits(scored, relationHits, W_RELATION, HitType.RELATION);
 		addHits(scored, entityAliasHits, W_ALIAS_ENTITY, HitType.ENTITY_ALIAS);
 		addHits(scored, eventAliasHits, W_ALIAS_EVENT, HitType.EVENT_ALIAS);
-		
+
 		addNeighbors(scored, neighborHits, W_NEIGHBOR_1H);
 
 		// 4) Copertura anchor = quanti anchor dell’input coperti in quel chunk
@@ -153,12 +156,32 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 		for (KnowledgeGraphSearchResult result : results) {
 			Optional<GraphDocumentChunk> chunk = this.docChunkRepository.findById(result.getChunkId());
 			if (chunk.isPresent()) {
-				result.setDocument(new Document(chunk.get().getId(), chunk.get().getText(), chunk.get().getMetaData()));
-				result.setExtractedDocumentMetaData(ExtractedDocumentMetaData.of(result.getDocument().getMetadata()));
+				Map<String, Object> sanitized = this.sanitize(chunk.get().getMetaData());
+				result.setDocument(new Document(chunk.get().getId(), chunk.get().getText(), sanitized));
+				result.setExtractedDocumentMetaData(ExtractedDocumentMetaData.of(sanitized));
 				values.add(result);
 			}
 		}
 		return values;
+	}
+
+	private Map<String, Object> sanitize(Map<String, Object> metaData) {
+		Map<String, Object> newMap = new HashMap<>();
+		Set<Entry<String, Object>> set = metaData.entrySet();
+
+		for (Entry<String, Object> entry : set) {
+			Object value = entry.getValue();
+			if (value != null) {
+				if (value instanceof Number nr) {
+					newMap.put(entry.getKey(), new Integer(nr.intValue()));
+				} else if (value instanceof String string) {
+					newMap.put(entry.getKey(), value.toString());
+				} else {
+					newMap.put(entry.getKey(), value.toString());
+				}
+			}
+		}
+		return newMap;
 	}
 	// ----------------- helpers -----------------
 

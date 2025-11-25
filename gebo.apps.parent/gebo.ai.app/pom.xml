@@ -48,6 +48,18 @@
 						<reuseForks>false</reuseForks>
 					</configuration>
 				</plugin>
+				<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+							<classifier>bootable+swagger</classifier>
+						</configuration>
+					</plugin>
 				</plugins>
 			</build>
 			<dependencies>

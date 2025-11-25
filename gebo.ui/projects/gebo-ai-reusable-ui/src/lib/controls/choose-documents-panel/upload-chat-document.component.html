@@ -1,6 +1,6 @@
 <ng-template #viewDocumentChips>
     <div class="grid">
-        <div class="col-12">
+        <div class="col-12  justify-content-center" style="text-align: center;">
             <span *ngFor="let doc of uploadedContents" style="list-style: none;break-after: avoid;">
                 <p-button id="DocRemoveBtn" gebo-ai-label icon="pi pi-times-circle" [text]="true"
                     (onClick)="doRemoveUploaded(doc)"></p-button><i class="pi pi-cloud-upload"></i> {{doc.fileName}}

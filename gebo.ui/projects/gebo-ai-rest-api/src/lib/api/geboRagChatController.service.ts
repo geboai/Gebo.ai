@@ -66,6 +66,53 @@ export class GeboRagChatControllerService {
     /**
      * 
      * 
+     * @param profileCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createCleanRagChatByProfileCode(profileCode: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanRagChatByProfileCode(profileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanRagChatByProfileCode(profileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanRagChatByProfileCode(profileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (profileCode === null || profileCode === undefined) {
+            throw new Error('Required parameter profileCode was null or undefined when calling createCleanRagChatByProfileCode.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (profileCode !== undefined && profileCode !== null) {
+            queryParameters = queryParameters.set('profileCode', <any>profileCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GUserChatInfo>('get',`${this.basePath}/api/users/GeboChatController/createCleanRagChatByProfileCode`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param chatProfileCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

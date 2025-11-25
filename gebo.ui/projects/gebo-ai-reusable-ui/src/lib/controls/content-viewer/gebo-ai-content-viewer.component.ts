@@ -19,13 +19,14 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
 import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
-import { EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
+import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 
 /**
  * URL for the content controller API endpoint
  */
 const contentControllerUrl: string = "/api/users/ContentController";
 const uploadedContentControllerUrl: string = "/api/users/GeboUserChatUploadsController/serveContent/"
+const generatedContentControllerUrl: string = "/api/users/GeboLLMGeneratedResourceController/serveLLMGeneratedContent/"
 /**
  * @Component GeboAIContentViewerComponent
  * A component responsible for rendering different types of content based on their file type.
@@ -43,6 +44,8 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
   @Input() code: string = "";
 
   @Input() userUploadedContent?: EnrichedUserUploadedContentView;
+
+  @Input() generatedContent?: EnrichedLLMGeneratedResource;
 
   /** Flag to determine if the viewer should be active */
   @Input() activate: boolean = false;
@@ -126,6 +129,25 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * Sets flags for different content types and prepares the external content URL
    */
   private handleMetaInfo() {
+    if (this.generatedContent) {
+      const fileType = this.generatedContent.fileType;
+      if (fileType) {
+        this.ingestionFileType = this.generatedContent.fileType;
+        if (this.ingestionFileType?.uiViewable === true) {
+          this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
+          this.plainTextContent = fileType?.treatAs === 'plainText';
+          this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
+          this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
+          this.externalContentUrl = this.path + generatedContentControllerUrl + this.generatedContent?.userContextCode + "/" + this.generatedContent?.code;
+          this.contentServedByGebo = true;
+        }
+        this.downloadableContent = fileType?.uiViewable === false;
+        this.visible = fileType?.uiViewable === true;
+        console.log("Content: " + this.externalContentUrl);
+        console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
+        console.log("content viewer url:" + this.externalContentUrl);
+      }
+    }
     if (this.userUploadedContent) {
       const fileType = this.userUploadedContent.fileType;
       if (fileType) {
@@ -213,6 +235,9 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
           this.loading = false;
         }
       });
+    }
+    if (this.generatedContent && changes["generatedContent"]) {
+      this.handleMetaInfo();
     }
     if (this.userUploadedContent && changes["userUploadedContent"]) {
       this.handleMetaInfo();

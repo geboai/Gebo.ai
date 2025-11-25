@@ -48,14 +48,17 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
+import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 /**
@@ -70,9 +73,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
 			GUserChatContextRepository userContextRepository, GeboChatPromptsConfigs promptConfigs,
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
-			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository) {
+			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
+			IGChatStorageAreaService chatStorageAreaService,
+			LLMGeneratedResourceRepository generatedResourceRepository) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
-				promptsDao, interactionsContext, securityService, fixerServiceRepository);
+				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
+				generatedResourceRepository);
 	}
 
 	/**
@@ -303,7 +309,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	 * @param modelCode the code of the model to use for transcription
 	 * @return the transcribed text
 	 * @throws LLMConfigException if there is a problem with the model configuration
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@Override
 	public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException {
@@ -447,6 +453,25 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		userContext.setDescription(description);
 		userContext.setUsername(user.getUsername());
 		userContext = persistenceManager.insert(userContext);
+		GUserChatInfoData data = new GUserChatInfoData(userContext);
+
+		return data;
+	}
+
+	@Override
+	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) {
+		UserInfos user = securityService.getCurrentUser();
+		GUserChatContext userContext = new GUserChatContext();
+		IGConfigurableChatModel chatModel = this.chatModelConfigurations.findByCode(modelCode);
+		if (chatModel == null)
+			throw new RuntimeException("Cannot create a chat with not existing chat model code");
+		userContext.setChatModelCode(modelCode);
+		String description = "Chat with "
+				+ (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null
+						? chatModel.getConfig().getChoosedModel().getCode()
+						: " chat bot");
+		userContext.setDescription(description);
+		userContext.setUsername(user.getUsername());
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 
 		return data;

@@ -218,4 +218,8 @@ public class GeboChatController {
 	public GUserChatInfo suggestChatDescription(@RequestParam("id") @NotNull String id) throws GeboChatException, LLMConfigException {
 		return chatService.suggestChatDescription(id);
 	}
+	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) {
+		return chatService.createCleanChatByModelCode(modelCode);
+	}
 }

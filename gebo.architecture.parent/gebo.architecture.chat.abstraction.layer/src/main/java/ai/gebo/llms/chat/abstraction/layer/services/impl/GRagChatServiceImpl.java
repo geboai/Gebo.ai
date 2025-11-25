@@ -54,11 +54,13 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
@@ -67,6 +69,7 @@ import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
+import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 /**
@@ -89,9 +92,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			IGChatProfileManagementService chatProfileManagementService,
-			IGChatRequestResourcesUsePolicy requestLimitationPolicy) {
+			IGChatRequestResourcesUsePolicy requestLimitationPolicy, IGChatStorageAreaService chatStorageAreaService,
+			LLMGeneratedResourceRepository generatedResourceRepository) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
-				promptsDao, interactionsContext, securityService, fixerServiceRepository);
+				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
+				generatedResourceRepository);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -595,6 +600,27 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		userContext.setRagChat(true);
 		userContext.setUsername(user.getUsername());
 		userContext = persistenceManager.insert(userContext);
+		GUserChatInfoData data = new GUserChatInfoData(userContext);
+		return data;
+	}
+
+	@Override
+	public GUserChatInfo createCleanRagChatByProfileCode(@NotNull String profileCode)
+			throws GeboPersistenceException, LLMConfigException {
+		UserInfos user = securityService.getCurrentUser();
+		Optional<GChatProfileConfiguration> chatProfileData = this.chatProfilesRepository.findById(profileCode);
+		if (chatProfileData.isEmpty())
+			throw new RuntimeException("Chat profile does not exist");
+		GChatProfileConfiguration chatProfile = chatProfileData.get();
+		boolean canAccess = securityService.isCanAccess(chatProfile, true);
+		if (!canAccess)
+			throw new SecurityException("Trying to access wrong chat profile");
+		String description = chatProfile.getDescription();
+		GUserChatContext userContext = new GUserChatContext();
+		userContext.setChatProfileCode(profileCode);
+		userContext.setDescription(description);
+		userContext.setRagChat(true);
+		userContext.setUsername(user.getUsername());
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 		return data;
 	}

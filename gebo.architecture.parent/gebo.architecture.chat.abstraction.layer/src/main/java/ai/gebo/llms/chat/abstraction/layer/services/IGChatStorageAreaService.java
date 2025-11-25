@@ -5,11 +5,13 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.model.UserUploadContentServerSide;
 import ai.gebo.llms.chat.abstraction.layer.model.UserUploadedContent;
 import ai.gebo.model.OperationStatus;
@@ -85,5 +87,12 @@ public interface IGChatStorageAreaService {
 	 * @throws IOException
 	 */
 	public List<Document> getIngestedContentsOf(UserUploadedContent uploaded) throws IOException;
+
+	public LLMGeneratedResource addMedia(Media media, GUserChatContext userContext) throws IOException;
+
+	public LLMGeneratedResource getGeneratedContent(String userSessionCode, String generatedResourceCode)
+			throws IOException;
+
+	public InputStream streamContent(LLMGeneratedResource generated) throws IOException;
 
 }

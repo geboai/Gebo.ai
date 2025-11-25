@@ -41,7 +41,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	protected List<GResponseDocumentRef> documentsRef = new ArrayList<GResponseDocumentRef>(); // Document references
 	protected List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>(); // List of functions called during the interaction
 	protected ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
-
+	protected List<LLMGeneratedResource> generatedResources=new ArrayList<>();
 	/**
 	 * Default constructor for GeboTemplatedChatResponse.
 	 */
@@ -281,6 +281,14 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public List<LLMGeneratedResource> getGeneratedResources() {
+		return generatedResources;
+	}
+
+	public void setGeneratedResources(List<LLMGeneratedResource> generatedResources) {
+		this.generatedResources = generatedResources;
 	}
 
 }

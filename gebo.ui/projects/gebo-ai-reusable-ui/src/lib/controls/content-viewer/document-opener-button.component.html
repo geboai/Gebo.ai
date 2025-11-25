@@ -14,10 +14,20 @@
 
 <p-button *ngIf="document" [icon]="((document?.fileType?.icon)?document.fileType?.icon:'p p-unknown')" [text]="true"
                 (onClick)="onClickFile(document)" [label]="document.name"></p-button>
+
 <gebo-ai-content-viewer *ngIf="document" [code]="currentViewedDocumentCode?currentViewedDocumentCode:''"
     [activate]="currentViewedDocumentCode?true:false" (close)="currentViewedDocumentCode=undefined"></gebo-ai-content-viewer>
 
 <p-button *ngIf="uploadedContent" [icon]="((uploadedContent?.fileType?.icon)?uploadedContent.fileType?.icon:'p p-unknown')" [text]="true"
                 (onClick)="onClickUploadedContent(uploadedContent)" [label]="uploadedContent.fileName"></p-button>
+
 <gebo-ai-content-viewer *ngIf="currentViewedUploadedContent" [userUploadedContent]="currentViewedUploadedContent"
-    [activate]="currentViewedUploadedContent?true:false" (close)="currentViewedUploadedContent=undefined"></gebo-ai-content-viewer>                
+    [activate]="currentViewedUploadedContent?true:false" (close)="currentViewedUploadedContent=undefined"></gebo-ai-content-viewer>   
+
+<p-button *ngIf="generatedContent" [icon]="generatedContent?.fileType?.icon?generatedContent?.fileType?.icon:'p p-unknown'" (onClick)="onClickGeneratedContent(generatedContent)" [text]="true" [label]="generatedContent.fileName"></p-button>
+
+<gebo-ai-content-viewer *ngIf="currentViewedGeneratedContent" [generatedContent]="currentViewedUploadedContent"
+    [activate]="currentViewedGeneratedContent?true:false" (close)="currentViewedGeneratedContent=undefined"></gebo-ai-content-viewer>   
+
+
+    
