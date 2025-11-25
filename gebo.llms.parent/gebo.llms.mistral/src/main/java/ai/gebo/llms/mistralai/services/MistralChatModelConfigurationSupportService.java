@@ -15,6 +15,9 @@ import java.util.List;
 import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
+import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
+import org.springframework.ai.model.tool.DefaultToolExecutionEligibilityPredicate;
+import org.springframework.ai.model.tool.ToolExecutionEligibilityPredicate;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
@@ -77,7 +80,7 @@ public class MistralChatModelConfigurationSupportService
 	final MistralModelsLookupService mistralModelsLookupService;
 	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
 	final ModelRuntimeConfigureHandler configureHandler;
-	
+
 	/**
 	 * Inner class that implements the configuration and creation of Mistral AI chat
 	 * models.
@@ -113,14 +116,19 @@ public class MistralChatModelConfigurationSupportService
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("Mistral AI api  key configuration gone wrong ", e);
 			}
-			MistralAiApi openaiApi = new MistralAiApi(apiKey);
+
 			org.springframework.ai.mistralai.MistralAiChatOptions.Builder builder = MistralAiChatOptions.builder();
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
 					.getWebClientBuilder();
+			Builder apiBuilder = MistralAiApi.builder();
+			apiBuilder.apiKey(apiKey);
+			apiBuilder.restClientBuilder(restClient);
+
+			MistralAiApi mistralApi = apiBuilder.build();
 			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			
+
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
@@ -139,13 +147,13 @@ public class MistralChatModelConfigurationSupportService
 					return x.getToolDefinition().name();
 				}).toList();
 				builder = builder.toolNames(new HashSet<String>(names));
-
+				builder.internalToolExecutionEnabled(!functions.isEmpty());
 			}
-
+			ToolExecutionEligibilityPredicate toolEligibilityPredicate = new DefaultToolExecutionEligibilityPredicate();
 			MistralAiChatOptions options = builder.build();
-			MistralAiChatModel model = new MistralAiChatModel(openaiApi, options,
-					functionsRepo.createToolCallingManager(), retryTemplate,
-					ObservationRegistry.NOOP);
+			MistralAiChatModel model = new MistralAiChatModel(mistralApi, options,
+					functionsRepo.createToolCallingManager(), retryTemplate, ObservationRegistry.NOOP,
+					toolEligibilityPredicate);
 			return model;
 		}
 
@@ -226,8 +234,9 @@ public class MistralChatModelConfigurationSupportService
 	}
 
 	@Override
-	public OperationStatus<GMistralChatModelConfig> insertAndConfigure(GMistralChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
-		
+	public OperationStatus<GMistralChatModelConfig> insertAndConfigure(GMistralChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
 		return configureHandler.insertAndConfigure(config, type);
 	}
 }

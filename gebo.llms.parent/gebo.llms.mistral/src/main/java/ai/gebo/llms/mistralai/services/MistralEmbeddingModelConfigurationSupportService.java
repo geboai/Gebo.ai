@@ -22,6 +22,7 @@ import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.mistralai.MistralAiEmbeddingModel;
 import org.springframework.ai.mistralai.MistralAiEmbeddingOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
+import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
@@ -43,6 +45,7 @@ import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "mistralAIEnabled", havingValue = "true")
@@ -59,8 +62,6 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 		type.setDescription("embedding service hosted on Mistral AI");
 		type.setModelConfigurationClass(GMistralEmbeddingModelConfig.class.getName());
 	}
-
-	
 
 	/**
 	 * Service for accessing secrets, used to retrieve API keys.
@@ -123,7 +124,16 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("Mistral AI api  key configuration gone wrong ", e);
 			}
-			MistralAiApi openaiApi = new MistralAiApi(apiKey);
+			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
+			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
+			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
+					.getWebClientBuilder();
+			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
+			Builder apiBuilder = MistralAiApi.builder();
+			apiBuilder.apiKey(apiKey);
+			apiBuilder.restClientBuilder(restClient);
+
+			MistralAiApi mistralApi = apiBuilder.build();
 			org.springframework.ai.mistralai.MistralAiEmbeddingOptions.Builder builder = MistralAiEmbeddingOptions
 					.builder();
 
@@ -133,14 +143,12 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 
 			MistralAiEmbeddingOptions options = builder.build();
 			MetadataMode meta = MetadataMode.EMBED;
-			MistralAiEmbeddingModel model = new MistralAiEmbeddingModel(openaiApi, meta, options,
-					RetryTemplate.defaultInstance());
+			MistralAiEmbeddingModel model = new MistralAiEmbeddingModel(mistralApi, meta, options, retryTemplate,
+					ObservationRegistry.NOOP);
 			return model;
 		}
 
 	};
-
-	
 
 	/**
 	 * Returns the embedding model type supported by this service.
@@ -177,7 +185,7 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 	 */
 	@Override
 	public OperationStatus<List<GMistralEmbeddingModelChoice>> getModelChoices(GMistralEmbeddingModelConfig config) {
-		
+
 		return mistralModelsLookupService.getEmbeddingModelsChoices(config);
 	}
 
@@ -201,8 +209,9 @@ public class MistralEmbeddingModelConfigurationSupportService implements
 	}
 
 	@Override
-	public OperationStatus<GMistralEmbeddingModelConfig> insertAndConfigure(GMistralEmbeddingModelConfig config) throws GeboPersistenceException, LLMConfigException {
-		
+	public OperationStatus<GMistralEmbeddingModelConfig> insertAndConfigure(GMistralEmbeddingModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
 		return configureHandler.insertAndConfigure(config, type);
 	}
 

@@ -22,10 +22,8 @@ import java.util.Set;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
-import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.ollama.api.OllamaOptions.Builder;
+import org.springframework.ai.ollama.api.OllamaEmbeddingOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
@@ -42,8 +40,6 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
-import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
-import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -114,13 +110,13 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
 			OllamaApi ollamaapi = apiBuilder.build();
-			Builder builder = OllamaOptions.builder();
+			org.springframework.ai.ollama.api.OllamaEmbeddingOptions.Builder builder = OllamaEmbeddingOptions.builder();
 
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
 
-			OllamaOptions options = builder.build();
+			OllamaEmbeddingOptions options = builder.build();
 			MetadataMode meta = MetadataMode.EMBED;
 			ObservationRegistry observationRegistry = ObservationRegistry.create();
 			ModelManagementOptions modelManagementOptions = ModelManagementOptions.defaults();
