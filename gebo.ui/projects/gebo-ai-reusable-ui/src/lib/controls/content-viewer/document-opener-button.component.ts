@@ -6,12 +6,12 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, Input } from "@angular/core";
-import { EnrichedDocumentReferenceView, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
+import { EnrichedDocumentReferenceView, EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 
 /**
  * AI generated comments
@@ -30,24 +30,29 @@ export class GeboUIDocumentOpenerButton {
      * Input property that accepts an EnrichedDocumentReferenceView object
      * to be displayed and potentially opened by this component.
      */
-    @Input() document?:EnrichedDocumentReferenceView;
-    @Input() uploadedContent?:EnrichedUserUploadedContentView;
+    @Input() document?: EnrichedDocumentReferenceView;
+    @Input() uploadedContent?: EnrichedUserUploadedContentView;
+    @Input() generatedContent?: EnrichedLLMGeneratedResource;
     /**
      * Stores the code/identifier of the currently viewed document.
      */
-    protected currentViewedDocumentCode?:string;
+    protected currentViewedDocumentCode?: string;
     protected currentViewedUploadedContent?: EnrichedUserUploadedContentView;
-    
+    protected currentViewedGeneratedContent?: EnrichedLLMGeneratedResource;
+
     /**
      * Handles the click event when a file/document is selected.
      * Updates the currentViewedDocumentCode with the code of the selected document.
      * 
      * @param item The document reference that was clicked/selected
      */
-    onClickFile(item:EnrichedDocumentReferenceView) {
-        this.currentViewedDocumentCode=item.code;
+    onClickFile(item: EnrichedDocumentReferenceView) {
+        this.currentViewedDocumentCode = item.code;
     }
     onClickUploadedContent(arg0: EnrichedUserUploadedContentView) {
-        this.currentViewedUploadedContent=arg0;
+        this.currentViewedUploadedContent = arg0;
+    }
+    onClickGeneratedContent(arg0: EnrichedLLMGeneratedResource) {
+        this.currentViewedGeneratedContent = arg0;
     }
 }

@@ -284,6 +284,8 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		resource.setFileName(media.getName());
 		resource.setUserContextCode(userContext.getCode());
 		resource.setContentType(media.getMimeType() != null ? media.getMimeType().getType() : null);
+		String extension = getExtension(media);
+		resource.setExtension(extension);
 		Path path = getSessionPath(userContext);
 		Path out = Path.of(path.toString(), resource.getCode());
 		try (OutputStream os = Files.newOutputStream(out)) {
@@ -292,6 +294,16 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		}
 		resource = llmGeneratedResourceRepository.insert(resource);
 		return resource;
+	}
+
+	private String getExtension(Media media) {
+		int index = media.getName() != null ? media.getName().lastIndexOf(".") : -1;
+		if (index >= 0) {
+			return media.getName().substring(index).toLowerCase();
+		} else {
+
+			return null;
+		}
 	}
 
 	@Override

@@ -11,7 +11,7 @@
 
 
 import { Injectable } from "@angular/core";
-import { ContentMetaInfosControllerService, DocumentReferenceView, GeboUserKnowledgeBaseSemanticSearchControllerService, IngestionFileType, IngestionFileTypesLibraryControllerService, SearchDocumentByNameParam, SemanticQueryParam, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
+import { ContentMetaInfosControllerService, DocumentReferenceView, GeboUserKnowledgeBaseSemanticSearchControllerService, IngestionFileType, IngestionFileTypesLibraryControllerService, LLMGeneratedResource, SearchDocumentByNameParam, SemanticQueryParam, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { forkJoin, map, Observable, of } from "rxjs";
 /**
  * AI generated comments
@@ -42,6 +42,10 @@ export interface EnrichedDocumentReferenceView extends DocumentReferenceView {
 export interface EnrichedUserUploadedContentView extends UserUploadedContent {
     fileType?: EnrichedIngestionFileType;
 }
+
+export interface EnrichedLLMGeneratedResource extends LLMGeneratedResource {
+    fileType?: EnrichedIngestionFileType;
+}
 /**
  * Service responsible for retrieving document references and enriching them with additional metadata.
  * This service caches file types and provides methods to search documents by name or code,
@@ -51,6 +55,7 @@ export interface EnrichedUserUploadedContentView extends UserUploadedContent {
     providedIn: "root"
 })
 export class EnrichedDocumentReferenceViewRetrieveService {
+
 
     /**
      * Static cache of file types to avoid repeated API calls
@@ -113,12 +118,19 @@ export class EnrichedDocumentReferenceViewRetrieveService {
         object.fileType = this.getEnrichedFileType(object.extension);
         return object;
     }
-    public async enrichUserUploadedContent(content:UserUploadedContent):Promise<EnrichedUserUploadedContentView> {
+    public async enrichUserUploadedContent(content: UserUploadedContent): Promise<EnrichedUserUploadedContentView> {
         //ensure preloaded file types
         await this.preloadFileTypes().toPromise();
         return {
             ...content,
-            fileType:EnrichedDocumentReferenceViewRetrieveService.getEnrichedFileType(content.extension)
+            fileType: EnrichedDocumentReferenceViewRetrieveService.getEnrichedFileType(content.extension)
+        };
+    }
+    public async enrichLLMGeneratedResource(content: LLMGeneratedResource): Promise<EnrichedLLMGeneratedResource> {
+        await this.preloadFileTypes().toPromise();
+        return {
+            ...content,
+            fileType: EnrichedDocumentReferenceViewRetrieveService.getEnrichedFileType(content.extension)
         };
     }
     private preloadFileTypes(): Observable<EnrichedIngestionFileType[]> {
@@ -126,7 +138,7 @@ export class EnrichedDocumentReferenceViewRetrieveService {
             return of(EnrichedDocumentReferenceViewRetrieveService.fileTypes);
         else
             return this.filetypesControllerService.getAllFileTypes().pipe(map(x => {
-                EnrichedDocumentReferenceViewRetrieveService.fileTypes = x.map(y=>this.enrichFileType(y));
+                EnrichedDocumentReferenceViewRetrieveService.fileTypes = x.map(y => this.enrichFileType(y));
                 return EnrichedDocumentReferenceViewRetrieveService.fileTypes;
             }));
     }

@@ -8,7 +8,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- <input #focusableTop readonly style="border: 0px solid white;">
+<input #focusableTop readonly style="border: 0px solid white;">
 <div class="card flex justify-center">
     <p-toast />
 </div>
@@ -55,11 +55,12 @@
                     </div>
                     <div class="col-12" style="height: 100%;">
 
-                        
+
                         <div class="grid" style="width: 100%;">
                             <div class="col-12" style="text-align: right;">
-                                <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true" id="ScrollDownBtn" gebo-ai-label
-                                    severity="contrast" title="Scroll down" *ngIf="(interactions && interactions.length > 1)"></p-button>
+                                <p-button (onClick)="scrollDown()" icon="pi pi-arrow-down" [raised]="true"
+                                    id="ScrollDownBtn" gebo-ai-label severity="contrast" title="Scroll down"
+                                    *ngIf="(interactions && interactions.length > 1)"></p-button>
                             </div>
                         </div>
                         <ul *ngFor="let interaction of interactions;" style="with: 100%;">
@@ -100,12 +101,21 @@
                                     <li
                                         *ngIf="interaction?.response?.calledFunctions && interaction?.response?.calledFunctions?.length">
                                         <ul class="pi pi-microchip">
-                                            <b id="CalledFunctionsCtl" gebo-ai-text>AI Called functions:</b>
+                                            <b id="CalledFunctionsCtl" gebo-ai-text>AI Called functions</b>
                                             <li *ngFor="let f of interaction.response?.calledFunctions;"
                                                 [title]="f.functionDescription">
                                                 <i class="pi pi-bolt"></i>
                                                 {{f.functionName}}<span id="WithParams" gebo-ai-text>with
                                                     params:</span>{{f.paramsDescription}}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li
+                                        *ngIf="interaction?.response?.generatedResources && interaction?.response?.generatedResources?.length">
+                                        <ul class="pi pi-microchip">
+                                            <b id="GeneratedResourcesCtl" gebo-ai-text>AI generated files</b>
+                                            <li *ngFor="let g of interaction.response?.generatedResources">
+                                                
                                             </li>
                                         </ul>
                                     </li>
@@ -118,8 +128,9 @@
                         -->
                         <div class="grid" style="width: 100%;">
                             <div class="col-12" style="text-align: right;">
-                                <p-button (onClick)="scrollUp()" icon="pi pi-arrow-up"  id="ScrollUpBtn" gebo-ai-label [raised]="true"
-                                    severity="contrast" title="Scroll Up" *ngIf="(interactions && interactions.length > 1)"></p-button>
+                                <p-button (onClick)="scrollUp()" icon="pi pi-arrow-up" id="ScrollUpBtn" gebo-ai-label
+                                    [raised]="true" severity="contrast" title="Scroll Up"
+                                    *ngIf="(interactions && interactions.length > 1)"></p-button>
                             </div>
                         </div>
                     </div>
@@ -135,7 +146,7 @@
         <div class="col-2"></div>
 
     </div>
-    
+
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
         [chatUserInfos]="chatUserInfos" [knowledgeBaseCodes]="knowledgeBaseCodes" [chatInfo]="chatInfo"
         [userChatContextCode]="userChatContextCode" [capabilities]="capabilities"
