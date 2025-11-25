@@ -12,7 +12,7 @@ RUN update-locale LANG=en_US.UTF-8
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="0.9.9.8"
+LABEL org.opencontainers.image.version="1.0.0.0-SNAPSHOT"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -100,7 +100,7 @@ RUN mkdir -p /opt/gebo.ai/config
 RUN mkdir -p /opt/gebo.ai/work
 RUN mkdir -p /opt/gebo.ai/shares
 RUN mkdir -p /var/log/gebo.ai
-COPY gebo.ai.app-0.9.9.8-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.0.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
