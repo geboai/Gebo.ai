@@ -16,6 +16,8 @@ import java.util.stream.Stream;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.tika.parser.microsoft.onenote.fsshttpb.streamobj.StreamObjectTypeHeaderEnd;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.graphrag.extraction.model.AbstractAliasObject.EquivalenceType;
 import ai.gebo.architecture.graphrag.extraction.model.AbstractGraphObject;
@@ -26,7 +28,7 @@ import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 
 public class CSVIEParser {
-
+	private static final Logger LOGGER = LoggerFactory.getLogger(CSVIEParser.class);
 	private static final String REFERENCED_EVENT_NAMES = "referencedEventNames";
 	private static final String REFERENCED_ENTITIES_NAMES = "referencedEntitiesNames";
 	private static final String DOCUMENT_FRAGMENT_ID = "documentFragmentId";
@@ -48,12 +50,16 @@ public class CSVIEParser {
 			CONFIDENCE_SCORE, DOCUMENT_FRAGMENT_ID, REFERENCED_ENTITIES_NAMES, REFERENCED_EVENT_NAMES };
 
 	public static LLMExtractionResult parseCSV(String content) throws IOException {
+		LOGGER.info("Begin parseCsv(...)");
 		LLMExtractionResult output = new LLMExtractionResult();
+		LOGGER.info("LLM CSV CONTENT:" + content);
+
 		// identify valid csv lines
 		// <object type>;<object subtype>;<object name>;<object description>;<confidence
 		// score>;<document fragment id>;<referred entities names>;<referred events
 		// names>
 		// <object type> is one of: entity, event, relation, entity_alias, event_alias
+
 		if (content != null) {
 			ByteArrayInputStream is = new ByteArrayInputStream(content.getBytes());
 			BufferedReader dis = new BufferedReader(new InputStreamReader(is));
@@ -68,6 +74,7 @@ public class CSVIEParser {
 							String value = tokenizer.nextToken();
 							if (value == null)
 								value = "";
+							value = value.replace("\"", "");
 							data.put(field, value.trim().toUpperCase());
 						}
 					}
@@ -78,6 +85,7 @@ public class CSVIEParser {
 			} while (line != null);
 		}
 		sanitize(output);
+		LOGGER.info("End parseCsv(...) => " + output);
 		return output;
 	}
 
@@ -128,6 +136,17 @@ public class CSVIEParser {
 		}
 		output.setRelations(relations);
 		List<EntityAliasObject> entitiesAliases = new ArrayList<>();
+		for (EntityAliasObject eAlias : output.getEntityAliases()) {
+			if (eAlias.getAliasObject() != null && eAlias.getReferenceObject() != null
+					&& eAlias.getAliasObject().getName() != null && eAlias.getReferenceObject().getName() != null
+					&& entitiesByName.containsKey(eAlias.getReferenceObject().getName())
+					&& entitiesByName.containsKey(eAlias.getAliasObject().getName())) {
+				eAlias.setAliasObject(entitiesByName.get(eAlias.getAliasObject().getName()));
+				eAlias.setReferenceObject(entitiesByName.get(eAlias.getReferenceObject().getName()));
+				entitiesAliases.add(eAlias);
+			}
+		}
+		output.setEntityAliases(entitiesAliases);
 
 	}
 
@@ -144,6 +163,10 @@ public class CSVIEParser {
 				String description = data.get(OBJECT_DESCRIPTION);
 				String confidence = data.get(CONFIDENCE_SCORE);
 				String fragmentId = data.get(DOCUMENT_FRAGMENT_ID);
+				if (fragmentId != null) {
+					fragmentId = fragmentId.replace(GraphDataExtractionServiceImpl.START_CHUNK_ID, "")
+							.replace(GraphDataExtractionServiceImpl.END_CHUNK_ID, "");
+				}
 				String referencedEntitiesNames = data.get(REFERENCED_ENTITIES_NAMES);
 				String referencedEventNames = data.get(REFERENCED_EVENT_NAMES);
 				switch (type) {
@@ -248,7 +271,7 @@ public class CSVIEParser {
 		if (objectSubtype != null) {
 			object.setType(objectSubtype);
 		} else {
-			object.setType("EVENT");
+			object.setType("RELATION");
 		}
 		object.setLongDescription(description);
 		assignConfidence(object, confidence);
@@ -306,6 +329,7 @@ public class CSVIEParser {
 			} else {
 				object.setType("EVENT");
 			}
+
 			object.setTitle(name);
 			assignConfidence(object, confidence);
 			object.setLongDescription(description);
@@ -342,6 +366,7 @@ public class CSVIEParser {
 
 		} else {
 			EntityObject object = new EntityObject();
+
 			if (objectSubtype != null) {
 				object.setType(objectSubtype);
 			} else {
@@ -356,13 +381,4 @@ public class CSVIEParser {
 
 	}
 
-	public static void main(String[] args) throws IOException {
-		String text = "entity;person;Gesù;The central figure in the text.;1.0;CHUNK-ID-1;;;\r\n"
-				+ "entity;nation;Sesso;Sexual realm or concept;0.8;CHUNK-ID-2;;;\r\n"
-				+ "event;action;risorse dai morti;Jesus is given resources by the dead.;0.9;CHUNK-ID-1;;Gesù\r\n"
-				+ "relation;part-of;Primo Mistero;The Second Space of the First Mystery.;1.0;CHUNK-ID-3;;Kether, l’Anziano dei Giorni, tu lo sai.\r\n"
-				+ "entity_alias;company;I re del fuoco sessuale;literally \"Fire Sexual Kings\";0.7;CHUNK-ID-2;;;\r\n"
-				+ "entity;nation;Padre;Father, a concept or entity;0.9;CHUNK-ID-4;;;";
-		System.out.println(parseCSV(text));
-	}
 }

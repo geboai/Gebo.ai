@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -52,14 +54,20 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GraphDataExtractionServiceImpl implements IGraphDataExtractionService {
-	private static final String GRAPHRAG_EXTRACTION_PROMPT_OBJECT = "Graphrag-extraction-prompt-object";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED = "GraphRagExtractionConfig-by-default-config-checked";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG = "GraphRagExtractionConfig-by-default-config";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED = "GraphRagExtractionConfig-by-knowledgebase-and-project-checked";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE = "GraphRagExtractionConfig-by-knowledgebase";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED = "GraphRagExtractionConfig-by-datasource-checked";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT = "GraphRagExtractionConfig-by-project";
-	private static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE = "GraphRagExtractionConfig-by-datasource";
+	static final String FORMAT_TEMPLATE_VARIABLE = "format";
+	static final String EXTRACT_CSV_FROM_THE_FOLLOWING_TEXT = "\r\nEXTRACT CSV FROM THE FOLLOWING TEXT:\r\n";
+	static final String END_CHUNK_ID = "[/CHUNK-ID]";
+	static final String START_CHUNK_ID = "[CHUNK-ID]";
+	static final String END_THINK = "</think>";
+	static final String START_THINK = "<think>";
+	static final String GRAPHRAG_EXTRACTION_PROMPT_OBJECT = "Graphrag-extraction-prompt-object";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG_CHECKED = "GraphRagExtractionConfig-by-default-config-checked";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DEFAULT_CONFIG = "GraphRagExtractionConfig-by-default-config";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE_AND_PROJECT_CHECKED = "GraphRagExtractionConfig-by-knowledgebase-and-project-checked";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_KNOWLEDGEBASE = "GraphRagExtractionConfig-by-knowledgebase";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE_CHECKED = "GraphRagExtractionConfig-by-datasource-checked";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_PROJECT = "GraphRagExtractionConfig-by-project";
+	static final String GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE = "GraphRagExtractionConfig-by-datasource";
 	private final IGChatModelRuntimeConfigurationDao chatModelsConfiguration;
 	private final GraphRagExtractionStaticConfig staticConfig;
 	private final GraphRagExtractionConfigRepository configRepository;
@@ -68,7 +76,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration,
 			Map<String, Object> cache) throws LLMConfigException {
-		String text = "[CHUNK-ID]" + document.getId() + "[/CHUNK-ID]\r\n"
+		String text = START_CHUNK_ID + document.getId() + END_CHUNK_ID + "\r\n"
 				+ (document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "");
 		text += document.getText();
 		return extract(text, configuration, cache);
@@ -89,10 +97,10 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 				prompt = configuration.getExtractionPrompt();
 			}
 			PromptTemplate promptTemplate = new PromptTemplate(prompt);
-			if (configuration.getExtractionFormat() == GraphRagExtractionFormat.JSON) {
-				String formatSpecification = createFormatSpecification(configuration);
-				promptTemplate.add("format", formatSpecification);
-			}
+
+			String formatSpecification = createFormatSpecification(configuration);
+			promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, formatSpecification);
+
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
@@ -100,8 +108,13 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		switch (configuration.getExtractionFormat()) {
 		case JSON:
 			return clean(requestSpec.call().entity(LLMExtractionResult.class));
-		case CSV:
-			return clean(parseCSV(requestSpec.call().content()));
+
+		case CSV: {
+			StringBuffer buffer = new StringBuffer(promptObject.getContents() + EXTRACT_CSV_FROM_THE_FOLLOWING_TEXT);
+			buffer.append(text);
+			String response = chatModel.getChatModel().call(buffer.toString());
+			return clean(parseCSV(response));
+		}
 		default:
 			throw new RuntimeException("Invalid format is not JSON nor CSV");
 		}
@@ -110,6 +123,13 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 
 	private LLMExtractionResult parseCSV(String content) {
 		try {
+			if (content != null && content.toLowerCase().contains(START_THINK)
+					&& content.toLowerCase().contains(END_THINK)) {
+				int startThink = content.toLowerCase().indexOf(END_THINK);
+				if (startThink >= 0) {
+					content = content.substring(startThink + END_THINK.length());
+				}
+			}
 			return CSVIEParser.parseCSV(content);
 		} catch (IOException e) {
 			LOGGER.error("Problem parsing received CSV response", e);
@@ -159,9 +179,12 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	}
 
 	private String createFormatSpecification(GraphRagExtractionConfig configuration) {
-		BeanOutputConverter<LLMExtractionResult> beanOutputConverter = new BeanOutputConverter<>(
-				LLMExtractionResult.class);
-		String format = beanOutputConverter.getFormat() + "\r\n";
+		String format = "";
+		if (configuration.getExtractionFormat() == GraphRagExtractionFormat.JSON) {
+			BeanOutputConverter<LLMExtractionResult> beanOutputConverter = new BeanOutputConverter<>(
+					LLMExtractionResult.class);
+			format += beanOutputConverter.getFormat() + "\r\n";
+		}
 		List<GraphObjectType> entityTypes = getAllowedEntityTypes(configuration);
 		List<GraphObjectType> relationTypes = getAllowedRelationTypes(configuration);
 		List<GraphObjectType> eventTypes = getAllowedEventTypes(configuration);
@@ -455,23 +478,30 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 				prompt = configuration.getExtractionPrompt();
 			}
 			PromptTemplate promptTemplate = new PromptTemplate(prompt);
-			if (configuration.getExtractionFormat() == GraphRagExtractionFormat.JSON) {
-				String formatSpecification = createFormatSpecification(configuration);
-				promptTemplate.add("format", formatSpecification);
-			}
+
+			String formatSpecification = createFormatSpecification(configuration);
+			promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, formatSpecification);
+
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
-		List<Message> messages = documents.stream()
-				.map(x -> (Message) new SystemMessage(
-						"[CHUNK-ID]" + x.getId() + "[/CHUNK-ID]\r\n" + x.getText() + "\r\n" + x.getMetadata()))
-				.toList();
-		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
+
 		switch (configuration.getExtractionFormat()) {
-		case JSON:
+		case JSON: {
+			List<Message> messages = documents.stream().map(x -> (Message) new UserMessage(
+					START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n" + x.getText() + "\r\n" + x.getMetadata()))
+					.toList();
+			ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
 			return clean(requestSpec.call().entity(LLMExtractionResult.class));
-		case CSV:
-			return clean(parseCSV(requestSpec.call().content()));
+		}
+		case CSV: {
+			StringBuffer buffer = new StringBuffer(promptObject.getContents() + EXTRACT_CSV_FROM_THE_FOLLOWING_TEXT);
+			for (Document x : documents) {
+				buffer.append(START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n" + x.getText() + "\r\n");
+			}
+			String response = chatModel.getChatModel().call(buffer.toString());
+			return clean(parseCSV(response));
+		}
 		default:
 			throw new RuntimeException("Format specified is not JSON nor CSV");
 		}

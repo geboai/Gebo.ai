@@ -30,6 +30,7 @@ import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
+import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionFormat;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.jobs.services.GeboJobServiceException;
@@ -160,6 +161,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		graphragConfig.setDefaultConfiguration(true);
 		graphragConfig.setUsedModelConfiguration(GObjectRef.of(knowledgeExtractionChatModelConfig));
 		graphragConfig.setDescription("Default knowledge extraction model");
+		graphragConfig.setExtractionFormat(GraphRagExtractionFormat.JSON);
 		persistentObjectManager.insert(graphragConfig);
 		createDefaultUser();
 		beforeEachCallback();

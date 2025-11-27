@@ -32,17 +32,17 @@ public class GraphRagExtractionStaticConfig {
 			+ "7. Do not invent facts not supported by the text.\r\n"
 			+ "8. document fragment id is inside the [CHUNK-ID]..[/CHUNK-ID] delimiters, you will receive a system-message for each document fragment.\r\n"
 			+ "\r\n" + "---\r\n" + "\r\n" + "\r\n" + "Now produce the output in exactly this format:\r\n"
-			+ "${format}\r\n" + "";
+			+ "{format}\r\n" + "";
 	private static String csvExtractionPrompt = "You are an information extraction system. Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.\r\n"
 			+ "\r\n" + "Produce the output strictly as CSV rows using the following format:\r\n"
-			+ "<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment id>;<referred entities names>;<referred events names>\r\n"
+			+ "<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>\r\n"
 			+ "\r\n" + "Where:\r\n" + "\r\n"
 			+ "<object type> is one of: entity, event, relation, entity_alias, event_alias\r\n" + "\r\n"
 			+ "<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  \r\n"
 			+ "<object name> is the canonical name of the extracted object\r\n" + "\r\n"
 			+ "<object description> is a short and clear description (1–2 sentences)\r\n"
 			+ "<confidence score> is the confidence scores between 0.0–1.0 when relevant\r\n"
-			+ "<document fragment id> is inside the [CHUNK-ID]..[/CHUNK-ID] delimiters, you will receive a system-message for each document fragment \r\n"
+			+ "<document fragment ids> is a comma separated list of CHUNK-ID inside the [CHUNK-ID]..[/CHUNK-ID] delimiters before each text fragment. \r\n"
 			+ "\r\n"
 			+ "<referred entities ids> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none\r\n"
 			+ "\r\n"
@@ -56,7 +56,8 @@ public class GraphRagExtractionStaticConfig {
 			+ "Always reference entities/events by their names inside <referred entities names> and <referred events names>.\r\n"
 			+ "\r\n"
 			+ "The output must be ONLY CSV lines, with no explanations, no headers, and no additional text.\r\n"
-			+ "If an object has no references, leave the corresponding fields empty but still output all eight CSV columns.";
+			+ "If an object has no references, leave the corresponding fields empty but still output all eight CSV columns."
+			+ "{format}\r\n" + "";
 	List<GraphRagExtractionConfig> extractionConfigs = new ArrayList<>();
 
 	public GraphRagExtractionStaticConfig() {
