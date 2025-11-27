@@ -33,4 +33,12 @@ export interface GraphRagExtractionConfig {
     usedModelConfiguration?: GObjectRefGBaseChatModelConfig;
     contentSelectionFilter?: GContentSelectionFilter;
     processEveryDocument?: boolean;
+    extractionFormat: GraphRagExtractionConfig.ExtractionFormatEnum;
+}
+export namespace GraphRagExtractionConfig {
+    export type ExtractionFormatEnum = 'JSON' | 'CSV';
+    export const ExtractionFormatEnum = {
+        JSON: 'JSON' as ExtractionFormatEnum,
+        CSV: 'CSV' as ExtractionFormatEnum
+    };
 }

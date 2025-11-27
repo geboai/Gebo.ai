@@ -337,13 +337,23 @@ export class GraphRagConfigurationControllerService {
     /**
      * 
      * 
+     * @param format 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSystemGraphRagExtractionConfign(observe?: 'body', reportProgress?: boolean): Observable<GraphRagExtractionConfig>;
-    public getSystemGraphRagExtractionConfign(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GraphRagExtractionConfig>>;
-    public getSystemGraphRagExtractionConfign(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GraphRagExtractionConfig>>;
-    public getSystemGraphRagExtractionConfign(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSystemGraphRagExtractionConfig(format: string, observe?: 'body', reportProgress?: boolean): Observable<GraphRagExtractionConfig>;
+    public getSystemGraphRagExtractionConfig(format: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GraphRagExtractionConfig>>;
+    public getSystemGraphRagExtractionConfig(format: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GraphRagExtractionConfig>>;
+    public getSystemGraphRagExtractionConfig(format: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (format === null || format === undefined) {
+            throw new Error('Required parameter format was null or undefined when calling getSystemGraphRagExtractionConfig.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (format !== undefined && format !== null) {
+            queryParameters = queryParameters.set('format', <any>format);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -360,8 +370,9 @@ export class GraphRagConfigurationControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<GraphRagExtractionConfig>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/getSystemGraphRagExtractionConfign`,
+        return this.httpClient.request<GraphRagExtractionConfig>('get',`${this.basePath}/api/admin/GraphRagConfigurationController/getSystemGraphRagExtractionConfig`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

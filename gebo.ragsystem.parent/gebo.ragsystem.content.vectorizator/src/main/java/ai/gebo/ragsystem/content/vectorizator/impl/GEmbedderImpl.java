@@ -134,6 +134,8 @@ public class GEmbedderImpl implements IGEmbedder {
 
 		// Delete existing vectors from vector stores
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
+			if (embeddingModel == null)
+				continue;
 			List<String> ids2delete = vectorsToDeleteForVectorStoreId.get(embeddingModel.getCode());
 			if (ids2delete != null && !ids2delete.isEmpty()) {
 				embeddingModel.getVectorStore().delete(ids2delete);
@@ -168,6 +170,8 @@ public class GEmbedderImpl implements IGEmbedder {
 		TreeMap<Integer, List<IGConfigurableEmbeddingModel>> groupByEmbedSize = new TreeMap<Integer, List<IGConfigurableEmbeddingModel>>();
 		List<String> validEmbedders = new ArrayList<String>();
 		for (IGConfigurableEmbeddingModel embedder : embeddingModels) {
+			if (embedder == null)
+				continue;
 			if (!groupByEmbedSize.containsKey(embedder.getTokenizationThreshold())) {
 				groupByEmbedSize.put(embedder.getTokenizationThreshold(),
 						new ArrayList<IGConfigurableEmbeddingModel>());
@@ -455,7 +459,7 @@ public class GEmbedderImpl implements IGEmbedder {
 					vectPayload);
 			msg.setTargetModule(GStandardModulesConstraints.CORE_MODULE);
 			msg.setTargetComponent(GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT);
-			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);			
+			msg.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
 			emitter.send(msg);
 		}
 

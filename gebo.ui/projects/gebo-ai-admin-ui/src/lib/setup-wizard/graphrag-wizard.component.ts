@@ -57,6 +57,7 @@ export class GraphRagWizardComponent extends BaseWizardSectionComponent {
     protected createConfig() {
         const data: GraphRagExtractionConfig = {
             defaultConfiguration: true,
+            extractionFormat:"CSV",
             description: "Graph rag default configuration"
         };
         this.actionRouter.routeEvent({

@@ -8,8 +8,10 @@ import { forkJoin, map, Observable, of } from "rxjs";
     templateUrl: "graph-rag-extraction-config.component.html",
     selector: "gebo-ai-graph-rag-extraction-config-component",
     standalone: false,
-    providers:[{ provide: GEBO_AI_MODULE, useValue: "GeboAIGraphRagExtractionModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGraphRagExtractionConfigComponent),
-            multi: false }]
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIGraphRagExtractionModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGraphRagExtractionConfigComponent),
+        multi: false
+    }]
 })
 export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingComponent<GraphRagExtractionConfig> {
     protected override entityName: string = "GraphRagExtractionConfig";
@@ -31,7 +33,8 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         usedModelConfiguration: new FormControl(),
         graphRagAllSources: new FormControl(),
         contentSelectionFilter: new FormControl(),
-        processEveryDocument: new FormControl()
+        processEveryDocument: new FormControl(),
+        extractionFormat: new FormControl()
     });
     protected systemConfiguration?: GraphRagExtractionConfig;
     /** Available chat models to choose from */
@@ -41,11 +44,12 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
     protected project?: GProject;
     protected dataSource?: GObjectRef;
     protected defaultConfiguration: boolean = false;
-    protected graphRagAllSources:boolean=false;
-    protected processEveryDocument:boolean|undefined;
+    protected graphRagAllSources: boolean = false;
+    protected processEveryDocument: boolean | undefined;
     /** The default chat model configuration */
     protected defaultChatModel?: { code?: string, description?: string };
     protected configurationLabel?: string;
+    protected extractionFormats: { code: GraphRagExtractionConfig.ExtractionFormatEnum, description: string }[] = [{ code: "CSV", description: "CSV format" }, { code: "JSON", description: "JSON format" }];
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
@@ -60,23 +64,23 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         this.formGroup.controls["defaultConfiguration"].valueChanges.subscribe({
             next: (value) => {
                 this.defaultConfiguration = value === true;
-                if (this.defaultConfiguration===true) {
+                if (this.defaultConfiguration === true) {
                     this.formGroup.controls["graphRagAllSources"].enable();
-                }else {
+                } else {
                     this.formGroup.controls["graphRagAllSources"].disable();
                 }
             }
         });
         this.formGroup.controls["graphRagAllSources"].valueChanges.subscribe({
             next: (value) => {
-                const actualValue:boolean=value === true
-                if (this.formGroup.controls["defaultConfiguration"].value===true) {
-                    if ( actualValue!==true) {
+                const actualValue: boolean = value === true
+                if (this.formGroup.controls["defaultConfiguration"].value === true) {
+                    if (actualValue !== true) {
                         this.formGroup.controls["processEveryDocument"].setValue(false);
                         this.formGroup.controls["contentSelectionFilter"].setValue(undefined);
                         this.formGroup.controls["processEveryDocument"].disable();
                         this.formGroup.controls["contentSelectionFilter"].disable();
-                    }else {
+                    } else {
                         this.formGroup.controls["processEveryDocument"].enable();
                         this.formGroup.controls["contentSelectionFilter"].enable();
                     }
@@ -86,13 +90,13 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
             }
         });
         this.formGroup.controls["processEveryDocument"].valueChanges.subscribe({
-            next:(processEveryDocument:boolean|undefined)=>{
-                this.processEveryDocument=processEveryDocument;
-                if (processEveryDocument===true) {
+            next: (processEveryDocument: boolean | undefined) => {
+                this.processEveryDocument = processEveryDocument;
+                if (processEveryDocument === true) {
                     //this.formGroup.controls["contentSelectionFilter"].clearValidators();
                     this.formGroup.controls["contentSelectionFilter"].setValue(null);
                     this.formGroup.controls["contentSelectionFilter"].disable();
-                }else {
+                } else {
                     this.formGroup.controls["contentSelectionFilter"].enable();
                     this.formGroup.controls["contentSelectionFilter"].addValidators(Validators.required);
                     //this.formGroup.controls["contentSelectionFilter"].clearValidators();
@@ -101,37 +105,50 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
                 this.formGroup.updateValueAndValidity();
             }
         });
-        this.userMessages=[{summary:"Important disclaimer",detail:"Graph-rag processing improves chat responses quality, but increases data processing pipeline costs.",severity:"warn"}];
+        this.formGroup.controls["extractionFormat"].valueChanges.subscribe({
+            next: (value) => {
+                if (this.mode == "NEW" && value) {
+                    this.loadingRelatedBackend = true;
+                    this.graphRagExtractionConfigService.getSystemGraphRagExtractionConfig(value).subscribe({
+                        next: (systemConfig) => {
+                            this.systemConfiguration = systemConfig;
+                            this.formGroup.controls["extractionPrompt"].setValue(this.systemConfiguration?.extractionPrompt);
+                        },
+                        complete: () => {
+                            this.loadingRelatedBackend = false;
+                        }
+                    })
+
+                }
+            }
+        });
+        this.userMessages = [{ summary: "Important disclaimer", detail: "Graph-rag processing improves chat responses quality, but increases data processing pipeline costs.", severity: "warn" }];
     }
 
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        const observables: [Observable<ConfigurationEntry[]>, Observable<GraphRagExtractionConfig>] = [this.geboChatModels.getRuntimeConfiguredChatModels(), this.graphRagExtractionConfigService.getSystemGraphRagExtractionConfign()];
-        forkJoin(observables)
-            .subscribe({
-                next: (data) => {
-                    this.chatModelsData = data[0]?.map(x => x.objectReference).filter(x => x ? true : false) as GObjectRefGBaseModelConfig[];
-                    const chatModels = data[0];
-                    if (chatModels) {
-                        let usedDefault: ConfigurationEntry;
-                        chatModels.forEach(m => {
-                            if (m.configuration?.defaultModel === true) {
-                                usedDefault = m;
-                                this.defaultChatModel = m.configuration;
-                            }
-                        });
+        this.geboChatModels.getRuntimeConfiguredChatModels().subscribe({
+            next: (data) => {
+                this.chatModelsData = data?.map(x => x.objectReference).filter(x => x ? true : false) as GObjectRefGBaseModelConfig[];
+                const chatModels = data;
+                if (chatModels) {
+                    let usedDefault: ConfigurationEntry;
+                    chatModels.forEach(m => {
+                        if (m.configuration?.defaultModel === true) {
+                            usedDefault = m;
+                            this.defaultChatModel = m.configuration;
+                        }
+                    });
 
-                    }
-                    this.systemConfiguration = data[1];
-                    if (this.mode == "NEW") {
-                        this.formGroup.controls["extractionPrompt"].setValue(this.systemConfiguration?.extractionPrompt);
-                    }
-                },
-                complete: () => {
-                    this.loadingRelatedBackend = false;
                 }
-            })
+
+
+            },
+            complete: () => {
+                this.loadingRelatedBackend = false;
+            }
+        })
     }
     private loadLookups(actualValue: GraphRagExtractionConfig): void {
         const observables: Observable<any>[] = [];
@@ -163,7 +180,7 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
                     if (this.project) label += " Project: " + this.project.description;
                     if (this.dataSource) label += " Data source: " + this.dataSource.description;
                     this.configurationLabel = label;
-                    if (!this.formGroup.controls["description"].value ) {
+                    if (!this.formGroup.controls["description"].value) {
                         this.formGroup.controls["description"].setValue(this.configurationLabel);
                     }
                 },
@@ -177,19 +194,9 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         this.loadLookups(actualValue);
     }
     protected override onNewData(actualValue: GraphRagExtractionConfig): void {
-        this.loadingRelatedBackend = true;
+
         this.loadLookups(actualValue);
-        this.graphRagExtractionConfigService.getSystemGraphRagExtractionConfign().subscribe({
-            next: (systemConfiguration) => {
-                this.systemConfiguration = systemConfiguration;
-                if (this.mode == "NEW") {
-                    this.formGroup.controls["extractionPrompt"].setValue(this.systemConfiguration?.extractionPrompt);
-                }
-            },
-            complete: () => {
-                this.loadingRelatedBackend = false;
-            }
-        });
+       
     }
     override findByCode(code: string): Observable<GraphRagExtractionConfig | null> {
         return this.graphRagExtractionConfigService.findGraphRagExtractionConfigByCode(code);

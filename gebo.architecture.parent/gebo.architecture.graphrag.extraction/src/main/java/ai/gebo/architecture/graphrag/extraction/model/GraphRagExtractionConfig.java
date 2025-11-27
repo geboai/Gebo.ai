@@ -10,11 +10,16 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Document
 @Data
-public class GraphRagExtractionConfig extends GBaseObject {
+
+public class GraphRagExtractionConfig extends GBaseObject implements Cloneable{
+	public GraphRagExtractionConfig() {
+	}
+
 	@HashIndexed
 	private String knowledgeBaseCode = null;
 	@HashIndexed
@@ -31,4 +36,10 @@ public class GraphRagExtractionConfig extends GBaseObject {
 	private GObjectRef<GBaseChatModelConfig> usedModelConfiguration = null;
 	private GContentSelectionFilter contentSelectionFilter = null;
 	private Boolean processEveryDocument = null;
+	@NotNull
+	private GraphRagExtractionFormat extractionFormat = null;
+	
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 }
