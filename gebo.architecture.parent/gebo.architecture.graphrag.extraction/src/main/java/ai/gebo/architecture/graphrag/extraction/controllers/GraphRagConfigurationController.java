@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.graphrag.extraction.config.GraphRagExtractionStaticConfig;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
+import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionFormat;
 import ai.gebo.architecture.graphrag.extraction.repositories.GraphRagExtractionConfigRepository;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -23,6 +24,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+
 @ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @RestController
 @PreAuthorize("hasRole('ADMIN')")
@@ -38,9 +40,11 @@ public class GraphRagConfigurationController {
 		return configRepository.findByDefaultConfiguration(Boolean.TRUE);
 	}
 
-	@GetMapping(value = "getSystemGraphRagExtractionConfign", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GraphRagExtractionConfig getSystemGraphRagExtractionConfign() {
-		return staticConfig.getExtractionConfig();
+	@GetMapping(value = "getSystemGraphRagExtractionConfig", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GraphRagExtractionConfig getSystemGraphRagExtractionConfig(
+			@RequestParam("format") @NotNull GraphRagExtractionFormat format) {
+		return staticConfig.getExtractionConfigs().stream().filter(x -> x.getExtractionFormat() == format).findAny()
+				.get();
 	}
 
 	@DeleteMapping(value = "deleteGraphRagExtractionConfig", consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -1,11 +1,19 @@
 package ai.gebo.architecture.graphrag.extraction.services.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -25,6 +33,7 @@ import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.GraphEntityStandardType;
 import ai.gebo.architecture.graphrag.extraction.model.GraphObjectType;
 import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionConfig;
+import ai.gebo.architecture.graphrag.extraction.model.GraphRagExtractionFormat;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 import ai.gebo.architecture.graphrag.extraction.repositories.GraphRagExtractionConfigRepository;
@@ -38,6 +47,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
+
 @ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
 @Service
 @AllArgsConstructor
@@ -53,11 +63,13 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	private final IGChatModelRuntimeConfigurationDao chatModelsConfiguration;
 	private final GraphRagExtractionStaticConfig staticConfig;
 	private final GraphRagExtractionConfigRepository configRepository;
+	private static final Logger LOGGER = LoggerFactory.getLogger(GraphDataExtractionServiceImpl.class);
 
 	@Override
 	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration,
 			Map<String, Object> cache) throws LLMConfigException {
-		String text = document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "";
+		String text = "[CHUNK-ID]" + document.getId() + "[/CHUNK-ID]\r\n"
+				+ (document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "");
 		text += document.getText();
 		return extract(text, configuration, cache);
 	}
@@ -71,21 +83,38 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			throw new LLMConfigException("No configured extraction model");
 		Prompt promptObject = (Prompt) cache.get(GRAPHRAG_EXTRACTION_PROMPT_OBJECT);
 		if (promptObject == null) {
-			String formatSpecification = createFormatSpecification(configuration);
-			String prompt = staticConfig.getExtractionConfig() != null
-					? staticConfig.getExtractionConfig().getExtractionPrompt()
-					: null;
+
+			String prompt = findMatchingFormatSystemConfig(configuration.getExtractionFormat()).getExtractionPrompt();
 			if (configuration != null && configuration.getExtractionPrompt() != null) {
 				prompt = configuration.getExtractionPrompt();
 			}
 			PromptTemplate promptTemplate = new PromptTemplate(prompt);
-			promptTemplate.add("format", formatSpecification);
+			if (configuration.getExtractionFormat() == GraphRagExtractionFormat.JSON) {
+				String formatSpecification = createFormatSpecification(configuration);
+				promptTemplate.add("format", formatSpecification);
+			}
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
-		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).user(text);
+		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).system(text);
+		switch (configuration.getExtractionFormat()) {
+		case JSON:
+			return clean(requestSpec.call().entity(LLMExtractionResult.class));
+		case CSV:
+			return clean(parseCSV(requestSpec.call().content()));
+		default:
+			throw new RuntimeException("Invalid format is not JSON nor CSV");
+		}
 
-		return clean(requestSpec.call().entity(LLMExtractionResult.class));
+	}
+
+	private LLMExtractionResult parseCSV(String content) {
+		try {
+			return CSVIEParser.parseCSV(content);
+		} catch (IOException e) {
+			LOGGER.error("Problem parsing received CSV response", e);
+			return new LLMExtractionResult();
+		}
 	}
 
 	private LLMExtractionResult clean(LLMExtractionResult data) {
@@ -142,17 +171,22 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		return format;
 	}
 
+	private GraphRagExtractionConfig findMatchingFormatSystemConfig(GraphRagExtractionFormat format) {
+		return staticConfig.getExtractionConfigs().stream().filter(x -> x.getExtractionFormat() == format).findFirst()
+				.get();
+	}
+
 	private List<GraphObjectType> getAllowedEventTypes(GraphRagExtractionConfig configuration) {
 
 		return configuration.getCustomEventTypes() != null && !configuration.getCustomEventTypes().isEmpty()
 				? configuration.getCustomEventTypes()
-				: staticConfig.getExtractionConfig().getCustomEventTypes();
+				: findMatchingFormatSystemConfig(configuration.getExtractionFormat()).getCustomEntityTypes();
 	}
 
 	private List<GraphObjectType> getAllowedRelationTypes(GraphRagExtractionConfig configuration) {
 		return configuration.getCustomRelationTypes() != null && !configuration.getCustomRelationTypes().isEmpty()
 				? configuration.getCustomRelationTypes()
-				: staticConfig.getExtractionConfig().getCustomRelationTypes();
+				: findMatchingFormatSystemConfig(configuration.getExtractionFormat()).getCustomRelationTypes();
 	}
 
 	private String formatAllowedTypes(String specification, List<GraphObjectType> entityTypes) {
@@ -181,9 +215,10 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		}
 		if (configuration.getCustomEntityTypes() != null && !configuration.getCustomEntityTypes().isEmpty()) {
 			entityTypes.addAll(configuration.getCustomEntityTypes());
-		} else if (staticConfig != null && staticConfig.getExtractionConfig() != null
-				&& staticConfig.getExtractionConfig().getCustomEntityTypes() != null) {
-			entityTypes.addAll(staticConfig.getExtractionConfig().getCustomEntityTypes());
+		} else if (staticConfig != null && staticConfig.getExtractionConfigs() != null
+				&& findMatchingFormatSystemConfig(configuration.getExtractionFormat()).getCustomEntityTypes() != null) {
+			entityTypes
+					.addAll(findMatchingFormatSystemConfig(configuration.getExtractionFormat()).getCustomEntityTypes());
 		}
 		return entityTypes;
 
@@ -214,7 +249,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public LLMExtractionResult extract(Document document, GDocumentReference docreference, Map<String, Object> cache)
 			throws LLMConfigException {
-		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig mainConfiguration = findMatchingFormatSystemConfig(GraphRagExtractionFormat.CSV);
 		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
 				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
 		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
@@ -295,7 +330,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public LLMExtractionResult extract(String query, List<String> knowledgeBases, Map<String, Object> cache)
 			throws LLMConfigException {
-		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig mainConfiguration = findMatchingFormatSystemConfig(GraphRagExtractionFormat.CSV);
 		GraphRagExtractionConfig defaultLevelConfig = null;
 		List<GraphRagExtractionConfig> defaultConfigs = this.configRepository.findByDefaultConfiguration(Boolean.TRUE);
 		if (!defaultConfigs.isEmpty()) {
@@ -308,14 +343,29 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 
 	private GraphRagExtractionConfig joinConfigurations(GraphRagExtractionConfig mainConfiguration,
 			GraphRagExtractionConfig defaultLevelConfig, List<String> knowledgeBases) {
-		// TODO: implement logics
-		return defaultLevelConfig;
+		if (defaultLevelConfig != null
+				&& mainConfiguration.getExtractionFormat() == defaultLevelConfig.getExtractionFormat()) {
+			try {
+				GraphRagExtractionConfig out = (GraphRagExtractionConfig) defaultLevelConfig.clone();
+				if (out.getExtractionPrompt() == null || out.getExtractionPrompt().trim().length() == 0) {
+					out.setExtractionPrompt(mainConfiguration.getExtractionPrompt());
+				}
+				return out;
+			} catch (CloneNotSupportedException e) {
+				// this will never be raised
+				throw new RuntimeException("Unsupported clone", e);
+			}
+		}
+		if (defaultLevelConfig != null)
+			return defaultLevelConfig;
+		else
+			return mainConfiguration;
 	}
 
 	@Override
 	public LLMExtractionResult extract(List<Document> documents, GDocumentReference docreference,
 			Map<String, Object> cache) throws LLMConfigException {
-		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig mainConfiguration = findMatchingFormatSystemConfig(GraphRagExtractionFormat.CSV);
 		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
 				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
 		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
@@ -399,15 +449,16 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			throw new LLMConfigException("No configured extraction model");
 		Prompt promptObject = (Prompt) cache.get(GRAPHRAG_EXTRACTION_PROMPT_OBJECT);
 		if (promptObject == null) {
-			String formatSpecification = createFormatSpecification(configuration);
-			String prompt = staticConfig.getExtractionConfig() != null
-					? staticConfig.getExtractionConfig().getExtractionPrompt()
-					: null;
+
+			String prompt = findMatchingFormatSystemConfig(configuration.getExtractionFormat()).getExtractionPrompt();
 			if (configuration != null && configuration.getExtractionPrompt() != null) {
 				prompt = configuration.getExtractionPrompt();
 			}
 			PromptTemplate promptTemplate = new PromptTemplate(prompt);
-			promptTemplate.add("format", formatSpecification);
+			if (configuration.getExtractionFormat() == GraphRagExtractionFormat.JSON) {
+				String formatSpecification = createFormatSpecification(configuration);
+				promptTemplate.add("format", formatSpecification);
+			}
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
@@ -416,7 +467,15 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 						"[CHUNK-ID]" + x.getId() + "[/CHUNK-ID]\r\n" + x.getText() + "\r\n" + x.getMetadata()))
 				.toList();
 		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
-		return clean(requestSpec.call().entity(LLMExtractionResult.class));
+		switch (configuration.getExtractionFormat()) {
+		case JSON:
+			return clean(requestSpec.call().entity(LLMExtractionResult.class));
+		case CSV:
+			return clean(parseCSV(requestSpec.call().content()));
+		default:
+			throw new RuntimeException("Format specified is not JSON nor CSV");
+		}
+
 	}
 
 	public final static BiPredicate<List<Document>, Integer> groupingPredicate = (List<Document> batch,
@@ -454,7 +513,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public Predicate<List<Document>> getBatchingPredicate(GDocumentReference docreference, Map<String, Object> cache)
 			throws LLMConfigException {
-		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig mainConfiguration = findMatchingFormatSystemConfig(GraphRagExtractionFormat.CSV);
 		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
 				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
 		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
@@ -520,7 +579,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 
 	@Override
 	public boolean isTreatedDocument(GDocumentReference docreference, Map<String, Object> cache) {
-		GraphRagExtractionConfig mainConfiguration = staticConfig.getExtractionConfig();
+		GraphRagExtractionConfig mainConfiguration = findMatchingFormatSystemConfig(GraphRagExtractionFormat.CSV);
 		GraphRagExtractionConfig dataSourceLevelConfig = (GraphRagExtractionConfig) cache
 				.get(GRAPH_RAG_EXTRACTION_CONFIG_BY_DATASOURCE);
 		GraphRagExtractionConfig projectLevelConfig = (GraphRagExtractionConfig) cache
