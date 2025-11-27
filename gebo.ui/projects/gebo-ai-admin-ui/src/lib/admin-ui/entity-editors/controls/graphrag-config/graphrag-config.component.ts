@@ -93,7 +93,8 @@ export class GeboAIGraphragConfigComponent implements OnInit, OnChanges {
             projectCode: this.context?.projectCode,
             defaultConfiguration: false,
             contentSelectionFilter: undefined,
-            processEveryDocument: false
+            processEveryDocument: false,
+            extractionFormat:"CSV"
         };
         this.geboUIRouter.routeEvent({
             actionType: GeboActionType.NEW,
