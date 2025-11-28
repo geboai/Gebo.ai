@@ -211,7 +211,7 @@ export class GeboAIGraphRagExtractionConfigComponent extends BaseEntityEditingCo
         return this.graphRagExtractionConfigService.deleteGraphRagExtractionConfig(value).pipe(map(x => true));
     }
     override canBeDeleted(value: GraphRagExtractionConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: this.entity?.defaultConfiguration !== true, message: "" });
+        return of({ canBeDeleted: true, message: "" });
     }
 
 }

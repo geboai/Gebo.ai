@@ -1,11 +1,6 @@
 package ai.gebo.architecture.graphrag.extraction.services.impl;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.Message;
-import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
-import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
@@ -76,15 +69,26 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public LLMExtractionResult extract(Document document, GraphRagExtractionConfig configuration,
 			Map<String, Object> cache) throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin extract(document,....)");
+		}
 		String text = START_CHUNK_ID + document.getId() + END_CHUNK_ID + "\r\n"
 				+ (document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "");
 		text += document.getText();
-		return extract(text, configuration, cache);
+		LLMExtractionResult data = extract(text, configuration, cache);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End extract(document,....)=>" + data);
+		}
+		return data;
 	}
 
 	@Override
 	public LLMExtractionResult extract(String text, GraphRagExtractionConfig configuration, Map<String, Object> cache)
 			throws LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin extract(text,....)");
+			LOGGER.debug("text=" + text);
+		}
 		IGConfigurableChatModel chatModel = getChatModel(configuration);
 
 		if (chatModel == null)
@@ -100,24 +104,57 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 
 			String formatSpecification = createFormatSpecification(configuration);
 			promptTemplate.add(FORMAT_TEMPLATE_VARIABLE, formatSpecification);
-
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Used prompt:" + promptObject.getContents());
+		}
+		LLMExtractionResult data = null;
 		ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).system(text);
 		switch (configuration.getExtractionFormat()) {
-		case JSON:
-			return clean(requestSpec.call().entity(LLMExtractionResult.class));
+		case JSON: {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Invoking llm JSON structured output");
 
+			}
+			long timestamp = System.currentTimeMillis();
+			data = clean(requestSpec.call().entity(LLMExtractionResult.class));
+			long elapsed = System.currentTimeMillis() - timestamp;
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Called JSON IE extraction in:" + elapsed + "ms");
+			}
+		}
+			break;
 		case CSV: {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Invoking llm CSV output");
+			}
 			StringBuffer buffer = new StringBuffer(promptObject.getContents() + EXTRACT_CSV_FROM_THE_FOLLOWING_TEXT);
 			buffer.append(text);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("LLM INPUT=>" + buffer);
+			}
+			long timestamp = System.currentTimeMillis();
 			String response = chatModel.getChatModel().call(buffer.toString());
-			return clean(parseCSV(response));
+			long elapsed = System.currentTimeMillis() - timestamp;
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Called CSV IE extraction in:" + elapsed + "ms");
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("LLM OUTPUT=>" + response);
+			}
+			data = clean(parseCSV(response));
 		}
+			break;
 		default:
 			throw new RuntimeException("Invalid format is not JSON nor CSV");
 		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End extract(text,....)=>" + data);
+
+		}
+		return data;
 
 	}
 
@@ -465,7 +502,9 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	@Override
 	public LLMExtractionResult extract(List<Document> documents, GraphRagExtractionConfig configuration,
 			Map<String, Object> cache) throws LLMConfigException {
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin extract(List<Document>,....)");
+		}
 		IGConfigurableChatModel chatModel = getChatModel(configuration);
 
 		if (chatModel == null)
@@ -485,27 +524,57 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			promptObject = promptTemplate.create();
 			cache.put(GRAPHRAG_EXTRACTION_PROMPT_OBJECT, promptObject);
 		}
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Used prompt:" + promptObject.getContents());
+		}
+		LLMExtractionResult data = null;
 		switch (configuration.getExtractionFormat()) {
 		case JSON: {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Invoking llm JSON structured output");
+			}
 			List<Message> messages = documents.stream().map(x -> (Message) new UserMessage(
 					START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n" + x.getText() + "\r\n" + x.getMetadata()))
 					.toList();
+			long timestamp = System.currentTimeMillis();
 			ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
-			return clean(requestSpec.call().entity(LLMExtractionResult.class));
+			data = clean(requestSpec.call().entity(LLMExtractionResult.class));
+			long elapsed = System.currentTimeMillis() - timestamp;
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Called JSON IE extraction in:" + elapsed + "ms");
+			}
 		}
+			break;
 		case CSV: {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Invoking llm CSV output");
+			}
 			StringBuffer buffer = new StringBuffer(promptObject.getContents() + EXTRACT_CSV_FROM_THE_FOLLOWING_TEXT);
 			for (Document x : documents) {
 				buffer.append(START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n" + x.getText() + "\r\n");
 			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("LLM INPUT=>" + buffer);
+			}
+			long timestamp = System.currentTimeMillis();
 			String response = chatModel.getChatModel().call(buffer.toString());
-			return clean(parseCSV(response));
+			long elapsed = System.currentTimeMillis() - timestamp;
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Called CSV IE extraction in:" + elapsed + "ms");
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("LLM OUTPUT=>" + response);
+			}
+			data = clean(parseCSV(response));
 		}
+			break;
 		default:
 			throw new RuntimeException("Format specified is not JSON nor CSV");
 		}
-
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End extract(List<Document>,....)=>" + data);
+		}
+		return data;
 	}
 
 	public final static BiPredicate<List<Document>, Integer> groupingPredicate = (List<Document> batch,

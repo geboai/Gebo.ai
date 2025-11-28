@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +13,6 @@ import java.util.StringTokenizer;
 import java.util.stream.Stream;
 
 import org.apache.commons.collections4.map.HashedMap;
-import org.apache.tika.parser.microsoft.onenote.fsshttpb.streamobj.StreamObjectTypeHeaderEnd;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +21,7 @@ import ai.gebo.architecture.graphrag.extraction.model.AbstractGraphObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityAliasObject;
 import ai.gebo.architecture.graphrag.extraction.model.EntityObject;
 import ai.gebo.architecture.graphrag.extraction.model.EventAliasObject;
+import ai.gebo.architecture.graphrag.extraction.model.EventObject;
 import ai.gebo.architecture.graphrag.extraction.model.LLMExtractionResult;
 import ai.gebo.architecture.graphrag.extraction.model.RelationObject;
 
@@ -50,10 +48,12 @@ public class CSVIEParser {
 			CONFIDENCE_SCORE, DOCUMENT_FRAGMENT_ID, REFERENCED_ENTITIES_NAMES, REFERENCED_EVENT_NAMES };
 
 	public static LLMExtractionResult parseCSV(String content) throws IOException {
-		LOGGER.info("Begin parseCsv(...)");
-		LLMExtractionResult output = new LLMExtractionResult();
-		LOGGER.info("LLM CSV CONTENT:" + content);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin parseCsv(...)");
 
+			LOGGER.debug("LLM CSV CONTENT:" + content);
+		}
+		LLMExtractionResult output = new LLMExtractionResult();
 		// identify valid csv lines
 		// <object type>;<object subtype>;<object name>;<object description>;<confidence
 		// score>;<document fragment id>;<referred entities names>;<referred events
@@ -85,7 +85,9 @@ public class CSVIEParser {
 			} while (line != null);
 		}
 		sanitize(output);
-		LOGGER.info("End parseCsv(...) => " + output);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End parseCsv(...) => " + output);
+		}
 		return output;
 	}
 
