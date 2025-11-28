@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kriteret e përzgjedhjes së skedarëve për procesim graphrag",
         "help" : "Redaktoni kriteret për skedarët që do të dërgohen në pipeline-in e nxjerrjes së informacionit për graphrag. Zgjidhni të paktën një emër skedari dhe kriter dhe/ose një lloj skedari dhe/ose madhësia maksimale e skedarit në bajte dhe/ose mosha e modifikimit të fundit në ditë"
+      },
+      "extractionFormat" : {
+        "label" : "Formati i nxjerrjes",
+        "help" : "Përdorni formatin CSV për llm-të nën 30b parametra, JSON për modelet e mëdha frontier",
+        "placeholder" : "Përdorni formatin CSV për llm-të nën 30b parametra, JSON për modelet e mëdha frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "U mor përgjigjja me zë"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Shkoni lart"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Shkoni poshtë"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Dokumente të gjetura"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Jeni i sigurt që doni të fshini këtë bisedë?",
+        "header" : "Veprimi i fshirjes së bisedës"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Mbyll"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Shto dokument në listën 'bisedo me' "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Dokumente të përpunuara",
         "dataset-2-label" : "Dokumente me gabime",
         "dataset-3-label" : "Dokumente të hedhura"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Tokenë të përpunuar",
+        "dataset-1-label" : "Gabim gjatë përpunimit të tokenëve"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analizimi i listës së dokumenteve"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Dokumentet e papërpunuara",
+        "label-1" : "Gabim gjatë përpunimit të dokumenteve",
+        "label-2" : "Dokumente të përpunuara"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizimi i dokumenteve"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Dokumente të pranuara",
+        "dataset-1-label" : "Dokumente të përpunuara",
+        "dataset-2-label" : "Dokumente me gabim",
+        "dataset-3-label" : "Dokumente të hedhura"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Dokumentet e papërpunuara",
+        "label-1" : "Gabim gjatë përpunimit të dokumenteve",
+        "label-2" : "Dokumente të përpunuara"
+      },
+      "EMBEDDING" : {
+        "description" : "Indeksimi semantik (embedding për semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Tokenë të përpunuar",
+        "dataset-1-label" : "Gabim gjatë përpunimit të tokenëve"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Dokumentet e papërpunuara",
+        "label-1" : "Gabim gjatë përpunimit të dokumenteve",
+        "label-2" : "Dokumente të përpunuara"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Dokumente të pranuara",
+        "dataset-1-label" : "Dokumente të përpunuara",
+        "dataset-2-label" : "Dokumente me gabim",
+        "dataset-3-label" : "Dokumente të hedhura"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksimi i entiteteve/marrëdhënieve/ngjarjeve (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Dokumentet e papërpunuara",
+        "label-1" : "Gabim gjatë përpunimit të dokumenteve",
+        "label-2" : "Dokumente të përpunuara"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Tokenë të përpunuar",
+        "dataset-1-label" : "Gabim gjatë përpunimit të tokenëve"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Dokumente të pranuara",
+        "dataset-1-label" : "Dokumente të përpunuara",
+        "dataset-2-label" : "Dokumente me gabim",
+        "dataset-3-label" : "Dokumente të hedhura"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Dokumente të pranuara",
+        "dataset-1-label" : "Dokumente të përpunuara",
+        "dataset-2-label" : "Dokumente me gabim",
+        "dataset-3-label" : "Dokumente të hedhura"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Në rregull!",
         "detail" : "Operacioni u përfundua me sukses"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Gabim gjatë transmetimit të përgjigjes së bisedës",
+        "detail" : "Gabim serveri: class org.neo4j.driver.internal.value.StringValue nuk mund të konvertohet në class java.lang.String (org.neo4j.driver.internal.value.StringValue është në unnamed module të loader 'app'; java.lang.String është në module java.base të loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "U ruajt me sukses",
+        "detail" : "Operacioni i përditësimit u krye me sukses"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Gabim në komunikimin me serverin Ollama ",
+        "detail" : "Gabim rrjeti në komunikimin me sistemin larg për të aksesuar përmbajtjen\n lista e modeleve Gabim në punën me url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Përfunduar"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfiguro graphrag në zonën e konfigurimit nëse dëshiron ta përdorësh këtu"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Cilësimet Graphrag"
+      },
+      "button-help" : {
+        "label" : "Kliko këtu për të konfiguruar nxjerrjen e informacionit për graphrag (aktualisht i pakonfiguruar)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Shto konfigurim"
       }
     }
   }

@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Filutvalgskriterier for graphrag-behandling",
         "help" : "Rediger kriterier for hvilke filer som skal sendes til informasjonsuttrekkspipelinen for graphrag. Velg minst et filnavn og kriterium, og/eller en filtype, og/eller maks filstørrelse i byte, og/eller antall dager siden siste endring."
+      },
+      "extractionFormat" : {
+        "label" : "Ekstraksjonsformat",
+        "help" : "Bruk CSV-format for llms under 30b parametere, JSON for store frontier-modeller",
+        "placeholder" : "Bruk CSV-format for llms under 30b parametere, JSON for store frontier-modeller"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Talsvar mottatt"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Bla opp"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Bla ned"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Fant dokumenter"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Er du sikker på at du vil slette denne chatten?",
+        "header" : "Slett chat-handling"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Lukk"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Legg til dokument i 'chat med'-listen "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Behandlede dokumenter",
         "dataset-2-label" : "Feil på dokumenter",
         "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyserer dokumentlisten"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumenttokenisering"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantisk indeksering (embedding for semantisk rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksering av entiteter/relasjoner/hendelser (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ikke behandlede dokumenter",
+        "label-1" : "Feil ved behandling av dokumenter",
+        "label-2" : "Behandlede dokumenter"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Behandlede tokens",
+        "dataset-1-label" : "Feil ved behandling av tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Mottatte dokumenter",
+        "dataset-1-label" : "Behandlede dokumenter",
+        "dataset-2-label" : "Feil dokumenter",
+        "dataset-3-label" : "Forkastede dokumenter"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operasjonen ble fullført"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Feil under strømming av chat-svar",
+        "detail" : "Serverfeil: class org.neo4j.driver.internal.value.StringValue kan ikke konverteres til class java.lang.String (org.neo4j.driver.internal.value.StringValue er i unavngitt modul av loader 'app'; java.lang.String er i modul java.base av loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Lagret med suksess",
+        "detail" : "Oppdateringen ble fullført"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Feil ved kommunikasjon med Ollama-server ",
+        "detail" : "Nettverksfeil ved kommunikasjon med det eksterne systemet for tilgang til innhold\n modelliste Feil ved arbeid med url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Fullført"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurer graphrag i oppsettområdet hvis du vil bruke det i denne seksjonen"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-innstillinger"
+      },
+      "button-help" : {
+        "label" : "Klikk her for å konfigurere informasjonsuttrekk for graphrag (ikke konfigurert ennå)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Legg til konfigurasjon"
       }
     }
   }

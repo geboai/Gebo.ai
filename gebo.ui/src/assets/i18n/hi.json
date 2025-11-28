@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag प्रोसेसिंग के लिए फाइल चयन मानदंड",
         "help" : "Graphrag के लिए सूचना निष्कर्षण पाइपलाइन में भेजने हेतु फाइल पर मानदंड संपादित करें, कम से कम एक फाइल नाम और मानदंड और/या एक फाइल प्रकार और/या फाइल आकार के अधिकतम बाइट्स और/या अंतिम संशोधन की आयु (दिनों में) का चयन करें"
+      },
+      "extractionFormat" : {
+        "label" : "एक्सट्रैक्शन प्रारूप",
+        "help" : "30b पैरामीटर्स से कम के llms के लिए CSV प्रारूप का उपयोग करें, विशाल फ्रंटियर मॉडलों के लिए JSON फॉर्म",
+        "placeholder" : "30b पैरामीटर्स से कम के llms के लिए CSV प्रारूप का उपयोग करें, विशाल फ्रंटियर मॉडलों के लिए JSON फॉर्म"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "वॉयस उत्तर प्राप्त हुआ"
+      },
+      "ScrollUpBtn" : {
+        "help" : "ऊपर स्क्रॉल करें"
+      },
+      "ScrollDownBtn" : {
+        "help" : "नीचे स्क्रॉल करें"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "दस्तावेज़ मिले"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
+        "header" : "चैट हटाने की क्रिया"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "बंद करें"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'चैट हेतु' सूची में दस्तावेज़ जोड़ें "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
         "dataset-2-label" : "त्रुटि वाले दस्तावेज़",
         "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "प्रोसेस किए गए टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रोसेसिंग में त्रुटि"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "दस्तावेज़ सूची का विश्लेषण"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "अप्रोसेस्ड दस्तावेज़",
+        "label-1" : "दस्तावेज़ प्रोसेसिंग में त्रुटि",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़"
+      },
+      "TOKENIZATION" : {
+        "description" : "दस्तावेज़ों का टोकनाइजेशन"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटिपूर्ण दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "अप्रोसेस्ड दस्तावेज़",
+        "label-1" : "दस्तावेज़ प्रोसेसिंग में त्रुटि",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़"
+      },
+      "EMBEDDING" : {
+        "description" : "समानार्थक अनुक्रमण (समानार्थक रैग के लिए एम्बेडिंग)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "प्रोसेस किए गए टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रोसेसिंग में त्रुटि"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "अप्रोसेस्ड दस्तावेज़",
+        "label-1" : "दस्तावेज़ प्रोसेसिंग में त्रुटि",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटिपूर्ण दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "इकाई/संबंध/घटनाओं का अनुक्रमण (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "अप्रोसेस्ड दस्तावेज़",
+        "label-1" : "दस्तावेज़ प्रोसेसिंग में त्रुटि",
+        "label-2" : "प्रोसेस किए गए दस्तावेज़"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "प्रोसेस किए गए टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रोसेसिंग में त्रुटि"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटिपूर्ण दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तावेज़",
+        "dataset-1-label" : "प्रोसेस किए गए दस्तावेज़",
+        "dataset-2-label" : "त्रुटिपूर्ण दस्तावेज़",
+        "dataset-3-label" : "अस्वीकृत दस्तावेज़"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ठीक है!",
         "detail" : "ऑपरेशन सफलतापूर्वक पूरा हुआ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "चैट प्रतिक्रिया स्ट्रीमिंग में त्रुटि",
+        "detail" : "सर्वर त्रुटि: class org.neo4j.driver.internal.value.StringValue को class java.lang.String में नहीं बदला जा सकता (org.neo4j.driver.internal.value.StringValue 'app' के अनाम मॉड्यूल में है; java.lang.String 'bootstrap' के मॉड्यूल java.base में है)"
+      },
+      "OK" : {
+        "summary" : "सफलतापूर्वक सहेजा गया",
+        "detail" : "अपडेट ऑपरेशन सफलतापूर्वक हुआ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : " Ollama सर्वर से संचार में त्रुटि ",
+        "detail" : "रिमोट सिस्टम से कनेक्ट करते समय नेटवर्क त्रुटि\n मॉडल सूची प्राप्त करने में त्रुटि, url के साथ कार्य में त्रुटि:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "संपन्न"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "यदि आप इसका उपयोग करना चाहते हैं तो सेटअप क्षेत्र में graphrag कॉन्फ़िगर करें"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag सेटिंग्स"
+      },
+      "button-help" : {
+        "label" : "जानकारी निकासी के लिए graphrag कॉन्फ़िगर करने हेतु यहाँ क्लिक करें (हाल में कॉन्फ़िगर नहीं है)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "कॉन्फ़िगरेशन जोड़ें"
       }
     }
   }

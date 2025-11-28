@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kritéria výběru souborů pro zpracování graphrag",
         "help" : "Upravte kritéria pro soubory, které budou odeslány do pipeline extrakce informací pro graphrag, vyberte alespoň jméno souboru a kritérium a/nebo typ souboru a/nebo maximální počet bajtů velikosti souboru a/nebo stáří poslední úpravy ve dnech"
+      },
+      "extractionFormat" : {
+        "label" : "Formát extrakce",
+        "help" : "Použijte formát CSV pro llms pod 30b parametrů, JSON pro velké pokročilé modely",
+        "placeholder" : "Použijte formát CSV pro llms pod 30b parametrů, JSON pro velké pokročilé modely"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Hlasová odpověď přijata"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Posunout nahoru"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Posunout dolů"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nalezené dokumenty"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Opravdu si přejete smazat tento chat?",
+        "header" : "Akce smazání chatu"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Zavřít"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Přidat dokument do seznamu 'chatovat s'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Zpracované dokumenty",
         "dataset-2-label" : "Chybné dokumenty",
         "dataset-3-label" : "Vyřazené dokumenty"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Zpracované tokeny",
+        "dataset-1-label" : "Chyba při zpracování tokenů"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analýza seznamu dokumentů"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nezpracované dokumenty",
+        "label-1" : "Chyba při zpracování dokumentů",
+        "label-2" : "Zpracované dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizace dokumentů"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Přijaté dokumenty",
+        "dataset-1-label" : "Zpracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Vyřazené dokumenty"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nezpracované dokumenty",
+        "label-1" : "Chyba při zpracování dokumentů",
+        "label-2" : "Zpracované dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Sémantický index (embedding pro sémantický rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Zpracované tokeny",
+        "dataset-1-label" : "Chyba při zpracování tokenů"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nezpracované dokumenty",
+        "label-1" : "Chyba při zpracování dokumentů",
+        "label-2" : "Zpracované dokumenty"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Přijaté dokumenty",
+        "dataset-1-label" : "Zpracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Vyřazené dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexace entit/vztahů/událostí (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nezpracované dokumenty",
+        "label-1" : "Chyba při zpracování dokumentů",
+        "label-2" : "Zpracované dokumenty"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Zpracované tokeny",
+        "dataset-1-label" : "Chyba při zpracování tokenů"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Přijaté dokumenty",
+        "dataset-1-label" : "Zpracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Vyřazené dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Přijaté dokumenty",
+        "dataset-1-label" : "Zpracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Vyřazené dokumenty"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operace byla úspěšně dokončena"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Chyba během streamování odpovědi chat",
+        "detail" : "Chyba serveru: třída org.neo4j.driver.internal.value.StringValue nelze převést na třídu java.lang.String (org.neo4j.driver.internal.value.StringValue je v nepojmenovaném modulu načítače 'app'; java.lang.String je v modulu java.base načítače 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Úspěšně uloženo",
+        "detail" : "Aktualizace byla úspěšně dokončena"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Chyba při komunikaci se serverem Ollama",
+        "detail" : "Chyba sítě při komunikaci se vzdáleným systémem pro přístup k obsahu\n seznam modelů Chyba při práci s url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Dokončeno"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Nastavte graphrag v oblasti nastavení, pokud ho chcete v této sekci použít"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Nastavení graphrag"
+      },
+      "button-help" : {
+        "label" : "Klikněte zde pro nastavení extrakce informací pro graphrag (zatím není nastaveno)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Přidat konfiguraci"
       }
     }
   }

@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag emalı üçün fayl seçmə meyarları",
         "help" : "Graphrag üçün məlumat çıxarışı pipeline-na göndəriləcək fayllardakı meyarları redaktə edin, ən azı bir fayl adı və meyar və/və ya fayl tipi və/və ya maksimum fayl ölçüsü bayt və/və ya son dəyişiklik yaşını günlərlə seçin"
+      },
+      "extractionFormat" : {
+        "label" : "Çıxarış formatı",
+        "help" : "30 milyondan az parametrli llms üçün CSV formatından, böyük frontier modelləri üçün JSON formatından istifadə edin",
+        "placeholder" : "30 milyondan az parametrli llms üçün CSV formatından, böyük frontier modelləri üçün JSON formatından istifadə edin"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Səsli cavab alındı"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Yuxarı sürüşdür"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Aşağı sürüşdür"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Sənədlər tapıldı"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Bu söhbəti silmək istədiyinizə əminsiniz?",
+        "header" : "Söhbəti silmə əməliyyatı"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Bağla"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'Söhbət üçün' siyahısına sənəd əlavə et"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Emal olunmuş sənədlər",
         "dataset-2-label" : "Səhv olan sənədlər",
         "dataset-3-label" : "İmtina olunan sənədlər"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalında səhv"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sənədlər siyahısının analiz edilməsi"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "TOKENIZATION" : {
+        "description" : "Sənədlərin tokenizə edilməsi"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantik indeksləşdirmə (semantic rag üçün embedding)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalında səhv"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Obyekt/münasibət/hadisələrin indeksləşdirilməsi (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Emal olunmamış sənədlər",
+        "label-1" : "Sənədlərin emalında səhv",
+        "label-2" : "Emal olunmuş sənədlər"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Emal olunmuş tokenlər",
+        "dataset-1-label" : "Tokenlərin emalında səhv"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Qəbul edilmiş sənədlər",
+        "dataset-1-label" : "Emal olunmuş sənədlər",
+        "dataset-2-label" : "Səhvli sənədlər",
+        "dataset-3-label" : "İmtina olunmuş sənədlər"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "TAMAM!",
         "detail" : "Əməliyyat uğurla yerinə yetirildi"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Söhbət cavabı yayımlanarkən səhv baş verdi",
+        "detail" : "Server səhvi: class org.neo4j.driver.internal.value.StringValue, class java.lang.String tipinə çevrilə bilmir (org.neo4j.driver.internal.value.StringValue 'app' yükləyicisində, java.lang.String isə 'bootstrap' yükləyicisindədir)"
+      },
+      "OK" : {
+        "summary" : "Uğurla yadda saxlanıldı",
+        "detail" : "Yeniləmə əməliyyatı uğurla tamamlandı"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama serveri ilə əlaqədə səhv",
+        "detail" : "Uzaq sistemə daxil olaraq məzmuna çıxış zamanı şəbəkə xətası\n Modellər siyahısı üçün url ilə işləyərkən səhv baş verdi: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Tamamlandı"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Əgər bu bölmədə istifadə etmək istəyirsinizsə, graphrag-i quraşdırma sahəsində konfiqurasiya edin"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag ayarları"
+      },
+      "button-help" : {
+        "label" : "Graphrag üçün informasiya çıxarışı ayarlarını aparmaq üçün bura klikləyin (hal-hazırda quraşdırılmayıb)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Konfiqurasiya əlavə et"
       }
     }
   }

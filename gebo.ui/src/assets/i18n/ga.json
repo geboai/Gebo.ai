@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Critéir roghnúcháin comhaid do phróiseáil graphrag",
         "help" : "Cuir in eagar critéir ar chomhaid le seoladh chuig píblíne eastóscadh faisnéise do graphrag, roghnaigh ar a laghad ainm comhaid agus critéar agus/nó cineál comhaid agus/nó uasmhéid bheart comhaid agus/nó aois ón athrú deireanach i laethanta"
+      },
+      "extractionFormat" : {
+        "label" : "Formáid eastósctha",
+        "help" : "Úsáid formáid CSV do llms faoi 30b paraiméadar, JSON do mhúnlaí ollmhóra frontier",
+        "placeholder" : "Úsáid formáid CSV do llms faoi 30b paraiméadar, JSON do mhúnlaí ollmhóra frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Freagra gutha faighte"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Scrollaigh suas"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Scrollaigh síos"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Cáipéisí aimsithe"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "An bhfuil tú cinnte gur mian leat an comhrá seo a scriosadh?",
+        "header" : "Gníomh scriosta comhrá"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Dún"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Cuir cáipéis leis an liosta 'comhrá leis'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Doiciméid próiseáilte",
         "dataset-2-label" : "Doiciméid le hearráid",
         "dataset-3-label" : "Doiciméid tréigthe"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Comharthaí próiseáilte",
+        "dataset-1-label" : "Earráid ag próiseáil comharthaí"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Ag anailísiú liosta cáipéisí"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Cáipéisí gan láimhseáil",
+        "label-1" : "Earráid ag próiseáil cáipéisí",
+        "label-2" : "Cáipéisí próiseáilte"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tocanú cáipéisí"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Cáipéisí faighte",
+        "dataset-1-label" : "Cáipéisí próiseáilte",
+        "dataset-2-label" : "Cáipéisí le hearráid",
+        "dataset-3-label" : "Cáipéisí caite"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Cáipéisí gan láimhseáil",
+        "label-1" : "Earráid ag próiseáil cáipéisí",
+        "label-2" : "Cáipéisí próiseáilte"
+      },
+      "EMBEDDING" : {
+        "description" : "Innéacsú seamantach (leabú do rag seamantach)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Comharthaí próiseáilte",
+        "dataset-1-label" : "Earráid ag próiseáil comharthaí"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Cáipéisí gan láimhseáil",
+        "label-1" : "Earráid ag próiseáil cáipéisí",
+        "label-2" : "Cáipéisí próiseáilte"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Cáipéisí faighte",
+        "dataset-1-label" : "Cáipéisí próiseáilte",
+        "dataset-2-label" : "Cáipéisí le hearráid",
+        "dataset-3-label" : "Cáipéisí caite"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Innéacsú Eintiteas/caidreamh/Imeachtaí (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Cáipéisí gan láimhseáil",
+        "label-1" : "Earráid ag próiseáil cáipéisí",
+        "label-2" : "Cáipéisí próiseáilte"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Comharthaí próiseáilte",
+        "dataset-1-label" : "Earráid ag próiseáil comharthaí"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Cáipéisí faighte",
+        "dataset-1-label" : "Cáipéisí próiseáilte",
+        "dataset-2-label" : "Cáipéisí le hearráid",
+        "dataset-3-label" : "Cáipéisí caite"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Cáipéisí faighte",
+        "dataset-1-label" : "Cáipéisí próiseáilte",
+        "dataset-2-label" : "Cáipéisí le hearráid",
+        "dataset-3-label" : "Cáipéisí caite"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Ceart go leor!",
         "detail" : "D’éirigh leis an oibríocht"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Earráid agus freagra á shruthú sa chomhrá",
+        "detail" : "Earráid ar an bhfreastalaí: ní féidir rang org.neo4j.driver.internal.value.StringValue a athrú go rang java.lang.String (org.neo4j.driver.internal.value.StringValue sa mhodúl gan ainm de luchtóir 'app'; java.lang.String sa mhodúl java.base de luchtóir 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Sábháladh go rathúil",
+        "detail" : "Oibríocht nuashonraithe críochnaithe go rathúil"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Earráid ag cumarsáid leis an bhfreastalaí Ollama",
+        "detail" : "Earráid líonra ag cumarsáid leis an gcóras cianda agus ag rochtain ábhair\n liosta samhlacha Earráid ag obair leis an URL: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Críochnaithe"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Cumraigh graphrag sa limistéar socraithe más mian leat é a úsáid sa chuid seo"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Socruithe graphrag"
+      },
+      "button-help" : {
+        "label" : "Cliceáil anseo chun eastóscadh faisnéise a chumrú do graphrag (níl sé cumraithe faoi láthair)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Cuir cumraíocht leis"
       }
     }
   }

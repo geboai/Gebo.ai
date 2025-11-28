@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "ग्राफर्याग प्रोसेसिङको लागि फाइल छनोट मापदण्डहरू",
         "help" : "ग्राफर्याग जानकारी एक्स्ट्र्याक्सन पाइपलाइनमा पठाउन फाइलमा मापदण्डहरू सम्पादन गर्नुहोस्, कम्तिमा पनि फाइल नाम र मापदण्ड, र/वा फाइल प्रकार, र/वा फाइलको अधिकतम साइज (बाइट्समा), र/वा अन्तिम परिमार्जन भएको दिनको अधिकतम उमेर चयन गर्नुहोस्"
+      },
+      "extractionFormat" : {
+        "label" : "निकासी ढाँचा",
+        "help" : "३०b भन्दा कम पाराम्स भएका llms का लागि CSV ढाँचा प्रयोग गर्नुहोस्, विशाल frontier मोडेलका लागि JSON प्रयोग गर्नुहोस्",
+        "placeholder" : "३०b भन्दा कम पाराम्स भएका llms का लागि CSV ढाँचा प्रयोग गर्नुहोस्, विशाल frontier मोडेलका लागि JSON प्रयोग गर्नुहोस्"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "आवाजमा उत्तर प्राप्त भयो"
+      },
+      "ScrollUpBtn" : {
+        "help" : "माथि स्क्रोल गर्नुहोस्"
+      },
+      "ScrollDownBtn" : {
+        "help" : "तल स्क्रोल गर्नुहोस्"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "डक्स फेला परे"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "के तपाईं यो च्याट मेटाउन चाहनुहुन्छ पक्का हुनुहुन्छ?",
+        "header" : "च्याट मेटाउने प्रक्रिया"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "बन्द गर्नुहोस्"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'च्याट गर्ने' सूचीमा कागजात थप्नुहोस्"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "संसाधित कागजातहरू",
         "dataset-2-label" : "त्रुटि भएका कागजातहरू",
         "dataset-3-label" : "फालेका कागजातहरू"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "प्रोसेस गरिएको टोकनहरू",
+        "dataset-1-label" : "टोकन प्रोसेस गर्दा त्रुटि"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "कागजातहरूको सूची विश्लेषण गर्दै"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "अप्रोसेस गरिएको डक्स",
+        "label-1" : "डक्स प्रोसेस गर्दा त्रुटि",
+        "label-2" : "प्रोसेस गरिएको डक्स"
+      },
+      "TOKENIZATION" : {
+        "description" : "कागजात टोकनाइजेसन"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "प्राप्त डक्स",
+        "dataset-1-label" : "प्रोसेस गरिएको डक्स",
+        "dataset-2-label" : "त्रुटि डक्स",
+        "dataset-3-label" : "फालिएका डक्स"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "अप्रोसेस गरिएको डक्स",
+        "label-1" : "डक्स प्रोसेस गर्दा त्रुटि",
+        "label-2" : "प्रोसेस गरिएको डक्स"
+      },
+      "EMBEDDING" : {
+        "description" : "समानार्थी अनुक्रमणिका (semantic rag का लागि embedding)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "प्रोसेस गरिएको टोकनहरू",
+        "dataset-1-label" : "टोकन प्रोसेस गर्दा त्रुटि"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "अप्रोसेस गरिएको डक्स",
+        "label-1" : "डक्स प्रोसेस गर्दा त्रुटि",
+        "label-2" : "प्रोसेस गरिएको डक्स"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त डक्स",
+        "dataset-1-label" : "प्रोसेस गरिएको डक्स",
+        "dataset-2-label" : "त्रुटि डक्स",
+        "dataset-3-label" : "फालिएका डक्स"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "इकाई/सम्बन्ध/घटना अनुक्रमणिका (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "अप्रोसेस गरिएको डक्स",
+        "label-1" : "डक्स प्रोसेस गर्दा त्रुटि",
+        "label-2" : "प्रोसेस गरिएको डक्स"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "प्रोसेस गरिएको टोकनहरू",
+        "dataset-1-label" : "टोकन प्रोसेस गर्दा त्रुटि"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त डक्स",
+        "dataset-1-label" : "प्रोसेस गरिएको डक्स",
+        "dataset-2-label" : "त्रुटि डक्स",
+        "dataset-3-label" : "फालिएका डक्स"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त डक्स",
+        "dataset-1-label" : "प्रोसेस गरिएको डक्स",
+        "dataset-2-label" : "त्रुटि डक्स",
+        "dataset-3-label" : "फालिएका डक्स"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "सफल छ!",
         "detail" : "अपरेशन सफलतापूर्वक सम्पन्न भयो"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "च्याट प्रसारण गर्दा त्रुटि",
+        "detail" : "सर्भर त्रुटि: class org.neo4j.driver.internal.value.StringValue लाई java.lang.String मा परिवर्तन गर्न सकिने छैन (org.neo4j.driver.internal.value.StringValue 'app' को अनामित मोड्युलमा छ; java.lang.String 'bootstrap' को java.base मा छ)"
+      },
+      "OK" : {
+        "summary" : "सफलतापूर्वक बचत गरियो",
+        "detail" : "अपडेट सफलतापूर्वक सम्पन्न भयो"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama सर्भर सँग सञ्चार गर्दा त्रुटि",
+        "detail" : "टाढाको सिस्टममा सामग्री पहुँच गर्दा नेटवर्क त्रुटि\n मोडेल सूची URL सँग काम गर्दा त्रुटि: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "पूरा भयो"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "यदि तपाईं यो खण्डमा प्रयोग गर्न चाहनुहुन्छ भने सेटअप क्षेत्रमा graphrag कन्फिगर गर्नुहोस्"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag सेटिङहरू"
+      },
+      "button-help" : {
+        "label" : "सूचना निकासीका लागि graphrag कन्फिगर गर्न यहाँ क्लिक गर्नुहोस् (हाल कन्फिगर गरिएको छैन)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "कन्फिगरेशन थप्नुहोस्"
       }
     }
   }

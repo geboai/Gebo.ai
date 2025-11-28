@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kriteriji odabira datoteka za graphrag obradu",
         "help" : "Uredite kriterije za datoteke koje će biti poslane u pipeline za izvlačenje informacija za graphrag; odaberite barem naziv datoteke i kriterij i/ili vrstu datoteke i/ili maksimalni broj bajtova veličine datoteke i/ili starost posljednje izmjene u danima"
+      },
+      "extractionFormat" : {
+        "label" : "Format ekstrakcije",
+        "help" : "Koristite CSV format za llms s manje od 30b parametara, JSON za velike frontier modele",
+        "placeholder" : "Koristite CSV format za llms s manje od 30b parametara, JSON za velike frontier modele"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Glasovni odgovor je primljen"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Pomakni prema gore"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Pomakni prema dolje"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Pronađeni dokumenti"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Jeste li sigurni da želite obrisati ovaj chat?",
+        "header" : "Akcija brisanja chata"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Zatvori"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Dodaj dokument na popis 'razgovaraj s'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Obrađeni dokumenti",
         "dataset-2-label" : "Dokumenti s greškom",
         "dataset-3-label" : "Odbijeni dokumenti"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Obrađeni tokeni",
+        "dataset-1-label" : "Greška u obradi tokena"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiziranje popisa dokumenata"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neobrađeni dokumenti",
+        "label-1" : "Greška u obradi dokumenata",
+        "label-2" : "Obrađeni dokumenti"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizacija dokumenata"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Primljeni dokumenti",
+        "dataset-1-label" : "Obrađeni dokumenti",
+        "dataset-2-label" : "Dokumenti s greškom",
+        "dataset-3-label" : "Odbijeni dokumenti"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neobrađeni dokumenti",
+        "label-1" : "Greška u obradi dokumenata",
+        "label-2" : "Obrađeni dokumenti"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantičko indeksiranje (ugradnja za semantički rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Obrađeni tokeni",
+        "dataset-1-label" : "Greška u obradi tokena"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neobrađeni dokumenti",
+        "label-1" : "Greška u obradi dokumenata",
+        "label-2" : "Obrađeni dokumenti"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Primljeni dokumenti",
+        "dataset-1-label" : "Obrađeni dokumenti",
+        "dataset-2-label" : "Dokumenti s greškom",
+        "dataset-3-label" : "Odbijeni dokumenti"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksiranje entiteta/odnosa/događaja (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neobrađeni dokumenti",
+        "label-1" : "Greška u obradi dokumenata",
+        "label-2" : "Obrađeni dokumenti"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Obrađeni tokeni",
+        "dataset-1-label" : "Greška u obradi tokena"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Primljeni dokumenti",
+        "dataset-1-label" : "Obrađeni dokumenti",
+        "dataset-2-label" : "Dokumenti s greškom",
+        "dataset-3-label" : "Odbijeni dokumenti"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Primljeni dokumenti",
+        "dataset-1-label" : "Obrađeni dokumenti",
+        "dataset-2-label" : "Dokumenti s greškom",
+        "dataset-3-label" : "Odbijeni dokumenti"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operacija je uspješno dovršena"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Greška prilikom dohvaćanja odgovora iz chata",
+        "detail" : "Greška na serveru: class org.neo4j.driver.internal.value.StringValue ne može se pretvoriti u class java.lang.String (org.neo4j.driver.internal.value.StringValue je u neimenovanom modu loadera 'app'; java.lang.String je u modulu java.base loadera 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Uspješno spremljeno",
+        "detail" : "Ažuriranje je uspješno izvršeno"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Greška u komunikaciji s Ollama serverom ",
+        "detail" : "Greška u mreži pri komunikaciji s udaljenim sustavom za pristup sadržaju\n popis modela Greška pri radu s url-om:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Dovršeno"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurirajte graphrag u postavkama ako ga želite koristiti u ovom odjeljku"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag postavke"
+      },
+      "button-help" : {
+        "label" : "Kliknite ovdje za konfiguraciju ekstrakcije informacija za graphrag (trenutno nije konfigurirano)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Dodaj konfiguraciju"
       }
     }
   }

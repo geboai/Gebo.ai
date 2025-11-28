@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "លក្ខណៈសម្បត្តិជ្រើសរើសឯកសារសម្រាប់ដំណើរការ graphrag",
         "help" : "កែប្រែលក្ខណៈសម្បត្តិនៅលើឯកសារដើម្បីផ្ញើទៅបណ្តាញទាញយកព័ត៌មានសម្រាប់ graphrag ជ្រើសយ៉ាងហោចណាស់ឈ្មោះឯកសារ និងលក្ខណៈសម្បត្តិ និង/ឬប្រភេទឯកសារ និង/ឬចំនួនបៃអតិបរមានៃទំហំឯកសារ និង/ឬអាយុខ្សែម៉ែត្រកែលអ្នកបានកែសំរួលចុងក្រោយជារយៈថ្ងៃ"
+      },
+      "extractionFormat" : {
+        "label" : "ទ្រង់ទ្រាយស្រង់",
+        "help" : "ប្រើទ្រង់ទ្រាយ CSV សម្រាប់ llms ក្រោម​ 30b params, JSON សម្រាប់ម៉ូឌែល frontier ធំៗ",
+        "placeholder" : "ប្រើទ្រង់ទ្រាយ CSV សម្រាប់ llms ក្រោម​ 30b params, JSON សម្រាប់ម៉ូឌែល frontier ធំៗ"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "បានទទួលចម្លើយសំលេង"
+      },
+      "ScrollUpBtn" : {
+        "help" : "រុករកឡើងលើ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "រុករកចុះក្រោម"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "រកឃើញឯកសារ"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "តើអ្នកប្រាកដថាអ្នកចង់លុបការជជែកនេះ?",
+        "header" : "សកម្មភាពលុបការជជែក"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "បិទ"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "បន្ថែមឯកសារទៅបញ្ជី 'ជជែកជាមួយ'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
         "dataset-2-label" : "ឯកសារមានបញ្ហា",
         "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Token បានដំណើរការ",
+        "dataset-1-label" : "មានបញ្ហាក្នុងការដំណើរការ token"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "កំពុងវិភាគបញ្ជីឯកសារ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "បញ្ហាក្នុងការដំណើរការ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ"
+      },
+      "TOKENIZATION" : {
+        "description" : "កំពុងធ្វើ tokenization ឯកសារ"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "ឯកសារដែលទទួលបាន",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារដែលមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "បញ្ហាក្នុងការដំណើរការ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ"
+      },
+      "EMBEDDING" : {
+        "description" : "សន្ទស្សន៍ semantic (embedding សម្រាប់ semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Token បានដំណើរការ",
+        "dataset-1-label" : "មានបញ្ហាក្នុងការដំណើរការ token"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "បញ្ហាក្នុងការដំណើរការ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "ឯកសារដែលទទួលបាន",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារដែលមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "សន្ទស្សន៍ Entity/Relations/Events (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ឯកសារមិនទាន់បានដំណើរការ",
+        "label-1" : "បញ្ហាក្នុងការដំណើរការ",
+        "label-2" : "ឯកសារដែលបានដំណើរការ"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Token បានដំណើរការ",
+        "dataset-1-label" : "មានបញ្ហាក្នុងការដំណើរការ token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ឯកសារដែលទទួលបាន",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារដែលមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ឯកសារដែលទទួលបាន",
+        "dataset-1-label" : "ឯកសារដែលបានដំណើរការ",
+        "dataset-2-label" : "ឯកសារដែលមានបញ្ហា",
+        "dataset-3-label" : "ឯកសារដែលបានបោះចោល"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ជោគជ័យ!",
         "detail" : "ប្រតិបត្តិការបានបញ្ចប់ដោយជោគជ័យ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "បញ្ហាក្នុងពេលបញ្ជូន chat",
+        "detail" : "កំហុសម៉ាស៊ីនបម្រើ: class org.neo4j.driver.internal.value.StringValue មិនអាចបំលែងទៅជា java.lang.String (org.neo4j.driver.internal.value.StringValue មាននៅក្នុង unnamed module របស់ loader 'app'; java.lang.String មាននៅក្នុង module java.base របស់ loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "រក្សាទុកបានជោគជ័យ",
+        "detail" : "បានធ្វើប្រតិបត្តិការប្រមាណផងដែរ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "បញ្ហាក្នុងការទំនាក់ទំនងជាមួយ Ollama server",
+        "detail" : "បញ្ហាបណ្ដាញនៅពេលភ្ជាប់ទៅប្រព័ន្ធពីចម្ងាយសម្រាប់សិក្សាតារាង\n រាយនាមម៉ូឌែល: ចាញ់ ធ្វើការជាមួយ url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "បានបញ្ចប់"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "កំណត់រចនាសម្ព័ន្ធ graphrag នៅក្នុងផ្នែកផ្គុំប្រសិនបើអ្នកចង់ប្រើវានៅផ្នែកនេះ"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "ការកំណត់ graphrag"
+      },
+      "button-help" : {
+        "label" : "ចុចទីនេះ ដើម្បីកំណត់រចនាសម្ព័ន្ធស្រង់ព័ត៌មានសម្រាប់ graphrag (បច្ចុប្បន្នមិនទាន់បានកំណត់រចនាសម្ព័ន្ធ)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "បន្ថែមការកំណត់រចនាសម្ព័ន្ធ"
       }
     }
   }

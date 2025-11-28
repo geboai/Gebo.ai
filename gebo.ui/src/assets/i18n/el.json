@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Κριτήρια επιλογής αρχείων για επεξεργασία graphrag",
         "help" : "Επεξεργαστείτε κριτήρια σε αρχείο για αποστολή στην ροή εξαγωγής πληροφοριών για graphrag. Επιλέξτε τουλάχιστον ένα όνομα αρχείου και κριτήριο ή/και έναν τύπο αρχείου ή/και το μέγιστο μέγεθος αρχείου σε bytes ή/και τις ημέρες από την τελευταία τροποποίηση"
+      },
+      "extractionFormat" : {
+        "label" : "Μορφή εξαγωγής",
+        "help" : "Χρησιμοποιήστε μορφή CSV για llms κάτω από 30b παραμέτρους, JSON για μεγάλα frontier models",
+        "placeholder" : "Χρησιμοποιήστε μορφή CSV για llms κάτω από 30b παραμέτρους, JSON για μεγάλα frontier models"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Ελήφθη φωνητική απάντηση"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Μετακινηθείτε προς τα πάνω"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Μετακινηθείτε προς τα κάτω"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Βρέθηκαν έγγραφα"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή τη συνομιλία;",
+        "header" : "Ενέργεια διαγραφής συνομιλίας"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Κλείσιμο"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Προσθήκη εγγράφου στη λίστα 'συνομιλία με'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Επεξεργασμένα έγγραφα",
         "dataset-2-label" : "Έγγραφα με σφάλμα",
         "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Επεξεργασμένα tokens",
+        "dataset-1-label" : "Σφάλμα στην επεξεργασία tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Ανάλυση λίστας εγγράφων"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "TOKENIZATION" : {
+        "description" : "Επεξεργασία tokens εγγράφων"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "EMBEDDING" : {
+        "description" : "Σημασιολογική ευρετηρίαση (ενσωμάτωση για semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Επεξεργασμένα tokens",
+        "dataset-1-label" : "Σφάλμα στην επεξεργασία tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Ευρετηρίαση Οντοτήτων/Σχέσεων/Γεγονότων (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Μη επεξεργασμένα έγγραφα",
+        "label-1" : "Σφάλμα στην επεξεργασία εγγράφων",
+        "label-2" : "Επεξεργασμένα έγγραφα"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Επεξεργασμένα tokens",
+        "dataset-1-label" : "Σφάλμα στην επεξεργασία tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ληφθέντα έγγραφα",
+        "dataset-1-label" : "Επεξεργασμένα έγγραφα",
+        "dataset-2-label" : "Έγγραφα με σφάλμα",
+        "dataset-3-label" : "Απορριφθέντα έγγραφα"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Η λειτουργία ολοκληρώθηκε επιτυχώς"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Σφάλμα κατά τη ροή απάντησης chat",
+        "detail" : "Σφάλμα διακομιστή: class org.neo4j.driver.internal.value.StringValue δεν μπορεί να μετατραπεί σε class java.lang.String (org.neo4j.driver.internal.value.StringValue βρίσκεται στο unnamed module του loader 'app'; java.lang.String βρίσκεται στο module java.base του loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Αποθηκεύτηκε με επιτυχία",
+        "detail" : "Η ενημέρωση ολοκληρώθηκε επιτυχώς"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Σφάλμα επικοινωνίας με τον Ollama server",
+        "detail" : "Σφάλμα δικτύου κατά την επικοινωνία με το απομακρυσμένο σύστημα μέσω\n λίστας models. Σφάλμα στη διεύθυνση url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Ολοκληρώθηκε"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Ρυθμίστε το graphrag στην περιοχή διαμόρφωσης για να το χρησιμοποιήσετε σε αυτή την ενότητα"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Ρυθμίσεις graphrag"
+      },
+      "button-help" : {
+        "label" : "Πατήστε εδώ για να ρυθμίσετε την εξαγωγή πληροφοριών για το graphrag (δεν έχει ρυθμιστεί προς το παρόν)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Προσθήκη διαμόρφωσης"
       }
     }
   }

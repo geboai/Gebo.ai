@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag処理用ファイル選択条件",
         "help" : "Graphragの情報抽出パイプラインに送るファイルの条件を編集してください。ファイル名と条件、および／またはファイルタイプ、最大ファイルサイズ（バイト単位）、最終更新日（経過日数）のいずれかを必ず選択してください。"
+      },
+      "extractionFormat" : {
+        "label" : "抽出フォーマット",
+        "help" : "30b未満のllmsにはCSV形式を、巨大フロンティアモデルにはJSON形式を使用してください",
+        "placeholder" : "30b未満のllmsにはCSV形式を、巨大フロンティアモデルにはJSON形式を使用してください"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "音声での回答を受信しました"
+      },
+      "ScrollUpBtn" : {
+        "help" : "上にスクロール"
+      },
+      "ScrollDownBtn" : {
+        "help" : "下にスクロール"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "関連ドキュメントを発見"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "このチャットを削除してもよろしいですか？",
+        "header" : "チャット削除アクション"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "閉じる"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "「チャット対象」リストにドキュメントを追加"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "処理済みのドキュメント",
         "dataset-2-label" : "エラードキュメント",
         "dataset-3-label" : "破棄されたドキュメント"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "処理済みトークン",
+        "dataset-1-label" : "トークン処理エラー"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ドキュメントリストを解析中"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "未処理ドキュメント",
+        "label-1" : "処理エラードキュメント",
+        "label-2" : "処理済みドキュメント"
+      },
+      "TOKENIZATION" : {
+        "description" : "ドキュメントのトークナイズ"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "受信済みドキュメント",
+        "dataset-1-label" : "処理済みドキュメント",
+        "dataset-2-label" : "エラードキュメント",
+        "dataset-3-label" : "破棄されたドキュメント"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "未処理ドキュメント",
+        "label-1" : "処理エラードキュメント",
+        "label-2" : "処理済みドキュメント"
+      },
+      "EMBEDDING" : {
+        "description" : "セマンティックインデックス（セマンティックRAGの埋め込み）"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "処理済みトークン",
+        "dataset-1-label" : "トークン処理エラー"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "未処理ドキュメント",
+        "label-1" : "処理エラードキュメント",
+        "label-2" : "処理済みドキュメント"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "受信済みドキュメント",
+        "dataset-1-label" : "処理済みドキュメント",
+        "dataset-2-label" : "エラードキュメント",
+        "dataset-3-label" : "破棄されたドキュメント"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "エンティティ／リレーション／イベントのインデックス（graphrag）"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "未処理ドキュメント",
+        "label-1" : "処理エラードキュメント",
+        "label-2" : "処理済みドキュメント"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "処理済みトークン",
+        "dataset-1-label" : "トークン処理エラー"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "受信済みドキュメント",
+        "dataset-1-label" : "処理済みドキュメント",
+        "dataset-2-label" : "エラードキュメント",
+        "dataset-3-label" : "破棄されたドキュメント"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "受信済みドキュメント",
+        "dataset-1-label" : "処理済みドキュメント",
+        "dataset-2-label" : "エラードキュメント",
+        "dataset-3-label" : "破棄されたドキュメント"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "操作が正常に完了しました"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "チャットのストリーミング応答中にエラーが発生しました",
+        "detail" : "サーバーエラー: class org.neo4j.driver.internal.value.StringValue を class java.lang.String にキャストできません（org.neo4j.driver.internal.value.StringValue は loader 'app' の無名モジュール、java.lang.String は loader 'bootstrap' の module java.base です）"
+      },
+      "OK" : {
+        "summary" : "正常に保存されました",
+        "detail" : "更新操作が正常に完了しました"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollamaサーバーとの通信エラー",
+        "detail" : "リモートシステムへのアクセス時にネットワークエラーが発生しました\nモデルリストでエラー URL動作時: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "完了"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "このセクションで使用する場合は、セットアップエリアでgraphragを構成してください"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag設定"
+      },
+      "button-help" : {
+        "label" : "情報抽出の設定（未設定）をするにはここをクリック"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "設定を追加"
       }
     }
   }

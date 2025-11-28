@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Tiêu chí chọn tệp cho xử lý graphrag",
         "help" : "Chỉnh sửa các tiêu chí trên tệp gửi đến quy trình trích xuất thông tin cho graphrag, chọn ít nhất tên tệp và tiêu chí và/hoặc loại tệp và/hoặc số byte tối đa của kích thước tệp và/hoặc số ngày kể từ lần chỉnh sửa cuối"
+      },
+      "extractionFormat" : {
+        "label" : "Định dạng trích xuất",
+        "help" : "Sử dụng định dạng CSV cho llms dưới 30b tham số, JSON cho các mô hình lớn",
+        "placeholder" : "Sử dụng định dạng CSV cho llms dưới 30b tham số, JSON cho các mô hình lớn"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Đã nhận câu trả lời bằng giọng nói"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Cuộn lên"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Cuộn xuống"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Đã tìm thấy tài liệu"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Bạn có chắc chắn muốn xóa cuộc trò chuyện này không?",
+        "header" : "Hành động xóa trò chuyện"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Đóng"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Thêm tài liệu vào danh sách 'trò chuyện với'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Tài liệu đã xử lý",
         "dataset-2-label" : "Tài liệu lỗi",
         "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Token đã xử lý",
+        "dataset-1-label" : "Lỗi khi xử lý token"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Phân tích danh sách tài liệu"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý"
+      },
+      "TOKENIZATION" : {
+        "description" : "Phân tách token tài liệu"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý"
+      },
+      "EMBEDDING" : {
+        "description" : "Phân mục ngữ nghĩa (embedding cho semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Token đã xử lý",
+        "dataset-1-label" : "Lỗi khi xử lý token"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Phân mục Thực thể/Mối quan hệ/Sự kiện (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Tài liệu chưa xử lý",
+        "label-1" : "Lỗi khi xử lý tài liệu",
+        "label-2" : "Tài liệu đã xử lý"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Token đã xử lý",
+        "dataset-1-label" : "Lỗi khi xử lý token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Tài liệu đã nhận",
+        "dataset-1-label" : "Tài liệu đã xử lý",
+        "dataset-2-label" : "Tài liệu lỗi",
+        "dataset-3-label" : "Tài liệu bị loại bỏ"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Thành công!",
         "detail" : "Thao tác thành công"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Lỗi khi truyền phản hồi trò chuyện",
+        "detail" : "Lỗi máy chủ: class org.neo4j.driver.internal.value.StringValue không thể chuyển thành class java.lang.String (org.neo4j.driver.internal.value.StringValue nằm trong unnamed module của loader 'app'; java.lang.String nằm trong module java.base của loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Lưu thành công",
+        "detail" : "Đã cập nhật thành công"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Lỗi khi liên lạc với máy chủ Ollama",
+        "detail" : "Lỗi mạng khi liên lạc với hệ thống từ xa để truy cập nội dung\n danh sách mô hình Lỗi khi làm việc với url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Hoàn tất"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Cấu hình graphrag trong khu vực thiết lập nếu bạn muốn sử dụng ở phần này"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Cài đặt graphrag"
+      },
+      "button-help" : {
+        "label" : "Nhấn vào đây để cấu hình trích xuất thông tin cho graphrag (hiện chưa được cấu hình)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Thêm cấu hình"
       }
     }
   }

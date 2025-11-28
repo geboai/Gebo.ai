@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "ለgraphrag ሂደት የፋይል መምረጫ መመሪያዎች",
         "help" : "ወደ መረጃ መውጣት ፓይፕላይን ለመላክ ላለሚችሉ ፋይሎች ቅንብሮችን ያስተካክሉ፣ ቢያንስ የፋይል ስም እና መመሪያ እና/ወይም የፋይል አይነት እና/የፋይል መጠን በባይት ክፍፍል እና/የመጨረሻ ማሻሻያ እድሜ በቀን ይምረጡ"
+      },
+      "extractionFormat" : {
+        "label" : "የእውቀት ቅርጸ-ተለቂያ",
+        "help" : "ለ llms ከ30b በታች ሲሆኑ CSV ቅርጽ ይጠቀሙ፣ ለትልቅ frontier models JSON ቅርጽ ይጠቀሙ",
+        "placeholder" : "ለ llms ከ30b በታች ሲሆኑ CSV ቅርጽ ይጠቀሙ፣ ለትልቅ frontier models JSON ቅርጽ ይጠቀሙ"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "የድምፅ መልስ ተቀብሏል"
+      },
+      "ScrollUpBtn" : {
+        "help" : "ወደ ላይ ይንቀሳቀሱ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "ወደ ታች ይንቀሳቀሱ"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ተገኙ የተያያዙ ሰነዶች"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "ይህን ውይይት መሰረዝ መፈለጋችሁ ይታወቃል?",
+        "header" : "የውይይት ማጥፊያ እርምጃ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "ዝጋ"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'ለውይይት' ዝርዝር ሰነድ ያክሉ "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "ተደርጓል ዶክዩመንቶች",
         "dataset-2-label" : "እንደማይታወቅ ዶክዩመንቶች",
         "dataset-3-label" : "የተጥለው ዶክዩመንት"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "ተሰርቷል tokens",
+        "dataset-1-label" : "ስህተት በማቀናበር tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "የሰነዶች ዝርዝር ትንተና"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "የማይታደሱ ሰነዶች",
+        "label-1" : "ስህተት በሚታደሱ ሰነዶች",
+        "label-2" : "ተታድሰ የተሞሉ ሰነዶች"
+      },
+      "TOKENIZATION" : {
+        "description" : "የሰነዶች ማንነት መስጠት"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "የተቀበሉ ሰነዶች",
+        "dataset-1-label" : "ተታድሰ የተሞሉ ሰነዶች",
+        "dataset-2-label" : "የስህተት ሰነዶች",
+        "dataset-3-label" : "የተጠረጠሩ ሰነዶች"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "የማይታደሱ ሰነዶች",
+        "label-1" : "ስህተት በሚታደሱ ሰነዶች",
+        "label-2" : "ተታድሰ የተሞሉ ሰነዶች"
+      },
+      "EMBEDDING" : {
+        "description" : "ስምንትን የሚያመለከት መግባት (embedding for semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "ተሰርቷል tokens",
+        "dataset-1-label" : "ስህተት በማቀናበር tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "የማይታደሱ ሰነዶች",
+        "label-1" : "ስህተት በሚታደሱ ሰነዶች",
+        "label-2" : "ተታድሰ የተሞሉ ሰነዶች"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "የተቀበሉ ሰነዶች",
+        "dataset-1-label" : "ተታድሰ የተሞሉ ሰነዶች",
+        "dataset-2-label" : "የስህተት ሰነዶች",
+        "dataset-3-label" : "የተጠረጠሩ ሰነዶች"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "የአካላት/ግንኙነቶች/ክስተቶች መመዝገብ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "የማይታደሱ ሰነዶች",
+        "label-1" : "ስህተት በሚታደሱ ሰነዶች",
+        "label-2" : "ተታድሰ የተሞሉ ሰነዶች"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "ተሰርቷል tokens",
+        "dataset-1-label" : "ስህተት በማቀናበር tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "የተቀበሉ ሰነዶች",
+        "dataset-1-label" : "ተታድሰ የተሞሉ ሰነዶች",
+        "dataset-2-label" : "የስህተት ሰነዶች",
+        "dataset-3-label" : "የተጠረጠሩ ሰነዶች"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "የተቀበሉ ሰነዶች",
+        "dataset-1-label" : "ተታድሰ የተሞሉ ሰነዶች",
+        "dataset-2-label" : "የስህተት ሰነዶች",
+        "dataset-3-label" : "የተጠረጠሩ ሰነዶች"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "እሺ!",
         "detail" : "ተግባሩ በተሳካ ሁኔታ ተጠናቀቀ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "ስህተት በውይይት ሲሰጥ ተፈጥሯል",
+        "detail" : "የሰርቨር ስህተት፡ class org.neo4j.driver.internal.value.StringValue ወደ java.lang.String መቀየር አልተቻለም (org.neo4j.driver.internal.value.StringValue በማስጀመሪያ module እና java.lang.String በ bootstrap module ላይ)"
+      },
+      "OK" : {
+        "summary" : "በተሳካ ሁኔታ ተቀምጧል",
+        "detail" : "ዕድል ስራ በተሳካ ሁኔታ ተጠናቋል"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "በ Ollama server ጋር በመገናኘት ስህተት ተፈጥሯል ",
+        "detail" : "ከሩቅ ስርዓት ጋር በመገናኘት የተፈጠረ አውታረ መረብ ስህተት\n የሞዴሎች ዝርዝር ስህተት url ማስተናገድ ሲደረግ፡ http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "ተጠናቋል"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ከዚህ ክፍል ውስጥ ለመጠቀም ከፈለጉ በቅድሚያ graphrag በማዘጋጀት ቦታ ውስጥ ያዘጋጁ"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "የ Graphrag ቅንብሮች"
+      },
+      "button-help" : {
+        "label" : "ለ graphrag መረጃ መውጣት እዚህ ንኩን (አሁን አልተዘጋጀም)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "ቅንብር ያክሉ"
       }
     }
   }

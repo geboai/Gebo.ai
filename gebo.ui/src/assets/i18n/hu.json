@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Fájl kiválasztási feltételek graphrag feldolgozáshoz",
         "help" : "Szerkessze a feltételeket a graphrag információkinyerési folyamatba küldendő fájlokra—válasszon legalább egy fájlnevet és feltételt és/vagy fájltípust és/vagy maximális fájlméretet bájtban és/vagy utolsó módosítás korát napokban."
+      },
+      "extractionFormat" : {
+        "label" : "Kinyerési formátum",
+        "help" : "Használjon CSV formátumot 30 milliárd paraméter alatti llm-ekhez, JSON formátumot nagy frontier modellekhez",
+        "placeholder" : "Használjon CSV formátumot 30 milliárd paraméter alatti llm-ekhez, JSON formátumot nagy frontier modellekhez"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Vokális válasz érkezett"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Felgörgetés"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Legörgetés"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Talált dokumentumok"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Biztos törli ezt a csevegést?",
+        "header" : "Csevegés törlése"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Bezárás"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Dokumentum hozzáadása a 'csevegés ezzel' listához "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Feldolgozott dokumentumok",
         "dataset-2-label" : "Hibás dokumentumok",
         "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Dokumentumok listájának elemzése"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozása során",
+        "label-2" : "Feldolgozott dokumentumok"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentumok tokenizálása"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozása során",
+        "label-2" : "Feldolgozott dokumentumok"
+      },
+      "EMBEDDING" : {
+        "description" : "Szemantikus indexelés (embedding szemantikus rag-hoz)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozása során",
+        "label-2" : "Feldolgozott dokumentumok"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entitások/kapcsolatok/események indexelése (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nem feldolgozott dokumentumok",
+        "label-1" : "Hiba a dokumentumok feldolgozása során",
+        "label-2" : "Feldolgozott dokumentumok"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Feldolgozott tokenek",
+        "dataset-1-label" : "Hiba a tokenek feldolgozásakor"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Beérkezett dokumentumok",
+        "dataset-1-label" : "Feldolgozott dokumentumok",
+        "dataset-2-label" : "Hibás dokumentumok",
+        "dataset-3-label" : "Elvetett dokumentumok"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Rendben!",
         "detail" : "A művelet sikeresen befejeződött"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Hiba a csevegési válasz közvetítésekor",
+        "detail" : "Szerverhiba: org.neo4j.driver.internal.value.StringValue osztály nem alakítható át java.lang.String osztállyá (org.neo4j.driver.internal.value.StringValue névtelen modulban van a(z) 'app' betöltőnél; java.lang.String a(z) java.base modulban a(z) 'bootstrap' betöltőnél)"
+      },
+      "OK" : {
+        "summary" : "Sikeresen mentve",
+        "detail" : "A frissítési művelet sikeresen befejeződött"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Hiba az Ollama szerverrel való kommunikáció során",
+        "detail" : "Hálózati hiba a távoli rendszerhez való kapcsolódás közben a tartalom eléréséhez\n modellek listája Hiba történt a következő URL-lel való munkánál: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Kész"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Állítsa be a graphrag-ot a beállítási területen, ha ebben a szakaszban használni szeretné"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag beállítások"
+      },
+      "button-help" : {
+        "label" : "Kattintson ide az információkinyerés beállításához a graphrag számára (jelenleg nincs beállítva)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Konfiguráció hozzáadása"
       }
     }
   }

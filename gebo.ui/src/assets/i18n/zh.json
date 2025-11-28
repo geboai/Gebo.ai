@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag 处理的文件筛选条件",
         "help" : "编辑文件筛选条件以发送至 graphrag 信息抽取流程，至少选择一个文件名和条件、文件类型、最大文件大小（字节）或最后修改天数"
+      },
+      "extractionFormat" : {
+        "label" : "提取格式",
+        "help" : "对于小于30b参数的llms请使用CSV格式，巨型前沿模型使用JSON格式",
+        "placeholder" : "对于小于30b参数的llms请使用CSV格式，巨型前沿模型使用JSON格式"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "语音回复已收到"
+      },
+      "ScrollUpBtn" : {
+        "help" : "向上滚动"
+      },
+      "ScrollDownBtn" : {
+        "help" : "向下滚动"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "找到的文档"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "你确定要删除此聊天吗？",
+        "header" : "删除聊天操作"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "关闭"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "将文档添加到“与...聊天”列表"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "已处理文档",
         "dataset-2-label" : "出错文档",
         "dataset-3-label" : "已丢弃文档"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "已处理的tokens",
+        "dataset-1-label" : "tokens处理出错"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "正在分析文档列表"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "文档处理出错",
+        "label-2" : "已处理文档"
+      },
+      "TOKENIZATION" : {
+        "description" : "文档分词"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "已接收文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "文档处理出错",
+        "label-2" : "已处理文档"
+      },
+      "EMBEDDING" : {
+        "description" : "语义索引（语义rag嵌入）"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "已处理的tokens",
+        "dataset-1-label" : "tokens处理出错"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "文档处理出错",
+        "label-2" : "已处理文档"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "已接收文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "实体/关系/事件索引（graphrag）"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "未处理文档",
+        "label-1" : "文档处理出错",
+        "label-2" : "已处理文档"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "已处理的tokens",
+        "dataset-1-label" : "tokens处理出错"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "已接收文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "已接收文档",
+        "dataset-1-label" : "已处理文档",
+        "dataset-2-label" : "出错文档",
+        "dataset-3-label" : "已丢弃文档"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "成功！",
         "detail" : "操作已成功完成"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "流式聊天响应时出错",
+        "detail" : "服务器错误：类 org.neo4j.driver.internal.value.StringValue 不能被强制转换为类 java.lang.String (org.neo4j.driver.internal.value.StringValue 属于未命名模块的加载器'app'；java.lang.String 属于基础模块的加载器'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "保存成功",
+        "detail" : "更新操作已成功完成"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "与 Ollama 服务器通信时出错",
+        "detail" : "与远程系统通信时发生网络错误，访问内容\n模型列表时在处理url:http://localhost:11434/api/tags时出错"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "已完成"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "如需在此部分使用graphrag，请在设置区域进行配置"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag设置"
+      },
+      "button-help" : {
+        "label" : "点击此处为graphrag配置信息抽取（当前未配置）"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "新增配置"
       }
     }
   }

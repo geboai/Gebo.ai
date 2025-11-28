@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag செயல்பாட்டுக்கு கோப்பு தேர்வு நெறிமுறைகள்",
         "help" : "Graphrag தகவல் பெறும் வடிகட்டும் குழாய்க்கு அனுப்ப கோப்பில் நெறிமுறைகளைத் திருத்தவும். குறைந்தது ஒரு கோப்புப்பெயர் மற்றும் நெறிமுறை அல்லது கோப்பு வகை மற்றும்/அல்லது கோப்பின் அதிகபட்ச பைட் அளவு மற்றும்/அல்லது கடைசி திருத்தத்திற்கான நாட்கள் இலைக்கொள்"
+      },
+      "extractionFormat" : {
+        "label" : "எடுத்தமைப்பு வடிவம்",
+        "help" : "30b அளவுக்கு குறைவான llms க்கான CSV வடிவத்தை பயன்படுத்து, பெரிய எல்லை மாதிரிகளுக்கு JSON வடிவத்தை பயன்படுத்து",
+        "placeholder" : "30b அளவுக்கு குறைவான llms க்கான CSV வடிவத்தை பயன்படுத்து, பெரிய எல்லை மாதிரிகளுக்கு JSON வடிவத்தை பயன்படுத்து"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "குரல் பதில் பெறப்பட்டது"
+      },
+      "ScrollUpBtn" : {
+        "help" : "மேலே சொருகு"
+      },
+      "ScrollDownBtn" : {
+        "help" : "கீழே சொருகு"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "கண்டறியப்பட்ட ஆவணங்கள்"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "இந்த உரையாடலை நீக்க விரும்புகிறீர்களா?",
+        "header" : "உரையாடல் நீக்கம்"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "மூடு"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'உரையாடலுடன்' பட்டியலில் ஆவணத்தை சேர்க்கவும் "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
         "dataset-2-label" : "பிழை வந்த ஆவணங்கள்",
         "dataset-3-label" : "நிராகரிக்கப்பட்ட ஆவணங்கள்"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "செயல்படுத்தப்பட்ட டோக்கன்கள்",
+        "dataset-1-label" : "டோக்கன்கள் செயல்பாட்டு பிழை"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ஆவணங்களின் பட்டியலை பகுப்பாய்வு செய்கிறது"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "செயல்படுத்தாத ஆவணங்கள்",
+        "label-1" : "ஆவணங்களை செயல்படுத்தும் பொழுது பிழை",
+        "label-2" : "செயல்படுத்தப்பட்ட ஆவணங்கள்"
+      },
+      "TOKENIZATION" : {
+        "description" : "ஆவணங்களை டோக்கன்களாக்குதல்"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "பெற்றுள்ள ஆவணங்கள்",
+        "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
+        "dataset-2-label" : "பிழை உள்ள ஆவணங்கள்",
+        "dataset-3-label" : "வெளியேற்றப்பட்ட ஆவணங்கள்"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "செயல்படுத்தாத ஆவணங்கள்",
+        "label-1" : "ஆவணங்களை செயல்படுத்தும் பொழுது பிழை",
+        "label-2" : "செயல்படுத்தப்பட்ட ஆவணங்கள்"
+      },
+      "EMBEDDING" : {
+        "description" : "அர்த்தவான குறியீடு (semantic rag க்கு embedding)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "செயல்படுத்தப்பட்ட டோக்கன்கள்",
+        "dataset-1-label" : "டோக்கன்கள் செயல்பாட்டு பிழை"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "செயல்படுத்தாத ஆவணங்கள்",
+        "label-1" : "ஆவணங்களை செயல்படுத்தும் பொழுது பிழை",
+        "label-2" : "செயல்படுத்தப்பட்ட ஆவணங்கள்"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "பெற்றுள்ள ஆவணங்கள்",
+        "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
+        "dataset-2-label" : "பிழை உள்ள ஆவணங்கள்",
+        "dataset-3-label" : "வெளியேற்றப்பட்ட ஆவணங்கள்"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "அண்மை/உறவுகள்/நிகழ்வுகள் குறியீடு (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "செயல்படுத்தாத ஆவணங்கள்",
+        "label-1" : "ஆவணங்களை செயல்படுத்தும் பொழுது பிழை",
+        "label-2" : "செயல்படுத்தப்பட்ட ஆவணங்கள்"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "செயல்படுத்தப்பட்ட டோக்கன்கள்",
+        "dataset-1-label" : "டோக்கன்கள் செயல்பாட்டு பிழை"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "பெற்றுள்ள ஆவணங்கள்",
+        "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
+        "dataset-2-label" : "பிழை உள்ள ஆவணங்கள்",
+        "dataset-3-label" : "வெளியேற்றப்பட்ட ஆவணங்கள்"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "பெற்றுள்ள ஆவணங்கள்",
+        "dataset-1-label" : "செயல்படுத்தப்பட்ட ஆவணங்கள்",
+        "dataset-2-label" : "பிழை உள்ள ஆவணங்கள்",
+        "dataset-3-label" : "வெளியேற்றப்பட்ட ஆவணங்கள்"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "வெற்றி!",
         "detail" : "செயல் வெற்றிகரமாக முடிந்தது"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "உரையாடல் ஓட்டத்தின் பொழுது பிழை",
+        "detail" : "சேவையக பிழை: class org.neo4j.driver.internal.value.StringValue ஐ class java.lang.String இற்கு மாற்ற முடியவில்லை (org.neo4j.driver.internal.value.StringValue மொத்த இல்லாத module ல் உள்ளது; java.lang.String என்பது module java.base ல் உள்ளது)"
+      },
+      "OK" : {
+        "summary" : "வெற்றிகரமாக சேமிக்கப்பட்டது",
+        "detail" : "புதுப்பிப்பு செயல் வெற்றிகரமாக முடிந்தது"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama சேவையகதுடன் தொடர்பு பிழை",
+        "detail" : "தொலைதூர அமைப்புடன் தொடர்புக்கு வலைப்பிழை\n மாதிரிகள் பட்டியலில் பிழை url வேலை செய்யும் போது: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "முடிந்தது"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "இந்த பகுதியை பயன்படுத்த விரும்பினால் அமைவு பகுதியில் graphrag ஐ கட்டமைக்கவும்"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag அமைப்புகள்"
+      },
+      "button-help" : {
+        "label" : "graphrag க்கான தகவல் எடுத்தமைவை கட்டமைக்க இங்கு கிளிக் செய்யவும் (தற்போது கட்டமைக்கப்படவில்லை)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "அமைவுகளைச் சேர்"
       }
     }
   }

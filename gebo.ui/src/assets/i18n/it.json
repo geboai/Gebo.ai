@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Criteri di selezione file per il processamento graphrag",
         "help" : "Modifica i criteri sui file da inviare alla pipeline di estrazione informazioni per graphrag, seleziona almeno un nome file e un criterio e/o un tipo di file e/o la dimensione massima in byte e/o l'età dell'ultima modifica in giorni"
+      },
+      "extractionFormat" : {
+        "label" : "Formato di estrazione",
+        "help" : "Usa il formato CSV per llms con meno di 30b parametri, JSON per modelli huge frontier",
+        "placeholder" : "Usa il formato CSV per llms con meno di 30b parametri, JSON per modelli huge frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Risposta vocale ricevuta"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Scorri su"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Scorri giù"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Documenti trovati"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Sei sicuro di voler eliminare questa chat?",
+        "header" : "Azione di eliminazione chat"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Chiudi"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Aggiungi documento all'elenco 'chat con'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Docs elaborati",
         "dataset-2-label" : "Docs con errore",
         "dataset-3-label" : "Docs scartati"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Token elaborati",
+        "dataset-1-label" : "Errore nell'elaborazione dei token"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analisi dell'elenco documenti"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizzazione dei documenti"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati"
+      },
+      "EMBEDDING" : {
+        "description" : "Indicizzazione semantica (embedding per semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Token elaborati",
+        "dataset-1-label" : "Errore nell'elaborazione dei token"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indicizzazione di entità/relazioni/eventi (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documenti non trattati",
+        "label-1" : "Errore nell'elaborazione dei documenti",
+        "label-2" : "Documenti elaborati"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Token elaborati",
+        "dataset-1-label" : "Errore nell'elaborazione dei token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documenti ricevuti",
+        "dataset-1-label" : "Documenti elaborati",
+        "dataset-2-label" : "Documenti con errore",
+        "dataset-3-label" : "Documenti scartati"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operazione completata con successo"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Errore durante lo streaming della risposta della chat",
+        "detail" : "Errore del server: class org.neo4j.driver.internal.value.StringValue non può essere convertita in class java.lang.String (org.neo4j.driver.internal.value.StringValue è in unnamed module of loader 'app'; java.lang.String è in module java.base of loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Salvato con successo",
+        "detail" : "Operazione di aggiornamento eseguita con successo"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Errore di comunicazione con il server Ollama",
+        "detail" : "Errore di rete nella comunicazione con il sistema remoto per l'accesso ai contenuti\n errore nella lista dei modelli, errore con url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Completato"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Configura graphrag nell'area di setup se vuoi utilizzarlo in questa sezione"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Impostazioni Graphrag"
+      },
+      "button-help" : {
+        "label" : "Clicca qui per configurare l'estrazione delle informazioni per graphrag (attualmente non configurato)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Aggiungi configurazione"
       }
     }
   }

@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Lêerkeusekriteria vir graphrag-verwerking",
         "help" : "Redigeer kriteria vir lêers om na die inligtingsonttrekkingsproses via graphrag te stuur; kies ten minste 'n lêernaam en kriteria en/of 'n lêertipe en/of die maksimum aantal grepe van lêergrootte en/of die ouderdom van laaste wysiging in dae"
+      },
+      "extractionFormat" : {
+        "label" : "Ekstraksieformaat",
+        "help" : "Gebruik CSV-formaat vir llms onder 30b parameters, JSON vir groot frontier modelle",
+        "placeholder" : "Gebruik CSV-formaat vir llms onder 30b parameters, JSON vir groot frontier modelle"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Stemantwoord ontvang"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Rol op"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Rol af"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Dokumente gevind"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Is jy seker jy wil hierdie geselskap uitvee?",
+        "header" : "Verwyder geselskap-aksie"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Maak toe"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Voeg dokument by 'gesels met' lys"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Verwerkte dokumente",
         "dataset-2-label" : "Fout dokumente",
         "dataset-3-label" : "Verwerpte dokumente"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Verwerkte tokes",
+        "dataset-1-label" : "Fout tydens verwerking van tokes"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Ontleed dokumentelys"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Dokumente nie behandel nie",
+        "label-1" : "Fout tydens verwerking van dokumente",
+        "label-2" : "Dokumente verwerk"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumente-tokenisering"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Foutdokumente",
+        "dataset-3-label" : "Wegegooide dokumente"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Dokumente nie behandel nie",
+        "label-1" : "Fout tydens verwerking van dokumente",
+        "label-2" : "Dokumente verwerk"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiese indeksering (embedding vir semantiese rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Verwerkte tokes",
+        "dataset-1-label" : "Fout tydens verwerking van tokes"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Dokumente nie behandel nie",
+        "label-1" : "Fout tydens verwerking van dokumente",
+        "label-2" : "Dokumente verwerk"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Foutdokumente",
+        "dataset-3-label" : "Wegegooide dokumente"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entiteite/Verhoudings/Gebeure-indeksering (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Dokumente nie behandel nie",
+        "label-1" : "Fout tydens verwerking van dokumente",
+        "label-2" : "Dokumente verwerk"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Verwerkte tokes",
+        "dataset-1-label" : "Fout tydens verwerking van tokes"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Foutdokumente",
+        "dataset-3-label" : "Wegegooide dokumente"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ontvangde dokumente",
+        "dataset-1-label" : "Verwerkte dokumente",
+        "dataset-2-label" : "Foutdokumente",
+        "dataset-3-label" : "Wegegooide dokumente"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operasie suksesvol voltooi"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Fout met stroom van geselskaprespons",
+        "detail" : "Bedienerfout: klas org.neo4j.driver.internal.value.StringValue kan nie omgeskakel word na klas java.lang.String nie (org.neo4j.driver.internal.value.StringValue is in onbekende module van laaier 'app'; java.lang.String is in module java.base van laaier 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Suksesvol gestoor",
+        "detail" : "Opdateringsaksie suksesvol voltooi"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Fout met kommunikasie met Ollama-bediener",
+        "detail" : "Netwerkfout met kommunikasie na die afgeleë stelsel tydens toegang tot inhoud\n modellelys Fout met url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Voltooi"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigureer graphrag in die instellingsgebied as jy dit hier wil gebruik"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-instellings"
+      },
+      "button-help" : {
+        "label" : "Klik hier om inligtingsekstraksie vir graphrag te konfigureer (tans nie gekonfigureer nie)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Voeg konfigurasie by"
       }
     }
   }

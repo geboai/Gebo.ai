@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Vigezo vya uteuzi wa faili kwa usindikaji wa graphrag",
         "help" : "Hariri vigezo vya faili ya kutuma kwenye mfumo wa uchimbaji habari wa graphrag, chagua angalau jina la faili na kigezo na/au aina ya faili na/au kiwango cha juu cha ukubwa wa faili kwa baiti na/au umri wa marekebisho ya mwisho kwa siku"
+      },
+      "extractionFormat" : {
+        "label" : "Muundo wa uchimbaji",
+        "help" : "Tumia muundo wa CSV kwa llms chini ya vigezo 30b, fomu ya JSON kwa mifano mikubwa ya frontier",
+        "placeholder" : "Tumia muundo wa CSV kwa llms chini ya vigezo 30b, fomu ya JSON kwa mifano mikubwa ya frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Jibu la sauti limepokelewa"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Sogeza juu"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Sogeza chini"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nyaraka zilizopatikana"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Una uhakika unataka kufuta gumzo hili?",
+        "header" : "Kitendo cha kufuta gumzo"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Funga"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Ongeza hati kwenye orodha ya 'zungumza na' "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Hati zilizochakatwa",
         "dataset-2-label" : "Hati zilizo na hitilafu",
         "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Njia zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata njia"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Inachambua orodha ya nyaraka"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "TOKENIZATION" : {
+        "description" : "Upasaji wa tokeni wa nyaraka"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "EMBEDDING" : {
+        "description" : "Uorodheshaji wa semantic (embedding kwa semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Njia zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata njia"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Uorodheshaji wa vitambulisho/mahusiano/matukio (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Njia zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata njia"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Sawa!",
         "detail" : "Operesheni imekamilika kwa mafanikio"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Hitilafu wakati wa kutiririsha majibu ya gumzo",
+        "detail" : "Hitilafu ya seva: class org.neo4j.driver.internal.value.StringValue haiwezi kubadilishwa kuwa class java.lang.String (org.neo4j.driver.internal.value.StringValue iko kwenye moduli isiyojulikana ya upakiaji 'app'; java.lang.String iko kwenye moduli java.base ya upakiaji 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Imehifadhiwa kwa mafanikio",
+        "detail" : "Shughuli ya usasishaji imekamilika kwa mafanikio"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Hitilafu ya kuwasiliana na seva ya Ollama ",
+        "detail" : "Hitilafu ya mtandao kuwasiliana na mfumo wa mbali kuchukua maudhui\n orodha ya mifano Hitilafu kufanya kazi na url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Imekamilika"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Sanidi graphrag katika eneo la usanidi ikiwa unataka kuitumia kwenye sehemu hii"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Mipangilio ya graphrag"
+      },
+      "button-help" : {
+        "label" : "Bofya hapa kusanidi uchimbaji wa taarifa kwa graphrag (bado haijasanidiwa)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Ongeza usanidi"
       }
     }
   }

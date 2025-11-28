@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kriteriji izbire datotek za obdelavo z graphrag",
         "help" : "Uredite kriterije datotek, ki jih pošljete v pipeline za ekstrakcijo informacij z graphrag. Izberite vsaj ime datoteke in kriterij in/ali vrsto datoteke in/ali največjo velikost datoteke v bajtih in/ali starost zadnje spremembe v dneh"
+      },
+      "extractionFormat" : {
+        "label" : "Oblika ekstrakcije",
+        "help" : "Uporabite format CSV za llms z manj kot 30b parametri, JSON za velike frontier modele",
+        "placeholder" : "Uporabite format CSV za llms z manj kot 30b parametri, JSON za velike frontier modele"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Prejet glasovni odgovor"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Pomakni navzgor"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Pomakni navzdol"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Najdeni dokumenti"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ali ste prepričani, da želite izbrisati ta klepet?",
+        "header" : "Dejanje brisanja klepeta"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Zapri"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Dodaj dokument na seznam 'klepetaj z' "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Obdelani dokumenti",
         "dataset-2-label" : "Dokumenti z napako",
         "dataset-3-label" : "Zavrnjeni dokumenti"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Obdelani žetoni",
+        "dataset-1-label" : "Napaka pri obdelavi žetonov"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiza seznama dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neobdelani dokumenti",
+        "label-1" : "Napaka pri obdelavi dokumentov",
+        "label-2" : "Obdelani dokumenti"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizacija dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Prejeti dokumenti",
+        "dataset-1-label" : "Obdelani dokumenti",
+        "dataset-2-label" : "Dokumenti z napako",
+        "dataset-3-label" : "Zavrnjeni dokumenti"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neobdelani dokumenti",
+        "label-1" : "Napaka pri obdelavi dokumentov",
+        "label-2" : "Obdelani dokumenti"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantično indeksiranje (embedding za semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Obdelani žetoni",
+        "dataset-1-label" : "Napaka pri obdelavi žetonov"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neobdelani dokumenti",
+        "label-1" : "Napaka pri obdelavi dokumentov",
+        "label-2" : "Obdelani dokumenti"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Prejeti dokumenti",
+        "dataset-1-label" : "Obdelani dokumenti",
+        "dataset-2-label" : "Dokumenti z napako",
+        "dataset-3-label" : "Zavrnjeni dokumenti"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indeksiranje entitet/relacij/dogodkov (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neobdelani dokumenti",
+        "label-1" : "Napaka pri obdelavi dokumentov",
+        "label-2" : "Obdelani dokumenti"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Obdelani žetoni",
+        "dataset-1-label" : "Napaka pri obdelavi žetonov"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Prejeti dokumenti",
+        "dataset-1-label" : "Obdelani dokumenti",
+        "dataset-2-label" : "Dokumenti z napako",
+        "dataset-3-label" : "Zavrnjeni dokumenti"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Prejeti dokumenti",
+        "dataset-1-label" : "Obdelani dokumenti",
+        "dataset-2-label" : "Dokumenti z napako",
+        "dataset-3-label" : "Zavrnjeni dokumenti"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "V redu!",
         "detail" : "Operacija je bila uspešno izvedena"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Napaka pri pretakanju odgovora v klepetu",
+        "detail" : "Napaka strežnika: razred org.neo4j.driver.internal.value.StringValue ni mogoče pretvoriti v razred java.lang.String (org.neo4j.driver.internal.value.StringValue je v neimenovanem modulu nalagalnika 'app'; java.lang.String je v modulu java.base nalagalnika 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Uspešno shranjeno",
+        "detail" : "Posodobitev je bila uspešno izvedena"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Napaka pri komunikaciji s strežnikom Ollama",
+        "detail" : "Napaka v omrežju pri komunikaciji z oddaljenim sistemom za dostop do vsebine\nSeznam modelov Napaka pri delu z url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Dokončano"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Nastavite graphrag v nastavitvah, če ga želite uporabljati v tem razdelku"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Nastavitve graphrag"
+      },
+      "button-help" : {
+        "label" : "Kliknite tukaj za nastavitev ekstrakcije informacij za graphrag (trenutno ni nastavljeno)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Dodaj konfiguracijo"
       }
     }
   }

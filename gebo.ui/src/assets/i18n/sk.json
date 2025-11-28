@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kritériá výberu súborov pre spracovanie graphrag",
         "help" : "Upravte kritériá výberu súborov, ktoré poputujú do pipeline na extrakciu informácií pre graphrag, vyberte aspoň názov súboru a kritériá a/alebo typ súboru a/alebo maximálny počet bajtov veľkosti súboru a/alebo starobu poslednej zmeny v dňoch"
+      },
+      "extractionFormat" : {
+        "label" : "Formát extrakcie",
+        "help" : "Použite formát CSV pre llms pod 30b parametrami, JSON pre veľké frontier modely",
+        "placeholder" : "Použite formát CSV pre llms pod 30b parametrami, JSON pre veľké frontier modely"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Hlasová odpoveď prijatá"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Posunúť hore"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Posunúť dole"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nájdené dokumenty"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ste si istí, že chcete odstrániť tento chat?",
+        "header" : "Akcia odstránenia chatu"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Zavrieť"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Pridať dokument do zoznamu 'chatovať s'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Spracované dokumenty",
         "dataset-2-label" : "Chybné dokumenty",
         "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyzovanie zoznamu dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizácia dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Sémantické indexovanie (embedding pre semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexovanie entít/vzťahov/udalostí (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operácia bola úspešne dokončená"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Chyba pri streamovaní odpovede chatu",
+        "detail" : "Chyba servera: class org.neo4j.driver.internal.value.StringValue nie je možné konvertovať na class java.lang.String (org.neo4j.driver.internal.value.StringValue je v nepojmenovanom module loadera 'app'; java.lang.String je v module java.base loadera 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Úspešne uložené",
+        "detail" : "Aktualizácia bola úspešne dokončená"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Chyba komunikácie so serverom Ollama",
+        "detail" : "Chyba siete pri komunikácii so vzdialeným systémom pri prístupe k obsahu\nzoznam modelov Chyba pri práci s url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Dokončené"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Nakonfigurujte graphrag v nastavovacej oblasti, ak ho chcete používať v tejto sekcii"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Nastavenia graphrag"
+      },
+      "button-help" : {
+        "label" : "Kliknite sem na konfiguráciu extrakcie informácií pre graphrag (momentálne nenakonfigurované)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Pridať konfiguráciu"
       }
     }
   }

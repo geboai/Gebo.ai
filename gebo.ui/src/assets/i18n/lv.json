@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Failu atlases kritēriji graphrag apstrādei",
         "help" : "Rediģējiet failu atlases kritērijus, kas tiks sūtīti uz informācijas iegūšanas cauruli graphrag, izvēlieties vismaz faila nosaukumu un kritēriju un/vai faila tipu un/vai maksimālo faila izmēru baitos un/vai pēdējās modifikācijas vecumu dienās"
+      },
+      "extractionFormat" : {
+        "label" : "Izgūšanas formāts",
+        "help" : "Izmantojiet CSV formātu llms ar mazāk nekā 30b parametriem, JSON formu lieliem frontier modeļiem",
+        "placeholder" : "Izmantojiet CSV formātu llms ar mazāk nekā 30b parametriem, JSON formu lieliem frontier modeļiem"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Saņemta balss atbilde"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Ritināt uz augšu"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Ritināt uz leju"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Atrastie dokumenti"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Vai esat pārliecināts, ka vēlaties dzēst šo tērzēšanu?",
+        "header" : "Tērzēšanas dzēšanas darbība"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Aizvērt"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Pievienot dokumentu 'tērzēšanas ar' sarakstam"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Apstrādātie dokumenti",
         "dataset-2-label" : "Kļūdainie dokumenti",
         "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātās atslēgas",
+        "dataset-1-label" : "Kļūda apstrādājot atslēgas"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analizē dokumentu sarakstu"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentu tokenizācija"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiskā indeksēšana (embedding semantiskajam rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātās atslēgas",
+        "dataset-1-label" : "Kļūda apstrādājot atslēgas"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entitāšu/Attiecību/Notikumu indeksēšana (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātās atslēgas",
+        "dataset-1-label" : "Kļūda apstrādājot atslēgas"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Labi!",
         "detail" : "Darbība veiksmīgi pabeigta"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Kļūda straumējot tērzēšanas atbildi",
+        "detail" : "Servera kļūda: class org.neo4j.driver.internal.value.StringValue nav pārveidojams par class java.lang.String (org.neo4j.driver.internal.value.StringValue ir nenosauktā modulī ar ielādētāju 'app'; java.lang.String ir modulī java.base ar ielādētāju 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Saglabāts veiksmīgi",
+        "detail" : "Atjaunošanas darbība veiksmīgi pabeigta"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Kļūda sazinoties ar Ollama serveri",
+        "detail" : "Tīkla kļūda, sazinoties ar attālo sistēmu piekļūstot saturam\n modeļu saraksta kļūda strādājot ar url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Pabeigts"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurējiet graphrag iestatījumu laukumā, ja vēlaties to izmantot šajā sadaļā"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag iestatījumi"
+      },
+      "button-help" : {
+        "label" : "Noklikšķiniet šeit, lai konfigurētu informācijas izguvi graphrag (pašlaik nav konfigurēts)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Pievienot konfigurāciju"
       }
     }
   }

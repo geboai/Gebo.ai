@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Criterii de selecție a fișierelor pentru procesarea graphrag",
         "help" : "Editează criteriile pentru fișierele ce vor fi trimise în fluxul de extragere a informațiilor pentru graphrag, selectează cel puțin un nume de fișier și un criteriu și/sau un tip de fișier și/sau dimensiunea maximă a fișierului în bytes și/sau vechimea ultimei modificări în zile"
+      },
+      "extractionFormat" : {
+        "label" : "Format de extragere",
+        "help" : "Folosiți formatul CSV pentru llms sub 30b parametri, JSON pentru modele frontieră mari",
+        "placeholder" : "Folosiți formatul CSV pentru llms sub 30b parametri, JSON pentru modele frontieră mari"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Răspuns vocal primit"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Derulați în sus"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Derulați în jos"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Documente găsite"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Sigur doriți să ștergeți această conversație?",
+        "header" : "Acțiune de ștergere chat"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Închide"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Adăugați document la lista 'chatează cu'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Documente procesate",
         "dataset-2-label" : "Documente cu erori",
         "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea tokenurilor"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiza listei de documente"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizarea documentelor"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexare semantică (embedding pentru semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea tokenurilor"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexare entități/relații/evenimente (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea tokenurilor"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operațiune realizată cu succes"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Eroare la transmiterea răspunsului din chat",
+        "detail" : "Eroare server: clasa org.neo4j.driver.internal.value.StringValue nu poate fi convertită la clasa java.lang.String (org.neo4j.driver.internal.value.StringValue este în modulul fără nume al loader-ului 'app'; java.lang.String este în modulul java.base al loader-ului 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Salvat cu succes",
+        "detail" : "Operațiunea de actualizare a fost finalizată cu succes"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Eroare la comunicarea cu serverul Ollama",
+        "detail" : "Eroare de rețea la comunicarea cu sistemul la distanță pentru accesarea conținutului\n lista modelelor Eroare lucrând cu url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Finalizat"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Configurați graphrag în zona de setare dacă doriți să îl folosiți în această secțiune"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Setări Graphrag"
+      },
+      "button-help" : {
+        "label" : "Apăsați aici pentru a configura extragerea informațiilor pentru graphrag (momentan neconfigurat)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Adaugă configurație"
       }
     }
   }

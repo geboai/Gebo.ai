@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Failų atrankos kriterijai graphrag apdorojimui",
         "help" : "Redaguokite failų siuntimo į informacijos ištraukimo procesą graphrag kriterijus: pasirinkite bent pavadinimą ir kriterijų ir/ar failo tipą ir/ar maksimalų failo dydį baitais ir/ar paskutinio pakeitimo amžių dienomis"
+      },
+      "extractionFormat" : {
+        "label" : "Ištraukimo formatas",
+        "help" : "Naudokite CSV formatą llm'ams iki 30b parametrų, JSON formatu - dideliems frontier modeliams",
+        "placeholder" : "Naudokite CSV formatą llm'ams iki 30b parametrų, JSON formatu - dideliems frontier modeliams"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Gautas balso atsakymas"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Slinkti aukštyn"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Slinkti žemyn"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Rasti dokumentai"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ar tikrai norite ištrinti šį pokalbį?",
+        "header" : "Pokalbio ištrynimo veiksmas"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Uždaryti"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Pridėti dokumentą prie 'pokalbių sąrašo' "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Apdoroti dokumentai",
         "dataset-2-label" : "Dokumentai su klaidomis",
         "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Apdoroti simboliai",
+        "dataset-1-label" : "Klaida apdorojant simbolius"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analizuojamas dokumentų sąrašas"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentų tokenizavimas"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantinis indeksavimas (semantinei rag įterpimai)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Apdoroti simboliai",
+        "dataset-1-label" : "Klaida apdorojant simbolius"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Subjektų, ryšių ir įvykių indeksavimas (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neapdoroti dokumentai",
+        "label-1" : "Klaida apdorojant dokumentus",
+        "label-2" : "Apdoroti dokumentai"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Apdoroti simboliai",
+        "dataset-1-label" : "Klaida apdorojant simbolius"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Gauti dokumentai",
+        "dataset-1-label" : "Apdoroti dokumentai",
+        "dataset-2-label" : "Dokumentai su klaidomis",
+        "dataset-3-label" : "Atmesti dokumentai"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "GERAI!",
         "detail" : "Veiksmas atliktas sėkmingai"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Klaida transliuojant pokalbio atsakymą",
+        "detail" : "Serverio klaida: negalima priskirti klasės org.neo4j.driver.internal.value.StringValue prie klasės java.lang.String (org.neo4j.driver.internal.value.StringValue yra nematytame modulyje su įkėlėju 'app'; java.lang.String yra module java.base su įkėlėju 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Išsaugota sėkmingai",
+        "detail" : "Atnaujinimo operacija atlikta sėkmingai"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Klaida bendraujant su Ollama serveriu ",
+        "detail" : "Tinklo klaida bendraujant su nuotoline sistema, kai pasiekiamas turinys\n modelių sąrašas Klaida dirbant su url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Užbaigta"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigūruokite graphrag sąrankos zonoje, jei norite jį naudoti šioje sekcijoje"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag nustatymai"
+      },
+      "button-help" : {
+        "label" : "Spauskite čia ir konfigūruokite informacijos ištraukimo nustatymus graphrag (šiuo metu nesukonfigūruota)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Pridėti konfigūraciją"
       }
     }
   }

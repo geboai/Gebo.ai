@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Urvalskriterier för filer vid graphrag-behandling",
         "help" : "Redigera kriterier för filer som ska skickas till informationsutvinnings-pipelinen för graphrag. Välj minst ett filnamn och kriterium och/eller en filtyp och/eller max filstorlek i byte och/eller ålder på senaste ändring i dagar"
+      },
+      "extractionFormat" : {
+        "label" : "Extraktionsformat",
+        "help" : "Använd CSV-format för llms under 30b parametrar, JSON för stora frontier-modeller",
+        "placeholder" : "Använd CSV-format för llms under 30b parametrar, JSON för stora frontier-modeller"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Röstsvaret har tagits emot"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Bläddra upp"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Bläddra ner"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Hittade dokument"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Är du säker på att du vill ta bort denna chat?",
+        "header" : "Ta bort chatåtgärd"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Stäng"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Lägg till dokument i 'chatta med'-listan "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Behandlade dokument",
         "dataset-2-label" : "Feldokument",
         "dataset-3-label" : "Kasserade dokument"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Bearbetade tokens",
+        "dataset-1-label" : "Fel vid bearbetning av tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyserar dokumentlista"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid bearbetning av dokument",
+        "label-2" : "Behandlade dokument"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumenttokenisering"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Bortkastade dokument"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid bearbetning av dokument",
+        "label-2" : "Behandlade dokument"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantisk indexering (embedding för semantisk rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Bearbetade tokens",
+        "dataset-1-label" : "Fel vid bearbetning av tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid bearbetning av dokument",
+        "label-2" : "Behandlade dokument"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Bortkastade dokument"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexering av entiteter/relationer/händelser (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ej behandlade dokument",
+        "label-1" : "Fel vid bearbetning av dokument",
+        "label-2" : "Behandlade dokument"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Bearbetade tokens",
+        "dataset-1-label" : "Fel vid bearbetning av tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Bortkastade dokument"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Mottagna dokument",
+        "dataset-1-label" : "Behandlade dokument",
+        "dataset-2-label" : "Feldokument",
+        "dataset-3-label" : "Bortkastade dokument"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Åtgärden genomfördes framgångsrikt"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Fel vid strömning av chatsvar",
+        "detail" : "Serverfel: class org.neo4j.driver.internal.value.StringValue kan inte konverteras till klass java.lang.String (org.neo4j.driver.internal.value.StringValue är i namnlös modul av loader 'app'; java.lang.String är i modulen java.base av loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Sparat utan problem",
+        "detail" : "Uppdateringen slutförd"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Fel vid kommunikation med Ollama-servern ",
+        "detail" : "Nätverksfel vid kommunikation med det externa systemet vid åtkomst av innehåll\nmodellista Fel vid arbete med url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Klart"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurera graphrag i inställningsområdet om du vill använda det här"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-inställningar"
+      },
+      "button-help" : {
+        "label" : "Klicka här för att konfigurera informationsutdrag för graphrag (för närvarande inte konfigurerat)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Lägg till konfiguration"
       }
     }
   }

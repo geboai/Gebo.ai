@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Критерии выбора файлов для обработки graphrag",
         "help" : "Измените критерии выбора файлов для отправки в конвейер извлечения информации для graphrag: выберите как минимум имя и критерий файла и/или тип файла, и/или максимальный размер файла в байтах, и/или количество дней с последнего изменения"
+      },
+      "extractionFormat" : {
+        "label" : "Формат извлечения",
+        "help" : "Используйте формат CSV для llms с параметрами ниже 30b, формат JSON для больших frontier моделей",
+        "placeholder" : "Используйте формат CSV для llms с параметрами ниже 30b, формат JSON для больших frontier моделей"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Голосовой ответ получен"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Прокрутить вверх"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Прокрутить вниз"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Документы найдены"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Вы уверены, что хотите удалить этот чат?",
+        "header" : "Удаление чата"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Закрыть"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Добавить документ в список 'чат с'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Обработанные документы",
         "dataset-2-label" : "Документы с ошибкой",
         "dataset-3-label" : "Отклонённые документы"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Обработанные токены",
+        "dataset-1-label" : "Ошибка обработки токенов"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Анализ списка документов"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка обработки документов",
+        "label-2" : "Обработанные документы"
+      },
+      "TOKENIZATION" : {
+        "description" : "Токенизация документов"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибками",
+        "dataset-3-label" : "Отбракованные документы"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка обработки документов",
+        "label-2" : "Обработанные документы"
+      },
+      "EMBEDDING" : {
+        "description" : "Семантическая индексация (эмбеддинг для семантического rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Обработанные токены",
+        "dataset-1-label" : "Ошибка обработки токенов"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка обработки документов",
+        "label-2" : "Обработанные документы"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибками",
+        "dataset-3-label" : "Отбракованные документы"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Индексация сущностей/связей/событий (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Необработанные документы",
+        "label-1" : "Ошибка обработки документов",
+        "label-2" : "Обработанные документы"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Обработанные токены",
+        "dataset-1-label" : "Ошибка обработки токенов"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибками",
+        "dataset-3-label" : "Отбракованные документы"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Полученные документы",
+        "dataset-1-label" : "Обработанные документы",
+        "dataset-2-label" : "Документы с ошибками",
+        "dataset-3-label" : "Отбракованные документы"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Операция успешно выполнена"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Ошибка при потоковой передаче ответа чата",
+        "detail" : "Ошибка сервера: class org.neo4j.driver.internal.value.StringValue не может быть приведен к классу java.lang.String (org.neo4j.driver.internal.value.StringValue находится в неопределённом модуле загрузчика 'app'; java.lang.String находится в модуле java.base загрузчика 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Успешно сохранено",
+        "detail" : "Операция обновления успешно выполнена"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ошибка связи с Ollama сервером",
+        "detail" : "Сетевая ошибка при обращении к удалённой системе для доступа к контенту\n список моделей Ошибка при работе с url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Завершено"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Настройте graphrag в области настройки, чтобы использовать его в этом разделе"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Настройки graphrag"
+      },
+      "button-help" : {
+        "label" : "Нажмите здесь, чтобы настроить извлечение информации для graphrag (пока не настроено)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Добавить конфигурацию"
       }
     }
   }

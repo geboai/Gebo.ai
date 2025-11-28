@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Ֆայլի ընտրության չափանիշներ graphrag-ի մշակման համար",
         "help" : "Խմբագրեք չափանիշները ֆայլի՝ տեղեկատվության արտահանման փաթեթ ուղարկելու համար graphrag-ի միջոցով, ընտրեք առնվազն մեկ ֆայլի անուն և չափանիշ և/կամ ֆայլի տեսակ և/կամ ֆայլի չափի առավելագույն բայթերի թիվ և/կամ վերջերս փոփոխության օրերի թիվ"
+      },
+      "extractionFormat" : {
+        "label" : "Վերծողական ձևաչափ",
+        "help" : "Օգտագործեք CSV ձևաչափ llms-ի համար 30b պարամետրերից ցածր, JSON հսկայական մոդելների համար",
+        "placeholder" : "Օգտագործեք CSV ձևաչափ llms-ի համար 30b պարամետրերից ցածր, JSON հսկայական մոդելների համար"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Ձայնային պատասխանն ընդունվել է"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Գնալ վերև"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Գնալ ներքև"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Գտնված փաստաթղթեր"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Վստա՞հ եք, որ ցանկանում եք ջնջել այս զրույցը։",
+        "header" : "Ջնջել զրույցի գործողություն"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Փակել"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Ավելացնել փաստաթուղթ 'զրուցել' ցուցակում"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Մշակված փաստաթղթեր",
         "dataset-2-label" : "Սխալներով փաստաթղթեր",
         "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Վերամշակված նշաններ",
+        "dataset-1-label" : "Սխալ նշանների մշակումում"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Փաստաթղթերի ցանկի վերլուծություն"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "TOKENIZATION" : {
+        "description" : "Փաստաթղթերի նշանավորում"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "EMBEDDING" : {
+        "description" : "Սեմանտիկ ինդեքսավորում (embedding սեմանտիկ rag-ի համար)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Վերամշակված նշաններ",
+        "dataset-1-label" : "Սխալ նշանների մշակումում"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Կոնկրետներ/Հարաբերություններ/Իրադարձությունների ինդեքսավորում (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Վերամշակված նշաններ",
+        "dataset-1-label" : "Սխալ նշանների մշակումում"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Սխալ զրույցի հոսքի պատասխանի ժամանակ",
+        "detail" : "Սերվերի սխալ․ class org.neo4j.driver.internal.value.StringValue-ը չի կարող փոխարկվել class java.lang.String-ի (org.neo4j.driver.internal.value.StringValue-ը գտնվում է 'app' բեռնիչի անվանակարգում, իսկ java.lang.String-ը բեռնիչի module java.base-ում 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Հաջողությամբ պահպանվեց",
+        "detail" : "Թարմացման գործընթացը հաջողությամբ իրականացվեց"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Սխալ Ollama սերվերի հետ կապի ժամանակ",
+        "detail" : "Ցանցի սխալ՝ հեռակա համակարգից տվյալներ ստանալու ժամանակ\n մոդելների ցանկ Սխալ url-ով աշխատանքիս ժամանակ՝ http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Ավարտված"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Կարգավորեք graphrag-ը նախապես, եթե ցանկանում եք օգտագործել այս բաժնում"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-ի կարգավորումներ"
+      },
+      "button-help" : {
+        "label" : "Սեղմեք այստեղ՝ graphrag-ի ինֆորմացիայի վերծման կարգավորում անելու համար (ներկայումս կարգավորված չէ)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Ավելացնել կարգավորում"
       }
     }
   }

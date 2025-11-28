@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag പ്രോസസിംഗിന് ഫയൽ തിരഞ്ഞെടുപ്പ് മാനദണ്ഡങ്ങൾ",
         "help" : "Graphrag വിവര എക്സ്ട്രാക്ഷൻ പൈപ്പ്‌ലൈനും പ്രോസസിംഗിനായി ഫയലുകൾ തിരയുവാൻ മാനദണ്ഡങ്ങൾ എഡിറ്റ് ചെയ്യുക, കുറഞ്ഞത് ഒരു ഫയൽ നാമവും മാനദണ്ഡവും അല്ലെങ്കിൽ ഫയൽ തരവും അല്ലെങ്കിൽ ഫയൽ സൈസിനുള്ള പരമാവധി ബൈറ്റുകളും അല്ലെങ്കിൽ അവസാനമായി മാറ്റം വരുത്തിയ ദിവസങ്ങൾ നൽകണം"
+      },
+      "extractionFormat" : {
+        "label" : "ഉർമമെടുക്കുന്ന ഫോർമാറ്റ്",
+        "help" : "30b പാരാമീറ്ററുകളിൽ താഴെ ഉള്ള llms നെക്കാൾ CSV ഫോർമാറ്റ് ഉപയോഗിക്കുക, വലിയ ഫ്രണ്ടിയർ മോഡലുകൾക്ക് JSON ഉപയോഗിക്കുക",
+        "placeholder" : "30b പാരാമീറ്ററുകളിൽ താഴെ ഉള്ള llms നെക്കാൾ CSV ഫോർമാറ്റ് ഉപയോഗിക്കുക, വലിയ ഫ്രണ്ടിയർ മോഡലുകൾക്ക് JSON ഉപയോഗിക്കുക"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "ശബ്ദ ഉത്തരവ് ലഭിച്ചു"
+      },
+      "ScrollUpBtn" : {
+        "help" : "മുകളിലേക്ക് സ്ക്രോൾ ചെയ്യുക"
+      },
+      "ScrollDownBtn" : {
+        "help" : "താഴേക്ക് സ്ക്രോൾ ചെയ്യുക"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "കണ്ടെത്തിയ ഡോക്യുമെന്റുകൾ"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "ഈ ചാറ്റ് മായ്ച്ചു കളയണോ എന്നു ഉറപ്പാണോ?",
+        "header" : "ചാറ്റ് actions മായ്ക്കുക"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "അടയ്ക്കുക"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'ചാറ്റ് വിത്' ലിസ്റ്റിലേക്ക് ഡോക്യുമെന്റ് ചേര്‍ക്കുക "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ",
         "dataset-2-label" : "പിശക് ഡോക്യുമെന്റുകൾ",
         "dataset-3-label" : "ഉപേക്ഷിച്ച ഡോക്യുമെന്റുകൾ"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "പ്രോസസ്സ് ചെയ്ത ടോകണുകൾ",
+        "dataset-1-label" : "ടോകൺ പ്രോസസ്സിങ്ങിൽ പിശകുകൾ"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ഡോക്യുമെന്റുകളുടെ ലിസ്റ്റ് വിശകലനം ചെയ്യുന്നു"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "പ്രോസസ്സ് ചെയ്യാത്ത ഡോക്യുമെന്റുകൾ",
+        "label-1" : "ഡോക്യുമെന്റുകൾ പ്രോസസ്സ് ചെയ്യുന്നതിനിടെ പിശകുകൾ",
+        "label-2" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ"
+      },
+      "TOKENIZATION" : {
+        "description" : "ഡോക്യുമെന്റുകൾ ടോകനുകൾ ആക്കുന്നു"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "ലഭിച്ച ഡോക്യുമെന്റുകൾ",
+        "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ",
+        "dataset-2-label" : "പിശക് വന്ന ഡോക്യുമെന്റുകൾ",
+        "dataset-3-label" : "വിട്ടുമാക്കിയ ഡോക്യുമെന്റുകൾ"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "പ്രോസസ്സ് ചെയ്യാത്ത ഡോക്യുമെന്റുകൾ",
+        "label-1" : "ഡോക്യുമെന്റുകൾ പ്രോസസ്സ് ചെയ്യുന്നതിനിടെ പിശകുകൾ",
+        "label-2" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ"
+      },
+      "EMBEDDING" : {
+        "description" : "സെമാന്റിക് ഇൻഡക്സിംഗ് (സെമാന്റിക് റാഗിനായി എംബെഡ്ഡിംഗ്)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "പ്രോസസ്സ് ചെയ്ത ടോകണുകൾ",
+        "dataset-1-label" : "ടോകൺ പ്രോസസ്സിങ്ങിൽ പിശകുകൾ"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "പ്രോസസ്സ് ചെയ്യാത്ത ഡോക്യുമെന്റുകൾ",
+        "label-1" : "ഡോക്യുമെന്റുകൾ പ്രോസസ്സ് ചെയ്യുന്നതിനിടെ പിശകുകൾ",
+        "label-2" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "ലഭിച്ച ഡോക്യുമെന്റുകൾ",
+        "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ",
+        "dataset-2-label" : "പിശക് വന്ന ഡോക്യുമെന്റുകൾ",
+        "dataset-3-label" : "വിട്ടുമാക്കിയ ഡോക്യുമെന്റുകൾ"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entity/Relations/Events ഇൻഡക്സ് ചെയ്യുന്നു (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "പ്രോസസ്സ് ചെയ്യാത്ത ഡോക്യുമെന്റുകൾ",
+        "label-1" : "ഡോക്യുമെന്റുകൾ പ്രോസസ്സ് ചെയ്യുന്നതിനിടെ പിശകുകൾ",
+        "label-2" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "പ്രോസസ്സ് ചെയ്ത ടോകണുകൾ",
+        "dataset-1-label" : "ടോകൺ പ്രോസസ്സിങ്ങിൽ പിശകുകൾ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ലഭിച്ച ഡോക്യുമെന്റുകൾ",
+        "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ",
+        "dataset-2-label" : "പിശക് വന്ന ഡോക്യുമെന്റുകൾ",
+        "dataset-3-label" : "വിട്ടുമാക്കിയ ഡോക്യുമെന്റുകൾ"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ലഭിച്ച ഡോക്യുമെന്റുകൾ",
+        "dataset-1-label" : "പ്രോസസ്സ് ചെയ്ത ഡോക്യുമെന്റുകൾ",
+        "dataset-2-label" : "പിശക് വന്ന ഡോക്യുമെന്റുകൾ",
+        "dataset-3-label" : "വിട്ടുമാക്കിയ ഡോക്യുമെന്റുകൾ"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ശരി!",
         "detail" : "പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായി"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "ചാറ്റ് സ്റ്റ്രീമിംഗ് പ്രതികരണത്തിൽ പിശക്",
+        "detail" : "സെർവർ പിശക്: class org.neo4j.driver.internal.value.StringValue-നെ java.lang.String-ലേക്ക് മാറ്റാൻ വന്ന പിശക് (org.neo4j.driver.internal.value.StringValue unnamed module of loader 'app'-ൽ ആണ്; java.lang.String, module java.base of loader 'bootstrap'-ൽ ആണ്)"
+      },
+      "OK" : {
+        "summary" : "വിജയകരമായി സംരക്ഷിച്ചു",
+        "detail" : "അപ്ഡേറ്റ് പ്രവർത്തനം വിജയകരമായി പൂർത്തിയായിരിക്കുന്നു"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama സെർവറുമായി സംവദിക്കുമ്പോൾ പിശക്",
+        "detail" : "സ്ഥലാന്തര സിസ്റ്റത്തിൽ ഉള്ള ഉള്ളടക്കം ലഭ്യമാക്കുന്നതിനിടെ നെറ്റ്വർക്ക് പിശക്.\n മോഡൽ ലിസ്റ്റ് Error working with url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "പൂർത്തിയായി"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ഈ സെക്ഷനിൽ ഉപയോഗിക്കാൻ ആഗ്രഹിക്കുന്നുവെങ്കിൽ സജ്ജീകരണ മേഖലയിലെ graphrag കോൺഫിഗർ ചെയ്യുക"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag ക്രമീകരണങ്ങൾ"
+      },
+      "button-help" : {
+        "label" : "graphrag-ന്റെ വിവരങ്ങൾ എക്സ്ട്രാക്ഷനു വേണ്ടി കോൺഫിഗർ ചെയ്യാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക (ഇപ്പോൾ കോൺഫിഗർ ചെയ്തിട്ടില്ല)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "കോൺഫിഗറേഷൻ ചേർക്കുക"
       }
     }
   }

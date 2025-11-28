@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "קריטריוני בחירת קבצים לעיבוד Graphrag",
         "help" : "ערוך קריטריונים על הקובץ שישלח לצנרת חילוץ המידע של Graphrag, יש לבחור לפחות שם קובץ ואחד הקריטריונים ו/או סוג הקובץ ו/או מספר הבייטים המקסימלי ו/או גיל אחרון שינוי בימים"
+      },
+      "extractionFormat" : {
+        "label" : "פורמט חילוץ",
+        "help" : "השתמש בפורמט CSV עבור llms עם פחות מ-30b פרמטרים, JSON לדגמי frontier גדולים מאוד",
+        "placeholder" : "השתמש בפורמט CSV עבור llms עם פחות מ-30b פרמטרים, JSON לדגמי frontier גדולים מאוד"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "תשובה קולית התקבלה"
+      },
+      "ScrollUpBtn" : {
+        "help" : "גלול מעלה"
+      },
+      "ScrollDownBtn" : {
+        "help" : "גלול מטה"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "נמצאו מסמכים"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "האם אתה בטוח שברצונך למחוק את הצ'אט הזה?",
+        "header" : "מחיקת צ'אט"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "סגור"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "הוסף מסמך לרשימת 'שוחח עם'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "מסמכים שעובדו",
         "dataset-2-label" : "מסמכים עם שגיאה",
         "dataset-3-label" : "מסמכים שנפסלו"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "אסימונים שעובדו",
+        "dataset-1-label" : "שגיאה בעיבוד אסימונים"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "מנתח רשימת מסמכים"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "מסמכים שלא טופלו",
+        "label-1" : "שגיאה בעיבוד מסמכים",
+        "label-2" : "מסמכים שעובדו"
+      },
+      "TOKENIZATION" : {
+        "description" : "איתחול אסימונים למסמכים"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "מסמכים שהתקבלו",
+        "dataset-1-label" : "מסמכים שעובדו",
+        "dataset-2-label" : "מסמכים עם שגיאות",
+        "dataset-3-label" : "מסמכים שנפסלו"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "מסמכים שלא טופלו",
+        "label-1" : "שגיאה בעיבוד מסמכים",
+        "label-2" : "מסמכים שעובדו"
+      },
+      "EMBEDDING" : {
+        "description" : "אינדוקס סמנטי (הטמעה עבור semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "אסימונים שעובדו",
+        "dataset-1-label" : "שגיאה בעיבוד אסימונים"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "מסמכים שלא טופלו",
+        "label-1" : "שגיאה בעיבוד מסמכים",
+        "label-2" : "מסמכים שעובדו"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "מסמכים שהתקבלו",
+        "dataset-1-label" : "מסמכים שעובדו",
+        "dataset-2-label" : "מסמכים עם שגיאות",
+        "dataset-3-label" : "מסמכים שנפסלו"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "אינדוקס ישויות/יחסים/אירועים (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "מסמכים שלא טופלו",
+        "label-1" : "שגיאה בעיבוד מסמכים",
+        "label-2" : "מסמכים שעובדו"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "אסימונים שעובדו",
+        "dataset-1-label" : "שגיאה בעיבוד אסימונים"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "מסמכים שהתקבלו",
+        "dataset-1-label" : "מסמכים שעובדו",
+        "dataset-2-label" : "מסמכים עם שגיאות",
+        "dataset-3-label" : "מסמכים שנפסלו"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "מסמכים שהתקבלו",
+        "dataset-1-label" : "מסמכים שעובדו",
+        "dataset-2-label" : "מסמכים עם שגיאות",
+        "dataset-3-label" : "מסמכים שנפסלו"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "הצליח!",
         "detail" : "הפעולה בוצעה בהצלחה"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "שגיאה בזרימת תגובת צ'אט",
+        "detail" : "שגיאת שרת: class org.neo4j.driver.internal.value.StringValue לא ניתן להמרה ל־class java.lang.String (org.neo4j.driver.internal.value.StringValue נמצא במודול ללא שם של loader 'app'; java.lang.String נמצא במודול java.base של loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "נשמר בהצלחה",
+        "detail" : "הפעולה בוצעה בהצלחה"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "שגיאה בתקשורת עם שרת Ollama",
+        "detail" : "שגיאת רשת בעת תקשורת עם המערכת מרחוק לקבלת תוכן\nרשימת מודלים שגיאה בעבודה עם כתובת:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "הושלם"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "הגדר graphrag באזור ההגדרות אם ברצונך להשתמש בו בחלק זה"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "הגדרות graphrag"
+      },
+      "button-help" : {
+        "label" : "לחץ כאן כדי להגדיר חילוץ מידע עבור graphrag (כעת לא מוגדר)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "הוסף הגדרה"
       }
     }
   }

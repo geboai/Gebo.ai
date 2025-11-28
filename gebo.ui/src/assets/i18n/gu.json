@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag પ્રક્રિયા માટે ફાઈલ પસંદગીના માપદંડ",
         "help" : "Graphrag માટે માહિતી બહાર કાઢવાની पाइપલાઇનમાં મોકલવા માટેના ફાઈલ માપદંડોમાં ફેરફાર કરો, ઓછામાં ઓછું ફાઈલ નામ અને માપદંડ, અથવા ફાઇલ ટાઇપ અને/અથવા મહત્તમ ફાઈલ કદ અને/અથવા છેલ્લે સુધારાયું તેના દિવસ પ્રમાણે પસંદ કરો"
+      },
+      "extractionFormat" : {
+        "label" : "એક્સટ્રેક્શન ફોર્મેટ",
+        "help" : "30b પેરામ્સ હેઠળના llms માટે CSV ફોર્મેટ વાપરો, વિશાળ ફ્રન્ટિયર મોડલ્સ માટે JSON ફોર્મ",
+        "placeholder" : "30b પેરામ્સ હેઠળના llms માટે CSV ફોર્મેટ વાપરો, વિશાળ ફ્રન્ટિયર મોડલ્સ માટે JSON ફોર્મ"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "વરબલ જવાબ મળ્યુ"
+      },
+      "ScrollUpBtn" : {
+        "help" : "ઉપર સ્ક્રોલ કરો"
+      },
+      "ScrollDownBtn" : {
+        "help" : "નીચે સ્ક્રોલ કરો"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ડૉક્યૂમેન્ટ મળ્યા"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "શું તમે ખરેખર આ ચેટ કાઢવા માંગો છો?",
+        "header" : "ચેટ કાઢવાની ક્રિયા"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "બંધ કરો"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : " 'ચેટ સાથે' યાદીમાં દસ્તાવેજ ઉમેરો "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
         "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
         "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "પ્રોસેસ કરેલ ટોકન",
+        "dataset-1-label" : "ટોકન પ્રોસેસિંગમાં ભૂલ"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "દસ્તાવેજોની યાદી વિશ્લેષણ કરી રહ્યા છીએ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "TOKENIZATION" : {
+        "description" : "દસ્તાવેજોનું ટોકનાઈઝેશન"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "EMBEDDING" : {
+        "description" : "સેમેન્ટિક ઈન્ડેક્સિંગ (સેમેન્ટિક rag માટે એમ્બેડિંગ)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "પ્રોસેસ કરેલ ટોકન",
+        "dataset-1-label" : "ટોકન પ્રોસેસિંગમાં ભૂલ"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "એકમ/સંબંધો/ઈવેન્ટ્સની સૂચિ બનાવવી (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "પ્રોસેસ કરેલ ટોકન",
+        "dataset-1-label" : "ટોકન પ્રોસેસિંગમાં ભૂલ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "બરાબર!",
         "detail" : "ઓપરેશન સફળતાપૂર્વક પૂર્ણ થયું"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "ચેટ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: class org.neo4j.driver.internal.value.StringValue cannot be cast to class java.lang.String (org.neo4j.driver.internal.value.StringValue is in unnamed module of loader 'app'; java.lang.String is in module java.base of loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "સਫળતાપૂર્વક સાચવ્યું",
+        "detail" : "અપડેટ કામગીરી સફળતાપૂર્વક પૂર્ણ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama સર્વર સાથે સંચાર કરતી વખતે ભૂલ",
+        "detail" : "રેવાન્ટ સિસ્ટમ સાથે સંચાર કરતી વખતે નેટવર્ક ભૂલ\n મોડલ્સ યાદી માટે url સાથે કામ કરતી વખતે ભૂલ:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "પૂર્ણ"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "જો તમે આ વિભાગમાં તેને વાપરવા માંગતા હો તો graphrag ને સેટઅપ વિસ્તારમાં રૂપરેખાંકિત કરો"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag સુયોજનો"
+      },
+      "button-help" : {
+        "label" : "graphrag માટે માહિતી એક્સટ્રેક્શન રૂપરેખાંકિત કરવા અહીં ક્લિક કરો (હજુ રૂપરેખાંકિત નથી)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "રૂપરેખાંકન ઉમેરો"
       }
     }
   }

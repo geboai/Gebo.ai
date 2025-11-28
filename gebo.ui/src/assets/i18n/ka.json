@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "ფაილების შერჩევის კრიტერიუმები graphrag-ისთვის",
         "help" : "დაარედაქტირეთ ფაილის კრიტერიუმები ინფორმაციის გაფრაშვის პაიპლაინისთვის graphrag-ზე გასაგზავნად, აირჩიეთ მინიმუმ ერთი ფაილის სახელი და კრიტერიუმი და/ან ფაილის ტიპი და/ან მაქსიმალური ზომა ბაიტებში და/ან ბოლო შეცვლის ასაკი დღეებში"
+      },
+      "extractionFormat" : {
+        "label" : "გაძეის ფორმატი",
+        "help" : "გამოიყენეთ CSV ფორმატი llms-სთვის 30b პარამეტრებამდე, JSON დიდი ზომის მოდელებისთვის",
+        "placeholder" : "გამოიყენეთ CSV ფორმატი llms-სთვის 30b პარამეტრებამდე, JSON დიდი ზომის მოდელებისთვის"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "მიღებული ხმოვანი პასუხი"
+      },
+      "ScrollUpBtn" : {
+        "help" : "აწიეთ ზემოთ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "ჩამოწიეთ ქვემოთ"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ნაპოვნია დოკუმენტები"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "დარწმუნებული ხართ, რომ გსურთ ამ ჩატის წაშლა?",
+        "header" : "ჩატის წაშლის ქმედება"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "დახურვა"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "დაუმატეთ დოკუმენტი 'ჩატში დაკავშირებულების' სიას "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "დამუშავებული დოკუმენტები",
         "dataset-2-label" : "დოკუმენტები შეცდომით",
         "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "შეცდომა ტოკენების დამუშავებისას"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "დოკუმენტების სიის ანალიზი"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "TOKENIZATION" : {
+        "description" : "დოკუმენტების ტოკენიზაცია"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "EMBEDDING" : {
+        "description" : "სემანტიკური ინდექსაცია (გრაფრაგისთვის ემბედინგი)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "შეცდომა ტოკენების დამუშავებისას"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ერთეულების/ურთიერთობების/მოვლენების ინდექსაცია (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "შეცდომა ტოკენების დამუშავებისას"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "წარმატებით დასრულდა!",
         "detail" : "ოპერაცია წარმატებით შესრულდა"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "შეცდომა ჩატის სტრიმინგის დროს",
+        "detail" : "სერვერის შეცდომა: class org.neo4j.driver.internal.value.StringValue ვერ იქნა გარდაქმნილი კლასად java.lang.String (org.neo4j.driver.internal.value.StringValue არის 'app'-ის სახელის გარეშე მოდულში; java.lang.String არის module java.base-ის 'bootstrap' ლოდერში)"
+      },
+      "OK" : {
+        "summary" : "წარმატებით შენახულია",
+        "detail" : "განახლების ოპერაცია წარმატებით დასრულდა"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "შეცდომა Ollama სერვერთან კომუნიკაციისას",
+        "detail" : "ქსელის შეცდომა შინაარსამდე წვდომის დროს\nმოდელების სია შეცდომა მისამართზე მუშაობისას:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "დასრულებულია"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "დააკონფიგურირეთ graphrag პარამეტრების ზონაში, თუ სურს მისი გამოყენება ამ განყოფილებაში"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-ის პარამეტრები"
+      },
+      "button-help" : {
+        "label" : "დააწკაპუნეთ აქ graphrag-ისთვის ინფორმაციის ამოღების კონფიგურაციისთვის (ამჟამად მორგებული არ არის)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "დაამატეთ კონფიგურაცია"
       }
     }
   }

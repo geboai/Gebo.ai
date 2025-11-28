@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "เกณฑ์การเลือกไฟล์สำหรับการประมวลผล graphrag",
         "help" : "แก้ไขเกณฑ์ของไฟล์ที่จะส่งไปยังขั้นตอนสกัดข้อมูลสำหรับ graphrag เลือกอย่างน้อยชื่อไฟล์และเกณฑ์ และ/หรือประเภทไฟล์ และ/หรือขนาดไฟล์ไม่เกินจำนวนไบต์สูงสุด และ/หรืออายุการแก้ไขล่าสุดเป็นวัน"
+      },
+      "extractionFormat" : {
+        "label" : "รูปแบบการสกัดข้อมูล",
+        "help" : "ใช้รูปแบบ CSV สำหรับ llms ที่มี params น้อยกว่า 30b, ใช้ JSON สำหรับโมเดล frontier ขนาดใหญ่",
+        "placeholder" : "ใช้รูปแบบ CSV สำหรับ llms ที่มี params น้อยกว่า 30b, ใช้ JSON สำหรับโมเดล frontier ขนาดใหญ่"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "ได้รับคำตอบเสียงแล้ว"
+      },
+      "ScrollUpBtn" : {
+        "help" : "เลื่อนขึ้น"
+      },
+      "ScrollDownBtn" : {
+        "help" : "เลื่อนลง"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "พบเอกสาร"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "คุณแน่ใจหรือว่าต้องการลบแชทนี้?",
+        "header" : "การลบแชท"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "ปิด"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "เพิ่มเอกสารไปยังรายการ 'แชทกับ' "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
         "dataset-2-label" : "เอกสารผิดพลาด",
         "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดในการประมวลผลโทเคน"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "กำลังวิเคราะห์รายการเอกสาร"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "TOKENIZATION" : {
+        "description" : "การแยกโทเคนของเอกสาร"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "EMBEDDING" : {
+        "description" : "การจัดทำดัชนีเชิงความหมาย (embedding สำหรับ semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดในการประมวลผลโทเคน"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "การจัดทำดัชนี Entity/Relations/Events (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดในการประมวลผลโทเคน"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "เรียบร้อย!",
         "detail" : "ดำเนินการสำเร็จ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "เกิดข้อผิดพลาดขณะสตรีมผลตอบกลับแชท",
+        "detail" : "Server error: class org.neo4j.driver.internal.value.StringValue ไม่สามารถแปลงเป็น class java.lang.String ได้ (org.neo4j.driver.internal.value.StringValue อยู่ใน unnamed module ของ loader 'app'; java.lang.String อยู่ใน module java.base ของ loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "บันทึกสำเร็จ",
+        "detail" : "อัปเดตข้อมูลสำเร็จ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "เกิดข้อผิดพลาดในการสื่อสารกับ Ollama server",
+        "detail" : "Netork error ขณะเชื่อมต่อระบบระยะไกลเข้าถึงเนื้อหา\n รายการ models Error ทำงานกับ url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "เสร็จสมบูรณ์"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ตั้งค่า graphrag ในพื้นที่ตั้งค่าหากต้องการใช้งานในส่วนนี้"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "การตั้งค่า graphrag"
+      },
+      "button-help" : {
+        "label" : "คลิกที่นี่เพื่อตั้งค่าการสกัดข้อมูลสำหรับ graphrag (ยังไม่ได้ตั้งค่า)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "เพิ่มการตั้งค่า"
       }
     }
   }

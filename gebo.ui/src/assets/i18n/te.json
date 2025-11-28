@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "graphrag ప్రాసెసింగ్ కోసం ఫైల్ ఎంపిక ప్రమాణాలు",
         "help" : "graphrag సమాచారం యాజన పైపును పంపే ఫైల్‌పై ప్రమాణాలను సవరించండి, అనవసరం కనీసం ఒక ఫైల్ పేరు మరియు ప్రమాణం మరియు/లేదా ఫైల్ రకం మరియు/లేదా గరిష్ట ఫైల్ సైజుకు బైట్లలో పరిమితి మరియు/లేదా చివరి మార్పిడి వయస్సు రోజుల్లో ఎంచుకోండి"
+      },
+      "extractionFormat" : {
+        "label" : "ఎక్స్ట్రాక్షన్ ఫార్మాట్",
+        "help" : "30b పరిమితికి కన్నా తక్కువ llms కోసం CSV ఫార్మాట్ ఉపయోగించండి, భారీ frontier మోడల్స్ కోసం JSON ఫార్మాట్ ఉపయోగించండి",
+        "placeholder" : "30b పరిమితికి కన్నా తక్కువ llms కోసం CSV ఫార్మాట్ ఉపయోగించండి, భారీ frontier మోడల్స్ కోసం JSON ఫార్మాట్ ఉపయోగించండి"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "వాయిస్ సమాధానం పొందబడింది"
+      },
+      "ScrollUpBtn" : {
+        "help" : "పైకి స్క్రోల్ చేయండి"
+      },
+      "ScrollDownBtn" : {
+        "help" : "క్రిందికి స్క్రోల్ చేయండి"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "డాక్యుమెంట్లు కనుగొన్నారు"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "మీరు ఈ చాటును ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?",
+        "header" : "చాట్ తొలిగింపు చర్య"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "మూసివేయండి"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'చాట్ విత్' జాబితాలో డాక్యుమెంట్ జోడించండి "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "ప్రాసessed పత్రాలు",
         "dataset-2-label" : "దోషపూరిత పత్రాలు",
         "dataset-3-label" : "విస్మరించిన పత్రాలు"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "ప్రాసెస్ చేసిన టోకెన్లు",
+        "dataset-1-label" : "టోకెన్లు ప్రాసెసింగ్ లో లోపం"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "డాక్యుమెంట్ల జాబితా విశ్లేషణ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ప్రాసెస్ చేయని డాక్యుమెంట్లు",
+        "label-1" : "డాక్యుమెంట్లు ప్రాసెసింగ్ లో లోపం",
+        "label-2" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు"
+      },
+      "TOKENIZATION" : {
+        "description" : "డాక్యుమెంట్ల టోకనైజేషన్"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "స్వీకరించిన డాక్యుమెంట్లు",
+        "dataset-1-label" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు",
+        "dataset-2-label" : "లోపం వచ్చిన డాక్యుమెంట్లు",
+        "dataset-3-label" : "విస్మరించబడిన డాక్యుమెంట్లు"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ప్రాసెస్ చేయని డాక్యుమెంట్లు",
+        "label-1" : "డాక్యుమెంట్లు ప్రాసెసింగ్ లో లోపం",
+        "label-2" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు"
+      },
+      "EMBEDDING" : {
+        "description" : "సెమాంటిక్ విన్యాసం (గ్రాగ్ కోసం ఎంబెడ్డింగ్)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "ప్రాసెస్ చేసిన టోకెన్లు",
+        "dataset-1-label" : "టోకెన్లు ప్రాసెసింగ్ లో లోపం"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ప్రాసెస్ చేయని డాక్యుమెంట్లు",
+        "label-1" : "డాక్యుమెంట్లు ప్రాసెసింగ్ లో లోపం",
+        "label-2" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "స్వీకరించిన డాక్యుమెంట్లు",
+        "dataset-1-label" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు",
+        "dataset-2-label" : "లోపం వచ్చిన డాక్యుమెంట్లు",
+        "dataset-3-label" : "విస్మరించబడిన డాక్యుమెంట్లు"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ఎంటిటీ/సంబంధాలు/ఈవెంట్ల విన్యాసం (గ్రాఫ్‌రాగ్)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ప్రాసెస్ చేయని డాక్యుమెంట్లు",
+        "label-1" : "డాక్యుమెంట్లు ప్రాసెసింగ్ లో లోపం",
+        "label-2" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "ప్రాసెస్ చేసిన టోకెన్లు",
+        "dataset-1-label" : "టోకెన్లు ప్రాసెసింగ్ లో లోపం"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "స్వీకరించిన డాక్యుమెంట్లు",
+        "dataset-1-label" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు",
+        "dataset-2-label" : "లోపం వచ్చిన డాక్యుమెంట్లు",
+        "dataset-3-label" : "విస్మరించబడిన డాక్యుమెంట్లు"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "స్వీకరించిన డాక్యుమెంట్లు",
+        "dataset-1-label" : "ప్రాసెస్ చేసిన డాక్యుమెంట్లు",
+        "dataset-2-label" : "లోపం వచ్చిన డాక్యుమెంట్లు",
+        "dataset-3-label" : "విస్మరించబడిన డాక్యుమెంట్లు"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "సరి!",
         "detail" : "కార్యాచరణ విజయవంతంగా పూర్తయింది"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "చాట్ స్ట్రీమింగ్ సమయంలో లోపం",
+        "detail" : "సర్వర్ లోపం: class org.neo4j.driver.internal.value.StringValue ను class java.lang.String గా మార్చలేం (org.neo4j.driver.internal.value.StringValue అనేది unnamed module లో ఉంది; java.lang.String అనేది module java.base లో ఉంది)"
+      },
+      "OK" : {
+        "summary" : "విజయవంతంగా పరిరక్షించబడింది",
+        "detail" : "అప్‌డేట్ ఆపరేషన్ విజయవంతంగా పూర్తయింది"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama సర్వర్‌తో కమ్యూనికేషన్ లో లోపం",
+        "detail" : "రిమోట్ సిస్టమ్‌తో కమ్యూనికేట్ చేయడంలో నెట్‌వర్క్ లోపం\n కంటెంట్ యాక్సెస్ చేయడంలోలోపం మరియు మోడల్స్ జాబితా ప్రాసెసింగ్ లోపం url:http://localhost:11434/api/tags తో పని చేయడంలో లోపం"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "పూర్తయింది"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ఈ విభాగంలో ఉపయోగించాలనుకుంటే సెటప్ ఏరియాలో graphrag కాన్ఫిగర్ చేయండి"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag సెట్టింగ్స్"
+      },
+      "button-help" : {
+        "label" : "graphrag కోసం సమాచార ఎక్స్ట్రాక్షన్ సెటప్ చేయడానికి ఇక్కడ క్లిక్ చేయండి (ఇప్పటికీ కాన్ఫిగర్ కాలేదు)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "కాన్ఫిగరేషన్ జోడించండి"
       }
     }
   }

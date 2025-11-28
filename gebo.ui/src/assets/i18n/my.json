@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag များလုပ်ဆောင်ရန် ဖိုင်ရွေးချယ်ခြင်း စံနှုန်းများ",
         "help" : "Graphrag အတွက် အချက်အလက်ထုတ်ယူမှု ပိုက်လိုင်းသို့ ပေးပို့ရန် ဖိုင်ပေါ်တွင် စံနှုန်းများ တည်းဖြတ်ပါ၊ ဖိုင်နာမည်နှင့်စံနှုန်း တစ်ခုအနည်းဆုံး/ဖိုင်အမျိုးအစား/ဖိုင်အရွယ်အစားအမြင့်ဆုံး byte အရေအတွက်/နောက်ဆုံးပြင်ဆင်ခဲ့သည့်နေ့အရက် နည်းဆုံးကို ရွေးချယ်ပါ"
+      },
+      "extractionFormat" : {
+        "label" : "ထုတ်ယူမှုဖော်မတ်",
+        "help" : "llms ၃၀b မှနည်းသောအတွက် CSV ဖော်မတ်သုံးပါ၊ မျိုးကြီး frontier မော်ဒယ်များအတွက် JSON ဖော်မတ်သုံးပါ",
+        "placeholder" : "llms ၃၀b မှနည်းသောအတွက် CSV ဖော်မတ်သုံးပါ၊ မျိုးကြီး frontier မော်ဒယ်များအတွက် JSON ဖော်မတ်သုံးပါ"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "အသံဖြေကြားချက်ရရှိပြီးပါပြီ"
+      },
+      "ScrollUpBtn" : {
+        "help" : "အပေါ်သို့မြှောက်ပါ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "အောက်သို့ဆွဲပါ"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "စာရွက်စာတမ်းများတွေ့ရှိသည်"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "ဤစကားဝိုင်းကိုဖျက်ရန်သေချာပါသလား?",
+        "header" : "စကားဝိုင်းဖျက်ခြင်း"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "ပိတ်ပါ"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'chat with' စာရင်းသို့ စာရွက်စာတမ်းထည့်ပါ"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "လုပ်ငန်းလုပ်ပြီးသောစာရွက်စာတမ်းများ",
         "dataset-2-label" : "အမှားပါသောစာရွက်စာတမ်းများ",
         "dataset-3-label" : "စစ်ထုတ်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "လုပ်ငန်းပြီးစီးထားသော token များ",
+        "dataset-1-label" : "token များလုပ်ငန်းလုပ်ရာတွင် ပြဿနာရှိသည်"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "စာရွက်စာတမ်းစာရင်းကိုဆန်းစစ်နေသည်"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "မသုံးသီသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများ処理တွင် ပြဿနာရှိသည်",
+        "label-2" : "လုပ်ငန်းအောင်မြင်စွာပြီးရှိသော စာရွက်စာတမ်းများ"
+      },
+      "TOKENIZATION" : {
+        "description" : "စာရွက်စာတမ်းများ tokenize လုပ်ခြင်း"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "လာရောက်စာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းပြီးစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "ပြဿနာရှိသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "အပယ်တင်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "မသုံးသီသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများ処理တွင် ပြဿနာရှိသည်",
+        "label-2" : "လုပ်ငန်းအောင်မြင်စွာပြီးရှိသော စာရွက်စာတမ်းများ"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantics စနစ်အစားထိုးခြင်း (semantic rag အတွက် embedding)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "လုပ်ငန်းပြီးစီးထားသော token များ",
+        "dataset-1-label" : "token များလုပ်ငန်းလုပ်ရာတွင် ပြဿနာရှိသည်"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "မသုံးသီသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများ処理တွင် ပြဿနာရှိသည်",
+        "label-2" : "လုပ်ငန်းအောင်မြင်စွာပြီးရှိသော စာရွက်စာတမ်းများ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "လာရောက်စာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းပြီးစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "ပြဿနာရှိသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "အပယ်တင်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entity/Relation/Event index လုပ်ခြင်း (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "မသုံးသီသောစာရွက်စာတမ်းများ",
+        "label-1" : "စာရွက်စာတမ်းများ処理တွင် ပြဿနာရှိသည်",
+        "label-2" : "လုပ်ငန်းအောင်မြင်စွာပြီးရှိသော စာရွက်စာတမ်းများ"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "လုပ်ငန်းပြီးစီးထားသော token များ",
+        "dataset-1-label" : "token များလုပ်ငန်းလုပ်ရာတွင် ပြဿနာရှိသည်"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "လာရောက်စာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းပြီးစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "ပြဿနာရှိသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "အပယ်တင်ထားသောစာရွက်စာတမ်းများ"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "လာရောက်စာရွက်စာတမ်းများ",
+        "dataset-1-label" : "လုပ်ငန်းပြီးစာရွက်စာတမ်းများ",
+        "dataset-2-label" : "ပြဿနာရှိသောစာရွက်စာတမ်းများ",
+        "dataset-3-label" : "အပယ်တင်ထားသောစာရွက်စာတမ်းများ"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "အိုကေ!",
         "detail" : "လုပ်ဆောင်မှုကိုအောင်မြင်စွာ ပြီးမြောက်ပါသည်"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Chat လုပ်ရာတွင် အမှားဖြစ်ပွားသည်",
+        "detail" : "ဆာဗာအမှား: class org.neo4j.driver.internal.value.StringValue ကို class java.lang.String သို့မပြောင်းနိုင်ပါ (org.neo4j.driver.internal.value.StringValue သည် unnamed module of loader 'app' တွင်ရှိသည်; java.lang.String သည် module java.base of loader 'bootstrap' တွင်ရှိသည်)"
+      },
+      "OK" : {
+        "summary" : "အောင်မြင်စွာသိမ်းဆည်းပြီးပါပြီ",
+        "detail" : "သတင်းအချက်အလက်ကို အောင်မြင်စွာ update ပြုလုပ်ပြီးပါပြီ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama server နှင့် ဆက်သွယ်ရာတွင် အမှားရှိသည်",
+        "detail" : "အဝေးရှိစနစ်ထံသို့ ချိတ်ဆက်ရာတွင် နက်ဝတ်အမှား \n မော်ဒယ်စာရင်းကို ဝင်ရောက်မည် URL တွင် အဆင်မပြေhttp://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "ပြီးဆုံးပါပြီ"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ဤဆွဲနယ်တွင် အသုံးပြုလိုပါက setup area အတွင်း graphrag ကိုပြင်ဆင်ပါ"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "graphrag ဆက်တင်များ"
+      },
+      "button-help" : {
+        "label" : "graphrag အတွက် သတင်းအချက်အလက်ထုတ်ယူမှုကို ပြင်ဆင်ရန်ဤနေရာကိုနှိပ်ပါ (လက်ရှိတွင်မပြင်ဆင်ရသေးပါ)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "ပြင်ဆင်မှုထည့်ပါ"
       }
     }
   }

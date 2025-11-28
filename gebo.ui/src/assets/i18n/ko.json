@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag 처리를 위한 파일 선택 기준",
         "help" : "정보 추출 파이프라인으로 전송할 파일의 기준을 편집하세요. 파일 이름과 기준 그리고/또는 파일 유형, 파일 크기(바이트 단위) 최대값, 마지막 수정 후 일수를 최소 하나 이상 선택하세요."
+      },
+      "extractionFormat" : {
+        "label" : "추출 형식",
+        "help" : "30b 파라미터 미만의 llms에는 CSV 형식 사용, 대형 프런티어 모델에는 JSON 형식 사용",
+        "placeholder" : "30b 파라미터 미만의 llms에는 CSV 형식 사용, 대형 프런티어 모델에는 JSON 형식 사용"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "음성 답변이 도착했습니다"
+      },
+      "ScrollUpBtn" : {
+        "help" : "위로 스크롤"
+      },
+      "ScrollDownBtn" : {
+        "help" : "아래로 스크롤"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "문서 찾음"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "이 채팅을 삭제하시겠습니까?",
+        "header" : "채팅 삭제 작업"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "닫기"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'채팅 대상' 목록에 문서 추가"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "처리된 문서",
         "dataset-2-label" : "오류 문서",
         "dataset-3-label" : "폐기된 문서"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "처리된 토큰",
+        "dataset-1-label" : "토큰 처리 오류"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "문서 목록 분석 중"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "미처리 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서"
+      },
+      "TOKENIZATION" : {
+        "description" : "문서 토큰화"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "미처리 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서"
+      },
+      "EMBEDDING" : {
+        "description" : "의미 기반 인덱싱 (시맨틱 rag 임베딩)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "처리된 토큰",
+        "dataset-1-label" : "토큰 처리 오류"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "미처리 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "엔터티/관계/이벤트 인덱싱 (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "미처리 문서",
+        "label-1" : "문서 처리 오류",
+        "label-2" : "처리된 문서"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "처리된 토큰",
+        "dataset-1-label" : "토큰 처리 오류"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "수신된 문서",
+        "dataset-1-label" : "처리된 문서",
+        "dataset-2-label" : "오류 문서",
+        "dataset-3-label" : "폐기된 문서"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "완료!",
         "detail" : "작업이 성공적으로 완료되었습니다"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "채팅 응답 스트리밍 중 오류 발생",
+        "detail" : "서버 오류: org.neo4j.driver.internal.value.StringValue 클래스를 java.lang.String 클래스로 캐스팅할 수 없습니다 (org.neo4j.driver.internal.value.StringValue는 'app'의 이름 없는 모듈에 있고, java.lang.String은 'bootstrap'의 java.base 모듈에 있습니다)"
+      },
+      "OK" : {
+        "summary" : "성공적으로 저장됨",
+        "detail" : "업데이트 작업이 성공적으로 완료되었습니다"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama 서버와 통신 중 오류",
+        "detail" : "원격 시스템에 접속하여 콘텐츠에 접근하는 동안 네트워크 오류 발생\n모델 목록 URL 작업 오류: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "완료됨"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "이 섹션에서 사용하려면 설정 영역에서 graphrag을 구성하세요"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag 설정"
+      },
+      "button-help" : {
+        "label" : "여기를 클릭하여 graphrag 정보 추출을 구성하세요 (현재 미설정)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "구성 추가"
       }
     }
   }

@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Pamantayan sa pagpili ng file para sa graphrag processing",
         "help" : "I-edit ang mga pamantayan sa file na ipapadala sa information extraction pipeline para sa graphrag, pumili ng kahit isang pangalan ng file at pamantayan at/o uri ng file at/o pinakamataas na bilang ng bytes ng laki ng file at/o edad ng pinakahuling pagbabago sa mga araw"
+      },
+      "extractionFormat" : {
+        "label" : "Paraan ng pagkuha",
+        "help" : "Gamitin ang format na CSV para sa llms na mas mababa sa 30b params, JSON para sa malalaking frontier na modelo",
+        "placeholder" : "Gamitin ang format na CSV para sa llms na mas mababa sa 30b params, JSON para sa malalaking frontier na modelo"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Natanggap ang sagot na boses"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Umakyat"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Bumaba"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nakita ang mga dokumento"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Sigurado ka bang gusto mong tanggalin ang chat na ito?",
+        "header" : "Aksyon sa pagtanggal ng chat"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Isara"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Magdagdag ng dokumento sa 'chat with' na listahan"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Na-prosesong dokumento",
         "dataset-2-label" : "Mga dokumentong may error",
         "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagka-error sa pagproseso ng token"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sinusuri ang listahan ng mga dokumento"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenisasyon ng mga dokumento"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantic indexing (pag-embed para sa semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagka-error sa pagproseso ng token"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Pag-index ng Entity/Relasyon/Kaganapan (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagka-error sa pagproseso ng token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Matagumpay na naisagawa ang operasyon"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Nag-error habang nag-stream ng sagot sa chat",
+        "detail" : "Error sa server: class org.neo4j.driver.internal.value.StringValue cannot be cast to class java.lang.String (org.neo4j.driver.internal.value.StringValue ay nasa unnamed module ng loader 'app'; java.lang.String ay nasa module java.base ng loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Matagumpay na na-save",
+        "detail" : "Matagumpay na natapos ang update na operasyon"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Nagka-error sa pakikipag-ugnayan sa Ollama server",
+        "detail" : "Error sa network habang kumokonekta sa remote system upang kunin ang nilalaman\n listahan ng mga modelo Nagka-error habang ginagamit ang url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Tapos na"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "I-configure ang graphrag sa setup area kung gusto mong gamitin ito sa seksyong ito"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Mga seting ng Graphrag"
+      },
+      "button-help" : {
+        "label" : "I-click dito para i-configure ang pagkuha ng impormasyon para sa graphrag (hindi pa naka-configure)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Magdagdag ng configuration"
       }
     }
   }

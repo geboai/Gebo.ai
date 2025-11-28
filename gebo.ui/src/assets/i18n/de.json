@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kriterien für Dateiauswahl bei Graphrag-Verarbeitung",
         "help" : "Bearbeiten Sie die Kriterien für Dateien, die an die Informations-Extraktionspipeline für Graphrag gesendet werden. Wählen Sie mindestens einen Dateinamen und ein Kriterium und/oder einen Dateityp und/oder die maximale Dateigröße in Byte und/oder das Änderungsalter in Tagen aus."
+      },
+      "extractionFormat" : {
+        "label" : "Extraktionsformat",
+        "help" : "Verwenden Sie das CSV-Format für LLMs mit weniger als 30b Parametern, JSON für große Frontier-Modelle",
+        "placeholder" : "Verwenden Sie das CSV-Format für LLMs mit weniger als 30b Parametern, JSON für große Frontier-Modelle"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Sprachantwort empfangen"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Nach oben scrollen"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Nach unten scrollen"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Gefundene Dokumente"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Sind Sie sicher, dass Sie diesen Chat löschen möchten?",
+        "header" : "Chat löschen"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Schließen"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Dokument zur 'Mit Chat' Liste hinzufügen "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Verarbeitete Dokumente",
         "dataset-2-label" : "Fehlerhafte Dokumente",
         "dataset-3-label" : "Ausgeschlossene Dokumente"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Verarbeitete Tokens",
+        "dataset-1-label" : "Fehler beim Verarbeiten von Tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Dokumentenliste wird analysiert"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten von Dokumenten",
+        "label-2" : "Verarbeitete Dokumente"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenisierung von Dokumenten"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Verworfene Dokumente"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten von Dokumenten",
+        "label-2" : "Verarbeitete Dokumente"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantisches Indexieren (Embedding für semantische RAG)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Verarbeitete Tokens",
+        "dataset-1-label" : "Fehler beim Verarbeiten von Tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten von Dokumenten",
+        "label-2" : "Verarbeitete Dokumente"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Verworfene Dokumente"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexierung von Entitäten/Beziehungen/Ereignissen (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nicht behandelte Dokumente",
+        "label-1" : "Fehler beim Verarbeiten von Dokumenten",
+        "label-2" : "Verarbeitete Dokumente"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Verarbeitete Tokens",
+        "dataset-1-label" : "Fehler beim Verarbeiten von Tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Verworfene Dokumente"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Empfangene Dokumente",
+        "dataset-1-label" : "Verarbeitete Dokumente",
+        "dataset-2-label" : "Fehlerhafte Dokumente",
+        "dataset-3-label" : "Verworfene Dokumente"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Vorgang erfolgreich abgeschlossen"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Fehler beim Streamen der Chat-Antwort",
+        "detail" : "Serverfehler: class org.neo4j.driver.internal.value.StringValue kann nicht in class java.lang.String umgewandelt werden (org.neo4j.driver.internal.value.StringValue befindet sich im unbenannten Modul des Loaders 'app'; java.lang.String befindet sich im Modul java.base des Loaders 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Erfolgreich gespeichert",
+        "detail" : "Aktualisierung erfolgreich durchgeführt"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Fehler bei der Kommunikation mit Ollama-Server",
+        "detail" : "Netzwerkfehler bei der Kommunikation mit dem entfernten System beim Zugriff auf Inhalt\n Modellsammlung Fehler beim Arbeiten mit URL:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Abgeschlossen"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurieren Sie Graphrag im Setup-Bereich, wenn Sie es in diesem Abschnitt verwenden möchten"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-Einstellungen"
+      },
+      "button-help" : {
+        "label" : "Hier klicken, um die Informations-Extraktion für Graphrag zu konfigurieren (aktuell nicht konfiguriert)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Konfiguration hinzufügen"
       }
     }
   }

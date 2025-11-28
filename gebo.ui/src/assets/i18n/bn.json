@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag প্রক্রিয়ার জন্য ফাইল নির্বাচন মানদণ্ড",
         "help" : "Graphrag-এর জন্য তথ্য নির্গমন পাইপলাইনে পাঠানোর জন্য ফাইলের মানদণ্ড সম্পাদনা করুন, কমপক্ষে একটি ফাইল নাম ও মানদণ্ড এবং/অথবা ফাইলের ধরন এবং/অথবা ফাইল সাইজের সর্বোচ্চ বাইট সংখ্যা এবং/অথবা সর্বশেষ সংশোধনের দিনের সংখ্যা নির্বাচন করুন"
+      },
+      "extractionFormat" : {
+        "label" : "এক্সট্রাকশন ফরম্যাট",
+        "help" : "৩০ বিলিয়ন প্যারামের নিচের llms-এর জন্য CSV ফরম্যাট ব্যবহার করুন, বৃহৎ ফ্রন্টিয়ার মডেলগুলোর জন্য JSON ফরম্যাট ব্যবহার করুন",
+        "placeholder" : "৩০ বিলিয়ন প্যারামের নিচের llms-এর জন্য CSV ফরম্যাট ব্যবহার করুন, বৃহৎ ফ্রন্টিয়ার মডেলগুলোর জন্য JSON ফরম্যাট ব্যবহার করুন"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "ভয়েস উত্তর পাওয়া গেছে"
+      },
+      "ScrollUpBtn" : {
+        "help" : "উপরে স্ক্রল করুন"
+      },
+      "ScrollDownBtn" : {
+        "help" : "নিচে স্ক্রল করুন"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ডকুমেন্ট পাওয়া গেছে"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "আপনি কি নিশ্চিত যে আপনি এই চ্যাটটি মুছে ফেলতে চান?",
+        "header" : "চ্যাট মুছে ফেলার অ্যাকশন"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "বন্ধ করুন"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'চ্যাট উইথ' তালিকায় ডকুমেন্ট যোগ করুন "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "প্রসেস করা নথি",
         "dataset-2-label" : "ত্রুটিপূর্ণ নথি",
         "dataset-3-label" : "বাতিল নথি"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "প্রসেস করা টোকেন",
+        "dataset-1-label" : "টোকেন প্রসেস করতে সমস্যা"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ডকুমেন্ট তালিকা বিশ্লেষণ করা হচ্ছে"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "বাছাই না করা ডকুমেন্ট",
+        "label-1" : "ডকুমেন্ট প্রসেসিংয়ে সমস্যা",
+        "label-2" : "প্রসেস করা ডকুমেন্ট"
+      },
+      "TOKENIZATION" : {
+        "description" : "ডকুমেন্ট টোকেনাইজেশন"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "গৃহীত ডকুমেন্ট",
+        "dataset-1-label" : "প্রসেস করা ডকুমেন্ট",
+        "dataset-2-label" : "সমস্যাযুক্ত ডকুমেন্ট",
+        "dataset-3-label" : "বাতিল ডকুমেন্ট"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "বাছাই না করা ডকুমেন্ট",
+        "label-1" : "ডকুমেন্ট প্রসেসিংয়ে সমস্যা",
+        "label-2" : "প্রসেস করা ডকুমেন্ট"
+      },
+      "EMBEDDING" : {
+        "description" : "সেমান্টিক ইনডেক্সিং (সেমান্টিক র‍্যাগ-এর জন্য এম্বেডিং)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "প্রসেস করা টোকেন",
+        "dataset-1-label" : "টোকেন প্রসেস করতে সমস্যা"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "বাছাই না করা ডকুমেন্ট",
+        "label-1" : "ডকুমেন্ট প্রসেসিংয়ে সমস্যা",
+        "label-2" : "প্রসেস করা ডকুমেন্ট"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "গৃহীত ডকুমেন্ট",
+        "dataset-1-label" : "প্রসেস করা ডকুমেন্ট",
+        "dataset-2-label" : "সমস্যাযুক্ত ডকুমেন্ট",
+        "dataset-3-label" : "বাতিল ডকুমেন্ট"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "এনটিটি/রিলেশন/ইভেন্ট ইনডেক্সিং (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "বাছাই না করা ডকুমেন্ট",
+        "label-1" : "ডকুমেন্ট প্রসেসিংয়ে সমস্যা",
+        "label-2" : "প্রসেস করা ডকুমেন্ট"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "প্রসেস করা টোকেন",
+        "dataset-1-label" : "টোকেন প্রসেস করতে সমস্যা"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "গৃহীত ডকুমেন্ট",
+        "dataset-1-label" : "প্রসেস করা ডকুমেন্ট",
+        "dataset-2-label" : "সমস্যাযুক্ত ডকুমেন্ট",
+        "dataset-3-label" : "বাতিল ডকুমেন্ট"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "গৃহীত ডকুমেন্ট",
+        "dataset-1-label" : "প্রসেস করা ডকুমেন্ট",
+        "dataset-2-label" : "সমস্যাযুক্ত ডকুমেন্ট",
+        "dataset-3-label" : "বাতিল ডকুমেন্ট"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ঠিক আছে!",
         "detail" : "অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "চ্যাট স্ট্রিমিংয়ে সমস্যা হয়েছে",
+        "detail" : "সার্ভার এরর: class org.neo4j.driver.internal.value.StringValue কে class java.lang.String-এ রূপান্তর করা যায় না (org.neo4j.driver.internal.value.StringValue 'app' লোডারের নামবিহীন মডিউলে রয়েছে; java.lang.String 'bootstrap' লোডারের module java.base-এ রয়েছে)"
+      },
+      "OK" : {
+        "summary" : "সফলভাবে সংরক্ষিত হয়েছে",
+        "detail" : "আপডেট অপারেশন সফলভাবে সম্পন্ন হয়েছে"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama সার্ভারের সঙ্গে সংযোগে সমস্যা",
+        "detail" : "রিমোট সিস্টেমের সাথে সংযুক্তিতে নেটওয়ার্ক সমস্যা\n মডেল তালিকা অ্যাক্সেসের সময় ইউআরএলের সাথে সমস্যা: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "সম্পন্ন হয়েছে"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "আপনি যদি এই সেকশনে ব্যবহার করতে চান, তাহলে সেটআপ এলাকায় graphrag কনফিগার করুন"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag সেটিংস"
+      },
+      "button-help" : {
+        "label" : "Graphrag-এর জন্য ইনফরমেশন এক্সট্রাকশন কনফিগার করতে এখানে ক্লিক করুন (এখনও কনফিগার করা হয়নি)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "কনফিগারেশন যোগ করুন"
       }
     }
   }

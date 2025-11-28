@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag ਪ੍ਰੋਸੈਸਿੰਗ ਲਈ ਫਾਇਲ ਚੋਣ ਮਾਪਦੰਡ",
         "help" : "ਜਾਣਕਾਰੀ ਐਕਸਟ੍ਰੈਕਸ਼ਨ ਪਾਈਪਲਾਈਨ ਲਈ ਭੇਜਣ ਲਈ ਫਾਇਲਾਂ ਦੇ ਮਾਪਦੰਡ ਸੋਧੋ: ਘੱਟੋ-ਘੱਟ ਫਾਇਲ ਨਾਂ ਤੇ ਮਾਪਦੰਡ, ਜਾਂ ਫਾਇਲ ਕਿਸਮ, ਜਾਂ ਫਾਇਲ ਦਾ ਵੱਧ ਤੋਂ ਵੱਧ ਆਕਾਰ (bytes) ਅਤੇ/ਜਾਂ ਆਖ਼ਰੀ ਸੋਧ ਦਿਨਾਂ ਵਿਚ"
+      },
+      "extractionFormat" : {
+        "label" : "ਐਕਸਟਰੈਕਸ਼ਨ ਫੌਰਮੈਟ",
+        "help" : "LLMs ਲਈ 30b ਪੈਰਾਮੀਟਰਾਂ ਤੋਂ ਘੱਟ ਲਈ CSV ਫੌਰਮੈਟ ਵਰਤੋ, ਵੱਡੇ ਫ੍ਰੰਟੀਅਰ ਮਾਡਲਾਂ ਲਈ JSON ਚੁਣੋ",
+        "placeholder" : "LLMs ਲਈ 30b ਪੈਰਾਮੀਟਰਾਂ ਤੋਂ ਘੱਟ ਲਈ CSV ਫੌਰਮੈਟ ਵਰਤੋ, ਵੱਡੇ ਫ੍ਰੰਟੀਅਰ ਮਾਡਲਾਂ ਲਈ JSON ਚੁਣੋ"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "ਬੋਲੀ ਜਵਾਬ ਮਿਲ ਗਿਆ"
+      },
+      "ScrollUpBtn" : {
+        "help" : "ਉপর ਸਕ੍ਰੋਲ ਕਰੋ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "ਥੱਲੇ ਸਕ੍ਰੋਲ ਕਰੋ"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ਮਿਲੇ ਹੋਏ ਡੌਕ"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "ਕੀ ਤੁਸੀਂ ਇਹ ਗੱਲਬਾਤ ਮਿਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?",
+        "header" : "ਚੈਟ ਮਿਟਾਉਣ ਦੀ ਕਾਰਵਾਈ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "ਬੰਦ ਕਰੋ"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'ਚੈਟ ਨਾਲ' ਲਿਸਟ ਵਿੱਚ ਡੌਕਯੂਮੈਂਟ ਸ਼ਾਮਿਲ ਕਰੋ "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "ਪ੍ਰੋਸੈਸ ਕੀਤੇ ਦਸਤਾਵੇਜ਼",
         "dataset-2-label" : "ਗਲਤੀ ਵਾਲੇ ਦਸਤਾਵੇਜ਼",
         "dataset-3-label" : "ਰੱਦ ਕੀਤੇ ਦਸਤਾਵੇਜ਼"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਟੋਕਨ",
+        "dataset-1-label" : "ਟੋਕਨ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ਡੌਕਯੂਮੈਂਟ ਲਿਸਟ ਦਾ ਵਿਸ਼ਲੇਸ਼ਣ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ਅਣਹੱਲੇ ਡੌਕ",
+        "label-1" : "ਡੌਕ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਵਿੱਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ"
+      },
+      "TOKENIZATION" : {
+        "description" : "ਡੌਕਯੂਮੈਂਟ ਟੋਕਨਾਈਜ਼ੇਸ਼ਨ"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "ਮਿਲੇ ਹੋਏ ਡੌਕ",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ",
+        "dataset-2-label" : "ਗਲਤ ਡੌਕ",
+        "dataset-3-label" : "ਅਣਗੌਰ ਕੀਤੇ ਡੌਕ"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ਅਣਹੱਲੇ ਡੌਕ",
+        "label-1" : "ਡੌਕ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਵਿੱਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ"
+      },
+      "EMBEDDING" : {
+        "description" : "ਸੈਮਾਂਟਿਕ ਇੰਡੈਕਸਿੰਗ (ਸੈਮਾਂਟਿਕ ਰੈੱਗ ਲਈ ਐਂਬੈੱਡਿੰਗ)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਟੋਕਨ",
+        "dataset-1-label" : "ਟੋਕਨ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ਅਣਹੱਲੇ ਡੌਕ",
+        "label-1" : "ਡੌਕ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਵਿੱਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "ਮਿਲੇ ਹੋਏ ਡੌਕ",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ",
+        "dataset-2-label" : "ਗਲਤ ਡੌਕ",
+        "dataset-3-label" : "ਅਣਗੌਰ ਕੀਤੇ ਡੌਕ"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ਇਕਾਈ/ਸੰਬੰਧ/ਇਵੈਂਟ ਇੰਡੈਕਸਿੰਗ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ਅਣਹੱਲੇ ਡੌਕ",
+        "label-1" : "ਡੌਕ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਵਿੱਚ ਗਲਤੀ",
+        "label-2" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਟੋਕਨ",
+        "dataset-1-label" : "ਟੋਕਨ ਪ੍ਰੋਸੈੱਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ਮਿਲੇ ਹੋਏ ਡੌਕ",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ",
+        "dataset-2-label" : "ਗਲਤ ਡੌਕ",
+        "dataset-3-label" : "ਅਣਗੌਰ ਕੀਤੇ ਡੌਕ"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ਮਿਲੇ ਹੋਏ ਡੌਕ",
+        "dataset-1-label" : "ਪ੍ਰੋਸੈੱਸ ਹੋਏ ਡੌਕ",
+        "dataset-2-label" : "ਗਲਤ ਡੌਕ",
+        "dataset-3-label" : "ਅਣਗੌਰ ਕੀਤੇ ਡੌਕ"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ਠੀਕ ਹੈ!",
         "detail" : "ਕਾਰਵਾਈ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰੀ ਹੋ ਗਈ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "ਚੈਟ ਜਵਾਬ ਸਟਰੀਮ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ",
+        "detail" : "ਸਰਵਰ ਗਲਤੀ: class org.neo4j.driver.internal.value.StringValue ਨੂੰ java.lang.String ਵਿੱਚ ਪਰਿਵਰਤਨ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ (org.neo4j.driver.internal.value.StringValue 'app' ਲੋਡਰ ਵਿੱਚ ਹੈ; java.lang.String 'bootstrap' ਲੋਡਰ ਵਿੱਚ ਹੈ)"
+      },
+      "OK" : {
+        "summary" : "ਸਫਲਤਾ ਨਾਲ ਸੇਵ ਹੋਇਆ",
+        "detail" : "ਅਪਡੇਟ ਓਪਰੇਸ਼ਨ ਸਫਲਤਾਪੂਰਵਕ ਪੂਰਾ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama ਸਰਵਰ ਨਾਲ ਸੰਚਾਰ ਦੌਰਾਨ ਗਲਤੀ",
+        "detail" : "ਦੂਰੇ ਸਿਸਟਮ ਨਾਲ ਸੰਚਾਰ ਕਰਦੇ ਸਮੇਂ ਨੈਟਵਰਕ ਗਲਤੀ\nਮਾਡਲ ਲਿਸਟ ਲਈ URL ਨਾਲ ਕੰਮ ਕਰਦੇ ਸਮੇਂ ਗਲਤੀ: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "ਪੂਰਾ ਹੋ ਗਿਆ"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ਜੇ ਤੁਸੀਂ ਇਸ ਭਾਗ ਵਿੱਚ ਵਰਤਣਾ ਚਾਹੁੰਦੇ ਹੋ, ਤਾਂ ਸੈਟਅੱਪ ਖੇਤਰ ਵਿੱਚ graphrag ਨੂੰ ਸੰਰਚਿਤ ਕਰੋ"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag ਸੈਟਿੰਗਜ਼"
+      },
+      "button-help" : {
+        "label" : "graphrag ਲਈ ਜਾਣਕਾਰੀ ਐਕਸਟਰੈਕਸ਼ਨ ਸੰਰਚਿਤ ਕਰਨ ਲਈ ਇੱਥੇ ਕਲਿੱਕ ਕਰੋ (ਹੁਣ ਤੱਕ ਸੰਰਚਿਤ ਨਹੀਂ ਹੈ)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "ਸੰਰਚਨਾ ਸ਼ਾਮਿਲ ਕਰੋ"
       }
     }
   }

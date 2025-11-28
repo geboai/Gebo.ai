@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Tiedostojen valintaperusteet graphrag-käsittelyyn",
         "help" : "Muokkaa kriteereitä, joiden perusteella tiedosto lähetetään tiedonpoimintaputkeen graphragille. Valitse vähintään tiedostonimi ja valintaehto ja/tai tiedostotyyppi ja/tai tiedoston enimmäiskoko sekä/tai tiedoston viimeisen muutoksen ikä (päivinä)"
+      },
+      "extractionFormat" : {
+        "label" : "Ulosmuodon tyyppi",
+        "help" : "Käytä CSV-muotoa llm:t alle 30b param, JSON-muoto suurille frontier-malleille",
+        "placeholder" : "Käytä CSV-muotoa llm:t alle 30b param, JSON-muoto suurille frontier-malleille"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Äänivastaus vastaanotettu"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Selaa ylös"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Selaa alas"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Löydetyt dokumentit"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Oletko varma, että haluat poistaa tämän keskustelun?",
+        "header" : "Poista keskustelu"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Sulje"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Lisää dokumentti 'keskustele'-listalle "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Käsitellyt asiakirjat",
         "dataset-2-label" : "Virheelliset asiakirjat",
         "dataset-3-label" : "Hylätyt asiakirjat"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Käsitellyt tokenit",
+        "dataset-1-label" : "Virhe tokenien käsittelyssä"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analysoidaan dokumenttilistaa"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Käsittelemättömät dokumentit",
+        "label-1" : "Virhe dokumenttien käsittelyssä",
+        "label-2" : "Käsitellyt dokumentit"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumenttien tokenointi"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut dokumentit",
+        "dataset-1-label" : "Käsitellyt dokumentit",
+        "dataset-2-label" : "Virheelliset dokumentit",
+        "dataset-3-label" : "Hylätyt dokumentit"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Käsittelemättömät dokumentit",
+        "label-1" : "Virhe dokumenttien käsittelyssä",
+        "label-2" : "Käsitellyt dokumentit"
+      },
+      "EMBEDDING" : {
+        "description" : "Semanttinen indeksointi (embedding semanttiselle ragille)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Käsitellyt tokenit",
+        "dataset-1-label" : "Virhe tokenien käsittelyssä"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Käsittelemättömät dokumentit",
+        "label-1" : "Virhe dokumenttien käsittelyssä",
+        "label-2" : "Käsitellyt dokumentit"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut dokumentit",
+        "dataset-1-label" : "Käsitellyt dokumentit",
+        "dataset-2-label" : "Virheelliset dokumentit",
+        "dataset-3-label" : "Hylätyt dokumentit"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entiteetti/Suhteet/Tapahtumat -indeksointi (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Käsittelemättömät dokumentit",
+        "label-1" : "Virhe dokumenttien käsittelyssä",
+        "label-2" : "Käsitellyt dokumentit"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Käsitellyt tokenit",
+        "dataset-1-label" : "Virhe tokenien käsittelyssä"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut dokumentit",
+        "dataset-1-label" : "Käsitellyt dokumentit",
+        "dataset-2-label" : "Virheelliset dokumentit",
+        "dataset-3-label" : "Hylätyt dokumentit"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Vastaanotetut dokumentit",
+        "dataset-1-label" : "Käsitellyt dokumentit",
+        "dataset-2-label" : "Virheelliset dokumentit",
+        "dataset-3-label" : "Hylätyt dokumentit"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Toiminto suoritettu onnistuneesti"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Virhe chat-vastauksen suoratoistossa",
+        "detail" : "Palvelinvirhe: class org.neo4j.driver.internal.value.StringValue ei voida muuntaa luokaksi java.lang.String (org.neo4j.driver.internal.value.StringValue on nimetön moduli lataajalla 'app'; java.lang.String on moduli java.base lataajalla 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Tallennus onnistui",
+        "detail" : "Päivitystoiminto onnistui"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Virhe viestinnässä Ollama-palvelimen kanssa ",
+        "detail" : "Verkkovirhe yhteydessä etäjärjestelmään sisällön hakemiseksi\n mallilista Virhe käsiteltäessä url-osoitetta:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Valmis"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Määritä graphrag asennusalueella, jos haluat käyttää sitä tässä osiossa"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-asetukset"
+      },
+      "button-help" : {
+        "label" : "Klikkaa tästä määrittääksesi tiedon poiminnan graphragille (ei vielä määritetty)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Lisää määritys"
       }
     }
   }

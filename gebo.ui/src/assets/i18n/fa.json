@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "معیارهای انتخاب فایل برای پردازش graphrag",
         "help" : "معیارهای فایل ارسالی به خط استخراج اطلاعات برای graphrag را ویرایش کنید. حداقل یک نام و معیار فایل و/یا نوع فایل و/یا حداکثر حجم فایل بر حسب بایت و/یا سن آخرین ویرایش بر حسب روز را انتخاب نمایید"
+      },
+      "extractionFormat" : {
+        "label" : "فرمت استخراج",
+        "help" : "برای مدل‌های llms با کمتر از ۳۰ میلیارد پارامتر از فرمت CSV استفاده کنید، فرمت JSON ویژه مدل‌های بزرگ frontier",
+        "placeholder" : "برای مدل‌های llms با کمتر از ۳۰ میلیارد پارامتر از فرمت CSV استفاده کنید، فرمت JSON ویژه مدل‌های بزرگ frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "پاسخ صوتی دریافت شد"
+      },
+      "ScrollUpBtn" : {
+        "help" : "اسکرول به بالا"
+      },
+      "ScrollDownBtn" : {
+        "help" : "اسکرول به پایین"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "اسناد پیدا شد"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "آیا مطمئن هستید که می‌خواهید این گفتگو را حذف کنید؟",
+        "header" : "حذف گفتگو"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "بستن"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "افزودن سند به لیست «گفتگو با»"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "اسناد پردازش‌شده",
         "dataset-2-label" : "اسناد دارای خطا",
         "dataset-3-label" : "اسناد کنار گذاشته‌شده"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "توکن‌های پردازش‌شده",
+        "dataset-1-label" : "خطا در پردازش توکن‌ها"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "در حال تحلیل لیست اسناد"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده"
+      },
+      "TOKENIZATION" : {
+        "description" : "توکنیزاسیون اسناد"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد ردشده"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده"
+      },
+      "EMBEDDING" : {
+        "description" : "ایندکس‌گذاری معنایی (embedding برای semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "توکن‌های پردازش‌شده",
+        "dataset-1-label" : "خطا در پردازش توکن‌ها"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد ردشده"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ایندکس‌گذاری نهادها/روابط/رویدادها (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "اسناد بررسی‌نشده",
+        "label-1" : "خطا در پردازش اسناد",
+        "label-2" : "اسناد پردازش‌شده"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "توکن‌های پردازش‌شده",
+        "dataset-1-label" : "خطا در پردازش توکن‌ها"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد ردشده"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "اسناد دریافت‌شده",
+        "dataset-1-label" : "اسناد پردازش‌شده",
+        "dataset-2-label" : "اسناد دارای خطا",
+        "dataset-3-label" : "اسناد ردشده"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "موفق!",
         "detail" : "عملیات با موفقیت انجام شد"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "خطا هنگام استریم پاسخ چت",
+        "detail" : "خطای سرور: کلاس org.neo4j.driver.internal.value.StringValue قابل تبدیل به کلاس java.lang.String نیست (org.neo4j.driver.internal.value.StringValue در unnamed module با loader 'app' است؛ java.lang.String در module java.base با loader 'bootstrap' قرار دارد)"
+      },
+      "OK" : {
+        "summary" : "با موفقیت ذخیره شد",
+        "detail" : "عملیات به‌روزرسانی با موفقیت انجام شد"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "خطا در ارتباط با سرور Ollama ",
+        "detail" : "خطای شبکه هنگام ارتباط با سیستم راه‌دور برای دسترسی به محتوا\n خطا در دریافت لیست مدل‌ها آدرس url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "تکمیل شد"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "برای استفاده از graphrag در این بخش ابتدا آن را در قسمت تنظیمات پیکربندی کنید"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "تنظیمات graphrag"
+      },
+      "button-help" : {
+        "label" : "برای پیکربندی استخراج اطلاعات برای graphrag اینجا کلیک کنید (در حال حاضر پیکربندی نشده)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "افزودن پیکربندی"
       }
     }
   }

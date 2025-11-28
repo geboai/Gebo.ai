@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "ग्राफरॅग प्रक्रिया करण्यासाठी फाइल निवडीची निकषे",
         "help" : "ग्राफरॅगसाठी माहिती काढण्याच्या पाइपलाइनला पाठवण्यासाठी फाइलवरील निकष संपादित करा, कमीत कमी फाइल नाव व निकष आणि/किंवा फाइलचा प्रकार आणि/किंवा किमान फाइल आकार मर्यादा आणि/किंवा मागील अद्ययावत दिनांकाचे दिवस टाका"
+      },
+      "extractionFormat" : {
+        "label" : "एक्स्ट्रॅक्शन स्वरूप",
+        "help" : "30b पेक्षा कमी पॅराम्ससाठी llms साठी CSV स्वरूप वापरा, मोठ्या फ्रंटियर मॉडेल्ससाठी JSON स्वरूप",
+        "placeholder" : "30b पेक्षा कमी पॅराम्ससाठी llms साठी CSV स्वरूप वापरा, मोठ्या फ्रंटियर मॉडेल्ससाठी JSON स्वरूप"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "आवाजातील उत्तर प्राप्त झाले"
+      },
+      "ScrollUpBtn" : {
+        "help" : "वर स्क्रोल करा"
+      },
+      "ScrollDownBtn" : {
+        "help" : "खाली स्क्रोल करा"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "दस्तऐवज सापडले"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "तुम्हाला हे संभाषण हटवायचे आहे याची खात्री आहे का?",
+        "header" : "चॅट हटवा क्रिया"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "बंद करा"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'चॅटसह' यादीत दस्तऐवज जोडा "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "प्रक्रिया झालेली कागदपत्रे",
         "dataset-2-label" : "त्रुटी असलेली कागदपत्रे",
         "dataset-3-label" : "फेकलेली कागदपत्रे"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "प्रक्रिया केलेले टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रक्रिया करताना त्रुटी"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "दस्तऐवजांची यादी विश्लेषित केली जात आहे"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "प्रक्रिया न केलेले दस्तऐवज",
+        "label-1" : "दस्तऐवज प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया केलेले दस्तऐवज"
+      },
+      "TOKENIZATION" : {
+        "description" : "दस्तऐवज टोकनायझेशन"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तऐवज",
+        "dataset-1-label" : "प्रक्रिया केलेले दस्तऐवज",
+        "dataset-2-label" : "त्रुटी दस्तऐवज",
+        "dataset-3-label" : "फेकून दिलेले दस्तऐवज"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "प्रक्रिया न केलेले दस्तऐवज",
+        "label-1" : "दस्तऐवज प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया केलेले दस्तऐवज"
+      },
+      "EMBEDDING" : {
+        "description" : "समानार्थी अनुक्रमणिका (semantic rag साठी embedding)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "प्रक्रिया केलेले टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रक्रिया करताना त्रुटी"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "प्रक्रिया न केलेले दस्तऐवज",
+        "label-1" : "दस्तऐवज प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया केलेले दस्तऐवज"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तऐवज",
+        "dataset-1-label" : "प्रक्रिया केलेले दस्तऐवज",
+        "dataset-2-label" : "त्रुटी दस्तऐवज",
+        "dataset-3-label" : "फेकून दिलेले दस्तऐवज"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "घटक/संबंध/घटना अनुक्रमणिका (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "प्रक्रिया न केलेले दस्तऐवज",
+        "label-1" : "दस्तऐवज प्रक्रिया करताना त्रुटी",
+        "label-2" : "प्रक्रिया केलेले दस्तऐवज"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "प्रक्रिया केलेले टोकन्स",
+        "dataset-1-label" : "टोकन्स प्रक्रिया करताना त्रुटी"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तऐवज",
+        "dataset-1-label" : "प्रक्रिया केलेले दस्तऐवज",
+        "dataset-2-label" : "त्रुटी दस्तऐवज",
+        "dataset-3-label" : "फेकून दिलेले दस्तऐवज"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "प्राप्त दस्तऐवज",
+        "dataset-1-label" : "प्रक्रिया केलेले दस्तऐवज",
+        "dataset-2-label" : "त्रुटी दस्तऐवज",
+        "dataset-3-label" : "फेकून दिलेले दस्तऐवज"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ठीक आहे!",
         "detail" : "क्रिया यशस्वीरित्या पूर्ण झाली"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "चॅट प्रतिसाद प्रवाहित करताना त्रुटी",
+        "detail" : "सर्व्हर त्रुटी: वर्ग org.neo4j.driver.internal.value.StringValue ला java.lang.String या वर्गात रूपांतरित करता येत नाही (org.neo4j.driver.internal.value.StringValue हे 'app' लोडरच्या अनामित मॉड्यूलमध्ये आहे; java.lang.String हे 'bootstrap' लोडरच्या module java.base मध्ये आहे)"
+      },
+      "OK" : {
+        "summary" : "यशस्वीरित्या जतन केले",
+        "detail" : "अपडेट ऑपरेशन यशस्वीरित्या पूर्ण झाले"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama सर्व्हरशी संवाद साधताना त्रुटी",
+        "detail" : "दूरस्थ प्रणालीशी नेटवर्क त्रुटी\n सामग्री ऍक्सेस करताना models यादी संदर्भाने url वर काम करताना त्रुटी: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "पूर्ण झाले"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "या विभागात वापरायचे असल्यास सेटअप क्षेत्रात graphrag संरचित करा"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag सेटिंग्ज"
+      },
+      "button-help" : {
+        "label" : "graphrag साठी माहिती काढण्याचे कॉन्फिगर करण्यासाठी येथे क्लिक करा (सध्या कॉन्फिगर केलेले नाही)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "कॉन्फिगरेशन जोडा"
       }
     }
   }

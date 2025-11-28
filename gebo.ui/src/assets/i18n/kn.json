@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Graphrag ಪ್ರಕ್ರಿಯೆಗೆ ಫೈಲ್ ಆಯ್ಕೆ ಮಾನದಂಡಗಳು",
         "help" : "Graphrag ನ ಮಾಹಿತಿ ಎಕ್ಸ್ಟ್ರಾಕ್ಷನ್ ಪೈಪ್‌ಲೈನ್‌ಗೆ ಕಳುಹಿಸಲಿರುವ ಫೈಲ್ ಮಾಲಿಕೆಗಳನ್ನು ಸಂಪಾದಿಸಿ, ಕನಿಷ್ಠ ಫೈಲ್ ಹೆಸರು ಮತ್ತು ಮಾನದಂಡ ಮತ್ತು/ಅಥವಾ ಫೈಲ್ ಪ್ರಕಾರ ಮತ್ತು/ಅಥವಾ ಫೈಲ್ ಗಾತ್ರದ ಗರಿಷ್ಠ ಬೈಟ್ಸ್ ಮತ್ತು/ಅಥವಾ ಕೊನೆಯ ಬದಲಾವಣೆಯ ದಿನಗಳ ವಯಸ್ಸನ್ನು ಆಯ್ಕೆಮಾಡಿ"
+      },
+      "extractionFormat" : {
+        "label" : "ಪಡೆಯುವ ಸ್ವರೂಪ",
+        "help" : "30b ಪ್ಯാരಾಮ್ಸ್ ಒಳಗಿನ llms ಗಾಗಿ CSV ಸ್ವರೂಪ ಇತ್ಯಾದಿಗಳನ್ನು ಬಳಸಿ,JSON ಸ್ವರೂಪ ದೊಡ್ಡ ಫ್ರಂಟಿಯರ್ ಮಾದರಿಗಳು",
+        "placeholder" : "30b ಪ್ಯಾರಾಮ್ಸ್ ಒಳಗಿನ llms ಗಾಗಿ CSV ಸ್ವರೂಪ ಇತ್ಯಾದಿಗಳನ್ನು ಬಳಸಿ,JSON ಸ್ವರೂಪ ದೊಡ್ಡ ಫ್ರಂಟಿಯರ್ ಮಾದರಿಗಳು"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "ಧ್ವನಿಯಾದ ಉತ್ತರ ಪಡೆದುದಾಗಿದೆ"
+      },
+      "ScrollUpBtn" : {
+        "help" : "ಮೇಲೆ ಸ್ಕ್ರೋಲ್ ಮಾಡಿ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "ಕೆಳಗೆ ಸ್ಕ್ರೋಲ್ ಮಾಡಿ"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ಡಾಕ್ಯುಮೆಂಟ್ಸ್ ಕಂಡುಬಂದಿವೆ"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "ನೀವು ಈ ಚಾಟ್ ಅನ್ನು ಅಳಿಸಲು ಖಚಿತವಾಗಿ ಬಯಸುತ್ತೀರಾ?",
+        "header" : "ಚಾಟ್ ಅಳಿಸುವ ಕ್ರಿಯೆ"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "ಮುಚ್ಚಿ"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'ಚಾಟ್ ವಿತ್' ಪಟ್ಟಿಗೆ ಡಾಕ್ಯುಮೆಂಟ್ ಸೇರಿಸಿ "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "ಸಂಸ್ಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
         "dataset-2-label" : "ದೋಷದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು",
         "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಗಳು"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಟೋಕನ್ಸ್",
+        "dataset-1-label" : "ಟೋಕನ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "ಡಾಕ್ಯುಮೆಂಟ್ ಪಟ್ಟಿಯನ್ನು ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "ಪ್ರಕ್ರಿಯೆ ಆಗದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ",
+        "label-2" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "TOKENIZATION" : {
+        "description" : "ಡಾಕ್ಯುಮೆಂಟ್ಸ್ಗಳ ಟೋಕನೀಕರಣ"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-1-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-2-label" : "ದೋಷ ಇರುವ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "ಪ್ರಕ್ರಿಯೆ ಆಗದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ",
+        "label-2" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "EMBEDDING" : {
+        "description" : "ಅರ್ಥಪೂರ್ಣ ಸೂಚ್ಯಂಕ ನಿರ್ಮಾಣ (ಸಿಮೆಂಟಿಕ್ rag ಗಾಗಿ ಎಂಬೆಡಿಂಗ್)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಟೋಕನ್ಸ್",
+        "dataset-1-label" : "ಟೋಕನ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "ಪ್ರಕ್ರಿಯೆ ಆಗದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ",
+        "label-2" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-1-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-2-label" : "ದೋಷ ಇರುವ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ಏಂಟಿಟಿ/ಸಂಬಂಧಗಳು/ಘಟನೆಗಳ ಸೂಚ್ಯಂಕ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "ಪ್ರಕ್ರಿಯೆ ಆಗದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "label-1" : "ಡಾಕ್ಯುಮೆಂಟ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ",
+        "label-2" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಟೋಕನ್ಸ್",
+        "dataset-1-label" : "ಟೋಕನ್ಸ್ ಪ್ರೊಸೆಸಿಂಗ್ ನಲ್ಲಿ ದೋಷ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-1-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-2-label" : "ದೋಷ ಇರುವ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "ಸ್ವೀಕರಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-1-label" : "ಪ್ರಕ್ರಿಯೆಗೊಂಡ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-2-label" : "ದೋಷ ಇರುವ ಡಾಕ್ಯುಮೆಂಟ್ಸ್",
+        "dataset-3-label" : "ತ್ಯಜಿಸಿದ ಡಾಕ್ಯುಮೆಂಟ್ಸ್"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "ಸರಿ!",
         "detail" : "ಕ್ರಿಯೆ ಯಶಸ್ವಿಯಾಗಿ ಪೂರ್ಣಗೊಂಡಿದೆ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "ಚಾಟ್ ಉತ್ತರ ಸ್ಟ್ರೀಮ್ ಮಾಡುವಲ್ಲಿ ದೋಷ",
+        "detail" : "ಸರ್ವರ್ ದೋಷ: class org.neo4j.driver.internal.value.StringValue ಅನ್ನು class java.lang.String ಗೆ ಪರಿವರ್ತಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ (org.neo4j.driver.internal.value.StringValue 'app' ಲೋಡರ್‌ನ ಅನಾಮಧೇಯ ಮೋಡ್ಯೂಲ್‌ನಲ್ಲಿ ಇದೆ; java.lang.String 'bootstrap' ಲೋಡರ್‌ನ module java.base ನಲ್ಲಿ ಇದೆ)"
+      },
+      "OK" : {
+        "summary" : "ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ",
+        "detail" : "ಅಪ್‌ಡೇಟ್ ಕಾರ್ಯಾಚರಣೆ ಯಶಸ್ವಿಯಾಗಿದೆ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama ಸರ್ವರ್‌ನೊಂದಿಗೆ ಸಂಪರ್ಕ ವಿಫಲವಾಗಿದೆ",
+        "detail" : "ದೂರಸ್ಥ ವ್ಯವಸ್ಥೆಯಲ್ಲಿ ಸಂಪರ್ಕಿಸಲು ನೆಟ್‌ವರ್ಕ್ ದೋಷ\n ಮಾದರಿ ಪಟ್ಟಿ ಅಡಿಲು url ನಲ್ಲಿ ದೋಷ: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "ಪೂರ್ಣಗೊಂಡಿದೆ"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ಈ ವಿಭಾಗದಲ್ಲಿ ಬಳಸಲು ಬಯಸಿದರೆ ಸೆಟಪ್ ಪ್ರದೇಶದಲ್ಲಿ graphrag ಅನ್ನು ಸಂರಚಿಸಿ"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "button-help" : {
+        "label" : "graphrag ಗಾಗಿ ಮಾಹಿತಿಯ ಅವಲೋಕನ ಸಂರಚಿಸಲು ಇಲ್ಲಿ ಕ್ಲಿಕ್ ಮಾಡಿ (ಈಗಕ್ಕೂ ಸಂರಚಿಸಿಲ್ಲ)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "ಸಂರಚನೆ ಸೇರಿಸಿ"
       }
     }
   }

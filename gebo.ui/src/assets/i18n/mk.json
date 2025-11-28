@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Критериуми за избор на датотеки за graphrag обработка",
         "help" : "Уредете ги критериумите за датотеките што ќе се испратат во pipeline за извлекување информации со graphrag, изберете барем име на датотека и критериум и/или тип на датотека и/или максимална големина на датотека во бајти и/или старост на последна измена во денови"
+      },
+      "extractionFormat" : {
+        "label" : "Формат на екстракција",
+        "help" : "Користете CSV формат за llms под 30b параметри, JSON формат за модели со голема граница",
+        "placeholder" : "Користете CSV формат за llms под 30b параметри, JSON формат за модели со голема граница"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Гласовниот одговор е примен"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Помести нагоре"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Помести надолу"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Пронајдени документи"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Дали сте сигурни дека сакате да го избришете овој разговор?",
+        "header" : "Акција за бришење разговор"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Затвори"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Додај документ на листата 'разговарај со'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Обработени документи",
         "dataset-2-label" : "Документи со грешка",
         "dataset-3-label" : "Одбиени документи"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Обработени токени",
+        "dataset-1-label" : "Грешка при обработка на токени"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Анализирање на списокот со документи"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Необработени документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи"
+      },
+      "TOKENIZATION" : {
+        "description" : "Токенизација на документи"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Примени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи со грешка",
+        "dataset-3-label" : "Отфрлени документи"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Необработени документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи"
+      },
+      "EMBEDDING" : {
+        "description" : "Семантичко индексирање (embedding за семантичко rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Обработени токени",
+        "dataset-1-label" : "Грешка при обработка на токени"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Необработени документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Примени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи со грешка",
+        "dataset-3-label" : "Отфрлени документи"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Индексирање на ентитети/релации/настани (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Необработени документи",
+        "label-1" : "Грешка при обработка на документи",
+        "label-2" : "Обработени документи"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Обработени токени",
+        "dataset-1-label" : "Грешка при обработка на токени"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Примени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи со грешка",
+        "dataset-3-label" : "Отфрлени документи"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Примени документи",
+        "dataset-1-label" : "Обработени документи",
+        "dataset-2-label" : "Документи со грешка",
+        "dataset-3-label" : "Отфрлени документи"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Во ред!",
         "detail" : "Операцијата е успешно завршена"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Грешка при стримање на одговорот од разговорот",
+        "detail" : "Серверска грешка: class org.neo4j.driver.internal.value.StringValue не може да се претвори во class java.lang.String (org.neo4j.driver.internal.value.StringValue е во неименуван модул на loader 'app'; java.lang.String е во модул java.base на loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Успешно зачувано",
+        "detail" : "Операцијата за ажурирање е успешно завршена"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Грешка при комуникација со Ollama серверот",
+        "detail" : "Мрежна грешка при комуникација со оддалечениот систем за пристап до содржина\n листа на модели Грешка при работа со url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Завршено"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Конфигурирајте graphrag во делот за поставување ако сакате да го користите овде"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Поставки за graphrag"
+      },
+      "button-help" : {
+        "label" : "Кликнете тука за да конфигурирате екстракција на информации за graphrag (моментално не е конфигурирано)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Додај конфигурација"
       }
     }
   }

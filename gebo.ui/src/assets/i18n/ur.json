@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "گراف ریگ پراسیسنگ کے لیے فائل منتخب کرنے کے معیار",
         "help" : "گراف ریگ کے انفارمیشن استخراج پائپ لائن میں بھیجنے کے لیے فائل کے معیار میں ترمیم کریں، کم از کم فائل کا نام اور معیار، یا فائل کی قسم، یا زیادہ سے زیادہ فائل سائز (بائٹس میں)، یا آخری ترمیم کی عمر (دنوں میں) منتخب کریں"
+      },
+      "extractionFormat" : {
+        "label" : "نکالنے کی شکل",
+        "help" : "llms کے لیے 30b پیرامیٹرز سے کم پر CSV شکل استعمال کریں، بڑے frontier ماڈلز کے لیے JSON فارم",
+        "placeholder" : "llms کے لیے 30b پیرامیٹرز سے کم پر CSV شکل استعمال کریں، بڑے frontier ماڈلز کے لیے JSON فارم"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "آواز کا جواب موصول ہوا"
+      },
+      "ScrollUpBtn" : {
+        "help" : "اوپر سکرول کریں"
+      },
+      "ScrollDownBtn" : {
+        "help" : "نیچے سکرول کریں"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "متعلقہ دستاویزات مل گئیں"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "کیا آپ واقعی اس چیٹ کو حذف کرنا چاہتے ہیں؟",
+        "header" : "چیٹ حذف کرنے کا عمل"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "بند کریں"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "'چیٹ ویڈ' فہرست میں دستاویز شامل کریں"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "عمل شدہ دستاویزات",
         "dataset-2-label" : "خرابی والی دستاویزات",
         "dataset-3-label" : "رد کی گئی دستاویزات"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "پروسیس شدہ ٹوکنز",
+        "dataset-1-label" : "ٹوکنز پروسیس کرتے وقت خرابی"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "دستاویزات کی فہرست کا تجزیہ کیا جا رہا ہے"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "غیر استعمال شدہ دستاویزات",
+        "label-1" : "دستاویزات پروسیس کرتے وقت خرابی",
+        "label-2" : "پروسیس شدہ دستاویزات"
+      },
+      "TOKENIZATION" : {
+        "description" : "دستاویزات کی ٹوکنائزیشن"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "موصول ہونے والی دستاویزات",
+        "dataset-1-label" : "پروسیس شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کردہ دستاویزات"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "غیر استعمال شدہ دستاویزات",
+        "label-1" : "دستاویزات پروسیس کرتے وقت خرابی",
+        "label-2" : "پروسیس شدہ دستاویزات"
+      },
+      "EMBEDDING" : {
+        "description" : "سمینٹک انڈیکسنگ (سمینٹک rag کے لیے ایمبیڈنگ)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "پروسیس شدہ ٹوکنز",
+        "dataset-1-label" : "ٹوکنز پروسیس کرتے وقت خرابی"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "غیر استعمال شدہ دستاویزات",
+        "label-1" : "دستاویزات پروسیس کرتے وقت خرابی",
+        "label-2" : "پروسیس شدہ دستاویزات"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "موصول ہونے والی دستاویزات",
+        "dataset-1-label" : "پروسیس شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کردہ دستاویزات"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ایونٹی/ریلیشنز/ایونٹس انڈیکسنگ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "غیر استعمال شدہ دستاویزات",
+        "label-1" : "دستاویزات پروسیس کرتے وقت خرابی",
+        "label-2" : "پروسیس شدہ دستاویزات"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "پروسیس شدہ ٹوکنز",
+        "dataset-1-label" : "ٹوکنز پروسیس کرتے وقت خرابی"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "موصول ہونے والی دستاویزات",
+        "dataset-1-label" : "پروسیس شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کردہ دستاویزات"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "موصول ہونے والی دستاویزات",
+        "dataset-1-label" : "پروسیس شدہ دستاویزات",
+        "dataset-2-label" : "خرابی والی دستاویزات",
+        "dataset-3-label" : "رد کردہ دستاویزات"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "اوکے!",
         "detail" : "عمل کامیابی سے مکمل ہو گیا"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "چیٹ جواب کو سٹریم کرتے وقت خرابی",
+        "detail" : "سرور کی خرابی: class org.neo4j.driver.internal.value.StringValue کو class java.lang.String میں تبدیل نہیں کیا جا سکتا (org.neo4j.driver.internal.value.StringValue لوڈر 'app' کے نامعلوم ماڈیول میں ہے؛ java.lang.String لوڈر 'bootstrap' کے ماڈیول java.base میں ہے)"
+      },
+      "OK" : {
+        "summary" : "کامیابی سے محفوظ کر لیا گیا",
+        "detail" : "اپ ڈیٹ کامیابی سے مکمل ہوا"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama سرور سے رابطہ کرنے میں خرابی",
+        "detail" : "ریموٹ سسٹم سے مواد حاصل کرتے ہوئے نیٹ ورک میں خرابی\n ماڈلز لسٹ پر کام کرتے ہوئے url:http://localhost:11434/api/tags پر خرابی"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "مکمل ہوا"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "اگر آپ اس سیکشن میں استعمال کرنا چاہتے ہیں تو سیٹ اپ ایریا میں graphrag کو ترتیب دیں"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag سیٹنگز"
+      },
+      "button-help" : {
+        "label" : "معلومات نکالنے کے لئے graphrag کی ترتیب دینے کے لئے یہاں کلک کریں (فی الحال ترتیب نہیں ہے)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "ترتیب شامل کریں"
       }
     }
   }

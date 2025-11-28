@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Criteris de selecció de fitxers per processament graphrag",
         "help" : "Edita els criteris sobre els fitxers a enviar a la pipeline d'extracció d'informació per a graphrag; selecciona almenys un nom de fitxer i criteri i/o un tipus de fitxer i/o el nombre màxim de bytes de mida i/o l'antiguitat de l'última modificació en dies"
+      },
+      "extractionFormat" : {
+        "label" : "Format d'extracció",
+        "help" : "Utilitza el format CSV per a llms amb menys de 30b paràmetres, JSON per a grans models frontier",
+        "placeholder" : "Utilitza el format CSV per a llms amb menys de 30b paràmetres, JSON per a grans models frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Resposta vocal rebuda"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Desplaça cap amunt"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Desplaça cap avall"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "S'han trobat documents"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Estàs segur que vols suprimir aquest xat?",
+        "header" : "Acció de suprimir xat"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Tanca"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Afegeix document a la llista 'xatejar amb'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Documents processats",
         "dataset-2-label" : "Documents amb error",
         "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "S'està analitzant la llista de documents"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenització de documents"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexació semàntica (embedding per semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexació d'entitats/relacions/esdeveniments (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "L’operació s’ha completat correctament"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Error en transmetre la resposta del xat",
+        "detail" : "Error del servidor: class org.neo4j.driver.internal.value.StringValue no es pot convertir a class java.lang.String (org.neo4j.driver.internal.value.StringValue és en el mòdul sense nom del carregador 'app'; java.lang.String és en el mòdul java.base del carregador 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Desat amb èxit",
+        "detail" : "Operació d'actualització realitzada correctament"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Error en comunicar-se amb el servidor Ollama",
+        "detail" : "Error de xarxa en comunicar-se amb el sistema remot per accedir al contingut\nllista de models Error en treballar amb la url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Completat"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Configura graphrag a l'espai de configuració si vols utilitzar-lo en aquesta secció"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Paràmetres de graphrag"
+      },
+      "button-help" : {
+        "label" : "Fes clic aquí per configurar l'extracció d'informació per graphrag (actualment no configurat)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Afegeix configuració"
       }
     }
   }

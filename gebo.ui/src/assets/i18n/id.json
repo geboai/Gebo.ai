@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Kriteria seleksi file untuk pemrosesan graphrag",
         "help" : "Edit kriteria pada file yang akan dikirim ke pipeline ekstraksi informasi untuk graphrag, pilih minimal nama file dan kriteria dan/atau tipe file dan/atau ukuran file maksimal per byte dan/atau usia modifikasi terakhir dalam hari"
+      },
+      "extractionFormat" : {
+        "label" : "Format ekstraksi",
+        "help" : "Gunakan format CSV untuk llms di bawah 30b parameter, format JSON untuk model huge frontier",
+        "placeholder" : "Gunakan format CSV untuk llms di bawah 30b parameter, format JSON untuk model huge frontier"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Jawaban suara diterima"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Gulir ke atas"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Gulir ke bawah"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Dokumen ditemukan"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Apakah Anda yakin ingin menghapus chat ini?",
+        "header" : "Hapus chat"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Tutup"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Tambah dokumen ke daftar 'chat dengan' "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Dokumen diproses",
         "dataset-2-label" : "Dokumen bermasalah",
         "dataset-3-label" : "Dokumen dibuang"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Token yang diproses",
+        "dataset-1-label" : "Kesalahan memproses token"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Menganalisis daftar dokumen"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Dokumen belum diproses",
+        "label-1" : "Kesalahan memproses dokumen",
+        "label-2" : "Dokumen yang diproses"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenisasi dokumen"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Dokumen diterima",
+        "dataset-1-label" : "Dokumen yang diproses",
+        "dataset-2-label" : "Dokumen error",
+        "dataset-3-label" : "Dokumen dibuang"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Dokumen belum diproses",
+        "label-1" : "Kesalahan memproses dokumen",
+        "label-2" : "Dokumen yang diproses"
+      },
+      "EMBEDDING" : {
+        "description" : "Pengindeksan semantik (embedding untuk semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Token yang diproses",
+        "dataset-1-label" : "Kesalahan memproses token"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Dokumen belum diproses",
+        "label-1" : "Kesalahan memproses dokumen",
+        "label-2" : "Dokumen yang diproses"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Dokumen diterima",
+        "dataset-1-label" : "Dokumen yang diproses",
+        "dataset-2-label" : "Dokumen error",
+        "dataset-3-label" : "Dokumen dibuang"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Pengindeksan Entitas/Relasi/Event (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Dokumen belum diproses",
+        "label-1" : "Kesalahan memproses dokumen",
+        "label-2" : "Dokumen yang diproses"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Token yang diproses",
+        "dataset-1-label" : "Kesalahan memproses token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Dokumen diterima",
+        "dataset-1-label" : "Dokumen yang diproses",
+        "dataset-2-label" : "Dokumen error",
+        "dataset-3-label" : "Dokumen dibuang"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Dokumen diterima",
+        "dataset-1-label" : "Dokumen yang diproses",
+        "dataset-2-label" : "Dokumen error",
+        "dataset-3-label" : "Dokumen dibuang"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "OK!",
         "detail" : "Operasi berhasil dilakukan"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Kesalahan saat streaming respon chat",
+        "detail" : "Kesalahan server: class org.neo4j.driver.internal.value.StringValue tidak dapat di-cast ke class java.lang.String (org.neo4j.driver.internal.value.StringValue ada di unnamed module dengan loader 'app'; java.lang.String ada di module java.base dengan loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Berhasil disimpan",
+        "detail" : "Operasi pembaruan berhasil"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Kesalahan komunikasi dengan server Ollama",
+        "detail" : "Kesalahan jaringan saat komunikasi dengan sistem remote untuk mengakses konten\n daftar model Error saat bekerja dengan url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Selesai"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurasi graphrag di area pengaturan jika ingin menggunakannya di bagian ini"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Pengaturan graphrag"
+      },
+      "button-help" : {
+        "label" : "Klik di sini untuk konfigurasi ekstraksi informasi untuk graphrag (belum dikonfigurasi)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Tambah konfigurasi"
       }
     }
   }

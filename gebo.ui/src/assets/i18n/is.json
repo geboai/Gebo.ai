@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Skilyrði fyrir val á skrám til Graphrag vinnslu",
         "help" : "Breyttu skilyrðum á skrám sem senda má í upplýsingadrátt fyrir graphrag, veldu að minnsta kosti skráarnafn og skilyrði og/eða skráategund og/eða hámarksstærð í bæti og/eða aldur síðustu breytingar í dögum"
+      },
+      "extractionFormat" : {
+        "label" : "Útdráttar snið",
+        "help" : "Notaðu CSV snið fyrir llms undir 30b breytum, JSON fyrir mjög stór líkön",
+        "placeholder" : "Notaðu CSV snið fyrir llms undir 30b breytum, JSON fyrir mjög stór líkön"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Talandi svar móttekið"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Færa upp"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Færa niður"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Fundust skjöl"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ertu viss um að þú viljir eyða þessu spjalli?",
+        "header" : "Eyða spjalli"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Loka"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Bæta skjali við 'spjalla við' lista"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Meðhöndluð skjöl",
         "dataset-2-label" : "Skjöl með villu",
         "dataset-3-label" : "Feld skjöl"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Unnin tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Greini skjala lista"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tákngerving skjala"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "EMBEDDING" : {
+        "description" : "Merkingarvísun (embedding fyrir semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Unnin tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Vísun á aðila/tengsl/atburði (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Unnin tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Í lagi!",
         "detail" : "Aðgerð heppnaðist"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Villa við flutning spjallsvarar",
+        "detail" : "Þjónustuvilla: class org.neo4j.driver.internal.value.StringValue má ekki breyta í class java.lang.String (org.neo4j.driver.internal.value.StringValue er í ónefndu einingu af hleðara 'app'; java.lang.String er í einingu java.base af hleðara 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Tókst að vista",
+        "detail" : "Uppfærsla tókst"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Villa við samskipti við Ollama server",
+        "detail" : "Neto villa við samskipti við fjartengt kerfi til að nálgast efni\n vantar lista yfir líkön Villa með url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Lokið"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Stilltu graphrag í stillingum ef þú vilt nota það hér"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag stillingar"
+      },
+      "button-help" : {
+        "label" : "Smelltu hér til að stilla útdrátt úr upplýsingum fyrir graphrag (ekki stillt eins og er)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Bæta við stillingu"
       }
     }
   }

@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "معايير اختيار الملفات لمعالجة رسم المعرفة",
         "help" : "حرر معايير الملفات التي سيتم إرسالها إلى خط استخراج المعلومات لـ Graphrag، حدد على الأقل اسم ملف ومعيار أو نوع ملف أو الحد الأقصى لحجم الملف بالبايت أو عمر آخر تعديل بالأيام"
+      },
+      "extractionFormat" : {
+        "label" : "تنسيق الاستخراج",
+        "help" : "استخدم تنسيق CSV لنماذج llms أقل من 30b بارام، وتنسيق JSON لنماذج frontier العملاقة",
+        "placeholder" : "استخدم تنسيق CSV لنماذج llms أقل من 30b بارام، وتنسيق JSON لنماذج frontier العملاقة"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "تم استلام الإجابة الصوتية"
+      },
+      "ScrollUpBtn" : {
+        "help" : "التمرير للأعلى"
+      },
+      "ScrollDownBtn" : {
+        "help" : "التمرير للأسفل"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "تم العثور على مستندات"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "هل أنت متأكد أنك تريد حذف هذه المحادثة؟",
+        "header" : "إجراء حذف المحادثة"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "إغلاق"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "إضافة مستند إلى قائمة 'الدردشة مع'"
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "مستندات تمت معالجتها",
         "dataset-2-label" : "مستندات تحتوي على أخطاء",
         "dataset-3-label" : "مستندات تم تجاهلها"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "الرموز المعالجة",
+        "dataset-1-label" : "خطأ في معالجة الرموز"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "تحليل قائمة المستندات"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "مستندات غير معالجة",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات معالجة"
+      },
+      "TOKENIZATION" : {
+        "description" : "ترميز المستندات"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "المستندات المعالجة",
+        "dataset-2-label" : "المستندات ذات الأخطاء",
+        "dataset-3-label" : "المستندات المرفوضة"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "مستندات غير معالجة",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات معالجة"
+      },
+      "EMBEDDING" : {
+        "description" : "الفهرسة الدلالية (تضمين للـ semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "الرموز المعالجة",
+        "dataset-1-label" : "خطأ في معالجة الرموز"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "مستندات غير معالجة",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات معالجة"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "المستندات المعالجة",
+        "dataset-2-label" : "المستندات ذات الأخطاء",
+        "dataset-3-label" : "المستندات المرفوضة"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "فهرسة الكيانات / العلاقات / الأحداث (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "مستندات غير معالجة",
+        "label-1" : "خطأ في معالجة المستندات",
+        "label-2" : "مستندات معالجة"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "الرموز المعالجة",
+        "dataset-1-label" : "خطأ في معالجة الرموز"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "المستندات المعالجة",
+        "dataset-2-label" : "المستندات ذات الأخطاء",
+        "dataset-3-label" : "المستندات المرفوضة"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "المستندات المستلمة",
+        "dataset-1-label" : "المستندات المعالجة",
+        "dataset-2-label" : "المستندات ذات الأخطاء",
+        "dataset-3-label" : "المستندات المرفوضة"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "تم بنجاح!",
         "detail" : "تم تنفيذ العملية بنجاح"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "خطأ أثناء بث استجابة المحادثة",
+        "detail" : "خطأ في الخادم: لا يمكن تحويل org.neo4j.driver.internal.value.StringValue إلى نوع java.lang.String (org.neo4j.driver.internal.value.StringValue في وحدة غير مسماة للمحمل 'app'؛ java.lang.String في وحدة java.base للمحمل 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "تم الحفظ بنجاح",
+        "detail" : "تمت عملية التحديث بنجاح"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "خطأ في الاتصال بخادم Ollama",
+        "detail" : "خطأ في الشبكة أثناء الاتصال بالنظام البعيد للوصول إلى المحتوى\n قائمة النماذج حدث خطأ أثناء العمل مع الرابط: http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "مكتمل"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "قم بتكوين graphrag في منطقة الإعداد إذا كنت تريد استخدامه في هذا القسم"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "إعدادات graphrag"
+      },
+      "button-help" : {
+        "label" : "انقر هنا لتكوين استخراج المعلومات لـ graphrag (غير مضبوط حالياً)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "إضافة إعداد"
       }
     }
   }

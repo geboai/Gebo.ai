@@ -986,6 +986,11 @@
       "contentSelectionFilter" : {
         "label" : "Критерії вибору файлів для обробки graphrag",
         "help" : "Редагуйте критерії вибору файлів для надсилання у pipeline вилучення інформації для graphrag: виберіть принаймні назву файлу та критерій і/або тип файлу, і/або максимальний розмір файлу (у байтах), і/або вік останньої зміни у днях"
+      },
+      "extractionFormat" : {
+        "label" : "Формат витягу",
+        "help" : "Використовуйте формат CSV для llms з менше ніж 30b параметрами, JSON для величезних frontier моделей",
+        "placeholder" : "Використовуйте формат CSV для llms з менше ніж 30b параметрами, JSON для величезних frontier моделей"
       }
     }
   },
@@ -1762,6 +1767,19 @@
       },
       "LOADING_VOCAL_ANSWER" : {
         "summary" : "Голосову відповідь отримано"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Прокрутити вгору"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Прокрутити вниз"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Знайдено документи"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ви впевнені, що бажаєте видалити цей чат?",
+        "header" : "Дія видалення чату"
       }
     },
     "ChangeDescriptionComponent" : {
@@ -1801,6 +1819,11 @@
       },
       "CloseBtn" : {
         "help" : "Закрити"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Додати документ до списку \"чат з\" "
       }
     }
   },
@@ -2748,6 +2771,76 @@
         "dataset-1-label" : "Опрацьовані документи",
         "dataset-2-label" : "Документи з помилкою",
         "dataset-3-label" : "Відхилені документи"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Оброблені токени",
+        "dataset-1-label" : "Помилка обробки токенів"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Аналіз списку документів"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Не оброблені документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Оброблені документи"
+      },
+      "TOKENIZATION" : {
+        "description" : "Токенізація документів"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Оброблені документи",
+        "dataset-2-label" : "Документи з помилками",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Не оброблені документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Оброблені документи"
+      },
+      "EMBEDDING" : {
+        "description" : "Семантична індексація (ембеддинг для semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Оброблені токени",
+        "dataset-1-label" : "Помилка обробки токенів"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Не оброблені документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Оброблені документи"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Оброблені документи",
+        "dataset-2-label" : "Документи з помилками",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Індексація сутностей/зв'язків/подій (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Не оброблені документи",
+        "label-1" : "Помилка обробки документів",
+        "label-2" : "Оброблені документи"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Оброблені токени",
+        "dataset-1-label" : "Помилка обробки токенів"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Оброблені документи",
+        "dataset-2-label" : "Документи з помилками",
+        "dataset-3-label" : "Відхилені документи"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Отримані документи",
+        "dataset-1-label" : "Оброблені документи",
+        "dataset-2-label" : "Документи з помилками",
+        "dataset-3-label" : "Відхилені документи"
       }
     }
   },
@@ -2911,6 +3004,18 @@
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
         "summary" : "Готово!",
         "detail" : "Операцію виконано успішно"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Помилка під час потокового передавання відповіді чату",
+        "detail" : "Помилка сервера: class org.neo4j.driver.internal.value.StringValue не може бути приведено до class java.lang.String (org.neo4j.driver.internal.value.StringValue знаходиться у неназваному модулі завантажувача 'app'; java.lang.String знаходиться у модулі java.base завантажувача 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Успішно збережено",
+        "detail" : "Оновлення виконано успішно"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Помилка зв'язку з сервером Ollama ",
+        "detail" : "Мережева помилка при зв'язку з віддаленою системою доступу до вмісту\n список моделей Помилка роботи з url:http://localhost:11434/api/tags"
       }
     }
   },
@@ -2936,6 +3041,22 @@
       },
       "CompletedData" : {
         "label" : "Завершено"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Налаштуйте graphrag у зоні налаштувань, якщо хочете використовувати його в цьому розділі"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Налаштування graphrag"
+      },
+      "button-help" : {
+        "label" : "Натисніть тут, щоб налаштувати витяг інформації для graphrag (зараз не налаштовано)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Додати конфігурацію"
       }
     }
   }
