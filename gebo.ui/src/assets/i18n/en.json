@@ -986,6 +986,11 @@
             "contentSelectionFilter": {
                 "label": "File selection criterias for graphrag processing",
                 "help": "Edit criterias on file to send to information extraction pipeline for graphrag, select at least a file name and criteria and/or a file type and/or the maximum number of bytes of file size and/or the age of last modification in days"
+            },
+            "extractionFormat": {
+                "label": "Extraction format",
+                "help": "Use CSV format for llms under 30b params,JSON form huge frontier models",
+                "placeholder": "Use CSV format for llms under 30b params,JSON form huge frontier models"
             }
         }
     },
@@ -1742,13 +1747,13 @@
                 "help": "Upload a file to chat or work with"
             },
             "SubmiQuestion": {
-                "help": "Sumbit your question"
+                "help": "Submit your question"
             },
             "WithParams": {
                 "label": "with params:"
             },
             "CalledFunctionsCtl": {
-                "label": "AI Called functions:"
+                "label": "AI Called functions"
             },
             "UploadedDocs": {
                 "label": "Uploaded docs"
@@ -1762,6 +1767,19 @@
             },
             "LOADING_VOCAL_ANSWER": {
                 "summary": "Vocal answer received"
+            },
+            "ScrollUpBtn": {
+                "help": "Scroll Up"
+            },
+            "ScrollDownBtn": {
+                "help": "Scroll down"
+            },
+            "FoundRelatedDocs": {
+                "label": "Found docs"
+            },
+            "DELETE_CHAT_ACTION": {
+                "message": "Are you shure you whant to delete this chat?",
+                "header": "Delete chat action"
             }
         },
         "ChangeDescriptionComponent": {
@@ -1801,6 +1819,11 @@
             },
             "CloseBtn": {
                 "help": "Close"
+            }
+        },
+        "DocumentRefComponent": {
+            "AddDocsBtn": {
+                "help": "Add document to 'chat with' list "
             }
         }
     },
@@ -2748,6 +2771,76 @@
                 "dataset-1-label": "Processed docs",
                 "dataset-2-label": "Error docs",
                 "dataset-3-label": "Discarded docs"
+            },
+            "GRAPHEXTRACTION-tokens-processing": {
+                "dataset-0-label": "Processed tokens",
+                "dataset-1-label": "Error processing tokens"
+            }
+        },
+        "GeboAIJobGraphicVisualizerComponent": {
+            "DOCUMENT_DISCOVERY": {
+                "description": "Analyzing documents list"
+            },
+            "DOCUMENT_DISCOVERY-docs-histogram": {
+                "label-0": "Not treated docs",
+                "label-1": "Error processing docs",
+                "label-2": "Processed docs"
+            },
+            "TOKENIZATION": {
+                "description": "Documents tokenization"
+            },
+            "DOCUMENT_DISCOVERY-documents-chart": {
+                "dataset-0-label": "Received docs",
+                "dataset-1-label": "Processed docs",
+                "dataset-2-label": "Error docs",
+                "dataset-3-label": "Discarded docs"
+            },
+            "TOKENIZATION-docs-histogram": {
+                "label-0": "Not treated docs",
+                "label-1": "Error processing docs",
+                "label-2": "Processed docs"
+            },
+            "EMBEDDING": {
+                "description": "Semantic indexing (embedding for semantic rag)"
+            },
+            "TOKENIZATION-tokens-processing": {
+                "dataset-0-label": "Processed tokens",
+                "dataset-1-label": "Error processing tokens"
+            },
+            "EMBEDDING-docs-histogram": {
+                "label-0": "Not treated docs",
+                "label-1": "Error processing docs",
+                "label-2": "Processed docs"
+            },
+            "TOKENIZATION-documents-chart": {
+                "dataset-0-label": "Received docs",
+                "dataset-1-label": "Processed docs",
+                "dataset-2-label": "Error docs",
+                "dataset-3-label": "Discarded docs"
+            },
+            "GRAPHEXTRACTION": {
+                "description": "Entity/Relations/Events indexing (graphrag)"
+            },
+            "GRAPHEXTRACTION-docs-histogram": {
+                "label-0": "Not treated docs",
+                "label-1": "Error processing docs",
+                "label-2": "Processed docs"
+            },
+            "EMBEDDING-tokens-processing": {
+                "dataset-0-label": "Processed tokens",
+                "dataset-1-label": "Error processing tokens"
+            },
+            "EMBEDDING-documents-chart": {
+                "dataset-0-label": "Received docs",
+                "dataset-1-label": "Processed docs",
+                "dataset-2-label": "Error docs",
+                "dataset-3-label": "Discarded docs"
+            },
+            "GRAPHEXTRACTION-documents-chart": {
+                "dataset-0-label": "Received docs",
+                "dataset-1-label": "Processed docs",
+                "dataset-2-label": "Error docs",
+                "dataset-3-label": "Discarded docs"
             }
         }
     },
@@ -2911,6 +3004,18 @@
             "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
                 "summary": "OK!",
                 "detail": "Operation done successfully"
+            },
+            "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b": {
+                "summary": "Error while streaming chat respose",
+                "detail": "Server error: class org.neo4j.driver.internal.value.StringValue cannot be cast to class java.lang.String (org.neo4j.driver.internal.value.StringValue is in unnamed module of loader 'app'; java.lang.String is in module java.base of loader 'bootstrap')"
+            },
+            "OK": {
+                "summary": "Saved with success",
+                "detail": "Update operation done successfully"
+            },
+            "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3": {
+                "summary": "Error comunicating with  Ollama server ",
+                "detail": "Netork error comunicating to the remote system accessing content\n models list Error working with url:http://localhost:11434/api/tags"
             }
         }
     },
@@ -2936,6 +3041,22 @@
             },
             "CompletedData": {
                 "label": "Completed"
+            }
+        }
+    },
+    "GeboAIGraphRagConfigModule": {
+        "GeboAIGraphragConfigComponent": {
+            "ConfigureGraphragLabel": {
+                "label": "Configure graphrag in the setup area if you want to use it in this section"
+            },
+            "GraphragSettingsLabel": {
+                "label": "Graphrag settings"
+            },
+            "button-help": {
+                "label": "Click here to configure information extraction for graphrag (actually not configured)"
+            },
+            "AddConfigurationBtn": {
+                "label": "Add configuration"
             }
         }
     }

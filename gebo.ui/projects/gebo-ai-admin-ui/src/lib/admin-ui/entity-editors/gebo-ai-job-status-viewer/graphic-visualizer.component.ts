@@ -4,13 +4,13 @@ import { NGPieChart, renderData, StatusRendering } from "./graphic-rendering";
 import { findMatchingTranlations, GeboAITranslationService, UIExistingText } from "@Gebo.ai/reusable-ui";
 import { map, Observable, of, Subscription } from "rxjs";
 const moduleId: string = "GeboAIJobStatsVisualizerModule";
-const entityId: string = "GeboAIStatsVisualizerComponent";
+const entityId: string = "GeboAIJobGraphicVisualizerComponent";
 @Component({
   templateUrl: "graphic-visualizer.component.html",
   selector: "gebo-ai-jobsummary-graphic-visualizer",
   standalone: false
 })
-export class GeboAIStatsVisualizerComponent implements OnInit, OnChanges {
+export class GeboAIJobGraphicVisualizerComponent implements OnInit, OnChanges {
   constructor(private geboTranslationService: GeboAITranslationService) {
 
   }
