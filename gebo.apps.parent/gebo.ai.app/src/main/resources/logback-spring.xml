@@ -71,13 +71,13 @@
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	<logger name="ai.gebo.architecture.graphrag.extraction.services.impl" level="DEBUG"
-		additivity="false">
+	<logger
+		name="ai.gebo.architecture.graphrag.extraction.services.impl"
+		level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	<logger name="ai.gebo.security" level="INFO"
-		additivity="false">
+	<logger name="ai.gebo.security" level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>

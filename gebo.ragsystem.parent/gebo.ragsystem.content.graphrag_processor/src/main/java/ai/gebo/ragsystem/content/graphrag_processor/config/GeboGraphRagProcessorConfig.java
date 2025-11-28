@@ -32,7 +32,7 @@ public class GeboGraphRagProcessorConfig {
 	@Data
 	public static class GraphRagCustomReceiverConfig extends TimedOutMessageReceiverFactoryConfig {
 		long minimumDelayBetweenRequests = -1;
-		int concurrentGraphExtractionWorkers = 4;
+		int concurrentGraphExtractionWorkers = 2;
 	}
 
 	/**

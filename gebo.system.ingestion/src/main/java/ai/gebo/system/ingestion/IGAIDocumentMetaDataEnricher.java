@@ -61,11 +61,15 @@ public interface IGAIDocumentMetaDataEnricher {
 	 */
 	public List<Document> enrichCatalogingInformations(List<Document> documents, GDocumentReference reference,
 			GKnowledgeBase knowledgeBase, GProject project, GProjectEndpoint endpoint);
+
 	/***********************************************************************
 	 * Applies the metadata header to a document
+	 * 
 	 * @param document
 	 * @param infos
 	 * @return
 	 */
 	public Document enrich(Document document, MetaDataHeaderInfos infos);
+
+	public String getContentWithoutMetaData(Document document);
 }

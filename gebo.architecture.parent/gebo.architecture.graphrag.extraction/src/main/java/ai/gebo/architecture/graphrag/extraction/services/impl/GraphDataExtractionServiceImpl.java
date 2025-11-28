@@ -41,6 +41,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.system.ingestion.IGAIDocumentMetaDataEnricher;
 import lombok.AllArgsConstructor;
 
 @ConditionalOnProperty(prefix = "ai.gebo.neo4j", name = "enabled", havingValue = "true")
@@ -64,6 +65,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	private final IGChatModelRuntimeConfigurationDao chatModelsConfiguration;
 	private final GraphRagExtractionStaticConfig staticConfig;
 	private final GraphRagExtractionConfigRepository configRepository;
+	private final IGAIDocumentMetaDataEnricher metaDataEnricher;
 	private static final Logger LOGGER = LoggerFactory.getLogger(GraphDataExtractionServiceImpl.class);
 
 	@Override
@@ -72,8 +74,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin extract(document,....)");
 		}
-		String text = START_CHUNK_ID + document.getId() + END_CHUNK_ID + "\r\n"
-				+ (document.getMetadata() != null ? document.getMetadata().toString() + "\r\n" : "");
+		String text = START_CHUNK_ID + document.getId() + END_CHUNK_ID + "\r\n";
 		text += document.getText();
 		LLMExtractionResult data = extract(text, configuration, cache);
 		if (LOGGER.isDebugEnabled()) {
@@ -141,8 +142,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("Called CSV IE extraction in:" + elapsed + "ms");
 			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("LLM OUTPUT=>" + response);
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("LLM OUTPUT=>" + response);
 			}
 			data = clean(parseCSV(response));
 		}
@@ -533,9 +534,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Invoking llm JSON structured output");
 			}
-			List<Message> messages = documents.stream().map(x -> (Message) new UserMessage(
-					START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n" + x.getText() + "\r\n" + x.getMetadata()))
-					.toList();
+			List<Message> messages = documents.stream().map(x -> (Message) new UserMessage(START_CHUNK_ID + x.getId()
+					+ END_CHUNK_ID + "\r\n" + metaDataEnricher.getContentWithoutMetaData(x) + "\r\n")).toList();
 			long timestamp = System.currentTimeMillis();
 			ChatClientRequestSpec requestSpec = chatModel.getChatClient().prompt(promptObject).messages(messages);
 			data = clean(requestSpec.call().entity(LLMExtractionResult.class));
@@ -551,7 +551,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			}
 			StringBuffer buffer = new StringBuffer(promptObject.getContents() + EXTRACT_CSV_FROM_THE_FOLLOWING_TEXT);
 			for (Document x : documents) {
-				buffer.append(START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n" + x.getText() + "\r\n");
+				buffer.append(START_CHUNK_ID + x.getId() + END_CHUNK_ID + "\r\n"
+						+ metaDataEnricher.getContentWithoutMetaData(x) + "\r\n");
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("LLM INPUT=>" + buffer);
@@ -562,8 +563,8 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("Called CSV IE extraction in:" + elapsed + "ms");
 			}
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("LLM OUTPUT=>" + response);
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("LLM OUTPUT=>" + response);
 			}
 			data = clean(parseCSV(response));
 		}
