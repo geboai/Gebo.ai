@@ -35,10 +35,10 @@
             <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" label="Chat with knowledge base"
                 title="Create a new RAG chat with company contents" *ngIf="chatProfilesData?.length" gebo-ai-label
                 [text]="true"
-                (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):routeNewRagChat()"></p-button>
+                (onClick)="chatProfilesData.length>1? newRagChatDialog.toggle($event):routeNewRagChat()"></p-button><br/>
             <p-button icon="pi pi-pen-to-square" id="NewChatMiniBtn" label="Chat"
                 title="Create a new chat with large language models"
-                *ngIf="(!chatProfilesData?.length) && chatModelsData.length" gebo-ai-label [text]="true"
+                *ngIf="chatModelsData?.length" gebo-ai-label [text]="true"
                 (onClick)="chatModelsData.length>1?newChatDialog.toggle($event):routeNewChat()"></p-button>
             <p-popover #newRagChatDialog>
                 <div class="grid">

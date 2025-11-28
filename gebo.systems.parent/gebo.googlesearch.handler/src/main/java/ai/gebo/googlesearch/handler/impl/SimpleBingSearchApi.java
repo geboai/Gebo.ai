@@ -86,16 +86,7 @@ public class SimpleBingSearchApi {
 			}
 			// Construct the search URL with the query parameter
 			String uriRequested = BING_QUERY + URLEncoder.encode(request.getSearchTextQParam());
-			// Add any additional query parameters from the request
-			for (Map.Entry<String, List<String>> entry : request.getAdditionalQueryRequestParameters().entrySet()) {
-				String key = entry.getKey();
-				List<String> val = entry.getValue();
-				if (val != null && !val.isEmpty()) {
-					for (String stringParam : val) {
-						uriRequested += "&" + key + "=" + URLEncoder.encode(stringParam);
-					}
-				}
-			}
+			
 			URI uri = new URI(uriRequested);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Accept", "text/html");

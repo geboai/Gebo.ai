@@ -38,6 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
@@ -50,6 +51,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatRequestResourcesUsePolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -68,17 +70,19 @@ import reactor.core.publisher.Flux;
  */
 @Service
 public class GChatServiceImpl extends AbstractChatService implements IGChatService {
+	private final IGChatRequestResourcesUsePolicy requestResourceUsePolicy;
 
 	public GChatServiceImpl(IGChatModelRuntimeConfigurationDao chatModelConfigurations,
 			IGToolCallbackSourceRepositoryPattern callbacksRepoPattern, IGPersistentObjectManager persistenceManager,
 			GUserChatContextRepository userContextRepository, GeboChatPromptsConfigs promptConfigs,
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
 			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
-			IGChatStorageAreaService chatStorageAreaService,
-			LLMGeneratedResourceRepository generatedResourceRepository) {
+			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
+			IGChatRequestResourcesUsePolicy requestResourceUsePolicy) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
 				generatedResourceRepository);
+		this.requestResourceUsePolicy = requestResourceUsePolicy;
 	}
 
 	/**
@@ -391,14 +395,22 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			} else {
 
 				// Prepare prompt and context for streaming
-				List<Document> context = new ArrayList<Document>();
-				context.add(interactionsContext.interactionsAsDocument(userContext, handler.getContextLength()));
 				PromptTemplate promptTemplate = null;
 				String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
 				Prompt prompt = null;
 				promptTemplate = new PromptTemplate(promptTemplateText);
 				prompt = promptTemplate.create();
-				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, null, context);
+				UserInfos user = securityService.getCurrentUser();
+				ChatModelLimitedRequest limitedRequest = this.requestResourceUsePolicy.manageChatRequest(userContext,
+						user, request, handler);
+				List<Document> documents = null;
+				if (limitedRequest.getUploadedDocuments() != null
+						&& limitedRequest.getUploadedDocuments().getValue() != null) {
+					documents = limitedRequest.getUploadedDocuments().getValue().aiDocumentsList();
+				}
+				List<ChatInteractions> history = limitedRequest.getHistory().getValue();
+				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, history,
+						documents);
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux

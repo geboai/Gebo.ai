@@ -510,10 +510,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         };
         const translateSubscription = this.geboAiTranslationService.translateConfirmation(moduleId, entityId, confirmation).subscribe({
             next: (trconfirmation) => {
-                if (trconfirmation) {
-                    this.confirmService.confirm(trconfirmation);
+                
+                    this.confirmService.confirm(trconfirmation?trconfirmation:confirmation);
                     translateSubscription.unsubscribe();
-                }
+                
             }
         })
 

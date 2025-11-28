@@ -77,6 +77,11 @@
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
+	<logger name="org.springframework.http.codec" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
 	<logger name="ai.gebo.security" level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />

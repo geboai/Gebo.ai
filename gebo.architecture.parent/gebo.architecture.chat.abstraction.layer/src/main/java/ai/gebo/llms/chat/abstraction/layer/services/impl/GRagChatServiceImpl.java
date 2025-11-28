@@ -39,7 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
-import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
@@ -193,7 +193,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			try {
 				// Generates a limited resources request based on policy
 				UserInfos user = securityService.getCurrentUser();
-				ChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRequest(chatProfile,
+				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(chatProfile,
 						userContext, user, request, embeddingHandler, chatHandler, visibleKnowledgeBaseCodes);
 				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				// Retrieves historical interactions and document results
@@ -502,7 +502,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (embeddingHandler != null && chatHandler != null) {
 			try {
 
-				ChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRequest(chatProfile,
+				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(chatProfile,
 						userContext, user, request, embeddingHandler, chatHandler, visibleKnowledgeBaseCodes);
 				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				if (chatHandler.getConfig() != null && chatHandler.getConfig().getChoosedModel() != null) {

@@ -43,6 +43,7 @@ import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.HistoryStrategy;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
@@ -176,14 +177,14 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @throws IOException
 	 */
 	@Override
-	public ChatModelLimitedRequest manageRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
+	public RagChatModelLimitedRequest manageRagChatRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
 			UserInfos user, GeboChatRequest request, IGConfigurableEmbeddingModel embeddingHandler,
 			IGConfigurableChatModel chatHandler, List<String> visibleKnowledgeBaseCodes)
 			throws LLMConfigException, IOException {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin manageRequest(.....)");
+			LOGGER.debug("Begin manageRagChatRequest(.....)");
 		}
-		ChatModelLimitedRequest lrequest = new ChatModelLimitedRequest();
+		RagChatModelLimitedRequest lrequest = new RagChatModelLimitedRequest();
 		// considering the context window in Nr of tokens
 		int contextWindowNToken = getContextLength(chatHandler);
 
@@ -313,7 +314,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 		// Put here conditions and optimizations to fix free tokens space
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End manageRequest(.....) stats=>" + logObject(stats));
+			LOGGER.debug("End manageRagChatRequest(.....) stats=>" + logObject(stats));
 		}
 		return lrequest;
 	}
@@ -591,5 +592,78 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			lastRange = range;
 		}
 		return lastRange;
+	}
+
+	@Override
+	public ChatModelLimitedRequest manageChatRequest(GUserChatContext userContext, UserInfos user,
+			GeboChatRequest request, IGConfigurableChatModel chatHandler) throws LLMConfigException, IOException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin manageChatRequest(.....)");
+		}
+		ChatModelLimitedRequest lrequest = new ChatModelLimitedRequest();
+		// considering the context window in Nr of tokens
+		int contextWindowNToken = getContextLength(chatHandler);
+
+		// retrieve percentage of allocations settings and optimizations
+		ContextWindowLengthRangeSettings settings = findOptimizationSettings(contextWindowNToken);
+		lrequest.setContextWindowNToken(contextWindowNToken);
+		// check if tooling is enabled
+		GBaseChatModelConfig<?> chatModelConfig = (GBaseChatModelConfig<?>) chatHandler.getConfig();
+		boolean hasToolingEnabled = chatModelConfig.getEnabledFunctions() != null
+				&& !chatModelConfig.getEnabledFunctions().isEmpty();
+		// if tooling is enabled calculate a residual (or important) space that will
+		// remain free for tools use
+		int toolsTokensSpaceReservation = 0;
+		if (hasToolingEnabled) {
+			toolsTokensSpaceReservation = (int) (((double) contextWindowNToken)
+					* (settings.minimumToolAvailablePercent / 100.0));
+		}
+		// compute query tokens size
+		lrequest.setQuery(new TokenLimitedContent<String>());
+		lrequest.getQuery().setValue(request.getQuery());
+		lrequest.getQuery().setNToken(tokenEstimator.estimate(request.getQuery()));
+		int requestSize = lrequest.getQuery().getNToken();
+		// adding history history and the
+		// available tokens for documents will be already decreased from this allocation
+		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
+		ChatModelRequestContextWindowStats stats = lrequest.getStats();
+		int availableTokensForDocuments = 0;
+		boolean historyToBeShrinked = false;
+		// compute actual history size
+		int historySizeTarget = lrequest.getHistory().getNToken();
+		if (stats.historySharePerc > settings.historyLimitPercent) {
+			// if history is taking more than its maximum potential share than recompute a
+			// maximum available tokens for documents theorizing to shring the history to
+			// its maximum share
+			// but leaving space for tool calling
+			historyToBeShrinked = true;
+			historySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+			availableTokensForDocuments = contextWindowNToken - historySizeTarget - toolsTokensSpaceReservation
+					- requestSize;
+		} else {
+			// if history space is less than its maximum share compute maximum available
+			// tokens for documents by
+			// subtracting actual amount of delta from the full context window
+			// (availableNTokens) minus the
+			// tool calls free space
+			availableTokensForDocuments = (int) stats.availableNTokens;
+			availableTokensForDocuments -= toolsTokensSpaceReservation;
+		}
+		// first add explicitly uploaded documents
+		lrequest.setUploadedDocuments(
+				createLimitedUploadedDocumentsOnRequests(userContext, request, availableTokensForDocuments));
+		stats = lrequest.getStats();
+		if (stats.availableNTokens < toolsTokensSpaceReservation) {
+			// now check real documents size allocations and recalculate
+			lrequest.setHistory(shrinkHistory(userContext, historySizeTarget, settings.historyStrategy, chatHandler));
+		}
+		stats = lrequest.getStats();
+
+		// Put here conditions and optimizations to fix free tokens space
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End manageChatRequest(.....) stats=>" + logObject(stats));
+		}
+		return lrequest;
+	
 	}
 }
