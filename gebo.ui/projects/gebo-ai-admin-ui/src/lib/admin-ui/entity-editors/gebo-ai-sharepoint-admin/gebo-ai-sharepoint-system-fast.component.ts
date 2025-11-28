@@ -85,7 +85,12 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
         this.formGroup.controls["description"].setValue("Sharepoint/OneDrive system");
         this.formGroup.controls["sharepointVersion"].setValue(this.currentSharepointVersion);
     }
-
+    get oauth2Credentials():FormGroup {
+        return this.formGroup.controls["oauth2Credentials"] as FormGroup;
+    }
+    get customAttributes():FormGroup {
+        return this.oauth2Credentials.controls["customAttributes"] as FormGroup;
+    }
     /**
      * Conditionally enables or disables a form control based on the provided parameter
      * 

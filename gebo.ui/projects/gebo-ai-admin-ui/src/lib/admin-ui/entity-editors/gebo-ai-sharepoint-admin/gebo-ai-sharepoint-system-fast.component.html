@@ -36,13 +36,13 @@
                 </gebo-ai-field>
             </div>
 
-            <div class="col-12" formGroupName="oauth2Credentials" *ngIf="currentSharepointVersion==='CLOUD_VERSION'">
+            <div class="col-12" [formGroup]="oauth2Credentials" *ngIf="currentSharepointVersion==='CLOUD_VERSION'">
                 <p-fieldset id="MicrosofOauth2Fieldset" gebo-ai-label legend="Microsof oauth2 app registration infos for Gebo.ai">
                     <p>Please go to your organization Microsoft Azure Administrative section or Microsoft Entra
                         Administrative section, add a new app for this Gebo.ai installation,
                         note the client-id, tenant-id, and client-secret and report them here</p>
                     <div class="grid">
-                        <div class="col-6" formGroupName="customAttributes">
+                        <div class="col-6" [formGroup]="customAttributes" >
                             <gebo-ai-field id="tenantId" label="Tenant ID" [required]="true" help="Oauth2 tenant identifier for you organization microsoft &quot;entra&quot; product (to be retrieved in microsoft cloud admin console)">
                                 <input pInputText id="tenantId" formControlName="tenantId" [required]="true" gebo-ai-field-element />
                             </gebo-ai-field>

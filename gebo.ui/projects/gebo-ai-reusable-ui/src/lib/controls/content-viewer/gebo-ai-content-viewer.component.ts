@@ -180,7 +180,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
               this.plainTextContent = fileType?.treatAs === 'plainText';
               this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
 
-              this.browsableContent = this.contentMetaInfo?.moduleId === 'webcrawler-module';
+              this.browsableContent = (this.contentMetaInfo?.moduleId === 'webcrawler-module' || this.contentMetaInfo?.referenceType==="WEB");
               if (this.browsableContent && this.contentMetaInfo?.url) {
                 this.externalContentUrl = this.contentMetaInfo.url;
                 this.contentServedByGebo = false;
@@ -193,8 +193,9 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
             console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
             console.log("content viewer url:" + this.externalContentUrl);
 
-            this.loading = true;
-            if (this.sourceCodeContent || this.plainTextContent) {
+            
+            if ((this.sourceCodeContent || this.plainTextContent) && this.browsableContent!==true) {
+              this.loading = true;
               this.contentMetaControllerService.getContentObject(this.code).subscribe({
                 next: (value) => {
                   this.contentObject = value;

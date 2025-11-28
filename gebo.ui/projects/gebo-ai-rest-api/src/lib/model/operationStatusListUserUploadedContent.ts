@@ -15,6 +15,6 @@ import { UserUploadedContent } from './userUploadedContent';
 export interface OperationStatusListUserUploadedContent { 
     result?: Array<UserUploadedContent>;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

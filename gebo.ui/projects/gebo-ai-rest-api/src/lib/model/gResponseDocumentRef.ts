@@ -12,6 +12,7 @@
 import { DocInternalRef } from './docInternalRef';
 
 export interface GResponseDocumentRef { 
+    referenceType?: GResponseDocumentRef.ReferenceTypeEnum;
     uuid?: string;
     documentCode?: string;
     description?: string;
@@ -26,7 +27,14 @@ export interface GResponseDocumentRef {
     loadPercentage?: number;
     references?: Array<DocInternalRef>;
     nbytesRelevant?: number;
-    ntokensRelevant?: number;
     shortCode?: string;
+    ntokensRelevant?: number;
     ntotalContentTokens?: number;
+}
+export namespace GResponseDocumentRef {
+    export type ReferenceTypeEnum = 'FILE' | 'WEB';
+    export const ReferenceTypeEnum = {
+        FILE: 'FILE' as ReferenceTypeEnum,
+        WEB: 'WEB' as ReferenceTypeEnum
+    };
 }
