@@ -210,7 +210,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             this.geboFastLLMSSetupService.createLLMCredentials({
                 apiKeySecretContext: this.vendorConfiguration?.parentModel.apiKeySecretContext,
                 newApiSecret: credentials.newApiSecret,
-                newUserName: credentials.newApiSecret.newUserName,
+                newUserName: credentials.newUserName,
                 serviceHandler: this.vendorConfiguration.libraryModel[0].serviceHandler,
                 type: this.vendorConfiguration.libraryModel[0].type,
                 baseUrl: credentials.baseUrl,
