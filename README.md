@@ -74,6 +74,7 @@ After you've installed with docker go to http://<your server ip>:12999/ and conf
 The docker-compose file installs the required 
 - MongoDB
 - Qdrant Vector Database
+- Neo4J Graph Database 
 - geboai/gebo.ai open source version software https://hub.docker.com/r/geboai/gebo.ai  
 
 ## For devs/software architects/software companies 
