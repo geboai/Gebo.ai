@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.system.ingestion.impl;
 
@@ -35,9 +32,9 @@ import ai.gebo.system.ingestion.IGSpecializedDocumentReferenceIngestionHandler;
 import ai.gebo.system.ingestion.model.IngestionFileType;
 
 /**
- * Implementation of the document reference ingestion handler interface.
- * This service manages the ingestion of document references by delegating
- * to specialized handlers based on content type and file extension.
+ * Implementation of the document reference ingestion handler interface. This
+ * service manages the ingestion of document references by delegating to
+ * specialized handlers based on content type and file extension.
  * 
  * AI generated comments
  */
@@ -45,22 +42,24 @@ import ai.gebo.system.ingestion.model.IngestionFileType;
 public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferenceIngestionHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GDocumentReferenceIngestionHandlerImpl.class);
 	protected final SpecializedHandlerRepositoryPattern repoPattern;
-	
+
 	/**
 	 * Map of content types that can be handled by this ingestion handler
 	 */
 	protected final TreeMap<String, Boolean> handledContentTypes = new TreeMap<String, Boolean>();
-	
+
 	/**
 	 * Map of file extensions that can be handled by this ingestion handler
 	 */
 	protected final TreeMap<String, Boolean> handledExtensions = new TreeMap<String, Boolean>();
 
 	/**
-	 * Constructor that initializes the handler with a repository of specialized handlers.
-	 * Collects all supported content types and extensions from the specialized handlers.
+	 * Constructor that initializes the handler with a repository of specialized
+	 * handlers. Collects all supported content types and extensions from the
+	 * specialized handlers.
 	 * 
-	 * @param repoPattern Repository containing specialized document reference ingestion handlers
+	 * @param repoPattern Repository containing specialized document reference
+	 *                    ingestion handlers
 	 */
 	public GDocumentReferenceIngestionHandlerImpl(SpecializedHandlerRepositoryPattern repoPattern) {
 		this.repoPattern = repoPattern;
@@ -79,7 +78,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Extracts metadata from the document reference and creates a map of metadata properties.
+	 * Extracts metadata from the document reference and creates a map of metadata
+	 * properties.
 	 * 
 	 * @param reference The document reference containing metadata
 	 * @return A map containing the metadata properties
@@ -111,6 +111,9 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 			meta.put(DocumentMetaInfos.GEBO_FILE_NAME, reference.getName());
 			meta.put("file_name", reference.getName());
 		}
+		if (reference.getReferenceType() != null) {
+			meta.put(DocumentMetaInfos.GEBO_REFERENCE_TYPE, reference.getReferenceType().name());
+		}
 		if (reference.getRelativePath() != null) {
 			meta.put(DocumentMetaInfos.GEBO_FILE_RELATIVE_PATH, reference.getRelativePath());
 		}
@@ -129,14 +132,14 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Handles the content of a document reference by finding an appropriate specialized handler
-	 * and delegating the processing to it.
+	 * Handles the content of a document reference by finding an appropriate
+	 * specialized handler and delegating the processing to it.
 	 * 
 	 * @param reference The document reference to process
-	 * @param is The input stream containing the document content
+	 * @param is        The input stream containing the document content
 	 * @return IngestionHandlerData containing the processed content and metadata
 	 * @throws GeboIngestionException If an error occurs during ingestion
-	 * @throws IOException If an I/O error occurs
+	 * @throws IOException            If an I/O error occurs
 	 */
 	@Override
 	public IngestionHandlerData handleContent(GDocumentReference reference, InputStream is)
@@ -166,7 +169,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Retrieves a list of all file types that can be handled by the registered specialized handlers.
+	 * Retrieves a list of all file types that can be handled by the registered
+	 * specialized handlers.
 	 * 
 	 * @return A list of supported ingestion file types
 	 */
@@ -182,7 +186,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Returns a list of all content types that can be handled by this ingestion handler.
+	 * Returns a list of all content types that can be handled by this ingestion
+	 * handler.
 	 * 
 	 * @return A list of supported content types
 	 */
@@ -193,7 +198,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Returns a list of all file extensions that can be handled by this ingestion handler.
+	 * Returns a list of all file extensions that can be handled by this ingestion
+	 * handler.
 	 * 
 	 * @return A list of supported file extensions
 	 */
@@ -204,7 +210,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Checks if a document reference can be handled based on its content type or extension.
+	 * Checks if a document reference can be handled based on its content type or
+	 * extension.
 	 * 
 	 * @param reference The document reference to check
 	 * @return true if the document can be handled, false otherwise
@@ -243,8 +250,8 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Checks if a document reference is processable by this handler.
-	 * Currently, it's an alias for isHandled().
+	 * Checks if a document reference is processable by this handler. Currently,
+	 * it's an alias for isHandled().
 	 * 
 	 * @param docref The document reference to check
 	 * @return true if the document can be processed, false otherwise
@@ -255,14 +262,15 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Processes a document's content as text only by finding an appropriate specialized handler
-	 * and delegating the processing to it.
+	 * Processes a document's content as text only by finding an appropriate
+	 * specialized handler and delegating the processing to it.
 	 * 
 	 * @param reference The document reference to process
-	 * @param is The input stream containing the document content
-	 * @return A GeboDocument containing the processed text content, or null if no handler is available
+	 * @param is        The input stream containing the document content
+	 * @return A GeboDocument containing the processed text content, or null if no
+	 *         handler is available
 	 * @throws GeboIngestionException If an error occurs during ingestion
-	 * @throws IOException If an I/O error occurs
+	 * @throws IOException            If an I/O error occurs
 	 */
 	@Override
 	public GeboDocument handleTextOnlyContent(GDocumentReference reference, InputStream is)
@@ -275,14 +283,15 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 	}
 
 	/**
-	 * Processes a document by finding an appropriate specialized handler
-	 * and delegating the processing to it.
+	 * Processes a document by finding an appropriate specialized handler and
+	 * delegating the processing to it.
 	 * 
 	 * @param reference The document reference to process
-	 * @param is The input stream containing the document content
-	 * @return A GeboDocument containing the processed document, or null if no handler is available
+	 * @param is        The input stream containing the document content
+	 * @return A GeboDocument containing the processed document, or null if no
+	 *         handler is available
 	 * @throws GeboIngestionException If an error occurs during ingestion
-	 * @throws IOException If an I/O error occurs
+	 * @throws IOException            If an I/O error occurs
 	 */
 	@Override
 	public GeboDocument handleDocument(GDocumentReference reference, InputStream is)

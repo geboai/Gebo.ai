@@ -25,13 +25,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class GDocumentReference extends GAbstractVirtualFilesystemObject {
 
 	/**
-	 * Enumeration for defining the type of reference - either a FILE or WEB.
-	 */
-	public static enum ReferenceType {
-		FILE, WEB
-	}
-
-	/**
 	 * Serial version UID for serialization.
 	 */
 	private static final long serialVersionUID = 3645646023522604382L;

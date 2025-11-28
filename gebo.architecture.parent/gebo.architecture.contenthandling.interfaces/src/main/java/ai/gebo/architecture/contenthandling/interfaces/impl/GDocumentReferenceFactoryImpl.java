@@ -25,8 +25,8 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.contenthandling.interfaces.GeboContentHandlerSystemException;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
-import ai.gebo.knlowledgebase.model.contents.GDocumentReference.ReferenceType;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
+import ai.gebo.knlowledgebase.model.contents.ReferenceType;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
 
