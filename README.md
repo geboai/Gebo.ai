@@ -12,6 +12,7 @@ an enterprise version with more feature and support is also available.
  
 ## Gebo.ai features:
 ### Administrative features
+ All the following features are fully configurable using the administrative AI.
  - Configure the large language models to use like:
       - OpenAI chatgpt
       - Anthropic Claude
@@ -22,6 +23,7 @@ an enterprise version with more feature and support is also available.
       - MistralAI
       - Regolo.ai (Italian/European)
       - Almost every local large language model using Ollama 
+      - Every provider/local server compatible with OpenAi API
  - Configure tools & functions that each llm configuration can use      
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
     - Microsoft Onedrive/Sharepoint
@@ -30,6 +32,13 @@ an enterprise version with more feature and support is also available.
     - Google Workspaces/Drives (under development, coming soon)
     - GitHub/GIT/Bitbucket or other git compatible servers
     - Company shared filesystems
+ - Configure company single sign on (SSO) using one of the following oauth2 providers:
+ 	- Microsoft Entra
+ 	- Google auth   
+ 	- AWS Cognito
+ 	- KeyCloak (as Generic oauth2)
+ - Configure GraphRag features (experimental)
+ 	- The software can use cheap models provided (on premise or in cloud) to export knowledge graphs persisted with neo4j. 	
  - Create knowledge bases collectioning documents from the previus mentioned system.  
  - Schedule document updates for AI reindexing (embedding) on updates.
  - Monitor embedding batch job.
@@ -46,7 +55,9 @@ an enterprise version with more feature and support is also available.
 ### Users features        
  - Chat using chatbots without retrieve augmented generation according to admin config.
  - Chat using chatbots with retrieve augmented generation  according to admin config.
- - Browse company knowledge bases to select  documents to chat/work with  according to admin config.     
+ - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
+ - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
+ - Voice interface working with OpenAI provider.   
 
 ## How to install Gebo.ai 
 
