@@ -178,11 +178,12 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		graphragConfig.setUsedModelConfiguration(GObjectRef.of((GBaseChatModelConfig) model.getConfig()));
 		graphragConfig.setDescription("Default knowledge extraction model");
 		graphragConfig.setProcessEveryDocument(false);
-		graphragConfig.setGraphRagAllSources(false);		
+		graphragConfig.setGraphRagAllSources(false);
+		graphragConfig.setExtractionFormat(GraphRagExtractionFormat.JSON);
 		persistentObjectManager.insert(graphragConfig);
 		graphragConfig = new GraphRagExtractionConfig();
 		graphragConfig.setExtractionPrompt("This is a knowledge extraction prompt \n\n${format}");
-		graphragConfig.setDefaultConfiguration(true);
+		graphragConfig.setDefaultConfiguration(false);
 		graphragConfig.setUsedModelConfiguration(GObjectRef.of((GBaseChatModelConfig) model.getConfig()));
 		graphragConfig.setDescription("Specific knowledge extraction model");
 		graphragConfig.setProcessEveryDocument(true);
@@ -190,6 +191,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		graphragConfig.setKnowledgeBaseCode(kb.getCode());
 		graphragConfig.setProjectCode(project.getCode());
 		graphragConfig.setEndpoint(GObjectRef.of(endpoint));
+		graphragConfig.setExtractionFormat(GraphRagExtractionFormat.JSON);
 		persistentObjectManager.insert(graphragConfig);
 	}
 
