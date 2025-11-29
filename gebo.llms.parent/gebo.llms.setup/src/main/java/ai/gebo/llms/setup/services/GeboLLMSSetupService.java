@@ -65,23 +65,23 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GeboLLMSSetupService {
-	final IGSecurityService securityService;
-	final IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
-	final IGChatModelConfigurationSupportServiceRepositoryPattern chatModelsSupportRepo;
-	final IGeboCryptingService cryptService;
-	final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsConfigDao;
-	final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embedModelsSupportRepo;
-	final IGToolCallbackSourceRepositoryPattern functionsCallbackWrapper;
-	final IGPersistentObjectManager persistenceManager;
-	final IGeboSecretsAccessService secretService;
-	final IGChatProfileManagementService chatProfileManagementService;
-	final IGRuntimeChatProfileChatModelDao chatProfileChatModelDao;
-	final LLMSVendorsSetupConfig vendorsSetupConfig;
-	final IGToolCallbackSourceRepositoryPattern toolsRepo;
+	private final IGSecurityService securityService;
+	private final IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
+	private final IGChatModelConfigurationSupportServiceRepositoryPattern chatModelsSupportRepo;
+	private final IGeboCryptingService cryptService;
+	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsConfigDao;
+	private final IGEmbeddingModelConfigurationSupportServiceRepositoryPattern embedModelsSupportRepo;
+	private final IGToolCallbackSourceRepositoryPattern functionsCallbackWrapper;
+	private final IGPersistentObjectManager persistenceManager;
+	private final IGeboSecretsAccessService secretService;
+	private final IGChatProfileManagementService chatProfileManagementService;
+	private final IGRuntimeChatProfileChatModelDao chatProfileChatModelDao;
+	private final LLMSVendorsSetupConfig vendorsSetupConfig;
+	private final IGToolCallbackSourceRepositoryPattern toolsRepo;
 	// Sample text for testing embedding model configurations.
-	static final String embeddingText4Test = "By default, the length of the embedding vector will be 1536 for text-embedding-3-small or 3072 for text-embedding-3-large. You can reduce the dimensions of the embedding by passing in the dimensions parameter without the embedding losing its concept-representing properties. We go into more detail on embedding dimensions in the embedding use case section.";
+	private static final String embeddingText4Test = "By default, the length of the embedding vector will be 1536 for text-embedding-3-small or 3072 for text-embedding-3-large. You can reduce the dimensions of the embedding by passing in the dimensions parameter without the embedding losing its concept-representing properties. We go into more detail on embedding dimensions in the embedding use case section.";
 	// Logger instance to log messages.
-	static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(GeboLLMSSetupService.class);
+	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(GeboLLMSSetupService.class);
 
 	/**
 	 * Checks if the default language models (chat and embedding) are present.
