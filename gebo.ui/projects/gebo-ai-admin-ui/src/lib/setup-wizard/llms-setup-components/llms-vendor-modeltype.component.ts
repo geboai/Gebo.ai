@@ -218,11 +218,15 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
 
             }).subscribe({
                 next: (value) => {
+                    //showing eventual fealures or successes
                     this.assignBackendMessages(value?.messages);
                     if (value.hasErrorMessages !== true && value.result) {
+                        //the created secret is automatically selected and the option of using it or creating another
+                        //new secret is shown.
                         this.secrets = [...this.secrets, value.result];
                         this.secretFormGroup.controls["useExistingOrNew"].setValue("EXISTING");
                         this.secretFormGroup.controls["selectedSecret"].setValue(value.result.code);
+                        this.existingOrNewShow=true;
                     }
                 },
                 complete: () => {
