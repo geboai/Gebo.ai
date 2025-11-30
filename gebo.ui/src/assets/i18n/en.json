@@ -169,6 +169,10 @@
             "mandatory-missing": {
                 "summary": "Gebo.ai setup is missing some mandatory step",
                 "detail": "Please review the red steps of the setup process"
+            },
+            "googleDriveWorkspacesSystemSetupSection": {
+                "label": "Google Drive/Workspaces integration",
+                "description": "Configure Gebo.ai to access your Google cloud Drive/Workspaces team data"
             }
         },
         "ConfluenceWizardComponent": {
@@ -426,6 +430,20 @@
             },
             "KnowledgeBaseCodesHeader": {
                 "label": "Knowledge base codes"
+            }
+        },
+        "GoogleWorkspacesWizardComponent": {
+            "MainPanel": {
+                "label": "Setup company Google Drive/Workspaces systems"
+            },
+            "ConfigCodeHeader": {
+                "label": "Config code"
+            },
+            "GoogleDriveBtn": {
+                "label": "Google Drive"
+            },
+            "DescriptionHeader": {
+                "label": "Description"
             }
         }
     },
@@ -2049,6 +2067,15 @@
             "pub": {
                 "label": "Public key",
                 "help": "Open the public key file and copy on this text area."
+            },
+            "jsonContent": {
+                "label": "Google credentials file content",
+                "help": "Copy here the file content of Google api credentials file downloaded from the google cloud api console (https://console.cloud.google.com/)"
+            },
+            "delegatedUser": {
+                "label": "Google user to impersonate",
+                "help": "The user that will be impersonated by the provided credentials",
+                "placeholder": "The user that will be impersonated by the provided credentials"
             }
         }
     },
@@ -2653,6 +2680,10 @@
             "ai_gebo_git_content_handler_GGitProjectEndpoint": {
                 "label": "+git repo",
                 "help": "add a git repository data source like bitbucket,github or others"
+            },
+            "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint": {
+                "label": "+google drive",
+                "help": "add a google drive data source"
             }
         }
     },
@@ -3057,6 +3088,118 @@
             },
             "AddConfigurationBtn": {
                 "label": "Add configuration"
+            }
+        }
+    },
+    "GeboAiGoogleWorkspacesModule": {
+        "GeboAIGoogleDriveFastComponent": {
+            "CreateBtn": {
+                "label": "Create"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of the Google Drive system."
+            },
+            "MainPanel": {
+                "label": "Create Google Drive/Workspace connection"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "delegatedUser": {
+                "label": "Google user to impersonate",
+                "help": "The user that will be impersonated by the provided credentials",
+                "placeholder": "The user that will be impersonated by the provided credentials"
+            },
+            "jsonContent": {
+                "label": "Google credentials json content",
+                "help": "Create Google Credentials with your workspace/team drives access in the Google Console Cloud and paste here the downloaded json file content (https://console.cloud.google.com/).",
+                "placeholder": "Create Google Credentials with your workspace/team drives access in the Google Console Cloud and paste here the downloaded json file content (https://console.cloud.google.com/)."
+            }
+        },
+        "GGoogleDriveProjectEndpoint": {
+            "SaveBtn": {
+                "label": "Save"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "PublishBtn": {
+                "label": "Publish!",
+                "help": "Saves and let these contents being available in knowledge base to LLm's"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "MainPanel": {
+                "label": "Sharing google drive contents"
+            },
+            "SettingsTab": {
+                "label": "Settings"
+            },
+            "LogsTab": {
+                "label": "Logs"
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of the uploaded content of google drive entries."
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "Automatically generated unique code of the contents."
+            },
+            "tree": {
+                "label": "Choosed file or folder",
+                "help": "Shared google drive spaces and pages contents"
+            },
+            "driveSystemCode": {
+                "label": "Google drive configuration",
+                "help": "Already configured google drive system reference."
+            },
+            "openZips": {
+                "label": "Open zip files",
+                "help": "Enable zip files opening and content extraction"
+            },
+            "parentProjectCode": {
+                "label": "Project",
+                "help": "Parent project reference."
+            },
+            "programmedTables": {
+                "label": "Contents updates checks schedule",
+                "help": "Configure the scheduling of changed contents to mantain the retrieve augmented generation system updated"
+            },
+            "catalogingCriteria": {
+                "label": "Folders and subfolders organization criteria",
+                "help": "Please explain here how the files and folders organization criteria has been done in the google drive contents shared with Gebo.ai"
+            }
+        },
+        "GGoogleDriveSystem": {
+            "GeneralSettingsTab": {
+                "label": "General settings"
+            },
+            "CancelBtn": {
+                "label": "Cancel"
+            },
+            "DeleteBtn": {
+                "label": "Delete"
+            },
+            "SaveBtn": {
+                "label": "Save"
+            },
+            "MainPanel": {
+                "label": "Editing google drive integration"
+            },
+            "code": {
+                "label": "Unique Code",
+                "help": "Automatically generated unique code of the google drive system."
+            },
+            "description": {
+                "label": "Description",
+                "help": "Enter the description of the google drive system."
+            },
+            "driveAccessSecret": {
+                "label": "Identity used",
+                "help": "Select or create the identity to access the google drive system"
             }
         }
     }
