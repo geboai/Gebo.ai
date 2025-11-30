@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Bei der Gebo.ai Einrichtung fehlt ein erforderlicher Schritt",
         "detail" : "Bitte überprüfen Sie die roten Schritte des Einrichtungsprozesses"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces-Integration",
+        "description" : "Konfigurieren Sie Gebo.ai, um auf Ihre Google Cloud Drive/Workspaces Team-Daten zuzugreifen"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Wissensdatenbank-Codes"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Firmenweite Google Drive/Workspaces-Systeme einrichten"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationscode"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beschreibung"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Öffentlicher Schlüssel",
         "help" : "Public Key Datei öffnen und hier hineinkopieren."
+      },
+      "jsonContent" : {
+        "label" : "Google-Zugangsdaten Dateiinhalte",
+        "help" : "Kopieren Sie hier den Inhalt der Google API-Zugangsdaten-Datei, die Sie aus der Google Cloud API-Konsole (https://console.cloud.google.com/) heruntergeladen haben"
+      },
+      "delegatedUser" : {
+        "label" : "Zu vertretender Google-Nutzer",
+        "help" : "Der Nutzer, der durch die bereitgestellten Zugangsdaten vertreten wird",
+        "placeholder" : "Der Nutzer, der durch die bereitgestellten Zugangsdaten vertreten wird"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "Git-Repository-Datenquelle wie bitbucket, github oder andere hinzufügen"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "eine Google Drive Datenquelle hinzufügen"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Konfiguration hinzufügen"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Erstellen"
+      },
+      "description" : {
+        "label" : "Beschreibung",
+        "help" : "Geben Sie die Beschreibung des Google Drive-Systems ein."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace-Verbindung erstellen"
+      },
+      "CancelBtn" : {
+        "label" : "Abbrechen"
+      },
+      "delegatedUser" : {
+        "label" : "Zu vertretender Google-Nutzer",
+        "help" : "Der Nutzer, der durch die bereitgestellten Zugangsdaten vertreten wird",
+        "placeholder" : "Der Nutzer, der durch die bereitgestellten Zugangsdaten vertreten wird"
+      },
+      "jsonContent" : {
+        "label" : "Google-Zugangsdaten JSON-Inhalt",
+        "help" : "Erstellen Sie Google-Zugangsdaten mit Zugriffsrechten für Ihre Workspace-/Teamlaufwerke in der Google Cloud Console und fügen Sie hier den heruntergeladenen JSON-Dateiinhalt ein (https://console.cloud.google.com/).",
+        "placeholder" : "Erstellen Sie Google-Zugangsdaten mit Zugriffsrechten für Ihre Workspace-/Teamlaufwerke in der Google Cloud Console und fügen Sie hier den heruntergeladenen JSON-Dateiinhalt ein (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Speichern"
+      },
+      "CancelBtn" : {
+        "label" : "Abbrechen"
+      },
+      "PublishBtn" : {
+        "label" : "Veröffentlichen!",
+        "help" : "Speichern und diese Inhalte dem Wissensbereich für LLm's zur Verfügung stellen"
+      },
+      "DeleteBtn" : {
+        "label" : "Löschen"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive-Inhalte freigeben"
+      },
+      "SettingsTab" : {
+        "label" : "Einstellungen"
+      },
+      "LogsTab" : {
+        "label" : "Protokolle"
+      },
+      "description" : {
+        "label" : "Beschreibung",
+        "help" : "Geben Sie die Beschreibung der hochgeladenen Inhalte von Google Drive-Einträgen ein."
+      },
+      "code" : {
+        "label" : "Eindeutiger Code",
+        "help" : "Automatisch generierter eindeutiger Code der Inhalte."
+      },
+      "tree" : {
+        "label" : "Ausgewählte Datei oder Ordner",
+        "help" : "Freigegebener Google Drive-Bereich und Seiteninhalte"
+      },
+      "driveSystemCode" : {
+        "label" : "Google Drive-Konfiguration",
+        "help" : "Bereits konfigurierte Google Drive-Systemreferenz."
+      },
+      "openZips" : {
+        "label" : "ZIP-Dateien öffnen",
+        "help" : "Öffnen und Extrahieren von ZIP-Dateiinhalten ermöglichen"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenz des übergeordneten Projekts."
+      },
+      "programmedTables" : {
+        "label" : "Zeitplan für Inhaltsaktualisierungen",
+        "help" : "Planung der Aktualisierung geänderter Inhalte konfigurieren, um das Retrieval-Augmented-Generation-System aktuell zu halten"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterien für Ordnungsstruktur von Ordnern und Unterordnern",
+        "help" : "Bitte erläutern Sie hier, nach welchen Kriterien die Dateien und Ordner innerhalb der mit Gebo.ai geteilten Google Drive-Inhalte organisiert wurden"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Allgemeine Einstellungen"
+      },
+      "CancelBtn" : {
+        "label" : "Abbrechen"
+      },
+      "DeleteBtn" : {
+        "label" : "Löschen"
+      },
+      "SaveBtn" : {
+        "label" : "Speichern"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive-Integration bearbeiten"
+      },
+      "code" : {
+        "label" : "Eindeutiger Code",
+        "help" : "Automatisch generierter eindeutiger Code des Google Drive-Systems."
+      },
+      "description" : {
+        "label" : "Beschreibung",
+        "help" : "Geben Sie die Beschreibung des Google Drive-Systems ein."
+      },
+      "driveAccessSecret" : {
+        "label" : "Verwendete Identität",
+        "help" : "Wählen oder erstellen Sie die Identität, um auf das Google Drive-System zuzugreifen"
       }
     }
   }

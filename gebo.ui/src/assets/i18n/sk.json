@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Nastavenie Gebo.ai chýba povinný krok",
         "detail" : "Prosím, skontrolujte červené kroky v procese nastavenia"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrácia Google Drive/Workspaces",
+        "description" : "Nakonfigurujte Gebo.ai na prístup k tímovým dátam v Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kódy vedomostnej databázy"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Nastaviť firemné Google Drive/Workspaces systémy"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Verejný kľúč",
         "help" : "Otvorte súbor s verejným kľúčom a skopírujte ho do tohto textového poľa."
+      },
+      "jsonContent" : {
+        "label" : "Obsah súboru s Google povereniami",
+        "help" : "Skopírujte sem obsah súboru s Google API povereniami stiahnutého z google cloud api konzoly (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google používateľ na zosobnenie",
+        "help" : "Používateľ, ktorého budú poverenia zosobňovať",
+        "placeholder" : "Používateľ, ktorého budú poverenia zosobňovať"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "pridať zdroj git repozitára ako bitbucket, github alebo iné"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "pridať zdroj dát google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Pridať konfiguráciu"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis systému Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Vytvoriť pripojenie Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "delegatedUser" : {
+        "label" : "Google používateľ na zosobnenie",
+        "help" : "Používateľ, ktorého budú poverenia zosobňovať",
+        "placeholder" : "Používateľ, ktorého budú poverenia zosobňovať"
+      },
+      "jsonContent" : {
+        "label" : "Obsah Google poverení vo formáte json",
+        "help" : "Vytvorte Google poverenia s prístupom k vašim firemným/team drives v Google Console Cloud a vložte sem obsah stiahnutého json súboru (https://console.cloud.google.com/).",
+        "placeholder" : "Vytvorte Google poverenia s prístupom k vašim firemným/team drives v Google Console Cloud a vložte sem obsah stiahnutého json súboru (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "PublishBtn" : {
+        "label" : "Zverejniť!",
+        "help" : "Uloží a sprístupní tieto obsahy v databáze znalostí pre LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "MainPanel" : {
+        "label" : "Zdieľanie obsahu google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis nahraného obsahu položiek google drive."
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód obsahu."
+      },
+      "tree" : {
+        "label" : "Vybraný súbor alebo priečinok",
+        "help" : "Zdieľané priestory a stránky google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfigurácia Google drive",
+        "help" : "Referencie už nakonfigurovaného systému google drive."
+      },
+      "openZips" : {
+        "label" : "Otvárať zip súbory",
+        "help" : "Povoliť otváranie zip súborov a extrakciu obsahu"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenčný projekt"
+      },
+      "programmedTables" : {
+        "label" : "Plánovanie kontroly aktualizácií obsahu",
+        "help" : "Nastavte plánovanie kontrol zmeneného obsahu, aby ste udržiavali systém rozšírenej generácie údajov aktuálny"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kritéria organizácie priečinkov a podpriečinkov",
+        "help" : "Vysvetlite, prosím, ako boli organizované priečinky a súbory v obsahu google drive zdieľanom s Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Všeobecné nastavenia"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava integrácie google drive"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód systému google drive."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis systému google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Použitá identita",
+        "help" : "Vyberte alebo vytvorte identitu na prístup do systému google drive"
       }
     }
   }

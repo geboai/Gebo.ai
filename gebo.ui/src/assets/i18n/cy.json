@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Mae setup Gebo.ai ar goll cam gorfodol",
         "detail" : "Adolygwch y camau coch yn y broses setup"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integreiddio Google Drive/Workspaces",
+        "description" : "Ffurfweddu Gebo.ai i gael mynediad at ddata tîm Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Codau cronfa wybodaeth"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Sefydlu systemau Google Drive/Workspaces y cwmni"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Allwedd gyhoeddus",
         "help" : "Agorwch y ffeil allwedd gyhoeddus a chopïwch yma."
+      },
+      "jsonContent" : {
+        "label" : "Cynnwys ffeil cymwysterau Google",
+        "help" : "Copïwch yma gynnwys ffeil cymwysterau api Google wedi'i lawrlwytho o'r consol api google cloud (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Defnyddiwr Google i'w efelychu",
+        "help" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir",
+        "placeholder" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+repo git",
         "help" : "ychwanegu ffynhonnell data rep Git fel bitbucket, github neu eraill"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ychwanegu ffynhonnell ddata google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Ychwanegu ffurfweddiad"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Creu"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch y disgrifiad o'r system Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Creu cysylltiad Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "delegatedUser" : {
+        "label" : "Defnyddiwr Google i'w efelychu",
+        "help" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir",
+        "placeholder" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir"
+      },
+      "jsonContent" : {
+        "label" : "Cynnwys json cymwysterau Google",
+        "help" : "Creu Cymwysterau Google gyda mynediad eich drives gwaith/tîm yn y Google Console Cloud a gludwch yma gynnwys y ffeil json a lawrlwythwyd (https://console.cloud.google.com/).",
+        "placeholder" : "Creu Cymwysterau Google gyda mynediad eich drives gwaith/tîm yn y Google Console Cloud a gludwch yma gynnwys y ffeil json a lawrlwythwyd (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn gadael i'r cynnwys fod ar gael yn y gronfa wybodaeth i LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "MainPanel" : {
+        "label" : "Rhannu cynnwys google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch y disgrifiad o gynnwys a uwchlwythwyd o danysgrifiadau google drive."
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw cynnwys a gynhyrchir yn awtomatig."
+      },
+      "tree" : {
+        "label" : "Ffeil neu ffolder dewiswyd",
+        "help" : "Cynnwys ardaloedd a thudalennau google drive a rennir"
+      },
+      "driveSystemCode" : {
+        "label" : "Ffurfweddiad google drive",
+        "help" : "Cyfeiriad at system google drive sydd eisoes wedi'i ffurfweddu."
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip ac echdynnu cynnwys"
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeiriad at brosiect rhiant."
+      },
+      "programmedTables" : {
+        "label" : "Amserlen gwiriadau diweddariadau cynnwys",
+        "help" : "Ffurfweddu'r amserlen diweddaru cynnwys er mwyn cadw'r system cenedlaethau atgyfnerthiedig yn gyfredol"
+      },
+      "catalogingCriteria" : {
+        "label" : "Meini prawf trefnu ffolderi ac is-ffolderi",
+        "help" : "Esboniwch yma sut mae'r ffeiliau a'r ffolderi wedi'u trefnu yn y cynnwys google drive a rannwyd gyda Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Gosodiadau cyffredinol"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "MainPanel" : {
+        "label" : "Golygu integreiddio google drive"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw'r system google drive a gynhyrchir yn awtomatig."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch y disgrifiad o'r system google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Hunaniaeth sydd wedi'i ddefnyddio",
+        "help" : "Dewiswch neu crëwch hunaniaeth i gael mynediad i'r system google drive"
       }
     }
   }

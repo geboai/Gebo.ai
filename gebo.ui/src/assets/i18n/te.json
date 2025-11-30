@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai సెటప్‌లో కొన్ని తప్పనిసరి దశలు మిస్సయ్యాయి",
         "detail" : "దయచేసి సెటప్ ప్రక్రియలో ఉన్న ఎరుపు దశలను పరిశీలించండి"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ఇంటిగ్రేషన్",
+        "description" : "మీ Google cloud Drive/Workspaces టీమ్ డేటాను యాక్సెస్ చేయడానికి Gebo.ai ను ఆక్రమించండి"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "నాలెడ్జ్ బేస్ కోడ్లు"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "కంపెనీ Google Drive/Workspaces సిస్టమ్‌ల సెటప్ చేయండి"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "కాన్ఫిగరేషన్ కోడ్"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "వివరణ"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "పబ్లిక్ కీ",
         "help" : "పబ్లిక్ కీ ఫైలును తెరిచి, ఈ టెక్స్ట్ ప్రాంతంలో కాపీ చేయండి."
+      },
+      "jsonContent" : {
+        "label" : "Google ప్రమాణపత్రాల ఫైల్ కంటెంట్",
+        "help" : "Google cloud api కన్సోల్ నుండి డౌన్‌లోడ్ చేసిన Google api ప్రమాణపత్రాల ఫైల్ కంటెంట్‌ను ఇక్కడ కాపీ చేయండి (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "అనుకరించాల్సిన Google వినియోగదారు",
+        "help" : "ఈ ప్రమాణపత్రాల ద్వారా అనుకరించబడే వినియోగదారు",
+        "placeholder" : "ఈ ప్రమాణపత్రాల ద్వారా అనుకరించబడే వినియోగదారు"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket, github లేదా ఇతర git రెపోజిటరీ డేటా సోర్స్‌ను జోడించండి"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ఒక Google Drive డేటా సోర్స్ జోడించండి"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "కాన్ఫిగరేషన్ జోడించండి"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "సృష్టించు"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "Google Drive సిస్టమ్ యొక్క వివరణను నమోదు చేయండి."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace కనెక్షన్‌ను సృష్టించండి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "delegatedUser" : {
+        "label" : "అనుకరించాల్సిన Google వినియోగదారు",
+        "help" : "ఈ ప్రమాణపత్రాల ద్వారా అనుకరించబడే వినియోగదారు",
+        "placeholder" : "ఈ ప్రమాణపత్రాల ద్వారా అనుకరించబడే వినియోగదారు"
+      },
+      "jsonContent" : {
+        "label" : "Google ప్రమాణపత్రాల json కంటెంట్",
+        "help" : "Google Console Cloud లో మీ workspace/team drives యాక్సెస్‌తో Google ప్రమాణపత్రాలు సృష్టించండి మరియు డౌన్‌లోడ్ చేసిన json ఫైల్ కంటెంట్‌ను ఇక్కడ పేస్ట్ చేయండి (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud లో మీ workspace/team drives యాక్సెస్‌తో Google ప్రమాణపత్రాలు సృష్టించండి మరియు డౌన్‌లోడ్ చేసిన json ఫైల్ కంటెంట్‌ను ఇక్కడ పేస్ట్ చేయండి (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "PublishBtn" : {
+        "label" : "ప్రచురించండి!",
+        "help" : "సేవ్ చేయండి మరియు ఈ కంటెంట్‌లను LLm యొక్క నోలెడ్జ్ బేస్‌లో అందుబాటులో ఉండేలా చేయండి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయి"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive కంటెంట్‌లను పంచుకునుట"
+      },
+      "SettingsTab" : {
+        "label" : "సెట్టింగ్‌లు"
+      },
+      "LogsTab" : {
+        "label" : "లాగ్స్"
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "అప్‌లోడ్ చేసిన Google Drive ఎంట్రీల కంటెంట్ యొక్క వివరణను నమోదు చేయండి."
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "కంటెంట్‌లకు ఆటోమాటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్."
+      },
+      "tree" : {
+        "label" : "ఎంచుకున్న ఫైల్ లేదా ఫోల్డర్",
+        "help" : "షేర్ చేసిన Google Drive స్పేస్‌లు మరియు పేజీల కంటెంట్‌లు"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive కాన్ఫిగరేషన్",
+        "help" : "ఇప్పటికే కాన్ఫిగర్ చేసిన Google Drive సిస్టమ్ రిఫరెన్స్."
+      },
+      "openZips" : {
+        "label" : "జిప్ ఫైళ్ళను ఓపెన్ చేయండి",
+        "help" : "జిప్ ఫైళ్ళను ఓపెన్ చేయడం మరియు కంటెంట్‌ను ఎక్స్‌ట్రాక్ట్ చేయడం అనుమతించండి"
+      },
+      "parentProjectCode" : {
+        "label" : "ప్రాజెక్ట్",
+        "help" : "పెరెంట్ ప్రాజెక్ట్ రిఫరెన్స్."
+      },
+      "programmedTables" : {
+        "label" : "కంటెంట్ నవీకరణ చెక్స్ షెడ్యూల్",
+        "help" : "బదిలీ చేయబడిన జనరేషన్ సిస్టమ్ అప్‌డేట్‌గా ఉంచడానికి మారిన కంటెంట్‌లను షెడ్యూలింగ్‌ను ఆక్రమించండి"
+      },
+      "catalogingCriteria" : {
+        "label" : "ఫోల్డర్లు మరియు ఉపఫోల్డర్ల ఆర్గనైజేషన్ ప్రమాణాలు",
+        "help" : "Gebo.aiతో షేర్ చేసిన Google Drive కంటెంట్‌లలో ఫైల్స్ మరియు ఫోల్డర్ల ఆర్గనైజేషన్ ప్రమాణాలు ఎలా అమలు చేయబడెనో ఇక్కడ వివరించండి"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "జనరల్ సెట్టింగ్స్"
+      },
+      "CancelBtn" : {
+        "label" : "రద్దు చేయి"
+      },
+      "DeleteBtn" : {
+        "label" : "డిలీట్ చేయి"
+      },
+      "SaveBtn" : {
+        "label" : "సేవ్ చేయి"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive ఇంటిగ్రేషన్‌ను ఎడిట్ చేయడం"
+      },
+      "code" : {
+        "label" : "యూనిక్ కోడ్",
+        "help" : "Google Drive సిస్టమ్ యొక్క ఆటోమేటిక్‌గా రూపొందించబడిన యూనిక్ కోడ్."
+      },
+      "description" : {
+        "label" : "వివరణ",
+        "help" : "Google Drive సిస్టమ్ యొక్క వివరణను నమోదు చేయండి."
+      },
+      "driveAccessSecret" : {
+        "label" : "వాడబడే ఐడెంటిటీ",
+        "help" : "Google Drive సిస్టమ్‌కి యాక్సెస్ చేసేందుకు ఐడెంటిటీని ఎంచుకోండి లేదా సృష్టించండి"
       }
     }
   }

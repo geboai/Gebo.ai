@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai opstelling kort 'n verpligte stap",
         "detail" : "Gaan asseblief die rooi stappe van die opstelproses na"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integrasie",
+        "description" : "Stel Gebo.ai op om toegang te hê tot jou Google cloud Drive/Workspaces span data"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kennisbasis kodes"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Stel maatskappy Google Drive/Workspaces stelsels op"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasiekode"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrywing"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Publieke sleutel",
         "help" : "Maak die publieke sleutel-lêer oop en kopieer in hierdie teksarea."
+      },
+      "jsonContent" : {
+        "label" : "Google geloofsbrieweblêerinhoud",
+        "help" : "Plak die lêerinhoud van Google API geloofsbriewe hier wat afgelaai is vanaf die Google cloud API-konsol (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google gebruiker om voor te doen as",
+        "help" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe",
+        "placeholder" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "voeg 'n git-bewaarplek databron by soos bitbucket, github of ander"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "voeg 'n google drive databron by"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Voeg konfigurasie by"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Skep"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die Google Drive-stelsel in."
+      },
+      "MainPanel" : {
+        "label" : "Skep Google Drive/Workspace-verbinding"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "delegatedUser" : {
+        "label" : "Google gebruiker om voor te doen as",
+        "help" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe",
+        "placeholder" : "Die gebruiker wat voorgedoen sal word deur die verskafde geloofsbriewe"
+      },
+      "jsonContent" : {
+        "label" : "Google geloofsbriewe json-inhoud",
+        "help" : "Skep Google geloofsbriewe met jou toegang tot werkruimte/span drives in die Google Console Cloud en plak die afgelaaide json-lêerinhoud hier (https://console.cloud.google.com/).",
+        "placeholder" : "Skep Google geloofsbriewe met jou toegang tot werkruimte/span drives in die Google Console Cloud en plak die afgelaaide json-lêerinhoud hier (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "PublishBtn" : {
+        "label" : "Publiseer!",
+        "help" : "Stoor en maak hierdie inhoud beskikbaar in kennisbasis vir LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "MainPanel" : {
+        "label" : "Deel google drive-inhoud"
+      },
+      "SettingsTab" : {
+        "label" : "Instellings"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing in van die opgelaaide inhoud van google drive-inskrywings."
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die inhoud."
+      },
+      "tree" : {
+        "label" : "Gekose lêer of gids",
+        "help" : "Gedeelde google drive-ruimtes en bladsyinhoud"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive-konfigurasie",
+        "help" : "Reeds gekonfigureerde google drive-stelsel verwysing."
+      },
+      "openZips" : {
+        "label" : "Maak zip-lêers oop",
+        "help" : "Aktiveer zip-lêers oopmaak en inhoudonttrekking"
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Ouerprojek verwysing."
+      },
+      "programmedTables" : {
+        "label" : "Inhoudsopdateringskontrole skedule",
+        "help" : "Stel die skedulering van veranderde inhoud in om die retrieve augmented generation system op datum te hou"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vouers en subvouers organisasie-kriteria",
+        "help" : "Verduidelik asseblief hier hoe die lêer- en vouerorganisasiekriteria toegepas is op die google drive-inhoud wat met Gebo.ai gedeel is"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Algemene instellings"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselleer"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwyder"
+      },
+      "SaveBtn" : {
+        "label" : "Stoor"
+      },
+      "MainPanel" : {
+        "label" : "Google drive-integrasie redigeer"
+      },
+      "code" : {
+        "label" : "Unieke kode",
+        "help" : "Outomaties gegenereerde unieke kode van die google drive-stelsel."
+      },
+      "description" : {
+        "label" : "Beskrywing",
+        "help" : "Voer die beskrywing van die google drive-stelsel in."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identiteit gebruik",
+        "help" : "Kies of skep die identiteit om toegang te verkry tot die google drive-stelsel"
       }
     }
   }

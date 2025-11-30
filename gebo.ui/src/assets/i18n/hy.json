@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai կարգավորումը բացում է պարտադիր քայլ",
         "detail" : "Խնդրում ենք վերանայել կարգավորման գործընթացի կարմիր քայլերը"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ինտեգրացիա",
+        "description" : "Կազմակերպեք Gebo.ai-ը, որպեսզի մուտք գործի ձեր Google cloud Drive/Workspaces թիմային տվյալները"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Գիտելիքների բազայի կոդեր"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Կազմակերպության Google Drive/Workspaces համակարգերի կարգավորում"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կարգավորման կոդ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Հասարակական բանալի",
         "help" : "Բացեք հասարակական բանալու ֆայլը և պատճենեք այս դաշտում։"
+      },
+      "jsonContent" : {
+        "label" : "Google հավաստագիրը ֆայլի բովանդակություն",
+        "help" : "Պատճենեք այստեղ Google api հավաստագրերի ֆայլի բովանդակությունը, որը ներբեռնել եք google cloud api կոնսոլից (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google օգտագործող, որին պետք է անձնավորել",
+        "help" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով",
+        "placeholder" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "ավելացնել git պահոցների տվ. աղբյուր՝ օրինակ bitbucket, github կամ այլ"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ավելացնել google drive տվյալների աղբյուր"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Ավելացնել կարգավորում"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք Google Drive համակարգի նկարագրությունը։"
+      },
+      "MainPanel" : {
+        "label" : "Ստեղծել Google Drive/Workspace կապակցում"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "delegatedUser" : {
+        "label" : "Google օգտագործող, որին պետք է անձնավորել",
+        "help" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով",
+        "placeholder" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով"
+      },
+      "jsonContent" : {
+        "label" : "Google հավաստագրերը json բովանդակություն",
+        "help" : "Ստեղծեք Google Credentials ձեր workspace/թիմի drive-ներին մուտքի համար Google Console Cloud-ում և պատճենեք այստեղ ներբեռնված json ֆայլի բովանդակությունը (https://console.cloud.google.com/):",
+        "placeholder" : "Ստեղծեք Google Credentials ձեր workspace/թիմի drive-ներին մուտքի համար Google Console Cloud-ում և պատճենեք այստեղ ներբեռնված json ֆայլի բովանդակությունը (https://console.cloud.google.com/):"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և դարձնում այս բովանդակությունը մատչելի գիտելիքների բազայում LLm-ների համար"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "MainPanel" : {
+        "label" : "Google drive-ի բովանդակության տարածում"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ներբեռնված google drive բովանդակության նկարագրությունը։"
+      },
+      "code" : {
+        "label" : "Ունիկալ կոդ",
+        "help" : "Բովանդակության ավտոմատ գեներացված ունիկալ կոդ։"
+      },
+      "tree" : {
+        "label" : "Ընտրված ֆայլ կամ պանակ",
+        "help" : "Տարածված google drive տարածքներ և էջերի բովանդակություն"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive կարգավորում",
+        "help" : "Արդեն կազմաձևած google drive համակարգի հղում։"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացելու և բովանդակության հանման հնարավորությունը"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Մայր նախագծի հղում։"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացման ստուգումների ժամանակացույց",
+        "help" : "Կարգավորեք փոփոխված բովանդակության ստուգումների ժամանակացույցը, որպեսզի ճշգրիտ թարմացվի Retrieve Augmented Generation համակարգը"
+      },
+      "catalogingCriteria" : {
+        "label" : "Ֆայլերի և ենթապանակների կազմակերպման չափանիշներ",
+        "help" : "Ավածրագրեք այստեղ, թե ինչպես են ֆայլերն ու պանակները կազմակերպվել Gebo.ai-ի հետ տարածված google drive-ի բովանդակության մեջ"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ընդհանուր կարգավորումներ"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ինտեգրման խմբագրում"
+      },
+      "code" : {
+        "label" : "Ունիկալ կոդ",
+        "help" : "Google drive համակարգի ավտոմատ գեներացված ունիկալ կոդ։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք google drive համակարգի նկարագրությունը։"
+      },
+      "driveAccessSecret" : {
+        "label" : "Օգտագործված ինքնություն",
+        "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ google drive համակարգին մուտք գործելու համար"
       }
     }
   }

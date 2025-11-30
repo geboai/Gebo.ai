@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Недостасува задолжителен чекор во подесувањето на Gebo.ai",
         "detail" : "Прегледајте ги обележаните (црвени) чекори во процесот на подесување"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces интеграција",
+        "description" : "Конфигурирајте го Gebo.ai за пристап до вашите тимски податоци на Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Кодови на бази на знаење"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Постави Google Drive/Workspaces системи за компанијата"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Конфигурациски код"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Опис"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Јавен клуч",
         "help" : "Отворете ја јавната датотека со клуч и копирајте ја во ова поле."
+      },
+      "jsonContent" : {
+        "label" : "Содржина на датотеката со Google креденции",
+        "help" : "Копирајте ја овде содржината на датотеката со Google api креденции преземена од google cloud api конзолата (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google корисник за империонирање",
+        "help" : "Корисникот кој ќе биде империониран со овие креденции",
+        "placeholder" : "Корисникот кој ќе биде империониран со овие креденци"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "додајте извор на податоци од git репозиториум како bitbucket, github или други"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "додај извор на податоци од google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Додај конфигурација"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Креирај"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Внесете опис за Google Drive системот."
+      },
+      "MainPanel" : {
+        "label" : "Креирај Google Drive/Workspace поврзување"
+      },
+      "CancelBtn" : {
+        "label" : "Откажи"
+      },
+      "delegatedUser" : {
+        "label" : "Google корисник за империонирање",
+        "help" : "Корисникот кој ќе биде империониран со овие креденции",
+        "placeholder" : "Корисникот кој ќе биде империониран со овие креденци"
+      },
+      "jsonContent" : {
+        "label" : "Содржина на Google credentials json",
+        "help" : "Креирајте Google креденции со пристап до вашите workspace/team drives во Google Console Cloud и ставете ја тука содржината на преземената json датотека (https://console.cloud.google.com/).",
+        "placeholder" : "Креирајте Google креденции со пристап до вашите workspace/team drives во Google Console Cloud и ставете ја тука содржината на преземената json датотека (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Зачувај"
+      },
+      "CancelBtn" : {
+        "label" : "Откажи"
+      },
+      "PublishBtn" : {
+        "label" : "Објави!",
+        "help" : "Ги зачувува и ги прави содржините достапни во базата на знаење на LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Избриши"
+      },
+      "MainPanel" : {
+        "label" : "Споделување на содржини од google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Поставки"
+      },
+      "LogsTab" : {
+        "label" : "Логови"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Внесете опис за испратената содржина од google drive записи."
+      },
+      "code" : {
+        "label" : "Уникатен код",
+        "help" : "Автоматски генериран уникатен код на содржините."
+      },
+      "tree" : {
+        "label" : "Избрана датотека или папка",
+        "help" : "Споделени google drive простори и страници содржини"
+      },
+      "driveSystemCode" : {
+        "label" : "Конфигурација на google drive",
+        "help" : "Англирај веќе конфигуриран google drive систем."
+      },
+      "openZips" : {
+        "label" : "Отвори zip датотеки",
+        "help" : "Овозможи отворање и извлекување содржина на zip датотеки"
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Референца на матичен проект."
+      },
+      "programmedTables" : {
+        "label" : "Распоред за проверка на ажурирања на содржините",
+        "help" : "Конфигурирајте го распоредот за променети содржини за одржување на системот за зголемено генерирање ажуриран"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критериуми за организација на папки и потпапки",
+        "help" : "Објаснете овде како е организирана структуратата на датотеките и папките во содржините од google drive споделени со Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Општи поставки"
+      },
+      "CancelBtn" : {
+        "label" : "Откажи"
+      },
+      "DeleteBtn" : {
+        "label" : "Избриши"
+      },
+      "SaveBtn" : {
+        "label" : "Зачувај"
+      },
+      "MainPanel" : {
+        "label" : "Уредување на интеграцијата со google drive"
+      },
+      "code" : {
+        "label" : "Уникатен код",
+        "help" : "Автоматски генериран уникатен код на google drive системот."
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Внесете опис за google drive системот."
+      },
+      "driveAccessSecret" : {
+        "label" : "Користен идентитет",
+        "help" : "Изберете или креирајте идентитет за пристап до google drive системот"
       }
     }
   }

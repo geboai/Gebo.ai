@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai सेटअपमा केही अनिवार्य चरणहरू छुटेका छन्",
         "detail" : "कृपया सेटअप प्रक्रियाका रातो चरणहरू समीक्षा गर्नुहोस्"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces एकीकरण",
+        "description" : "Gebo.ai लाई तपाईंको Google cloud Drive/Workspaces टिम डाटामा पहुँच गर्न कन्फिगर गर्नुहोस्"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "नलेजबेस कोडहरू"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "कम्पनीको Google Drive/Workspaces प्रणाली सेटअप गर्नुहोस्"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "कन्फिगरेशन कोड"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "विवरण"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "सार्वजनिक कुञ्जी",
         "help" : "सार्वजनिक कुञ्जी फाइल खोल्नुहोस् र यस पाठ क्षेत्रमा प्रतिलिपि गर्नुहोस्।"
+      },
+      "jsonContent" : {
+        "label" : "Google प्रमाणपत्र फाइलको सामग्री",
+        "help" : "Google api प्रमाणपत्र फाइलको सामग्री यहाँ प्रतिलिपि गर्नुहोस् जुन google cloud api console (https://console.cloud.google.com/) बाट डाउनलोड गरिएको छ"
+      },
+      "delegatedUser" : {
+        "label" : "नक्कल गर्नुपर्ने Google प्रयोगकर्ता",
+        "help" : "दिइएको प्रमाणपत्रबाट जसलाई नक्कल गरिनेछ त्यो प्रयोगकर्ता",
+        "placeholder" : "दिइएको प्रमाणपत्रबाट जसलाई नक्कल गरिनेछ त्यो प्रयोगकर्ता"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket, github वा अन्य git repository डाटा स्रोत थप्नुहोस्"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive डाटा स्रोत थप्नुहोस्"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "कन्फिगरेशन थप्नुहोस्"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "सिर्जना गर्नुहोस्"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "Google Drive प्रणालीको विवरण प्रविष्ट गर्नुहोस्।"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace जडान सिर्जना गर्नुहोस्"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "delegatedUser" : {
+        "label" : "नक्कल गर्नुपर्ने Google प्रयोगकर्ता",
+        "help" : "दिइएको प्रमाणपत्रबाट जसलाई नक्कल गरिनेछ त्यो प्रयोगकर्ता",
+        "placeholder" : "दिइएको प्रमाणपत्रबाट जसलाई नक्कल गरिनेछ त्यो प्रयोगकर्ता"
+      },
+      "jsonContent" : {
+        "label" : "Google प्रमाणपत्र json सामग्री",
+        "help" : "Google Console Cloud मा तपाईंको workspace/team drives पहुँचसहित Google प्रमाणपत्र सिर्जना गर्नुहोस् र यहाँ डाउनलोड गरिएको json फाइलको सामग्री टाँस्नुहोस् (https://console.cloud.google.com/)।",
+        "placeholder" : "Google Console Cloud मा तपाईंको workspace/team drives पहुँचसहित Google प्रमाणपत्र सिर्जना गर्नुहोस् र यहाँ डाउनलोड गरिएको json फाइलको सामग्री टाँस्नुहोस् (https://console.cloud.google.com/)।"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "सेभ गर्नुहोस्"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "PublishBtn" : {
+        "label" : "प्रकाशित गर्नुहोस्!",
+        "help" : "सेभ गर्छ र यी सामग्रीहरू LLm's लाई ज्ञान आधारमा उपलब्ध गराउँछ"
+      },
+      "DeleteBtn" : {
+        "label" : "मेटाउनुहोस्"
+      },
+      "MainPanel" : {
+        "label" : "google drive सामग्रीहरू साझा गर्दै"
+      },
+      "SettingsTab" : {
+        "label" : "सेटिङ्स"
+      },
+      "LogsTab" : {
+        "label" : "लगहरू"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "google drive प्रविष्टिहरूको अपलोड गरिएका सामग्रीको विवरण प्रविष्ट गर्नुहोस्।"
+      },
+      "code" : {
+        "label" : "अद्वितीय कोड",
+        "help" : "सामग्रीहरूको स्वचालित रूपमा सिर्जना गरिएको अद्वितीय कोड।"
+      },
+      "tree" : {
+        "label" : "छनोट गरिएको फाइल वा फोल्डर",
+        "help" : "साझा गरिएको google drive स्पेस र पृष्ठहरू सामग्री"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive कन्फिगरेशन",
+        "help" : "पहिले नै कन्फिगर गरिएको google drive प्रणाली सन्दर्भ।"
+      },
+      "openZips" : {
+        "label" : "zip फाइलहरू खोल्नुहोस्",
+        "help" : "zip फाइलहरू खोल्न र सामग्री निकाल्न सक्षम गर्नुहोस्"
+      },
+      "parentProjectCode" : {
+        "label" : "प्रोजेक्ट",
+        "help" : "मुख्य प्रोजेक्ट सन्दर्भ।"
+      },
+      "programmedTables" : {
+        "label" : "सामग्री अद्यावधिक जाँच तालिका",
+        "help" : "परिवर्तित सामग्रीहरूको तालिका निर्दिष्ट गर्नुहोस् ताकि Retrieve Augmented Generation प्रणाली अपडेट रहोस्"
+      },
+      "catalogingCriteria" : {
+        "label" : "फोल्डरहरू र सब-फोल्डरहरूको संगठन मापदण्ड",
+        "help" : "Gebo.ai सँग साझा गरिएको google drive सामग्रीमा फाइल र फोल्डरहरू कसरी व्यवस्थित गरिएको छ भनेर यहाँ स्पष्ट गर्नुहोस्"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "सामान्य सेटिङ्स"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द गर्नुहोस्"
+      },
+      "DeleteBtn" : {
+        "label" : "मेटाउनुहोस्"
+      },
+      "SaveBtn" : {
+        "label" : "सेभ गर्नुहोस्"
+      },
+      "MainPanel" : {
+        "label" : "google drive एकीकरण सम्पादन गर्दै"
+      },
+      "code" : {
+        "label" : "अद्वितीय कोड",
+        "help" : "google drive प्रणालीको स्वचालित रूपमा सिर्जना गरिएको अद्वितीय कोड।"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "google drive प्रणालीको विवरण प्रविष्ट गर्नुहोस्।"
+      },
+      "driveAccessSecret" : {
+        "label" : "प्रयोग भएको परिचय",
+        "help" : "google drive प्रणालीमा पहुँच गर्नको लागि परिचय छान्नुहोस् वा सिर्जना गर्नुहोस्"
       }
     }
   }

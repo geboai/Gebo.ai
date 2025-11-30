@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai seadistusest on mõni kohustuslik samm puudu",
         "detail" : "Vaadake üle seadistusprotsessi punased sammud"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces'i integratsioon",
+        "description" : "Seadista Gebo.ai ligipääsuks oma Google Drive/Workspaces meeskonna andmetele"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Teadmusbaasi koodid"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Seadista ettevõtte Google Drive/Workspaces süsteemid"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Seadistuskood"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kirjeldus"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Avalik võti",
         "help" : "Ava avaliku võtme fail ja kopeeri see tekstiväljale."
+      },
+      "jsonContent" : {
+        "label" : "Google'i mandaadifaili sisu",
+        "help" : "Kopeeri siia Google API mandaadifaili sisu, mille laadisid alla Google Cloud API konsoolist (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google'i kasutaja, keda volitatakse",
+        "help" : "Kasutaja, keda antud mandaadid volitavad",
+        "placeholder" : "Kasutaja, keda antud mandaadid volitavad"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "lisa git repositooriumi andmeallikas, nagu bitbucket, github või muud"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "lisa google drive andmeallikas"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Lisa seadistus"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Loo"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta Google Drive süsteemi kirjeldus."
+      },
+      "MainPanel" : {
+        "label" : "Loo Google Drive/Workspace ühendus"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "delegatedUser" : {
+        "label" : "Google'i kasutaja, keda volitatakse",
+        "help" : "Kasutaja, keda antud mandaadid volitavad",
+        "placeholder" : "Kasutaja, keda antud mandaadid volitavad"
+      },
+      "jsonContent" : {
+        "label" : "Google'i mandaadi json-sisu",
+        "help" : "Loo Google Console Cloud'is Google'i mandaadid oma tööruumi/meeskonna Drive'i ligipääsuga ja kleebi siia alla laaditud json-faili sisu (https://console.cloud.google.com/).",
+        "placeholder" : "Loo Google Console Cloud'is Google'i mandaadid oma tööruumi/meeskonna Drive'i ligipääsuga ja kleebi siia alla laaditud json-faili sisu (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "PublishBtn" : {
+        "label" : "Avalda!",
+        "help" : "Salvesta ja tee need sisud saadavaks teadmistebaasis LLm'ide jaoks"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive'i sisu jagamine"
+      },
+      "SettingsTab" : {
+        "label" : "Seaded"
+      },
+      "LogsTab" : {
+        "label" : "Logid"
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta üleslaetud Google Drive'i sisu kirjeldus."
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Sisu jaoks automaatselt genereeritud unikaalne kood."
+      },
+      "tree" : {
+        "label" : "Valitud fail või kaust",
+        "help" : "Jagatud Google Drive'i alad ja lehekülgede sisu"
+      },
+      "driveSystemCode" : {
+        "label" : "Google Drive'i seadistus",
+        "help" : "Juba seadistatud Google Drive'i süsteemi viide."
+      },
+      "openZips" : {
+        "label" : "Ava zip-failid",
+        "help" : "Luba zip-failide avamine ja sisu ekstraheerimine"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Ülemprojekti viide."
+      },
+      "programmedTables" : {
+        "label" : "Sisu uuendamise kontrollide ajakava",
+        "help" : "Konfigureeri muudetud sisu ajakava, et hoida andmete täiendus-süsteem ajakohasena"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kaustade ja alamkaustade organiseerimise põhimõtted",
+        "help" : "Selgita siin, kuidas faile ja kaustasid on korraldatud ning jagatud Gebo.ai kaudu Google Drive'ist"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Üldised seaded"
+      },
+      "CancelBtn" : {
+        "label" : "Tühista"
+      },
+      "DeleteBtn" : {
+        "label" : "Kustuta"
+      },
+      "SaveBtn" : {
+        "label" : "Salvesta"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive'i integratsiooni muutmine"
+      },
+      "code" : {
+        "label" : "Unikaalne kood",
+        "help" : "Google Drive'i süsteemi automaatselt loodud unikaalne kood."
+      },
+      "description" : {
+        "label" : "Kirjeldus",
+        "help" : "Sisesta Google Drive'i süsteemi kirjeldus."
+      },
+      "driveAccessSecret" : {
+        "label" : "Kasutatav identiteet",
+        "help" : "Vali või loo identiteet Google Drive'i süsteemile juurdepääsuks"
       }
     }
   }

@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Mancano alcuni passaggi obbligatori nella configurazione di Gebo.ai",
         "detail" : "Per favore, controlla i passaggi in rosso del processo di configurazione"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrazione Google Drive/Workspaces",
+        "description" : "Configura Gebo.ai per accedere ai dati del team su Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Codici base di conoscenza"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configura i sistemi Google Drive/Workspaces aziendali"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codice di configurazione"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descrizione"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Chiave pubblica",
         "help" : "Apri il file della chiave pubblica e copia qui il contenuto."
+      },
+      "jsonContent" : {
+        "label" : "Contenuto file credenziali Google",
+        "help" : "Copia qui il contenuto del file di credenziali Google api scaricato dalla console Google cloud api (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Utente Google da impersonare",
+        "help" : "L’utente che verrà impersonato con le credenziali fornite",
+        "placeholder" : "L’utente che verrà impersonato con le credenziali fornite"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "aggiungi una fonte dati repository git come bitbucket, github o altri"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "aggiungi una fonte dati google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Aggiungi configurazione"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Crea"
+      },
+      "description" : {
+        "label" : "Descrizione",
+        "help" : "Inserisci la descrizione del sistema Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Crea connessione Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Annulla"
+      },
+      "delegatedUser" : {
+        "label" : "Utente Google da impersonare",
+        "help" : "L’utente che verrà impersonato con le credenziali fornite",
+        "placeholder" : "L’utente che verrà impersonato con le credenziali fornite"
+      },
+      "jsonContent" : {
+        "label" : "Contenuto json credenziali Google",
+        "help" : "Crea le credenziali Google con accesso alle workspace/team drives nella Google Console Cloud e incolla qui il contenuto del file json scaricato (https://console.cloud.google.com/).",
+        "placeholder" : "Crea le credenziali Google con accesso alle workspace/team drives nella Google Console Cloud e incolla qui il contenuto del file json scaricato (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salva"
+      },
+      "CancelBtn" : {
+        "label" : "Annulla"
+      },
+      "PublishBtn" : {
+        "label" : "Pubblica!",
+        "help" : "Salva e rendi questi contenuti disponibili nella knowledge base ai LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "MainPanel" : {
+        "label" : "Condivisione contenuti google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Impostazioni"
+      },
+      "LogsTab" : {
+        "label" : "Registri"
+      },
+      "description" : {
+        "label" : "Descrizione",
+        "help" : "Inserisci la descrizione dei contenuti caricati dalle voci google drive."
+      },
+      "code" : {
+        "label" : "Codice univoco",
+        "help" : "Codice univoco generato automaticamente dei contenuti."
+      },
+      "tree" : {
+        "label" : "File o cartella selezionato",
+        "help" : "Contenuti degli spazi condivisi e delle pagine di google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Configurazione google drive",
+        "help" : "Riferimento al sistema google drive già configurato."
+      },
+      "openZips" : {
+        "label" : "Apri file zip",
+        "help" : "Abilita apertura dei file zip ed estrazione dei contenuti"
+      },
+      "parentProjectCode" : {
+        "label" : "Progetto",
+        "help" : "Riferimento al progetto padre."
+      },
+      "programmedTables" : {
+        "label" : "Pianificazione controlli aggiornamenti contenuti",
+        "help" : "Configura la programmazione delle modifiche dei contenuti per mantenere aggiornato il sistema di generazione aumentata dal recupero"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteri organizzazione cartelle e sottocartelle",
+        "help" : "Spiega qui come sono stati fissati i criteri di organizzazione di file e cartelle nei contenuti google drive condivisi con Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Impostazioni generali"
+      },
+      "CancelBtn" : {
+        "label" : "Annulla"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Salva"
+      },
+      "MainPanel" : {
+        "label" : "Modifica integrazione google drive"
+      },
+      "code" : {
+        "label" : "Codice univoco",
+        "help" : "Codice univoco generato automaticamente del sistema google drive."
+      },
+      "description" : {
+        "label" : "Descrizione",
+        "help" : "Inserisci la descrizione del sistema google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identità utilizzata",
+        "help" : "Seleziona o crea l’identità per accedere al sistema google drive"
       }
     }
   }

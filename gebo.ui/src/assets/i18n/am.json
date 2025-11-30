@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "በ Gebo.ai ቅንብር አንዳንድ አስፈላጊ ደረጃ ይጎድመዋል",
         "detail" : "እባክዎ በቀይ የተሰየመውን የቅንብር ሂደት ደረጃዎች ይመልከቱ"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces መያዣ ዘዴ",
+        "description" : "Gebo.ai ወደ Google cloud Drive/Workspaces የቡድን መረጃዎትን ለመድረስ ያዘጋጁ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "የ እውቀት መሠረት ኮዶች"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "የኩባንያዎ Google Drive/Workspaces መስሪያዎችን አዘጋጅ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "የውቅረት ኮድ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "መግለጫ"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "የህዝብ ቁልፍ",
         "help" : "የህዝብ ቁልፉን ፋይል በደቡ ከፍተና ወደዚህ ቦታ ያቅሩ።"
+      },
+      "jsonContent" : {
+        "label" : "የGoogle ማስረጃ ፋይል ይዞታ",
+        "help" : "ከGoogle cloud api console (https://console.cloud.google.com/) የወረዱትን የGoogle api ማስረጃ ፋይል ይዞታን እዚህ ቅዱ"
+      },
+      "delegatedUser" : {
+        "label" : "የGoogle ተጠቃሚ እንደተላከው የሚናገረው",
+        "help" : "በቀጥታ የሚገኙት ማስረጃዎች የሚያስወክሉት ተጠቃሚ",
+        "placeholder" : "በቀጥታ የሚገኙት ማስረጃዎች የሚያስወክሉት ተጠቃሚ"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "እንደ bitbucket, github ወይም ሌሎች የgit መዝገቦች መረጃ ምንጭ ያክሉ"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "የgoogle drive የውሂብ ምንጭ ያክሉ"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "ቅንብር ያክሉ"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ፍጠር"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የGoogle Drive ስርዓት መግለጫ ያስገቡ።"
+      },
+      "MainPanel" : {
+        "label" : "የGoogle Drive/Workspace ግንኙነት ፍጠሩ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "delegatedUser" : {
+        "label" : "የGoogle ተጠቃሚ እንደተላከው የሚናገረው",
+        "help" : "በቀጥታ የሚገኙት ማስረጃዎች የሚያስወክሉት ተጠቃሚ",
+        "placeholder" : "በቀጥታ የሚገኙት ማስረጃዎች የሚያስወክሉት ተጠቃሚ"
+      },
+      "jsonContent" : {
+        "label" : "የGoogle ማስረጃዎች json ይዞታ",
+        "help" : "በGoogle Console Cloud ውስጥ ከworkspace/ቡድን መሳሪያዎች ወደታች የወረዱትን json ፋይል ይዞታ እዚህ ቅዱ (https://console.cloud.google.com/).",
+        "placeholder" : "በGoogle Console Cloud ውስጥ ከworkspace/ቡድን መሳሪያዎች ወደታች የወረዱትን json ፋይል ይዞታ እዚህ ቅዱ (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "PublishBtn" : {
+        "label" : "አትላ!",
+        "help" : "ይህን ይቆጣጠሩና በማስተዋወቂያ መረጃ ማዕከል በLLm's ይታያል"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "MainPanel" : {
+        "label" : "የgoogle drive ይዞታዎችን ማጋራት"
+      },
+      "SettingsTab" : {
+        "label" : "ቅንብሮች"
+      },
+      "LogsTab" : {
+        "label" : "መዝገቦች"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የተከፈተው የGoogle Drive ይዞታ መግለጫ ያስገቡ።"
+      },
+      "code" : {
+        "label" : "በተለየ ሁኔታ የተፈጠረ ኮድ",
+        "help" : "በራሱ ሲፈጠር የተለየ ዋጋ የይዞታ ኮድ።"
+      },
+      "tree" : {
+        "label" : "የተመረጠው ፋይል ወይም ፎልደር",
+        "help" : "የተጋሩት የgoogle drive ስፋቶችና ገጾች ይዞታዎች"
+      },
+      "driveSystemCode" : {
+        "label" : "የGoogle drive አዋቂ ቅንብር",
+        "help" : "አስቀድሞ የተዘጋጀውን የgoogle drive የስራ ዘዴ አንድ ግልጽ ምርጫ"
+      },
+      "openZips" : {
+        "label" : "Zip ፋይሎች ክፈት",
+        "help" : "የzip ፋይሎችን ክፈትና ይዞታን መውጣት ያብቃ"
+      },
+      "parentProjectCode" : {
+        "label" : "ፕሮጀክት",
+        "help" : "የወላጅ ፕሮጀክት አገናኝ"
+      },
+      "programmedTables" : {
+        "label" : "ይዞታዎች የዝርዝር ማሸነፍ ጊዜ አቅጣጫ",
+        "help" : "የተቀየሩትን ውሂብ ያዘጋጁ በመጠቀም ዘዴዎች እንዲቀጥሉ"
+      },
+      "catalogingCriteria" : {
+        "label" : "የፎልደሮችና ንዑስ-ፎልደሮች ዝግጅት መስፈርቶች",
+        "help" : "በGebo.ai ጋር የተላኩት በgoogle drive ይዞታ የፋይሎችና ፎልደሮች ዝግጅት መስፈርቶች እንዴት እንደተሠራ እዚህ ይገልጹ"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "አጠቃላይ ቅንብሮች"
+      },
+      "CancelBtn" : {
+        "label" : "ይቅር"
+      },
+      "DeleteBtn" : {
+        "label" : "ሰርዝ"
+      },
+      "SaveBtn" : {
+        "label" : "አስቀምጥ"
+      },
+      "MainPanel" : {
+        "label" : "የgoogle drive መያዣ ማሻሻያ"
+      },
+      "code" : {
+        "label" : "በተለየ ሁኔታ የተፈጠረ ኮድ",
+        "help" : "በራሱ ሲፈጠር የተለየ ኮድ ለgoogle drive ስርዓት"
+      },
+      "description" : {
+        "label" : "መግለጫ",
+        "help" : "የgoogle drive ስርዓቱን መግለጫ ያስገቡ።"
+      },
+      "driveAccessSecret" : {
+        "label" : "የተጠቀሱት መለያ",
+        "help" : "ወደ google drive ስርዓቱ ለመድረስ መለያ ይምረጡ ወይም ይፍጠሩ"
       }
     }
   }

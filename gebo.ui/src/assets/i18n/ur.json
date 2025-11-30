@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai سیٹ اپ میں کچھ لازمی مرحلہ غائب ہے",
         "detail" : "براہ کرم سیٹ اپ کے سرخ مراحل چیک کریں"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces انضمام",
+        "description" : "Gebo.ai کو اپنی Google cloud Drive/Workspaces ٹیم ڈیٹا تک رسائی کے لیے ترتیب دیں"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "نالوج بیس کوڈز"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "کمپنی کے Google Drive/Workspaces سسٹمز سیٹ اپ کریں"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کنفیگ کوڈ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "تفصیل"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "پبلک کلید",
         "help" : "پبلک کلید کی فائل کھولیں اور اس ٹیکسٹ ایریا میں نقل کریں۔"
+      },
+      "jsonContent" : {
+        "label" : "Google کی اسناد کی فائل کا مواد",
+        "help" : "یہاں Google api credentials فائل کا مواد چسپاں کریں جو آپ نے google cloud api console (https://console.cloud.google.com/) سے ڈاؤن لوڈ کی ہے"
+      },
+      "delegatedUser" : {
+        "label" : "Google صارف جس کو نمائندگی کرنی ہے",
+        "help" : "وہ صارف جس کی نمائندگی فراہم کردہ اسناد کے ذریعے کی جائے گی",
+        "placeholder" : "وہ صارف جس کی نمائندگی فراہم کردہ اسناد کے ذریعے کی جائے گی"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git ریپو",
         "help" : "git ریپوزٹری ڈیٹا سورس شامل کریں جیسے bitbucket، github یا دیگر"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive ڈیٹا سورس شامل کریں"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "ترتیب شامل کریں"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "بنائیں"
+      },
+      "description" : {
+        "label" : "تفصیل",
+        "help" : "Google Drive سسٹم کی تفصیل درج کریں۔"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace کنیکشن بنائیں"
+      },
+      "CancelBtn" : {
+        "label" : "منسوخ کریں"
+      },
+      "delegatedUser" : {
+        "label" : "Google صارف جس کو نمائندگی کرنی ہے",
+        "help" : "وہ صارف جس کی نمائندگی فراہم کردہ اسناد کے ذریعے کی جائے گی",
+        "placeholder" : "وہ صارف جس کی نمائندگی فراہم کردہ اسناد کے ذریعے کی جائے گی"
+      },
+      "jsonContent" : {
+        "label" : "Google کی اسناد کا json مواد",
+        "help" : "Google Console Cloud میں اپنی workspace/team drives تک رسائی کے ساتھ Google Credentials بنائیں اور یہاں ڈاؤن لوڈ شدہ json فائل کا مواد چسپاں کریں (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud میں اپنی workspace/team drives تک رسائی کے ساتھ Google Credentials بنائیں اور یہاں ڈاؤن لوڈ شدہ json فائل کا مواد چسپاں کریں (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "محفوظ کریں"
+      },
+      "CancelBtn" : {
+        "label" : "منسوخ کریں"
+      },
+      "PublishBtn" : {
+        "label" : "شائع کریں!",
+        "help" : "مواد کو محفوظ کریں اور انہیں knowledge base میں LLm's کے لئے دستیاب بنائیں"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف کریں"
+      },
+      "MainPanel" : {
+        "label" : "google drive مواد کا اشتراک کرنا"
+      },
+      "SettingsTab" : {
+        "label" : "سیٹنگز"
+      },
+      "LogsTab" : {
+        "label" : "لاگز"
+      },
+      "description" : {
+        "label" : "تفصیل",
+        "help" : "اپ لوڈ شدہ google drive اندراجات کے مواد کی تفصیل درج کریں۔"
+      },
+      "code" : {
+        "label" : "یونیک کوڈ",
+        "help" : "مواد کا خودکار بنایا گیا منفرد کوڈ۔"
+      },
+      "tree" : {
+        "label" : "منتخب کردہ فائل یا فولڈر",
+        "help" : "شئیر کردہ google drive اسپیسز اور پیجز کا مواد"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive کنفیگریشن",
+        "help" : "پہلے سے ترتیب دیا گیا google drive سسٹم ریفرنس۔"
+      },
+      "openZips" : {
+        "label" : "زپ فائلیں کھولیں",
+        "help" : "زپ فائلیں کھولنے اور مواد نکالنے کو فعال کریں"
+      },
+      "parentProjectCode" : {
+        "label" : "پروجیکٹ",
+        "help" : "پیرنٹ پروجیکٹ کا حوالہ۔"
+      },
+      "programmedTables" : {
+        "label" : "مواد کی اپڈیٹس چیک کرنے کا شیڈول",
+        "help" : "تبدیل شدہ مواد کی شیڈولنگ سیٹ کریں تاکہ augmented generation سسٹم اپڈیٹ رہے"
+      },
+      "catalogingCriteria" : {
+        "label" : "فولڈرز اور سب فولڈرز کی تنظیم کے معیار",
+        "help" : "براہ کرم یہاں بیان کریں کہ Google drive میں Gebo.ai کے ساتھ شیئر کیے گئے مواد میں فائلز اور فولڈرز کی تنظیم کیسے کی گئی ہے"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "جنرل سیٹنگز"
+      },
+      "CancelBtn" : {
+        "label" : "منسوخ کریں"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف کریں"
+      },
+      "SaveBtn" : {
+        "label" : "محفوظ کریں"
+      },
+      "MainPanel" : {
+        "label" : "google drive انضمام میں ترمیم"
+      },
+      "code" : {
+        "label" : "یونیک کوڈ",
+        "help" : "google drive سسٹم کا خودکار بنایا گیا منفرد کوڈ۔"
+      },
+      "description" : {
+        "label" : "تفصیل",
+        "help" : "google drive سسٹم کی تفصیل درج کریں۔"
+      },
+      "driveAccessSecret" : {
+        "label" : "استعمال شدہ شناخت",
+        "help" : "google drive سسٹم تک رسائی کے لئے شناخت منتخب کریں یا بنائیں"
       }
     }
   }

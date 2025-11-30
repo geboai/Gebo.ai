@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Það vantar skylduskref í gebo.ai uppsetningu",
         "detail" : "Vinsamlega skoðaðu rauðu skrefin í uppsetningarferlinu"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces samþætting",
+        "description" : "Stilltu Gebo.ai til að fá aðgang að Google cloud Drive/Workspaces teymisgögnum þínum"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kóðar þekkingargrunns"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Stilla Google Drive/Workspaces kerfi fyrirtækis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Opinber lykill",
         "help" : "Opnaðu skrá með opinberum lykli og afritaðu hér inn."
+      },
+      "jsonContent" : {
+        "label" : "Innihald Google skilríkjaskrár",
+        "help" : "Afritaðu hér innihald Google api skilríkjaskrár sem hlaðið var niður úr google cloud api stjórnborðinu (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google notandi sem verður hermt eftir",
+        "help" : "Notandinn sem verður hermt eftir með þessum skilríkjum",
+        "placeholder" : "Notandinn sem verður hermt eftir með þessum skilríkjum"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bæta við git forritasafni eins og bitbucket, github eða öðrum"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "bæta við google drive gagnagjafa"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Bæta við stillingu"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Búa til"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á Google Drive kerfinu."
+      },
+      "MainPanel" : {
+        "label" : "Búa til Google Drive/Workspace tengingu"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "delegatedUser" : {
+        "label" : "Google notandi sem verður hermt eftir",
+        "help" : "Notandinn sem verður hermt eftir með þessum skilríkjum",
+        "placeholder" : "Notandinn sem verður hermt eftir með þessum skilríkjum"
+      },
+      "jsonContent" : {
+        "label" : "Google skilríkja json innihald",
+        "help" : "Búðu til Google skilríki með aðgangi að workspace/team drives í Google Console Cloud og límdu hér innihaldi json skrárinnar sem var hlaðið niður (https://console.cloud.google.com/).",
+        "placeholder" : "Búðu til Google skilríki með aðgangi að workspace/team drives í Google Console Cloud og límdu hér innihaldi json skrárinnar sem var hlaðið niður (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vistar og gerir þessi gögn aðgengileg í þekkingargrunninum fyrir LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "MainPanel" : {
+        "label" : "Deila efni úr google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "LogsTab" : {
+        "label" : "Atburðaskrá"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á hlaðnu efni úr google drive færslum."
+      },
+      "code" : {
+        "label" : "Einstakur kóði",
+        "help" : "Sjálfvirkt búinn til einstakur kóði fyrir efnið."
+      },
+      "tree" : {
+        "label" : "Valin skrá eða mappa",
+        "help" : "Deilt efni og síður úr google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive stillingar",
+        "help" : "Tilvísun í núverandi stillta google drive kerfi."
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun zip skráa og útdrátt efnis"
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Tilvísun í yfirstandandi verkefni."
+      },
+      "programmedTables" : {
+        "label" : "Tímasetning á athugun á efninu",
+        "help" : "Stilltu áætlun fyrir uppfærslu á breyttu efni til að halda retrieve augmented generation kerfinu uppfærðu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Skipulagsskilyrði fyrir möppur og undirmöppur",
+        "help" : "Vinsamlegast útskýrðu hér hvernig skipulag gagna og skráa hefur verið gert í því Google Drive efni sem deilt er með Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Almennar stillingar"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "MainPanel" : {
+        "label" : "Breyta google drive samþættingu"
+      },
+      "code" : {
+        "label" : "Einstakur kóði",
+        "help" : "Sjálfvirkt búinn til einstakur kóði fyrir google drive kerfið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á google drive kerfinu."
+      },
+      "driveAccessSecret" : {
+        "label" : "Auðkenni sem notað er",
+        "help" : "Veldu eða búðu til auðkenni til að fá aðgang að google drive kerfinu"
       }
     }
   }

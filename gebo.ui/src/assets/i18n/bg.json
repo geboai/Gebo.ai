@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Липсва задължителна стъпка в настройката на Gebo.ai",
         "detail" : "Моля, прегледайте червените стъпки в процеса на настройка"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Интеграция с Google Drive/Workspaces",
+        "description" : "Конфигурирайте Gebo.ai, за да има достъп до данните на екипа ви в Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Кодове на база знания"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Настройка на служебни Google Drive/Workspaces системи"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Конфигурационен код"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Описание"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Публичен ключ",
         "help" : "Отворете файла с публичния ключ и копирайте тук."
+      },
+      "jsonContent" : {
+        "label" : "Съдържание на файла с Google идентификационни данни",
+        "help" : "Копирайте тук съдържанието на файла с идентификационни данни на Google api, изтеглен от конзолата на google cloud api (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google потребител за имитиране",
+        "help" : "Потребителят, който ще бъде имитиран с предоставените идентификационни данни",
+        "placeholder" : "Потребителят, който ще бъде имитиран с предоставените идентификационни данни"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git репо",
         "help" : "добави източник от git репозитория като bitbucket, github или други"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "добавяне на източник на данни от google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Добави конфигурация"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Създай"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на Google Drive системата."
+      },
+      "MainPanel" : {
+        "label" : "Създаване на връзка с Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "delegatedUser" : {
+        "label" : "Google потребител за имитиране",
+        "help" : "Потребителят, който ще бъде имитиран с предоставените идентификационни данни",
+        "placeholder" : "Потребителят, който ще бъде имитиран с предоставените идентификационни данни"
+      },
+      "jsonContent" : {
+        "label" : "Съдържание на Google идентификационния json файл",
+        "help" : "Създайте Google Credentials с достъп до вашите workspace/екипни устройства в Google Console Cloud и поставете тук съдържанието на изтегления json файл (https://console.cloud.google.com/).",
+        "placeholder" : "Създайте Google Credentials с достъп до вашите workspace/екипни устройства в Google Console Cloud и поставете тук съдържанието на изтегления json файл (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Запази"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "PublishBtn" : {
+        "label" : "Публикувай!",
+        "help" : "Запазва и прави съдържанието достъпно в базата с познания за LLM"
+      },
+      "DeleteBtn" : {
+        "label" : "Изтрий"
+      },
+      "MainPanel" : {
+        "label" : "Споделяне на съдържание в google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Настройки"
+      },
+      "LogsTab" : {
+        "label" : "Логове"
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на каченото съдържание на google drive записи."
+      },
+      "code" : {
+        "label" : "Уникален код",
+        "help" : "Автоматично генериран уникален код на съдържанията."
+      },
+      "tree" : {
+        "label" : "Избрани файл или папка",
+        "help" : "Споделени пространства и страници от google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive конфигурация",
+        "help" : "Вече конфигуриран google drive системен референт."
+      },
+      "openZips" : {
+        "label" : "Отваряне на zip файлове",
+        "help" : "Позволява отваряне и извличане на съдържание от zip файлове"
+      },
+      "parentProjectCode" : {
+        "label" : "Проект",
+        "help" : "Референция към родителски проект."
+      },
+      "programmedTables" : {
+        "label" : "График за проверка на съдържание",
+        "help" : "Конфигурирайте разписанието на обновяваните съдържания, за да се поддържа актуализирана системата за разширено извличане на информация"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критерии за организация на папки и подпапки",
+        "help" : "Моля, опишете тук как са организирани файловете и папките в съдържанието на google drive, споделено с Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Общи настройки"
+      },
+      "CancelBtn" : {
+        "label" : "Отказ"
+      },
+      "DeleteBtn" : {
+        "label" : "Изтрий"
+      },
+      "SaveBtn" : {
+        "label" : "Запази"
+      },
+      "MainPanel" : {
+        "label" : "Редактиране на интеграция с google drive"
+      },
+      "code" : {
+        "label" : "Уникален код",
+        "help" : "Автоматично генериран уникален код на google drive системата."
+      },
+      "description" : {
+        "label" : "Описание",
+        "help" : "Въведете описание на google drive системата."
+      },
+      "driveAccessSecret" : {
+        "label" : "Използвана идентичност",
+        "help" : "Изберете или създайте идентичност за достъп до google drive системата"
       }
     }
   }

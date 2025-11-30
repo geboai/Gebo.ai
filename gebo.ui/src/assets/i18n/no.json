@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai oppsett mangler et obligatorisk trinn",
         "detail" : "Vennligst se over de røde trinnene i oppsettprosessen"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces-integrasjon",
+        "description" : "Konfigurer Gebo.ai for å få tilgang til Google cloud Drive/Workspaces-teamdataene dine"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kunnskapsbasekoder"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Sett opp bedriftens Google Drive/Workspaces-systemer"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurasjonskode"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Offentlig nøkkel",
         "help" : "Åpne offentlig nøkkelfil og kopier innholdet i dette tekstfeltet."
+      },
+      "jsonContent" : {
+        "label" : "Innhold i Google legitimasjonsfil",
+        "help" : "Kopier innholdet fra Google API-legitimasjonsfilen hentet fra Google Cloud API-konsollen (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google-bruker som skal etterlignes",
+        "help" : "Brukeren som skal etterlignes av de angitte legitimasjonene",
+        "placeholder" : "Brukeren som skal etterlignes av de angitte legitimasjonene"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "legg til en git repository kilde som bitbucket, github eller andre"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "legg til en google drive-datakilde"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Legg til konfigurasjon"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Opprett"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av Google Drive-systemet."
+      },
+      "MainPanel" : {
+        "label" : "Opprett Google Drive/Workspace-tilkobling"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "delegatedUser" : {
+        "label" : "Google-bruker som skal etterlignes",
+        "help" : "Brukeren som skal etterlignes av de angitte legitimasjonene",
+        "placeholder" : "Brukeren som skal etterlignes av de angitte legitimasjonene"
+      },
+      "jsonContent" : {
+        "label" : "Google legitimasjons-JSON-innhold",
+        "help" : "Opprett Google-legitimasjon med tilgang til dine workspace/team drives i Google Console Cloud og lim inn innholdet fra den nedlastede JSON-filen her (https://console.cloud.google.com/).",
+        "placeholder" : "Opprett Google-legitimasjon med tilgang til dine workspace/team drives i Google Console Cloud og lim inn innholdet fra den nedlastede JSON-filen her (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "PublishBtn" : {
+        "label" : "Publiser!",
+        "help" : "Lagrer og gjør innholdet tilgjengelig i kunnskapsbasen for LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "MainPanel" : {
+        "label" : "Deler google drive-innhold"
+      },
+      "SettingsTab" : {
+        "label" : "Innstillinger"
+      },
+      "LogsTab" : {
+        "label" : "Logger"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av det opplastede innholdet fra Google Drive-elementene."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for innholdet."
+      },
+      "tree" : {
+        "label" : "Valgt fil eller mappe",
+        "help" : "Delte Google Drive-områder og sideinnhold"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive-konfigurasjon",
+        "help" : "Referanse til allerede konfigurert Google Drive-system."
+      },
+      "openZips" : {
+        "label" : "Åpne zip-filer",
+        "help" : "Aktiver åpning og utpakking av zip-filer"
+      },
+      "parentProjectCode" : {
+        "label" : "Prosjekt",
+        "help" : "Referanse til overordnet prosjekt."
+      },
+      "programmedTables" : {
+        "label" : "Tidsplan for oppdateringssjekk av innhold",
+        "help" : "Konfigurer planlegging av endret innhold, slik at systemet blir oppdatert"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering av mapper og undermapper",
+        "help" : "Forklar her hvordan fil- og mappeorganiseringen er gjort i innholdet fra Google Drive som er delt med Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Generelle innstillinger"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Slett"
+      },
+      "SaveBtn" : {
+        "label" : "Lagre"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer Google Drive-integrasjon"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk generert unik kode for Google Drive-systemet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Skriv inn beskrivelsen av Google Drive-systemet."
+      },
+      "driveAccessSecret" : {
+        "label" : "Brukt identitet",
+        "help" : "Velg eller opprett identiteten som skal brukes for å få tilgang til Google Drive-systemet"
       }
     }
   }

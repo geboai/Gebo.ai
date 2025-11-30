@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "הגדרת Gebo.ai חסרה שלב הכרחי",
         "detail" : "אנא בדוק את השלבים האדומים בתהליך ההגדרה"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "אינטגרציה עם Google Drive/Workspaces",
+        "description" : "הגדר את Gebo.ai לגשת לנתוני הצוות שלך ב-Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "קודי מאגר ידע"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "הגדרת מערכות Google Drive/Workspaces של החברה"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "קוד תצורה"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "תיאור"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "מפתח ציבורי",
         "help" : "פתח את קובץ המפתח הציבורי והעתק לאזור הטקסט הזה."
+      },
+      "jsonContent" : {
+        "label" : "תוכן קובץ האישורים של Google",
+        "help" : "העתק כאן את תוכן קובץ האישורים של Google api שהורדת מ-console של google cloud ‏(https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "משתמש Google לחיקוי",
+        "help" : "המשתמש שיזוהה על ידי האישורים שסיפקת",
+        "placeholder" : "המשתמש שיזוהה על ידי האישורים שסיפקת"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+מאגר git",
         "help" : "הוסף מקור נתונים של מאגר git כמו bitbucket, github או אחרים"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "הוספת מקור נתונים של google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "הוסף הגדרה"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "צור"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת ה-Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "יצירת חיבור Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "delegatedUser" : {
+        "label" : "משתמש Google לחיקוי",
+        "help" : "המשתמש שיזוהה על ידי האישורים שסיפקת",
+        "placeholder" : "המשתמש שיזוהה על ידי האישורים שסיפקת"
+      },
+      "jsonContent" : {
+        "label" : "תוכן קובץ json של האישורים של Google",
+        "help" : "צור אישורי Google עם הרשאות ל-workspace/drive של הצוות ב-Google Console Cloud והדבק כאן את תוכן קובץ ה-json שהורדת (https://console.cloud.google.com/).",
+        "placeholder" : "צור אישורי Google עם הרשאות ל-workspace/drive של הצוות ב-Google Console Cloud והדבק כאן את תוכן קובץ ה-json שהורדת (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "PublishBtn" : {
+        "label" : "פרסם!",
+        "help" : "שומר ומאפשר לתכנים להיות זמינים ב-knowledge base עבור LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "MainPanel" : {
+        "label" : "שיתוף תכנים מתוך google drive"
+      },
+      "SettingsTab" : {
+        "label" : "הגדרות"
+      },
+      "LogsTab" : {
+        "label" : "יומנים"
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן תיאור עבור התוכן שהועלה מה-google drive."
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור התכנים."
+      },
+      "tree" : {
+        "label" : "קובץ או תיקיה שנבחרו",
+        "help" : "תכנים של מרחבי google drive ודפים משותפים"
+      },
+      "driveSystemCode" : {
+        "label" : "תצורת google drive",
+        "help" : "הפניה למערכת google drive שכבר מוגדרת."
+      },
+      "openZips" : {
+        "label" : "פתח קבצי zip",
+        "help" : "אפשר פתיחת קבצי zip וחילוץ תוכן"
+      },
+      "parentProjectCode" : {
+        "label" : "פרויקט",
+        "help" : "הפניה לפרויקט האב."
+      },
+      "programmedTables" : {
+        "label" : "לו״ז בדיקות לעדכון תכנים",
+        "help" : "הגדר מתי לעדכן תכנים שהשתנו כדי לשמור על עדכניות מערכת‪ ה‑retrieve augmented generation"
+      },
+      "catalogingCriteria" : {
+        "label" : "קריטריונים לארגון תיקיות ותתי-תיקיות",
+        "help" : "אנא הסבר כאן איך סידור הקבצים והתיקיות בוצע בתכנים המשותפים ב-google drive עם Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "הגדרות כלליות"
+      },
+      "CancelBtn" : {
+        "label" : "ביטול"
+      },
+      "DeleteBtn" : {
+        "label" : "מחק"
+      },
+      "SaveBtn" : {
+        "label" : "שמור"
+      },
+      "MainPanel" : {
+        "label" : "עריכת אינטגרציה עם google drive"
+      },
+      "code" : {
+        "label" : "קוד ייחודי",
+        "help" : "קוד ייחודי שנוצר אוטומטית עבור מערכת ה-google drive."
+      },
+      "description" : {
+        "label" : "תיאור",
+        "help" : "הזן את התיאור של מערכת ה-google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "זהות בשימוש",
+        "help" : "בחר או צור זהות עבור גישה למערכת ה-google drive"
       }
     }
   }

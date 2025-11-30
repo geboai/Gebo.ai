@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai installatie mist een verplichte stap",
         "detail" : "Controleer de rode stappen in het installatieproces"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integratie",
+        "description" : "Configureer Gebo.ai om toegang te krijgen tot je Google cloud Drive/Workspaces teamgegevens"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kennisbank-codes"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Bedrijf Google Drive/Workspaces systemen instellen"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Configuratiecode"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beschrijving"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Publieke sleutel",
         "help" : "Open het publieke sleutelbestand en kopieer dit naar dit tekstvak."
+      },
+      "jsonContent" : {
+        "label" : "Google referentie bestand inhoud",
+        "help" : "Kopieer hier de bestandsinhoud van het Google API referentiebestand dat is gedownload van de Google Cloud API Console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google gebruiker die geïmpersonificeerd wordt",
+        "help" : "De gebruiker die geïmpersonificeerd wordt door de opgegeven referenties",
+        "placeholder" : "De gebruiker die geïmpersonificeerd wordt door de opgegeven referenties"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "een git repository gegevensbron toevoegen zoals bitbucket, github of anderen"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "voeg een google drive gegevensbron toe"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Configuratie toevoegen"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Aanmaken"
+      },
+      "description" : {
+        "label" : "Beschrijving",
+        "help" : "Voer de beschrijving in van het Google Drive-systeem."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace-verbinding maken"
+      },
+      "CancelBtn" : {
+        "label" : "Annuleren"
+      },
+      "delegatedUser" : {
+        "label" : "Google gebruiker die geïmpersonificeerd wordt",
+        "help" : "De gebruiker die geïmpersonificeerd wordt door de opgegeven referenties",
+        "placeholder" : "De gebruiker die geïmpersonificeerd wordt door de opgegeven referenties"
+      },
+      "jsonContent" : {
+        "label" : "Google referentie json-inhoud",
+        "help" : "Maak Google-referenties aan met toegang tot je workspace/team drives in de Google Console Cloud en plak hier de gedownloade json-bestandsinhoud (https://console.cloud.google.com/).",
+        "placeholder" : "Maak Google-referenties aan met toegang tot je workspace/team drives in de Google Console Cloud en plak hier de gedownloade json-bestandsinhoud (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Opslaan"
+      },
+      "CancelBtn" : {
+        "label" : "Annuleren"
+      },
+      "PublishBtn" : {
+        "label" : "Publiceren!",
+        "help" : "Slaat op en maakt deze inhoud beschikbaar in de kennisbank voor LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwijderen"
+      },
+      "MainPanel" : {
+        "label" : "Google drive-inhoud delen"
+      },
+      "SettingsTab" : {
+        "label" : "Instellingen"
+      },
+      "LogsTab" : {
+        "label" : "Logboeken"
+      },
+      "description" : {
+        "label" : "Beschrijving",
+        "help" : "Voer de beschrijving in van de geüploade inhoud van google drive items."
+      },
+      "code" : {
+        "label" : "Unieke code",
+        "help" : "Automatisch gegenereerde unieke code van de inhoud."
+      },
+      "tree" : {
+        "label" : "Gekozen bestand of map",
+        "help" : "Gedeelde google drive-ruimtes en pagina-inhoud"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive configuratie",
+        "help" : "Reeds geconfigureerde google drive systeemreferentie."
+      },
+      "openZips" : {
+        "label" : "Zip-bestanden openen",
+        "help" : "Inschakelen van zip-bestanden en inhoudsextractie"
+      },
+      "parentProjectCode" : {
+        "label" : "Project",
+        "help" : "Referentie naar bovenliggend project."
+      },
+      "programmedTables" : {
+        "label" : "Schema voor inhoudsupdates controleren",
+        "help" : "Stel het schema in voor gewijzigde inhoud om het retrieval augmented generatie-systeem up-to-date te houden"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteria voor mappen en submappen organisatie",
+        "help" : "Leg hier uit hoe de organisatie van de bestanden en mappen in de gedeelde google drive-inhoud met Gebo.ai is geregeld"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Algemene instellingen"
+      },
+      "CancelBtn" : {
+        "label" : "Annuleren"
+      },
+      "DeleteBtn" : {
+        "label" : "Verwijderen"
+      },
+      "SaveBtn" : {
+        "label" : "Opslaan"
+      },
+      "MainPanel" : {
+        "label" : "Google drive integratie bewerken"
+      },
+      "code" : {
+        "label" : "Unieke code",
+        "help" : "Automatisch gegenereerde unieke code van het google drive-systeem."
+      },
+      "description" : {
+        "label" : "Beschrijving",
+        "help" : "Voer de beschrijving in van het google drive-systeem."
+      },
+      "driveAccessSecret" : {
+        "label" : "Gebruikte identiteit",
+        "help" : "Selecteer of maak de identiteit aan om toegang te krijgen tot het google drive-systeem"
       }
     }
   }

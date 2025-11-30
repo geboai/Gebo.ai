@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Пропущено обов'язковий крок налаштування Gebo.ai",
         "detail" : "Будь ласка, перегляньте позначені червоним кроки процесу налаштування"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Інтеграція Google Drive/Workspaces",
+        "description" : "Налаштуйте Gebo.ai для доступу до даних вашої команди в Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Коди бази знань"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Налаштування систем Google Drive/Workspaces компанії"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Код конфігурації"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Опис"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Публічний ключ",
         "help" : "Відкрийте файл публічного ключа та скопіюйте його в це текстове поле."
+      },
+      "jsonContent" : {
+        "label" : "Зміст файлу облікових даних Google",
+        "help" : "Скопіюйте сюди вміст файлу облікових даних Google api, завантаженого з google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Користувач Google для імітації",
+        "help" : "Користувач, якого буде імітувати ця облікова інформація",
+        "placeholder" : "Користувач, якого буде імітувати ця облікова інформація"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git репозиторій",
         "help" : "додати джерело даних git-репозиторію, наприклад bitbucket, github або інші"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "додати джерело даних google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Додати конфігурацію"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Створити"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Введіть опис системи Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Створити підключення Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Скасувати"
+      },
+      "delegatedUser" : {
+        "label" : "Користувач Google для імітації",
+        "help" : "Користувач, якого буде імітувати ця облікова інформація",
+        "placeholder" : "Користувач, якого буде імітувати ця облікова інформація"
+      },
+      "jsonContent" : {
+        "label" : "Json-файл облікових даних Google",
+        "help" : "Створіть облікові дані Google з доступом до ваших workspace/team drives у Google Console Cloud і вставте сюди вміст завантаженого json-файлу (https://console.cloud.google.com/).",
+        "placeholder" : "Створіть облікові дані Google з доступом до ваших workspace/team drives у Google Console Cloud і вставте сюди вміст завантаженого json-файлу (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Зберегти"
+      },
+      "CancelBtn" : {
+        "label" : "Скасувати"
+      },
+      "PublishBtn" : {
+        "label" : "Опублікувати!",
+        "help" : "Зберігає та дозволяє цим матеріалам бути доступними у базі знань для LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Видалити"
+      },
+      "MainPanel" : {
+        "label" : "Спільний доступ до вмісту google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Налаштування"
+      },
+      "LogsTab" : {
+        "label" : "Логи"
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Введіть опис завантаженого вмісту з google drive."
+      },
+      "code" : {
+        "label" : "Унікальний код",
+        "help" : "Автоматично згенерований унікальний код вмісту."
+      },
+      "tree" : {
+        "label" : "Вибраний файл або папка",
+        "help" : "Вміст і сторінки спільного простору google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Конфігурація google drive",
+        "help" : "Посилання на вже налаштовану систему google drive."
+      },
+      "openZips" : {
+        "label" : "Відкривати zip-файли",
+        "help" : "Увімкніть відкривання zip-файлів та витягування вмісту"
+      },
+      "parentProjectCode" : {
+        "label" : "Проєкт",
+        "help" : "Посилання на батьківський проєкт."
+      },
+      "programmedTables" : {
+        "label" : "Графік перевірки оновлень вмісту",
+        "help" : "Налаштуйте розклад перевірки зміненого вмісту, щоб підтримувати систему retrieve augmented generation в актуальному стані"
+      },
+      "catalogingCriteria" : {
+        "label" : "Критерії організації папок та підпапок",
+        "help" : "Будь ласка, опишіть тут, як організовано папки та файли у вмісті google drive, який ділиться з Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Загальні налаштування"
+      },
+      "CancelBtn" : {
+        "label" : "Скасувати"
+      },
+      "DeleteBtn" : {
+        "label" : "Видалити"
+      },
+      "SaveBtn" : {
+        "label" : "Зберегти"
+      },
+      "MainPanel" : {
+        "label" : "Редагування інтеграції google drive"
+      },
+      "code" : {
+        "label" : "Унікальний код",
+        "help" : "Автоматично згенерований унікальний код системи google drive."
+      },
+      "description" : {
+        "label" : "Опис",
+        "help" : "Введіть опис системи google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Використана ідентичність",
+        "help" : "Виберіть або створіть ідентифікатор для доступу до системи google drive"
       }
     }
   }

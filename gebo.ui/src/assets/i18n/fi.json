@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai-asetuksista puuttuu pakollinen vaihe",
         "detail" : "Tarkista käyttöönoton punaisella merkeillä merkityt vaiheet"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces -integraatio",
+        "description" : "Määritä Gebo.ai käyttämään Google cloud Drive/Workspaces -tiimitietoja"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Tietopohjan koodit"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Ota käyttöön yrityksen Google Drive/Workspaces -järjestelmät"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Asetuskoodi"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Kuvaus"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Julkinen avain",
         "help" : "Avaa julkinen avaintiedosto ja kopioi tämä tekstialue."
+      },
+      "jsonContent" : {
+        "label" : "Google-tunnistetiedoston sisältö",
+        "help" : "Kopioi tähän Googlen api-tunnistetiedoston sisältö, jonka olet ladannut google cloud api -konsolista (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google-käyttäjä, jota käytetään valtuutettuna",
+        "help" : "Käyttäjä, jota annetut tunnukset käyttävät valtuutettuna",
+        "placeholder" : "Käyttäjä, jota annetut tunnukset käyttävät valtuutettuna"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "lisää git-repositorion tietolähde, kuten bitbucket, github tai muut"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "lisää google drive -tietolähde"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Lisää määritys"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Luo"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna Google Drive -järjestelmän kuvaus."
+      },
+      "MainPanel" : {
+        "label" : "Luo Google Drive/Workspace -yhteys"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "delegatedUser" : {
+        "label" : "Google-käyttäjä, jota käytetään valtuutettuna",
+        "help" : "Käyttäjä, jota annetut tunnukset käyttävät valtuutettuna",
+        "placeholder" : "Käyttäjä, jota annetut tunnukset käyttävät valtuutettuna"
+      },
+      "jsonContent" : {
+        "label" : "Google-tunnistetietojen json-sisältö",
+        "help" : "Luo Google-tunnukset työtila/tiimi-driveihin Google Console Cloudissa ja liitä tähän ladatun json-tiedoston sisältö (https://console.cloud.google.com/).",
+        "placeholder" : "Luo Google-tunnukset työtila/tiimi-driveihin Google Console Cloudissa ja liitä tähän ladatun json-tiedoston sisältö (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "PublishBtn" : {
+        "label" : "Julkaise!",
+        "help" : "Tallentaa ja mahdollistaa sisällön käytön tietopohjassa LLm:lle"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "MainPanel" : {
+        "label" : "Jaetaan google drive -sisältöjä"
+      },
+      "SettingsTab" : {
+        "label" : "Asetukset"
+      },
+      "LogsTab" : {
+        "label" : "Lokit"
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna jaettavan google drive -sisällön kuvaus."
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Sisältöjen automaattisesti luotu yksilöllinen koodi."
+      },
+      "tree" : {
+        "label" : "Valittu tiedosto tai kansio",
+        "help" : "Jaetut google drive -tilat ja sivujen sisällöt"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive -kokoonpano",
+        "help" : "Viite aiemmin määritettyyn google drive -järjestelmään."
+      },
+      "openZips" : {
+        "label" : "Avaa zip-tiedostot",
+        "help" : "Ota käyttöön zip-tiedostojen avaaminen ja sisällön purku"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Ylemmän tason projektiviite."
+      },
+      "programmedTables" : {
+        "label" : "Sisältöpäivitysten tarkistusaikataulu",
+        "help" : "Määritä muuttuneen sisällön tarkistuksen aikataulu, jotta tietojen haun järjestelmä pysyy ajan tasalla"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kansioiden ja alakansioiden järjestelyperiaatteet",
+        "help" : "Selitä tässä, miten kansioiden ja tiedostojen järjestely on tehty Gebo.ai:n kanssa jaettuun google drive -sisältöön"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Yleiset asetukset"
+      },
+      "CancelBtn" : {
+        "label" : "Peruuta"
+      },
+      "DeleteBtn" : {
+        "label" : "Poista"
+      },
+      "SaveBtn" : {
+        "label" : "Tallenna"
+      },
+      "MainPanel" : {
+        "label" : "Google drive -integraation muokkaus"
+      },
+      "code" : {
+        "label" : "Yksilöllinen koodi",
+        "help" : "Google drive -järjestelmän automaattisesti luotu yksilöllinen koodi."
+      },
+      "description" : {
+        "label" : "Kuvaus",
+        "help" : "Anna google drive -järjestelmän kuvaus."
+      },
+      "driveAccessSecret" : {
+        "label" : "Käytetty tunnus",
+        "help" : "Valitse tai luo tunnus pääsyyn google drive -järjestelmään"
       }
     }
   }

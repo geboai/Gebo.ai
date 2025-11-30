@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Pengaturan Gebo.ai ada langkah penting yang belum selesai",
         "detail" : "Silakan periksa langkah berwarna merah pada proses pengaturan"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrasi Google Drive/Workspaces",
+        "description" : "Konfigurasikan Gebo.ai untuk mengakses data tim Google cloud Drive/Workspaces Anda"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kode basis pengetahuan"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Siapkan sistem Google Drive/Workspaces perusahaan"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kode konfigurasi"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsi"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Kunci publik",
         "help" : "Buka file kunci publik lalu salin ke area teks ini."
+      },
+      "jsonContent" : {
+        "label" : "Isi file kredensial Google",
+        "help" : "Salin di sini isi file kredensial Google api yang diunduh dari google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Pengguna Google yang akan diwakilkan",
+        "help" : "Pengguna yang akan diwakilkan oleh kredensial yang diberikan",
+        "placeholder" : "Pengguna yang akan diwakilkan oleh kredensial yang diberikan"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "tambah sumber data repository git seperti bitbucket, github atau lainnya"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "tambah sumber data google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Tambah konfigurasi"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Buat"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi sistem Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Buat koneksi Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "delegatedUser" : {
+        "label" : "Pengguna Google yang akan diwakilkan",
+        "help" : "Pengguna yang akan diwakilkan oleh kredensial yang diberikan",
+        "placeholder" : "Pengguna yang akan diwakilkan oleh kredensial yang diberikan"
+      },
+      "jsonContent" : {
+        "label" : "Isi json kredensial Google",
+        "help" : "Buat Kredensial Google dengan akses drive workspace/tim Anda di Google Console Cloud dan tempelkan di sini isi file json yang diunduh (https://console.cloud.google.com/).",
+        "placeholder" : "Buat Kredensial Google dengan akses drive workspace/tim Anda di Google Console Cloud dan tempelkan di sini isi file json yang diunduh (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Simpan"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "PublishBtn" : {
+        "label" : "Publikasikan!",
+        "help" : "Menyimpan dan membiarkan isi ini tersedia di basis pengetahuan untuk LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Hapus"
+      },
+      "MainPanel" : {
+        "label" : "Berbagi konten google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Pengaturan"
+      },
+      "LogsTab" : {
+        "label" : "Log"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi konten google drive yang diunggah."
+      },
+      "code" : {
+        "label" : "Kode unik",
+        "help" : "Kode unik konten yang otomatis dibuat."
+      },
+      "tree" : {
+        "label" : "File atau folder yang dipilih",
+        "help" : "Ruang dan konten halaman google drive yang dibagikan"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfigurasi google drive",
+        "help" : "Referensi sistem google drive yang sudah dikonfigurasi."
+      },
+      "openZips" : {
+        "label" : "Buka file zip",
+        "help" : "Aktifkan pembukaan file zip dan ekstraksi konten"
+      },
+      "parentProjectCode" : {
+        "label" : "Proyek",
+        "help" : "Referensi induk proyek."
+      },
+      "programmedTables" : {
+        "label" : "Jadwal pemeriksaan pembaruan konten",
+        "help" : "Atur penjadwalan konten yang diubah agar sistem retrival augmented generation tetap terbarui"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteria organisasi folder dan subfolder",
+        "help" : "Tolong jelaskan di sini bagaimana kriteria organisasi file dan folder diterapkan pada konten google drive yang dibagikan dengan Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Pengaturan umum"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "DeleteBtn" : {
+        "label" : "Hapus"
+      },
+      "SaveBtn" : {
+        "label" : "Simpan"
+      },
+      "MainPanel" : {
+        "label" : "Mengedit integrasi google drive"
+      },
+      "code" : {
+        "label" : "Kode unik",
+        "help" : "Kode unik sistem google drive yang otomatis dibuat."
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi sistem google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identitas yang digunakan",
+        "help" : "Pilih atau buat identitas untuk mengakses sistem google drive"
       }
     }
   }

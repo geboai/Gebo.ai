@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai ಸೆಟಪ್ನಲ್ಲಿ ಕೆಲವು ಅಗತ್ಯವಾದ ಹಂತಗಳು ಕಾಣೆಯಾಗಿವೆ",
         "detail" : "ದಯವಿಟ್ಟು ಸೆಟಪ್ ಪ್ರಕ್ರಿಯೆಯ ಕೆಂಪು ಹಂತಗಳನ್ನು ಪರಿಶೀಲಿಸಿ"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ಏಕೀಕರಣ",
+        "description" : "ನಿಮ್ಮ Google cloud Drive/Workspaces ತಂಡ ಡೇಟಾವನ್ನು ಪ್ರವೇಶಿಸಲು Gebo.ai ಅನ್ನು ಸಂರಚಿಸಿ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "ನಾಲಿಕಾ ಕೋಡ್‌ಗಳು"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ಕಂಪನಿ Google Drive/Workspaces ವ್ಯವಸ್ಥೆಗಳನ್ನು ಸ್ಥಾಪಿಸಿ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ಕಾನ್ಫಿಗ್ ಕೋಡ್"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "ವಿವರಣೆ"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "ಸಾರ್ವಜನಿಕ ಕೀಲಿ",
         "help" : "ಸಾರ್ವಜನಿಕ ಕೀಲಿ ಫೈಲ್ ತೆರೆಯಿರಿ ಮತ್ತು ಈ ಪಠ್ಯ ಪ್ರದೇಶದಲ್ಲಿ ಪ್ರತಿಬಿಂಬಿಸಿ."
+      },
+      "jsonContent" : {
+        "label" : "Google ಪ್ರಮಾಣಪತ್ರಗಳ ಫೈಲ್ ವಿಷಯ",
+        "help" : "Google cloud api console (https://console.cloud.google.com/) ನಿಂದ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ Google api ಪ್ರಮಾಣಪತ್ರಗಳ ಫೈಲ್ ವಿಷಯವನ್ನು ಇಲ್ಲಿ ಪಠ್ಯ ಹಾಕಿ"
+      },
+      "delegatedUser" : {
+        "label" : "ನಕಲಿ ಮಾಡಬೇಕಾದ Google ಬಳಕೆದಾರ",
+        "help" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ",
+        "placeholder" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket, github ಅಥವಾ ಇತರರಂತಹ git repository ಡೇಟಾ ಮೂಲ ಸೇರಿಸಿ"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive ಡೇಟಾ ಮೂಲವನ್ನು ಸೇರಿಸಿ"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "ಸಂರಚನೆ ಸೇರಿಸಿ"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ರಚಿಸಿ"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "Google Drive ವ್ಯವಸ್ಥೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace ಸಂಪರ್ಕವನ್ನು ರಚಿಸಿ"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "delegatedUser" : {
+        "label" : "ನಕಲಿ ಮಾಡಬೇಕಾದ Google ಬಳಕೆದಾರ",
+        "help" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ",
+        "placeholder" : "ನೀಡಲಾದ ಪ್ರಮಾಣಪತ್ರಗಳಿಂದ ನಕಲಿ ಮಾಡಲಾಗುವ ಬಳಕೆದಾರ"
+      },
+      "jsonContent" : {
+        "label" : "Google ಪ್ರಮಾಣಪತ್ರಗಳ json ವಿಷಯ",
+        "help" : "ನಿಮ್ಮ workspace/team drives ಪ್ರವೇಶವನ್ನು ಹೊಂದಿರುವ Google Console Cloud ನಲ್ಲಿ Google ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ರಚಿಸಿ ಮತ್ತು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ json ಫೈಲ್ ವಿಷಯವನ್ನು ಇಲ್ಲಿ ಹಾಕಿ (https://console.cloud.google.com/).",
+        "placeholder" : "ನಿಮ್ಮ workspace/team drives ಪ್ರವೇಶವನ್ನು ಹೊಂದಿರುವ Google Console Cloud ನಲ್ಲಿ Google ಪ್ರಮಾಣಪತ್ರಗಳನ್ನು ರಚಿಸಿ ಮತ್ತು ಡೌನ್‌ಲೋಡ್ ಮಾಡಿದ json ಫೈಲ್ ವಿಷಯವನ್ನು ಇಲ್ಲಿ ಹಾಕಿ (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸು"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "PublishBtn" : {
+        "label" : "ಪ್ರಕಟಿಸಿ!",
+        "help" : "ಉಳಿಸಿ ಮತ್ತು ಈ ವಿಷಯಗಳನ್ನು ಜ್ಞಾನಕೋಶದಲ್ಲಿ LLm' ಗಳಿಗೆ ಲಭ್ಯವಾಗುವಂತೆ ಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "MainPanel" : {
+        "label" : "google drive ವಿಷಯ ಹಂಚಿಕೊಳ್ಳಲಾಗುತ್ತಿದೆ"
+      },
+      "SettingsTab" : {
+        "label" : "ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "LogsTab" : {
+        "label" : "ಲಾಗ್‍ಗಳು"
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "ಅಪ್ಲೋಡ್ ಮಾಡಲಾದ google drive ಒಳಗೊಂಡಿರುವ ವಿಷಯದ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "ಒಳಗೊಂಡಿರುವ ಮಾಹಿತಿ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಿರುವ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "tree" : {
+        "label" : "ಆಯ್ಕೆ ಮಾಡಲಾದ ಫೈಲ್ ಅಥವಾ ಫೋಲ್ಡರ್",
+        "help" : "ಹಂಚಿಕೆ ಮಾಡಲಾದ google drive ಸ್ಥಳ ಹಾಗೂ ಪುಟಗಳ ವಿಷಯಗಳು"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive ಸಂರಚನೆ",
+        "help" : "ಈಗಾಗಲೆ ಸಂರಚಿಸಲಾಗಿದೆ ಎಂಬ google drive ಸಿಸ್ಟಂ ಉಲ್ಲೇಖ."
+      },
+      "openZips" : {
+        "label" : "zip ಫೈಲ್‍ಗಳನ್ನು ತೆರೆಯಿರಿ",
+        "help" : "zip ಫೈಲ್ ತೆರೆಯುವಿಕೆ ಮತ್ತು ವಿಷಯ ಹೊರತೆಗೆದುಬರುವಿಕೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ"
+      },
+      "parentProjectCode" : {
+        "label" : "ಪ್ರಾಜೆಕ್ಟ್",
+        "help" : "ಪೋಷಕ ಪ್ರಾಜೆಕ್ಟ್ ಉಲ್ಲೇಖ."
+      },
+      "programmedTables" : {
+        "label" : "ವಿಷಯ ನವೀಕರಣಗಳ ಪರಿಶೀಲನೆ ವೇಳಾಪಟ್ಟಿ",
+        "help" : "ಬदलಾದ ವಿಷಯಗಳನ್ನು ಪರಿಶೀಲಿಸಲು ವೀಕ್ಷಣೆ ವಿನ್ಯಾಸವನ್ನು ಉದ್ದೀಪಿಸು, retrieve augmented generation system ಅನ್ನು ನವೀಕರಿಸುವಂತೆ ಇಟ್ಟುಕೊಳ್ಳಿ"
+      },
+      "catalogingCriteria" : {
+        "label" : "ಫೋಲ್ಡರ್ ಮತ್ತು ಉಪಫೋಲ್ಡರ್ ಗಳ ಸಂಘಟನೆ ಮಾನದಂಡಗಳು",
+        "help" : "Gebo.ai ಗೆ ಹಂಚಲ್ಪಟ್ಟ google drive ವಿಷಯಗಳಲ್ಲಿ ಫೈಲ್‌ಗಳು ಮತ್ತು ಫೋಲ್ಡರ್‌ಗಳ ಸಂಘಟನೆ ಮಾನದಂಡಗಳು ಹೇಗೆ ನಡೆಯಿತು ಎಂದು ಇಲ್ಲಿ ವಿವರಿಸಿ"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ಹೆಚ್ಚಿನ ಸೆಟ್ಟಿಂಗ್ಗಳು"
+      },
+      "CancelBtn" : {
+        "label" : "ರದ್ದುಮಾಡಿ"
+      },
+      "DeleteBtn" : {
+        "label" : "ಅಳಿಸಿ"
+      },
+      "SaveBtn" : {
+        "label" : "ಉಳಿಸು"
+      },
+      "MainPanel" : {
+        "label" : "google drive ಏಕೀಕರಣವನ್ನು ಸಂಪಾದಿಸಲಾಗುತ್ತಿದೆ"
+      },
+      "code" : {
+        "label" : "ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್",
+        "help" : "google drive ವ್ಯವಸ್ಥೆಯ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ರಚಿಸಲಾದ ವೈಶಿಷ್ಟ್ಯಪೂರ್ಣ ಕೋಡ್."
+      },
+      "description" : {
+        "label" : "ವಿವರಣೆ",
+        "help" : "google drive ವ್ಯವಸ್ಥೆಯ ವಿವರಣೆಯನ್ನು ನಮೂದಿಸಿ."
+      },
+      "driveAccessSecret" : {
+        "label" : "ಬಳಸಲಾದ ಗುರುತು",
+        "help" : "google drive ವ್ಯವಸ್ಥೆಗೆ ಪ್ರವೇಶಿಸಲು ಗುರುತನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ ನಿರ್ಮಿಸಿ"
       }
     }
   }

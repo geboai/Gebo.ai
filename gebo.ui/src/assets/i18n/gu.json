@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai સેટઅપમાં કંઈક ફરજિયાત પગલું ચૂકી ગયું છે",
         "detail" : "મહેરબાની કરીને સેટઅપ પ્રક્રિયાના લાલ રંગના પગલાંઓને ચકાસો"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces એકીકરણ",
+        "description" : "તમારા Google cloud Drive/Workspaces ટીમ ડેટા ઍક્સેસ કરવા માટે Gebo.aiનું સમાયોજન કરો"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "નોલેજ બેઝ કોડ્સ"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "કંપની Google Drive/Workspaces સિસ્ટમ્સ સમાયોજિત કરો"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કોન્ફિગ કોડ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "વિવરણ"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "પબ્લિક કી",
         "help" : "પબ્લિક કી ફાઇલ ખોલીને અહીં નકલ કરો."
+      },
+      "jsonContent" : {
+        "label" : "Google ઓળખપત્રો ફાઇલની સામગ્રી",
+        "help" : "Google cloud api કન્સોલ (https://console.cloud.google.com/) માંથી ડાઉનલોડ કરેલ Google api ઓળખપત્રો ફાઇલની સામગ્રી અહીંથી નકલ કરો"
+      },
+      "delegatedUser" : {
+        "label" : "નકલ કરવા માટેનો Google યુઝર",
+        "help" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે",
+        "placeholder" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket,github અથવા અન્ય જેવા git repository ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive ડેટા સ્ત્રોત ઉમેરો"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "રૂપરેખાંકન ઉમેરો"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "બનાવો"
+      },
+      "description" : {
+        "label" : "વિવરણ",
+        "help" : "Google Drive સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace કનેક્શન બનાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "delegatedUser" : {
+        "label" : "નકલ કરવા માટેનો Google યુઝર",
+        "help" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે",
+        "placeholder" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે"
+      },
+      "jsonContent" : {
+        "label" : "Google ઓળખપત્રો json સામગ્રી",
+        "help" : "Google Console Cloud માં તમારી workspace/team drives ઍક્સેસ સાથે Google ઓળખપત્રો બનાવો અને અહીંથી ડાઉનલોડ કરેલા json ફાઇલની સામગ્રી પેસ્ટ કરો (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud માં તમારી workspace/team drives ઍક્સેસ સાથે Google ઓળખપત્રો બનાવો અને અહીંથી ડાઉનલોડ કરેલા json ફાઇલની સામગ્રી પેસ્ટ કરો (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સાચવે છે અને આ સામગ્રીને જ્ઞાન આધાર માટે LLm's માં ઉપલબ્ધ બનાવે છે"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢો"
+      },
+      "MainPanel" : {
+        "label" : "google drive સામગ્રી શેર કરવી"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "LogsTab" : {
+        "label" : "લોગ્સ"
+      },
+      "description" : {
+        "label" : "વિવરણ",
+        "help" : "google drive એન્ટ્રીઓની અપલોડ કરેલી સામગ્રીનું વર્ણન દાખલ કરો."
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "સામગ્રીનો આપમેળે જનરેટ થયેલો અનન્ય કોડ."
+      },
+      "tree" : {
+        "label" : "પસંદ કરેલી ફાઇલ અથવા ફોલ્ડર",
+        "help" : "શેર કરેલા google drive સ્પેસ અને પેજોની સામગ્રી"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive રૂપરેખાંકન",
+        "help" : "પહેલેથી રૂપરેખાંકિત google drive સિસ્ટમ સંદર્ભ."
+      },
+      "openZips" : {
+        "label" : "ઝિપ ફાઇલો ખોલો",
+        "help" : "ઝિપ ફાઇલો ખોલવા અને સામગ્રી નીકાળવાનો વિકલ્પ સક્ષમ કરો"
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "પેરંટ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રીના સુધારા તપાસની સમીક્ષા સમયપત્રક",
+        "help" : "પસંદ કરેલી સામગ્રીના સુધારાના શેડ્યૂલ બનાવો જેથી retrieve augmented generation સિસ્ટમ અપડેટ રહે"
+      },
+      "catalogingCriteria" : {
+        "label" : "ફોલ્ડર અને સબફોલ્ડરની ઠરાવેલા ગુણધર્મો",
+        "help" : "અહીં સમજાવો કે Gebo.ai સાથે શેર કરેલી google drive સામગ્રીમાં ફાઇલો અને ફોલ્ડર્સના ઠરાવેલા ગુણધર્મો કેવી રીતે કરવામાં આવ્યા છે"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "મૂળભૂત સેટિંગ્સ"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "MainPanel" : {
+        "label" : "google drive એકીકરણમાં ફેરફાર કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "google drive સિસ્ટમનો આપમેળે જનરેટ થયેલો અનન્ય કોડ."
+      },
+      "description" : {
+        "label" : "વિવરણ",
+        "help" : "google drive સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "driveAccessSecret" : {
+        "label" : "ઉપયોગ કરેલી ઓળખ",
+        "help" : "google drive સિસ્ટમ ઍક્સેસ કરવા માટે ઓળખ પસંદ કરો અથવા બનાવો"
       }
     }
   }

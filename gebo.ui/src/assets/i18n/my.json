@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai အတွက် မဖြစ်မနေလိုအပ်သောအဆင့် တချို့ လက်လွတ်နေသည်",
         "detail" : "စနစ်တပ်ဆင်မှု လုပ်ငန်းစဉ်ရှိ အနီရောင်အဆင့်များကို ပြန်လည်စစ်ဆေးပါ"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ပေါင်းစပ်ခြင်း",
+        "description" : "သင့် Google cloud Drive/Workspaces အသင်းဒေတာကို Gebo.ai မှ အသုံးပြုရန် ပြင်ဆင်ပါ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Knowledge base codes"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ကုမ္ပဏီ Google Drive/Workspaces စနစ်များပြင်ဆင်ပါ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ပြင်ဆင်မည့်ကုဒ်"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "ဖော်ပြချက်"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "အများသုံး key",
         "help" : "အများသုံး key ဖိုင်ကိုဖွင့်ပြီး ဒီစာရိုက်ရာနေရာမှာကူးထည့်ပါ။"
+      },
+      "jsonContent" : {
+        "label" : "Google အထောက်အထား ဖိုင်အကြောင်းအရာ",
+        "help" : "Google cloud api console (https://console.cloud.google.com/) မှ ဒေါင်းလုပ်လုပ်ထားသော Google api အထောက်အထားဖိုင်၏ အကြောင်းအရာကို ဤနေရာတွင် ပွားပါ"
+      },
+      "delegatedUser" : {
+        "label" : "ပြောင်းလဲအသုံးပြုမည့် Google အသုံးပြုသူ",
+        "help" : "ပေးထားသော အထောက်အထားဖြင့် ပြောင်းလဲအသုံးပြုမည့်အသုံးပြုသူ",
+        "placeholder" : "ပေးထားသော အထောက်အထားဖြင့် ပြောင်းလဲအသုံးပြုမည့်အသုံးပြုသူ"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket၊ github သို့မဟုတ် အခြား git repository ဒေတာရင်းမြစ် ထည့်ရန်"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive ဒေတာအရင်းအမြစ် ထည့်ပါ"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "ပြင်ဆင်မှုထည့်ပါ"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ဖန်တီးပါ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "Google Drive စနစ်၏ ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace ချိတ်ဆက်မှုဖန်တီးပါ"
+      },
+      "CancelBtn" : {
+        "label" : "မလုပ်ဆောင်တော့ပါ"
+      },
+      "delegatedUser" : {
+        "label" : "ပြောင်းလဲအသုံးပြုမည့် Google အသုံးပြုသူ",
+        "help" : "ပေးထားသော အထောက်အထားဖြင့် ပြောင်းလဲအသုံးပြုမည့်အသုံးပြုသူ",
+        "placeholder" : "ပေးထားသော အထောက်အထားဖြင့် ပြောင်းလဲအသုံးပြုမည့်အသုံးပြုသူ"
+      },
+      "jsonContent" : {
+        "label" : "Google အထောက်အထား json အကြောင်းအရာ",
+        "help" : "Google Console Cloud တွင် သင့် workspace/team drives ဝင်ခွင့်ပါရှိသော Google Credentials ဖန်တီးပြီး ဒေါင်းလုပ် json ဖိုင်အကြောင်းအရာကို ဤနေရာတွင် ပွားပါ (https://console.cloud.google.com/)",
+        "placeholder" : "Google Console Cloud တွင် သင့် workspace/team drives ဝင်ခွင့်ပါရှိသော Google Credentials ဖန်တီးပြီး ဒေါင်းလုပ် json ဖိုင်အကြောင်းအရာကို ဤနေရာတွင် ပွားပါ (https://console.cloud.google.com/)"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "CancelBtn" : {
+        "label" : "မလုပ်ဆောင်တော့ပါ"
+      },
+      "PublishBtn" : {
+        "label" : "ထုတ်ဝေပေးပါ!",
+        "help" : "သိမ်းဆည်းပြီး knowledge base တွင် LLm များရရှိနိုင်အောင် ဆောင်ရွက်ပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက္ပါ"
+      },
+      "MainPanel" : {
+        "label" : "google drive အကြောင်းအရာမျှဝေခြင်း"
+      },
+      "SettingsTab" : {
+        "label" : "Setting များ"
+      },
+      "LogsTab" : {
+        "label" : "မှတ်တမ်းများ"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "တင်သွင်းထားသော google drive အကြောင်းအရာ ဖော်ပြချက် ထည့်ပါ"
+      },
+      "code" : {
+        "label" : "ထူးခြားသောကုဒ်",
+        "help" : "အကြောင်းအရာများအတွက် အလိုအလျောက်ဖန်တီးသည့် ထူးခြားသောကုဒ်"
+      },
+      "tree" : {
+        "label" : "ရွေးချယ်ထားသောဖိုင် သို့မဟုတ် ဖိုလ်ဒါ",
+        "help" : "မျှဝေထားသော google drive spaces နှင့်စာမျက်နှာအကြောင်းအရာများ"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive ပြင်ဆင်မှု",
+        "help" : "ပြီးပြည့်စုံထားသော google drive စနစ်ကိုရည်ညွှန်းပါ"
+      },
+      "openZips" : {
+        "label" : "zip ဖိုင်များဖွင့်ပါ",
+        "help" : "zip ဖိုင်များဖွင့်ခြင်းနှင့် အကြောင်းအရာယူခြင်းကို ဖွင့်ရန်"
+      },
+      "parentProjectCode" : {
+        "label" : "Project",
+        "help" : "မိဘ project ကို ရည်ညွှန်းသည်"
+      },
+      "programmedTables" : {
+        "label" : "အကြောင်းအရာ အပ်ဒိတ်များ စစ်ဆေးချိန်ဇယား",
+        "help" : "ပြောင်းလဲသွားသော အကြောင်းအရင်းများရယူရေး အချိန်ဇယားအား ပြင်ဆင်ပါ"
+      },
+      "catalogingCriteria" : {
+        "label" : "ဖိုင်များနှင့် ဖိုလ်ဒါများ စီစဉ်သည့်စည်းမျဉ်းများ",
+        "help" : "Gebo.ai နှင့်မျှဝေသော google drive မှ ဖိုင်များဖန်တီးစဉ် စည်းမျဉ်းများကို ဤနေရာတွင် ရှင်းပြပါ"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ယေဘုယျပြင်ဆင်မှုများ"
+      },
+      "CancelBtn" : {
+        "label" : "မလုပ်ဆောင်တော့ပါ"
+      },
+      "DeleteBtn" : {
+        "label" : "ဖျက်ပါ"
+      },
+      "SaveBtn" : {
+        "label" : "သိမ်းဆည်းပါ"
+      },
+      "MainPanel" : {
+        "label" : "google drive ပေါင်းစပ်မှု တည်းဖြတ်ခြင်း"
+      },
+      "code" : {
+        "label" : "ထူးခြားသော ကုဒ်",
+        "help" : "google drive စနစ်အတွက် အလိုအလျောက်ဖန်တီးသည့်ထူးခြားသောကုဒ်"
+      },
+      "description" : {
+        "label" : "ဖော်ပြချက်",
+        "help" : "google drive စနစ်၏ဖော်ပြချက်ကို ထည့်ပါ။"
+      },
+      "driveAccessSecret" : {
+        "label" : "အသုံးပြုထားသော အထောက်အထား",
+        "help" : "google drive စနစ်ထည့်သွင်းခြင်းအတွက် အထောက်အထားကို ရွေးပါ သို့မဟုတ် ဖန်တီးပါ"
       }
     }
   }

@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai സജ്ജീകരണത്തിൽ ചില നിർബന്ധിത ഘട്ടങ്ങൾ കാണുന്നു",
         "detail" : "ദയവായി സജ്ജീകരണ പ്രക്രിയയിലെ ചുവപ്പ് ഘട്ടങ്ങൾ പരിശോധിക്കുക"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ഇന്റഗ്രേഷൻ",
+        "description" : "നിങ്ങളുടെ Google ക്ലൗഡ് Drive/Workspaces ടീം ഡാറ്റ ആക്സസ് ചെയ്യാൻ Gebo.ai ക്രമീകരിക്കുക"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "നോളജ് ബേസ് കോഡുകൾ"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "കമ്പനിയുടെ Google Drive/Workspaces സിസ്റ്റങ്ങൾ ക്രമീകരിക്കുക"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "കമ്പനിയ്ക്കുള്ള ക്രമീകരണ കോഡ്"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "വിവരണം"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "സാധാരണ കീ",
         "help" : "പബ്ലിക് കീ ഫയൽ തുറന്ന് ഈ ടെക്സ്റ്റ് ഏറിയയിൽ പകർത്തുക."
+      },
+      "jsonContent" : {
+        "label" : "Google ക്രെഡൻഷ്യൽസ് ഫയൽ ഉള്ളടക്കം",
+        "help" : "Google cloud api console (https://console.cloud.google.com/) നിന്ന് ഡൗൺലോഡ് ചെയ്ത Google api ക്രെഡൻഷ്യൽസ് ഫയലിന്റെ ഉള്ളടക്കം ഇവിടെ പകർത്തുക"
+      },
+      "delegatedUser" : {
+        "label" : "താനതാവുന്ന Google ഉപയോക്താവ്",
+        "help" : "നൽകിയിരിക്കുന്ന ക്രെഡൻഷ്യൽസ് ഉപയോഗിച്ച് impersonate ചെയ്യുന്നതാണ് ഈ ഉപയോക്താവിനെ",
+        "placeholder" : "നൽകിയിരിക്കുന്ന ക്രെഡൻഷ്യൽസ് ഉപയോഗിച്ച് impersonate ചെയ്യുന്നതാണ് ഈ ഉപയോക്താവിനെ"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git റിപ്പോ",
         "help" : "bitbucket, github അല്ലെങ്കിൽ മറ്റേതെങ്കിലും git റീപോസിറ്ററി ഡാറ്റാ സോഴ്‌സ് ചേർക്കുക"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ഒരു google drive ഡാറ്റ ഉറവിടം ചേർ്ക്കുക"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "കോൺഫിഗറേഷൻ ചേർക്കുക"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ഉണ്ട്"
+      },
+      "description" : {
+        "label" : "വിവരണം",
+        "help" : "Google Drive സിസ്റ്റത്തിന്റെ വിശദവിവരം നൽകുക."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace കണക്ഷൻ സൃഷ്ടിക്കുക"
+      },
+      "CancelBtn" : {
+        "label" : "റദ്ദാക്കുക"
+      },
+      "delegatedUser" : {
+        "label" : "താനതാവുന്ന Google ഉപയോക്താവ്",
+        "help" : "നൽകിയിരിക്കുന്ന ക്രെഡൻഷ്യൽസ് ഉപയോഗിച്ച് impersonate ചെയ്യുന്നതാണ് ഈ ഉപയോക്താവിനെ",
+        "placeholder" : "നൽകിയിരിക്കുന്ന ക്രെഡൻഷ്യൽസ് ഉപയോഗിച്ച് impersonate ചെയ്യുന്നതാണ് ഈ ഉപയോക്താവിനെ"
+      },
+      "jsonContent" : {
+        "label" : "Google ക്രെഡൻഷ്യൽസ് json ഉള്ളടക്കം",
+        "help" : "Google Console Cloud-ൽ നിങ്ങളുടെ workspace/team drives ആക്സസ് ഉള്ള Google Credentials സൃഷ്ടിച്ച് ഡൗൺലോഡ് ചെയ്ത json ഫയലിന്റെ ഉള്ളടക്കം ഇവിടെ ഒട്ടിക്കുക (https://console.cloud.google.com/) .",
+        "placeholder" : "Google Console Cloud-ൽ നിങ്ങളുടെ workspace/team drives ആക്സസ് ഉള്ള Google Credentials സൃഷ്ടിച്ച് ഡൗൺലോഡ് ചെയ്ത json ഫയലിന്റെ ഉള്ളടക്കം ഇവിടെ ഒട്ടിക്കുക (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "സംരക്ഷിക്കുക"
+      },
+      "CancelBtn" : {
+        "label" : "റദ്ദാക്കുക"
+      },
+      "PublishBtn" : {
+        "label" : "പ്രസിദ്ധീകരിക്കുക!",
+        "help" : "സംരക്ഷിച്ച് ഈ ഉള്ളടക്കം LLm-കളുടെ knowledge base-ലേക്ക് ആക്‌സസ് ചെയ്യാവുന്നതാക്കുന്നു"
+      },
+      "DeleteBtn" : {
+        "label" : "ഇളക്കുക"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ഉള്ളടക്കങ്ങൾ പങ്കിടുന്നു"
+      },
+      "SettingsTab" : {
+        "label" : "ക്രമീകരണങ്ങൾ"
+      },
+      "LogsTab" : {
+        "label" : "ലോഗുകൾ"
+      },
+      "description" : {
+        "label" : "വിവരണം",
+        "help" : "അപ്‍ലോഡ് ചെയ്ത google drive എൻട്രികളുടെ വിശദങ്ങളുടെ വിവരണം നൽകുക."
+      },
+      "code" : {
+        "label" : "യൂണികോഡ്",
+        "help" : "ഉള്ളടക്കങ്ങൾക്ക് സ്വയം സൃഷ്ടിക്കപ്പെടുന്ന യുണിക്വ് കോഡ്."
+      },
+      "tree" : {
+        "label" : "തിരഞ്ഞെടുത്ത ഫയലോ ഫോൾഡറോ",
+        "help" : "പങ്കിടുന്ന google drive സ്‌പെയ്‌സുകളുടെയും പേജുകളുടെയും ഉള്ളടക്കം"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive ക്രമീകരണം",
+        "help" : "AlreadyConfigured google drive സിസ്റ്റം റഫറൻസ്."
+      },
+      "openZips" : {
+        "label" : "Zip ഫയലുകൾ തുറക്കുക",
+        "help" : "Zip ഫയലുകൾ തുറക്കും, ഉള്ളടക്കം എടുക്കുന്നതിന് അനുവദിക്കുക"
+      },
+      "parentProjectCode" : {
+        "label" : "പ്രോജക്ട്",
+        "help" : "മൂലപ്രോജക്ട് റഫറൻസ്."
+      },
+      "programmedTables" : {
+        "label" : "ഉള്ളടക്ക പുതുക്കൽ പരിശോധന ഷെഡ്യൂൾ",
+        "help" : "മാറ്റം വന്ന ഉള്ളടക്കങ്ങൾ പിന്തുടർന്ന് retrieve augmented generation സിസ്റ്റം അപ്‌ഡേറ്റ് ആയിരിക്കാൻ ഷെഡ്യൂൾ ക്രമീകരിക്കുക"
+      },
+      "catalogingCriteria" : {
+        "label" : "ഫോൾഡറുകളും ഉപഫോൾഡറുകളും ക്രമികരണ മാനദണ്ഡങ്ങൾ",
+        "help" : "Gebo.ai-ൽ പങ്കിട്ട google drive ഉള്ളടക്കത്തിൽ ഫയലുകളും ഫോൾഡറുകളും ക്രമീകരിക്കാൻ ഉപയോഗിച്ച മാനദണ്ഡങ്ങൾ ഇവിടെ വിശദീകരിക്കുക"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "പൊതുവായ ക്രമീകരണങ്ങൾ"
+      },
+      "CancelBtn" : {
+        "label" : "റദ്ദാക്കുക"
+      },
+      "DeleteBtn" : {
+        "label" : "ഇളക്കുക"
+      },
+      "SaveBtn" : {
+        "label" : "സംരക്ഷിക്കുക"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ഇന്റഗ്രേഷൻ എഡിറ്റ്ചെയ്യുന്നു"
+      },
+      "code" : {
+        "label" : "യൂണികോഡ്",
+        "help" : "Google drive സിസ്റ്റത്തിനുള്ള സ്വയം സൃഷ്ടിക്കപ്പെടുന്ന യുണിക്വ് കോഡ്."
+      },
+      "description" : {
+        "label" : "വിവരണം",
+        "help" : "Google drive സിസ്റ്റത്തിന്റെ വിവരണം നൽകുക."
+      },
+      "driveAccessSecret" : {
+        "label" : "ഉപയോഗിക്കുന്ന ഐഡന്റിറ്റി",
+        "help" : "Google drive സിസ്റ്റം ആക്‌സസ് ചെയ്യാൻ ഐഡന്റിറ്റി തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ സൃഷ്ടിക്കുക"
       }
     }
   }

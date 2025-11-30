@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "برخی مراحل اجباری راه‌اندازی Gebo.ai ناقص است",
         "detail" : "لطفاً مراحل قرمز رنگ فرآیند راه‌اندازی را بررسی کنید"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "ادغام Google Drive/Workspaces",
+        "description" : "Gebo.ai را برای دسترسی به داده‌های تیم Google cloud Drive/Workspaces خود پیکربندی کنید"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "کدهای پایگاه دانش"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "راه‌اندازی سیستم‌های Google Drive/Workspaces شرکت"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "کد پیکربندی"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "توضیحات"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "کلید عمومی",
         "help" : "فایل کلید عمومی را باز کنید و در این قسمت کپی کنید."
+      },
+      "jsonContent" : {
+        "label" : "محتوای فایل اعتبارسنجی Google",
+        "help" : "محتوای فایل اعتبارنامه Google api دانلود شده از کنسول api گوگل (https://console.cloud.google.com/) را اینجا کپی کنید"
+      },
+      "delegatedUser" : {
+        "label" : "کاربر Google برای احراز هویت",
+        "help" : "کاربری که توسط اعتبارنامه‌های ارائه‌شده احراز هویت می‌شود",
+        "placeholder" : "کاربری که توسط اعتبارنامه‌های ارائه‌شده احراز هویت می‌شود"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+مخزن git",
         "help" : "افزودن منبع داده مخزن git مانند bitbucket، github یا دیگران"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "افزودن یک منبع داده google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "افزودن پیکربندی"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ایجاد"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیح سیستم Google Drive را وارد کنید."
+      },
+      "MainPanel" : {
+        "label" : "ایجاد اتصال Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "delegatedUser" : {
+        "label" : "کاربر Google برای احراز هویت",
+        "help" : "کاربری که توسط اعتبارنامه‌های ارائه‌شده احراز هویت می‌شود",
+        "placeholder" : "کاربری که توسط اعتبارنامه‌های ارائه‌شده احراز هویت می‌شود"
+      },
+      "jsonContent" : {
+        "label" : "محتوای json اعتبارنامه Google",
+        "help" : "در کنسول Google Console Cloud با دسترسی به درایوهای workspace/team خود اعتبارنامه Google ایجاد کرده و محتوای فایل json دانلود شده را اینجا جای‌گذاری کنید (https://console.cloud.google.com/).",
+        "placeholder" : "در کنسول Google Console Cloud با دسترسی به درایوهای workspace/team خود اعتبارنامه Google ایجاد کرده و محتوای فایل json دانلود شده را اینجا جای‌گذاری کنید (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "PublishBtn" : {
+        "label" : "انتشار!",
+        "help" : "محتوا ذخیره شده و در اختیار پایه دانش LLM قرار می‌گیرد"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "اشتراک‌گذاری محتوای google drive"
+      },
+      "SettingsTab" : {
+        "label" : "تنظیمات"
+      },
+      "LogsTab" : {
+        "label" : "گزارش‌ها"
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیحات مربوط به محتوای بارگذاری شده google drive را وارد کنید."
+      },
+      "code" : {
+        "label" : "کد یکتای",
+        "help" : "کد یکتای محتوای به طور خودکار تولید شده."
+      },
+      "tree" : {
+        "label" : "فایل یا پوشه انتخاب شده",
+        "help" : "فضاها و صفحات اشتراکی google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "پیکربندی google drive",
+        "help" : "مرجع سیستم google drive که قبلاً پیکربندی شده."
+      },
+      "openZips" : {
+        "label" : "بازکردن فایل‌های zip",
+        "help" : "فعالسازی بازکردن و استخراج محتوای فایل‌های zip"
+      },
+      "parentProjectCode" : {
+        "label" : "پروژه",
+        "help" : "مرجع پروژه والد"
+      },
+      "programmedTables" : {
+        "label" : "برنامه زمان‌بندی بررسی به‌روزرسانی محتوا",
+        "help" : "برنامه‌بندی بررسی تغییرات محتوا را برای به‌روزرسانی سیستم تولید افزوده تنظیم کنید"
+      },
+      "catalogingCriteria" : {
+        "label" : "ملاک‌های سازماندهی پوشه‌ها و زیرپوشه‌ها",
+        "help" : "لطفاً در اینجا توضیح دهید که چگونه معیارهای سازماندهی فایل‌ها و پوشه‌ها در محتوای google drive که با Gebo.ai به اشتراک گذاشته شده انجام شده است"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "تنظیمات عمومی"
+      },
+      "CancelBtn" : {
+        "label" : "لغو"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "ذخیره"
+      },
+      "MainPanel" : {
+        "label" : "ویرایش ادغام google drive"
+      },
+      "code" : {
+        "label" : "کد یکتای",
+        "help" : "کد یکتای سیستم google drive به طور خودکار تولید شده."
+      },
+      "description" : {
+        "label" : "توضیحات",
+        "help" : "توضیح سیستم google drive را وارد کنید."
+      },
+      "driveAccessSecret" : {
+        "label" : "هویت مورد استفاده",
+        "help" : "هویت لازم برای دسترسی به سیستم google drive را انتخاب یا ایجاد کنید"
       }
     }
   }

@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Usanidi wa Gebo.ai umekosa hatua fulani ya lazima",
         "detail" : "Tafadhali kagua hatua nyekundu kwenye mchakato wa usanidi"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Muunganiko wa Google Drive/Workspaces",
+        "description" : "Sanidi Gebo.ai ili kufikia data ya timu yako ya Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Misimbo ya msingi ya maarifa"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Sanidi mifumo ya Google Drive/Workspaces ya kampuni"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Msimbo wa usanidi"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Ufunguo wa umma",
         "help" : "Fungua faili ya ufunguo wa umma na kopi kwenye eneo hili la maandishi."
+      },
+      "jsonContent" : {
+        "label" : "Yaliyomo kwenye faili ya uthibitisho wa Google",
+        "help" : "Nakili hapa yaliyomo kwenye faili ya uthibitisho wa Google api uliopakuliwa kutoka kwenye Google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Mtumiaji wa Google wa kuigwa",
+        "help" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho",
+        "placeholder" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "ongeza chanzo cha data ya hazina ya git kama bitbucket, github au zingine"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ongeza chanzo cha data cha google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Ongeza usanidi"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Unda"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Unda muunganiko wa Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "delegatedUser" : {
+        "label" : "Mtumiaji wa Google wa kuigwa",
+        "help" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho",
+        "placeholder" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho"
+      },
+      "jsonContent" : {
+        "label" : "Yaliyomo ya Google credentials json",
+        "help" : "Unda Google Credentials zenye ufikiaji wa workspace/team drives zako kwenye Google Console Cloud na badilisha hapa yaliyomo kwenye faili la json ulilopakua (https://console.cloud.google.com/).",
+        "placeholder" : "Unda Google Credentials zenye ufikiaji wa workspace/team drives zako kwenye Google Console Cloud na badilisha hapa yaliyomo kwenye faili la json ulilopakua (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Inaokoa na kufanya maudhui haya yapatikane katika hifadhidata ya maarifa kwa LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "MainPanel" : {
+        "label" : "Kushiriki maudhui ya google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "LogsTab" : {
+        "label" : "Kumbukumbu"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya maudhui yaliyopakiwa ya google drive."
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa maudhui uliotengenezwa kiotomatiki."
+      },
+      "tree" : {
+        "label" : "Faili au folda iliyochaguliwa",
+        "help" : "Maeneo na kurasa zilizoshirikiwa kwenye google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Usanidi wa google drive",
+        "help" : "Marejeleo ya mfumo wa google drive ulioshasanidiwa."
+      },
+      "openZips" : {
+        "label" : "Fungua faili za zip",
+        "help" : "Wezesha kufungua faili za zip na kutoa maudhui"
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Marejeleo ya mradi mzazi."
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya ukaguzi wa masasisho ya maudhui",
+        "help" : "Sanidi ratiba ya maudhui yaliyobadilishwa ili kuweka mfumo wa retrieve augmented generation up-to-date"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vigezo vya upangaji wa folda na mafolda",
+        "help" : "Tafadhali eleza hapa jinsi vigezo vya upangaji wa mafaili na mafolda vilivyofanyika kwenye maudhui ya google drive yaliyoshirikiwa na Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Mipangilio ya jumla"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "MainPanel" : {
+        "label" : "Hariri muunganiko wa google drive"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee uliotengenezwa kiotomatiki wa mfumo wa google drive."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Utambulisho unaotumika",
+        "help" : "Chagua au unda utambulisho wa kufikia mfumo wa google drive"
       }
     }
   }

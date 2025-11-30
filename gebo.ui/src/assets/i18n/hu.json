@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "A Gebo.ai beállításából hiányzik néhány kötelező lépés",
         "detail" : "Kérjük, nézze át a beállítási folyamat pirossal jelölt lépéseit"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integráció",
+        "description" : "Állítsa be a Gebo.ai-t, hogy hozzáférjen a Google cloud Drive/Workspaces csapatadataihoz"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Tudásbázis kódok"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Céges Google Drive/Workspaces rendszerek beállítása"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurációs kód"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Leírás"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Nyilvános kulcs",
         "help" : "Nyissa meg a nyilvános kulcs fájlt és másolja be ebbe a mezőbe."
+      },
+      "jsonContent" : {
+        "label" : "Google hitelesítő adatfájl tartalma",
+        "help" : "Ide másolja be a Google api hitelesítő adatfájl tartalmát, amit letöltött a google cloud api konzolból (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Impersonálandó Google felhasználó",
+        "help" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak",
+        "placeholder" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "git adattár adatforrás hozzáadása, például bitbucket, github vagy más"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive adatforrás hozzáadása"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Konfiguráció hozzáadása"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Létrehozás"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a Google Drive rendszer leírását."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace kapcsolat létrehozása"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "delegatedUser" : {
+        "label" : "Impersonálandó Google felhasználó",
+        "help" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak",
+        "placeholder" : "Az a felhasználó, akit a megadott hitelesítő adatokkal impersonálnak"
+      },
+      "jsonContent" : {
+        "label" : "Google hitelesítő adatok json tartalma",
+        "help" : "Hozza létre a Google Credentialst a workspace/team drives hozzáféréssel a Google Console Cloud-ban, és ide illessze be a letöltött json fájl tartalmát (https://console.cloud.google.com/).",
+        "placeholder" : "Hozza létre a Google Credentialst a workspace/team drives hozzáféréssel a Google Console Cloud-ban, és ide illessze be a letöltött json fájl tartalmát (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "PublishBtn" : {
+        "label" : "Közzététel!",
+        "help" : "Elmenti, és lehetővé teszi, hogy ezek a tartalmak elérhetők legyenek a tudásbázisban az LLM-ek számára"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "MainPanel" : {
+        "label" : "Google drive tartalmak megosztása"
+      },
+      "SettingsTab" : {
+        "label" : "Beállítások"
+      },
+      "LogsTab" : {
+        "label" : "Napló"
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a feltöltött google drive tartalmak leírását."
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A tartalmak automatikusan generált egyedi kódja."
+      },
+      "tree" : {
+        "label" : "Kiválasztott fájl vagy mappa",
+        "help" : "Megosztott google drive területek és oldalak tartalma"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive konfiguráció",
+        "help" : "Már konfigurált google drive rendszer hivatkozása."
+      },
+      "openZips" : {
+        "label" : "Zip fájlok megnyitása",
+        "help" : "Zip fájlok megnyitásának és tartalom kinyerésének engedélyezése"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Szülő projekt hivatkozása."
+      },
+      "programmedTables" : {
+        "label" : "Tartalomfrissítések ellenőrzési ütemezése",
+        "help" : "Állítsa be a módosult tartalmak ütemezését, hogy a retrieve augmented generation rendszer naprakész maradjon"
+      },
+      "catalogingCriteria" : {
+        "label" : "Mappák és almappák szervezési elvei",
+        "help" : "Kérjük, magyarázza el itt, hogyan történik a fájlok és mappák szervezése a Gebo.ai-vel megosztott google drive tartalomban"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Általános beállítások"
+      },
+      "CancelBtn" : {
+        "label" : "Mégse"
+      },
+      "DeleteBtn" : {
+        "label" : "Törlés"
+      },
+      "SaveBtn" : {
+        "label" : "Mentés"
+      },
+      "MainPanel" : {
+        "label" : "Google drive integráció szerkesztése"
+      },
+      "code" : {
+        "label" : "Egyedi kód",
+        "help" : "A google drive rendszer automatikusan generált egyedi kódja."
+      },
+      "description" : {
+        "label" : "Leírás",
+        "help" : "Adja meg a google drive rendszer leírását."
+      },
+      "driveAccessSecret" : {
+        "label" : "Használt identitás",
+        "help" : "Válassza ki vagy hozzon létre egy identitást a google drive rendszer eléréséhez"
       }
     }
   }

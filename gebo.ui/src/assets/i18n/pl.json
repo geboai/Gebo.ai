@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Brakuje wymaganego etapu konfiguracji Gebo.ai",
         "detail" : "Sprawdź czerwone kroki procesu konfiguracji"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integracja Google Drive/Workspaces",
+        "description" : "Skonfiguruj Gebo.ai, aby uzyskać dostęp do danych zespołu Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kody bazy wiedzy"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Skonfiguruj systemy firmowe Google Drive/Workspaces"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfiguracji"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Klucz publiczny",
         "help" : "Otwórz plik z kluczem publicznym i skopiuj zawartość do tego pola."
+      },
+      "jsonContent" : {
+        "label" : "Zawartość pliku z poświadczeniami Google",
+        "help" : "Skopiuj tutaj zawartość pliku poświadczeń Google API pobranego z konsoli Google Cloud API (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Użytkownik Google do podszycia się",
+        "help" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia",
+        "placeholder" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+repozytorium git",
         "help" : "dodaj źródło danych repozytorium git, np. bitbucket, github lub inne"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "dodaj źródło danych Google Drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Dodaj konfigurację"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Utwórz"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis systemu Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Utwórz połączenie Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "delegatedUser" : {
+        "label" : "Użytkownik Google do podszycia się",
+        "help" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia",
+        "placeholder" : "Użytkownik, którego tożsamość będzie użyta przez podane poświadczenia"
+      },
+      "jsonContent" : {
+        "label" : "Poświadczenia Google – zawartość pliku json",
+        "help" : "Utwórz poświadczenia Google z dostępem do workspace/team drives w Google Console Cloud i wklej tutaj zawartość pobranego pliku json (https://console.cloud.google.com/).",
+        "placeholder" : "Utwórz poświadczenia Google z dostępem do workspace/team drives w Google Console Cloud i wklej tutaj zawartość pobranego pliku json (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "PublishBtn" : {
+        "label" : "Opublikuj!",
+        "help" : "Zapisuje i udostępnia te treści w bazie wiedzy dla LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "MainPanel" : {
+        "label" : "Udostępnianie treści google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Ustawienia"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis przesłanych treści z Google Drive."
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod treści."
+      },
+      "tree" : {
+        "label" : "Wybrany plik lub folder",
+        "help" : "Udostępnione przestrzenie i strony Google Drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfiguracja Google Drive",
+        "help" : "Odniesienie do już skonfigurowanego systemu Google Drive."
+      },
+      "openZips" : {
+        "label" : "Otwieraj pliki zip",
+        "help" : "Włącz otwieranie plików zip i wyodrębnianie ich zawartości"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Odniesienie do projektu nadrzędnego."
+      },
+      "programmedTables" : {
+        "label" : "Harmonogram sprawdzania aktualizacji treści",
+        "help" : "Skonfiguruj harmonogram aktualizowania treści, aby generowanie uzupełniane o pozyskane dane było aktualne"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kryteria organizacji folderów i podfolderów",
+        "help" : "Opisz tutaj, według jakich kryteriów posegregowano pliki i foldery udostępniane z Google Drive do Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ustawienia ogólne"
+      },
+      "CancelBtn" : {
+        "label" : "Anuluj"
+      },
+      "DeleteBtn" : {
+        "label" : "Usuń"
+      },
+      "SaveBtn" : {
+        "label" : "Zapisz"
+      },
+      "MainPanel" : {
+        "label" : "Edycja integracji Google Drive"
+      },
+      "code" : {
+        "label" : "Unikalny kod",
+        "help" : "Automatycznie generowany unikalny kod systemu google drive."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Wpisz opis systemu Google Drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Użyta tożsamość",
+        "help" : "Wybierz lub utwórz tożsamość do uzyskania dostępu do systemu Google Drive"
       }
     }
   }

@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Configurarea Gebo.ai nu are unii pași obligatorii",
         "detail" : "Vă rugăm să verificați pașii roșii ai procesului de configurare"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrare Google Drive/Workspaces",
+        "description" : "Configurează Gebo.ai pentru a accesa datele echipei tale din Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Coduri bază de cunoștințe"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configurează sistemele Google Drive/Workspaces ale companiei"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod de configurare"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Cheie publică",
         "help" : "Deschideți fișierul cheii publice și copiați-l în această zonă de text."
+      },
+      "jsonContent" : {
+        "label" : "Conținutul fișierului de acreditări Google",
+        "help" : "Copiază aici conținutul fișierului de acreditări Google api descărcat din consola Google Cloud (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Utilizator Google de impersonat",
+        "help" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate",
+        "placeholder" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "adaugă o sursă de date dintr-un repository git precum bitbucket, github sau altele"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "adauga o sursă de date google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Adaugă configurație"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Creează"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea sistemului Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Creează conexiune Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "delegatedUser" : {
+        "label" : "Utilizator Google de impersonat",
+        "help" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate",
+        "placeholder" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate"
+      },
+      "jsonContent" : {
+        "label" : "Conținut json acreditări Google",
+        "help" : "Creează acreditări Google cu acces la drive-urile workspace/echipă în Google Console Cloud și lipește aici conținutul fișierului json descărcat (https://console.cloud.google.com/).",
+        "placeholder" : "Creează acreditări Google cu acces la drive-urile workspace/echipă în Google Console Cloud și lipește aici conținutul fișierului json descărcat (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și permite ca aceste conținuturi să fie disponibile în baza de cunoștințe pentru LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "MainPanel" : {
+        "label" : "Partajare conținut Google Drive"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "LogsTab" : {
+        "label" : "Jurnale"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea conținutului încărcat din google drive."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat al conținutului."
+      },
+      "tree" : {
+        "label" : "Fișierul sau folderul selectat",
+        "help" : "Spații Google Drive partajate și conținuturi de pagini"
+      },
+      "driveSystemCode" : {
+        "label" : "Configurația Google Drive",
+        "help" : "Referință către sistemul Google Drive deja configurat."
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință proiect părinte."
+      },
+      "programmedTables" : {
+        "label" : "Program actualizări conținut",
+        "help" : "Configurează programarea verificării modificărilor de conținut pentru a menține sistemul actualizat cu recuperare augmentată de generare"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criterii de organizare foldere și subfoldere",
+        "help" : "Te rugăm să explici aici cum a fost realizată organizarea fișierelor și folderelor în conținutul Google Drive partajat cu Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Setări generale"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "MainPanel" : {
+        "label" : "Editare integrare Google Drive"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat al sistemului Google Drive."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea sistemului Google Drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identitatea folosită",
+        "help" : "Selectează sau creează identitatea pentru accesul la sistemul Google Drive"
       }
     }
   }

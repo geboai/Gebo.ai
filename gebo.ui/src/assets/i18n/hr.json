@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Nedostaje neki obavezni korak postavljanja za Gebo.ai",
         "detail" : "Pregledajte korake označene crvenom bojom u postupku postavljanja"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integracija",
+        "description" : "Konfigurirajte Gebo.ai za pristup podacima svog tima na Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kodovi baze znanja"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Postavi Google Drive/Workspaces sustave kompanije"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguracijski kod"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Javni ključ",
         "help" : "Otvorite datoteku javnog ključa i kopirajte ju u ovo tekstualno polje."
+      },
+      "jsonContent" : {
+        "label" : "Sadržaj datoteke Google vjerodajnica",
+        "help" : "Ovdje kopirajte sadržaj Google api vjerodajnica preuzetih iz google cloud api konzole (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google korisnik za imitaciju",
+        "help" : "Korisnik kojeg će navedene vjerodajnice oponašati",
+        "placeholder" : "Korisnik kojeg će navedene vjerodajnice oponašati"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "dodajte izvor podataka iz git repozitorija kao što su bitbucket, github ili drugi"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "dodaj izvor podataka s google drivea"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Dodaj konfiguraciju"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Kreiraj"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Unesite opis Google Drive sustava."
+      },
+      "MainPanel" : {
+        "label" : "Kreiraj Google Drive/Workspace vezu"
+      },
+      "CancelBtn" : {
+        "label" : "Odustani"
+      },
+      "delegatedUser" : {
+        "label" : "Google korisnik za imitaciju",
+        "help" : "Korisnik kojeg će navedene vjerodajnice oponašati",
+        "placeholder" : "Korisnik kojeg će navedene vjerodajnice oponašati"
+      },
+      "jsonContent" : {
+        "label" : "Google vjerodajnice u json sadržaju",
+        "help" : "Kreirajte Google vjerodajnice s pristupom radnim mjestima/tim disku u Google Console Cloudu i ovdje zalijepite preuzeti sadržaj json datoteke (https://console.cloud.google.com/).",
+        "placeholder" : "Kreirajte Google vjerodajnice s pristupom radnim mjestima/tim disku u Google Console Cloudu i ovdje zalijepite preuzeti sadržaj json datoteke (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Spremi"
+      },
+      "CancelBtn" : {
+        "label" : "Odustani"
+      },
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Spremi i omogući da ovaj sadržaj bude dostupan u bazi znanja za LLm-ove"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "MainPanel" : {
+        "label" : "Dijeljenje sadržaja google drivea"
+      },
+      "SettingsTab" : {
+        "label" : "Postavke"
+      },
+      "LogsTab" : {
+        "label" : "Zapisi"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Unesite opis prenesenih google drive stavki."
+      },
+      "code" : {
+        "label" : "Jedinstveni kod",
+        "help" : "Automatski generirani jedinstveni kod sadržaja."
+      },
+      "tree" : {
+        "label" : "Odabrana datoteka ili mapa",
+        "help" : "Dijeljeni Google Drive prostori i sadržaj stranica"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfiguracija google drivea",
+        "help" : "Referenca na već konfigurirani google drive sustav."
+      },
+      "openZips" : {
+        "label" : "Otvori zip datoteke",
+        "help" : "Omogući otvaranje zip datoteka i izdvajanje sadržaja"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca na matični projekt."
+      },
+      "programmedTables" : {
+        "label" : "Raspored provjere ažuriranja sadržaja",
+        "help" : "Konfiguriraj raspored promjena sadržaja radi ažuriranja retrieve augmented generation sustava"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteriji organizacije mapa i podmapa",
+        "help" : "Opišite ovdje kako su organizirane datoteke i mape u google drive sadržajima podijeljenima s Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Opće postavke"
+      },
+      "CancelBtn" : {
+        "label" : "Odustani"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Spremi"
+      },
+      "MainPanel" : {
+        "label" : "Uređivanje integracije google drivea"
+      },
+      "code" : {
+        "label" : "Jedinstveni kod",
+        "help" : "Automatski generirani jedinstveni kod google drive sustava."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Unesite opis google drive sustava."
+      },
+      "driveAccessSecret" : {
+        "label" : "Korišteni identitet",
+        "help" : "Odaberi ili kreiraj identitet za pristup google drive sustavu"
       }
     }
   }

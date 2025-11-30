@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai quraşdırmasında bəzi məcburi addım çatışmır",
         "detail" : "Quraşdırma prosesinin qırmızı addımlarını yoxlayın"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces inteqrasiyası",
+        "description" : "Gebo.ai-nı Google cloud Drive/Workspaces komanda məlumatlarınıza çıxış üçün qurun"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Bilik bazası kodları"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Şirkət Google Drive/Workspaces sistemlərini qurun"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Quruluş kodu"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Təsvir"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Publik açar",
         "help" : "Publik açar faylını açın və bu mətn sahəsinə kopyalayın."
+      },
+      "jsonContent" : {
+        "label" : "Google etimadnamə faylının məzmunu",
+        "help" : "Google cloud api konsolundan endirilən Google api etimadnamə faylının məzmununu bura kopyalayın (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Təqlid ediləcək Google istifadəçisi",
+        "help" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi",
+        "placeholder" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket, github və ya digər git repozitorisi məlumat mənbəsi əlavə et"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive məlumat mənbəyi əlavə edin"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Konfiqurasiya əlavə et"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Yarat"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google Drive sisteminin təsvirini daxil edin."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace bağlantısı yaradın"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "delegatedUser" : {
+        "label" : "Təqlid ediləcək Google istifadəçisi",
+        "help" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi",
+        "placeholder" : "Verilmiş etimadnamələrlə təqlid ediləcək istifadəçi"
+      },
+      "jsonContent" : {
+        "label" : "Google etimadnamə json məzmunu",
+        "help" : "Google Console Cloud-da workspace/komanda disklərinə çıxış hüququ ilə Google Credentials yaradın və endirilmiş json fayl məzmununu bura yapışdırın (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud-da workspace/komanda disklərinə çıxış hüququ ilə Google Credentials yaradın və endirilmiş json fayl məzmununu bura yapışdırın (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "PublishBtn" : {
+        "label" : "Dərc et!",
+        "help" : "Saxlanılır və bu məzmunları bilik bazasına LLm üçün əlçatan edir"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "MainPanel" : {
+        "label" : "Google drive məzmununu paylaşmaq"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "LogsTab" : {
+        "label" : "Qeydlər"
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google drive-ə yüklənmiş elementlərin məzmununun təsvirini daxil edin."
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Məzmun üçün avtomatik yaradılan unikal kod."
+      },
+      "tree" : {
+        "label" : "Seçilmiş fayl və ya qovluq",
+        "help" : "Paylaşılan google drive sahələri və səhifə məzmunları"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive quruluşu",
+        "help" : "Artıq qurulmuş google drive sisteminə istinad."
+      },
+      "openZips" : {
+        "label" : "Zip faylları aç",
+        "help" : "Zip faylları açmağı və məzmun çıxarılışını aktiv edin"
+      },
+      "parentProjectCode" : {
+        "label" : "Layihə",
+        "help" : "Əsas layihəyə istinad."
+      },
+      "programmedTables" : {
+        "label" : "Məzmun yeniləmələrinin yoxlama cədvəli",
+        "help" : "Yenilənmiş məzmunların alınması üçün planlaşdırmanı qurun və yenilənmə sistemini təzə saxlayın"
+      },
+      "catalogingCriteria" : {
+        "label" : "Qovluq və altqovluq təşkil kriteriyaları",
+        "help" : "Burada lütfən, Google drive məzmununun necə təşkil olunduğunu (qovluq/fayl strukturu) izah edin və bu məzmunu Gebo.ai ilə necə paylaşdığınızı qeyd edin"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ümumi ayarlar"
+      },
+      "CancelBtn" : {
+        "label" : "Ləğv et"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Yadda saxla"
+      },
+      "MainPanel" : {
+        "label" : "Google drive inteqrasiyasını redaktə etmək"
+      },
+      "code" : {
+        "label" : "Unikal kod",
+        "help" : "Google drive sistemi üçün avtomatik yaradılmış unikal kod."
+      },
+      "description" : {
+        "label" : "Təsvir",
+        "help" : "Google drive sisteminin təsvirini daxil edin."
+      },
+      "driveAccessSecret" : {
+        "label" : "İstifadə olunan şəxsiyyət",
+        "help" : "Google drive sisteminə giriş üçün şəxsiyyəti seçin və ya yaradın"
       }
     }
   }

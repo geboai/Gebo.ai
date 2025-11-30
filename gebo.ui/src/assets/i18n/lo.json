@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "ການຕິດຕັ້ງ Gebo.ai ຂາດຂັ້ນຕອນທີ່ຈຳເປັນບາງຢ່າງ",
         "detail" : "ກະລຸນາກວດເບິ່ງຂັ້ນຕອນສີແດງໃນການຕິດຕັ້ງ"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "ການເຊື່ອມຕໍ່ Google Drive/Workspaces",
+        "description" : "ຕັ້ງຄ່າ Gebo.ai ເພື່ອເຂົ້າເຖິງຂໍ້ມູນທີມ Google cloud Drive/Workspaces ຂອງທ່ານ"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "ລະຫັດຖານຄວາມຮູ້"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ຕັ້ງຄ່າລະບົບ Google Drive/Workspaces ຂອງບໍລິສັດ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "ລະຫັດຕັ້ງຄ່າ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "ຄໍາອະທິບາຍ"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "ຄີສາທາລະນະ",
         "help" : "ເປີດໄຟລ໌ public key ແລະ ກົບສໍາເນາລົງໃນຊ່ອງນີ້."
+      },
+      "jsonContent" : {
+        "label" : "ເນື້ອໃນໄຟລ໌ credentials ຂອງ Google",
+        "help" : "ກົງສໍາເນົາໄຟລ໌ credentials ຂອງ Google api ຈາກ Google cloud api console (https://console.cloud.google.com/) ມາໃສ່ທີ່ນີ້"
+      },
+      "delegatedUser" : {
+        "label" : "ຜູ້ໃຊ້ Google ທີ່ຈະຈໍາລອງ",
+        "help" : "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້",
+        "placeholder" : "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ git repository ເຊັ່ນ bitbucket, github ຫຼື ອື່ນໆ"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ເພີ່ມແຫຼ່ງຂໍ້ມູນ google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "ເພີ່ມການຕັ້ງຄ່າ"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "ສ້າງ"
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ໃສ່ຄໍາອະທິບາຍກ່ຽວກັບລະບົບ Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "ສ້າງການເຊື່ອມຕໍ່ Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "delegatedUser" : {
+        "label" : "ຜູ້ໃຊ້ Google ທີ່ຈະຈໍາລອງ",
+        "help" : "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້",
+        "placeholder" : "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
+      },
+      "jsonContent" : {
+        "label" : "ເນື້ອໃນ json credentials ຂອງ Google",
+        "help" : "ສ້າງ Google Credentials ດ້ວຍການເຂົ້າຮ່ວມ workspace/team drives ໃນ Google Console Cloud ແລະ ກົງສໍາເນົາເນື້ອໃນໄຟລ json ມາວາງທີ່ນີ້ (https://console.cloud.google.com/).",
+        "placeholder" : "ສ້າງ Google Credentials ດ້ວຍການເຂົ້າຮ່ວມ workspace/team drives ໃນ Google Console Cloud ແລະ ກົງສໍາເນົາເນື້ອໃນໄຟລ json ມາວາງທີ່ນີ້ (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "PublishBtn" : {
+        "label" : "ເຜີຍແຜ່!",
+        "help" : "ບັນທຶກແລະເຮັດໃຫ້ເນື້ອຫານີ້ສາມາດເຂົ້າເຖິງໄດ້ໃນຄວາມຮູ້ໃຫ້ LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "MainPanel" : {
+        "label" : "ແບ່ງປັນເນື້ອຫາ google drive"
+      },
+      "SettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າ"
+      },
+      "LogsTab" : {
+        "label" : "ບັນທຶກ"
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ໃສ່ຄໍາອະທິບາຍກ່ຽວກັບເນື້ອຫາທີ່ອັບໂຫຼດຂອງ google drive."
+      },
+      "code" : {
+        "label" : "ລະຫັດທີ່ເປັນຄວາມພິເສດ",
+        "help" : "ລະຫັດທີ່ສ້າງອັດຕະໂນມັດຂອງເນື້ອຫາ."
+      },
+      "tree" : {
+        "label" : "ເລືອກໄຟລ໌ ຫຼືໂຟນເດີ",
+        "help" : "ເນື້ອຫາຂອງສະຖານທີ່ແບ່ງປັນ google drive ແລະໜ້າເທັກ"
+      },
+      "driveSystemCode" : {
+        "label" : "ການຕັ້ງຄ່າ google drive",
+        "help" : "ເອີ້ນຖຶງການຕັ້ງຄ່າລະບົບ google drive ທີ່ຕັ້ງຄ່າໄວ້ແລ້ວ"
+      },
+      "openZips" : {
+        "label" : "ເປີດໄຟລ zip",
+        "help" : "ເປີດໄຟລ zip ແລະແຍກເນື້ອຫາຂອງມັນ"
+      },
+      "parentProjectCode" : {
+        "label" : "ໂຄງການ",
+        "help" : "ອ້າງອີງໂຄງການອື່ນ"
+      },
+      "programmedTables" : {
+        "label" : "ຕາຕະລາງກວດກາການອັບເດດເນື້ອຫາ",
+        "help" : "ຕັ້ງຄ່າການກຳນົດເວລາກວດກາເນື້ອຫາທີ່ມີການປຽນແປງ ເພື່ອໃຫ້ລະບົບການສຳລັບຂໍ້ມູນທີ່ອັບເດດເສມໄປ"
+      },
+      "catalogingCriteria" : {
+        "label" : "ເກນການຈັດອົງກອນໂຟນເດີແລະໂຟນເດີຍ່ອຍ",
+        "help" : "ອະທິບາຍເກັນການຈັດອົງກອນໄຟລ໌ແລະໂຟນເດີໃນຄົງທີ່ແບ່ງປັນກັບ Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ການຕັ້ງຄ່າທົ່ວໄປ"
+      },
+      "CancelBtn" : {
+        "label" : "ຍົກເລີກ"
+      },
+      "DeleteBtn" : {
+        "label" : "ລຶບ"
+      },
+      "SaveBtn" : {
+        "label" : "ບັນທຶກ"
+      },
+      "MainPanel" : {
+        "label" : "ແກ້ໄຂການເຊື່ອມຕໍ່ google drive"
+      },
+      "code" : {
+        "label" : "ລະຫັດທີ່ເປັນຄວາມພິເສດ",
+        "help" : "ລະຫັດທີ່ສ້າງອັດຕະໂນມັດຂອງລະບົບ google drive."
+      },
+      "description" : {
+        "label" : "ຄໍາອະທິບາຍ",
+        "help" : "ໃສ່ຄໍາອະທິບາຍກ່ຽວກັບລະບົບ google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identity ທີ່ໃຊ້",
+        "help" : "ເລືອກ ຫຼື ສ້າງ identity ເພື່ອໃຊ້ເຂົ້າເຖິງ google drive"
       }
     }
   }

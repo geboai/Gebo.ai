@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Pri nastavitvi Gebo.ai manjka kakšen obvezen korak",
         "detail" : "Preglejte rdeče korake postopka nastavitve"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integracija",
+        "description" : "Nastavite Gebo.ai za dostop do podatkov vaše ekipe Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kode baze znanja"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Nastavite podjetniške Google Drive/Workspaces sisteme"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguracijska koda"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Opis"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Javni ključ",
         "help" : "Odprite datoteko javnega ključa in jo kopirajte v to besedilno polje."
+      },
+      "jsonContent" : {
+        "label" : "Vsebina datoteke s poverilnicami Google",
+        "help" : "Tukaj prilepite vsebino datoteke s poverilnicami Google API, ki ste jo prenesli iz Google Cloud API konzole (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google uporabnik za prevzem identitete",
+        "help" : "Uporabnik, ki ga bodo poverilnice uporabljale za prevzem identitete",
+        "placeholder" : "Uporabnik, ki ga bodo poverilnice uporabljale za prevzem identitete"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repozitorij",
         "help" : "dodaj vir podatkov git repozitorija kot so bitbucket, github ali drugi"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "dodajte vir podatkov Google Drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Dodaj konfiguracijo"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Ustvari"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis sistema Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Ustvarite povezavo Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "delegatedUser" : {
+        "label" : "Google uporabnik za prevzem identitete",
+        "help" : "Uporabnik, ki ga bodo poverilnice uporabljale za prevzem identitete",
+        "placeholder" : "Uporabnik, ki ga bodo poverilnice uporabljale za prevzem identitete"
+      },
+      "jsonContent" : {
+        "label" : "Vsebina Google poverilnic (json)",
+        "help" : "Ustvarite Google poverilnice z dostopom do vaših delovnih/ekipnih pogonov v Google Console Cloud in sem prilepite preneseno json datoteko (https://console.cloud.google.com/).",
+        "placeholder" : "Ustvarite Google poverilnice z dostopom do vaših delovnih/ekipnih pogonov v Google Console Cloud in sem prilepite preneseno json datoteko (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "PublishBtn" : {
+        "label" : "Objavi!",
+        "help" : "Shrani in naredi te vsebine dostopne v zbirki znanja za LLm-je"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "MainPanel" : {
+        "label" : "Deljenje vsebine Google Drive"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavitve"
+      },
+      "LogsTab" : {
+        "label" : "Dnevniki"
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis naložene vsebine Google Drive vnosov."
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda vsebine."
+      },
+      "tree" : {
+        "label" : "Izbrana datoteka ali mapa",
+        "help" : "Vsebina deljenih Google Drive prostorov in strani"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfiguracija Google Drive",
+        "help" : "Referenca na že konfiguriran sistem Google Drive."
+      },
+      "openZips" : {
+        "label" : "Odpiranje zip datotek",
+        "help" : "Omogoči odpiranje zip datotek in izvleček vsebine"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenca na nadrejen projekt."
+      },
+      "programmedTables" : {
+        "label" : "Urnik preverjanja posodobitev vsebine",
+        "help" : "Nastavite urnik za preverjanje spremenjene vsebine za vzdrževanje posodobljenega sistema generiranja z razširjenim pridobivanjem"
+      },
+      "catalogingCriteria" : {
+        "label" : "Merila za organizacijo map in podmap",
+        "help" : "Prosimo, pojasnite, kako ste organizirali mape in datoteke v vsebini Google Drive, ki ste jih delili z Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Splošne nastavitve"
+      },
+      "CancelBtn" : {
+        "label" : "Prekliči"
+      },
+      "DeleteBtn" : {
+        "label" : "Izbriši"
+      },
+      "SaveBtn" : {
+        "label" : "Shrani"
+      },
+      "MainPanel" : {
+        "label" : "Urejanje integracije Google Drive"
+      },
+      "code" : {
+        "label" : "Unikatna koda",
+        "help" : "Samodejno generirana unikatna koda za sistem Google Drive."
+      },
+      "description" : {
+        "label" : "Opis",
+        "help" : "Vnesite opis sistema Google Drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Uporabljena identiteta",
+        "help" : "Izberite ali ustvarite identiteto za dostop do sistema Google Drive"
       }
     }
   }

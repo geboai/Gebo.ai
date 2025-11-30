@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.aiのセットアップで必須手順が不足しています",
         "detail" : "セットアップ手順の赤いステップを確認してください"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces 連携",
+        "description" : "Gebo.ai を設定して Google クラウド Drive/Workspaces チームデータへアクセスします"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "ナレッジベースコード"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "会社の Google Drive/Workspaces システムを設定"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "設定コード"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "説明"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "公開キー",
         "help" : "公開鍵ファイルを開き、このテキストエリアにコピーしてください。"
+      },
+      "jsonContent" : {
+        "label" : "Google 認証情報ファイルの内容",
+        "help" : "Google Cloud API コンソール（https://console.cloud.google.com/）からダウンロードした Google API 認証情報ファイルの内容をここにコピーしてください"
+      },
+      "delegatedUser" : {
+        "label" : "なりすまし用 Google ユーザー",
+        "help" : "提供された認証情報でなりすますユーザー",
+        "placeholder" : "提供された認証情報でなりすますユーザー"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git リポジトリ",
         "help" : "bitbucket、github などの git リポジトリのデータソースを追加"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive データソースを追加"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "設定を追加"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "作成"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "Google Drive システムの説明を入力してください。"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace 接続を作成"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "delegatedUser" : {
+        "label" : "なりすまし用 Google ユーザー",
+        "help" : "提供された認証情報でなりすますユーザー",
+        "placeholder" : "提供された認証情報でなりすますユーザー"
+      },
+      "jsonContent" : {
+        "label" : "Google 認証情報 json 内容",
+        "help" : "Google Console Cloud でワークスペースやチームドライブのアクセス権付き Google 認証情報を作成し、ダウンロードした json ファイルの内容をここへ貼り付けてください（https://console.cloud.google.com/）。",
+        "placeholder" : "Google Console Cloud でワークスペースやチームドライブのアクセス権付き Google 認証情報を作成し、ダウンロードした json ファイルの内容をここへ貼り付けてください（https://console.cloud.google.com/）。"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "PublishBtn" : {
+        "label" : "公開！",
+        "help" : "保存して、これらの内容をナレッジベースでLLmが利用できるようにします"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "MainPanel" : {
+        "label" : "google drive コンテンツの共有"
+      },
+      "SettingsTab" : {
+        "label" : "設定"
+      },
+      "LogsTab" : {
+        "label" : "ログ"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "アップロードした google drive エントリーの内容説明を入力してください。"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "内容の自動生成されたユニークコードです。"
+      },
+      "tree" : {
+        "label" : "選択したファイルまたはフォルダー",
+        "help" : "共有された google drive のスペースやページの内容"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive の構成",
+        "help" : "既に構成済みの google drive システム参照です。"
+      },
+      "openZips" : {
+        "label" : "zip ファイルを開く",
+        "help" : "zip ファイルの開封と内容抽出を有効化します"
+      },
+      "parentProjectCode" : {
+        "label" : "プロジェクト",
+        "help" : "親プロジェクトの参照です。"
+      },
+      "programmedTables" : {
+        "label" : "内容更新チェックのスケジュール",
+        "help" : "変更された内容を取得型生成システムに反映させるためのスケジュールを設定します"
+      },
+      "catalogingCriteria" : {
+        "label" : "フォルダーとサブフォルダーの整理基準",
+        "help" : "Gebo.ai で共有された google drive コンテンツのファイル・フォルダ整理基準をここでご説明ください"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "一般設定"
+      },
+      "CancelBtn" : {
+        "label" : "キャンセル"
+      },
+      "DeleteBtn" : {
+        "label" : "削除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "MainPanel" : {
+        "label" : "google drive 連携を編集"
+      },
+      "code" : {
+        "label" : "ユニークコード",
+        "help" : "google drive システムの自動生成ユニークコードです。"
+      },
+      "description" : {
+        "label" : "説明",
+        "help" : "google drive システムの説明を入力してください。"
+      },
+      "driveAccessSecret" : {
+        "label" : "使用するID",
+        "help" : "google drive システムへアクセスする ID を選択または作成してください"
       }
     }
   }

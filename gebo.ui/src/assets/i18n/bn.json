@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai সেটআপে কিছু বাধ্যতামূলক ধাপ অনুপস্থিত",
         "detail" : "অনুগ্রহ করে সেটআপ প্রক্রিয়ার লাল চিহ্নিত ধাপগুলো দেখুন"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ইন্টিগ্রেশন",
+        "description" : "Gebo.ai কনফিগার করুন যেন আপনার Google ক্লাউড Drive/Workspaces টিম ডাটায় অ্যাক্সেস পায়"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "নলেজ বেস কোডসমূহ"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "কোম্পানির Google Drive/Workspaces সিস্টেম সেটআপ করুন"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "কনফিগ কোড"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "বর্ণনা"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "পাবলিক কী",
         "help" : "পাবলিক কী ফাইল খুলুন এবং এই টেক্সট এলাকায় কপি করুন।"
+      },
+      "jsonContent" : {
+        "label" : "Google ক্রেডেনশিয়াল ফাইল কনটেন্ট",
+        "help" : "Google api কনফিগারেশন কনসোল (https://console.cloud.google.com/) থেকে ডাউনলোডকৃত Google api credentials ফাইলের কনটেন্ট এখানে কপি করুন"
+      },
+      "delegatedUser" : {
+        "label" : "ইম্পার্সোনেট করার জন্য Google ইউজার",
+        "help" : "প্রদত্ত ক্রেডেনশিয়াল দিয়ে যে ইউজার ইম্পার্সোনেট হবে",
+        "placeholder" : "প্রদত্ত ক্রেডেনশিয়াল দিয়ে যে ইউজার ইম্পার্সোনেট হবে"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket, github অথবা অন্য git repository তথ্যসূত্র যোগ করুন"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "একটি google drive ডেটা সোর্স যোগ করুন"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "কনফিগারেশন যোগ করুন"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "তৈরি করুন"
+      },
+      "description" : {
+        "label" : "বর্ণনা",
+        "help" : "Google Drive সিস্টেমের বর্ণনা লিখুন।"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace সংযোগ তৈরি করুন"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল করুন"
+      },
+      "delegatedUser" : {
+        "label" : "ইম্পার্সোনেট করার জন্য Google ইউজার",
+        "help" : "প্রদত্ত ক্রেডেনশিয়াল দিয়ে যে ইউজার ইম্পার্সোনেট হবে",
+        "placeholder" : "প্রদত্ত ক্রেডেনশিয়াল দিয়ে যে ইউজার ইম্পার্সোনেট হবে"
+      },
+      "jsonContent" : {
+        "label" : "Google ক্রেডেনশিয়ালস json কনটেন্ট",
+        "help" : "Google Console Cloud-এ আপনার workspace/team drives এর অ্যাক্সেস দিয়ে Google Credentials তৈরি করুন এবং এখানেই ডাউনলোডকৃত json ফাইলের কনটেন্ট পেস্ট করুন (https://console.cloud.google.com/)।",
+        "placeholder" : "Google Console Cloud-এ আপনার workspace/team drives এর অ্যাক্সেস দিয়ে Google Credentials তৈরি করুন এবং এখানেই ডাউনলোডকৃত json ফাইলের কনটেন্ট পেস্ট করুন (https://console.cloud.google.com/)।"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "সংরক্ষণ করুন"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল করুন"
+      },
+      "PublishBtn" : {
+        "label" : "প্রকাশ করুন!",
+        "help" : "সংরক্ষণ করে এই কনটেন্ট জ্ঞানের ভাণ্ডারে LLm-র জন্য সহজলভ্য করুন"
+      },
+      "DeleteBtn" : {
+        "label" : "মুছে ফেলুন"
+      },
+      "MainPanel" : {
+        "label" : "গুগল ড্রাইভ কনটেন্ট শেয়ারিং"
+      },
+      "SettingsTab" : {
+        "label" : "সেটিংস"
+      },
+      "LogsTab" : {
+        "label" : "লগ"
+      },
+      "description" : {
+        "label" : "বর্ণনা",
+        "help" : "গুগল ড্রাইভ এন্ট্রির আপলোড করা কনটেন্টের বর্ণনা লিখুন।"
+      },
+      "code" : {
+        "label" : "ইউনিক কোড",
+        "help" : "কনটেন্টের স্বয়ংক্রিয়ভাবে জেনারেট হওয়া ইউনিক কোড।"
+      },
+      "tree" : {
+        "label" : "নির্বাচিত ফাইল বা ফোল্ডার",
+        "help" : "শেয়ার করা গুগল ড্রাইভ স্পেস এবং পেজের কনটেন্ট"
+      },
+      "driveSystemCode" : {
+        "label" : "গুগল ড্রাইভ কনফিগারেশন",
+        "help" : "ইতিমধ্যে কনফিগার করা গুগল ড্রাইভ সিস্টেমের রেফারেন্স।"
+      },
+      "openZips" : {
+        "label" : "জিপ ফাইল খুলুন",
+        "help" : "জিপ ফাইল খোলা এবং কনটেন্ট বের করার অনুমতি দিন"
+      },
+      "parentProjectCode" : {
+        "label" : "প্রজেক্ট",
+        "help" : "প্যারেন্ট প্রজেক্টের রেফারেন্স।"
+      },
+      "programmedTables" : {
+        "label" : "কনটেন্ট আপডেট চেকের সময়সূচি",
+        "help" : "কনটেন্ট পরিবর্তনে RAG সিস্টেম আপডেট রাখার জন্য চেক করার সময়সূচি কনফিগার করুন"
+      },
+      "catalogingCriteria" : {
+        "label" : "ফোল্ডার ও সাবফোল্ডার সংগঠনের মানদণ্ড",
+        "help" : "Gebo.ai-এর সাথে শেয়ার করা গুগল ড্রাইভ কনটেন্টগুলোতে কীভাবে ফাইল ও ফোল্ডার সংগঠনের মানদণ্ড নির্ধারিত হয়েছে, দয়া করে তা এখানে ব্যাখ্যা করুন"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "সাধারণ সেটিংস"
+      },
+      "CancelBtn" : {
+        "label" : "বাতিল করুন"
+      },
+      "DeleteBtn" : {
+        "label" : "মুছে ফেলুন"
+      },
+      "SaveBtn" : {
+        "label" : "সংরক্ষণ করুন"
+      },
+      "MainPanel" : {
+        "label" : "গুগল ড্রাইভ ইন্টিগ্রেশন সম্পাদনা"
+      },
+      "code" : {
+        "label" : "ইউনিক কোড",
+        "help" : "গুগল ড্রাইভ সিস্টেমের স্বয়ংক্রিয়ভাবে জেনারেট হওয়া ইউনিক কোড।"
+      },
+      "description" : {
+        "label" : "বর্ণনা",
+        "help" : "গুগল ড্রাইভ সিস্টেমের বর্ণনা লিখুন।"
+      },
+      "driveAccessSecret" : {
+        "label" : "ব্যবহৃত পরিচিতি",
+        "help" : "গুগল ড্রাইভ সিস্টেমে অ্যাক্সেসের জন্য পরিচিতি নির্বাচন করুন বা তৈরি করুন"
       }
     }
   }

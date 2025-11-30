@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai 设置缺少某些必需步骤",
         "detail" : "请检查设置流程中标红的步骤"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces 集成",
+        "description" : "配置 Gebo.ai 以访问您的 Google 云端硬盘/Workspaces 团队数据"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "知识库代码"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "设置公司 Google Drive/Workspaces 系统"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "配置代码"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "描述"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "公钥",
         "help" : "打开公钥文件并复制到此文本区域。"
+      },
+      "jsonContent" : {
+        "label" : "Google 凭证文件内容",
+        "help" : "请在此粘贴从 Google 云端 API 控制台（https://console.cloud.google.com/）下载的 Google API 凭证文件内容"
+      },
+      "delegatedUser" : {
+        "label" : "要模拟的 Google 用户",
+        "help" : "将由所提供凭证模拟的用户",
+        "placeholder" : "将由所提供凭证模拟的用户"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git 仓库",
         "help" : "添加 git 仓库数据源，例如 bitbucket、github 或其他"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "添加一个 Google Drive 数据源"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "新增配置"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "创建"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入 Google Drive 系统的描述。"
+      },
+      "MainPanel" : {
+        "label" : "创建 Google Drive/Workspace 连接"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "delegatedUser" : {
+        "label" : "要模拟的 Google 用户",
+        "help" : "将由所提供凭证模拟的用户",
+        "placeholder" : "将由所提供凭证模拟的用户"
+      },
+      "jsonContent" : {
+        "label" : "Google 凭证 json 内容",
+        "help" : "在 Google 控制台云端创建具备 workspace/团队云端硬盘访问权限的 Google 凭证，并在此粘贴下载的 json 文件内容（https://console.cloud.google.com/）。",
+        "placeholder" : "在 Google 控制台云端创建具备 workspace/团队云端硬盘访问权限的 Google 凭证，并在此粘贴下载的 json 文件内容（https://console.cloud.google.com/）。"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "PublishBtn" : {
+        "label" : "发布！",
+        "help" : "保存并让这些内容在知识库中可供 LLm’s 使用"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "MainPanel" : {
+        "label" : "共享 google drive 内容"
+      },
+      "SettingsTab" : {
+        "label" : "设置"
+      },
+      "LogsTab" : {
+        "label" : "日志"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入上传的 google drive 条目的内容描述。"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的内容唯一代码。"
+      },
+      "tree" : {
+        "label" : "已选择的文件或文件夹",
+        "help" : "共享 google drive 空间与页面内容"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive 配置",
+        "help" : "已配置的 google drive 系统引用。"
+      },
+      "openZips" : {
+        "label" : "打开 zip 文件",
+        "help" : "启用 zip 文件解压及内容提取功能"
+      },
+      "parentProjectCode" : {
+        "label" : "项目",
+        "help" : "父项目引用。"
+      },
+      "programmedTables" : {
+        "label" : "内容更新检查计划",
+        "help" : "配置更改内容的调度，以便保持检索增强生成系统的最新状态"
+      },
+      "catalogingCriteria" : {
+        "label" : "文件夹及子文件夹组织标准",
+        "help" : "请在此说明您与 Gebo.ai 共享的 google drive 内容中文件及文件夹的组织标准"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "常规设置"
+      },
+      "CancelBtn" : {
+        "label" : "取消"
+      },
+      "DeleteBtn" : {
+        "label" : "删除"
+      },
+      "SaveBtn" : {
+        "label" : "保存"
+      },
+      "MainPanel" : {
+        "label" : "编辑 google drive 集成"
+      },
+      "code" : {
+        "label" : "唯一代码",
+        "help" : "自动生成的 google drive 系统唯一代码。"
+      },
+      "description" : {
+        "label" : "描述",
+        "help" : "输入 google drive 系统的描述。"
+      },
+      "driveAccessSecret" : {
+        "label" : "使用的身份",
+        "help" : "选择或创建用于访问 google drive 系统的身份"
       }
     }
   }

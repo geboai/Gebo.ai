@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai kurulumu bazı zorunlu adımları eksik",
         "detail" : "Lütfen kurulum sürecinin kırmızı adımlarını inceleyin"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces entegrasyonu",
+        "description" : "Gebo.ai'yi Google cloud Drive/Workspaces ekip verilerinize erişecek şekilde yapılandırın"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Bilgi tabanı kodları"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Şirket Google Drive/Workspaces sistemlerini kur"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Yapılandırma kodu"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Açıklama"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Açık anahtar",
         "help" : "Açık anahtar dosyasını açın ve bu alana kopyalayın."
+      },
+      "jsonContent" : {
+        "label" : "Google kimlik bilgileri dosya içeriği",
+        "help" : "Google cloud api konsolundan (https://console.cloud.google.com/) indirilen Google api kimlik bilgileri dosya içeriğini buraya kopyalayın"
+      },
+      "delegatedUser" : {
+        "label" : "Taklit edilecek Google kullanıcısı",
+        "help" : "Sağlanan kimlik bilgileriyle taklit edilecek kullanıcı",
+        "placeholder" : "Sağlanan kimlik bilgileriyle taklit edilecek kullanıcı"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git deposu",
         "help" : "bitbucket, github veya diğerleri gibi bir git deposu veri kaynağı ekle"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "bir google drive veri kaynağı ekle"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Yapılandırma ekle"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Oluştur"
+      },
+      "description" : {
+        "label" : "Açıklama",
+        "help" : "Google Drive sisteminin açıklamasını girin."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace bağlantısı oluştur"
+      },
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "delegatedUser" : {
+        "label" : "Taklit edilecek Google kullanıcısı",
+        "help" : "Sağlanan kimlik bilgileriyle taklit edilecek kullanıcı",
+        "placeholder" : "Sağlanan kimlik bilgileriyle taklit edilecek kullanıcı"
+      },
+      "jsonContent" : {
+        "label" : "Google kimlik bilgileri json içeriği",
+        "help" : "Google Console Cloud üzerinden workspace/ekip sürücülerine erişimi olan Google Kimlik Bilgileri oluşturun ve indirilen json dosya içeriğini buraya yapıştırın (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud üzerinden workspace/ekip sürücülerine erişimi olan Google Kimlik Bilgileri oluşturun ve indirilen json dosya içeriğini buraya yapıştırın (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Kaydet"
+      },
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "PublishBtn" : {
+        "label" : "Yayınla!",
+        "help" : "Kaydeder ve bu içerikleri bilgi tabanında LLm'ler için erişilebilir kılar"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "MainPanel" : {
+        "label" : "Google drive içeriklerini paylaşma"
+      },
+      "SettingsTab" : {
+        "label" : "Ayarlar"
+      },
+      "LogsTab" : {
+        "label" : "Kayıtlar"
+      },
+      "description" : {
+        "label" : "Açıklama",
+        "help" : "Google drive girdilerinin yüklenen içeriğinin açıklamasını girin."
+      },
+      "code" : {
+        "label" : "Benzersiz Kod",
+        "help" : "İçeriklerin otomatik oluşturulan benzersiz kodu."
+      },
+      "tree" : {
+        "label" : "Seçilen dosya veya klasör",
+        "help" : "Paylaşılan google drive alanları ve sayfa içerikleri"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive yapılandırması",
+        "help" : "Önceden yapılandırılmış google drive sistem referansı."
+      },
+      "openZips" : {
+        "label" : "Zip dosyalarını aç",
+        "help" : "Zip dosyalarını açmayı ve içerik çıkarmayı etkinleştir"
+      },
+      "parentProjectCode" : {
+        "label" : "Proje",
+        "help" : "Üst proje referansı."
+      },
+      "programmedTables" : {
+        "label" : "İçerik güncelleme kontrol programı",
+        "help" : "Güncellenen içeriklerin planlamasını yapılandırarak retrieve augmented generation sisteminin güncel kalmasını sağlayın"
+      },
+      "catalogingCriteria" : {
+        "label" : "Klasör ve alt klasör organizasyon kriterleri",
+        "help" : "Gebo.ai ile paylaşılan google drive içeriklerinde dosya ve klasör organizasyon kriterlerinin nasıl yapıldığını burada açıklayın"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Genel ayarlar"
+      },
+      "CancelBtn" : {
+        "label" : "İptal"
+      },
+      "DeleteBtn" : {
+        "label" : "Sil"
+      },
+      "SaveBtn" : {
+        "label" : "Kaydet"
+      },
+      "MainPanel" : {
+        "label" : "Google drive entegrasyonunu düzenleme"
+      },
+      "code" : {
+        "label" : "Benzersiz Kod",
+        "help" : "Google drive sisteminin otomatik oluşturulan benzersiz kodu."
+      },
+      "description" : {
+        "label" : "Açıklama",
+        "help" : "Google drive sisteminin açıklamasını girin."
+      },
+      "driveAccessSecret" : {
+        "label" : "Kullanılan kimlik",
+        "help" : "Google drive sistemine erişmek için bir kimlik seçin veya oluşturun"
       }
     }
   }

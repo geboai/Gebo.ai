@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai inställningar saknar något obligatoriskt steg",
         "detail" : "Vänligen granska de röda stegen i installationsprocessen"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces-integration",
+        "description" : "Konfigurera Gebo.ai för att få åtkomst till ditt Google cloud Drive/Workspaces teamdata"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kunskapsbaskoder"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Ställ in företagets Google Drive/Workspaces-system"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskod"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivning"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Publik nyckel",
         "help" : "Öppna den publika nyckelfilen och kopiera in den i detta textfält."
+      },
+      "jsonContent" : {
+        "label" : "Google-behörighetsfilens innehåll",
+        "help" : "Kopiera här innehållet från filen med Google api-behörighetsuppgifter som laddats ner från Google cloud api-konsolen (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google-användare att imitera",
+        "help" : "Användaren som kommer att imiteras av de angivna behörigheterna",
+        "placeholder" : "Användaren som kommer att imiteras av de angivna behörigheterna"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "lägg till en git-repositorium-datakälla som bitbucket, github eller andra"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "lägg till en Google Drive-datakälla"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Lägg till konfiguration"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Skapa"
+      },
+      "description" : {
+        "label" : "Beskrivning",
+        "help" : "Ange beskrivningen av Google Drive-systemet."
+      },
+      "MainPanel" : {
+        "label" : "Skapa Google Drive/Workspace-anslutning"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "delegatedUser" : {
+        "label" : "Google-användare att imitera",
+        "help" : "Användaren som kommer att imiteras av de angivna behörigheterna",
+        "placeholder" : "Användaren som kommer att imiteras av de angivna behörigheterna"
+      },
+      "jsonContent" : {
+        "label" : "Google-behörigheters json-innehåll",
+        "help" : "Skapa Google-behörigheter med åtkomst till ditt workspace/team drives i Google Console Cloud och klistra in det nedladdade json-filens innehåll här (https://console.cloud.google.com/).",
+        "placeholder" : "Skapa Google-behörigheter med åtkomst till ditt workspace/team drives i Google Console Cloud och klistra in det nedladdade json-filens innehåll här (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Spara"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "PublishBtn" : {
+        "label" : "Publicera!",
+        "help" : "Sparar och gör dessa innehåll tillgängliga i kunskapsbasen för LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Radera"
+      },
+      "MainPanel" : {
+        "label" : "Delar Google Drive-innehåll"
+      },
+      "SettingsTab" : {
+        "label" : "Inställningar"
+      },
+      "LogsTab" : {
+        "label" : "Loggar"
+      },
+      "description" : {
+        "label" : "Beskrivning",
+        "help" : "Ange beskrivningen av det uppladdade innehållet av Google Drive-poster."
+      },
+      "code" : {
+        "label" : "Unik kod",
+        "help" : "Automatiskt genererad unik kod för innehållet."
+      },
+      "tree" : {
+        "label" : "Vald fil eller mapp",
+        "help" : "Delade Google Drive-utrymmen och sidinnehåll"
+      },
+      "driveSystemCode" : {
+        "label" : "Google Drive-konfiguration",
+        "help" : "Redan konfigurerad referens till Google Drive-system."
+      },
+      "openZips" : {
+        "label" : "Öppna zip-filer",
+        "help" : "Aktivera öppning och innehållsextraktion av zip-filer"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referens till överordnat projekt."
+      },
+      "programmedTables" : {
+        "label" : "Schema för kontroll av innehållsuppdateringar",
+        "help" : "Konfigurera schemaläggning av ändrat innehåll för att hålla retrieval augmented generation-systemet uppdaterat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Organisationskriterier för mappar och undermappar",
+        "help" : "Förklara här hur fil- och mapporganiseringen har gjorts av Google Drive-innehållet som delas med Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Allmänna inställningar"
+      },
+      "CancelBtn" : {
+        "label" : "Avbryt"
+      },
+      "DeleteBtn" : {
+        "label" : "Radera"
+      },
+      "SaveBtn" : {
+        "label" : "Spara"
+      },
+      "MainPanel" : {
+        "label" : "Redigera Google Drive-integration"
+      },
+      "code" : {
+        "label" : "Unik kod",
+        "help" : "Automatiskt genererad unik kod för Google Drive-systemet."
+      },
+      "description" : {
+        "label" : "Beskrivning",
+        "help" : "Ange beskrivningen av Google Drive-systemet."
+      },
+      "driveAccessSecret" : {
+        "label" : "Använd identitet",
+        "help" : "Välj eller skapa en identitet för åtkomst till Google Drive-systemet"
       }
     }
   }

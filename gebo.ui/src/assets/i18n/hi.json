@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai सेटअप में कुछ आवश्यक चरण गायब हैं",
         "detail" : "कृपया सेटअप प्रक्रिया के लाल चरणों की समीक्षा करें"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces एकीकरण",
+        "description" : "अपने Google cloud Drive/Workspaces टीम डेटा तक पहुँच के लिए Gebo.ai को कॉन्फ़िगर करें"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "नॉलेज बेस कोड्स"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "कंपनी के Google Drive/Workspaces सिस्टम सेटअप करें"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "कॉन्फ़िग कोड"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "विवरण"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "सार्वजनिक कुंजी",
         "help" : "पब्लिक की फ़ाइल खोलें और इस टेक्स्ट एरिया में कॉपी करें।"
+      },
+      "jsonContent" : {
+        "label" : "Google क्रेडेंशियल फ़ाइल सामग्री",
+        "help" : "यहाँ Google api क्रेडेंशियल फ़ाइल की सामग्री पेस्ट करें जो google cloud api कंसोल (https://console.cloud.google.com/) से डाउनलोड की गई है"
+      },
+      "delegatedUser" : {
+        "label" : "प्रतिनिधित्व किया जाने वाला Google उपयोगकर्ता",
+        "help" : "वह उपयोगकर्ता जिसे प्रदान की गई क्रेडेंशियल्स से प्रतिनिधित्व किया जाएगा",
+        "placeholder" : "वह उपयोगकर्ता जिसे प्रदान की गई क्रेडेंशियल्स से प्रतिनिधित्व किया जाएगा"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+Git रिपॉजिटरी",
         "help" : "Bitbucket, GitHub या अन्य जैसे git रिपॉजिटरी डेटा स्रोत जोड़ें"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "एक google drive डेटा स्रोत जोड़ें"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "कॉन्फ़िगरेशन जोड़ें"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "बनाएँ"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "Google Drive सिस्टम का विवरण दर्ज करें।"
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace कनेक्शन बनाएं"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द करें"
+      },
+      "delegatedUser" : {
+        "label" : "प्रतिनिधित्व किया जाने वाला Google उपयोगकर्ता",
+        "help" : "वह उपयोगकर्ता जिसे प्रदान की गई क्रेडेंशियल्स से प्रतिनिधित्व किया जाएगा",
+        "placeholder" : "वह उपयोगकर्ता जिसे प्रदान की गई क्रेडेंशियल्स से प्रतिनिधित्व किया जाएगा"
+      },
+      "jsonContent" : {
+        "label" : "Google क्रेडेंशियल्स json सामग्री",
+        "help" : "Google Console Cloud में अपने workspace/team drives एक्सेस के साथ Google Credentials बनाएं और यहाँ डाउनलोड किया गया json फ़ाइल सामग्री पेस्ट करें (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud में अपने workspace/team drives एक्सेस के साथ Google Credentials बनाएं और यहाँ डाउनलोड किया गया json फ़ाइल सामग्री पेस्ट करें (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "सहेजें"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द करें"
+      },
+      "PublishBtn" : {
+        "label" : "प्रकाशित करें!",
+        "help" : "सहेजें और इन सामग्रियों को ज्ञान आधार में LLm's के लिए उपलब्ध कराएँ"
+      },
+      "DeleteBtn" : {
+        "label" : "हटाएँ"
+      },
+      "MainPanel" : {
+        "label" : "google drive सामग्री साझा करना"
+      },
+      "SettingsTab" : {
+        "label" : "सेटिंग्स"
+      },
+      "LogsTab" : {
+        "label" : "लॉग्स"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "google drive प्रविष्टियों की अपलोड की गई सामग्री का विवरण दर्ज करें।"
+      },
+      "code" : {
+        "label" : "विशिष्ट कोड",
+        "help" : "सामग्री का स्वचालित रूप से जनरेट किया गया विशिष्ट कोड।"
+      },
+      "tree" : {
+        "label" : "चुनी गई फ़ाइल या फ़ोल्डर",
+        "help" : "साझा google drive स्थान और पृष्ठ सामग्री"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive कॉन्फ़िगरेशन",
+        "help" : "पहले से कॉन्फ़िगर किया गया google drive सिस्टम संदर्भ।"
+      },
+      "openZips" : {
+        "label" : "zip फ़ाइलें खोलें",
+        "help" : "zip फ़ाइलें खोलने और सामग्री निकालने को सक्षम करें"
+      },
+      "parentProjectCode" : {
+        "label" : "प्रोजेक्ट",
+        "help" : "पैरेंट प्रोजेक्ट संदर्भ।"
+      },
+      "programmedTables" : {
+        "label" : "सामग्री अपडेट जांच का शेड्यूल",
+        "help" : "परिवर्तित सामग्रियों के शेड्यूल को कॉन्फ़िगर करें ताकि अधिग्रहण संवर्धित निर्माण प्रणाली अपडेट रहे"
+      },
+      "catalogingCriteria" : {
+        "label" : "फ़ोल्डरों और सबफ़ोल्डरों के आयोजन का मापदंड",
+        "help" : "कृपया यहाँ बताएं कि Gebo.ai के साथ साझा की गई google drive सामग्री में फ़ाइलों और फ़ोल्डरों का आयोजन कैसे किया गया है"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "सामान्य सेटिंग्स"
+      },
+      "CancelBtn" : {
+        "label" : "रद्द करें"
+      },
+      "DeleteBtn" : {
+        "label" : "हटाएँ"
+      },
+      "SaveBtn" : {
+        "label" : "सहेजें"
+      },
+      "MainPanel" : {
+        "label" : "google drive एकीकरण संपादन"
+      },
+      "code" : {
+        "label" : "विशिष्ट कोड",
+        "help" : "google drive सिस्टम का स्वचालित रूप से जनरेट किया गया विशिष्ट कोड।"
+      },
+      "description" : {
+        "label" : "विवरण",
+        "help" : "google drive सिस्टम का विवरण दर्ज करें।"
+      },
+      "driveAccessSecret" : {
+        "label" : "इस्तेमाल की गई पहचान",
+        "help" : "google drive सिस्टम का उपयोग करने के लिए पहचान चुनें या बनाएँ"
       }
     }
   }

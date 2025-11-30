@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai அமைவில் சில கட்டாய படிகள் இல்லை",
         "detail" : "அமைவு செயல்முறை உள்ள சிவப்பு படிகளை சோதிக்கவும்"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ஒருங்கிணைப்பு",
+        "description" : "உங்கள் Google cloud Drive/Workspaces குழு தரவுகளுக்கு அணுக Gebo.ai ஐ அமைக்கவும்"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "அறிவுத்தள குறியீடுகள்"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "நிறுவன Google Drive/Workspaces அமைப்புகள் அமைப்பு"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "கட்டமைப்பு குறியம்"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "விளக்கம்"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "பொது விசை",
         "help" : "பொது விசைப் கோப்பைத் திறந்து இந்த உரைப்பகுதியில் நகலெடுத்து ஒட்டவும்."
+      },
+      "jsonContent" : {
+        "label" : "Google அம்சப்பட்டிகள் கோப்பு உள்ளடக்கம்",
+        "help" : "Google cloud api console (https://console.cloud.google.com/) இலிருந்து பதிவிறக்கம் செய்த Google api அம்சப்பட்டிகள் கோப்பின் உள்ளடக்கத்தை இங்கே நகலெடுக்கவும்"
+      },
+      "delegatedUser" : {
+        "label" : "புரளிக்கப்பட்ட Google பயனர்",
+        "help" : "வழங்கப்பட்ட அம்சப்பட்டிகளால் புரளிவாக்கப்பட உள்ள பயனர்",
+        "placeholder" : "வழங்கப்பட்ட அம்சப்பட்டிகளால் புரளிவாக்கப்பட உள்ள பயனர்"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "bitbucket, github போன்ற git repository தரவு மூலத்தை சேர்க்க"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive தரவு மூலத்தைச் சேர்க்கவும்"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "அமைவுகளைச் சேர்"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "உருவாக்கு"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "Google Drive அமைப்பின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace இணைப்பை உருவாக்கவும்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "delegatedUser" : {
+        "label" : "புரளிக்கப்பட்ட Google பயனர்",
+        "help" : "வழங்கப்பட்ட அம்சப்பட்டிகளால் புரளிவாக்கப்பட உள்ள பயனர்",
+        "placeholder" : "வழங்கப்பட்ட அம்சப்பட்டிகளால் புரளிவாக்கப்பட உள்ள பயனர்"
+      },
+      "jsonContent" : {
+        "label" : "Google அம்சப்பட்டிகள் json உள்ளடக்கம்",
+        "help" : "Google Console Cloud-இல் உங்கள் workspace/team drives அணுகலுடன் Google Credentials உருவாக்கி, பதிவிறக்கம் செய்த json கோப்பு உள்ளடக்கத்தை இங்கே ஒட்டவும் (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud-இல் உங்கள் workspace/team drives அணுகலுடன் Google Credentials உருவாக்கி, பதிவிறக்கம் செய்த json கோப்பு உள்ளடக்கத்தை இங்கே ஒட்டவும் (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "PublishBtn" : {
+        "label" : "வெளியிடு!",
+        "help" : "இந்த உள்ளடக்கங்களை அறிவு தளத்தில் LLm's க்கு கிடைக்க செய்கிறது"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "MainPanel" : {
+        "label" : "Google drive உள்ளடக்கங்களை பகிர்வு"
+      },
+      "SettingsTab" : {
+        "label" : "அமைப்புகள்"
+      },
+      "LogsTab" : {
+        "label" : "பதிவுகள்"
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "பதிவேற்றப்பட்ட google drive உள்ளடக்கங்களின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியம்",
+        "help" : "உள்ளடக்கங்களுக்கான தானாக உருவாக்கப்பட்ட தனிப்பட்ட குறியம்."
+      },
+      "tree" : {
+        "label" : "தேர்ந்தெடுக்கப்பட்ட கோப்பு அல்லது அடைவு",
+        "help" : "பகிரப்பட்ட google drive இடங்கள் மற்றும் பக்க உள்ளடக்கங்கள்"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive கட்டமைப்பு",
+        "help" : "ஏற்கனவே அமைக்கப்பட்ட google drive சிஸ்டம் குறிப்பு."
+      },
+      "openZips" : {
+        "label" : "Zip கோப்புகளை திறக்கவும்",
+        "help" : "Zip கோப்புகளை திறப்பதை மற்றும் உள்ளடக்கம் பிரித்தெடுத்தல் வகையை இயக்கு"
+      },
+      "parentProjectCode" : {
+        "label" : "திட்டம்",
+        "help" : "பேரிட்ட குறிப்பு."
+      },
+      "programmedTables" : {
+        "label" : "உள்ளடக்கன் புதுப்பிப்பு சரிபார்ப்பு அட்டவணை",
+        "help" : "மாற்றியுள்ள உள்ளடக்கங்களை தேடியும் அந்த Retrieve Augmented Generation சிஸ்டத்தை புதுப்பித்து வைத்திருக்க வடிவமைக்கவும்"
+      },
+      "catalogingCriteria" : {
+        "label" : "அடைவுகளும் துணை அடைவுகளும் ஒழுங்கமைக்கும் அளவுகோல்கள்",
+        "help" : "Gebo.ai உடன் பகிரப்பட்ட google drive உள்ளடக்கங்களில் கோப்புகளும் அடைவுகளும் எப்படி ஒழுங்கமைக்கப்பட்டன என்று இங்கே குறிப்பிடவும்"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "பொதுவான அமைப்புகள்"
+      },
+      "CancelBtn" : {
+        "label" : "ரத்துசெய்"
+      },
+      "DeleteBtn" : {
+        "label" : "அழி"
+      },
+      "SaveBtn" : {
+        "label" : "சேமி"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ஒருங்கிணைப்பைதிருத்துகிறது"
+      },
+      "code" : {
+        "label" : "தனிப்பட்ட குறியம்",
+        "help" : "Google drive சிஸ்டத்திற்கான தானாக உருவாக்கப்பட்ட தனிப்பட்ட குறியம்."
+      },
+      "description" : {
+        "label" : "விளக்கம்",
+        "help" : "Google drive சிஸ்டத்தின் விளக்கத்தை உள்ளிடவும்."
+      },
+      "driveAccessSecret" : {
+        "label" : "பயன்படுத்தும் அடையாளம்",
+        "help" : "Google drive சிஸ்டத்திற்கு அணுகும் அடையாளத்தைத் தேர்ந்தெடுக்கவும் அல்லது உருவாக்கவும்"
       }
     }
   }

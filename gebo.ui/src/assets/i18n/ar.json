@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "إعداد Gebo.ai ينقصه بعض الخطوات الإلزامية",
         "detail" : "يرجى مراجعة الخطوات المميزة باللون الأحمر في عملية الإعداد"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "تكامل Google Drive/Workspaces",
+        "description" : "قم بإعداد Gebo.ai للوصول إلى بيانات فريقك في Google Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "رموز قاعدة المعرفة"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "إعداد أنظمة Google Drive/Workspaces للشركة"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "رمز الإعداد"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "الوصف"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "المفتاح العام",
         "help" : "افتح ملف المفتاح العام و انسخ محتواه في هذه المنطقة."
+      },
+      "jsonContent" : {
+        "label" : "محتوى ملف بيانات اعتماد Google",
+        "help" : "انسخ هنا محتوى ملف بيانات اعتماد API من Google الذي تم تنزيله من وحدة تحكم Google Cloud API (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "مستخدم Google المراد تمثيله",
+        "help" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة",
+        "placeholder" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+مستودع Git",
         "help" : "إضافة مصدر بيانات مستودع git مثل bitbucket أو github أو غيرها"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "إضافة مصدر بيانات Google Drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "إضافة إعداد"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "إنشاء"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصف نظام Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "إنشاء اتصال Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "delegatedUser" : {
+        "label" : "مستخدم Google المراد تمثيله",
+        "help" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة",
+        "placeholder" : "المستخدم الذي سيتم تمثيله من خلال بيانات الاعتماد المقدمة"
+      },
+      "jsonContent" : {
+        "label" : "محتوى json لاعتماد Google",
+        "help" : "قم بإنشاء بيانات اعتماد Google مع إمكانية الوصول إلى مساحة العمل/أقراص الفريق في وحدة تحكم Google Cloud والصق هنا محتوى ملف json الذي تم تنزيله (https://console.cloud.google.com/).",
+        "placeholder" : "قم بإنشاء بيانات اعتماد Google مع إمكانية الوصول إلى مساحة العمل/أقراص الفريق في وحدة تحكم Google Cloud والصق هنا محتوى ملف json الذي تم تنزيله (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "PublishBtn" : {
+        "label" : "نشر!",
+        "help" : "يتم حفظ المحتوى وجعله متاحاً في قاعدة المعرفة لنظام LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "MainPanel" : {
+        "label" : "مشاركة محتوى Google Drive"
+      },
+      "SettingsTab" : {
+        "label" : "الإعدادات"
+      },
+      "LogsTab" : {
+        "label" : "السجلات"
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصفاً لمحتوى Google Drive الذي تم تحميله."
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائياً للمحتوى."
+      },
+      "tree" : {
+        "label" : "الملف أو المجلد المختار",
+        "help" : "المساحات والمحتويات المشتركة في Google Drive"
+      },
+      "driveSystemCode" : {
+        "label" : "إعداد Google drive",
+        "help" : "مرجع نظام Google Drive الذي تم إعداده مسبقاً."
+      },
+      "openZips" : {
+        "label" : "فتح ملفات zip",
+        "help" : "تفعيل فتح واستخراج محتوى ملفات zip"
+      },
+      "parentProjectCode" : {
+        "label" : "مشروع",
+        "help" : "مرجع المشروع الرئيسي."
+      },
+      "programmedTables" : {
+        "label" : "جدولة فحص تحديث المحتوى",
+        "help" : "اضبط جدولة مراجعة التغييرات للحفاظ على تحديث نظام توليد البيانات المدعومة"
+      },
+      "catalogingCriteria" : {
+        "label" : "معايير تنظيم الملفات والمجلدات",
+        "help" : "يرجى شرح كيفية تنظيم الملفات والمجلدات التي تمت مشاركتها في Google Drive مع Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "الإعدادات العامة"
+      },
+      "CancelBtn" : {
+        "label" : "إلغاء"
+      },
+      "DeleteBtn" : {
+        "label" : "حذف"
+      },
+      "SaveBtn" : {
+        "label" : "حفظ"
+      },
+      "MainPanel" : {
+        "label" : "تعديل تكامل Google Drive"
+      },
+      "code" : {
+        "label" : "رمز فريد",
+        "help" : "رمز فريد يتم إنشاؤه تلقائياً لنظام Google Drive."
+      },
+      "description" : {
+        "label" : "الوصف",
+        "help" : "أدخل وصفاً لنظام Google Drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "الهوية المستخدمة",
+        "help" : "اختر أو أنشئ هوية للوصول إلى نظام Google Drive"
       }
     }
   }

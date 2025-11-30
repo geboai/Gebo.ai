@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Kulang ng ilang mandatoryong hakbang ang Gebo.ai setup",
         "detail" : "Pakitignan ang mga pulang hakbang sa proseso ng setup"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integration",
+        "description" : "I-configure ang Gebo.ai upang makuha ang iyong Google cloud Drive/Workspaces team data"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Mga code ng knowledge base"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "I-setup ang company Google Drive/Workspaces systems"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Pampublikong susi",
         "help" : "Buksan ang file ng pampublikong susi at kopyahin dito sa text area."
+      },
+      "jsonContent" : {
+        "label" : "Nilalaman ng Google credentials file",
+        "help" : "Kopyahin dito ang nilalaman ng Google api credentials file na na-download mula sa google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google user na gagayahin",
+        "help" : "Ang user na gagamitin ng mga ibinigay na credentials",
+        "placeholder" : "Ang user na gagamitin ng mga ibinigay na credentials"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "magdagdag ng pinagmulan ng data ng git repository tulad ng bitbucket, github o iba pa"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "magdagdag ng google drive data source"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Magdagdag ng configuration"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Gumawa"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng Google Drive system."
+      },
+      "MainPanel" : {
+        "label" : "Gumawa ng Google Drive/Workspace connection"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "delegatedUser" : {
+        "label" : "Google user na gagayahin",
+        "help" : "Ang user na gagamitin ng mga ibinigay na credentials",
+        "placeholder" : "Ang user na gagamitin ng mga ibinigay na credentials"
+      },
+      "jsonContent" : {
+        "label" : "Google credentials json content",
+        "help" : "Gumawa ng Google Credentials na may workspace/team drives access sa Google Console Cloud at i-paste dito ang na-download na json file content (https://console.cloud.google.com/).",
+        "placeholder" : "Gumawa ng Google Credentials na may workspace/team drives access sa Google Console Cloud at i-paste dito ang na-download na json file content (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "I-save at gawing available ang mga nilalaman na ito sa knowledge base para sa LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "MainPanel" : {
+        "label" : "Pagbabahagi ng mga google drive contents"
+      },
+      "SettingsTab" : {
+        "label" : "Mga Setting"
+      },
+      "LogsTab" : {
+        "label" : "Mga Log"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng mga naka-upload na google drive entries."
+      },
+      "code" : {
+        "label" : "Natatanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng mga nilalaman."
+      },
+      "tree" : {
+        "label" : "Napiling file o folder",
+        "help" : "Mga nilalaman ng shared google drive spaces at mga page"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive configuration",
+        "help" : "Reperensya ng na-configure nang google drive system."
+      },
+      "openZips" : {
+        "label" : "Buksan ang mga zip file",
+        "help" : "Paganahin ang pagbubukas ng zip files at pagkuha ng laman"
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Reperensya ng parent project."
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng content updates check",
+        "help" : "I-configure ang iskedyul ng mga pagbabagong nilalaman para mapanatiling updated ang retrieve augmented generation system"
+      },
+      "catalogingCriteria" : {
+        "label" : "Pamantayan ng organisasyon ng mga folder at subfolder",
+        "help" : "Paki-explain rito kung paano inayos ang mga file at folder sa google drive contents na ibinahagi sa Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Pangkalahatang mga setting"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "MainPanel" : {
+        "label" : "Pag-eedit ng google drive integration"
+      },
+      "code" : {
+        "label" : "Natatanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng google drive system."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng google drive system."
+      },
+      "driveAccessSecret" : {
+        "label" : "Ginamit na identity",
+        "help" : "Pumili o gumawa ng identity para ma-access ang google drive system"
       }
     }
   }

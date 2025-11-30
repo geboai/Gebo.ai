@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Cài đặt Gebo.ai thiếu một số bước bắt buộc",
         "detail" : "Vui lòng xem lại các bước màu đỏ trong quá trình cài đặt"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Tích hợp Google Drive/Workspaces",
+        "description" : "Cấu hình Gebo.ai để truy cập dữ liệu nhóm Google cloud Drive/Workspaces của bạn"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Mã cơ sở kiến thức"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Thiết lập hệ thống Google Drive/Workspaces cho công ty"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Mã cấu hình"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Mô tả"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Khóa công khai",
         "help" : "Mở tệp khóa công khai và sao chép vào vùng văn bản này."
+      },
+      "jsonContent" : {
+        "label" : "Nội dung tệp thông tin xác thực Google",
+        "help" : "Dán nội dung tệp thông tin xác thực Google api đã tải về từ google cloud api console (https://console.cloud.google.com/) vào đây"
+      },
+      "delegatedUser" : {
+        "label" : "Người dùng Google sẽ giả lập",
+        "help" : "Người dùng sẽ được giả lập bởi thông tin xác thực đã cung cấp",
+        "placeholder" : "Người dùng sẽ được giả lập bởi thông tin xác thực đã cung cấp"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "thêm nguồn dữ liệu kho git như bitbucket, github hoặc khác"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "thêm một nguồn dữ liệu google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Thêm cấu hình"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Tạo"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả hệ thống Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Tạo kết nối Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "delegatedUser" : {
+        "label" : "Người dùng Google sẽ giả lập",
+        "help" : "Người dùng sẽ được giả lập bởi thông tin xác thực đã cung cấp",
+        "placeholder" : "Người dùng sẽ được giả lập bởi thông tin xác thực đã cung cấp"
+      },
+      "jsonContent" : {
+        "label" : "Nội dung json thông tin xác thực Google",
+        "help" : "Tạo Google Credentials có quyền truy cập workspace/team drives của bạn trong Google Console Cloud và dán nội dung tệp json đã tải về vào đây (https://console.cloud.google.com/).",
+        "placeholder" : "Tạo Google Credentials có quyền truy cập workspace/team drives của bạn trong Google Console Cloud và dán nội dung tệp json đã tải về vào đây (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "PublishBtn" : {
+        "label" : "Xuất bản!",
+        "help" : "Lưu và cho phép những nội dung này có sẵn trong kho tri thức để LLM sử dụng"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "MainPanel" : {
+        "label" : "Chia sẻ nội dung google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Cài đặt"
+      },
+      "LogsTab" : {
+        "label" : "Nhật ký"
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả về nội dung tệp google drive đã tải lên."
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Tự động tạo mã duy nhất cho nội dung."
+      },
+      "tree" : {
+        "label" : "Tệp hoặc thư mục đã chọn",
+        "help" : "Các không gian drive và trang đã được chia sẻ của google"
+      },
+      "driveSystemCode" : {
+        "label" : "Cấu hình google drive",
+        "help" : "Tham chiếu hệ thống google drive đã được cấu hình."
+      },
+      "openZips" : {
+        "label" : "Mở tệp zip",
+        "help" : "Bật tính năng mở và trích xuất nội dung tệp zip"
+      },
+      "parentProjectCode" : {
+        "label" : "Dự án",
+        "help" : "Tham chiếu dự án cha."
+      },
+      "programmedTables" : {
+        "label" : "Lịch kiểm tra cập nhật nội dung",
+        "help" : "Cài đặt lịch kiểm tra nội dung thay đổi để đảm bảo hệ thống truy xuất mở rộng luôn được cập nhật"
+      },
+      "catalogingCriteria" : {
+        "label" : "Tiêu chí tổ chức thư mục và thư mục con",
+        "help" : "Vui lòng giải thích tiêu chí sắp xếp tệp và thư mục đã được áp dụng cho nội dung google drive chia sẻ với Gebo.ai ở đây"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Cài đặt chung"
+      },
+      "CancelBtn" : {
+        "label" : "Hủy"
+      },
+      "DeleteBtn" : {
+        "label" : "Xóa"
+      },
+      "SaveBtn" : {
+        "label" : "Lưu"
+      },
+      "MainPanel" : {
+        "label" : "Chỉnh sửa tích hợp google drive"
+      },
+      "code" : {
+        "label" : "Mã duy nhất",
+        "help" : "Tự động tạo mã duy nhất cho hệ thống google drive."
+      },
+      "description" : {
+        "label" : "Mô tả",
+        "help" : "Nhập mô tả cho hệ thống google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Danh tính sử dụng",
+        "help" : "Chọn hoặc tạo danh tính để truy cập hệ thống google drive"
       }
     }
   }

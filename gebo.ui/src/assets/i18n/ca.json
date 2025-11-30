@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Falta algun pas obligatori de la configuració de Gebo.ai",
         "detail" : "Revisa els passos en vermell del procés de configuració"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integració de Google Drive/Workspaces",
+        "description" : "Configura Gebo.ai per accedir a les dades d'equip de Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Codis de la base de coneixement"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configura els sistemes d'empresa de Google Drive/Workspaces"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Clau pública",
         "help" : "Obre l'arxiu de la clau pública i copia'l en aquesta àrea de text."
+      },
+      "jsonContent" : {
+        "label" : "Contingut de l'arxiu de credencials de Google",
+        "help" : "Copia aquí el contingut de l'arxiu de credencials de Google API descarregat des de la consola d'API de Google (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Usuari de Google a suplantar",
+        "help" : "L'usuari que serà suplantat per les credencials proporcionades",
+        "placeholder" : "L'usuari que serà suplantat per les credencials proporcionades"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "afegeix una font de dades de repositori git com bitbucket, github o altres"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "afegeix una font de dades google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Afegeix configuració"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Crear"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Crear connexió Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "delegatedUser" : {
+        "label" : "Usuari de Google a suplantar",
+        "help" : "L'usuari que serà suplantat per les credencials proporcionades",
+        "placeholder" : "L'usuari que serà suplantat per les credencials proporcionades"
+      },
+      "jsonContent" : {
+        "label" : "Contingut json de credencials de Google",
+        "help" : "Crea credencials de Google amb accés als drives d'equip/espais de treball a la Google Console Cloud i enganxa aquí el contingut de l'arxiu json descarregat (https://console.cloud.google.com/).",
+        "placeholder" : "Crea credencials de Google amb accés als drives d'equip/espais de treball a la Google Console Cloud i enganxa aquí el contingut de l'arxiu json descarregat (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i permet que aquests continguts estiguin disponibles a la base de coneixement per als LLM"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "MainPanel" : {
+        "label" : "Compartint continguts de google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del contingut carregat de les entrades de google drive."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament pels continguts."
+      },
+      "tree" : {
+        "label" : "Fitxer o carpeta escollits",
+        "help" : "Continguts compartits de google drive i pàgines"
+      },
+      "driveSystemCode" : {
+        "label" : "Configuració de google drive",
+        "help" : "Referència del sistema google drive ja configurat."
+      },
+      "openZips" : {
+        "label" : "Obre arxius zip",
+        "help" : "Permet l'obertura i extracció de contingut d'arxius zip"
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència del projecte pare."
+      },
+      "programmedTables" : {
+        "label" : "Programació de comprovació d'actualitzacions de contingut",
+        "help" : "Configura la planificació dels continguts modificats per mantenir el sistema de generació augmentada d'informació actualitzat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteris d'organització de carpetes i subcarpetes",
+        "help" : "Explica aquí com s'han organitzat els fitxers i carpetes en els continguts de google drive compartits amb Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Configuració general"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "MainPanel" : {
+        "label" : "Editant la integració de google drive"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament del sistema google drive."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identitat utilitzada",
+        "help" : "Selecciona o crea la identitat per accedir al sistema google drive"
       }
     }
   }

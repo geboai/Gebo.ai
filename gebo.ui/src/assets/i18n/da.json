@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai opsætning mangler et obligatorisk trin",
         "detail" : "Gennemgå de røde trin i opsætningsprocessen"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integration",
+        "description" : "Konfigurer Gebo.ai til at få adgang til dine Google cloud Drive/Workspaces teamdata"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Vidensbasekoder"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Opsæt virksomhedens Google Drive/Workspaces systemer"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurationskode"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Beskrivelse"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Offentlig nøgle",
         "help" : "Åbn den offentlige nøglefil og kopier den i dette tekstfelt."
+      },
+      "jsonContent" : {
+        "label" : "Indhold af Google legitimationsfil",
+        "help" : "Kopier her indholdet af Google api-legitimationsfilen, som er downloadet fra google cloud api-konsollen (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google-bruger der skal imiteres",
+        "help" : "Brugeren der vil blive imiteret med de angivne legitimationsoplysninger",
+        "placeholder" : "Brugeren der vil blive imiteret med de angivne legitimationsoplysninger"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "tilføj en git repository-datakilde såsom bitbucket,github eller andre"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "tilføj en google drive datakilde"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Tilføj konfiguration"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Opret"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af Google Drive-systemet."
+      },
+      "MainPanel" : {
+        "label" : "Opret Google Drive/Workspace forbindelse"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "delegatedUser" : {
+        "label" : "Google-bruger der skal imiteres",
+        "help" : "Brugeren der vil blive imiteret med de angivne legitimationsoplysninger",
+        "placeholder" : "Brugeren der vil blive imiteret med de angivne legitimationsoplysninger"
+      },
+      "jsonContent" : {
+        "label" : "Indhold af Google legitimations-json",
+        "help" : "Opret Google-legitimationsoplysninger med adgang til dit workspace/team drives i Google Console Cloud og indsæt her det downloadede json-filindhold (https://console.cloud.google.com/).",
+        "placeholder" : "Opret Google-legitimationsoplysninger med adgang til dit workspace/team drives i Google Console Cloud og indsæt her det downloadede json-filindhold (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "PublishBtn" : {
+        "label" : "Offentliggør!",
+        "help" : "Gemmer og gør disse indhold tilgængelige i vidensbasen for LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "MainPanel" : {
+        "label" : "Deling af google drive-indhold"
+      },
+      "SettingsTab" : {
+        "label" : "Indstillinger"
+      },
+      "LogsTab" : {
+        "label" : "Logs"
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af det uploadede indhold fra google drive."
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for indholdet."
+      },
+      "tree" : {
+        "label" : "Valgt fil eller mappe",
+        "help" : "Delte google drive områder og sideindhold"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive konfiguration",
+        "help" : "Allerede konfigureret google drive system reference."
+      },
+      "openZips" : {
+        "label" : "Åbn zip-filer",
+        "help" : "Aktiver åbning af zip-filer og udtrækning af indhold"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Reference til overordnet projekt."
+      },
+      "programmedTables" : {
+        "label" : "Tidsplan for opdateringskontrol af indhold",
+        "help" : "Konfigurer tidsplanen for ændrede indhold for at holde systemet til hentning af udvidet generering opdateret"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriterier for organisering af mapper og undermapper",
+        "help" : "Forklar her, hvordan fil- og mappestrukturen er organiseret i det google drive-indhold, der er delt med Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Generelle indstillinger"
+      },
+      "CancelBtn" : {
+        "label" : "Annuller"
+      },
+      "DeleteBtn" : {
+        "label" : "Slet"
+      },
+      "SaveBtn" : {
+        "label" : "Gem"
+      },
+      "MainPanel" : {
+        "label" : "Redigerer google drive integration"
+      },
+      "code" : {
+        "label" : "Unik kode",
+        "help" : "Automatisk genereret unik kode for google drive systemet."
+      },
+      "description" : {
+        "label" : "Beskrivelse",
+        "help" : "Indtast beskrivelsen af google drive systemet."
+      },
+      "driveAccessSecret" : {
+        "label" : "Brugt identitet",
+        "help" : "Vælg eller opret den identitet, der skal tilgå google drive-systemet"
       }
     }
   }

@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Set up Gebo.ai tertinggal beberapa langkah wajib",
         "detail" : "Sila semak langkah merah dalam proses persediaan"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrasi Google Drive/Workspaces",
+        "description" : "Konfigurasikan Gebo.ai untuk mengakses data pasukan Google cloud Drive/Workspaces anda"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kod pangkalan pengetahuan"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Tetapkan sistem Google Drive/Workspaces syarikat"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kod konfigurasi"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsi"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Kunci awam",
         "help" : "Buka fail kunci awam dan salin ke ruang teks ini."
+      },
+      "jsonContent" : {
+        "label" : "Kandungan fail Google credentials",
+        "help" : "Salin di sini kandungan fail Google api credentials yang dimuat turun dari konsol api google cloud (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Pengguna Google untuk diwakili",
+        "help" : "Pengguna yang akan diwakili oleh credentials yang diberikan",
+        "placeholder" : "Pengguna yang akan diwakili oleh credentials yang diberikan"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "tambah sumber data repositori git seperti bitbucket, github atau lain-lain"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "tambah sumber data google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Tambah konfigurasi"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Cipta"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi sistem Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Cipta sambungan Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "delegatedUser" : {
+        "label" : "Pengguna Google untuk diwakili",
+        "help" : "Pengguna yang akan diwakili oleh credentials yang diberikan",
+        "placeholder" : "Pengguna yang akan diwakili oleh credentials yang diberikan"
+      },
+      "jsonContent" : {
+        "label" : "Kandungan json Google credentials",
+        "help" : "Cipta Google Credentials dengan akses workspace/team drives anda di Google Console Cloud dan tampal kandungan fail json yang dimuat turun di sini (https://console.cloud.google.com/).",
+        "placeholder" : "Cipta Google Credentials dengan akses workspace/team drives anda di Google Console Cloud dan tampal kandungan fail json yang dimuat turun di sini (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Simpan"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "PublishBtn" : {
+        "label" : "Terbitkan!",
+        "help" : "Simpan dan biarkan kandungan ini tersedia dalam knowledge base kepada LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Padam"
+      },
+      "MainPanel" : {
+        "label" : "Perkongsian kandungan google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Tetapan"
+      },
+      "LogsTab" : {
+        "label" : "Log"
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi kandungan yang dimuat naik dari entri google drive."
+      },
+      "code" : {
+        "label" : "Kod Unik",
+        "help" : "Kod unik yang dijana secara automatik untuk kandungan."
+      },
+      "tree" : {
+        "label" : "Fail atau folder dipilih",
+        "help" : "Kandungan ruang dan halaman yang dikongsi dari google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfigurasi google drive",
+        "help" : "Rujukan sistem google drive yang telah dikonfigurasi."
+      },
+      "openZips" : {
+        "label" : "Buka fail zip",
+        "help" : "Aktifkan pembukaan fail zip dan pengekstrakan kandungan"
+      },
+      "parentProjectCode" : {
+        "label" : "Projek",
+        "help" : "Rujukan projek induk."
+      },
+      "programmedTables" : {
+        "label" : "Jadual pemeriksaan kemas kini kandungan",
+        "help" : "Konfigurasikan jadual kemas kini kandungan untuk memastikan sistem retrieve augmented generation sentiasa dikemas kini"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteria organisasi folder dan subfolder",
+        "help" : "Sila jelaskan di sini bagaimana kriteria organisasi fail dan folder dilaksanakan dalam kandungan google drive yang dikongsi dengan Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Tetapan umum"
+      },
+      "CancelBtn" : {
+        "label" : "Batal"
+      },
+      "DeleteBtn" : {
+        "label" : "Padam"
+      },
+      "SaveBtn" : {
+        "label" : "Simpan"
+      },
+      "MainPanel" : {
+        "label" : "Penyuntingan integrasi google drive"
+      },
+      "code" : {
+        "label" : "Kod Unik",
+        "help" : "Kod unik yang dijana secara automatik untuk sistem google drive."
+      },
+      "description" : {
+        "label" : "Deskripsi",
+        "help" : "Masukkan deskripsi sistem google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identiti yang digunakan",
+        "help" : "Pilih atau cipta identiti untuk mengakses sistem google drive"
       }
     }
   }

@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai diegime trūksta privalomų žingsnių",
         "detail" : "Peržiūrėkite nustatymo proceso raudonai pažymėtus žingsnius"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integracija",
+        "description" : "Konfigūruokite Gebo.ai, kad galėtumėte pasiekti savo Google cloud Drive/Workspaces komandos duomenis"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Žinių bazės kodai"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Nustatykite įmonės Google Drive/Workspaces sistemas"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigūracijos kodas"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Aprašymas"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Viešasis raktas",
         "help" : "Atidarykite viešojo rakto failą ir nukopijuokite šį tekstą čia."
+      },
+      "jsonContent" : {
+        "label" : "Google prisijungimo duomenų failo turinys",
+        "help" : "Nukopijuokite čia Google API prisijungimo duomenų failo turinį, kurį atsisiuntėte iš google cloud api konsolės (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Imituojamas Google naudotojas",
+        "help" : "Naudotojas, kuris bus imituojamas naudojant šiuos prisijungimo duomenis",
+        "placeholder" : "Naudotojas, kuris bus imituojamas naudojant šiuos prisijungimo duomenis"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repozitorija",
         "help" : "pridėti git saugyklos duomenų šaltinį, pvz., bitbucket, github ar kitus"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "pridėti google drive duomenų šaltinį"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Pridėti konfigūraciją"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Kurti"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite Google Drive sistemos aprašymą."
+      },
+      "MainPanel" : {
+        "label" : "Sukurti Google Drive/Workspace ryšį"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "delegatedUser" : {
+        "label" : "Imituojamas Google naudotojas",
+        "help" : "Naudotojas, kuris bus imituojamas naudojant šiuos prisijungimo duomenis",
+        "placeholder" : "Naudotojas, kuris bus imituojamas naudojant šiuos prisijungimo duomenis"
+      },
+      "jsonContent" : {
+        "label" : "Google prisijungimo json turinys",
+        "help" : "Sukurkite Google prisijungimo duomenis su prieiga prie savo workspace/team drives Google Console Cloud ir įklijuokite čia atsisiųsto json failo turinį (https://console.cloud.google.com/).",
+        "placeholder" : "Sukurkite Google prisijungimo duomenis su prieiga prie savo workspace/team drives Google Console Cloud ir įklijuokite čia atsisiųsto json failo turinį (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "PublishBtn" : {
+        "label" : "Publikuoti!",
+        "help" : "Išsaugo ir leidžia šį turinį naudoti žinių bazėje LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "MainPanel" : {
+        "label" : "Dalijimasis google drive turiniu"
+      },
+      "SettingsTab" : {
+        "label" : "Nustatymai"
+      },
+      "LogsTab" : {
+        "label" : "Žurnalai"
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įrašykite įkelto google drive turinio aprašymą."
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas turinio unikalus kodas."
+      },
+      "tree" : {
+        "label" : "Pasirinktas failas arba aplankas",
+        "help" : "Bendrinamo google drive erdvės ir puslapių turinys"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive konfigūracija",
+        "help" : "Jau sukonfigūruotos google drive sistemos nuoroda."
+      },
+      "openZips" : {
+        "label" : "Atidaryti zip failus",
+        "help" : "Įjungti zip failų atidarymą ir turinio išgavimą"
+      },
+      "parentProjectCode" : {
+        "label" : "Projektas",
+        "help" : "Pirminio projekto nuoroda."
+      },
+      "programmedTables" : {
+        "label" : "Turinio atnaujinimų tikrinimo tvarkaraštis",
+        "help" : "Konfigūruokite pasikeitusio turinio tikrinimo tvarkaraštį, kad išliktų atnaujinta RAG sistema"
+      },
+      "catalogingCriteria" : {
+        "label" : "Aplankų ir poaplankių organizavimo kriterijai",
+        "help" : "Paaiškinkite, kaip buvo organizuoti failai ir aplankai, kurie bendrinami iš google drive su Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Bendrieji nustatymai"
+      },
+      "CancelBtn" : {
+        "label" : "Atšaukti"
+      },
+      "DeleteBtn" : {
+        "label" : "Ištrinti"
+      },
+      "SaveBtn" : {
+        "label" : "Išsaugoti"
+      },
+      "MainPanel" : {
+        "label" : "Redaguojama google drive integracija"
+      },
+      "code" : {
+        "label" : "Unikalus kodas",
+        "help" : "Automatiškai sugeneruotas google drive sistemos unikalus kodas."
+      },
+      "description" : {
+        "label" : "Aprašymas",
+        "help" : "Įveskite google drive sistemos aprašymą."
+      },
+      "driveAccessSecret" : {
+        "label" : "Naudojama tapatybė",
+        "help" : "Pasirinkite arba sukurkite tapatybę google drive sistemai pasiekti"
       }
     }
   }

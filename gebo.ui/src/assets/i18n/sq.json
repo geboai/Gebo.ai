@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Konfigurimit të Gebo.ai i mungon një hap i detyrueshëm",
         "detail" : "Ju lutemi kontrolloni hapat e kuq të procesit të konfigurimit"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrimi me Google Drive/Workspaces",
+        "description" : "Konfiguro Gebo.ai për të aksesuar të dhënat e ekipit tënd në Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Kodat e bazës së njohurive"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Konfiguro sistemet e Google Drive/Workspaces të kompanisë"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Kodi i konfigurimit"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Përshkrimi"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Çelësi publik",
         "help" : "Hapni file-in e çelësit publik dhe kopjoni në këtë hapësirë teksti."
+      },
+      "jsonContent" : {
+        "label" : "Përmbajtja e skedarit të kredencialeve Google",
+        "help" : "Kopjo këtu përmbajtjen e skedarit të kredencialeve të Google api të shkarkuar nga google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Përdoruesi i Google për imitimin",
+        "help" : "Përdoruesi që do të imitohet nga këto kredenciale",
+        "placeholder" : "Përdoruesi që do të imitohet nga këto kredenciale"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "shto një burim të dhënash git repository si bitbucket, github ose të tjera"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "shto një burim të dhënash Google Drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Shto konfigurim"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Krijo"
+      },
+      "description" : {
+        "label" : "Përshkrimi",
+        "help" : "Shkruaj përshkrimin e sistemit Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Krijo lidhje me Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Anulo"
+      },
+      "delegatedUser" : {
+        "label" : "Përdoruesi i Google për imitimin",
+        "help" : "Përdoruesi që do të imitohet nga këto kredenciale",
+        "placeholder" : "Përdoruesi që do të imitohet nga këto kredenciale"
+      },
+      "jsonContent" : {
+        "label" : "Përmbajtja json e kredencialeve Google",
+        "help" : "Krijo Kredencialet Google me qasje në drives e ekipit/organizimit në Google Console Cloud dhe ngjiti këtu përmbajtjen e skedarit json të shkarkuar (https://console.cloud.google.com/).",
+        "placeholder" : "Krijo Kredencialet Google me qasje në drives e ekipit/organizimit në Google Console Cloud dhe ngjiti këtu përmbajtjen e skedarit json të shkarkuar (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Ruaj"
+      },
+      "CancelBtn" : {
+        "label" : "Anulo"
+      },
+      "PublishBtn" : {
+        "label" : "Publiko!",
+        "help" : "Ruani dhe lejoni që këto përmbajtje të jenë të disponueshme në bazën e njohurive për LLm-të"
+      },
+      "DeleteBtn" : {
+        "label" : "Fshij"
+      },
+      "MainPanel" : {
+        "label" : "Ndaj përmbajtjet e google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Cilësimet"
+      },
+      "LogsTab" : {
+        "label" : "Regjistrat"
+      },
+      "description" : {
+        "label" : "Përshkrimi",
+        "help" : "Shkruaj përshkrimin e përmbajtjes së ngarkuar të hyrjeve të google drive."
+      },
+      "code" : {
+        "label" : "Kodi unik",
+        "help" : "Kodi unik i gjeneruar automatikisht për përmbajtjet."
+      },
+      "tree" : {
+        "label" : "Skedari ose dosja e zgjedhur",
+        "help" : "Hapësirat e ndara të google drive dhe përmbajtja e faqeve"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfigurimi i google drive",
+        "help" : "Referenca për sistemin e google drive të konfiguruar tashmë."
+      },
+      "openZips" : {
+        "label" : "Hap skedarët zip",
+        "help" : "Aktivizo hapjen dhe nxjerrjen e përmbajtjes nga skedarët zip"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekti",
+        "help" : "Referenca e projektit prind."
+      },
+      "programmedTables" : {
+        "label" : "Orari i kontrollit të përditësimeve të përmbajtjes",
+        "help" : "Konfiguro orarin për ndryshimet e përmbajtjes për të mbajtur sistemin e përditësuar të gjenerimit me rikuperim të zgjeruar"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kriteret e organizimit të dosjeve dhe nën-dosjeve",
+        "help" : "Ju lutemi shpjegoni këtu si janë organizuar dosjet dhe skedarët në përmbajtjen e google drive të ndarë me Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Cilësimet e përgjithshme"
+      },
+      "CancelBtn" : {
+        "label" : "Anulo"
+      },
+      "DeleteBtn" : {
+        "label" : "Fshij"
+      },
+      "SaveBtn" : {
+        "label" : "Ruaj"
+      },
+      "MainPanel" : {
+        "label" : "Ndrysho integrimin me google drive"
+      },
+      "code" : {
+        "label" : "Kodi unik",
+        "help" : "Kodi unik i gjeneruar automatikisht i sistemit google drive."
+      },
+      "description" : {
+        "label" : "Përshkrimi",
+        "help" : "Shkruaj përshkrimin e sistemit google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identiteti i përdorur",
+        "help" : "Zgjidh ose krijo identitetin për të aksesuar sistemin google drive"
       }
     }
   }

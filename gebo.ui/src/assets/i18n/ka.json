@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai-ის დაყენებას აკლია აუცილებელი ნაბიჯი",
         "detail" : "გთხოვთ, გადაიხედოთ დაყენების პროცესის წითლად მონიშნული ნაბიჯები"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ინტეგრაცია",
+        "description" : "დააყენეთ Gebo.ai, რომ ჰქონდეს წვდომა თქვენს Google cloud Drive/Workspaces გუნდის მონაცემებზე"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "ცოდნის ბაზის კოდები"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "კომპანიის Google Drive/Workspaces სისტემის დაყენება"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "საჯარო გასაღები",
         "help" : "გახსენით საჯარო გასაღების ფაილი და დააკოპირეთ ამ ველში."
+      },
+      "jsonContent" : {
+        "label" : "Google ანგარიშის მონაცემების ფაილის შიგთავსი",
+        "help" : "აქ ჩასვით Google api credentials ფაილის შიგთავსი, რომელიც ჩამოტვირთეთ google cloud api console-იდან (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google მომხმარებელი, რომელიც უნდა იყოს იმიტირებული",
+        "help" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით",
+        "placeholder" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git რეპო",
         "help" : "დაამატეთ git საცავის მონაცემების წყარო, მაგალითად Bitbucket, GitHub ან სხვა"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "დაამატეთ google drive მონაცემთა წყარო"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "დაამატეთ კონფიგურაცია"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "შექმნა"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ Google Drive სისტემის აღწერა."
+      },
+      "MainPanel" : {
+        "label" : "შექმენით Google Drive/Workspace კავშირი"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "delegatedUser" : {
+        "label" : "Google მომხმარებელი, რომელიც უნდა იყოს იმიტირებული",
+        "help" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით",
+        "placeholder" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით"
+      },
+      "jsonContent" : {
+        "label" : "Google credentials JSON ფაილის შიგთავსი",
+        "help" : "შექმენით Google Credentials თქვენი workspace/team drives წვდომით Google Console Cloud-ში და აქ ჩასვით ჩამოტვირთული JSON ფაილის შიგთავსი (https://console.cloud.google.com/).",
+        "placeholder" : "შექმენით Google Credentials თქვენი workspace/team drives წვდომით Google Console Cloud-ში და აქ ჩასვით ჩამოტვირთული JSON ფაილის შიგთავსი (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "შეინახეთ და გახადეთ ეს შემცველობები ხელმისაწვდომი ცოდნის ბაზისთვის LLm-ებისთვის"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "MainPanel" : {
+        "label" : "Google drive შემცველობის გაზიარება"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ატვირთული google drive შემცველობის აღწერა."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებადი უნიკალური კოდი შემცველობისთვის."
+      },
+      "tree" : {
+        "label" : "არჩეული ფაილი ან საქაღალდე",
+        "help" : "გაზიარებული google drive სივრცეებისა და გვერდების შემცველობა"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive კონფიგურაცია",
+        "help" : "უკვე კონფიგურირებული google drive სისტემის მითითება."
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართეთ zip ფაილების გახსნისა და შემცველობის გამოტანის ფუნქცია"
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "მშობელი პროექტის მითითება."
+      },
+      "programmedTables" : {
+        "label" : "შედარების განრიგის შემოწმება",
+        "help" : "დააპროგრამეთ შეცვლილი შემცველობის განახლების განრიგი, რათა RAG სისტემა იყოს განახლებული"
+      },
+      "catalogingCriteria" : {
+        "label" : "საქაღალდეებისა და ქვესაქაღალდეების ორგანიზების კრიტერიუმები",
+        "help" : "მიუთითეთ როგორაა ორგანიზებული ფაილები და საქაღალდეები იმ google drive შემცველობებში, რომლებიც გაზიარებულია Gebo.ai-თან"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "გენერალური პარამეტრები"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ინტეგრაციის ჩასწორება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი google drive სისტემისთვის."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ google drive სისტემის აღწერა."
+      },
+      "driveAccessSecret" : {
+        "label" : "გამოყენებული იდენტობა",
+        "help" : "აირჩიეთ ან შექმენით იდენტობა google drive სისტემაზე წვდომისთვის"
       }
     }
   }

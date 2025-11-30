@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Tá céim riachtanach ar iarraidh do shocrú Gebo.ai",
         "detail" : "Athbhreithnigh na céimeanna dearga sa phróiseas socraithe le do thoil"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Comhtháthú Google Drive/Workspaces",
+        "description" : "Cumraigh Gebo.ai chun do chuid sonraí foirne Google cloud Drive/Workspaces a rochtain"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Cóid an bhunachair eolais"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Cumraigh córais Google Drive/Workspaces na cuideachta"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cód cumraíochta"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Cur síos"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Eochair phoiblí",
         "help" : "Oscail an comhad eochrach phoiblí agus cóipeáil anseo é."
+      },
+      "jsonContent" : {
+        "label" : "Ábhar comhaid dintiúir Google",
+        "help" : "Cóipeáil anseo an t-ábhar den chomhad dintiúir Google api a íoslódáladh ón consól google cloud api (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Úsáideoir Google le clónáil",
+        "help" : "An t-úsáideoir a bheidh clónáilte leis na dintiúir a cuireadh ar fáil",
+        "placeholder" : "An t-úsáideoir a bheidh clónáilte leis na dintiúir a cuireadh ar fáil"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+giotán stór",
         "help" : "cuir foinse sonraí stórtha git cosúil le bitbucket, github nó ceann eile leis"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "cuir foinse sonraí google drive leis"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Cuir cumraíocht leis"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Cruthaigh"
+      },
+      "description" : {
+        "label" : "Cur síos",
+        "help" : "Cuir isteach cur síos ar an gcóras Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Cruthaigh nasc Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "delegatedUser" : {
+        "label" : "Úsáideoir Google le clónáil",
+        "help" : "An t-úsáideoir a bheidh clónáilte leis na dintiúir a cuireadh ar fáil",
+        "placeholder" : "An t-úsáideoir a bheidh clónáilte leis na dintiúir a cuireadh ar fáil"
+      },
+      "jsonContent" : {
+        "label" : "Ábhar json dintiúir Google",
+        "help" : "Cruthaigh Dintiúir Google le rochtain ar do chuid workspace/team drives sa Google Console Cloud agus greamaigh anseo an t-ábhar ón gcomhad json a íoslódáladh (https://console.cloud.google.com/).",
+        "placeholder" : "Cruthaigh Dintiúir Google le rochtain ar do chuid workspace/team drives sa Google Console Cloud agus greamaigh anseo an t-ábhar ón gcomhad json a íoslódáladh (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Sábháil"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "PublishBtn" : {
+        "label" : "Foilsigh!",
+        "help" : "Sábhálann agus ceadaíonn ábhar a bheith ar fáil sa bhunachar eolais do LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Scrios"
+      },
+      "MainPanel" : {
+        "label" : "Ag roinnt ábhar google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Socruithe"
+      },
+      "LogsTab" : {
+        "label" : "Loganna"
+      },
+      "description" : {
+        "label" : "Cur síos",
+        "help" : "Cuir isteach cur síos ar an ábhar uaslódáilte d'iarchoimeádáin google drive."
+      },
+      "code" : {
+        "label" : "Cód uathúil",
+        "help" : "Cód uathúil atá ginte go huathoibríoch don ábhar."
+      },
+      "tree" : {
+        "label" : "Comhad nó fillteán roghnaithe",
+        "help" : "Ábhar spásanna agus leathanaigh google drive roinnte"
+      },
+      "driveSystemCode" : {
+        "label" : "Cumraíocht google drive",
+        "help" : "Tagairt do chóras google drive atá cumraithe cheana."
+      },
+      "openZips" : {
+        "label" : "Oscail comhaid zip",
+        "help" : "Cumasaigh oscailt agus eastóscadh ábhar comhad zip"
+      },
+      "parentProjectCode" : {
+        "label" : "Tionscadal",
+        "help" : "Tagairt don tionscadal tuismitheora."
+      },
+      "programmedTables" : {
+        "label" : "Sceideal seiceálacha nuashonruithe ábhar",
+        "help" : "Cumraigh an sceideal do cheannródaíocht ábhar athraithe chun an córas giniúna forlíonta a choinneáil cothrom le dáta"
+      },
+      "catalogingCriteria" : {
+        "label" : "Critéir eagraíochta fillteán agus fofhillteán",
+        "help" : "Tabhair míniú anseo faoin gcaoi ar d’eagraíodh na comhaid agus na fillteáin i n-ábhair google drive a roinneadh le Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Socruithe ginearálta"
+      },
+      "CancelBtn" : {
+        "label" : "Cealaigh"
+      },
+      "DeleteBtn" : {
+        "label" : "Scrios"
+      },
+      "SaveBtn" : {
+        "label" : "Sábháil"
+      },
+      "MainPanel" : {
+        "label" : "Ag cur in eagar comhtháthú google drive"
+      },
+      "code" : {
+        "label" : "Cód uathúil",
+        "help" : "Cód uathúil atá ginte go huathoibríoch don chóras google drive."
+      },
+      "description" : {
+        "label" : "Cur síos",
+        "help" : "Cuir isteach cur síos ar an gcóras google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Aitheantas in úsáid",
+        "help" : "Roghnaigh nó cruthaigh an taitheantas chun rochtain a fháil ar an gcóras google drive"
       }
     }
   }

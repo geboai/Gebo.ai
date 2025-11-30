@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Λείπουν κάποιες υποχρεωτικές ρυθμίσεις του Gebo.ai",
         "detail" : "Παρακαλώ ελέγξτε τα βήματα με κόκκινο στη διαδικασία ρύθμισης"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Ενσωμάτωση Google Drive/Workspaces",
+        "description" : "Ρυθμίστε το Gebo.ai για να έχει πρόσβαση στα δεδομένα της ομάδας σας στο Google cloud Drive/Workspaces"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Κωδικοί γνωσιακής βάσης"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Ρύθμιση εταιρικών συστημάτων Google Drive/Workspaces"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Κωδικός ρύθμισης"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Περιγραφή"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Δημόσιο κλειδί",
         "help" : "Ανοίξτε το αρχείο του δημόσιου κλειδιού και αντιγράψτε το σε αυτό το πεδίο κειμένου."
+      },
+      "jsonContent" : {
+        "label" : "Περιεχόμενο αρχείου διαπιστευτηρίων Google",
+        "help" : "Αντιγράψτε εδώ το περιεχόμενο του αρχείου διαπιστευτηρίων Google api που κατεβάσατε από το google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Χρήστης Google για προσωρινή αντιπροσώπευση",
+        "help" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια",
+        "placeholder" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repo",
         "help" : "προσθήκη πηγής δεδομένων αποθετηρίου git όπως bitbucket, github ή άλλα"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "προσθέστε μια πηγή δεδομένων google drive"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Προσθήκη διαμόρφωσης"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Δημιουργία"
+      },
+      "description" : {
+        "label" : "Περιγραφή",
+        "help" : "Εισαγάγετε την περιγραφή του συστήματος Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Δημιουργία σύνδεσης Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "delegatedUser" : {
+        "label" : "Χρήστης Google για προσωρινή αντιπροσώπευση",
+        "help" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια",
+        "placeholder" : "Ο χρήστης που θα αντιπροσωπευθεί από τα παρεχόμενα διαπιστευτήρια"
+      },
+      "jsonContent" : {
+        "label" : "Περιεχόμενο json διαπιστευτηρίων Google",
+        "help" : "Δημιουργήστε διαπιστευτήρια Google με πρόσβαση στα drives του workspace/ομάδας σας στο Google Console Cloud και επικολλήστε εδώ το ληφθέν αρχείο json (https://console.cloud.google.com/).",
+        "placeholder" : "Δημιουργήστε διαπιστευτήρια Google με πρόσβαση στα drives του workspace/ομάδας σας στο Google Console Cloud και επικολλήστε εδώ το ληφθέν αρχείο json (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Αποθήκευση"
+      },
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "PublishBtn" : {
+        "label" : "Δημοσίευση!",
+        "help" : "Αποθηκεύει και επιτρέπει αυτά τα περιεχόμενα να είναι διαθέσιμα στη βάση γνώσης για τα LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Διαγραφή"
+      },
+      "MainPanel" : {
+        "label" : "Κοινοποίηση περιεχομένων google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Ρυθμίσεις"
+      },
+      "LogsTab" : {
+        "label" : "Αρχεία καταγραφής"
+      },
+      "description" : {
+        "label" : "Περιγραφή",
+        "help" : "Εισαγάγετε την περιγραφή του μεταφορτωμένου περιεχομένου από το google drive."
+      },
+      "code" : {
+        "label" : "Μοναδικός Κωδικός",
+        "help" : "Αυτόματα παραγόμενος μοναδικός κωδικός του περιεχομένου."
+      },
+      "tree" : {
+        "label" : "Επιλεγμένο αρχείο ή φάκελος",
+        "help" : "Κοινόχρηστοι χώροι και σελίδες google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Ρύθμιση Google drive",
+        "help" : "Αναφορά στο ήδη διαμορφωμένο σύστημα google drive."
+      },
+      "openZips" : {
+        "label" : "Άνοιγμα αρχείων zip",
+        "help" : "Ενεργοποίηση ανοίγματος και εξαγωγής περιεχομένου αρχείων zip"
+      },
+      "parentProjectCode" : {
+        "label" : "Έργο",
+        "help" : "Αναφορά στο γονικό έργο."
+      },
+      "programmedTables" : {
+        "label" : "Πρόγραμμα ελέγχου ενημερώσεων περιεχομένου",
+        "help" : "Ρυθμίστε τον προγραμματισμό ελέγχων αλλαγών περιεχομένου για να παραμένει ενημερωμένο το σύστημα αυξημένης ανάκτησης"
+      },
+      "catalogingCriteria" : {
+        "label" : "Κριτήρια οργάνωσης φακέλων και υποφακέλων",
+        "help" : "Εξηγήστε εδώ πώς έχουν οργανωθεί τα αρχεία και οι φάκελοι στα περιεχόμενα του google drive που κοινοποιήθηκαν με το Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Γενικές ρυθμίσεις"
+      },
+      "CancelBtn" : {
+        "label" : "Ακύρωση"
+      },
+      "DeleteBtn" : {
+        "label" : "Διαγραφή"
+      },
+      "SaveBtn" : {
+        "label" : "Αποθήκευση"
+      },
+      "MainPanel" : {
+        "label" : "Επεξεργασία ενσωμάτωσης google drive"
+      },
+      "code" : {
+        "label" : "Μοναδικός Κωδικός",
+        "help" : "Αυτόματα παραγόμενος μοναδικός κωδικός του συστήματος google drive."
+      },
+      "description" : {
+        "label" : "Περιγραφή",
+        "help" : "Εισαγάγετε την περιγραφή του συστήματος google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Χρησιμοποιούμενη ταυτότητα",
+        "help" : "Επιλέξτε ή δημιουργήστε την ταυτότητα για πρόσβαση στο σύστημα google drive"
       }
     }
   }

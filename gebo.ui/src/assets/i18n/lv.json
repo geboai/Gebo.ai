@@ -169,6 +169,10 @@
       "mandatory-missing" : {
         "summary" : "Gebo.ai iestatīšanai trūkst kāds obligāts solis",
         "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integrācija",
+        "description" : "Konfigurējiet Gebo.ai lai piekļūtu jūsu Google cloud Drive/Workspaces komandas datiem"
       }
     },
     "ConfluenceWizardComponent" : {
@@ -426,6 +430,20 @@
       },
       "KnowledgeBaseCodesHeader" : {
         "label" : "Zināšanu bāzes kodi"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Uzstādīt uzņēmuma Google Drive/Workspaces sistēmas"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
       }
     }
   },
@@ -2049,6 +2067,15 @@
       "pub" : {
         "label" : "Publiskā atslēga",
         "help" : "Atveriet publiskās atslēgas failu un nokopējiet šo saturu šajā laukā."
+      },
+      "jsonContent" : {
+        "label" : "Google akreditācijas faila saturs",
+        "help" : "Iekopējiet šeit Google api akreditācijas faila saturu, kas lejupielādēts no google cloud api konsoles (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google lietotājs, kuru imitēt",
+        "help" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām",
+        "placeholder" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām"
       }
     }
   },
@@ -2653,6 +2680,10 @@
       "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
         "label" : "+git repozitorijs",
         "help" : "pievienot git repozitorija datu avotu, piemēram, bitbucket,github vai citi"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "pievienot google drive datu avotu"
       }
     }
   },
@@ -3057,6 +3088,118 @@
       },
       "AddConfigurationBtn" : {
         "label" : "Pievienot konfigurāciju"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Izveidot"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet Google Drive sistēmas aprakstu."
+      },
+      "MainPanel" : {
+        "label" : "Izveidojiet Google Drive/Workspace savienojumu"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "delegatedUser" : {
+        "label" : "Google lietotājs, kuru imitēt",
+        "help" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām",
+        "placeholder" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām"
+      },
+      "jsonContent" : {
+        "label" : "Google akreditāciju json saturs",
+        "help" : "Izveidojiet Google akreditācijas ar piekļuvi jūsu darba/grupas diskiem Google Console Cloud un ielīmējiet šeit lejupielādētā json faila saturu (https://console.cloud.google.com/).",
+        "placeholder" : "Izveidojiet Google akreditācijas ar piekļuvi jūsu darba/grupas diskiem Google Console Cloud un ielīmējiet šeit lejupielādētā json faila saturu (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un ļauj šiem saturiem kļūt pieejamiem zināšanu bāzē LLm’s"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "MainPanel" : {
+        "label" : "Google drive satura koplietošana"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet augšupielādētā google drive satura aprakstu."
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "tree" : {
+        "label" : "Izvēlētais fails vai mape",
+        "help" : "Koplietotās google drive vietas un lappušu saturs"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive konfigurācija",
+        "help" : "Jau konfigurētas google drive sistēmas atsauce."
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura izvilkšanu"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Galvenā projekta atsauce."
+      },
+      "programmedTables" : {
+        "label" : "Satura atjauninājumu pārbaudes grafiks",
+        "help" : "Konfigurējiet izmaiņu satura grafiku, lai uzturētu retrieve augmented generation sistēmu atjauninātu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Mapju un apakšmapju organizācijas kritēriji",
+        "help" : "Lūdzu, paskaidrojiet šeit, kāds ir failu un mapju organizācijas kritērijs google drive saturam, kas kopīgots ar Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Vispārīgie iestatījumi"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "MainPanel" : {
+        "label" : "Google drive integrācijas rediģēšana"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts google drive sistēmas unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet google drive sistēmas aprakstu."
+      },
+      "driveAccessSecret" : {
+        "label" : "Lietotā identitāte",
+        "help" : "Izvēlieties vai izveidojiet identitāti, lai piekļūtu google drive sistēmai"
       }
     }
   }
