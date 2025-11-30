@@ -12,7 +12,7 @@ an enterprise version with more feature and support is also available.
  
 ## Gebo.ai features:
 ### Administrative features
- The admin, chat,rag chat,graphrag chat user interfaces are **fully multilanguage**.
+ The admin, chat,rag chat,graphrag chat user interfaces are **fully multilanguage** and the application is **fully multiuser**.
  All the following features are fully configurable using the administrative user interface.
  - Configure the large language models to use like:
       - **OpenAI** chatgpt
@@ -23,14 +23,14 @@ an enterprise version with more feature and support is also available.
       - **Deepseek**
       - **MistralAI**
       - **Regolo.ai** (Italian/European)
-      - Almost every local large language model using **Ollama** 
+      - Almost every local large language model using **Ollama** or **vLLM**       
       - Every provider/local server compatible with **OpenAi API**
  - Configure tools & functions that each llm configuration can use      
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
     - **Microsoft Onedrive/Sharepoint**
     - **Atlassian Confluence**
     - **Atlassian Jira**
-    - **Google Workspaces/Drives** (under development, coming soon)
+    - **Google Workspaces/Drives** 
     - **GitHub/GIT/Bitbucket** or other **git** compatible servers
     - Company shared filesystems
  - Configure **company single sign** on (SSO) using one of the following oauth2 providers:

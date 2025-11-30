@@ -23,6 +23,7 @@ security.provider.1: org.bouncycastle.jce.provider.BouncyCastleProvider
 ai.gebo.multilanguage.config.classPathMode: false
 ai.gebo.multilanguage.config.folderPrefix:
 ai.gebo.lucene.config.enabled: false
+ai.gebo.neo4j.enabled: false
 spring:
   neo4j:
     uri: bolt://localhost:7687

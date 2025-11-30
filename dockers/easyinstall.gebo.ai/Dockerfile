@@ -88,7 +88,7 @@ WORKDIR /opt/java/
 RUN curl -L -o jdk-21_linux-x64_bin.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz
 RUN tar zxvfs jdk-21_linux-x64_bin.tar.gz
 RUN rm jdk-21_linux-x64_bin.tar.gz
-ENV JAVA_HOME=/opt/java/jdk-21.0.8
+ENV JAVA_HOME=/opt/java/jdk-21.0.9
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8
@@ -103,7 +103,7 @@ RUN mkdir -p /var/log/gebo.ai
 COPY gebo.ai.app-1.0.0.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
+ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8  -Dai.gebo.neo4j.enabled=false  -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 COPY gebo.ai.sh /bin/gebo.ai.sh
