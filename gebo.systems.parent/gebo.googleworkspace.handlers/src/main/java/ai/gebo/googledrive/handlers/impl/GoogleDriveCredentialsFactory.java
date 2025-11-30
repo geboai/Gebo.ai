@@ -77,14 +77,13 @@ class GoogleDriveCredentialsFactory {
 		AbstractGeboSecretContent secret = secretAccessService.getSecretContentById(secretCode);
 		GoogleCredentials credential = null;
 		if (secret.type() == GeboSecretType.GOOGLE_CLOUD_JSON_CREDENTIALS) {
-
 			GeboGoogleJsonSecretContent content = (GeboGoogleJsonSecretContent) secret;
 			credential = ServiceAccountCredentials
 					.fromStream(new ByteArrayInputStream(content.getJsonContent().getBytes()))
-					.createScoped(List.of(DriveScopes.DRIVE_READONLY, DriveScopes.DRIVE_METADATA_READONLY));
+					.createScoped(List.of(DriveScopes.DRIVE_READONLY, DriveScopes.DRIVE_METADATA_READONLY)).createDelegated(content.getDelegatedUser());
 
 		} else
-			throw new VirtualFilesystemBrowsingException("Illegal Gebo secret type");
+			throw new VirtualFilesystemBrowsingException("Illegal Gebo secret type, required GOOGLE_CLOUD_JSON_CREDENTIALS");
 
 		credential.refreshIfExpired();
 

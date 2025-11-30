@@ -111,7 +111,8 @@ export class GeboAiSecretsAdminEditComponent extends BaseEntityEditingComponent<
         ),
         googleJsonContent: new FormGroup(
             {
-                jsonContent: new FormControl()
+                jsonContent: new FormControl(),
+                delegatedUser: new FormControl()
             }
         ),
         oauth2Content: new FormGroup({

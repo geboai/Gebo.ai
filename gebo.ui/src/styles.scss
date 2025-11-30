@@ -88,6 +88,7 @@ label {
 .pi.pi-sharepoint,
 .pi.pi-onedrive,
 .pi.pi-google-workspace,
+.pi.pi-google-drive,
 .pi.pi-confluence,
 .pi.pi-jira {
   display: inline-block;
@@ -112,6 +113,9 @@ label {
   background-image: url("assets/3rdparty/google-workspace-logo.svg");
 }
 
+.pi.pi-google-drive {
+  background-image: url("assets/3rdparty/Google_Drive_icon.svg");
+}
 .pi.pi-confluence {
   background-image: url("assets/3rdparty/confluence-svgrepo-com.svg");
 }

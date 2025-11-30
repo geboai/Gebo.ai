@@ -68,7 +68,8 @@ export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {
     /** Form group containing the description and JSON content fields */
     public formGroup: FormGroup = new FormGroup({
         description: new FormControl(null, [Validators.required]),
-        jsonContent: new FormControl(null, [Validators.required, jsonValidator])
+        jsonContent: new FormControl(null, [Validators.required, jsonValidator]),
+        delegatedUser: new FormControl(null, [Validators.required])
     });
 
     /**
@@ -107,11 +108,13 @@ export class GeboAIGoogleDriveFastComponent implements OnInit, OnChanges {
      */
     doInsert(): void {
         this.loading = true;
-        const value: { description: string, jsonContent: string } = this.formGroup.value;
+        const value: { description: string, jsonContent: string,delegatedUser:string } = this.formGroup.value;
         const data: FastGoogleDriveSystemInsert = {
             description: value.description,
             googleJsonCredentials: {
-                jsonContent: value.jsonContent
+                jsonContent: value.jsonContent,
+                delegatedUser: value.delegatedUser
+
             }
         };
         this.googleDriveController.fastGoogleDriveConfig(data).subscribe({
