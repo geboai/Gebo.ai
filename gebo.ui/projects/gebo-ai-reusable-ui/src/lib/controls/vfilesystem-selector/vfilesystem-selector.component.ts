@@ -19,7 +19,7 @@
 
 import { ChangeDetectorRef, Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { BrowseParam, GVirtualFilesystemRoot, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
+import { BrowseParam, GSharepointProjectEndpoint, GVirtualFilesystemRoot, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions, TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "primeng/tree";
 import { of } from "rxjs";
@@ -27,6 +27,42 @@ import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemR
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, fieldHostComponentName } from "../field-host-component-iface/field-host-component-iface";
 
+const iconsMapping:{[key:string]:string}={
+    GGitProjectEndpoint:"pi pi-git",
+    GGoogleDriveProjectEndpoint:"pi pi-google-drive",
+    /*GFilesystemProjectEndpoint:"pi pi-folder",*/
+    GJiraProjectEndpoint:"pi pi-jira",
+    GConfluenceProjectEndpoint:"pi pi-confluence",
+    GSharepointProjectEndpoint:"pi pi-sharepoint",
+    GUploadsProjectEndpoint:"pi pi-cloud-upload",
+    GUserspaceProjectEndpoint:"pi pi-user",
+    project:"pi pi-list-check",
+    knowledgebase:"pi pi-sitemap"
+};
+const stdFolderOpened="pi pi-folder-open";
+const stdFolderClosed="pi pi-folder";
+function icon_folder_opened(node?:VFilesystemReference):string {
+    let out:string|undefined=undefined;
+    let iconKey:string|undefined=node?.path?node.path.iconKey:node?.root?.iconKey;
+    if (iconKey) {
+        out=iconsMapping[iconKey];
+    }
+    if (!out) {
+        out=stdFolderOpened;
+    }
+    return out;
+}
+function icon_folder_closed(node?:VFilesystemReference):string {
+    let out:string|undefined=undefined;
+    let iconKey:string|undefined=node?.path?node.path.iconKey:node?.root?.iconKey;
+    if (iconKey) {
+        out=iconsMapping[iconKey];
+    }
+    if (!out) {
+        out=stdFolderClosed;
+    }
+    return out;
+}
 
 /**
  * Extended interface for VFilesystemReference that includes UI selection state information
@@ -76,8 +112,8 @@ function toEnrichedNode(entry: VFilesystemReference, parent?: TreeNode<EnrichedF
         label: entry.path ? entry.path.name : entry.root.description,
         leaf: (!entry.path) || (entry.path && entry.path.folder === true) ? false : true,
         data: data,
-        icon: (!entry.path) || (entry.path && entry.path.folder === true) ? "pi pi-folder-open" : "pi pi-file-o",
-        collapsedIcon: (!entry.path) || (entry.path && entry.path.folder === true) ? "pi pi-folder" : "pi pi-file-o",
+        icon: (!entry.path) || (entry.path && entry.path.folder === true) ? icon_folder_opened(entry) : "pi pi-file-o",
+        collapsedIcon: (!entry.path) || (entry.path && entry.path.folder === true) ? icon_folder_closed(entry) : "pi pi-file-o",
         parent: parent,
         key: key
     };

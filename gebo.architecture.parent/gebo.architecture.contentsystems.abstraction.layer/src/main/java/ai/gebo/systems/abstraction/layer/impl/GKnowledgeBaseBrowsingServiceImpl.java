@@ -179,7 +179,7 @@ public class GKnowledgeBaseBrowsingServiceImpl implements IGKnowledgeBaseBrowsin
 		pinfo.absolutePath = ENDPOINT_PREFIX + x.getCode() + ":" + x.getClass().getName();
 		pinfo.name = x.getDescription();
 		pinfo.folder = true;
-		pinfo.iconKey = x.getClass().getSimpleName().toLowerCase();
+		pinfo.iconKey = x.getClass().getSimpleName();
 		return pinfo;
 	};
 

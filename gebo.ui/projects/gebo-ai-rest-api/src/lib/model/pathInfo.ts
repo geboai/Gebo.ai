@@ -15,6 +15,7 @@ export interface PathInfo {
     name?: string;
     folder?: boolean;
     metaType?: PathInfo.MetaTypeEnum;
+    iconKey?: string;
 }
 export namespace PathInfo {
     export type MetaTypeEnum = 'WEB_PAGE' | 'FILE' | 'FOLDER' | 'DEVICE' | 'UNKNOWN';
