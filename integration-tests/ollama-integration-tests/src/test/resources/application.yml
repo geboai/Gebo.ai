@@ -1,3 +1,13 @@
+server:
+  port: 12999
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
+  servlet:
+    contextPath: /
 ai.gebo.neo4j.enabled: true
 spring:
   neo4j:
@@ -5,6 +15,37 @@ spring:
 #    authentication:
 #      username: neo4j
 #      password: password
+ai.gebo.security:
+  auth:
+    tokenSecret: 04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+    tokenExpirationMsec: 120000
+  cors:
+    allowedOrigins: http://localhost:12999,http://localhost:4200
+  oauth2configs:
+    # KeyCloak oauth2 test configuration
+    - registrationId: keycloakClient
+      description: Keycloak Oauth2 test configuration
+      provider: oauth2_generic
+      client:
+        secret: ltxhyiESLC4FCKnPww6Ylc50HYEIf7Pg
+        clientId: keycloakClient
+        tenantId: default
+        scopes:
+      configurationTypes: AUTHENTICATION
+      providerConfig:
+        provider: oauth2_generic
+        authorizationUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/auth
+        tokenUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/token
+        userInfoUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/userinfo
+        issuerUri: http://localhost:8083/realms/MainRealm
+        userNameAttribute: email
+reactor.schedulers.defaultPoolSize: 16
+spring.task:
+  execution:
+    pool:
+      max-size: 16
+      queue-capacity: 100
+      keep-alive: "10s"
 
 ai.gebo.security.cors.allowedOrigins: no
 ai.gebo.mongodb:
@@ -65,7 +106,7 @@ ai.gebo.core.config:
 #                  customSearchEngineId: <put here your search engine id>
 
 ai.gebo.sysinit.admin.config:
-       adminUsername: paolo.zavalloni@gmail.com
+       adminUsername: mymail@gmail.com
        adminPassword: mypassword
 
 ai.gebo.sysinit.llms.config:

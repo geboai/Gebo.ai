@@ -26,6 +26,10 @@
 			<version>1.20.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+		<dependency>
+			<groupId>ai.gebo.clients</groupId>
+			<artifactId>gebo.monolithic.api.resttemplate.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
