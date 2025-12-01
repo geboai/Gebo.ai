@@ -59,4 +59,6 @@ public interface IGChatRequestResourcesUsePolicy {
 
 	public ChatModelLimitedRequest manageChatRequest(GUserChatContext userContext, UserInfos user,
 			GeboChatRequest request, IGConfigurableChatModel chatHandler) throws LLMConfigException, IOException;
+
+	
 }

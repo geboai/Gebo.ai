@@ -34,6 +34,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
@@ -723,6 +724,34 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 			throw new GeboPersistenceException("Cannot find a repository for entity:" + type.getName());
 		handler.delete(data);
 
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> T transactionalInsert(T element) throws GeboPersistenceException {
+		
+		return this.insert(element);
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> T transactionalUpdate(T element) throws GeboPersistenceException {
+		
+		return this.update(element);
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> void transactionalDelete(T element) throws GeboPersistenceException {
+		this.delete(element);
+		
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> T transactionalFindById(Class<T> type, String id) throws GeboPersistenceException {
+		
+		return this.findById(type, id);
 	}
 
 }

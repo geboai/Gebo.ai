@@ -88,6 +88,11 @@ public class GeboUserChatsController {
 		return null;
 	}
 
+	@GetMapping(value = "getMyChats", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GUserChatInfo> getMyChats() {
+		return repository.findByUsername(securityService.getCurrentUser().getUsername());
+	}
+
 	/**
 	 * Retrieves a paginated list of chat information for the current user.
 	 * 
