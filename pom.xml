@@ -41,6 +41,7 @@
 		<module>gebo.integrations.clients</module>
 		<module>gebo.llms.parent</module>
 		<module>gebo.buildsystems.parent</module>
+		<module>gebo.api.clients</module>
 	</modules>
 	<dependencies>
 		<dependency>
