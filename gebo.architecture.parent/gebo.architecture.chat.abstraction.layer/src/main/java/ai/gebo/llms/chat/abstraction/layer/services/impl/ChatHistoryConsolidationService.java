@@ -45,6 +45,9 @@ public class ChatHistoryConsolidationService {
 
 	@Async
 	public void consolidateHistory(String userContextCode, int historySizeTarget) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin consolidateHistory(" + userContextCode + "," + historySizeTarget + ")");
+		}
 		try {
 			GUserChatContext context = persistenceManager.transactionalFindById(GUserChatContext.class,
 					userContextCode);
@@ -118,6 +121,9 @@ public class ChatHistoryConsolidationService {
 			}
 		} catch (Throwable th) {
 			LOGGER.error("History consolidation error", th);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End consolidateHistory(" + userContextCode + "," + historySizeTarget + ")");
 		}
 	}
 
