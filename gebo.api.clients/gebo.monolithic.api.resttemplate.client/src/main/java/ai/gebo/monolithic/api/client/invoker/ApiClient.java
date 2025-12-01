@@ -573,6 +573,12 @@ public class ApiClient {
 			}
 			auth.applyToParams(queryParams, headerParams);
 		}
+		if (authNames == null || authNames.length == 0) {
+			Collection<Authentication> auths = authentications.values();
+			for (Authentication authentication : auths) {
+				authentication.applyToParams(queryParams, headerParams);
+			}
+		}
 	}
 
 	private class ApiClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
