@@ -1,0 +1,83 @@
+ai.gebo.neo4j.enabled: true
+spring:
+  neo4j:
+    uri: bolt://localhost:7687
+#    authentication:
+#      username: neo4j
+#      password: password
+
+ai.gebo.security.cors.allowedOrigins: no
+ai.gebo.mongodb:
+  enabled: false
+  databaseName: gebo-ai-tests
+  connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+ai.gebo.vectorstore:
+  use: QDRANT
+
+ai.gebo.llms.config:
+   mistralAIEnabled: true
+   openAIEnabled: true
+   ollamaEnabled: true
+   googleVertexEnabled: false
+   anthropicEnabled: true
+   huggingfaceEnabled: false
+   deepseekEnabled: true
+   azureOpenAIEnabled: true
+ai.gebo.vectorizator.config:
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  disposerConfig:
+    poolCardinality: 1
+    flushThreshold: 10
+    useSenderThread: true
+vectorizatorReceiverConfig:
+  poolCardinality: 2
+  flushThreshold: 6
+  useSenderThread: true
+  timeout: 10000
+
+ai.gebo.graphrag.processor:
+  discardedExtensions: 
+    - .xls
+    - .xlsx
+    - .ods
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  graphRagProcessorReceiverConfig:
+    poolCardinality: 2
+    flushThreshold: 6
+    useSenderThread: true
+    timeout: 10000
+
+ai.gebo.core.config:
+  mongoDisposerConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 6
+    timeout: 10000
+  userMessagesReceiverConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 10
+    timeout: 10000
+#Google search api for LLM search web function
+#ai.gebo.googlesearch:
+#                  enabled: true
+#                  apiKey: <put here your api key>
+#                  customSearchEngineId: <put here your search engine id>
+
+ai.gebo.sysinit.admin.config:
+       adminUsername: paolo.zavalloni@gmail.com
+       adminPassword: mypassword
+
+ai.gebo.sysinit.llms.config:
+       providers:
+        -
+         providerId: ollama
+         url: http://localhost:11434
+         chatModel:
+            modelCode: qwen3:14b
+            defaultModel: true
+         embeddingModel:
+            modelCode: mxbai-embed-large:latest
+            defaultModel: true                       
+             
+                     

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="LOGS" value="logs" />
+	<appender name="Console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				%date [%thread] %-5level %logger{36}:%line - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	<appender name="RollingFile"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS}/ai.gebo.monolithic.app.log</file>
+		<encoder
+			class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%date [%thread] %-5level %logger{36}:%line - %msg%n
+			</Pattern>
+		</encoder>
+
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily and when the file reaches 10 MegaBytes -->
+			<fileNamePattern>${LOGS}/archived/ai.gebo.monolithic.app-%d{yyyy-MM-dd}.%i.log
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+	</appender>
+	<!-- LOG everything at INFO level -->
+	<root level="INFO">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</root>
+	<logger name="ai.gebo" level="INFO" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	
+	
+	<logger name="ai.gebo.systems.abstraction.layer.impl" level="INFO" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	
+	<!-- 
+	<logger name="ai.gebo.ragsystem.content.vectorizator.impl" level="DEBUG" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	<logger name="ai.gebo.ragsystem.ingestion" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	<logger name="ai.gebo.webcrawler.handler" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	-->
+	
+	<logger name="ai.gebo.architecture.documents.cache" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	<logger name="ai.gebo.application.messaging" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	<!-- 
+	<logger name="ai.gebo.ragsystem.content.vectorizator"
+		level="INFO" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>  -->
+	<logger name="org.springframework.ai.transformer.splitter"
+		level="ERROR" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	<logger name="org.springframework.ai.reader" level="ERROR"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+</configuration>

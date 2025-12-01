@@ -10,6 +10,11 @@
 	<artifactId>gebo.architecture.integration.tests</artifactId>
 	<dependencies>
 		<dependency>
+			<groupId>ai.gebo.apps</groupId>
+			<artifactId>gebo.apps.monolithic.starter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>ai.gebo.core</groupId>
 			<artifactId>gebo.knowledgebase.model</artifactId>
 			<version>${project.version}</version>

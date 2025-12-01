@@ -178,6 +178,11 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+		// ai.gebo.mongodb.enabled: true
+		// databaseName: gebo-ai-tests
+		// connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+		registry.add("ai.gebo.mongodb.enabled", () -> true);
+		registry.add("ai.gebo.mongodb.connectionString", mongoDBContainer::getConnectionString);
 
 		String boltUrl = neo4jContainer.getBoltUrl();
 		registry.add("spring.neo4j.uri", neo4jContainer::getBoltUrl);
@@ -227,7 +232,8 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 		return data;
 	}
 
-	protected abstract void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint) throws GeboPersistenceException;
+	protected abstract void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint)
+			throws GeboPersistenceException;
 
 	protected static final List<String> ALL_ROLES = List.of(GeboAISecurityConfig.ADMIN_ROLE,
 			GeboAISecurityConfig.USER_ROLE);
