@@ -170,7 +170,13 @@
 							<classifier>bootable</classifier>
 						</configuration>
 					</plugin>
-					<execution>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+
+
+							<execution>
 								<id>copy-jar</id>
 								<phase>package</phase>
 								<goals>
@@ -188,6 +194,8 @@
 									</resources>
 								</configuration>
 							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.panteleyev</groupId>
 						<artifactId>jpackage-maven-plugin</artifactId>
@@ -321,26 +329,8 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-resources-plugin</artifactId>
 						<executions>
-							<execution>
-								<id>copy-resources</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<resources>
-										<resource>
-											<directory>src/main/resources</directory>
-											<filtering>true</filtering>
-											<excludes>
-												<exclude>jpackage/override/service-installer.exe</exclude>
-											</excludes>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-							
+
+
 							<execution>
 								<id>copy-jar</id>
 								<phase>package</phase>
