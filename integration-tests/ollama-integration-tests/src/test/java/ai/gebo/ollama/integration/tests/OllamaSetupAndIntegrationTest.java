@@ -161,6 +161,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			LOGGER.info("Chat response:" + response.getQueryResponse());
 			newToken=tokenRenewApi.renew().getToken();
 			authApiClient.setApiKey(newToken);
+			Thread.currentThread().sleep(10000);
 		}
 
 	}

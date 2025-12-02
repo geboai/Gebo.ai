@@ -242,7 +242,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments = (int) stats.availableNTokens;
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
-		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 10.0) > settings.historyLimitPercent;
+		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 5.0) > settings.historyLimitPercent;
 		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 		lrequest.setHistoryConsolidationRequired(preemptiveHistoryShrinked);
 		lrequest.setHistorySizeTarget(preemptiveHistorySizeTarget);
@@ -550,39 +550,46 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		if (historyStrategy == null)
 			historyStrategy = HistoryStrategy.SHORTENQUEUE;
 		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
-		int nhistoryTokens = 0;
+
 		ChatHistoryData out = new ChatHistoryData();
 		GUserChatConsolidationData consolidated = userContext.getConsolidation();
 		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
 		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
 		int firstInteractionToInclude = consolidated != null ? consolidated.getLastInteractionPointer() : 0;
+		int nhistoryTokens = consolidatedTokensSize;
 		if (userContext.getInteractions() != null) {
-			for (int i = userContext.getInteractions().size() - 1; i >= firstInteractionToInclude; i--) {
-				ChatInteractions interaction = userContext.getInteractions().get(i);
-				if (interaction.getRequestNTokens() == null && interaction.getRequest() != null) {
-					interaction.setRequestNTokens(tokenEstimator.estimate(interaction.getRequest().getQuery()));
-				}
+			if (nhistoryTokens < tokensBudget) {
+				for (int i = userContext.getInteractions().size() - 1; i >= firstInteractionToInclude; i--) {
+					ChatInteractions interaction = userContext.getInteractions().get(i);
+					int totalTokens=nhistoryTokens;
+					if (interaction.getRequestNTokens() == null && interaction.getRequest() != null) {
+						interaction.setRequestNTokens(tokenEstimator.estimate(interaction.getRequest().getQuery()));
+					}
 
-				if (interaction.getResponseNTokens() == null && interaction.getResponse() != null
-						&& interaction.getResponse().getQueryResponse() != null) {
-					interaction.setResponseNTokens(
-							tokenEstimator.estimate(interaction.getResponse().getQueryResponse().toString()));
-				}
-				if (interaction.getRequestNTokens() != null) {
-					nhistoryTokens += interaction.getRequestNTokens();
-				}
+					if (interaction.getResponseNTokens() == null && interaction.getResponse() != null
+							&& interaction.getResponse().getQueryResponse() != null) {
+						interaction.setResponseNTokens(
+								tokenEstimator.estimate(interaction.getResponse().getQueryResponse().toString()));
+					}
+					if (interaction.getRequestNTokens() != null) {
+						totalTokens += interaction.getRequestNTokens();
+					}
 
-				if (interaction.getResponseNTokens() != null) {
-					nhistoryTokens += interaction.getResponseNTokens();
+					if (interaction.getResponseNTokens() != null) {
+						totalTokens += interaction.getResponseNTokens();
+					}
+					if (totalTokens < tokensBudget) {
+						history.add(interaction);
+						nhistoryTokens=totalTokens;
+					} else
+						break;
+
 				}
-
-				history.add(interaction);
-
 			}
 		}
 		_history.setValue(out);
-		_history.setNToken(nhistoryTokens + consolidatedTokensSize);
+		_history.setNToken(nhistoryTokens);
 		return _history;
 	}
 
@@ -668,7 +675,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments = (int) stats.availableNTokens;
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
-		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 10.0) > settings.historyLimitPercent;
+		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 5.0) > settings.historyLimitPercent;
 		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 		lrequest.setHistoryConsolidationRequired(preemptiveHistoryShrinked);
 		lrequest.setHistorySizeTarget(preemptiveHistorySizeTarget);
