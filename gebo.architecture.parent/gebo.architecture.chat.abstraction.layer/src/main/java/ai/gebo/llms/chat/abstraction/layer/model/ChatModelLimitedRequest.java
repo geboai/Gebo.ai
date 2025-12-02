@@ -29,11 +29,10 @@ public class ChatModelLimitedRequest {
 		stats.queryNTokens = query != null ? query.getNToken() : 0;
 		stats.uploadedDocumentsNTokens = uploadedDocuments != null ? uploadedDocuments.getNToken() : 0;
 		stats.contextDocumentsNTokens = 0;
-
 		if (stats.contextWindowLengthNTokens > 0.0) {
 			// Calculate available tokens and percentage shares for each component
 			stats.availableNTokens = stats.contextWindowLengthNTokens - (stats.documentsNTokens + stats.queryNTokens
-					+ stats.documentsNTokens + stats.contextDocumentsNTokens);
+					+ stats.documentsNTokens + stats.contextDocumentsNTokens+stats.historyNTokens);
 			stats.documentsSharePerc = 100.0 * stats.documentsNTokens / stats.contextWindowLengthNTokens;
 			stats.historySharePerc = 100.0 * stats.historyNTokens / stats.contextWindowLengthNTokens;
 			stats.queryNTokens = 100.0 * stats.queryNTokens / stats.contextWindowLengthNTokens;
