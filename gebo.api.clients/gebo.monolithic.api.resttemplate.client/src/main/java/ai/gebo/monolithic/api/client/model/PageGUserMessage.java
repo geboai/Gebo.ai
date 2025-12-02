@@ -27,7 +27,7 @@ import java.util.List;
  * PageGUserMessage
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-01T17:06:13.417468800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
 
 public class PageGUserMessage {
   @JsonProperty("totalPages")
@@ -45,20 +45,20 @@ public class PageGUserMessage {
   @JsonProperty("number")
   private Integer number = null;
 
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
-
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
-
-  @JsonProperty("sort")
-  private SortObject sort = null;
-
   @JsonProperty("first")
   private Boolean first = null;
 
   @JsonProperty("last")
   private Boolean last = null;
+
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
+
+  @JsonProperty("sort")
+  private SortObject sort = null;
+
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -161,60 +161,6 @@ public class PageGUserMessage {
     this.number = number;
   }
 
-  public PageGUserMessage numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-    return this;
-  }
-
-   /**
-   * Get numberOfElements
-   * @return numberOfElements
-  **/
-  @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
-  }
-
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-  }
-
-  public PageGUserMessage pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
-  public PageGUserMessage sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
   public PageGUserMessage first(Boolean first) {
     this.first = first;
     return this;
@@ -251,6 +197,60 @@ public class PageGUserMessage {
     this.last = last;
   }
 
+  public PageGUserMessage numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+    return this;
+  }
+
+   /**
+   * Get numberOfElements
+   * @return numberOfElements
+  **/
+  @Schema(description = "")
+  public Integer getNumberOfElements() {
+    return numberOfElements;
+  }
+
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+  }
+
+  public PageGUserMessage sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
+  public PageGUserMessage pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
+  }
+
   public PageGUserMessage empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -284,17 +284,17 @@ public class PageGUserMessage {
         Objects.equals(this.size, pageGUserMessage.size) &&
         Objects.equals(this.content, pageGUserMessage.content) &&
         Objects.equals(this.number, pageGUserMessage.number) &&
-        Objects.equals(this.numberOfElements, pageGUserMessage.numberOfElements) &&
-        Objects.equals(this.pageable, pageGUserMessage.pageable) &&
-        Objects.equals(this.sort, pageGUserMessage.sort) &&
         Objects.equals(this.first, pageGUserMessage.first) &&
         Objects.equals(this.last, pageGUserMessage.last) &&
+        Objects.equals(this.numberOfElements, pageGUserMessage.numberOfElements) &&
+        Objects.equals(this.sort, pageGUserMessage.sort) &&
+        Objects.equals(this.pageable, pageGUserMessage.pageable) &&
         Objects.equals(this.empty, pageGUserMessage.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, size, content, number, numberOfElements, pageable, sort, first, last, empty);
+    return Objects.hash(totalPages, totalElements, size, content, number, first, last, numberOfElements, sort, pageable, empty);
   }
 
 
@@ -308,11 +308,11 @@ public class PageGUserMessage {
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

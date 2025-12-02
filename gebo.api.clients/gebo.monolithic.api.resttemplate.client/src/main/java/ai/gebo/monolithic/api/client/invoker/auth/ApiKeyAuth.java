@@ -3,7 +3,7 @@ package ai.gebo.monolithic.api.client.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-01T17:06:13.417468800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
 public class ApiKeyAuth implements Authentication {
     private final String location;
     private final String paramName;
@@ -56,5 +56,9 @@ public class ApiKeyAuth implements Authentication {
         } else if (location.equals("header")) {
             headerParams.add(paramName, value);
        }
+    }
+    @Override
+    public boolean isAppliable() {
+    	return apiKey!=null;
     }
 }

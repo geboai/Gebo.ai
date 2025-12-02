@@ -14,5 +14,5 @@ Name | Type | Description | Notes
 **name** | **String** |  |  [optional]
 **originalUrl** | **String** |  |  [optional]
 **weightedResultsRanking** | **Double** |  |  [optional]
-**ntokens** | **Long** |  |  [optional]
 **nbytes** | **Long** |  |  [optional]
+**ntokens** | **Long** |  |  [optional]

@@ -25,17 +25,17 @@ import java.util.List;
  * RagDocumentsCachedDaoResult
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-01T17:06:13.417468800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
 
 public class RagDocumentsCachedDaoResult {
   @JsonProperty("documentItems")
   private List<RagDocumentReferenceItem> documentItems = null;
 
-  @JsonProperty("ntokens")
-  private Long ntokens = null;
-
   @JsonProperty("nbytes")
   private Long nbytes = null;
+
+  @JsonProperty("ntokens")
+  private Long ntokens = null;
 
   public RagDocumentsCachedDaoResult documentItems(List<RagDocumentReferenceItem> documentItems) {
     this.documentItems = documentItems;
@@ -63,24 +63,6 @@ public class RagDocumentsCachedDaoResult {
     this.documentItems = documentItems;
   }
 
-  public RagDocumentsCachedDaoResult ntokens(Long ntokens) {
-    this.ntokens = ntokens;
-    return this;
-  }
-
-   /**
-   * Get ntokens
-   * @return ntokens
-  **/
-  @Schema(description = "")
-  public Long getNtokens() {
-    return ntokens;
-  }
-
-  public void setNtokens(Long ntokens) {
-    this.ntokens = ntokens;
-  }
-
   public RagDocumentsCachedDaoResult nbytes(Long nbytes) {
     this.nbytes = nbytes;
     return this;
@@ -99,6 +81,24 @@ public class RagDocumentsCachedDaoResult {
     this.nbytes = nbytes;
   }
 
+  public RagDocumentsCachedDaoResult ntokens(Long ntokens) {
+    this.ntokens = ntokens;
+    return this;
+  }
+
+   /**
+   * Get ntokens
+   * @return ntokens
+  **/
+  @Schema(description = "")
+  public Long getNtokens() {
+    return ntokens;
+  }
+
+  public void setNtokens(Long ntokens) {
+    this.ntokens = ntokens;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -110,13 +110,13 @@ public class RagDocumentsCachedDaoResult {
     }
     RagDocumentsCachedDaoResult ragDocumentsCachedDaoResult = (RagDocumentsCachedDaoResult) o;
     return Objects.equals(this.documentItems, ragDocumentsCachedDaoResult.documentItems) &&
-        Objects.equals(this.ntokens, ragDocumentsCachedDaoResult.ntokens) &&
-        Objects.equals(this.nbytes, ragDocumentsCachedDaoResult.nbytes);
+        Objects.equals(this.nbytes, ragDocumentsCachedDaoResult.nbytes) &&
+        Objects.equals(this.ntokens, ragDocumentsCachedDaoResult.ntokens);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(documentItems, ntokens, nbytes);
+    return Objects.hash(documentItems, nbytes, ntokens);
   }
 
 
@@ -126,8 +126,8 @@ public class RagDocumentsCachedDaoResult {
     sb.append("class RagDocumentsCachedDaoResult {\n");
     
     sb.append("    documentItems: ").append(toIndentedString(documentItems)).append("\n");
-    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("    nbytes: ").append(toIndentedString(nbytes)).append("\n");
+    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -16,9 +16,24 @@
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>ai.gebo.architecture</groupId>
-			<artifactId>gebo.restintegration.abstraction.layer</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.13.2</version>
+		<scope>test</scope>
 		</dependency>
 		<!--
 		https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
@@ -46,9 +61,10 @@
 					<plugin>
 						<groupId>io.swagger.codegen.v3</groupId>
 						<artifactId>swagger-codegen-maven-plugin</artifactId>
-						<version>3.0.59</version>
+						<version>3.0.75</version>
 						<configuration>
 							<inputSpec>${swagger.file}</inputSpec>
+							<templateDirectory>${project.basedir}/../swagger-codegen-templates/java-resttemplate</templateDirectory>
 							<configOptions>
 								<sourceFolder>${generated-sources-java-path}</sourceFolder>
 							</configOptions>

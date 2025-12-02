@@ -11,5 +11,5 @@ Name | Type | Description | Notes
 **rankIndex** | **Integer** |  |  [optional]
 **weightedResultsRanking** | **Double** |  |  [optional]
 **origin** | **String** |  |  [optional]
-**ntokens** | **Long** |  |  [optional]
 **nbytes** | **Long** |  |  [optional]
+**ntokens** | **Long** |  |  [optional]

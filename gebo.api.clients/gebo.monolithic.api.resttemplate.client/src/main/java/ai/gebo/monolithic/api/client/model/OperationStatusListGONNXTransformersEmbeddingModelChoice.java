@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusListGONNXTransformersEmbeddingModelChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-01T17:06:13.417468800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
 
 public class OperationStatusListGONNXTransformersEmbeddingModelChoice {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusListGONNXTransformersEmbeddingModelChoice {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusListGONNXTransformersEmbeddingModelChoice result(List<GONNXTransformersEmbeddingModelChoice> result) {
     this.result = result;
@@ -93,24 +93,6 @@ public class OperationStatusListGONNXTransformersEmbeddingModelChoice {
     this.messages = messages;
   }
 
-  public OperationStatusListGONNXTransformersEmbeddingModelChoice hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusListGONNXTransformersEmbeddingModelChoice hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -129,6 +111,24 @@ public class OperationStatusListGONNXTransformersEmbeddingModelChoice {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusListGONNXTransformersEmbeddingModelChoice hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -141,13 +141,13 @@ public class OperationStatusListGONNXTransformersEmbeddingModelChoice {
     OperationStatusListGONNXTransformersEmbeddingModelChoice operationStatusListGONNXTransformersEmbeddingModelChoice = (OperationStatusListGONNXTransformersEmbeddingModelChoice) o;
     return Objects.equals(this.result, operationStatusListGONNXTransformersEmbeddingModelChoice.result) &&
         Objects.equals(this.messages, operationStatusListGONNXTransformersEmbeddingModelChoice.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusListGONNXTransformersEmbeddingModelChoice.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusListGONNXTransformersEmbeddingModelChoice.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusListGONNXTransformersEmbeddingModelChoice.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusListGONNXTransformersEmbeddingModelChoice.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -158,8 +158,8 @@ public class OperationStatusListGONNXTransformersEmbeddingModelChoice {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

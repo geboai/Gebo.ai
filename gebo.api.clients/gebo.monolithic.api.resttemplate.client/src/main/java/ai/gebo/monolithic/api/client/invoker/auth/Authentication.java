@@ -10,4 +10,7 @@ public interface Authentication {
      * @param headerParams The header parameters for the request
      */
     public void applyToParams(MultiValueMap<String, String> queryParams, HttpHeaders headerParams);
+    public default boolean isAppliable() {
+    	return false;
+    }
 }

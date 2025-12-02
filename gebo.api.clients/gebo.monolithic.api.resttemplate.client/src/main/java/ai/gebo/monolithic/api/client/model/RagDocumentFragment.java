@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * RagDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-01T17:06:13.417468800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
 
 public class RagDocumentFragment {
   @JsonProperty("documentId")
@@ -49,11 +49,11 @@ public class RagDocumentFragment {
   @JsonProperty("origin")
   private String origin = null;
 
-  @JsonProperty("ntokens")
-  private Long ntokens = null;
-
   @JsonProperty("nbytes")
   private Long nbytes = null;
+
+  @JsonProperty("ntokens")
+  private Long ntokens = null;
 
   public RagDocumentFragment documentId(String documentId) {
     this.documentId = documentId;
@@ -199,24 +199,6 @@ public class RagDocumentFragment {
     this.origin = origin;
   }
 
-  public RagDocumentFragment ntokens(Long ntokens) {
-    this.ntokens = ntokens;
-    return this;
-  }
-
-   /**
-   * Get ntokens
-   * @return ntokens
-  **/
-  @Schema(description = "")
-  public Long getNtokens() {
-    return ntokens;
-  }
-
-  public void setNtokens(Long ntokens) {
-    this.ntokens = ntokens;
-  }
-
   public RagDocumentFragment nbytes(Long nbytes) {
     this.nbytes = nbytes;
     return this;
@@ -233,6 +215,24 @@ public class RagDocumentFragment {
 
   public void setNbytes(Long nbytes) {
     this.nbytes = nbytes;
+  }
+
+  public RagDocumentFragment ntokens(Long ntokens) {
+    this.ntokens = ntokens;
+    return this;
+  }
+
+   /**
+   * Get ntokens
+   * @return ntokens
+  **/
+  @Schema(description = "")
+  public Long getNtokens() {
+    return ntokens;
+  }
+
+  public void setNtokens(Long ntokens) {
+    this.ntokens = ntokens;
   }
 
 
@@ -253,13 +253,13 @@ public class RagDocumentFragment {
         Objects.equals(this.rankIndex, ragDocumentFragment.rankIndex) &&
         Objects.equals(this.weightedResultsRanking, ragDocumentFragment.weightedResultsRanking) &&
         Objects.equals(this.origin, ragDocumentFragment.origin) &&
-        Objects.equals(this.ntokens, ragDocumentFragment.ntokens) &&
-        Objects.equals(this.nbytes, ragDocumentFragment.nbytes);
+        Objects.equals(this.nbytes, ragDocumentFragment.nbytes) &&
+        Objects.equals(this.ntokens, ragDocumentFragment.ntokens);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(documentId, documentContent, code, rootKnowledgebaseCode, parentProjectCode, rankIndex, weightedResultsRanking, origin, ntokens, nbytes);
+    return Objects.hash(documentId, documentContent, code, rootKnowledgebaseCode, parentProjectCode, rankIndex, weightedResultsRanking, origin, nbytes, ntokens);
   }
 
 
@@ -276,8 +276,8 @@ public class RagDocumentFragment {
     sb.append("    rankIndex: ").append(toIndentedString(rankIndex)).append("\n");
     sb.append("    weightedResultsRanking: ").append(toIndentedString(weightedResultsRanking)).append("\n");
     sb.append("    origin: ").append(toIndentedString(origin)).append("\n");
-    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("    nbytes: ").append(toIndentedString(nbytes)).append("\n");
+    sb.append("    ntokens: ").append(toIndentedString(ntokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }

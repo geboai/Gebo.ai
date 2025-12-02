@@ -24,7 +24,7 @@ import java.util.List;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-01T17:06:13.417468800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
 
 public class UserInfos {
   @JsonProperty("name")
@@ -33,11 +33,11 @@ public class UserInfos {
   @JsonProperty("username")
   private String username = null;
 
-  @JsonProperty("roles")
-  private List<String> roles = null;
-
   @JsonProperty("disabled")
   private Boolean disabled = null;
+
+  @JsonProperty("roles")
+  private List<String> roles = null;
 
   @JsonProperty("sourname")
   private String sourname = null;
@@ -78,6 +78,24 @@ public class UserInfos {
     this.username = username;
   }
 
+  public UserInfos disabled(Boolean disabled) {
+    this.disabled = disabled;
+    return this;
+  }
+
+   /**
+   * Get disabled
+   * @return disabled
+  **/
+  @Schema(description = "")
+  public Boolean isDisabled() {
+    return disabled;
+  }
+
+  public void setDisabled(Boolean disabled) {
+    this.disabled = disabled;
+  }
+
   public UserInfos roles(List<String> roles) {
     this.roles = roles;
     return this;
@@ -102,24 +120,6 @@ public class UserInfos {
 
   public void setRoles(List<String> roles) {
     this.roles = roles;
-  }
-
-  public UserInfos disabled(Boolean disabled) {
-    this.disabled = disabled;
-    return this;
-  }
-
-   /**
-   * Get disabled
-   * @return disabled
-  **/
-  @Schema(description = "")
-  public Boolean isDisabled() {
-    return disabled;
-  }
-
-  public void setDisabled(Boolean disabled) {
-    this.disabled = disabled;
   }
 
   public UserInfos sourname(String sourname) {
@@ -152,14 +152,14 @@ public class UserInfos {
     UserInfos userInfos = (UserInfos) o;
     return Objects.equals(this.name, userInfos.name) &&
         Objects.equals(this.username, userInfos.username) &&
-        Objects.equals(this.roles, userInfos.roles) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
+        Objects.equals(this.roles, userInfos.roles) &&
         Objects.equals(this.sourname, userInfos.sourname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, username, roles, disabled, sourname);
+    return Objects.hash(name, username, disabled, roles, sourname);
   }
 
 
@@ -170,8 +170,8 @@ public class UserInfos {
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
+    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
     sb.append("}");
     return sb.toString();
