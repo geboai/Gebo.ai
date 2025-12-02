@@ -41,11 +41,13 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.ContextWindowLengthRangeSettings;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.HistoryStrategy;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelRequestContextWindowStats;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatConsolidationData;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.TokenLimitedContent;
@@ -105,13 +107,19 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @return A TokenLimitedContent object containing the chat history and
 	 *         corresponding token count.
 	 */
-	private TokenLimitedContent<List<ChatInteractions>> completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(
+	private TokenLimitedContent<ChatHistoryData> completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(
 			GUserChatContext userContext) {
-		TokenLimitedContent<List<ChatInteractions>> _history = new TokenLimitedContent<List<ChatInteractions>>();
+		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
 		int nhistoryTokens = 0;
+		ChatHistoryData out = new ChatHistoryData();
+		GUserChatConsolidationData consolidated = userContext.getConsolidation();
+		out.setConsolidated(consolidated);
 		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
+		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
+		int firstInteractionToInclude = consolidated != null ? consolidated.getLastInteractionPointer() : 0;
 		if (userContext.getInteractions() != null) {
-			for (ChatInteractions interaction : userContext.getInteractions()) {
+			for (int i = firstInteractionToInclude; i < userContext.getInteractions().size(); i++) {
+				ChatInteractions interaction = userContext.getInteractions().get(i);
 				if (interaction.getRequestNTokens() == null && interaction.getRequest() != null) {
 					interaction.setRequestNTokens(tokenEstimator.estimate(interaction.getRequest().getQuery()));
 				}
@@ -133,8 +141,8 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 
 			}
 		}
-		_history.setValue(history);
-		_history.setNToken(nhistoryTokens);
+		_history.setValue(out);
+		_history.setNToken(nhistoryTokens + consolidatedTokensSize);
 		return _history;
 	}
 
@@ -177,10 +185,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @throws IOException
 	 */
 	@Override
-	public RagChatModelLimitedRequest manageRagChatRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
-			UserInfos user, GeboChatRequest request, IGConfigurableEmbeddingModel embeddingHandler,
-			IGConfigurableChatModel chatHandler, List<String> visibleKnowledgeBaseCodes)
-			throws LLMConfigException, IOException {
+	public RagChatModelLimitedRequest manageRagChatRequest(GChatProfileConfiguration chatProfile,
+			GUserChatContext userContext, UserInfos user, GeboChatRequest request,
+			IGConfigurableEmbeddingModel embeddingHandler, IGConfigurableChatModel chatHandler,
+			List<String> visibleKnowledgeBaseCodes) throws LLMConfigException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin manageRagChatRequest(.....)");
 		}
@@ -212,16 +220,17 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
 		ChatModelRequestContextWindowStats stats = lrequest.getStats();
 		int availableTokensForDocuments = 0;
-		boolean historyToBeShrinked = false;
+
 		// compute actual history size
 		int historySizeTarget = lrequest.getHistory().getNToken();
+		boolean historyToBeShrinked = false;
 		if (stats.historySharePerc > settings.historyLimitPercent) {
 			// if history is taking more than its maximum potential share than recompute a
 			// maximum available tokens for documents theorizing to shring the history to
 			// its maximum share
 			// but leaving space for tool calling
 			historyToBeShrinked = true;
-			historySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+			historySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 			availableTokensForDocuments = contextWindowNToken - historySizeTarget - toolsTokensSpaceReservation
 					- requestSize;
 		} else {
@@ -233,6 +242,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments = (int) stats.availableNTokens;
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
+		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 5.0) > settings.historyLimitPercent;
+		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
+		lrequest.setHistoryConsolidationRequired(preemptiveHistoryShrinked);
+		lrequest.setHistorySizeTarget(preemptiveHistorySizeTarget);
 		// first add explicitly uploaded documents
 		lrequest.setUploadedDocuments(
 				createLimitedUploadedDocumentsOnRequests(userContext, request, availableTokensForDocuments));
@@ -532,40 +545,52 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 	 * @param chatHandler     The chat model handler used.
 	 * @return The token-limited version of the chat history.
 	 */
-	private TokenLimitedContent<List<ChatInteractions>> shrinkHistory(GUserChatContext userContext, int tokensBudget,
+	private TokenLimitedContent<ChatHistoryData> shrinkHistory(GUserChatContext userContext, int tokensBudget,
 			HistoryStrategy historyStrategy, IGConfigurableChatModel chatHandler) {
 		if (historyStrategy == null)
 			historyStrategy = HistoryStrategy.SHORTENQUEUE;
-		TokenLimitedContent<List<ChatInteractions>> out = new TokenLimitedContent<List<ChatInteractions>>();
-		List<ChatInteractions> documents = new ArrayList<ChatInteractions>();
-		out.setValue(documents);
+		TokenLimitedContent<ChatHistoryData> _history = new TokenLimitedContent<ChatHistoryData>();
 
-		// going further from last to before data until lower than tokens budget
+		ChatHistoryData out = new ChatHistoryData();
+		GUserChatConsolidationData consolidated = userContext.getConsolidation();
+		out.setConsolidated(consolidated);
+		List<ChatInteractions> history = new ArrayList<ChatInteractions>();
+		int consolidatedTokensSize = consolidated != null ? consolidated.getTokensSize() : 0;
+		int firstInteractionToInclude = consolidated != null ? consolidated.getLastInteractionPointer() : 0;
+		int nhistoryTokens = consolidatedTokensSize;
 		if (userContext.getInteractions() != null) {
-			switch (historyStrategy) {
-			case SHORTENQUEUE: {
-				int tokensCount = 0;
-				boolean goingFurther = true;
-				for (int i = userContext.getInteractions().size() - 1; i >= 0 && goingFurther; i--) {
+			if (nhistoryTokens < tokensBudget) {
+				for (int i = userContext.getInteractions().size() - 1; i >= firstInteractionToInclude; i--) {
 					ChatInteractions interaction = userContext.getInteractions().get(i);
-					int reqRespSize = (interaction.getRequestNTokens() != null ? interaction.getRequestNTokens() : 0)
-							+ (interaction.getResponseNTokens() != null ? interaction.getResponseNTokens() : 0);
-					if ((tokensCount + reqRespSize) <= tokensBudget) {
-						tokensCount += reqRespSize;
-						documents.add(interaction);
-					} else {
-						goingFurther = false;
+					int totalTokens=nhistoryTokens;
+					if (interaction.getRequestNTokens() == null && interaction.getRequest() != null) {
+						interaction.setRequestNTokens(tokenEstimator.estimate(interaction.getRequest().getQuery()));
 					}
+
+					if (interaction.getResponseNTokens() == null && interaction.getResponse() != null
+							&& interaction.getResponse().getQueryResponse() != null) {
+						interaction.setResponseNTokens(
+								tokenEstimator.estimate(interaction.getResponse().getQueryResponse().toString()));
+					}
+					if (interaction.getRequestNTokens() != null) {
+						totalTokens += interaction.getRequestNTokens();
+					}
+
+					if (interaction.getResponseNTokens() != null) {
+						totalTokens += interaction.getResponseNTokens();
+					}
+					if (totalTokens < tokensBudget) {
+						history.add(interaction);
+						nhistoryTokens=totalTokens;
+					} else
+						break;
+
 				}
-				out.setNToken(tokensCount);
-			}
-				break;
-			case SUMMARIZE: {
-				throw new RuntimeException("Summarization strategy not yet implemented");
-			}
 			}
 		}
-		return out;
+		_history.setValue(out);
+		_history.setNToken(nhistoryTokens);
+		return _history;
 	}
 
 	/**
@@ -628,8 +653,9 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 		lrequest.setHistory(completeHistoryTokenEstimationOnlyRequestTextAndResponseTextNTokens(userContext));
 		ChatModelRequestContextWindowStats stats = lrequest.getStats();
 		int availableTokensForDocuments = 0;
-		boolean historyToBeShrinked = false;
+
 		// compute actual history size
+		boolean historyToBeShrinked = false;
 		int historySizeTarget = lrequest.getHistory().getNToken();
 		if (stats.historySharePerc > settings.historyLimitPercent) {
 			// if history is taking more than its maximum potential share than recompute a
@@ -637,7 +663,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			// its maximum share
 			// but leaving space for tool calling
 			historyToBeShrinked = true;
-			historySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+			historySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 			availableTokensForDocuments = contextWindowNToken - historySizeTarget - toolsTokensSpaceReservation
 					- requestSize;
 		} else {
@@ -649,6 +675,10 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments = (int) stats.availableNTokens;
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
+		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 5.0) > settings.historyLimitPercent;
+		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
+		lrequest.setHistoryConsolidationRequired(preemptiveHistoryShrinked);
+		lrequest.setHistorySizeTarget(preemptiveHistorySizeTarget);
 		// first add explicitly uploaded documents
 		lrequest.setUploadedDocuments(
 				createLimitedUploadedDocumentsOnRequests(userContext, request, availableTokensForDocuments));
@@ -664,6 +694,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			LOGGER.debug("End manageChatRequest(.....) stats=>" + logObject(stats));
 		}
 		return lrequest;
-	
+
 	}
+
 }

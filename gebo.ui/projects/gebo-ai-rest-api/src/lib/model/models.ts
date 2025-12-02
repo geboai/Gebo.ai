@@ -122,6 +122,7 @@ export * from './gStatsLabelValue';
 export * from './gStatsLine';
 export * from './gUploadsContentManagementSystem';
 export * from './gUploadsProjectEndpoint';
+export * from './gUserChatConsolidationData';
 export * from './gUserChatContext';
 export * from './gUserChatInfo';
 export * from './gUserMessage';

@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ai.gebo.clients</groupId>
+    <artifactId>gebo.api.clients</artifactId>
+    <version>1.0.0.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>gebo.monolithic.api.resttemplate.client</artifactId>
+  <properties>
+		<swagger.file>http://localhost:12999/v3/api-docs</swagger.file>
+		
+		<generated-sources-path>${project.basedir}</generated-sources-path>
+		<generated-sources-java-path>src/main/java</generated-sources-java-path>
+
+	</properties>
+	<packaging>jar</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.13.2</version>
+		<scope>test</scope>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>2.2.30</version>
+		</dependency>
+	</dependencies>
+
+	
+	<profiles>
+		
+		<profile>
+			<id>generate-rest-api</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.swagger.codegen.v3</groupId>
+						<artifactId>swagger-codegen-maven-plugin</artifactId>
+						<version>3.0.75</version>
+						<configuration>
+							<inputSpec>${swagger.file}</inputSpec>
+							<templateDirectory>${project.basedir}/../swagger-codegen-templates/java-resttemplate</templateDirectory>
+							<configOptions>
+								<sourceFolder>${generated-sources-java-path}</sourceFolder>
+							</configOptions>
+							<output>${generated-sources-path}</output>
+						</configuration>
+						<executions>
+							<execution>
+								<id>generate-swagger-angular</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<language>java</language>
+									<library>resttemplate</library>
+									<java8>true</java8>
+									<dateLibrary>java8</dateLibrary>
+									<modelPackage>ai.gebo.monolithic.api.client.model</modelPackage>
+									<apiPackage>ai.gebo.monolithic.api.client.api</apiPackage>
+									<invokerPackage>ai.gebo.monolithic.api.client.invoker</invokerPackage>
+									<additionalProperties>
+										java8=true,dateLibrary=legacy,OffsetDateTime=java.time.OffsetDateTime,ngVersion=10.0.6,libraryName=resttemplate</additionalProperties>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+</project>

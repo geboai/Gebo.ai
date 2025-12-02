@@ -38,6 +38,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatProfileRuntimeEnvironment;
@@ -93,10 +94,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService,
 			IGChatProfileManagementService chatProfileManagementService,
 			IGChatRequestResourcesUsePolicy requestLimitationPolicy, IGChatStorageAreaService chatStorageAreaService,
-			LLMGeneratedResourceRepository generatedResourceRepository) {
+			LLMGeneratedResourceRepository generatedResourceRepository,
+			ChatHistoryConsolidationService historyConsolidationService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository);
+				generatedResourceRepository, historyConsolidationService);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -193,11 +195,12 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			try {
 				// Generates a limited resources request based on policy
 				UserInfos user = securityService.getCurrentUser();
-				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(chatProfile,
-						userContext, user, request, embeddingHandler, chatHandler, visibleKnowledgeBaseCodes);
+				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(
+						chatProfile, userContext, user, request, embeddingHandler, chatHandler,
+						visibleKnowledgeBaseCodes);
 				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				// Retrieves historical interactions and document results
-				List<ChatInteractions> history = limitedResourcesRequest.getHistory().getValue();
+				ChatHistoryData history = limitedResourcesRequest.getHistory().getValue();
 				RagDocumentsCachedDaoResult extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
 				List<Document> documentsList = extractedDocuments.aiDocumentsList();
 				List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
@@ -502,8 +505,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		if (embeddingHandler != null && chatHandler != null) {
 			try {
 
-				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(chatProfile,
-						userContext, user, request, embeddingHandler, chatHandler, visibleKnowledgeBaseCodes);
+				RagChatModelLimitedRequest limitedResourcesRequest = requestLimitationPolicy.manageRagChatRequest(
+						chatProfile, userContext, user, request, embeddingHandler, chatHandler,
+						visibleKnowledgeBaseCodes);
 				response.setContextWindowStats(limitedResourcesRequest.getStats());
 				if (chatHandler.getConfig() != null && chatHandler.getConfig().getChoosedModel() != null) {
 					response.setUsedChatModelCode(chatHandler.getConfig().getChoosedModel().getCode());
@@ -511,7 +515,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				if (chatHandler.getType() != null) {
 					response.setUsedChatModelProvider(chatHandler.getType().getCode());
 				}
-				List<ChatInteractions> history = limitedResourcesRequest.getHistory().getValue();
+				ChatHistoryData history = limitedResourcesRequest.getHistory().getValue();
 				RagDocumentsCachedDaoResult extractedDocuments = limitedResourcesRequest.getDocuments().getValue();
 				RagDocumentsCachedDaoResult contextDocuments = limitedResourcesRequest.getContextDocuments().getValue();
 				RagDocumentsCachedDaoResult uploadedDocuments = limitedResourcesRequest.getUploadedDocuments()
@@ -527,7 +531,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				request.setDocuments(extractedDocuments);
 				Prompt prompt = promptTemplate.create();
 				return streamChatClient(chatHandler, prompt, context, request, response, userContext, history,
-						contextdocs);
+						contextdocs, limitedResourcesRequest.isHistoryConsolidationRequired(),
+						limitedResourcesRequest.getHistorySizeTarget());
 			} catch (Throwable th) {
 				response.getBackendMessages().add(GUserMessage.errorMessage("Error on service provider", th));
 				LOGGER.error("Error chat handling", th);
@@ -621,6 +626,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		userContext.setDescription(description);
 		userContext.setRagChat(true);
 		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 		return data;
 	}

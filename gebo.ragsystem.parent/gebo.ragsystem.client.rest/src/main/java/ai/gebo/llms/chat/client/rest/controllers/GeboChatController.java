@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
@@ -219,7 +220,7 @@ public class GeboChatController {
 		return chatService.suggestChatDescription(id);
 	}
 	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) {
+	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) throws GeboPersistenceException {
 		return chatService.createCleanChatByModelCode(modelCode);
 	}
 }

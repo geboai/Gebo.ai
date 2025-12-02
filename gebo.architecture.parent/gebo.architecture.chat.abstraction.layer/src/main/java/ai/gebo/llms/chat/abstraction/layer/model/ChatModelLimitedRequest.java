@@ -10,9 +10,10 @@ public class ChatModelLimitedRequest {
 
 	/** The maximum number of tokens allowed for the context window */
 	private int contextWindowNToken;
-
+	private boolean historyConsolidationRequired = false;
+	private int historySizeTarget = 0;
 	/** The chat history limited by tokens */
-	private TokenLimitedContent<List<ChatInteractions>> history;
+	private TokenLimitedContent<ChatHistoryData> history;
 	/** The query string limited by tokens */
 	private TokenLimitedContent<String> query;
 	private TokenLimitedContent<RagDocumentsCachedDaoResult> uploadedDocuments;

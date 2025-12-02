@@ -6,11 +6,10 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.repository;
+
+import java.util.List;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -21,16 +20,15 @@ import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 
 /**
- * Gebo.ai comment agent
- * Repository interface for managing GUserChatContext entities with MongoDB. 
- * Extends the generic IGBaseMongoDBRepository providing additional methods 
- * for specific query operations.
+ * Gebo.ai comment agent Repository interface for managing GUserChatContext
+ * entities with MongoDB. Extends the generic IGBaseMongoDBRepository providing
+ * additional methods for specific query operations.
  */
 public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUserChatContext> {
 
 	/**
-	 * Returns the managed type of the repository, which is GUserChatContext.
-	 * This method overrides the default implementation from the parent interface.
+	 * Returns the managed type of the repository, which is GUserChatContext. This
+	 * method overrides the default implementation from the parent interface.
 	 * 
 	 * @return the class type GUserChatContext
 	 */
@@ -40,9 +38,10 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	}
 
 	/**
-	 * Finds all chat information based on the given example and pageable parameters.
+	 * Finds all chat information based on the given example and pageable
+	 * parameters.
 	 *
-	 * @param qbe an Example of GUserChatContext to use for query by example.
+	 * @param qbe  an Example of GUserChatContext to use for query by example.
 	 * @param page a Pageable object to manage pagination information.
 	 * @return a Page of GUserChatInfo data.
 	 */
@@ -52,9 +51,11 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	 * Finds chat information by the given username and pageable parameters.
 	 *
 	 * @param username a String representing the username to search for.
-	 * @param page a Pageable object to manage pagination.
+	 * @param page     a Pageable object to manage pagination.
 	 * @return a Page of GUserChatInfo data for the specified username.
 	 */
 	public Page<GUserChatInfo> findByUsername(String username, Pageable page);
+
+	public List<GUserChatInfo> findByUsername(String username);
 
 }

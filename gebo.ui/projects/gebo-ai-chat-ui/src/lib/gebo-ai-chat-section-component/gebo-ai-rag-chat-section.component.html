@@ -82,8 +82,8 @@
         </div>
         <div class="col-12">
             <p-tree [value]="chatsTree" (onNodeSelect)="openChatItem($event)"
-                (onScrollIndexChange)="scrollIndexChange($event)" [virtualScrollOptions]="scrollOptions"
-                [virtualScrollItemSize]="page.pageSize" [virtualNodeHeight]="20" styleClass="h-full w-full"
+                
+                 styleClass="h-full w-full"
                 (onNodeDoubleClick)="openChatItem($event)" [loading]="chatsPageLoading">
                 <ng-template let-node pTemplate="default">
 

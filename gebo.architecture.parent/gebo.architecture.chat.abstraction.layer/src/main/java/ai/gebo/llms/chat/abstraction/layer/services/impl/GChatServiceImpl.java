@@ -37,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
@@ -78,10 +79,11 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGPromptConfigDao promptsDao, InteractionsContextService interactionsContext,
 			IGSecurityService securityService, IGChatResponseParsingFixerServiceRepository fixerServiceRepository,
 			IGChatStorageAreaService chatStorageAreaService, LLMGeneratedResourceRepository generatedResourceRepository,
-			IGChatRequestResourcesUsePolicy requestResourceUsePolicy) {
+			IGChatRequestResourcesUsePolicy requestResourceUsePolicy,
+			ChatHistoryConsolidationService historyConsolidationService) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, userContextRepository, promptConfigs,
 				promptsDao, interactionsContext, securityService, fixerServiceRepository, chatStorageAreaService,
-				generatedResourceRepository);
+				generatedResourceRepository, historyConsolidationService);
 		this.requestResourceUsePolicy = requestResourceUsePolicy;
 	}
 
@@ -99,42 +101,41 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	 * @throws GeboPersistenceException if persistence fails
 	 * @throws GeboChatException        if there is an error in chat processing
 	 * @throws LLMConfigException       if there is a configuration error
+	 * @throws IOException
 	 */
 	private <T> GeboTemplatedChatResponse<T> chat(IGConfigurableChatModel handler, GUserChatContext userContext,
 			GeboChatRequest request, Class<T> responseType)
-			throws GeboPersistenceException, GeboChatException, LLMConfigException {
+			throws GeboPersistenceException, GeboChatException, LLMConfigException, IOException {
 		KBContext kbcontext = new KBContext();
 		kbcontext.setActualUser(userContext.getUsername());
 		LLMtInteractionContextThreadLocal.Context.set(kbcontext);
 		GeboTemplatedChatResponse<T> gresponse = new GeboTemplatedChatResponse<T>();
 		gresponse.setQuery(request.getQuery());
+		List<ChatInteractions> interactions = userContext.getInteractions() != null ? userContext.getInteractions()
+				: new ArrayList<>();
 
-		// Initialize interactions list if null
-		List<ChatInteractions> interactions = userContext.getInteractions();
-		if (interactions == null) {
-			interactions = new ArrayList<ChatInteractions>();
-		}
 		gresponse.setUserChatContextCode(userContext.getCode());
 
 		// Retrieve default prompt
 		GPromptConfig gprompt = promptsDao.defaultPrompt((GBaseChatModelConfig) handler.getConfig(), false);
-
+		ChatModelLimitedRequest limitedRequest = null;
 		// Check if prompt is configured
 		if (gprompt == null) {
 			throw new GeboChatException("The system has no default prompt configured");
 		} else {
 			BeanOutputConverter<T> outputConverter = new BeanOutputConverter<T>(responseType);
-			List<Document> context = new ArrayList<Document>();
-			context.add(interactionsContext.interactionsAsDocument(userContext, handler.getContextLength()));
+
 			PromptTemplate promptTemplate = null;
 			String promptTemplateText = PromptProcessorUtil.processPrompt(gprompt);
 			Prompt prompt = null;
 			promptTemplate = new PromptTemplate(promptTemplateText);
 
 			prompt = promptTemplate.create();
-
-			gresponse = callTemplatedChatClient(handler, prompt, kbcontext, request, gresponse, interactions, List.of(),
-					context, responseType);
+			UserInfos user = securityService.getCurrentUser();
+			limitedRequest = this.requestResourceUsePolicy.manageChatRequest(userContext, user, request, handler);
+			ChatHistoryData history = limitedRequest.getHistory().getValue();
+			gresponse = callTemplatedChatClient(handler, prompt, kbcontext, request, gresponse, history, List.of(),
+					List.of(), responseType);
 		}
 
 		// Set response details
@@ -152,8 +153,15 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 		interaction.setResponse(gresponse);
 		interactions.add(interaction);
 		userContext.setInteractions(interactions);
-		persistenceManager.update(userContext);
-
+		if (userContext.getCode() == null) {
+			userContext = persistenceManager.transactionalInsert(userContext);
+		} else {
+			userContext = persistenceManager.transactionalUpdate(userContext);
+		}
+		if (limitedRequest.isHistoryConsolidationRequired()) {
+			this.historyConsolidationService.consolidateHistory(userContext.getCode(),
+					limitedRequest.getHistorySizeTarget());
+		}
 		// Clean up context
 		LLMtInteractionContextThreadLocal.Context.remove();
 		return gresponse;
@@ -408,9 +416,9 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 						&& limitedRequest.getUploadedDocuments().getValue() != null) {
 					documents = limitedRequest.getUploadedDocuments().getValue().aiDocumentsList();
 				}
-				List<ChatInteractions> history = limitedRequest.getHistory().getValue();
-				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, history,
-						documents);
+				ChatHistoryData history = limitedRequest.getHistory().getValue();
+				return streamChatClient(handler, prompt, kbcontext, request, gresponse, userContext, history, documents,
+						limitedRequest.isHistoryConsolidationRequired(), limitedRequest.getHistorySizeTarget());
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux
@@ -471,7 +479,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	}
 
 	@Override
-	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) {
+	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException {
 		UserInfos user = securityService.getCurrentUser();
 		GUserChatContext userContext = new GUserChatContext();
 		IGConfigurableChatModel chatModel = this.chatModelConfigurations.findByCode(modelCode);
@@ -484,6 +492,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 						: " chat bot");
 		userContext.setDescription(description);
 		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 
 		return data;

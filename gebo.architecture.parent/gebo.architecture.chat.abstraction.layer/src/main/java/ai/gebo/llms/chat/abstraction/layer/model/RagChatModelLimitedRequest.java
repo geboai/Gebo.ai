@@ -26,7 +26,7 @@ public class RagChatModelLimitedRequest {
 	private int contextWindowNToken;
 
 	/** The chat history limited by tokens */
-	private TokenLimitedContent<List<ChatInteractions>> history;
+	private TokenLimitedContent<ChatHistoryData> history;
 
 	/** The cached documents limited by tokens */
 	private TokenLimitedContent<RagDocumentsCachedDaoResult> documents;
@@ -41,7 +41,8 @@ public class RagChatModelLimitedRequest {
 
 	/** The remaining token space available */
 	private int residualTokenSpace;
-
+	private boolean historyConsolidationRequired = false;
+	private int historySizeTarget=0;
 	/**
 	 * Calculates and retrieves the context window statistics including token
 	 * distribution among various components.
