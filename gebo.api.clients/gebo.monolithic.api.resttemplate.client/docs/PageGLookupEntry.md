@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalPages** | **Integer** |  |  [optional]
 **totalElements** | **Long** |  |  [optional]
+**totalPages** | **Integer** |  |  [optional]
 **size** | **Integer** |  |  [optional]
 **content** | [**List&lt;GLookupEntry&gt;**](GLookupEntry.md) |  |  [optional]
 **number** | **Integer** |  |  [optional]

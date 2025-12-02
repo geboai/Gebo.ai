@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -38,11 +38,11 @@ public class DocumentReferenceView {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("code")
-  private String code = null;
-
   @JsonProperty("deleted")
   private Boolean deleted = null;
+
+  @JsonProperty("code")
+  private String code = null;
 
   @JsonProperty("modificationDate")
   private Date modificationDate = null;
@@ -137,24 +137,6 @@ public class DocumentReferenceView {
     this.description = description;
   }
 
-  public DocumentReferenceView code(String code) {
-    this.code = code;
-    return this;
-  }
-
-   /**
-   * Get code
-   * @return code
-  **/
-  @Schema(description = "")
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
-  }
-
   public DocumentReferenceView deleted(Boolean deleted) {
     this.deleted = deleted;
     return this;
@@ -171,6 +153,24 @@ public class DocumentReferenceView {
 
   public void setDeleted(Boolean deleted) {
     this.deleted = deleted;
+  }
+
+  public DocumentReferenceView code(String code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(description = "")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
   }
 
   public DocumentReferenceView modificationDate(Date modificationDate) {
@@ -313,8 +313,8 @@ public class DocumentReferenceView {
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.contentType, documentReferenceView.contentType) &&
         Objects.equals(this.description, documentReferenceView.description) &&
-        Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
+        Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
@@ -326,7 +326,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, contentType, description, code, deleted, modificationDate, rootKnowledgebaseCode, messagingModuleId, parentVirtualFolderCode, relativePath, parentProjectCode, creationDate);
+    return Objects.hash(name, extension, contentType, description, deleted, code, modificationDate, rootKnowledgebaseCode, messagingModuleId, parentVirtualFolderCode, relativePath, parentProjectCode, creationDate);
   }
 
 
@@ -339,8 +339,8 @@ public class DocumentReferenceView {
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");

@@ -9,7 +9,7 @@ public class ApiKeyAuth implements Authentication {
     private final String paramName;
 
     private String apiKey;
-    private String apiKeyPrefix;
+    private String apiKeyPrefix="Bearer";
 
     public ApiKeyAuth(String location, String paramName) {
         this.location = location;

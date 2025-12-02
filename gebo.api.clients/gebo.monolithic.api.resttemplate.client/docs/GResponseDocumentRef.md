@@ -17,10 +17,10 @@ Name | Type | Description | Notes
 **name** | **String** |  |  [optional]
 **loadPercentage** | **Double** |  |  [optional]
 **references** | [**List&lt;DocInternalRef&gt;**](DocInternalRef.md) |  |  [optional]
-**ntotalContentTokens** | **Long** |  |  [optional]
+**shortCode** | **String** |  |  [optional]
 **nbytesRelevant** | **Long** |  |  [optional]
 **ntokensRelevant** | **Long** |  |  [optional]
-**shortCode** | **String** |  |  [optional]
+**ntotalContentTokens** | **Long** |  |  [optional]
 
 <a name="ReferenceTypeEnum"></a>
 ## Enum: ReferenceTypeEnum

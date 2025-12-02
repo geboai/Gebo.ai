@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Order
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
 
 public class Order {
   /**
@@ -100,11 +100,11 @@ public class Order {
   }  @JsonProperty("nullHandling")
   private NullHandlingEnum nullHandling = null;
 
-  @JsonProperty("ascending")
-  private Boolean ascending = null;
-
   @JsonProperty("descending")
   private Boolean descending = null;
+
+  @JsonProperty("ascending")
+  private Boolean ascending = null;
 
   public Order direction(DirectionEnum direction) {
     this.direction = direction;
@@ -178,24 +178,6 @@ public class Order {
     this.nullHandling = nullHandling;
   }
 
-  public Order ascending(Boolean ascending) {
-    this.ascending = ascending;
-    return this;
-  }
-
-   /**
-   * Get ascending
-   * @return ascending
-  **/
-  @Schema(description = "")
-  public Boolean isAscending() {
-    return ascending;
-  }
-
-  public void setAscending(Boolean ascending) {
-    this.ascending = ascending;
-  }
-
   public Order descending(Boolean descending) {
     this.descending = descending;
     return this;
@@ -214,6 +196,24 @@ public class Order {
     this.descending = descending;
   }
 
+  public Order ascending(Boolean ascending) {
+    this.ascending = ascending;
+    return this;
+  }
+
+   /**
+   * Get ascending
+   * @return ascending
+  **/
+  @Schema(description = "")
+  public Boolean isAscending() {
+    return ascending;
+  }
+
+  public void setAscending(Boolean ascending) {
+    this.ascending = ascending;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -228,13 +228,13 @@ public class Order {
         Objects.equals(this.property, order.property) &&
         Objects.equals(this.ignoreCase, order.ignoreCase) &&
         Objects.equals(this.nullHandling, order.nullHandling) &&
-        Objects.equals(this.ascending, order.ascending) &&
-        Objects.equals(this.descending, order.descending);
+        Objects.equals(this.descending, order.descending) &&
+        Objects.equals(this.ascending, order.ascending);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(direction, property, ignoreCase, nullHandling, ascending, descending);
+    return Objects.hash(direction, property, ignoreCase, nullHandling, descending, ascending);
   }
 
 
@@ -247,8 +247,8 @@ public class Order {
     sb.append("    property: ").append(toIndentedString(property)).append("\n");
     sb.append("    ignoreCase: ").append(toIndentedString(ignoreCase)).append("\n");
     sb.append("    nullHandling: ").append(toIndentedString(nullHandling)).append("\n");
-    sb.append("    ascending: ").append(toIndentedString(ascending)).append("\n");
     sb.append("    descending: ").append(toIndentedString(descending)).append("\n");
+    sb.append("    ascending: ").append(toIndentedString(ascending)).append("\n");
     sb.append("}");
     return sb.toString();
   }

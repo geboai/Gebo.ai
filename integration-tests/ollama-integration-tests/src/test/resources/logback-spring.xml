@@ -45,6 +45,10 @@
 		<appender-ref ref="Console" />
 	</logger>
 	
+	<logger name="ai.gebo.llms.chat.abstraction.layer" level="DEBUG" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
 	<!-- 
 	<logger name="ai.gebo.ragsystem.content.vectorizator.impl" level="DEBUG" additivity="false">
 		<appender-ref ref="RollingFile" />

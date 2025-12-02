@@ -27,14 +27,14 @@ import java.util.List;
  * PageGUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
 
 public class PageGUserChatInfo {
-  @JsonProperty("totalPages")
-  private Integer totalPages = null;
-
   @JsonProperty("totalElements")
   private Long totalElements = null;
+
+  @JsonProperty("totalPages")
+  private Integer totalPages = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -63,24 +63,6 @@ public class PageGUserChatInfo {
   @JsonProperty("empty")
   private Boolean empty = null;
 
-  public PageGUserChatInfo totalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-    return this;
-  }
-
-   /**
-   * Get totalPages
-   * @return totalPages
-  **/
-  @Schema(description = "")
-  public Integer getTotalPages() {
-    return totalPages;
-  }
-
-  public void setTotalPages(Integer totalPages) {
-    this.totalPages = totalPages;
-  }
-
   public PageGUserChatInfo totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
@@ -97,6 +79,24 @@ public class PageGUserChatInfo {
 
   public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
+  }
+
+  public PageGUserChatInfo totalPages(Integer totalPages) {
+    this.totalPages = totalPages;
+    return this;
+  }
+
+   /**
+   * Get totalPages
+   * @return totalPages
+  **/
+  @Schema(description = "")
+  public Integer getTotalPages() {
+    return totalPages;
+  }
+
+  public void setTotalPages(Integer totalPages) {
+    this.totalPages = totalPages;
   }
 
   public PageGUserChatInfo size(Integer size) {
@@ -279,8 +279,8 @@ public class PageGUserChatInfo {
       return false;
     }
     PageGUserChatInfo pageGUserChatInfo = (PageGUserChatInfo) o;
-    return Objects.equals(this.totalPages, pageGUserChatInfo.totalPages) &&
-        Objects.equals(this.totalElements, pageGUserChatInfo.totalElements) &&
+    return Objects.equals(this.totalElements, pageGUserChatInfo.totalElements) &&
+        Objects.equals(this.totalPages, pageGUserChatInfo.totalPages) &&
         Objects.equals(this.size, pageGUserChatInfo.size) &&
         Objects.equals(this.content, pageGUserChatInfo.content) &&
         Objects.equals(this.number, pageGUserChatInfo.number) &&
@@ -294,7 +294,7 @@ public class PageGUserChatInfo {
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, size, content, number, first, last, numberOfElements, sort, pageable, empty);
+    return Objects.hash(totalElements, totalPages, size, content, number, first, last, numberOfElements, sort, pageable, empty);
   }
 
 
@@ -303,8 +303,8 @@ public class PageGUserChatInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class PageGUserChatInfo {\n");
     
-    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
+    sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");

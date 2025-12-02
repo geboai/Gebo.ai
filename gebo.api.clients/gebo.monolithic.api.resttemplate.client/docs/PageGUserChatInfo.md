@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalPages** | **Integer** |  |  [optional]
 **totalElements** | **Long** |  |  [optional]
+**totalPages** | **Integer** |  |  [optional]
 **size** | **Integer** |  |  [optional]
 **content** | [**List&lt;GUserChatInfo&gt;**](GUserChatInfo.md) |  |  [optional]
 **number** | **Integer** |  |  [optional]

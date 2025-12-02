@@ -25,7 +25,7 @@ import java.util.List;
  * GResponseDocumentRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T06:59:38.467683700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-12-02T07:42:58.505542900+01:00[Europe/Rome]")
 
 public class GResponseDocumentRef {
   /**
@@ -101,8 +101,8 @@ public class GResponseDocumentRef {
   @JsonProperty("references")
   private List<DocInternalRef> references = null;
 
-  @JsonProperty("ntotalContentTokens")
-  private Long ntotalContentTokens = null;
+  @JsonProperty("shortCode")
+  private String shortCode = null;
 
   @JsonProperty("nbytesRelevant")
   private Long nbytesRelevant = null;
@@ -110,8 +110,8 @@ public class GResponseDocumentRef {
   @JsonProperty("ntokensRelevant")
   private Long ntokensRelevant = null;
 
-  @JsonProperty("shortCode")
-  private String shortCode = null;
+  @JsonProperty("ntotalContentTokens")
+  private Long ntotalContentTokens = null;
 
   public GResponseDocumentRef referenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
@@ -373,22 +373,22 @@ public class GResponseDocumentRef {
     this.references = references;
   }
 
-  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
-    this.ntotalContentTokens = ntotalContentTokens;
+  public GResponseDocumentRef shortCode(String shortCode) {
+    this.shortCode = shortCode;
     return this;
   }
 
    /**
-   * Get ntotalContentTokens
-   * @return ntotalContentTokens
+   * Get shortCode
+   * @return shortCode
   **/
   @Schema(description = "")
-  public Long getNtotalContentTokens() {
-    return ntotalContentTokens;
+  public String getShortCode() {
+    return shortCode;
   }
 
-  public void setNtotalContentTokens(Long ntotalContentTokens) {
-    this.ntotalContentTokens = ntotalContentTokens;
+  public void setShortCode(String shortCode) {
+    this.shortCode = shortCode;
   }
 
   public GResponseDocumentRef nbytesRelevant(Long nbytesRelevant) {
@@ -427,22 +427,22 @@ public class GResponseDocumentRef {
     this.ntokensRelevant = ntokensRelevant;
   }
 
-  public GResponseDocumentRef shortCode(String shortCode) {
-    this.shortCode = shortCode;
+  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
+    this.ntotalContentTokens = ntotalContentTokens;
     return this;
   }
 
    /**
-   * Get shortCode
-   * @return shortCode
+   * Get ntotalContentTokens
+   * @return ntotalContentTokens
   **/
   @Schema(description = "")
-  public String getShortCode() {
-    return shortCode;
+  public Long getNtotalContentTokens() {
+    return ntotalContentTokens;
   }
 
-  public void setShortCode(String shortCode) {
-    this.shortCode = shortCode;
+  public void setNtotalContentTokens(Long ntotalContentTokens) {
+    this.ntotalContentTokens = ntotalContentTokens;
   }
 
 
@@ -469,15 +469,15 @@ public class GResponseDocumentRef {
         Objects.equals(this.name, gresponseDocumentRef.name) &&
         Objects.equals(this.loadPercentage, gresponseDocumentRef.loadPercentage) &&
         Objects.equals(this.references, gresponseDocumentRef.references) &&
-        Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens) &&
+        Objects.equals(this.shortCode, gresponseDocumentRef.shortCode) &&
         Objects.equals(this.nbytesRelevant, gresponseDocumentRef.nbytesRelevant) &&
         Objects.equals(this.ntokensRelevant, gresponseDocumentRef.ntokensRelevant) &&
-        Objects.equals(this.shortCode, gresponseDocumentRef.shortCode);
+        Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, loadPercentage, references, ntotalContentTokens, nbytesRelevant, ntokensRelevant, shortCode);
+    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, loadPercentage, references, shortCode, nbytesRelevant, ntokensRelevant, ntotalContentTokens);
   }
 
 
@@ -500,10 +500,10 @@ public class GResponseDocumentRef {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    loadPercentage: ").append(toIndentedString(loadPercentage)).append("\n");
     sb.append("    references: ").append(toIndentedString(references)).append("\n");
-    sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
+    sb.append("    shortCode: ").append(toIndentedString(shortCode)).append("\n");
     sb.append("    nbytesRelevant: ").append(toIndentedString(nbytesRelevant)).append("\n");
     sb.append("    ntokensRelevant: ").append(toIndentedString(ntokensRelevant)).append("\n");
-    sb.append("    shortCode: ").append(toIndentedString(shortCode)).append("\n");
+    sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
     sb.append("}");
     return sb.toString();
   }
