@@ -10,10 +10,8 @@
  * Do not edit the class manually.
  */
 
-export interface UserInfos { 
-    name?: string;
-    sourname?: string;
-    roles?: Array<string>;
-    username?: string;
-    disabled?: boolean;
+export interface GUserChatConsolidationData { 
+    consolidationText?: string;
+    lastInteractionPointer?: number;
+    tokensSize?: number;
 }

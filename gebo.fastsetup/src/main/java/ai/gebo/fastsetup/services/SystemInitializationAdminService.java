@@ -39,7 +39,7 @@ public class SystemInitializationAdminService {
 		this.licenceRepository = licenceRepository;
 	}
 
-	@Scheduled(initialDelay = 10000)
+	@Scheduled(initialDelay = 20000)
 	public void onTick() {
 		// if not yet configured interactiverly
 		if (configuration != null && configuration.getAdminUsername() != null

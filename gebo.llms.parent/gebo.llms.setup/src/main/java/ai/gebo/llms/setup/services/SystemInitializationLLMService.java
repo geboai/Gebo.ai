@@ -49,7 +49,7 @@ public class SystemInitializationLLMService {
 		this.vendorsLibraryConfiguration = vendorsLibraryConfiguration;
 	}
 
-	@Scheduled(initialDelay = 10000)
+	@Scheduled(initialDelay = 20000)
 	public void onTick() {
 		if (systemInitializationLLMConfiguration != null && systemInitializationLLMConfiguration.getProviders() != null
 				&& !systemInitializationLLMConfiguration.getProviders().isEmpty()) {

@@ -479,7 +479,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	}
 
 	@Override
-	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) {
+	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException {
 		UserInfos user = securityService.getCurrentUser();
 		GUserChatContext userContext = new GUserChatContext();
 		IGConfigurableChatModel chatModel = this.chatModelConfigurations.findByCode(modelCode);
@@ -492,6 +492,7 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 						: " chat bot");
 		userContext.setDescription(description);
 		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 
 		return data;

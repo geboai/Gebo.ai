@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
@@ -79,5 +80,5 @@ public interface IGChatService extends IGGenericalChatService {
      */
     public InputStream speech(String text, String modelCode) throws LLMConfigException;
 
-	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode);
+	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException;
 }

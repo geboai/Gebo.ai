@@ -38,8 +38,14 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
 import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.monolithic.api.client.api.AuthControllerApi;
+import ai.gebo.monolithic.api.client.api.ChatModelsControllerApi;
+import ai.gebo.monolithic.api.client.api.ChatModelsLookupControllerApi;
 import ai.gebo.monolithic.api.client.api.GeboChatControllerApi;
+import ai.gebo.monolithic.api.client.api.TokenRenewControllerApi;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
+import ai.gebo.monolithic.api.client.model.GChatModelType;
+import ai.gebo.monolithic.api.client.model.GLookupEntryRef;
+import ai.gebo.monolithic.api.client.model.GLookupEntryRefGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GUserChatInfo;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
 import ai.gebo.monolithic.api.client.model.LoginRequest;
@@ -50,7 +56,7 @@ import ai.gebo.ragsystem.vectorstores.qdrant.model.QdrantConfig;
 import ai.gebo.ragsystem.vectorstores.services.GeboVectorStoreConfigurationService;
 import lombok.Data;
 
-@SpringBootTest(classes = Main.class,webEnvironment = WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegrationTests {
 
 	static QdrantContainer qdrantContainer = new QdrantContainer("qdrant/qdrant:latest");
@@ -58,8 +64,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 	static final ObjectMapper mapper = new ObjectMapper();
 	@Autowired
 	GeboVectorStoreConfigurationService vectorStoreConfigurationService;
-	@Autowired
-	IGChatModelRuntimeConfigurationDao chatModelsRuntimeDao;
+
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
 	JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
@@ -102,7 +107,7 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 	@Test
 	public void ollamaChatHistoryConsolidationTest()
 			throws InterruptedException, StreamReadException, DatabindException, IOException, GeboPersistenceException {
-		Thread.currentThread().sleep(40000);
+		Thread.currentThread().sleep(60000);
 		ApiClient apiClient = new ApiClient();
 		AuthControllerApi controllerApi = new AuthControllerApi(apiClient);
 
@@ -116,9 +121,15 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 		assertFalse("Login cannot be with errors", result.isHasErrorMessages());
 		InputStream chatResource = getClass().getResourceAsStream("/chat-sessions/history-consolidation-test.json");
 		TInteractions interactions = mapper.readValue(chatResource, TInteractions.class);
-		IGConfigurableChatModel defaultModel = chatModelsRuntimeDao.defaultHandler();
+
 		ApiClient authApiClient = new ApiClient();
-		apiClient.setApiKey(result.getResult().getSecurityHeaderData().getToken());
+		authApiClient.setApiKey(result.getResult().getSecurityHeaderData().getToken());
+		ChatModelsControllerApi chatModelsControllerApi = new ChatModelsControllerApi(authApiClient);
+
+		ChatModelsLookupControllerApi chatmodelsLookupApi = new ChatModelsLookupControllerApi(authApiClient);
+		List<GLookupEntryRef> models = chatmodelsLookupApi.getRuntimeConfiguredChatModelsLookup(null);
+		assertFalse("At least a default chat model must be configured", models.isEmpty());
+		GLookupEntryRef defaultModel = models.get(0);
 		GeboChatControllerApi chatControllerApi = new GeboChatControllerApi(authApiClient);
 		GUserChatInfo cleanChat = chatControllerApi.createCleanChatByModelCode(defaultModel.getCode());
 		// load the created user context
@@ -136,6 +147,9 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			_interactions.add(interaction);
 		}
 		data.setInteractions(_interactions);
+		TokenRenewControllerApi tokenRenewApi=new TokenRenewControllerApi(authApiClient);
+		String newToken=tokenRenewApi.renew().getToken();
+		authApiClient.setApiKey(newToken);
 		persistentObjectManager.update(data);
 		for (int i = _interactions.size() - 3; i < _interactions.size(); i++) {
 			ai.gebo.monolithic.api.client.model.GeboChatRequest request = new ai.gebo.monolithic.api.client.model.GeboChatRequest();
@@ -145,6 +159,8 @@ public class OllamaSetupAndIntegrationTest extends AbstractGeboMonolithicIntegra
 			request.setId(UUID.randomUUID().toString());
 			GeboChatResponse response = chatControllerApi.chat(request);
 			LOGGER.info("Chat response:" + response.getQueryResponse());
+			newToken=tokenRenewApi.renew().getToken();
+			authApiClient.setApiKey(newToken);
 		}
 
 	}

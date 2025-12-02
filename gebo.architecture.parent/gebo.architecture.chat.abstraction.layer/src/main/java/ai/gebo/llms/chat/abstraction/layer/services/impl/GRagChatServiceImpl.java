@@ -626,6 +626,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		userContext.setDescription(description);
 		userContext.setRagChat(true);
 		userContext.setUsername(user.getUsername());
+		userContext = persistenceManager.insert(userContext);
 		GUserChatInfoData data = new GUserChatInfoData(userContext);
 		return data;
 	}

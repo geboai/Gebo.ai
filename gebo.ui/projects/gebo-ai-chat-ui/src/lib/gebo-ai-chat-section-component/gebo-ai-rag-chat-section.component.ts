@@ -209,10 +209,10 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         if (this.page.page !== undefined && this.page.pageSize !== undefined) {
             this.page.page = page;
             this.chatsPageLoading = true;
-            this.geboUserChatsControllerService.getMyChatsPaged(this.page.page, this.page.pageSize).subscribe({
-                next: (page) => {
-                    this.chatsPage = page;
-                    const childrens: GUserChatInfo[] = page.content ? page.content : [];
+            this.geboUserChatsControllerService.getMyChats().subscribe({
+                next: (chats) => {
+                    
+                    const childrens: GUserChatInfo[] = chats?chats: [];
                     const newItems: TreeNode<GUserChatInfo>[] = childrens.map(x => {
                         const item: TreeNode = {
                             label: x.description,

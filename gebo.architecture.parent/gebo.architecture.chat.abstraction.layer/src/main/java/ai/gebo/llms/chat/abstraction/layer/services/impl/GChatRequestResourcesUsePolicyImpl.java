@@ -230,7 +230,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			// its maximum share
 			// but leaving space for tool calling
 			historyToBeShrinked = true;
-			historySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+			historySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 			availableTokensForDocuments = contextWindowNToken - historySizeTarget - toolsTokensSpaceReservation
 					- requestSize;
 		} else {
@@ -243,7 +243,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
 		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 10.0) > settings.historyLimitPercent;
-		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 		lrequest.setHistoryConsolidationRequired(preemptiveHistoryShrinked);
 		lrequest.setHistorySizeTarget(preemptiveHistorySizeTarget);
 		// first add explicitly uploaded documents
@@ -656,7 +656,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			// its maximum share
 			// but leaving space for tool calling
 			historyToBeShrinked = true;
-			historySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+			historySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 			availableTokensForDocuments = contextWindowNToken - historySizeTarget - toolsTokensSpaceReservation
 					- requestSize;
 		} else {
@@ -669,7 +669,7 @@ public class GChatRequestResourcesUsePolicyImpl implements IGChatRequestResource
 			availableTokensForDocuments -= toolsTokensSpaceReservation;
 		}
 		boolean preemptiveHistoryShrinked = (stats.historySharePerc + 10.0) > settings.historyLimitPercent;
-		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * stats.historySharePerc / 100.0);
+		int preemptiveHistorySizeTarget = (int) (((double) contextWindowNToken) * settings.historyLimitPercent / 100.0);
 		lrequest.setHistoryConsolidationRequired(preemptiveHistoryShrinked);
 		lrequest.setHistorySizeTarget(preemptiveHistorySizeTarget);
 		// first add explicitly uploaded documents
