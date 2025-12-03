@@ -12,8 +12,11 @@
 
 package ai.gebo.architecture.persistence;
 
+import java.util.List;
+
 import org.springframework.data.repository.NoRepositoryBean;
 import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
+import ai.gebo.model.base.GBaseObject;
 
 /**
  * Gebo.ai comment agent
@@ -36,4 +39,6 @@ public interface IGMongoRepositoriesImplementationRepositoryPattern
      * @return An instance of IGBaseMongoDBRepository corresponding to the managed type.
      */
     public IGBaseMongoDBRepository findByManagedType(Class _type);
+
+	public List<IGBaseMongoDBRepository> findByAssignableBy(Class<? extends GBaseObject> referencedType);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ai.gebo.knlowledgebase.model.contents.GContentSelectionFilter;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +34,7 @@ public class GraphRagExtractionConfig extends GBaseObject implements Cloneable{
 	private List<GraphObjectType> customEntityTypes = null;
 	private List<GraphObjectType> customEventTypes = null;
 	private List<GraphObjectType> customRelationTypes = null;
+	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> usedModelConfiguration = null;
 	private GContentSelectionFilter contentSelectionFilter = null;
 	private Boolean processEveryDocument = null;

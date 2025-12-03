@@ -57,6 +57,8 @@ public interface IGPersistentObjectManager {
 	 */
 	public boolean isDeletable(GBaseObject object) throws GeboPersistenceException;
 
+	public boolean isDeletable(GObjectRef objectReference) throws GeboPersistenceException;
+
 	/**
 	 * Retrieves a count of related objects.
 	 *
@@ -98,7 +100,7 @@ public interface IGPersistentObjectManager {
 	 * @throws GeboPersistenceException if update fails.
 	 */
 	public <T extends GBaseObject> T update(T element) throws GeboPersistenceException;
-	
+
 	@Transactional
 	public <T extends GBaseObject> T transactionalUpdate(T element) throws GeboPersistenceException;
 
@@ -110,7 +112,7 @@ public interface IGPersistentObjectManager {
 	 * @throws GeboPersistenceException if deletion fails.
 	 */
 	public <T extends GBaseObject> void delete(T element) throws GeboPersistenceException;
-	
+
 	@Transactional
 	public <T extends GBaseObject> void transactionalDelete(T element) throws GeboPersistenceException;
 
@@ -134,7 +136,7 @@ public interface IGPersistentObjectManager {
 	 * @throws GeboPersistenceException if search fails.
 	 */
 	public <T extends GBaseObject> T findById(Class<T> type, String id) throws GeboPersistenceException;
-	
+
 	@Transactional
 	public <T extends GBaseObject> T transactionalFindById(Class<T> type, String id) throws GeboPersistenceException;
 

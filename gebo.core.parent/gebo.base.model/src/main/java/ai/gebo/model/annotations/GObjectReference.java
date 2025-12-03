@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.model.annotations;
 
@@ -21,17 +18,20 @@ import java.lang.annotation.Target;
 import ai.gebo.model.base.GBaseObject;
 
 /**
- * AI generated comments
- * This annotation is used to indicate that a field is a reference to a GBaseObject.
- * The type of the object being referenced is specified by the referencedType method.
+ * AI generated comments This annotation is used to indicate that a field is a
+ * reference to a GBaseObject. The type of the object being referenced is
+ * specified by the referencedType method.
  */
 @Retention(RUNTIME) // Specifies that this annotation is available at runtime.
 @Target(FIELD) // Indicates that this annotation can be applied to fields.
 public @interface GObjectReference {
-    /**
-     * Specifies the type of GBaseObject that is being referenced by the annotated field.
-     * 
-     * @return the class type of the referenced GBaseObject
-     */
-    public Class<? extends GBaseObject> referencedType();
+	/**
+	 * Specifies the type of GBaseObject that is being referenced by the annotated
+	 * field.
+	 * 
+	 * @return the class type of the referenced GBaseObject
+	 */
+	public Class<? extends GBaseObject> referencedType();
+
+	public boolean referencesExtensions() default false;
 }
