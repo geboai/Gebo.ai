@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Earráid ag cumarsáid leis an bhfreastalaí Ollama",
         "detail" : "Earráid líonra ag cumarsáid leis an gcóras cianda agus ag rochtain ábhair\n liosta samhlacha Earráid ag obair leis an URL: http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Is féidir leat é seo a scriosadh",
+        "detail" : "Is féidir na sonraí atá á dtaispeáint faoi láthair a scriosadh go sábháilte"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Ní féidir leat é seo a scriosadh",
+        "detail" : "Tagraítear don réad seo ó chuid eile den fheidhmchlár"
       }
     }
   },

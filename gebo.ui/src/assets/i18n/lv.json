@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Kļūda sazinoties ar Ollama serveri",
         "detail" : "Tīkla kļūda, sazinoties ar attālo sistēmu piekļūstot saturam\n modeļu saraksta kļūda strādājot ar url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Jūs varat to dzēst",
+        "detail" : "Pašreiz skatāmos datus var droši izdzēst"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Jūs nevarat to dzēst",
+        "detail" : "Uz šo objektu ir atsauces citās lietotnes daļās"
       }
     }
   },

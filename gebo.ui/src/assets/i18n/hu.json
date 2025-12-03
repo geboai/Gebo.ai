@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Hiba az Ollama szerverrel való kommunikáció során",
         "detail" : "Hálózati hiba a távoli rendszerhez való kapcsolódás közben a tartalom eléréséhez\n modellek listája Hiba történt a következő URL-lel való munkánál: http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Ez törölhető",
+        "detail" : "A jelenleg megjelenített adat biztonságosan törölhető"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Ez nem törölhető",
+        "detail" : "Erre az objektumra az alkalmazás más része(i) hivatkoznak"
       }
     }
   },

@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Fehler bei der Kommunikation mit Ollama-Server",
         "detail" : "Netzwerkfehler bei der Kommunikation mit dem entfernten System beim Zugriff auf Inhalt\n Modellsammlung Fehler beim Arbeiten mit URL:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Sie können dies löschen",
+        "detail" : "Die aktuell angezeigten Daten können sicher gelöscht werden"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Sie können dies nicht löschen",
+        "detail" : "Dieses Objekt wird an anderer Stelle in der Anwendung referenziert"
       }
     }
   },

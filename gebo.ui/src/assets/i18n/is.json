@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Villa við samskipti við Ollama server",
         "detail" : "Neto villa við samskipti við fjartengt kerfi til að nálgast efni\n vantar lista yfir líkön Villa með url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Þú getur eytt þessu",
+        "detail" : "Gögnum sem þú skoðar núna er óhætt að eyða"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Þú getur ekki eytt þessu",
+        "detail" : "Þessu atriði er vísað í annars staðar í forritinu"
       }
     }
   },

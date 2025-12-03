@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Ralat berkomunikasi dengan pelayan Ollama ",
         "detail" : "Ralat rangkaian semasa berkomunikasi dengan sistem jauh mengakses kandungan\n senarai model Ralat bekerja dengan url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Anda boleh padam ini",
+        "detail" : "Data yang sedang dipaparkan boleh dipadam dengan selamat"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Anda tidak boleh padam ini",
+        "detail" : "Objek ini dirujuk dari bahagian lain aplikasi"
       }
     }
   },

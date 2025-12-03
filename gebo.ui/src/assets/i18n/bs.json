@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Greška pri komunikaciji sa Ollama serverom ",
         "detail" : "Greška u mreži pri komunikaciji sa udaljenim sistemom pristupajući sadržaju\n lista modela Greška prilikom rada sa url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Možete izbrisati ovo",
+        "detail" : "Trenutno prikazani podaci mogu biti sigurno obrisani"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Ne možete izbrisati ovo",
+        "detail" : "Ovaj objekat je povezan sa drugim dijelom aplikacije"
       }
     }
   },

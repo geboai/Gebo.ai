@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Eroare la comunicarea cu serverul Ollama",
         "detail" : "Eroare de rețea la comunicarea cu sistemul la distanță pentru accesarea conținutului\n lista modelelor Eroare lucrând cu url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Poți șterge acest lucru",
+        "detail" : "Datele vizualizate în prezent pot fi șterse în siguranță"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Nu poți șterge acest lucru",
+        "detail" : "Acest obiect este referit din alte părți ale aplicației"
       }
     }
   },

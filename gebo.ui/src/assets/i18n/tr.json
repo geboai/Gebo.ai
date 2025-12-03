@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : " Ollama sunucusuyla iletişimde hata ",
         "detail" : "Uzaktan sisteme erişirken ağ hatası\n modeller listesi url ile çalışılırken hata:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Bunu silebilirsiniz",
+        "detail" : "Görüntülenen mevcut veri güvenle silinebilir"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Bunu silemezsiniz",
+        "detail" : "Bu nesne uygulamanın başka bir bölümünden referans alınmış"
       }
     }
   },

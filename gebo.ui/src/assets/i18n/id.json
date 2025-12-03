@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Kesalahan komunikasi dengan server Ollama",
         "detail" : "Kesalahan jaringan saat komunikasi dengan sistem remote untuk mengakses konten\n daftar model Error saat bekerja dengan url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Anda dapat menghapus ini",
+        "detail" : "Data yang sedang dilihat dapat dihapus dengan aman"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Anda tidak dapat menghapus ini",
+        "detail" : "Objek ini dirujuk dari bagian lain aplikasi"
       }
     }
   },

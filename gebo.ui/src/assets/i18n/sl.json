@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Napaka pri komunikaciji s strežnikom Ollama",
         "detail" : "Napaka v omrežju pri komunikaciji z oddaljenim sistemom za dostop do vsebine\nSeznam modelov Napaka pri delu z url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "To lahko izbrišete",
+        "detail" : "Trenutno prikazane podatke lahko varno izbrišete"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Tega ne morete izbrisati",
+        "detail" : "Ta objekt se uporablja na drugem delu aplikacije"
       }
     }
   },

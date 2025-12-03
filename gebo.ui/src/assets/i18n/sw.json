@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Hitilafu ya kuwasiliana na seva ya Ollama ",
         "detail" : "Hitilafu ya mtandao kuwasiliana na mfumo wa mbali kuchukua maudhui\n orodha ya mifano Hitilafu kufanya kazi na url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Unaweza kufuta hii",
+        "detail" : "Data inayoonekana sasa inaweza kufutwa salama"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Huwezi kufuta hii",
+        "detail" : "Kitu hiki kinarejelewa kutoka sehemu nyingine za programu"
       }
     }
   },

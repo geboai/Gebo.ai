@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Lỗi khi liên lạc với máy chủ Ollama",
         "detail" : "Lỗi mạng khi liên lạc với hệ thống từ xa để truy cập nội dung\n danh sách mô hình Lỗi khi làm việc với url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Bạn có thể xóa mục này",
+        "detail" : "Dữ liệu đang xem hiện tại có thể được xóa an toàn"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Bạn không thể xóa mục này",
+        "detail" : "Đối tượng này đang được tham chiếu từ phần khác của ứng dụng"
       }
     }
   },

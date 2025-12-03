@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Fout met kommunikasie met Ollama-bediener",
         "detail" : "Netwerkfout met kommunikasie na die afgeleë stelsel tydens toegang tot inhoud\n modellelys Fout met url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Jy kan dit uitvee",
+        "detail" : "Die data wat tans vertoon word kan veilig uitgevee word"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Jy kan dit nie uitvee nie",
+        "detail" : "Hierdie objek word vanuit ander deel(e) van die toepassing verwys"
       }
     }
   },

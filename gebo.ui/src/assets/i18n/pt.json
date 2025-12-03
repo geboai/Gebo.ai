@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Erro ao comunicar com o servidor Ollama",
         "detail" : "Erro de rede ao comunicar com o sistema remoto acessando o conteúdo\nlista de modelos Erro ao trabalhar com url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Você pode excluir isso",
+        "detail" : "Os dados visualizados atualmente podem ser excluídos com segurança"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Você não pode excluir isso",
+        "detail" : "Este objeto é referenciado por outra parte do aplicativo"
       }
     }
   },

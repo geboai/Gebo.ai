@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "ຜິດພາດໃນການສື່ສານກັບ Ollama server",
         "detail" : "Netork error comunicating to the remote system accessing content\n models list Error working with url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "ທ່ານສາມາດລຶບນີ້ໄດ້",
+        "detail" : "ຂໍ້ມູນທີ່ກຳລັງສະແດງຢູ່ຂະນະນີ້ສາມາດຖືກລຶບໄດ້ຢ່າງປອດໄພ"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "ທ່ານບໍ່ສາມາດລຶບນີ້ໄດ້",
+        "detail" : "ວັດຖຸນີ້ຖືກອ້າງອີງຈາກສ່ວນອື່ນຂອງແອັບພິເຄຊັນ"
       }
     }
   },

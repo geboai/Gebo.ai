@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Feil ved kommunikasjon med Ollama-server ",
         "detail" : "Nettverksfeil ved kommunikasjon med det eksterne systemet for tilgang til innhold\n modelliste Feil ved arbeid med url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Du kan slette dette",
+        "detail" : "De viste dataene kan trygt slettes"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Du kan ikke slette dette",
+        "detail" : "Dette objektet er referert til fra andre deler av applikasjonen"
       }
     }
   },

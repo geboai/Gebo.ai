@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Erreur de communication avec le serveur Ollama",
         "detail" : "Erreur réseau lors de l'accès au système distant pour consulter le contenu\n liste de modèles Erreur lors de l'utilisation de l'url : http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Vous pouvez supprimer ceci",
+        "detail" : "Les données actuellement affichées peuvent être supprimées en toute sécurité"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Vous ne pouvez pas supprimer ceci",
+        "detail" : "Cet objet est référencé par une ou plusieurs autres parties de l'application"
       }
     }
   },

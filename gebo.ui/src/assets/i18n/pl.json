@@ -3047,6 +3047,14 @@
       "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
         "summary" : "Błąd komunikacji z serwerem Ollama",
         "detail" : "Błąd sieci podczas komunikacji z systemem zdalnym\n lista modeli Błąd podczas pracy z url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Możesz to usunąć",
+        "detail" : "Aktualnie wyświetlane dane można bezpiecznie usunąć"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Nie możesz tego usunąć",
+        "detail" : "Ten obiekt jest używany w innej części aplikacji"
       }
     }
   },
