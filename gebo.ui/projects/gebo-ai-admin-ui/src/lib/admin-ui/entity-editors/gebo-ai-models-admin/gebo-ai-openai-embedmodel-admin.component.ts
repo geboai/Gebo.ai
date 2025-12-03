@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseChatModelChoice, GOpenAIEmbeddingModelConfig, OpenAiEmbeddingModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -36,7 +36,7 @@ import { isValidUrl } from "../utils/url-ok";
     }]
 
 })
-export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingComponent<GOpenAIEmbeddingModelConfig> {
+export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GOpenAIEmbeddingModelConfig> {
     /**
      * The entity name identifier for the GOpenAIEmbeddingModelConfig
      */
@@ -188,14 +188,6 @@ export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingCompo
         }))
     }
 
-    /**
-     * Determines if a model configuration can be deleted
-     * Currently always returns true as there are no dependencies to check
-     * @param value The model configuration to check
-     * @returns Observable containing the delete permission status and message
-     */
-    override canBeDeleted(value: GOpenAIEmbeddingModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
+    
 
 }

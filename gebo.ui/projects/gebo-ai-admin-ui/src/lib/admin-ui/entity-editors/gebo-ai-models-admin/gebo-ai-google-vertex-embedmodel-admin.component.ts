@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseChatModelChoice, GGoogleVertexEmbeddingModelConfig, GoogleVertexEmbeddingModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -39,7 +39,7 @@ import { isValidUrl } from "../utils/url-ok";
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGoogleVertexEmbedModelAdminComponent), multi: false  }
     ]
 })
-export class GeboAIGoogleVertexEmbedModelAdminComponent extends BaseEntityEditingComponent<GGoogleVertexEmbeddingModelConfig> {
+export class GeboAIGoogleVertexEmbedModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GGoogleVertexEmbeddingModelConfig> {
     /**
      * Entity name used for component identification and logging
      */
@@ -192,14 +192,6 @@ export class GeboAIGoogleVertexEmbedModelAdminComponent extends BaseEntityEditin
         }))
     }
     
-    /**
-     * Determines if a configuration can be safely deleted
-     * Currently always returns true as there's no dependency check implemented
-     * @param value The configuration to check
-     * @returns Observable with deletion permission status
-     */
-    override canBeDeleted(value: GGoogleVertexEmbeddingModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
+    
 
 }

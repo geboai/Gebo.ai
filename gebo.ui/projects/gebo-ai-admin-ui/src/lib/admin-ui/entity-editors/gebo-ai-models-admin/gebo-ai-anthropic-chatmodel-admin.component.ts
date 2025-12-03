@@ -22,7 +22,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { FunctionsLookupControllerService, GBaseChatModelChoice, GLookupEntry, GAnthropicChatModelConfig, SecretInfo, SecretsControllerService, AnthropicChatModelsConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -43,7 +43,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
         multi: false
     }]
 })
-export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingComponent<GAnthropicChatModelConfig> {
+export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GAnthropicChatModelConfig> {
     /**
      * Entity name used for form identification and processing
      */
@@ -210,12 +210,5 @@ export class GeboAIAnthropicChatModelAdminComponent extends BaseEntityEditingCom
         }))
     }
 
-    /**
-     * Checks if the given Anthropic chat model configuration can be deleted
-     * Currently always returns true as there are no restrictions implemented
-     */
-    override canBeDeleted(value: GAnthropicChatModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
 
 }

@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AzureOpenAiChatModelsConfigurationControllerService, FunctionsLookupControllerService, GAzureOpenAIChatModelConfig, GBaseChatModelChoice, GLookupEntry, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -39,7 +39,7 @@ import { isValidUrl } from "../utils/url-ok";
         multi: false
     }]
 })
-export class GeboAIAzureOpenAIChatModelAdminComponent extends BaseEntityEditingComponent<GAzureOpenAIChatModelConfig> {
+export class GeboAIAzureOpenAIChatModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GAzureOpenAIChatModelConfig> {
     /**
      * Name of the entity type being managed by this component
      */
@@ -216,13 +216,5 @@ export class GeboAIAzureOpenAIChatModelAdminComponent extends BaseEntityEditingC
         }))
     }
 
-    /**
-     * Determines if a configuration can be deleted
-     * @param value The configuration to check
-     * @returns Observable with information about deletion possibility
-     */
-    override canBeDeleted(value: GAzureOpenAIChatModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
-
+   
 }

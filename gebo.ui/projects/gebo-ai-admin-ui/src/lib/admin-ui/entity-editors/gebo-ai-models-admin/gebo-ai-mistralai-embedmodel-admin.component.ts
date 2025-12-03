@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseChatModelChoice, GMistralEmbeddingModelConfig, MistralAiEmbeddingModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -40,7 +40,7 @@ import { isValidUrl } from "../utils/url-ok";
         multi: false
     }]
 })
-export class GeboAIMistralAIEmbedModelAdminComponent extends BaseEntityEditingComponent<GMistralEmbeddingModelConfig> {
+export class GeboAIMistralAIEmbedModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GMistralEmbeddingModelConfig> {
     /**
      * The name of the entity being managed by this component
      */
@@ -183,12 +183,6 @@ export class GeboAIMistralAIEmbedModelAdminComponent extends BaseEntityEditingCo
         }))
     }
 
-    /**
-     * Determines if a MistralAI embedding model configuration can be deleted
-     * Currently returns true for all configurations
-     */
-    override canBeDeleted(value: GMistralEmbeddingModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
+    
 
 }
