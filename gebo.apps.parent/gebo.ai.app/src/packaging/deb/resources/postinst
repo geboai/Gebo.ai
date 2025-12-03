@@ -10,27 +10,28 @@ SERVICE_NAME="gebo-ai.service"
 APP_DIR="$APP_HOME/gebo-ai"
 SERVICE_SRC="$APP_DIR/$SERVICE_NAME"
 SERVICE_DST="/etc/systemd/system/$SERVICE_NAME"
-
+echo "Trying to install " > /tmp/gebo-ai-install-log.txt
+echo "" > /tmp/gebo-ai-install-err.txt
 # Create user and service
 if ! id -u "$APP_USER" >/dev/null 2>&1; then
-    useradd -r -m -d "$APP_HOME" -s /bin/bash "$APP_USER"
+    useradd -r -m -d "$APP_HOME" -s /bin/bash "$APP_USER"  >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt 
 fi
 
 # Create folders
-mkdir -p "$GEBO_HOME" "$GEBO_WORK"
-chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK"
+mkdir -p "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
 
 # Install systemd unit
 if [ -f "$SERVICE_SRC" ]; then
-    cp "$SERVICE_SRC" "$SERVICE_DST"
-    chmod 744 "$SERVICE_DST"
+    cp "$SERVICE_SRC" "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+    chmod 744 "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
 fi
 
 # Reload systemd and enables the service
 if command -v systemctl   then
-    systemctl daemon-reload 
-    systemctl enable "$SERVICE_NAME"
-    systemctl restart "$SERVICE_NAME"
+    systemctl daemon-reload   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+    systemctl enable "$SERVICE_NAME"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+    systemctl restart "$SERVICE_NAME"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
 fi
 
 exit 0
