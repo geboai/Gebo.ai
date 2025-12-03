@@ -20,7 +20,7 @@
 import { Component, forwardRef, Injector, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentsResetControllerService, EmbeddingModelsControllersService, GKnowledgeBase, GObjectRef, GProject, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 
@@ -38,7 +38,7 @@ import { forkJoin, map, Observable, of } from "rxjs";
         multi: false
     }]
 })
-export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponent<GKnowledgeBase> {
+export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GKnowledgeBase> {
     /**
      * Name of the entity type being managed by this component
      */
@@ -269,14 +269,7 @@ export class GeboAiKnowledgeBaseAdminComponent extends BaseEntityEditingComponen
         return this.knowledgeBaseControllerService.deleteKnowledgeBase(value).pipe(map(v => true));
     }
 
-    /**
-     * Determines if a knowledge base can be deleted
-     * @param value The knowledge base to check
-     * @returns Observable containing deletion status and a message
-     */
-    override canBeDeleted(value: GKnowledgeBase): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
+   
 
     /**
      * Triggers reindexing of the knowledge base contents after confirmation

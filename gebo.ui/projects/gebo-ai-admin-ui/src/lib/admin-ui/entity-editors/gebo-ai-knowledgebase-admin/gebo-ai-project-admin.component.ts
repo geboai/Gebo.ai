@@ -23,7 +23,7 @@
 import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
@@ -42,7 +42,7 @@ import { map, Observable, of } from "rxjs";
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiProjectAdminComponent),  multi: false   }
     ]
 })
-export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GProject> {
+export class GeboAiProjectAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GProject> {
     /**
      * The entity name for this component
      */
@@ -181,18 +181,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
         return this.projectsControllerService.insertProject(value);
     }
 
-    /**
-     * Checks if a project can be safely deleted
-     * Currently returns a placeholder implementation that allows deletion
-     * 
-     * @param value The project to check
-     * @returns An Observable containing deletion permission status and explanation message
-     */
-    override canBeDeleted(value: GProject): Observable<{ canBeDeleted: boolean; message: string; }> {
-        //TODO: create backend services to check this
-        return of({ canBeDeleted: true, message: "" });
-    }
-
+   
     /**
      * Triggers a reindexing of all contents associated with the current project
      * Displays a confirmation dialog before proceeding
