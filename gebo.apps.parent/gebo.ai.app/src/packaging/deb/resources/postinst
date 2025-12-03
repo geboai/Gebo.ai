@@ -23,11 +23,11 @@ chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK"
 # Install systemd unit
 if [ -f "$SERVICE_SRC" ]; then
     cp "$SERVICE_SRC" "$SERVICE_DST"
-    chmod 644 "$SERVICE_DST"
+    chmod 744 "$SERVICE_DST"
 fi
 
 # Reload systemd and enables the service
-if command -v systemctl >/dev/null 2>&1; then
+if command -v systemctl >/dev/null  then
     systemctl daemon-reload || true
     systemctl enable "$SERVICE_NAME" || true
     # opzionale: avvio immediato

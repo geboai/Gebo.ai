@@ -211,7 +211,7 @@
 
 									<!-- directory con jar e dipendenze -->
 									<input>${project.build.directory}/jpackage/lib</input>
-									<mainJar>${project.build.finalName}.jar</mainJar>
+									<mainJar>${project.build.finalName}-bootable.jar</mainJar>
 
 									<!-- Nome applicazione/pacchetto -->
 									<name>gebo-ai</name>
