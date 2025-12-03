@@ -19,10 +19,10 @@ export interface PageGLookupEntry {
     size?: number;
     content?: Array<GLookupEntry>;
     number?: number;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     sort?: SortObject;
     pageable?: PageableObject;
-    first?: boolean;
-    last?: boolean;
     empty?: boolean;
 }

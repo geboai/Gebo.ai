@@ -171,7 +171,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
    * @param outputForwardingService - Optional service for forwarding outputs
    */
   constructor(
-    private injector: Injector,
+    protected injector: Injector,
     private geboFormGroupsService: GeboFormGroupsService,
     private confirmationService: ConfirmationService,
     private geboUIActionRoutingService: GeboUIActionRoutingService,
@@ -344,7 +344,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
   }
 
   /**
-   * Determines if there is a next step in the wizard
+   * Determines if there is a next step in the wizardoverride 
    */
   public get hasNextStep(): boolean {
     return this.getActualWizardStep()?.nextStepNavigation ? true : false;
@@ -580,10 +580,12 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
     this.canBeDeletedCheckBackend = true;
     this.canBeDeleted(value).subscribe({
       next: (returned) => {
+        this.canBeDeletedCheckBackend = false;
         this.canDelete = returned.canBeDeleted;
         if (!this.canDelete) this.userMessages = [{ id: "CANNOT-DELETE", detail: returned.message, severity: "WARN" }];
       },
       error: (error) => {
+        this.canBeDeletedCheckBackend = false;
         this.userMessages = [{
           id: "SERVERERROR",
           detail: "Server error saving: " + error,
@@ -631,6 +633,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
         if (!errorStatus(this.lastOperationStatus)) {
           this.updateObjectReference();
           this.onLoadedPersistentData(this.entity);
+          this.checkCanBeDeleted(this.entity);
           this.entityDataLoaded = true;
           if (successfulActionCallback) {
             try {
@@ -681,6 +684,7 @@ export abstract class BaseEntityEditingComponent<RecordType extends { code?: str
           this.entityDataLoaded = true;
           this.updateObjectReference();
           this.onLoadedPersistentData(this.entity);
+          this.checkCanBeDeleted(this.entity);
           this.codeWhasNotPresent = false;
           if (successfulActionCallback) {
             try {

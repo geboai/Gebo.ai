@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { DEFAULT_LANGUAGE, findMatchingTranslation, UIExistingText, UILanguageResources } from "./text-language-resources";
+import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat, map } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
@@ -8,7 +8,7 @@ import { findMatchingTranlations } from "./text-language-resources";
 
 import { HttpClient } from "@angular/common/http";
 import { GeboLanguage } from "./language-choice.component";
-import { text } from "mermaid/dist/rendering-util/rendering-elements/shapes/text";
+
 export interface ExtendedConfirmation extends Confirmation {
     id: string;
 }

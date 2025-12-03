@@ -9,12 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
 import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
-    hasWarnMessages?: boolean;
+export interface DeletableStatus { 
+    deletable?: boolean;
+    userMessage?: GUserMessage;
 }

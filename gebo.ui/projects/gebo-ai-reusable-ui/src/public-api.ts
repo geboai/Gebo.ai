@@ -26,6 +26,7 @@ export * from  "./lib/architecture/gebo-ui-entity-form-config";
 export * from "./lib/architecture/gebo-ui-architecture.module";
 export * from "./lib/architecture/gebo-ui-modal-opener.component";
 export * from "./lib/controls/base-entity-editing-component/base-entity-editing.component";
+export * from "./lib/controls/base-entity-editing-component/base-entity-editing-auto-delete-check.component";
 export * from "./lib/controls/base-entity-editing-component/entities-modification-wizard";
 export * from "./lib/controls/base-entity-editing-component/operation-status";
 

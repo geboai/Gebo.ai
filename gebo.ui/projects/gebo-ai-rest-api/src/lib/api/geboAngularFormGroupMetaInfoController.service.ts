@@ -17,7 +17,10 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { DeletableStatus } from '../model/deletableStatus';
 import { FormGroupMetaInfo } from '../model/formGroupMetaInfo';
+import { GObjectRef } from '../model/gObjectRef';
+import { SimpleGObjectRef } from '../model/simpleGObjectRef';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -54,6 +57,100 @@ export class GeboAngularFormGroupMetaInfoControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public checkDeletableByGObjectRef(body: GObjectRef, observe?: 'body', reportProgress?: boolean): Observable<DeletableStatus>;
+    public checkDeletableByGObjectRef(body: GObjectRef, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DeletableStatus>>;
+    public checkDeletableByGObjectRef(body: GObjectRef, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DeletableStatus>>;
+    public checkDeletableByGObjectRef(body: GObjectRef, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling checkDeletableByGObjectRef.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<DeletableStatus>('post',`${this.basePath}/api/admin/AngularFormGroupController/checkDeletableByGObjectRef`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public checkDeletableBySimpleObjectRef(body: SimpleGObjectRef, observe?: 'body', reportProgress?: boolean): Observable<DeletableStatus>;
+    public checkDeletableBySimpleObjectRef(body: SimpleGObjectRef, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DeletableStatus>>;
+    public checkDeletableBySimpleObjectRef(body: SimpleGObjectRef, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DeletableStatus>>;
+    public checkDeletableBySimpleObjectRef(body: SimpleGObjectRef, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling checkDeletableBySimpleObjectRef.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<DeletableStatus>('post',`${this.basePath}/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 

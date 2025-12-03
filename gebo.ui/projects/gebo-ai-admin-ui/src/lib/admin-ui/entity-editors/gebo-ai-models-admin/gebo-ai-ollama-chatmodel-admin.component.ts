@@ -22,7 +22,7 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseChatModelChoice, GOllamaChatModelConfig, OllamaChatModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -43,7 +43,7 @@ import { isValidUrl } from "../utils/url-ok";
         multi: false
     }]
 })
-export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingComponent<GOllamaChatModelConfig> {
+export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GOllamaChatModelConfig> {
     /**
      * The name of the entity being managed by this component
      */
@@ -201,14 +201,5 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
         }))
     }
     
-    /**
-     * Checks if a configuration can be deleted
-     * Currently always returns true, but could implement validation logic in the future
-     * @param value The configuration to check
-     * @returns Observable with deletion permission information
-     */
-    override canBeDeleted(value: GOllamaChatModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
-
+    
 }
