@@ -27,11 +27,10 @@ if [ -f "$SERVICE_SRC" ]; then
 fi
 
 # Reload systemd and enables the service
-if command -v systemctl >/dev/null  then
-    systemctl daemon-reload || true
-    systemctl enable "$SERVICE_NAME" || true
-    # opzionale: avvio immediato
-    systemctl restart "$SERVICE_NAME" || true
+if command -v systemctl   then
+    systemctl daemon-reload 
+    systemctl enable "$SERVICE_NAME"
+    systemctl restart "$SERVICE_NAME"
 fi
 
 exit 0
