@@ -23,10 +23,9 @@ mkdir -p "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/ge
 chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
 echo "Trying to install systemd unit " >> /tmp/gebo-ai-install-log.txt
 # Install systemd unit
-if [ -f "$SERVICE_SRC" ]; then
-    cp "$SERVICE_SRC" "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
-    chmod 744 "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
-fi
+cp "$SERVICE_SRC" "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+chmod 744 "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+
 echo "Trying reset systemd subsystem to launch the service " >> /tmp/gebo-ai-install-log.txt
 # Reload systemd and enables the service
 if command -v systemctl   then
