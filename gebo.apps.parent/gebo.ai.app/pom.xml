@@ -87,7 +87,7 @@
 		<profile>
 			<id>bootables</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<plugins>
@@ -130,10 +130,8 @@
 		<profile>
 			<id>package-unix</id>
 			<activation>
-				<os>
-					<family>unix</family>
-					<name>Linux</name>
-				</os>
+				<!-- <os> <family>unix</family> <name>Linux</name> </os> -->
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<plugins>
@@ -268,9 +266,8 @@
 		<profile>
 			<id>package-windows</id>
 			<activation>
-				<os>
-					<family>windows</family>
-				</os>
+				<!-- <os> <family>windows</family> </os> -->
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
 				<plugins>
@@ -425,7 +422,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.5.4</version>
 				<configuration>
 					<argLine>
 						--add-opens=java.base/java.nio.charset=ALL-UNNAMED
