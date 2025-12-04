@@ -6,6 +6,10 @@ APP_GROUP="gebo-ai"
 APP_HOME="/home/gebo-ai"
 GEBO_HOME="$APP_HOME/home"
 GEBO_WORK="/var/gebo-ai/data"
+GEBO_CONFIG="/var/gebo-ai/config"
+GEBO_ADDITIONAL_CONFIG_FILE="/etc/gebo-ai/application.properties"
+GEBO_LOG_BASE="/var/log/gebo-ai"
+GEBO_EXEC_FOLDER=
 SERVICE_NAME="gebo-ai.service"
 APP_DIR="$APP_HOME/gebo-ai"
 SERVICE_SRC="$APP_DIR/$SERVICE_NAME"
@@ -19,12 +23,81 @@ if ! id -u "$APP_USER" >/dev/null 2>&1; then
 fi
 echo "Trying to create folders " >> /tmp/gebo-ai-install-log.txt
 # Create folders
-mkdir -p "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+mkdir -p "$GEBO_HOME" "$GEBO_WORK" "$GEBO_CONFIG" -p "$GEBO_LOG_BASE"  >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
 chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
-echo "Trying to install systemd unit " >> /tmp/gebo-ai-install-log.txt
+
+echo "Trying to write systemd unit " >> /tmp/gebo-ai-install-log.txt
 # Install systemd unit
-cp "$SERVICE_SRC" "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
-chmod 744 "$SERVICE_DST"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+cat > "$SERVICE_PATH" <<EOF
+[Unit]
+Description=Gebo.ai Service
+After=network.target
+
+[Service]
+User=$APP_USER
+Group=$APP_GROUP
+Environment=GEBO_HOME=$GEBO_HOME
+Environment=GEBO_WORK_DIRECTORY=$GEBO_WORK
+Environment=SPRING_CONFIG_ADDITIONAL_LOCATION=file:/etc/gebo-ai/
+WorkingDirectory=$APP_HOME
+ExecStart=$APP_DIR/bin/gebo-ai
+Restart=on-failure
+StandardOutput=append:/var/log/gebo-ai/service.log
+StandardError=append:/var/log/gebo-ai/service.err
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+chmod 644 "$SERVICE_PATH"
+
+echo "Trying to write gebo additional configuration file " >> /tmp/gebo-ai-install-log.txt
+cat > $GEBO_ADDITIONAL_CONFIG_FILE << EOF
+logging.level.root=INFO
+logging.level.org.springframework=INFO
+logging.level.org.springframework.web=INFO
+logging.level.org.springframework.core=INFO
+logging.level.org.springframework.core.codec=INFO
+server.port=12999
+server.compression.enabled=true
+server.compression.mime-types=text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+server.compression.min-response-size=1024
+server.http2.enabled=true
+server.servlet.contextPath=/
+spring.servlet.multipart.enabled=true
+spring.servlet.multipart.maxFileSize=100MB
+spring.servlet.multipart.maxRequestSize=100MB
+
+#Neo4J connectivity configuration
+#ai.gebo.neo4j.enabled=true
+#spring.neo4j.uri=bolt://localhost:7687
+#spring.neo4j.authentication.username=neo4j
+#spring.neo4j.authentication.password=secret
+
+#Eventual custom token secret for unique JWT in installation
+#ai.gebo.security.auth.tokenSecret=04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1
+#ai.gebo.security.auth.tokenExpirationMsec=120000
+#ai.gebo.security.cors.allowedOrigins=http://localhost:12999,http://localhost:4200
+
+#Qdrant connectivity configuration
+#ai.gebo.vectorstore.use=QDRANT
+#ai.gebo.vectorstore.qdrant.host=127.0.0.1
+#ai.gebo.vectorstore.qdrant.port=6334
+#ai.gebo.vectorstore.qdrant.tls=false
+
+#Work directory can be configured using UI
+ai.gebo.config.setupConfiguresWorkdir=true
+
+#MongoDB connectivity data
+#ai.gebo.mongodb.enabled=true
+#ai.gebo.mongodb.databaseName=gebo-ai
+#ai.gebo.mongodb.connectionString=mongodb://mongoroot:mongopwd@localhost:27017/gebo-ai?authSource=admin
+
+#Allow user connecting configuring wich share(s) to configure from UI
+ai.gebo.filesystem.allowFilesystemSharesUI=true
+
+ai.gebo.filesystem.shares= 
+EOF
 
 echo "Trying reset systemd subsystem to launch the service " >> /tmp/gebo-ai-install-log.txt
 # Reload systemd and enables the service
