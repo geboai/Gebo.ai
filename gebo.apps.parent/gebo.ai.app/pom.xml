@@ -128,7 +128,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>package-unix</id>
+			<id>package-unix-deb</id>
 			<activation>
 				<!-- <os> <family>unix</family> <name>Linux</name> </os> -->
 				<activeByDefault>false</activeByDefault>
@@ -260,6 +260,87 @@
 									</javaOptions>
 								</configuration>
 							</execution>
+							
+
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>package-unix-rpm</id>
+			<activation>
+				<!-- <os> <family>unix</family> <name>Linux</name> </os> -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+
+						<configuration>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+
+
+							<execution>
+								<id>copy-jar</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/jpackage/lib</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.build.finalName}-bootable.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.panteleyev</groupId>
+						<artifactId>jpackage-maven-plugin</artifactId>
+						<version>1.7.1</version>
+						<executions>
+							
 							<!-- RPM (RHEL / Rocky / Alma / Fedora / SUSE) -->
 							<execution>
 								<id>gebo-ai-rpm</id>
