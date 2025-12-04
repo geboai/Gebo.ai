@@ -100,7 +100,7 @@ EOF
 
 echo "Trying reset systemd subsystem to launch the service " >> /tmp/gebo-ai-install-log.txt
 # Reload systemd and enables the service
-if command -v systemctl   then
+if command -v systemctl >/dev/null 2>&1; then
     systemctl daemon-reload   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
     systemctl enable "$SERVICE_NAME"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
     systemctl restart "$SERVICE_NAME"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
