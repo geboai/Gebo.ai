@@ -240,7 +240,7 @@
 									<appContentPaths>
 										<path>${project.basedir}/src/packaging/deb/gebo-ai.service</path>
 									</appContentPaths>
-
+									<verbose>true</verbose>
 									<!-- Volendo puoi passare anche system properties -->
 									<javaOptions>
 										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
@@ -371,7 +371,7 @@
 
 									<!-- script/resources specifici RPM -->
 									<resourceDir>${project.basedir}/src/packaging/rpm/resources</resourceDir>
-
+									<verbose>true</verbose>
 									<javaOptions>
 										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
 										<option>-DGEBO_LOG_BASE=/var/log/gebo-ai</option>
@@ -526,7 +526,7 @@
 									<resourceDir>${project.basedir}/src/packaging/msi/resources</resourceDir>
 									<!-- opzionale: per install per-user invece che per-machine -->
 									<!-- <winPerUserInstall>true</winPerUserInstall> -->
-
+									<verbose>true</verbose>
 									<!-- JVM options (ogni option è un argomento singolo) -->
 									<javaOptions>
 										<!-- dove vuoi che la tua app creda sia la "home" su Windows -->

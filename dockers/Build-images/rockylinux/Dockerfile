@@ -14,12 +14,12 @@ RUN dnf -y install fakeroot
 RUN dnf -y install  rpm-build
 RUN dnf -y install redhat-rpm-config
 RUN dnf -y install systemd-rpm-macros
-RUN dnf -y install java-21-openjdk java-21-openjdk-devel
+#RUN dnf -y install java-21-openjdk java-21-openjdk-devel
 #RUN dnf -y install maven
 RUN dnf -y install rpm-build
-#RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.rpm https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.rpm
-#RUN rpm -i /opt/java/jdk-21_linux-x64_bin.rpm
-#RUN rm -rf /opt/java/jdk-21_linux-x64_bin.rpm
+RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.rpm https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.rpm
+RUN rpm -i /opt/java/jdk-21_linux-x64_bin.rpm
+RUN rm -rf /opt/java/jdk-21_linux-x64_bin.rpm
 RUN curl -L -o /opt/java/apache-maven-3.9.11-bin.tar.gz https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
 WORKDIR /opt/java/
 RUN tar zxvfs apache-maven-3.9.11-bin.tar.gz 
