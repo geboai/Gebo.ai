@@ -29,7 +29,7 @@ import { ButtonModule } from "primeng/button";
 import { GeboAIUserProfileComponent } from "./user-profile.component";
 import { GeboAIChangePasswordComponent } from "./change-password.component";
 import { DialogModule } from "primeng/dialog";
-
+import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
 /**
  * Routes configuration that maps the user profile component to the "ui/currentProfile" path.
  * This allows users to access their profile page through this route.
@@ -49,8 +49,9 @@ const routes:Routes=[{
         BlockUIModule,
         PanelModule,
         DialogModule,
-        MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes)],
+        MessagesModule,ReactiveFormsModule,FormsModule,RouterModule.forRoot(routes),GeboAIFieldTranslationContainerModule],
     declarations:[GeboAIUserProfileComponent,GeboAIChangePasswordComponent]
+    
 })
 export class GeboAIUserProfileModule {
 

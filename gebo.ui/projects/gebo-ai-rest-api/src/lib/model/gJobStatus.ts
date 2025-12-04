@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { GObjectRefGProjectEndpoint } from './gObjectRefGProjectEndpoint';
+import { WorkflowStatus } from './workflowStatus';
 
 export interface GJobStatus { 
     code?: string;
@@ -18,26 +19,19 @@ export interface GJobStatus {
     userCreated?: string;
     dateModified?: Date;
     dateCreated?: Date;
-    jobType?: GJobStatus.JobTypeEnum;
+    jobType: GJobStatus.JobTypeEnum;
+    workflowType: string;
+    workflowId: string;
     processing?: boolean;
-    vectorizationEnded?: boolean;
-    contentBatchEnded?: boolean;
     finished?: boolean;
     error?: boolean;
-    lastBatchMessage?: boolean;
-    howManyBatchDocuments?: number;
-    howManyBatchSentToVectorization?: number;
-    howManyBatchContentsReadingErrors?: number;
-    howManyBatchPersistendDocuments?: number;
-    currentBatchDocumentVectorizedCounter?: number;
-    currentBatchDocumentReceviedCounter?: number;
-    vectorizationErrors?: number;
-    vectorizedSegments?: number;
-    vectorizedTokens?: number;
     startDateTime?: Date;
     endDateTime?: Date;
-    projectEndpointReference?: GObjectRefGProjectEndpoint;
+    projectEndpointReference: GObjectRefGProjectEndpoint;
+    knowledgeBaseCode: string;
+    projectCode: string;
     parentJobCode?: string;
+    workflowStatus?: WorkflowStatus;
 }
 export namespace GJobStatus {
     export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';

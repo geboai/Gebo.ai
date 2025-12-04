@@ -32,6 +32,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/i18n",
               {
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor",
@@ -55,6 +56,7 @@
             ],
             "styles": [
               "src/styles.scss",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/primeflex/primeflex.css",
               "node_modules/prismjs/themes/prism-okaidia.css",
               "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",

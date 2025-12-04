@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Visibility;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The group or role to which this comment is visible. Optional on create and update.

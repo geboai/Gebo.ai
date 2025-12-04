@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.application.messaging.model;
 
@@ -41,6 +38,11 @@ public class GStandardModulesConstraints {
 	public static final String SCHEDULER_MODULE = "scheduler-module";
 	public static final String INTEGRATION_MODULE = "integration-module";
 	public static final String SCHEDULER_COMPONENT = "scheduler-component";
+	public static final String TOKENIZER_MODULE = "tokenizer-module";
+	public static final String TOKENIZER_COMPONENT = "tokenizer-component";
+
+	public static final String KNOWLEDGE_GRAPH_MODULE = "knowledge-graph-module";
+	public static final String KNOWLEDGE_GRAPH_COMPONENT = "knowledge-graph-component";
 
 	// Constants for component names
 	public static final String RESOURCES_DISPOSE_COMPONENT = "resources-dispose-component";
@@ -57,13 +59,13 @@ public class GStandardModulesConstraints {
 
 	// Lists of modules categorized by their type
 	public static final List<String> EXTERNAl_MODULES = new ArrayList<String>();
-	public static final List<String> UNDER_DEVELOPMENT_MODULES = of(GOOGLE_DRIVE_MODULE);
+	public static final List<String> UNDER_DEVELOPMENT_MODULES = of();
 	public static final List<String> ALL_MODULES = of(CORE_MODULE, SHARED_FILESYSTEM_MODULE, UPLOADS_MODULE,
 			VECTORIZATOR_MODULE, GIT_MODULE, ATLASSIAN_CONFLUENCE_MODULE, ATLASSIAN_JIRA_MODULE, SHAREPOINT_MODULE,
-			FULLTEXT_MODULE, USERSPACE_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE);
+			FULLTEXT_MODULE, USERSPACE_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE, GOOGLE_DRIVE_MODULE);
 	public static final List<String> COMMUNITY_MODULES = of(CORE_MODULE, SHARED_FILESYSTEM_MODULE, UPLOADS_MODULE,
 			VECTORIZATOR_MODULE, GIT_MODULE, ATLASSIAN_CONFLUENCE_MODULE, ATLASSIAN_JIRA_MODULE, FULLTEXT_MODULE,
-			USERSPACE_MODULE, SHAREPOINT_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE);
+			USERSPACE_MODULE, SHAREPOINT_MODULE, ASYNC_PUBLISHING_JOB_MODULE, SCHEDULER_MODULE, GOOGLE_DRIVE_MODULE);
 
 	static {
 		// Check system property to determine if UNDER_DEVELOPMENT modules should be

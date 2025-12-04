@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.fastsetup.model.ComponentSetupStatus;
+import ai.gebo.architecture.setup.model.ComponentSetupStatus;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 
 /**

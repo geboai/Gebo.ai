@@ -98,10 +98,11 @@ public class ThreadPoolConfig {
 
 		// Create and configure the ThreadPoolTaskExecutor
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(5); // Minimum number of threads in the pool
-		executor.setMaxPoolSize(10); // Maximum number of threads in the pool
-		executor.setQueueCapacity(25); // Queue capacity for pending tasks
-		executor.setThreadNamePrefix("tpool-"); // Prefix for thread names
+		executor.setCorePoolSize(corePoolsSize); // Minimum number of threads in the pool
+		executor.setMaxPoolSize(maxPoolSize); // Maximum number of threads in the pool
+		executor.setQueueCapacity(queueCapacity); // Queue capacity for pending tasks
+		executor.setThreadNamePrefix("gebo.ai-tpool-"); // Prefix for thread names
+		executor.setThreadPriority(Thread.MAX_PRIORITY);
 		executor.setWaitForTasksToCompleteOnShutdown(false); // Ensures tasks complete on shutdown
 		executor.setAwaitTerminationSeconds(5); // Timeout for waiting for tasks to complete
 		executor.initialize(); // Initializes the thread pool

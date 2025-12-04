@@ -31,4 +31,12 @@ export interface GDeepseekChatModelConfig {
     temperature?: number;
     contextLength?: number;
     defaultModelPrompt?: string;
+    forUses?: Array<GDeepseekChatModelConfig.ForUsesEnum>;
+}
+export namespace GDeepseekChatModelConfig {
+    export type ForUsesEnum = 'CHAT' | 'GRAPH_EXTRACTION';
+    export const ForUsesEnum = {
+        CHAT: 'CHAT' as ForUsesEnum,
+        GRAPHEXTRACTION: 'GRAPH_EXTRACTION' as ForUsesEnum
+    };
 }

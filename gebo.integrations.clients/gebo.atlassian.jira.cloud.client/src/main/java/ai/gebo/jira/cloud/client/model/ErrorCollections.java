@@ -25,7 +25,6 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
 /**
  * ErrorCollections
  */

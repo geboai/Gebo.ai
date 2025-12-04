@@ -35,6 +35,8 @@ public class PathInfo {
 
     // Metadata type of the path
     public PathInfoMetaType metaType = PathInfoMetaType.UNKNOWN;
+    
+    public String iconKey=null;
 
     /**
      * Factory method to create a PathInfo instance from a Path object.

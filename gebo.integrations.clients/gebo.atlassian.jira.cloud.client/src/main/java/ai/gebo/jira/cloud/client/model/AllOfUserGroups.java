@@ -25,12 +25,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.GroupName;
-import ai.gebo.jira.cloud.client.model.ListWrapperCallbackGroupName;
-import ai.gebo.jira.cloud.client.model.SimpleListWrapperGroupName;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * The groups that the user belongs to.
  */

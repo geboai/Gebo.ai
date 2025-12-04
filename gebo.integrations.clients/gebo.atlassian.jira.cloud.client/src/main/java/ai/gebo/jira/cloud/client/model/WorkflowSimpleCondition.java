@@ -25,10 +25,9 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * A workflow transition rule condition. This object returns &#x60;nodeType&#x60; as &#x60;simple&#x60;.

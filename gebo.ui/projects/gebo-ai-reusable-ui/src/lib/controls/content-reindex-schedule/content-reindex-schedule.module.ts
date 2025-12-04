@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * @file content-reindex.module.ts
@@ -35,6 +35,8 @@ import { CalendarModule } from "primeng/calendar";
 import { InputNumberModule } from "primeng/inputnumber";
 import { FieldsetModule } from "primeng/fieldset";
 import { SelectModule } from 'primeng/select';
+import { GEBO_AI_MODULE} from "../field-host-component-iface/field-host-component-iface";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 
 /**
  * NgModule for content reindexing functionality.
@@ -51,9 +53,10 @@ import { SelectModule } from 'primeng/select';
  * Only the GeboAIContentReindexScheduleComponent is exported for use in other modules.
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, CalendarModule,InputNumberModule,FieldsetModule],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, DialogModule, PanelModule, BlockUIModule, ChipModule, ButtonModule, SelectModule, CalendarModule, InputNumberModule, FieldsetModule,GeboAIFieldTranslationContainerModule],
     declarations: [GeboAIPeriodsSchedulingBaseComponent, TimeSetComponent, GeboAIContentReindexScheduleComponent],
-    exports: [GeboAIContentReindexScheduleComponent]
+    exports: [GeboAIContentReindexScheduleComponent],
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false }]
 
 })
 export class GeboAIContentReindexModule { }

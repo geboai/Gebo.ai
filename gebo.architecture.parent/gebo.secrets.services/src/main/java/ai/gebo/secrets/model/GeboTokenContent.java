@@ -12,6 +12,8 @@
 
 package ai.gebo.secrets.model;
 
+import jakarta.validation.constraints.NotNull;
+
 /**
  * GeboTokenContent class represents the content of a Gebo secret related to tokens.
  * It extends the AbstractGeboSecretContent and provides specific methods for handling token and user information.
@@ -20,8 +22,9 @@ package ai.gebo.secrets.model;
  */
 public class GeboTokenContent extends AbstractGeboSecretContent {
     // Field to store the token value.
+	@NotNull
     private String token = null;
-    
+	@NotNull
     // Field to store the user associated with the token.
     private String user = null;
     

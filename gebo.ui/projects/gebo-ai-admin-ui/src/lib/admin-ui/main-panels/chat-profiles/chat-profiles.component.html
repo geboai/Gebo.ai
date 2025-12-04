@@ -1,3 +1,5 @@
+
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -8,25 +10,23 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-blockUI [target]="ragProfilesUI" [blocked]="loadingChatProfiles">
+<p-blockUI id="BlockUI1" gebo-ai-label [target]="ragProfilesUI" [blocked]="loadingChatProfiles">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-blockUI [target]="promptUI" [blocked]="loadingPrompts">
+<p-blockUI id="BlockUI2" gebo-ai-label [target]="promptUI" [blocked]="loadingPrompts">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
 
-<p-panel #ragProfilesUI header="Retrivial augmented generation chat profiles">
+<p-panel id="MainPanel" gebo-ai-label  #ragProfilesUI header="Retrivial augmented generation chat profiles">
+    <p-button id="NewChatProfileBtn" gebo-ai-label (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
     <p-table *ngIf="chatprofiles?.content?.length" [value]="(chatprofiles.content?chatprofiles.content:[])">
         <ng-template pTemplate="header">
             <tr>
-                <th>Code</th>
-                <th>Description</th>
-                <th>Knowledge bases</th>
-                <th></th>
+                <th id="CodeHeader" gebo-ai-text>Code</th>
+                <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                <th id="KnowledgeBasesHeader" gebo-ai-text>Knowledge bases</th>
+                <th id="EmptyHeader" gebo-ai-text></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-model>
@@ -34,25 +34,27 @@
                 <td>{{ model.code }}</td>
                 <td>{{ model.description }}</td>
                 <td>{{ model.knowledgeBaseCodes }}</td>
-                <td><p-button (onClick)="editChatProfile(model)" [outlined]="true" label="configure"
+                <td><p-button id="ConfigureBtn1" gebo-ai-label (onClick)="editChatProfile(model)" [outlined]="true" label="configure"
                         icon="pi pi-wrench"></p-button></td>
             </tr>
         </ng-template>
     </p-table>
-    <p-paginator (onPageChange)="onChatProfilePageChange($event)" [first]="0" [rows]="profilesPage.pageSize"
+    <p-paginator id="Paginator1" gebo-ai-label (onPageChange)="onChatProfilePageChange($event)" [first]="0" [rows]="profilesPage.pageSize"
         *ngIf="chatprofiles?.content?.length" [totalRecords]="chatprofiles?.totalElements"
         [rowsPerPageOptions]="[10, 20, 30]" />
-    <p-button (onClick)="newChatProfile()" label="New chat profile" icon="pi pi-comments" [outlined]="true"></p-button>
+    
 </p-panel>
 
-<p-panel #promptUI header="Prompts collection & default prompts">
+<p-panel id="PromptsPanel" gebo-ai-label  #promptUI header="Prompts collection & default prompts">
+    <p-button id="NewPromptConfigurationBtn" gebo-ai-label (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
+        [outlined]="true"></p-button>
     <p-table *ngIf="prompts?.content?.length" [value]="(prompts.content?prompts.content:[])">
         <ng-template pTemplate="header">
             <tr>
-                <th>Code</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th></th>
+                <th id="CodeHeader2" gebo-ai-text>Code</th>
+                <th id="DescriptionHeader2" gebo-ai-text>Description</th>
+                <th id="CategoryHeader" gebo-ai-text>Category</th>
+                <th id="EmptyHeader2" gebo-ai-text></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-model>
@@ -60,14 +62,17 @@
                 <td>{{ model.code }}</td>
                 <td>{{ model.description }}</td>
                 <td>{{ model.promptCategory}}</td>
-                <td><p-button (onClick)="editPrompt(model)" [outlined]="true" label="configure"
+                <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editPrompt(model)" [outlined]="true" label="configure"
                         icon="pi pi-wrench"></p-button></td>
             </tr>
         </ng-template>
     </p-table>
-    <p-paginator (onPageChange)="onPromptPageChange($event)" [first]="0" [rows]="promptsPage.pageSize"
+    <p-paginator id="Paginator2" gebo-ai-label (onPageChange)="onPromptPageChange($event)" [first]="0" [rows]="promptsPage.pageSize"
         *ngIf="prompts?.content?.length" [totalRecords]="prompts?.totalElements" [rowsPerPageOptions]="[10, 20, 30]" />
-    <p-button (onClick)="newPrompt()" label="New prompt configuration" icon="pi pi-hashtag"
-        [outlined]="true"></p-button>
+    
 
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -40,6 +40,11 @@
 	</logger>
 	
 	
+	<logger name="ai.gebo.systems.abstraction.layer.impl" level="INFO" additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
+	
 	<!-- 
 	<logger name="ai.gebo.ragsystem.content.vectorizator.impl" level="DEBUG" additivity="false">
 		<appender-ref ref="RollingFile" />
@@ -55,11 +60,19 @@
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
+	-->
+	
+	<logger name="ai.gebo.architecture.documents.cache" level="INFO"
+		additivity="false">
+		<appender-ref ref="RollingFile" />
+		<appender-ref ref="Console" />
+	</logger>
 	<logger name="ai.gebo.application.messaging" level="INFO"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
+	<!-- 
 	<logger name="ai.gebo.ragsystem.content.vectorizator"
 		level="INFO" additivity="false">
 		<appender-ref ref="RollingFile" />

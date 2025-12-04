@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MistralBaseModelCard } from './mistralBaseModelCard';
 import { ModelMetaInfo } from './modelMetaInfo';
 
 export interface GMistralEmbeddingModelChoice { 
@@ -25,4 +26,5 @@ export interface GMistralEmbeddingModelChoice {
     informativeUrl?: string;
     contextLength?: number;
     optimalTokenizationParam?: number;
+    modelCard?: MistralBaseModelCard;
 }

@@ -6,35 +6,31 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
  * Module for managing and displaying job status information, including content reading and vectorization tasks.
  * This component provides visualization of job progress, task completion statistics, and log messages.
  */
-import { Component, Injector, SimpleChanges } from '@angular/core';
+import { Component, forwardRef, Injector, SimpleChanges } from '@angular/core';
 
 import { FormControl, FormGroup } from "@angular/forms";
 import { CompanySystemsControllerService, DataPage, GJobStatus, JobLauncherControllerService, JobSummary, LogViewControllerService, PageGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { forkJoin, map, Observable, of } from "rxjs";
+import { renderData, StatusRendering } from './graphic-rendering';
 
-/**
- * Type definition for PrimeNG pie chart data structure.
- * Represents a structured format for chart visualization with labels, datasets, and styling options.
- */
-export type NGPieChart = {
-  labels: string[];
-  datasets: { label: string, data: number[], backgroundColor?: string[]; borderColor?: string[]; borderWith?: number }[];
-};
 @Component({
-    selector: "gebo-ai-job-status-viewer-component", templateUrl: "gebo-ai-job-status-viewer.component.html",
-    standalone: false
+  selector: "gebo-ai-job-status-viewer-component", templateUrl: "gebo-ai-job-status-viewer.component.html",
+  standalone: false, providers: [ 
+    { provide: GEBO_AI_MODULE, useValue: "GeboAIJobStatusModule", multi: false }, 
+    { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIJobStatusViewerComponent), multi: false }
+  ]
 })
 /**
  * Component responsible for displaying and managing job status information.
@@ -78,71 +74,14 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
     page: 0,
     pageSize: 20
   };
-  /**
-   * Standard configuration options for charts
-   */
-  basicOptions = {
-    plugins: {
-      legend: {
-        labels: {
-          color: "black",
-        },
-      },
-    },
-    scales: {
-      x: {
-        ticks: {
-          color: "black",
-        },
-        grid: {
-          color: "black",
-        },
-      },
-      y: {
-        beginAtZero: true,
-        ticks: {
-          color: "black",
-        },
-        grid: {
-          color: "black",
-        },
-      },
-    },
-  };
-  /**
-   * Configuration options specific to pie charts
-   */
-  pieOptions = {
-    plugins: {
-      legend: {
-        labels: {
-          usePointStyle: true,
-          color: "black"
-        }
-      }
-    }
-  };
-  /**
-   * Chart data for content reading process
-   */
-  contentsReadData?: NGPieChart;
-  /**
-   * Chart data for content vectorization process
-   */
-  contentsVectorizationData?: NGPieChart;
-  /**
-   * Chart data showing volume metrics for vectorization
-   */
-  contentsVectorizationVolume?: NGPieChart;
-  /**
-   * Pie chart showing results summary
-   */
-  resultsPiechart?: NGPieChart;
+  
 
   /**
    * Current page of user messages
    */
   public actualPageData?: PageGUserMessage;
+
+  public rootGraphicData?: StatusRendering;
 
   /**
    * Component constructor that initializes services and triggers initial data refresh
@@ -153,6 +92,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
     private logViewControllerService: LogViewControllerService,
     geboUIActionRoutingService: GeboUIActionRoutingService,
     private companySystemsControllerService: CompanySystemsControllerService,
+    
     outputForwardingService?: GeboUIOutputForwardingService) {
     super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService)
     this.refreshGraphics();
@@ -194,7 +134,7 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
       const observables: [Observable<GJobStatus>, Observable<PageGUserMessage>, Observable<JobSummary>] = [this.JobLauncherControllerService.getJobStatus(this.entity.code), this.logViewControllerService.getJobMessagesPaged({
         jobId: this.entity?.code,
         dataPage: this.actualPage
-      }), this.JobLauncherControllerService.getJobSummary(this.entity.code, true)];
+      }), this.JobLauncherControllerService.getJobSummary(this.entity.code)];
       this.loadingRelatedBackend = true;
       forkJoin(observables).subscribe({
         next: (values) => {
@@ -207,15 +147,17 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
           if (anyVersion && anyVersion?.page?.totalElements) {
             this.actualPageData.totalElements = anyVersion?.page?.totalElements;
           }
-          if (!(this.jobSummary?.contentsReadTerminated === true && this.jobSummary?.vectorizationTerminated === true)) {
-            let delayInMilliseconds: number = 10000; // 2000 milliseconds (2 seconds) delay
-            if (this.actualPageData && this.actualPageData.totalElements !== undefined && this.actualPageData.totalElements < 3) {
-              delayInMilliseconds = 2000;
-            }
+
+          let delayInMilliseconds: number = 10000; // 2000 milliseconds (2 seconds) delay
+          if (this.actualPageData && this.actualPageData.totalElements !== undefined && this.actualPageData.totalElements < 3) {
+            delayInMilliseconds = 10000;
+          }
+          if (this.jobSummary?.workflowStatus?.finished !== true) {
             setTimeout(() => {
               this.reloadPeriodically();
             }, delayInMilliseconds);
           }
+
         },
         complete: () => {
           this.loadingRelatedBackend = false;
@@ -229,115 +171,11 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
    * Creates and updates chart data structures for visualization.
    */
   private refreshGraphics(): void {
-
-    const contentsGraphicData: NGPieChart = {
-      labels: [],
-      datasets: [{
-        label: "Documents read",
-        data: [],
-        backgroundColor:[]
-
-      }, {
-        label: "Sent to embedding",
-        data: [],
-        backgroundColor:[]
-      }, {
-        label: "Read errors",
-        data: [],
-        backgroundColor:[]
-      }]
-    };
-    const vectorizationGraphicData: NGPieChart = {
-      labels: [],
-      datasets: [{
-        label: "Received for embedding",
-        data: [],
-        backgroundColor:[]
-      },
-      {
-        label: "Successfully embedded",
-        data: [],
-        backgroundColor:[]
-      },
-      {
-        label: "Embedding errors",
-        data: [],
-        backgroundColor:[]
-      }]
-    };
-    const contentsVectorizationVolume: NGPieChart = {
-      labels: [],
-      datasets: [
-        {
-          label: "Nr. embedded tokenized segments",
-          data: [],
-          backgroundColor:[]
-        },
-        {
-          label: "Embedded Token X 1000",
-          data: [],
-          backgroundColor:[]
-        }],
-    }
-    const pichartResults: NGPieChart = {
-      labels: ["Documents to embed", "Successfully embedded docs"],
-      datasets: [
-        { data: [], label: "",backgroundColor:[] }
-      ]
-    };
-    if (this.jobSummary && this.jobSummary.contentsProcessingData && this.jobSummary.contentsProcessingData.length) {
-
-      const categories: string[] = [];
-      this.jobSummary.contentsProcessingData.forEach(x => {
-
-        contentsGraphicData.datasets[0].data.push(x.howManyBatchDocuments ? x.howManyBatchDocuments : 0);
-        contentsGraphicData.datasets[0].backgroundColor?.push("#EBB921");
-        contentsGraphicData.datasets[1].data.push(x.howManyBatchSentToVectorization ? x.howManyBatchSentToVectorization : 0);
-        contentsGraphicData.datasets[1].backgroundColor?.push("#36A2EB");
-        contentsGraphicData.datasets[2].data.push(x.howManyBatchContentsReadingErrors ? x.howManyBatchContentsReadingErrors : 0);
-        contentsGraphicData.datasets[2].backgroundColor?.push("red");
-        categories.push(this.totsString(x.timestamp));
-      });
-      contentsGraphicData.labels = categories;
-
-
-    }
-    this.contentsReadData = contentsGraphicData;
-
-    if (this.jobSummary && this.jobSummary.vectorizationProcessingData && this.jobSummary.vectorizationProcessingData.length) {
-      this.jobSummary.vectorizationProcessingData.forEach(x => {
-
-        vectorizationGraphicData.datasets[0].data.push(x.currentBatchDocumentReceviedCounter ? x.currentBatchDocumentReceviedCounter : 0);
-        vectorizationGraphicData.datasets[0].backgroundColor?.push("#5BEBE1"); 
-        vectorizationGraphicData.datasets[1].data.push(x.currentBatchDocumentVectorizedCounter ? x.currentBatchDocumentVectorizedCounter : 0);
-        vectorizationGraphicData.datasets[1].backgroundColor?.push("#32EB8C");
-        vectorizationGraphicData.datasets[2].data.push(x.vectorizationErrors ? x.vectorizationErrors : 0);
-        vectorizationGraphicData.datasets[2].backgroundColor?.push("#EB2BD5");
-
-        contentsVectorizationVolume.datasets[0].data.push(x.vectorizedSegments ? x.vectorizedSegments : 0);
-        const vectorizedTokens = Math.round((x.vectorizedTokens ? x.vectorizedTokens : 0) / 1000);
-        contentsVectorizationVolume.datasets[1].data.push(vectorizedTokens);
-        contentsVectorizationVolume.datasets[0].backgroundColor?.push("#C0C0C0");
-        contentsVectorizationVolume.datasets[1].backgroundColor?.push("#75163F");
-        vectorizationGraphicData.labels.push(this.totsString(x.timestamp));
-        contentsVectorizationVolume.labels.push(this.totsString(x.timestamp));
-      });
+    this.rootGraphicData = undefined;
+    if (this.jobSummary?.workflowStatus?.rootStatus) {
+      this.rootGraphicData = renderData(this.jobSummary?.workflowStatus?.rootStatus,this.jobSummary?.workflowStepsSummaries);
     }
 
-    this.contentsVectorizationData = vectorizationGraphicData;
-    this.contentsVectorizationVolume = contentsVectorizationVolume;
-    if (this.jobSummary) {
-      const howMuchTotalToVectorize: number = this.jobSummary.howManyBatchSentToVectorization ? this.jobSummary.howManyBatchSentToVectorization : 0;
-      const howMuchAreVectorized: number = this.jobSummary.currentBatchDocumentVectorizedCounter ? this.jobSummary.currentBatchDocumentVectorizedCounter : 0;
-      const notYetVectorized = howMuchTotalToVectorize - howMuchAreVectorized;
-      if (notYetVectorized >= 0 && howMuchTotalToVectorize >= 0) {
-        pichartResults.datasets[0].data.push(notYetVectorized);
-        pichartResults.datasets[0].backgroundColor?.push("#36A2EB");
-        pichartResults.datasets[0].data.push(howMuchAreVectorized);
-        pichartResults.datasets[0].backgroundColor?.push("#32EB8C");
-        this.resultsPiechart = pichartResults;
-      }
-    }
   }
 
   /**

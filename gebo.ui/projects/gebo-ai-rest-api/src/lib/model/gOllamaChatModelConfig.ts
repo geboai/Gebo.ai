@@ -31,4 +31,12 @@ export interface GOllamaChatModelConfig {
     temperature?: number;
     contextLength?: number;
     defaultModelPrompt?: string;
+    forUses?: Array<GOllamaChatModelConfig.ForUsesEnum>;
+}
+export namespace GOllamaChatModelConfig {
+    export type ForUsesEnum = 'CHAT' | 'GRAPH_EXTRACTION';
+    export const ForUsesEnum = {
+        CHAT: 'CHAT' as ForUsesEnum,
+        GRAPHEXTRACTION: 'GRAPH_EXTRACTION' as ForUsesEnum
+    };
 }

@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "મૂળભૂત સિસ્ટમ ભાષા",
+        "help" : "આ Gebo.ai ઇન્સ્ટોલેશન માટે મૂળભૂત સિસ્ટમ ભાષા"
+      },
+      "username" : {
+        "label" : "ઇ-મેઇલ",
+        "help" : "લોગિન માટે યૂઝરનેમ તરીકે ઇ-મેઇલ"
+      },
+      "passwordC" : {
+        "label" : "પાસવર્ડની પુષ્ટિ કરો",
+        "help" : "પાસવર્ડની પુષ્ટિ કરો"
+      },
+      "password" : {
+        "label" : "પાસવર્ડ",
+        "help" : "લોગિન માટે પાસવર્ડ (ઓછામાં ઓછા 8 અક્ષરો)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " પાસવર્ડ મિલતા નથી "
+      },
+      "LocalAdmin" : {
+        "label" : "તમારું લોકલ એડમિન એકાઉન્ટ બનાવો"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "આ એકાઉન્ટ તમે ભવિષ્યમાં સોફ્ટવેર સેટપ/એડમિન કરવા માટે ઉપયોગમાં લેશો, આ ડેટા તમારી સિસ્ટમ પર સ્થાનિક રહેશે અને નેટવર્ક પર મોકલાશે નહીં"
+      },
+      "EnterBtn" : {
+        "label" : "પ્રવેશ કરવા લોગિન પેજ પર જાઓ"
+      },
+      "SetupPage" : {
+        "label" : "તમારી gebo.ai ઇન્સ્ટોલેશન સેટઅપ કરો"
+      },
+      "CreateBtn" : {
+        "label" : "સિસ્ટમ સેટઅપ બનાવો"
+      },
+      "LicenceFieldSet" : {
+        "label" : "લાઇસન્સ વાંચો અને સ્વીકારો"
+      },
+      "AcceptMark" : {
+        "label" : "હું શરતો સ્વીકારું છું",
+        "help" : "અહીં ક્લિક કરીને તમે લાઇસન્સની શરтоં માન્ય કરો છો"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ઇ-મેઇલ",
+        "help" : "લિસ્ટ માટે ઇ-મેઇલ યુઝરનેમ તરીકે દાખલ કરો"
+      },
+      "password" : {
+        "label" : "પાસવર્ડ",
+        "help" : "પ્રવેશ કરવા માટે પાસવર્ડ"
+      },
+      "LoginPanel" : {
+        "label" : "gebo.ai માં લોોગિન કરો"
+      },
+      "LoginBtn" : {
+        "label" : "લૉગિન"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ઠીક છે!",
+        "detail" : "પરિયાળ સફળતાપૂર્વક પૂર્ણ થઈ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "gebo.aiમાં આપનું સ્વાગત છે",
+        "detail" : "લોગિન કરવા માટે તમારું વપરાશકર્તા નામ અને પાસવર્ડ દાખલ કરો"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "પ્રક્રિયા નિષ્ફળ ગઈ",
+        "detail" : "આપેલ વિગતો સાથે પરિચય ન થઈ શક્યો"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "બરાબર!",
+        "detail" : "પ્રક્રિયા સફળતાપૂર્વક પૂર્ણ થઈ"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Gebo.ai પર સ્વાગત છે",
+        "detail" : "લૉગિન કરવા માટે આપનું યુઝર્નેમ અને પાસવર્ડ દાખલ કરો"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 રૂપરેખાંકન"
+      },
+      "ProviderNameHeader" : {
+        "label" : "પ્રદાતા નામ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 સુરક્ષા સેટિંગ્સ"
+      },
+      "IdHeader" : {
+        "label" : "આઈડી"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "સેટઅપ મુખ્ય પૃષ્ઠ પર પાછા જાઓ"
+      },
+      "WizardUi" : {
+        "label" : "સેટઅપ વિભાગ પસંદ કરો"
+      },
+      "adminUserSetupSection" : {
+        "label" : "એડમિનિસ્ટ્રેટર અને અન્ય ખાતા સેટઅપ",
+        "description" : "આ સ્થાનાંતરણ માટે યોગ્ય રીતે સંચાલિત કરવા માટે ઓછામાં ઓછું એક વહીવટ ખાતું જરૂરી છે, જો જરૂર હોય તો અન્ય યુઝર્સ ઉમેરો"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai વર્ક ડિરેક્ટરી",
+        "description" : "વર્ક ડિરેક્ટરી રૂપરેખાંકિત કરો, તે ફોલ્ડર હશે જ્યાં આ ઇન્સ્ટોલેશનના તમામ કાંફિગ્યુરેશન અને કાર્યકારી ફાઇલો સ્ટોર થશે. તેનો નિયમિત બેકઅપ લેવા પણ ઉત્તમ વિચાર છે."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "વેક્ટર ડેટાબેઝ રૂપરેખાંકન",
+        "description" : "Gebo.ai ને રીટ્રીવ ઓગમેન્ટેડ જનરેશન સેવા આપવા માટે વેક્ટર ડેટાબેઝ રૂપરેખાંકિત કરવું પડશે, તમે લોકલ વેક્ટર ડેટાબેઝ, Qdrant અથવા Mongo Atlas માંથી પસંદ કરી શકો છો"
+      },
+      "oauth2SetupSection" : {
+        "label" : "સિંગલ સાઈનઓન, oauth2 ઓથન્ટિકેશન",
+        "description" : "Oauth2 સિંગલ સાઈનઓન ઓથન્ટિકેશન અને oauth2 ક્લાયન્ટ્સ રૂપરેખાંકન"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "મોટા ભાષા મોડલ્સ સેટઅપ",
+        "description" : "વિવિધ llms ને ક્લાઉડ અથવા લોકલ/લેન ઇન્ફ્રાસ્ટ્રક્ચરને આધારભૂત સેવામાં રૂપરેખાંકિત કરો, સોફ્ટવેર યોગ્ય રીતે કાર્ય કરવા માટે ઓછામાં ઓછું એક ચેટ મોડલ અને એક એમ્બેડિંગ મોડલ્સ રૂપરેખાંકિત કરવાના રહેશે."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "ગ્રાફ રેગ/જ્ઞાન એક્સટ્રેશન સેટઅપ",
+        "description" : "ગ્રાફ રેગ અને જ્ઞાન ઉલ્લેખણ ઉપ પ્રણાલી રૂપરેખાંકિત કરો"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "શેર કરેલા ફાઈલસિસ્ટમ માર્ગો સેટઅપ",
+        "description" : "કંપનીના શેરડ ફાઈલસિસ્ટમના માર્ગો રૂપરેખાંકિત કરો જેથી વર્કિંગ ક્ષેત્રનો ઉપયોગ વિવિધ જ્ઞાન આધાર માટે થઈ શકે"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence ઈન્ટિગ્રેશન",
+        "description" : "Gebo.ai ને તમારા Atlassian Confluence ક્લાઉડ અથવા ઑન પ્રેમાઇસ ઇન્સ્ટોલેશનમાં ઍક્સેસ આપવા માટે રૂપરેખાંકિત કરો"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira ઈન્ટિગ્રેશન",
+        "description" : "Gebo.ai ને તમારા Atlassian jira ક્લાઉડ ઇન્સ્ટોલેશનમાં ઍક્સેસ આપવા માટે રૂપરેખાંકિત કરો"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ઈન્ટિગ્રેશન",
+        "description" : "Gebo.ai ને તમારા Microsoft Sharepoint ક્લાઉડ અથવા ઑન પ્રેમાઇસ ઇન્સ્ટોલેશનમાં ઍક્સેસ આપવા માટે રૂપરેખાંકિત કરો"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "ઓછામાં ઓછી એક જ્ઞાન આધાર રૂપરેખાંકિત કરો",
+        "description" : "તમારા યુઝર્સ Gebo.ai ની રીટ્રીવ ઓગમેન્ટેડ જનરેશન સેવાઓનો લાભ લે શકે તે માટે ઓછામાં ઓછી એક જ્ઞાન આધાર રૂપરેખાંકિત કરો"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "ઓછામાં ઓછી એક \"R.A.G.\" ચેટ પ્રોફાઈલ રૂપરેખાંકિત કરો",
+        "description" : "તમારા યુઝર્સ માટે રૂપરેખાંકિત થયેલા કોઈ જ્ઞાન આધાર પરથી ઓછામાં ઓછી રીટ્રીવ ઓગમેન્ટેડ ચેટ પ્રોફાઈલ રૂપરેખાંકિત કરો"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai સેટઅપ ફરજિયાત પગલાં પૂર્ણ...",
+        "detail" : "ફરજિયાત સેટઅપ પગલાં પૂર્ણ થયા છે, પણ અમુક ચૂકતા પગલાંઓ કારણે તમારી સંસ્થા આ સોફ્ટવેરનો પૂર્ણ અનુભવ લઈ શકતી નથી"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai સેટઅપ સરસ છે!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai સેટઅપમાં કંઈક ફરજિયાત પગલું ચૂકી ગયું છે",
+        "detail" : "મહેરબાની કરીને સેટઅપ પ્રક્રિયાના લાલ રંગના પગલાંઓને ચકાસો"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces એકીકરણ",
+        "description" : "તમારા Google cloud Drive/Workspaces ટીમ ડેટા ઍક્સેસ કરવા માટે Gebo.aiનું સમાયોજન કરો"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "કંપની Atlassian Confluence સિસ્ટમ્સ સેટઅપ કરો"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "SystemTypeHeader" : {
+        "label" : "સિસ્ટમ પ્રકાર"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કંફિગ કોડ"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence સિસ્ટમ"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira સિસ્ટમ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કંફિગ કોડ"
+      },
+      "MainPanel" : {
+        "label" : "કંપની Atlassian Jira સિસ્ટમ્સ સેટઅપ કરો"
+      },
+      "SystemTypeHeader" : {
+        "label" : "સિસ્ટમ પ્રકાર"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કંફિગ કોડ"
+      },
+      "MainPanel" : {
+        "label" : "કંપની Microsoft Sharepoint સિસ્ટમ્સ સેટઅપ કરો"
+      },
+      "SystemTypeHeader" : {
+        "label" : "સિસ્ટમ પ્રકાર"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint સિસ્ટમ"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "યોગ્ય ઉપલબ્ધ ક્રેડિટ સાથે api-કી પ્રદાન કરો. જો OpenAI પસંદ કરો છો તો તમારી સામાન્ય યોજના માટે વિશિષ્ટ api ઉપયોગ માટે કંઈક ક્રેડિટ (10-30$ પૂરતું થઈ શકે છે) ઉમેરો, નહિતર આ એપ્લિકેશનમાં કોઇ પણ llms ટ્રાફિક ઉપલબ્ધ નહીં થાય."
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai llms પ્રોવાઈડર્સ ઍક્સેસ તમારા api-કી સાથે સુયોજિત કરો"
+      },
+      "provider" : {
+        "label" : "મોટા ભાષા મોડલ સપ્લાયર",
+        "help" : "OpenAI (chatgpt), Google (Gemini), અથવા Anthropic (Claude) માંથી એક સપ્લાયર પસંદ કરો"
+      },
+      "user" : {
+        "label" : "યુઝર",
+        "help" : "apiKey સાથે સંકળાયેલા યુઝર દાખલ કરો"
+      },
+      "ConfigureBtn" : {
+        "label" : "રૂપરેખાંકિત કરો"
+      },
+      "apiKey" : {
+        "label" : "Api કી",
+        "help" : "ઉપયોગમાં લેવાય તેવા LLMS પ્રોવાઈડર્સ માટે તમારી api કી"
+      },
+      "ProviderHeader" : {
+        "label" : "પ્રદાતા"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "રૂપરેખાંકન કોડ"
+      },
+      "ModelHeader" : {
+        "label" : "મોડલ"
+      },
+      "ModelTypeHeader" : {
+        "label" : "મોડલ પ્રકાર"
+      },
+      "DefaultModelHeader" : {
+        "label" : "ડિફોલ્ટ મોડલ"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms પ્રદાતાની ઍક્સેસ સેટઅપ કરો"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "ગ્રાફ રેગ રૂપરેખાંકન બનાવો"
+      },
+      "MainPanel" : {
+        "label" : "ગ્રાફ રેગ અને જ્ઞાન એક્સટ્રેશનનું ડિફોલ્ટ રૂપરેખાંકન સેટઅપ કરો"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કંફિગ કોડ"
+      },
+      "EditConfigBtn" : {
+        "label" : "કન્ફિગ સંપાદિત કરો"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "પ્રોજેક્ટ"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "જ્ઞાન આધાર ઉમેરો"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "જ્ઞાન આધાર"
+      },
+      "MainPanel" : {
+        "label" : "જ્ઞાન આધાર અને સામગ્રી રૂપરેખાંકન"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "સામગ્રી સ્ત્રોત"
+      },
+      "PublishedHeader" : {
+        "label" : "પ્રકાશિત"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "દસ્તાવેજોની સંખ્યા"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "પ્રોજેક્ટ/આઇટમ ઉમેરો",
+        "help" : "નવો પ્રોજેક્ટ બનાવો"
+      },
+      "Button1" : {
+        "help" : "જ્ઞાન આધાર ખોલો"
+      },
+      "Button2" : {
+        "help" : "પ્રોજેક્ટ ફોર્મ ખોલો"
+      },
+      "Button3" : {
+        "help" : "ડેટા સોર્સ ખોલો"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai વર્ક ફોલ્ડર રૂપરેખાંકન"
+      },
+      "ConfigureBtn" : {
+        "label" : "રૂપરેખાંકિત કરો"
+      },
+      "workDirectory" : {
+        "label" : "Gebo.ai વર્ક ડિરેક્ટરી તરીકે ફોલ્ડર પસંદ કરો",
+        "help" : "સર્વરનું એવું ફોલ્ડર પસંદ કરો જે આ ઇન્સ્ટોલેશન દ્વારા તેની રૂપરેખાંકન અને સામગ્રી સ્ટોર માટે વર્ક ફોલ્ડર તરીકે ઉપયોગમાં લેવાશે."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "ફોલ્ડર ઉમેરો"
+      },
+      "AddFolderBtn" : {
+        "label" : "ફોલ્ડર ઉમેરો"
+      },
+      "CodeHeader" : {
+        "label" : "કોડ"
+      },
+      "MainPanel" : {
+        "label" : "સર્વર શેર કરેલા ફાઈલસિસ્ટમ માર્ગો"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "એબ્સોલ્યુટ માર્ગ"
+      },
+      "DeleteHeader" : {
+        "label" : "કાઢી નાખો"
+      },
+      "path" : {
+        "label" : "શેર ફાઈલસિસ્ટમ માટે મૂળ ફોલ્ડર ઉમેરો",
+        "help" : "સર્જનાત્મક દસ્તાવેજોના રિપોઝિટલરી માટે તમારા સંસ્થામાં ઉપયોગમાં લેવાતી શેરડ ફાઈલસિસ્ટમ માટે સર્વર પરનું такое ફોલ્ડર પસંદ કરો જે મૂળ માર્ગ છે"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "ફાઈલસિસ્ટમ એન્ટ્રીનું વર્ણન દાખલ કરો"
+      },
+      "RemovePathBtn" : {
+        "label" : "માર્ગ દૂર કરો"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "રૂપરેખાંકિત કરો"
+      },
+      "MainPanel" : {
+        "label" : "વેક્ટર ડેટાબેઝ રૂપરેખાંકન"
+      },
+      "host" : {
+        "label" : "Qdrant હોસ્ટ",
+        "help" : "Qdrant નું હોસ્ટ નામ અથવા ip સરનામું"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant કનેક્શન સેટિંગ્સ"
+      },
+      "port" : {
+        "label" : "Qdrant પોર્ટ",
+        "help" : "Qdrant કનેક્શન પોર્ટ (6334 સ્ટાન્ડર્ડ છે)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api કી",
+        "help" : "Qdrant ઓથન્ટિકેશન માટે Api કી"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS પેરામીટર",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai સેટઅપના ફરજિયાત પગલાં પૂર્ણ થયા...",
+        "detail" : "ફરજિયાત સેટઅપ પગલાં પૂર્ણ થયા છે, પણ કેટલાક ચૂકી ગયેલા પગલાંઓને લીધે તમારી સંસ્થા સમગ્રપણે સોફ્ટવેરનો સંપૂર્ણ લાભ લઈ શકતી નથી"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai સેટઅપના કેટલાક ફરજિયાત પગલાં ચૂકી ગયા છે",
+        "detail" : "મહેરબાની કરીને સેટઅપ પ્રક્રિયા ના લાલ બતાવવામાં આવેલા પગલાંની સમીક્ષા કરો"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai સેટઅપ ઠીક છે!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "નવું R.A.G. ચેટ પ્રોફાઇલ ઉમેરો"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. ચેટ પ્રોફાઇલ ઉમેરો"
+      },
+      "MainPanel" : {
+        "label" : "ઓગમેન્ટેડ જનરેશન (r.a.g.) ચેટ પ્રોફાઈલસ સેટિંગ્સ મેળવો"
+      },
+      "CodeHeader" : {
+        "label" : "કોડ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "હાલની R.A.G. ચેટ પ્રોફાઇલ્સ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. ચેટ પ્રોફાઇલ સંપાદિત કરો"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "નોલેજ બેઝ કોડ્સ"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "કંપની Google Drive/Workspaces સિસ્ટમ્સ સમાયોજિત કરો"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "કોન્ફિગ કોડ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "વિવરણ"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "કોડ",
+        "help" : "OAUTH2 પ્રમાણીકરણ/એકત્રીકરણ કોડ (registrationId) માટે વર્ણન દાખલ કરો."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "OAUTH2 પ્રમાણીકરણ/એકત્રીકરણની માહિતી માટે વર્ણન દાખલ કરો."
+      },
+      "configurationType" : {
+        "label" : "કોન્ફિગરેશન હેતુ",
+        "help" : "પસંદ કરો કે આ સેટિંગ્સ Gebo.ai માટે પ્રમાણિત થવા માટે અથવા Gebo.ai ને 3rd party સિસ્ટમ સાથે ક્લાઈન્ટ કનેક્ટિવિટી આપવા માટે ઉપયોગમાં લેવાશે કે નહીં."
+      },
+      "authProvider" : {
+        "label" : "પ્રોવાઈડર",
+        "help" : "OAUTH2 પ્રમાણીકરણ માટે પ્રોવાઈડર દાખલ કરો"
+      },
+      "issuerUri" : {
+        "label" : "ઇશ્યુઅર Uri",
+        "help" : "પ્રોવાઈડર માટેનું OAUTH2 ઇશ્યુઅર URL દાખલ કરો"
+      },
+      "authorizationUri" : {
+        "label" : "અથોરાઈઝેશન URL",
+        "help" : "પ્રોવાઈડર માટે OAUTH2 અધિકૃતતા URL દાખલ કરો"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "પ્રોવાઈડર માટે OAUTH2 Jwk Set url દાખલ કરો"
+      },
+      "userInfoUri" : {
+        "label" : "યૂઝર ઇન્ફો URL",
+        "help" : "પ્રોવાઈડર માટે OAUTH2 યૂઝર ઇન્ફો URL દાખલ કરો"
+      },
+      "introspectionUri" : {
+        "label" : "ઇન્ટ્રોસ્પેક્શન Uri",
+        "help" : "પ્રોવાઈડર માટે OAUTH2 ઇન્ટ્રોસ્પેક્શન URL દાખલ કરો"
+      },
+      "tokenUri" : {
+        "label" : "ટોકન URL",
+        "help" : "પ્રોવાઈડર માટે OAUTH2 ટોકન URL દાખલ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સેવ કરો"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 પ્રોવાઈડર URLS"
+      },
+      "MainPanel" : {
+        "label" : "નવું OAUTH2 પ્રમાણીકરણ/એકત્રીકરણ માહિતી દાખલ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "ડિલીટ કરો"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ક્લાઈન્ટ ID",
+        "help" : "oauth2 પ્રોટોકોલ માટે ક્લાઈન્ટ ઓળખનાર (oauth2 ઓથેન્ટિકેટ થયેલ 3rd party સોફ્ટવેર એડમિન વિસ્તારમાં મેળવવાનો છે)"
+      },
+      "secret" : {
+        "label" : "સિક્રેટ કી",
+        "help" : "oauth2 પ્રોટોકોલ માટે ક્લાઈન્ટ સિક્રેટ (oauth2 ઓથેન્ટિકેટ થયેલ 3rd party સોફ્ટવેર એડમિન વિસ્તારમાં મેળવવાનો છે)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Confluence સિસ્ટમ રૂપરેખાંકન બનાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "Confluence સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "CreateBtn" : {
+        "label" : "બનાવો"
+      },
+      "username" : {
+        "label" : "Confluence વપરાશકર્તા નામ",
+        "help" : "Confluence વપરાશકર્તા નામ"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence સંસ્કરણ",
+        "help" : "Confluence સંસ્કરણ"
+      },
+      "baseUri" : {
+        "label" : "મૂળ ઇન્ટરનેટ સરનામું",
+        "help" : "Onpremise સ્થાપન માટેના confluence સિસ્ટમનું મૂળ url અથવા confluence ક્લાઉડ સિસ્ટમ માટે તમારી સંસ્થાનું મૂળ url"
+      },
+      "password" : {
+        "label" : "Confluence પાસવર્ડ",
+        "help" : "Confluence પાસવર્ડ"
+      },
+      "token" : {
+        "label" : "Confluence cloud api કી",
+        "help" : "Confluence CLOUD apikey જે confluence backoffic માં મેળવવામાં આવે છે, અહીં \"તમારા Atlassian ખાતા માટે API Token\" દાખલ કરવું પડશે."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સાચવે છે અને આ સામગ્રીને LLm's માટે જ્ઞાન આધારમાં ઉપલબ્ધ બનાવે છે"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાંખો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "Confluence સામગ્રી વહેંચવી"
+      },
+      "LogsTab" : {
+        "label" : "લૉગ્સ"
+      },
+      "code" : {
+        "label" : "અદ્વિતीय કોડ",
+        "help" : "સામગ્રીના આપમેળે ઉત્પન્ન થયેલા અદ્વિતીય કોડ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "Confluence પ્રવેશોની અપલોડ થયેલી સામગ્રીનું વર્ણન દાખલ કરો."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence સિસ્ટમ",
+        "help" : "પહેલેથી રૂપરેખાંકિત Confluence સિસ્ટમ સંદર્ભ."
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "મૂલ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "openZips" : {
+        "label" : "ઝિપ ફાઇલો ખોલો",
+        "help" : "ઝિપ ફાઈલો ખોલવાની અને સામગ્રી કાઢવાના વિકલ્પને સક્રિય કરો"
+      },
+      "tree" : {
+        "label" : "પસંદ કરેલા સ્પેસ અથવા પેજ/ઉપપેજ",
+        "help" : "શેર કરેલ Confluence સ્પેસ અને પેજીસની સામગ્રી"
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રી અપડેટ ચકાસણીનો સમયપત્રક",
+        "help" : " બદલાયેલ સામગ્રીને વાંચન સક્ષમ જનરેશન સિસ્ટમ અપડેટ રાખવા માટે સમયપત્રક સુયોજિત કરો"
+      },
+      "catalogingCriteria" : {
+        "label" : "જગ્યા, પેજ અને ઉપપેજ સંગઠન માપદંડો",
+        "help" : "અહીં સ્પષ્ટ કરો કે કઈ રીતે Confluence સામગ્રીમાં જગ્યાઓ, પેજ અને ઉપપેજનું સંગઠન માપદંડો કરવામાં આવ્યું છે જે Gebo.ai સાથે શેર કરવામાં આવ્યા છે"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "સામાન્ય સેટિંગ્સ"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાંખો"
+      },
+      "MainPanel" : {
+        "label" : "Confluence સિસ્ટમ સંપાદન કરી રહ્યા છીએ"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "baseUri" : {
+        "label" : "મૂળ ઇન્ટરનેટ સરનામું",
+        "help" : "Confluence સિસ્ટમના મૂળ સરનામાનો url"
+      },
+      "code" : {
+        "label" : "અદ્વિતીય કોડ",
+        "help" : "Confluence સિસ્ટમનો આપમેળે ઉત્પન્ન થયેલો અદ્વિતीय કોડ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "Confluence સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence સંસ્કરણ",
+        "help" : "Confluence સંસ્કરણ"
+      },
+      "secretCode" : {
+        "label" : "વપરાયેલ ઓળખ",
+        "help" : "Confluence સિસ્ટમને ઍક્સેસ કરવા માટે ઓળખ પસંદ કરો અથવા બનાવો"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "નવું ગ્રુપ"
+      },
+      "NewUserBtn" : {
+        "label" : "નવો વપરાશકર્તા"
+      },
+      "UsersListPanel" : {
+        "label" : "વપરાશકર્તાઓની સૂચિ"
+      },
+      "GroupsListPanel" : {
+        "label" : "ગ્રુપ્સની સૂચિ"
+      },
+      "SournameHeader" : {
+        "label" : "અટક"
+      },
+      "UsernameHeader" : {
+        "label" : "વપરાશકર્તા નામ"
+      },
+      "RolesHeader" : {
+        "label" : "ભૂમિકા"
+      },
+      "NameHeader" : {
+        "label" : "નામ"
+      },
+      "EditBtn" : {
+        "label" : "સંપાદિત કરો"
+      },
+      "DisabledHeader" : {
+        "label" : "અક્ષમ"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "UserIds" : {
+        "placeholder" : "વપરાશકર્તાઓ પસંદ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "MainPanel" : {
+        "label" : "વપરાશકર્તા જૂથ સંપાદિત કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "વપરાશકર્તા જૂથનું વર્ણન નાખો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "વપરાશકર્તા જૂથનો કોડ નાખો"
+      },
+      "userIds" : {
+        "label" : "વપરાશકર્તાઓની યાદી",
+        "help" : "જૂથમાં જોડાયેલ વપરાશકર્તાઓ પસંદ કરો"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "બનાવો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "jira સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "MainPanel" : {
+        "label" : "jira સિસ્ટમ રૂપરેખાંકન બનાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "username" : {
+        "label" : "jira યૂઝરનામ",
+        "help" : "jira યુઝરનું નામ"
+      },
+      "token" : {
+        "label" : "jira cloud api કી",
+        "help" : "jira બેકઓફિસમાં મેળવેલ jira CLOUD apikey, અહીં \"તમારા Atlassian ખાતા માટેનું API Token\" ઉમેરવું પડશે."
+      },
+      "baseUri" : {
+        "label" : "મુખ્ય ઈન્ટરનેટ સરનામું",
+        "help" : "onpremise ઈન્સ્ટોલેશન માટેના બેઝ jira સિસ્ટમ એડ્રેસ અથવા jira cloud સિસ્ટમ માટે તમારા સંગઠનનું બેઝ url"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "કાઢી નાંખો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સાચવે છે અને આ સામગ્રીને જ્ઞાન આધારમાં LLm's માટે ઉપલબ્ધ કરે છે"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "LogsTab" : {
+        "label" : "લોગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "jira સામગ્રી શેર કરી રહ્યા છીએ"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "સામગ્રીનો આપમેળે જનરેટ થયેલ અનન્ય કોડ."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira સિસ્ટમ",
+        "help" : "પહેલેથી રૂપરેખાંકિત jira સિસ્ટમ સંદર્ભ."
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "પેરન્ટ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "jira એન્ટ્રીની અપલોડ કરેલી સામગ્રીનું વર્ણન દાખલ કરો."
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રી સુધારાઓ માટે ચેક્સની સમયસૂચિ",
+        "help" : "પમાણિત સામગ્રી માટે અપડેટ ચકાસણીની સમયસૂચિ રૂપરેખાંકિત કરો જેથી retrieve augmented generation system અપડેટ રહે."
+      },
+      "openZips" : {
+        "label" : "ઝિપ ફાઈલો ખોલો",
+        "help" : "ઝિપ ફાઈલો ખોલવાની અને સામગ્રી કાઢવાની સુવિધા ચાલુ કરો"
+      },
+      "tree" : {
+        "label" : "પસંદ કરેલા જગ્યા અથવા પેજ/સબપેજ",
+        "help" : "શેર કરેલી jira પ્રોજેક્ટ્સ અને ટિકિટ્સની હાયરાર્કી સામગ્રી"
+      },
+      "catalogingCriteria" : {
+        "label" : "જગ્યા, પેજ અને સબપેજની રચના માટેના માપદંડ",
+        "help" : "મહેરબાની કરીને અહીં સમજાવો કે જગ્યા, પેજ અને સબ પેજની રચનાના માપદંડ કેવી રીતે અપનાવવામાં આવ્યા છે, જે jira સામગ્રી Gebo.ai સાથે શેર કરવામાં આવી છે"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "jira સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાંખો"
+      },
+      "MainPanel" : {
+        "label" : "jira સિસ્ટમ સંપાદન"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "baseUri" : {
+        "label" : "મુખ્ય ઈન્ટરનેટ સરનામું",
+        "help" : "jira સિસ્ટમ માટેના મુખ્ય એડ્રેસનું url"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "jira સિસ્ટમનો આપમેળે જનરેટ થયેલ અનન્ય કોડ."
+      },
+      "secretCode" : {
+        "label" : "ઉપયોગ કરાયેલ ઓળખ",
+        "help" : "jira સિસ્ટમમાં પ્રવેશ મેળવવા માટે ઓળખ પસંદ કરો અથવા બનાવો"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "SharePpoint/OneDrive સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint આવૃત્તિ",
+        "help" : "sharepoint આવૃત્તિ"
+      },
+      "secret" : {
+        "label" : "ગુપ્ત કી",
+        "help" : "આ એપ માટે microsoft \"entra\" પ્રોડક્ટમાં નોંધાયેલ Oauth2 ક્લાઈન્ટ ગુપ્ત (microsoft cloud admin console માંથી મેળવવું)"
+      },
+      "clientId" : {
+        "label" : "ક્લાઈન્ટ ID",
+        "help" : "આ એપ માટે microsoft \"entra\" પ્રોડક્ટમાં નોંધાયેલ Oauth2 ક્લાઈન્ટ આધારભૂત (microsoft cloud admin console માંથી મેળવવું)"
+      },
+      "tenantId" : {
+        "label" : "ટેનન્ટ ID",
+        "help" : "તમારી સંસ્થા માટે microsoft \"entra\" પ્રોડક્ટમાં નોંધાયેલ Oauth2 ટેનન્ટ ઓળખપત્ર (microsoft cloud admin console માંથી મેળવવું)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gebo.ai માટે Microsoft oauth2 એપ નોંધણી માહિતી"
+      },
+      "CreateBtn" : {
+        "label" : "બનાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive સિસ્ટમ રૂપરેખા બનાવો"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સંગ્રહે છે અને આ ഉള്ളખય બેસ જાણકારીમાં LLm માટે ઉપલબ્ધ બનાવે છે"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive સંસાધનો વહેંચવાનું"
+      },
+      "LogsTab" : {
+        "label" : "લૉગ્સ"
+      },
+      "DeleteBtn" : {
+        "label" : "દૂર કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "આ સમાવિષ્ટોનો આપમેળે જનરેટ થયેલ અનન્ય કોડ."
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "માતૃ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "SharePoint/OneDrive એન્ટ્રી ડેટા સ્રોતોનું વર્ણન દાખલ કરો."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint સિસ્ટમ",
+        "help" : "પહેલેથી રૂપરેખિત SharePoint/OneDrive સિસ્ટમ સંદર્ભ."
+      },
+      "openZips" : {
+        "label" : "ઝિપ ફાઇલો ખોલો",
+        "help" : "ઝિપ ફાઇલો ખોલવા અને સામગ્રી કાઢવા સમર્થ કરો"
+      },
+      "tree" : {
+        "label" : "પસંદ કરેલ Sharepoint સાઇટ્સ/પૃષ્ઠો/સપૃષ્ઠો અથવા OneDrive ડ્રાઇવ્સ/ફોલ્ડર/ફાઇલ્સ",
+        "help" : "સાંઝા કરેલ sharepoint/OneDrive સામગ્રી"
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રી સુધારણા તપાસ સમયપત્રક",
+        "help" : "પુનઃપ્રાપ્ત જનરેશન સિસ્ટમ અપડેટ રહે એ માટે બદલાયેલ સામગ્રીનું આયોજન કરો"
+      },
+      "catalogingCriteria" : {
+        "label" : "જગ્યા, પૃષ્ઠો અને ઉપપૃષ્ઠોની સંગઠન માપદંડો",
+        "help" : "અહીં સમજાવો કે sharepoint સામગ્રીમાં જગ્યા, પૃષ્ઠો અને ઉપપૃષ્ઠોની સંગઠન રીત કેવી રીતે અપનાવવામાં આવી છે, જે Gebo.ai સાથે વહેંચાઈ છે"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint સિસ્ટમ સંપાદન"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "જનરલ સેટિંગ્સ"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "દૂર કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "secretCode" : {
+        "label" : "ઉપયોગ કરાયેલ ઓળખ",
+        "help" : "sharepoint સિસ્ટમમાં પ્રવેશ માટે ઓળખ પસંદ કરો અથવા બનાવો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "sharepoint સિસ્ટમનો આપમેળે જનરેટ થયેલ અનન્ય કોડ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "sharepoint સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint આવૃત્તિ",
+        "help" : "sharepoint આવૃત્તિ"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "હટાવો"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "સંગ્રહો"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "રદ કરો"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "સામાન્ય માહિતી/સમગ્રી સેટિંગ્સ"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms સેટિંગ્સ"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "નોલેજ ગ્રાફ ડેટા ની બહારennungstadium માટે આપોઆપ જનરેટ થયેલું અનન્ય કોડ"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/જ્ઞાન બહાર કાઢવાનો કંફિગરેશન"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "આ જ્ઞાન ગ્રાફ ડેટા કાઢવાના સ્ટેજનું વર્ણન દાખલ કરો"
+      },
+      "extractionPrompt" : {
+        "label" : "માહિતી કાઢવાનુ પ્રોમ્પ્ટ",
+        "help" : "સત્તા/ઇવેન્ટ્સ/રિલેશન અને ઉપનામોને બહાર કાઢવા માટે મેગા ભાષા મોડલ પ્રોમ્પ્ટ"
+      },
+      "usedModelConfiguration" : {
+        "label" : "ડેટા કાઢવામાં ઉપયોગ કરાયેલ LLM",
+        "help" : "જ્ઞાન બહાર કાઢવા માટે કયું મેગા ભાષા મોડલ ઉપયોગ કરેલ, જો પસંદ ન કરો તો ડિફોલ્ટ વાપરશે."
+      },
+      "graphRagAllSources" : {
+        "label" : "બધી માહિતી સ્ત્રોતો પર graph rag લાગુ કરો",
+        "help" : "જો સાચું હોય તો તમામ જ્ઞાન બેસ/પ્રોજેક્ટ/ડેટા સોર્સ પર જ્ઞાન બહાર કાઢવું, નહિતર ફક્ત સ્પષ્ટ કરેલા પર લાગુ થશે"
+      },
+      "defaultModel" : {
+        "label" : "ડિફોલ્ટ મેગા ભાષા મોડલ",
+        "help" : "જ્ઞાન બહાર કાઢવા માટે ડિફોલ્ટ મેગા ભાષા મોડલ વાપરાશે"
+      },
+      "processEveryDocument" : {
+        "label" : "બધા ફાઈલ્સ પર graph rag લાગુ કરો",
+        "help" : "graph rag અલ્ગોરિધમ બધા ફાઈલો પર લાગુ થશે, જેથી વિશ્લેષણ વધુ વિગતવાર થશે પણ ખર્ચ અને પ્રક્રિયા સમય વધારે થશે"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Graphrag પ્રક્રિયા માટે ફાઈલ પસંદગીના માપદંડ",
+        "help" : "Graphrag માટે માહિતી બહાર કાઢવાની पाइપલાઇનમાં મોકલવા માટેના ફાઈલ માપદંડોમાં ફેરફાર કરો, ઓછામાં ઓછું ફાઈલ નામ અને માપદંડ, અથવા ફાઇલ ટાઇપ અને/અથવા મહત્તમ ફાઈલ કદ અને/અથવા છેલ્લે સુધારાયું તેના દિવસ પ્રમાણે પસંદ કરો"
+      },
+      "extractionFormat" : {
+        "label" : "એક્સટ્રેક્શન ફોર્મેટ",
+        "help" : "30b પેરામ્સ હેઠળના llms માટે CSV ફોર્મેટ વાપરો, વિશાળ ફ્રન્ટિયર મોડલ્સ માટે JSON ફોર્મ",
+        "placeholder" : "30b પેરામ્સ હેઠળના llms માટે CSV ફોર્મેટ વાપરો, વિશાળ ફ્રન્ટિયર મોડલ્સ માટે JSON ફોર્મ"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "ફાઇલ પ્રકારો પસંદ કરો"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ફાઇલ નામની ફિલ્ટર કરવાની માપદંડ"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "છેલ્લે ફાઇલ સંપાદિત કરી, કેટલા દિવસ પહેલા"
+      },
+      "nameFilter" : {
+        "placeholder" : "ફાઇલનું નામ"
+      },
+      "maxFileSize" : {
+        "placeholder" : "મહત્તમ ફાઇલ કદ (બાઇટ્સમાં)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "MainPanel" : {
+        "label" : "નોલેજ બેસ સંપાદન કરો"
+      },
+      "AccessSettingsTab" : {
+        "label" : "નોલેજ બેસ ઍક્સેસ સેટિંગ્સ"
+      },
+      "code" : {
+        "label" : "વિશિષ્ટ કોડ",
+        "help" : "નોલેજ બેસનો આપમેળે બનાવાયેલ અનન્ય કોડ."
+      },
+      "description" : {
+        "label" : "વિગતવર્ણન",
+        "help" : "નોલેજ બેસનું વર્ણન દાખલ કરો."
+      },
+      "embeddingModelReferences" : {
+        "label" : "વપરાતી એમ્બેડિંગ મોડલ્સ (સિસ્ટમ ડિફોલ્ટ માટે ખાલી રાખો)",
+        "help" : "નોલેજ બેસ માટે એમ્બેડિંગ મોડલ્સ, ખાલી રાખવાથી ડિફોલ્ટ વપરાશે."
+      },
+      "SaveBtn" : {
+        "label" : "સેવ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "IndexBtn" : {
+        "label" : "એસૂચી",
+        "help" : "કોન્ટેન્ટ ફરીથી એસૂચિત કરો"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "પ્રોજેક્ટ અથવા પ્લાન સંપાદન કરો"
+      },
+      "code" : {
+        "label" : "વિશિષ્ટ કોડ",
+        "help" : "પ્રોજેક્ટનો આપમેળે બનાવાયેલ અનન્ય કોડ."
+      },
+      "description" : {
+        "label" : "વિગતવર્ણન",
+        "help" : "પ્રોજેક્ટનું વર્ણન દાખલ કરો."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "નોલેજ બેસ",
+        "help" : "નોલેજ બેસ."
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "IndexBtn" : {
+        "label" : "એસૂચી",
+        "help" : "કોન્ટેન્ટ ફરીથી એસૂચિત કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સેવ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ આઇટમ/પ્રોજેક્ટ ઉમેરો",
+        "help" : "નવું ઉમેરો..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "દરેકનો ઉપયોગ કરે છે",
+        "help" : "દરેક ઉપયોગ કરી શકે છે"
+      },
+      "accessibleGroups" : {
+        "label" : "ગ્રુપોની યાદી",
+        "help" : "અનુમતિ ધરાવતા ગ્રુપ પસંદ કરો"
+      },
+      "accessibleUsers" : {
+        "label" : "યુઝર્સની યાદી",
+        "help" : "અનુમતિ ધરાવતા યુઝર્સ પસંદ કરો"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "ડેશબોર્ડ"
+      },
+      "LLMSTab" : {
+        "label" : "ચેટ અને એમ્બેડિંગ માટે LLMs"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag ચેટ પ્રોફાઇલ્સ/મોડલ પ્રમ્પ્ટ્સ"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "જ્ઞાન આધાર અને પ્રોજેક્ટ્સ"
+      },
+      "UsersGroupTab" : {
+        "label" : "યૂઝર્સ અને ગ્રૂપ્સ"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai મોડ્યુલ્સ કન્ફિગ્રેશન"
+      },
+      "LogsTab" : {
+        "label" : "લોગ્સ"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "કોડ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "ConfigureBtn2" : {
+        "label" : "રૂપરેખાંકન કરો"
+      },
+      "ConfigureBtn" : {
+        "label" : "રૂપરેખાંકન કરો"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "નવું પ્રોમ્પ્ટ રૂપરેખાંકન"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "નવું ચેટ પ્રોફાઇલ"
+      },
+      "MainPanel" : {
+        "label" : "રીટ્રીવલ ઓગમેન્ટેડ જનરેશન ચેટ પ્રોફાઇલ્સ"
+      },
+      "PromptsPanel" : {
+        "label" : "પ્રોમ્પ્ટ્સ સંગ્રહ અને ડિફોલ્ટ પ્રોમ્પ્ટ્સ"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "નોલેજ બેઝિસ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "ConfigureBtn1" : {
+        "label" : "રૂપરેખાંકિત કરો"
+      },
+      "CodeHeader" : {
+        "label" : "કોડ"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "નવી જ્ઞાન આધાર"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "નવી એમ્બેડિંગ મોડલ રૂપરેખાંકન"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "નવી ચેટ મોડલ રૂપરેખાંકન"
+      },
+      "DescriptionHeader" : {
+        "label" : "વિવરણ"
+      },
+      "CodeHeader" : {
+        "label" : "કોડ"
+      },
+      "ModelHeader" : {
+        "label" : "મોડલ "
+      },
+      "ModelProviderHeader" : {
+        "label" : "મોડલ પ્રદાતા"
+      },
+      "ConfigureBtn" : {
+        "label" : "રૂપરેખાંકિત કરો"
+      },
+      "CodeHeader2" : {
+        "label" : "કોડ"
+      },
+      "DescriptionHeader2" : {
+        "label" : "વિવરણ"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "મોડલ પ્રદાતા"
+      },
+      "ConfigureBtn2" : {
+        "label" : "રૂપરેખાંકિત કરો"
+      },
+      "ModelHeader2" : {
+        "label" : "મોડલ "
+      },
+      "ChatmodelsZone" : {
+        "label" : "રૂપરેખાંકિત ચેટ મોડલ્સ"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "રૂપરેખાંકિત એમ્બેડિંગ મોડલ્સ"
+      },
+      "chat" : {
+        "label" : "નવો ચેટ મોડેલ",
+        "help" : "યૂઝર સાથે ચેટ કરવા અથવા ऑટોમેશન ચલાવવા માટે ક્ષમતા ધરાવતો નવો ચેટ મોડેલ ઉમેરવા માટે સપ્લાયર પસંદ કરો",
+        "placeholder" : "યૂઝર સાથે ચેટ કરવા અથવા ऑટોમેશન ચલાવવા માટે ક્ષમતા ધરાવતો નવો ચેટ મોડેલ ઉમેરવા માટે સપ્લાયર પસંદ કરો"
+      },
+      "embed" : {
+        "label" : "નવું એમ્બેડિંગ મોડેલ",
+        "help" : "સમેન્ટિકલ ઇન્ડેક્સિંગ માટે ક્ષમતા ધરાવતું નવું એમ્બેડિંગ મોડેલ ઉમેરવા માટે સપ્લાયર પસંદ કરો",
+        "placeholder" : "સમેન્ટિકલ ઇન્ડેક્સિંગ માટે ક્ષમતા ધરાવતું નવું એમ્બેડિંગ મોડેલ ઉમેરવા માટે સપ્લાયર પસંદ કરો"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "મોડલનું પરીક્ષણ"
+      },
+      "TestChatBtn" : {
+        "label" : "ચેટનું પરીક્ષણ કરો"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો OpenAI ટોકન પસંદ કરો"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે OpenAI ચેટ મોડલ પસંદ કરો."
+      },
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "એડવાન્સ્ડ સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI એમ્બેડિંગ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો OpenAI ટોકન પસંદ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI એમ્બેડિંગ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે OpenAI એમ્બેડિંગ મોડલ પસંદ કરો."
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત એમ્બેડિંગ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં એમ્બેડિંગ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત એમ્બેડિંગ મોડલ તરીકે ઉપયોગ થશે"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "baseUrl" : {
+        "label" : "મૂળ ollama સર્વર એડ્રેસ",
+        "help" : "મૂળ એડ્રેસ (જેમ કે http://servername:234/) જ્યાં ollama લોંકલ અથવા LAN સર્વર જવાબ આપે છે."
+      },
+      "choosedModel" : {
+        "label" : "Ollama ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે Ollama ચેટ મોડલ પસંદ કરો.",
+        "placeholder" : "મોડલ પસંદ કરો"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો Ollama ટોકન પસંદ કરો (ઐચ્છિક)"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "MainPanel" : {
+        "label" : "Ollama લોંકલ (અથવા LAN) સર્વર ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો Anthropic ટોકન પસંદ કરો"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે Anthropic ચેટ મોડલ પસંદ કરો.",
+        "placeholder" : "મોડલ પસંદ કરો"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "એડવાન્સ્ડ સેટિંગ્સ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો MistralAI ટોકન પસંદ કરો"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે MistralAI ચેટ મોડલ પસંદ કરો."
+      },
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "એડવાન્સ્ડ સેટિંગ્સ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે Google Vertex AI ચેટ મોડલ પસંદ કરો."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો Google Vertex AI ટોકન પસંદ કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "TabGeneralInfos" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "એડવાન્સ્ડ સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો Deepseek ટોકન પસંદ કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે Deepseek ચેટ મોડલ પસંદ કરો.",
+        "placeholder" : "મોડલ પસંદ કરો"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "એડવાન્સ્ડ સેટિંગ્સ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek ચેટ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "મોડલ રૂપરેખાંકન માટે આપમેળે உருவાતો અનન્ય કોડ"
+      },
+      "baseUrl" : {
+        "label" : "ચેટ મોડલ API સર્વરનું સરનામું",
+        "help" : "ચેટ મોડલનું મૂળ સરનામું."
+      },
+      "apiSecretCode" : {
+        "label" : "ચેટ મોડલ API ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો ચેટ મોડલ API ટોકન પસંદ કરો (ઐચ્છિક)"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત ચેટ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં ચેટ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત ચેટ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "choosedModel" : {
+        "label" : "ચેટ મોડલ પસંદગી",
+        "help" : "ઉપયોગ માટે ચેટ મોડલ પસંદ કરો."
+      },
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "TitleFragment" : {
+        "label" : "ચેટ મોડલ પ્રદાતા સંપાદન:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "એડવાન્સ્ડ સેટિંગ્સ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "મોડલ ઍક્સેસ સેટિંગ્સ"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "MainPanel" : {
+        "label" : "Ollama લોંકલ (અથવા LAN) એમ્બેડિંગ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો Ollama ટોકન પસંદ કરો"
+      },
+      "choosedModel" : {
+        "label" : "Ollama એમ્બેડિંગ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે Ollama એમ્બેડિંગ મોડલ પસંદ કરો."
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકન માટે આપમેળે બનેલો અનન્ય કોડ"
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત એમ્બેડિંગ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં એમ્બેડિંગ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત એમ્બેડિંગ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "baseUrl" : {
+        "label" : "મૂળ ollama સર્વર એડ્રેસ",
+        "help" : "મૂળ એડ્રેસ (જેમ કે http://servername:234/) જ્યાં ollama લોંકલ અથવા LAN સર્વર જવાબ આપે છે."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI એમ્બેડિંગ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકન માટે આપમેળે બનેલો અનન્ય કોડ"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI એમ્બેડિંગ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે MistralAI એમ્બેડિંગ મોડલ પસંદ કરો."
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત એમ્બેડિંગ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં એમ્બેડિંગ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત એમ્બેડિંગ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો MistralAI ટોકન પસંદ કરો"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI એમ્બેડિંગ મોડલ રૂપરેખાંકન સંપાદન"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI એમ્બેડિંગ મોડલ પસંદગી",
+        "help" : "ઉપયોગ કરવા માટે Google Vertex AI એમ્બેડિંગ મોડલ પસંદ કરો."
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત એમ્બેડિંગ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં એમ્બેડિંગ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત એમ્બેડિંગ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકન માટે આપમેળે બનેલો અનન્ય કોડ"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો Google Vertex AI ટોકન પસંદ કરો"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "હટાવો"
+      },
+      "TitleFragment" : {
+        "label" : "એમ્બેડિંગ મોડલ પ્રદાતા સંપાદન:"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકનનું વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "એમ્બેડિંગ મોડલ રૂપરેખાંકન માટે આપમેળે બનેલો અનન્ય કોડ"
+      },
+      "choosedModel" : {
+        "label" : "એમ્બેડિંગ મોડલ પસંદગી",
+        "help" : "ઉપયોગ માટે એમ્બેડિંગ મોડલ પસંદ કરો."
+      },
+      "baseUrl" : {
+        "label" : "એમ્બેડિંગ મોડલ API સર્વર એડ્રેસ",
+        "help" : "એમ્બેડિંગ મોડલ સર્વરનું સરનામું."
+      },
+      "defaultModel" : {
+        "label" : "આને મૂળભૂત એમ્બેડિંગ મોડલ તરીકે રાખો",
+        "help" : "સાચું હોય ત્યારે જ્યાં એમ્બેડિંગ મોડલ દર્શાવાયેલ નથી ત્યાં આ મૂળભૂત એમ્બેડિંગ મોડલ તરીકે ઉપયોગ થશે"
+      },
+      "apiSecretCode" : {
+        "label" : "એમ્બેડિંગ મોડલ API ટોકન",
+        "help" : "આ મોડલ માટે ઉપયોગમાં લેવાતો એમ્બેડિંગ મોડલ API ટોકન પસંદ કરો"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "ચેટ કોન્ફિગરેશન માહિતી"
+      },
+      "chaDeleteBtn" : {
+        "help" : "આ ચેટ સત્ર કાઢી નાખો"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "ચેટ સત્રનું નામ બદલો"
+      },
+      "QueryControl" : {
+        "placeholder" : "ચેટ બોટ માટે સંદેશ લખો"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "દસ્તાવેજો શોધો અથવા બ્રાઉઝ કરો અને ચેટ કરવા માટે પસંદ કરો"
+      },
+      "UploadFileBtn" : {
+        "help" : "ચેટ માટે અથવા કામ કરવા માટે ફાઇલ અપલોડ કરો"
+      },
+      "SubmiQuestion" : {
+        "help" : "તમારો પ્રશ્ન મોકલો"
+      },
+      "WithParams" : {
+        "label" : "પેરામેટર્સ સાથે:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI દ્વારા બોલાવવામાં આવેલી ફંક્શન્સ:"
+      },
+      "UploadedDocs" : {
+        "label" : "અપલોડ કરેલ દસ્તાવેજો"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ચેટ ઇતિહાસ લોડ થઈ ગયો",
+        "detail" : "ચેટ ઇતિહાસ સફળતાપૂર્વક લોડ થયો"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "તમારી ભાષણ અપલોડ થઈ રહી છે"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "વરબલ જવાબ મળ્યુ"
+      },
+      "ScrollUpBtn" : {
+        "help" : "ઉપર સ્ક્રોલ કરો"
+      },
+      "ScrollDownBtn" : {
+        "help" : "નીચે સ્ક્રોલ કરો"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ડૉક્યૂમેન્ટ મળ્યા"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "શું તમે ખરેખર આ ચેટ કાઢવા માંગો છો?",
+        "header" : "ચેટ કાઢવાની ક્રિયા"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "સેવ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "description" : {
+        "label" : "ચેટનું વર્ણન",
+        "help" : "ચેટ સત્રનું વર્ણન દાખલ કરો."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "વપરાયેલ મોડેલ",
+        "help" : "મોડેલ કોડ"
+      },
+      "providerId" : {
+        "label" : "ચેટ મોડેલ પ્રદાતા",
+        "help" : "LLms પ્રદાતા ડ્રાઈવર"
+      },
+      "functions" : {
+        "label" : "ચેટ મોડેલ કૉલ કરી શકાય તેવી ફંક્શન્સ",
+        "help" : "ચેટ મોડેલ માટે ઉપલબ્ધ ફંક્શન્સની યાદી"
+      },
+      "NameCol" : {
+        "label" : "નામ"
+      },
+      "DescriptionCol" : {
+        "label" : "વર્ણન"
+      },
+      "kbases" : {
+        "label" : "ઉપલબ્ધ જ્ઞાન આધાર",
+        "help" : "આ RAG ચેટમાં વપરાતા જ્ઞાન આધારની યાદી"
+      },
+      "CloseBtn" : {
+        "help" : "બંધ કરો"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : " 'ચેટ સાથે' યાદીમાં દસ્તાવેજ ઉમેરો "
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "રેકોર્ડ કરો",
+        "help" : "ઑડિયો ટ્રેક રેકોર્ડ કરવાનું શરૂ કરો અને મોકલો"
+      },
+      "StopBtn" : {
+        "label" : "રેકોર્ડિંગ",
+        "help" : "રેકોર્ડિંગ"
+      },
+      "AbortBtn" : {
+        "label" : "રેકોર્ડિંગ રદ કરો",
+        "help" : "રેકોર્ડિંગ રદ કરો"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "રેકોર્ડિંગ રોકો"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "ડેટા ફરીથી લાવો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "SelectHeader" : {
+        "label" : "પસંદ કરો"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "અંતિમ તારીખ/સમય"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "શરૂઆતની તારીખ/સમય"
+      },
+      "ProcessingHeader" : {
+        "label" : "પ્રક્રિયા"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "CodeHeader" : {
+        "label" : "કોડ"
+      },
+      "FinishedHeader" : {
+        "label" : "પૂર્ણ થયું"
+      },
+      "WithErrorHeader" : {
+        "label" : "તૃટિ સાથે"
+      },
+      "LogTableComponent" : {
+        "help" : "આ શેર કરવામાં આવેલી ફાઈલ સિસ્ટમ ક્ષેત્રનું ઇનજેશન લોગ છે"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "પ્રક્રિયા આંકડા"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "CloseBtn" : {
+        "label" : "બંધ કરો"
+      },
+      "PublicationLogTab" : {
+        "label" : "પ્રકાશન લોગ"
+      },
+      "MainPanel" : {
+        "label" : "પ્રકાશન લોગ"
+      },
+      "actualStatus" : {
+        "label" : "સ્થિતિ",
+        "help" : "કાર્યની સ્થિતિ, ચાલી રહી છે, પૂર્ણ થયું અથવા ભૂલ સાથે પૂર્ણ થયું."
+      },
+      "publishingSystem" : {
+        "label" : "પ્રકાશિત સામગ્રી રૂપરેખા",
+        "help" : "પ્રકાશિત સામગ્રીની માહિતી"
+      },
+      "startDateTime" : {
+        "label" : "શરૂઆતની તારીખ/સમય",
+        "help" : "સામગ્રી સુમેળ કાર્યની શરૂઆત તારીખ અને સમય"
+      },
+      "endDateTime" : {
+        "label" : "અંતિમ તારીખ/સમય",
+        "help" : "સામગ્રી સુમેળ કાર્યની અંત તારીખ અને સમય"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "પૂર્ણ રીતે પ્રક્રિયા કરવામાં આવી નથી"
+      },
+      "ProcessedCompletely" : {
+        "label" : "પૂર્ણ પ્રક્રિયા કરવામાં આવી"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "એમ્બેડિંગ સામે કુલ દસ્તાવેજોની સંખ્યા"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "વધુ વિગતો"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "પ્રોમ્પ્ટ જનરેટ કરો"
+      },
+      "PromptWizardBtn" : {
+        "label" : "પ્રોમ્પ્ટ વિઝાર્ડ",
+        "help" : "તમારા ઉદ્દેશ માટે પ્રોમ્પ્ટ જનરેટ કરવા માટે LLM નો ઉપયોગ કરો"
+      },
+      "acceptPrompt" : {
+        "label" : "પ્રોમ્પ્ટ સ્વીકારો"
+      },
+      "promptWizardUI" : {
+        "label" : "પ્રોમ્પ્ટ ટેમ્પલેટ જનરેશન વિઝાર્ડ"
+      },
+      "cancel" : {
+        "label" : "રદ કરો"
+      },
+      "response" : {
+        "label" : "ભલામણ કરેલ પ્રોમ્પ્ટ ટેમ્પલેટ",
+        "help" : "તમારા ઉદ્દેશ માટે જનરેટ કરેલ ટેમ્પલેટ ટેક્સ્ટ (તમે તેને બદલી અથવા સુધારી શકો છો)"
+      },
+      "modelCode" : {
+        "label" : "પ્રયોજન માટે ઉપયોગમાં લેવાતું ચેટ મોડલ",
+        "help" : "પ્રોમ્પ્ટ ટેમ્પલેટ જનરેટ કરવા માટે કયું ચેટ મોડલ પસંદ કરવું તે પસંદ કરો"
+      },
+      "query" : {
+        "label" : "પ્રોમ્પ્ટ ટેમ્પલેટ વિનંતી",
+        "help" : "બીજા વ્યક્તિમાં દર્શાવો કે તે ઉદ્દેશ શું છે જે AI વપરાશકર્તાને સપોર્ટ કરશે"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "તાપમાન",
+        "help" : "મોડલ જે તાપમાને જવાબ આપશે, 0 થી 1 સુધી (ખાતરી ન હોય તો ખાલી રાખો)"
+      },
+      "contextLength" : {
+        "label" : "સંદર્ભ લંબાઈ (ટોકન્સ)",
+        "help" : "AI મોડલ પ્રક્રિયા કરતી વખતે જેટલાં લખાણનું અવલોકન આપી શકે છે (જો નક્કી ન કરો તો 1047576નું માન લેશે)"
+      },
+      "topP" : {
+        "label" : "ટોપ P",
+        "help" : "ટોપ P પેરામિટર, 0 થી 1 સુધી (ખાતરી ન હોય તો ખાલી રાખો)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "આ મોડલ માટે સક્રિય ફંક્શન્સ કૉલ",
+        "help" : "ચેટ દરમિયાન મોડલ દ્વારા ઉપયોગ કરી શકાય તેવી કાર્યો"
+      },
+      "defaultModelPrompt" : {
+        "label" : "મૂળભૂત મોડલ પ્રોમ્પ્ટ",
+        "help" : "ચેટ મોડલ માટેનું મૂળભૂત પ્રોમ્પ્ટ સંપાદિત કરો."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "ઓળખાણનું વર્ણન દાખલ કરો."
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "ઓળખાણ માટે આપમેળે உருவાયેલ અનન્ય કોડ."
+      },
+      "secretType" : {
+        "label" : "ઓળખાણ પ્રકાર",
+        "help" : "દૂરસ્થ સિસ્ટમ માટે નિર્માણ કરતી વખતે ઓળખ પ્રકાર પસંદ કરો"
+      },
+      "InsertBtn" : {
+        "label" : "ચોнащો"
+      },
+      "token" : {
+        "label" : "ટોકન",
+        "help" : "ટોકન દાખલ કરો."
+      },
+      "user" : {
+        "label" : "યૂઝર",
+        "help" : "ટોકન દ્વારા દર્શાવાયેલ વપરાશકર્તા દાખલ કરો."
+      },
+      "MainPanel" : {
+        "label" : "ઓળખાણ બનાવી રહ્યા છીએ"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાંખો"
+      },
+      "username" : {
+        "label" : "યૂઝર નામ",
+        "help" : "યૂઝર નામ દાખલ કરો."
+      },
+      "password" : {
+        "label" : "પાસવર્ડ",
+        "help" : "પાસવર્ડ દાખલ કરો."
+      },
+      "email" : {
+        "label" : "ઈ-મેઈલ/યૂઝર નામ",
+        "help" : "ssh કી સાથે સંલગ્ન ઇ-મેઈલ અથવા યુઝર નામ દાખલ કરો."
+      },
+      "key" : {
+        "label" : "ગુપ્ત કી",
+        "help" : "પ્રાઇવેટ કી ફાઇલ ખોલીને અહીં નકલ કરો."
+      },
+      "passphrase" : {
+        "label" : "કી પાસફ્રેઝ",
+        "help" : "કી પાસફ્રેઝ દાખલ કરો."
+      },
+      "pub" : {
+        "label" : "પબ્લિક કી",
+        "help" : "પબ્લિક કી ફાઇલ ખોલીને અહીં નકલ કરો."
+      },
+      "jsonContent" : {
+        "label" : "Google ઓળખપત્રો ફાઇલની સામગ્રી",
+        "help" : "Google cloud api કન્સોલ (https://console.cloud.google.com/) માંથી ડાઉનલોડ કરેલ Google api ઓળખપત્રો ફાઇલની સામગ્રી અહીંથી નકલ કરો"
+      },
+      "delegatedUser" : {
+        "label" : "નકલ કરવા માટેનો Google યુઝર",
+        "help" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે",
+        "placeholder" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "અદ્યતન કોડ",
+        "help" : "વિશિષ્ટ કોડ આપમેળે બનાવવામાં આવેલ છે."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "અપલોડ કરેલા ફાઇલ સિસ્ટમ સમાવિષ્ટનું વર્ણન દાખલ કરો."
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "મૂળ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "upload" : {
+        "label" : "સામગ્રી અપલોડ કરો",
+        "help" : "બ્રાઉઝ બટન ક્લિક કરો અને zip ફાઇલો કે અન્ય ફાઇલો પસંદ કરો"
+      },
+      "openZips" : {
+        "label" : "zip ફાઇલો ખોલો",
+        "help" : "zip ફાઇલો ખુલ્લી કરવાની અને સામગ્રી કાઢી લેવા સક્રિય કરો"
+      },
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સાચવે છે અને આ સામગ્રી LLm's માટે નોલેજ બેઝમાં ઉપલબ્ધ બનાવે છે"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "LogsTab" : {
+        "label" : "લૉગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "અપલોડ કરેલાં સામગ્રીમાં ફેરફાર"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "બિલ્ડ સિસ્ટમ્સ સેટ કરો",
+        "help" : "મેટા માહિતી અને વધારાના આર્ટિફેક્ટ્સ માટે તપાસવાના build/packaging સિસ્ટમ્સની યાદી (જો કોઈ સોફ્ટવેર કોડ સમાવિષ્ટ ન હોય તો ખાલી રાખો)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "પસંદ કરેલા તત્વો"
+      },
+      "ChooseOk" : {
+        "label" : "ઠીક છે"
+      },
+      "ChooseCancel" : {
+        "label" : "રદ કરો"
+      },
+      "EditBtn" : {
+        "help" : "પસંદ કરેલા ફેરફાર કરો"
+      },
+      "ChooseElementsArea" : {
+        "label" : "તત્વો પસંદ કરો"
+      },
+      "VFileSystemSelector" : {
+        "label" : "તત્વો પસંદ કરો"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "લૂણવણીની સમયસૂચિ સંપાદિત કરો"
+      },
+      "ConfirmBtn" : {
+        "label" : "પૂષ્ટિ કરો"
+      },
+      "AddBtn" : {
+        "label" : "+ઉમેરો"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સંગ્રહ કરો અને આ સામગ્રીને જ્ઞાન આધાર માટે ઉપલબ્ધ કરો LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "સોર્સ કોડ ટ્રીટમેન્ટ"
+      },
+      "LogsTab" : {
+        "label" : "લૉગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "મૌજૂદ ફાઇલ સિસ્ટમ સામગ્રી એડિટ કરે છે"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "અપલોડ કરેલ ફાઇલ સિસ્ટમ સમાન અમુક સામગ્રીનું વર્ણન દાખલ કરો."
+      },
+      "openZips" : {
+        "label" : "ઝિપ ફાઇલો ખોલો",
+        "help" : "ઝિપ ફાઇલો ખોલવી અને તેમાંની સામગ્રી કાઢો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "સ્વચલિત રીતે જનરેટ થયેલો સામગ્રી માટે અનન્ય કોડ."
+      },
+      "tree" : {
+        "label" : "પસંદ કરેલી ફાઇલો અથવા ફોલ્ડર્સ",
+        "help" : "શેર કરેલી ફાઇલસિસ્ટમ્સમાં ઉપલબ્ધ સર્વર પર ફાઇલ્સ અથવા ડિરેક્ટરીઝ"
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "પેરન્ટ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રી અપડેટ્સ ચેક્સ માટે સમયપત્રક",
+        "help" : "પરીવર્તિત સામગ્રી અપડેટ રાખવા માટેની સુયોજિત સમયપત્રક કોન્ફિગર કરો"
+      },
+      "catalogingCriteria" : {
+        "label" : "ફોલ્ડર્સ ગોઠવણી માટેના માપદંડ",
+        "help" : "મહેરબાની કરીને અહીં સમજાવો કે તમે Gebo.ai સાથે શેર કરેલા ફાઇલ સિસ્ટમ ક્ષેત્રમાં ફોલ્ડર્સ કેવી રીતે ગોઠવ્યા છે"
+      },
+      "buildSystemsRefs" : {
+        "label" : "બિલ્ડ સિસ્ટમ્સ સુયોજિત કરો",
+        "help" : "મેટા માહિતી અને વધારાના આર્ટિફેક્ટ શોધવા બિલ્ડ/પેકેજિંગ સિસ્ટમ્સની યાદી (જો કોઈ સોફ્ટવેર કોડ નથી તો ખાલી રાખો)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "નવી ફાઇલ શેર વિસ્તાર"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "એબ્સોલ્યુટ પાથ"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db અથવા yml ફાઇલ કોન્ફિગ"
+      },
+      "DescriptionHeader" : {
+        "label" : "વર્ણન"
+      },
+      "CodeHeader" : {
+        "label" : "કોડ"
+      },
+      "ModifyHeader" : {
+        "label" : "ફેરફાર કરો"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "પસંદ કરેલ શેર કરેલ ફાઇલસિસ્ટમ ફોલ્ડર",
+        "help" : "સર્વર ફોલ્ડર પસંદ કરો જે તમારી સંસ્થા દ્વારા દસ્તાવેજ સંગ્રહ માટે શેર કરેલ ફાઇલસિસ્ટમ માટે રૂટ પાથ છે"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "તમારી સંસ્થાના શેર કરેલા ફાઇલસિસ્ટમ વિસ્તારમાં વર્ણન દાખલ કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "સ્વચાલિત રીતે જનરેટ થયેલો સામગ્રી માટે અનન્ય કોડ."
+      },
+      "InsertBtn" : {
+        "label" : "દાખલ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "MainPanel" : {
+        "label" : "સર્વર શેર કરેલ ફાઇલ ફોલ્ડર સંપાદિત કરે છે"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "ડિલીટ કરો"
+      },
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સાચવો અને આ સામગ્રીને જ્ઞાન આધારમાં LLm's માટે ઉપલબ્ધ કરો"
+      },
+      "MainPanel" : {
+        "label" : "git સ્ત્રોત/દસ્તાવેજીકરણ રિપોઝિટરી સંપાદન"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "git રિપોના વર્ણન દાખલ કરો."
+      },
+      "code" : {
+        "label" : "અદ્વિતીય કોડ",
+        "help" : "git રિપો માટે આપમેળે જનરેટ થયેલ અનન્ય કોડ."
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "પેરેંટ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git સિસ્ટમ",
+        "help" : "પહેલેથી જ કાન્ફિગર કરેલ git સિસ્ટમ સંદર્ભ."
+      },
+      "branch" : {
+        "label" : "બ્રાંચ",
+        "help" : "ચેકઆઉટ કરવા માટેનું બ્રાંચ નામ (સામાન્ય રીતે master, main અથવા develop)"
+      },
+      "identityCode" : {
+        "label" : "વપરાયેલ ઓળખ",
+        "help" : "સિસ્ટમ પર ક્લોન/ચેકઆઉટ માટે ઓળખ પસંદ કરો"
+      },
+      "repositoryUri" : {
+        "label" : "રિપોઝિટરી url/સરનામું",
+        "help" : "git રિમોટ રિપોઝિટરીનું સંપૂર્ણ સરનામું (સામાન્ય રીતે http:, https: અથવા ssh: થી શરૂ થાય છે)"
+      },
+      "publicAccess" : {
+        "label" : "પબ્લિક",
+        "help" : "જો સાચું હોય તો રિપોઝિટરી ઍક્સેસ માટે ઓથેન્ટિકેશન જરૂરી નથી"
+      },
+      "openZips" : {
+        "label" : "જિપ ફાઈલો ખોલો",
+        "help" : "zip ફાઈલો ખોલવું અને સામગ્રી કાઢવું સક્રિય કરો"
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રી અપડેટ ચકાસણી સમયપત્રક",
+        "help" : "રિટ્રીવ વધારાના જનરેશન સિસ્ટમને અપડેટ રાખવા માટે બદલાયેલી સામગ્રીના સમયનિર્ધારણને રૂપરેખાંકિત કરો"
+      },
+      "buildSystemsRefs" : {
+        "label" : "બિલ્ડ સિસ્ટમ્સ રૂપરેખાંકિત કરો",
+        "help" : "મેટા માહિતી અને વધારાની આર્ટિફેક્ટ માહિતી માટે તપાસવા બિલ્ડ/પેકેજિંગ સિસ્ટમ્સની યાદી"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સંગ્રહો"
+      },
+      "DeleteBtn" : {
+        "label" : "delete"
+      },
+      "GeneralInfosTab" : {
+        "label" : "સામાન્ય માહિતી"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ચેટ મોડેલ વાપરો"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "પસંદ કરો"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "ચેટ મોડેલ કૉન્ફિગરેશન પસંદ કરો"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "એમ્બેડિંગ મોડેલ કૉન્ફિગરેશન પસંદ કરો"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "પસંદ કરો"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG સેટિંગ્સ"
+      },
+      "LanguageModelTab" : {
+        "label" : "મોટું ભાષા મોડેલ અને ઉપયોગી ટૂલ્સ સેટિંગ્સ"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "એમ્બેડિંગ મોડેલ વાપરો"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "સુરક્ષા પ્રવેશ સેટિંગ્સ"
+      },
+      "MainPanel" : {
+        "label" : "રિટ્રીવ ઓગમેન્ટેડ જનરેશન ચેટ પ્રોફાઇલ એડિટ કરી રહ્યા છીએ"
+      },
+      "code" : {
+        "label" : "વિશિષ્ટ કોડ",
+        "help" : "ચેટ પ્રોફાઇલ માટે આપમેળે જનરેટ થયેલ વિશિષ્ટ કોડ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "ચેટ પ્રોફાઇલનું વર્ણન નાખો."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "વપરાશકર્તા જ્‌્ઞાન આધાર પસંદ કરે છે",
+        "help" : "વપરાશકર્તા ઉપલબ્ધ જ્‌્ઞાન આધારમાંથી પસંદ કરી શકે છે અથવા પોતાની ફાઇલો અપલોડ કરી શકે છે."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "જ્‌્ઞાન આધાર",
+        "help" : "દસ્તાવેજ મેળવવા માટે ઉપયોગમાં લેવાતા જ્‌્ઞાન આધાર."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "સમાનતા થ્રેશોલ્ડ",
+        "help" : "સેમેન્ટિક શોધ માટે સમાનતા થ્રેશોલ્ડ, 0.60–0.65 ન્યૂનત્તમ ફિલ્ટરિંગ, 0.70-0.75 મધ્યમ ફિલ્ટરિંગ, 0.80–0.85 ચોક્કસ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "બીજું 'હોપ' સમાનતા થ્રેશોલ્ડ",
+        "help" : "સેમેન્ટિક શોધ માટે સમાનતા થ્રેશોલ્ડ, 0.60–0.65 ન્યૂનત્તમ ફિલ્ટરિંગ, 0.70-0.75 મધ્યમ ફિલ્ટરિંગ, 0.80–0.85 ચોક્કસ; મલ્ટિ-હોપ ragની બીજી શોધમાં વપરાય છે"
+      },
+      "disableMultiHopRag" : {
+        "label" : "'મલ્ટિ હોપ' rag ડિસેબલ કરો",
+        "help" : "'મલ્ટિ હોપ rag' કાર્ય અટકાવો. મલ્ટિ હોપ શોધ પહેલું સેમેન્ટિક શોધ કરે છે અને પ્રાપ્ત થયેલા દસ્તાવેજોને સેમેન્ટિક શોધ માટે સંદર્ભ તરીકે ઉપયોગ કરે છે જેથી વિશાળ સંદર્ભ મળે છે."
+      },
+      "topK" : {
+        "label" : "વિચારી લેવામાં આવેલી દસ્તાવેજ ફ્રેગમેન્ટ્સ (TopK)",
+        "help" : "રિટ્રીવ ઓગમેન્ટેડ જનરેશનમાં, સેમેન્ટિક શોધમાં મળી આવેલી Top N દસ્તાવેજ ફ્રેગમેન્ટ્સ"
+      },
+      "enabledFunctions" : {
+        "label" : "આ RAG ચેટ માટે સક્રિય ફંક્શન્સ કોલ",
+        "help" : "વપરાશકર્તા સાથે ચેટ દરમિયાન llm મોડેલ દ્વારા વાપરી શકાય તેવી ફંક્શનલિટી, પસંદ કરાયેલ જ્‌્ઞાન આધાર સાથે પણ ઇન્ટરએક્ટ કરે છે"
+      },
+      "prompt" : {
+        "label" : "પ્રોમ્પ્ટ",
+        "help" : "રિટ્રીવ ઓગમેન્ટેડ જનરેશન સેશન માટે પ્રોમ્પ્ટ એડિટ કરો."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "કાઢી નાખો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "પ્રોમ્પ્ટ કેટેગરી દાખલ કરો અથવા вставить કરો"
+      },
+      "MainPanel" : {
+        "label" : "પ્રોમ્પ્ટ સંપાદન કરી રહ્યા છે"
+      },
+      "promptCategory" : {
+        "label" : "પ્રોમ્પ્ટ કેટેગરી",
+        "help" : "પ્રોમ્પ્ટ કેટેગરી પસંદ કરો અથવા દાખલ કરો."
+      },
+      "prompt" : {
+        "label" : "પ્રોમ્પ્ટ",
+        "help" : "ચેટ માટે પ્રોમ્પ્ટ સંપાદિત કરો, વપરાશકર્તાના પ્રશ્ન માટે {query} અને LLM સુધી મોકલાયેલ દસ્તાવેજો/ઇતિહાસ માટે {context} નો ઉપયોગ કરો."
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "પ્રોમ્પ્ટનો આપમેળે જનરેટ થયેલ અનન્ય કોડ."
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "પ્રોમ્પ્ટનું વર્ણન દાખલ કરો."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "પાસવર્ડ બદલો"
+      },
+      "YourUserName" : {
+        "label" : "તમારું યુઝર નામ"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "જુનો પાસવર્ડ",
+        "help" : "લૉગિન કરવા માટે હાલનો પાસવર્ડ"
+      },
+      "newPassword" : {
+        "label" : "નવો પાસવર્ડ",
+        "help" : "નવો પાસવર્ડ"
+      },
+      "username" : {
+        "label" : "ઇ-મેલ",
+        "help" : "લૉગિન માટે ઇ-મેલ તરીકે યૂઝરનેમ"
+      },
+      "ChangePasswordUI" : {
+        "label" : "પાસવર્ડ બદલવાનો ફોર્મ"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "ChangePwdBtn" : {
+        "label" : "પાસવર્ડ બદલો"
+      },
+      "newPassword1" : {
+        "label" : "નવો પાસવર્ડ ખાતરી કરો",
+        "help" : "નવો પાસવર્ડ ખાતરી કરો"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "ડિલીટ કરો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "SaveBtn" : {
+        "label" : "સેવ કરો"
+      },
+      "ForMoreInformations" : {
+        "label" : "Google custom search API અથવા તમારું API કી મેળવવા (મફતમાં) વધુ માહિતી માટે, મુલાકાત લો: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "અદ્વિતीय કોડ",
+        "help" : "google search api કૉન્ફિગરેશન માટેનો અનન્ય કોડ."
+      },
+      "MainPanel" : {
+        "label" : "google custom search api ઓળખપત્ર સંપાદિત કરો"
+      },
+      "secretCode" : {
+        "label" : "Google search api ટોકન",
+        "help" : "Google search api ટોકન પસંદ કરો અથવા દાખલ કરો"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "વર્ણન",
+        "help" : "google search api કૉન્ફિગરેશનનું વર્ણન દાખલ કરો."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "જ્ઞાન આધાર વિના ચેટ કરો",
+        "help" : "ચેટ સત્ર માટે LLMs પસંદ કરો",
+        "placeholder" : "ચેટ સત્ર માટે LLMs પસંદ કરો"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "ચેટ વિકલ્પો વિભાગ ખોલો"
+      },
+      "CreateChatBtn" : {
+        "label" : "નવી ચેટ"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "નવું ચેટ સત્ર"
+      },
+      "chatProfileCode" : {
+        "label" : "જ્ઞાન આધાર સાથે ચેટ કરો",
+        "help" : "કંપની (અને તમારા) દસ્તાવેજો અને LLMs સાથે સંપર્ક કરવા માટે કંપની ચેટ પ્રોફાઇલ પસંદ કરો",
+        "placeholder" : "કંપની (અને તમારા) દસ્તાવેજો અને LLMs સાથે સંપર્ક કરવા માટે કંપની ચેટ પ્રોફાઇલ પસંદ કરો"
+      },
+      "NewChatBtn" : {
+        "label" : "નવી ચેટ"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ચેટ સેશન"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "સાઈડ બાર બંધ કરો"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "મોટા ભાષા મોડલ્સ સાથે નવી ચેટ બનાવો",
+        "label" : "ચેટ"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "કંપની સામગ્રી સાથે નવી RAG ચેટ બનાવો",
+        "label" : "નોલેજ બેઝ સાથે ચેટ"
+      },
+      "ChatsTitle" : {
+        "label" : "ચેટ્સ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ચેટ વિકલ્પ વિભાગ ખોલો"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "દસ્તાવેજો સાથે વાત કરો",
+        "help" : "કામ કરવા માટે દસ્તાવેજો શોધો અથવા પસંદ કરો"
+      },
+      "chooseFilesDialog" : {
+        "label" : "વાત કરવા માટે ફાયદા પસંદ કરો"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "દસ્તાવેજો શોધો અથવા બ્રાઉઝ કરો અને ચેટ માટે પસંદ કરો"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "પુષ્ટિ કરો"
+      },
+      "userspaceBrowsing" : {
+        "label" : "તમારા દસ્તાવેજો અપલોડ કરો અથવા પસંદ કરો",
+        "help" : "તમારા યુઝર સ્પેસમાંથી દસ્તાવેજો પસંદ કરો/અપલોડ કરો"
+      },
+      "fileSearchBtn" : {
+        "label" : "શોધો"
+      },
+      "semanticSearchBtn" : {
+        "label" : "શોધો"
+      },
+      "query" : {
+        "label" : "સેમેન્ટિક શોધ શબ્દસમૂહ",
+        "help" : "તમારી શોધના સંબંધિત અર્થપૂર્ણ શબ્દસમૂહ દાખલ કરો"
+      },
+      "choosenBrowsing" : {
+        "label" : "ફાઈલો બ્રાઉઝિંગ જ્ઞાન આધાર પસંદ કરો",
+        "help" : "કંપનીના શેર કરેલા જ્ઞાન આધારની ફાઈલ બ્રાઉઝિંગ પસંદ કરો"
+      },
+      "filename" : {
+        "label" : "શોધેલી ફાઈલ નામ",
+        "help" : "તમારી શોધેલી સામગ્રી માટે ફાઈલ નામનો ભાગ દાખલ કરો"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ફાઇલનામ શોધો"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "કંપની ફાઇલો બ્રાઉઝ કરો"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "સેમેન્ટિક શોધ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "ચેટ કરવા માટે ફાઇલો પસંદ کریں"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "પસંદ કરેલને બદલો"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "યૂઝર ફાઇલો પસંદ કરો"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "okBtn" : {
+        "label" : "ઠીક છે"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "યૂઝરે અપલોડ કરેલ સામગ્રી પસંદ કરો"
+      },
+      "UserspaceBrowser" : {
+        "label" : "જ્ઞાન આધાર અને યૂઝર ફાઇલો"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ઉપપ્રોજેક્ટ અથવા વસ્તુ",
+        "help" : "ઉપપ્રોજેક્ટ અથવા વસ્તુ ઉમેરો"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ફાઈલો અપલોધ કરો",
+        "help" : "અપલોધ કરેલ ફાઈલોના ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "Microsoft SharePoint/OneDrive ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "Atlassian Confluence ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "શેર કરેલ ફાઈલસિસ્ટમ ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "Atlassian Jira ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bitbucket,github અથવા અન્ય જેવા git repository ડેટા સોર્સ ઉમેરો"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "google drive ડેટા સ્ત્રોત ઉમેરો"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "સેટઅપ"
+      },
+      "admin" : {
+        "label" : "Gebo.ai એડમિન"
+      },
+      "currentProfile" : {
+        "label" : "મારું પ્રોફાઇલ"
+      },
+      "logout" : {
+        "label" : "લૉગઆઉટ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ભાષા બદલો"
+      },
+      "MyProfile" : {
+        "label" : "તમારી પ્રોફાઇલ"
+      },
+      "MyProfileItem" : {
+        "label" : "તમારી પ્રોફાઇલ"
+      },
+      "chatMenuItem" : {
+        "label" : "ચેટ"
+      },
+      "setupMenuItem" : {
+        "label" : "સેટઅપ"
+      },
+      "adminMenuItem" : {
+        "label" : "એડમિન"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "પ્રોફાઇલ સુધારો"
+      },
+      "logoutMenuItem" : {
+        "label" : "લોગઆઉટ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "દસ્તાવેજોની સૂચિ વિશ્લેષણ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "TOKENIZATION" : {
+        "description" : "દસ્તાવેજોનું ટોકનાઈઝેશન"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "પ્રક્રિયા કરેલા ટોકન",
+        "dataset-1-label" : "ટોકન પ્રક્રિયા કરતી વખતે ભૂલ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "EMBEDDING" : {
+        "description" : "સેમેન્ટિક અનુક્રમણિકા બનાવવી (સેમેન્ટિક રેગ માટે એમ્બેડીંગ)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "પ્રક્રિયા કરેલા ટોકન",
+        "dataset-1-label" : "ટોકન પ્રક્રિયા કરતી વખતે ભૂલ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "એકમ/સંબંધ/ واقعات અનુક્રમણિકા (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "પ્રક્રિયા ન કરેલા દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રક્રિયા કરતી વખતે ભૂલ",
+        "label-2" : "પ્રક્રિયા કરેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "મળેલા દસ્તાવેજો",
+        "dataset-1-label" : "પ્રક્રિયા કરેલા દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલ ધરાવતા દસ્તાવેજો",
+        "dataset-3-label" : "કાઢી નાંખેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "પ્રોસેસ કરેલ ટોકન",
+        "dataset-1-label" : "ટોકન પ્રોસેસિંગમાં ભૂલ"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "દસ્તાવેજોની યાદી વિશ્લેષણ કરી રહ્યા છીએ"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "TOKENIZATION" : {
+        "description" : "દસ્તાવેજોનું ટોકનાઈઝેશન"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "EMBEDDING" : {
+        "description" : "સેમેન્ટિક ઈન્ડેક્સિંગ (સેમેન્ટિક rag માટે એમ્બેડિંગ)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "પ્રોસેસ કરેલ ટોકન",
+        "dataset-1-label" : "ટોકન પ્રોસેસિંગમાં ભૂલ"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "એકમ/સંબંધો/ઈવેન્ટ્સની સૂચિ બનાવવી (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "અપ્રક્રિયિત દસ્તાવેજો",
+        "label-1" : "દસ્તાવેજો પ્રોસેસિંગમાં ભૂલ",
+        "label-2" : "પ્રોસેસ કરેલ દસ્તાવેજો"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "પ્રોસેસ કરેલ ટોકન",
+        "dataset-1-label" : "ટોકન પ્રોસેસિંગમાં ભૂલ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "પ્રાપ્ત દસ્તાવેજો",
+        "dataset-1-label" : "પ્રોસેસ કરેલ દસ્તાવેજો",
+        "dataset-2-label" : "ભૂલવાળા દસ્તાવેજો",
+        "dataset-3-label" : "ફગાવેલા દસ્તાવેજો"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy કી ક્રેડિટ લિંક ખરીદો"
+      },
+      "ModifyBtn" : {
+        "label" : "બદલો",
+        "help" : "મોડેલ રૂપરેખા જુઓ/બદલો"
+      },
+      "ExistingModelCode" : {
+        "label" : "કોડ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "વર્ણન"
+      },
+      "ExistingModelType" : {
+        "label" : "મોડેલ પ્રકાર"
+      },
+      "ExistingModelsSection" : {
+        "label" : "હાલની રૂપરેખાઓ"
+      },
+      "ProviderWWW" : {
+        "label" : "વેબસાઇટ લિંક"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "પ્રવાઇડર ક્રેડેન્શિયલ્સ"
+      },
+      "ProviderInfos" : {
+        "label" : "પ્રદાતા માહિતી"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api કી/ક્રેડેન્શિયલ્સ",
+        "help" : "આ પ્રદાતા માટે api કી અથવા ક્રેડેન્શિયલ્સ પસંદ કરો"
+      },
+      "NewApiKey" : {
+        "label" : "નવી api કી",
+        "help" : "આ પ્રદાતા સાથે ઉપયોગ માટે નવી api કી દાખલ કરો"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "હાલની અથવા નવી ઉપયોગ કરો",
+        "help" : "આ પ્રદાતા માટે હાલની અથવા નવી ક્રેડેન્શિયલ્સ બનાવો"
+      },
+      "NewUserName" : {
+        "label" : "યૂઝર નામ",
+        "help" : "પ્રદાતા સેવાઓ ઍક્સેસ કરવા માટે વપરાતું યૂઝર નામ"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "નવું એમ્બેડિંગ મોડેલ",
+        "help" : "નવું એમ્બેડિંગ મોડેલ રૂપરેખા બનાવો"
+      },
+      "NewChatModel" : {
+        "label" : "નવું ચેટ મોડેલ",
+        "help" : "નવું ચેટ મોડેલ રૂપરેખા બનાવો"
+      },
+      "NewModelDialog" : {
+        "label" : "નવું મોડેલ ઉમેરો"
+      },
+      "PiSave" : {
+        "label" : "સંગ્રહો"
+      },
+      "NewModelsButton" : {
+        "label" : "નવા મોડેલ્સ",
+        "help" : "નવી મોડેલ્સ રૂપરેખા બનાવો"
+      },
+      "NewModelsDialog" : {
+        "label" : "નવા મોડેલ્સ ઉમેરો"
+      },
+      "baseUrl" : {
+        "label" : "બેઝ api url",
+        "help" : "પ્રદાતા માટે api સેવાઓના બેઝ url"
+      },
+      "ModelTypePanel" : {
+        "label" : "નવા મોડેલ્સ ઉમેરો"
+      },
+      "ModelsChoices" : {
+        "label" : "મોડેલ્સ પસંદગીઓ"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "સુચવાયેલા મોડેલ્સ પસંદગી"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "એમ્બેડિંગ મોડેલ",
+        "help" : "પહેલેથી જ નિર્ધારિત એમ્બેડિંગ મોડેલ્સમાંથી એક પસંદ કરો"
+      },
+      "chatPresetChoice" : {
+        "label" : "ચેટ મોડેલ",
+        "help" : "પહેલેથી જ નિર્ધારિત ચેટ મોડેલ્સમાંથી એક પસંદ કરો"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "એડવાન્સ મોડેલ્સ પસંદગી"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "એમ્બેડિંગ મોડેલ",
+        "help" : "પ્રદાતા દ્વારા પ્રકાશિત એમ્બેડિંગ મોડેલ્સમાંથી એક પસંદ કરો"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "ચેટ મોડેલ",
+        "help" : "પ્રદાતા દ્વારા પ્રકાશિત ચેટ મોડેલ્સમાંથી એક પસંદ કરો"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " આ પસંદગી મોડ માત્ર તમે નિષ્ણાત હો તો અથવા પ્રદાતા સાઇટ પર ચકાસીને કયા મોડેલ્સ તમારી જરૂરિયાત માટે યોગ્ય છે એ જાણવા માટે જ વાપરો. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "સીધા પસંદગીઅતથા ડિફોલ્ટ ચેટ મોડેલ તરીકે સેટ કરો",
+        "help" : "આ મોડેલને ડિફોલ્ટ તરીકે સેટ કરો, દરેક કાર્ય માટે જ્યાં બીજું ચેટ મોડેલ રૂપરેખિત નથી ત્યાં આનો ઉપયોગ થશે"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " અમને તમારા માટે નીચે મુજબ મોડેલ્સ સૂચવે છે "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ડિફોલ્ટ એમ્બેડિંગ મોડેલ તરીકે સેટ કરો",
+        "help" : "આ મોડેલને ડિફોલ્ટ તરીકે સેટ કરો, દરેક કામ માટે જ્યાં બીજું એમ્બેડિંગ મોડેલ રૂપરેખિત નથી ત્યાં આનો ઉપયોગ થશે"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ડિફોલ્ટ ચેટ મોડેલ તરીકે સેટ કરો",
+        "help" : "આ મોડેલને ડિફોલ્ટ તરીકે સેટ કરો, દરેક કાર્ય માટે જ્યાં બીજું ચેટ મોડેલ રૂપરેખિત નથી ત્યાં આનો ઉપયોગ થશે"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ડિફોલ્ટ એમ્બેડિંગ મોડેલ તરીકે સેટ કરો",
+        "help" : "આ મોડેલને ડિફોલ્ટ તરીકે સેટ કરો, દરેક કાર્ય માટે જ્યાં બીજું એમ્બેડિંગ મોડેલ રૂપરેખિત નથી ત્યાં આનો ઉપયોગ થશે"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " આ પસંદગી મોડ માત્ર તમે નિષ્ણાત હો તો અથવા પ્રદાતા સાઇટ પર ચકાસીને કયા મોડેલ્સ તમારી જરૂરિયાત માટે યોગ્ય છે એ જાણવા માટે જ વાપરો. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "બનાવો અને સક્રિય કરો"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "બનાવો અને સક્રિય કરો"
+      },
+      "ProviderNameField" : {
+        "label" : "પ્રદાતા"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "પ્રોટેકટર માટે પ્રમાણપત્રો જરૂરી છે",
+        "help" : "પ્રોએડર/સર્વર એપ્લિકેશન એ api કી અથવા અન્ય પ્રમાણપત્રો દ્વારા પ્રમાણીકૃત પ્રવેશ માટે રૂપરેખાંકિત છે"
+      },
+      "baseUrl1" : {
+        "label" : "મુલભૂત api url",
+        "help" : "api સેવાઓ માટે પ્રોવાઈડરનો મૂળ url"
+      },
+      "enableAllFunctions" : {
+        "label" : "બધી ફંક્શન કોલ્સ સક્રિય કરો",
+        "help" : "બધી ઉપલબ્ધ ટૂલ્સ અને ફંક્શન કોલ્સ સક્રિય કરો, જો સેટ ન હોય તો, તેને llms એડમિન પેનલમાં પછી સક્રિય કરી શકાશે"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI રિમોટ પ્રદાતા બરાબર છે",
+        "detail" : "પ્રદાતા ચાલુ છે અને સફળતાપૂર્વક રૂપરેખિત થયો છે"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ઓપરેશન નિષ્ફળ ગયું",
+        "detail" : "પરૂપરાયેલ ક્રેડેન્શિયલ્સથી ઓથેન્ટિકેટ કરી શક્યા નથી"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "બરાબર!",
+        "detail" : "ઓપરેશન સફળતાપૂર્વક પૂર્ણ થયું"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "ચેટ સ્ટ્રીમ કરતી વખતે ભૂલ",
+        "detail" : "સર્વર ભૂલ: class org.neo4j.driver.internal.value.StringValue cannot be cast to class java.lang.String (org.neo4j.driver.internal.value.StringValue is in unnamed module of loader 'app'; java.lang.String is in module java.base of loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "સਫળતાપૂર્વક સાચવ્યું",
+        "detail" : "અપડેટ કામગીરી સફળતાપૂર્વક પૂર્ણ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Ollama સર્વર સાથે સંચાર કરતી વખતે ભૂલ",
+        "detail" : "રેવાન્ટ સિસ્ટમ સાથે સંચાર કરતી વખતે નેટવર્ક ભૂલ\n મોડલ્સ યાદી માટે url સાથે કામ કરતી વખતે ભૂલ:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "તમે આને ડિલીટ કરી શકો છો",
+        "detail" : "હાલમાં જોઈ રહેલા ડેટાને સુરક્ષિત રીતે કાઢી શકાય છે"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "તમે આને ડિલીટ કરી શકતા નથી",
+        "detail" : "આ ઓબ્જેક્ટ એપ્લિકેશનના અન્ય ભાગ(ઓ)થી સંબદ્ધ છે"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ચેટ કરવા માટે ફાઇલો અપલોડ કરો"
+      },
+      "ChooseFile" : {
+        "help" : "ફાઇલો પસંદ કરો"
+      },
+      "UploadFile" : {
+        "help" : "ફાઇલો અપલોડ કરો"
+      },
+      "DragDropHere" : {
+        "label" : "અપલોડ કરવા માટે ફાઇલો અહીં ડ્રેગ અને ડ્રોપ કરો"
+      },
+      "RemoveAll" : {
+        "help" : "બધું દૂર કરો"
+      },
+      "UploadPending" : {
+        "label" : "અપલોડ માટે બાકી"
+      },
+      "CompletedData" : {
+        "label" : "પૂર્ણ"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "જો તમે આ વિભાગમાં તેને વાપરવા માંગતા હો તો graphrag ને સેટઅપ વિસ્તારમાં રૂપરેખાંકિત કરો"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag સુયોજનો"
+      },
+      "button-help" : {
+        "label" : "graphrag માટે માહિતી એક્સટ્રેક્શન રૂપરેખાંકિત કરવા અહીં ક્લિક કરો (હજુ રૂપરેખાંકિત નથી)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "રૂપરેખાંકન ઉમેરો"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "બનાવો"
+      },
+      "description" : {
+        "label" : "વિવરણ",
+        "help" : "Google Drive સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "MainPanel" : {
+        "label" : "Google Drive/Workspace કનેક્શન બનાવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "delegatedUser" : {
+        "label" : "નકલ કરવા માટેનો Google યુઝર",
+        "help" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે",
+        "placeholder" : "આ ઓળખપત્રો દ્વારા જે વપરાશકર્તાને નકલ કરવામાં આવશે"
+      },
+      "jsonContent" : {
+        "label" : "Google ઓળખપત્રો json સામગ્રી",
+        "help" : "Google Console Cloud માં તમારી workspace/team drives ઍક્સેસ સાથે Google ઓળખપત્રો બનાવો અને અહીંથી ડાઉનલોડ કરેલા json ફાઇલની સામગ્રી પેસ્ટ કરો (https://console.cloud.google.com/).",
+        "placeholder" : "Google Console Cloud માં તમારી workspace/team drives ઍક્સેસ સાથે Google ઓળખપત્રો બનાવો અને અહીંથી ડાઉનલોડ કરેલા json ફાઇલની સામગ્રી પેસ્ટ કરો (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "PublishBtn" : {
+        "label" : "પ્રકાશિત કરો!",
+        "help" : "સાચવે છે અને આ સામગ્રીને જ્ઞાન આધાર માટે LLm's માં ઉપલબ્ધ બનાવે છે"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢો"
+      },
+      "MainPanel" : {
+        "label" : "google drive સામગ્રી શેર કરવી"
+      },
+      "SettingsTab" : {
+        "label" : "સેટિંગ્સ"
+      },
+      "LogsTab" : {
+        "label" : "લોગ્સ"
+      },
+      "description" : {
+        "label" : "વિવરણ",
+        "help" : "google drive એન્ટ્રીઓની અપલોડ કરેલી સામગ્રીનું વર્ણન દાખલ કરો."
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "સામગ્રીનો આપમેળે જનરેટ થયેલો અનન્ય કોડ."
+      },
+      "tree" : {
+        "label" : "પસંદ કરેલી ફાઇલ અથવા ફોલ્ડર",
+        "help" : "શેર કરેલા google drive સ્પેસ અને પેજોની સામગ્રી"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive રૂપરેખાંકન",
+        "help" : "પહેલેથી રૂપરેખાંકિત google drive સિસ્ટમ સંદર્ભ."
+      },
+      "openZips" : {
+        "label" : "ઝિપ ફાઇલો ખોલો",
+        "help" : "ઝિપ ફાઇલો ખોલવા અને સામગ્રી નીકાળવાનો વિકલ્પ સક્ષમ કરો"
+      },
+      "parentProjectCode" : {
+        "label" : "પ્રોજેક્ટ",
+        "help" : "પેરંટ પ્રોજેક્ટ સંદર્ભ."
+      },
+      "programmedTables" : {
+        "label" : "સામગ્રીના સુધારા તપાસની સમીક્ષા સમયપત્રક",
+        "help" : "પસંદ કરેલી સામગ્રીના સુધારાના શેડ્યૂલ બનાવો જેથી retrieve augmented generation સિસ્ટમ અપડેટ રહે"
+      },
+      "catalogingCriteria" : {
+        "label" : "ફોલ્ડર અને સબફોલ્ડરની ઠરાવેલા ગુણધર્મો",
+        "help" : "અહીં સમજાવો કે Gebo.ai સાથે શેર કરેલી google drive સામગ્રીમાં ફાઇલો અને ફોલ્ડર્સના ઠરાવેલા ગુણધર્મો કેવી રીતે કરવામાં આવ્યા છે"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "મૂળભૂત સેટિંગ્સ"
+      },
+      "CancelBtn" : {
+        "label" : "રદ કરો"
+      },
+      "DeleteBtn" : {
+        "label" : "કાઢો"
+      },
+      "SaveBtn" : {
+        "label" : "સાચવો"
+      },
+      "MainPanel" : {
+        "label" : "google drive એકીકરણમાં ફેરફાર કરો"
+      },
+      "code" : {
+        "label" : "અનન્ય કોડ",
+        "help" : "google drive સિસ્ટમનો આપમેળે જનરેટ થયેલો અનન્ય કોડ."
+      },
+      "description" : {
+        "label" : "વિવરણ",
+        "help" : "google drive સિસ્ટમનું વર્ણન દાખલ કરો."
+      },
+      "driveAccessSecret" : {
+        "label" : "ઉપયોગ કરેલી ઓળખ",
+        "help" : "google drive સિસ્ટમ ઍક્સેસ કરવા માટે ઓળખ પસંદ કરો અથવા બનાવો"
+      }
+    }
+  }
+}

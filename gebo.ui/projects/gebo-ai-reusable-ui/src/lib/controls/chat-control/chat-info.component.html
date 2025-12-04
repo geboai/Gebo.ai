@@ -8,84 +8,54 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-panel header="Chat configuration infos" [style]="{width:'1024px'}">
     <ng-template #icons name="icons" pTemplate="icons">
-        <p-button icon="pi pi-times-circle" [rounded]="true" [text]="true" title="Close"
+        <p-button icon="pi pi-times-circle" [rounded]="true" [text]="true" title="Close" id="CloseBtn" gebo-ai-label
             (onClick)="close.emit(true)"></p-button>
     </ng-template>
     <div class="grid">
         <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-                <label for="providerId">Chat model provider</label>
-                <div id="providerId">{{data?.providerId}}</div>
-                <small id="providerId-help">
-                    LLms provider driver
-                </small>
-            </div>
+            <gebo-ai-field id="providerId" label="Chat model provider" help="LLms provider driver">
+                <div>{{data?.providerId}}</div>
+            </gebo-ai-field>
+
         </div>
         <div class="col-6">
-            <div class="flex flex-column gap-2 ">
-                <label for="usedModel">Used model</label>
-                <div id="usedModel">{{data?.chatModelChoice?.code}}</div>
-                <small id="usedModel-help">
-                    Model code
-                </small>
-            </div>
+            <gebo-ai-field id="usedModel" label="Used model" help="Model code">
+                <div>{{data?.chatModelChoice?.code}}</div>
+            </gebo-ai-field>
+
         </div>
         <div class="col-12" *ngIf="data?.knowledgeBases">
-            <div class="flex flex-column gap-2 ">
-                <label for="kbases">Available knowledge bases</label>
+            <gebo-ai-field id="kbases" label="Available knowledge bases"
+                help="List of knowledge bases used in this RAG chat">
                 <div id="kbases"><i *ngFor="let k of data?.knowledgeBases">{{k.description}}</i>&nbsp;</div>
-                <small id="kbases-help">
-                    List of knowledge bases used in this RAG chat
-                </small>
-            </div>
+            </gebo-ai-field>
+
         </div>
         <div class="col-12">
-            
-            <div class="flex flex-column gap-2 ">
-                <label for="functions">Chat model callable functions</label>
-                
+            <gebo-ai-field id="functions" label="Chat model callable functions"
+                help="List of functions available to the chat model">
                 <div id="functions">
-                    <p-fieldset  *ngFor="let tree of data?.availableFunctions;" [legend]="tree.category?.description">
-                        <div class="grid"> 
-                            <div class="col-4"><b>Name</b></div>
-                            <div class="col-8"><b>Description</b></div>
+                    <p-fieldset *ngFor="let tree of data?.availableFunctions;" [legend]="tree.category?.description">
+                        <div class="grid">
+                            <div class="col-4"><b id="NameCol" gebo-ai-text>Name</b></div>
+                            <div class="col-8"><b id="DescriptionCol" gebo-ai-text>Description</b></div>
                             <div *ngFor="let f of tree.toolsReference" class="col-12 grid">
                                 <div class="col-4">{{f.name}}</div>
                                 <div class="col-8">{{f.description}}</div>
                             </div>
                         </div>
-                        <!-- 
-                        <p-table [value]="tree.functionsReference?tree.functionsReference:[]" [tableStyle]="{ 'min-width': '50rem' }">
-                            <ng-template #header pTemplate="header">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    
-                                </tr>
-                            </ng-template>
-                            <ng-template #body let-item pTemplate="body">
-                                <tr>
-                                    <td>{{ item.name}}</td>
-                                    <td>{{ item.description}}</td>
-                                    
-                                </tr>
-                            </ng-template>
-                        </p-table>-->
+
                     </p-fieldset>
-                    <!-- 
-                    <ul *ngFor="let tree of data?.availableFunctions;">{{tree.category?.description}}
-                        <li *ngFor="let f of tree.functionsReference"><b>{{f.name}}:</b>{{f.description}}</li>
-                    </ul>
-                    -->
+
                 </div>
-                
-            </div>
+            </gebo-ai-field>
+
         </div>
     </div>
 </p-panel>

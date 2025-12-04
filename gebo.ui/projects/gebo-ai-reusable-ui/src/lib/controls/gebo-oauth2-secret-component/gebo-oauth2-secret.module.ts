@@ -8,10 +8,12 @@ import { InputTextModule } from "primeng/inputtext";
 import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 import { MultiSelectModule } from "primeng/multiselect";
 import { FieldsetModule } from "primeng/fieldset";
-
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 @NgModule({
-    imports:[CommonModule,FormsModule,ReactiveFormsModule,BlockUIModule,PanelModule,InputTextModule,EditableListboxModule,MultiSelectModule,FieldsetModule],
-    declarations:[GeboOauth2SecretComponent],
-    exports:[GeboOauth2SecretComponent]
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, BlockUIModule, PanelModule, InputTextModule, EditableListboxModule, MultiSelectModule, FieldsetModule, GeboAIFieldTranslationContainerModule],
+    declarations: [GeboOauth2SecretComponent],
+    exports: [GeboOauth2SecretComponent],
+    providers: []
 })
-export class GeboOauth2SecretModule {}
+export class GeboOauth2SecretModule { }

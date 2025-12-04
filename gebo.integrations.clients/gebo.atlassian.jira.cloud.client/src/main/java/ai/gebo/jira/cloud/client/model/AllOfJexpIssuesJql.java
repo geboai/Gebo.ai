@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.JexpJqlIssues;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The JQL query that specifies the set of issues available in the Jira expression.

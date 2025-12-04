@@ -18,10 +18,17 @@
  */
 package ai.gebo.secrets.model;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+@Data
 public class GeboGoogleJsonSecretContent extends AbstractGeboSecretContent {
 	
 	// Stores the JSON content related to Google Cloud credentials
+	@NotNull
 	private String jsonContent = null;
+	@NotNull
+	private String delegatedUser=null;
 
 	/**
 	 * Returns the type of secret content, specific to Google Cloud JSON credentials.
@@ -33,21 +40,5 @@ public class GeboGoogleJsonSecretContent extends AbstractGeboSecretContent {
 		return GeboSecretType.GOOGLE_CLOUD_JSON_CREDENTIALS;
 	}
 
-	/**
-	 * Gets the JSON content associated with this secret.
-	 * 
-	 * @return A String containing the JSON content
-	 */
-	public String getJsonContent() {
-		return jsonContent;
-	}
-
-	/**
-	 * Sets the JSON content for this secret.
-	 * 
-	 * @param jsonContent A String representing the JSON content to be set
-	 */
-	public void setJsonContent(String jsonContent) {
-		this.jsonContent = jsonContent;
-	}
+	
 }

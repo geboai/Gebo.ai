@@ -8,62 +8,60 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
 <p-blockUI [target]="jobStatusView" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #jobStatusView [header]="jobTitle+entity?.code">
+<p-panel id="MainPanel" gebo-ai-label #jobStatusView header="Publishing log">
   <div class="geboDialogContent">
     <div class="grid">
       <div class="col-4">
-        <div class="flex flex-column gap-2 ">
-          <label for="publishingSystem">Published content configuration</label>
-          <div>
+        <gebo-ai-field id="publishingSystem" label="Published content configuration" help="Published content info">
+          <div gebo-ai-field-element>
             {{systemInfos?.endpoint?.description}}
           </div>
+        </gebo-ai-field>
 
-          <small id="publishingSystem-help">
-            Published content info
-          </small>
-        </div>
       </div>
 
-      <div class="col-3">
-        <div class="flex flex-column gap-2 ">
-          <label for="startDateTime">Start date/time</label>
-          <div>{{entity?.startDateTime | date:'short'}}</div>
+      <div class="col-2">
+        <gebo-ai-field id="startDateTime" label="Start date/time"
+          help="Start date and time of the content synchronization task">
+          <div gebo-ai-field-element>{{entity?.startDateTime | date:'short'}}</div>
+        </gebo-ai-field>
 
-          <small id="startDateTime-help">
-            Start date and time of the content synchronization task
-          </small>
-        </div>
       </div>
-      
-      <div class="col-3">
-        <div class="flex flex-column gap-2 ">
-          <label for="actualStatus">Status</label>
-          <div>
-            <span *ngIf="jobSummary?.contentsReadTerminated!==true">Under processing</span>
-            <span
-              *ngIf="jobSummary?.contentsReadTerminated==true && jobSummary?.vectorizationTerminated===true">Finished</span>
-            <span *ngIf="jobSummary?.contentsReadTerminated==true && jobSummary?.vectorizationTerminated!==true">Wait
-              for end of embedding</span>
+      <div class="col-2">
+        <gebo-ai-field id="endDateTime" label="End date/time"
+          help="End date and time of the content synchronization task">
+          <div gebo-ai-field-element>{{entity?.endDateTime | date:'short'}}</div>
+        </gebo-ai-field>
+
+      </div>
+      <div class="col-2">
+        <gebo-ai-field id="actualStatus" label="Status"
+          help="Status of the task, still running, finished or finished with errors.">
+          <div id="actualStatus" gebo-ai-field-element>
+
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished!==true" style="color: orange;">
+              <i class="pi pi-spin pi-cog"></i>
+              <span id="NotProcessedCompletely" gebo-ai-text>Not processed completely</span>
+              
+            </span>
+            <span *ngIf="this.jobSummary?.workflowStatus?.finished===true" style="color: green;">
+              <i class="pi pi-check"></i>
+              <span id="ProcessedCompletely" gebo-ai-text>Processed completely</span>
+            </span>
+
           </div>
-          <small id="actualStatus-help">
-            Status of the task, still running, finished or finished with errors.
-          </small>
-        </div>
+        </gebo-ai-field>
       </div>
       <div class="col-2">
         <div class="grid">
-          <div class="col-4"><p-button (onClick)="cancelAction.emit(true)" icon="pi pi-times" [outlined]="true"
-              label="Close" severity="contrast"></p-button></div>
-          <div class="col-4"><p-button icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true"
-              [disabled]="!(jobSummary?.contentsReadTerminated==true && jobSummary?.vectorizationTerminated===true)"
-              (onClick)="doDelete()"></p-button></div>
+          <div class="col-4"><p-button id="CloseBtn" gebo-ai-label (onClick)="cancelAction.emit(true)"
+              icon="pi pi-times" [outlined]="true" label="Close" severity="contrast"></p-button></div>
+          <div class="col-4"><p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete"
+              [outlined]="true" (onClick)="doDelete()"></p-button></div>
           <div class="col-4"></div>
         </div>
 
@@ -77,113 +75,26 @@
     <div class="col-12">
       <p-tabView>
 
-        <p-tabPanel header="Publication stats">
-          <div class="grid">
-            <div class="col-6">
-              <div class="card">
-                <p-chart type="bar" [data]="contentsReadData" [options]="basicOptions" [height]="'200px'" />
-              </div>
-              <div class="card">
-                <p-chart type="bar" [data]="contentsVectorizationData" [options]="basicOptions" [height]="'200px'" />
-              </div>
-              <div class="card">
-                <p-chart type="bar" [data]="contentsVectorizationVolume" [options]="basicOptions" [height]="'200px'" />
-              </div>
-            </div>
-            <div class="col-6">
-              <p-chart type="pie" *ngIf="resultsPiechart" [data]="resultsPiechart" [options]="pieOptions" [height]="'500px'" />
-            </div>
-          </div>
-          <div class="grid">
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="scannedDocuments">Inspected documents</label>
-                <div>
-                  {{jobSummary?.howManyBatchDocuments}}
-                </div>
-                <small id="scannedDocuments-help">
-                  Total number of documents inspected
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="readingErrorsDocuments">With access or reading errors</label>
-                <div>
-                  {{jobSummary?.howManyBatchContentsReadingErrors}}
-                </div>
-                <small id="readingErrorsDocuments-help">
-                  Nr. docs with errors
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="scannedDocuments">Sent to embedding phase</label>
-                <div>
-                  {{jobSummary?.howManyBatchSentToVectorization}}
-                </div>
-                <small id="scannedDocuments-help">
-                  New or modified docs sent to embedding
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="scannedFinished">Documents inspection finished</label>
-                <div>
-                  {{jobSummary?.contentsReadTerminated===true?"Yes":"No"}}
-                </div>
-                <small id="scannedFinished-help">
-                  Documents inspection phase is terminated
-                </small>
-              </div>
-            </div>
-            <div class="col-4">
+        <p-tabPanel id="ProcessesStatsTab" gebo-ai-label header="Processes stats">
+          <div class="grid" *ngIf="rootGraphicData">
+            <div class="col-12">
+              <gebo-ai-jobsummary-graphic-visualizer
+                [rendered]="rootGraphicData"></gebo-ai-jobsummary-graphic-visualizer>
 
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="embeddingReceiveddDocuments">Embedding received docs</label>
-                <div>
-                  {{jobSummary?.currentBatchDocumentReceviedCounter}}
-                </div>
-                <small id="embeddingReceiveddDocuments-help">
-                  Docs received from embedding system
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="embeddedDocuments">Number of embedded documents</label>
-                <div>
-                  {{jobSummary?.currentBatchDocumentVectorizedCounter}}
-                </div>
-                <small id="embeddedDocuments-help">
-                  Nr. of docs successfully embedded
-                </small>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="flex flex-column gap-2 ">
-                <label for="vectorizationTerminated">Embedding finished</label>
-                <div>
-                  {{jobSummary?.vectorizationTerminated===true?"Yes":"No"}}
-                </div>
-                <small id="vectorizationTerminated-help">
-                  Data embedding phase is terminated
-                </small>
-              </div>
             </div>
           </div>
         </p-tabPanel>
-        <p-tabPanel header="Publication log">
-          <p-messages [value]="logMessages" [enableService]="false" [closable]="false"></p-messages>
-          <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="actualPage.pageSize"
-            [totalRecords]="actualPageData?.totalElements" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        <p-tabPanel id="PublicationLogTab" gebo-ai-label header="Publication log">
+          <p-messages id="MessagesComponent" gebo-ai-label [value]="logMessages" [enableService]="false"
+            [closable]="false"></p-messages>
+          <p-paginator id="PaginatorComponent" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
+            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.totalElements"
+            [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
         </p-tabPanel>
       </p-tabView>
     </div>
   </div>
 
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

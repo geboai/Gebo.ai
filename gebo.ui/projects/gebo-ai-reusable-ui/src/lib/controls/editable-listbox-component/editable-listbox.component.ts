@@ -68,6 +68,8 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
     @Input() placeholder?: string;
     /** Flag indicating if the component is in readonly mode */
     @Input() readonly: boolean = false;
+
+    @Input() required?:boolean;
     /** The current value of the component */
     public value?: string = undefined;
     /** Observable to fetch options dynamically */
@@ -250,6 +252,7 @@ export class EditableListboxComponent implements ControlValueAccessor, OnInit, O
      */
     setDisabledState?(isDisabled: boolean): void {
         this.disabled=isDisabled===true;
+       
     }
 
     /**

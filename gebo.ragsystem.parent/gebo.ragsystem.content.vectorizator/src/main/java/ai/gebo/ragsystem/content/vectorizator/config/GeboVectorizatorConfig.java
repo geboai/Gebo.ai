@@ -26,7 +26,7 @@ import ai.gebo.application.messaging.GAbstractTimedOutMessageReceiverFactory.Tim
  * including message size limits and receiver configurations.
  */
 @Configuration
-@ConfigurationProperties(value = "ai.gebo.vectorizator.config")
+@ConfigurationProperties(value = "ai.gebo.docscache.config")
 public class GeboVectorizatorConfig {
 	/** Maximum cumulative size of messages in bytes before processing (default: 1MB) */
 	long maximumMessagesCumulatedBytesThreshold = 1024 * 1024;
@@ -46,7 +46,7 @@ public class GeboVectorizatorConfig {
 		disposerConfig.setUseSenderThread(false);
 		vectorizatorReceiverConfig.setPoolCardinality(1);
 		vectorizatorReceiverConfig.setUseSenderThread(true);
-		vectorizatorReceiverConfig.setTimeout(20000l);
+		vectorizatorReceiverConfig.setTimeout(5000l);
 		vectorizatorReceiverConfig.setFlushThreshold(10);
 	}
 

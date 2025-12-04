@@ -17,10 +17,10 @@
  * The component provides UI for creating, editing, and deleting OpenAI embedding model configurations,
  * fetching available models from the OpenAI API, and managing API secret connections.
  */
-import { Component, Injector } from "@angular/core";
+import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AzureOpenAiEmbeddingModelsConfigurationControllerService, GBaseChatModelChoice, GAzureOpenAIEmbeddingModelConfig, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -29,9 +29,12 @@ import { isValidUrl } from "../utils/url-ok";
 @Component({
     selector: "gebo-ai-azure-open-ai-embed-model-admin-component",
     templateUrl: "gebo-ai-openai-embedmodel-admin.component.html",
-    standalone: false
+    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAzureOpenAIEmbedModelAdminComponent),
+        multi: false
+    }]
 })
-export class GeboAIAzureOpenAIEmbedModelAdminComponent extends BaseEntityEditingComponent<GAzureOpenAIEmbeddingModelConfig> {
+export class GeboAIAzureOpenAIEmbedModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GAzureOpenAIEmbeddingModelConfig> {
     /**
      * The entity name identifier for the GAzureOpenAIEmbeddingModelConfig
      */
@@ -184,14 +187,5 @@ export class GeboAIAzureOpenAIEmbedModelAdminComponent extends BaseEntityEditing
         }))
     }
 
-    /**
-     * Determines if a model configuration can be deleted
-     * Currently always returns true as there are no dependencies to check
-     * @param value The model configuration to check
-     * @returns Observable containing the delete permission status and message
-     */
-    override canBeDeleted(value: GAzureOpenAIEmbeddingModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
-
+    
 }

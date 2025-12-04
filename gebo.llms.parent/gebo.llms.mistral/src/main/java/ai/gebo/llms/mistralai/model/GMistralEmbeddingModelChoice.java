@@ -13,6 +13,7 @@
 package ai.gebo.llms.mistralai.model;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
+import lombok.Data;
 
 /**
  * AI generated comments
@@ -22,16 +23,9 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
  * from the abstraction layer, specifically tailored for Mistral AI's
  * embedding model offerings.
  */
+@Data
 public class GMistralEmbeddingModelChoice extends GBaseEmbeddingModelChoice {
 
-    /**
-     * Default constructor for GMistralEmbeddingModelChoice.
-     * Initializes a new instance with default values.
-     * 
-     * TODO Auto-generated constructor stub
-     */
-	public GMistralEmbeddingModelChoice() {
-		// TODO Auto-generated constructor stub
-	}
+	private MistralBaseModelCard modelCard = null;
 
 }

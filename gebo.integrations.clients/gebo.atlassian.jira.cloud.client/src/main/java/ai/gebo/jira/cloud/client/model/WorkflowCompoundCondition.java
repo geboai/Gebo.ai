@@ -24,15 +24,15 @@
 
 package ai.gebo.jira.cloud.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.WorkflowCondition;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * A compound workflow transition rule condition. This object returns &#x60;nodeType&#x60; as &#x60;compound&#x60;.
  */

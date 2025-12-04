@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,13 +18,15 @@
  */
 import { HttpClient } from "@angular/common/http";
 import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
-import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
+import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 
 /**
  * URL for the content controller API endpoint
  */
 const contentControllerUrl: string = "/api/users/ContentController";
-
+const uploadedContentControllerUrl: string = "/api/users/GeboUserChatUploadsController/serveContent/"
+const generatedContentControllerUrl: string = "/api/users/GeboLLMGeneratedResourceController/serveLLMGeneratedContent/"
 /**
  * @Component GeboAIContentViewerComponent
  * A component responsible for rendering different types of content based on their file type.
@@ -32,54 +34,60 @@ const contentControllerUrl: string = "/api/users/ContentController";
  * rendering for each content type.
  */
 @Component({
-    selector: "gebo-ai-content-viewer",
-    templateUrl: "gebo-ai-content-viewer.component.html",
-    standalone: false
+  selector: "gebo-ai-content-viewer",
+  templateUrl: "gebo-ai-content-viewer.component.html",
+  standalone: false
 })
 export class GeboAIContentViewerComponent implements OnInit, OnChanges {
 
   /** Unique identifier for the content to be displayed */
   @Input() code: string = "";
-  
+
+  @Input() userUploadedContent?: EnrichedUserUploadedContentView;
+
+  @Input() generatedContent?: EnrichedLLMGeneratedResource;
+
   /** Flag to determine if the viewer should be active */
   @Input() activate: boolean = false;
-  
-  /** Controls the visibility of the content viewer */
-  public visible: boolean = false;
-  
-  /** Indicates if content is being loaded */
-  public loading: boolean = false;
-  
-  /** Metadata information about the content */
-  public contentMetaInfo?: ContentMetaInfo;
-  
-  /** Information about the file type of the content */
-  public ingestionFileType?: IngestionFileType;
-  
-  /** Programming language of the source code content */
-  public sourceCodeLanguage: string = "";
-  
-  /** Flag indicating if the content is source code */
-  public sourceCodeContent: boolean = false;
-  
-  /** Flag indicating if the content is browsable web content */
-  public browsableContent: boolean = false;
-  
-  /** Flag indicating if the content should be downloaded rather than viewed */
-  public downloadableContent: boolean = false;
-  
-  /** Flag indicating if the content is plain text */
-  public plainTextContent: boolean = false;
-  
-  /** Flag indicating if the content is a PDF document */
-  public pdfContent: boolean = false;
-  
-  /** The actual content object with data */
-  public contentObject?: ContentObject;
-  
-  /** URL for external content viewing */
-  public externalContentUrl: string = "javascript:void(0)";
 
+  /** Controls the visibility of the content viewer */
+  protected visible: boolean = false;
+
+  /** Indicates if content is being loaded */
+  protected loading: boolean = false;
+
+  /** Metadata information about the content */
+  protected contentMetaInfo?: ContentMetaInfo;
+
+  /** Information about the file type of the content */
+  protected ingestionFileType?: IngestionFileType;
+
+  /** Programming language of the source code content */
+  protected sourceCodeLanguage: string = "";
+
+  /** Flag indicating if the content is source code */
+  protected sourceCodeContent: boolean = false;
+
+  /** Flag indicating if the content is browsable web content */
+  protected browsableContent: boolean = false;
+
+  /** Flag indicating if the content should be downloaded rather than viewed */
+  protected downloadableContent: boolean = false;
+
+  /** Flag indicating if the content is plain text */
+  protected plainTextContent: boolean = false;
+
+  /** Flag indicating if the content is a PDF document */
+  protected pdfContent: boolean = false;
+
+  /** The actual content object with data */
+  protected contentObject?: ContentObject;
+
+  /** URL for external content viewing */
+  protected externalContentUrl: string = "javascript:void(0)";
+
+  /*** if true the url is served by gebo and requires an authorization token */
+  protected contentServedByGebo: boolean = false;
   /** Event emitter that fires when the content viewer is closed */
   @Output() close: EventEmitter<boolean> = new EventEmitter();
 
@@ -111,8 +119,8 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * 
    * @param evt The event that triggered the close action
    */
-  public closeMe(evt:any) {
-    this.visible=false;
+  protected closeMe(evt: any) {
+    this.visible = false;
     this.close.emit(true);
   }
 
@@ -121,32 +129,73 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * Sets flags for different content types and prepares the external content URL
    */
   private handleMetaInfo() {
+    if (this.generatedContent) {
+      const fileType = this.generatedContent.fileType;
+      if (fileType) {
+        this.ingestionFileType = this.generatedContent.fileType;
+        if (this.ingestionFileType?.uiViewable === true) {
+          this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
+          this.plainTextContent = fileType?.treatAs === 'plainText';
+          this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
+          this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
+          this.externalContentUrl = this.path + generatedContentControllerUrl + this.generatedContent?.userContextCode + "/" + this.generatedContent?.code;
+          this.contentServedByGebo = true;
+        }
+        this.downloadableContent = fileType?.uiViewable === false;
+        this.visible = fileType?.uiViewable === true;
+        console.log("Content: " + this.externalContentUrl);
+        console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
+        console.log("content viewer url:" + this.externalContentUrl);
+      }
+    }
+    if (this.userUploadedContent) {
+      const fileType = this.userUploadedContent.fileType;
+      if (fileType) {
+        this.ingestionFileType = this.userUploadedContent.fileType;
+        if (this.ingestionFileType?.uiViewable === true) {
+          this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
+          this.plainTextContent = fileType?.treatAs === 'plainText';
+          this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
+          this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
+          this.externalContentUrl = this.path + uploadedContentControllerUrl + this.userUploadedContent?.userContextCode + "/" + this.userUploadedContent?.code;
+          this.contentServedByGebo = true;
+        }
+        this.downloadableContent = fileType?.uiViewable === false;
+        this.visible = fileType?.uiViewable === true;
+        console.log("Content: " + this.externalContentUrl);
+        console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
+        console.log("content viewer url:" + this.externalContentUrl);
+      }
+    }
     if (this.contentMetaInfo) {
       if (this.contentMetaInfo.extension) {
         this.loading = true;
         this.ingestionMetaInfoService.getIngestionFileTypeByExtension(this.contentMetaInfo.extension).subscribe({
           next: (fileType) => {
             this.externalContentUrl = this.path + contentControllerUrl + "?code=" + encodeURIComponent(this.code);
+            this.contentServedByGebo = true;
             this.ingestionFileType = fileType;
             if (this.ingestionFileType.uiViewable === true) {
               this.sourceCodeContent = fileType?.treatAs === 'sourceCode';
               this.plainTextContent = fileType?.treatAs === 'plainText';
               this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
 
-              this.browsableContent = this.contentMetaInfo?.moduleId === 'webcrawler-module';
+              this.browsableContent = (this.contentMetaInfo?.moduleId === 'webcrawler-module' || this.contentMetaInfo?.referenceType==="WEB");
               if (this.browsableContent && this.contentMetaInfo?.url) {
                 this.externalContentUrl = this.contentMetaInfo.url;
+                this.contentServedByGebo = false;
               }
             }
             this.downloadableContent = fileType?.uiViewable === false;
-            this.visible =fileType?.uiViewable === true;
+            this.visible = fileType?.uiViewable === true;
             console.log("Content: " + this.externalContentUrl);
-            
+
             console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
             console.log("content viewer url:" + this.externalContentUrl);
+
             
-            this.loading = true;
-            if (this.sourceCodeContent || this.plainTextContent) {
+            if ((this.sourceCodeContent || this.plainTextContent) && this.browsableContent!==true) {
+              this.loading = true;
               this.contentMetaControllerService.getContentObject(this.code).subscribe({
                 next: (value) => {
                   this.contentObject = value;
@@ -168,7 +217,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
       }
     }
   }
- 
+
   /**
    * Angular lifecycle hook that responds to input changes
    * Fetches content metadata when the content code changes and the component is activated
@@ -177,8 +226,6 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (this.code && this.code.length && changes["code"] && this.activate === true) {
-      
-
       this.loading = true;
       this.contentMetaControllerService.getContentMetaInfos(this.code).subscribe({
         next: (value) => {
@@ -189,6 +236,12 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
           this.loading = false;
         }
       });
+    }
+    if (this.generatedContent && changes["generatedContent"]) {
+      this.handleMetaInfo();
+    }
+    if (this.userUploadedContent && changes["userUploadedContent"]) {
+      this.handleMetaInfo();
     }
   }
 

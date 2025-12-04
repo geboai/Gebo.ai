@@ -8,14 +8,12 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-blockUI [target]="mainTree" [blocked]="loading">
+
+<p-blockUI id="LockBlockUIPanel" gebo-ai-label [target]="mainTree" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-tree #mainTree [value]="roots" class=" col-12" selectionMode="single" [(selection)]="selectedNodes"
+<p-tree id="MainTree" gebo-ai-label #mainTree [value]="roots" class=" col-12" selectionMode="single" [(selection)]="selectedNodes"
     (onNodeExpand)="nodeExpand($event)" (onNodeCollapse)="nodeCollapse($event)" (onNodeSelect)="nodeSelect($event)"
     (onNodeUnselect)="nodeUnselect($event)">
     <ng-template let-node pTemplate="default">
@@ -25,7 +23,7 @@
                 {{ node.label }}
             </a>
 
-            <a title="add new..." class="anchorButton"  (click)="createRootProject(node)">+ Add item/project</a>
+            <a id="addNewAnchor" gebo-ai-label title="add new..." class="anchorButton"  (click)="createRootProject(node)" gebo-ai-text>+ Add item/project</a>
         </span>
         <span *ngIf="node.data.isProject===true">
 
@@ -48,3 +46,6 @@
 </p-tree>
 <gebo-ai-content-viewer [activate]="openContentViewing" [code]="openContentViewingCode"
     (close)="openContentViewing=false"></gebo-ai-content-viewer>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

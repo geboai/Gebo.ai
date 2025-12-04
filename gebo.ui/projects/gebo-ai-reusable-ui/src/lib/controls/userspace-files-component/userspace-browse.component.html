@@ -8,22 +8,19 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
-<p-panel #UsBrowse header="Knowledge bases & user files">
+<p-panel id="UserspaceBrowser" gebo-ai-label #UsBrowse header="Knowledge bases & user files">
     <p-blockUI [target]="UsBrowse" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
     <div class="grid" style="width:240px;">
         <div class="col-6">
-            <p-button label="OK" [outlined]="true" icon="pi pi-check" (onClick)="confirmEditing()" severity="success"
-                [disabled]="formGroup.invalid"></p-button>
+            <p-button id="okBtn" gebo-ai-label label="OK" [outlined]="true" icon="pi pi-check"
+                (onClick)="confirmEditing()" severity="success" [disabled]="formGroup.invalid"></p-button>
         </div>
         <div class="col-6">
-            <p-button label="Cancel" [outlined]="true" icon="pi pi-cancel" (onClick)="closeMe.emit(false)"
-                severity="secondary"></p-button>
+            <p-button id="cancelBtn" gebo-ai-label label="Cancel" [outlined]="true" icon="pi pi-cancel"
+                (onClick)="closeMe.emit(false)" severity="secondary"></p-button>
         </div>
     </div>
     <p-fieldset legend="Choosed elements">
@@ -34,15 +31,13 @@
 
         </div>
     </p-fieldset>
-    <p-fieldset legend="Choose user uploaded content">
+    <p-fieldset id="chooseUserUploadedContent" gebo-ai-label legend="Choose user uploaded content">
         <p-tree [value]="root" (onNodeExpand)="nodeExpand($event)">
             <ng-template let-node pTemplate="default">
                 <span [formGroup]="formGroup">
-
                     <p-checkbox name="choosed" id="choosed" *ngIf="node.data?.isFile===true && node.data?.data?.code"
                         formControlName="choosed" [value]="node.data.data.code"></p-checkbox>
                     <label for="choosed" class="ml-2"> {{node.data.data.name}} </label>
-
 
 
                     <p-button *ngIf="node.data.isKnowledgeBase===true || node.data.isUserspaceFolder===true"
@@ -64,3 +59,4 @@
         </p-tree>
     </p-fieldset>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

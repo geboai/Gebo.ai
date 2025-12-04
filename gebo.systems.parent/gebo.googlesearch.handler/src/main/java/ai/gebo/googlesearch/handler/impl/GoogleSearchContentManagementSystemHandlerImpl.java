@@ -210,4 +210,9 @@ public class GoogleSearchContentManagementSystemHandlerImpl
 			throws GeboContentHandlerSystemException {
 		// TODO Auto-generated method stub
 	}
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return false;
+	}
 }

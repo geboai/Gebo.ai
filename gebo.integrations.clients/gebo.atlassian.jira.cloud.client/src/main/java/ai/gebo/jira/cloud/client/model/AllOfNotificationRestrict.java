@@ -27,12 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.GroupName;
-import ai.gebo.jira.cloud.client.model.NotificationRecipientsRestrictions;
-import ai.gebo.jira.cloud.client.model.RestrictedPermission;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * Restricts the notifications to users with the specified permissions.
  */

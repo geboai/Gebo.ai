@@ -529,7 +529,7 @@ const jiraModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
  */
 const googleDriveModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
     moduleId: GOOGLEDRIVE_MODULE,
-    addProjectEndpointicon: "pi pi-google",
+    addProjectEndpointicon: "pi pi-google-drive",
     addProjectEndpointLabel: "+google drive",
     addProjectEndpointTitle: "add a google drive data source",
     projecteEndpointClassName: "ai.gebo.googledrive.handlers.GGoogleDriveProjectEndpoint",

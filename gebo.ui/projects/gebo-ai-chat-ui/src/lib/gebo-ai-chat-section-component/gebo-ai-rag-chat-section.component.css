@@ -1,0 +1,15 @@
+:host ::ng-deep .gebo-sidebar {
+  width: 30vw;
+}
+
+@media (max-width: 1919px) {
+  :host ::ng-deep .gebo-sidebar {
+    width: 50vw;
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .gebo-sidebar {
+    width: 80vw;
+  }
+}

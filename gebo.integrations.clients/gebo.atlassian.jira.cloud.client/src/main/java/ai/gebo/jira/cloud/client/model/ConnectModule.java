@@ -25,7 +25,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * A [Connect module](https://developer.atlassian.com/cloud/jira/platform/about-jira-modules/) in the same format as in the [app descriptor](https://developer.atlassian.com/cloud/jira/platform/app-descriptor/).

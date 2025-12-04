@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ai.gebo.model.base.GBaseObject;
+import lombok.Data;
 import lombok.ToString;
 
 /***
@@ -26,7 +26,7 @@ import lombok.ToString;
  * 
  * AI generated comments
  */
-@ToString
+@Data
 public class GVirtualFilesystemRoot {
 	
 	// Code associated with the virtual file system root
@@ -43,6 +43,7 @@ public class GVirtualFilesystemRoot {
 	
 	// Date when the file system root was last modified
 	private Date dateModified = null;
+	private String iconKey=null;
 
 	/**
 	 * Default constructor for GVirtualFilesystemRoot
@@ -50,41 +51,7 @@ public class GVirtualFilesystemRoot {
 	public GVirtualFilesystemRoot() {
 	}
 
-	/**
-	 * Gets the absolute path of the virtual file system root.
-	 * 
-	 * @return the absolute path as a String
-	 */
-	public String getAbsolutePath() {
-		return absolutePath;
-	}
-
-	/**
-	 * Sets the absolute path of the virtual file system root.
-	 * 
-	 * @param absolutePath the new absolute path
-	 */
-	public void setAbsolutePath(String absolutePath) {
-		this.absolutePath = absolutePath;
-	}
-
-	/**
-	 * Gets the URI of the virtual file system root.
-	 * 
-	 * @return the URI as a String
-	 */
-	public String getUri() {
-		return uri;
-	}
-
-	/**
-	 * Sets the URI of the virtual file system root.
-	 * 
-	 * @param uri the new URI
-	 */
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+	
 
 	/**
 	 * Creates a GVirtualFilesystemRoot object from a given Path.
@@ -135,58 +102,5 @@ public class GVirtualFilesystemRoot {
 		return roots;
 	}
 
-	/**
-	 * Gets the date when the virtual file system root was last modified.
-	 * 
-	 * @return the modification date
-	 */
-	public Date getDateModified() {
-		return dateModified;
-	}
-
-	/**
-	 * Sets the date when the virtual file system root was last modified.
-	 * 
-	 * @param dateModified the new modification date
-	 */
-	public void setDateModified(Date dateModified) {
-		this.dateModified = dateModified;
-	}
-
-	/**
-	 * Gets the code associated with the virtual file system root.
-	 * 
-	 * @return the code as a String
-	 */
-	public String getCode() {
-		return code;
-	}
-
-	/**
-	 * Sets the code associated with the virtual file system root.
-	 * 
-	 * @param code the new code
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	/**
-	 * Gets the description of the virtual file system root.
-	 * 
-	 * @return the description as a String
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Sets the description of the virtual file system root.
-	 * 
-	 * @param description the new description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 }

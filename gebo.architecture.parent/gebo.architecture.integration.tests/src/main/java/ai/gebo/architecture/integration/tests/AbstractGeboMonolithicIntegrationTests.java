@@ -27,12 +27,15 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.FileCopyUtils;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.containers.Neo4jContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.architecture.contenthandling.interfaces.IGDocumentReferenceFactory;
 import ai.gebo.architecture.environment.EnvironmentHolder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -40,9 +43,11 @@ import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
+import ai.gebo.jobs.services.model.JobSummary;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
+import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -68,7 +73,7 @@ import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService
  * services needed for the tests.
  */
 @AutoConfigureDataMongo
-public class AbstractGeboMonolithicIntegrationTests {
+public abstract class AbstractGeboMonolithicIntegrationTests {
 
 	/** Manager for handling persistent objects. */
 	@Autowired
@@ -103,6 +108,8 @@ public class AbstractGeboMonolithicIntegrationTests {
 	/** List of all MongoDB repositories used. */
 	@Autowired
 	protected List<IGBaseMongoDBRepository> allRepositories;
+	@Autowired
+	protected DocumentReferenceRepository documentReferenceRepository;
 	/** Repository for vectorized content. */
 	@Autowired
 	protected VectorizedContentRepository vectorizedContentRepository;
@@ -153,7 +160,9 @@ public class AbstractGeboMonolithicIntegrationTests {
 	/** Container to manage a MongoDB instance for integration tests. */
 	@Container
 	protected static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:7.0").withExposedPorts(27017);
-
+	@Container
+	private static Neo4jContainer neo4jContainer = new Neo4jContainer(DockerImageName.parse("neo4j:latest"))
+			.withoutAuthentication(); // Disable password
 	/** ObjectMapper instance for JSON operations. */
 	protected static ObjectMapper mapper = new ObjectMapper();
 
@@ -165,8 +174,19 @@ public class AbstractGeboMonolithicIntegrationTests {
 	@DynamicPropertySource
 	public static void containersProperties(DynamicPropertyRegistry registry) {
 		mongoDBContainer.start();
+		neo4jContainer.start();
 		registry.add("spring.data.mongodb.host", mongoDBContainer::getHost);
 		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+		registry.add("spring.data.mongodb.port", mongoDBContainer::getFirstMappedPort);
+		// ai.gebo.mongodb.enabled: true
+		// databaseName: gebo-ai-tests
+		// connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+		registry.add("ai.gebo.mongodb.enabled", () -> true);
+		registry.add("ai.gebo.mongodb.connectionString", mongoDBContainer::getConnectionString);
+
+		String boltUrl = neo4jContainer.getBoltUrl();
+		registry.add("spring.neo4j.uri", neo4jContainer::getBoltUrl);
+
 	}
 
 	/**
@@ -206,8 +226,14 @@ public class AbstractGeboMonolithicIntegrationTests {
 		T endpoint = type.newInstance();
 		endpoint.setDescription(description);
 		endpoint.setParentProjectCode(testPj.getCode());
-		return persistentObjectManager.insert(endpoint);
+
+		T data = persistentObjectManager.insert(endpoint);
+		this.enableWorkflowSteps(testKB, testPj, data);
+		return data;
 	}
+
+	protected abstract void enableWorkflowSteps(GKnowledgeBase kb, GProject project, GProjectEndpoint endpoint)
+			throws GeboPersistenceException;
 
 	protected static final List<String> ALL_ROLES = List.of(GeboAISecurityConfig.ADMIN_ROLE,
 			GeboAISecurityConfig.USER_ROLE);
@@ -403,6 +429,40 @@ public class AbstractGeboMonolithicIntegrationTests {
 		}
 	}
 
+	protected void printSummary(JobSummary summary) {
+		LOGGER.info("Begin summary for workflow:" + summary.getWorkflowType() + " " + summary.getWorkflowId()
+				+ " ***********************************************");
+		if (summary.getWorkflowStatus() == null) {
+			LOGGER.info("Now orkflow status present!!!");
+		} else {
+			LOGGER.info("finished=" + summary.getWorkflowStatus().isFinished() + " hasErrors:"
+					+ summary.getWorkflowStatus().isHasErrors());
+			printWorkflowStatusNode(summary.getWorkflowStatus().getRootStatus(), 0);
+		}
+		LOGGER.info("End summary for workflow:" + summary.getWorkflowType() + " " + summary.getWorkflowId()
+				+ " ***********************************************");
+
+	}
+
+	protected void printWorkflowStatusNode(ComputedWorkflowStatus rootStatus, int i) {
+		int offset = (i + 1) * 2;
+		String offsetString = "";
+		for (int j = 0; j < offset; j++) {
+			offsetString += " ";
+		}
+		LOGGER.info(offsetString + " stepId:" + rootStatus.getWorkflowStepId() + " completed:"
+				+ rootStatus.isCompleted() + " hasErrors:" + rootStatus.isHasErrors() + " input:"
+				+ rootStatus.getBatchDocumentsInput() + " discarded:" + rootStatus.getBatchDiscardedInput()
+				+ " processed:" + rootStatus.getBatchDocumentsProcessed() + " errors:"
+				+ rootStatus.getBatchDocumentsProcessingErrors() + " sentToNextStep:"
+				+ rootStatus.getBatchSentToNextStep() + " segments:" + rootStatus.getChunksProcessed() + " tokens:"
+				+ rootStatus.getTokensProcessed());
+		for (ComputedWorkflowStatus child : rootStatus.getChilds()) {
+			printWorkflowStatusNode(child, i + 1);
+		}
+
+	}
+
 	/**
 	 * Displays a list of user messages.
 	 * 
@@ -422,5 +482,9 @@ public class AbstractGeboMonolithicIntegrationTests {
 	 */
 	protected <T> void showMessages(OperationStatus<T> status) {
 		showMessages(status.getMessages());
+	}
+
+	protected long getNRDocuments(GProjectEndpoint endpoint) {
+		return this.documentReferenceRepository.countByProjectEndpoint(endpoint);
 	}
 }

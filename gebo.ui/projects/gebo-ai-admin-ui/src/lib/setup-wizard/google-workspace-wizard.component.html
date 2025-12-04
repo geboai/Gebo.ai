@@ -12,18 +12,25 @@
  
  
 
-<p-blockUI [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUI" gebo-ai-label [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #instModeUI header="Setup company Google Drive/Workspaces systems">
+<p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Google Drive/Workspaces systems">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+    <div class="grid geboLargeButtonsBar">
+
+        <div class="col-6">
+            <p-button id="GoogleDriveBtn" gebo-ai-label icon="pi pi-plus" label="Google Drive" styleClass="w-full" [outlined]="true"
+                (onClick)="createSystem()"></p-button>
+        </div>
+    </div>
     <div class=" grid">
 
         <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
                 <ng-template #header pTemplate="header">
                     <tr>
-                        <th>Config code</th>
-                        <th>Description</th>
+                        <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+                        <th id="DescriptionHeader" gebo-ai-text>Description</th>
                         <th></th>
 
                     </tr>
@@ -32,23 +39,19 @@
                     <tr>
                         <td>{{ item.code }}</td>
                         <td>{{ item.description }}</td>
-                        <td><p-button label="Edit system" icon="pi pi-pencil" [outlined]="true"
+                        <td><p-button id="EditSystemBtn" gebo-ai-label label="Edit system" icon="pi pi-pencil" [outlined]="true"
                                 (onClick)="editSystem(item)"></p-button></td>
                     </tr>
                 </ng-template>
             </p-table></div>
 
     </div>
-    <div class="grid geboLargeButtonsBar">
-
-        <div class="col-6">
-            <p-button icon="pi pi-plus" label="Google Drive" styleClass="w-full" [outlined]="true"
-                (onClick)="createSystem()"></p-button>
-        </div>
-    </div>
+    
 </p-panel>
-<p-dialog  [maximizable]="true" [visible]="createGoogleDriveWorkspacesWindowOpen" [modal]="true"
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createGoogleDriveWorkspacesWindowOpen" [modal]="true"
      (visibleChange)="closeDialog()">
     <gebo-ai-google-drive-fast-component (cancelAction)="closeDialog()"
         (insertedGoogleDriveSystemEvent)="closeWizard()"></gebo-ai-google-drive-fast-component>
 </p-dialog>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

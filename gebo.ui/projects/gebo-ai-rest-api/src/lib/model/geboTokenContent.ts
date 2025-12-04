@@ -11,6 +11,6 @@
  */
 
 export interface GeboTokenContent { 
-    token?: string;
-    user?: string;
+    token: string;
+    user: string;
 }

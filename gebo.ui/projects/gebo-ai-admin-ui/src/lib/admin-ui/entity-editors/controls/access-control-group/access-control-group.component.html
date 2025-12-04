@@ -1,3 +1,4 @@
+
 <!--
 /**
  * This Source Code is subject to the terms of the 
@@ -9,39 +10,23 @@
  */
  -->
  
- 
- 
-
-
 <div class="grid" *ngIf="formGroup" [formGroup]="formGroup">
     <div class="col-2">
-        <div class="flex flex-column gap-2 ">
-            <label for="accessibleToAll">Everyone uses</label>
-            <p-checkbox formControlName="accessibleToAll" id="accessibleToAll" aria-describedby="accessibleToAll-help" [binary]="true" [trueValue]="true" [falseValue]="false"></p-checkbox>
-            <small id="accessibleToAll-help">
-                Everyone can use
-            </small>
-        </div>
+        <gebo-ai-field id="accessibleToAll" label="Everyone uses" help="Everyone can use">
+            <p-checkbox id="accessibleToAll" formControlName="accessibleToAll" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+        </gebo-ai-field>
     </div>
     <div class="col-5">
-        <div class="flex flex-column gap-2 ">
-            <label for="accessibleGroups">Groups list</label>
-            <p-multiSelect  id="accessibleGroups" formControlName="accessibleGroups" aria-describedby="accessibleGroups-help"  dataKey="code" optionLabel="description"  optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" 
-            [showClear]="true" ></p-multiSelect>
-            <small id="accessibleGroups-help">
-                Select allowed groups
-            </small>
-        </div>
+        <gebo-ai-field id="accessibleGroups" label="Groups list" help="Select allowed groups">
+            <p-multiSelect id="accessibleGroups" formControlName="accessibleGroups" dataKey="code" optionLabel="description" optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
+        </gebo-ai-field>
     </div>
     <div class="col-5">
-        <div class="flex flex-column gap-2 ">
-            <label for="accessibleUsers">Users list</label>
-            <p-multiSelect  id="accessibleUsers" formControlName="accessibleUsers" aria-describedby="accessibleUsers-help"  dataKey="username" optionLabel="username"  optionValue="username" [options]="users" [disabled]="accessibleToAll"  placeholder="Select users" display="chip" 
-            [showClear]="true" ></p-multiSelect>
-            <small id="accessibleUsers-help">
-                Select allowed  users 
-            </small>
-        </div>
+        <gebo-ai-field id="accessibleUsers" label="Users list" help="Select allowed users">
+            <p-multiSelect id="accessibleUsers" formControlName="accessibleUsers" dataKey="username" optionLabel="username" optionValue="username" [options]="users" [disabled]="accessibleToAll" placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
+        </gebo-ai-field>
     </div>
-
 </div>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

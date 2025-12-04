@@ -27,11 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.SimpleErrorCollection;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
-import java.util.Map;
 /**
  * A collection of errors related to unchanged issues. The collection size is limited, which means not all errors may be returned.
  */

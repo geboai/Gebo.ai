@@ -6,18 +6,16 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.services.impl;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.document.Document;
 import org.springframework.ai.content.Media;
+import org.springframework.ai.document.Document;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.document.model.GeboDocument;
@@ -25,10 +23,9 @@ import ai.gebo.document.model.GeboTextDocumentFragment;
 import ai.gebo.llms.abstraction.layer.services.IGDocumentTranslator;
 
 /**
- * AI generated comments
- * Implementation of the IGDocumentTranslator interface, providing methods
- * to convert GeboDocument objects to AI Documents, plain text, and from chat
- * responses.
+ * AI generated comments Implementation of the IGDocumentTranslator interface,
+ * providing methods to convert GeboDocument objects to AI Documents, plain
+ * text, and from chat responses.
  */
 @Service
 public class GDocumentTranslatorImpl implements IGDocumentTranslator {
@@ -72,11 +69,12 @@ public class GDocumentTranslatorImpl implements IGDocumentTranslator {
 	}
 
 	/**
-	 * Creates a GeboDocument from a ChatResponse, setting content type and extension.
+	 * Creates a GeboDocument from a ChatResponse, setting content type and
+	 * extension.
 	 *
-	 * @param res the chat response containing generated results
+	 * @param res         the chat response containing generated results
 	 * @param contentType the type of content to set for the document
-	 * @param extension the file extension to set for the document
+	 * @param extension   the file extension to set for the document
 	 * @return a GeboDocument constructed from the chat response data
 	 */
 	@Override
@@ -93,7 +91,13 @@ public class GDocumentTranslatorImpl implements IGDocumentTranslator {
 				List<Media> media = r.getOutput().getMedia();
 				for (Media _media : media) {
 					// Try to add media to the document
-					document.tryAddMedia(_media.getName(),_media.getMimeType().getType(),_media.getMimeType().getSubtype(),_media.getMimeType().getSubtypeSuffix(),_media.getDataAsByteArray());
+					String name = _media.getName();
+					String mimeType = _media.getMimeType() != null ? _media.getMimeType().getType() : null;
+					String subType = _media.getMimeType() != null ? _media.getMimeType().getSubtype() : null;
+					String mediaExtension = _media.getMimeType() != null ? _media.getMimeType().getSubtypeSuffix()
+							: null;
+					Charset charset = _media.getMimeType().getCharset();
+					document.tryAddMedia(name, mimeType, subType, mediaExtension,charset, _media.getDataAsByteArray());
 				}
 			}
 		}

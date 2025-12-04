@@ -25,8 +25,9 @@ import { MessagesModule } from "primeng/messages";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { CheckboxModule } from "primeng/checkbox";
 import { FieldsetModule } from "primeng/fieldset";
+import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 @NgModule({
-    imports:[CommonModule,FormsModule,ReactiveFormsModule,TreeSelectModule,TreeModule,DialogModule,ChipModule,ButtonModule,BlockUIModule,PanelModule,MessagesModule,RadioButtonModule,CheckboxModule,FieldsetModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, TreeSelectModule, TreeModule, DialogModule, ChipModule, ButtonModule, BlockUIModule, PanelModule, MessagesModule, RadioButtonModule, CheckboxModule, FieldsetModule, GeboAIFieldTranslationContainerModule],
     declarations:[VFilesystemSelectorComponent],
     exports:[VFilesystemSelectorComponent]
 })

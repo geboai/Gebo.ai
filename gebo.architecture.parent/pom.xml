@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>0.9.9.7</version>
+    <version>1.0.0.0-rc1</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -38,5 +38,10 @@
   	<module>gebo.architecture.swagger</module>
   	<module>gebo.architecture.mcp-clients</module>
   	<module>gebo.architecture.mcp-server</module>
+  	<module>gebo.architecture.graphrag.extraction</module>
+  	<module>gebo.architecture.graphrag.persistence</module>
+  	<module>gebo.architecture.documents.cache</module>
+  	<module>gebo.architecture.neo4j</module>
+  	<module>gebo.architecture.setup</module>
   </modules>
 </project>

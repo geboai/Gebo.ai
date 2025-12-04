@@ -21,6 +21,11 @@ label {
     min-height: 600px;
     height: 90%;
 }
+.geboDialogMidContent {
+    min-height: 500px;
+    height: 90%;
+}
+
 .geboMinHeight{
     min-height: 900px;
     height: 100%;
@@ -74,7 +79,7 @@ label {
     text-align: left;
     border: 0px;
     background: transparent;
-    padding: 0.1em;
+    padding: 0.5em;
 }
 .p-dialog .p-dialog-header {
     padding: 0.1rem 0.1rem !important;
@@ -83,6 +88,7 @@ label {
 .pi.pi-sharepoint,
 .pi.pi-onedrive,
 .pi.pi-google-workspace,
+.pi.pi-google-drive,
 .pi.pi-confluence,
 .pi.pi-jira {
   display: inline-block;
@@ -107,6 +113,9 @@ label {
   background-image: url("assets/3rdparty/google-workspace-logo.svg");
 }
 
+.pi.pi-google-drive {
+  background-image: url("assets/3rdparty/Google_Drive_icon.svg");
+}
 .pi.pi-confluence {
   background-image: url("assets/3rdparty/confluence-svgrepo-com.svg");
 }
@@ -156,3 +165,139 @@ label {
 .pi.pi-amazon   { background-image: url("assets/oauth2/amazon.svg"); }
 .pi.pi-slack    { background-image: url("assets/oauth2/slack.svg"); }
 .pi.pi-oauth2_generic    { background-image: url("assets/oauth2/oauth-svgrepo-com.svg"); }
+
+/* Stato normale: solo underline leggera */
+.p-inputtext,
+.p-dropdown .p-dropdown-label,
+.p-calendar .p-inputtext,
+.p-inputnumber .p-inputtext,
+.p-textarea {
+  //border: 0 !important;
+  border-bottom: 1px solid var(--surface-400, #ced4da) !important;
+  border-radius: 3 !important;
+  box-shadow: none !important;
+}
+
+/* Stato invalido: underline rossa */
+.p-inputtext.ng-invalid.ng-touched,
+.p-inputtext.ng-invalid.ng-dirty,
+.p-inputtext.p-invalid,
+.p-dropdown.p-invalid .p-dropdown-label,
+.p-calendar.p-invalid .p-inputtext,
+.p-inputnumber.p-invalid .p-inputtext,
+.p-textarea.p-invalid {
+  //border: 0 !important;
+  border-bottom: 2px solid var(--red-500, #ef4444) !important;
+  box-shadow: none !important;
+}
+
+/* Focus su invalido: rinforza l'underline */
+.p-inputtext.ng-invalid:focus,
+.p-inputtext.p-invalid:focus,
+.p-dropdown.p-invalid .p-dropdown-label:focus,
+.p-calendar.p-invalid .p-inputtext:focus,
+.p-inputnumber.p-invalid .p-inputtext:focus {
+  outline: 0;
+  box-shadow: 0 1px 0 0 var(--red-500, #ef4444) !important;
+}
+.gebo-ai-invalid-underline {
+  border-bottom: 2px solid #f44336 !important;
+  outline: none;
+}
+
+//READONLY
+.p-inputtext[readonly],
+.p-inputtextarea[readonly],
+input.p-inputtext:read-only,
+textarea.p-inputtextarea:read-only {
+  background: var(--p-content-background, #C0C0C0);
+  background-color: #C0C0C0;
+  color: var(--p-content-color, #666);
+  border-style: dashed;
+  cursor: default;
+}
+
+/* InputNumber renders an input with .p-inputtext too */
+.p-inputnumber input.p-inputtext[readonly] {
+  /* your styles */
+}
+
+/* Calendar when using [readonlyInput]="true" */
+.p-calendar input.p-inputtext[readonly] {
+  /* your styles */
+}
+
+/* If you use a wrapper and want to dim the whole control area */
+:has(> .p-inputtext[readonly]),
+:has(> .p-inputtextarea[readonly]) {
+  /* optional wrapper styling if your browser supports :has */
+  opacity: 0.8;
+}
+/* Auto-generated flag CSS for Gebo.ai */
+[class$='-flag']{display:inline-block;width:1.25rem;height:1rem;background-size:cover;background-position:center;border-radius:2px;vertical-align:middle}
+.en-flag{background-image:url('assets/flags/en.svg');}
+.es-flag{background-image:url('assets/flags/es.svg');}
+.zh-flag{background-image:url('assets/flags/zh.svg');}
+.hi-flag{background-image:url('assets/flags/hi.svg');}
+.ar-flag{background-image:url('assets/flags/ar.svg');}
+.pt-flag{background-image:url('assets/flags/pt.svg');}
+.fr-flag{background-image:url('assets/flags/fr.svg');}
+.de-flag{background-image:url('assets/flags/de.svg');}
+.ru-flag{background-image:url('assets/flags/ru.svg');}
+.ja-flag{background-image:url('assets/flags/ja.svg');}
+.ko-flag{background-image:url('assets/flags/ko.svg');}
+.it-flag{background-image:url('assets/flags/it.svg');}
+.tr-flag{background-image:url('assets/flags/tr.svg');}
+.vi-flag{background-image:url('assets/flags/vi.svg');}
+.pl-flag{background-image:url('assets/flags/pl.svg');}
+.nl-flag{background-image:url('assets/flags/nl.svg');}
+.id-flag{background-image:url('assets/flags/id.svg');}
+.th-flag{background-image:url('assets/flags/th.svg');}
+.fa-flag{background-image:url('assets/flags/fa.svg');}
+.ur-flag{background-image:url('assets/flags/ur.svg');}
+.bn-flag{background-image:url('assets/flags/bn.svg');}
+.tl-flag{background-image:url('assets/flags/tl.svg');}
+.uk-flag{background-image:url('assets/flags/uk.svg');}
+.ro-flag{background-image:url('assets/flags/ro.svg');}
+.el-flag{background-image:url('assets/flags/el.svg');}
+.cs-flag{background-image:url('assets/flags/cs.svg');}
+.hu-flag{background-image:url('assets/flags/hu.svg');}
+.sv-flag{background-image:url('assets/flags/sv.svg');}
+.da-flag{background-image:url('assets/flags/da.svg');}
+.no-flag{background-image:url('assets/flags/no.svg');}
+.fi-flag{background-image:url('assets/flags/fi.svg');}
+.he-flag{background-image:url('assets/flags/he.svg');}
+.bg-flag{background-image:url('assets/flags/bg.svg');}
+.sr-flag{background-image:url('assets/flags/sr.svg');}
+.hr-flag{background-image:url('assets/flags/hr.svg');}
+.sk-flag{background-image:url('assets/flags/sk.svg');}
+.lt-flag{background-image:url('assets/flags/lt.svg');}
+.lv-flag{background-image:url('assets/flags/lv.svg');}
+.et-flag{background-image:url('assets/flags/et.svg');}
+.sl-flag{background-image:url('assets/flags/sl.svg');}
+.ca-flag{background-image:url('assets/flags/ca.svg');}
+.ms-flag{background-image:url('assets/flags/ms.svg');}
+.sw-flag{background-image:url('assets/flags/sw.svg');}
+.ta-flag{background-image:url('assets/flags/ta.svg');}
+.te-flag{background-image:url('assets/flags/te.svg');}
+.mr-flag{background-image:url('assets/flags/mr.svg');}
+.gu-flag{background-image:url('assets/flags/gu.svg');}
+.kn-flag{background-image:url('assets/flags/kn.svg');}
+.ml-flag{background-image:url('assets/flags/ml.svg');}
+.pa-flag{background-image:url('assets/flags/pa.svg');}
+.my-flag{background-image:url('assets/flags/my.svg');}
+.km-flag{background-image:url('assets/flags/km.svg');}
+.lo-flag{background-image:url('assets/flags/lo.svg');}
+.ne-flag{background-image:url('assets/flags/ne.svg');}
+.am-flag{background-image:url('assets/flags/am.svg');}
+.af-flag{background-image:url('assets/flags/af.svg');}
+.az-flag{background-image:url('assets/flags/az.svg');}
+.hy-flag{background-image:url('assets/flags/hy.svg');}
+.ka-flag{background-image:url('assets/flags/ka.svg');}
+.sq-flag{background-image:url('assets/flags/sq.svg');}
+.bs-flag{background-image:url('assets/flags/bs.svg');}
+.mk-flag{background-image:url('assets/flags/mk.svg');}
+.be-flag{background-image:url('assets/flags/be.svg');}
+.is-flag{background-image:url('assets/flags/is.svg');}
+.ga-flag{background-image:url('assets/flags/ga.svg');}
+.cy-flag{background-image:url('assets/flags/cy.svg');}

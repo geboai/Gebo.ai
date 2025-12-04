@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Default na wika ng sistema",
+        "help" : "Default na wika ng sistema para sa Gebo.ai installation na ito"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail bilang username para mag-login"
+      },
+      "passwordC" : {
+        "label" : "Kumpirmahin ang password",
+        "help" : "Kumpirmahin ang password"
+      },
+      "password" : {
+        "label" : "Password",
+        "help" : "Password para mag-login (hindi bababa sa 8 karakter)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " hindi magkatugma ang mga password "
+      },
+      "LocalAdmin" : {
+        "label" : "Gumawa ng iyong local admin account"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Gagamitin mo ang account na ito sa hinaharap para mag-setup/mag-administer ng software, mananatiling lokal sa iyong sistema ang datos na ito at hindi ipapadala sa network"
+      },
+      "EnterBtn" : {
+        "label" : "Pumunta sa login page para makapasok"
+      },
+      "SetupPage" : {
+        "label" : "I-setup ang iyong Gebo.ai installation"
+      },
+      "CreateBtn" : {
+        "label" : "Gumawa ng system setup"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Basahin at tanggapin ang lisensya"
+      },
+      "AcceptMark" : {
+        "label" : "Tinatanggap ko ang mga tuntunin",
+        "help" : "Sa pag-click dito tinatanggap mo ang mga tuntunin at kundisyon sa lisensya"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail bilang username para mag-login"
+      },
+      "password" : {
+        "label" : "Password",
+        "help" : "Password para mag-login"
+      },
+      "LoginPanel" : {
+        "label" : "Mag-login sa gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Mag-login"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na naisagawa ang operasyon"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Maligayang pagdating sa gebo.ai",
+        "detail" : "Ilagay ang iyong username at password para mag-login"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Nabigo ang operasyon",
+        "detail" : "Hindi ma-authenticate gamit ang ibinigay na credentials"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na natapos ang operasyon"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Maligayang pagdating sa gebo.ai",
+        "detail" : "Ilagay ang iyong username at password para mag-login"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 config"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Pangalan ng provider"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 mga setting ng seguridad"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Bumalik sa home page ng setup"
+      },
+      "WizardUi" : {
+        "label" : "Pumili ng seksyon para sa setup"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administrator at iba pang setup ng account",
+        "description" : "Kailangan ng kahit isang administration account upang tiyakin na ang Gebo.ai installation na ito ay maayos na mapapamahalaan, magdagdag ng ibang users kung kinakailangan"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai work directory",
+        "description" : "I-configure ang work directory, ito ang magiging folder kung saan ilalagay ang configurations at lahat ng working files ng installation na ito. Mabuting ideya rin na i-backup ito paminsan-minsan."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Konfigurasyon ng vector database",
+        "description" : "Kailangan mag-configure ng vector database para magamit ng Gebo.ai ang retrieve augmented generation services, maaari kang pumili ng local vector database, Qdrant o Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Isang signon, oauth2 authentication",
+        "description" : "Oauth2 single signon authentication at oauth2 clients configuration"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Setup ng large language models",
+        "description" : "I-configure ang iba't ibang llms gamit ang cloud o local/lan na backend services, kailangang mag-setup ng kahit isang chat model at isang embedding model para gumana ng maayos ang software."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graph rag/Pagkuha ng kaalaman setup",
+        "description" : "I-configure ang graph rag at knowledge extraction subsystem"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Setup ng mga shared filesystem paths",
+        "description" : "I-configure ang mga shared filesystem paths ng kumpanya upang magamit na area para sa retrieve augmented generation na mga dokumento sa iba't ibang knowledge bases"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integrasyon sa Atlassian confluence",
+        "description" : "I-configure ang Gebo.ai upang makapunta sa iyong Atlassian Confluence cloud o on-premise installations"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integrasyon sa Atlassian jira",
+        "description" : "I-configure ang Gebo.ai upang makapunta sa iyong Atlassian jira cloud installations"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integrasyon sa Microsoft Sharepoint",
+        "description" : "I-configure ang Gebo.ai upang makapunta sa iyong Microsoft Sharepoint cloud o on-premise installations"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Mag-configure ng kahit isang knowledge base",
+        "description" : "Mag-configure ng kahit isang knowledge base upang magamit ng iyong mga user ang retrieve augmented generations services ng Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Mag-configure ng kahit isang \"R.A.G.\" chat profile",
+        "description" : "Mag-configure ng kahit isang retrieve augmented chat profile para sa iyong mga user batay sa isa sa iyong mga na-configure na knowledge bases"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai setup mandatory steps tapos na...",
+        "detail" : "Natapos na ang mga kinakailangang hakbang sa setup ngunit may ilang kulang na hakbang na pumipigil sa iyong organisasyon na maabot ang buong potensyal ng software na ito"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai setup OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Kulang ng ilang mandatoryong hakbang ang Gebo.ai setup",
+        "detail" : "Pakitignan ang mga pulang hakbang sa proseso ng setup"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integration",
+        "description" : "I-configure ang Gebo.ai upang makuha ang iyong Google cloud Drive/Workspaces team data"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Setup ng Atlassian Confluence systems ng kumpanya"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Uri ng sistema"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence system"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira system"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "MainPanel" : {
+        "label" : "Setup ng Atlassian Jira systems ng kumpanya"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Uri ng sistema"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "MainPanel" : {
+        "label" : "Setup ng Microsoft Sharepoint systems ng kumpanya"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Uri ng sistema"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint system"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Magbigay ng api-key na may tamang available credit. Kung OpenAI ang pipiliin, kailangan mong magdagdag ng partikular na credit (10-30$ ay sapat na) sa karaniwan mong plano para sa paggamit ng api, kung hindi ay walang magiging available na llms traffic sa application na ito."
+      },
+      "MainPanel" : {
+        "label" : "I-setup ang access ng mga llms provider ng Gebo.ai gamit ang sarili mong api key"
+      },
+      "provider" : {
+        "label" : "Tagapagbigay ng large language model",
+        "help" : "Pumili ng isang supplier mula sa OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "User",
+        "help" : "Ilagay ang user na naka-associate sa apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "I-configure"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Ang iyong api key ng LLMS providers na gagamitin"
+      },
+      "ProviderHeader" : {
+        "label" : "Provider"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Configuration code"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Uri ng model"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Default na model"
+      },
+      "MainPanelHeader" : {
+        "label" : "I-setup ang access ng Gebo.ai llms providers"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Gumawa ng graph rag config"
+      },
+      "MainPanel" : {
+        "label" : "Itakda ang default configuration ng Graph Rag at pagkuha ng kaalaman"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "EditConfigBtn" : {
+        "label" : "I-edit ang config"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Proyekto"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Magdagdag ng Knowledge base"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Knowledge base"
+      },
+      "MainPanel" : {
+        "label" : "Mga konfigurasyon ng knowledge bases at nilalaman"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Pinagmulan ng nilalaman"
+      },
+      "PublishedHeader" : {
+        "label" : "Nailathala"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Bilang ng dokumento"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Magdagdag ng proyekto/item",
+        "help" : "gumawa ng bagong proyekto"
+      },
+      "Button1" : {
+        "help" : "buksan ang knowledge base"
+      },
+      "Button2" : {
+        "help" : "buksan ang project form"
+      },
+      "Button3" : {
+        "help" : "buksan ang data source"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Konfigurasyon ng Gebo.ai work folder"
+      },
+      "ConfigureBtn" : {
+        "label" : "I-configure"
+      },
+      "workDirectory" : {
+        "label" : "Pumili ng folder bilang Gebo.ai work directory",
+        "help" : "Pumili ng server folder na gagamitin ng installation na ito bilang work folder para sa configurations at storage ng mga nilalaman."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Magdagdag ng folder"
+      },
+      "AddFolderBtn" : {
+        "label" : "Magdagdag ng folder"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "MainPanel" : {
+        "label" : "Mga path ng server shared filesystem"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolute path"
+      },
+      "DeleteHeader" : {
+        "label" : "Tanggalin"
+      },
+      "path" : {
+        "label" : "Magdagdag ng root folder ng shared filesystem",
+        "help" : "Pumili ng server folder na siyang root path ng shared filesystem na ginagamit ng inyong organisasyon bilang repository ng dokumento"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng filesystem entry"
+      },
+      "RemovePathBtn" : {
+        "label" : "Tanggalin ang path"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "I-configure"
+      },
+      "MainPanel" : {
+        "label" : "Konfigurasyon ng vector database"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Pangalan ng Qdrant host o ip address"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant connection settings"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant communication port (6334 ang standard)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Api key para sa Qdrant authentication"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Tapos na ang mga kinakailangang hakbang sa Gebo.ai setup...",
+        "detail" : "Natapos na ang mga kinakailangang hakbang, ngunit may mga nawawalang hakbang na pumipigil sa inyong organisasyon na maranasan nang buo ang software na ito"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "May kulang na mandatoryong hakbang sa Gebo.ai setup",
+        "detail" : "Paki-review ang mga pulang hakbang ng proseso ng setup"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai setup OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Magdagdag ng bagong R.A.G. chat profile"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Magdagdag ng R.A.G. chat profile"
+      },
+      "MainPanel" : {
+        "label" : "Makuha ang settings ng augmented generation (r.a.g.) chat profiles"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Umiiral na mga R.A.G. chat profile"
+      },
+      "DescriptionHeader" : {
+        "label" : "Paglalarawan"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "I-edit ang R.A.G. chat profile"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Mga code ng knowledge base"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "I-setup ang company Google Drive/Workspaces systems"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Config code"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Code",
+        "help" : "Ilagay ang deskripsyon ng OAUTH2 Authentication/Integration code (registrationId)."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng OAUTH2 Authentication/Integration na impormasyon."
+      },
+      "configurationType" : {
+        "label" : "Layunin ng configuration",
+        "help" : "Pumili kung ang settings na ito ay gagamitin para mag-authenticate sa Gebo.ai o para bigyan ng client connectivity si Gebo.ai sa isang third party system."
+      },
+      "authProvider" : {
+        "label" : "Provider",
+        "help" : "Ilagay ang provider ng OAUTH2 Authentication"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Ilagay ang OAUTH2 issuer URL ng provider"
+      },
+      "authorizationUri" : {
+        "label" : "Authorization URL",
+        "help" : "Ilagay ang OAUTH2 Authorization URL ng provider"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Ilagay ang OAUTH2 Jwk Set url ng provider"
+      },
+      "userInfoUri" : {
+        "label" : "User info URL",
+        "help" : "Ilagay ang OAUTH2 User info Url URL ng provider"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Ilagay ang OAUTH2 introspection URL ng provider"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Ilagay ang OAUTH2 Token URL ng provider"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 provider URLS"
+      },
+      "MainPanel" : {
+        "label" : "Ilagay ang bagong OAUTH2 Authentication/Integration na impormasyon"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "Tagatukoy ng kliyente para sa oauth2 na protocol (kunin ito sa admin area ng oauth2 authenticated 3rd party software)"
+      },
+      "secret" : {
+        "label" : "Lihim na susi",
+        "help" : "Lihim ng kliyente para sa oauth2 na protocol (kunin ito sa admin area ng oauth2 authenticated 3rd party software)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Gumawa ng confluence system configuration"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng confluence system."
+      },
+      "CreateBtn" : {
+        "label" : "Gumawa"
+      },
+      "username" : {
+        "label" : "Confluence username",
+        "help" : "Pangalan ng gumagamit ng Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence version",
+        "help" : "Bersyon ng Confluence"
+      },
+      "baseUri" : {
+        "label" : "Pangunahing internet address",
+        "help" : "Url ng pangunahing confluence system address para sa onpremise installation o pangunahing url ng inyong organisasyon para sa confluence cloud system"
+      },
+      "password" : {
+        "label" : "Confluence password",
+        "help" : "Password ng Confluence"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD apikey na nakuha mula sa confluence backoffice, dito dapat ilagay ang \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "I-save at gawing available ang mga nilalamang ito sa knowledge base para sa LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SettingsTab" : {
+        "label" : "Mga setting"
+      },
+      "MainPanel" : {
+        "label" : "Pagbabahagi ng confluence contents"
+      },
+      "LogsTab" : {
+        "label" : "Mga log"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong nabuong natanging kodigo ng mga nilalaman."
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng na-upload na nilalaman ng confluence entries."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence system",
+        "help" : "Naka-configure nang confluence system reference."
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Reference ng magulang na proyekto."
+      },
+      "openZips" : {
+        "label" : "Buksan ang mga zip file",
+        "help" : "Paganahin ang pagbubukas ng zip files at pagkuha ng nilalaman"
+      },
+      "tree" : {
+        "label" : "Piniling mga spaces o pages/subpages",
+        "help" : "Ibinahaging confluence spaces at nilalaman ng mga pahina"
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng pagsusuri ng update sa nilalaman",
+        "help" : "Isaayos ang iskedyul ng pagbabago ng mga nilalaman upang mapanatiling updated ang retrieve augmented generation system"
+      },
+      "catalogingCriteria" : {
+        "label" : "Pamantayan sa organisasyon ng spaces, pages at subpages",
+        "help" : "Ipaliwanag dito kung paano isinagawa ang organisasyon ng spaces, pages at subpages sa confluence contents na ibinahagi sa Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Pangkalahatang setting"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang confluence system"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "baseUri" : {
+        "label" : "Pangunahing internet address",
+        "help" : "Url ng pangunahing confluence system address"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong nabuong natanging kodigo ng confluence system."
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng confluence system."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence version",
+        "help" : "Bersyon ng Confluence"
+      },
+      "secretCode" : {
+        "label" : "Ginamit na pagkakakilanlan",
+        "help" : "Pumili o gumawa ng pagkakakilanlan para makapag-access sa confluence system"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "bagong grupo"
+      },
+      "NewUserBtn" : {
+        "label" : "bagong user"
+      },
+      "UsersListPanel" : {
+        "label" : "Listahan ng mga user"
+      },
+      "GroupsListPanel" : {
+        "label" : "Listahan ng mga grupo"
+      },
+      "SournameHeader" : {
+        "label" : "apelyido"
+      },
+      "UsernameHeader" : {
+        "label" : "username"
+      },
+      "RolesHeader" : {
+        "label" : "mga tungkulin"
+      },
+      "NameHeader" : {
+        "label" : "pangalan"
+      },
+      "EditBtn" : {
+        "label" : "I-edit"
+      },
+      "DisabledHeader" : {
+        "label" : "hindi pinagana"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "UserIds" : {
+        "placeholder" : "Pumili ng mga user"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang grupo ng user"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng grupo ng user"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Ilagay ang kodigo ng grupo ng user"
+      },
+      "userIds" : {
+        "label" : "Listahan ng mga user",
+        "help" : "Pumili ng mga user na kasali sa grupo"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Lumikha"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng sistema ng jira."
+      },
+      "MainPanel" : {
+        "label" : "Lumikha ng kumpigurasyon ng sistema ng jira"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "username" : {
+        "label" : "jira username",
+        "help" : "jira user name"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira CLOUD apikey na nakuha mula sa jira backoffice, dito kailangang ipasok ang \"API Token for your Atlassian Account.\""
+      },
+      "baseUri" : {
+        "label" : "Pangunahing internet address",
+        "help" : "Url ng pangunahing address ng sistema ng jira para sa onpremise na pag-install o base url ng inyong organisasyon para sa jira cloud system"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "Ise-save at magpapalabas ng mga nilalamang ito sa knowledge base para ma-access ng mga LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SettingsTab" : {
+        "label" : "Mga setting"
+      },
+      "LogsTab" : {
+        "label" : "Mga log"
+      },
+      "MainPanel" : {
+        "label" : "Pagbabahagi ng mga nilalaman ng jira"
+      },
+      "code" : {
+        "label" : "Natanging code",
+        "help" : "Awtomatikong binuong natatanging code ng mga nilalaman."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "Naka-configure nang reference ng jira system."
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Reference ng parent na proyekto."
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng nai-upload na nilalaman mula sa jira entries."
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng pagbabantay sa update ng nilalaman",
+        "help" : "I-configure ang iskedyul ng pagbabago ng mga nilalaman upang manatiling napapanahon ang retrieve augmented generation system"
+      },
+      "openZips" : {
+        "label" : "Buksan ang zip files",
+        "help" : "Paganahin ang pagbubukas ng zip files at pagkuha ng nilalaman"
+      },
+      "tree" : {
+        "label" : "Napiling mga space o page/subpage",
+        "help" : "Ibinahaging hierarchy ng mga proyekto at ticket sa jira"
+      },
+      "catalogingCriteria" : {
+        "label" : "Pamantayan sa organisasyon ng mga space, page at subpage",
+        "help" : "Pakipaliwanag dito kung paano isinagawa ang organisasyon ng mga space, page at subpage sa jira na ibinahagi sa Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng sistema ng jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "MainPanel" : {
+        "label" : "Pag-edit ng jira system"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "baseUri" : {
+        "label" : "Pangunahing internet address",
+        "help" : "Url ng pangunahing address ng sistema ng jira"
+      },
+      "code" : {
+        "label" : "Natanging code",
+        "help" : "Awtomatikong binuong natatanging code ng sistema ng jira."
+      },
+      "secretCode" : {
+        "label" : "Ginamit na pagkakakilanlan",
+        "help" : "Pumili o lumikha ng pagkakakilanlan para makapasok sa sistema ng jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng SharPpoint/OneDrive system."
+      },
+      "sharepointVersion" : {
+        "label" : "Bersyon ng Sharepoint",
+        "help" : "bersyon ng sharepoint"
+      },
+      "secret" : {
+        "label" : "Lihim na susi",
+        "help" : "Oauth2 client secret para sa app na ito na nakarehistro sa microsoft \"entra\" product (kukunin mula sa microsoft cloud admin console)"
+      },
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "Oauth2 client identifier para sa app na ito na nakarehistro sa microsoft \"entra\" product (kukunin mula sa microsoft cloud admin console)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID",
+        "help" : "Oauth2 tenant identifier para sa iyong organisasyon sa microsoft \"entra\" product (kukunin mula sa microsoft cloud admin console)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Impormasyon ng Microsof oauth2 app registration para sa Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Gumawa"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "MainPanel" : {
+        "label" : "Gumawa ng SharePoint/OneDrive system configuration"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "Ise-save at gagawing available ang mga nilalaman sa knowledge base para sa LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Mga setting"
+      },
+      "MainPanel" : {
+        "label" : "Pagbabahagi ng SharePoint/OneDrive nilalaman"
+      },
+      "LogsTab" : {
+        "label" : "Mga log"
+      },
+      "DeleteBtn" : {
+        "label" : "Burahin"
+      },
+      "code" : {
+        "label" : "Natanging Code",
+        "help" : "Awtomatikong ginawang natatanging code ng nilalaman."
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Sanggunian ng pangunahing proyekto."
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng mga entry ng SharePoint/OneDrive data sources."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint system",
+        "help" : "Naka-configure nang SharePoint/OneDrive system na sanggunian."
+      },
+      "openZips" : {
+        "label" : "Buksan ang mga zip file",
+        "help" : "Paganahin ang pagbubukas ng mga zip file at pagkuha ng nilalaman"
+      },
+      "tree" : {
+        "label" : "Napiling Sharepoint sites/pages/subpages o OneDrive drives/folder/files",
+        "help" : "Ibinahaging nilalaman ng sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng pagsusuri ng update ng nilalaman",
+        "help" : "I-configure ang pag-schedule ng mga nagbago na nilalaman upang mapanatiling updated ang retrieve augmented generation system"
+      },
+      "catalogingCriteria" : {
+        "label" : "Mga pamantayan sa pag-aayos ng spaces, pages at subpages",
+        "help" : "Pakipaliwanag dito kung paano inayos ang spaces, pages at sub pages sa content ng sharepoint na ibinahagi sa Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Ina-edit ang sharepoint system"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Pangkalahatang setting"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Burahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "secretCode" : {
+        "label" : "Ginamit na pagkakakilanlan",
+        "help" : "Piliin o gumawa ng pagkakakilanlan para maka-access sa sharepoint system"
+      },
+      "code" : {
+        "label" : "Natanging Code",
+        "help" : "Awtomatikong ginawang natatanging code ng sharepoint system."
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng sharepoint system."
+      },
+      "sharepointVersion" : {
+        "label" : "Bersyon ng Sharepoint",
+        "help" : "bersyon ng sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Tanggalin"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "I-save"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Kanselahin"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Pangkalahatang impormasyon/mga setting ng nilalaman"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Mga setting ng LLms"
+      },
+      "code" : {
+        "label" : "Natatangging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng yugto ng pagkuha ng data ng knowledge graph"
+      },
+      "MainPanel" : {
+        "label" : "Konpigurasyon ng graphrag/pagkuha ng kaalaman"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng konpigurasyon para sa yugto ng pagkuha ng data ng knowledge graph na ito"
+      },
+      "extractionPrompt" : {
+        "label" : "Prompt para sa pagkuha ng impormasyon",
+        "help" : "Prompt ng large language model para sa pagkuha ng entities/kaganapan/ugnayan at mga alias"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM na ginamit para sa pagkuha ng data",
+        "help" : "Tukuyin ang large language model na gagamitin para sa pagkuha ng kaalaman, ang default ang gagamitin kung walang napili."
+      },
+      "graphRagAllSources" : {
+        "label" : "I-apply ang graph rag sa lahat ng pinagkukunan ng data",
+        "help" : "Kung totoo, lahat ng knowledge bases/proyekto/pinagmumulan ng data ay ipoproseso para sa pagkuha ng kaalaman, kung hindi, tanging ang mga espesipikong naka-configure lang ang gagawin"
+      },
+      "defaultModel" : {
+        "label" : "Default na large language model",
+        "help" : "Ang default na large language model ang gagamitin para sa pagkuha ng kaalaman"
+      },
+      "processEveryDocument" : {
+        "label" : "I-apply ang graph rag sa lahat ng file",
+        "help" : "Ang graph rag algorithms ay i-apply sa lahat ng file, mapapahusay nito ang detalye ng pagsusuri na kaya ng sistema pero tataas ang gastos at oras para iproseso ang mga dokumento"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Pamantayan sa pagpili ng file para sa graphrag processing",
+        "help" : "I-edit ang mga pamantayan sa file na ipapadala sa information extraction pipeline para sa graphrag, pumili ng kahit isang pangalan ng file at pamantayan at/o uri ng file at/o pinakamataas na bilang ng bytes ng laki ng file at/o edad ng pinakahuling pagbabago sa mga araw"
+      },
+      "extractionFormat" : {
+        "label" : "Paraan ng pagkuha",
+        "help" : "Gamitin ang format na CSV para sa llms na mas mababa sa 30b params, JSON para sa malalaking frontier na modelo",
+        "placeholder" : "Gamitin ang format na CSV para sa llms na mas mababa sa 30b params, JSON para sa malalaking frontier na modelo"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Pumili ng mga uri ng file"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Pamantayan sa pagsala ng pangalan ng file"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Huling pagbabago ng file, bilang ng araw na nakalipas"
+      },
+      "nameFilter" : {
+        "placeholder" : "Pangalan ng file"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Pinakamalaking laki ng file sa Bytes"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Knowledge base"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Mga setting ng access sa Knowledge base"
+      },
+      "code" : {
+        "label" : "Natanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng knowledge base."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng knowledge base."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Ginamit na embedding models (iwanang walang laman upang gamitin ang default ng sistema)",
+        "help" : "Embedding models para sa knowledge base, kapag walang laman ay gagamit ng default."
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "IndexBtn" : {
+        "label" : "Index",
+        "help" : "I-reindex ang mga nilalaman"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Ina-edit ang proyekto o item"
+      },
+      "code" : {
+        "label" : "Natanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng proyekto."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng proyekto."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "knowledge base",
+        "help" : "knowledge base."
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "IndexBtn" : {
+        "label" : "Index",
+        "help" : "I-reindex ang mga nilalaman"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Magdagdag ng item/proyekto",
+        "help" : "magdagdag ng bago..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Ginagamit ng lahat",
+        "help" : "Maaaring gamitin ng lahat"
+      },
+      "accessibleGroups" : {
+        "label" : "Listahan ng mga grupo",
+        "help" : "Pumili ng pinapahintulutang mga grupo"
+      },
+      "accessibleUsers" : {
+        "label" : "Listahan ng mga user",
+        "help" : "Pumili ng pinapahintulutang mga user"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Dashboard"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs para sa chat at embedding"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag chat profile/Prompt ng Model"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Mga knowledge base at proyekto"
+      },
+      "UsersGroupTab" : {
+        "label" : "Mga user at grupo"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai modules config"
+      },
+      "LogsTab" : {
+        "label" : "Mga log"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kode"
+      },
+      "DescriptionHeader" : {
+        "label" : "Paglalarawan"
+      },
+      "ConfigureBtn2" : {
+        "label" : "I-configure"
+      },
+      "ConfigureBtn" : {
+        "label" : "I-configure"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Bagong prompt configuration"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Bagong chat profile"
+      },
+      "MainPanel" : {
+        "label" : "Retrieval augmented generation chat profiles"
+      },
+      "PromptsPanel" : {
+        "label" : "Koleksyon ng prompts at default prompts"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Mga knowledge base"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "ConfigureBtn1" : {
+        "label" : "i-configure"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Bagong knowledge base"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Bagong configuration ng embedding model"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Bagong configuration ng chat model"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Tagapamahagi ng model"
+      },
+      "ConfigureBtn" : {
+        "label" : "i-configure"
+      },
+      "CodeHeader2" : {
+        "label" : "Code"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Deskripsyon"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Tagapamahagi ng model"
+      },
+      "ConfigureBtn2" : {
+        "label" : "i-configure"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Mga na-configure na chat model"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Mga na-configure na embedding model"
+      },
+      "chat" : {
+        "label" : "Bagong chat model",
+        "help" : "Piliin ang supplier upang magdagdag ng bagong chat model na kayang makipag-chat sa user o magsagawa ng automations",
+        "placeholder" : "Piliin ang supplier upang magdagdag ng bagong chat model na kayang makipag-chat sa user o magsagawa ng automations"
+      },
+      "embed" : {
+        "label" : "Bagong embedding model",
+        "help" : "Piliin ang supplier upang magdagdag ng bagong embedding model na kayang magsagawa ng semantical indexing ng mga nilalaman",
+        "placeholder" : "Piliin ang supplier upang magdagdag ng bagong embedding model na kayang magsagawa ng semantical indexing ng mga nilalaman"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Sinusubok ang modelo"
+      },
+      "TestChatBtn" : {
+        "label" : "Subukan ang chat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Piliin ang OpenAI token na gagamitin para sa modelong ito"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI chat model na pagpipilian",
+        "help" : "Pumili ng OpenAI chat model na gagamitin."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Advanced na mga setting"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang OpenAI chat model configuration"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mga setting ng access sa modelo"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang OpenAI embedding model configuration"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Piliin ang OpenAI token na gagamitin para sa modelong ito"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng embedding model configuration"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng embedding model configuration"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding model na pagpipilian",
+        "help" : "Pumili ng OpenAI embedding model na gagamitin."
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default embedding model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default embedding model kung hindi nakasaad ang embedding model"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "baseUrl" : {
+        "label" : "Base na address ng ollama server",
+        "help" : "Base na address (hal. http://servername:234/) kung saan sumasagot ang ollama lokal o lan server."
+      },
+      "choosedModel" : {
+        "label" : "Ollama chat model na pagpipilian",
+        "help" : "Pumili ng Ollama chat model na gagamitin.",
+        "placeholder" : "Pumili ng modelo"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Piliin ang Ollama token na gagamitin para sa modelong ito (opsyonal)"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Ollama local (o lan) server chat model configuration"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Piliin ang Anthropic token na gagamitin para sa modelong ito"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic chat model na pagpipilian",
+        "help" : "Pumili ng Anthropic chat model na gagamitin.",
+        "placeholder" : "Pumili ng modelo"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Advanced na mga setting"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mga setting ng access sa modelo"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Anthropic chat model configuration"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Piliin ang MistralAI token na gagamitin para sa modelong ito"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI chat model na pagpipilian",
+        "help" : "Pumili ng MistralAI chat model na gagamitin."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Advanced na mga setting"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mga setting ng access sa modelo"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang MistralAI chat model configuration"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI chat model na pagpipilian",
+        "help" : "Pumili ng Google Vertex AI chat model na gagamitin."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Piliin ang Google Vertex AI token na gagamitin para sa modelong ito"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Mga setting ng access sa modelo"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Advanced na mga setting"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Google Vertex AI chat model configuration"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Piliin ang Deepseek token na gagamitin para sa modelong ito"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek chat model na pagpipilian",
+        "help" : "Pumili ng Deepseek chat model na gagamitin.",
+        "placeholder" : "Pumili ng modelo"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Advanced na mga setting"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Deepseek chat model configuration"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mga setting ng access sa modelo"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng konfigurasyon ng modelo"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng konfigurasyon ng modelo"
+      },
+      "baseUrl" : {
+        "label" : "Chat model API base server address",
+        "help" : "Base na address ng Chat model."
+      },
+      "apiSecretCode" : {
+        "label" : "Chat model API token",
+        "help" : "Piliin ang Chat model API token na gagamitin para sa modelong ito (opsyonal)"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default chat model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default chat model kung hindi nakasaad ang chat model"
+      },
+      "choosedModel" : {
+        "label" : "Chat model chat model na pagpipilian",
+        "help" : "Pumili ng Chat model chat model na gagamitin."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "TitleFragment" : {
+        "label" : "Ina-edit ang chat model provider:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Advanced na mga setting"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mga setting ng access sa modelo"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng embedding model configuration"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang Ollama local (o lan) embedding model configuration"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Piliin ang Ollama token na gagamitin para sa modelong ito"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding model na pagpipilian",
+        "help" : "Pumili ng Ollama embedding model na gagamitin."
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng embedding model configuration"
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default embedding model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default embedding model kung hindi nakasaad ang embedding model"
+      },
+      "baseUrl" : {
+        "label" : "Base na address ng ollama server",
+        "help" : "Base na address (hal. http://servername:234/) kung saan sumasagot ang ollama local o lan server."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng embedding model configuration"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang MistralAI embedding model configuration"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng embedding model configuration"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding model na pagpipilian",
+        "help" : "Pumili ng MistralAI embedding model na gagamitin."
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default embedding model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default embedding model kung hindi nakasaad ang embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Piliin ang MistralAI token na gagamitin para sa modelong ito"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Ina-edit ang Google Vertex AI embedding model configuration"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng embedding model configuration"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding model na pagpipilian",
+        "help" : "Pumili ng Google Vertex AI embedding model na gagamitin."
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default embedding model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default embedding model kung hindi nakasaad ang embedding model"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng embedding model configuration"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Piliin ang Google Vertex AI token na gagamitin para sa modelong ito"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "TitleFragment" : {
+        "label" : "Ina-edit ang embedding model provider:"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng Embedding model configuration"
+      },
+      "code" : {
+        "label" : "Natatanging kodigo",
+        "help" : "Awtomatikong binuong natatanging kodigo ng Embedding model configuration"
+      },
+      "choosedModel" : {
+        "label" : "Embedding model embedding model na pagpipilian",
+        "help" : "Pumili ng Embedding model embedding model na gagamitin."
+      },
+      "baseUrl" : {
+        "label" : "Embedding model API server address",
+        "help" : "Base na address ng Embedding model server."
+      },
+      "defaultModel" : {
+        "label" : "Itakda ito bilang default embedding model",
+        "help" : "Kapag totoo, ito ang gagamitin bilang default embedding model kung hindi nakasaad ang embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding model API token",
+        "help" : "Piliin ang Embedding model API token na gagamitin para sa modelong ito"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Impormasyon ng configuration ng chat"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Tanggalin ang chat session na ito"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Palitan ang pangalan ng chat session"
+      },
+      "QueryControl" : {
+        "placeholder" : "Sumulat ng mensahe para sa chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Mag-browse o maghanap at pumili ng mga dokumentong pwedeng kausapin"
+      },
+      "UploadFileBtn" : {
+        "help" : "Mag-upload ng file para makipag-chat o magtrabaho dito"
+      },
+      "SubmiQuestion" : {
+        "help" : "Ipadala ang iyong tanong"
+      },
+      "WithParams" : {
+        "label" : "may mga params:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI Tinawag na mga function:"
+      },
+      "UploadedDocs" : {
+        "label" : "Na-upload na mga dokumento"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Nai-load ang kasaysayan ng chat",
+        "detail" : "Matagumpay na nai-load ang kasaysayan ng chat"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ina-upload ang iyong talumpati"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Natanggap ang sagot na boses"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Umakyat"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Bumaba"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nakita ang mga dokumento"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Sigurado ka bang gusto mong tanggalin ang chat na ito?",
+        "header" : "Aksyon sa pagtanggal ng chat"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "description" : {
+        "label" : "Deskripsyon ng chat",
+        "help" : "Ilagay ang deskripsyon ng chat session."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Ginamit na modelo",
+        "help" : "Model code"
+      },
+      "providerId" : {
+        "label" : "Provider ng chat model",
+        "help" : "LLms provider driver"
+      },
+      "functions" : {
+        "label" : "Mga tawag na function ng chat model",
+        "help" : "Listahan ng mga function na magagamit ng chat model"
+      },
+      "NameCol" : {
+        "label" : "Pangalan"
+      },
+      "DescriptionCol" : {
+        "label" : "Deskripsyon"
+      },
+      "kbases" : {
+        "label" : "Mga available na knowledge base",
+        "help" : "Listahan ng mga knowledge base na ginagamit sa RAG chat na ito"
+      },
+      "CloseBtn" : {
+        "help" : "Isara"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Magdagdag ng dokumento sa 'chat with' na listahan"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "I-record",
+        "help" : "Simulan ang pag-record ng audio track at ipadala ito"
+      },
+      "StopBtn" : {
+        "label" : "Nagre-record",
+        "help" : "Nagre-record"
+      },
+      "AbortBtn" : {
+        "label" : "Itigil ang pag-record",
+        "help" : "Itigil ang pag-record"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Itigil ang pagre-record"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "i-reload ang data"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SelectHeader" : {
+        "label" : "Piliin"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "petsa/oras ng pagtatapos"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "petsa/oras ng pagsisimula"
+      },
+      "ProcessingHeader" : {
+        "label" : "pinoproseso"
+      },
+      "DescriptionHeader" : {
+        "label" : "Deskripsyon"
+      },
+      "CodeHeader" : {
+        "label" : "Code"
+      },
+      "FinishedHeader" : {
+        "label" : "tapos na"
+      },
+      "WithErrorHeader" : {
+        "label" : "may error"
+      },
+      "LogTableComponent" : {
+        "help" : "Itong log ng ingestion ng shared filesystem area"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Istatistika ng proseso"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "CloseBtn" : {
+        "label" : "Isara"
+      },
+      "PublicationLogTab" : {
+        "label" : "Log ng publikasyon"
+      },
+      "MainPanel" : {
+        "label" : "Log ng pag-publish"
+      },
+      "actualStatus" : {
+        "label" : "Status",
+        "help" : "Status ng gawain, kasalukuyang tumatakbo, tapos na o natapos na may mga error."
+      },
+      "publishingSystem" : {
+        "label" : "Konpigurasyon ng nilalamang nailathala",
+        "help" : "Impormasyon ng nailathalang nilalaman"
+      },
+      "startDateTime" : {
+        "label" : "Petsa/oras ng pagsisimula",
+        "help" : "Petsa at oras ng gawain ng synchronisation ng nilalaman"
+      },
+      "endDateTime" : {
+        "label" : "Petsa/oras ng pagtatapos",
+        "help" : "Petsa at oras ng pagtatapos ng gawain ng synchronisation ng nilalaman"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Hindi ganap na naproseso"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Ganap na naproseso"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "paglalapat ng embedding kumpara sa kabuuang bilang ng mga dokumento"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Karagdagang detalye"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Gumawa ng prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Prompt wizard",
+        "help" : "Gamitin ito para magamit ang isang LLM upang gumawa ng prompt para sa iyong mga layunin"
+      },
+      "acceptPrompt" : {
+        "label" : "Tanggapin ang prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Prompt template generation wizard"
+      },
+      "cancel" : {
+        "label" : "Kanselahin"
+      },
+      "response" : {
+        "label" : "Iminungkahing prompt template",
+        "help" : "Ginawang template na teksto para sa iyong layunin (maaari mo itong baguhin o itama/modipikahin)"
+      },
+      "modelCode" : {
+        "label" : "Chat model na gagamitin",
+        "help" : "Piliin ang chat model na nais mong tanungin para sa paggawa ng prompt template"
+      },
+      "query" : {
+        "label" : "Paghiling ng prompt template",
+        "help" : "Tukuyin sa pangalawang panauhan kung ano ang layunin na susuportahan ng AI para sa user"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura kung paano sasagot ang modelo, mula 0 hanggang 1 (kung hindi sigurado, iwanang walang laman)"
+      },
+      "contextLength" : {
+        "label" : "Haba ng konteksto (mga token)",
+        "help" : "Dami ng text na maaaring isaalang-alang ng AI model kapag pinoproseso (kung hindi nakalagay, 1047576 ang gagamitin)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Ang TopP na parameter, mula 0 hanggang 1 (kung hindi sigurado, iwanang walang laman)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Mga pinapaganang function call para sa modelong ito",
+        "help" : "Mga kakayahan na maaaring gamitin ng modelo habang nakikipag-chat"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Default na prompt ng modelo",
+        "help" : "I-edit ang default na prompt para sa chat model."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng pagkakakilanlan."
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong nilikhang natatanging kodigo ng pagkakakilanlan."
+      },
+      "secretType" : {
+        "label" : "Uri ng pagkakakilanlan",
+        "help" : "Piliin ang uri ng pagkakakilanlan na gagawin para sa remote system"
+      },
+      "InsertBtn" : {
+        "label" : "Ilagay"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Ilagay ang token."
+      },
+      "user" : {
+        "label" : "Gumagamit",
+        "help" : "Ilagay ang gumagamit na tinutukoy ng token."
+      },
+      "MainPanel" : {
+        "label" : "Gumagawa ng pagkakakilanlan"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "username" : {
+        "label" : "Pangalan ng gumagamit",
+        "help" : "Ilagay ang pangalan ng gumagamit."
+      },
+      "password" : {
+        "label" : "Password",
+        "help" : "Ilagay ang password."
+      },
+      "email" : {
+        "label" : "E-mail/Pangalan ng gumagamit",
+        "help" : "Ilagay ang e-mail o pangalan ng gumagamit na konektado sa ssh key."
+      },
+      "key" : {
+        "label" : "Lihim na susi",
+        "help" : "Buksan ang file ng pribadong susi at kopyahin dito sa text area."
+      },
+      "passphrase" : {
+        "label" : "Passphrase ng susi",
+        "help" : "Ilagay ang passphrase ng susi."
+      },
+      "pub" : {
+        "label" : "Pampublikong susi",
+        "help" : "Buksan ang file ng pampublikong susi at kopyahin dito sa text area."
+      },
+      "jsonContent" : {
+        "label" : "Nilalaman ng Google credentials file",
+        "help" : "Kopyahin dito ang nilalaman ng Google api credentials file na na-download mula sa google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google user na gagayahin",
+        "help" : "Ang user na gagamitin ng mga ibinigay na credentials",
+        "placeholder" : "Ang user na gagamitin ng mga ibinigay na credentials"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong nilikhang natanging kodigo ng mga nilalaman."
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng in-upload na nilalaman ng filesystem entry."
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Sanggunian ng pinagmulan ng proyekto."
+      },
+      "upload" : {
+        "label" : "I-upload ang mga nilalaman",
+        "help" : "I-click ang browse button at pumili ng mga zip file o iba pang file"
+      },
+      "openZips" : {
+        "label" : "Buksan ang mga zip file",
+        "help" : "Paganahin ang pagbubukas ng mga zip file at pagkuha ng nilalaman"
+      },
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "I-save at gawing available ang mga nilalamang ito sa knowledge base para sa LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "LogsTab" : {
+        "label" : "Mga log"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang in-upload na nilalaman"
+      },
+      "SettingsTab" : {
+        "label" : "Mga setting"
+      },
+      "buildSystemsRefs" : {
+        "label" : "I-configure ang mga build system",
+        "help" : "Listahan ng mga build/packaging system na iinspeksyunin para sa meta impormasyon at karagdagang detalye ng artipakto (iwanang walang laman kung walang kasamang software code)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Napiling mga elemento"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Kanselahin"
+      },
+      "EditBtn" : {
+        "help" : "Baguhin ang napili"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Pumili ng mga elemento"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Pumili ng mga elemento"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "I-edit ang pag-iskedyul"
+      },
+      "ConfirmBtn" : {
+        "label" : "Kumpirmahin"
+      },
+      "AddBtn" : {
+        "label" : "+Magdagdag"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "I-save at gawing available ang mga nilalaman na ito sa knowledge base para sa LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SettingsTab" : {
+        "label" : "Mga setting"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Paggamot ng source code"
+      },
+      "LogsTab" : {
+        "label" : "Mga log"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang kasalukuyang nilalaman ng filesystem"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng in-upload na nilalaman ng filesystem entry."
+      },
+      "openZips" : {
+        "label" : "Buksan ang mga zip file",
+        "help" : "Paganahin ang pagbubukas ng zip file at pagkuha ng nilalaman"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong ginawa na natanging kodigo ng mga nilalaman."
+      },
+      "tree" : {
+        "label" : "Napiling mga file o folder",
+        "help" : "Mga file o direktoryo ng shared filesystems na makukuha sa server"
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Sanggunian ng parent na proyekto."
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng pagsusuri ng update ng nilalaman",
+        "help" : "I-configure ang iskedyul ng pagbabago ng nilalaman para mapanatiling updated ang retrieve augmented generation system"
+      },
+      "catalogingCriteria" : {
+        "label" : "Pamantayan sa organisasyon ng folder",
+        "help" : "Pakipaliwanag dito kung paano ginawa ang pamantayan sa organisasyon ng mga folder sa file system area na ibinabahagi mo sa Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "I-configure ang build systems",
+        "help" : "Listahan ng mga build/packaging system na susuriin para sa meta impormasyon at dagdag na impormasyon ng artifact (iwanang blangko kung walang software code na nakapaloob)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Bagong lugar para sa pagbabahagi ng file"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Ganap na path"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db o yml file na config"
+      },
+      "DescriptionHeader" : {
+        "label" : "Paglalarawan"
+      },
+      "CodeHeader" : {
+        "label" : "Kodigo"
+      },
+      "ModifyHeader" : {
+        "label" : "Baguhin"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Napiling shared filesystem folder",
+        "help" : "Pumili ng folder sa server na root path para sa shared filesystem na ginagamit ng iyong organisasyon bilang repositoryo ng dokumento"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng shared filesystem area ng iyong organisasyon"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong ginawa na natanging kodigo ng mga nilalaman."
+      },
+      "InsertBtn" : {
+        "label" : "Ipasok"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang shared file folder sa server"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "I-save at gawing available ang mga nilalaman sa knowledge base para sa LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang git source/documentation repository"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng git repo."
+      },
+      "code" : {
+        "label" : "Natatanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng git repo."
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Sanggunian ng magulang na proyekto."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git system",
+        "help" : "Naka-configure nang sanggunian ng git system."
+      },
+      "branch" : {
+        "label" : "Branch",
+        "help" : "Pangalan ng branch na ika-checkout (karaniwang master, main o develop)"
+      },
+      "identityCode" : {
+        "label" : "Gamit na pagkakakilanlan",
+        "help" : "Pumili ng pagkakakilanlan para sa pag-clone/checkout sa system"
+      },
+      "repositoryUri" : {
+        "label" : "Repository url/address",
+        "help" : "Kumpletong address ng git remote repository (karaniwang nagsisimula sa http:, https: o ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "public",
+        "help" : "Kung totoo, hindi kailangan ng authentication para ma-access ang repository"
+      },
+      "openZips" : {
+        "label" : "Buksan ang zip files",
+        "help" : "Paganahin ang pagbubukas at extraction ng nilalaman mula sa zip files"
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng pag-check ng updates sa nilalaman",
+        "help" : "I-configure ang iskedyul ng pagbabago ng nilalaman para mapanatiling updated ang retrieve augmented generation system"
+      },
+      "buildSystemsRefs" : {
+        "label" : "I-configure ang build systems",
+        "help" : "Listahan ng build/packaging systems para suriin ang meta impormasyon at karagdagang detalye ng artifacts"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "DeleteBtn" : {
+        "label" : "Burahin"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Pangkalahatang impormasyon"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Gamitin ang chat model"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "pumili"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Pumili ng configuration ng chat model"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Pumili ng configuration ng embedding model"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "pumili"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG settings"
+      },
+      "LanguageModelTab" : {
+        "label" : "Mga setting ng large language model at magagamit na tools"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Gamitin ang embedding model"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Mga setting ng security access"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang retrieve augmented generation chat profile"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong nabubuong natatanging kodigo ng chat profile."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng chat profile."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Pinipili ng user ang knowledge bases",
+        "help" : "Maaaring pumili ang user mula sa mga accessible na knowledge base at/o mag-upload ng sariling files."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Mga knowledge base",
+        "help" : "Mga knowledge base na gagamitin para sa pagkuha ng dokumento."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Threshold ng pagkakatulad",
+        "help" : "Threshold ng pagkakatulad para sa semantic searches, 0.60–0.65 Mababa ang pag-filter, 0.70-0.75 Katamtamang pag-filter, 0.80–0.85 Tumpak"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Threshold ng pagkakatulad para sa 2nd 'hop'",
+        "help" : "Threshold ng pagkakatulad para sa semantic searches, 0.60–0.65 Mababa ang pag-filter, 0.70-0.75 Katamtamang pag-filter, 0.80–0.85 Tumpak na ginagamit mula sa ikalawang paghahanap ng multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Huwag paganahin ang 'Multi Hop' rag",
+        "help" : "Huwag paganahin ang 'multi hop rag' functionality. Gumagawa ang multi hop search ng unang semantic search at ginagamit ang mga nahanap na dokumento bilang konteksto para sa semantic search, na nagbibigay ng mas malawak na konteksto."
+      },
+      "topK" : {
+        "label" : "Mga isina-alang-alang na fragment ng dokumento (TopK)",
+        "help" : "Sa retrieve augmented generation, Top N nahanap na mga fragment ng dokumento na isina-alang-alang sa semantic search"
+      },
+      "enabledFunctions" : {
+        "label" : "Mga pinaganang tawag ng function para sa RAG chat na ito",
+        "help" : "Mga functionality na puwedeng gamitin ng llm model habang nakikipag-chat ang user at nakikipag-interact din sa napiling knowledge base"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "I-edit ang prompt para sa retrieve augmented generation sessions."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Ilagay o piliin ang kategorya ng prompt"
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang prompt"
+      },
+      "promptCategory" : {
+        "label" : "Kategorya ng prompt",
+        "help" : "Pumili o maglagay ng kategorya ng prompt."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "I-edit ang prompt para sa chat, gamitin ang {query} para tukuyin ang tanong ng user at {context} para tukuyin ang konteksto ng mga dokumento/kasaysayan na ipinadala sa LLM."
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "Awtomatikong nalilikhang natatanging kodigo ng prompt."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng prompt."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Palitan ang password"
+      },
+      "YourUserName" : {
+        "label" : "Iyong username"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Lumang Password",
+        "help" : "Kasalukuyang password para mag-login"
+      },
+      "newPassword" : {
+        "label" : "Bagong password",
+        "help" : "bagong password"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail bilang username para mag-login"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Pormularyo ng pagpapalit ng password"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "ChangePwdBtn" : {
+        "label" : "palitan ang password"
+      },
+      "newPassword1" : {
+        "label" : "Kumpirmahin ang bagong password",
+        "help" : "Kumpirmahin ang bagong password"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "ForMoreInformations" : {
+        "label" : "Para sa karagdagang impormasyon tungkol sa Google custom search API o pagkuha ng iyong api key (libre) bisitahin: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Natanging Kodigo",
+        "help" : "natanging kodigo ng google search api configuration."
+      },
+      "MainPanel" : {
+        "label" : "Ina-edit ang google custom search api credentials"
+      },
+      "secretCode" : {
+        "label" : "Google search api token",
+        "help" : "Pumili o maglagay ng google search api token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "Paglalarawan",
+        "help" : "Ilagay ang paglalarawan ng google search api configuration."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Makipag-chat nang walang knowledge bases",
+        "help" : "Pumili ng LLMs para sa chat session",
+        "placeholder" : "Pumili ng LLMs para sa chat session"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Buksan ang seksyon ng mga opsyon sa chat"
+      },
+      "CreateChatBtn" : {
+        "label" : "Bagong chat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Bagong session ng chat"
+      },
+      "chatProfileCode" : {
+        "label" : "Makipag-chat gamit ang knowledge bases",
+        "help" : "Pumili ng company chat profile para makipag-ugnayan sa mga dokumento ng kumpanya (at sayo) at LLMs",
+        "placeholder" : "Pumili ng company chat profile para makipag-ugnayan sa mga dokumento ng kumpanya (at sayo) at LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "Bagong chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Mga chat session"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Isara ang sidebar"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Gumawa ng bagong chat gamit ang malalaking language model",
+        "label" : "Chat"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Gumawa ng bagong RAG chat gamit ang mga nilalaman ng kumpanya",
+        "label" : "Makipag-chat sa knowledge base"
+      },
+      "ChatsTitle" : {
+        "label" : "Mga chat"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Buksan ang seksyon ng mga chat option"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Makipag-usap sa mga dokumento",
+        "help" : "Mag-browse o maghanap at pumili ng mga dokumentong gagamitin"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Pumili ng mga file na kakausapin"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Mag-browse o maghanap at pumili ng mga dokumentong pwedeng kausapin"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Kumpirmahin"
+      },
+      "userspaceBrowsing" : {
+        "label" : "I-upload o piliin ang iyong mga dokumento",
+        "help" : "Pumili/mag-upload ng mga dokumento mula sa iyong user space"
+      },
+      "fileSearchBtn" : {
+        "label" : "Maghanap"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Maghanap"
+      },
+      "query" : {
+        "label" : "Parirala para sa semantic na paghahanap",
+        "help" : "Maglagay ng makahulugang parirala na may kaugnayan sa iyong hinahanap"
+      },
+      "choosenBrowsing" : {
+        "label" : "Piliin ang mga file sa pag-browse ng knowledge bases",
+        "help" : "Piliin ang mga file mula sa mga company shared knowledge bases"
+      },
+      "filename" : {
+        "label" : "Hinahanap na pangalan ng file",
+        "help" : "Maglagay ng bahagi ng filename para sa iyong hinahanap na nilalaman"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Paghahanap ng filename"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Mag-browse ng mga file ng kumpanya"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantic na paghahanap"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Pumili ng mga file na pwedeng kausapin"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Baguhin ang napili"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Pumili ng mga file ng user"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Pumili ng in-upload na nilalaman ng user"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Mga knowledge base at file ng user"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproject o item",
+        "help" : "magdagdag ng subproject o item"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+mag-upload ng files",
+        "help" : "magdagdag ng pinagmulan ng data ng na-upload na files"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "magdagdag ng Microsoft SharePoint/OneDrive na pinagmulan ng data"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "magdagdag ng Atlassian Confluence na pinagmulan ng data"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "magdagdag ng shared filesystem na pinagmulan ng data"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "magdagdag ng Atlassian Jira na pinagmulan ng data"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "magdagdag ng pinagmulan ng data ng git repository tulad ng bitbucket, github o iba pa"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "magdagdag ng google drive data source"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Setup"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "aking profile"
+      },
+      "logout" : {
+        "label" : "logout"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Palitan ang wika"
+      },
+      "MyProfile" : {
+        "label" : "iyong profile"
+      },
+      "MyProfileItem" : {
+        "label" : "iyong profile"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Setup"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "i-edit ang profile"
+      },
+      "logoutMenuItem" : {
+        "label" : "logout"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sinusuri ang listahan ng mga dokumento"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagkaroon ng error sa pagproseso ng mga dokumento",
+        "label-2" : "Na-prosesong dokumento",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Natanggap na mga dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Mga dokumentong may error",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenisasyon ng mga dokumento"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagkaroon ng error sa pagproseso ng mga dokumento",
+        "label-2" : "Na-prosesong dokumento",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagkaroon ng error sa pagproseso ng token"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Natanggap na mga dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Mga dokumentong may error",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantic na pag-iindex (embedding para sa semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagkaroon ng error sa pagproseso ng mga dokumento",
+        "label-2" : "Na-prosesong dokumento",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagkaroon ng error sa pagproseso ng token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Natanggap na mga dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Mga dokumentong may error",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Pag-index ng entidad/relasyon/kaganapan (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagkaroon ng error sa pagproseso ng mga dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Natanggap na mga dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Mga dokumentong may error",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagka-error sa pagproseso ng token"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Sinusuri ang listahan ng mga dokumento"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenisasyon ng mga dokumento"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantic indexing (pag-embed para sa semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagka-error sa pagproseso ng token"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Pag-index ng Entity/Relasyon/Kaganapan (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Hindi na-prosesong dokumento",
+        "label-1" : "Nagka-error sa pagproseso ng dokumento",
+        "label-2" : "Na-prosesong dokumento"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Na-prosesong token",
+        "dataset-1-label" : "Nagka-error sa pagproseso ng token"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Natanggap na dokumento",
+        "dataset-1-label" : "Na-prosesong dokumento",
+        "dataset-2-label" : "Nagka-error na dokumento",
+        "dataset-3-label" : "Itinapong dokumento"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Link para bumili ng Apy key credit"
+      },
+      "ModifyBtn" : {
+        "label" : "Baguhin",
+        "help" : "Tingnan/baguhin ang configuration ng model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Code"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Paglalarawan"
+      },
+      "ExistingModelType" : {
+        "label" : "Uri ng model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Umiiral na mga configuration"
+      },
+      "ProviderWWW" : {
+        "label" : "Web site link"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Mga kredensyal ng provider"
+      },
+      "ProviderInfos" : {
+        "label" : "Mga impormasyon ng provider"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/kredensyal",
+        "help" : "Pumili ng api key o kredensyal para sa provider na ito"
+      },
+      "NewApiKey" : {
+        "label" : "Bagong api key",
+        "help" : "Ilagay ang bagong api key na gagamitin sa provider na ito"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Gamitin ang umiiral o bago",
+        "help" : "Gamitin ang umiiral o gumawa ng bagong kredensyal para sa provider na ito"
+      },
+      "NewUserName" : {
+        "label" : "Username",
+        "help" : "Username na ginagamit para mag-access ng provider services"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Bagong embedding model",
+        "help" : "Gumawa ng bagong embedding model configuration"
+      },
+      "NewChatModel" : {
+        "label" : "Bagong Chat model",
+        "help" : "Gumawa ng bagong chat model configuration"
+      },
+      "NewModelDialog" : {
+        "label" : "Magdagdag ng bagong model"
+      },
+      "PiSave" : {
+        "label" : "I-save"
+      },
+      "NewModelsButton" : {
+        "label" : "Bagong mga model",
+        "help" : "Gumawa ng bagong models configuration"
+      },
+      "NewModelsDialog" : {
+        "label" : "Magdagdag ng bagong mga model"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url para sa mga api services ng provider"
+      },
+      "ModelTypePanel" : {
+        "label" : "Magdagdag ng bagong mga model"
+      },
+      "ModelsChoices" : {
+        "label" : "Mga pagpipilian ng model"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Iminungkahing pagpili ng mga model"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Pumili ng isa sa mga nakahandang embedding models"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat model",
+        "help" : "Pumili ng isa sa mga nakahandang chat models"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Advanced na pagpili ng mga model"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Pumili ng isa sa mga inilathalang embedding model ng supplier"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat model",
+        "help" : "Pumili ng isa sa mga inilathalang chat model ng supplier"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Gamitin lamang ang selection mode na ito kung ikaw ay eksperto o kung sisilipin mo sa supplier site kung alin sa mga modelo ang angkop sa iyong pangangailangan. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "gawin default na chat model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang chat model na naka-configure"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Inirerekomenda namin ang sumusunod na listahan ng mga model "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "gawin default na embedding model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang embedding model na naka-configure"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "gawin default na chat model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang chat model na naka-configure"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "gawin default na embedding model",
+        "help" : "Itakda ang model na ito bilang default, ito ang gagamitin sa bawat gawain na walang ibang embedding model na naka-configure"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Gamitin lamang ang selection mode na ito kung ikaw ay eksperto o kung sisilipin mo sa supplier site kung alin sa mga modelo ang angkop sa iyong pangangailangan. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Gumawa at i-activate"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Gumawa at i-activate"
+      },
+      "ProviderNameField" : {
+        "label" : "Provider"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Kailangan ng kredensyal ng provider",
+        "help" : "Ang provider/server application ay nakaayos para sa authenticated na access gamit ang api key o ibang kredensyal"
+      },
+      "baseUrl1" : {
+        "label" : "Base api url",
+        "help" : "Base url ng provider para sa mga serbisyo ng api"
+      },
+      "enableAllFunctions" : {
+        "label" : "i-enable lahat ng function calls",
+        "help" : "I-enable lahat ng available na tools at function calls; kung hindi itatakda, maaari itong i-enable sa llms admin panel sa ibang pagkakataon"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI remote provider OK",
+        "detail" : "Maayos na gumagana at naayos ang provider"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Nabigo ang operasyon",
+        "detail" : "Hindi makapag-authenticate gamit ang mga ibinigay na kredensyal"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Matagumpay na naisagawa ang operasyon"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Nag-error habang nag-stream ng sagot sa chat",
+        "detail" : "Error sa server: class org.neo4j.driver.internal.value.StringValue cannot be cast to class java.lang.String (org.neo4j.driver.internal.value.StringValue ay nasa unnamed module ng loader 'app'; java.lang.String ay nasa module java.base ng loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Matagumpay na na-save",
+        "detail" : "Matagumpay na natapos ang update na operasyon"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Nagka-error sa pakikipag-ugnayan sa Ollama server",
+        "detail" : "Error sa network habang kumokonekta sa remote system upang kunin ang nilalaman\n listahan ng mga modelo Nagka-error habang ginagamit ang url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Pwede mong tanggalin ito",
+        "detail" : "Ang kasalukuyang tinitingnang data ay ligtas na matanggal"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Hindi mo puwedeng tanggalin ito",
+        "detail" : "Ang bagay na ito ay ginagamit pa sa ibang bahagi ng application"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Mag-upload ng mga file na pwedeng kausapin"
+      },
+      "ChooseFile" : {
+        "help" : "Pumili ng mga file"
+      },
+      "UploadFile" : {
+        "help" : "I-upload ang mga file"
+      },
+      "DragDropHere" : {
+        "label" : "I-drag at i-drop ang mga file dito para i-upload"
+      },
+      "RemoveAll" : {
+        "help" : "Tanggalin lahat"
+      },
+      "UploadPending" : {
+        "label" : "Naghihintay para ma-upload"
+      },
+      "CompletedData" : {
+        "label" : "Tapos na"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "I-configure ang graphrag sa setup area kung gusto mong gamitin ito sa seksyong ito"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Mga seting ng Graphrag"
+      },
+      "button-help" : {
+        "label" : "I-click dito para i-configure ang pagkuha ng impormasyon para sa graphrag (hindi pa naka-configure)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Magdagdag ng configuration"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Gumawa"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng Google Drive system."
+      },
+      "MainPanel" : {
+        "label" : "Gumawa ng Google Drive/Workspace connection"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "delegatedUser" : {
+        "label" : "Google user na gagayahin",
+        "help" : "Ang user na gagamitin ng mga ibinigay na credentials",
+        "placeholder" : "Ang user na gagamitin ng mga ibinigay na credentials"
+      },
+      "jsonContent" : {
+        "label" : "Google credentials json content",
+        "help" : "Gumawa ng Google Credentials na may workspace/team drives access sa Google Console Cloud at i-paste dito ang na-download na json file content (https://console.cloud.google.com/).",
+        "placeholder" : "Gumawa ng Google Credentials na may workspace/team drives access sa Google Console Cloud at i-paste dito ang na-download na json file content (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "PublishBtn" : {
+        "label" : "I-publish!",
+        "help" : "I-save at gawing available ang mga nilalaman na ito sa knowledge base para sa LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "MainPanel" : {
+        "label" : "Pagbabahagi ng mga google drive contents"
+      },
+      "SettingsTab" : {
+        "label" : "Mga Setting"
+      },
+      "LogsTab" : {
+        "label" : "Mga Log"
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng mga naka-upload na google drive entries."
+      },
+      "code" : {
+        "label" : "Natatanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng mga nilalaman."
+      },
+      "tree" : {
+        "label" : "Napiling file o folder",
+        "help" : "Mga nilalaman ng shared google drive spaces at mga page"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive configuration",
+        "help" : "Reperensya ng na-configure nang google drive system."
+      },
+      "openZips" : {
+        "label" : "Buksan ang mga zip file",
+        "help" : "Paganahin ang pagbubukas ng zip files at pagkuha ng laman"
+      },
+      "parentProjectCode" : {
+        "label" : "Proyekto",
+        "help" : "Reperensya ng parent project."
+      },
+      "programmedTables" : {
+        "label" : "Iskedyul ng content updates check",
+        "help" : "I-configure ang iskedyul ng mga pagbabagong nilalaman para mapanatiling updated ang retrieve augmented generation system"
+      },
+      "catalogingCriteria" : {
+        "label" : "Pamantayan ng organisasyon ng mga folder at subfolder",
+        "help" : "Paki-explain rito kung paano inayos ang mga file at folder sa google drive contents na ibinahagi sa Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Pangkalahatang mga setting"
+      },
+      "CancelBtn" : {
+        "label" : "Kanselahin"
+      },
+      "DeleteBtn" : {
+        "label" : "Tanggalin"
+      },
+      "SaveBtn" : {
+        "label" : "I-save"
+      },
+      "MainPanel" : {
+        "label" : "Pag-eedit ng google drive integration"
+      },
+      "code" : {
+        "label" : "Natatanging Code",
+        "help" : "Awtomatikong nilikhang natatanging code ng google drive system."
+      },
+      "description" : {
+        "label" : "Deskripsyon",
+        "help" : "Ilagay ang deskripsyon ng google drive system."
+      },
+      "driveAccessSecret" : {
+        "label" : "Ginamit na identity",
+        "help" : "Pumili o gumawa ng identity para ma-access ang google drive system"
+      }
+    }
+  }
+}

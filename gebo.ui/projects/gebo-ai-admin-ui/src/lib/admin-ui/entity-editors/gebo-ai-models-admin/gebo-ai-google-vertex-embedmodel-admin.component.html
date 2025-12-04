@@ -12,68 +12,40 @@
  
  
 
-<p-blockUI [target]="gvUI" [blocked]="loading">
+<p-blockUI id="LockBlockUI" gebo-ai-label [target]="gvUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #gvUI header="Editing Google Vertex AI embedding model configuration" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #gvUI header="Editing Google Vertex AI embedding model configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [value]="userMessages" [enableService]="false" [closable]="false" />
+        <p-messages id="Messages" gebo-ai-label [value]="userMessages" [enableService]="false" [closable]="false" />
         
         <div class="grid standardTabDialogueHeight">
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of the embedding model configuration
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the embedding model configuration" [required]="true">
+                    <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element/>
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="code">Unique Code</label>
-                    <input pInputText id="code" formControlName="code" aria-describedby="code-help" readonly="true" />
-                    <small id="code-help">
-                        Automatically generated unique code of the embedding model configuration
-                    </small>
-                </div>
+                <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the embedding model configuration">
+                    <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element/>
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="apiSecretCode">Google Vertex AI token</label>
-                    <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
-                        [required]="true" [optionsObservable]="identitiesObservable"
-                        [createNewRecordRequest]="newSecretAction" aria-describedby="modelCode-help">
+                <gebo-ai-field id="apiSecretCode" label="Google Vertex AI token" help="Choose the Google Vertex AI token to be used for this model" [required]="true">
+                    <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token" [required]="true" [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
-                    <small id="apiSecretCode-help">
-                        Choose the Google Vertex AI token to be used for this model
-                    </small>
-                </div>
+                </gebo-ai-field>
             </div>
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="choosedModel">Google Vertex AI embedding model choice</label>
-                    <p-select styleClass="w-full"  formControlName="choosedModel" id="choosedModel" placeholder="Select a model"
-                        [required]="true" [options]="modelChoicesData" optionLabel="description"
-                        aria-describedby="choosedModel-help"></p-select>
-
-
-                    <small id="choosedModel-help">
-                        Choose the Google Vertex AI embedding model to work with.
-                    </small>
-                </div>
+                <gebo-ai-field id="choosedModel" label="Google Vertex AI embedding model choice" help="Choose the Google Vertex AI embedding model to work with." [required]="true">
+                    <p-select styleClass="w-full" formControlName="choosedModel" id="choosedModel" placeholder="Select a model" [required]="true" [options]="modelChoicesData" optionLabel="description" gebo-ai-field-element></p-select>
+                </gebo-ai-field>
             </div>
            
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="defaultModel">set this as default embedding model</label>
-                    <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true"
-                        [falseValue]="false" aria-describedby="defaultModel-help"></p-checkbox>
-                    <small id="defaultModel-help">
-                        If true this will be used as default embedding model where embedding model is not indicated
-                    </small>
-                </div>
+                <gebo-ai-field id="defaultModel" label="set this as default embedding model" help="If true this will be used as default embedding model where embedding model is not indicated">
+                    <p-checkbox formControlName="defaultModel" id="defaultModel" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                </gebo-ai-field>
             </div>
         </div>
     </div>
@@ -85,17 +57,18 @@
     
         <div class="grid geboLargeButtonsBar" *ngIf="!isWizardMode">
             <div class="col-4">
-                <p-button [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
+                <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save"
                     severity="success" [disabled]="this.formGroup.invalid || canSave===false"   styleClass="w-full" ></p-button>
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full"  />
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
+                <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"   styleClass="w-full" 
                     [disabled]="canDelete===false" />
             </div>
 
         </div>
     
 </p-panel>
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

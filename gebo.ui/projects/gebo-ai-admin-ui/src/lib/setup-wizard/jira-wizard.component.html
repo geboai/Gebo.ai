@@ -9,22 +9,26 @@
  */
  -->
  
- 
- 
-
 <p-blockUI [target]="instModeUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #instModeUI header="Setup company Atlassian Jira systems">
+<p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Setup company Atlassian Jira systems">
   <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+  <div class="grid geboLargeButtonsBar">
+
+    <div class="col-6">
+      <p-button id="JiraSystemBtn" gebo-ai-label icon="pi pi-plus" label="Jira system" styleClass="w-full" [outlined]="true"
+        (onClick)="createJiraSystem()"></p-button>
+    </div>
+  </div>
   <div class=" grid">
 
     <div class="col-12"><p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
         <ng-template #header pTemplate="header">
           <tr>
-            <th>Config code</th>
-            <th>Description</th>
-            <th>System type</th>
+            <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+            <th id="SystemTypeHeader" gebo-ai-text>System type</th>
             <th></th>
 
           </tr>
@@ -34,23 +38,19 @@
             <td>{{ item.code }}</td>
             <td>{{ item.description }}</td>
             <td>{{ item.confluenceVersion}}</td>
-            <td><p-button label="Edit system" icon="pi pi-pencil" [outlined]="true"
+            <td><p-button id="EditSystemBtn" gebo-ai-label label="Edit system" icon="pi pi-pencil" [outlined]="true"
                 (onClick)="editJiraSystem(item)"></p-button></td>
           </tr>
         </ng-template>
       </p-table></div>
 
   </div>
-  <div class="grid geboLargeButtonsBar">
-
-    <div class="col-6">
-      <p-button icon="pi pi-plus" label="Jira system" styleClass="w-full" [outlined]="true"
-        (onClick)="createJiraSystem()"></p-button>
-    </div>
-  </div>
+  
 </p-panel>
 <p-dialog  [maximizable]="true" [visible]="createConfluenceWindowOpen" [modal]="true"  (visibleChange)="closeDialog()">
 
   <gebo-ai-jira-system-fast-component (cancelAction)="closeDialog()"
     (newJiraSystemEvent)="this.closeWizard()"></gebo-ai-jira-system-fast-component>
 </p-dialog>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

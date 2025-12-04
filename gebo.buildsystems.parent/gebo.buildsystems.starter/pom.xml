@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>gebo.buildsystems.parent</artifactId>
 		<groupId>ai.gebo.buildsystems</groupId>
-		<version>0.9.9.7</version>
+		<version>1.0.0.0-rc1</version>
 	</parent>
 	<artifactId>gebo.buildsystems.starter</artifactId>
 	<packaging>jar</packaging>

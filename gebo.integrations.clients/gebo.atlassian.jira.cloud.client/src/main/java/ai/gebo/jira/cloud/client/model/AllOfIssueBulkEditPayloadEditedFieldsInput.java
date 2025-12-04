@@ -27,28 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.JiraCascadingSelectField;
-import ai.gebo.jira.cloud.client.model.JiraColorField;
-import ai.gebo.jira.cloud.client.model.JiraDateField;
-import ai.gebo.jira.cloud.client.model.JiraDateTimeField;
-import ai.gebo.jira.cloud.client.model.JiraIssueFields;
-import ai.gebo.jira.cloud.client.model.JiraLabelsField;
-import ai.gebo.jira.cloud.client.model.JiraMultipleGroupPickerField;
-import ai.gebo.jira.cloud.client.model.JiraMultipleSelectField;
-import ai.gebo.jira.cloud.client.model.JiraMultipleSelectUserPickerField;
-import ai.gebo.jira.cloud.client.model.JiraMultipleVersionPickerField;
-import ai.gebo.jira.cloud.client.model.JiraNumberField;
-import ai.gebo.jira.cloud.client.model.JiraRichTextField;
-import ai.gebo.jira.cloud.client.model.JiraSingleGroupPickerField;
-import ai.gebo.jira.cloud.client.model.JiraSingleLineTextField;
-import ai.gebo.jira.cloud.client.model.JiraSingleSelectField;
-import ai.gebo.jira.cloud.client.model.JiraSingleSelectUserPickerField;
-import ai.gebo.jira.cloud.client.model.JiraSingleVersionPickerField;
-import ai.gebo.jira.cloud.client.model.JiraStatusInput;
-import ai.gebo.jira.cloud.client.model.JiraUrlField;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * An object that defines the values to be updated in specified fields of an issue. The structure and content of this parameter vary depending on the type of field being edited. Although the order is not significant, ensure that field IDs align with those in selectedActions.
  */

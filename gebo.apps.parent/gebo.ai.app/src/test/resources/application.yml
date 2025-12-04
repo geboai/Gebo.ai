@@ -1,32 +1,53 @@
+ai.gebo.neo4j.enabled: true
+spring:
+  neo4j:
+    uri: bolt://localhost:7687
+#    authentication:
+#      username: neo4j
+#      password: password
+
 ai.gebo.security.cors.allowedOrigins: no
 ai.gebo.mongodb:
-    enabled: false
-    databaseName: gebo-ai-tests
-    connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+  enabled: false
+  databaseName: gebo-ai-tests
+  connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
 ai.gebo.vectorstore:
-    use: TEST
+  use: TEST
 ai.gebo.vectorizator.config:
   maximumMessagesCumulatedBytesThreshold: 2097152
   disposerConfig:
     poolCardinality: 1
     flushThreshold: 10
     useSenderThread: true
-  vectorizatorReceiverConfig:
+vectorizatorReceiverConfig:
+  poolCardinality: 2
+  flushThreshold: 6
+  useSenderThread: true
+  timeout: 10000
+
+ai.gebo.graphrag.processor:
+  discardedExtensions: 
+    - .xls
+    - .xlsx
+    - .ods
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  graphRagProcessorReceiverConfig:
     poolCardinality: 2
-    flushThreshold: 10
+    flushThreshold: 6
     useSenderThread: true
-    timeout: 20000
+    timeout: 10000
+
 ai.gebo.core.config:
   mongoDisposerConfig:
     poolCardinality: 1
     useSenderThread: true
-    flushThreshold: 10
-    timeout: 20000
+    flushThreshold: 6
+    timeout: 10000
   userMessagesReceiverConfig:
     poolCardinality: 1
     useSenderThread: true
-    flushThreshold: 10		
-    timeout: 20000
+    flushThreshold: 10
+    timeout: 10000
 #Google search api for LLM search web function
 #ai.gebo.googlesearch:
 #                  enabled: true

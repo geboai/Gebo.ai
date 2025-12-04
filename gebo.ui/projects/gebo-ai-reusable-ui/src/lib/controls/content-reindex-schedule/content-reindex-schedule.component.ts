@@ -6,14 +6,15 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /* AI generated comments */
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { ReindexingFrequencyOptionsControllerService, ReindexingProgrammedTable, ReindexingTime, ReindexTimeStructureMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Defines the time slots units based on the ReindexingTime array
@@ -60,6 +61,9 @@ const availPeriods: PeriodOption[] = [{ code: "DAILY", description: "Daily progr
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GeboAIContentReindexScheduleComponent),
             multi: true
+        }, { provide: GEBO_AI_MODULE, useValue: "GeboAIContentReindexModule", multi: false },
+        {
+            provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentReindexScheduleComponent"), multi: false
         }
     ],
     standalone: false
@@ -70,47 +74,47 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
      * Input property that allows specifying which frequency types should be available in the component
      */
     @Input() public frequencyTypes?: ReindexingProgrammedTable.FrequencyEnum[];
-    
+
     /**
      * List of frequency periods that can be scheduled based on input configuration
      */
     public availableSchedulablePeriods?: ReindexingProgrammedTable.FrequencyEnum[];
-    
+
     /**
      * Current value of the scheduled reindexing configurations
      */
     public value?: ReindexingProgrammedTable[];
-    
+
     /**
      * Temporarily edited value during modification process
      */
     public editedValue?: ReindexingProgrammedTable[];
-    
+
     /**
      * Current UI mode - either displaying schedules or editing them
      */
     public mode: "DISPLAY" | "EDITING" = "DISPLAY";
-    
+
     /**
      * Human-readable representations of configured time schedules
      */
     public displayTimes: string[] = [];
-    
+
     /**
      * Flag indicating if data is being loaded or processed
      */
     public loading: boolean = false;
-    
+
     /**
      * Metadata about time structures for different frequency types
      */
     public timeMetaInfos: ReindexTimeStructureMetaInfo[] = [];
-    
+
     /**
      * Controls whether value changes should be emitted or not
      */
     private emitValue: boolean = true;
-    
+
     /**
      * Form group for managing the schedule editing UI
      */
@@ -157,7 +161,7 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
      * @param value The time slot values to validate
      * @returns Boolean indicating whether the values are valid for the given frequency
      */
-    private validateReindexingProgrammedTable(frequency:ReindexingProgrammedTable.FrequencyEnum,value?: timeSlotUnities ): boolean {
+    private validateReindexingProgrammedTable(frequency: ReindexingProgrammedTable.FrequencyEnum, value?: timeSlotUnities): boolean {
         let validated: boolean = true;
         const format = this.timeMetaInfos.find(x => x.frequency === frequency);
         if (!value) {
@@ -168,11 +172,11 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
                     format.periodComponents.forEach((cFmt, i) => {
                         if (x.timeComponent) {
                             const tComponentValue = x.timeComponent[i];
-                            if (tComponentValue===undefined) {
-                                validated=false;    
+                            if (tComponentValue === undefined) {
+                                validated = false;
                             }
-                        }else {
-                            validated=false;
+                        } else {
+                            validated = false;
                         }
                     });
                 } else {
@@ -180,7 +184,7 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
                 }
             });
         }
-        console.log("For time:"+frequency+" validation=>"+validated);
+        console.log("For time:" + frequency + " validation=>" + validated);
         return validated;
     }
 
@@ -193,8 +197,8 @@ export class GeboAIContentReindexScheduleComponent implements OnChanges, OnInit,
             const dataStructure: InternalRappr = fg.value;
             let out: ValidationErrors | null = null;
             if (this.validateReindexingProgrammedTable("DAILY", dataStructure?.daily) &&
-                this.validateReindexingProgrammedTable("DATES",dataStructure?.dates) &&
-                this.validateReindexingProgrammedTable("HOURLY",dataStructure?.hours) &&
+                this.validateReindexingProgrammedTable("DATES", dataStructure?.dates) &&
+                this.validateReindexingProgrammedTable("HOURLY", dataStructure?.hours) &&
                 this.validateReindexingProgrammedTable("MONTHLY", dataStructure?.monthly) &&
                 this.validateReindexingProgrammedTable("WEEKLY", dataStructure?.weekly)) {
                 out = null;

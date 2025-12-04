@@ -19,4 +19,6 @@ com.openi40/openi40.scheduler.SpringBootEnvironment/tmlog.lck
 *.msi
 *.cab
 *.cdx.json
+*.deb
+*.rpm
 dockers/gebo.ai.platform/jdk-*_linux-x64_bin.tar.gz

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IGUserSecurityProfile;
+import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.model.User;
 import ai.gebo.security.model.UserInfosImpl;
 import ai.gebo.security.model.UsersGroup;
@@ -212,6 +213,16 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return userGroups;
 		}
 
+	}
+
+	@Override
+	public void checkBeingCreator(GBaseObject o) throws SecurityException {
+		if (o.getUserCreated() == null || o.getUserCreated().trim().length() == 0)
+			throw new SecurityException("Object not owned");
+		UserInfos user = getCurrentUser();
+		if (user != null && user.getUsername().equals(o.getUserCreated()))
+			return;
+		throw new SecurityException("The actual user is not the owner of this object");
 	}
 
 }

@@ -6,14 +6,14 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
-import { Component, Injector } from "@angular/core";
+
+
+
+import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { Observable, of } from "rxjs";
 
@@ -28,7 +28,12 @@ import { Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-users-group-component",
     templateUrl: "gebo-ai-group.component.html",
-    standalone: false
+    standalone: false,
+    providers: [ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false },   
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGroupComponent),
+        multi: false
+    }]
 })
 export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup> {
     /**
@@ -36,7 +41,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * Used for logging and error messages.
      */
     protected override entityName: string = "UsersGroup";
-    
+
     /**
      * Form group for managing UsersGroup data inputs.
      * Contains fields for code, description, and userIds.
@@ -46,13 +51,13 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
         description: new FormControl(),
         userIds: new FormControl()
     });
-    
+
     /**
      * List of all users in the system.
      * Populated on component initialization to allow user selection for the group.
      */
     users?: UserInfos[] = [];
-    
+
     /**
      * Initializes the component by calling the parent initialization
      * and loading all users from the backend service.
@@ -68,7 +73,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
             }
         });
     }
-    
+
     /**
      * Constructor that injects required services.
      * 
@@ -79,10 +84,10 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
      * @param geboUIActionRoutingService Service for UI action routing
      * @param outputForwardingService Optional service for output forwarding
      */
-    constructor(injector:Injector,geboFormGroupsService: GeboFormGroupsService, confirmService:ConfirmationService, private userAdminControllerService: UsersAdminControllerService,geboUIActionRoutingService: GeboUIActionRoutingService, outputForwardingService?: GeboUIOutputForwardingService) {
-        super(injector,geboFormGroupsService,confirmService,geboUIActionRoutingService, outputForwardingService)
+    constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService, confirmService: ConfirmationService, private userAdminControllerService: UsersAdminControllerService, geboUIActionRoutingService: GeboUIActionRoutingService, outputForwardingService?: GeboUIOutputForwardingService) {
+        super(injector, geboFormGroupsService, confirmService, geboUIActionRoutingService, outputForwardingService)
     }
-    
+
     /**
      * Finds a user group by its code.
      * 
@@ -92,7 +97,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
     override findByCode(code: string): Observable<UsersGroup | null> {
         return this.userAdminControllerService.findGroupByCode(code);
     }
-    
+
     /**
      * Updates an existing user group.
      * 
@@ -102,7 +107,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
     override save(value: UsersGroup): Observable<UsersGroup> {
         return this.userAdminControllerService.updateGroup(value);
     }
-    
+
     /**
      * Creates a new user group.
      * 
@@ -112,7 +117,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
     override insert(value: UsersGroup): Observable<UsersGroup> {
         return this.userAdminControllerService.insertGroup(value);
     }
-    
+
     /**
      * Deletes a user group.
      * 
@@ -122,7 +127,7 @@ export class GeboAIGroupComponent extends BaseEntityEditingComponent<UsersGroup>
     override delete(value: UsersGroup): Observable<boolean> {
         return this.userAdminControllerService.deleteGroup(value);
     }
-    
+
     /**
      * Checks if a user group can be deleted.
      * Currently always returns true with no validation logic.

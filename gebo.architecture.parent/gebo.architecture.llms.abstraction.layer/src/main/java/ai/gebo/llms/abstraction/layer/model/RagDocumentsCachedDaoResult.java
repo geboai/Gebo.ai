@@ -20,68 +20,25 @@ import java.util.stream.Stream;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.model.IJsonClonable;
+import lombok.Data;
+
 /**
  * AI generated comments
  * This class represents a cached DAO (Data Access Object) result for RAG (Retrieval-Augmented Generation) documents.
  * It implements the IRagContent interface to provide methods for accessing and manipulating document references,
  * and recalculating their size and weight.
  */
-public class RagDocumentsCachedDaoResult implements IRagContent {
+@Data
+public class RagDocumentsCachedDaoResult implements IRagContent,IJsonClonable<RagDocumentsCachedDaoResult>,Cloneable {
 	// Number of tokens in the document
 	private long NTokens;
 	// Number of bytes in the document
 	private long NBytes;
 	// List of document reference items
 	private List<RagDocumentReferenceItem> documentItems = new ArrayList<RagDocumentReferenceItem>();
-
-	/**
-	 * Gets the number of tokens in the document.
-	 * @return the number of tokens
-	 */
-	public long getNTokens() {
-		return NTokens;
-	}
-
-	/**
-	 * Sets the number of tokens in the document.
-	 * @param nTokens the number of tokens
-	 */
-	public void setNTokens(long nTokens) {
-		NTokens = nTokens;
-	}
-
-	/**
-	 * Gets the number of bytes in the document.
-	 * @return the number of bytes
-	 */
-	public long getNBytes() {
-		return NBytes;
-	}
-
-	/**
-	 * Sets the number of bytes in the document.
-	 * @param nBytes the number of bytes
-	 */
-	public void setNBytes(long nBytes) {
-		NBytes = nBytes;
-	}
-
-	/**
-	 * Gets the list of document reference items.
-	 * @return the list of document reference items
-	 */
-	public List<RagDocumentReferenceItem> getDocumentItems() {
-		return documentItems;
-	}
-
-	/**
-	 * Sets the list of document reference items.
-	 * @param documentItems the list of document reference items
-	 */
-	public void setDocumentItems(List<RagDocumentReferenceItem> documentItems) {
-		this.documentItems = documentItems;
-	}
-
+	
+	
 	/**
 	 * Streams the child elements of this RAG content.
 	 * @return a stream of child RAG contents
@@ -146,7 +103,9 @@ public class RagDocumentsCachedDaoResult implements IRagContent {
 			}
 		}
 	}
-
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 	/**
 	 * Compiles a list of AI documents from the document fragments.
 	 * Only fragments with an associated document are included.
@@ -156,8 +115,8 @@ public class RagDocumentsCachedDaoResult implements IRagContent {
 		final List<Document> documents = new ArrayList<Document>();
 		documentItems.forEach(x -> {
 			x.getFragments().forEach(y -> {
-				if (y.getDocument() != null)
-					documents.add(y.getDocument());
+				if (y.toAIDocument() != null)
+					documents.add(y.toAIDocument());
 			});
 		});
 		return documents;

@@ -37,7 +37,7 @@ import ai.gebo.googleworkspace.services.GeboGoogleWorkspaceCredentialsService;
 import ai.gebo.googleworkspace.services.GeboGoogleWorkspaceFlowSessionFactory;
 import ai.gebo.googleworkspace.services.GeboGoogleWorkspaceFlowSessionFactory.GeboGoogleWorkspaceFlowSession;
 import ai.gebo.googleworkspaces.model.GeboGoogleWorkspaceAccessSecret;
-import ai.gebo.secrets.services.IGeboSecretsAccessService.SecretInfo;
+import ai.gebo.secrets.model.SecretInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;

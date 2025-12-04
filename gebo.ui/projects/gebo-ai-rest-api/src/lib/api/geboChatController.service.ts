@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GBaseChatModelChoice } from '../model/gBaseChatModelChoice';
+import { GUserChatInfo } from '../model/gUserChatInfo';
 import { GeboChatRequest } from '../model/geboChatRequest';
 import { GeboChatResponse } from '../model/geboChatResponse';
 import { GeboChatUserInfo } from '../model/geboChatUserInfo';
@@ -102,6 +103,53 @@ export class GeboChatControllerService {
         return this.httpClient.request<GeboChatResponse>('post',`${this.basePath}/api/users/GeboDirectModelChatController/chat`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param modelCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createCleanChatByModelCode(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public createCleanChatByModelCode(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public createCleanChatByModelCode(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public createCleanChatByModelCode(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (modelCode === null || modelCode === undefined) {
+            throw new Error('Required parameter modelCode was null or undefined when calling createCleanChatByModelCode.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (modelCode !== undefined && modelCode !== null) {
+            queryParameters = queryParameters.set('modelCode', <any>modelCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GUserChatInfo>('get',`${this.basePath}/api/users/GeboDirectModelChatController/createCleanChatByModelCode`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -396,6 +444,53 @@ export class GeboChatControllerService {
         return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDirectModelChatController/streamResponse`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public suggestChatDescription(id: string, observe?: 'body', reportProgress?: boolean): Observable<GUserChatInfo>;
+    public suggestChatDescription(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GUserChatInfo>>;
+    public suggestChatDescription(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GUserChatInfo>>;
+    public suggestChatDescription(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling suggestChatDescription.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (id !== undefined && id !== null) {
+            queryParameters = queryParameters.set('id', <any>id);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GUserChatInfo>('get',`${this.basePath}/api/users/GeboDirectModelChatController/suggestChatDescription`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

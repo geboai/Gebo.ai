@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,6 +20,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { forkJoin, Observable } from "rxjs";
 
 /**
@@ -36,7 +37,9 @@ const fixedControls: string[] = ["accessibleGroups", "accessibleUsers", "accessi
 @Component({
     selector: "gebo-ai-access-control",
     templateUrl: "access-control-group.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAccessControlModule", multi: false },
+    { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAccessControlComponent") }]
 })
 export class GeboAIAccessControlComponent implements OnInit, OnChanges {
     /**
@@ -44,12 +47,12 @@ export class GeboAIAccessControlComponent implements OnInit, OnChanges {
      * Expected to contain or receive controls for accessibleGroups, accessibleUsers, and accessibleToAll.
      */
     @Input() formGroup?: FormGroup;
-    
+
     /**
      * Flag indicating whether the component is currently loading data from the backend.
      */
     loadingRelatedBackend: boolean = false;
-    
+
     /**
      * Creates an instance of the access control component.
      * @param userAdminControllerService Service for accessing user and group information
@@ -57,22 +60,22 @@ export class GeboAIAccessControlComponent implements OnInit, OnChanges {
     constructor(private userAdminControllerService: UsersAdminControllerService) {
 
     }
-    
+
     /**
      * Flag indicating whether the resource is accessible to all users.
      */
     public accessibleToAll: boolean = false;
-    
+
     /**
      * List of all users in the system that can be granted access.
      */
     users?: UserInfos[] = [];
-    
+
     /**
      * List of all user groups in the system that can be granted access.
      */
     groups?: UsersGroup[] = [];
-    
+
     /**
      * Initializes the component by fetching users and groups from the backend.
      * Uses forkJoin to parallelize the API calls for better performance.
@@ -89,7 +92,7 @@ export class GeboAIAccessControlComponent implements OnInit, OnChanges {
             }
         });
     }
-    
+
     /**
      * Initializes the form group by ensuring all required controls exist and
      * setting up value change subscriptions to keep the UI state synchronized.
@@ -108,12 +111,12 @@ export class GeboAIAccessControlComponent implements OnInit, OnChanges {
                     this.formGroup?.controls["accessibleToAll"].setValue(true);
                 } else {
                     this.accessibleToAll = x.accessibleToAll;
-                    
+
                 }
             }
         });
     }
-    
+
     /**
      * Responds to input changes, particularly when the formGroup input changes.
      * Ensures the form group is properly initialized with the necessary controls.

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.systems.abstraction.layer;
 
@@ -36,35 +33,45 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.system.ingestion.IGDocumentReferenceIngestionHandler;
 
 /**
- * Abstract class providing a framework for implementing remote virtual filesystem handlers 
- * in a content management system. It extends GAbstractContentManagementSystemHandler to handle 
- * specific functionalities related to remote virtual filesystem operations.
+ * Abstract class providing a framework for implementing remote virtual
+ * filesystem handlers in a content management system. It extends
+ * GAbstractContentManagementSystemHandler to handle specific functionalities
+ * related to remote virtual filesystem operations.
  * 
- * @param <SystemIntegrationType> The type of content management system integration.
- * @param <ProjectEndpointType> The type of project endpoint.
- * @param <ResourceReferenceType> The type of remote virtual filesystem resource reference.
- * @param <ConsumingServiceType> The type of consuming service to be used for managing resources.
+ * @param <SystemIntegrationType> The type of content management system
+ *                                integration.
+ * @param <ProjectEndpointType>   The type of project endpoint.
+ * @param <ResourceReferenceType> The type of remote virtual filesystem resource
+ *                                reference.
+ * @param <ConsumingServiceType>  The type of consuming service to be used for
+ *                                managing resources.
  * 
- * AI generated comments
+ *                                AI generated comments
  */
 public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<SystemIntegrationType extends GContentManagementSystem, ProjectEndpointType extends GVirtualFilesystemProjectEndpoint, ResourceReferenceType extends IGRemoteVirtualFilesystemResourceReference, ConsumingServiceType extends IGRemoteVirtualFilesystemConsumingService<SystemIntegrationType, ProjectEndpointType, ResourceReferenceType>>
 		extends GAbstractContentManagementSystemHandler<SystemIntegrationType, ProjectEndpointType> {
 
-	// The consuming service responsible for managing interaction with the remote virtual filesystem.
+	// The consuming service responsible for managing interaction with the remote
+	// virtual filesystem.
 	protected final ConsumingServiceType consumingService;
 
 	/**
 	 * Constructor initializing handler with required services and resources.
 	 *
-	 * @param buildSystemHandlerRepository Repository pattern for build system handlers.
-	 * @param contentHandler Factory for document reference creation.
-	 * @param configurationsDao Data Access Object for system configuration.
-	 * @param endpointsDao Data Access Object for project endpoint configuration.
-	 * @param localFolderDiscoveryService Service for discovering local persistent folders.
-	 * @param persistentObjectManager Manager for persistence of objects.
-	 * @param messageBroker Broker for messaging within the system.
-	 * @param consumingService Service handling consumption of remote filesystem resources.
-	 * @param ingestionHandler Handler for document reference ingestion.
+	 * @param buildSystemHandlerRepository Repository pattern for build system
+	 *                                     handlers.
+	 * @param contentHandler               Factory for document reference creation.
+	 * @param configurationsDao            Data Access Object for system
+	 *                                     configuration.
+	 * @param endpointsDao                 Data Access Object for project endpoint
+	 *                                     configuration.
+	 * @param localFolderDiscoveryService  Service for discovering local persistent
+	 *                                     folders.
+	 * @param persistentObjectManager      Manager for persistence of objects.
+	 * @param messageBroker                Broker for messaging within the system.
+	 * @param consumingService             Service handling consumption of remote
+	 *                                     filesystem resources.
+	 * @param ingestionHandler             Handler for document reference ingestion.
 	 */
 	public GAbstractRemoteVirtualFilesystemContentManagementSystemHandler(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
@@ -82,21 +89,22 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	}
 
 	/**
-	 * Implementation of the abstract method consumeImplementation. Consumes
-	 * content from the system, creating a root folder and passing it to the consumer.
+	 * Implementation of the abstract method consumeImplementation. Consumes content
+	 * from the system, creating a root folder and passing it to the consumer.
 	 *
-	 * @param contentManagementConfig Configuration for the content management system.
-	 * @param buildSystems List of build systems involved.
-	 * @param endpoint Project endpoint to be used.
-	 * @param consumer Consumer for the content.
-	 * @param messagesConsumer Consumer for any user messages.
-	 * @param errorConsumer Consumer for handling content access errors.
+	 * @param contentManagementConfig Configuration for the content management
+	 *                                system.
+	 * @param buildSystems            List of build systems involved.
+	 * @param endpoint                Project endpoint to be used.
+	 * @param consumer                Consumer for the content.
+	 * @param messagesConsumer        Consumer for any user messages.
+	 * @param errorConsumer           Consumer for handling content access errors.
 	 * @throws GeboContentHandlerSystemException In case of system handling issues.
 	 */
 	@Override
 	protected void consumeImplementation(SystemIntegrationType contentManagementConfig, List<GBuildSystem> buildSystems,
-			ProjectEndpointType endpoint, IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
-			throws GeboContentHandlerSystemException {
+			ProjectEndpointType endpoint, IGContentConsumer consumer, IGUserMessagesConsumer messagesConsumer,
+			IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
 
 		// Create a root item for the virtual folder structure and consume it
 		GVirtualFolder root = createRootItem(contentManagementConfig, endpoint);
@@ -111,14 +119,14 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	private static final String SYSTEM_REFERENCE = "SYSTEM_REFERENCE";
 
 	/**
-	 * Streams content associated with a document reference, leveraging caching mechanisms 
-	 * for performance optimization and managing remote resources.
+	 * Streams content associated with a document reference, leveraging caching
+	 * mechanisms for performance optimization and managing remote resources.
 	 *
 	 * @param reference The reference of the document to be streamed.
-	 * @param cache Cache containing context-specific values.
+	 * @param cache     Cache containing context-specific values.
 	 * @return InputStream The stream of the content.
 	 * @throws GeboContentHandlerSystemException For handler related exceptions.
-	 * @throws IOException If IO operation fails.
+	 * @throws IOException                       If IO operation fails.
 	 */
 	@Override
 	public InputStream streamContent(GDocumentReference reference, Map<String, Object> cache)
@@ -128,7 +136,8 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 		if (reference == null)
 			throw new RuntimeException("Cannot receive a null reference here");
 
-		// Retrieve or resolve the project endpoint from the cache or the persistent object manager
+		// Retrieve or resolve the project endpoint from the cache or the persistent
+		// object manager
 		ProjectEndpointType endpoint = (ProjectEndpointType) cache.get(PROJECT_ENDPOINT_REFERENCE);
 		if (endpoint == null) {
 			try {
@@ -171,23 +180,33 @@ public abstract class GAbstractRemoteVirtualFilesystemContentManagementSystemHan
 	}
 
 	/**
-	 * Checks for any updates or deletions of virtual filesystem objects since the last check,
-	 * leveraging the consuming service to determine such changes.
+	 * Checks for any updates or deletions of virtual filesystem objects since the
+	 * last check, leveraging the consuming service to determine such changes.
 	 *
-	 * @param endpoint The project endpoint being examined.
-	 * @param itemsToCheck Stream of virtual filesystem objects to check for changes.
+	 * @param endpoint      The project endpoint being examined.
+	 * @param itemsToCheck  Stream of virtual filesystem objects to check for
+	 *                      changes.
 	 * @param errorConsumer Consumer for error handling during access checks.
-	 * @return Stream of virtual filesystem objects that have been updated or deleted.
-	 * @throws GeboContentHandlerSystemException If errors occur during the check process.
+	 * @return Stream of virtual filesystem objects that have been updated or
+	 *         deleted.
+	 * @throws GeboContentHandlerSystemException If errors occur during the check
+	 *                                           process.
 	 */
 	@Override
 	public Stream<GAbstractVirtualFilesystemObject> checkUpdatedOrDeleted(ProjectEndpointType endpoint,
-			Stream<GAbstractVirtualFilesystemObject> itemsToCheck, IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+			Stream<GAbstractVirtualFilesystemObject> itemsToCheck, IGContentsAccessErrorConsumer errorConsumer)
+			throws GeboContentHandlerSystemException {
 
 		// Retrieve system integration information for the endpoint
 		SystemIntegrationType system = getSystem(endpoint);
-		
+
 		// Use the consuming service to check for updates or deletions
 		return consumingService.checkUpdatedOrDeleted(system, endpoint, errorConsumer, itemsToCheck);
+	}
+
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return false;
 	}
 }

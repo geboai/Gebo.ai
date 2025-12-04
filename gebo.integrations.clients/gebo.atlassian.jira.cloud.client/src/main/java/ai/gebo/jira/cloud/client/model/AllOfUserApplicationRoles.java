@@ -25,12 +25,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.ApplicationRole;
-import ai.gebo.jira.cloud.client.model.ListWrapperCallbackApplicationRole;
-import ai.gebo.jira.cloud.client.model.SimpleListWrapperApplicationRole;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * The application roles the user is assigned to.
  */

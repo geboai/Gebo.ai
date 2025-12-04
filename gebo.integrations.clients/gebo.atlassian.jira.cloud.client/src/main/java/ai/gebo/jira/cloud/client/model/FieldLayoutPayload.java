@@ -24,16 +24,13 @@
 
 package ai.gebo.jira.cloud.client.model;
 
-import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.FieldLayoutConfiguration;
-import ai.gebo.jira.cloud.client.model.ProjectCreateResourceIdentifier;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Defines the payload for the field layouts. See https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-field-configurations/\\#api-group-issue-field-configurations\&quot; + fieldlayout is what users would see as \&quot;Field Configuration\&quot; in Jira&#x27;s UI - https://support.atlassian.com/jira-cloud-administration/docs/manage-issue-field-configurations/
  */

@@ -177,6 +177,7 @@ export class SetupWizardService {
                         wizardComponent: c.wizardComponent,
                         wizardSectionId: c.wizardSectionId,
                         mandatory: c.mandatory === true,
+                        experimental: c.experimental===true,
                         requredStepsIds: c.requredStepsIds
                     };
                     item.enabled = enabledValue;

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.ollama.services;
 
@@ -23,11 +20,11 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelChoice;
@@ -37,21 +34,22 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.restintegration.abstraction.layer.GeboRestIntegrationException;
 import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
  * 
- * Service for retrieving available model choices from an Ollama server.
- * This service is only activated when the 'ollamaEnabled' property is set to true.
+ * Service for retrieving available model choices from an Ollama server. This
+ * service is only activated when the 'ollamaEnabled' property is set to true.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class OllamaModelsLookupService {
 	static Logger LOGGER = LoggerFactory.getLogger(OllamaModelsLookupService.class);
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	@Autowired
-	RestTemplateWrapperService restTemplateWrapper;
+	final IGeboSecretsAccessService secretService;
+	final RestTemplateWrapperService restTemplateWrapper;
+	final ILLMTypeFiltrerRepositoryPattern llmTypeFiltrerRepoPattern;
 
 	/**
 	 * Inner class representing an Ollama model with its details and parameters.
@@ -82,17 +80,11 @@ public class OllamaModelsLookupService {
 	};
 
 	/**
-	 * Default constructor for OllamaModelsLookupService.
-	 */
-	public OllamaModelsLookupService() {
-
-	}
-
-	/**
 	 * Retrieves a list of available chat models from an Ollama server.
 	 * 
 	 * @param config Configuration containing the base URL for the Ollama server
-	 * @return OperationStatus containing a list of GOllamaChatModelChoice objects or error messages
+	 * @return OperationStatus containing a list of GOllamaChatModelChoice objects
+	 *         or error messages
 	 */
 	public OperationStatus<List<GOllamaChatModelChoice>> getChatModels(GOllamaChatModelConfig config) {
 		OperationStatus<List<GOllamaChatModelChoice>> result = new OperationStatus<List<GOllamaChatModelChoice>>();
@@ -146,14 +138,15 @@ public class OllamaModelsLookupService {
 			}
 		} finally {
 		}
-		return result;
+		return llmTypeFiltrerRepoPattern.filterChatModels(OllamaChatModelConfigurationSupportService.type, result);
 	}
 
 	/**
 	 * Retrieves a list of available embedding models from an Ollama server.
 	 * 
 	 * @param config Configuration containing the base URL for the Ollama server
-	 * @return OperationStatus containing a list of GOllamaEmbeddingModelChoice objects or error messages
+	 * @return OperationStatus containing a list of GOllamaEmbeddingModelChoice
+	 *         objects or error messages
 	 */
 	public OperationStatus<List<GOllamaEmbeddingModelChoice>> getEmbeddingModels(GOllamaEmbeddingModelConfig config) {
 		OperationStatus<List<GOllamaEmbeddingModelChoice>> result = new OperationStatus<List<GOllamaEmbeddingModelChoice>>();
@@ -207,12 +200,13 @@ public class OllamaModelsLookupService {
 			}
 		} finally {
 		}
-		return result;
+		return llmTypeFiltrerRepoPattern.filterEmbeddingModels(OllamaEmbeddingModelConfigurationSupportService.type,
+				result);
 	}
 
 	/**
-	 * Recursively encodes keys in a map by replacing dots with dashes.
-	 * This is necessary because some frameworks have issues with dot notation in keys.
+	 * Recursively encodes keys in a map by replacing dots with dashes. This is
+	 * necessary because some frameworks have issues with dot notation in keys.
 	 * 
 	 * @param m The map whose keys need to be encoded
 	 * @return A new map with encoded keys

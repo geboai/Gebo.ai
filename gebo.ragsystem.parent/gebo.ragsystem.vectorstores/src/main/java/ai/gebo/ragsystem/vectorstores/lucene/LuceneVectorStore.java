@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.ragsystem.vectorstores.lucene;
 
@@ -22,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.embedding.EmbeddingOptions;
-import org.springframework.ai.embedding.EmbeddingOptionsBuilder;
+
 import org.springframework.ai.embedding.TokenCountBatchingStrategy;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.filter.Filter.Expression;
@@ -35,9 +32,9 @@ import ai.gebo.llms.abstraction.layer.vectorstores.IGExtendedVectorStore;
 /**
  * AI generated comments
  * 
- * A Lucene-based implementation of the extended vector store interface.
- * This class provides vector storage and similarity search capabilities using Apache Lucene
- * and integrates with embedding models for vector generation.
+ * A Lucene-based implementation of the extended vector store interface. This
+ * class provides vector storage and similarity search capabilities using Apache
+ * Lucene and integrates with embedding models for vector generation.
  */
 public class LuceneVectorStore implements IGExtendedVectorStore {
 	/** Logger for this class */
@@ -52,11 +49,12 @@ public class LuceneVectorStore implements IGExtendedVectorStore {
 	final EmbeddingOptions embeddingOptions;
 
 	/**
-	 * Constructs a new LuceneVectorStore with the specified embedding model and Lucene server.
+	 * Constructs a new LuceneVectorStore with the specified embedding model and
+	 * Lucene server.
 	 *
-	 * @param config Configuration for the embedding model
+	 * @param config         Configuration for the embedding model
 	 * @param embeddingModel The embedding model used to generate vectors
-	 * @param luceneServer The Lucene server for storing and retrieving data
+	 * @param luceneServer   The Lucene server for storing and retrieving data
 	 * @throws IOException If there is an error initializing the vector store
 	 */
 	public LuceneVectorStore(GBaseEmbeddingModelConfig config, EmbeddingModel embeddingModel,
@@ -64,15 +62,15 @@ public class LuceneVectorStore implements IGExtendedVectorStore {
 		this.embeddingModel = embeddingModel;
 		this.config = config;
 		this.luceneServer = luceneServer;
-		EmbeddingOptionsBuilder builder = EmbeddingOptionsBuilder.builder().withDimensions(1024);
-		builder.withModel(config.getChoosedModel().getCode());
+		org.springframework.ai.embedding.EmbeddingOptions.Builder builder = EmbeddingOptions.builder().dimensions(1024);
+		builder.model(config.getChoosedModel().getCode());
 		this.embeddingOptions = builder.build();
 
 	}
 
 	/**
-	 * Adds a list of documents to the vector store by generating embeddings
-	 * and storing them in the Lucene server.
+	 * Adds a list of documents to the vector store by generating embeddings and
+	 * storing them in the Lucene server.
 	 *
 	 * @param documents The documents to add to the vector store
 	 */
@@ -102,9 +100,9 @@ public class LuceneVectorStore implements IGExtendedVectorStore {
 	}
 
 	/**
-	 * Performs a similarity search using the provided query.
-	 * The method converts the query to an embedding vector and uses
-	 * the Lucene server to find similar documents.
+	 * Performs a similarity search using the provided query. The method converts
+	 * the query to an embedding vector and uses the Lucene server to find similar
+	 * documents.
 	 *
 	 * @param request The search request containing the query and parameters
 	 * @return List of documents that are similar to the query

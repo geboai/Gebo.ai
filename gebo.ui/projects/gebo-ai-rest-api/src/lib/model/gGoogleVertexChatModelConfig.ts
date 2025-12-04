@@ -31,4 +31,12 @@ export interface GGoogleVertexChatModelConfig {
     temperature?: number;
     contextLength?: number;
     defaultModelPrompt?: string;
+    forUses?: Array<GGoogleVertexChatModelConfig.ForUsesEnum>;
+}
+export namespace GGoogleVertexChatModelConfig {
+    export type ForUsesEnum = 'CHAT' | 'GRAPH_EXTRACTION';
+    export const ForUsesEnum = {
+        CHAT: 'CHAT' as ForUsesEnum,
+        GRAPHEXTRACTION: 'GRAPH_EXTRACTION' as ForUsesEnum
+    };
 }

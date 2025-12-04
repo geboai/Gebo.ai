@@ -27,12 +27,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.GroupName;
-import ai.gebo.jira.cloud.client.model.NotificationRecipients;
-import ai.gebo.jira.cloud.client.model.UserDetails;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * The recipients of the email notification for the issue.
  */

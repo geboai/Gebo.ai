@@ -7,20 +7,17 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- -->
+-->
  
- 
- 
-
-<p-panel #logList [showHeader]="false">
+<p-panel id="MainPanel" gebo-ai-label  #logList [showHeader]="false">
     <p-blockUI [target]="logList" [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
 <div class="grid">
     <div class="col-12" >
         <table class="grid geboLargeButtonsBar">
-            <div class="col-4"><p-button icon="pi pi-history" [outlined]="true" [disabled]="(!jobType && !className)" (onClick)="reloadData()" label="reload data"></p-button></div>
-            <div class="col-4"><p-button icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true" (onClick)="deleteSelected()"></p-button></div>
+            <div class="col-4"><p-button id="ReloadDataBtn" gebo-ai-label icon="pi pi-history" [outlined]="true" [disabled]="(!jobType && !className)" (onClick)="reloadData()" label="reload data"></p-button></div>
+            <div class="col-4"><p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete" [outlined]="true" (onClick)="deleteSelected()"></p-button></div>
             <div class="col-4"></div>
         </table>
 
@@ -30,15 +27,14 @@
         <p-table  [value]="actualData" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Select</th>
-                    <th>Code</th>
-                    <th>Description</th>
-
-                    <th>start date/time</th>
-                    <th>end date/time</th>
-                    <th>processing</th>
-                    <th>finished</th>
-                    <th>with error</th>
+                    <th id="SelectHeader" gebo-ai-text>Select</th>
+                    <th id="CodeHeader" gebo-ai-text>Code</th>
+                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                    <th id="StartDateTimeHeader" gebo-ai-text>start date/time</th>
+                    <th id="EndDateTimeHeader" gebo-ai-text>end date/time</th>
+                    <th id="ProcessingHeader" gebo-ai-text>processing</th>
+                    <th id="FinishedHeader" gebo-ai-text>finished</th>
+                    <th id="WithErrorHeader" gebo-ai-text>with error</th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -63,7 +59,7 @@
                         {{ data.error===true?'YES':'NO' }}
                     </td>
                     <td>
-                        <p-button (onClick)="showItem(data)" [outlined]="true" icon="pi pi-eye"></p-button>
+                        <p-button id="ShowItemBtn" gebo-ai-label (onClick)="showItem(data)" [outlined]="true" icon="pi pi-eye"></p-button>
                     </td>
                 </tr>
             </ng-template>
@@ -74,7 +70,7 @@
 
             </div>
             <div class="col-4">
-                <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
+                <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
             [totalRecords]="data?.totalElements"  [rowsPerPageOptions]="[10, 20, 30]" />
             </div>
             <div class="col-4">
@@ -85,3 +81,6 @@
     </div>
 </div>
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

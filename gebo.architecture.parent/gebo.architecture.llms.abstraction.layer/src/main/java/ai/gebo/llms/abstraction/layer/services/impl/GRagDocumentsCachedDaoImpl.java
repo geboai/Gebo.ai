@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
@@ -21,6 +22,7 @@ import org.springframework.ai.vectorstore.SearchRequest.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.config.service.IGGeboConfigService;
@@ -553,10 +555,10 @@ public class GRagDocumentsCachedDaoImpl implements IGRagDocumentsCachedDao {
 			RagDocumentsCachedDaoResult result, long maxTokens) {
 		Map<String, RagDocumentFragment> fragmentsMap = new HashMap<>();
 		for (RagDocumentFragment frag : alreadyIn.getFragments()) {
-			fragmentsMap.put(frag.getDocument().getId(), frag);
+			fragmentsMap.put(frag.toAIDocument().getId(), frag);
 		}
 		for (RagDocumentFragment nested : item.getFragments()) {
-			if (!fragmentsMap.containsKey(nested.getDocument().getId())) {
+			if (!fragmentsMap.containsKey(nested.toAIDocument().getId())) {
 				if (result.getNTokens() + nested.getNTokens() <= maxTokens) {
 					alreadyIn.getFragments().add(nested);
 					result.recalculateSize();

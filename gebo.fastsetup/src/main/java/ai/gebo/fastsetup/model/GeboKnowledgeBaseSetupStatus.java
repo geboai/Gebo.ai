@@ -12,6 +12,8 @@
 
 package ai.gebo.fastsetup.model;
 
+import ai.gebo.architecture.setup.model.ComponentSetupStatus;
+
 /**
  * Represents the setup status of the Gebo Knowledge Base including counts of specific components.
  * Extends the {@link ComponentSetupStatus} class to include specific details 

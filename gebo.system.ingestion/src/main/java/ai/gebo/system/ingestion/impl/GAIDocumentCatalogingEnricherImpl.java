@@ -48,11 +48,14 @@ import ai.gebo.system.ingestion.model.MetaDataHeaderInfos;
 @Component
 @Scope("singleton")
 public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEnricher {
-	static final Logger LOGGER = LoggerFactory.getLogger(GAIDocumentCatalogingEnricherImpl.class);
-	static final String METADATA_BLOCK_START = "[METADATA]";
-	static final String CONTENT_BLOCK_START = "[CONTENT]";
-	static final String METADATA_BLOCK_END = "[/METADATA]";
-	static final String CONTENT_BLOCK_END = "[/CONTENT]";
+	public static final String META_SUBTITLE = "META-SUBTITLE:";
+	public static final String META_TITLE = "META-TITLE:";
+	private static final Logger LOGGER = LoggerFactory.getLogger(GAIDocumentCatalogingEnricherImpl.class);
+	public static final String METADATA_BLOCK_START = "[METADATA]";
+	public static final String CONTENT_BLOCK_START = "[CONTENT]";
+	public static final String METADATA_BLOCK_END = "[/METADATA]";
+	public static final String CONTENT_BLOCK_END = "[/CONTENT]";
+	public static final String BREAK_LINE = "\r\n";
 	@Autowired
 	protected GeboContentReadingConfig contentsReadingConfig;
 	@Autowired
@@ -262,13 +265,14 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	 * @param infos    The metadata header information to add
 	 * @return The enriched document
 	 */
+	@Override
 	public Document enrich(Document document, MetaDataHeaderInfos infos) {
 		StringBuffer newContent = new StringBuffer();
 		if (document.getMetadata() != null && document.getMetadata().containsKey(DocumentMetaInfos.TITLE)) {
-			newContent.append("TITLE:" + document.getMetadata().get(DocumentMetaInfos.TITLE).toString() + "\n");
+			newContent.append(META_TITLE + document.getMetadata().get(DocumentMetaInfos.TITLE).toString() + "\n");
 		}
 		if (document.getMetadata() != null && document.getMetadata().containsKey(DocumentMetaInfos.SUBTITLE)) {
-			newContent.append("SUBTITLE:" + document.getMetadata().get(DocumentMetaInfos.SUBTITLE).toString() + "\n");
+			newContent.append(META_SUBTITLE + document.getMetadata().get(DocumentMetaInfos.SUBTITLE).toString() + "\n");
 		}
 		newContent.append(infos.metaDataHeader);
 		newContent.append("\n");
@@ -421,4 +425,67 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 		return enriched;
 	}
 
+	
+
+	private static String getContentWithoutMetaData(String content, Map<String, Object> metaData) {
+		if (metaData != null) {
+			if (metaData.containsKey(DocumentMetaInfos.GEBO_EMBEDDING_METADATA)) {
+				Object meta = metaData.get(DocumentMetaInfos.GEBO_EMBEDDING_METADATA);
+				if (content.indexOf(meta.toString()) >= 0) {
+					content = content.replace(meta.toString(), "");
+				}
+			}
+		}
+		int startMetaData = content.indexOf(METADATA_BLOCK_START);
+		int endMetaData = content.indexOf(METADATA_BLOCK_END);
+		if (startMetaData >= 0 && endMetaData >= 0) {
+			endMetaData = endMetaData + METADATA_BLOCK_END.length();
+			content = content.substring(0, startMetaData) + content.substring(endMetaData);
+		}
+		int metaTitleStart = content.indexOf(META_TITLE);
+		if (metaTitleStart >= 0) {
+			int endLine = content.indexOf(BREAK_LINE, metaTitleStart);
+			content = (metaTitleStart > 0 ? content.substring(0, metaTitleStart) : "") + content.substring(endLine+BREAK_LINE.length());
+		}
+		int metaSubTitle = content.indexOf(META_SUBTITLE);
+		if (metaSubTitle >= 0) {
+			int endLine = content.indexOf(BREAK_LINE, metaSubTitle);
+			content = (metaSubTitle > 0 ? content.substring(0, metaSubTitle) : "") + content.substring(endLine+BREAK_LINE.length());
+		}
+		return content;
+	}
+
+	@Override
+	public String getContentWithoutMetaData(Document document) {
+		return getContentWithoutMetaData(document.getText(), document.getMetadata());
+	}
+
+	public static void main(String[] args) {
+		String content = "META-TITLE:Primo Libro Ο Cap. 1-62\r\n" + "META-SUBTITLE:SAMAEL AUN WEOR\r\n"
+				+ "[METADATA]\r\n" + "\r\n" + "Category: /pistis_sophia_svelato.pdf\r\n"
+				+ "knowledge base: Libreria esoterica\r\n" + "project/item: Tradizione gnostica\r\n" + "\r\n"
+				+ "[/METADATA]\r\n" + "\r\n" + "\r\n" + "\r\n" + "Pistis Sophia Svelato Ο Samael Aun Weor \r\n"
+				+ "“Lavori mi dai Signore, ma con essi fortezza”. \r\n"
+				+ "Il sesto Mistero spiega con la massima chiarezza il ventiquattresimo Mistero. \r\n"
+				+ "Lo spirito è forte ma la carne è debole; non cadete in tentazione. \r\n"
+				+ "L’Anima, il sesso, la tentazione, la caduta, la rigenerazione, sono nascosti nel sesto Mistero. \r\n"
+				+ "Nel primo spazio si trova l’Anziano dei Giorni, il Padre che sta in segreto. \r\n"
+				+ "Nel secondo spazio si trova la Natura, spiegabile solo con il sesto Mistero. \r\n" + " \r\n"
+				+ "Disse Gesù ai suoi discepoli: «Io venni da quel primo mistero che è l’ultimo mistero, cioè dal \r\n"
+				+ "ventiquattresimo». I discepoli non sapevano e non capivano che c’era qualcosa all’interno di quel \r\n"
+				+ "mistero; pensavano che quel mistero fosse il capo di tutto, il capo di tutti gli esseri; pensavano che \r\n"
+				+ "fosse il compimento di tutti i compimenti giacché a proposito di quel mistero Gesù aveva detto loro \r\n"
+				+ "che circonda il primo comandamento, le cinque incisioni, la grande luce, i cinque assistenti e tutto \r\n"
+				+ "il tesoro della luce. \r\n" + " \r\n"
+				+ "Il Gesù Intimo appare fuori dal Primo Mistero benché il Figlio sia uno con il Padre e il Padre \r\n"
+				+ "uno con il Figlio. Chi ha visto il Figlio, ha visto il Padre. \r\n"
+				+ "Il Primo Mistero è quello del Padre e per questo è anche l’Ultimo. Il Vecchio dei Secoli è il \r\n"
+				+ "primo e l’ultimo dei Misteri. \r\n"
+				+ "Il ventiquattresimo Mistero, spiegabile con il sesto Mistero, nasconde nelle sue viscere il Primo \r\n"
+				+ "Mistero.  \r\n"
+				+ "Il Primo Mistero, spiegabile con il ventiquattresimo Mistero e sintetizzato nel sesto Mistero, è \r\n"
+				+ "la testa stessa dell’Universo.\r\n" + "";
+		String out = getContentWithoutMetaData(content, new HashMap<>());
+		System.out.println(out);
+	}
 }

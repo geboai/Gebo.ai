@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Idioma predeterminat del sistema",
+        "help" : "Idioma predeterminat del sistema per a aquesta instal·lació de Gebo.ai"
+      },
+      "username" : {
+        "label" : "Correu electrònic",
+        "help" : "Correu electrònic com a nom d’usuari per iniciar sessió"
+      },
+      "passwordC" : {
+        "label" : "Confirma la contrasenya",
+        "help" : "Confirma la contrasenya"
+      },
+      "password" : {
+        "label" : "Contrasenya",
+        "help" : "Contrasenya per iniciar sessió (com a mínim 8 caràcters)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " les contrasenyes no coincideixen "
+      },
+      "LocalAdmin" : {
+        "label" : "Crea el teu compte d’administrador local"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Utilitzaràs aquest compte en el futur per configurar/administrar el programari; aquestes dades romandran locals al teu sistema i no s’enviaran per la xarxa"
+      },
+      "EnterBtn" : {
+        "label" : "Vés a la pàgina d’inici de sessió per entrar"
+      },
+      "SetupPage" : {
+        "label" : "Configura la teva instal·lació de gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Crea la configuració del sistema"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Llegeix i accepta la llicència"
+      },
+      "AcceptMark" : {
+        "label" : "Accepto els termes",
+        "help" : "En fer clic aquí acceptes els termes i condicions de la llicència"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "correu electrònic",
+        "help" : "Correu electrònic com a nom d'usuari per iniciar sessió"
+      },
+      "password" : {
+        "label" : "Contrasenya",
+        "help" : "Contrasenya per iniciar sessió"
+      },
+      "LoginPanel" : {
+        "label" : "Inicia sessió a Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Inicia sessió"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Benvingut a Gebo.ai",
+        "detail" : "Introdueix el teu nom d'usuari i contrasenya per iniciar sessió"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "L'operació ha fallat",
+        "detail" : "No es pot autenticar amb les credencials introduïdes"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "D'acord!",
+        "detail" : "Operació realitzada amb èxit"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Benvingut a gebo.ai",
+        "detail" : "Introdueix el teu nom d’usuari i contrasenya per iniciar sessió"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Configuració Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Nom del proveïdor"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "MainPanel" : {
+        "label" : "Configuració de seguretat Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Tornar a la pàgina principal de configuració"
+      },
+      "WizardUi" : {
+        "label" : "Tria una secció de configuració"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Configuració de comptes d’administrador i altres",
+        "description" : "Es requereix almenys un compte d’administració per garantir que aquesta instal·lació de Gebo.ai es gestioni correctament. Afegeix altres usuaris si cal."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Directori de treball Gebo.ai",
+        "description" : "Configura un directori de treball, serà la carpeta on es desaran les configuracions i tots els fitxers de treball d’aquesta instal·lació. També és molt recomanable fer-ne còpies de seguretat periòdicament."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Configuració de la base de dades vectorial",
+        "description" : "Cal configurar una base de dades vectorial perquè Gebo.ai pugui oferir serveis de generació augmentada de recuperació. Pots escollir entre una base de dades vectorial local, Qdrant o Mongo Atlas."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Autenticació single signon, oauth2",
+        "description" : "Autenticació single signon Oauth2 i configuració de clients Oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Configuració de models de llenguatge grans",
+        "description" : "Configura diversos llms amb serveis cloud o infraestructura local/lan; s’ha de configurar almenys un model de xat i un model d’embeddings perquè el programari funcioni correctament."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Configuració de Graph rag/Extracció de coneixement",
+        "description" : "Configura el subsistema d’extracció de coneixement i graph rag"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Configuració de rutes de sistemes de fitxers compartits",
+        "description" : "Configura les rutes de sistemes de fitxers compartits de l’empresa que s’utilitzaran com àrees de documents de generació augmentada per a diverses bases de coneixement"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integració amb Atlassian Confluence",
+        "description" : "Configura Gebo.ai per accedir a les teves instal·lacions Atlassian Confluence cloud o en local"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integració amb Atlassian Jira",
+        "description" : "Configura Gebo.ai per accedir a les teves instal·lacions Atlassian Jira cloud"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integració amb Microsoft Sharepoint",
+        "description" : "Configura Gebo.ai per accedir a les teves instal·lacions Microsoft Sharepoint cloud o en local"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Configura almenys una base de coneixement",
+        "description" : "Configura almenys una base de coneixement perquè els teus usuaris puguin gaudir dels serveis de generació augmentada de Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Configura almenys un perfil de xat \"R.A.G.\"",
+        "description" : "Configura almenys un perfil de xat augmentat per recuperació per als teus usuaris basat en una de les teves bases de coneixement configurades"
+      },
+      "mandatory-done" : {
+        "summary" : "Els passos obligatoris de configuració de Gebo.ai s’han completat...",
+        "detail" : "S’han completat els passos obligatoris, però falten alguns passos que impedeixen a la teva organització aprofitar al màxim aquest programari"
+      },
+      "setup-ok" : {
+        "summary" : "Configuració de Gebo.ai OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Falta algun pas obligatori de la configuració de Gebo.ai",
+        "detail" : "Revisa els passos en vermell del procés de configuració"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integració de Google Drive/Workspaces",
+        "description" : "Configura Gebo.ai per accedir a les dades d'equip de Google cloud Drive/Workspaces"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configura els sistemes Atlassian Confluence de l’empresa"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tipus de sistema"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Sistema Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Sistema Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "MainPanel" : {
+        "label" : "Configura els sistemes Atlassian Jira de l’empresa"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tipus de sistema"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "MainPanel" : {
+        "label" : "Configura els sistemes Microsoft Sharepoint de l’empresa"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tipus de sistema"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sistema Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Proporcioneu una api-key amb crèdit disponible suficient. Si escolliu OpenAI heu d’afegir crèdit específic (10-30 $ en poden ser suficients) al vostre pla habitual per usar l’api, en cas contrari no hi haurà trànsit disponible de llms en aquesta aplicació."
+      },
+      "MainPanel" : {
+        "label" : "Configureu l’accés als proveïdors llms de Gebo.ai amb la vostra pròpia api key"
+      },
+      "provider" : {
+        "label" : "Proveïdor de models de llenguatge grans",
+        "help" : "Tria un proveïdor entre OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Usuari",
+        "help" : "Escriviu l’usuari associat a l’apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configura"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "La teva api key dels proveïdors LLMS per utilitzar"
+      },
+      "ProviderHeader" : {
+        "label" : "Proveïdor"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Tipus de model"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Model per defecte"
+      },
+      "MainPanelHeader" : {
+        "label" : "Configura l’accés als proveïdors llms de Gebo.ai"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Crea la configuració graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Configuració per defecte de Graph Rag i extracció de coneixement"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "EditConfigBtn" : {
+        "label" : "Edita la configuració"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projecte"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Afegeix una base de coneixement"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Base de coneixement"
+      },
+      "MainPanel" : {
+        "label" : "Configuracions de bases de coneixement i continguts"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Font dels continguts"
+      },
+      "PublishedHeader" : {
+        "label" : "Publicat"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Núm. de documents"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Afegeix un projecte/element",
+        "help" : "crea un projecte nou"
+      },
+      "Button1" : {
+        "help" : "obre base de coneixement"
+      },
+      "Button2" : {
+        "help" : "obre formulari del projecte"
+      },
+      "Button3" : {
+        "help" : "obre la font de dades"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configuració de la carpeta de treball Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configura"
+      },
+      "workDirectory" : {
+        "label" : "Tria una carpeta com a directori de treball de Gebo.ai",
+        "help" : "Tria una carpeta del servidor que aquesta instal·lació utilitzarà com a carpeta de treball per a configuracions i emmagatzematge de continguts."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Afegeix carpeta"
+      },
+      "AddFolderBtn" : {
+        "label" : "Afegeix carpeta"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "MainPanel" : {
+        "label" : "Rutes de sistemes de fitxers compartits del servidor"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Ruta absoluta"
+      },
+      "DeleteHeader" : {
+        "label" : "Elimina"
+      },
+      "path" : {
+        "label" : "Afegeix una carpeta arrel d’un sistema de fitxers compartit",
+        "help" : "Trieu una carpeta de servidor que sigui la ruta arrel del sistema de fitxers compartit que la vostra organització utilitza com a repositori de documents"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de l’entrada del sistema de fitxers"
+      },
+      "RemovePathBtn" : {
+        "label" : "Elimina ruta"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Configura"
+      },
+      "MainPanel" : {
+        "label" : "Configuració de la base de dades vectorial"
+      },
+      "host" : {
+        "label" : "Host de Qdrant",
+        "help" : "Nom de host o adreça IP de Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Configuració de connexió Qdrant"
+      },
+      "port" : {
+        "label" : "Port de Qdrant",
+        "help" : "Port de comunicació de Qdrant (el estàndard és 6334)"
+      },
+      "apiKey" : {
+        "label" : "Api key de Qdrant",
+        "help" : "Api key per a l’autenticació de Qdrant"
+      },
+      "tls" : {
+        "label" : "Paràmetre TLS de Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Passos obligatoris de configuració de Gebo.ai completats...",
+        "detail" : "S’han completat els passos obligatoris, però falten alguns passos perquè la vostra organització pugui aprofitar al màxim aquest programari"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Falten alguns passos obligatoris de configuració de Gebo.ai",
+        "detail" : "Reviseu els passos en vermell del procés de configuració"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Configuració de Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Afegeix un nou perfil de xat R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Afegeix perfil de xat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Configura els perfils de xat de generació augmentada (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Perfils de xat R.A.G. existents"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Edita el perfil de xat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Codis de la base de coneixement"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configura els sistemes d'empresa de Google Drive/Workspaces"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Codi de configuració"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Codi",
+        "help" : "Introdueix la descripció del codi d'autenticació/integració OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la informació d'autenticació/integració OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Finalitat de la configuració",
+        "help" : "Tria si aquesta configuració s'utilitzarà per autenticar a Gebo.ai o perquè Gebo.ai tingui connectivitat com a client amb un sistema de tercers."
+      },
+      "authProvider" : {
+        "label" : "Proveïdor",
+        "help" : "Introdueix el proveïdor de l'autenticació OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "URI de l'issuer",
+        "help" : "Introdueix la URL de l'issuer OAUTH2 del proveïdor"
+      },
+      "authorizationUri" : {
+        "label" : "URL d'autorització",
+        "help" : "Introdueix la URL d'autorització OAUTH2 del proveïdor"
+      },
+      "jwkSetUri" : {
+        "label" : "URI de Jwk Set",
+        "help" : "Introdueix la URL de Jwk Set OAUTH2 del proveïdor"
+      },
+      "userInfoUri" : {
+        "label" : "URL d'informació d'usuari",
+        "help" : "Introdueix la URL d'informació d'usuari OAUTH2 del proveïdor"
+      },
+      "introspectionUri" : {
+        "label" : "URI d'introspecció",
+        "help" : "Introdueix la URL d'introspecció OAUTH2 del proveïdor"
+      },
+      "tokenUri" : {
+        "label" : "URL de token",
+        "help" : "Introdueix la URL del token OAUTH2 del proveïdor"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URLS del proveïdor OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Introdueix nova informació d'autenticació/integració OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID de client",
+        "help" : "Identificador de client per al protocol oauth2 (es pot obtenir a l'àrea d'administració del programari de tercers autenticat per oauth2)"
+      },
+      "secret" : {
+        "label" : "Clau secreta",
+        "help" : "Clau secreta de client per al protocol oauth2 (es pot obtenir a l'àrea d'administració del programari de tercers autenticat per oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Crea la configuració del sistema Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema Confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Crea"
+      },
+      "username" : {
+        "label" : "Nom d'usuari de Confluence",
+        "help" : "Nom d'usuari de Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Versió de Confluence",
+        "help" : "Versió de Confluence"
+      },
+      "baseUri" : {
+        "label" : "Adreça base d'internet",
+        "help" : "URL de l'adreça base del sistema Confluence per a una instal·lació on-premise o l'URL base de la teva organització per a Confluence Cloud"
+      },
+      "password" : {
+        "label" : "Contrasenya de Confluence",
+        "help" : "Contrasenya de Confluence"
+      },
+      "token" : {
+        "label" : "Clau api de Confluence cloud",
+        "help" : "Clau API de Confluence CLOUD adquirida al backoffice de Confluence. Aquí cal inserir \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i fes que aquests continguts estiguin disponibles a la base de coneixement per als LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "MainPanel" : {
+        "label" : "Compartir contingut de Confluence"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament pel contingut."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del contingut pujat de les entrades de Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Sistema Confluence",
+        "help" : "Referència al sistema Confluence ja configurat."
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència al projecte pare."
+      },
+      "openZips" : {
+        "label" : "Obre fitxers zip",
+        "help" : "Habilita l'obertura i l'extracció de contingut de fitxers zip"
+      },
+      "tree" : {
+        "label" : "Espais o pàgines/subpàgines triats",
+        "help" : "Contingut d'espais i pàgines compartides de Confluence"
+      },
+      "programmedTables" : {
+        "label" : "Horari de comprovació d'actualitzacions de continguts",
+        "help" : "Configura la planificació dels continguts modificats per mantenir el sistema d'augmentació de recuperació actualitzat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteris d'organització d'espais, pàgines i subpàgines",
+        "help" : "Explica aquí com s'han organitzat els criteris d'espais, pàgines i subpàgines en el contingut de Confluence compartit amb Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Configuració general"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "MainPanel" : {
+        "label" : "Editant el sistema Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "baseUri" : {
+        "label" : "Adreça base d'internet",
+        "help" : "URL de l'adreça base del sistema Confluence"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament del sistema Confluence."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema Confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Versió de Confluence",
+        "help" : "Versió de Confluence"
+      },
+      "secretCode" : {
+        "label" : "Identitat utilitzada",
+        "help" : "Selecciona o crea la identitat per accedir al sistema Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nou grup"
+      },
+      "NewUserBtn" : {
+        "label" : "nou usuari"
+      },
+      "UsersListPanel" : {
+        "label" : "Llista d'usuaris"
+      },
+      "GroupsListPanel" : {
+        "label" : "Llista de grups"
+      },
+      "SournameHeader" : {
+        "label" : "cognom"
+      },
+      "UsernameHeader" : {
+        "label" : "nom d'usuari"
+      },
+      "RolesHeader" : {
+        "label" : "rols"
+      },
+      "NameHeader" : {
+        "label" : "nom"
+      },
+      "EditBtn" : {
+        "label" : "Edita"
+      },
+      "DisabledHeader" : {
+        "label" : "desactivat"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "UserIds" : {
+        "placeholder" : "Selecciona usuaris"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "MainPanel" : {
+        "label" : "Editant grup d'usuaris"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del grup d'usuaris"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Introdueix el codi del grup d'usuaris"
+      },
+      "userIds" : {
+        "label" : "Llista d'usuaris",
+        "help" : "Selecciona els usuaris que participen al grup"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Crea"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema jira."
+      },
+      "MainPanel" : {
+        "label" : "Crear configuració del sistema jira"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "username" : {
+        "label" : "nom d'usuari jira",
+        "help" : "nom d'usuari jira"
+      },
+      "token" : {
+        "label" : "clau api jira cloud",
+        "help" : "La clau apikey CLOUD de jira adquirida al backoffice de jira, aquí s'ha d'introduir \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Adreça base d'internet",
+        "help" : "URL de l'adreça base del sistema jira per a instal·lació onpremise o la URL base de la teva organització per al sistema jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i permet que aquests continguts estiguin disponibles a la base de coneixement per als LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "MainPanel" : {
+        "label" : "Compartir continguts de jira"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament dels continguts."
+      },
+      "jiraSystemCode" : {
+        "label" : "sistema jira",
+        "help" : "Referència a un sistema jira ja configurat."
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència al projecte pare."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del contingut pujat de les entrades de jira."
+      },
+      "programmedTables" : {
+        "label" : "Horari de comprovació d'actualitzacions de continguts",
+        "help" : "Configura la programació dels continguts canviats per mantenir el sistema de generació augmentada de recuperació actualitzat"
+      },
+      "openZips" : {
+        "label" : "Obrir fitxers zip",
+        "help" : "Permet obrir fitxers zip i extreure'n el contingut"
+      },
+      "tree" : {
+        "label" : "Espais o pàgines/subpàgines escollides",
+        "help" : "Contingut jeràrquic de projectes i tiquets jira compartits"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteris d'organització d'espais, pàgines i subpàgines",
+        "help" : "Explica aquí com s'han organitzat els espais, pàgines i subpàgines als continguts de jira compartits amb Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "MainPanel" : {
+        "label" : "Editant el sistema jira"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "baseUri" : {
+        "label" : "Adreça base d'internet",
+        "help" : "URL de l'adreça base del sistema jira"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament pel sistema jira."
+      },
+      "secretCode" : {
+        "label" : "Identitat utilitzada",
+        "help" : "Selecciona o crea la identitat per accedir al sistema jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Versió de Sharepoint",
+        "help" : "versió de sharepoint"
+      },
+      "secret" : {
+        "label" : "Clau secreta",
+        "help" : "Clau secreta Oauth2 per a aquesta aplicació registrada al producte microsoft \"entra\" (per obtenir-la a la consola d'administració de microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "ID de client",
+        "help" : "Identificador de client Oauth2 per a aquesta aplicació registrada al producte microsoft \"entra\" (per obtenir-lo a la consola d'administració de microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "ID de l’arrendatari",
+        "help" : "Identificador de tenant Oauth2 per a la teva organització al producte microsoft \"entra\" (per obtenir-lo a la consola d'administració de microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Informació de registre de l'app Microsof oauth2 per a Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Crea"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "MainPanel" : {
+        "label" : "Crea la configuració del sistema SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i fa que aquests continguts estiguin disponibles a la base de coneixement per als LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "MainPanel" : {
+        "label" : "Compartint continguts de SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament dels continguts."
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència del projecte pare."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de les fonts de dades d'entrades de SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sistema sharepoint",
+        "help" : "Referència al sistema SharePoint/OneDrive ja configurat."
+      },
+      "openZips" : {
+        "label" : "Obre fitxers zip",
+        "help" : "Activa l'obertura de fitxers zip i l'extracció del contingut"
+      },
+      "tree" : {
+        "label" : "Llocs/pàgines/sublocs de Sharepoint o unitats/carpetes/fitxers OneDrive seleccionats",
+        "help" : "Contingut compartit de SharePoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Planificació de comprovació d'actualització de continguts",
+        "help" : "Configura la programació dels canvis de contingut per mantenir el sistema d'augment de recuperació actualitzat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteris d'organització d'espais, pàgines i subpàgines",
+        "help" : "Descriu aquí com s'ha fet el criteri d'organització d'espais, pàgines i subpàgines als continguts de sharepoint compartits amb Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Editant sistema sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Configuració general"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "secretCode" : {
+        "label" : "Identitat utilitzada",
+        "help" : "Selecciona o crea la identitat per accedir al sistema sharepoint"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament del sistema sharepoint."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Versió de Sharepoint",
+        "help" : "versió de sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Elimina"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Desa"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Cancel·la"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Configuració general d'informació/continguts"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Configuració de LLms"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de l'etapa d'extracció de dades del knowledge graph"
+      },
+      "MainPanel" : {
+        "label" : "Configuració d'extracció de coneixement/Graphrag"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció d'aquesta configuració de l'etapa d'extracció de dades del knowledge graph"
+      },
+      "extractionPrompt" : {
+        "label" : "Prompt d'extracció d'informació",
+        "help" : "Prompt del gran model de llenguatge per a l'extracció d'entitats/esdeveniments/relacions i àlies"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM utilitzat per a l'extracció de dades",
+        "help" : "Especifica el gran model de llenguatge utilitzat per a l'extracció de coneixement, s'utilitzarà el predeterminat si no se'n selecciona cap."
+      },
+      "graphRagAllSources" : {
+        "label" : "Aplica graph rag a totes les fonts de dades",
+        "help" : "Si és cert, totes les bases de coneixement/projectes/fonts de dades es processaran per a l'extracció de coneixement, en cas contrari només les específicament configurades"
+      },
+      "defaultModel" : {
+        "label" : "Model de llenguatge gran predeterminat",
+        "help" : "S'utilitzarà el model de llenguatge gran predeterminat per a l'extracció de coneixement"
+      },
+      "processEveryDocument" : {
+        "label" : "Aplica graph rag a tots els fitxers",
+        "help" : "Els algorismes graph rag s'aplicaran a tots els fitxers, això augmentarà el detall de l'anàlisi que el sistema pot fer però també l'increment del cost i el temps requerits per processar els documents"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Criteris de selecció de fitxers per processament graphrag",
+        "help" : "Edita els criteris sobre els fitxers a enviar a la pipeline d'extracció d'informació per a graphrag; selecciona almenys un nom de fitxer i criteri i/o un tipus de fitxer i/o el nombre màxim de bytes de mida i/o l'antiguitat de l'última modificació en dies"
+      },
+      "extractionFormat" : {
+        "label" : "Format d'extracció",
+        "help" : "Utilitza el format CSV per a llms amb menys de 30b paràmetres, JSON per a grans models frontier",
+        "placeholder" : "Utilitza el format CSV per a llms amb menys de 30b paràmetres, JSON per a grans models frontier"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Selecciona els tipus de fitxer"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Criteris de filtratge de nom de fitxer"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Última modificació del fitxer, fa dies"
+      },
+      "nameFilter" : {
+        "placeholder" : "Nom del fitxer"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Mida màxima del fitxer en Bytes"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "MainPanel" : {
+        "label" : "Editant una base de coneixement"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Configuració d'accés a la base de coneixement"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la base de coneixement."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la base de coneixement."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Models d'embedding utilitzats (deixa buit per al valor per defecte del sistema)",
+        "help" : "Els models d'embedding per a la base de coneixement; si es deixa buit s'utilitzarà el valor per defecte."
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "IndexBtn" : {
+        "label" : "Índex",
+        "help" : "Reindexa el contingut"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Editant un projecte o element"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament del projecte."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del projecte."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "base de coneixement",
+        "help" : "base de coneixement."
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "IndexBtn" : {
+        "label" : "Índex",
+        "help" : "Reindexa el contingut"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Afegeix element/projecte",
+        "help" : "afegeix nou..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Tothom pot utilitzar-ho",
+        "help" : "Tothom pot fer-ho servir"
+      },
+      "accessibleGroups" : {
+        "label" : "Llista de grups",
+        "help" : "Selecciona els grups permesos"
+      },
+      "accessibleUsers" : {
+        "label" : "Llista d'usuaris",
+        "help" : "Selecciona els usuaris permesos"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Tauler de control"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs per a xat i incrustació"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Perfils de xat Rag / Prompts de model"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Bases de coneixement i projectes"
+      },
+      "UsersGroupTab" : {
+        "label" : "Usuaris i grups"
+      },
+      "GeboModulesTab" : {
+        "label" : "Configuració de mòduls Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Configura"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configura"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nova configuració de prompt"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Nou perfil de xat"
+      },
+      "MainPanel" : {
+        "label" : "Perfils de xat amb generació augmentada per recuperació"
+      },
+      "PromptsPanel" : {
+        "label" : "Col·lecció de prompts i prompts per defecte"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Bases de coneixement"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "ConfigureBtn1" : {
+        "label" : "configura"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nova base de coneixement"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nova configuració del model d'incorporació"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nova configuració del model de xat"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Proveïdor del model"
+      },
+      "ConfigureBtn" : {
+        "label" : "configura"
+      },
+      "CodeHeader2" : {
+        "label" : "Codi"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Descripció"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Proveïdor del model"
+      },
+      "ConfigureBtn2" : {
+        "label" : "configura"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Models de xat configurats"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Models d'incorporació configurats"
+      },
+      "chat" : {
+        "label" : "Nou model de xat",
+        "help" : "Selecciona el proveïdor per afegir un nou model de xat capaç de xatejar amb l'usuari o executar automatitzacions",
+        "placeholder" : "Selecciona el proveïdor per afegir un nou model de xat capaç de xatejar amb l'usuari o executar automatitzacions"
+      },
+      "embed" : {
+        "label" : "Nou model d'incrustació",
+        "help" : "Selecciona el proveïdor per afegir un nou model d'incrustació capaç de fer indexació semàntica de continguts",
+        "placeholder" : "Selecciona el proveïdor per afegir un nou model d'incrustació capaç de fer indexació semàntica de continguts"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Model de prova"
+      },
+      "TestChatBtn" : {
+        "label" : "Prova el xat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "apiSecretCode" : {
+        "label" : "Token OpenAI",
+        "help" : "Tria el token d'OpenAI que s'utilitzarà per a aquest model"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat OpenAI",
+        "help" : "Tria el model de xat d'OpenAI amb què treballar."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configuració avançada"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model de xat d'OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configuració d'accés al model"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model d'embeddings d'OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "Token OpenAI",
+        "help" : "Tria el token d'OpenAI que s'utilitzarà per a aquest model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model d'embeddings"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model d'embeddings"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model d'embeddings OpenAI",
+        "help" : "Tria el model d'embeddings d'OpenAI amb què treballar."
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model d'embeddings per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model d'embeddings per defecte on no s'indiqui cap model"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "baseUrl" : {
+        "label" : "Adreça base del servidor ollama",
+        "help" : "Adreça base (com http://servername:234/) on respon el servidor local o LAN d'ollama."
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat Ollama",
+        "help" : "Tria el model de xat Ollama amb què treballar.",
+        "placeholder" : "Selecciona un model"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Ollama",
+        "help" : "Tria el token Ollama que s'utilitzarà per a aquest model (opcional)"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model de xat del servidor Ollama local (o LAN)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Anthropic",
+        "help" : "Tria el token Anthropic que s'utilitzarà per a aquest model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat Anthropic",
+        "help" : "Tria el model de xat Anthropic amb què treballar.",
+        "placeholder" : "Selecciona un model"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configuració avançada"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configuració d'accés al model"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model de xat Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "apiSecretCode" : {
+        "label" : "Token MistralAI",
+        "help" : "Tria el token MistralAI que s'utilitzarà per a aquest model"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat MistralAI",
+        "help" : "Tria el model de xat MistralAI amb què treballar."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configuració avançada"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configuració d'accés al model"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model de xat MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat Google Vertex AI",
+        "help" : "Tria el model de xat Google Vertex AI amb què treballar."
+      },
+      "apiSecretCode" : {
+        "label" : "Token Google Vertex AI",
+        "help" : "Tria el token Google Vertex AI que s'utilitzarà per a aquest model"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Informació general"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Configuració d'accés al model"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Configuració avançada"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model de xat Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Deepseek",
+        "help" : "Tria el token Deepseek que s'utilitzarà per a aquest model"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat Deepseek",
+        "help" : "Tria el model de xat Deepseek amb què treballar.",
+        "placeholder" : "Selecciona un model"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configuració avançada"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model de xat Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configuració d'accés al model"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model"
+      },
+      "baseUrl" : {
+        "label" : "Adreça base del servidor API del model de xat",
+        "help" : "Adreça base del model de xat."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API del model de xat",
+        "help" : "Tria el token API del model de xat que s'utilitzarà per a aquest model (opcional)"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model de xat per defecte on no s'indiqui cap model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model de xat del model de xat",
+        "help" : "Tria el model de xat del model de xat amb què treballar."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "TitleFragment" : {
+        "label" : "Edició del proveïdor de models de xat:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Configuració avançada"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Configuració d'accés al model"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model d'embeddings"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model d'embeddings del servidor Ollama local (o LAN)"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Ollama",
+        "help" : "Tria el token Ollama que s'utilitzarà per a aquest model"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model d'embeddings Ollama",
+        "help" : "Tria el model d'embeddings Ollama amb què treballar."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model d'embeddings"
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model d'embeddings per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model d'embeddings per defecte on no s'indiqui cap model"
+      },
+      "baseUrl" : {
+        "label" : "Adreça base del servidor ollama",
+        "help" : "Adreça base (com http://servername:234/) on respon el servidor local o LAN d'ollama."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model d'embeddings"
+      },
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model d'embeddings MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model d'embeddings"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model d'embeddings MistralAI",
+        "help" : "Tria el model d'embeddings MistralAI amb què treballar."
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model d'embeddings per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model d'embeddings per defecte on no s'indiqui cap model"
+      },
+      "apiSecretCode" : {
+        "label" : "Token MistralAI",
+        "help" : "Tria el token MistralAI que s'utilitzarà per a aquest model"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Edició de la configuració del model d'embeddings Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model d'embeddings"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model d'embeddings Google Vertex AI",
+        "help" : "Tria el model d'embeddings de Google Vertex AI amb què treballar."
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model d'embeddings per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model d'embeddings per defecte on no s'indiqui cap model"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model d'embeddings"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Google Vertex AI",
+        "help" : "Tria el token Google Vertex AI que s'utilitzarà per a aquest model"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "TitleFragment" : {
+        "label" : "Edició del proveïdor de models d'embeddings:"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració del model d'embeddings"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament de la configuració del model d'embeddings"
+      },
+      "choosedModel" : {
+        "label" : "Selecció de model d'embeddings del model d'embeddings",
+        "help" : "Tria el model d'embeddings del model d'embeddings amb què treballar."
+      },
+      "baseUrl" : {
+        "label" : "Adreça del servidor API del model d'embeddings",
+        "help" : "Adreça base del servidor del model d'embeddings."
+      },
+      "defaultModel" : {
+        "label" : "estableix com a model d'embeddings per defecte",
+        "help" : "Si és cert, s'utilitzarà com a model d'embeddings per defecte on no s'indiqui cap model"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API del model d'embeddings",
+        "help" : "Tria el token API del model d'embeddings que s'utilitzarà per a aquest model"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Informació de configuració del xat"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Elimina aquesta sessió de xat"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Canvia el nom de la sessió de xat"
+      },
+      "QueryControl" : {
+        "placeholder" : "Escriu un missatge per al xat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Explora o cerca i selecciona documents per xatejar"
+      },
+      "UploadFileBtn" : {
+        "help" : "Carrega un fitxer per xatejar o treballar-hi"
+      },
+      "SubmiQuestion" : {
+        "help" : "Envia la teva pregunta"
+      },
+      "WithParams" : {
+        "label" : "amb paràmetres:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Funcions d’IA cridades:"
+      },
+      "UploadedDocs" : {
+        "label" : "Documents pujats"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historial de xat carregat",
+        "detail" : "L'historial de xat s'ha carregat correctament"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "S'està pujant la teva veu"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Resposta vocal rebuda"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Desplaça cap amunt"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Desplaça cap avall"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "S'han trobat documents"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Estàs segur que vols suprimir aquest xat?",
+        "header" : "Acció de suprimir xat"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "description" : {
+        "label" : "Descripció del xat",
+        "help" : "Introdueix la descripció de la sessió de xat."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Model utilitzat",
+        "help" : "Codi del model"
+      },
+      "providerId" : {
+        "label" : "Proveïdor del model de xat",
+        "help" : "Driver del proveïdor de LLms"
+      },
+      "functions" : {
+        "label" : "Funcions disponibles del model de xat",
+        "help" : "Llista de funcions disponibles pel model de xat"
+      },
+      "NameCol" : {
+        "label" : "Nom"
+      },
+      "DescriptionCol" : {
+        "label" : "Descripció"
+      },
+      "kbases" : {
+        "label" : "Bases de coneixement disponibles",
+        "help" : "Llista de bases de coneixement utilitzades en aquest xat RAG"
+      },
+      "CloseBtn" : {
+        "help" : "Tanca"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Afegeix document a la llista 'xatejar amb'"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Grava",
+        "help" : "Comença a gravar una pista d'àudio i envia-la"
+      },
+      "StopBtn" : {
+        "label" : "Enregistrant",
+        "help" : "Enregistrant"
+      },
+      "AbortBtn" : {
+        "label" : "Atura l'enregistrament",
+        "help" : "Atura l'enregistrament"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Atura l'enregistrament"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "torna a carregar dades"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SelectHeader" : {
+        "label" : "Selecciona"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "data/hora de finalització"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "data/hora d'inici"
+      },
+      "ProcessingHeader" : {
+        "label" : "processant"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "FinishedHeader" : {
+        "label" : "finalitzat"
+      },
+      "WithErrorHeader" : {
+        "label" : "amb error"
+      },
+      "LogTableComponent" : {
+        "help" : "Aquest és el registre d'ingestió de l'àrea del sistema de fitxers compartit"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Estadístiques de processos"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "CloseBtn" : {
+        "label" : "Tanca"
+      },
+      "PublicationLogTab" : {
+        "label" : "Registre de publicació"
+      },
+      "MainPanel" : {
+        "label" : "Registre de publicació"
+      },
+      "actualStatus" : {
+        "label" : "Estat",
+        "help" : "Estat de la tasca, encara en execució, finalitzada o finalitzada amb errors."
+      },
+      "publishingSystem" : {
+        "label" : "Configuració del contingut publicat",
+        "help" : "Informació del contingut publicat"
+      },
+      "startDateTime" : {
+        "label" : "Data/hora d'inici",
+        "help" : "Data i hora d'inici de la tasca de sincronització de contingut"
+      },
+      "endDateTime" : {
+        "label" : "Data/hora de finalització",
+        "help" : "Data i hora de finalització de la tasca de sincronització de contingut"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "No processat completament"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Processat completament"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding vs nombre total de documents"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Més detalls"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Genera indicació"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Assistent d'indicacions",
+        "help" : "Utilitza això per fer servir un LLM per generar la indicació pels teus objectius"
+      },
+      "acceptPrompt" : {
+        "label" : "Accepta la indicació"
+      },
+      "promptWizardUI" : {
+        "label" : "Assistent de generació de plantilla d'indicacions"
+      },
+      "cancel" : {
+        "label" : "Cancel·la"
+      },
+      "response" : {
+        "label" : "Plantilla d'indicació suggerida",
+        "help" : "Text de plantilla generat per al teu objectiu (pots canviar-lo o corregir-lo/modificar-lo)"
+      },
+      "modelCode" : {
+        "label" : "Model de xat a utilitzar",
+        "help" : "Tria el model de xat al qual vols demanar la generació de la plantilla d'indicació"
+      },
+      "query" : {
+        "label" : "Sol·licitud de plantilla d'indicació",
+        "help" : "Especifica en segona persona quin és l'objectiu que la IA ajudarà a l'usuari"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatura",
+        "help" : "Temperatura amb la qual respondrà el model, de 0 a 1 (si no n'estàs segur, deixa-ho en blanc)"
+      },
+      "contextLength" : {
+        "label" : "Longitud de context (tokens)",
+        "help" : "Quantitat de text que un model d'IA pot tenir en compte en processar (si no s'estableix s'utilitzarà 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Paràmetre TopP, de 0 a 1 (si no n'estàs segur, deixa-ho en blanc)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Funcions habilitades per a aquest model",
+        "help" : "Funcionalitats que el model pot utilitzar durant el xat"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Indicació predeterminada del model",
+        "help" : "Edita la indicació predeterminada per al model de xat."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la identitat."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic de la identitat generat automàticament."
+      },
+      "secretType" : {
+        "label" : "Tipus d'identitat",
+        "help" : "Selecciona el tipus d'identitat per crear per al sistema remot"
+      },
+      "InsertBtn" : {
+        "label" : "Insereix"
+      },
+      "token" : {
+        "label" : "Testimoni",
+        "help" : "Introdueix el testimoni."
+      },
+      "user" : {
+        "label" : "Usuari",
+        "help" : "Introdueix l'usuari indicat pel testimoni."
+      },
+      "MainPanel" : {
+        "label" : "Creant identitat"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "username" : {
+        "label" : "Nom d'usuari",
+        "help" : "Introdueix el nom d'usuari."
+      },
+      "password" : {
+        "label" : "Contrasenya",
+        "help" : "Introdueix la contrasenya."
+      },
+      "email" : {
+        "label" : "Correu electrònic/Nom d'usuari",
+        "help" : "Introdueix el correu electrònic o el nom d'usuari associat a la clau ssh."
+      },
+      "key" : {
+        "label" : "Clau secreta",
+        "help" : "Obre l'arxiu de la clau privada i copia'l en aquesta àrea de text."
+      },
+      "passphrase" : {
+        "label" : "Contrasenya de la clau",
+        "help" : "Introdueix la contrasenya de la clau."
+      },
+      "pub" : {
+        "label" : "Clau pública",
+        "help" : "Obre l'arxiu de la clau pública i copia'l en aquesta àrea de text."
+      },
+      "jsonContent" : {
+        "label" : "Contingut de l'arxiu de credencials de Google",
+        "help" : "Copia aquí el contingut de l'arxiu de credencials de Google API descarregat des de la consola d'API de Google (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Usuari de Google a suplantar",
+        "help" : "L'usuari que serà suplantat per les credencials proporcionades",
+        "placeholder" : "L'usuari que serà suplantat per les credencials proporcionades"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament dels continguts."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del contingut pujat de l’entrada del sistema de fitxers."
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència del projecte pare."
+      },
+      "upload" : {
+        "label" : "Puja continguts",
+        "help" : "Fes clic al botó per explorar i selecciona fitxers zip o altres fitxers"
+      },
+      "openZips" : {
+        "label" : "Obre fitxers zip",
+        "help" : "Activa l’obertura de fitxers zip i l’extracció de continguts"
+      },
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i fes que aquests continguts estiguin disponibles a la base de coneixement per als LLm’s"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "MainPanel" : {
+        "label" : "Editant el contingut pujat"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configura sistemes de compilació",
+        "help" : "Llista de sistemes de compilació/paquetització a inspeccionar per informació meta i artefactes addicionals (deixa-ho en blanc si no s’hi inclou codi de programari)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Elements escollits"
+      },
+      "ChooseOk" : {
+        "label" : "D'acord"
+      },
+      "ChooseCancel" : {
+        "label" : "Cancel·la"
+      },
+      "EditBtn" : {
+        "help" : "Modifica la selecció"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Escull elements"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Escull elements"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Edita la programació"
+      },
+      "ConfirmBtn" : {
+        "label" : "Confirma"
+      },
+      "AddBtn" : {
+        "label" : "+Afegeix"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i permet que aquests continguts estiguin disponibles a la base de coneixement per als LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Tractament del codi font"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "MainPanel" : {
+        "label" : "Editant contingut de sistema de fitxers existent"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del contingut carregat de l'entrada del sistema de fitxers."
+      },
+      "openZips" : {
+        "label" : "Obre fitxers zip",
+        "help" : "Activa l'obertura de fitxers zip i l'extracció del contingut"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament dels continguts."
+      },
+      "tree" : {
+        "label" : "Fitxers o carpetes triades",
+        "help" : "Fitxers o directoris de sistemes compartits disponibles al servidor"
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència del projecte pare."
+      },
+      "programmedTables" : {
+        "label" : "Programació de comprovacions d’actualitzacions de continguts",
+        "help" : "Configura la programació dels continguts canviats per mantenir el sistema de generació augmentada de recuperació actualitzat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteris d’organització de carpetes",
+        "help" : "Si us plau, explica aquí com s’han organitzat les carpetes en l’àrea del sistema de fitxers que comparteixes amb Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configura sistemes de compilació",
+        "help" : "Llista de sistemes de compilació/packaging per inspeccionar metadades i informació addicional d'artefactes (deixa-ho en blanc si no hi ha codi de programari)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nova àrea de compartició de fitxers"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Camí absolut"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "config db o fitxer yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descripció"
+      },
+      "CodeHeader" : {
+        "label" : "Codi"
+      },
+      "ModifyHeader" : {
+        "label" : "Modifica"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Carpeta de sistema de fitxers compartida triada",
+        "help" : "Tria una carpeta del servidor que sigui la ruta arrel del sistema de fitxers compartit utilitzat a la teva organització com a dipòsit de documents"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la zona de sistema de fitxers compartida de la teva organització"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament dels continguts."
+      },
+      "InsertBtn" : {
+        "label" : "Insereix"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "MainPanel" : {
+        "label" : "Editant carpeta compartida del servidor"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Suprimeix"
+      },
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i fes que aquest contingut estigui disponible a la base de coneixement dels LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Editant el repositori de codi/font/git de documentació"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del repositori git."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament pel repositori git."
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència del projecte principal."
+      },
+      "contentManagementSystem" : {
+        "label" : "Sistema Git",
+        "help" : "Referència del sistema git ja configurat."
+      },
+      "branch" : {
+        "label" : "Branca",
+        "help" : "Nom de la branca a descarregar (normalment master, main o develop)"
+      },
+      "identityCode" : {
+        "label" : "Identitat utilitzada",
+        "help" : "Selecciona la identitat per clonar/descarregar al sistema"
+      },
+      "repositoryUri" : {
+        "label" : "URL o adreça del repositori",
+        "help" : "Adreça completa del repositori git remot (normalment comença amb http:, https: o ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "públic",
+        "help" : "Si és cert, l'accés al repositori no requereix autenticació"
+      },
+      "openZips" : {
+        "label" : "Obre arxius zip",
+        "help" : "Permet obrir arxius zip i extreure'n el contingut"
+      },
+      "programmedTables" : {
+        "label" : "Horari de comprovació d'actualització de continguts",
+        "help" : "Configura la programació dels continguts modificats per mantenir el sistema d'augment de generació actualitzat"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configura sistemes de compilació",
+        "help" : "Llista de sistemes de construcció/paquetització a inspeccionar per obtenir metainformació i informació addicional d'artifacts"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informació general"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Utilitza el model de xat"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "triar"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Selecciona una configuració de model de xat"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Selecciona una configuració de model d'embedding"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "triar"
+      },
+      "RagSettingsTab" : {
+        "label" : "Configuració RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Configuració de grans models de llenguatge i eines disponibles"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Utilitza el model d'embedding"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Configuració d'accés de seguretat"
+      },
+      "MainPanel" : {
+        "label" : "Edició del perfil de xat retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament del perfil de xat."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix una descripció del perfil de xat."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "L'usuari tria les bases de coneixement",
+        "help" : "L'usuari pot triar entre les bases de coneixement accessibles i/o pujar els seus propis fitxers."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Bases de coneixement",
+        "help" : "Bases de coneixement a fer servir per a la recuperació de documents."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Llindar de similitud",
+        "help" : "Llindar de similitud per a cerques semàntiques, 0,60–0,65 poc filtrat, 0,70–0,75 filtrat mitjà, 0,80–0,85 acurat"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Llindar de similitud del segon 'salt'",
+        "help" : "Llindar de similitud per a cerques semàntiques, 0,60–0,65 poc filtrat, 0,70–0,75 filtrat mitjà, 0,80–0,85 acurat utilitzat a partir de la segona cerca de multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Desactiva 'Multi Hop' rag",
+        "help" : "Desactiva la funcionalitat 'multi hop rag'. La cerca multi hop fa una primera cerca semàntica i utilitza els documents trobats com a context per a la cerca semàntica, proporcionant un context més ampli."
+      },
+      "topK" : {
+        "label" : "Fragments de document considerats (TopK)",
+        "help" : "En la retrieve augmented generation, Top N fragments de document trobats considerats a la cerca semàntica"
+      },
+      "enabledFunctions" : {
+        "label" : "Funcions habilitades per a aquest xat RAG",
+        "help" : "Funcionalitats que pot utilitzar el model llm durant el xat amb l'usuari, interactuant també amb la base de coneixement seleccionada"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Edita el prompt per a les sessions de retrieve augmented generation."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Introdueix o insereix la categoria del prompt"
+      },
+      "MainPanel" : {
+        "label" : "Editant el prompt"
+      },
+      "promptCategory" : {
+        "label" : "Categoria del prompt",
+        "help" : "Selecciona o insereix la categoria del prompt."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Edita el prompt per al xat, utilitza {query} per indicar la pregunta de l'usuari i {context} per indicar el context de documents/historial enviat al LLM."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic del prompt generat automàticament."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del prompt."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Canvia la contrasenya"
+      },
+      "YourUserName" : {
+        "label" : "El teu nom d'usuari"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Contrasenya antiga",
+        "help" : "Contrasenya actual per iniciar sessió"
+      },
+      "newPassword" : {
+        "label" : "Nova contrasenya",
+        "help" : "nova contrasenya"
+      },
+      "username" : {
+        "label" : "Correu electrònic",
+        "help" : "Correu electrònic com a nom d'usuari per iniciar sessió"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Formulari per canviar la contrasenya"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "ChangePwdBtn" : {
+        "label" : "canvia la contrasenya"
+      },
+      "newPassword1" : {
+        "label" : "Confirma la nova contrasenya",
+        "help" : "Confirma la nova contrasenya"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "ForMoreInformations" : {
+        "label" : "Per a més informació sobre l'API de cerca personalitzada de Google o per obtenir la teva clau API (gratuïta), visita: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "codi únic de la configuració de l'API de cerca de Google."
+      },
+      "MainPanel" : {
+        "label" : "Editant les credencials de l'API de cerca personalitzada de Google"
+      },
+      "secretCode" : {
+        "label" : "Token de l'API de cerca de Google",
+        "help" : "Tria o introdueix el token de l'API de cerca de Google"
+      },
+      "customSearchEngineId" : {
+        "label" : "Id del motor de cerca de Google",
+        "help" : "Id del motor de cerca de Google"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció de la configuració de l'API de cerca de Google."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Xat sense bases de coneixement",
+        "help" : "Tria els LLMs per a una sessió de xat",
+        "placeholder" : "Tria els LLMs per a una sessió de xat"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Obre la secció d'opcions de xat"
+      },
+      "CreateChatBtn" : {
+        "label" : "Nou xat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nova sessió de xat"
+      },
+      "chatProfileCode" : {
+        "label" : "Xat amb bases de coneixement",
+        "help" : "Tria el perfil de xat de l'empresa per interactuar amb documents de l'empresa (i teus) i LLMs",
+        "placeholder" : "Tria el perfil de xat de l'empresa per interactuar amb documents de l'empresa (i teus) i LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "Nou xat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sessions de xat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Tanca la barra lateral"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Crea un nou xat amb models de llenguatge",
+        "label" : "Xat"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Crea un nou xat RAG amb contingut de l'empresa",
+        "label" : "Xat amb la base de coneixement"
+      },
+      "ChatsTitle" : {
+        "label" : "Xats"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Obre la secció d'opcions del xat"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Xateja amb documents",
+        "help" : "Explora o cerca i selecciona els documents per treballar"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Tria fitxers per xatejar"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Explora o cerca i selecciona documents per xatejar"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Confirma"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Puja o tria els teus documents",
+        "help" : "Tria o puja documents des del teu espai d'usuari"
+      },
+      "fileSearchBtn" : {
+        "label" : "Cerca"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Cerca"
+      },
+      "query" : {
+        "label" : "Frase de cerca semàntica",
+        "help" : "Introdueix una frase significativa relacionada amb la teva cerca"
+      },
+      "choosenBrowsing" : {
+        "label" : "Tria fitxers explorant bases de coneixement",
+        "help" : "Tria fitxers explorant les bases de coneixement compartides de l'empresa"
+      },
+      "filename" : {
+        "label" : "Nom del fitxer cercat",
+        "help" : "Introdueix una part del nom del fitxer pel contingut que busques"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Cerca de noms de fitxer"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Explora els fitxers de l'empresa"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Cerca semàntica"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Tria fitxers per xatejar"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Modifica la selecció"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Tria fitxers d'usuaris"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "okBtn" : {
+        "label" : "D'acord"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Selecciona el contingut pujat per l'usuari"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Bases de coneixement i fitxers d'usuari"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojecte o element",
+        "help" : "afegeix subprojecte o element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+pujar fitxers",
+        "help" : "afegeix una font de dades de fitxers pujats"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "afegeix una font de dades de Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "afegeix una font de dades d'Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+sistema d'arxius",
+        "help" : "afegeix una font de dades compartida del sistema d'arxius"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "afegeix una font de dades d'Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "afegeix una font de dades de repositori git com bitbucket, github o altres"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "afegeix una font de dades google drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Xat"
+      },
+      "setup" : {
+        "label" : "Configuració"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administració"
+      },
+      "currentProfile" : {
+        "label" : "el meu perfil"
+      },
+      "logout" : {
+        "label" : "tanca sessió"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Canvia la llengua"
+      },
+      "MyProfile" : {
+        "label" : "el teu perfil"
+      },
+      "MyProfileItem" : {
+        "label" : "el teu perfil"
+      },
+      "chatMenuItem" : {
+        "label" : "Xat"
+      },
+      "setupMenuItem" : {
+        "label" : "Configuració"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "edita el perfil"
+      },
+      "logoutMenuItem" : {
+        "label" : "tanca sessió"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analitzant la llista de documents"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenització de documents"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexació semàntica (embedding per a semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexació d'entitats/relacions/esdeveniments (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "S'està analitzant la llista de documents"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenització de documents"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexació semàntica (embedding per semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexació d'entitats/relacions/esdeveniments (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documents no tractats",
+        "label-1" : "Error en processar documents",
+        "label-2" : "Documents processats"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Tokens processats",
+        "dataset-1-label" : "Error en processar tokens"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documents rebuts",
+        "dataset-1-label" : "Documents processats",
+        "dataset-2-label" : "Documents amb error",
+        "dataset-3-label" : "Documents descartats"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Enllaç per comprar crèdits d’Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Modifica",
+        "help" : "Visualitza/modifica la configuració del model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Codi"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Descripció"
+      },
+      "ExistingModelType" : {
+        "label" : "Tipus de model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Configuracions existents"
+      },
+      "ProviderWWW" : {
+        "label" : "Enllaç al lloc web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Credencials del proveïdor"
+      },
+      "ProviderInfos" : {
+        "label" : "Informació del proveïdor"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/credencials",
+        "help" : "Tria api key o credencials per a aquest proveïdor"
+      },
+      "NewApiKey" : {
+        "label" : "Nova api key",
+        "help" : "Introdueix una nova api key per utilitzar amb aquest proveïdor"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Utilitza existents o noves",
+        "help" : "Utilitza credencials existents o crea’n de noves per a aquest proveïdor"
+      },
+      "NewUserName" : {
+        "label" : "Nom d’usuari",
+        "help" : "Nom d’usuari per accedir als serveis del proveïdor"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nou model d’embeddings",
+        "help" : "Crea una nova configuració de model d’embeddings"
+      },
+      "NewChatModel" : {
+        "label" : "Nou model de xat",
+        "help" : "Crea una nova configuració de model de xat"
+      },
+      "NewModelDialog" : {
+        "label" : "Afegeix nou model"
+      },
+      "PiSave" : {
+        "label" : "Desa"
+      },
+      "NewModelsButton" : {
+        "label" : "Nous models",
+        "help" : "Crea una nova configuració de models"
+      },
+      "NewModelsDialog" : {
+        "label" : "Afegeix nous models"
+      },
+      "baseUrl" : {
+        "label" : "URL base de l’api",
+        "help" : "URL base pels serveis d’api del proveïdor"
+      },
+      "ModelTypePanel" : {
+        "label" : "Afegeix nous models"
+      },
+      "ModelsChoices" : {
+        "label" : "Opcions de models"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Selecció de models suggerits"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model d’embeddings",
+        "help" : "Selecciona un dels models d’embeddings predefinits"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model de xat",
+        "help" : "Selecciona un dels models de xat predefinits"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Selecció avançada de models"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model d’embeddings",
+        "help" : "Selecciona un dels models d’embeddings publicats pel proveïdor"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model de xat",
+        "help" : "Selecciona un dels models de xat publicats pel proveïdor"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Utilitza aquest mode de selecció només si ets expert o consultant la pàgina del proveïdor per saber quin model encaixa amb les teves necessitats. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre de configurat"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Et suggerim la següent llista de models "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "estableix com a model d’embeddings per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre d’embeddings configurat"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "estableix com a model de xat per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre de configurat"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "estableix com a model d’embeddings per defecte",
+        "help" : "Defineix aquest model com a predeterminat, s’utilitzarà per a cada tasca si no n’hi ha un altre d’embeddings configurat"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Utilitza aquest mode de selecció només si ets expert o consultant la pàgina del proveïdor per saber quin model encaixa amb les teves necessitats. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Crea i activa"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Crea i activa"
+      },
+      "ProviderNameField" : {
+        "label" : "Proveïdor"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "El proveïdor requereix credencials",
+        "help" : "L'aplicació del proveïdor/servidor està configurada per accés autenticat mitjançant clau api o altres credencials"
+      },
+      "baseUrl1" : {
+        "label" : "Url base de l'api",
+        "help" : "Url base del proveïdor per als serveis d'api"
+      },
+      "enableAllFunctions" : {
+        "label" : "activa totes les trucades de funció",
+        "help" : "Activa totes les eines i trucades de funció disponibles, si no s'activa es podrà fer més endavant des del panell d'administració de llms"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Proveïdor remot d’AI OK",
+        "detail" : "El proveïdor està actiu i s’ha configurat correctament"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "L’operació ha fallat",
+        "detail" : "No es pot autenticar amb les credencials proporcionades"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "L’operació s’ha completat correctament"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Error en transmetre la resposta del xat",
+        "detail" : "Error del servidor: class org.neo4j.driver.internal.value.StringValue no es pot convertir a class java.lang.String (org.neo4j.driver.internal.value.StringValue és en el mòdul sense nom del carregador 'app'; java.lang.String és en el mòdul java.base del carregador 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Desat amb èxit",
+        "detail" : "Operació d'actualització realitzada correctament"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Error en comunicar-se amb el servidor Ollama",
+        "detail" : "Error de xarxa en comunicar-se amb el sistema remot per accedir al contingut\nllista de models Error en treballar amb la url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Pots suprimir això",
+        "detail" : "Les dades actuals que estàs veient es poden suprimir de manera segura"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "No pots suprimir això",
+        "detail" : "Aquest objecte està referenciat des d’altres parts de l’aplicació"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Carrega fitxers per xatejar"
+      },
+      "ChooseFile" : {
+        "help" : "Tria fitxers"
+      },
+      "UploadFile" : {
+        "help" : "Carrega fitxers"
+      },
+      "DragDropHere" : {
+        "label" : "Arrossega i deixa anar fitxers aquí per carregar-los"
+      },
+      "RemoveAll" : {
+        "help" : "Elimina-ho tot"
+      },
+      "UploadPending" : {
+        "label" : "Pendent de carregar"
+      },
+      "CompletedData" : {
+        "label" : "Completat"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Configura graphrag a l'espai de configuració si vols utilitzar-lo en aquesta secció"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Paràmetres de graphrag"
+      },
+      "button-help" : {
+        "label" : "Fes clic aquí per configurar l'extracció d'informació per graphrag (actualment no configurat)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Afegeix configuració"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Crear"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Crear connexió Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "delegatedUser" : {
+        "label" : "Usuari de Google a suplantar",
+        "help" : "L'usuari que serà suplantat per les credencials proporcionades",
+        "placeholder" : "L'usuari que serà suplantat per les credencials proporcionades"
+      },
+      "jsonContent" : {
+        "label" : "Contingut json de credencials de Google",
+        "help" : "Crea credencials de Google amb accés als drives d'equip/espais de treball a la Google Console Cloud i enganxa aquí el contingut de l'arxiu json descarregat (https://console.cloud.google.com/).",
+        "placeholder" : "Crea credencials de Google amb accés als drives d'equip/espais de treball a la Google Console Cloud i enganxa aquí el contingut de l'arxiu json descarregat (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "PublishBtn" : {
+        "label" : "Publica!",
+        "help" : "Desa i permet que aquests continguts estiguin disponibles a la base de coneixement per als LLM"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "MainPanel" : {
+        "label" : "Compartint continguts de google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Configuració"
+      },
+      "LogsTab" : {
+        "label" : "Registres"
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del contingut carregat de les entrades de google drive."
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament pels continguts."
+      },
+      "tree" : {
+        "label" : "Fitxer o carpeta escollits",
+        "help" : "Continguts compartits de google drive i pàgines"
+      },
+      "driveSystemCode" : {
+        "label" : "Configuració de google drive",
+        "help" : "Referència del sistema google drive ja configurat."
+      },
+      "openZips" : {
+        "label" : "Obre arxius zip",
+        "help" : "Permet l'obertura i extracció de contingut d'arxius zip"
+      },
+      "parentProjectCode" : {
+        "label" : "Projecte",
+        "help" : "Referència del projecte pare."
+      },
+      "programmedTables" : {
+        "label" : "Programació de comprovació d'actualitzacions de contingut",
+        "help" : "Configura la planificació dels continguts modificats per mantenir el sistema de generació augmentada d'informació actualitzat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criteris d'organització de carpetes i subcarpetes",
+        "help" : "Explica aquí com s'han organitzat els fitxers i carpetes en els continguts de google drive compartits amb Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Configuració general"
+      },
+      "CancelBtn" : {
+        "label" : "Cancel·la"
+      },
+      "DeleteBtn" : {
+        "label" : "Elimina"
+      },
+      "SaveBtn" : {
+        "label" : "Desa"
+      },
+      "MainPanel" : {
+        "label" : "Editant la integració de google drive"
+      },
+      "code" : {
+        "label" : "Codi únic",
+        "help" : "Codi únic generat automàticament del sistema google drive."
+      },
+      "description" : {
+        "label" : "Descripció",
+        "help" : "Introdueix la descripció del sistema google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identitat utilitzada",
+        "help" : "Selecciona o crea la identitat per accedir al sistema google drive"
+      }
+    }
+  }
+}

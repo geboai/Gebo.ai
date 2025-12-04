@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,14 +20,16 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { DataPage, GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesForJobType, LogViewControllerService, PageableObject, PageGJobStatusItem } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { Observable } from "rxjs";
 
 @Component({
-    selector: "gebo-ai-log-table-component",
-    templateUrl: "log-table.component.html",
-    standalone: false
+  selector: "gebo-ai-log-table-component",
+  templateUrl: "log-table.component.html",
+  standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIJobStatusModule", multi: false }, {
+    provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LogTableComponent")
+  }]
 })
 export class LogTableComponent implements OnChanges {
   /** Class name used to filter log entries */
@@ -165,11 +167,11 @@ export class LogTableComponent implements OnChanges {
         next: (value) => {
           this.data = value;
           this.actualData = this.data?.content ? this.data.content : [];
-         
+
           // Handle different API response formats
-          const anyVersion=value as any;
-          if (anyVersion && anyVersion?.page?.totalElements){
-              this.data.totalElements=anyVersion?.page?.totalElements;
+          const anyVersion = value as any;
+          if (anyVersion && anyVersion?.page?.totalElements) {
+            this.data.totalElements = anyVersion?.page?.totalElements;
           }
         },
         error: (error) => { },

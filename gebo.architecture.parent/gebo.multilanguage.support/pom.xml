@@ -3,15 +3,23 @@
   <parent>
     <groupId>ai.gebo.architecture</groupId>
     <artifactId>gebo.architecture.parent</artifactId>
-    <version>0.9.9.7</version>
+    <version>1.0.0.0-rc1</version>
   </parent>
   <artifactId>gebo.multilanguage.support</artifactId>
   <dependencies>
   		<dependency>
   			<groupId>org.springframework.boot</groupId>
   			<artifactId>spring-boot-starter-json</artifactId>
-  			
   		</dependency>
-  
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-security</artifactId>  	
+  			<scope>provided</scope>		
+  		</dependency>
+  		<dependency>
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+  			<scope>provided</scope>  			
+  		</dependency>
   </dependencies>
 </project>

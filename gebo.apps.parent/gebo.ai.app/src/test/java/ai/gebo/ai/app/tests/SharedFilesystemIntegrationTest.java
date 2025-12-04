@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.ai.app.tests;
 
@@ -33,30 +30,35 @@ import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 
 /**
- * AI generated comments
- * Integration tests for shared filesystem functionalities.
+ * AI generated comments Integration tests for shared filesystem
+ * functionalities.
  */
 public class SharedFilesystemIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
-    
-    // Dependency injection for interacting with the filesystem content management system.
+
+	// Dependency injection for interacting with the filesystem content management
+	// system.
 	@Autowired
 	IGFilesystemContentManagementSystemHandler filesystemHandler;
-	
+
 	// Service for handling changes in the filesystem.
 	@Autowired
 	GFilesystemChangesHandlingService fsChangeService;
 
 	/**
-	 * Test to process data in a shared filesystem.
-	 * It validates the ability to handle and process files in a simulated shared environment.
+	 * Test to process data in a shared filesystem. It validates the ability to
+	 * handle and process files in a simulated shared environment.
 	 *
-	 * @throws InstantiationException if there is an error creating instances.
-	 * @throws IllegalAccessException if there is an error accessing a method.
-	 * @throws GeboPersistenceException for persistence-related errors.
+	 * @throws InstantiationException            if there is an error creating
+	 *                                           instances.
+	 * @throws IllegalAccessException            if there is an error accessing a
+	 *                                           method.
+	 * @throws GeboPersistenceException          for persistence-related errors.
 	 * @throws GeboContentHandlerSystemException for content handler system errors.
-	 * @throws IOException if an I/O error occurs during file handling.
-	 * @throws GeboJobServiceException for job service related exceptions.
-	 * @throws InterruptedException if the thread executing the test is interrupted.
+	 * @throws IOException                       if an I/O error occurs during file
+	 *                                           handling.
+	 * @throws GeboJobServiceException           for job service related exceptions.
+	 * @throws InterruptedException              if the thread executing the test is
+	 *                                           interrupted.
 	 */
 	@Test
 	public void testSharedFilesystemProcessing()
@@ -65,7 +67,8 @@ public class SharedFilesystemIntegrationTest extends AbstractBaseTestLLmsIntegra
 		GFilesystemProjectEndpoint endpoint = createAndPersist("shared filesystem test data",
 				GFilesystemProjectEndpoint.class);
 		GFilesystemContentManagementSystem system = filesystemHandler.getSystem(endpoint);
-		// Create base folder for testing; similar usage to a shared test project folder.
+		// Create base folder for testing; similar usage to a shared test project
+		// folder.
 		String baseFolder = localFolderDiscoveryService.getLocalPersistentFolder(system, endpoint);
 		Files.createDirectories(Path.of(baseFolder));
 		for (String path : ALL_DATA_FILES) {
@@ -84,13 +87,17 @@ public class SharedFilesystemIntegrationTest extends AbstractBaseTestLLmsIntegra
 	 * Test to process a large ZIP file which might encounter OutOfMemoryError.
 	 * Validates the system's stability and memory handling capabilities.
 	 *
-	 * @throws InstantiationException if there is an error creating instances.
-	 * @throws IllegalAccessException if there is an error accessing a method.
-	 * @throws GeboPersistenceException for persistence-related errors.
+	 * @throws InstantiationException            if there is an error creating
+	 *                                           instances.
+	 * @throws IllegalAccessException            if there is an error accessing a
+	 *                                           method.
+	 * @throws GeboPersistenceException          for persistence-related errors.
 	 * @throws GeboContentHandlerSystemException for content handler system errors.
-	 * @throws IOException if an I/O error occurs during file handling.
-	 * @throws GeboJobServiceException for job service related exceptions.
-	 * @throws InterruptedException if the thread executing the test is interrupted.
+	 * @throws IOException                       if an I/O error occurs during file
+	 *                                           handling.
+	 * @throws GeboJobServiceException           for job service related exceptions.
+	 * @throws InterruptedException              if the thread executing the test is
+	 *                                           interrupted.
 	 */
 	@Test
 	public void testZipGoingOutOfMemoryProcessing()
@@ -107,21 +114,26 @@ public class SharedFilesystemIntegrationTest extends AbstractBaseTestLLmsIntegra
 		endpoint.setPath(List.of(VFilesystemReference.from(Path.of(baseFolder))));
 		endpoint.setOpenZips(true);
 		endpoint = persistentObjectManager.update(endpoint);
-		runAndWaitDoneCheckingResults(endpoint, 10, true);
+		runAndWaitDoneCheckingResults(endpoint, 10, true, 90);
 		cleanPersistent(endpoint);
 	}
 
 	/**
-	 * Test to validate the detection and processing of changes in the shared filesystem.
-	 * This involves adding new resources and confirming their recognition and handling by the system.
+	 * Test to validate the detection and processing of changes in the shared
+	 * filesystem. This involves adding new resources and confirming their
+	 * recognition and handling by the system.
 	 *
-	 * @throws InstantiationException if there is an error creating instances.
-	 * @throws IllegalAccessException if there is an error accessing a method.
-	 * @throws GeboPersistenceException for persistence-related errors.
+	 * @throws InstantiationException            if there is an error creating
+	 *                                           instances.
+	 * @throws IllegalAccessException            if there is an error accessing a
+	 *                                           method.
+	 * @throws GeboPersistenceException          for persistence-related errors.
 	 * @throws GeboContentHandlerSystemException for content handler system errors.
-	 * @throws IOException if an I/O error occurs during file handling.
-	 * @throws GeboJobServiceException for job service related exceptions.
-	 * @throws InterruptedException if the thread executing the test is interrupted.
+	 * @throws IOException                       if an I/O error occurs during file
+	 *                                           handling.
+	 * @throws GeboJobServiceException           for job service related exceptions.
+	 * @throws InterruptedException              if the thread executing the test is
+	 *                                           interrupted.
 	 */
 	// @Test // Currently commented out: Uncomment to execute this test.
 	public void testSharedFilesystemChangesProcessing()

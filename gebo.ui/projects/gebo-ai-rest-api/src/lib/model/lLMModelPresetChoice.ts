@@ -11,6 +11,7 @@
  */
 
 export interface LLMModelPresetChoice { 
-    code?: string;
+    code: string;
     description?: string;
+    defaultChoice?: boolean;
 }

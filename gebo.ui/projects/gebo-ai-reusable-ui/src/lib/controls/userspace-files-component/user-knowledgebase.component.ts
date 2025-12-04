@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
@@ -19,6 +19,7 @@ import { BaseEntityEditingComponent } from "../base-entity-editing-component/bas
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 
 /**
@@ -32,14 +33,19 @@ import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output
 @Component({
     selector: "gebo-ai-userspace-knowledgebase-component",
     templateUrl: "user-knowledgebase.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{
+        provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
+    },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceKnowledgebaseComponent")
+    }]
 })
 export class GeboAIUserspaceKnowledgebaseComponent extends BaseEntityEditingComponent<UserspaceKnowledgebaseDto> {
     /**
      * Identifies the type of entity being edited
      */
     protected override entityName: string = "UserspaceKnowledgebaseDto";
-    
+
     /**
      * Form group that contains all form controls for the knowledgebase entity
      */
@@ -50,11 +56,11 @@ export class GeboAIUserspaceKnowledgebaseComponent extends BaseEntityEditingComp
         parentKnowledgebaseCode: new FormControl(),
         accessibleGroups: new FormControl()
     });
-    
+
     /**
      * Stores the user groups that can be assigned to the knowledgebase
      */
-    public userGroups: GroupInfo[]=[];
+    public userGroups: GroupInfo[] = [];
 
     /**
      * Constructor initializes the component with required services
@@ -71,24 +77,24 @@ export class GeboAIUserspaceKnowledgebaseComponent extends BaseEntityEditingComp
         confirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         private userspaceControllerService: UserspaceControllerService,
-        private userControllerService:UserControllerService,
+        private userControllerService: UserControllerService,
         outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
     }
-    
+
     /**
      * Lifecycle hook that initializes the component.
      * Loads user groups from the backend service.
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        this.loadingRelatedBackend=true;
+        this.loadingRelatedBackend = true;
         this.userControllerService.getMyGroups().subscribe({
-            next:(values)=>{
-                this.userGroups=values;
+            next: (values) => {
+                this.userGroups = values;
             },
-            complete:()=>{
-                this.loadingRelatedBackend=false;
+            complete: () => {
+                this.loadingRelatedBackend = false;
             }
         });
     }

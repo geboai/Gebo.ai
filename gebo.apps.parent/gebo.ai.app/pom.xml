@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>gebo.apps.parent</artifactId>
 		<groupId>ai.gebo.apps</groupId>
-		<version>0.9.9.7</version>
+		<version>1.0.0.0-rc1</version>
 	</parent>
 	<artifactId>gebo.ai.app</artifactId>
 	<dependencies>
@@ -35,6 +35,19 @@
 			</activation>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.5.4</version> <!-- mettila esplicita se non è nel parent -->
+						<configuration>
+							<argLine>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED
+								--enable-native-access=ALL-UNNAMED
+							</argLine>
+							<forkCount>1</forkCount>
+							<reuseForks>false</reuseForks>
+						</configuration>
+					</plugin>
 					<plugin>
 						<groupId>org.springframework.boot</groupId>
 						<artifactId>spring-boot-maven-plugin</artifactId>
@@ -73,6 +86,9 @@
 		</profile>
 		<profile>
 			<id>bootables</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -94,7 +110,461 @@
 							</archive>
 						</configuration>
 					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
 
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>package-unix-deb</id>
+			<activation>
+				<!-- <os> <family>unix</family> <name>Linux</name> </os> -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+
+						<configuration>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+
+
+							<execution>
+								<id>copy-jar</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/jpackage/lib</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.build.finalName}-bootable.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.panteleyev</groupId>
+						<artifactId>jpackage-maven-plugin</artifactId>
+						<version>1.7.1</version>
+						<executions>
+							<execution>
+								<id>gebo-ai-deb</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jpackage</goal>
+								</goals>
+								<configuration>
+									<!-- Dove finisce il .deb -->
+									<destination>${project.build.directory}/installer</destination>
+
+									<!-- directory con jar e dipendenze -->
+									<input>${project.build.directory}/jpackage/lib</input>
+									<mainJar>${project.build.finalName}-bootable.jar</mainJar>
+
+									<!-- Nome applicazione/pacchetto -->
+									<name>gebo-ai</name>
+									<linuxPackageName>gebo-ai</linuxPackageName>
+
+									<!-- Tipo di pacchetto -->
+									<type>DEB</type>
+
+									<!-- Runtime image JDK 22+ (già generata con jlink) <runtimeImage>${project.build.directory}/runtime</runtimeImage> -->
+
+									<!-- Cartella di installazione principale -->
+									<!-- Risultato finale: /home/gebo-ai/gebo-ai/... -->
+									<installDir>/home/gebo-ai</installDir>
+
+									<!-- Metadati DEB -->
+									<linuxDebMaintainer>paolo.zavalloni@gebo.ai</linuxDebMaintainer>
+									<linuxAppCategory>utils</linuxAppCategory>
+
+									<!-- Opzionale: chiede a jpackage di trattarlo come servizio -->
+									<launcherAsService>true</launcherAsService>
+
+									<!-- Risorse override jpackage (control, postinst, ecc.) -->
+									<resourceDir>${project.basedir}/src/packaging/deb/resources</resourceDir>
+
+									<!-- File extra da mettere nell'immagine app (es. unit systemd) -->
+									<appContentPaths>
+										<path>${project.basedir}/src/packaging/deb/gebo-ai.service</path>
+									</appContentPaths>
+									<verbose>true</verbose>
+									<!-- Volendo puoi passare anche system properties -->
+									<javaOptions>
+										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
+										<option>-DGEBO_LOG_BASE=/var/log/gebo-ai</option>
+										<option>-DGEBO_HOME=/home/gebo-ai/home</option>
+										<option>-DGEBO_WORK_DIRECTORY=/var/gebo-ai/data</option>
+										<option>-Dsun.jnu.encoding=UTF-8</option>
+										<option>-Dfile.encoding=UTF-8</option>
+										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
+										<option>--enable-native-access=ALL-UNNAMED</option>
+										<option>-Xms2g</option>
+										<option>-Xmx6g</option>
+										<option>-XX:+AggressiveHeap</option>
+										<option>-XX:MaxMetaspaceSize=512m</option>
+										<option>-XX:+PrintGCDetails</option>
+										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>
+									</javaOptions>
+								</configuration>
+							</execution>
+							
+
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>package-unix-rpm</id>
+			<activation>
+				<!-- <os> <family>unix</family> <name>Linux</name> </os> -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+
+						<configuration>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+
+
+							<execution>
+								<id>copy-jar</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/jpackage/lib</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.build.finalName}-bootable.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+
+						<executions>
+							<execution>
+								<id>parse-project-version</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>parse-version</goal>
+								</goals>
+								<configuration>
+									<!-- prefix for generated properties -->
+									<propertyPrefix>parsedVersion</propertyPrefix>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.panteleyev</groupId>
+						<artifactId>jpackage-maven-plugin</artifactId>
+						<version>1.7.1</version>
+						<executions>
+							
+							<!-- RPM (RHEL / Rocky / Alma / Fedora / SUSE) -->
+							<execution>
+								<id>gebo-ai-rpm</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jpackage</goal>
+								</goals>
+								<configuration>
+									<destination>${project.build.directory}/installer</destination>
+
+									<!-- stesso input / jar -->
+									<input>${project.build.directory}/jpackage/lib</input>
+									<mainJar>${project.build.finalName}-bootable.jar</mainJar>
+
+									<name>gebo-ai</name>
+									<linuxPackageName>gebo-ai</linuxPackageName>
+
+									<!-- pacchetto RPM -->
+									<type>RPM</type>
+
+									<installDir>/home/gebo-ai</installDir>
+
+									<!-- metadati RPM -->
+									<linuxRpmGroup>Applications/Utilities</linuxRpmGroup>
+									<linuxAppCategory>utils</linuxAppCategory>
+		
+									<launcherAsService>true</launcherAsService>
+									<appVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</appVersion>	
+									<!-- script/resources specifici RPM -->
+									<resourceDir>${project.basedir}/src/packaging/rpm/resources</resourceDir>
+									<verbose>true</verbose>
+									<javaOptions>
+										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
+										<option>-DGEBO_LOG_BASE=/var/log/gebo-ai</option>
+										<option>-DGEBO_HOME=/home/gebo-ai/home</option>
+										<option>-DGEBO_WORK_DIRECTORY=/var/gebo-ai/data</option>
+										<option>-Dsun.jnu.encoding=UTF-8</option>
+										<option>-Dfile.encoding=UTF-8</option>
+										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
+										<option>--enable-native-access=ALL-UNNAMED</option>
+										<option>-Xms2g</option>
+										<option>-Xmx6g</option>
+										<option>-XX:+AggressiveHeap</option>
+										<option>-XX:MaxMetaspaceSize=512m</option>
+										<option>-XX:+PrintGCDetails</option>
+										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>
+									</javaOptions>
+								</configuration>
+							</execution>
+
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>package-windows</id>
+			<activation>
+				<!-- <os> <family>windows</family> </os> -->
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+
+						<configuration>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+
+						<configuration>
+							<jvmArguments>
+								--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
+							<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+							<excludeDevtools>false</excludeDevtools>
+							<layout>JAR</layout>
+
+							<classifier>bootable</classifier>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+
+						<executions>
+							<execution>
+								<id>parse-project-version</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>parse-version</goal>
+								</goals>
+								<configuration>
+									<!-- prefix for generated properties -->
+									<propertyPrefix>parsedVersion</propertyPrefix>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+
+
+							<execution>
+								<id>copy-jar</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/jpackage/lib</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.build.directory}</directory>
+											<includes>
+												<include>${project.build.finalName}-bootable.jar</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.panteleyev</groupId>
+						<artifactId>jpackage-maven-plugin</artifactId>
+						<version>1.7.1</version>
+						<executions>
+							<execution>
+								<id>gebo-ai-msi</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jpackage</goal>
+								</goals>
+								<configuration>
+									<!-- dove finisce l'MSI -->
+									<destination>${project.build.directory}/installer</destination>
+
+									<!-- directory con il jar -->
+									<input>${project.build.directory}/jpackage/lib</input>
+
+									<!-- JAR Spring Boot con classifier "bootable" -->
+									<mainJar>${project.build.finalName}-bootable.jar</mainJar>
+									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
+
+									<!-- Nome applicazione -->
+									<name>gebo-ai</name>
+
+									<!-- Tipo di pacchetto per Windows -->
+									<type>MSI</type>
+
+									<!-- Sulle Windows: sottocartella sotto Program Files -->
+									<!-- Se la togli, usa il default (= nome app) -->
+									<installDir>GeboAI</installDir>
+
+									<!-- Metadati generici -->
+									<vendor>Gebo.ai</vendor>
+									<appVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</appVersion>
+
+									<!-- Opzioni specifiche Windows -->
+									<winMenu>true</winMenu>
+									<winShortcut>true</winShortcut>
+									<winDirChooser>true</winDirChooser>
+									<launcherAsService>true</launcherAsService>
+									<resourceDir>${project.basedir}/src/packaging/msi/resources</resourceDir>
+									<!-- opzionale: per install per-user invece che per-machine -->
+									<!-- <winPerUserInstall>true</winPerUserInstall> -->
+									<verbose>true</verbose>
+									<!-- JVM options (ogni option è un argomento singolo) -->
+									<javaOptions>
+										<!-- dove vuoi che la tua app creda sia la "home" su Windows -->
+										<option>-DGEBO_HOME=$APPDIR</option>
+										<option>-Dai.gebo.config.setupConfiguresWorkdir=true</option>
+										<option>-Dsun.jnu.encoding=UTF-8</option>
+										<option>-Dfile.encoding=UTF-8</option>
+										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
+										<option>--enable-native-access=ALL-UNNAMED</option>
+										<option>-Xms2g</option>
+										<option>-Xmx6g</option>
+										<option>-XX:+AggressiveHeap</option>
+										<option>-XX:MaxMetaspaceSize=512m</option>
+										<option>-XX:+PrintGCDetails</option>
+										<option>-Xlog:gc:=$APPDIR\gc.log</option>
+									</javaOptions>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -104,31 +574,21 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-
 				<configuration>
+					<argLine>
+						--add-opens=java.base/java.nio.charset=ALL-UNNAMED
+						--enable-native-access=ALL-UNNAMED
+					</argLine>
 					<forkCount>1</forkCount>
 					<reuseForks>false</reuseForks>
-					<forkMode>never</forkMode>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.cyclonedx</groupId>
 				<artifactId>cyclonedx-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
 
-				<configuration>
-					<jvmArguments>
-						--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmArguments>
-					<mainClass>ai.gebo.monolithic.app.Main</mainClass>
-					<excludeDevtools>false</excludeDevtools>
-					<layout>JAR</layout>
 
-					<classifier>bootable</classifier>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>

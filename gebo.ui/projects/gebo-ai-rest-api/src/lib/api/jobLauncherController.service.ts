@@ -250,29 +250,21 @@ export class JobLauncherControllerService {
      * 
      * 
      * @param jobCode 
-     * @param statsDetails 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobSummary(jobCode: string, statsDetails: boolean, observe?: 'body', reportProgress?: boolean): Observable<JobSummary>;
-    public getJobSummary(jobCode: string, statsDetails: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobSummary>>;
-    public getJobSummary(jobCode: string, statsDetails: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobSummary>>;
-    public getJobSummary(jobCode: string, statsDetails: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobSummary(jobCode: string, observe?: 'body', reportProgress?: boolean): Observable<JobSummary>;
+    public getJobSummary(jobCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<JobSummary>>;
+    public getJobSummary(jobCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<JobSummary>>;
+    public getJobSummary(jobCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobCode === null || jobCode === undefined) {
             throw new Error('Required parameter jobCode was null or undefined when calling getJobSummary.');
         }
 
-        if (statsDetails === null || statsDetails === undefined) {
-            throw new Error('Required parameter statsDetails was null or undefined when calling getJobSummary.');
-        }
-
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (jobCode !== undefined && jobCode !== null) {
             queryParameters = queryParameters.set('jobCode', <any>jobCode);
-        }
-        if (statsDetails !== undefined && statsDetails !== null) {
-            queryParameters = queryParameters.set('statsDetails', <any>statsDetails);
         }
 
         let headers = this.defaultHeaders;

@@ -89,5 +89,10 @@ public class GIntegrationSystemContentHandlerImpl
 			throws GeboContentHandlerSystemException {		
 
 	}
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return true;
+	}
 
 }

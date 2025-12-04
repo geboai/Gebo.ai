@@ -12,7 +12,7 @@
 import { GeboCustomSecretContent } from './geboCustomSecretContent';
 
 export interface SecretWrapperGeboCustomSecretContent { 
-    contextCode?: string;
-    description?: string;
-    secretContent?: GeboCustomSecretContent;
+    contextCode: string;
+    description: string;
+    secretContent: GeboCustomSecretContent;
 }

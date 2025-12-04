@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Noklusējuma sistēmas valoda",
+        "help" : "Noklusējuma sistēmas valoda šai Gebo.ai instalācijai"
+      },
+      "username" : {
+        "label" : "E-pasts",
+        "help" : "E-pasts kā lietotājvārds pieteikšanās"
+      },
+      "passwordC" : {
+        "label" : "Apstipriniet paroli",
+        "help" : "Apstipriniet paroli"
+      },
+      "password" : {
+        "label" : "Parole",
+        "help" : "Parole pieteikšanās (vismaz 8 rakstzīmes)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " paroles nesakrīt "
+      },
+      "LocalAdmin" : {
+        "label" : "Izveidojiet savu lokālo administratora kontu"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Šo kontu jūs izmantosiet turpmākai programmatūras uzstādīšanai/administrēšanai, šie dati paliks lokāli jūsu sistēmā un netiks sūtīti internetā"
+      },
+      "EnterBtn" : {
+        "label" : "Dodieties uz pieteikšanās lapu"
+      },
+      "SetupPage" : {
+        "label" : "Konfigurējiet savu Gebo.ai instalāciju"
+      },
+      "CreateBtn" : {
+        "label" : "Izveidot sistēmas konfigurāciju"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Izlasiet un pieņemiet licenci"
+      },
+      "AcceptMark" : {
+        "label" : "Es piekrītu noteikumiem",
+        "help" : "Noklikšķinot šeit, jūs piekrītat licences noteikumiem"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-pasts",
+        "help" : "E-pastu izmanto kā lietotājvārdu, lai pieteiktos"
+      },
+      "password" : {
+        "label" : "Parole",
+        "help" : "Parole pieteikšanai"
+      },
+      "LoginPanel" : {
+        "label" : "Pieslēgties gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Pieslēgties"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Labi!",
+        "detail" : "Darbība veiksmīgi pabeigta"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Laipni lūdzam gebo.ai",
+        "detail" : "Ievadiet savu lietotājvārdu un paroli, lai pieteiktos"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Darbība neveiksmīga",
+        "detail" : "Nevar autentificēt ar norādītajiem akreditācijas datiem"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Labi!",
+        "detail" : "Darbība veiksmīgi pabeigta"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Laipni lūdzam gebo.ai",
+        "detail" : "Ievadiet savu lietotājvārdu un paroli, lai pieteiktos"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 konfigurācija"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Pakalpojumu sniedzēja nosaukums"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 drošības iestatījumi"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Atpakaļ uz iestatīšanas sākumlapu"
+      },
+      "WizardUi" : {
+        "label" : "Izvēlieties iestatīšanas sadaļu"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Administratora un citu kontu iestatīšana",
+        "description" : "Nepieciešams vismaz viens administratora konts, lai šo Gebo.ai instalāciju varētu pienācīgi pārvaldīt; pievienojiet citus lietotājus, ja vajag"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai darba direktorijs",
+        "description" : "Konfigurējiet darba direktoriju; tas būs mape, kurā tiks glabāti šīs instalācijas iestatījumi un visi darba faili. Ieteicams to arī regulāri dublēt."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Vektoru datubāzes konfigurācija",
+        "description" : "Jākonfigurē vektoru datubāze, lai Gebo.ai nodrošinātu retrieve augmented generation pakalpojumus; varat izvēlēties starp lokālu vektoru datubāzi, Qdrant vai Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Vienotā pierakstīšanās, oauth2 autentifikācija",
+        "description" : "Oauth2 vienotās pierakstīšanās autentifikācijas un oauth2 klientu konfigurācija"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Lielu valodas modeļu iestatīšana",
+        "description" : "Konfigurējiet vairākus llms ar mākoņpakalpojumu vai lokālās/LAN infrastruktūras aizmugures servisiem; lai programma darbotos pareizi, nepieciešams konfigurēt vismaz vienu čata modeli un vienu embedding modeli."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Grafu RAG/zināšanu ieguves iestatīšana",
+        "description" : "Konfigurējiet grafu rag un zināšanu ieguves apakšsistēmu"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Koplietojamo failu sistēmas ceļu iestatīšana",
+        "description" : "Konfigurējiet uzņēmuma kopīgās failu sistēmas ceļus, kas tiks izmantoti kā retrieve augmented generation dokumentu zona dažādās zināšanu bāzēs"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian Confluence integrācija",
+        "description" : "Konfigurējiet Gebo.ai piekļuvi savām Atlassian Confluence mākoņa vai lokālajām instalācijām"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian Jira integrācija",
+        "description" : "Konfigurējiet Gebo.ai piekļuvi savām Atlassian Jira mākoņa instalācijām"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint integrācija",
+        "description" : "Konfigurējiet Gebo.ai piekļuvi savām Microsoft Sharepoint mākoņa vai lokālajām instalācijām"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Konfigurējiet vismaz vienu zināšanu bāzi",
+        "description" : "Konfigurējiet vismaz vienu zināšanu bāzi, lai jūsu lietotāji varētu izmantot Gebo.ai retrieve augmented generations pakalpojumus"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Konfigurējiet vismaz vienu \"R.A.G.\" čata profilu",
+        "description" : "Konfigurējiet vismaz vienu retrieve augmented čata profilu saviem lietotājiem, pamatojoties uz kādu no jūsu konfigurētām zināšanu bāzēm"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai obligātie iestatījumi ir pabeigti...",
+        "detail" : "Obligātie iestatīšanas soļi ir izpildīti, bet dažas trūkstošās darbības neļauj jūsu organizācijai pilnībā izmantot šo programmatūru"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai iestatīšana ir veiksmīga!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai iestatīšanai trūkst kāds obligāts solis",
+        "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces integrācija",
+        "description" : "Konfigurējiet Gebo.ai lai piekļūtu jūsu Google cloud Drive/Workspaces komandas datiem"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Uzņēmuma Atlassian Confluence sistēmu iestatīšana"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistēmas tips"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence sistēma"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira sistēma"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "MainPanel" : {
+        "label" : "Uzņēmuma Atlassian Jira sistēmu iestatīšana"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistēmas tips"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "MainPanel" : {
+        "label" : "Uzņēmuma Microsoft Sharepoint sistēmu iestatīšana"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Sistēmas tips"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint sistēma"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Nodrošiniet api-atslēgu ar pietiekamu kredītu. Ja tiek izvēlēts OpenAI, jūsu plānam jāpiemēro īpašs papildkredīts (10–30$ varētu būt pietiekami), citādi šajā lietotnē nebūs pieejams llms trafiks."
+      },
+      "MainPanel" : {
+        "label" : "Iestatiet Gebo.ai llms piekļuvi ar savu api atslēgu"
+      },
+      "provider" : {
+        "label" : "Lielā valodas modeļa piegādātājs",
+        "help" : "Izvēlieties vienu no piegādātājiem: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Lietotājs",
+        "help" : "Ievadiet lietotāju, kuram piesaistīta apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurēt"
+      },
+      "apiKey" : {
+        "label" : "Api atslēga",
+        "help" : "Jūsu LLMS pakalpojuma sniedzēja api atslēga, ko izmantot"
+      },
+      "ProviderHeader" : {
+        "label" : "Pakalpojumu sniedzējs"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "ModelHeader" : {
+        "label" : "Modelis"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Modeļa tips"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Noklusējuma modelis"
+      },
+      "MainPanelHeader" : {
+        "label" : "Iestatiet Gebo.ai llms nodrošinātāju piekļuvi"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Izveidot graph rag konfigurāciju"
+      },
+      "MainPanel" : {
+        "label" : "Iestatiet Graph Rag un zināšanu ieguves noklusējuma konfigurāciju"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "EditConfigBtn" : {
+        "label" : "Rediģēt konfigurāciju"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekts"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Pievienot zināšanu bāzi"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Zināšanu bāze"
+      },
+      "MainPanel" : {
+        "label" : "Zināšanu bāzu un satura konfigurācijas"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Satura avots"
+      },
+      "PublishedHeader" : {
+        "label" : "Publicēts"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Dokumentu skaits"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Pievienot projektu/elementu",
+        "help" : "izveidot jaunu projektu"
+      },
+      "Button1" : {
+        "help" : "atvērt zināšanu bāzi"
+      },
+      "Button2" : {
+        "help" : "atvērt projekta formu"
+      },
+      "Button3" : {
+        "help" : "atvērt datu avotu"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai darba mapes konfigurācija"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurēt"
+      },
+      "workDirectory" : {
+        "label" : "Izvēlieties mapi kā Gebo.ai darba direktoriju",
+        "help" : "Izvēlieties servera mapi, kuru šī instalācija izmantos, lai glabātu savus iestatījumus un saturu."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Pievienot mapi"
+      },
+      "AddFolderBtn" : {
+        "label" : "Pievienot mapi"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "MainPanel" : {
+        "label" : "Servera koplietojamo failu sistēmu ceļi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolūtais ceļš"
+      },
+      "DeleteHeader" : {
+        "label" : "Dzēst"
+      },
+      "path" : {
+        "label" : "Pievienot koplietojamās failu sistēmas saknes mapi",
+        "help" : "Izvēlieties servera mapi, kas kalpo kā saknes ceļš koplietojamai failu sistēmai jūsu organizācijā kā dokumentu glabāšanas vieta"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet failu sistēmas ieraksta aprakstu"
+      },
+      "RemovePathBtn" : {
+        "label" : "Noņemt ceļu"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigurēt"
+      },
+      "MainPanel" : {
+        "label" : "Vektoru datubāzes konfigurācija"
+      },
+      "host" : {
+        "label" : "Qdrant resursdatora adrese",
+        "help" : "Qdrant resursdatora nosaukums vai IP adrese"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant savienojuma iestatījumi"
+      },
+      "port" : {
+        "label" : "Qdrant ports",
+        "help" : "Qdrant sakaru ports (6334 ir standarts)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api atslēga",
+        "help" : "Api atslēga Qdrant autentifikācijai"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parametrs",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai obligātās iestatīšanas darbības pabeigtas...",
+        "detail" : "Obligātās iestatīšanas darbības ir pabeigtas, bet dažu trūkstošu soļu dēļ jūsu organizācija nevarētu pilnvērtīgi izmantot šo programmu"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai iestatīšanai pietrūkst dažu obligāto soļu",
+        "detail" : "Lūdzu, pārskatiet iestatīšanas procesa sarkanos soļus"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai iestatīšana OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Pievienot jaunu R.A.G. tērzēšanas profilu"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Pievienot R.A.G. tērzēšanas profilu"
+      },
+      "MainPanel" : {
+        "label" : "Ielādēt paplašinātās ģenerācijas (r.a.g.) tērzēšanas profilu iestatījumus"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Esošie R.A.G. tērzēšanas profili"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Rediģēt R.A.G. tērzēšanas profilu"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Zināšanu bāzes kodi"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Uzstādīt uzņēmuma Google Drive/Workspaces sistēmas"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfigurācijas kods"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kods",
+        "help" : "Ievadiet OAUTH2 autentifikācijas/integrācijas koda (registrationId) aprakstu."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet OAUTH2 autentifikācijas/integrācijas informācijas aprakstu."
+      },
+      "configurationType" : {
+        "label" : "Konfigurācijas mērķis",
+        "help" : "Izvēlieties, vai šie iestatījumi tiks izmantoti, lai autentificētos Gebo.ai vai lai Gebo.ai savienotos ar trešo pušu sistēmu kā klients."
+      },
+      "authProvider" : {
+        "label" : "Pakalpojumu sniedzējs",
+        "help" : "Ievadiet OAUTH2 autentifikācijas sniedzēju"
+      },
+      "issuerUri" : {
+        "label" : "Izdevēja URI",
+        "help" : "Ievadiet pakalpojuma sniedzēja OAUTH2 izdevēja URL"
+      },
+      "authorizationUri" : {
+        "label" : "Autorizācijas URL",
+        "help" : "Ievadiet pakalpojuma sniedzēja OAUTH2 autorizācijas URL"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set URI",
+        "help" : "Ievadiet pakalpojuma sniedzēja OAUTH2 Jwk Set URL"
+      },
+      "userInfoUri" : {
+        "label" : "Lietotāja informācijas URL",
+        "help" : "Ievadiet pakalpojuma sniedzēja OAUTH2 lietotāja informācijas URL"
+      },
+      "introspectionUri" : {
+        "label" : "Introspekcijas URI",
+        "help" : "Ievadiet pakalpojuma sniedzēja OAUTH2 introspekcijas URL"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Ievadiet pakalpojuma sniedzēja OAUTH2 tokena URL"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 sniedzēja URL"
+      },
+      "MainPanel" : {
+        "label" : "Ievadiet jaunu OAUTH2 autentifikācijas/integrācijas informāciju"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Klienta ID",
+        "help" : "Klienta identifikators priekš oauth2 protokola (saņemams oauth2 autentificētās 3. puses programmatūras administrēšanas sadaļā)"
+      },
+      "secret" : {
+        "label" : "Slepenā atslēga",
+        "help" : "Klienta slepenā atslēga priekš oauth2 protokola (saņemama oauth2 autentificētās 3. puses programmatūras administrēšanas sadaļā)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Izveidot Confluence sistēmas konfigurāciju"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet Confluence sistēmas aprakstu."
+      },
+      "CreateBtn" : {
+        "label" : "Izveidot"
+      },
+      "username" : {
+        "label" : "Confluence lietotājvārds",
+        "help" : "Confluence lietotājvārds"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence versija",
+        "help" : "Confluence versija"
+      },
+      "baseUri" : {
+        "label" : "Pamata interneta adrese",
+        "help" : "Pamata Confluence sistēmas adrese uzstādīšanai uz vietas vai jūsu organizācijas bāzes adrese Confluence mākoņa sistēmā"
+      },
+      "password" : {
+        "label" : "Confluence parole",
+        "help" : "Confluence parole"
+      },
+      "token" : {
+        "label" : "Confluence cloud api atslēga",
+        "help" : "Confluence CLOUD apikey, kas iegūta Confluence backendā, šeit jāievada \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un ļauj šim saturam būt pieejamam zināšanu bāzē LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "Confluence satura koplietošana"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet ievietotā Confluence satura aprakstu."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence sistēma",
+        "help" : "Jau konfigurētās Confluence sistēmas atsauce."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Vecāka projekta atsauce."
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Ieslēgt zip failu atvēršanu un satura izvilkšanu"
+      },
+      "tree" : {
+        "label" : "Izvēlētās telpas vai lapas/apakšlapas",
+        "help" : "Koplietotās Confluence telpas un lapu saturs"
+      },
+      "programmedTables" : {
+        "label" : "Satura atjaunināšanas pārbaudes grafiks",
+        "help" : "Konfigurējiet izmainītā satura ieplānotu pārbaudi, lai uzturētu datu atjaunošanu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Telpu, lapu un apakšlapu organizācijas kritēriji",
+        "help" : "Lūdzu, paskaidrojiet šeit, kā tika veikta telpu, lapu un apakšlapu organizācija Confluence saturā, kas koplietota ar Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Vispārējie iestatījumi"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "MainPanel" : {
+        "label" : "Confluence sistēmas rediģēšana"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "baseUri" : {
+        "label" : "Pamata interneta adrese",
+        "help" : "Bāzes Confluence sistēmas adrese"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts Confluence sistēmas unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet Confluence sistēmas aprakstu."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence versija",
+        "help" : "Confluence versija"
+      },
+      "secretCode" : {
+        "label" : "Izmantotā identitāte",
+        "help" : "Izvēlieties vai izveidojiet identitāti piekļuvei Confluence sistēmai"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "jauna grupa"
+      },
+      "NewUserBtn" : {
+        "label" : "jauns lietotājs"
+      },
+      "UsersListPanel" : {
+        "label" : "Lietotāju saraksts"
+      },
+      "GroupsListPanel" : {
+        "label" : "Grupu saraksts"
+      },
+      "SournameHeader" : {
+        "label" : "uzvārds"
+      },
+      "UsernameHeader" : {
+        "label" : "lietotājvārds"
+      },
+      "RolesHeader" : {
+        "label" : "lomas"
+      },
+      "NameHeader" : {
+        "label" : "vārds"
+      },
+      "EditBtn" : {
+        "label" : "Rediģēt"
+      },
+      "DisabledHeader" : {
+        "label" : "deaktivizēts"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "UserIds" : {
+        "placeholder" : "Izvēlieties lietotājus"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "MainPanel" : {
+        "label" : "Lietotāju grupas rediģēšana"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet lietotāju grupas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Ievadiet lietotāju grupas kodu"
+      },
+      "userIds" : {
+        "label" : "Lietotāju saraksts",
+        "help" : "Izvēlieties lietotājus, kas piedalās grupā"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Izveidot"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet jira sistēmas aprakstu."
+      },
+      "MainPanel" : {
+        "label" : "Izveidot jira sistēmas konfigurāciju"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "username" : {
+        "label" : "jira lietotājvārds",
+        "help" : "jira lietotāja vārds"
+      },
+      "token" : {
+        "label" : "jira cloud api atslēga",
+        "help" : "jira CLOUD apikey, kas iegūts jira backoffice, šeit jāievada \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Bāzes interneta adrese",
+        "help" : "jira sistēmas bāzes adreses URL onpremise instalācijai vai jūsu organizācijas bāzes URL jira cloud sistēmai"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un ļauj šim saturam būt pieejamam zināšanu bāzē LLm lietošanai"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "MainPanel" : {
+        "label" : "Jira satura koplietošana"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira sistēma",
+        "help" : "Jau konfigurētas jira sistēmas atsauce."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Augšējā līmeņa projekta atsauce."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet augšupielādētā jira ierakstu satura aprakstu."
+      },
+      "programmedTables" : {
+        "label" : "Satura atjaunošanas pārbaudes grafiks",
+        "help" : "Konfigurējiet izmaiņu satura plānošanu, lai uzturētu informācijas izgūšanas sistēmas atjaunināšanu"
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura iegūšanu"
+      },
+      "tree" : {
+        "label" : "Izvēlētās telpas vai lapas/apakšlapas",
+        "help" : "Kopīgotā jira projektu un biļešu hierarhijas saturs"
+      },
+      "catalogingCriteria" : {
+        "label" : "Telpu, lapu un apakšlapu organizācijas kritēriji",
+        "help" : "Lūdzu, paskaidrojiet, kā tika veidots telpu, lapu un apakšlapu organizācijas kritērijs jira saturam, kas kopīgots ar Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet jira sistēmas aprakstu."
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "MainPanel" : {
+        "label" : "Jira sistēmas rediģēšana"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "baseUri" : {
+        "label" : "Bāzes interneta adrese",
+        "help" : "jira sistēmas bāzes adreses URL"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts jira sistēmas unikālais kods."
+      },
+      "secretCode" : {
+        "label" : "Izmantotā identitāte",
+        "help" : "Izvēlieties vai izveidojiet identitāti piekļuvei jira sistēmai"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet SharPpoint/OneDrive sistēmas aprakstu."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint versija",
+        "help" : "sharepoint versija"
+      },
+      "secret" : {
+        "label" : "Slepenā atslēga",
+        "help" : "Oauth2 klienta slepenā atslēga šai lietotnei, kas reģistrēta microsoft \"entra\" produktā (atrodama microsoft mākoņpakalpojumu administratora konsolē)"
+      },
+      "clientId" : {
+        "label" : "Klienta ID",
+        "help" : "Oauth2 klienta identifikators šai lietotnei, kas reģistrēta microsoft \"entra\" produktā (atrodama microsoft mākoņpakalpojumu administratora konsolē)"
+      },
+      "tenantId" : {
+        "label" : "Nomnieka ID",
+        "help" : "Oauth2 nomnieka identifikators jūsu organizācijas microsoft \"entra\" produktā (atrodama microsoft mākoņpakalpojumu administratora konsolē)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 lietotnes reģistrācijas informācija Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Izveidot"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "MainPanel" : {
+        "label" : "Izveidot SharePoint/OneDrive sistēmas konfigurāciju"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un padara šos saturus pieejamus zināšanu bāzē LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive satura koplietošana"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts saturu unikālais kods."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Vecākprojekta atsauce."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet SharePoint/OneDrive ierakstu datu avotu aprakstu."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint sistēma",
+        "help" : "Jau konfigurētā SharePoint/OneDrive sistēmas atsauce."
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura izguvi"
+      },
+      "tree" : {
+        "label" : "Izvēlētās Sharepoint vietnes/lapas/apakšlapas vai OneDrive diski/mapes/faili",
+        "help" : "Koplietots sharepoint/OneDrive saturs"
+      },
+      "programmedTables" : {
+        "label" : "Satura atjauninājumu pārbaudes grafiks",
+        "help" : "Konfigurējiet izmaiņu satura plānošanu, lai uzturētu atjauninātu informācijas iegūšanas sistēmu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Telpu, lapu un apakšlapu organizācijas kritēriji",
+        "help" : "Lūdzu, paskaidrojiet šeit, kādi ir telpu, lapu un apakšlapu organizācijas kritēriji sharepoint saturam, kas koplietots ar Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Rediģē sharepoint sistēmu"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Vispārējie iestatījumi"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "secretCode" : {
+        "label" : "Izmantotā identitāte",
+        "help" : "Izvēlieties vai izveidojiet identitāti piekļuvei sharepoint sistēmai"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts sharepoint sistēmas unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet sharepoint sistēmas aprakstu."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint versija",
+        "help" : "sharepoint versija"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Dzēst"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Saglabāt"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Atcelt"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Vispārīgās informācijas/satura iestatījumi"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms iestatījumi"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts zināšanu grafika datu iegūšanas posma unikālais kods"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/zināšanu iegūšanas konfigurācija"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet šī zināšanu grafika datu iegūšanas posma konfigurācijas aprakstu"
+      },
+      "extractionPrompt" : {
+        "label" : "Informācijas iegūšanas uzdevums",
+        "help" : "Liela valodas modeļa uzdevums entītiju/notikumu/attiecību un aizstājvārdu iegūšanai"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM, kas izmantots datu iegūšanai",
+        "help" : "Norādiet lielo valodas modeli, kas tiks izmantots zināšanu iegūšanai; ja nav izvēlēts, tiks izmantots noklusējuma."
+      },
+      "graphRagAllSources" : {
+        "label" : "Pielietot graph rag visiem datu avotiem",
+        "help" : "Ja iestatīts uz patiesu, tiks apstrādātas visas zināšanu bāzes/projekti/datu avoti, pretējā gadījumā tikai tie, kas ir īpaši konfigurēti"
+      },
+      "defaultModel" : {
+        "label" : "Noklusējuma liels valodas modelis",
+        "help" : "Zināšanu iegūšanai tiks izmantots noklusējuma liels valodas modelis"
+      },
+      "processEveryDocument" : {
+        "label" : "Pielietot graph rag visiem failiem",
+        "help" : "Graph rag algoritmi tiks piemēroti visiem failiem; tas uzlabos sistēmas analīzes detaļu līmeni, bet palielinās izmaksas un nepieciešamo apstrādes laiku"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Failu atlases kritēriji graphrag apstrādei",
+        "help" : "Rediģējiet failu atlases kritērijus, kas tiks sūtīti uz informācijas iegūšanas cauruli graphrag, izvēlieties vismaz faila nosaukumu un kritēriju un/vai faila tipu un/vai maksimālo faila izmēru baitos un/vai pēdējās modifikācijas vecumu dienās"
+      },
+      "extractionFormat" : {
+        "label" : "Izgūšanas formāts",
+        "help" : "Izmantojiet CSV formātu llms ar mazāk nekā 30b parametriem, JSON formu lieliem frontier modeļiem",
+        "placeholder" : "Izmantojiet CSV formātu llms ar mazāk nekā 30b parametriem, JSON formu lieliem frontier modeļiem"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Izvēlieties failu tipus"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Faila nosaukuma filtrēšanas kritēriji"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Faila pēdējā modifikācija, pirms dienām"
+      },
+      "nameFilter" : {
+        "placeholder" : "Faila nosaukums"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maksimālais faila izmērs baitos"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "MainPanel" : {
+        "label" : "Zināšanu bāzes rediģēšana"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Zināšanu bāzes piekļuves iestatījumi"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts zināšanu bāzes unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet zināšanu bāzes aprakstu."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Izmantotie iegulēšanas modeļi (atstājiet tukšu, lai izmantotu sistēmas noklusējumu)",
+        "help" : "Iegulēšanas modeļi zināšanu bāzei, ja atstāts tukšs, tiks izmantots noklusējuma modelis."
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksēt",
+        "help" : "Pārindeksēt saturu"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Projekta vai vienības rediģēšana"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts projekta unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet projekta aprakstu."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "zināšanu bāze",
+        "help" : "zināšanu bāze."
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "IndexBtn" : {
+        "label" : "Indeksēt",
+        "help" : "Pārindeksēt saturu"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Pievienot vienību/projektu",
+        "help" : "pievienot jaunu..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Visi lieto",
+        "help" : "Ikviens var lietot"
+      },
+      "accessibleGroups" : {
+        "label" : "Grupu saraksts",
+        "help" : "Izvēlieties atļautās grupas"
+      },
+      "accessibleUsers" : {
+        "label" : "Lietotāju saraksts",
+        "help" : "Izvēlieties atļautos lietotājus"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Informācijas panelis"
+      },
+      "LLMSTab" : {
+        "label" : "LLM modeļi tērzēšanai un ievades datiem"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag tērzēšanas profili / Modeļa norādījumi"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Zināšanu bāzes un projekti"
+      },
+      "UsersGroupTab" : {
+        "label" : "Lietotāji un grupas"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai moduļu konfigurācija"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Konfigurēt"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurēt"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Jauns uzvednes konfigurējums"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Jauns tērzēšanas profils"
+      },
+      "MainPanel" : {
+        "label" : "Meklēšanas papildinātie ģenerēšanas tērzēšanas profili"
+      },
+      "PromptsPanel" : {
+        "label" : "Uzvedņu kolekcija un noklusējuma uzvednes"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Zināšanu bāzes"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "ConfigureBtn1" : {
+        "label" : "konfigurēt"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Jauna zināšanu bāze"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Jauna iegulšanas modeļa konfigurācija"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Jauna tērzēšanas modeļa konfigurācija"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "ModelHeader" : {
+        "label" : "Modelis "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Modeļa nodrošinātājs"
+      },
+      "ConfigureBtn" : {
+        "label" : "konfigurēt"
+      },
+      "CodeHeader2" : {
+        "label" : "Kods"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Apraksts"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Modeļa nodrošinātājs"
+      },
+      "ConfigureBtn2" : {
+        "label" : "konfigurēt"
+      },
+      "ModelHeader2" : {
+        "label" : "Modelis "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Konfigurētie tērzēšanas modeļi"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Konfigurētie iegulšanas modeļi"
+      },
+      "chat" : {
+        "label" : "Jauns čata modelis",
+        "help" : "Izvēlieties piegādātāju, lai pievienotu jaunu čata modeli, kas var sarunāties ar lietotāju vai veikt automatizāciju",
+        "placeholder" : "Izvēlieties piegādātāju, lai pievienotu jaunu čata modeli, kas var sarunāties ar lietotāju vai veikt automatizāciju"
+      },
+      "embed" : {
+        "label" : "Jauns iegulšanas modelis",
+        "help" : "Izvēlieties piegādātāju, lai pievienotu jaunu iegulšanas modeli, kas var veikt satura semantisko indeksēšanu",
+        "placeholder" : "Izvēlieties piegādātāju, lai pievienotu jaunu iegulšanas modeli, kas var veikt satura semantisko indeksēšanu"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Pārbaudes modelis"
+      },
+      "TestChatBtn" : {
+        "label" : "Pārbaudīt čatu"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI tokens",
+        "help" : "Izvēlieties OpenAI tokenu, ko izmantot šim modelim"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI čata modeļa izvēle",
+        "help" : "Izvēlieties OpenAI čata modeli darbam."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Paplašinātie iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI čata modeļa konfigurācijas rediģēšana"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeļa piekļuves iestatījumi"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI iegulējuma modeļa konfigurācijas rediģēšana"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI tokens",
+        "help" : "Izvēlieties OpenAI tokenu, ko izmantot šim modelim"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts iegulējuma modeļa konfigurācijas unikālais kods"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet iegulējuma modeļa konfigurācijas aprakstu"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI iegulējuma modeļa izvēle",
+        "help" : "Izvēlieties OpenAI iegulējuma modeli darbam."
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma iegulējuma modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "baseUrl" : {
+        "label" : "Bāzes Ollama servera adrese",
+        "help" : "Bāzes adrese (piem. http://servera_nosaukums:234/), uz kuru atbild Ollama lokālais vai LAN serveris."
+      },
+      "choosedModel" : {
+        "label" : "Ollama čata modeļa izvēle",
+        "help" : "Izvēlieties Ollama čata modeli darbam.",
+        "placeholder" : "Izvēlieties modeli"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama tokens",
+        "help" : "Izvēlieties Ollama tokenu, ko izmantot šim modelim (pēc izvēles)"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "MainPanel" : {
+        "label" : "Ollama lokālā (vai LAN) servera čata modeļa konfigurācijas rediģēšana"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic tokens",
+        "help" : "Izvēlieties Anthropic tokenu, ko izmantot šim modelim"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic čata modeļa izvēle",
+        "help" : "Izvēlieties Anthropic čata modeli darbam.",
+        "placeholder" : "Izvēlieties modeli"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Paplašinātie iestatījumi"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic čata modeļa konfigurācijas rediģēšana"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI tokens",
+        "help" : "Izvēlieties MistralAI tokenu, ko izmantot šim modelim"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI čata modeļa izvēle",
+        "help" : "Izvēlieties MistralAI čata modeli darbam."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Paplašinātie iestatījumi"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI čata modeļa konfigurācijas rediģēšana"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI čata modeļa izvēle",
+        "help" : "Izvēlieties Google Vertex AI čata modeli darbam."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI tokens",
+        "help" : "Izvēlieties Google Vertex AI tokenu, ko izmantot šim modelim"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Vispārīga informācija"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Modeļa piekļuves iestatījumi"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Paplašinātie iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI čata modeļa konfigurācijas rediģēšana"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek tokens",
+        "help" : "Izvēlieties Deepseek tokenu, ko izmantot šim modelim"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek čata modeļa izvēle",
+        "help" : "Izvēlieties Deepseek čata modeli darbam.",
+        "placeholder" : "Izvēlieties modeli"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Paplašinātie iestatījumi"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek čata modeļa konfigurācijas rediģēšana"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeļa piekļuves iestatījumi"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet modeļa konfigurācijas aprakstu"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts modeļa konfigurācijas unikālais kods"
+      },
+      "baseUrl" : {
+        "label" : "Čata modeļa API bāzes servera adrese",
+        "help" : "Čata modeļa bāzes adrese."
+      },
+      "apiSecretCode" : {
+        "label" : "Čata modeļa API tokens",
+        "help" : "Izvēlieties čata modeļa API tokenu, ko izmantot šim modelim (pēc izvēles)"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma čata modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma čata modelis, ja čata modelis nav norādīts"
+      },
+      "choosedModel" : {
+        "label" : "Čata modeļa čata modeļa izvēle",
+        "help" : "Izvēlieties čata modeļa čata modeli darbam."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "TitleFragment" : {
+        "label" : "Rediģē čata modeļa nodrošinātāju:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Paplašinātie iestatījumi"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Modeļa piekļuves iestatījumi"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet iegulējuma modeļa konfigurācijas aprakstu"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "MainPanel" : {
+        "label" : "Ollama lokālā (vai LAN) iegulējuma modeļa konfigurācijas rediģēšana"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama tokens",
+        "help" : "Izvēlieties Ollama tokenu, ko izmantot šim modelim"
+      },
+      "choosedModel" : {
+        "label" : "Ollama iegulējuma modeļa izvēle",
+        "help" : "Izvēlieties Ollama iegulējuma modeli darbam."
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts iegulējuma modeļa konfigurācijas unikālais kods"
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma iegulējuma modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      },
+      "baseUrl" : {
+        "label" : "Bāzes Ollama servera adrese",
+        "help" : "Bāzes adrese (piem. http://servera_nosaukums:234/), uz kuru atbild Ollama lokālais vai LAN serveris."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet iegulējuma modeļa konfigurācijas aprakstu"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI iegulējuma modeļa konfigurācijas rediģēšana"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts iegulējuma modeļa konfigurācijas unikālais kods"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI iegulējuma modeļa izvēle",
+        "help" : "Izvēlieties MistralAI iegulējuma modeli darbam."
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma iegulējuma modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI tokens",
+        "help" : "Izvēlieties MistralAI tokenu, ko izmantot šim modelim"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI iegulējuma modeļa konfigurācijas rediģēšana"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet iegulējuma modeļa konfigurācijas aprakstu"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI iegulējuma modeļa izvēle",
+        "help" : "Izvēlieties Google Vertex AI iegulējuma modeli darbam."
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma iegulējuma modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts iegulējuma modeļa konfigurācijas unikālais kods"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI tokens",
+        "help" : "Izvēlieties Google Vertex AI tokenu, ko izmantot šim modelim"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "TitleFragment" : {
+        "label" : "Rediģē iegulējuma modeļa nodrošinātāju:"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet iegulējuma modeļa konfigurācijas aprakstu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts iegulējuma modeļa konfigurācijas unikālais kods"
+      },
+      "choosedModel" : {
+        "label" : "Iegulējuma modeļa izvēle",
+        "help" : "Izvēlieties iegulējuma modeli darbam."
+      },
+      "baseUrl" : {
+        "label" : "Iegulējuma modeļa API servera adrese",
+        "help" : "Iegulējuma modeļa servera bāzes adrese."
+      },
+      "defaultModel" : {
+        "label" : "iestatīt kā noklusējuma iegulējuma modelis",
+        "help" : "Ja atzīmēts, šis tiks lietots kā noklusējuma iegulējuma modelis, ja iegulējuma modelis nav norādīts"
+      },
+      "apiSecretCode" : {
+        "label" : "Iegulējuma modeļa API tokens",
+        "help" : "Izvēlieties iegulējuma modeļa API tokenu, ko izmantot šim modelim"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Tērzēšanas konfigurācijas informācija"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Dzēst šo tērzēšanas sesiju"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Pārdēvēt tērzēšanas sesiju"
+      },
+      "QueryControl" : {
+        "placeholder" : "Ieraksti ziņu tērzēšanas botam"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pārlūkot vai meklēt un izvēlēties dokumentus, ar kuriem tērzēt"
+      },
+      "UploadFileBtn" : {
+        "help" : "Augšupielādēt failu, lai tērzētu vai strādātu ar to"
+      },
+      "SubmiQuestion" : {
+        "help" : "Iesniegt savu jautājumu"
+      },
+      "WithParams" : {
+        "label" : "ar parametriem:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI izsauktās funkcijas:"
+      },
+      "UploadedDocs" : {
+        "label" : "Augšupielādētie dokumenti"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Tērzēšanas vēsture ielādēta",
+        "detail" : "Tērzēšanas vēsture veiksmīgi ielādēta"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Jūsu runa tiek augšupielādēta"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Saņemta balss atbilde"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Ritināt uz augšu"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Ritināt uz leju"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Atrastie dokumenti"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Vai esat pārliecināts, ka vēlaties dzēst šo tērzēšanu?",
+        "header" : "Tērzēšanas dzēšanas darbība"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "description" : {
+        "label" : "Tērzēšanas apraksts",
+        "help" : "Ievadiet tērzēšanas sesijas aprakstu."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Izmantotais modelis",
+        "help" : "Modeļa kods"
+      },
+      "providerId" : {
+        "label" : "Tērzēšanas modeļa nodrošinātājs",
+        "help" : "LLms nodrošinātāja draiveris"
+      },
+      "functions" : {
+        "label" : "Tērzēšanas modeļa izsaucamās funkcijas",
+        "help" : "Funkciju saraksts, kas pieejamas tērzēšanas modelim"
+      },
+      "NameCol" : {
+        "label" : "Nosaukums"
+      },
+      "DescriptionCol" : {
+        "label" : "Apraksts"
+      },
+      "kbases" : {
+        "label" : "Pieejamās zināšanu bāzes",
+        "help" : "Zināšanu bāzu saraksts, kas izmantotas šajā RAG tērzēšanā"
+      },
+      "CloseBtn" : {
+        "help" : "Aizvērt"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Pievienot dokumentu 'tērzēšanas ar' sarakstam"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Ierakstīt",
+        "help" : "Sāciet ierakstīt audio ierakstu un nosūtiet to"
+      },
+      "StopBtn" : {
+        "label" : "Ierakstīšana",
+        "help" : "Ierakstīšana"
+      },
+      "AbortBtn" : {
+        "label" : "Pārtraukt ierakstīšanu",
+        "help" : "Pārtraukt ierakstīšanu"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Pārtraukt ierakstu"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "atjaunot datus"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SelectHeader" : {
+        "label" : "Izvēlēties"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "beigu datums/laiks"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "sākuma datums/laiks"
+      },
+      "ProcessingHeader" : {
+        "label" : "apstrāde"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "FinishedHeader" : {
+        "label" : "pabeigts"
+      },
+      "WithErrorHeader" : {
+        "label" : "ar kļūdu"
+      },
+      "LogTableComponent" : {
+        "help" : "Šis ir koplietotās failu sistēmas apgabala ielādes žurnāls"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Procesu statistika"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "CloseBtn" : {
+        "label" : "Aizvērt"
+      },
+      "PublicationLogTab" : {
+        "label" : "Publicēšanas žurnāls"
+      },
+      "MainPanel" : {
+        "label" : "Publicēšanas žurnāls"
+      },
+      "actualStatus" : {
+        "label" : "Statuss",
+        "help" : "Uzdevuma statuss: vēl darbojas, pabeigts vai pabeigts ar kļūdām."
+      },
+      "publishingSystem" : {
+        "label" : "Publicētā satura konfigurācija",
+        "help" : "Informācija par publicēto saturu"
+      },
+      "startDateTime" : {
+        "label" : "Sākuma datums/laiks",
+        "help" : "Satura sinhronizācijas uzdevuma sākuma datums un laiks"
+      },
+      "endDateTime" : {
+        "label" : "Beigu datums/laiks",
+        "help" : "Satura sinhronizācijas uzdevuma beigu datums un laiks"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Nav pilnībā apstrādāts"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Pilnībā apstrādāts"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "iegulšana salīdzinājumā ar kopējo dokumentu skaitu"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Sīkāka informācija"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Ģenerēt uzvedni"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Uzvednes vednis",
+        "help" : "Izmantojiet šo, lai izmantotu LLM, lai ģenerētu uzvedni saviem mērķiem"
+      },
+      "acceptPrompt" : {
+        "label" : "Pieņemt uzvedni"
+      },
+      "promptWizardUI" : {
+        "label" : "Uzvednes veidnes ģenerēšanas vednis"
+      },
+      "cancel" : {
+        "label" : "Atcelt"
+      },
+      "response" : {
+        "label" : "Ieteiktā uzvednes veidne",
+        "help" : "Ģenerētais veidnes teksts jūsu mērķim (jūs varat to mainīt vai labot/pielāgot)"
+      },
+      "modelCode" : {
+        "label" : "Izvēlētais čata modelis",
+        "help" : "Izvēlieties čata modeli, kuru vēlaties izmantot uzvednes veidnes ģenerēšanai"
+      },
+      "query" : {
+        "label" : "Uzvednes veidnes pieprasījums",
+        "help" : "Norādiet otrajā personā, kādu mērķi AI palīdzēs lietotājam sasniegt"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatūra",
+        "help" : "Modeļa atbildes temperatūra no 0 līdz 1 (ja neesat pārliecināts, atstājiet tukšu)"
+      },
+      "contextLength" : {
+        "label" : "Konteksta garums (tokeni)",
+        "help" : "Teksta apjoms, ko AI modelis var ņemt vērā apstrādājot (ja nav norādīts, tiks izmantots 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP parametrs no 0 līdz 1 (ja neesat pārliecināts, atstājiet tukšu)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Šim modelim pieejamās funkcijas",
+        "help" : "Funkcijas, kuras modelis var izmantot sarakstes laikā"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Noklusējuma modeļa uzvedne",
+        "help" : "Rediģējiet noklusējuma uzvedni sarakstes modelim."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet identitātes aprakstu."
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts identitātes unikālais kods."
+      },
+      "secretType" : {
+        "label" : "Identitātes tips",
+        "help" : "Izvēlieties identitātes tipu, ko izveidot attālajai sistēmai"
+      },
+      "InsertBtn" : {
+        "label" : "Ievietot"
+      },
+      "token" : {
+        "label" : "Tokens",
+        "help" : "Ievadiet tokenu."
+      },
+      "user" : {
+        "label" : "Lietotājs",
+        "help" : "Ievadiet ar tokenu norādīto lietotāju."
+      },
+      "MainPanel" : {
+        "label" : "Identitātes izveide"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "username" : {
+        "label" : "Lietotājvārds",
+        "help" : "Ievadiet lietotājvārdu."
+      },
+      "password" : {
+        "label" : "Parole",
+        "help" : "Ievadiet paroli."
+      },
+      "email" : {
+        "label" : "E-pasts/lietotājvārds",
+        "help" : "Ievadiet ar ssh atslēgu saistīto e-pastu vai lietotājvārdu."
+      },
+      "key" : {
+        "label" : "Slepenā atslēga",
+        "help" : "Atveriet privātās atslēgas failu un nokopējiet šo saturu šajā laukā."
+      },
+      "passphrase" : {
+        "label" : "Atslēgas parole",
+        "help" : "Ievadiet atslēgas paroli."
+      },
+      "pub" : {
+        "label" : "Publiskā atslēga",
+        "help" : "Atveriet publiskās atslēgas failu un nokopējiet šo saturu šajā laukā."
+      },
+      "jsonContent" : {
+        "label" : "Google akreditācijas faila saturs",
+        "help" : "Iekopējiet šeit Google api akreditācijas faila saturu, kas lejupielādēts no google cloud api konsoles (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google lietotājs, kuru imitēt",
+        "help" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām",
+        "placeholder" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet augšupielādētā failu sistēmas ieraksta aprakstu."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Atsauce uz augstākstāvošo projektu."
+      },
+      "upload" : {
+        "label" : "Augšupielādēt saturu",
+        "help" : "Noklikšķiniet uz pārlūkot un izvēlieties zip vai citus failus"
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura izvilkšanu"
+      },
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un ļauj šim saturam būt pieejamam zināšanu bāzē LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "MainPanel" : {
+        "label" : "Augšupielādētā satura rediģēšana"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurēt būvēšanas sistēmas",
+        "help" : "Būvēšanas/iepakošanas sistēmu saraksts metadatu un papildu artefaktu informācijas pārbaudei (atstājiet tukšu, ja nav programmatūras koda)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Izvēlētie elementi"
+      },
+      "ChooseOk" : {
+        "label" : "Labi"
+      },
+      "ChooseCancel" : {
+        "label" : "Atcelt"
+      },
+      "EditBtn" : {
+        "help" : "Rediģēt izvēlēto"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Izvēlieties elementus"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Izvēlieties elementus"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Rediģēt plānošanu"
+      },
+      "ConfirmBtn" : {
+        "label" : "Apstiprināt"
+      },
+      "AddBtn" : {
+        "label" : "+Pievienot"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un ļauj šiem saturam būt pieejamam zināšanu bāzē LLm’s"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Avota koda apstrāde"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "MainPanel" : {
+        "label" : "Eksistējoša failu sistēmas satura rediģēšana"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet augšupielādētā failu sistēmas ieraksta satura aprakstu."
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura izgūšanu"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "tree" : {
+        "label" : "Izvēlētie faili vai mapes",
+        "help" : "Kopīgotas failu sistēmas faili vai direktorijas, kas pieejamas serverī"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Vecāka projekta atsauce."
+      },
+      "programmedTables" : {
+        "label" : "Satura atjauninājumu pārbaudes grafiks",
+        "help" : "Konfigurējiet izmaiņu satura plānošanu, lai uzturētu papildināto ģenerēšanas sistēmu atjauninātu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Mapju organizācijas kritēriji",
+        "help" : "Lūdzu, paskaidrojiet šeit, kā tika veikta mapju organizācija failu sistēmas apgabalā, kuru kopīgojat ar Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurēt būvēšanas sistēmas",
+        "help" : "Uzskaitiet būvēšanas/iepakošanas sistēmas, kurās pārbaudīt meta informāciju un papildu artefaktu datus (atstājiet tukšu, ja nav iekļauts programmatūras kods)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Jauna failu koplietošanas zona"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolūtais ceļš"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db vai yml faila konfigurācija"
+      },
+      "DescriptionHeader" : {
+        "label" : "Apraksts"
+      },
+      "CodeHeader" : {
+        "label" : "Kods"
+      },
+      "ModifyHeader" : {
+        "label" : "Rediģēt"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Izvēlētā koplietotā failu sistēmas mape",
+        "help" : "Izvēlieties servera mapi, kas kalpo kā saknes ceļš organizācijas koplietotajai failu sistēmai kā dokumentu krātuvei"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet savas organizācijas koplietotās failu sistēmas apgabala aprakstu"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "InsertBtn" : {
+        "label" : "Ievietot"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "MainPanel" : {
+        "label" : "Servera koplietotās mapes rediģēšana"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabāt un padarīt šo saturu pieejamu zināšanu bāzē LLm lietošanai"
+      },
+      "MainPanel" : {
+        "label" : "Rediģēt git avota/dokumentācijas repozitoriju"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet git repozitorija aprakstu."
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts git repozitorija unikālais kods."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Atsauce uz vecāku projektu."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git sistēma",
+        "help" : "Jau konfigurēta git sistēmas atsauce."
+      },
+      "branch" : {
+        "label" : "Zars",
+        "help" : "Zara nosaukums, kuru pārslēgt (parasti master, main vai develop)"
+      },
+      "identityCode" : {
+        "label" : "Izmantotā identitāte",
+        "help" : "Izvēlieties identitāti klonēšanai/checkout sistēmā"
+      },
+      "repositoryUri" : {
+        "label" : "Repozitorija adrese",
+        "help" : "Pilna git attālinātā repozitorija adrese (parasti sākas ar http:, https: vai ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "publisks",
+        "help" : "Ja iestatīts kā patiess, repozitorija piekļuvei nav nepieciešama autentifikācija"
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura izguvi"
+      },
+      "programmedTables" : {
+        "label" : "Satura atjauninājumu pārbaudes grafiks",
+        "help" : "Konfigurējiet mainītā satura pārbaudes grafiku, lai uzturētu atjauninātu izgūšanas un paplašinātas ģenerēšanas sistēmu"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Konfigurēt būvēšanas sistēmas",
+        "help" : "Būvēšanas/iepakošanas sistēmu saraksts, kas jāapstrādā meta informācijai un papildu artefaktu informācijai"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Vispārīga informācija"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Izmantot čata modeli"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "izvēlēties"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Izvēlieties čata modeļa konfigurāciju"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Izvēlieties iegulšanas modeļa konfigurāciju"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "izvēlēties"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG iestatījumi"
+      },
+      "LanguageModelTab" : {
+        "label" : "Lielā valodas modeļa un lietojamo rīku iestatījumi"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Izmantot iegulšanas modeli"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Drošības piekļuves iestatījumi"
+      },
+      "MainPanel" : {
+        "label" : "Rediģēt retrieve augmented generation čata profilu"
+      },
+      "code" : {
+        "label" : "Unikālais kods",
+        "help" : "Automātiski ģenerēts čata profila unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet čata profila aprakstu."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Lietotājs izvēlas zināšanu bāzes",
+        "help" : "Lietotājs var izvēlēties no pieejamajām zināšanu bāzēm un/vai augšupielādēt savus failus."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Zināšanu bāzes",
+        "help" : "Zināšanu bāzes, ko izmantot dokumentu meklēšanai."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Līdzības slieksnis",
+        "help" : "Līdzības slieksnis semantiskajai meklēšanai, 0.60–0.65 vājš filtrs, 0.70–0.75 vidējs filtrs, 0.80–0.85 precīzs"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2. 'solis' līdzības slieksnis",
+        "help" : "Līdzības slieksnis semantiskajām meklēšanām, 0.60–0.65 vājš filtrs, 0.70–0.75 vidējs filtrs, 0.80–0.85 precīzi izmanto no 2. meklēšanas multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Atslēgt 'Multi Hop' rag",
+        "help" : "Atslēdz 'multi hop rag' funkcionalitāti. Multi hop meklēšana vispirms veic semantisko meklēšanu un izmantoto atrastos dokumentus kā kontekstu semantiskajai meklēšanai, nodrošinot plašāku kontekstu."
+      },
+      "topK" : {
+        "label" : "Ņemtie vērā dokumentu fragmenti (TopK)",
+        "help" : "Retrieve augmented generation laikā Top N atrastie dokumentu fragmenti semantiskajā meklēšanā"
+      },
+      "enabledFunctions" : {
+        "label" : "Iespējotās funkcijas šim RAG čatam",
+        "help" : "Funkcionalitātes, ko llm modelis var izmantot sarunas laikā ar lietotāju, sadarbojoties arī ar izvēlēto zināšanu bāzi"
+      },
+      "prompt" : {
+        "label" : "Uzvedne",
+        "help" : "Rediģējiet uzvedni retrieve augmented generation sesijām."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Ievadiet vai atlasiet prompta kategoriju"
+      },
+      "MainPanel" : {
+        "label" : "Prompta rediģēšana"
+      },
+      "promptCategory" : {
+        "label" : "Prompta kategorija",
+        "help" : "Atlasiet vai ievadiet prompta kategoriju."
+      },
+      "prompt" : {
+        "label" : "Prompts",
+        "help" : "Rediģējiet tērzēšanas promptu, izmantojiet {query}, lai norādītu lietotāja jautājumu, un {context}, lai norādītu dokumentu/vēstures kontekstu, kas nosūtīts LLM."
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts prompta unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet prompta aprakstu."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Mainīt paroli"
+      },
+      "YourUserName" : {
+        "label" : "Jūsu lietotājvārds"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Vecā parole",
+        "help" : "Pašreizējā parole, lai pieteiktos"
+      },
+      "newPassword" : {
+        "label" : "Jaunā parole",
+        "help" : "jaunā parole"
+      },
+      "username" : {
+        "label" : "E-pasts",
+        "help" : "E-pasts kā lietotājvārds pieteikšanās"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Paroles maiņas forma"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "ChangePwdBtn" : {
+        "label" : "mainīt paroli"
+      },
+      "newPassword1" : {
+        "label" : "Apstipriniet jauno paroli",
+        "help" : "Apstipriniet jauno paroli"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "ForMoreInformations" : {
+        "label" : "Lai iegūtu vairāk informācijas par Google pielāgotās meklēšanas API vai lai saņemtu savu API atslēgu (bez maksas), apmeklējiet: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Google meklēšanas API konfigurācijas unikālais kods."
+      },
+      "MainPanel" : {
+        "label" : "Rediģēt google pielāgotās meklēšanas API akreditācijas datus"
+      },
+      "secretCode" : {
+        "label" : "Google search api tokens",
+        "help" : "Izvēlieties vai ievadiet google search api tokenu"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google meklētāja id",
+        "help" : "Google meklētāja id"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet google search api konfigurācijas aprakstu."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Tērzēt bez zināšanu bāzēm",
+        "help" : "Izvēlieties LLM sesijai tērzēšanai",
+        "placeholder" : "Izvēlieties LLM sesijai tērzēšanai"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Atvērt tērzēšanas opciju sadaļu"
+      },
+      "CreateChatBtn" : {
+        "label" : "Jauna tērzēšana"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Jauna tērzēšanas sesija"
+      },
+      "chatProfileCode" : {
+        "label" : "Tērzēt ar zināšanu bāzēm",
+        "help" : "Izvēlieties uzņēmuma tērzēšanas profilu, lai mijiedarbotos ar uzņēmuma (un jūsu) dokumentiem un LLM",
+        "placeholder" : "Izvēlieties uzņēmuma tērzēšanas profilu, lai mijiedarbotos ar uzņēmuma (un jūsu) dokumentiem un LLM"
+      },
+      "NewChatBtn" : {
+        "label" : "Jauna tērzēšana"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Tērzēšanas sesijas"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Aizvērt sānu joslu"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Izveidot jaunu tērzēšanu ar lieliem valodu modeļiem",
+        "label" : "Tērzēt"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Izveidot jaunu RAG tērzēšanu ar uzņēmuma saturu",
+        "label" : "Tērzēt ar zināšanu bāzi"
+      },
+      "ChatsTitle" : {
+        "label" : "Tērzēšanas"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Atvērt tērzēšanas opciju sadaļu"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Sazināties ar dokumentiem",
+        "help" : "Pārlūkojiet vai meklējiet un izvēlieties dokumentus darbam"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Izvēlieties failus sarunai"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pārlūkot vai meklēt un izvēlēties dokumentus, ar kuriem tērzēt"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Apstiprināt"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Augšupielādējiet vai izvēlieties savus dokumentus",
+        "help" : "Izvēlieties/augšupielādējiet dokumentus no savas lietotāja zonas"
+      },
+      "fileSearchBtn" : {
+        "label" : "Meklēt"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Meklēt"
+      },
+      "query" : {
+        "label" : "Semantiskās meklēšanas frāze",
+        "help" : "Ievadiet jēgpilnu frāzi, kas attiecas uz jūsu meklējumu"
+      },
+      "choosenBrowsing" : {
+        "label" : "Izvēlieties failus, pārlūkojot zināšanu bāzes",
+        "help" : "Izvēlieties failus, pārlūkojot uzņēmuma kopīgās zināšanu bāzes"
+      },
+      "filename" : {
+        "label" : "Meklētā faila nosaukums",
+        "help" : "Ievadiet daļu faila nosaukuma meklējamajam saturam"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Faila nosaukuma meklēšana"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Pārlūkot uzņēmuma failus"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Semantiskā meklēšana"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Izvēlieties failus, ar kuriem tērzēt"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Mainīt izvēlēto"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Izvēlieties lietotāju failus"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "okBtn" : {
+        "label" : "Labi"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Izvēlieties lietotāja augšupielādēto saturu"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Zināšanu bāzes un lietotāju faili"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+apakšprojekts vai vienība",
+        "help" : "pievienot apakšprojektu vai vienību"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+augšupielādēt failus",
+        "help" : "pievienot augšupielādēto failu datu avotu"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "pievienot Microsoft SharePoint/OneDrive datu avotu"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "pievienot Atlassian Confluence datu avotu"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+failu sistēma",
+        "help" : "pievienot koplietotās failu sistēmas datu avotu"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "pievienot Atlassian Jira datu avotu"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repozitorijs",
+        "help" : "pievienot git repozitorija datu avotu, piemēram, bitbucket,github vai citi"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "pievienot google drive datu avotu"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai čats"
+      },
+      "setup" : {
+        "label" : "Uzstādījumi"
+      },
+      "admin" : {
+        "label" : "Gebo.ai administrācija"
+      },
+      "currentProfile" : {
+        "label" : "mans profils"
+      },
+      "logout" : {
+        "label" : "iziet"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Mainīt valodu"
+      },
+      "MyProfile" : {
+        "label" : "jūsu profils"
+      },
+      "MyProfileItem" : {
+        "label" : "jūsu profils"
+      },
+      "chatMenuItem" : {
+        "label" : "Tērzēšana"
+      },
+      "setupMenuItem" : {
+        "label" : "Iestatīšana"
+      },
+      "adminMenuItem" : {
+        "label" : "Administrēšana"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "rediģēt profilu"
+      },
+      "logoutMenuItem" : {
+        "label" : "iziet"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Tiek analizēts dokumentu saraksts"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentu tokenizācija"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Apstrādātie tokeni",
+        "dataset-1-label" : "Kļūda tokenu apstrādē"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiskā indeksēšana (semantiskajam rag iegūšanai)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Apstrādātie tokeni",
+        "dataset-1-label" : "Kļūda tokenu apstrādē"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entitāšu/attiecību/notikumu indeksēšana (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda, apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Noraidītie dokumenti"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātās atslēgas",
+        "dataset-1-label" : "Kļūda apstrādājot atslēgas"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analizē dokumentu sarakstu"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "TOKENIZATION" : {
+        "description" : "Dokumentu tokenizācija"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "EMBEDDING" : {
+        "description" : "Semantiskā indeksēšana (embedding semantiskajam rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātās atslēgas",
+        "dataset-1-label" : "Kļūda apstrādājot atslēgas"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Entitāšu/Attiecību/Notikumu indeksēšana (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Neapstrādātie dokumenti",
+        "label-1" : "Kļūda apstrādājot dokumentus",
+        "label-2" : "Apstrādātie dokumenti"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Apstrādātās atslēgas",
+        "dataset-1-label" : "Kļūda apstrādājot atslēgas"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Saņemtie dokumenti",
+        "dataset-1-label" : "Apstrādātie dokumenti",
+        "dataset-2-label" : "Kļūdainie dokumenti",
+        "dataset-3-label" : "Atmestie dokumenti"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Pirkt Apy atslēgas kredītu saite"
+      },
+      "ModifyBtn" : {
+        "label" : "Mainīt",
+        "help" : "Skatīt/mainīt modeļa konfigurāciju"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kods"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Apraksts"
+      },
+      "ExistingModelType" : {
+        "label" : "Modeļa tips"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Esošās konfigurācijas"
+      },
+      "ProviderWWW" : {
+        "label" : "Mājaslapas saite"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Pakalpojumu sniedzēja akreditācijas dati"
+      },
+      "ProviderInfos" : {
+        "label" : "Pakalpojumu sniedzēja informācija"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api atslēga/akreditācijas dati",
+        "help" : "Izvēlieties api atslēgu vai akreditācijas datus šim nodrošinātājam"
+      },
+      "NewApiKey" : {
+        "label" : "Jauna api atslēga",
+        "help" : "Ievadiet jaunu api atslēgu, ko izmantot ar šo nodrošinātāju"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Izmantot esošos vai jaunus",
+        "help" : "Izmantot esošos vai izveidot jaunus akreditācijas datus šim nodrošinātājam"
+      },
+      "NewUserName" : {
+        "label" : "Lietotājvārds",
+        "help" : "Lietotājvārds piekļuvei pakalpojuma sniedzēja pakalpojumiem"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Jauns embedding modelis",
+        "help" : "Izveidot jaunu embedding modeļa konfigurāciju"
+      },
+      "NewChatModel" : {
+        "label" : "Jauns Chat modelis",
+        "help" : "Izveidot jaunu tērzēšanas modeļa konfigurāciju"
+      },
+      "NewModelDialog" : {
+        "label" : "Pievienot jaunu modeli"
+      },
+      "PiSave" : {
+        "label" : "Saglabāt"
+      },
+      "NewModelsButton" : {
+        "label" : "Jauni modeļi",
+        "help" : "Izveidot jaunu modeļu konfigurāciju"
+      },
+      "NewModelsDialog" : {
+        "label" : "Pievienot jaunus modeļus"
+      },
+      "baseUrl" : {
+        "label" : "Bāzes api URL",
+        "help" : "Bāzes URL nodrošinātāja api pakalpojumiem"
+      },
+      "ModelTypePanel" : {
+        "label" : "Pievienot jaunus modeļus"
+      },
+      "ModelsChoices" : {
+        "label" : "Modeļu izvēle"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Ieteiktā modeļu izvēle"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding modelis",
+        "help" : "Izvēlieties vienu no iepriekšdefinētajiem embedding modeļiem"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat modelis",
+        "help" : "Izvēlieties vienu no iepriekšdefinētajiem tērzēšanas modeļiem"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Paplašināta modeļu izvēle"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding modelis",
+        "help" : "Izvēlieties vienu no piegādātāja publicētajiem embedding modeļiem"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat modelis",
+        "help" : "Izvēlieties vienu no piegādātāja publicētajiem tērzēšanas modeļiem"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Izmantojiet šo izvēles režīmu tikai tad, ja esat eksperts vai pārbaudiet piegādātāja vietnē, kuri modeļi atbilst jūsu vajadzībām. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma tērzēšanas modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits tērzēšanas modelis"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Mēs iesakām jums šādu modeļu sarakstu "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma embedding modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits embedding modelis"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma tērzēšanas modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits tērzēšanas modelis"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "iestatīt kā noklusējuma embedding modeli",
+        "help" : "Iestatīt šo modeli kā noklusējuma, tas tiks izmantots visiem uzdevumiem, kuriem nav konfigurēts cits embedding modelis"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Izmantojiet šo izvēles režīmu tikai tad, ja esat eksperts vai pārbaudiet piegādātāja vietnē, kuri modeļi atbilst jūsu vajadzībām. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Izveidot un aktivizēt"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Izveidot un aktivizēt"
+      },
+      "ProviderNameField" : {
+        "label" : "Paklpojumu sniedzējs"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Pakalpojumu sniedzējam ir nepieciešamas autentifikācijas dati",
+        "help" : "Pakalpojumu sniedzējs/servera lietotne ir iestatīta piekļuvei ar api atslēgu vai citiem autentifikācijas datiem"
+      },
+      "baseUrl1" : {
+        "label" : "Bāzes api adrese",
+        "help" : "Pakalpojumu sniedzēja bāzes adrese api pakalpojumiem"
+      },
+      "enableAllFunctions" : {
+        "label" : "iespējot visas funkciju izsaukšanas",
+        "help" : "Iespējo visus pieejamos rīkus un funkciju izsaukšanas; ja nav atzīmēts, tos varēs aktivizēt vēlāk llms administrēšanas panelī"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI attālinātais pakalpojumu sniedzējs OK",
+        "detail" : "Pakalpojumu sniedzējs darbojas un ir veiksmīgi konfigurēts"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Darbība neveiksmīga",
+        "detail" : "Nav iespējams autentificēties ar norādītajiem akreditācijas datiem"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Labi!",
+        "detail" : "Darbība veiksmīgi pabeigta"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Kļūda straumējot tērzēšanas atbildi",
+        "detail" : "Servera kļūda: class org.neo4j.driver.internal.value.StringValue nav pārveidojams par class java.lang.String (org.neo4j.driver.internal.value.StringValue ir nenosauktā modulī ar ielādētāju 'app'; java.lang.String ir modulī java.base ar ielādētāju 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Saglabāts veiksmīgi",
+        "detail" : "Atjaunošanas darbība veiksmīgi pabeigta"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Kļūda sazinoties ar Ollama serveri",
+        "detail" : "Tīkla kļūda, sazinoties ar attālo sistēmu piekļūstot saturam\n modeļu saraksta kļūda strādājot ar url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Jūs varat to dzēst",
+        "detail" : "Pašreiz skatāmos datus var droši izdzēst"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Jūs nevarat to dzēst",
+        "detail" : "Uz šo objektu ir atsauces citās lietotnes daļās"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Augšupielādēt failus tērzēšanai"
+      },
+      "ChooseFile" : {
+        "help" : "Izvēlēties failus"
+      },
+      "UploadFile" : {
+        "help" : "Augšupielādēt failus"
+      },
+      "DragDropHere" : {
+        "label" : "Velciet un nometiet failus šeit, lai augšupielādētu"
+      },
+      "RemoveAll" : {
+        "help" : "Noņemt visu"
+      },
+      "UploadPending" : {
+        "label" : "Gaida augšupielādi"
+      },
+      "CompletedData" : {
+        "label" : "Pabeigts"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Konfigurējiet graphrag iestatījumu laukumā, ja vēlaties to izmantot šajā sadaļā"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag iestatījumi"
+      },
+      "button-help" : {
+        "label" : "Noklikšķiniet šeit, lai konfigurētu informācijas izguvi graphrag (pašlaik nav konfigurēts)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Pievienot konfigurāciju"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Izveidot"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet Google Drive sistēmas aprakstu."
+      },
+      "MainPanel" : {
+        "label" : "Izveidojiet Google Drive/Workspace savienojumu"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "delegatedUser" : {
+        "label" : "Google lietotājs, kuru imitēt",
+        "help" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām",
+        "placeholder" : "Lietotājs, kas tiks imitēts ar sniegtajām akreditācijām"
+      },
+      "jsonContent" : {
+        "label" : "Google akreditāciju json saturs",
+        "help" : "Izveidojiet Google akreditācijas ar piekļuvi jūsu darba/grupas diskiem Google Console Cloud un ielīmējiet šeit lejupielādētā json faila saturu (https://console.cloud.google.com/).",
+        "placeholder" : "Izveidojiet Google akreditācijas ar piekļuvi jūsu darba/grupas diskiem Google Console Cloud un ielīmējiet šeit lejupielādētā json faila saturu (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "PublishBtn" : {
+        "label" : "Publicēt!",
+        "help" : "Saglabā un ļauj šiem saturiem kļūt pieejamiem zināšanu bāzē LLm’s"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "MainPanel" : {
+        "label" : "Google drive satura koplietošana"
+      },
+      "SettingsTab" : {
+        "label" : "Iestatījumi"
+      },
+      "LogsTab" : {
+        "label" : "Žurnāli"
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet augšupielādētā google drive satura aprakstu."
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts satura unikālais kods."
+      },
+      "tree" : {
+        "label" : "Izvēlētais fails vai mape",
+        "help" : "Koplietotās google drive vietas un lappušu saturs"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive konfigurācija",
+        "help" : "Jau konfigurētas google drive sistēmas atsauce."
+      },
+      "openZips" : {
+        "label" : "Atvērt zip failus",
+        "help" : "Iespējot zip failu atvēršanu un satura izvilkšanu"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekts",
+        "help" : "Galvenā projekta atsauce."
+      },
+      "programmedTables" : {
+        "label" : "Satura atjauninājumu pārbaudes grafiks",
+        "help" : "Konfigurējiet izmaiņu satura grafiku, lai uzturētu retrieve augmented generation sistēmu atjauninātu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Mapju un apakšmapju organizācijas kritēriji",
+        "help" : "Lūdzu, paskaidrojiet šeit, kāds ir failu un mapju organizācijas kritērijs google drive saturam, kas kopīgots ar Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Vispārīgie iestatījumi"
+      },
+      "CancelBtn" : {
+        "label" : "Atcelt"
+      },
+      "DeleteBtn" : {
+        "label" : "Dzēst"
+      },
+      "SaveBtn" : {
+        "label" : "Saglabāt"
+      },
+      "MainPanel" : {
+        "label" : "Google drive integrācijas rediģēšana"
+      },
+      "code" : {
+        "label" : "Unikāls kods",
+        "help" : "Automātiski ģenerēts google drive sistēmas unikālais kods."
+      },
+      "description" : {
+        "label" : "Apraksts",
+        "help" : "Ievadiet google drive sistēmas aprakstu."
+      },
+      "driveAccessSecret" : {
+        "label" : "Lietotā identitāte",
+        "help" : "Izvēlieties vai izveidojiet identitāti, lai piekļūtu google drive sistēmai"
+      }
+    }
+  }
+}

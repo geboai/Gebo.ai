@@ -12,6 +12,8 @@
 
 package ai.gebo.secrets.model;
 
+import jakarta.validation.constraints.NotNull;
+
 /**
  * Gebo.ai comment agent
  *
@@ -21,15 +23,19 @@ package ai.gebo.secrets.model;
 public class GeboSshKeySecretContent extends AbstractGeboSecretContent {
 
     // Email associated with the SSH key
+	@NotNull
     private String email = null;
 
     // Private SSH key
+	@NotNull
     private String key = null;
 
     // Public SSH key
+	@NotNull
     private String pub = null;
 
     // Passphrase for the SSH key
+	@NotNull
     private String passphrase = null;
 
     /**

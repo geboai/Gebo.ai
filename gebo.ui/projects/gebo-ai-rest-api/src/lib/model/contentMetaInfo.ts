@@ -20,4 +20,12 @@ export interface ContentMetaInfo {
     rootKnowledgeBase?: string;
     moduleId?: string;
     url?: string;
+    referenceType?: ContentMetaInfo.ReferenceTypeEnum;
+}
+export namespace ContentMetaInfo {
+    export type ReferenceTypeEnum = 'FILE' | 'WEB';
+    export const ReferenceTypeEnum = {
+        FILE: 'FILE' as ReferenceTypeEnum,
+        WEB: 'WEB' as ReferenceTypeEnum
+    };
 }

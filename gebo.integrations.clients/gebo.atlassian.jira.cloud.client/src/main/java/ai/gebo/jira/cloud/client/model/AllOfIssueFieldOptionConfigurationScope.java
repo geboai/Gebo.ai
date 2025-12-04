@@ -26,11 +26,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.IssueFieldOptionScopeBean;
-import ai.gebo.jira.cloud.client.model.ProjectScopeBean;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * Defines the projects that the option is available in. If the scope is not defined, then the option is available in all projects.
  */

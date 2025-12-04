@@ -6,13 +6,10 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.repository;
 
-import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -20,18 +17,18 @@ import org.springframework.data.domain.Pageable;
 
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 
 /**
- * Gebo.ai comment agent
- * Repository interface for managing GUserChatContext entities with MongoDB. 
- * Extends the generic IGBaseMongoDBRepository providing additional methods 
- * for specific query operations.
+ * Gebo.ai comment agent Repository interface for managing GUserChatContext
+ * entities with MongoDB. Extends the generic IGBaseMongoDBRepository providing
+ * additional methods for specific query operations.
  */
 public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUserChatContext> {
 
 	/**
-	 * Returns the managed type of the repository, which is GUserChatContext.
-	 * This method overrides the default implementation from the parent interface.
+	 * Returns the managed type of the repository, which is GUserChatContext. This
+	 * method overrides the default implementation from the parent interface.
 	 * 
 	 * @return the class type GUserChatContext
 	 */
@@ -41,65 +38,10 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	}
 
 	/**
-	 * Interface for representing user chat information. 
-	 * Provides getter methods to access chat-related data.
-	 */
-	public static interface GUserChatInfo {
-
-		/**
-		 * Gets the code of the chat.
-		 *
-		 * @return a String representing the chat code.
-		 */
-		String getCode();
-
-		/**
-		 * Gets the username associated with the chat.
-		 *
-		 * @return a String representing the username.
-		 */
-		String getUsername();
-
-		/**
-		 * Gets the description of the chat.
-		 *
-		 * @return a String providing the chat description.
-		 */
-		String getDescription();
-
-		/**
-		 * Gets the creation date and time of the chat.
-		 *
-		 * @return a Date object representing when the chat was created.
-		 */
-		Date getChatCreationDateTime();
-
-		/**
-		 * Gets the profile code of the chat.
-		 *
-		 * @return a String representing the profile code.
-		 */
-		public String getChatProfileCode();
-
-		/**
-		 * Checks if the chat has a RAG (red-amber-green) status.
-		 *
-		 * @return a Boolean indicating if the chat has RAG status.
-		 */
-		public Boolean getRagChat();
-
-		/**
-		 * Gets the chat model code.
-		 *
-		 * @return a String representing the model code of the chat.
-		 */
-		public String getChatModelCode();
-	}
-
-	/**
-	 * Finds all chat information based on the given example and pageable parameters.
+	 * Finds all chat information based on the given example and pageable
+	 * parameters.
 	 *
-	 * @param qbe an Example of GUserChatContext to use for query by example.
+	 * @param qbe  an Example of GUserChatContext to use for query by example.
 	 * @param page a Pageable object to manage pagination information.
 	 * @return a Page of GUserChatInfo data.
 	 */
@@ -109,9 +51,11 @@ public interface GUserChatContextRepository extends IGBaseMongoDBRepository<GUse
 	 * Finds chat information by the given username and pageable parameters.
 	 *
 	 * @param username a String representing the username to search for.
-	 * @param page a Pageable object to manage pagination.
+	 * @param page     a Pageable object to manage pagination.
 	 * @return a Page of GUserChatInfo data for the specified username.
 	 */
 	public Page<GUserChatInfo> findByUsername(String username, Pageable page);
+
+	public List<GUserChatInfo> findByUsername(String username);
 
 }

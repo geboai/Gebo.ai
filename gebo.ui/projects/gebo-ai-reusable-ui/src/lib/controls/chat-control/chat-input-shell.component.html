@@ -1,0 +1,80 @@
+<div [ngClass]="interactions && interactions.length ? 'floating-chat-area' : 'floating-chat-area-middle'"
+    class="w-full">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="w-full">
+
+        <!-- wrapper centrato col box responsive -->
+        <div class="grid justify-content-center w-full">
+            <div class="col-12 lg:col-6 xxl:col-6">
+                <!--
+                    col-12: mobile/tutto schermo
+                    lg:col-6: circa metà schermo (full HD)
+                    xxl:col-4: circa 1/3 su schermi molto grandi
+                -->
+                <div class="col-12 lg:col-6 xxl:col-6 chat-input-shell chat-area">
+
+                    <!-- Riga superiore: pannello documenti + upload list -->
+                    <div class="grid w-full mb-2 ">
+
+                        <div class="col-12">
+                            <gebo-ai-choose-documents-panel-component *ngIf="ragsystem && chatUserInfos?.knowledgeBases"
+                                [interactionDisabled]="loading" [knowledgeBaseCodes]="knowledgeBaseCodes"
+                                [(openedSearchDocumentsWindows)]="openSelectDocumentsWindow"
+                                [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
+                                formControlName="forcedRequestDocuments">
+                            </gebo-ai-choose-documents-panel-component>
+
+                            <gebo-ai-upload-chat-documents-files [(showUpload)]="openedUploadDocumentsWindow"
+                                formControlName="userUploadedContents" [chatModelCode]="chatInfo?.chatModelCode"
+                                [chatProfileCode]="chatInfo?.chatProfileCode" [ragChat]="ragsystem"
+                                [userSessionCode]="userChatContextCode"
+                                (newSessionCreatedOnUpload)="onNewSessionCreatedOnUploadInternal($event)">
+                            </gebo-ai-upload-chat-documents-files>
+                        </div>
+
+                    </div>
+
+                    <!-- Riga inferiore: sinistra / textarea / destra perfettamente simmetriche -->
+                    <div class="grid align-items-center w-full">
+
+                        <!-- SINISTRA: bottoni upload & browse docs -->
+                        <div
+                            class="col-3  md:col-2 lg:col-2 xxl:col-2 flex justify-content-center  mb-2 md:mb-0 gap-2">
+                            <p-button id="UploadFileBtn" [text]="false" [rounded]="true" gebo-ai-label
+                                icon="pi pi-cloud-upload" title="Upload a file to chat or work with"
+                                (onClick)="openUploadDialog()" [disabled]="loading">
+                            </p-button>
+
+                            <p-button id="ChatWithDocsBtnNew" [text]="true" gebo-ai-label icon="pi pi-search"
+                                title="Browse or search and select documents to chat with"
+                                (onClick)="openSelectDocsDialog()" [disabled]="loading">
+                            </p-button>
+                        </div>
+
+                        <!-- CENTRO: textarea -->
+                        <div class="col-6   md:col-8 lg:col-8 xxl:col-8  md:col-6 mb-2 md:mb-0">
+                            <textarea rows="3" pTextarea formControlName="query" class="w-full" gebo-ai-label
+                                id="QueryControl" placeholder="Write a message for the chat bot"
+                                (keydown.enter)="onSubmit()" [required]="true"></textarea>
+                        </div>
+
+                        <!-- DESTRA: audio + submit (stessa larghezza della sinistra) -->
+                        <div class="col-3   md:col-2 lg:col-2 xxl:col-2  flex justify-content-center  gap-2">
+                            <gebo-ai-audio-component class="flex align-items-center"
+                                [disabled]="capabilities?.supportsTranscript !== true || loading"
+                                (onAudioTrack)="onSpeechEventInternal($event)" [playAudioTrack]="currentAudioTrack"
+                                [viewLabels]="true">
+                            </gebo-ai-audio-component>
+
+                            <p-button id="SubmiQuestion" (onClick)="onSendClick()" gebo-ai-label
+                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
+                                type="submit" title="Submit your question" [text]="false">
+                            </p-button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

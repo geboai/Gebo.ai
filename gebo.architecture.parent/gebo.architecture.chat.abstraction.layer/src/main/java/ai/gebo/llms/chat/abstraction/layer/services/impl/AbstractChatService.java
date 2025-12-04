@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -16,11 +17,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.messages.AbstractMessage;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
 import org.springframework.ai.chat.messages.Message;
@@ -30,6 +31,7 @@ import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -48,19 +50,31 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboChatPromptsConfigs;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatHistoryData;
+import ai.gebo.llms.chat.abstraction.layer.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.GPromptConfig;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
-import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfoData;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboTemplatedChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.model.LLMGeneratedResource;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatContextRepository;
+import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGGenericalChatService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGPromptConfigDao;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
+import ai.gebo.security.services.IGSecurityService;
+import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -68,22 +82,34 @@ import reactor.core.publisher.Mono;
  * AI generated comments Provides an abstract implementation of chat services,
  * facilitating integration with different chat models.
  */
+@AllArgsConstructor
 public abstract class AbstractChatService implements IGGenericalChatService {
+	private static final String CONVERSATION_SUMMARY_SO_FAR = "Conversation summary so far:";
 	protected final static ObjectMapper mapper = new ObjectMapper(); // JSON object mapper for
 																		// serialization/deserialization
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass()); // Logger for logging events
 
-	@Autowired
-	protected IGChatModelRuntimeConfigurationDao chatModelConfigurations; // DAO for fetching chat model configurations
+	final protected IGChatModelRuntimeConfigurationDao chatModelConfigurations; // DAO for fetching chat model
+																				// configurations
 
-	@Autowired
-	protected IGToolCallbackSourceRepositoryPattern callbacksRepoPattern; // Repository pattern for tool callbacks
+	final protected IGToolCallbackSourceRepositoryPattern callbacksRepoPattern; // Repository pattern for tool callbacks
 
-	@Autowired
-	protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
+	final protected IGPersistentObjectManager persistenceManager; // Manager for handling persistence operations
 
-	@Autowired
-	protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
+	final protected GUserChatContextRepository userContextRepository; // Repository for user chat context data
+	final protected GeboChatPromptsConfigs promptConfigs;
+	final protected IGPromptConfigDao promptsDao;
+
+	final protected InteractionsContextService interactionsContext;
+
+	final protected IGSecurityService securityService;
+
+	final protected IGChatResponseParsingFixerServiceRepository fixerServiceRepository;
+
+	final protected IGChatStorageAreaService chatStorageAreaService;
+
+	final protected LLMGeneratedResourceRepository generatedResourceRepository;
+	final protected ChatHistoryConsolidationService historyConsolidationService;
 
 	/**
 	 * Inner class representing a system message containing document data.
@@ -176,21 +202,28 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	/**
 	 * Constructs a list of Message objects from chat interactions and documents.
 	 *
-	 * @param messages List of chat interactions
+	 * @param _history List of chat interactions
 	 * @param docs     List of documents
 	 * @return A list of constructed Message objects
 	 */
-	protected List<Message> getMessages(List<ChatInteractions> messages, List<Document> docs) {
+	protected List<Message> getMessages(ChatHistoryData history, List<Document> docs) {
 
 		List<Message> message_list = new ArrayList<>();
-		if (messages != null) {
-			for (ChatInteractions chatInteraction : messages) {
-				GeboChatRequest request = chatInteraction.request;
+		List<ChatInteractions> _history = history.getInteractions();
+		if (history.getConsolidated() != null) {
+			SystemMessage consolidatedMsg = new SystemMessage(
+					CONVERSATION_SUMMARY_SO_FAR + history.getConsolidated().getConsolidationText() + "\r\n");
+			message_list.add(consolidatedMsg);
+		}
+		if (_history != null) {
+
+			for (ChatInteractions chatInteraction : _history) {
+				GeboChatRequest request = chatInteraction.getRequest();
 				if (request != null) {
 					UserMessage _request = new UserMessage(request.getQuery());
 					message_list.add(_request);
 				}
-				GeboTemplatedChatResponse response = chatInteraction.response;
+				GeboTemplatedChatResponse response = chatInteraction.getResponse();
 				if (response != null) {
 					AssistantMessage _response = new AssistantMessage(stringhify(response.getQueryResponse()));
 					message_list.add(_response);
@@ -239,7 +272,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	protected GeboChatResponse callChatClient(IGConfigurableChatModel configurableChatModel, final Prompt prompt,
 			final KBContext context, final GeboChatRequest request, final GeboChatResponse response,
-			final List<ChatInteractions> messages, final List<GResponseDocumentRef> docrefs, List<Document> docs)
+			final ChatHistoryData messages, final List<GResponseDocumentRef> docrefs, List<Document> docs)
 			throws LLMConfigException {
 		ChatClient client = configurableChatModel.getChatClient();
 		ChatResponse chatresponse = client.prompt(prompt).user(request.getQuery()).messages(getMessages(messages, docs))
@@ -261,28 +294,28 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param context               Knowledge base context
 	 * @param request               Request object
 	 * @param response              Response object to update
-	 * @param messages              List of chat interactions
+	 * @param history               List of chat interactions
 	 * @param docrefs               List of document references
 	 * @param docs                  List of documents
-	 * @param responseType          Class of the response type
+	 * @param rt                    Class of the response type
 	 * @return Updated GeboTemplatedChatResponse
 	 * @throws LLMConfigException if a configuration error occurs
 	 */
 	protected <ResponseType> GeboTemplatedChatResponse<ResponseType> callTemplatedChatClient(
 			IGConfigurableChatModel configurableChatModel, final Prompt prompt, final KBContext context,
 			final GeboChatRequest request, final GeboTemplatedChatResponse<ResponseType> response,
-			final List<ChatInteractions> messages, final List<GResponseDocumentRef> docrefs, List<Document> docs,
-			Class<ResponseType> responseType) throws LLMConfigException {
+			final ChatHistoryData history, final List<GResponseDocumentRef> docrefs, List<Document> docs,
+			Class<ResponseType> rt) throws LLMConfigException {
 		ChatClient client = configurableChatModel.getChatClient();
-		if (responseType.equals(String.class)) {
+		if (rt.equals(String.class)) {
 			ChatResponse chatresponse = client.prompt(prompt).user(request.getQuery())
-					.messages(getMessages(messages, docs)).call().chatResponse();
+					.messages(getMessages(history, docs)).call().chatResponse();
 			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 			String responseText = callResponseObject.getText();
 			response.setQueryResponse((ResponseType) responseText);
 		} else {
 			ResponseType entityEntry = client.prompt(prompt).user(request.getQuery())
-					.messages(getMessages(messages, docs)).call().entity(responseType);
+					.messages(getMessages(history, docs)).call().entity(rt);
 			response.setQueryResponse(entityEntry);
 		}
 		return response;
@@ -298,7 +331,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @param request               Request object
 	 * @param response              Response object to update
 	 * @param userContext           User chat context to update
-	 * @param messages              List of chat interactions
+	 * @param history               List of chat interactions
+	 * @param contextdocs
 	 * @param docrefs               List of document references
 	 * @param docs                  List of documents
 	 * @return A Flux of GeboChatMessageEnvelope representing the streamed messages
@@ -306,14 +340,25 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	protected Flux<GeboChatMessageEnvelope> streamChatClient(IGConfigurableChatModel configurableChatModel,
 			final Prompt prompt, final KBContext context, final GeboChatRequest request,
-			final GeboChatResponse response, final GUserChatContext userContext, final List<ChatInteractions> messages,
-			final List<GResponseDocumentRef> docrefs, List<Document> docs) throws LLMConfigException {
+			final GeboChatResponse response, final GUserChatContext userContext, final ChatHistoryData history,
+			List<Document> contextdocs, boolean chatHistoryConsolidation, int historySizeTarget)
+			throws LLMConfigException {
+
 		ChatClient client = configurableChatModel.getChatClient();
 		final Map<String, Object> toolsContext = ToolCallbackDeclarationUtil.newToolContextEnvironment(context);
 		try {
+
+			final List<Document> docs = request.getDocuments() != null ? request.getDocuments().aiDocumentsList()
+					: List.of();
+			ArrayList<Document> allDocs = new ArrayList<>(docs);
+			if (contextdocs != null) {
+				allDocs.addAll(contextdocs);
+			}
+
 			Flux<ChatResponse> res = client.prompt(prompt).user(request.getQuery())
-					.messages(getMessages(messages, docs)).toolContext(toolsContext).stream().chatResponse();
-			return composeFlux(res, context, request, response, userContext, docrefs, toolsContext);
+					.messages(getMessages(history, allDocs)).toolContext(toolsContext).stream().chatResponse();
+			return composeFlux(res, context, request, response, userContext, toolsContext, chatHistoryConsolidation,
+					historySizeTarget);
 		} catch (Throwable th) {
 			LOGGER.error("", th);
 			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", th);
@@ -326,22 +371,26 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	/**
 	 * Composes a Flux of GeboChatMessageEnvelope from the streaming chat response.
 	 *
-	 * @param res          Flux of chat responses
-	 * @param context      Knowledge base context
-	 * @param request      Request object
-	 * @param response     Response object to update
-	 * @param userContext  User chat context to update
-	 * @param docrefs      List of document references
-	 * @param toolsContext Context for tools involved in chat
+	 * @param res                      Flux of chat responses
+	 * @param context                  Knowledge base context
+	 * @param request                  Request object
+	 * @param response                 Response object to update
+	 * @param userContext              User chat context to update
+	 * @param docrefs                  List of document references
+	 * @param toolsContext             Context for tools involved in chat
+	 * @param historySizeTarget
+	 * @param chatHistoryConsolidation
 	 * @return A Flux of GeboChatMessageEnvelope representing the whole stream
 	 */
 	protected Flux<GeboChatMessageEnvelope> composeFlux(Flux<ChatResponse> res, final KBContext context,
 			final GeboChatRequest request, final GeboChatResponse response, final GUserChatContext userContext,
-			final List<GResponseDocumentRef> docrefs, Map<String, Object> toolsContext) {
+			Map<String, Object> toolsContext, boolean chatHistoryConsolidation, int historySizeTarget) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Beginning composeFlux(....)");
 		}
-
+		final List<GResponseDocumentRef> docrefs = request.getDocuments() != null
+				? GResponseDocumentRef.from(request.getDocuments())
+				: List.of();
 		final Map<String, ToolCall> toolCalls = new HashMap<>();
 		final StringBuffer buffer = new StringBuffer();
 		Mono<GeboChatMessageEnvelope> startFlux = Mono.fromSupplier(() -> {
@@ -350,6 +399,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 			response.setCalledFunctions(context.getCalledFunctions());
 			response.setDocumentsRef(docrefs);
+
 			GeboChatMessageEnvelope<GeboChatResponse> startEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
 			startEnvelope.setContent(response);
 			return startEnvelope;
@@ -373,6 +423,19 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 						if (text != null) {
 							contentSegment.append(text);
 						}
+						List<Media> medias = rs.getOutput().getMedia();
+						if (medias != null && !medias.isEmpty()) {
+							for (Media media : medias) {
+								LLMGeneratedResource generatedResource;
+								try {
+									generatedResource = this.chatStorageAreaService.addMedia(media, userContext);
+									response.getGeneratedResources().add(generatedResource);
+								} catch (Throwable e) {
+									LOGGER.error("Error receiving media", e);
+								}
+
+							}
+						}
 					}
 				}
 			}
@@ -382,6 +445,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			envelope.setContent(contentSegment.toString());
 			buffer.append(envelope.getContent());
 			return returned;
+		}).onErrorResume(exc -> {
+			GeboChatMessageEnvelope<GUserMessage> exceptionEnvelope = new GeboChatMessageEnvelope<GUserMessage>();
+			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", exc);
+			return Flux.just(exceptionEnvelope);
 		}).filter(x -> {
 			return x.getContentObjectType() != null && x.getContent() != null && x.getContent() != null
 					&& x.getContent().toString().trim().length() > 0;
@@ -404,18 +471,27 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			try {
 				List<ChatInteractions> interactions = userContext.getInteractions();
 				if (interactions == null) {
-					interactions = new ArrayList<GUserChatContext.ChatInteractions>();
+					interactions = new ArrayList<ChatInteractions>();
 				}
 				ChatInteractions interaction = new ChatInteractions();
-				interaction.request = request;
-				interaction.response = response;
+				interaction.setRequest(request);
+				interaction.setResponse(response);
 				interactions.add(interaction);
+				GUserChatContext freshCopy = null;
 				userContext.setInteractions(interactions);
 				userContext.setDateModified(new Date());
-				userContextRepository.save(userContext);
-				LLMtInteractionContextThreadLocal.Context.remove();
+				if (userContext.getCode() == null) {
+					freshCopy = persistenceManager.transactionalInsert(userContext);
+				} else {
+					freshCopy = persistenceManager.transactionalUpdate(userContext);
+				}
+				if (chatHistoryConsolidation) {
+					this.historyConsolidationService.consolidateHistory(freshCopy.getCode(), historySizeTarget);
+				}
 			} catch (Throwable th) {
 				LOGGER.error("Error saving user context", th);
+			} finally {
+				LLMtInteractionContextThreadLocal.Context.remove();
 			}
 			return finalEnvelope;
 		});
@@ -446,22 +522,4 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		return out;
 	}
 
-	/*
-	 * protected Flux<GeboChatMessageEnvelope> stream(ChatModel chatModel, final
-	 * Prompt prompt, final KBContext context, final GeboChatRequest request, final
-	 * GeboChatResponse response, final GUserChatContext userContext, final
-	 * List<GResponseDocumentRef> docrefs) { try { if (LOGGER.isDebugEnabled()) {
-	 * LOGGER.debug("Begin stream(....)"); }
-	 * 
-	 * Flux<ChatResponse> res = chatModel.stream(prompt);
-	 * 
-	 * if (LOGGER.isDebugEnabled()) { LOGGER.debug("End stream(....)"); } return
-	 * composeFlux(res, context, request, response, userContext, docrefs); } catch
-	 * (Throwable th) { response.getBackendMessages().add(GUserMessage.
-	 * errorMessage("Error on service provider", th));
-	 * LOGGER.error("Error chat handling", th);
-	 * GeboChatMessageEnvelope<GeboChatResponse> envelope = new
-	 * GeboChatMessageEnvelope<GeboChatResponse>(); envelope.setContent(response);
-	 * envelope.setLastMessage(true); return Flux.just(envelope); } }
-	 */
 }

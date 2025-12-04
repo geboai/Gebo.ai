@@ -11,6 +11,7 @@
  */
 import { ChatInteractions } from './chatInteractions';
 import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
+import { GUserChatConsolidationData } from './gUserChatConsolidationData';
 
 export interface GUserChatContext { 
     code?: string;
@@ -28,5 +29,5 @@ export interface GUserChatContext {
     interactions?: Array<ChatInteractions>;
     chatModelCode?: string;
     choosedKnowledgeBases?: Array<string>;
-    summarizedHistory?: string;
+    consolidation?: GUserChatConsolidationData;
 }

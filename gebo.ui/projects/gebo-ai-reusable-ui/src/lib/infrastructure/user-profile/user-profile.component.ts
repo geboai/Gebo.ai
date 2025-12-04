@@ -20,11 +20,17 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { LoginService } from "../login/login.service";
 import { UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-current-user-profile",
     templateUrl: "user-profile.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{
+        provide: GEBO_AI_MODULE, useValue: "GeboAIUserProfileModule", multi: false
+    }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserProfileComponent")
+    }]
 })
 export class GeboAIUserProfileComponent implements OnInit, OnChanges {
     /** Flag to indicate if data is currently being loaded */

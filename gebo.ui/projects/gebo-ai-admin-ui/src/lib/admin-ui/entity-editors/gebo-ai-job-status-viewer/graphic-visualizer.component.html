@@ -1,0 +1,24 @@
+<div class="grid" *ngIf="viewed">
+    <div class="col-12"><label ><i [ngClass]="(viewed.completed===true?'pi pi-check':'pi pi-spin pi-cog')"></i>{{viewed.description}} ({{viewed.completed===true?"Completed":"Executing"}})</label></div>
+    <div class="col-3">
+        <div class="card">
+            <p-chart id="Chart" type="pie" [data]="viewed.piechart" [options]="pieOptions" [height]="'170px'" />
+        </div>
+    </div>
+    <div class="col-9">
+        <div class="grid">
+            <div class="col-12" *ngIf="viewed.documentsChart">
+                <p-chart id="Chart2" type="bar" [data]="viewed.documentsChart" [options]="pieOptions" [height]="'150px'" />
+            </div>
+            <div class="col-12" *ngIf="viewed.tokensChart">
+                <p-chart id="Chart3"  type="bar" [data]="viewed.tokensChart" [options]="pieOptions" [height]="'150px'" />
+            </div>
+        </div>
+    </div>
+</div>
+<span *ngIf="viewed?.childs?.length">
+    <gebo-ai-jobsummary-graphic-visualizer *ngFor="let entry of viewed?.childs"
+        [rendered]="entry"></gebo-ai-jobsummary-graphic-visualizer>
+</span>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -15,6 +15,6 @@ import { GVirtualFilesystemRoot } from './gVirtualFilesystemRoot';
 export interface OperationStatusListGVirtualFilesystemRoot { 
     result?: Array<GVirtualFilesystemRoot>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

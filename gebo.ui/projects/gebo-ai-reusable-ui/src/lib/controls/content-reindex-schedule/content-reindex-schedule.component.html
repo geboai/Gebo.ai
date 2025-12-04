@@ -22,7 +22,7 @@
                     [style]="{width:'100%'}"></p-select>
             </div>
             <div class="col-2" *ngIf="unscheduledPeriods && unscheduledPeriods.length">
-                <p-button label="+Add" icon="pi pi-calendar" [outlined]="true"
+                <p-button id="AddBtn" gebo-ai-label label="+Add" icon="pi pi-calendar" [outlined]="true"
                     [disabled]="(!formGroup.controls['newFrequency'].value)"
                     (onClick)="addScheduling()" styleClass="w-full"></p-button>
             </div>
@@ -55,7 +55,7 @@
                 <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
                     <div class="grid">
                         <div class="col-3">
-                            <p-button label="Confirm" icon="pi pi-check" [outlined]="true" (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid"
+                            <p-button  id="ConfirmBtn" gebo-ai-label  label="Confirm" icon="pi pi-check" [outlined]="true" (onClick)="confirmEditedValues()" [disabled]="formGroup.invalid"
                                 styleClass="w-full" severity="success"></p-button>
                         </div>
 
@@ -69,7 +69,7 @@
     <p-blockUI [blocked]="loading">
         <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
-    <p-button title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true" icon="pi pi-pen-to-square"></p-button>
+    <p-button  id="EditBtn" gebo-ai-label  title="Edit scheduling" (onClick)="enterEdit()" [outlined]="true" icon="pi pi-pen-to-square"></p-button>
 
     <p-chip icon="pi pi-calendar" *ngFor="let t of displayTimes" [label]="t"></p-chip>
 </div>

@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.GroupName;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The group that the filter is shared with. For a request, specify the &#x60;groupId&#x60; or &#x60;name&#x60; property for the group. As a group&#x27;s name can change, use of &#x60;groupId&#x60; is recommended.

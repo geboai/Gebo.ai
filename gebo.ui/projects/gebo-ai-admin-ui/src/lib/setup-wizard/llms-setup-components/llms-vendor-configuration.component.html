@@ -1,0 +1,63 @@
+<p-blockUI id="BlockUIButton" [target]="mainPanel" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel #mainPanel id="VendorConfigPanel" [showHeader]="false">
+    <p-fieldset id="ProviderInfos" gebo-ai-label legend="Provider informations">
+       
+        <div class="grid">
+            <div class="col-12">
+                <label id="ProviderWWW" gebo-ai-text>Web site link</label>&nbsp;&nbsp;<a
+                    [href]="vendorConfiguration?.parentModel?.webSite" target="_blank"
+                    gebo-ai-field-element>{{vendorConfiguration?.parentModel?.webSite}}</a>
+
+
+            </div>
+            <div class="col-12" *ngIf="vendorConfiguration?.parentModel?.requiresApiKey===true">
+                <label id="ProviderBuy" gebo-ai-text>Buy Apy key credit link</label>&nbsp;&nbsp;<a
+                    [href]="vendorConfiguration?.parentModel?.acquireKeyUrl" target="_blank"
+                    gebo-ai-field-element>{{vendorConfiguration?.parentModel?.acquireKeyUrl}}</a>
+            </div>
+
+
+        </div>
+    </p-fieldset>
+    <div class="grid">
+        
+        <div class="col-3">
+            <p-button id="NewModelsButton" gebo-ai-label [outlined]="true" label="New models"
+                 title="Create new models configuration" severity="success"
+                icon="pi pi-microchip-ai" (onClick)="openModal()" styleClass="w-full" />
+            
+        </div>
+        
+    </div>
+    <p-fieldset *ngIf="vendorConfiguration?.runtimeConfigs && vendorConfiguration?.runtimeConfigs?.length"
+        id="ExistingModelsSection" gebo-ai-label legend="Existing configurations">
+        
+        <div class="col-12 grid">
+
+            <div class="col-4"><b id="ExistingModelCode" gebo-ai-text>Code</b></div>
+            <div class="col-4"><b id="ExistingModelDesc" gebo-ai-text>Description</b></div>
+            <div class="col-2"><b id="ExistingModelType" gebo-ai-text>Model type</b></div>
+            <div class="col-2"></div>
+            @for (config of vendorConfiguration?.runtimeConfigs; track $index) {
+            <div class="col-4">{{config.existingModelConfig.code}}</div>
+            <div class="col-4">{{config.existingModelConfig.description}}</div>
+            <div class="col-2">{{config.modelType}}</div>
+            <div class="col-2">
+                <p-button id="ModifyBtn" gebo-ai-label [outlined]="true" label="Modify"
+                    title="View/modify model configuration" severity="success" icon="pi pi-microchip-ai"
+                    (onClick)="doModify(config)" styleClass="w-full" />
+            </div>
+            }
+
+
+
+        </div>
+    </p-fieldset>
+    
+</p-panel>
+<p-dialog  [modal]="true" [visible]="openModalCreateModel" (visibleChange)="openModalCreateModel=false" [style]="{width:'98%',height:'90%'}" [maximizable]="true" [showHeader]="true" [closable]="true">
+    <gebo-ai-llms-vendor-model-type-config [vendorConfiguration]="vendorConfiguration" *ngIf="openModalCreateModel===true" (vendorConfigurationChanged)="vendorConfigurationChanged.emit($event)"
+                    ></gebo-ai-llms-vendor-model-type-config>
+</p-dialog>

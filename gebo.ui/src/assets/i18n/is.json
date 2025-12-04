@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Sjálfgefið kerfismál",
+        "help" : "Sjálfgefið kerfismál fyrir þessa Gebo.ai uppsetningu"
+      },
+      "username" : {
+        "label" : "Netfang",
+        "help" : "Netfang sem notandanafn til innskráningar"
+      },
+      "passwordC" : {
+        "label" : "Staðfesta lykilorð",
+        "help" : "Staðfestu lykilorðið"
+      },
+      "password" : {
+        "label" : "Lykilorð",
+        "help" : "Lykilorð til innskráningar (að minnsta kosti 8 stafir)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " lykilorð stemma ekki "
+      },
+      "LocalAdmin" : {
+        "label" : "Búðu til staðbundinn kerfisstjórareikning þinn"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Þú munt nota þennan reikning í framtíðinni til að stilla/stjórna hugbúnaðinum, þessi gögn verða aðeins staðbundin á þínu kerfi og ekki send yfir netið"
+      },
+      "EnterBtn" : {
+        "label" : "Fara á innskráningarsíðu"
+      },
+      "SetupPage" : {
+        "label" : "Settu upp þína gebo.ai uppsetningu"
+      },
+      "CreateBtn" : {
+        "label" : "Búa til kerfisstillingar"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Lestu og samþykktu leyfið"
+      },
+      "AcceptMark" : {
+        "label" : "Ég samþykki skilmálana",
+        "help" : "Með því að smella hér samþykkir þú skilmála leyfisins"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "netfang",
+        "help" : "Netfang sem notandanafn til að skrá þig inn"
+      },
+      "password" : {
+        "label" : "Lykilorð",
+        "help" : "Lykilorð til að skrá þig inn"
+      },
+      "LoginPanel" : {
+        "label" : "Skráðu þig inn á Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Innskráning"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Allt í lagi!",
+        "detail" : "Aðgerð tókst"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Velkomin á gebo.ai",
+        "detail" : "Sláðu inn notandanafn og lykilorð til að skrá þig inn"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Aðgerð mistókst",
+        "detail" : "Ekki tókst að auðkenna með gefnum upplýsingum"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Í lagi!",
+        "detail" : "Aðgerð tókst"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Velkomin í gebo.ai",
+        "detail" : "Sláðu inn notendanafn og lykilorð til að skrá þig inn"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 stillingar"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Heiti þjónustuaðila"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 öryggisstillingar"
+      },
+      "IdHeader" : {
+        "label" : "Auðkenni"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Til baka á uppsetningarheimasíðu"
+      },
+      "WizardUi" : {
+        "label" : "Veldu uppsetningarhluta"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Stillingar fyrir stjórnanda og aðra notendur",
+        "description" : "Að minnsta kosti þarf að setja upp stjórnendareikning til að tryggja að þessi Gebo.ai uppsetning sé rétt stjórnuð, bættu við öðrum notendum ef þörf krefur"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai vinnumappa",
+        "description" : "Stilltu vinnumöppu, hún verður mappan þar sem stillingar og öll vinnuskjöl þessa uppsetningar verða vistuð. Gott er að taka reglulega afrit af henni."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Stillingar vigurtölugagnagrunns",
+        "description" : "Það þarf að stilla vigurtölugagnagrunn fyrir Gebo.ai til að bjóða upp á endurheimta aukna útgáfur, þú getur valið milli staðbundins gagnagrunns, Qdrant eða Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Einn aðgangur, oauth2 auðkenning",
+        "description" : "Oauth2 auðkenning með sér inngangi og oauth2 viðskiptavina stillingar"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Stillingar stórra tungumálalíkana",
+        "description" : "Stilltu ýmis tungumálalíkön með skýja- eða staðbundinni innviðaþjónustu, að minnsta kosti eitt spjallmódel og eitt innsetningarlíkan þarf að vera stillt svo hugbúnaðurinn virki rétt."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Graf-rag/Þekkingarútdráttur uppsetning",
+        "description" : "Stilltu graf rag og undikerfi þekkingarútdráttar"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Stilling á sameiginlegum skrárslóðum",
+        "description" : "Stilltu slóðir fyrir sameiginlegar möppur fyrirtækisins sem verða notaðar sem svæði fyrir endurheimta auknar upplýsingar í mismunandi þekkingargrunnslýsingum"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian Confluence samþætting",
+        "description" : "Stilltu Gebo.ai til að komast inn á Atlassian Confluence skýja eða staðbundna uppsetningar"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian Jira samþætting",
+        "description" : "Stilltu Gebo.ai til að komast inn á Atlassian Jira skýja-uppsetningar"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint samþætting",
+        "description" : "Stilltu Gebo.ai til að tengjast Microsoft Sharepoint skýja eða staðbundnum uppsetningum þínum"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Setja upp að minnsta kosti einn þekkingargrunn",
+        "description" : "Stilltu að minnsta kosti einn þekkingargrunn svo notendur geti nýtt sér auknar upplýsingar í Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Setja upp að minnsta kosti „R.A.G.“ spjallprófíl",
+        "description" : "Stilltu að minnsta kosti einn aukinn spjallprófíl fyrir notendur byggðum á einum af þínum stilltu þekkingargrunnum"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai uppsetningar-skylduskref kláruð...",
+        "detail" : "Skylduuppsetningarskrefunum hefur verið lokið en einhver vantar sem koma í veg fyrir að ykkar fyrirtæki fái sem mest út úr hugbúnaðinum"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai uppsetning í lagi!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Það vantar skylduskref í gebo.ai uppsetningu",
+        "detail" : "Vinsamlega skoðaðu rauðu skrefin í uppsetningarferlinu"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces samþætting",
+        "description" : "Stilltu Gebo.ai til að fá aðgang að Google cloud Drive/Workspaces teymisgögnum þínum"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Stilla Atlassian Confluence kerfi fyrirtækisins"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tegund kerfis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence kerfi"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira kerfi"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "MainPanel" : {
+        "label" : "Stilla Atlassian Jira kerfi fyrirtækisins"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tegund kerfis"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "MainPanel" : {
+        "label" : "Stilla Microsoft Sharepoint kerfi fyrirtækisins"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tegund kerfis"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint kerfi"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Gefðu upp api-lykil með réttum inneignum. Ef OpenAI er valið þarftu að bæta sérstöku inneign (10-30$ getur verið nóg) við venjulega áskriftina þína fyrir notkun á api, annars verður ekki hægt að nota tungumálalíkönin í þessari forriti."
+      },
+      "MainPanel" : {
+        "label" : "Stilling á aðgangi Gebo.ai að tungumálalíkönum með þínum eigin api lykli"
+      },
+      "provider" : {
+        "label" : "Birgir stórra tungumálalíkana",
+        "help" : "Veldu einn birgi; OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Notandi",
+        "help" : "Settu inn notanda sem er tengdur api-lykli þínum"
+      },
+      "ConfigureBtn" : {
+        "label" : "Stilla"
+      },
+      "apiKey" : {
+        "label" : "Api lykill",
+        "help" : "Api lykillinn þinn fyrir valda LLMS þjónustu"
+      },
+      "ProviderHeader" : {
+        "label" : "Þjónustuaðili"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "ModelHeader" : {
+        "label" : "Módel"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Gerð líkans"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Sjálfgefið módel"
+      },
+      "MainPanelHeader" : {
+        "label" : "Stilla aðgang að Gebo.ai llms veitendum"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Búa til graf rag stillingar"
+      },
+      "MainPanel" : {
+        "label" : "Stilla sjálfgefnar grunnstillingar fyrir Graph Rag & þekkingarútdrátt"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "EditConfigBtn" : {
+        "label" : "Breyta stillingum"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Verkefni"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Bæta við þekkingargrunni"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Þekkingargrunnur"
+      },
+      "MainPanel" : {
+        "label" : "Stillingar þekkingargrunna og efnis"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Uppruni efnis"
+      },
+      "PublishedHeader" : {
+        "label" : "Útgefið"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Fjöldi skjala"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Bæta við verkefni/atriði",
+        "help" : "búa til nýtt verkefni"
+      },
+      "Button1" : {
+        "help" : "opna þekkingargrunn"
+      },
+      "Button2" : {
+        "help" : "opna verkefnaform"
+      },
+      "Button3" : {
+        "help" : "opna gagnaveitu"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Stilling á vinnumöppu Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Stilla"
+      },
+      "workDirectory" : {
+        "label" : "Veldu möppu sem Gebo.ai vinnumöppu",
+        "help" : "Veldu möppu á netþjóni sem þessi uppsetning mun nota sem vinnumöppu fyrir stillingar og efnisskrár."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Bæta við möppu"
+      },
+      "AddFolderBtn" : {
+        "label" : "Bæta við möppu"
+      },
+      "CodeHeader" : {
+        "label" : "Kóði"
+      },
+      "MainPanel" : {
+        "label" : "Slóðir sameiginlegra skráarkerfa á netþjóni"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Algild slóð"
+      },
+      "DeleteHeader" : {
+        "label" : "Eyða"
+      },
+      "path" : {
+        "label" : "Bæta við rótarmöppu sameiginlegs skráarkerfis",
+        "help" : "Veldu möppu á netþjóni sem er rótarslóð fyrir sameiginlega skráarkerfið sem fyrirtækið þitt notar sem skjalasafn"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á skráðarskráfærslunni"
+      },
+      "RemovePathBtn" : {
+        "label" : "Fjarlægja slóð"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Stilla"
+      },
+      "MainPanel" : {
+        "label" : "Stillingar vigurtölugagnagrunns"
+      },
+      "host" : {
+        "label" : "Qdrant hýsingarvél",
+        "help" : "Heiti eða ip tölu á Qdrant hýsingu"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant tengistillingar"
+      },
+      "port" : {
+        "label" : "Qdrant tengi",
+        "help" : "Tengi fyrir Qdrant samskipti (6334 er staðlað)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api lykill",
+        "help" : "Api lykill fyrir Qdrant auðkenningu"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS stilling",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai uppsetningarskylduskrefum lokið...",
+        "detail" : "Skylduuppsetningarskrefum hefur verið lokið en einhver stig vantar svo fyrirtækið þitt geti nýtt hugbúnaðinn að fullu"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Vantar skylduskref í Gebo.ai uppsetningu",
+        "detail" : "Yfirfarðu rauðu skrefin í uppsetningarferlinu"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai uppsetning í lagi!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Bæta við nýjum R.A.G. spjallprófíl"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Bæta við R.A.G. spjallprófíl"
+      },
+      "MainPanel" : {
+        "label" : "Ná í stillingar fyrir aukna kynslóð (r.a.g.) spjallprófíla"
+      },
+      "CodeHeader" : {
+        "label" : "Kóði"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Núverandi R.A.G. spjallprófílar"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Breyta R.A.G. spjallprófíl"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kóðar þekkingargrunns"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Stilla Google Drive/Workspaces kerfi fyrirtækis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Stillingarkóði"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kóði",
+        "help" : "Sláðu inn lýsingu á OAUTH2 auðkenningar-/samþættingarkóða (registrationId)."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á OAUTH2 auðkenningar-/samþættingargögnum."
+      },
+      "configurationType" : {
+        "label" : "Tilgangur uppsetningar",
+        "help" : "Veldu hvort þessi stilling verði notuð til að auðkenna í Gebo.ai eða til að veita Gebo.ai aðgang að utanaðkomandi kerfi."
+      },
+      "authProvider" : {
+        "label" : "Þjónustuaðili",
+        "help" : "Sláðu inn þjónustuaðila OAUTH2 auðkenningar"
+      },
+      "issuerUri" : {
+        "label" : "Útgáfuaðili Uri",
+        "help" : "Sláðu inn OAUTH2 útgáfuaðila vefslóð þjónustuaðilans"
+      },
+      "authorizationUri" : {
+        "label" : "Vefslóð heimildar",
+        "help" : "Sláðu inn OAUTH2 heimildar-vefslóð þjónustuaðilans"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Sláðu inn OAUTH2 Jwk Set vefslóð þjónustuaðilans"
+      },
+      "userInfoUri" : {
+        "label" : "Vefslóð notendaupplýsinga",
+        "help" : "Sláðu inn OAUTH2 notendaupplýsinga-vefslóð þjónustuaðilans"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Sláðu inn OAUTH2 introspection vefslóð þjónustuaðilans"
+      },
+      "tokenUri" : {
+        "label" : "Vefslóð tákns",
+        "help" : "Sláðu inn OAUTH2 tákns-vefslóð þjónustuaðilans"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 vefslóðir þjónustuaðila"
+      },
+      "MainPanel" : {
+        "label" : "Settu inn nýjar OAUTH2 auðkenningar-/samþættingaupplýsingar"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Viðskiptavinur auðkenni",
+        "help" : "Auðkenni viðskiptavinar fyrir oauth2 samskiptareglur (fáanlegt úr stjórnunarsvæði oauth2 auðkennds þriðja aðila hugbúnaðar)"
+      },
+      "secret" : {
+        "label" : "Leyni lykill",
+        "help" : "Leyni lykill viðskiptavinar fyrir oauth2 samskiptareglur (fáanlegt úr stjórnunarsvæði oauth2 auðkennds þriðja aðila hugbúnaðar)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Búa til stillingar fyrir Confluence kerfi"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á Confluence kerfinu."
+      },
+      "CreateBtn" : {
+        "label" : "Búa til"
+      },
+      "username" : {
+        "label" : "Confluence notendanafn",
+        "help" : "Confluence notendanafn"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence útgáfa",
+        "help" : "Confluence útgáfa"
+      },
+      "baseUri" : {
+        "label" : "Grunn vefslóð",
+        "help" : "Sláðu inn grunnslóð Confluence kerfisins fyrir staðbundna uppsetningu eða grunnslóð fyrirtækisins fyrir Confluence Cloud kerfi"
+      },
+      "password" : {
+        "label" : "Confluence lykilorð",
+        "help" : "Confluence lykilorð"
+      },
+      "token" : {
+        "label" : "Confluence cloud API lykill",
+        "help" : "Confluence CLOUD API lykillinn úr bakenda Confluence, hér þarf að setja inn \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Geymir og gerir þessi gögn aðgengileg í þekkingargrunninum fyrir LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "MainPanel" : {
+        "label" : "Deila Confluence efni"
+      },
+      "LogsTab" : {
+        "label" : "Atburðaskrá"
+      },
+      "code" : {
+        "label" : "Einkvæmt auðkenni",
+        "help" : "Sjálfkrafa búið til einkvæmt auðkenni fyrir efnið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á þeim gögnum sem hafa verið hlaðin inn úr Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence kerfi",
+        "help" : "Tilvísun í áður skráð Confluence kerfi."
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Tilvísun í yfirverkefni."
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun og útdrátt gagna úr zip skrám"
+      },
+      "tree" : {
+        "label" : "Valin svæði eða síður/undirsíður",
+        "help" : "Deilt Confluence efni - svæði og síður"
+      },
+      "programmedTables" : {
+        "label" : "Áætlun fyrir endurtekna athugun á breytingum",
+        "help" : "Stilltu endurskoðunartíma á breyttu efni til að halda gagnasafni uppfærðum"
+      },
+      "catalogingCriteria" : {
+        "label" : "Skipulagssjónarmið fyrir svæði, síður og undirsíður",
+        "help" : "Vinsamlegast útskýrðu hvernig valdir þú að skipuleggja svæði, síður og undirsíður í Confluence efni sem deilt er með Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Almennar stillingar"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "MainPanel" : {
+        "label" : "Breyta Confluence kerfi"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "baseUri" : {
+        "label" : "Grunn vefslóð",
+        "help" : "Sláðu inn grunnslóð Confluence kerfisins"
+      },
+      "code" : {
+        "label" : "Einkvæmt auðkenni",
+        "help" : "Sjálfkrafa búið til einkvæmt auðkenni fyrir Confluence kerfið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á Confluence kerfinu."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence útgáfa",
+        "help" : "Confluence útgáfa"
+      },
+      "secretCode" : {
+        "label" : "Auðkenni notað",
+        "help" : "Veldu eða búðu til auðkenni til að fá aðgang að Confluence kerfinu"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nýr hópur"
+      },
+      "NewUserBtn" : {
+        "label" : "nýr notandi"
+      },
+      "UsersListPanel" : {
+        "label" : "Notendalisti"
+      },
+      "GroupsListPanel" : {
+        "label" : "Hópalisti"
+      },
+      "SournameHeader" : {
+        "label" : "eftirnafn"
+      },
+      "UsernameHeader" : {
+        "label" : "notandanafn"
+      },
+      "RolesHeader" : {
+        "label" : "hlutverk"
+      },
+      "NameHeader" : {
+        "label" : "nafn"
+      },
+      "EditBtn" : {
+        "label" : "Breyta"
+      },
+      "DisabledHeader" : {
+        "label" : "óvirkt"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "UserIds" : {
+        "placeholder" : "Veldu notendur"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "MainPanel" : {
+        "label" : "Breyti notendahópi"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á notendahópi"
+      },
+      "code" : {
+        "label" : "Einstakt kóða",
+        "help" : "Sláðu inn kóða notendahóps"
+      },
+      "userIds" : {
+        "label" : "Notendalisti",
+        "help" : "Veldu notendur sem taka þátt í hópnum"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Búa til"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á jira kerfinu."
+      },
+      "MainPanel" : {
+        "label" : "Búa til jira kerfisstillingar"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "username" : {
+        "label" : "jira notandanafn",
+        "help" : "jira notendanafn"
+      },
+      "token" : {
+        "label" : "jira cloud api lykill",
+        "help" : "jira CLOUD api-lykilinn sem fenginn er í jira bakenda, hér þarf að setja inn „API Token for your Atlassian Account“."
+      },
+      "baseUri" : {
+        "label" : "Grunn internetfangi",
+        "help" : "Slóð að jira kerfinu fyrir sjálfvirka uppsetningu eða grunn vefslóð fyrir jira skýkerfi fyrirtækisins þíns"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vistar og gerir þessi gögn aðgengileg í þekkingargrunninum fyrir LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "LogsTab" : {
+        "label" : "Atvikaskrá"
+      },
+      "MainPanel" : {
+        "label" : "Deila jira efni"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni á efninu."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira kerfi",
+        "help" : "Vísun í áður stillt jira kerfi."
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Vísun í yfirverkefni."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á innihaldi innfluttra jira atriða."
+      },
+      "programmedTables" : {
+        "label" : "Áætlun yfir uppfærslur efnis",
+        "help" : "Stilltu áætlun yfir breytingar á efni til að halda RAG kerfinu uppfærðu"
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun og útdrátt á efni úr zip skrám"
+      },
+      "tree" : {
+        "label" : "Valdir staðir eða síður/undirsíður",
+        "help" : "Deild verkefna og miðaðir jira verkefna og miðaviðmóts"
+      },
+      "catalogingCriteria" : {
+        "label" : "Skipulag á stöðum, síðum og undirsíðum",
+        "help" : "Útskýrðu hérna hvernig staðir, síður og undirsíður eru skipulagðar í þeim jira gögnum sem deilt er með Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á jira kerfinu."
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "MainPanel" : {
+        "label" : "Breyta jira kerfi"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "baseUri" : {
+        "label" : "Grunn internetfangi",
+        "help" : "Slóð að jira kerfinu"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir jira kerfið."
+      },
+      "secretCode" : {
+        "label" : "Auðkenni notað",
+        "help" : "Veldu eða búðu til auðkenni til að fá aðgang að jira kerfinu"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á SharePoint/OneDrive kerfinu."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint útgáfa",
+        "help" : "SharePoint útgáfa"
+      },
+      "secret" : {
+        "label" : "Leynihólf",
+        "help" : "Oauth2 viðskiptaleynd fyrir þetta forrit, skráð í Microsoft \"entra\" vöru (má finna í stjórnborði Microsoft cloud stjórnanda)"
+      },
+      "clientId" : {
+        "label" : "Viðskiptavinauðkenni",
+        "help" : "Oauth2 auðkenni viðskiptavinar fyrir þetta forrit, skráð í Microsoft \"entra\" vöru (má finna í stjórnborði Microsoft cloud stjórnanda)"
+      },
+      "tenantId" : {
+        "label" : "Leigutaka auðkenni",
+        "help" : "Oauth2 auðkenni leigutaka fyrir þína stofnun í Microsoft \"entra\" vöru (má finna í stjórnborði Microsoft cloud stjórnanda)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsoft oauth2 forritaupplýsingar fyrir Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Búa til"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "MainPanel" : {
+        "label" : "Búa til SharePoint/OneDrive kerfisstillingar"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vistar og gerir þessar upplýsingar aðgengilegar í þekkingargrunn fyrir LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "MainPanel" : {
+        "label" : "Deiling SharePoint/OneDrive efnis"
+      },
+      "LogsTab" : {
+        "label" : "Atvikaskrár"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til auðkenni fyrir efnið."
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Tilvísun móðurverkefnis."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu fyrir gagnaheimildir SharePoint/OneDrive færslna."
+      },
+      "sharePointSystemCode" : {
+        "label" : "SharePoint kerfi",
+        "help" : "Tilvísun í fyrirfram stillt SharePoint/OneDrive kerfi."
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun zip skráa og útdrátt efnis"
+      },
+      "tree" : {
+        "label" : "Valin SharePoint svæði/síður/undirsíður eða OneDrive drif/möppur/skjöl",
+        "help" : "Deilt SharePoint/OneDrive efni"
+      },
+      "programmedTables" : {
+        "label" : "Áætlun fyrir uppfærslugreiningu á efni",
+        "help" : "Stilla tímasetningar á skoðun á breyttu efni til að halda uppfærðum bakhlið safnskerfisins"
+      },
+      "catalogingCriteria" : {
+        "label" : "Skipulagning skráa, síðna og undirsíðna",
+        "help" : "Útskýrðu hér hvernig röðun á svæðum, síðum og undirsíðum hefur verið framkvæmd í SharePoint efni deilt með Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Breyta SharePoint kerfi"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Almennar stillingar"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "secretCode" : {
+        "label" : "Auðkenni notað",
+        "help" : "Veldu eða búðu til auðkenni til að fá aðgang að SharePoint kerfinu"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til auðkenni fyrir SharePoint kerfið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á SharePoint kerfinu."
+      },
+      "sharepointVersion" : {
+        "label" : "SharePoint útgáfa",
+        "help" : "SharePoint útgáfa"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Eyða"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Vista"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Hætta við"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Almennar upplýsingar/stillingar innihalds"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Stillingar LLms"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir þessa þekkingargraf-gagnaútdráttarstig"
+      },
+      "MainPanel" : {
+        "label" : "Uppsetning útdráttar Graphrag/þekkingar"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu fyrir þetta þekkingargraf-gagnaútdráttarstig"
+      },
+      "extractionPrompt" : {
+        "label" : "Viðvörun til að taka út upplýsingar",
+        "help" : "Stór málvísindamódelsviðvörun fyrir útgreiningu eininga/atburða/tengsla og samheita"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM notað fyrir gagnatöku",
+        "help" : "Tilgreindu stórt málvísindamódel sem á að nota við þekkingarútgáfu, sjálfgefið verður notað ef ekkert er valið."
+      },
+      "graphRagAllSources" : {
+        "label" : "Nota graph rag á allar gagnaheimildir",
+        "help" : "Ef valið þá verða allar þekkingargrunnir/verkefni/gagnaheimildir unnar fyrir þekkingarútgáfu, annars aðeins þær sem eru sérstaklega stilltar"
+      },
+      "defaultModel" : {
+        "label" : "Sjálfgefið stórt málvísindamódel",
+        "help" : "Sjálfgefið stórt málvísindamódel verður notað við þekkingarútgáfu"
+      },
+      "processEveryDocument" : {
+        "label" : "Nota graph rag á allar skrár",
+        "help" : "Graph rag reikniritin verða notuð á allar skrár, þetta bætir nákvæmni og ítarleika greiningar sem kerfið getur veitt, en veldur auknum kostnaði og tíma við vinnslu skjalanna"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Skilyrði fyrir val á skrám til Graphrag vinnslu",
+        "help" : "Breyttu skilyrðum á skrám sem senda má í upplýsingadrátt fyrir graphrag, veldu að minnsta kosti skráarnafn og skilyrði og/eða skráategund og/eða hámarksstærð í bæti og/eða aldur síðustu breytingar í dögum"
+      },
+      "extractionFormat" : {
+        "label" : "Útdráttar snið",
+        "help" : "Notaðu CSV snið fyrir llms undir 30b breytum, JSON fyrir mjög stór líkön",
+        "placeholder" : "Notaðu CSV snið fyrir llms undir 30b breytum, JSON fyrir mjög stór líkön"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Veldu skráartegundir"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Leitarskilyrði skráarnafns"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Síðasta breyting á skrá, dögum síðan"
+      },
+      "nameFilter" : {
+        "placeholder" : "Skráarnafn"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Hámarksstærð skráar í bæti"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "MainPanel" : {
+        "label" : "Breyta þekkingargrunni"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Aðgangsstillingar fyrir þekkingargrunn"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir þekkingargrunninn."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu fyrir þekkingargrunninn."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Notuð innfelld líkan (látið autt til að nota sjálfgefið)",
+        "help" : "Innfelld líkan fyrir þekkingargrunninn, látið autt til að nota sjálfgefið."
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "IndexBtn" : {
+        "label" : "Flokka",
+        "help" : "Endurraða efni"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Breyta verkefni eða hlut"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir verkefnið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu fyrir verkefnið."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "þekkingargrunnur",
+        "help" : "þekkingargrunnur."
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "IndexBtn" : {
+        "label" : "Flokka",
+        "help" : "Endurraða efni"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Bæta við hlut/verkefni",
+        "help" : "bæta við nýju..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Allir nota",
+        "help" : "Allir geta notað"
+      },
+      "accessibleGroups" : {
+        "label" : "Hópaskrá",
+        "help" : "Veldu leyfða hópa"
+      },
+      "accessibleUsers" : {
+        "label" : "Notendaskrá",
+        "help" : "Veldu leyfða notendur"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Yfirlit"
+      },
+      "LLMSTab" : {
+        "label" : "LLM-líkön fyrir spjall og innfellingar"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Spjallprófílar/uppsetning fyrirmæla"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Þekkingargrunnur og verkefni"
+      },
+      "UsersGroupTab" : {
+        "label" : "Notendur og hópar"
+      },
+      "GeboModulesTab" : {
+        "label" : "Uppsetning á Gebo.ai einingum"
+      },
+      "LogsTab" : {
+        "label" : "Atvikaskrá"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kóði"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Stilla"
+      },
+      "ConfigureBtn" : {
+        "label" : "Stilla"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Ný uppsetning spurninga"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Ný spjallprófíll"
+      },
+      "MainPanel" : {
+        "label" : "Endurheimtarkerfi fyrir spjallprófíla"
+      },
+      "PromptsPanel" : {
+        "label" : "Spurningasafn & sjálfgefnar spurningar"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Þekkingargrunnar"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "ConfigureBtn1" : {
+        "label" : "stilla"
+      },
+      "CodeHeader" : {
+        "label" : "Kóði"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nýr þekkingargrunnur"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Ný uppsetning á innfeldu líkani"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Ný uppsetning á spjalllíkan"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "CodeHeader" : {
+        "label" : "Kóði"
+      },
+      "ModelHeader" : {
+        "label" : "Líkan "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Líkanveitandi"
+      },
+      "ConfigureBtn" : {
+        "label" : "stilla"
+      },
+      "CodeHeader2" : {
+        "label" : "Kóði"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Lýsing"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Líkanveitandi"
+      },
+      "ConfigureBtn2" : {
+        "label" : "stilla"
+      },
+      "ModelHeader2" : {
+        "label" : "Líkan "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Uppsett spjalllíkön"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Uppsett innföld líkön"
+      },
+      "chat" : {
+        "label" : "Nýtt spjalllíkani",
+        "help" : "Veldu birgja til að bæta við nýju spjalllíkani sem getur spjallað við notanda eða framkvæmt sjálfvirkni",
+        "placeholder" : "Veldu birgja til að bæta við nýju spjalllíkani sem getur spjallað við notanda eða framkvæmt sjálfvirkni"
+      },
+      "embed" : {
+        "label" : "Nýtt innfelld líkön",
+        "help" : "Veldu birgja til að bæta við nýju innfelldu líkön sem getur gert merkingarvísu skráaskráningu efnis",
+        "placeholder" : "Veldu birgja til að bæta við nýju innfelldu líkön sem getur gert merkingarvísu skráaskráningu efnis"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Prófa líkan"
+      },
+      "TestChatBtn" : {
+        "label" : "Prófa spjall"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á uppsetningu líkansins"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir uppsetningu líkansins"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI lykill",
+        "help" : "Veldu OpenAI lykil sem á að nota fyrir þetta líkan"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI spjalllíkansval",
+        "help" : "Veldu OpenAI spjalllíkan til að vinna með."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ítarlegar stillingar"
+      },
+      "MainPanel" : {
+        "label" : "Breyti OpenAI spjalllíkansuppsetningu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Aðgangsstillingar líkans"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "MainPanel" : {
+        "label" : "Breyti OpenAI innbyggða líkansuppsetningu"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI lykill",
+        "help" : "Veldu OpenAI lykil sem á að nota fyrir þetta líkan"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir innbyggða líkansuppsetningu"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á innbyggða líkansuppsetningunni"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI innbyggð líkansval",
+        "help" : "Veldu OpenAI innbyggt líkan til að vinna með."
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið innbyggt líkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið innbyggt líkan þar sem ekkert innbyggt líkan er valið"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir líkansuppsetninguna"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkansuppsetningunni"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "baseUrl" : {
+        "label" : "Grunnslóð Ollama þjóns",
+        "help" : "Grunnslóð (t.d. http://servername:234/) sem Ollama staðbundinn eða LAN þjónn svarar á."
+      },
+      "choosedModel" : {
+        "label" : "Ollama spjalllíkansval",
+        "help" : "Veldu Ollama spjalllíkan til að vinna með.",
+        "placeholder" : "Veldu líkan"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama lykill",
+        "help" : "Veldu Ollama lykil sem á að nota fyrir þetta líkan (valfrjálst)"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "MainPanel" : {
+        "label" : "Breyti Ollama staðbundna (eða LAN) þjóns spjalllíkansuppsetningu"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkansuppsetningunni"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir líkansuppsetninguna"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic lykill",
+        "help" : "Veldu Anthropic lykil sem á að nota fyrir þetta líkan"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic spjalllíkansval",
+        "help" : "Veldu Anthropic spjalllíkan til að vinna með.",
+        "placeholder" : "Veldu líkan"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ítarlegar stillingar"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Aðgangsstillingar líkans"
+      },
+      "MainPanel" : {
+        "label" : "Breyti Anthropic spjalllíkansuppsetningu"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkansuppsetningunni"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir líkansuppsetninguna"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI lykill",
+        "help" : "Veldu MistralAI lykil sem á að nota fyrir þetta líkan"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI spjalllíkansval",
+        "help" : "Veldu MistralAI spjalllíkan til að vinna með."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ítarlegar stillingar"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Aðgangsstillingar líkans"
+      },
+      "MainPanel" : {
+        "label" : "Breyti MistralAI spjalllíkansuppsetningu"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI spjalllíkansval",
+        "help" : "Veldu Google Vertex AI spjalllíkan til að vinna með."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI lykill",
+        "help" : "Veldu Google Vertex AI lykil sem á að nota fyrir þetta líkan"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkansuppsetningunni"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir líkansuppsetninguna"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Aðgangsstillingar líkans"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Ítarlegar stillingar"
+      },
+      "MainPanel" : {
+        "label" : "Breyti Google Vertex AI spjalllíkansuppsetningu"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek lykill",
+        "help" : "Veldu Deepseek lykil sem á að nota fyrir þetta líkan"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkansuppsetningunni"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir líkansuppsetninguna"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek spjalllíkansval",
+        "help" : "Veldu Deepseek spjalllíkan til að vinna með.",
+        "placeholder" : "Veldu líkan"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ítarlegar stillingar"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "MainPanel" : {
+        "label" : "Breyti Deepseek spjalllíkansuppsetningu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Aðgangsstillingar líkans"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á líkansuppsetningunni"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir líkansuppsetninguna"
+      },
+      "baseUrl" : {
+        "label" : "Grunnslóð API spjalllíkans",
+        "help" : "Grunnslóð spjalllíkans."
+      },
+      "apiSecretCode" : {
+        "label" : "API lykill spjalllíkans",
+        "help" : "Veldu API lykil spjalllíkans til að nota fyrir þetta líkan (valfrjálst)"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið spjalllíkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið spjalllíkan þar sem ekkert líkan er valið"
+      },
+      "choosedModel" : {
+        "label" : "Spjalllíkan val spjalllíkans",
+        "help" : "Veldu spjalllíkan til að vinna með."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "TitleFragment" : {
+        "label" : "Breyti þjónustuaðila spjalllíkans:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Ítarlegar stillingar"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Aðgangsstillingar líkans"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á innbyggðu líkansuppsetningunni"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "MainPanel" : {
+        "label" : "Breyti Ollama staðbundinni (eða LAN) innbyggðri líkansuppsetningu"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama lykill",
+        "help" : "Veldu Ollama lykil sem á að nota fyrir þetta líkan"
+      },
+      "choosedModel" : {
+        "label" : "Ollama innbyggð líkansval",
+        "help" : "Veldu Ollama innbyggt líkan til að vinna með."
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir innbyggðu líkansuppsetninguna"
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið innbyggt líkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið innbyggt líkan þar sem ekkert innbyggt líkan er valið"
+      },
+      "baseUrl" : {
+        "label" : "Grunnslóð Ollama þjóns",
+        "help" : "Grunnslóð (t.d. http://servername:234/) sem Ollama staðbundinn eða LAN þjónn svarar á."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á innbyggða líkansuppsetningunni"
+      },
+      "MainPanel" : {
+        "label" : "Breyti MistralAI innbyggðri líkansuppsetningu"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir innbyggðu líkansuppsetninguna"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI innbyggð líkansval",
+        "help" : "Veldu MistralAI innbyggt líkan til að vinna með."
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið innbyggt líkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið innbyggt líkan þar sem ekkert líkan er valið"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI lykill",
+        "help" : "Veldu MistralAI lykil sem á að nota fyrir þetta líkan"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Breyti Google Vertex AI innbyggðri líkansuppsetningu"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á innbyggða líkansuppsetningunni"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI innbyggð líkansval",
+        "help" : "Veldu Google Vertex AI innbyggt líkan til að vinna með."
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið innbyggt líkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið innbyggt líkan þar sem ekkert líkan er valið"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir innbyggðu líkansuppsetninguna"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI lykill",
+        "help" : "Veldu Google Vertex AI lykil sem á að nota fyrir þetta líkan"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "TitleFragment" : {
+        "label" : "Breyti þjónustuaðila innbyggðs líkans:"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á uppsetningu innbyggðs líkans"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir uppsetningu innbyggðs líkans"
+      },
+      "choosedModel" : {
+        "label" : "Innbyggð líkansval innbyggðs líkans",
+        "help" : "Veldu innbyggt líkan til að vinna með."
+      },
+      "baseUrl" : {
+        "label" : "Slóð þjóns API innbyggðs líkans",
+        "help" : "Grunnslóð innbyggða líkansins."
+      },
+      "defaultModel" : {
+        "label" : "setja þetta sem sjálfgefið innbyggt líkan",
+        "help" : "Ef valið þá verður þetta sjálfgefið innbyggt líkan þar sem ekkert líkan er valið"
+      },
+      "apiSecretCode" : {
+        "label" : "API lykill innbyggðs líkans",
+        "help" : "Veldu API lykil innbyggðs líkans sem á að nota fyrir þetta líkan"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Upplýsingar um spjallstillingar"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Eyða þessari spjalllotu"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Endurnefna spjalllotu"
+      },
+      "QueryControl" : {
+        "placeholder" : "Skrifaðu skilaboð til spjallbotsins"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Fletta eða leita og velja skjöl til að spjalla við"
+      },
+      "UploadFileBtn" : {
+        "help" : "Hlaða upp skrá til að spjalla eða vinna með"
+      },
+      "SubmiQuestion" : {
+        "help" : "Senda inn spurningu þína"
+      },
+      "WithParams" : {
+        "label" : "með viðföngum:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI kölluð föll:"
+      },
+      "UploadedDocs" : {
+        "label" : "Upphlaðin skjöl"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Spjallferill hlaðinn",
+        "detail" : "Tókst að hlaða inn spjallferil"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Tal þitt er að hlaðast inn"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Talandi svar móttekið"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Færa upp"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Færa niður"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Fundust skjöl"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ertu viss um að þú viljir eyða þessu spjalli?",
+        "header" : "Eyða spjalli"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "description" : {
+        "label" : "Lýsing á spjalli",
+        "help" : "Sláðu inn lýsingu á spjalllotunni."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Notað líkan",
+        "help" : "Líkan kóði"
+      },
+      "providerId" : {
+        "label" : "Aðili að spjalllíkani",
+        "help" : "LLms veitanda drifari"
+      },
+      "functions" : {
+        "label" : "Köllanlegar aðgerðir spjalllíkans",
+        "help" : "Listi yfir aðgerðir sem spjalllíkan getur notað"
+      },
+      "NameCol" : {
+        "label" : "Nafn"
+      },
+      "DescriptionCol" : {
+        "label" : "Lýsing"
+      },
+      "kbases" : {
+        "label" : "Tiltækar þekkingargrunnur",
+        "help" : "Listi yfir þekkingargrunn sem notaðir eru í þessu RAG spjalli"
+      },
+      "CloseBtn" : {
+        "help" : "Loka"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Bæta skjali við 'spjalla við' lista"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Upptaka",
+        "help" : "Hefja upptöku hljóðs og senda hana"
+      },
+      "StopBtn" : {
+        "label" : "Upptaka",
+        "help" : "Upptaka"
+      },
+      "AbortBtn" : {
+        "label" : "Hætta við upptöku",
+        "help" : "Hætta við upptöku"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Hætta við upptöku"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "endurhlaða gögnum"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SelectHeader" : {
+        "label" : "Velja"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "lokadagsetning/tími"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "upphafsdagsetning/tími"
+      },
+      "ProcessingHeader" : {
+        "label" : "vinnsla"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "CodeHeader" : {
+        "label" : "Kóði"
+      },
+      "FinishedHeader" : {
+        "label" : "lokið"
+      },
+      "WithErrorHeader" : {
+        "label" : "með villu"
+      },
+      "LogTableComponent" : {
+        "help" : "Þessi vinna skráir móttöku úr þessu sameiginlega skráakerfi"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Tölfræði ferla"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "CloseBtn" : {
+        "label" : "Loka"
+      },
+      "PublicationLogTab" : {
+        "label" : "Útgáfurit"
+      },
+      "MainPanel" : {
+        "label" : "Útgáfudagbók"
+      },
+      "actualStatus" : {
+        "label" : "Staða",
+        "help" : "Staða verkþáttarins, í gangi, lokið eða lokið með villum."
+      },
+      "publishingSystem" : {
+        "label" : "Stillingar birtra efnis",
+        "help" : "Upplýsingar um birt efni"
+      },
+      "startDateTime" : {
+        "label" : "Upphafsdagsetning/tími",
+        "help" : "Upphafsdagur og tími samræmingarverkefnis efnis"
+      },
+      "endDateTime" : {
+        "label" : "Lokadagsetning/tími",
+        "help" : "Lokadagur og tími samræmingarverkefnis efnis"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Ekki að fullu unnið"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Fullunnið"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "innfellingar á móti heildarfjölda skjala"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Nánari upplýsingar"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Búa til beiðni"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Beiðniartöframaður",
+        "help" : "Notaðu þetta til að nota LLM til að búa til beiðni fyrir markmið þín"
+      },
+      "acceptPrompt" : {
+        "label" : "Samþykkja beiðni"
+      },
+      "promptWizardUI" : {
+        "label" : "Töframaður fyrir sniðmátsgerð beiðni"
+      },
+      "cancel" : {
+        "label" : "Hætta við"
+      },
+      "response" : {
+        "label" : "Tillaga að beiðnisniðmáti",
+        "help" : "Búið til sniðmátstexta fyrir markmið þitt (þú getur breytt eða lagað það)"
+      },
+      "modelCode" : {
+        "label" : "Spjalllíkanið sem á að nota",
+        "help" : "Veldu það spjalllíkanið sem þú vilt spyrja um gerð beiðnisniðmáts"
+      },
+      "query" : {
+        "label" : "Beiðni um beiðnisniðmát",
+        "help" : "Tilgreindu í 2. persónu hvert markmiðið er sem AI mun styðja notandann við"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Hitastig",
+        "help" : "Hitastig sem líkanið mun svara á, frá 0 upp í 1 (ef þú ert óviss skaltu skilja þetta eftir autt)"
+      },
+      "contextLength" : {
+        "label" : "Samhengislengd (tokenar)",
+        "help" : "Magn texta sem gervigreindarlíkan getur tekið tillit til við úrvinnslu (ef ekki er sett inn verður 1047576 notað)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP breyta, frá 0 upp í 1 (ef þú ert óviss skaltu skilja þetta eftir autt)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Virk virkni fyrir þetta líkan",
+        "help" : "Aðgerðir sem hægt er að nota í spjallinu með líkaninu"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Sjálfgefinn fyrirspurn fyrir líkanið",
+        "help" : "Breyttu sjálfgefinni fyrirspurn fyrir spjalllíkanið."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu auðkennis."
+      },
+      "code" : {
+        "label" : "Einstakt kóði",
+        "help" : "Sjálfvirkt búinn til einstakur kóði auðkennisins."
+      },
+      "secretType" : {
+        "label" : "Tegund auðkennis",
+        "help" : "Veldu tegund auðkennis sem á að búa til fyrir fjarstýrt kerfi"
+      },
+      "InsertBtn" : {
+        "label" : "Setja inn"
+      },
+      "token" : {
+        "label" : "Tákn",
+        "help" : "Sláðu inn táknið."
+      },
+      "user" : {
+        "label" : "Notandi",
+        "help" : "Sláðu inn notandann sem táknið vísar á."
+      },
+      "MainPanel" : {
+        "label" : "Bý til auðkenni"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "username" : {
+        "label" : "Notandanafn",
+        "help" : "Sláðu inn notandanafn."
+      },
+      "password" : {
+        "label" : "Lykilorð",
+        "help" : "Sláðu inn lykilorð."
+      },
+      "email" : {
+        "label" : "Netfang/Notandanafn",
+        "help" : "Sláðu inn netfang eða notandanafn sem tengist ssh-lykli."
+      },
+      "key" : {
+        "label" : "Leynilykill",
+        "help" : "Opnaðu skrá með einkalykli og afritaðu hér inn."
+      },
+      "passphrase" : {
+        "label" : "Setningarorð lykils",
+        "help" : "Sláðu inn setningarorð lykils."
+      },
+      "pub" : {
+        "label" : "Opinber lykill",
+        "help" : "Opnaðu skrá með opinberum lykli og afritaðu hér inn."
+      },
+      "jsonContent" : {
+        "label" : "Innihald Google skilríkjaskrár",
+        "help" : "Afritaðu hér innihald Google api skilríkjaskrár sem hlaðið var niður úr google cloud api stjórnborðinu (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google notandi sem verður hermt eftir",
+        "help" : "Notandinn sem verður hermt eftir með þessum skilríkjum",
+        "placeholder" : "Notandinn sem verður hermt eftir með þessum skilríkjum"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Einstakt kóði",
+        "help" : "Sjálfvirkt búinn til einstakur kóði fyrir innihaldið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á hlaðnu efni úr skráarkerfi."
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Tilvísun í yfirverkefni."
+      },
+      "upload" : {
+        "label" : "Hlaða inn efni",
+        "help" : "Smelltu á vafrahnappinn og veldu zip skrár eða aðrar skrár"
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun zip skrár og útdrátt á efni"
+      },
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vista og gera þetta innihald aðgengilegt í þekkingargrunninum fyrir LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "LogsTab" : {
+        "label" : "Ferill"
+      },
+      "MainPanel" : {
+        "label" : "Breyta innhlöðnu efni"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Stilla smíðakerfi",
+        "help" : "Listi yfir smíða/pökkunarkerfi til að skoða meta upplýsingar og aðrar viðbótar upplýsingar um hluti (skildu eftir tómt ef enginn hugbúnaðarkóði fylgir með)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Valdir hlutir"
+      },
+      "ChooseOk" : {
+        "label" : "Í lagi"
+      },
+      "ChooseCancel" : {
+        "label" : "Hætta við"
+      },
+      "EditBtn" : {
+        "help" : "Breyta völdum"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Veldu hluti"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Veldu hluti"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Breyta tímasetningu"
+      },
+      "ConfirmBtn" : {
+        "label" : "Staðfesta"
+      },
+      "AddBtn" : {
+        "label" : "+Bæta við"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vista og gera þessi gögn aðgengileg í þekkingargrunninum fyrir LLm."
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Meðhöndlun kóða"
+      },
+      "LogsTab" : {
+        "label" : "Atvikaskrá"
+      },
+      "MainPanel" : {
+        "label" : "Breyta núverandi efni á skráakerfi"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á innsendu efni skráakerfisfærslunnar."
+      },
+      "openZips" : {
+        "label" : "Opna ZIP skrár",
+        "help" : "Virkja opnun ZIP skráa og útdrátt efnis"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir efnið."
+      },
+      "tree" : {
+        "label" : "Valdar skrár eða möppur",
+        "help" : "Deildar skrár eða möppur sem fáanlegar eru á netþjóninum"
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Vísun á yfirstandandi verkefni."
+      },
+      "programmedTables" : {
+        "label" : "Tímasetning athugana á uppfærslum efnis",
+        "help" : "Stilltu hvenær á að athuga breytt efni til að halda fyrirspurnaraukandi kerfi uppfærðu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Skipulagsviðmið möppna",
+        "help" : "Útskýrðu hér hvernig skipulagi möppna var háttað í skráakerfinu sem þú deilir með Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Stilla byggingarkerfi",
+        "help" : "Listi yfir byggingar-/pakka kerfi sem á að skoða fyrir meta upplýsingar og viðbótar upplýsingar um afurðir (skildu tómt ef enginn hugbúnaðarkóði fylgir)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nýtt deiliskráasvæði"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Heildarslóð"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db eða yml skráarstillingar"
+      },
+      "DescriptionHeader" : {
+        "label" : "Lýsing"
+      },
+      "CodeHeader" : {
+        "label" : "Auðkenni"
+      },
+      "ModifyHeader" : {
+        "label" : "Breyta"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Valin deild möppuskjárakerfisins",
+        "help" : "Veldu möppu á netþjóni sem er rótarslóð fyrir það skráakerfi sem fyrirtækið þitt notar sem skjalageymslu"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á deilda svæðinu á skráakerfi fyrirtækisins"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir efnið."
+      },
+      "InsertBtn" : {
+        "label" : "Setja inn"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "MainPanel" : {
+        "label" : "Breyta deildri netþjónamöppu"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vista og gera þetta efni aðgengilegt í þekkingargrunninum fyrir LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Breyting á git uppruna/skjölunar geymslu"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á git geymslunni."
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir git geymsluna."
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Tilvísun í yfirverkefni."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git kerfi",
+        "help" : "Tilvísun í þegar uppsett git kerfi."
+      },
+      "branch" : {
+        "label" : "Grein",
+        "help" : "Nafn á grein til að tengja við (yfirleitt master, main eða develop)"
+      },
+      "identityCode" : {
+        "label" : "Notuð auðkenni",
+        "help" : "Veldu auðkenni til að klóna/tengja við kerfið"
+      },
+      "repositoryUri" : {
+        "label" : "Geymslu url/slóð",
+        "help" : "Full slóð á git fjargeymslu (venjulega byrjar með http:, https: eða ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "opinbert",
+        "help" : "Ef satt þarf ekki auðkenningu til að nálgast geymsluna"
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun og útdrátt úr zip skrám"
+      },
+      "programmedTables" : {
+        "label" : "Tímasetning á athugunum breytinga á efni",
+        "help" : "Stilla tímasetningu til að halda upplýsingakerfinu uppfærðu"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Stilla byggingarkerfi",
+        "help" : "Listi yfir bygginga/pökkunarkerfi til að skoða meta upplýsingar og aðrar upplýsingar um gerviefni"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Almennar upplýsingar"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Nota spjallmódel"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "velja"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Veldu stillingar fyrir spjallmódel"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Veldu stillingar fyrir innfellingamódel"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "velja"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG stillingar"
+      },
+      "LanguageModelTab" : {
+        "label" : "Stórt tungumálalíkan og stillingar fyrir verkfæri"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Nota innfellingamódel"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Stillingar aðgangsöryggis"
+      },
+      "MainPanel" : {
+        "label" : "Breyta spjallprófíl fyrir retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir spjallprófílinn."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á spjallprófílnum."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Notandi velur gagnasöfn",
+        "help" : "Notandi getur valið úr aðgengilegum gagnasöfnum og/eða hlaðið inn eigin skrám."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Gagnasöfn",
+        "help" : "Gagnasöfn sem eru notuð fyrir skjalaleit."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Líkindiþröskuldur",
+        "help" : "Líkindiþröskuldur fyrir merkingarleit, 0.60–0.65 lítil sía, 0.70-0.75 meðal sía, 0.80–0.85 nákvæmt"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Líkindiþröskuldur fyrir 2. leit (hop)",
+        "help" : "Líkindiþröskuldur fyrir merkingarleit, 0.60–0.65 lítil sía, 0.70-0.75 meðal sía, 0.80–0.85 nákvæmt notað frá 2. leit í multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Slökkva á 'Multi Hop' rag",
+        "help" : "Slökkva á 'multi hop rag' virkni. Multi hop leit framkvæmir fyrst merkingarleit og notar fundin skjöl sem samhengi fyrir sjálfa leitina til að auka samhengi."
+      },
+      "topK" : {
+        "label" : "Fjöldi skjalsbrota tekið til athugunar (TopK)",
+        "help" : "Í retrieve augmented generation, efstu N fundin skjalsbrot sem teknir eru með í merkingarleit"
+      },
+      "enabledFunctions" : {
+        "label" : "Virk aðgerðaköll fyrir þetta RAG spjall",
+        "help" : "Aðgerðir sem llm líkanið getur notað í spjallinu auk samskipta við valið gagnasafn"
+      },
+      "prompt" : {
+        "label" : "Stikkorð",
+        "help" : "Breyttu stikkorðinu fyrir retrieve augmented generation loturnar."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Sláðu inn eða settu inn flokk beiðnar"
+      },
+      "MainPanel" : {
+        "label" : "Sýsla með beiðni"
+      },
+      "promptCategory" : {
+        "label" : "Flokkur beiðnar",
+        "help" : "Veldu eða settu inn flokk beiðnar."
+      },
+      "prompt" : {
+        "label" : "Beiðni",
+        "help" : "Breyttu beiðninni fyrir spjallið, notaðu {query} til að vísa í spurningu notanda og {context} til að vísa í skjöl/sögu sem send eru til LLM."
+      },
+      "code" : {
+        "label" : "Einstakt auðkenni",
+        "help" : "Sjálfvirkt búið til einstakt auðkenni fyrir beiðnina."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Sláðu inn lýsingu á beiðni."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Breyta lykilorði"
+      },
+      "YourUserName" : {
+        "label" : "Notandanafn þitt"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Gamalt lykilorð",
+        "help" : "Núverandi lykilorð til að skrá inn"
+      },
+      "newPassword" : {
+        "label" : "Nýtt lykilorð",
+        "help" : "nýtt lykilorð"
+      },
+      "username" : {
+        "label" : "Netfang",
+        "help" : "Netfang sem notandanafn til að skrá inn"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Form til að breyta lykilorði"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "ChangePwdBtn" : {
+        "label" : "breyta lykilorði"
+      },
+      "newPassword1" : {
+        "label" : "Staðfesta nýtt lykilorð",
+        "help" : "Staðfesta nýtt lykilorð"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "ForMoreInformations" : {
+        "label" : "Frekari upplýsingar um Google sérsniðna leit API eða hvernig á að fá api-lykil (ókeypis) má finna á: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Einstakt númer",
+        "help" : "Einstakt númer Google leitaraðstöðu stillingar."
+      },
+      "MainPanel" : {
+        "label" : "Breyta Google sérsniðnum leitaraðgangsupplýsingum"
+      },
+      "secretCode" : {
+        "label" : "Google leitaraðgangslykill",
+        "help" : "Veldu eða sláðu inn Google leitaraðgangslykilinn"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google leitarvélarnúmer",
+        "help" : "Google leitarvélarnúmer"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á Google leitaraðstöðu stillingum."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Spjalla án þekkingargrunns",
+        "help" : "Veldu LLM fyrir spjalllotu",
+        "placeholder" : "Veldu LLM fyrir spjalllotu"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Opna stillingahluta spjalls"
+      },
+      "CreateChatBtn" : {
+        "label" : "Nýtt spjall"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Ný spjalllota"
+      },
+      "chatProfileCode" : {
+        "label" : "Spjalla með þekkingargrunn",
+        "help" : "Veldu fyrirtækjaspjall fyrir aðgang að skjölum og LLM fyrirtækisins (og þínum eigin)",
+        "placeholder" : "Veldu fyrirtækjaspjall fyrir aðgang að skjölum og LLM fyrirtækisins (og þínum eigin)"
+      },
+      "NewChatBtn" : {
+        "label" : "Nýtt spjall"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Spjalllotur"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Loka hliðarslá"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Búa til nýtt spjall með stórum tungumálalíkönum",
+        "label" : "Spjall"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Búa til nýtt RAG spjall með efni fyrirtækis",
+        "label" : "Spjall við þekkingargrunn"
+      },
+      "ChatsTitle" : {
+        "label" : "Spjöll"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Opna valmöguleika spjalls"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Spjalla við skjöl",
+        "help" : "Fletta eða leita og velja skjöl til að vinna með"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Veldu skjöl til að spjalla við"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Fletta eða leita og velja skjöl til að spjalla við"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Staðfesta"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Hladdu upp eða veldu skjölin þín",
+        "help" : "Veldu eða hlaða upp skjölum úr þínu notendaumhverfi"
+      },
+      "fileSearchBtn" : {
+        "label" : "Leita"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Leita"
+      },
+      "query" : {
+        "label" : "Merkingarleit setning",
+        "help" : "Sláðu inn lýsandi setningu sem tengist leitinni þinni"
+      },
+      "choosenBrowsing" : {
+        "label" : "Velja skrár við skoðun á þekkingargrunnum",
+        "help" : "Veldu skrár við skoðun á þekkingargrunnum fyrirtækisins"
+      },
+      "filename" : {
+        "label" : "Nafn á skrá sem leitað er að",
+        "help" : "Sláðu inn hluta af skrárnafni fyrir efnið sem þú ert að leita að"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Leita að skráarnafni"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Fletta í skrám fyrirtækis"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Merkingaleit"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Velja skrár til að spjalla við"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Breyta völdu"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Veldu notendaskrár"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "okBtn" : {
+        "label" : "Í lagi"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Veldu efni sem notandi hefur hlaðið upp"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Þekkingargrunnur og notendaskrár"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+undirverkefni eða atriði",
+        "help" : "bæta við undirverkefni eða atriði"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+hlaða upp skrám",
+        "help" : "bæta við gagnagjafa úr hlaðnum skrám"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "bæta við Microsoft SharePoint/OneDrive gagnagjafa"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "bæta við Atlassian Confluence gagnagjafa"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+skráakerfi",
+        "help" : "bæta við sameiginlegum gagnagjafa úr skráakerfi"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "bæta við Atlassian Jira gagnagjafa"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "bæta við git forritasafni eins og bitbucket, github eða öðrum"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "bæta við google drive gagnagjafa"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai spjall"
+      },
+      "setup" : {
+        "label" : "Uppsetning"
+      },
+      "admin" : {
+        "label" : "Gebo.ai stjórnborð"
+      },
+      "currentProfile" : {
+        "label" : "mín prófíll"
+      },
+      "logout" : {
+        "label" : "skrá mig út"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Skipta um tungumál"
+      },
+      "MyProfile" : {
+        "label" : "prófíll þinn"
+      },
+      "MyProfileItem" : {
+        "label" : "prófíll þinn"
+      },
+      "chatMenuItem" : {
+        "label" : "Spjall"
+      },
+      "setupMenuItem" : {
+        "label" : "Uppsetning"
+      },
+      "adminMenuItem" : {
+        "label" : "Stjórnandi"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "breyta prófíl"
+      },
+      "logoutMenuItem" : {
+        "label" : "útskrá"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Greini skjölalista"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Meðhöndluð skjöl",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Meðhöndluð skjöl",
+        "dataset-2-label" : "Skjöl með villu",
+        "dataset-3-label" : "Feld skjöl"
+      },
+      "TOKENIZATION" : {
+        "description" : "Táknmyndun skjala"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Meðhöndluð skjöl",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Meðhöndluð tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Meðhöndluð skjöl",
+        "dataset-2-label" : "Skjöl með villu",
+        "dataset-3-label" : "Feld skjöl"
+      },
+      "EMBEDDING" : {
+        "description" : "Merkingarvísun (innfelling fyrir merkingarlega rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Meðhöndluð skjöl",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Meðhöndluð tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Meðhöndluð skjöl",
+        "dataset-2-label" : "Skjöl með villu",
+        "dataset-3-label" : "Feld skjöl"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Vísun eininga/tengsla/atburða (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Meðhöndluð skjöl"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Meðhöndluð skjöl",
+        "dataset-2-label" : "Skjöl með villu",
+        "dataset-3-label" : "Feld skjöl"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Unnin tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Greini skjala lista"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tákngerving skjala"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "EMBEDDING" : {
+        "description" : "Merkingarvísun (embedding fyrir semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Unnin tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Vísun á aðila/tengsl/atburði (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ómeðhöndluð skjöl",
+        "label-1" : "Villa við vinnslu skjala",
+        "label-2" : "Unnin skjöl"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Unnin tákn",
+        "dataset-1-label" : "Villa við vinnslu tákna"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Móttekin skjöl",
+        "dataset-1-label" : "Unnin skjöl",
+        "dataset-2-label" : "Villuskjöl",
+        "dataset-3-label" : "Hentu skjölum"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Kaupa Apy lykilsinneign tengil"
+      },
+      "ModifyBtn" : {
+        "label" : "Breyta",
+        "help" : "Skoða/breyta stillingum líkans"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kóði"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Lýsing"
+      },
+      "ExistingModelType" : {
+        "label" : "Líkangerð"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Núverandi stillingar"
+      },
+      "ProviderWWW" : {
+        "label" : "Vefslóð"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Aðgangsupplýsingar veitanda"
+      },
+      "ProviderInfos" : {
+        "label" : "Upplýsingar um veitanda"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api lykill/aðgangsuppl.",
+        "help" : "Veldu api lykil eða aðgangsupplýsingar fyrir þennan veitanda"
+      },
+      "NewApiKey" : {
+        "label" : "Nýr api lykill",
+        "help" : "Settu inn nýjan api lykil fyrir þennan veitanda"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Nota núverandi eða búa til nýtt",
+        "help" : "Notaðu núverandi eða búðu til nýjar aðgangsupplýsingar fyrir þennan veitanda"
+      },
+      "NewUserName" : {
+        "label" : "Notandanafn",
+        "help" : "Notandanafn sem er notað til að fá aðgang að þjónustu veitanda"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nýtt niðursetningarlíkan",
+        "help" : "Búa til nýjar stillingar fyrir niðursetningarlíkan"
+      },
+      "NewChatModel" : {
+        "label" : "Nýtt spjalllíkan",
+        "help" : "Búa til nýtt samtalslíkan"
+      },
+      "NewModelDialog" : {
+        "label" : "Bæta við nýju líkani"
+      },
+      "PiSave" : {
+        "label" : "Vista"
+      },
+      "NewModelsButton" : {
+        "label" : "Ný líkön",
+        "help" : "Búa til nýja líkansstillingu"
+      },
+      "NewModelsDialog" : {
+        "label" : "Bæta við nýjum líkönum"
+      },
+      "baseUrl" : {
+        "label" : "Grunn api slóð",
+        "help" : "Grunnslóð fyrir api þjónustu veitandans"
+      },
+      "ModelTypePanel" : {
+        "label" : "Bæta við nýjum líkönum"
+      },
+      "ModelsChoices" : {
+        "label" : "Valmöguleikar líkans"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Mælt er með vali á líkönum"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Niðursetningarlíkan",
+        "help" : "Veldu eitt af fyrirfram skilgreindum niðursetningarlíkönum"
+      },
+      "chatPresetChoice" : {
+        "label" : "Spjalllíkan",
+        "help" : "Veldu eitt af fyrirfram skilgreindum spjalllíkönum"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Ítarlegt líkanaval"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Niðursetningarlíkan",
+        "help" : "Veldu eitt af þeim niðursetningarlíkönum sem veitandi hefur birt"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Spjalllíkan",
+        "help" : "Veldu eitt af þeim spjalllíkönum sem veitandi hefur birt"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Notaðu þennan valmöguleika aðeins ef þú hefur reynslu eða skoðar á vef veitanda hvaða líkön henta þínum þörfum. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið spjalllíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað spjalllíkan er skilgreint"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Við mælum með eftirfarandi línasafni "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið niðursetningarlíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað niðursetningarlíkan er valið"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið spjalllíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað spjalllíkan er skilgreint"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "stilla sem sjálfgefið niðursetningarlíkan",
+        "help" : "Stilltu þetta líkan sem sjálfgefið, það verður notað fyrir öll verkefni þar sem ekkert annað niðursetningarlíkan er valið"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Notaðu þennan valmöguleika aðeins ef þú hefur reynslu eða skoðar á vef veitanda hvaða líkön henta þínum þörfum. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Búa til og virkja"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Búa til og virkja"
+      },
+      "ProviderNameField" : {
+        "label" : "Veirandi"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Þjónustan krefst auðkenningar",
+        "help" : "Þjónustan/forritið er stillt fyrir auðkenndan aðgang með api-lykli eða öðrum skilríkjum"
+      },
+      "baseUrl1" : {
+        "label" : "Grunnslóð api",
+        "help" : "Grunnslóð þjónustuveitanda fyrir api þjónustur"
+      },
+      "enableAllFunctions" : {
+        "label" : "virkja allar aðgerðir",
+        "help" : "Virkja öll tiltæk verkfæri og aðgerðir, ef það er ekki valið er hægt að virkja þau síðar í llms stjórnborði"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI fjaraðgangsveita í lagi",
+        "detail" : "Veitandi er í gagni og hefur verið rétt stilltur"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Aðgerð mistókst",
+        "detail" : "Ekki tókst að auðkenna með gefnum aðgangsupplýsingum"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Í lagi!",
+        "detail" : "Aðgerð heppnaðist"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Villa við flutning spjallsvarar",
+        "detail" : "Þjónustuvilla: class org.neo4j.driver.internal.value.StringValue má ekki breyta í class java.lang.String (org.neo4j.driver.internal.value.StringValue er í ónefndu einingu af hleðara 'app'; java.lang.String er í einingu java.base af hleðara 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Tókst að vista",
+        "detail" : "Uppfærsla tókst"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Villa við samskipti við Ollama server",
+        "detail" : "Neto villa við samskipti við fjartengt kerfi til að nálgast efni\n vantar lista yfir líkön Villa með url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Þú getur eytt þessu",
+        "detail" : "Gögnum sem þú skoðar núna er óhætt að eyða"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Þú getur ekki eytt þessu",
+        "detail" : "Þessu atriði er vísað í annars staðar í forritinu"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Hlaða inn skrám til að spjalla við"
+      },
+      "ChooseFile" : {
+        "help" : "Velja skrár"
+      },
+      "UploadFile" : {
+        "help" : "Hlaða upp skrám"
+      },
+      "DragDropHere" : {
+        "label" : "Dragðu og slepptu skrám hér til að hlaða upp"
+      },
+      "RemoveAll" : {
+        "help" : "Fjarlægja allt"
+      },
+      "UploadPending" : {
+        "label" : "Bíður eftir upphleðslu"
+      },
+      "CompletedData" : {
+        "label" : "Lokið"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Stilltu graphrag í stillingum ef þú vilt nota það hér"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag stillingar"
+      },
+      "button-help" : {
+        "label" : "Smelltu hér til að stilla útdrátt úr upplýsingum fyrir graphrag (ekki stillt eins og er)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Bæta við stillingu"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Búa til"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á Google Drive kerfinu."
+      },
+      "MainPanel" : {
+        "label" : "Búa til Google Drive/Workspace tengingu"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "delegatedUser" : {
+        "label" : "Google notandi sem verður hermt eftir",
+        "help" : "Notandinn sem verður hermt eftir með þessum skilríkjum",
+        "placeholder" : "Notandinn sem verður hermt eftir með þessum skilríkjum"
+      },
+      "jsonContent" : {
+        "label" : "Google skilríkja json innihald",
+        "help" : "Búðu til Google skilríki með aðgangi að workspace/team drives í Google Console Cloud og límdu hér innihaldi json skrárinnar sem var hlaðið niður (https://console.cloud.google.com/).",
+        "placeholder" : "Búðu til Google skilríki með aðgangi að workspace/team drives í Google Console Cloud og límdu hér innihaldi json skrárinnar sem var hlaðið niður (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "PublishBtn" : {
+        "label" : "Birta!",
+        "help" : "Vistar og gerir þessi gögn aðgengileg í þekkingargrunninum fyrir LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "MainPanel" : {
+        "label" : "Deila efni úr google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Stillingar"
+      },
+      "LogsTab" : {
+        "label" : "Atburðaskrá"
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á hlaðnu efni úr google drive færslum."
+      },
+      "code" : {
+        "label" : "Einstakur kóði",
+        "help" : "Sjálfvirkt búinn til einstakur kóði fyrir efnið."
+      },
+      "tree" : {
+        "label" : "Valin skrá eða mappa",
+        "help" : "Deilt efni og síður úr google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive stillingar",
+        "help" : "Tilvísun í núverandi stillta google drive kerfi."
+      },
+      "openZips" : {
+        "label" : "Opna zip skrár",
+        "help" : "Virkja opnun zip skráa og útdrátt efnis"
+      },
+      "parentProjectCode" : {
+        "label" : "Verkefni",
+        "help" : "Tilvísun í yfirstandandi verkefni."
+      },
+      "programmedTables" : {
+        "label" : "Tímasetning á athugun á efninu",
+        "help" : "Stilltu áætlun fyrir uppfærslu á breyttu efni til að halda retrieve augmented generation kerfinu uppfærðu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Skipulagsskilyrði fyrir möppur og undirmöppur",
+        "help" : "Vinsamlegast útskýrðu hér hvernig skipulag gagna og skráa hefur verið gert í því Google Drive efni sem deilt er með Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Almennar stillingar"
+      },
+      "CancelBtn" : {
+        "label" : "Hætta við"
+      },
+      "DeleteBtn" : {
+        "label" : "Eyða"
+      },
+      "SaveBtn" : {
+        "label" : "Vista"
+      },
+      "MainPanel" : {
+        "label" : "Breyta google drive samþættingu"
+      },
+      "code" : {
+        "label" : "Einstakur kóði",
+        "help" : "Sjálfvirkt búinn til einstakur kóði fyrir google drive kerfið."
+      },
+      "description" : {
+        "label" : "Lýsing",
+        "help" : "Settu inn lýsingu á google drive kerfinu."
+      },
+      "driveAccessSecret" : {
+        "label" : "Auðkenni sem notað er",
+        "help" : "Veldu eða búðu til auðkenni til að fá aðgang að google drive kerfinu"
+      }
+    }
+  }
+}

@@ -25,8 +25,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.UpdateScreenTypes;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The IDs of the screens for the screen types of the screen scheme. Only screens used in classic projects are accepted.

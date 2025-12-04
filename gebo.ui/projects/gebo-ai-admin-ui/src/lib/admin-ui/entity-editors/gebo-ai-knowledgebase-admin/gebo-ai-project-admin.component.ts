@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,10 +20,11 @@
  * their relationships with knowledge bases and parent projects.
  */
 
-import { Component, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, EnrichedChild, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 
@@ -36,14 +37,17 @@ import { map, Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-project-admin-component",
     templateUrl: "gebo-ai-project-admin.component.html",
-    standalone: false
+    standalone: false, providers: [ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiKnowledgeBaseModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiProjectAdminComponent),  multi: false   }
+    ]
 })
-export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GProject> {
+export class GeboAiProjectAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GProject> {
     /**
      * The entity name for this component
      */
     protected override entityName: string = "GProject";
-    
+
     /**
      * Form group defining the structure and controls for the project edit form
      * Contains fields for all editable properties of a project
@@ -64,22 +68,22 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * Flag indicating whether knowledge base editing is enabled
      */
     @Input() editKnowledgebase: boolean = false;
-    
+
     /**
      * Observable containing all knowledge bases available for selection
      */
     knowledgeBases: Observable<GKnowledgeBase[]> = this.knowledgeBaseControllerService.getKnowledgeBases();
-    
+
     /**
      * The parent project of the current project, if any
      */
     public parentProject?: GProject;
-    
+
     /**
      * Array of child entities related to this project
      */
     treeChilds: EnrichedChild[] = [];
-
+    graphRagContext?: { knowledgeBaseCode?: string; projectCode?: string; reference?: GObjectRef; };
     /**
      * Constructor initializing the component with required services
      * Sets up subscriptions to form value changes to update related data
@@ -121,6 +125,10 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
      * @param actualValue The loaded project data
      */
     protected override onLoadedPersistentData(actualValue: GProject): void {
+        this.graphRagContext = {
+            knowledgeBaseCode: actualValue?.rootKnowledgeBaseCode,
+            projectCode: actualValue?.code
+        };
         this.loadingRelatedBackend = true;
         this.treeService.loadProjectChilds(actualValue).subscribe({
             next: (childs) => {
@@ -173,18 +181,7 @@ export class GeboAiProjectAdminComponent extends BaseEntityEditingComponent<GPro
         return this.projectsControllerService.insertProject(value);
     }
 
-    /**
-     * Checks if a project can be safely deleted
-     * Currently returns a placeholder implementation that allows deletion
-     * 
-     * @param value The project to check
-     * @returns An Observable containing deletion permission status and explanation message
-     */
-    override canBeDeleted(value: GProject): Observable<{ canBeDeleted: boolean; message: string; }> {
-        //TODO: create backend services to check this
-        return of({ canBeDeleted: true, message: "" });
-    }
-
+   
     /**
      * Triggers a reindexing of all contents associated with the current project
      * Displays a confirmation dialog before proceeding

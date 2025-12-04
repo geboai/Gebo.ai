@@ -25,6 +25,8 @@ export interface IOperationStatus<T> {
     result?:T;
     /** List of user messages related to the operation, such as errors, warnings, or info messages */
     messages?:GUserMessage[];
+    hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }
 
 /**

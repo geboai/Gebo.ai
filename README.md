@@ -12,32 +12,42 @@ an enterprise version with more feature and support is also available.
  
 ## Gebo.ai features:
 ### Administrative features
+ The admin, chat,rag chat,graphrag chat user interfaces are **fully multilanguage** and the application is **fully multiuser**.
+ All the following features are fully configurable using the administrative user interface.
  - Configure the large language models to use like:
-      - OpenAI chatgpt
-      - Anthropic Claude
-      - XaI Grok
-      - Nvidia AI provider
-      - Groq
-      - Deepseek
-      - MistralAI
-      - Regolo.ai (Italian/European)
-      - Almost every local large language model using Ollama 
+      - **OpenAI** chatgpt
+      - **Anthropic** Claude
+      - **XaI** Grok
+      - **Nvidia** AI provider
+      - **Groq**
+      - **Deepseek**
+      - **MistralAI**
+      - **Regolo.ai** (Italian/European)
+      - Almost every local large language model using **Ollama** or **vLLM**       
+      - Every provider/local server compatible with **OpenAi API**
  - Configure tools & functions that each llm configuration can use      
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
-    - Microsoft Onedrive/Sharepoint
-    - Atlassian Confluence
-    - Atlassian Jira
-    - Google Workspaces/Drives (under development, coming soon)
-    - GitHub/GIT/Bitbucket or other git compatible servers
+    - **Microsoft Onedrive/Sharepoint**
+    - **Atlassian Confluence**
+    - **Atlassian Jira**
+    - **Google Workspaces/Drives** 
+    - **GitHub/GIT/Bitbucket** or other **git** compatible servers
     - Company shared filesystems
+ - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
+ 	- **Microsoft Entra**
+ 	- **Google auth**   
+ 	- **AWS Cognito**
+ 	- **KeyCloak** (as Generic oauth2)
+ - Configure **GraphRag** features (experimental)
+ 	- The software can use cheap models provided (on premise or in cloud) to export knowledge graphs persisted with neo4j. 	
  - Create knowledge bases collectioning documents from the previus mentioned system.  
  - Schedule document updates for AI reindexing (embedding) on updates.
  - Monitor embedding batch job.
  - Configure company users and groups.      
  - Organize multiple specific Retrieve augmented generation chats for specific company tasks:
     - Examples:
-       - Customer support chats to support customer support employees or directly the customers
-       - Tech/Production productivity chats to support employee on mananging internal technical documentation.
+       - Customer support **chatbots to support customer support employees or directly the customers**
+       - Tech/Production **productivity chatbots to support employee on mananging internal technical documentation**.
  - Chatbot access can be granted individually to users/groups
  - Knowledge bases can be granted individually to users/groups
 
@@ -46,7 +56,9 @@ an enterprise version with more feature and support is also available.
 ### Users features        
  - Chat using chatbots without retrieve augmented generation according to admin config.
  - Chat using chatbots with retrieve augmented generation  according to admin config.
- - Browse company knowledge bases to select  documents to chat/work with  according to admin config.     
+ - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
+ - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
+ - Voice interface working with OpenAI provider.   
 
 ## How to install Gebo.ai 
 
@@ -63,6 +75,7 @@ After you've installed with docker go to http://<your server ip>:12999/ and conf
 The docker-compose file installs the required 
 - MongoDB
 - Qdrant Vector Database
+- Neo4J Graph Database 
 - geboai/gebo.ai open source version software https://hub.docker.com/r/geboai/gebo.ai  
 
 ## For devs/software architects/software companies 

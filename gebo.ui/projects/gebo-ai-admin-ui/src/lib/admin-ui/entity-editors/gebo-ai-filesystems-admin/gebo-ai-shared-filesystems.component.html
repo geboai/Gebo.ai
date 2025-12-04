@@ -8,15 +8,12 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
 
 <p-dialog  [maximizable]="true" [visible]="visible" [modal]="true" [style]="{width:'95%',height:'800px'}" [closable]="true"
     [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
     header="Shared filesystem paths setting">
 
-    <p-panel #contentUI [showHeader]="false" *ngIf="visible">
+    <p-panel id="MainPanel" gebo-ai-label  #contentUI [showHeader]="false" *ngIf="visible">
         <p-blockUI [target]="contentUI" [blocked]="loading">
             <i class="pi pi-lock" style="font-size: 3rem"></i>
         </p-blockUI>
@@ -26,11 +23,11 @@
                 <p-table [value]="shares" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Absolute path</th>
-                            <th>db or yml file config</th>
-                            <th>Modify</th>
+                            <th id="CodeHeader" gebo-ai-text>Code</th>
+                            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                            <th id="AbsolutePathHeader" gebo-ai-text>Absolute path</th>
+                            <th id="DbOrYmlFileConfigHeader" gebo-ai-text>db or yml file config</th>
+                            <th id="ModifyHeader" gebo-ai-text>Modify</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-config>
@@ -42,7 +39,7 @@
                                 {{config.mongoConfigured===true?'db':'yml file'}}
                             </td>
                             <td>
-                                <p-button *ngIf="config.mongoConfigured===true" icon="pi pi-wrench" [outlined]="true" label="Configure" 
+                                <p-button *ngIf="config.mongoConfigured===true" id="ConfigureBtn" gebo-ai-label icon="pi pi-wrench" [outlined]="true" label="Configure" 
                                     (onClick)="openFileShare(config)"></p-button>
                             </td>
 
@@ -53,7 +50,7 @@
             </div>
             <div class="col-4">
 
-                <p-button [outlined]="true" label="New file share area" (onClick)="newFileShare()"
+                <p-button id="NewFileShareAreaBtn" gebo-ai-label [outlined]="true" label="New file share area" (onClick)="newFileShare()"
                     icon="pi pi-folder"   styleClass="w-full" ></p-button>
 
 
@@ -65,3 +62,5 @@
         </div>
     </p-panel>
 </p-dialog>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

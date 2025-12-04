@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.systems</groupId>
 		<artifactId>gebo.systems.parent</artifactId>
-		<version>0.9.9.7</version>
+		<version>1.0.0.0-rc1</version>
 	</parent>
 	<artifactId>gebo.userspace.handler</artifactId>
 	<dependencies>
@@ -19,6 +19,11 @@
 		<dependency>
 			<groupId>ai.gebo</groupId>
 			<artifactId>gebo.jobs.services</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>

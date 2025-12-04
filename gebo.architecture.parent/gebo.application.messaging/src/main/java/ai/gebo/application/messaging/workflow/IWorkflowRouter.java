@@ -1,0 +1,11 @@
+package ai.gebo.application.messaging.workflow;
+
+import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.workflow.model.WorkflowMessageContext;
+
+public interface IWorkflowRouter {
+
+	public void routeToNextSteps(GWorkflowType workflowType, String currentWorkflowId, String currentWorkflowStepId,
+			WorkflowMessageContext messageContext, IGMessageEmitter emitter);
+
+}

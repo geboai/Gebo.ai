@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.jobs.services.impl;
 
@@ -31,6 +28,7 @@ import ai.gebo.jobs.services.GeboJobServiceException;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus.JobType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatusItem;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.knowledgebase.repositories.UserMessageRepository;
@@ -42,63 +40,72 @@ import ai.gebo.systems.abstraction.layer.IGIOCModuleContentsDispatcherRepository
 /**
  * AI generated comments
  * 
- * GeboIngestionManager is responsible for managing the ingestion process of content
- * from various project endpoints. It handles the creation, tracking, and execution of 
- * content extraction and vectorization jobs.
+ * GeboIngestionManager is responsible for managing the ingestion process of
+ * content from various project endpoints. It handles the creation, tracking,
+ * and execution of content extraction and vectorization jobs.
  */
 @Service
 class GeboIngestionManager {
 	/** Logger for this class */
 	static Logger LOGGER = LoggerFactory.getLogger(GeboIngestionManager.class);
-	
+
 	/** Configuration for Gebo system */
 	@Autowired
 	GeboConfig geboConfig;
-	
+
 	/** Repository for job status records */
 	@Autowired
 	JobStatusRepository jobStatusRepository;
-	
+
 	/** Repository for user messages */
-	@Autowired 
+	@Autowired
 	UserMessageRepository messagesRepository;
-	
+
 	/** Dispatcher for IOC module contents using repository pattern */
 	@Autowired
 	IGIOCModuleContentsDispatcherRepositoryPattern iocRepositoryPattern;
-	
+
 	/** Manager for persistent objects */
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
-	
+
 	/** Maximum number of messages to save in a single batch */
 	public static final int BATCH_MESSAGES_SAVING = 1000;
-	
+
 	/** Maximum number of document reference IDs to search in a single batch */
 	public static final int BATCH_DOCREFS_IDS_SEARCH = 1000;
-	
+
 	/** Map to track job status by endpoint key */
 	static Map<String, GJobStatus> statusMap = new HashMap<String, GJobStatus>();
 
 	/**
-	 * Creates a new job status for content extraction and vectorization for a project endpoint
+	 * Creates a new job status for content extraction and vectorization for a
+	 * project endpoint
 	 * 
 	 * @param item The project endpoint for which to create the job
 	 * @return A new GJobStatus instance representing the created job
+	 * @throws GeboPersistenceException
 	 */
-	GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GProjectEndpoint item) {
+	GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GProjectEndpoint item, String workflowType,
+			String workflowId) throws GeboPersistenceException {
 		GJobStatus status = new GJobStatus();
 		status.setCode(UUID.randomUUID().toString());
 		status.setDescription("Job to complete reading and LLM embedding contents of " + item.getDescription() + " ["
 				+ item.getCode() + "]");
 		status.setProjectEndpointReference(GObjectRef.of(item));
+		status.setProjectCode(item.getParentProjectCode());
+		GProject project = persistentObjectManager.findById(GProject.class, item.getParentProjectCode());
+		status.setKnowledgeBaseCode(project.getRootKnowledgeBaseCode());
 		status.setStartDateTime(new Date());
+		status.setWorkflowType(workflowType);
+		status.setWorkflowId(workflowId);
 		status.setError(false);
 		status.setFinished(false);
 		status.setProcessing(true);
 		status.setJobType(JobType.CONTENTS_READING_VECTORIZING);
 		jobStatusRepository.save(status);
-		GUserMessage message = GUserMessage.infoMessage("Start processing data source:"+item.getDescription(), "Contained new or updated documents will be inserted in the vector store to be used in retrieve augmented generation functionalities of Gebo.ai");
+		GUserMessage message = GUserMessage.infoMessage("Start processing data source:" + item.getDescription(),
+				"Contained new or updated documents will be inserted in the vector store to be used in retrieve augmented generation functionalities of Gebo.ai");
 		message.setJobId(status.getCode());
 		messagesRepository.save(message);
 		return status;
@@ -172,16 +179,20 @@ class GeboIngestionManager {
 	}
 
 	/**
-	 * Creates a content extraction and vectorization job for a project endpoint reference
+	 * Creates a content extraction and vectorization job for a project endpoint
+	 * reference
 	 * 
-	 * @param endpoint The project endpoint reference
+	 * @param endpoint     The project endpoint reference
+	 * @param workflowType
+	 * @param workflowI
 	 * @return The created job status
-	 * @throws GeboPersistenceException If an error occurs while retrieving the endpoint
+	 * @throws GeboPersistenceException If an error occurs while retrieving the
+	 *                                  endpoint
 	 */
-	public GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GObjectRef<GProjectEndpoint> endpoint)
-			throws GeboPersistenceException {
+	public GJobStatus internalCreateContentsExtractionAndVectorizationStatus(GObjectRef<GProjectEndpoint> endpoint,
+			String workflowType, String workflowId) throws GeboPersistenceException {
 		GProjectEndpoint ep = persistentObjectManager.findByReference(endpoint, GProjectEndpoint.class);
-		return internalCreateContentsExtractionAndVectorizationStatus(ep);
+		return internalCreateContentsExtractionAndVectorizationStatus(ep, workflowType, workflowId);
 	}
 
 }

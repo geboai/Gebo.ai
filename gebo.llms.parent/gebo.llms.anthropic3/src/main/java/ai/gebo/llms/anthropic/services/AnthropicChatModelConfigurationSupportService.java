@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.anthropic.services;
 
@@ -21,12 +18,12 @@ import org.springframework.ai.anthropic.AnthropicChatOptions.Builder;
 import org.springframework.ai.anthropic.api.AnthropicApi;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -36,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -45,17 +43,19 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
+import lombok.AllArgsConstructor;
 
 /**
- * Service for configuring and creating Anthropic chat models.
- * AI generated comments
- * This service is only enabled if the anthropicEnabled property is set to true.
+ * Service for configuring and creating Anthropic chat models. AI generated
+ * comments This service is only enabled if the anthropicEnabled property is set
+ * to true.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "anthropicEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class AnthropicChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GAnthropicChatModelChoice, GAnthropicChatModelConfig> {
-	
+
 	/**
 	 * Static definition of the Anthropic model type
 	 */
@@ -65,13 +65,12 @@ public class AnthropicChatModelConfigurationSupportService
 		type.setDescription("Chat models hosted on Anthropic");
 		type.setModelConfigurationClass(GAnthropicChatModelConfig.class.getName());
 	}
-	
+
 	/**
 	 * Service for looking up available Anthropic models
 	 */
-	@Autowired
-	AnthropicModelsLookupService modelsService;
-	
+	final AnthropicModelsLookupService modelsService;
+
 	/**
 	 * List of available chat model choices
 	 */
@@ -80,20 +79,19 @@ public class AnthropicChatModelConfigurationSupportService
 	/**
 	 * Service for accessing secrets like API keys
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
+	final IGeboSecretsAccessService secretService;
+
 	/**
 	 * Repository for tools/functions that can be called by the models
 	 */
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+
 	/**
 	 * Factory for obtaining service clients providers
 	 */
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Inner class that implements the configurable chat model for Anthropic
@@ -105,7 +103,7 @@ public class AnthropicChatModelConfigurationSupportService
 		 * Configures an Anthropic chat model based on the provided configuration
 		 * 
 		 * @param config The Anthropic configuration
-		 * @param type The type of chat model
+		 * @param type   The type of chat model
 		 * @return A configured AnthropicChatModel instance
 		 * @throws LLMConfigException If configuration fails
 		 */
@@ -129,14 +127,14 @@ public class AnthropicChatModelConfigurationSupportService
 			} catch (GeboCryptSecretException e) {
 				throw new LLMConfigException("Anthropic api  key configuration gone wrong ", e);
 			}
-			
+
 			// Get the client providers for making API calls
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
 					.getWebClientBuilder();
 			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
-			
+
 			// Build the Anthropic API configuration
 			org.springframework.ai.anthropic.api.AnthropicApi.Builder apiBuilder = AnthropicApi.builder();
 			if (config.getBaseUrl() != null) {
@@ -145,9 +143,9 @@ public class AnthropicChatModelConfigurationSupportService
 			apiBuilder.apiKey(apiKey);
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
-			
+
 			AnthropicApi anthropicApi = apiBuilder.build();
-			
+
 			// Configure Anthropic chat options
 			Builder builder = AnthropicChatOptions.builder();
 			builder.maxTokens(16000);
@@ -160,7 +158,7 @@ public class AnthropicChatModelConfigurationSupportService
 			if (config.getTopP() != null) {
 				builder = builder.topP(config.getTopP());
 			}
-			
+
 			// Add any enabled functions/tools
 			List<ToolCallback> functions = new ArrayList<ToolCallback>();
 			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
@@ -175,12 +173,6 @@ public class AnthropicChatModelConfigurationSupportService
 					retryTemplate, ObservationRegistry.create());
 			return model;
 		}
-	}
-
-	/**
-	 * Default constructor
-	 */
-	public AnthropicChatModelConfigurationSupportService() {
 	}
 
 	/**
@@ -228,6 +220,21 @@ public class AnthropicChatModelConfigurationSupportService
 	 */
 	@Override
 	public GAnthropicChatModelConfig createBaseConfiguration(String presetModel) {
-		throw new MethodNotFoundException("createBaseConfiguration() is not implemented for Anthropic chat provider");
+		GAnthropicChatModelConfig clean = new GAnthropicChatModelConfig();
+		clean.setModelTypeCode(getType().getCode());
+		clean.setChoosedModel(new GAnthropicChatModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription("chat model " + presetModel);
+		clean.setDescription("Anthropic AI chat model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
+
+	}
+
+	@Override
+	public OperationStatus<GAnthropicChatModelConfig> insertAndConfigure(GAnthropicChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

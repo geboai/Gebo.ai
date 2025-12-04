@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -36,6 +36,8 @@ import { ScrollPanelModule } from "primeng/scrollpanel";
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FieldsetModule } from "primeng/fieldset";
 import { EditableListboxModule } from "../../controls/editable-listbox-component/editable-listbox.module";
+import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 // Routes configuration for the fast setup feature
 const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
@@ -47,9 +49,11 @@ const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
  * The module handles routing to the setup page and provides all necessary form controls and UI elements.
  */
 @NgModule({
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule, MessagesModule, InputTextModule, ButtonModule, PasswordModule, RouterModule.forRoot(routes), DropdownModule, EditableListboxModule, CheckboxModule, RadioButtonModule, ScrollPanelModule, SelectButtonModule,FieldsetModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, PanelModule, BlockUIModule, MessagesModule, InputTextModule, ButtonModule, PasswordModule, RouterModule.forRoot(routes), DropdownModule, EditableListboxModule, CheckboxModule, RadioButtonModule, ScrollPanelModule, SelectButtonModule, FieldsetModule, GeboAIFieldTranslationContainerModule],
     declarations: [FastSetupComponent, GeboAILicenceComponent],
-    exports: [FastSetupComponent]
+    exports: [FastSetupComponent],
+    providers: [
+    ]
 })
 
 export class FastSetupModule implements OnInit {

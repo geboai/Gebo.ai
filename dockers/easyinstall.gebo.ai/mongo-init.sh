@@ -1,7 +1,6 @@
 #!/bin/bash
-set -euo pipefail
 
-DATA_DIR="${MONGO_DATA:-/data/db}"
+export DATA_DIR="${MONGO_DATA:-/data/db}"
 
 # Se Mongo è già inizializzato, esci
 if [ -f "${DATA_DIR}/WiredTiger" ] || [ -f "${DATA_DIR}/WiredTiger.turtle" ]; then

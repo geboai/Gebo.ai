@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -18,7 +18,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { GeboContentProcessRow, GeboFastKnowledgeBaseSetupControllerService, GeboKnowledgeBaseSetupStatus, GKnowledgeBase, GObjectRefGProjectEndpoint, GProject, JobLauncherControllerService, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { AbstractStatusService, BaseWizardSectionComponent, ChooseDataSourceType, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, sliceWizard } from "@Gebo.ai/reusable-ui";
+import { AbstractStatusService, BaseWizardSectionComponent, ChooseDataSourceType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, sliceWizard } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable } from "rxjs";
 import { KNOWLEDGEBASE_WIZARD } from "./wizards-navigation";
@@ -54,19 +54,20 @@ export class KnowledgeBasePresentService extends AbstractStatusService {
 @Component({
     selector: "gebo-knowledge-base-wizard-component",
     templateUrl: "knowledge-base-wizard.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("KnowledgeBaseWizardComponent") }]
 })
 export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
     /**
      * Collection of content process rows to be displayed in the wizard
      */
     public rows: GeboContentProcessRow[] = [];
-    
+
     /**
      * Current status of the knowledge base setup process
      */
     public status?: GeboKnowledgeBaseSetupStatus;
-    
+
     /**
      * Creates an instance of KnowledgeBaseWizardComponent.
      * @param setupWizardComunicationService - Service for communicating with the wizard framework
@@ -82,7 +83,7 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
         private actionsRoutingService: GeboUIActionRoutingService) {
         super(setupWizardComunicationService);
     }
-    
+
     /**
      * Reloads the component data by fetching the latest content process rows and setup status.
      * Overrides the abstract method from the parent class.
@@ -108,8 +109,8 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
      * Sets up a knowledge base with default accessibility to all.
      */
     public newKnowledgeBase() {
-        const newKb:GKnowledgeBase={
-            accessibleToAll:true
+        const newKb: GKnowledgeBase = {
+            accessibleToAll: true
         };
         this.actionsRoutingService.routeEvent({
             actionType: GeboActionType.NEW,
@@ -121,12 +122,12 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
             onActionPerformed: (event) => {
                 this.reloadData();
             },
-            onWizardActionPerformed:(event)=>{
+            onWizardActionPerformed: (event) => {
                 this.reloadData();
             }
         });
     }
-    
+
     /**
      * Opens an existing knowledge base for editing.
      * @param row - The content process row containing the knowledge base to edit
@@ -138,17 +139,17 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
                 context: {},
                 contextType: "KnowledgeBaseWizardComponent",
                 target: row.knowledgeBase,
-                targetType: "GKnowledgeBase",                
+                targetType: "GKnowledgeBase",
                 onActionPerformed: (event) => {
                     this.reloadData()
                 },
-                onWizardActionPerformed:(event)=>{
+                onWizardActionPerformed: (event) => {
                     this.reloadData();
                 }
             });
         }
     }
-    
+
     /**
      * Opens an existing project for editing.
      * @param row - The content process row containing the project to edit
@@ -160,24 +161,24 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
                 context: {},
                 contextType: "KnowledgeBaseWizardComponent",
                 target: row.project,
-                targetType: "GProject",                
+                targetType: "GProject",
                 onActionPerformed: (event) => {
                     this.reloadData()
                 },
-                onWizardActionPerformed:(event)=>{
+                onWizardActionPerformed: (event) => {
                     this.reloadData();
                 }
             });
         }
     }
-    
+
     /**
      * Initiates the creation of a new project associated with a knowledge base.
      * @param row - The content process row containing the knowledge base to associate with the new project
      */
     public newProject(row: GeboContentProcessRow) {
         const project: GProject = {
-            accessibleToAll:true,
+            accessibleToAll: true,
             rootKnowledgeBaseCode: row.knowledgeBase?.code
         };
         this.actionsRoutingService.routeEvent({
@@ -190,12 +191,12 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
             onActionPerformed: (event) => {
                 this.reloadData()
             },
-            onWizardActionPerformed:(event)=>{
+            onWizardActionPerformed: (event) => {
                 this.reloadData();
             }
         });
     }
-    
+
     /**
      * Initiates the creation of a new data source for a project.
      * @param row - The content process row containing the project to associate with the new data source
@@ -217,12 +218,12 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
             onActionPerformed: (event) => {
                 this.reloadData()
             },
-            onWizardActionPerformed:(event)=>{
+            onWizardActionPerformed: (event) => {
                 this.reloadData();
             }
         });
     }
-    
+
     /**
      * Opens an existing data source for editing.
      * @param row - The content process row containing the data source to edit
@@ -234,17 +235,17 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
                 context: {},
                 contextType: "KnowledgeBaseWizardComponent",
                 target: row.endpoint,
-                targetType: this.entityName(row.endpointObjectRef?.className),                
+                targetType: this.entityName(row.endpointObjectRef?.className),
                 onActionPerformed: (event) => {
                     this.reloadData()
                 },
-                onWizardActionPerformed:(event)=>{
+                onWizardActionPerformed: (event) => {
                     this.reloadData();
                 }
             });
         }
     }
-    
+
     /**
      * Extracts the entity name from a fully qualified class name.
      * @param className - The fully qualified class name
@@ -253,10 +254,10 @@ export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {
      */
     entityName(className: string | undefined): string {
         if (!className) throw Error("Unknown entity type");
-        const lastIndex=className.lastIndexOf(".");
-        return lastIndex && lastIndex>0? className.substring(lastIndex+1):className;
+        const lastIndex = className.lastIndexOf(".");
+        return lastIndex && lastIndex > 0 ? className.substring(lastIndex + 1) : className;
     }
-    
+
     /**
      * Publishes a data source to the knowledge base after user confirmation.
      * Creates a job to process the data source and monitors its status.

@@ -4,22 +4,22 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-	<version>0.9.9.7</version>
+	<version>1.0.0.0-rc1</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.4</version>
+		<version>3.5.8</version>
 	</parent>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<!-- TODO: Test if works ok <org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
 		<apache-poi.version>5.4.1</apache-poi.version>
-		<spring.ai.version>1.0.1</spring.ai.version>
+		<spring.ai.version>1.1.0</spring.ai.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
@@ -41,6 +41,7 @@
 		<module>gebo.integrations.clients</module>
 		<module>gebo.llms.parent</module>
 		<module>gebo.buildsystems.parent</module>
+		<module>gebo.api.clients</module>
 	</modules>
 	<dependencies>
 		<dependency>
@@ -50,8 +51,7 @@
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.38</version>
+			<artifactId>lombok</artifactId>			
 			<scope>provided</scope>
 		</dependency>
 
@@ -122,8 +122,20 @@
 						${project.groupId}-${project.artifactId}-${project.version}</finalName>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>native</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<skipTests>true</skipTests>
+			</properties>
+		</profile>
+	</profiles>
 	<distributionManagement>
 		<repository>
 			<id>github</id>

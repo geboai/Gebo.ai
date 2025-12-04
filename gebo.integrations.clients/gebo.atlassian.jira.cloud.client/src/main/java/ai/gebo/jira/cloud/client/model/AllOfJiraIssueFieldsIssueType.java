@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.JiraIssueTypeField;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Set the issue type field by providing an &#x60;issueTypeId&#x60;.

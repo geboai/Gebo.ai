@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -19,15 +19,18 @@
  */
 import { Component, OnInit } from "@angular/core";
 import { FormGroupMetaInfo, GeboAngularFormGroupMetaInfoControllerService, JobLauncherControllerService, LogViewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
 @Component({
     selector: "gebo-ai-logs-view-component",
     templateUrl: "logs-view.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLogsViewPanelModule", multi: false }, {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiLogsViewComponent")
+    }]
 })
-export class GeboAiLogsViewComponent   extends AncestorPanelComponent   implements OnInit {
+export class GeboAiLogsViewComponent extends AncestorPanelComponent implements OnInit {
     /**
      * Overrides the parent method to reload viewed data.
      * Fetches form group meta information and filters for endpoint types,
@@ -35,7 +38,7 @@ export class GeboAiLogsViewComponent   extends AncestorPanelComponent   implemen
      * Sets loading state during the operation.
      */
     public override reloadViewedData(): void {
-        this.loading=true;
+        this.loading = true;
         this.geboFormGroupControllerService.getFormGroupsMetaInfos().subscribe({
             next: (fGroups: FormGroupMetaInfo[]) => {
                 if (fGroups) {
@@ -48,11 +51,11 @@ export class GeboAiLogsViewComponent   extends AncestorPanelComponent   implemen
                             }
                         });
                     }
-                    this.endpointTabs=tabs;
+                    this.endpointTabs = tabs;
                 }
             },
-            complete:()=>{
-                this.loading=false;
+            complete: () => {
+                this.loading = false;
             }
         });
     }
@@ -60,7 +63,7 @@ export class GeboAiLogsViewComponent   extends AncestorPanelComponent   implemen
      * Flag indicating whether data is currently being loaded
      */
     public loading: boolean = false;
-    
+
     /**
      * Constructor initializes necessary services for the logs view component
      * 
@@ -75,12 +78,12 @@ export class GeboAiLogsViewComponent   extends AncestorPanelComponent   implemen
         private geboFormGroupControllerService: GeboAngularFormGroupMetaInfoControllerService) {
         super();
     }
-    
+
     /**
      * Array to store endpoint tab information including display label and associated class name
      */
     endpointTabs: { label: string, className: string }[] = [];
-    
+
     /**
      * Lifecycle hook that is called after component initialization
      * Triggers the data loading process

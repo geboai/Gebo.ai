@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -34,6 +31,7 @@ import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -47,6 +45,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.model.GOpenAIChatModelChoice;
@@ -60,9 +59,11 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
+import lombok.AllArgsConstructor;
 
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "openAIEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class OpenAIChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GOpenAIChatModelChoice, GOpenAIChatModelConfig> {
 	/**
@@ -74,33 +75,26 @@ public class OpenAIChatModelConfigurationSupportService
 		type.setDescription("chatgpt service hosted on OpenAI");
 		type.setModelConfigurationClass(GOpenAIChatModelConfig.class.getName());
 	}
-	
+
 	/**
 	 * Available model choices for OpenAI chat models.
 	 */
 	static final List<GOpenAIChatModelChoice> choices = GBaseModelChoice.of(GOpenAIChatModelChoice.class,
 			OpenAiApi.ChatModel.values());
 
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	@Autowired
-	IGOpenAIApiUtil openaiApiUtil;
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	@Autowired
-	OpenAITextToSpeechModelConfigurationSupportService ttsOpenAISupportService;
-	@Autowired
-	OpenAITranscriptModelConfigurationSupportService transcriptOpenAISupportService;
-	@Autowired
-	IGTextToSpeechModelRuntimeConfigurationDao ttsDao;
-	@Autowired
-	IGTranscriptModelRuntimeConfigurationDao transcriptDao;
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final IGeboSecretsAccessService secretService;
+	final IGOpenAIApiUtil openaiApiUtil;
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+	final OpenAITextToSpeechModelConfigurationSupportService ttsOpenAISupportService;
+	final OpenAITranscriptModelConfigurationSupportService transcriptOpenAISupportService;
+	final IGTextToSpeechModelRuntimeConfigurationDao ttsDao;
+	final IGTranscriptModelRuntimeConfigurationDao transcriptDao;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
-	 * Implementation of a configurable chat model for OpenAI.
-	 * This class handles the creation and configuration of OpenAI chat models.
+	 * Implementation of a configurable chat model for OpenAI. This class handles
+	 * the creation and configuration of OpenAI chat models.
 	 */
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, OpenAiChatModel> {
 
@@ -113,7 +107,7 @@ public class OpenAIChatModelConfigurationSupportService
 		 * Configures the OpenAI chat model based on the provided configuration.
 		 * 
 		 * @param config The OpenAI chat model configuration
-		 * @param type The chat model type
+		 * @param type   The chat model type
 		 * @return The configured OpenAI chat model
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
@@ -171,7 +165,7 @@ public class OpenAIChatModelConfigurationSupportService
 			if (user != null) {
 				builder = builder.user(user);
 			}
-			
+
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = new OpenAiChatModel(openaiApi, options, toolCallingManager, retryTemplate,
@@ -222,8 +216,8 @@ public class OpenAIChatModelConfigurationSupportService
 		}
 
 		/**
-		 * Gets the speech model for text-to-speech functionality.
-		 * Creates a new one if not available.
+		 * Gets the speech model for text-to-speech functionality. Creates a new one if
+		 * not available.
 		 * 
 		 * @return A configurable text-to-speech model
 		 * @throws LLMConfigException if there is an error creating the model
@@ -243,8 +237,8 @@ public class OpenAIChatModelConfigurationSupportService
 		}
 
 		/**
-		 * Gets the transcript model for speech-to-text functionality.
-		 * Creates a new one if not available.
+		 * Gets the transcript model for speech-to-text functionality. Creates a new one
+		 * if not available.
 		 * 
 		 * @return A configurable transcript model
 		 * @throws LLMConfigException if there is an error creating the model
@@ -264,11 +258,7 @@ public class OpenAIChatModelConfigurationSupportService
 		}
 	};
 
-	/**
-	 * Default constructor for the OpenAIChatModelConfigurationSupportService.
-	 */
-	public OpenAIChatModelConfigurationSupportService() {
-	}
+	
 
 	/**
 	 * Gets the model type supported by this service.
@@ -310,7 +300,7 @@ public class OpenAIChatModelConfigurationSupportService
 			ModelMetaInfo meta = new ModelMetaInfo();
 			meta.setInformativeUrl("https://platform.openai.com/docs/models/");
 			return meta;
-		});
+		}, type);
 	}
 
 	/**
@@ -328,5 +318,11 @@ public class OpenAIChatModelConfigurationSupportService
 		clean.setDescription("OpenAI chat model " + presetModel);
 		clean.setModelTypeCode(getType().getCode());
 		return clean;
+	}
+
+	@Override
+	public OperationStatus<GOpenAIChatModelConfig> insertAndConfigure(GOpenAIChatModelConfig config) throws GeboPersistenceException, LLMConfigException {
+	 
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

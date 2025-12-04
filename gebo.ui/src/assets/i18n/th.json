@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "ภาษาระบบเริ่มต้น",
+        "help" : "ภาษาระบบเริ่มต้นสำหรับการติดตั้ง Gebo.ai นี้"
+      },
+      "username" : {
+        "label" : "อีเมล",
+        "help" : "ใช้อีเมลเป็นชื่อผู้ใช้สำหรับเข้าสู่ระบบ"
+      },
+      "passwordC" : {
+        "label" : "ยืนยันรหัสผ่าน",
+        "help" : "ยืนยันรหัสผ่าน"
+      },
+      "password" : {
+        "label" : "รหัสผ่าน",
+        "help" : "รหัสผ่านสำหรับเข้าสู่ระบบ (อย่างน้อย 8 ตัวอักษร)"
+      },
+      "PasswordNotMatching" : {
+        "label" : "รหัสผ่านไม่ตรงกัน"
+      },
+      "LocalAdmin" : {
+        "label" : "สร้างบัญชีผู้ดูแลระบบในเครื่องของคุณ"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "คุณจะใช้บัญชีนี้ในอนาคตเพื่อกำหนดค่าหรือดูแลซอฟต์แวร์ ข้อมูลนี้จะอยู่ในระบบของคุณเองและจะไม่ถูกส่งผ่านเครือข่าย"
+      },
+      "EnterBtn" : {
+        "label" : "ไปที่หน้าเข้าสู่ระบบ"
+      },
+      "SetupPage" : {
+        "label" : "ตั้งค่าการติดตั้ง Gebo.ai ของคุณ"
+      },
+      "CreateBtn" : {
+        "label" : "สร้างการตั้งค่าระบบ"
+      },
+      "LicenceFieldSet" : {
+        "label" : "อ่านและยอมรับข้อตกลง"
+      },
+      "AcceptMark" : {
+        "label" : "ฉันยอมรับเงื่อนไข",
+        "help" : "โดยคลิกที่นี่คุณยอมรับข้อกำหนดและเงื่อนไขในข้อตกลง"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "อีเมล",
+        "help" : "อีเมลสำหรับเข้าสู่ระบบ"
+      },
+      "password" : {
+        "label" : "รหัสผ่าน",
+        "help" : "รหัสผ่านสำหรับเข้าสู่ระบบ"
+      },
+      "LoginPanel" : {
+        "label" : "เข้าสู่ระบบไปยัง gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "เข้าสู่ระบบ"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "ตกลง!",
+        "detail" : "ดำเนินการสำเร็จ"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "ยินดีต้อนรับสู่ gebo.ai",
+        "detail" : "กรุณาใส่ชื่อผู้ใช้และรหัสผ่านเพื่อเข้าสู่ระบบ"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ดำเนินการไม่สำเร็จ",
+        "detail" : "ไม่สามารถยืนยันตัวตนด้วยข้อมูลที่ให้มา"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "เรียบร้อย!",
+        "detail" : "ดำเนินการสำเร็จแล้ว"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "ยินดีต้อนรับสู่ Gebo.ai",
+        "detail" : "กรอกชื่อผู้ใช้และรหัสผ่านของคุณเพื่อเข้าสู่ระบบ"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "การตั้งค่า Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "ชื่อผู้ให้บริการ"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "MainPanel" : {
+        "label" : "การตั้งค่าความปลอดภัย Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "รหัส"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "กลับไปหน้าตั้งค่าหลัก"
+      },
+      "WizardUi" : {
+        "label" : "เลือกหมวดการตั้งค่า"
+      },
+      "adminUserSetupSection" : {
+        "label" : "ตั้งค่าผู้ดูแลและบัญชีอื่น ๆ",
+        "description" : "จำเป็นต้องมีบัญชีผู้ดูแลอย่างน้อยหนึ่งบัญชีเพื่อให้แน่ใจว่าการจัดการ Gebo.ai นี้ถูกต้อง เพิ่มผู้ใช้อื่นหากจำเป็น"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "โฟลเดอร์งาน Gebo.ai",
+        "description" : "กำหนดค่าโฟลเดอร์งาน ซึ่งจะเป็นโฟลเดอร์ที่เก็บการตั้งค่าและไฟล์งานทั้งหมดของการติดตั้งนี้ ควรสำรองข้อมูลนี้เป็นระยะ ๆ ด้วย"
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "การตั้งค่าฐานข้อมูลเวกเตอร์",
+        "description" : "จำเป็นต้องตั้งค่าฐานข้อมูลเวกเตอร์สำหรับ Gebo.ai เพื่อให้บริการ retrieve augmented generation คุณสามารถเลือกฐานข้อมูลแบบ local, Qdrant หรือ Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Single signon, การยืนยันตัวตน oauth2",
+        "description" : "การยืนยันตัวตนแบบ single signon ด้วย Oauth2 และการตั้งค่า Oauth2 clients"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "ตั้งค่า large language models",
+        "description" : "กำหนดค่า llms กับ backend ทั้งแบบคลาวด์หรือแบบ local/lan ต้องตั้งค่าอย่างน้อยหนึ่งโมเดลแชทและอย่างน้อยหนึ่งโมเดล embedding เพื่อให้ซอฟต์แวร์ทำงานได้อย่างถูกต้อง"
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "การตั้งค่า Graph rag/การสกัดความรู้",
+        "description" : "กำหนดค่า graph rag และระบบย่อยการสกัดความรู้"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "การตั้งค่าพาธโฟลเดอร์ที่ใช้ร่วมกัน",
+        "description" : "กำหนดเส้นทางของโฟลเดอร์ที่ใช้งานร่วมกันในบริษัท เพื่อใช้เป็นพื้นที่เอกสาร retrieve augmented generation ในฐานข้อมูลความรู้ต่าง ๆ"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "การเชื่อมต่อ Atlassian confluence",
+        "description" : "กำหนดค่า Gebo.ai เพื่อเข้าถึง Atlassian Confluence ทั้งแบบคลาวด์หรือ on premise"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "การเชื่อมต่อ Atlassian jira",
+        "description" : "กำหนดค่า Gebo.ai เพื่อเข้าถึง Atlassian jira บนคลาวด์"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "การเชื่อมต่อ Microsoft Sharepoint",
+        "description" : "กำหนดค่า Gebo.ai เพื่อเข้าถึง Microsoft Sharepoint ทั้งแบบคลาวด์หรือ on premise"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "ตั้งค่าฐานความรู้ อย่างน้อย 1 ฐาน",
+        "description" : "ตั้งค่าอย่างน้อยหนึ่งฐานความรู้ให้ผู้ใช้ของคุณได้ใช้งานบริการ retrieve augmented generations จาก Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "ตั้งค่าโปรไฟล์แชท \"R.A.G.\" อย่างน้อย 1 รายการ",
+        "description" : "ตั้งโปรไฟล์แชท retrieve augmented อย่างน้อยหนึ่งรายการสำหรับผู้ใช้ของคุณโดยอิงจากฐานความรู้ที่คุณได้ตั้งไว้"
+      },
+      "mandatory-done" : {
+        "summary" : "ดำเนินการติดตั้ง Gebo.ai ขั้นตอนที่จำเป็นเรียบร้อยแล้ว...",
+        "detail" : "ได้ดำเนินขั้นตอนติดตั้งที่จำเป็นครบถ้วนแล้ว แต่ยังมีบางขั้นตอนที่ขาดทำให้องค์กรของคุณไม่สามารถใช้งานซอฟต์แวร์นี้ได้เต็มที่"
+      },
+      "setup-ok" : {
+        "summary" : "ตั้งค่า Gebo.ai เรียบร้อย!"
+      },
+      "mandatory-missing" : {
+        "summary" : "การติดตั้ง Gebo.ai ขาดบางขั้นตอนที่จำเป็น",
+        "detail" : "กรุณาตรวจสอบขั้นตอนที่แสดงเป็นสีแดงในกระบวนการตั้งค่า"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "การเชื่อมต่อ Google Drive/Workspaces",
+        "description" : "ตั้งค่า Gebo.ai เพื่อเข้าถึงข้อมูลทีมใน Google Drive/Workspaces ของคุณ"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ตั้งค่าระบบ Atlassian Confluence ของบริษัท"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ประเภทระบบ"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "รหัส config"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "ระบบ Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "ระบบ Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "รหัส config"
+      },
+      "MainPanel" : {
+        "label" : "ตั้งค่าระบบ Atlassian Jira ของบริษัท"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ประเภทระบบ"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "รหัส config"
+      },
+      "MainPanel" : {
+        "label" : "ตั้งค่าระบบ Microsoft Sharepoint ของบริษัท"
+      },
+      "SystemTypeHeader" : {
+        "label" : "ประเภทระบบ"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "ระบบ Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "กรุณากรอก api-key ที่มีเครดิตเพียงพอ หากเลือก OpenAI ต้องเพิ่มเครดิตในแผนของคุณ (ประมาณ 10-30$ ก็เพียงพอ) เพื่อใช้งาน api หากไม่มี จะไม่สามารถใช้งาน llms ได้ในแอปพลิเคชันนี้"
+      },
+      "MainPanel" : {
+        "label" : "ตั้งค่าการเข้าถึงผู้ให้บริการ llms ของ Gebo.ai ด้วย api key ของคุณ"
+      },
+      "provider" : {
+        "label" : "ผู้ให้บริการ large language model",
+        "help" : "เลือกผู้ให้บริการระหว่าง OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "ผู้ใช้",
+        "help" : "กรอกผู้ใช้ที่เกี่ยวข้องกับ apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "ตั้งค่า"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "api key ของผู้ให้บริการ LLMS ที่จะใช้งาน"
+      },
+      "ProviderHeader" : {
+        "label" : "ผู้ให้บริการ"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "รหัสการตั้งค่า"
+      },
+      "ModelHeader" : {
+        "label" : "โมเดล"
+      },
+      "ModelTypeHeader" : {
+        "label" : "ประเภทโมเดล"
+      },
+      "DefaultModelHeader" : {
+        "label" : "โมเดลเริ่มต้น"
+      },
+      "MainPanelHeader" : {
+        "label" : "ตั้งค่าการเข้าถึงผู้ให้บริการ llms ของ Gebo.ai"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "สร้าง config สำหรับ graph rag"
+      },
+      "MainPanel" : {
+        "label" : "ตั้งค่า Graph Rag & การสกัดความรู้เริ่มต้น"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "รหัส config"
+      },
+      "EditConfigBtn" : {
+        "label" : "แก้ไขการตั้งค่า"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "โปรเจกต์"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "เพิ่มฐานความรู้"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "ฐานความรู้"
+      },
+      "MainPanel" : {
+        "label" : "การตั้งค่าฐานความรู้ & เนื้อหา"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "แหล่งข้อมูล"
+      },
+      "PublishedHeader" : {
+        "label" : "เผยแพร่"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "จำนวนเอกสาร"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "เพิ่มโปรเจกต์/รายการ",
+        "help" : "สร้างโปรเจกต์ใหม่"
+      },
+      "Button1" : {
+        "help" : "เปิดฐานความรู้"
+      },
+      "Button2" : {
+        "help" : "เปิดฟอร์มโปรเจกต์"
+      },
+      "Button3" : {
+        "help" : "เปิดแหล่งข้อมูล"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "การตั้งค่าโฟลเดอร์งานของ Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "ตั้งค่า"
+      },
+      "workDirectory" : {
+        "label" : "เลือกโฟลเดอร์สำหรับโฟลเดอร์งานของ Gebo.ai",
+        "help" : "เลือกโฟลเดอร์บนเซิร์ฟเวอร์ที่การติดตั้งนี้จะใช้เป็นโฟลเดอร์งานสำหรับเก็บข้อมูลและเนื้อหาต่าง ๆ"
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "เพิ่มโฟลเดอร์"
+      },
+      "AddFolderBtn" : {
+        "label" : "เพิ่มโฟลเดอร์"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "MainPanel" : {
+        "label" : "เส้นทางไฟล์ระบบที่ใช้ร่วมกันของเซิร์ฟเวอร์"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "เส้นทางแบบเต็ม"
+      },
+      "DeleteHeader" : {
+        "label" : "ลบ"
+      },
+      "path" : {
+        "label" : "เพิ่มโฟลเดอร์รากของไฟล์ระบบที่ใช้ร่วมกัน",
+        "help" : "เลือกโฟลเดอร์บนเซิร์ฟเวอร์ที่เป็นเส้นทางหลักสำหรับไฟล์ระบบที่ใช้ร่วมกันภายในองค์กรของคุณเพื่อใช้เป็นที่เก็บเอกสาร"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายรายการไฟล์ระบบ"
+      },
+      "RemovePathBtn" : {
+        "label" : "ลบเส้นทาง"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "ตั้งค่า"
+      },
+      "MainPanel" : {
+        "label" : "การตั้งค่าฐานข้อมูลเวกเตอร์"
+      },
+      "host" : {
+        "label" : "โฮสต์ Qdrant",
+        "help" : "ชื่อโฮสต์หรือที่อยู่ไอพีของ Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "การตั้งค่าการเชื่อมต่อ Qdrant"
+      },
+      "port" : {
+        "label" : "พอร์ต Qdrant",
+        "help" : "พอร์ตเชื่อมต่อ Qdrant (6334 เป็นค่ามาตรฐาน)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Api key สำหรับยืนยันตัวตน Qdrant"
+      },
+      "tls" : {
+        "label" : "พารามิเตอร์ Qdrant TLS",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "ขั้นตอนตั้งค่าหลักของ Gebo.ai เสร็จสมบูรณ์...",
+        "detail" : "ดำเนินการขั้นตอนหลักเสร็จเรียบร้อยแล้ว แต่ยังมีขั้นตอนที่ขาดซึ่งอาจทำให้บริษัทของคุณไม่ได้ใช้งานซอฟต์แวร์นี้อย่างเต็มที่"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "การตั้งค่า Gebo.ai ขาดขั้นตอนสำคัญบางข้อ",
+        "detail" : "กรุณาตรวจสอบขั้นตอนที่เป็นสีแดงในกระบวนการตั้งค่า"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "ตั้งค่า Gebo.ai เรียบร้อย!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "เพิ่มโปรไฟล์แชท R.A.G. ใหม่"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "เพิ่มโปรไฟล์แชท R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "เรียกคืนการตั้งค่าโปรไฟล์แชทแบบ augmented generation (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "โปรไฟล์แชท R.A.G. ที่มีอยู่"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "แก้ไขโปรไฟล์แชท R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "รหัสคลังความรู้"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "ตั้งค่าระบบ Google Drive/Workspaces ของบริษัท"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "รหัสการตั้งค่า"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "รหัส",
+        "help" : "กรอกคำอธิบายรหัสการตรวจสอบ/การเชื่อมต่อ OAUTH2 (registrationId)"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายข้อมูลการตรวจสอบ/การเชื่อมต่อ OAUTH2"
+      },
+      "configurationType" : {
+        "label" : "วัตถุประสงค์การตั้งค่า",
+        "help" : "เลือกว่าค่านี้จะใช้สำหรับการยืนยันตัวตนใน Gebo.ai หรือให้ Gebo.ai เชื่อมต่อกับระบบอื่น"
+      },
+      "authProvider" : {
+        "label" : "ผู้ให้บริการ",
+        "help" : "กรอกชื่อผู้ให้บริการการตรวจสอบ OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "ที่อยู่ผู้ออกใบอนุญาต",
+        "help" : "กรอก URL ผู้ออกใบอนุญาต OAUTH2 ของผู้ให้บริการ"
+      },
+      "authorizationUri" : {
+        "label" : "URL อนุญาต",
+        "help" : "กรอก URL สำหรับการอนุญาต OAUTH2 ของผู้ให้บริการ"
+      },
+      "jwkSetUri" : {
+        "label" : "ที่อยู่ Jwk Set",
+        "help" : "กรอก url Jwk Set ของผู้ให้บริการ OAUTH2"
+      },
+      "userInfoUri" : {
+        "label" : "URL ข้อมูลผู้ใช้",
+        "help" : "กรอก URL ข้อมูลผู้ใช้ OAUTH2 ของผู้ให้บริการ"
+      },
+      "introspectionUri" : {
+        "label" : "ที่อยู่ Introspection",
+        "help" : "กรอก URL introspection OAUTH2 ของผู้ให้บริการ"
+      },
+      "tokenUri" : {
+        "label" : "URL โทเค็น",
+        "help" : "กรอก URL โทเค็น OAUTH2 ของผู้ให้บริการ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URL ผู้ให้บริการ OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "เพิ่มข้อมูลการตรวจสอบ/การเชื่อมต่อ OAUTH2 ใหม่"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "รหัสประจำตัวลูกค้าสำหรับโปรโตคอล oauth2 (สามารถดูได้ในพื้นที่ผู้ดูแลระบบซอฟต์แวร์บุคคลที่สามที่ผ่านการรับรอง oauth2)"
+      },
+      "secret" : {
+        "label" : "Secret key",
+        "help" : "รหัสลับของลูกค้าสำหรับโปรโตคอล oauth2 (สามารถดูได้ในพื้นที่ผู้ดูแลระบบซอฟต์แวร์บุคคลที่สามที่ผ่านการรับรอง oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "สร้างการกำหนดค่าระบบ Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "ใส่คำอธิบายของระบบ Confluence"
+      },
+      "CreateBtn" : {
+        "label" : "สร้าง"
+      },
+      "username" : {
+        "label" : "ชื่อผู้ใช้ Confluence",
+        "help" : "ชื่อผู้ใช้ Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "เวอร์ชัน Confluence",
+        "help" : "เวอร์ชัน Confluence"
+      },
+      "baseUri" : {
+        "label" : "ที่อยู่หลักอินเทอร์เน็ต",
+        "help" : "Url ของที่อยู่ระบบหลัก Confluence สำหรับการติดตั้งแบบ onpremise หรือ base url องค์กรของคุณสำหรับ Confluence Cloud"
+      },
+      "password" : {
+        "label" : "รหัสผ่าน Confluence",
+        "help" : "รหัสผ่าน Confluence"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD apikey ที่ได้รับใน confluence backoffice ตรงนี้ต้องกรอก \"API Token for your Atlassian Account\""
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและอนุญาตให้เนื้อหาเหล่านี้ใช้งานได้ในฐานข้อมูลความรู้สำหรับ LLm"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SettingsTab" : {
+        "label" : "การตั้งค่า"
+      },
+      "MainPanel" : {
+        "label" : "แบ่งปันเนื้อหา Confluence"
+      },
+      "LogsTab" : {
+        "label" : "บันทึก"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของเนื้อหาที่สร้างให้อัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "ใส่คำอธิบายของเนื้อหา Confluence ที่อัปโหลด"
+      },
+      "confluenceSystemCode" : {
+        "label" : "ระบบ Confluence",
+        "help" : "อ้างอิงถึงระบบ Confluence ที่กำหนดค่าแล้ว"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "อ้างอิงโปรเจกต์หลัก"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้งานการเปิดไฟล์ zip และแยกเนื้อหา"
+      },
+      "tree" : {
+        "label" : "พื้นที่หรือหน้า/หน้ารองที่เลือกไว้",
+        "help" : "เนื้อหาในพื้นที่และหน้าของ Confluence ที่แบ่งปัน"
+      },
+      "programmedTables" : {
+        "label" : "กำหนดเวลาตรวจสอบการอัปเดตเนื้อหา",
+        "help" : "กำหนดเวลาตรวจสอบเนื้อหาที่เปลี่ยนแปลงเพื่อให้ระบบดึงข้อมูลที่อัปเดตอยู่เสมอ"
+      },
+      "catalogingCriteria" : {
+        "label" : "เกณฑ์การจัดองค์กรพื้นที่ หน้า และหน้ารอง",
+        "help" : "โปรดอธิบายที่นี่ถึงเกณฑ์การจัดองค์กรพื้นที่ หน้า และหน้ารองในเนื้อหา Confluence ที่แบ่งปันกับ Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "การตั้งค่าทั่วไป"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขระบบ Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "baseUri" : {
+        "label" : "ที่อยู่หลักอินเทอร์เน็ต",
+        "help" : "Url ของที่อยู่ระบบหลัก Confluence"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของระบบ Confluence ที่สร้างให้อัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "ใส่คำอธิบายของระบบ Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "เวอร์ชัน Confluence",
+        "help" : "เวอร์ชัน Confluence"
+      },
+      "secretCode" : {
+        "label" : "ตัวตนที่ใช้",
+        "help" : "เลือกหรือสร้างตัวตนเพื่อเข้าถึงระบบ Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "กลุ่มใหม่"
+      },
+      "NewUserBtn" : {
+        "label" : "ผู้ใช้ใหม่"
+      },
+      "UsersListPanel" : {
+        "label" : "รายชื่อผู้ใช้"
+      },
+      "GroupsListPanel" : {
+        "label" : "รายชื่อกลุ่ม"
+      },
+      "SournameHeader" : {
+        "label" : "นามสกุล"
+      },
+      "UsernameHeader" : {
+        "label" : "ชื่อผู้ใช้"
+      },
+      "RolesHeader" : {
+        "label" : "บทบาท"
+      },
+      "NameHeader" : {
+        "label" : "ชื่อ"
+      },
+      "EditBtn" : {
+        "label" : "แก้ไข"
+      },
+      "DisabledHeader" : {
+        "label" : "ปิดการใช้งาน"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "UserIds" : {
+        "placeholder" : "เลือกผู้ใช้"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขกลุ่มผู้ใช้"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของกลุ่มผู้ใช้"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "กรอกรหัสของกลุ่มผู้ใช้"
+      },
+      "userIds" : {
+        "label" : "รายชื่อผู้ใช้",
+        "help" : "เลือกผู้ใช้ที่เข้าร่วมกลุ่ม"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "สร้าง"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของระบบ jira"
+      },
+      "MainPanel" : {
+        "label" : "สร้างการกำหนดค่าระบบ jira"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "username" : {
+        "label" : "jira username",
+        "help" : "ชื่อผู้ใช้ jira"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira CLOUD apikey ที่ได้รับจาก backoffic jira ที่นี่ต้องใส่ \"API Token for your Atlassian Account\""
+      },
+      "baseUri" : {
+        "label" : "ที่อยู่เว็บหลัก",
+        "help" : "Url ของที่อยู่หลักของระบบ jira สำหรับการติดตั้ง onpremise หรือ base url องค์กรของคุณสำหรับระบบ jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและทำให้เนื้อหานี้สามารถใช้ได้ใน knowledge base สำหรับ LLm’s"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SettingsTab" : {
+        "label" : "การตั้งค่า"
+      },
+      "LogsTab" : {
+        "label" : "บันทึก"
+      },
+      "MainPanel" : {
+        "label" : "แบ่งปันเนื้อหา jira"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของเนื้อหาที่สร้างขึ้นอัตโนมัติ"
+      },
+      "jiraSystemCode" : {
+        "label" : "jira system",
+        "help" : "การอ้างอิงระบบ jira ที่ตั้งค่าไว้แล้ว"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "การอ้างอิงโปรเจกต์หลัก"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของเนื้อหา jira ที่อัปโหลด"
+      },
+      "programmedTables" : {
+        "label" : "กำหนดเวลาตรวจสอบการอัปเดตเนื้อหา",
+        "help" : "ตั้งค่ากำหนดเวลาสำหรับเนื้อหาที่เปลี่ยนแปลงเพื่อติดตามระบบ retrieve augmented generation ให้ทันสมัย"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้งานการเปิดไฟล์ zip และแยกเนื้อหา"
+      },
+      "tree" : {
+        "label" : "ส่วนหรือหน้าหลัก/หน้ารองที่เลือก",
+        "help" : "เนื้อหาโปรเจกต์ jira และลำดับชั้นของตั๋วที่แบ่งปัน"
+      },
+      "catalogingCriteria" : {
+        "label" : "เกณฑ์การจัดระเบียบ spaces, pages และ subpages",
+        "help" : "โปรดอธิบายที่นี่ถึงเกณฑ์การจัดระเบียบ spaces, pages และ subpages ในเนื้อหา jira ที่แบ่งปันกับ Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของระบบ jira"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขระบบ jira"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "baseUri" : {
+        "label" : "ที่อยู่เว็บหลัก",
+        "help" : "Url ของที่อยู่หลักของระบบ jira"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของระบบ jira ที่สร้างขึ้นอัตโนมัติ"
+      },
+      "secretCode" : {
+        "label" : "ตัวตนที่ใช้",
+        "help" : "เลือกหรือสร้างตัวตนเพื่อใช้เข้าถึงระบบ jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของระบบ SharPpoint/OneDrive"
+      },
+      "sharepointVersion" : {
+        "label" : "เวอร์ชัน Sharepoint",
+        "help" : "เวอร์ชัน sharepoint"
+      },
+      "secret" : {
+        "label" : "รหัสลับ",
+        "help" : "Oauth2 client secret สำหรับแอปนี้ที่ลงทะเบียนในผลิตภัณฑ์ microsoft \"entra\" (ดูก่อนที่คอนโซลผู้ดูแลระบบ microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "Oauth2 client identifier สำหรับแอปนี้ที่ลงทะเบียนในผลิตภัณฑ์ microsoft \"entra\" (ดูก่อนที่คอนโซลผู้ดูแลระบบ microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "Tenant ID",
+        "help" : "Oauth2 tenant identifier สำหรับผลิตภัณฑ์ microsoft \"entra\" ขององค์กรคุณ (ดูก่อนที่คอนโซลผู้ดูแลระบบ microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "ข้อมูลการลงทะเบียนแอป Microsof oauth2 สำหรับ Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "สร้าง"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "MainPanel" : {
+        "label" : "สร้างการตั้งค่าระบบ SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและให้เนื้อหานี้สามารถใช้ได้ในฐานความรู้สำหรับ LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "การตั้งค่า"
+      },
+      "MainPanel" : {
+        "label" : "การแชร์เนื้อหา SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "บันทึก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะที่ถูกสร้างขึ้นโดยอัตโนมัติของเนื้อหา"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "การอ้างอิงโปรเจกต์ต้นทาง"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของแหล่งข้อมูลรายการ SharePoint/OneDrive"
+      },
+      "sharePointSystemCode" : {
+        "label" : "ระบบ sharepoint",
+        "help" : "การอ้างอิงระบบ SharePoint/OneDrive ที่กำหนดไว้แล้ว"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้งานการเปิดไฟล์ zip และดึงข้อมูลเนื้อหา"
+      },
+      "tree" : {
+        "label" : "ไซต์/หน้า/หน้ารองที่เลือกใน Sharepoint หรือไดรฟ์/โฟลเดอร์/ไฟล์ใน OneDrive",
+        "help" : "เนื้อหา sharepoint/OneDrive ที่แชร์"
+      },
+      "programmedTables" : {
+        "label" : "กำหนดเวลาตรวจสอบการอัปเดตเนื้อหา",
+        "help" : "ตั้งเวลาการอัปเดตเนื้อหาที่เปลี่ยนแปลงเพื่อให้ระบบ retrieve augmented generation อัปเดตอยู่เสมอ"
+      },
+      "catalogingCriteria" : {
+        "label" : "หลักเกณฑ์การจัดหน้าว่างหน้าและหน้ารอง",
+        "help" : "โปรดอธิบายที่นี่ถึงวิธีการจัดระเบียบพื้นที่ หน้า และหน้ารองในเนื้อหา sharepoint ที่แชร์กับ Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "แก้ไขระบบ sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "การตั้งค่าทั่วไป"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "secretCode" : {
+        "label" : "ตัวตนที่ใช้",
+        "help" : "เลือกหรือสร้างตัวตนสำหรับเข้าถึงระบบ sharepoint"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะที่ถูกสร้างขึ้นโดยอัตโนมัติของระบบ sharepoint"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของระบบ sharepoint"
+      },
+      "sharepointVersion" : {
+        "label" : "เวอร์ชัน Sharepoint",
+        "help" : "เวอร์ชัน sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "ลบ"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "บันทึก"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "ยกเลิก"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "การตั้งค่าข้อมูล/เนื้อหาโดยทั่วไป"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "การตั้งค่า LLms"
+      },
+      "code" : {
+        "label" : "รหัสที่ไม่ซ้ำกัน",
+        "help" : "รหัสที่ไม่ซ้ำกันสำหรับขั้นตอนการสกัดข้อมูล knowledge graph ที่สร้างขึ้นโดยอัตโนมัติ\n                                    "
+      },
+      "MainPanel" : {
+        "label" : "การตั้งค่าการสกัด Graphrag/ความรู้"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าขั้นตอนการสกัดข้อมูล knowledge graph นี้\n                                    "
+      },
+      "extractionPrompt" : {
+        "label" : "พรอมต์สำหรับการสกัดข้อมูล",
+        "help" : "พรอมต์สำหรับ large language model ในการสกัด entity/เหตุการณ์/ความสัมพันธ์ และนามแฝง"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM ที่ใช้สำหรับการสกัดข้อมูล",
+        "help" : "ระบุ large language model ที่ใช้สำหรับการสกัดความรู้ หากไม่ได้เลือกจะใช้งานตัวตั้งต้น\n                                    "
+      },
+      "graphRagAllSources" : {
+        "label" : "ใช้ graph rag กับทุกแหล่งข้อมูล",
+        "help" : "หากเป็นจริง ระบบจะประมวลผลฐานความรู้/โปรเจค/แหล่งข้อมูลทั้งหมดเพื่อสกัดความรู้ มิฉะนั้นจะทำเฉพาะที่ตั้งค่าไว้เท่านั้น "
+      },
+      "defaultModel" : {
+        "label" : "large language model ตั้งต้น",
+        "help" : "large language model ตั้งต้นจะถูกใช้สำหรับการสกัดความรู้"
+      },
+      "processEveryDocument" : {
+        "label" : "ใช้ graph rag กับทุกไฟล์",
+        "help" : "อัลกอริทึม graph rag จะถูกนำไปใช้กับไฟล์ทั้งหมด ซึ่งจะช่วยเพิ่มรายละเอียดในการวิเคราะห์ที่ระบบสามารถทำได้ แต่จะเพิ่มค่าใช้จ่ายและเวลาที่ต้องใช้ในการประมวลผลเอกสาร"
+      },
+      "contentSelectionFilter" : {
+        "label" : "เกณฑ์การเลือกไฟล์สำหรับการประมวลผล graphrag",
+        "help" : "แก้ไขเกณฑ์ของไฟล์ที่จะส่งไปยังขั้นตอนสกัดข้อมูลสำหรับ graphrag เลือกอย่างน้อยชื่อไฟล์และเกณฑ์ และ/หรือประเภทไฟล์ และ/หรือขนาดไฟล์ไม่เกินจำนวนไบต์สูงสุด และ/หรืออายุการแก้ไขล่าสุดเป็นวัน"
+      },
+      "extractionFormat" : {
+        "label" : "รูปแบบการสกัดข้อมูล",
+        "help" : "ใช้รูปแบบ CSV สำหรับ llms ที่มี params น้อยกว่า 30b, ใช้ JSON สำหรับโมเดล frontier ขนาดใหญ่",
+        "placeholder" : "ใช้รูปแบบ CSV สำหรับ llms ที่มี params น้อยกว่า 30b, ใช้ JSON สำหรับโมเดล frontier ขนาดใหญ่"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "เลือกประเภทไฟล์"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "เกณฑ์การกรองชื่อไฟล์"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "การแก้ไขไฟล์ล่าสุด, กี่วันที่แล้ว"
+      },
+      "nameFilter" : {
+        "placeholder" : "ชื่อไฟล์"
+      },
+      "maxFileSize" : {
+        "placeholder" : "ขนาดไฟล์สูงสุด (ไบต์)"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขฐานความรู้"
+      },
+      "AccessSettingsTab" : {
+        "label" : "การตั้งค่าสิทธิ์เข้าถึงฐานความรู้"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของฐานความรู้ที่สร้างอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของฐานความรู้"
+      },
+      "embeddingModelReferences" : {
+        "label" : "โมเดล embedding ที่ใช้ (เว้นว่างเพื่อใช้ค่าระบบเริ่มต้น)",
+        "help" : "โมเดล embedding สำหรับฐานความรู้ หากเว้นว่างจะใช้ค่าเริ่มต้น"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "IndexBtn" : {
+        "label" : "จัดทำดัชนี",
+        "help" : "สร้างดัชนีเนื้อหาใหม่"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "แก้ไขโปรเจกต์หรือรายการ"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของโปรเจกต์ที่สร้างอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของโปรเจกต์"
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "ฐานความรู้",
+        "help" : "ฐานความรู้"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "IndexBtn" : {
+        "label" : "จัดทำดัชนี",
+        "help" : "สร้างดัชนีเนื้อหาใหม่"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ เพิ่มรายการ/โปรเจกต์",
+        "help" : "เพิ่มใหม่..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "ทุกคนใช้งานได้",
+        "help" : "ทุกคนสามารถใช้งานได้"
+      },
+      "accessibleGroups" : {
+        "label" : "รายชื่อกลุ่ม",
+        "help" : "เลือกกลุ่มที่อนุญาต"
+      },
+      "accessibleUsers" : {
+        "label" : "รายชื่อผู้ใช้",
+        "help" : "เลือกผู้ใช้ที่อนุญาต"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "แดชบอร์ด"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs สำหรับแชทและฝังข้อมูล"
+      },
+      "RagChatConfigTab" : {
+        "label" : "โปรไฟล์ Rag chat/โมเดลพรอมต์"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "ฐานความรู้และโปรเจกต์"
+      },
+      "UsersGroupTab" : {
+        "label" : "ผู้ใช้และกลุ่ม"
+      },
+      "GeboModulesTab" : {
+        "label" : "การตั้งค่าโมดูล Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "บันทึกข้อมูล"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "ConfigureBtn2" : {
+        "label" : "กำหนดค่า"
+      },
+      "ConfigureBtn" : {
+        "label" : "กำหนดค่า"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "การตั้งค่าพรอมต์ใหม่"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "โปรไฟล์แชทใหม่"
+      },
+      "MainPanel" : {
+        "label" : "โปรไฟล์แชทค้นหาข้อมูลพร้อมการสร้างข้อความ"
+      },
+      "PromptsPanel" : {
+        "label" : "คอลเลกชันพรอมต์และพรอมต์เริ่มต้น"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "คลังความรู้"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "ConfigureBtn1" : {
+        "label" : "ตั้งค่า"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "สร้างฐานความรู้ใหม่"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "กำหนดค่ารูปแบบการฝังใหม่"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "กำหนดค่ารูปแบบแชทใหม่"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "CodeHeader" : {
+        "label" : "โค้ด"
+      },
+      "ModelHeader" : {
+        "label" : "โมเดล "
+      },
+      "ModelProviderHeader" : {
+        "label" : "ผู้ให้บริการโมเดล"
+      },
+      "ConfigureBtn" : {
+        "label" : "กำหนดค่า"
+      },
+      "CodeHeader2" : {
+        "label" : "โค้ด"
+      },
+      "DescriptionHeader2" : {
+        "label" : "คำอธิบาย"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "ผู้ให้บริการโมเดล"
+      },
+      "ConfigureBtn2" : {
+        "label" : "กำหนดค่า"
+      },
+      "ModelHeader2" : {
+        "label" : "โมเดล "
+      },
+      "ChatmodelsZone" : {
+        "label" : "โมเดลแชทที่กำหนดค่าไว้"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "โมเดลการฝังที่กำหนดค่าไว้"
+      },
+      "chat" : {
+        "label" : "โมเดลแชทใหม่",
+        "help" : "เลือกผู้ให้บริการเพื่อเพิ่มโมเดลแชทใหม่ที่สามารถสนทนากับผู้ใช้หรือดำเนินการอัตโนมัติ",
+        "placeholder" : "เลือกผู้ให้บริการเพื่อเพิ่มโมเดลแชทใหม่ที่สามารถสนทนากับผู้ใช้หรือดำเนินการอัตโนมัติ"
+      },
+      "embed" : {
+        "label" : "โมเดลฝังข้อมูลใหม่",
+        "help" : "เลือกผู้ให้บริการเพื่อเพิ่มโมเดลฝังข้อมูลใหม่ที่สามารถจัดทำดัชนีความหมายของเนื้อหา",
+        "placeholder" : "เลือกผู้ให้บริการเพื่อเพิ่มโมเดลฝังข้อมูลใหม่ที่สามารถจัดทำดัชนีความหมายของเนื้อหา"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "ทดสอบโมเดล"
+      },
+      "TestChatBtn" : {
+        "label" : "ทดลองแชท"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "เลือก OpenAI token ที่จะใช้กับโมเดลนี้"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "choosedModel" : {
+        "label" : "เลือก OpenAI chat model",
+        "help" : "เลือก OpenAI chat model ที่ต้องการใช้งาน"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "การตั้งค่าขั้นสูง"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า OpenAI chat model"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า OpenAI embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "เลือก OpenAI token ที่จะใช้กับโมเดลนี้"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่า embedding model จะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่า embedding model"
+      },
+      "choosedModel" : {
+        "label" : "เลือก OpenAI embedding model",
+        "help" : "เลือก OpenAI embedding model ที่ต้องการใช้งาน"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็น embedding model เริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็น embedding model ค่าเริ่มต้นเมื่อไม่มีการระบุ embedding model"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "baseUrl" : {
+        "label" : "ที่อยู่เซิร์ฟเวอร์หลัก ollama",
+        "help" : "ที่อยู่หลัก (เช่น http://servername:234/) ที่เซิร์ฟเวอร์ ollama ตอบสนอง"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Ollama chat model",
+        "help" : "เลือก Ollama chat model ที่ต้องการใช้งาน",
+        "placeholder" : "เลือกโมเดล"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "เลือก Ollama token ที่จะใช้กับโมเดลนี้ (ไม่บังคับ)"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า Ollama local (หรือ lan) server chat model"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "เลือก Anthropic token ที่จะใช้กับโมเดลนี้"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Anthropic chat model",
+        "help" : "เลือก Anthropic chat model ที่ต้องการใช้งาน",
+        "placeholder" : "เลือกโมเดล"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "การตั้งค่าขั้นสูง"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า Anthropic chat model"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "เลือก MistralAI token ที่จะใช้กับโมเดลนี้"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "choosedModel" : {
+        "label" : "เลือก MistralAI chat model",
+        "help" : "เลือก MistralAI chat model ที่ต้องการใช้งาน"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "การตั้งค่าขั้นสูง"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า MistralAI chat model"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Google Vertex AI chat model",
+        "help" : "เลือก Google Vertex AI chat model ที่ต้องการใช้งาน"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "เลือก Google Vertex AI token ที่จะใช้กับโมเดลนี้"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "TabGeneralInfos" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "การตั้งค่าขั้นสูง"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า Google Vertex AI chat model"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "เลือก Deepseek token ที่จะใช้กับโมเดลนี้"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Deepseek chat model",
+        "help" : "เลือก Deepseek chat model ที่ต้องการใช้งาน",
+        "placeholder" : "เลือกโมเดล"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "การตั้งค่าขั้นสูง"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า Deepseek chat model"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่าโมเดล"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่าโมเดลจะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "baseUrl" : {
+        "label" : "ที่อยู่เซิร์ฟเวอร์หลักของ Chat model API",
+        "help" : "ที่อยู่หลักของ Chat model"
+      },
+      "apiSecretCode" : {
+        "label" : "Chat model API token",
+        "help" : "เลือก Chat model API token ที่จะใช้กับโมเดลนี้ (ไม่บังคับ)"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็นโมเดลแชทเริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็นโมเดลแชทค่าเริ่มต้นเมื่อไม่มีการระบุโมเดลแชท"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Chat model chat model",
+        "help" : "เลือก Chat model chat model ที่ต้องการใช้งาน"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "TitleFragment" : {
+        "label" : "แก้ไขผู้ให้บริการโมเดลแชท:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "การตั้งค่าขั้นสูง"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "การตั้งค่าการเข้าถึงโมเดล"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่า embedding model"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า Ollama local (หรือ lan) embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "เลือก Ollama token ที่จะใช้กับโมเดลนี้"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Ollama embedding model",
+        "help" : "เลือก Ollama embedding model ที่ต้องการใช้งาน"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่า embedding model จะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็น embedding model เริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็น embedding model ค่าเริ่มต้นเมื่อไม่มีการระบุ embedding model"
+      },
+      "baseUrl" : {
+        "label" : "ที่อยู่เซิร์ฟเวอร์หลัก ollama",
+        "help" : "ที่อยู่หลัก (เช่น http://servername:234/) ที่เซิร์ฟเวอร์ ollama ตอบสนอง"
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่า embedding model"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า MistralAI embedding model"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่า embedding model จะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "choosedModel" : {
+        "label" : "เลือก MistralAI embedding model",
+        "help" : "เลือก MistralAI embedding model ที่ต้องการใช้งาน"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็น embedding model เริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็น embedding model ค่าเริ่มต้นเมื่อไม่มีการระบุ embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "เลือก MistralAI token ที่จะใช้กับโมเดลนี้"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "แก้ไขการตั้งค่า Google Vertex AI embedding model"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่า embedding model"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Google Vertex AI embedding model",
+        "help" : "เลือก Google Vertex AI embedding model ที่ต้องการใช้งาน"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็น embedding model เริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็น embedding model ค่าเริ่มต้นเมื่อไม่มีการระบุ embedding model"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่า embedding model จะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "เลือก Google Vertex AI token ที่จะใช้กับโมเดลนี้"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "TitleFragment" : {
+        "label" : "แก้ไขผู้ให้บริการ embedding model:"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของการตั้งค่า Embedding model"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่า Embedding model จะถูกสร้างขึ้นโดยอัตโนมัติ"
+      },
+      "choosedModel" : {
+        "label" : "เลือก Embedding model embedding model",
+        "help" : "เลือก Embedding model embedding model ที่ต้องการใช้งาน"
+      },
+      "baseUrl" : {
+        "label" : "ที่อยู่เซิร์ฟเวอร์หลักของ Embedding model API",
+        "help" : "ที่อยู่หลักของเซิร์ฟเวอร์ Embedding model"
+      },
+      "defaultModel" : {
+        "label" : "ตั้งค่านี้เป็น embedding model เริ่มต้น",
+        "help" : "ถ้าเปิดใช้งาน จะใช้เป็น embedding model ค่าเริ่มต้นเมื่อไม่มีการระบุ embedding model"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding model API token",
+        "help" : "เลือก Embedding model API token ที่จะใช้กับโมเดลนี้"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "ข้อมูลการตั้งค่าการแชท"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ลบเซสชันแชทนี้"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "เปลี่ยนชื่อเซสชันแชท"
+      },
+      "QueryControl" : {
+        "placeholder" : "เขียนข้อความสำหรับบอทแชท"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "เรียกดูหรือค้นหาและเลือกเอกสารเพื่อแชทด้วย"
+      },
+      "UploadFileBtn" : {
+        "help" : "อัปโหลดไฟล์เพื่อแชทหรือทำงานด้วย"
+      },
+      "SubmiQuestion" : {
+        "help" : "ส่งคำถามของคุณ"
+      },
+      "WithParams" : {
+        "label" : "พร้อมพารามิเตอร์:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "ฟังก์ชันที่ AI เรียกใช้:"
+      },
+      "UploadedDocs" : {
+        "label" : "เอกสารที่อัปโหลด"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ประวัติแชทถูกโหลดแล้ว",
+        "detail" : "โหลดประวัติแชทสำเร็จ"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "กำลังอัปโหลดคำพูดของคุณ"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "ได้รับคำตอบเสียงแล้ว"
+      },
+      "ScrollUpBtn" : {
+        "help" : "เลื่อนขึ้น"
+      },
+      "ScrollDownBtn" : {
+        "help" : "เลื่อนลง"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "พบเอกสาร"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "คุณแน่ใจหรือว่าต้องการลบแชทนี้?",
+        "header" : "การลบแชท"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "description" : {
+        "label" : "คำอธิบายแชท",
+        "help" : "กรอกคำอธิบายเซสชันแชท"
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "โมเดลที่ใช้",
+        "help" : "รหัสโมเดล"
+      },
+      "providerId" : {
+        "label" : "ผู้ให้บริการโมเดลแชท",
+        "help" : "ไดรเวอร์ผู้ให้บริการ LLms"
+      },
+      "functions" : {
+        "label" : "ฟังก์ชันที่เรียกใช้ได้ของโมเดลแชท",
+        "help" : "รายการฟังก์ชันที่ใช้ได้ในโมเดลแชท"
+      },
+      "NameCol" : {
+        "label" : "ชื่อ"
+      },
+      "DescriptionCol" : {
+        "label" : "คำอธิบาย"
+      },
+      "kbases" : {
+        "label" : "ชุดข้อมูลความรู้ที่ใช้ได้",
+        "help" : "รายการชุดข้อมูลความรู้ที่ใช้ใน RAG แชทนี้"
+      },
+      "CloseBtn" : {
+        "help" : "ปิด"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "เพิ่มเอกสารไปยังรายการ 'แชทกับ' "
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "บันทึกเสียง",
+        "help" : "เริ่มบันทึกเสียงและส่ง"
+      },
+      "StopBtn" : {
+        "label" : "กำลังบันทึก",
+        "help" : "กำลังบันทึก"
+      },
+      "AbortBtn" : {
+        "label" : "ยกเลิกการบันทึก",
+        "help" : "ยกเลิกการบันทึก"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "ยกเลิกการบันทึก"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "รีโหลดข้อมูล"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SelectHeader" : {
+        "label" : "เลือก"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "วันเวลาเสร็จสิ้น"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "วันเวลาเริ่มต้น"
+      },
+      "ProcessingHeader" : {
+        "label" : "กำลังประมวลผล"
+      },
+      "DescriptionHeader" : {
+        "label" : "รายละเอียด"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "FinishedHeader" : {
+        "label" : "เสร็จสิ้น"
+      },
+      "WithErrorHeader" : {
+        "label" : "พบข้อผิดพลาด"
+      },
+      "LogTableComponent" : {
+        "help" : "บันทึกการกินข้อมูลของพื้นที่ระบบไฟล์ที่ใช้ร่วมกันนี้"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "สถิติการประมวลผล"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "CloseBtn" : {
+        "label" : "ปิด"
+      },
+      "PublicationLogTab" : {
+        "label" : "บันทึกการเผยแพร่"
+      },
+      "MainPanel" : {
+        "label" : "บันทึกการเผยแพร่"
+      },
+      "actualStatus" : {
+        "label" : "สถานะ",
+        "help" : "สถานะของงาน กำลังทำงาน เสร็จสิ้น หรือเสร็จสิ้นแต่มีข้อผิดพลาด"
+      },
+      "publishingSystem" : {
+        "label" : "การตั้งค่าเนื้อหาที่เผยแพร่",
+        "help" : "ข้อมูลเนื้อหาที่เผยแพร่"
+      },
+      "startDateTime" : {
+        "label" : "วันเวลาเริ่มต้น",
+        "help" : "วันและเวลาเริ่มต้นของงานซิงค์เนื้อหา"
+      },
+      "endDateTime" : {
+        "label" : "วันเวลาเสร็จสิ้น",
+        "help" : "วันและเวลาเสร็จสิ้นของงานซิงค์เนื้อหา"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "ยังประมวลผลไม่เสร็จสมบูรณ์"
+      },
+      "ProcessedCompletely" : {
+        "label" : "ประมวลผลเสร็จสมบูรณ์"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "การฝังเทียบกับจำนวนเอกสารทั้งหมด"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "ดูรายละเอียดเพิ่มเติม"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "สร้างพรอมต์"
+      },
+      "PromptWizardBtn" : {
+        "label" : "ตัวช่วยสร้างพรอมต์",
+        "help" : "ใช้สิ่งนี้เพื่อใช้ LLM สร้างพรอมต์ตามเป้าหมายของคุณ"
+      },
+      "acceptPrompt" : {
+        "label" : "ยอมรับพรอมต์"
+      },
+      "promptWizardUI" : {
+        "label" : "ตัวช่วยสร้างเทมเพลตพรอมต์"
+      },
+      "cancel" : {
+        "label" : "ยกเลิก"
+      },
+      "response" : {
+        "label" : "เทมเพลตพรอมต์ที่แนะนำ",
+        "help" : "ข้อความเทมเพลตที่สร้างจากเป้าหมายของคุณ (คุณสามารถแก้ไขหรือปรับเปลี่ยนได้)"
+      },
+      "modelCode" : {
+        "label" : "เลือกโมเดลแชทที่จะใช้",
+        "help" : "เลือกโมเดลแชทที่คุณต้องการใช้สร้างเทมเพลตพรอมต์"
+      },
+      "query" : {
+        "label" : "คำขอเทมเพลตพรอมต์",
+        "help" : "ระบุวัตถุประสงค์ที่ AI จะช่วยเหลือคุณโดยใช้บุรุษที่สอง"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "อุณหภูมิ",
+        "help" : "ค่าความแปรปรวนที่โมเดลจะใช้ตอบ ตั้งแต่ 0 ถึง 1 (หากไม่แน่ใจเว้นว่างไว้)"
+      },
+      "contextLength" : {
+        "label" : "ความยาวบริบท (โทเคน)",
+        "help" : "ปริมาณข้อความที่โมเดล AI สามารถนำมาพิจารณา (หากไม่ได้กำหนดไว้จะใช้ 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "พารามิเตอร์ TopP ตั้งแต่ 0 ถึง 1 (หากไม่แน่ใจเว้นว่างไว้)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "เปิดใช้งานฟังก์ชันสำหรับโมเดลนี้",
+        "help" : "ฟังก์ชันที่โมเดลสามารถใช้ได้ระหว่างการแชท"
+      },
+      "defaultModelPrompt" : {
+        "label" : "พรอมต์เริ่มต้นของโมเดล",
+        "help" : "แก้ไขพรอมต์เริ่มต้นสำหรับโมเดลแชทนี้"
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกรายละเอียดของตัวตน"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของตัวตนที่สร้างอัตโนมัติ"
+      },
+      "secretType" : {
+        "label" : "ประเภทตัวตน",
+        "help" : "เลือกประเภทตัวตนที่ต้องการสร้างสำหรับระบบระยะไกล"
+      },
+      "InsertBtn" : {
+        "label" : "แทรก"
+      },
+      "token" : {
+        "label" : "โทเคน",
+        "help" : "กรอกโทเคน"
+      },
+      "user" : {
+        "label" : "ผู้ใช้",
+        "help" : "กรอกชื่อผู้ใช้ตามที่ระบุในโทเคน"
+      },
+      "MainPanel" : {
+        "label" : "กำลังสร้างตัวตน"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "username" : {
+        "label" : "ชื่อผู้ใช้",
+        "help" : "กรอกชื่อผู้ใช้"
+      },
+      "password" : {
+        "label" : "รหัสผ่าน",
+        "help" : "กรอกรหัสผ่าน"
+      },
+      "email" : {
+        "label" : "อีเมล/ชื่อผู้ใช้",
+        "help" : "กรอกอีเมลหรือชื่อผู้ใช้ที่เกี่ยวข้องกับ ssh key"
+      },
+      "key" : {
+        "label" : "คีย์ลับ",
+        "help" : "เปิดไฟล์คีย์ส่วนตัวแล้วคัดลอกลงในช่องนี้"
+      },
+      "passphrase" : {
+        "label" : "วลีรหัสคีย์",
+        "help" : "กรอกวลีรหัสสำหรับคีย์"
+      },
+      "pub" : {
+        "label" : "คีย์สาธารณะ",
+        "help" : "เปิดไฟล์คีย์สาธารณะแล้วคัดลอกลงในช่องนี้"
+      },
+      "jsonContent" : {
+        "label" : "เนื้อหาไฟล์ข้อมูลรับรอง Google",
+        "help" : "คัดลอกเนื้อหาไฟล์ข้อมูลรับรอง Google api ที่ดาวน์โหลดจาก google cloud api console (https://console.cloud.google.com/) มาวางที่นี่"
+      },
+      "delegatedUser" : {
+        "label" : "ผู้ใช้ Google ที่จะสวมบทบาท",
+        "help" : "ผู้ใช้ที่จะถูกสวมบทบาทโดยข้อมูลรับรองนี้",
+        "placeholder" : "ผู้ใช้ที่จะถูกสวมบทบาทโดยข้อมูลรับรองนี้"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของเนื้อหาที่สร้างขึ้นโดยอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของเนื้อหาที่อัปโหลดในรายการไฟล์ระบบ"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "การอ้างอิงโปรเจกต์หลัก"
+      },
+      "upload" : {
+        "label" : "อัปโหลดเนื้อหา",
+        "help" : "คลิกปุ่มเรียกดูและเลือกไฟล์ zip หรือไฟล์อื่น ๆ"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้การเปิดไฟล์ zip และแยกเนื้อหา"
+      },
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและเผยแพร่เนื้อหาเหล่านี้ในฐานความรู้ให้กับ LLM"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "LogsTab" : {
+        "label" : "บันทึก"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขเนื้อหาที่อัปโหลด"
+      },
+      "SettingsTab" : {
+        "label" : "การตั้งค่า"
+      },
+      "buildSystemsRefs" : {
+        "label" : "กำหนดค่าระบบ Build",
+        "help" : "รายการระบบ build/packaging ที่จะตรวจสอบสำหรับข้อมูลเมตาและข้อมูลสิ่งประดิษฐ์เพิ่มเติม (เว้นว่างหากไม่มีซอฟต์แวร์โค้ดรวมอยู่)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "รายการที่เลือก"
+      },
+      "ChooseOk" : {
+        "label" : "ตกลง"
+      },
+      "ChooseCancel" : {
+        "label" : "ยกเลิก"
+      },
+      "EditBtn" : {
+        "help" : "แก้ไขที่เลือกไว้"
+      },
+      "ChooseElementsArea" : {
+        "label" : "เลือกองค์ประกอบ"
+      },
+      "VFileSystemSelector" : {
+        "label" : "เลือกองค์ประกอบ"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "แก้ไขกำหนดเวลา"
+      },
+      "ConfirmBtn" : {
+        "label" : "ยืนยัน"
+      },
+      "AddBtn" : {
+        "label" : "+เพิ่ม"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและทำให้เนื้อหานี้พร้อมใช้งานในฐานความรู้สำหรับ LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SettingsTab" : {
+        "label" : "การตั้งค่า"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "การดูแลซอร์สโค้ด"
+      },
+      "LogsTab" : {
+        "label" : "บันทึก"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขเนื้อหาไฟล์ระบบที่มีอยู่"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของเนื้อหาที่อัปโหลดเข้าไฟล์ระบบ"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้งานการแตกไฟล์ zip และดึงเนื้อหา"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของเนื้อหาที่สร้างโดยอัตโนมัติ"
+      },
+      "tree" : {
+        "label" : "ไฟล์หรือโฟลเดอร์ที่เลือก",
+        "help" : "ไฟล์หรือโฟลเดอร์ของไฟล์ระบบที่แชร์ซึ่งมีอยู่บนเซิร์ฟเวอร์"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "อ้างอิงโปรเจกต์หลัก"
+      },
+      "programmedTables" : {
+        "label" : "กำหนดเวลาตรวจสอบการอัปเดตเนื้อหา",
+        "help" : "กำหนดตารางการเปลี่ยนแปลงของเนื้อหาเพื่อให้ระบบการเรียกค้นข้อมูลรุ่นใหม่ทันสมัยอยู่เสมอ"
+      },
+      "catalogingCriteria" : {
+        "label" : "เกณฑ์การจัดโฟลเดอร์",
+        "help" : "โปรดอธิบายที่นี่ว่าเกณฑ์การจัดโฟลเดอร์ในส่วนไฟล์ระบบที่คุณแชร์กับ Gebo.ai ได้ถูกดำเนินการอย่างไร"
+      },
+      "buildSystemsRefs" : {
+        "label" : "กำหนดค่าระบบ build",
+        "help" : "รายชื่อ build/packaging systems ที่จะตรวจสอบข้อมูล meta และ artifact เพิ่มเติม (ปล่อยว่างหากไม่มีซอฟต์แวร์โค้ด)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "สร้างพื้นที่แชร์ไฟล์ใหม่"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "เส้นทางแบบสมบูรณ์"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "กำหนดค่า db หรือ yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "คำอธิบาย"
+      },
+      "CodeHeader" : {
+        "label" : "รหัส"
+      },
+      "ModifyHeader" : {
+        "label" : "แก้ไข"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "โฟลเดอร์ไฟล์ระบบที่แชร์ที่เลือก",
+        "help" : "เลือกโฟลเดอร์บนเซิร์ฟเวอร์ที่เป็นเส้นทางหลักสำหรับไฟล์ระบบที่แชร์และใช้ในองค์กรของคุณเป็นที่เก็บเอกสาร"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของส่วนที่ใช้ไฟล์ระบบร่วมกันในองค์กรของคุณ"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของเนื้อหาที่สร้างโดยอัตโนมัติ"
+      },
+      "InsertBtn" : {
+        "label" : "เพิ่ม"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขโฟลเดอร์ไฟล์ที่แชร์บนเซิร์ฟเวอร์"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและให้เนื้อหานี้พร้อมใช้งานในฐานความรู้สำหรับ LLm"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขคลังข้อมูลซอร์ส/เอกสารบน git"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของ git repo"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะที่สร้างอัตโนมัติสำหรับ git repo"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "อ้างอิงโปรเจกต์หลัก"
+      },
+      "contentManagementSystem" : {
+        "label" : "ระบบ Git",
+        "help" : "อ้างอิงระบบ git ที่ตั้งค่าไว้แล้ว"
+      },
+      "branch" : {
+        "label" : "สาขา",
+        "help" : "ชื่อสาขาที่จะ checkout (ปกติคือ master, main หรือ develop)"
+      },
+      "identityCode" : {
+        "label" : "รหัสประจำตัวที่ใช้",
+        "help" : "เลือกประจำตัวสำหรับการ clone/checkout บนระบบ"
+      },
+      "repositoryUri" : {
+        "label" : "url/ที่อยู่ของคลังข้อมูล",
+        "help" : "ที่อยู่สมบูรณ์ของ git remote repository (โดยทั่วไปเริ่มด้วย http:, https: หรือ ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "สาธารณะ",
+        "help" : "ถ้าเลือกจริงจะสามารถเข้าถึงคลังข้อมูลได้โดยไม่ต้องยืนยันตัวตน"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้งานการเปิดไฟล์ zip และแยกเนื้อหา"
+      },
+      "programmedTables" : {
+        "label" : "ตารางเวลาอัพเดตเนื้อหา",
+        "help" : "กำหนดตารางการตรวจสอบการเปลี่ยนแปลงเนื้อหาเพื่อให้ระบบ retrieve augmented generation อัปเดตตลอดเวลา"
+      },
+      "buildSystemsRefs" : {
+        "label" : "กำหนดค่าระบบ build",
+        "help" : "รายการระบบ build/packaging ที่จะตรวจสอบสำหรับข้อมูล meta และ artifacts อื่นๆ"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ข้อมูลทั่วไป"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ใช้โมเดลแชท"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "เลือก"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "เลือกการตั้งค่าโมเดลแชท"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "เลือกการตั้งค่า embedding model"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "เลือก"
+      },
+      "RagSettingsTab" : {
+        "label" : "การตั้งค่า RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "การตั้งค่า large language model & เครื่องมือที่ใช้ได้"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "ใช้ embedding model"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "การตั้งค่าการเข้าถึงความปลอดภัย"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขโปรไฟล์แชท retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของโปรไฟล์แชทที่สร้างขึ้นโดยอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกรายละเอียดโปรไฟล์แชท"
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "ผู้ใช้เลือก knowledge bases",
+        "help" : "ผู้ใช้สามารถเลือก knowledge base ที่เข้าถึงได้หรืออัปโหลดไฟล์ของตัวเอง"
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Knowledge bases",
+        "help" : "Knowledge base ที่ใช้สำหรับการค้นหาเอกสาร"
+      },
+      "similaritySearchThreshold" : {
+        "label" : "เกณฑ์ความคล้ายคลึง",
+        "help" : "เกณฑ์ความคล้ายคลึงสำหรับการค้นความหมาย, 0.60–0.65 คัดกรองน้อย, 0.70-0.75 คัดกรองปานกลาง, 0.80–0.85 แม่นยำ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "เกณฑ์ความคล้ายคลึง 'hop' ที่สอง",
+        "help" : "เกณฑ์ความคล้ายคลึงสำหรับการค้นความหมาย, 0.60–0.65 คัดกรองน้อย, 0.70-0.75 คัดกรองปานกลาง, 0.80–0.85 แม่นยำ ใช้สำหรับการค้นหาครั้งที่สองของ multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "ปิดใช้งาน 'Multi Hop' rag",
+        "help" : "ปิดใช้งานฟังก์ชัน 'multi hop rag' การค้นหาแบบ multi hop จะค้นความหมายรอบแรกและใช้เอกสารที่พบเป็นบริบทสำหรับการค้นหาแบบ semantic ให้บริบทที่มากขึ้น"
+      },
+      "topK" : {
+        "label" : "ชิ้นส่วนเอกสารที่นำมาพิจารณา (TopK)",
+        "help" : "ใน retrieve augmented generation, Top N ของเอกสารที่พบและนำมาพิจารณาในการค้น semantic"
+      },
+      "enabledFunctions" : {
+        "label" : "เปิดใช้งานฟังก์ชันสำหรับ RAG chat นี้",
+        "help" : "ฟังก์ชันที่ llm model สามารถใช้ได้ระหว่างคุยกับผู้ใช้และเชื่อมต่อกับ knowledge base ที่เลือกไว้"
+      },
+      "prompt" : {
+        "label" : "พรอมต์",
+        "help" : "แก้ไขพรอมต์สำหรับ session ของ retrieve augmented generation"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "กรอกหรือเลือกหมวดหมู่พร็อมต์"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขพร็อมต์"
+      },
+      "promptCategory" : {
+        "label" : "หมวดหมู่พร็อมต์",
+        "help" : "เลือกหรือกรอกหมวดหมู่พร็อมต์"
+      },
+      "prompt" : {
+        "label" : "พร็อมต์",
+        "help" : "แก้ไขพร็อมต์สำหรับแชท ใช้ {query} สำหรับแสดงคำถามผู้ใช้ และ {context} สำหรับแสดงเนื้อหาหรือประวัติที่ส่งไปยัง LLM"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของพร็อมต์ที่สร้างอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกคำอธิบายของพร็อมต์"
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "เปลี่ยนรหัสผ่าน"
+      },
+      "YourUserName" : {
+        "label" : "ชื่อผู้ใช้ของคุณ"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "รหัสผ่านเดิม",
+        "help" : "รหัสผ่านจริงที่ใช้เข้าสู่ระบบ"
+      },
+      "newPassword" : {
+        "label" : "รหัสผ่านใหม่",
+        "help" : "รหัสผ่านใหม่"
+      },
+      "username" : {
+        "label" : "อีเมล",
+        "help" : "ใช้อีเมลเป็นชื่อผู้ใช้เพื่อเข้าสู่ระบบ"
+      },
+      "ChangePasswordUI" : {
+        "label" : "แบบฟอร์มเปลี่ยนรหัสผ่าน"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "ChangePwdBtn" : {
+        "label" : "เปลี่ยนรหัสผ่าน"
+      },
+      "newPassword1" : {
+        "label" : "ยืนยันรหัสผ่านใหม่",
+        "help" : "ยืนยันรหัสผ่านใหม่"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "ForMoreInformations" : {
+        "label" : "สำหรับข้อมูลเพิ่มเติมเกี่ยวกับ Google custom search API หรือการขอคีย์ api (ฟรี) โปรดไปที่: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของการตั้งค่า google search api"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขข้อมูลประจำตัว google custom search api"
+      },
+      "secretCode" : {
+        "label" : "โทเค็น google search api",
+        "help" : "เลือกหรือกรอกโทเค็น google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "รหัส google search engine",
+        "help" : "รหัส google search engine"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "ใส่คำอธิบายของการตั้งค่า google search api"
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "แชทโดยไม่ใช้ฐานความรู้",
+        "help" : "เลือก LLM สำหรับเซสชันแชท",
+        "placeholder" : "เลือก LLM สำหรับเซสชันแชท"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "เปิดส่วนตัวเลือกแชท"
+      },
+      "CreateChatBtn" : {
+        "label" : "แชทใหม่"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "เซสชันแชทใหม่"
+      },
+      "chatProfileCode" : {
+        "label" : "แชทกับฐานความรู้",
+        "help" : "เลือกโปรไฟล์แชทบริษัทเพื่อโต้ตอบกับเอกสารบริษัท (และของคุณ) และ LLM",
+        "placeholder" : "เลือกโปรไฟล์แชทบริษัทเพื่อโต้ตอบกับเอกสารบริษัท (และของคุณ) และ LLM"
+      },
+      "NewChatBtn" : {
+        "label" : "แชทใหม่"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "เซสชันแชท"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "ปิดแถบข้าง"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "สร้างแชทใหม่กับโมเดลภาษาขนาดใหญ่",
+        "label" : "แชท"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "สร้างแชท RAG ใหม่กับเนื้อหาของบริษัท",
+        "label" : "แชทกับฐานความรู้"
+      },
+      "ChatsTitle" : {
+        "label" : "แชท"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "เปิดตัวเลือกแชท"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "สนทนากับเอกสาร",
+        "help" : "เรียกดูหรือค้นหาและเลือกเอกสารเพื่อใช้งาน"
+      },
+      "chooseFilesDialog" : {
+        "label" : "เลือกไฟล์เพื่อสนทนาด้วย"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "เรียกดูหรือค้นหาและเลือกเอกสารเพื่อแชทด้วย"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "ยืนยัน"
+      },
+      "userspaceBrowsing" : {
+        "label" : "อัปโหลดหรือเลือกเอกสารของคุณ",
+        "help" : "เลือกหรืออัปโหลดเอกสารจากพื้นที่ของคุณ"
+      },
+      "fileSearchBtn" : {
+        "label" : "ค้นหา"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ค้นหา"
+      },
+      "query" : {
+        "label" : "วลีค้นหาเชิงความหมาย",
+        "help" : "ระบุวลีที่เกี่ยวข้องกับสิ่งที่คุณต้องการค้นหา"
+      },
+      "choosenBrowsing" : {
+        "label" : "เลือกไฟล์จากฐานความรู้",
+        "help" : "เลือกไฟล์จากฐานความรู้ที่แชร์ในบริษัท"
+      },
+      "filename" : {
+        "label" : "ชื่อไฟล์ที่ค้นหา",
+        "help" : "ใส่ส่วนหนึ่งของชื่อไฟล์ที่คุณต้องการค้นหา"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ค้นหาชื่อไฟล์"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "เรียกดูไฟล์บริษัท"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "การค้นหาเชิงความหมาย"
+      },
+      "chooseFilesDialog" : {
+        "label" : "เลือกไฟล์เพื่อแชทด้วย"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "แก้ไขที่เลือก"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "เลือกไฟล์ของผู้ใช้"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "okBtn" : {
+        "label" : "ตกลง"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "เลือกเนื้อหาที่ผู้ใช้ได้อัปโหลด"
+      },
+      "UserspaceBrowser" : {
+        "label" : "ฐานความรู้ & ไฟล์ของผู้ใช้"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+โครงการย่อยหรือรายการ",
+        "help" : "เพิ่มโครงการย่อยหรือรายการ"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+อัปโหลดไฟล์",
+        "help" : "เพิ่มแหล่งข้อมูลจากไฟล์ที่อัปโหลด"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "เพิ่มแหล่งข้อมูลจาก Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "เพิ่มแหล่งข้อมูล Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "เพิ่มแหล่งข้อมูลจากไฟล์ระบบที่แชร์"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "เพิ่มแหล่งข้อมูล Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "เพิ่มแหล่งข้อมูล repository git เช่น bitbucket, github หรืออื่นๆ"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "เพิ่มแหล่งข้อมูล google drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "ตั้งค่า"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "โปรไฟล์ของฉัน"
+      },
+      "logout" : {
+        "label" : "ออกจากระบบ"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "เปลี่ยนภาษา"
+      },
+      "MyProfile" : {
+        "label" : "โปรไฟล์ของคุณ"
+      },
+      "MyProfileItem" : {
+        "label" : "โปรไฟล์ของคุณ"
+      },
+      "chatMenuItem" : {
+        "label" : "แชท"
+      },
+      "setupMenuItem" : {
+        "label" : "ตั้งค่า"
+      },
+      "adminMenuItem" : {
+        "label" : "ผู้ดูแลระบบ"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "แก้ไขโปรไฟล์"
+      },
+      "logoutMenuItem" : {
+        "label" : "ออกจากระบบ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "กำลังวิเคราะห์รายการเอกสาร"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "TOKENIZATION" : {
+        "description" : "การแบ่งโทเค็นเอกสาร"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "โทเค็นที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดระหว่างประมวลผลโทเค็น"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "EMBEDDING" : {
+        "description" : "การจัดทำดัชนีความหมาย (embedding สำหรับ semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "โทเค็นที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดระหว่างประมวลผลโทเค็น"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "การจัดทำดัชนีเอนทิตี้/ความสัมพันธ์/เหตุการณ์ (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "เอกสารที่ยังไม่ได้ดำเนินการ",
+        "label-1" : "เกิดข้อผิดพลาดระหว่างประมวลผลเอกสาร",
+        "label-2" : "เอกสารที่ประมวลผลแล้ว"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารที่ประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารผิดพลาด",
+        "dataset-3-label" : "เอกสารที่ถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดในการประมวลผลโทเคน"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "กำลังวิเคราะห์รายการเอกสาร"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "TOKENIZATION" : {
+        "description" : "การแยกโทเคนของเอกสาร"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "EMBEDDING" : {
+        "description" : "การจัดทำดัชนีเชิงความหมาย (embedding สำหรับ semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดในการประมวลผลโทเคน"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "การจัดทำดัชนี Entity/Relations/Events (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "เอกสารถูกเว้นไว้",
+        "label-1" : "เกิดข้อผิดพลาดในการประมวลผลเอกสาร",
+        "label-2" : "เอกสารถูกประมวลผลแล้ว"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "โทเคนที่ประมวลผลแล้ว",
+        "dataset-1-label" : "เกิดข้อผิดพลาดในการประมวลผลโทเคน"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "เอกสารที่ได้รับ",
+        "dataset-1-label" : "เอกสารถูกประมวลผลแล้ว",
+        "dataset-2-label" : "เอกสารถูกผิดพลาด",
+        "dataset-3-label" : "เอกสารถูกละทิ้ง"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "ลิงก์ซื้อคีย์ Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "แก้ไข",
+        "help" : "ดู/แก้ไขการตั้งค่ารุ่น"
+      },
+      "ExistingModelCode" : {
+        "label" : "รหัส"
+      },
+      "ExistingModelDesc" : {
+        "label" : "คำอธิบาย"
+      },
+      "ExistingModelType" : {
+        "label" : "ประเภทโมเดล"
+      },
+      "ExistingModelsSection" : {
+        "label" : "การตั้งค่าที่มีอยู่"
+      },
+      "ProviderWWW" : {
+        "label" : "ลิงก์เว็บไซต์"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "ข้อมูลรับรองผู้ให้บริการ"
+      },
+      "ProviderInfos" : {
+        "label" : "ข้อมูลผู้ให้บริการ"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ข้อมูลรับรอง",
+        "help" : "เลือก api key หรือข้อมูลรับรองสำหรับผู้ให้บริการนี้"
+      },
+      "NewApiKey" : {
+        "label" : "Api key ใหม่",
+        "help" : "กรอก api key ใหม่เพื่อใช้กับผู้ให้บริการนี้"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "ใช้ที่มีอยู่หรือสร้างใหม่",
+        "help" : "ใช้หรือสร้างข้อมูลรับรองใหม่สำหรับผู้ให้บริการนี้"
+      },
+      "NewUserName" : {
+        "label" : "ชื่อผู้ใช้",
+        "help" : "ชื่อผู้ใช้สำหรับเข้าสู่บริการผู้ให้บริการ"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "สร้างโมเดล embedding ใหม่",
+        "help" : "สร้างการตั้งค่าโมเดล embedding ใหม่"
+      },
+      "NewChatModel" : {
+        "label" : "สร้าง Chat model ใหม่",
+        "help" : "สร้างการตั้งค่าโมเดลแชทใหม่"
+      },
+      "NewModelDialog" : {
+        "label" : "เพิ่มโมเดลใหม่"
+      },
+      "PiSave" : {
+        "label" : "บันทึก"
+      },
+      "NewModelsButton" : {
+        "label" : "โมเดลใหม่",
+        "help" : "สร้างการตั้งค่าโมเดลใหม่"
+      },
+      "NewModelsDialog" : {
+        "label" : "เพิ่มโมเดลใหม่"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url สำหรับบริการ api ของผู้ให้บริการ"
+      },
+      "ModelTypePanel" : {
+        "label" : "เพิ่มโมเดลใหม่"
+      },
+      "ModelsChoices" : {
+        "label" : "ตัวเลือกโมเดล"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "รายการโมเดลที่แนะนำ"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "โมเดล embedding",
+        "help" : "เลือกจากโมเดล embedding ที่กำหนดไว้ล่วงหน้า"
+      },
+      "chatPresetChoice" : {
+        "label" : "โมเดลแชท",
+        "help" : "เลือกจากโมเดลแชทที่กำหนดไว้ล่วงหน้า"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "เลือกรุ่นขั้นสูง"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "โมเดล embedding",
+        "help" : "เลือกหนึ่งในโมเดล embedding ที่ผู้จำหน่ายเผยแพร่"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "โมเดลแชท",
+        "help" : "เลือกหนึ่งในโมเดลแชทที่ผู้จำหน่ายเผยแพร่"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " ใช้โหมดนี้เฉพาะเมื่อคุณเชี่ยวชาญ หรือเช็คบนเว็บไซต์ผู้จำหน่ายว่ารุ่นไหนเหมาะกับคุณ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดลแชทเริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนดโมเดลแชทอื่น"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " เราแนะนำรายชื่อโมเดลต่อไปนี้ "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดล embedding เริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนด embedding อื่น"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดลแชทเริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนดโมเดลแชทอื่น"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ตั้งเป็นโมเดล embedding เริ่มต้น",
+        "help" : "ตั้งค่านี้เป็นโมเดลหลัก ระบบจะเลือกอัตโนมัติหากไม่กำหนด embedding อื่น"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " ใช้โหมดนี้เฉพาะเมื่อคุณเชี่ยวชาญ หรือเช็คบนเว็บไซต์ผู้จำหน่ายว่ารุ่นไหนเหมาะกับคุณ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "สร้างและเปิดใช้งาน"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "สร้างและเปิดใช้งาน"
+      },
+      "ProviderNameField" : {
+        "label" : "ผู้ให้บริการ"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "ผู้ให้บริการต้องการข้อมูลรับรอง",
+        "help" : "แอปพลิเคชันผู้ให้บริการ/เซิร์ฟเวอร์ถูกตั้งค่าสำหรับการเข้าถึงที่ต้องยืนยันตัวตนผ่าน api key หรือข้อมูลรับรองอื่น ๆ"
+      },
+      "baseUrl1" : {
+        "label" : "base api url",
+        "help" : "Provider Base url สำหรับบริการ api"
+      },
+      "enableAllFunctions" : {
+        "label" : "เปิดใช้งานการเรียกใช้ฟังก์ชันทั้งหมด",
+        "help" : "เปิดใช้งานเครื่องมือและการเรียกฟังก์ชันทั้งหมดที่มีอยู่ หากไม่ได้ตั้งค่า สามารถเปิดใช้งานได้ในภายหลังผ่านแผงควบคุม llms admin"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "ผู้ให้บริการ AI ระยะไกลพร้อมใช้งาน",
+        "detail" : "ผู้ให้บริการพร้อมและได้รับการตั้งค่าสำเร็จแล้ว"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ดำเนินการล้มเหลว",
+        "detail" : "ไม่สามารถยืนยันตัวตนด้วยข้อมูลรับรองที่ให้มา"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "เรียบร้อย!",
+        "detail" : "ดำเนินการสำเร็จ"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "เกิดข้อผิดพลาดขณะสตรีมผลตอบกลับแชท",
+        "detail" : "Server error: class org.neo4j.driver.internal.value.StringValue ไม่สามารถแปลงเป็น class java.lang.String ได้ (org.neo4j.driver.internal.value.StringValue อยู่ใน unnamed module ของ loader 'app'; java.lang.String อยู่ใน module java.base ของ loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "บันทึกสำเร็จ",
+        "detail" : "อัปเดตข้อมูลสำเร็จ"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "เกิดข้อผิดพลาดในการสื่อสารกับ Ollama server",
+        "detail" : "Netork error ขณะเชื่อมต่อระบบระยะไกลเข้าถึงเนื้อหา\n รายการ models Error ทำงานกับ url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "คุณสามารถลบสิ่งนี้ได้",
+        "detail" : "คุณสามารถลบข้อมูลที่กำลังดูอยู่ได้อย่างปลอดภัย"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "คุณไม่สามารถลบสิ่งนี้ได้",
+        "detail" : "ข้อมูลนี้มีการอ้างอิงจากส่วนอื่นของแอปพลิเคชัน"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "อัปโหลดไฟล์เพื่อใช้ในการแชท"
+      },
+      "ChooseFile" : {
+        "help" : "เลือกไฟล์"
+      },
+      "UploadFile" : {
+        "help" : "อัปโหลดไฟล์"
+      },
+      "DragDropHere" : {
+        "label" : "ลากและวางไฟล์ที่นี่เพื่ออัปโหลด"
+      },
+      "RemoveAll" : {
+        "help" : "ลบทั้งหมด"
+      },
+      "UploadPending" : {
+        "label" : "รอการอัปโหลด"
+      },
+      "CompletedData" : {
+        "label" : "เสร็จสมบูรณ์"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "ตั้งค่า graphrag ในพื้นที่ตั้งค่าหากต้องการใช้งานในส่วนนี้"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "การตั้งค่า graphrag"
+      },
+      "button-help" : {
+        "label" : "คลิกที่นี่เพื่อตั้งค่าการสกัดข้อมูลสำหรับ graphrag (ยังไม่ได้ตั้งค่า)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "เพิ่มการตั้งค่า"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "สร้าง"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกรายละเอียดของระบบ Google Drive"
+      },
+      "MainPanel" : {
+        "label" : "สร้างการเชื่อมต่อ Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "delegatedUser" : {
+        "label" : "ผู้ใช้ Google ที่จะสวมบทบาท",
+        "help" : "ผู้ใช้ที่จะถูกสวมบทบาทโดยข้อมูลรับรองนี้",
+        "placeholder" : "ผู้ใช้ที่จะถูกสวมบทบาทโดยข้อมูลรับรองนี้"
+      },
+      "jsonContent" : {
+        "label" : "เนื้อหาไฟล์ json ข้อมูลรับรองของ Google",
+        "help" : "สร้างข้อมูลรับรอง Google พร้อมสิทธิ์เข้าถึง workspace/team drives ใน Google Console Cloud และวางเนื้อหาของไฟล์ json ที่ดาวน์โหลดที่นี่ (https://console.cloud.google.com/)",
+        "placeholder" : "สร้างข้อมูลรับรอง Google พร้อมสิทธิ์เข้าถึง workspace/team drives ใน Google Console Cloud และวางเนื้อหาของไฟล์ json ที่ดาวน์โหลดที่นี่ (https://console.cloud.google.com/)"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "PublishBtn" : {
+        "label" : "เผยแพร่!",
+        "help" : "บันทึกและให้ข้อมูลเหล่านี้พร้อมใช้งานในฐานความรู้สำหรับ LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "MainPanel" : {
+        "label" : "แบ่งปันเนื้อหา google drive"
+      },
+      "SettingsTab" : {
+        "label" : "การตั้งค่า"
+      },
+      "LogsTab" : {
+        "label" : "บันทึก"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกรายละเอียดของเนื้อหา google drive ที่อัปโหลด"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของเนื้อหานี้ที่สร้างขึ้นโดยอัตโนมัติ"
+      },
+      "tree" : {
+        "label" : "ไฟล์หรือโฟลเดอร์ที่เลือก",
+        "help" : "เนื้อหาโฟลเดอร์และหน้าต่างๆ ใน google drive ที่แบ่งปัน"
+      },
+      "driveSystemCode" : {
+        "label" : "การกำหนดค่า google drive",
+        "help" : "อ้างอิงถึงระบบ google drive ที่กำหนดค่าไว้แล้ว"
+      },
+      "openZips" : {
+        "label" : "เปิดไฟล์ zip",
+        "help" : "เปิดใช้งานการแตกไฟล์ zip และอ่านเนื้อหา"
+      },
+      "parentProjectCode" : {
+        "label" : "โปรเจกต์",
+        "help" : "อ้างอิงโปรเจกต์หลัก"
+      },
+      "programmedTables" : {
+        "label" : "กำหนดเวลาตรวจสอบการอัปเดตเนื้อหา",
+        "help" : "ตั้งเวลาตรวจสอบความเปลี่ยนแปลงของเนื้อหาเพื่ออัปเดตระบบ retrieve augmented generation"
+      },
+      "catalogingCriteria" : {
+        "label" : "เกณฑ์การจัดระเบียบโฟลเดอร์และโฟลเดอร์ย่อย",
+        "help" : "โปรดอธิบายถึงรูปแบบการจัดระเบียบไฟล์และโฟลเดอร์ใน google drive ที่แบ่งปันกับ Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ตั้งค่าทั่วไป"
+      },
+      "CancelBtn" : {
+        "label" : "ยกเลิก"
+      },
+      "DeleteBtn" : {
+        "label" : "ลบ"
+      },
+      "SaveBtn" : {
+        "label" : "บันทึก"
+      },
+      "MainPanel" : {
+        "label" : "แก้ไขการเชื่อมต่อ google drive"
+      },
+      "code" : {
+        "label" : "รหัสเฉพาะ",
+        "help" : "รหัสเฉพาะของระบบ google drive ที่สร้างขึ้นโดยอัตโนมัติ"
+      },
+      "description" : {
+        "label" : "คำอธิบาย",
+        "help" : "กรอกรายละเอียดของระบบ google drive"
+      },
+      "driveAccessSecret" : {
+        "label" : "บัญชีที่ใช้",
+        "help" : "เลือกหรือสร้างบัญชีสำหรับเข้าถึงระบบ google drive"
+      }
+    }
+  }
+}

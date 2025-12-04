@@ -18,8 +18,8 @@
         <p-table [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Code</th>
-                    <th>Description</th>
+                    <th id="CodeHeader" gebo-ai-text>Code</th>
+                    <th id="DescriptionHeader" gebo-ai-text>Description</th>
                     <th></th>
                    <!--  <th>Base uri</th> -->
                     
@@ -30,9 +30,8 @@
                     <td>{{ config.code }}</td>
                     <td>{{ config.description }}</td>
                     <td>
-                        <p-button *ngIf="config.contentManagementSystemType==='DEFAULT.FILESYSTEM.CONTENT.HANDLER' && filesystemUIConfig?.uiSettingsEnabled===true" icon="pi pi-wrench" [outlined]="true" label="Configure" (onClick)="openFilesystemsConfiguration()"></p-button>
-                        <p-button *ngIf="config.contentManagementSystemType==='GOOGLE-SEARCH-MODULE'" icon="pi pi-wrench" [outlined]="true" label="Configure" (onClick)="openGoogleSearchConfiguration()"></p-button>
-                        
+                        <p-button id="ConfigureBtn" gebo-ai-label *ngIf="config.contentManagementSystemType==='DEFAULT.FILESYSTEM.CONTENT.HANDLER' && filesystemUIConfig?.uiSettingsEnabled===true" icon="pi pi-wrench" [outlined]="true" label="Configure" (onClick)="openFilesystemsConfiguration()"></p-button>
+                        <p-button id="ConfigureBtn2" gebo-ai-label *ngIf="config.contentManagementSystemType==='GOOGLE-SEARCH-MODULE'" icon="pi pi-wrench" [outlined]="true" label="Configure" (onClick)="openGoogleSearchConfiguration()"></p-button>
                     </td>
                     <!-- <td>{{ config.baseUri }}</td>
                     <td>
@@ -71,3 +70,5 @@
 </span>
 -->
 <gebo-ai-shared-filesystem-component [visible]="showFilesystemConfigurationWindow" (closed)="showFilesystemConfigurationWindow=false"></gebo-ai-shared-filesystem-component>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

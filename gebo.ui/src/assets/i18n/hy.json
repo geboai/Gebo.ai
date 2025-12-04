@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Համակարգի լռելյայն լեզու",
+        "help" : "Այս Gebo.ai տեղադրման լռելյայն լեզու"
+      },
+      "username" : {
+        "label" : "Էլ. փոստ",
+        "help" : "Մուտք գործելու համար օգտագործեք էլ. փոստը որպես օգտվողի անուն"
+      },
+      "passwordC" : {
+        "label" : "Հաստատել գաղտնաբառը",
+        "help" : "Հաստատել գաղտնաբառը"
+      },
+      "password" : {
+        "label" : "Գաղտնաբառ",
+        "help" : "Մուտք գործելու գաղտնաբառ (առնվազն 8 նիշ)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " գախտնաբառերը համընկնում չեն "
+      },
+      "LocalAdmin" : {
+        "label" : "Ստեղծել տեղական ադմինիստրատորի հաշիվ"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Այս հաշիվն օգտագործելու եք ծրագրի կարգավորումների/կառավարման համար, ձեր տվյալները կմնան տեղական համակարգում և չեն փոխանցվի դեպի ցանց"
+      },
+      "EnterBtn" : {
+        "label" : "Մուտք գործել էջ՝ մուտք գործելու համար"
+      },
+      "SetupPage" : {
+        "label" : "Կարգավորեք ձեր gebo.ai տեղադրումը"
+      },
+      "CreateBtn" : {
+        "label" : "Ստեղծել համակարգի կարգավորում"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Կարդալ և համաձայնվել լիցենզիային"
+      },
+      "AcceptMark" : {
+        "label" : "Համաձայն եմ պայմաններին",
+        "help" : "Սեղմելով այստեղ՝ դուք ընդունում եք լիցենզիայի պայմանները"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "էլ.փոստ",
+        "help" : "Էլ.փոստը որպես օգտանուն մուտք գործելու համար"
+      },
+      "password" : {
+        "label" : "Գաղտնաբառ",
+        "help" : "Գաղտնաբառ մուտք գործելու համար"
+      },
+      "LoginPanel" : {
+        "label" : "Մուտք դեպի Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Մուտք"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Բարի գալուստ gebo.ai",
+        "detail" : "Մուտքագրեք ձեր օգտանունը և գաղտնաբառը մուտք գործելու համար"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Գործողությունը ձախողվեց",
+        "detail" : "Հնարավոր չէ հաստատել օգտվողի մուտքագրած տվյալներով"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Լավ է!",
+        "detail" : "Գործողությունը հաջողությամբ իրականացվել է"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Բարի գալուստ gebo.ai",
+        "detail" : "Մուտք գործելու համար մուտքագրեք ձեր օգտանունը և գաղտնաբառը"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 կարգավորումներ"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Մատակարարի անունը"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 անվտանգության կարգավորումներ"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Վերադառնալ սկզբնական կարգաբերմանը"
+      },
+      "WizardUi" : {
+        "label" : "Ընտրեք կարգաբերման բաժինը"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Կառավարիչ և այլ օգտվողների կարգաբերում",
+        "description" : "Համակարքը ճիշտ կառավարելու համար անհրաժեշտ է առնվազն մեկ վարչական հաշիվ, անհրաժեշտության դեպքում կարող եք ավելացնել այլ օգտվողներ"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai աշխատանքային պանակ",
+        "description" : "Կարգավորեք աշխատանքային պանակը, այստեղ կպահվեն այս տեղադրման բոլոր կարգավորումները և աշխատանքային ֆայլերը։ Խորհուրդ է տրվում պարբերաբար պահուստավորել այն։"
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Վեկտորային բազայի կարգավորումներ",
+        "description" : "Gebo.ai-ին անհրաժեշտ է վեկտորային բազա՝ հավելյալ կենցաղ գործառույթների համար։ Կարող եք ընտրել տեղական բազա, Qdrant կամ Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Մեկ անկյունի մուտք՝ oauth2 վավերացում",
+        "description" : "Oauth2 մեկ անկյունի մուտք վավերացման և oauth2 հաճախորդների կարգավորումներ"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Խոշոր լեզվաբանական մոդելների կարգաբերում",
+        "description" : "Կարգավորեք տարբեր llms-ներ՝ ամպային կամ տեղական միջավայրի միջոցով։ Ապահովեք առնվազն մեկ ընդհանուր մոդել և մեկ embedding մոդել ծրագրի ճիշտ աշխատանքի համար։"
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Գրաֆային RAG/Գիտելիքի արդյունքաբերումի կարգաբերում",
+        "description" : "Կարգավորեք գրաֆային RAG և գիտելիքի արդյունքաբերումի ենթահամակարգը"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Հանրային ֆայլային համակարգերի ճանապարհների կարգաբերում",
+        "description" : "Կարգավորեք կազմակերպության հանրային ֆայլային համակարգերի ճանապարհները՝ որպես փաստաթղթերի ավգմենտացված գեներացիայի համար"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence ինտեգրում",
+        "description" : "Կարգավորեք Gebo.ai-ը՝ մուտք ունենալու ձեր Atlassian Confluence ամպային կամ տեղային տեղադրմանը"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira ինտեգրում",
+        "description" : "Կարգավորեք Gebo.ai-ը՝ մուտք ունենալու ձեր Atlassian jira ամպային տեղադրմանը"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ինտեգրում",
+        "description" : "Կարգավորեք Gebo.ai-ը՝ մուտք ունենալու ձեր Microsoft Sharepoint ամպային կամ տեղային տեղադրմանը"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Կարգավորեք առնվազն մեկ գիտելիքի բազա",
+        "description" : "Կարգավորեք առնվազն մեկ գիտելիքի բազա, որպեսզի օգտվողները օգտվեն Gebo.ai-ի հավելյալ գեներացիայի հնարավորություններից"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Կարգավորեք առնվազն մեկ \"R.A.G.\" զրուցարանային պրոֆիլ",
+        "description" : "Կարգավորեք առնվազն մեկ հավելյալ զրուցարանային պրոֆիլ օգտվողների համար, հիմնված ընտրված գիտելիքի բազաների վրա"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai կարգավորման պարտադիր քայլերը ավարտված են...",
+        "detail" : "Պարտադիր կարգավորման քայլերը ավարտված են, սակայն որոշ բացակայող քայլեր խանգարում են ձեր կազմակերպությանը առավելագույնը օգտվելու այս ծրագրից"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai կարգավորումը հաջողված է։"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai կարգավորումը բացում է պարտադիր քայլ",
+        "detail" : "Խնդրում ենք վերանայել կարգավորման գործընթացի կարմիր քայլերը"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ինտեգրացիա",
+        "description" : "Կազմակերպեք Gebo.ai-ը, որպեսզի մուտք գործի ձեր Google cloud Drive/Workspaces թիմային տվյալները"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Կազմակերպության Atlassian Confluence համակարգերի կարգաբերում"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Համակարգի տեսակը"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կոնֆիգի կոդ"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence համակարգ"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira համակարգ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կոնֆիգի կոդ"
+      },
+      "MainPanel" : {
+        "label" : "Կազմակերպության Atlassian Jira համակարգերի կարգաբերում"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Համակարգի տեսակը"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կոնֆիգի կոդ"
+      },
+      "MainPanel" : {
+        "label" : "Կազմակերպության Microsoft Sharepoint համակարգերի կարգաբերում"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Համակարգի տեսակը"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint համակարգ"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Ներդրեք api-key համապատասխան կրեդիտով։ Եթե ընտրում եք OpenAI, պետք է հավելեք հատուկ կրեդիտ (10-30$ բավարար է) ձեր ընթացիկ պլանին, հակառակ դեպքում llms-ի տրաֆիկ չի լինի այս հավելվածում։"
+      },
+      "MainPanel" : {
+        "label" : "Կարգավորեք Gebo.ai llms մատակարարներին ձեր api key-ով"
+      },
+      "provider" : {
+        "label" : "Խոշոր լեզվաբանական մոդելի մատակարար",
+        "help" : "Ընտրեք մատակարար՝ OpenAI (chatgpt), Google (Gemini) կամ Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Օգտվող",
+        "help" : "Մուտքագրեք apiKey-ին կցված օգտվողը"
+      },
+      "ConfigureBtn" : {
+        "label" : "Կարգաբերել"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "LLMS մատակարարների api key-ը, որը կօգտագործվի"
+      },
+      "ProviderHeader" : {
+        "label" : "Մատակարար"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Կարգավորման կոդ"
+      },
+      "ModelHeader" : {
+        "label" : "Մոդել"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Մոդելի տեսակը"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Պաշտոնական մոդել"
+      },
+      "MainPanelHeader" : {
+        "label" : "Կարգավորել Gebo.ai llms մատակարարների հասանելիությունը"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Ստեղծել գրաֆ rag կարգաբերում"
+      },
+      "MainPanel" : {
+        "label" : "Կարգավորեք գրաֆ rag և գիտելիքի արդյունքաբերումի հիմնական կազմաձևումը"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կոնֆիգի կոդ"
+      },
+      "EditConfigBtn" : {
+        "label" : "Խմբագրել կարգավորումը"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Նախագիծ"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Ավելացնել Գիտելիքի բազա"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Գիտելիքի բազա"
+      },
+      "MainPanel" : {
+        "label" : "Գիտելիքի բազաների և բովանդակության կարգավորումներ"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Բովանդակության աղբյուր"
+      },
+      "PublishedHeader" : {
+        "label" : "Հրապարակված"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Փաստաթղթերի քանակը"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Ավելացնել նախագիծ/պարունակ",
+        "help" : "ստեղծել նոր նախագիծ"
+      },
+      "Button1" : {
+        "help" : "բացել գիտելիքի բազան"
+      },
+      "Button2" : {
+        "help" : "բացել նախագծի ձևը"
+      },
+      "Button3" : {
+        "help" : "բացել տվյալների աղբյուրը"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai աշխատանքային պանակի կարգաբերում"
+      },
+      "ConfigureBtn" : {
+        "label" : "Կարգաբերել"
+      },
+      "workDirectory" : {
+        "label" : "Ընտրեք պանակ՝ որպես Gebo.ai աշխատանքային պանակ",
+        "help" : "Ընտրեք սերվերի պանակ, որ այս տեղադրումը կօգտագործի որպես աշխատանքային պանակ իր պարունակության և կարգավորումների համար։"
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Ավելացնել պանակ"
+      },
+      "AddFolderBtn" : {
+        "label" : "Ավելացնել պանակ"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "MainPanel" : {
+        "label" : "Սերվերի ընդհանուր ֆայլային համակարգի ճանապարհներ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Աբսոլյուտ ճանապարհ"
+      },
+      "DeleteHeader" : {
+        "label" : "Ջնջել"
+      },
+      "path" : {
+        "label" : "Ավելացնել հիմնական պանակ ընդհանուր ֆայլային համակարգից",
+        "help" : "Ընտրեք սերվերի պանակ, որը համարվում է կազմակերպության փաստաթղթերի հանրային ֆայլային համակարգի առաջնային ճանապարհ"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ֆայլային համակարգի նշում"
+      },
+      "RemovePathBtn" : {
+        "label" : "Հեռացնել ճանապարհը"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Կարգաբերել"
+      },
+      "MainPanel" : {
+        "label" : "Վեկտորային բազայի կարգաբերում"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Qdrant host անուն կամ IP հասցե"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant միացման կարգավորումներ"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Qdrant կապի port (6334-ն ստանդարտն է)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Api key Qdrant նույնականացման համար"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS պարամետր",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai-ի անհրաժեշտ քայլերը ավարտված են...",
+        "detail" : "Կարևոր կարգաբերման քայլերն ավարտված են, բայց առկա բաց թողնված քայլեր, որոնք կխանգարեն լիարժեք օգտագործել ծրագիրը"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai-ի կարգաբերումից բացակայում է կարևոր քայլ",
+        "detail" : "Խնդրում ենք ստուգել կարգաբերման կարմիր քայլերը"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai-ի կարգաբերումն ավարտված է"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Ավելացնել նոր R.A.G. զրույցի պրոֆիլ"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Ավելացնել R.A.G. զրույցի պրոֆիլ"
+      },
+      "MainPanel" : {
+        "label" : "Բերել հարստացված գեներացիայի (r.a.g.) զրույցի պրոֆիլների կարգավորումները"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Գոյություն ունեցող R.A.G. զրույցի պրոֆիլներ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Խմբագրել R.A.G. զրույցի պրոֆիլ"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Գիտելիքների բազայի կոդեր"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Կազմակերպության Google Drive/Workspaces համակարգերի կարգավորում"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Կարգավորման կոդ"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Կոդ",
+        "help" : "Մուտքագրեք OAUTH2 վավերացման/ինտեգրման կոդի (registrationId) նկարագրությունը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք OAUTH2 վավերացման/ինտեգրման տեղեկատվության նկարագրությունը։"
+      },
+      "configurationType" : {
+        "label" : "Կարգավորման նպատակ",
+        "help" : "Ընտրեք՝ արդյոք այս կարգավորումները կօգտագործվեն Gebo.ai-ում վավերացվելու համար, թե Gebo.ai-ին հնարավորություն տալու համար՝ միանալ երրորդ կողմի համակարգին։"
+      },
+      "authProvider" : {
+        "label" : "Մատակարարող",
+        "help" : "Մուտքագրեք OAUTH2 վավերացման մատակարարողին"
+      },
+      "issuerUri" : {
+        "label" : "Հրատարակողի URI",
+        "help" : "Մուտքագրեք մատակարարողի OAUTH2 հրատարակողի URL-ը"
+      },
+      "authorizationUri" : {
+        "label" : "Վավերացման URL",
+        "help" : "Մուտքագրեք մատակարարողի OAUTH2 Վավերացման URL-ը"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Մուտքագրեք մատակարարողի OAUTH2 Jwk Set url-ը"
+      },
+      "userInfoUri" : {
+        "label" : "Օգտատիրոջ ինֆո URL",
+        "help" : "Մուտքագրեք մատակարարողի OAUTH2 օգտատիրոջ ինֆո URL-ը"
+      },
+      "introspectionUri" : {
+        "label" : "Ինտրոսպեկցիայի URI",
+        "help" : "Մուտքագրեք մատակարարողի OAUTH2 ինտրոսպեկցիայի URL-ը"
+      },
+      "tokenUri" : {
+        "label" : "Թոքենի URL",
+        "help" : "Մուտքագրեք մատակարարողի OAUTH2 թոքենի URL-ը"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 մատակարարողի URL-ներ"
+      },
+      "MainPanel" : {
+        "label" : "Մուտքագրեք նոր OAUTH2 վավերացման/ինտեգրման տվյալներ"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Հաճախորդի ID",
+        "help" : "Հաճախորդի նույնացուցիչը oauth2 արձանագրության համար (ստացվում է oauth2-ով վավերացված 3-րդ կողմի ծրագրի կառավարման հատվածից)"
+      },
+      "secret" : {
+        "label" : "Գաղտնաբառ",
+        "help" : "Հաճախորդի գաղտնիքը oauth2 արձանագրության համար (ստացվում է oauth2-ով վավերացված 3-րդ կողմի ծրագրի կառավարման հատվածից)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Ստեղծել confluence համակարգի կարգավորումը"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք confluence համակարգի նկարագրությունը։"
+      },
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "username" : {
+        "label" : "Confluence օգտատերի անունը",
+        "help" : "Confluence օգտատերի անունը"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence տարբերակը",
+        "help" : "Confluence տարբերակը"
+      },
+      "baseUri" : {
+        "label" : "Հիմնական ինտերնետային հասցե",
+        "help" : "Confluence համակարգի հիմնական հասցեի url-ը локալ տեղադրման համար կամ ձեր կազմակերպության հիմնական url-ը confluence cloud համակարգի համար"
+      },
+      "password" : {
+        "label" : "Confluence գաղտնաբառը",
+        "help" : "Confluence գաղտնաբառը"
+      },
+      "token" : {
+        "label" : "Confluence cloud api ստեղն",
+        "help" : "Confluence CLOUD api ստեղնը, որը ձեռք է բերվել confluence backoffic-ում, այստեղ պետք է մուտքագրեք «API Token for your Atlassian Account»։"
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և այս բովանդակությունը հասանելի է դարձնում գիտելիքների բազայում LLm-երի համար"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "Confluence բովանդակության ընդհանուր օգտագործում"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "code" : {
+        "label" : "Տարբերանշան կոդ",
+        "help" : "Բովանդակության ավտոմատ գեներացված տարբերանշան կոդը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ներբեռնված confluence տվյալների նկարագրությունը։"
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence համակարգ",
+        "help" : "Արդեն կարգավորված confluence համակարգի հղում։"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Մայր նախագիծի հղում։"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացումն ու բովանդակության դուրս բերում"
+      },
+      "tree" : {
+        "label" : "Ընտրված տարածքներ կամ էջեր/ենթաէջեր",
+        "help" : "Համօգտագործվող confluence տարածքներ և էջեր"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացման ժամանակացույց",
+        "help" : "Կազմակերպեք տարբերակված բովանդակության ժամանակացույցը՝ retrieval augmented generation համակարգը արդիական պահելու համար"
+      },
+      "catalogingCriteria" : {
+        "label" : "Տարածքների, էջերի և ենթաէջերի կազմակերպման չափանիշներ",
+        "help" : "Խնդրում ենք մանրամասն նկարագրել ինչպես կազմակերպվել է տարածքների, էջերի և ենթաէջերի կառուցվածքը confluence բովանդակության մեջ, որը կիսվել է Gebo.ai-ով։"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ընդհանուր կարգավորումներ"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "MainPanel" : {
+        "label" : "Confluence համակարգի խմբագրում"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "baseUri" : {
+        "label" : "Հիմնական ինտերնետային հասցե",
+        "help" : "Confluence համակարգի հիմնական հասցեի url-ը"
+      },
+      "code" : {
+        "label" : "Տարբերանշան կոդ",
+        "help" : "Confluence համակարգի ավտոմատ գեներացված տարբերանշան կոդը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք confluence համակարգի նկարագրությունը։"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence տարբերակը",
+        "help" : "Confluence տարբերակը"
+      },
+      "secretCode" : {
+        "label" : "Օգտագործվող ինքնություն",
+        "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ confluence համակարգ մուտք գործելու համար"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "նոր խումբ"
+      },
+      "NewUserBtn" : {
+        "label" : "նոր օգտատեր"
+      },
+      "UsersListPanel" : {
+        "label" : "Օգտատերերի ցուցակ"
+      },
+      "GroupsListPanel" : {
+        "label" : "Խմբերի ցուցակ"
+      },
+      "SournameHeader" : {
+        "label" : "ազգանուն"
+      },
+      "UsernameHeader" : {
+        "label" : "օգտանուն"
+      },
+      "RolesHeader" : {
+        "label" : "դերեր"
+      },
+      "NameHeader" : {
+        "label" : "անուն"
+      },
+      "EditBtn" : {
+        "label" : "Խմբագրել"
+      },
+      "DisabledHeader" : {
+        "label" : "անդամը ակտիվ չէ"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "UserIds" : {
+        "placeholder" : "Ընտրեք օգտվողներին"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "MainPanel" : {
+        "label" : "Օգտվողների խմբի խմբագրում"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք խմբի նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրահատուկ կոդ",
+        "help" : "Մուտքագրեք օգտվողների խմբի կոդը"
+      },
+      "userIds" : {
+        "label" : "Օգտվողների ցանկ",
+        "help" : "Ընտրեք խմբին մասնակցող օգտվողներին"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք jira համակարգի նկարագրությունը։"
+      },
+      "MainPanel" : {
+        "label" : "Ստեղծել jira համակարգի կարգավորումներ"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "username" : {
+        "label" : "jira օգտատիրոջ անուն",
+        "help" : "jira օգտատիրողի անունը"
+      },
+      "token" : {
+        "label" : "jira cloud api բանալի",
+        "help" : "jira CLOUD apikey-ը, որն ստացվել է jira backoffice-ում, այստեղ պետք է ներմուծել \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Հիմնական ինտերնետային հասցե",
+        "help" : "Jira համակարգի հիմնական հասցեի URL-ն՝ տեղակայված ներքին ցանցում, կամ կազմակերպության հիմնական url-ը jira cloud համակարգի համար"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և թույլ է տալիս այս բովանդակությունը հասանելի դարձնել գիտելիքների բազային LLm-ների համար"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "MainPanel" : {
+        "label" : "Jira բովանդակության փոխանակում"
+      },
+      "code" : {
+        "label" : "Յուրահատուկ կոդ",
+        "help" : "Բովանդակության ավտոմատ ստեղծված յուրահատուկ կոդը։"
+      },
+      "jiraSystemCode" : {
+        "label" : "jira համակարգ",
+        "help" : "Արդեն կարգավորված jira համակարգի հղում։"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Վերադաս նախագծի հղում։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք բեռնված jira գրառումների բովանդակության նկարագրությունը։"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացումների ստուգումների ժամանակացույց",
+        "help" : "Կարգավորեք փոխված բովանդակության պլանավորումը՝ retrieve augmented generation համակարգի թարմացման համար"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացելն ու բովանդակության դուրս բերումը"
+      },
+      "tree" : {
+        "label" : "Ընտրված տարածքներ կամ էջեր/ենթաէջեր",
+        "help" : "Հանրային jira նախագծերի և տոմսերի հիերարխիկ բովանդակություն"
+      },
+      "catalogingCriteria" : {
+        "label" : "Տարածքների, էջերի ու ենթաէջերի կազմակերպման չափանիշներ",
+        "help" : "Խնդրում ենք այստեղ նշել, թե ինչպես է տարածքների, էջերի ու ենթաէջերի կազմակերպման չափանիշը իրականացվել Gebo.ai-ով համօգտագործված jira բովանդակության մեջ"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք jira համակարգի նկարագրությունը։"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "MainPanel" : {
+        "label" : "Jira համակարգի խմբագրում"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "baseUri" : {
+        "label" : "Հիմնական ինտերնետային հասցե",
+        "help" : "Jira համակարգի հիմնական ինտերնետային հասցեի URL-ը"
+      },
+      "code" : {
+        "label" : "Յուրահատուկ կոդ",
+        "help" : "Jira համակարգի ավտոմատ ստեղծվող յուրահատուկ կոդը։"
+      },
+      "secretCode" : {
+        "label" : "Օգտագործվող ինքնություն",
+        "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ jira համակարգ մուտք գործելու համար"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք SharPpoint/OneDrive համակարգի նկարագրությունը։"
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint տարբերակ",
+        "help" : "sharepoint տարբերակ"
+      },
+      "secret" : {
+        "label" : "Գաղտնի բանալի",
+        "help" : "Oauth2 հաճախորդի գաղտնիքը այս հավելվածի համար, որը գրանցված է microsoft \"entra\" արտադրանքում (ստանալիք microsoft cloud ադմինիստրատորի վահանակում)"
+      },
+      "clientId" : {
+        "label" : "Հաճախորդի ID",
+        "help" : "Oauth2 հաճախորդի նույնացուցիչ այս հավելվածի համար, որը գրանցված է microsoft \"entra\" արտադրանքում (ստանալիք microsoft cloud ադմինիստրատորի վահանակում)"
+      },
+      "tenantId" : {
+        "label" : "Վարձակալ ID",
+        "help" : "Oauth2 վարձակալության նույնացուցիչ ձեր կազմակերպության microsoft \"entra\" արտադրանքի համար (ստանալիք microsoft cloud ադմինիստրատորի վահանակում)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 հավելվածի գրանցման տվյալները Gebo.ai-ի համար"
+      },
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "MainPanel" : {
+        "label" : "Ստեղծել SharePoint/OneDrive համակարգի կոնֆիգուրացիա"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և տվյալները մատչելի է դարձնում գիտելիքների բազայում LLm-երի համար"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "Կիսում SharePoint/OneDrive բովանդակությունը"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "code" : {
+        "label" : "Թվային կոդ",
+        "help" : "Բովանդակության ավտոմատ գեներացված թվային կոդը։"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Վերադաս նախագծի հղում։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք SharePoint/OneDrive մուտքերի տվյալների աղբյուրների նկարագրությունը։"
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint համակարգ",
+        "help" : "Արդեն կարգավորված SharePoint/OneDrive համակարգի հղում։"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացումը և բովանդակության արտահանումը"
+      },
+      "tree" : {
+        "label" : "Ընտրված Sharepoint կայքեր/էջեր/ենթաէջեր կամ OneDrive հիշողություններ/պանակ/ֆայլեր",
+        "help" : "Կիսված sharepoint/OneDrive բովանդակություն"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացման ստուգումների ժամանակացույց",
+        "help" : "Կարգավորեք փոփոխված բովանդակության ժամանակացույցը՝ Retrieve Augmented Generation համակարգը թարմ պահելու համար"
+      },
+      "catalogingCriteria" : {
+        "label" : "Տարածքների, էջերի եւ ենթաէջերի կազմակերպման չափանիշներ",
+        "help" : "Խնդրում ենք բացատրել, թե ինչպես են կազմակերպված տարածքները, էջերը և ենթաէջերը sharepoint բովանդակությունում, որոնք կիսվում են Gebo.ai-ի հետ"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Խմբագրում sharepoint համակարգը"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Ընդհանուր կարգավորումներ"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "secretCode" : {
+        "label" : "Օգտագործվող ինքնություն",
+        "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ sharepoint համակարգ մուտք գործելու համար"
+      },
+      "code" : {
+        "label" : "Թվային կոդ",
+        "help" : "Sharepoint համակարգի ավտոմատ գեներացված թվային կոդը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք sharepoint համակարգի նկարագրությունը։"
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint տարբերակ",
+        "help" : "sharepoint տարբերակ"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Ջնջել"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Պահպանել"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Չեղարկել"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Ընդհանուր տեղեկատվության/պարունակության կարգավորումներ"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms կարգավորումներ"
+      },
+      "code" : {
+        "label" : "Միանշանակ կոդ",
+        "help" : "Ավտոմատ ստեղծված միանշանակ կոդ գիտելիքների գրաֆի տվյալների արտահանումը\n                                    փուլի համար"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/գիտելիքների արտահանման կարգավորումներ"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք այս գիտելիքների գրաֆի տվյալների արտահանման փուլի\n                                    կարգավորումների նկարագրությունը"
+      },
+      "extractionPrompt" : {
+        "label" : "Տեղեկատվության արտահանման հուշում",
+        "help" : "Հուշում խոշոր լեզվական մոդելի համար՝ էական միավորների/իրադարձությունների/կապերի և մականունների արտահանման համար"
+      },
+      "usedModelConfiguration" : {
+        "label" : "Տվյալների արտահանման համար օգտագործվող LLM",
+        "help" : "Նշեք գիտելիքների արտահանման համար օգտագործվող խոշոր լեզվական մոդելը, ըստ լռելյայն կօգտագործվի մեկը\n                                    եթե ոչ մեկը չի\n                                    ընտրվել։"
+      },
+      "graphRagAllSources" : {
+        "label" : "Կիրառել graph rag-ը բոլոր տվյալների աղբյուրների վրա",
+        "help" : "Եթե ՛true՛ է, բոլոր գիտելիքների բազաները/նախագծերը/տվյալների աղբյուրները կմշակվեն գիտելիքների արտահանման համար, հակառակ դեպքում միայն հատուկ կարգավորվածները"
+      },
+      "defaultModel" : {
+        "label" : "Լռելյայն խոշոր լեզվական մոդել",
+        "help" : "Լռելյայն խոշոր լեզվական մոդելը կօգտագործվի գիտելիքների արտահանման համար"
+      },
+      "processEveryDocument" : {
+        "label" : "Կիրառել graph rag-ը բոլոր ֆայլերի վրա",
+        "help" : "Graph rag ալգորիթմները կկիրառվեն բոլոր ֆայլերի վրա, ինչը կբարձրացնի\n                                            վերլուծության մանրամասները,\n                                            ինչը համակարգը կարող է, բայց կմեծացնի ծախսերը և ժամանակը\n                                            անհրաժեշտ՝ փաստաթղթերը մշակելու համար"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Ֆայլի ընտրության չափանիշներ graphrag-ի մշակման համար",
+        "help" : "Խմբագրեք չափանիշները ֆայլի՝ տեղեկատվության արտահանման փաթեթ ուղարկելու համար graphrag-ի միջոցով, ընտրեք առնվազն մեկ ֆայլի անուն և չափանիշ և/կամ ֆայլի տեսակ և/կամ ֆայլի չափի առավելագույն բայթերի թիվ և/կամ վերջերս փոփոխության օրերի թիվ"
+      },
+      "extractionFormat" : {
+        "label" : "Վերծողական ձևաչափ",
+        "help" : "Օգտագործեք CSV ձևաչափ llms-ի համար 30b պարամետրերից ցածր, JSON հսկայական մոդելների համար",
+        "placeholder" : "Օգտագործեք CSV ձևաչափ llms-ի համար 30b պարամետրերից ցածր, JSON հսկայական մոդելների համար"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Ընտրեք ֆայլի տեսակը"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Ֆայլի անվանաչափության չափանիշ"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Վերջին փոփոխության օրերը"
+      },
+      "nameFilter" : {
+        "placeholder" : "Ֆայլի անուն"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Առավելագույն ֆայլի չափը բայթերով"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Ընդհանուր տեղեկություններ"
+      },
+      "MainPanel" : {
+        "label" : "Գիտելիքների բազայի խմբագրում"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Գիտելիքների բազայի մուտքի կարգավորումներ"
+      },
+      "code" : {
+        "label" : "Unique Code",
+        "help" : "Գիտելիքների բազայի ավտոմատ գեներացված եզակի կոդ։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք գիտելիքների բազայի նկարագրությունը։"
+      },
+      "embeddingModelReferences" : {
+        "label" : "Օգտագործվող embedding մոդելներ (թողեք դատարկ՝ համակարգի լռելյայնը օգտագործելու համար)",
+        "help" : "Գիտելիքների բազայի embedding մոդելները. եթե դատարկ է, կօգտագործվի լռելյայն մոդելը։"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "IndexBtn" : {
+        "label" : "Ինդեքսացնել",
+        "help" : "Պարունակության վերաինդեքսավորում"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Նախագծի կամ տարրի խմբագրում"
+      },
+      "code" : {
+        "label" : "Unique Code",
+        "help" : "Նախագծի ավտոմատ գեներացված եզակի կոդ։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք նախագծի նկարագրությունը։"
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "գիտելիքների բազա",
+        "help" : "գիտելիքների բազա։"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "IndexBtn" : {
+        "label" : "Ինդեքսացնել",
+        "help" : "Պարունակության վերաինդեքսավորում"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Ավելացնել տարր/նախագիծ",
+        "help" : "ավելացնել նոր..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Բոլորը օգտագործում են",
+        "help" : "Բոլորը կարող են օգտագործել"
+      },
+      "accessibleGroups" : {
+        "label" : "Խմբերի ցանկ",
+        "help" : "Ընտրեք թույլատրելի խմբերը"
+      },
+      "accessibleUsers" : {
+        "label" : "Օգտատերերի ցանկ",
+        "help" : "Ընտրեք թույլատրելի օգտատերերին"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Վահանակ"
+      },
+      "LLMSTab" : {
+        "label" : "LLM-ներ զրուցի և ներկառուցման համար"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag զրույցի պրոֆիլներ/Մոդելի հուշումներ"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Գիտելիքի բազաներ և նախագծեր"
+      },
+      "UsersGroupTab" : {
+        "label" : "Օգտատերեր և խմբեր"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai մոդուլների կարգավորում"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Կարգավորել"
+      },
+      "ConfigureBtn" : {
+        "label" : "Կարգավորել"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Նոր հուշման կազմաձևում"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Նոր խոսակցության պրոֆիլ"
+      },
+      "MainPanel" : {
+        "label" : "Տվյալների փնտրման ուժեղացված խոսակցության պրոֆիլներ"
+      },
+      "PromptsPanel" : {
+        "label" : "Հուշումների հավաքածու և լռելյայն հուշումներ"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Գիտելիքների բազաներ"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "ConfigureBtn1" : {
+        "label" : "կազմաձևել"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Նոր գիտելիքների բազա"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Նոր ներկառուցվածEmbedding մոդেলের կարգավորում"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Նոր զրույցի մոդելի կարգավորում"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "ModelHeader" : {
+        "label" : "Մոդել"
+      },
+      "ModelProviderHeader" : {
+        "label" : "Մոդելի մատակարար"
+      },
+      "ConfigureBtn" : {
+        "label" : "կարգավորել"
+      },
+      "CodeHeader2" : {
+        "label" : "Կոդ"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Նկարագրություն"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Մոդելի մատակարար"
+      },
+      "ConfigureBtn2" : {
+        "label" : "կարգավորել"
+      },
+      "ModelHeader2" : {
+        "label" : "Մոդել"
+      },
+      "ChatmodelsZone" : {
+        "label" : "Կարգավորված զրույցի մոդելներ"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Կարգավորված embedding մոդելներ"
+      },
+      "chat" : {
+        "label" : "Նոր զրուցային մոդել",
+        "help" : "Ընտրեք մատակարարին՝ օգտատիրոջ հետ զրուցելու կամ ավտոմատացման գործողություններ կատարելու ունակ նոր զրուցային մոդել ավելացնելու համար",
+        "placeholder" : "Ընտրեք մատակարարին՝ օգտատիրոջ հետ զրուցելու կամ ավտոմատացման գործողություններ կատարելու ունակ նոր զրուցային մոդել ավելացնելու համար"
+      },
+      "embed" : {
+        "label" : "Նոր ներդրման մոդել",
+        "help" : "Ընտրեք մատակարարին՝ բովանդակության սեմանտիկ ինդեքսավորում կատարելու ունակ նոր ներդրման մոդել ավելացնելու համար",
+        "placeholder" : "Ընտրեք մատակարարին՝ բովանդակության սեմադիկ ինդեքսավորում կատարելու ունակ նոր ներդրման մոդել ավելացնելու համար"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Մոդելի փորձարկում"
+      },
+      "TestChatBtn" : {
+        "label" : "Փորձարկել զրույցը"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Ընտրեք այս մոդելի համար օգտագործվող OpenAI token-ը"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք OpenAI զրույցի մոդելը՝ աշխատելու համար։"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Հիմնական տվյալներ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Լրացուցիչ կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI զրույցի մոդելի կարգավորումների խմբագրում"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Մոդելի մուտքի կարգավորումներ"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding մոդելի կարգավորումների խմբագրում"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Ընտրեք այս մոդելի համար օգտագործվող OpenAI token-ը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Embedding մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք embedding մոդելի կարգավորումների նկարագրությունը"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding մոդելի ընտրություն",
+        "help" : "Ընտրեք OpenAI embedding մոդելը՝ աշխատելու համար։"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական embedding մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական embedding մոդել, երբ embedding մոդելն ընտրված չէ"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "baseUrl" : {
+        "label" : "Ollama սերվերի հիմնական հասցե",
+        "help" : "Հիմնական հասցեն (օրինակ՝ http://servername:234/), որտեղ ollama տեղական կամ LAN սերվերը արձագանքում է։"
+      },
+      "choosedModel" : {
+        "label" : "Ollama զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք Ollama զրույցի մոդելը՝ աշխատելու համար։",
+        "placeholder" : "Ընտրեք մոդել"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Ընտրեք Ollama token-ը՝ այս մոդելի համար օգտագործելու համար (ըստ ցանկության)"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "MainPanel" : {
+        "label" : "Ollama տեղական (կամ LAN) սերվերի զրույցի մոդելի կարգավորումների խմբագրում"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Ընտրեք Anthropic token-ը՝ այս մոդելի համար օգտագործելու համար"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք Anthropic զրույցի մոդելը՝ աշխատելու համար։",
+        "placeholder" : "Ընտրեք մոդել"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Լրացուցիչ կարգավորումներ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Հիմնական տվյալներ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Մոդելի մուտքի կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic զրույցի մոդելի կարգավորումների խմբագրում"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Ընտրեք MistralAI token-ը՝ այս մոդելի համար օգտագործելու համար"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք MistralAI զրույցի մոդելը՝ աշխատելու համար։"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Հիմնական տվյալներ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Լրացուցիչ կարգավորումներ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Մոդելի մուտքի կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI զրույցի մոդելի կարգավորումների խմբագրում"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք Google Vertex AI զրույցի մոդելը՝ աշխատելու համար։"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Ընտրեք Google Vertex AI token-ը՝ այս մոդելի համար օգտագործելու համար"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Հիմնական տվյալներ"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Մոդելի մուտքի կարգավորումներ"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Լրացուցիչ կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI զրույցի մոդելի կարգավորումների խմբագրում"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Ընտրեք Deepseek token-ը՝ այս մոդելի համար օգտագործելու համար"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք Deepseek զրույցի մոդելը՝ աշխատելու համար։",
+        "placeholder" : "Ընտրեք մոդել"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Լրացուցիչ կարգավորումներ"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Հիմնական տվյալներ"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek զրույցի մոդելի կարգավորումների խմբագրում"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Մոդելի մուտքի կարգավորումներ"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք մոդելի կարգավորումների նկարագրությունը"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "baseUrl" : {
+        "label" : "Զրույցի մոդելի API սերվերի հասցե",
+        "help" : "Զրույցի մոդելի հիմնական հասցեն։"
+      },
+      "apiSecretCode" : {
+        "label" : "Զրույցի մոդելի API token",
+        "help" : "Ընտրեք օգտագործվելիք զրույցի մոդելի API token-ը (ըստ ցանկության)"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական զրույցի մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական զրույցի մոդել, երբ մոդելը նշված չէ"
+      },
+      "choosedModel" : {
+        "label" : "Զրույցի մոդելի ընտրություն",
+        "help" : "Ընտրեք զրույցի մոդելը՝ աշխատելու համար։"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Հիմնական տվյալներ"
+      },
+      "TitleFragment" : {
+        "label" : "Զրույցի մոդել մատակարարի խմբագրում՝"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Լրացուցիչ կարգավորումներ"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Մոդելի մուտքի կարգավորումներ"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք embedding մոդելի կարգավորումների նկարագրությունը"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "MainPanel" : {
+        "label" : "Ollama տեղական (կամ LAN) embedding մոդելի կարգավորումների խմբագրում"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Ընտրեք Ollama token-ը՝ այս մոդելի համար օգտագործելու համար"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding մոդելի ընտրություն",
+        "help" : "Ընտրեք Ollama embedding մոդելը՝ աշխատելու համար։"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Embedding մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական embedding մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական embedding մոդել, երբ embedding մոդելն ընտրված չէ"
+      },
+      "baseUrl" : {
+        "label" : "Ollama սերվերի հիմնական հասցե",
+        "help" : "Հիմնական հասցեն (օրինակ՝ http://servername:234/), որտեղ ollama տեղական կամ LAN սերվերը արձագանքում է։"
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք embedding մոդելի կարգավորումների նկարագրությունը"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding մոդելի կարգավորումների խմբագրում"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Embedding մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding մոդելի ընտրություն",
+        "help" : "Ընտրեք MistralAI embedding մոդելը՝ աշխատելու համար։"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական embedding մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական embedding մոդել, երբ embedding մոդելն ընտրված չէ"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Ընտրեք MistralAI token-ը՝ այս մոդելի համար օգտագործելու համար"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding մոդելի կարգավորումների խմբագրում"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք embedding մոդելի կարգավորումների նկարագրությունը"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding մոդելի ընտրություն",
+        "help" : "Ընտրեք Google Vertex AI embedding մոդելը՝ աշխատելու համար։"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական embedding մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական embedding մոդել, երբ embedding մոդելն ընտրված չէ"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Embedding մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Ընտրեք Google Vertex AI token-ը՝ այս մոդելի համար օգտագործելու համար"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "TitleFragment" : {
+        "label" : "Embedding մոդել մատակարարի խմբագրում՝"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք Embedding մոդելի կարգավորումների նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Embedding մոդելի կարգավորումների ավտոմատ գեներացված յուրօրինակ կոդը"
+      },
+      "choosedModel" : {
+        "label" : "Embedding մոդելի embedding մոդելի ընտրություն",
+        "help" : "Ընտրեք embedding մոդելը՝ աշխատելու համար։"
+      },
+      "baseUrl" : {
+        "label" : "Embedding մոդելի API սերվերի հասցե",
+        "help" : "Embedding մոդելի սերվերի հիմնական հասցեն։"
+      },
+      "defaultModel" : {
+        "label" : "սահմանել որպես հիմնական embedding մոդել",
+        "help" : "Եթե ակտիվացված է, սա կօգտագործվի որպես հիմնական embedding մոդել, երբ embedding մոդելն ընտրված չէ"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding մոդելի API token",
+        "help" : "Ընտրեք embedding մոդելի API token-ը՝ այս մոդելի համար օգտագործելու համար"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Զրույցի կարգավորումների մասին տեղեկատվություն"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Ջնջել այս զրույցի սեսիան"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Վերանվանել զրույցի սեսիան"
+      },
+      "QueryControl" : {
+        "placeholder" : "Գրեք հաղորդագրություն զրույցի բոտին"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Թերթեք կամ որոնեք և ընտրեք փաստաթղթեր՝ զրուցելու համար"
+      },
+      "UploadFileBtn" : {
+        "help" : "Վերբեռնեք ֆայլ՝ զրույցի կամ աշխատանքի համար"
+      },
+      "SubmiQuestion" : {
+        "help" : "Ուղարկեք ձեր հարցը"
+      },
+      "WithParams" : {
+        "label" : "պարամետրերով․"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI կանչված գործառույթներ․"
+      },
+      "UploadedDocs" : {
+        "label" : "Վերբեռնված փաստաթղթեր"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Զրույցի պատմությունը բեռնված է",
+        "detail" : "Զրույցի պատմությունը հաջողությամբ բեռնվեց"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Ձեր խոսքը բեռնվում է"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Ձայնային պատասխանն ընդունվել է"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Գնալ վերև"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Գնալ ներքև"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Գտնված փաստաթղթեր"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Վստա՞հ եք, որ ցանկանում եք ջնջել այս զրույցը։",
+        "header" : "Ջնջել զրույցի գործողություն"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "description" : {
+        "label" : "Զրույցի նկարագրություն",
+        "help" : "Մուտքագրեք զրույցի սեսիայի նկարագրությունը։"
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Օգտագործվող մոդել",
+        "help" : "Մոդելի կոդը"
+      },
+      "providerId" : {
+        "label" : "Զրույցի մոդելի տրամադրող",
+        "help" : "LLms տրամադրողի դրայվեր"
+      },
+      "functions" : {
+        "label" : "Զրույցի մոդելի կանչելի ֆունկցիաներ",
+        "help" : "Ֆունկցիաների ցանկ, որոնք հասանելի են զրույցի մոդելին"
+      },
+      "NameCol" : {
+        "label" : "Անուն"
+      },
+      "DescriptionCol" : {
+        "label" : "Նկարագրություն"
+      },
+      "kbases" : {
+        "label" : "Հասանելի գիտելիքաբազաներ",
+        "help" : "Գիտելիքաբազաների ցանկ, որոնք օգտագործվում են այս RAG զրույցում"
+      },
+      "CloseBtn" : {
+        "help" : "Փակել"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Ավելացնել փաստաթուղթ 'զրուցել' ցուցակում"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Գրանցել",
+        "help" : "Սկսել ձայնագրությունը և ուղարկել այն"
+      },
+      "StopBtn" : {
+        "label" : "Ձայնագրում",
+        "help" : "Ձայնագրում"
+      },
+      "AbortBtn" : {
+        "label" : "Դադարեցնել ձայնագրումը",
+        "help" : "Դադարեցնել ձայնագրումը"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Դադարեցնել ձայնագրությունը"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "վերաբեռնել տվյալները"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SelectHeader" : {
+        "label" : "Ընտրել"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "ավարտի ամսաթիվ/ժամ"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "սկսի ամսաթիվ/ժամ"
+      },
+      "ProcessingHeader" : {
+        "label" : "մշակում"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "FinishedHeader" : {
+        "label" : "ավարտված"
+      },
+      "WithErrorHeader" : {
+        "label" : "խնդիրով"
+      },
+      "LogTableComponent" : {
+        "help" : "Այս ընդհանուր ֆայլային համակարգի տարածքի մուտքերի տեղեկագիր"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Գործողությունների վիճակագրություն"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "CloseBtn" : {
+        "label" : "Փակել"
+      },
+      "PublicationLogTab" : {
+        "label" : "Հրապարակման տեղեկագիր"
+      },
+      "MainPanel" : {
+        "label" : "Հրապարակման տեղեկագիր"
+      },
+      "actualStatus" : {
+        "label" : "Վիճակ",
+        "help" : "Առաջադրանքի վիճակը՝ դեռ ընթացքի մեջ, ավարտված կամ ավարտված սխալներով։"
+      },
+      "publishingSystem" : {
+        "label" : "Հրապարակված բովանդակության կարգավորումներ",
+        "help" : "Հրապարակված բովանդակության մասին տեղեկատվություն"
+      },
+      "startDateTime" : {
+        "label" : "Սկսի ամսաթիվ/ժամ",
+        "help" : "Բովանդակության համաժամացման առաջադրանքի սկսի ամսաթիվն ու ժամը"
+      },
+      "endDateTime" : {
+        "label" : "Ավարտի ամսաթիվ/ժամ",
+        "help" : "Բովանդակության համաժամացման առաջադրանքի ավարտի ամսաթիվն ու ժամը"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "ամբողջությամբ չմշակված"
+      },
+      "ProcessedCompletely" : {
+        "label" : "ամբողջությամբ մշակված"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "ներդրումը փաստաթղթերի ընդհանուր քանակի համեմատ"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Ավելին մանրամասն"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Ստեղծել հրաման"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Հրամանի վիզարդ",
+        "help" : "Օգտագործեք սա՝ LLM-ի միջոցով ձեր նպատակների համար հրաման ստեղծելու համար"
+      },
+      "acceptPrompt" : {
+        "label" : "Ընդունել հրամանը"
+      },
+      "promptWizardUI" : {
+        "label" : "Հրամանի ձևանմուշի ստեղծման վիզարդ"
+      },
+      "cancel" : {
+        "label" : "Չեղարկել"
+      },
+      "response" : {
+        "label" : "Առաջարկվող հրամանի ձևանմուշ",
+        "help" : "Ձեր նպատակի համար ստեղծված ձևանմուշի տեքստը (կարող եք փոփոխել կամ ուղղել այն)"
+      },
+      "modelCode" : {
+        "label" : "Օգտագործվող զրույցի մոդել",
+        "help" : "Ընտրեք զրույցի մոդելը, որին ուզում եք հարցնել հրամանի ձևանմուշի ստեղծման համար"
+      },
+      "query" : {
+        "label" : "Հրամանի ձևանմուշի հարցում",
+        "help" : "Մասնավորեք երկրորդ անձով, թե ինչ նպատակին է AI-ն աջակցելու օգտատիրոջը"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Ջերմաստիճան",
+        "help" : "Ջերմաստիճանը, որով մոդելը կպատասխանի՝ 0-ից 1 (եթե վստահ չեք, թողեք դաշտը դատարկ)"
+      },
+      "contextLength" : {
+        "label" : "Տեքստի երկարությունը (token-ներ)",
+        "help" : "Տեքստի քանակը, որը AI մոդելը կարող է հաշվի առնել մշակման ժամանակ (եթե չի նշված, կօգտագործվի 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP պարամետր՝ 0-ից 1 (եթե վստահ չեք, թողեք դաշտը դատարկ)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Այս մոդելի համար միացված ֆունկցիաներ",
+        "help" : "Ֆունկցիաներ, որոնք այս մոդելը կարող է օգտագործել զրույցի ընթացքում"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Մոդելի հիմնական հուշում",
+        "help" : "Խմբագրեք զրույցի մոդելի հիմնական հուշումը։"
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ինքնության նկարագրությունը։"
+      },
+      "code" : {
+        "label" : "Տվյալ կոդ",
+        "help" : "Ինքնության համար ավտոմատ ստեղծված հատուկ կոդ։"
+      },
+      "secretType" : {
+        "label" : "Ինքնության տեսակը",
+        "help" : "Ընտրեք հեռավոր համակարգի համար ստեղծվող ինքնության տեսակը"
+      },
+      "InsertBtn" : {
+        "label" : "Տեղադրել"
+      },
+      "token" : {
+        "label" : "Նիշք",
+        "help" : "Մուտքագրեք նիշքը։"
+      },
+      "user" : {
+        "label" : "Օգտատեր",
+        "help" : "Մուտքագրեք նիշքով նշանակված օգտատիրոջը։"
+      },
+      "MainPanel" : {
+        "label" : "Ինքնության ստեղծում"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Հեռացնել"
+      },
+      "username" : {
+        "label" : "Օգտանուն",
+        "help" : "Մուտքագրեք օգտանունը։"
+      },
+      "password" : {
+        "label" : "Գաղտնաբառ",
+        "help" : "Մուտքագրեք գաղտնաբառը։"
+      },
+      "email" : {
+        "label" : "Էլ. հասցե/Օգտանուն",
+        "help" : "Մուտքագրեք ssh բանալուն կից էլեկտրոնային հասցեն կամ օգտանունը։"
+      },
+      "key" : {
+        "label" : "Գաղտնի բանալի",
+        "help" : "Բացեք մասնավոր բանալու ֆայլը և պատճենեք այս դաշտում։"
+      },
+      "passphrase" : {
+        "label" : "Բանալու գաղտնաբառ",
+        "help" : "Մուտքագրեք բանալու գաղտնաբառը։"
+      },
+      "pub" : {
+        "label" : "Հասարակական բանալի",
+        "help" : "Բացեք հասարակական բանալու ֆայլը և պատճենեք այս դաշտում։"
+      },
+      "jsonContent" : {
+        "label" : "Google հավաստագիրը ֆայլի բովանդակություն",
+        "help" : "Պատճենեք այստեղ Google api հավաստագրերի ֆայլի բովանդակությունը, որը ներբեռնել եք google cloud api կոնսոլից (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google օգտագործող, որին պետք է անձնավորել",
+        "help" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով",
+        "placeholder" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Տարբերիչ կոդ",
+        "help" : "Բովանդակության ավտոմատ ստեղծված տարբերիչ կոդը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ներբեռնված բովանդակության կամ ֆայլային համակարգի տարրի նկարագրությունը։"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Վերընթաց նախագծի հղումը։"
+      },
+      "upload" : {
+        "label" : "Բեռնել բովանդակություն",
+        "help" : "Սեղմեք որոնման կոճակը և ընտրեք zip կամ այլ ֆայլեր"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացումն ու բովանդակության արդյունահանումը"
+      },
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և հասանելի է դարձնում այս բովանդակությունը գիտելիքների բազայում LLm-ների համար"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "MainPanel" : {
+        "label" : "Ներբեռնված բովանդակության խմբագրում"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Կազմաձևել կառուցման համակարգերը",
+        "help" : "Կառուցման/փաթեթավորման համակարգերի ցանկ՝ մետա տեղեկատվության և լրացուցիչ արտեֆակտների մասին ինֆորմացիայի ստուգման համար (թողեք դատարկ, եթե ծրագրային կոդ չի պարունակում)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Ընտրված տարրեր"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Չեղարկել"
+      },
+      "EditBtn" : {
+        "help" : "Փոփոխել ընտրվածը"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Ընտրեք տարրեր"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Ընտրեք տարրեր"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Խմբագրել ժամանակացույցը"
+      },
+      "ConfirmBtn" : {
+        "label" : "Հաստատել"
+      },
+      "AddBtn" : {
+        "label" : "+Ավելացնել"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և թույլ է տալիս, որ այս բովանդակությունը հասանելի լինի գիտելիքների բազայում LLm-ների համար"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Ծրագրային կոդի մշակում"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "MainPanel" : {
+        "label" : "Խմբագրում առկա ֆայլային համակարգի բովանդակությունը"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ֆայլային համակարգի ներբեռնված բովանդակության նկարագրությունը։"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլեր",
+        "help" : "Միացրեք zip ֆայլերի բացման և բովանդակության հանման հնարավորությունը"
+      },
+      "code" : {
+        "label" : "Եզակի կոդ",
+        "help" : "Բովանդակության ավտոմատ գեներացված եզակի կոդ։"
+      },
+      "tree" : {
+        "label" : "Ընտրված ֆայլեր կամ պանակներ",
+        "help" : "Համօգտագործվող ֆայլային համակարգի ֆայլեր կամ պանակներ, որոնք հասանելի են սպասարկչում"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Վերնախագծի հղում։"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացման ստուգումների ժամանակացույց",
+        "help" : "Կազմաձևեք փոխված բովանդակության ժամանակացույցը՝ Retrieve Augmented Generation համակարգի թարմացված լինելու համար"
+      },
+      "catalogingCriteria" : {
+        "label" : "Պանակների կազմակերպման չափանիշներ",
+        "help" : "Խնդրում ենք այստեղ բացատրել, թե ինչպես է կազմակերպվել պանակների տրամաբանությունը ֆայլային համակարգում, որը կիսում եք Gebo.ai-ի հետ"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Կառուցման համակարգերի կազմաձևում",
+        "help" : "Նշեք կառուցման/փաթեթավորման համակարգերի ցանկը՝ լրացուցիչ մետատվյալների և արտեֆակտների վերաբերյալ տեղեկատվություն ստուգելու համար (թույլատրեք դատարկ թողնել, եթե ծրագրային կոդ չկա)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Նոր համօգտագործվող տարածք"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Աբսոլյուտ ուղի"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db կամ yml ֆայլի կարգավորում"
+      },
+      "DescriptionHeader" : {
+        "label" : "Նկարագրություն"
+      },
+      "CodeHeader" : {
+        "label" : "Կոդ"
+      },
+      "ModifyHeader" : {
+        "label" : "Փոփոխել"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Ընտրված համօգտագործվող ֆայլային համակարգի պանակ",
+        "help" : "Ընտրեք ամպային պանակ, որը հանդիսանում է ձեր կազմակերպության փաստաթղթերի պահոցում օգտագործվող ֆայլային համակարգի ծագման հասցե"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ձեր կազմակերպության համօգտագործվող ֆայլային համակարգի տարածքի նկարագրությունը"
+      },
+      "code" : {
+        "label" : "Եզակի կոդ",
+        "help" : "Բովանդակության ավտոմատ գեներացված եզակի կոդ։"
+      },
+      "InsertBtn" : {
+        "label" : "Տեղադրել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "MainPanel" : {
+        "label" : "Խմբագրում սպասարկչի համօգտագործվող ֆայլային պանակը"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանել և այս բովանդակությունը հասանելի դարձնել գիտելիքների բազայում LLm-ների համար"
+      },
+      "MainPanel" : {
+        "label" : "Git-ի աղբյուրի/փաստաթղթերի պահոցի խմբագրում"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք git-ի պահոցի նկարագրությունը։"
+      },
+      "code" : {
+        "label" : "Հատուկ կոդ",
+        "help" : "Git-ի պահոցի ինքնաբար ստեղծված հատուկ կոդ։"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Վերահասցեագրված նախագծի հղում։"
+      },
+      "contentManagementSystem" : {
+        "label" : "Git համակարգ",
+        "help" : "Արդեն կարգավորված git համակարգի հղում։"
+      },
+      "branch" : {
+        "label" : "Մասնաճյուղ",
+        "help" : "Մասնաճյուղի անվանումը՝ թողարկելու համար (սովորաբար master, main կամ develop)"
+      },
+      "identityCode" : {
+        "label" : "Օգտագործված ինքնություն",
+        "help" : "Ընտրեք ինքնությունը՝ համակարգում կլոնավորմանն/թողարկման համար"
+      },
+      "repositoryUri" : {
+        "label" : "Պահոցի URL/հասցե",
+        "help" : "Git-ի հեռավոր պահոցի ամբողջական հասցեն (սովորաբար սկսվում է http:, https: կամ ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "հասարակական",
+        "help" : "Եթե նշված է, պահոցը հասանելի է առանց նույնականացման"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացումն ու բովանդակության դուրսբերումը"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացումների ստուգումների ժամանակացույց",
+        "help" : "Կարգավորեք փոխված բովանդակության ստուգումների ժամանակացույցը՝ Retrieve Augmented Generation համակարգը թարմ պահելու համար"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Կազմաձևել build համակարգերը",
+        "help" : "Build/փաթեթավորման համակարգերի ցանկ՝ մետա ինֆորմացիայի և լրացուցիչ արդյունքների տվյալների համար"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Ընդհանուր տեղեկություններ"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Օգտագործել զրույցի մոդել"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "ընտրել"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Ընտրեք զրույցի մոդելի կարգավորում"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Ընտրեք embedding մոդելի կարգավորում"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "ընտրել"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG-ի կարգավորումներ"
+      },
+      "LanguageModelTab" : {
+        "label" : "Մեծ լեզվական մոդել և գործիքների կարգավորումներ"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Օգտագործել embedding մոդել"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Անվտանգության հասանելիության կարգավորումներ"
+      },
+      "MainPanel" : {
+        "label" : "Խմբագրել Retrieve Augmented Generation զրույցի պրոֆիլը"
+      },
+      "code" : {
+        "label" : "Ունիկալ կոդ",
+        "help" : "Զրույցի պրոֆիլի ինքնաբար ստեղծված ունիկալ կոդը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք զրույցի պրոֆիլի նկարագրությունը։"
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Օգտատերը ընտրում է գիտելիքների բազաները",
+        "help" : "Օգտատերը կարող է ընտրել հասանելի գիտելիքների բազաներից և/կամ վերբեռնել իր ֆայլերը։"
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Գիտելիքների բազաներ",
+        "help" : "Փաստաթղթերի որոնման համար օգտագործվող գիտելիքների բազաներ։"
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Համաձայնության շեմ",
+        "help" : "Համաձայնության շեմ՝ սեմանտիկ որոնման համար, 0.60–0.65՝ թույլ զտում, 0.70-0.75՝ միջին զտում, 0.80–0.85՝ ճշգրիտ"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "2-րդ «հուլի» համաձայնության շեմ",
+        "help" : "Համաձայնության շեմ՝ սեմանտիկ որոնման համար, 0.60–0.65՝ թույլ զտում, 0.70-0.75՝ միջին զտում, 0.80–0.85՝ ճշգրիտ, որն օգտագործվում է բազմահուլ RAG-ի 2-րդ որոնումից"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Անջատել «Multi Hop» rag-ը",
+        "help" : "Անջատել «multi hop rag» ֆունկցիոնալը։ Multi hop որոնումը սկզբում կատարում է սեմանտիկ որոնում և հայտնաբերված փաստաթղթերը օգտագործում որպես համատեքստ՝ ինքը սեմանտիկ որոնմանը ավելի լայն համատեքստ տրամադրելու համար։"
+      },
+      "topK" : {
+        "label" : "Հաշվի առնվող փաստաթղթերի հատվածներ (TopK)",
+        "help" : "Retrieve augmented generation-ում Top N հայտնաբերված փաստաթղթերի հատվածները՝ սեմանտիկ որոնման արդյունքներով"
+      },
+      "enabledFunctions" : {
+        "label" : "Այս RAG զրույցի համար միացված գործառույթների կանչ",
+        "help" : "Ֆունկցիաներ, որոնք llm մոդելը կարող է օգտագործել զրույցի ընթացքում՝ ընտրված գիտելիքների բազայի հետ աշխատելիս"
+      },
+      "prompt" : {
+        "label" : "Հրահանգ",
+        "help" : "Խմբագրեք retrieve augmented generation սեսիաների համար հրահանգը։"
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Մուտքագրեք կամ ընտրեք հուշման կատեգորիան"
+      },
+      "MainPanel" : {
+        "label" : "Խմբագրում հուշումը"
+      },
+      "promptCategory" : {
+        "label" : "Հուշման կատեգորիա",
+        "help" : "Ընտրեք կամ մուտքագրեք հուշման կատեգորիան։"
+      },
+      "prompt" : {
+        "label" : "Հուշում",
+        "help" : "Խմբագրեք հուշումը զրույցի համար, օգտագործեք {query}՝ օգտատիրոջ հարցը նշելու համար և {context}՝ փաստաթղթերի/պատմության համատեքստը LLM-ին ուղարկելու համար։"
+      },
+      "code" : {
+        "label" : "Յուրօրինակ կոդ",
+        "help" : "Հուշման ինքնաբար ստեղծված յուրօրինակ կոդը։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք հուշման նկարագրությունը։"
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Փոխել գաղտնաբառը"
+      },
+      "YourUserName" : {
+        "label" : "Ձեր օգտանունը"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Հին գաղտնաբառ",
+        "help" : "Մուտքի համար օգտագործվող ներկայիս գաղտնաբառը"
+      },
+      "newPassword" : {
+        "label" : "Նոր գաղտնաբառ",
+        "help" : "նոր գաղտնաբառ"
+      },
+      "username" : {
+        "label" : "Էլ-հասցե",
+        "help" : "Մուտքի համար օգտագործվող էլ-հասցե"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Գաղտնաբառի փոփոխման ձև"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "ChangePwdBtn" : {
+        "label" : "փոխել գաղտնաբառը"
+      },
+      "newPassword1" : {
+        "label" : "Հաստատել նոր գաղտնաբառը",
+        "help" : "Հաստատեք նոր գաղտնաբառը"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "ForMoreInformations" : {
+        "label" : "Լրացուցիչ տեղեկությունների համար Google custom search API-ի կամ ձեր api բանալին (անվճար) ստանալու մասին այցելեք՝ https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Հատուկ կոդ",
+        "help" : "google search api կազմաձևման հատուկ կոդը։"
+      },
+      "MainPanel" : {
+        "label" : "Google custom search api հավաստագրերի խմբագրում"
+      },
+      "secretCode" : {
+        "label" : "Google search api նշան",
+        "help" : "Ընտրեք կամ մուտքագրեք google search api նշանը"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google որոնման համակարգի id",
+        "help" : "Google որոնման համակարգի id"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք google search api կազմաձևման նկարագրությունը։"
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Զրույց առանց գիտելիքների բազաների",
+        "help" : "Ընտրեք LLM-ները զրույցի սեսիայի համար",
+        "placeholder" : "Ընտրեք LLM-ները զրույցի սեսիայի համար"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Բացել զրույցի տարբերակների բաժինը"
+      },
+      "CreateChatBtn" : {
+        "label" : "Նոր զրույց"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Նոր զրույցի սեսիա"
+      },
+      "chatProfileCode" : {
+        "label" : "Զրույց գիտելիքների բազաների հետ",
+        "help" : "Ընտրեք ընկերության զրույցի պրոֆիլը՝ ընկերության (և ձեր) փաստաթղթերի ու LLM-ների հետ փոխազդելու համար",
+        "placeholder" : "Ընտրեք ընկերության զրույցի պրոֆիլը՝ ընկերության (և ձեր) փաստաթղթերի ու LLM-ների հետ փոխազդելու համար"
+      },
+      "NewChatBtn" : {
+        "label" : "Նոր զրույց"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Զրույցների նիստեր"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Փակել կողային վահանակը"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Ստեղծել նոր զրույց՝ մեծ լեզվաբառարանների օգնությամբ",
+        "label" : "Զրույց"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Ստեղծել նոր RAG զրույց ընկերության պարունակությամբ",
+        "label" : "Զրույց գիտելիքների բազայի հետ"
+      },
+      "ChatsTitle" : {
+        "label" : "Զրույցներ"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Բացել զրույցի ընտրանքների բաժինը"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Զրուցել փաստաթղթերի հետ",
+        "help" : "Թերթեք կամ որոնեք և ընտրեք փաստաթղթեր՝ աշխատելու համար"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Ընտրեք ֆայլեր՝ զրուցելու համար"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Թերթեք կամ որոնեք և ընտրեք փաստաթղթեր՝ զրուցելու համար"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Հաստատել"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Բեռնեք կամ ընտրեք ձեր փաստաթղթերը",
+        "help" : "Ընտրեք/բեռնեք փաստաթղթեր ձեր օգտատիրոջ տարածքից"
+      },
+      "fileSearchBtn" : {
+        "label" : "Փնտրել"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Փնտրել"
+      },
+      "query" : {
+        "label" : "Սեմանտիկ որոնման արտահայտություն",
+        "help" : "Մուտքագրեք ձեր որոնմանը համապատասխան արտահայտություն"
+      },
+      "choosenBrowsing" : {
+        "label" : "Ընտրեք ֆայլեր գիտելիքների բազայից",
+        "help" : "Ընտրեք ֆայլեր կորպորատիվ ընդհանուր գիտելիքների բազայից"
+      },
+      "filename" : {
+        "label" : "Փնտրվող ֆայլի անվանումը",
+        "help" : "Մուտքագրեք փնտրվող բովանդակության ֆայլի անվան մի մասը"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Կայքի անվան որոնում"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Թերթել ընկերության ֆայլերը"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Սեմանտիկ որոնում"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Ընտրեք ֆայլեր՝ զրույցի համար"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Փոփոխել ընտրվածը"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Ընտրել օգտատիրոջ ֆայլերը"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Ընտրել օգտատիրոջ վերբեռնած բովանդակությունը"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Գիտելիքների բազաներ և օգտատիրոջ ֆայլեր"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ենթանախագիծ կամ ապրանք",
+        "help" : "ավելացնել ենթանախագիծ կամ ապրանք"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+վերբեռնել ֆայլեր",
+        "help" : "ավելացնել վերբեռնված ֆայլին տեղեկության աղբյուր"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ավելացնել Microsoft SharePoint/OneDrive տվյալների աղբյուր"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ավելացնել Atlassian Confluence տվյալների աղբյուր"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ֆայլային համակարգ",
+        "help" : "ավելացնել համատեղված ֆայլային համակարգի տվյալների աղբյուր"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ավելացնել Atlassian Jira տվյալների աղբյուր"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "ավելացնել git պահոցների տվ. աղբյուր՝ օրինակ bitbucket, github կամ այլ"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ավելացնել google drive տվյալների աղբյուր"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai զրուցարան"
+      },
+      "setup" : {
+        "label" : "Կարգավորումներ"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ադմին"
+      },
+      "currentProfile" : {
+        "label" : "իմ պրոֆիլը"
+      },
+      "logout" : {
+        "label" : "ելք"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Փոխել լեզուն"
+      },
+      "MyProfile" : {
+        "label" : "ձեր պրոֆիլը"
+      },
+      "MyProfileItem" : {
+        "label" : "ձեր պրոֆիլը"
+      },
+      "chatMenuItem" : {
+        "label" : "Զրույց"
+      },
+      "setupMenuItem" : {
+        "label" : "Կարգավորումներ"
+      },
+      "adminMenuItem" : {
+        "label" : "Ադմին"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "խմբագրել պրոֆիլը"
+      },
+      "logoutMenuItem" : {
+        "label" : "դուրս գալ"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Փաստաթղթերի ցուցակի վերլուծություն"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ մշակման փաստաթղթեր",
+        "label-2" : "Մշակված փաստաթղթեր",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Մշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալներով փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "TOKENIZATION" : {
+        "description" : "Փաստաթղթերի տokenizացիա"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ մշակման փաստաթղթեր",
+        "label-2" : "Մշակված փաստաթղթեր",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Մշակված token-ներ",
+        "dataset-1-label" : "Սխալ մշակման token-ներ"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Մշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալներով փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "EMBEDDING" : {
+        "description" : "Սեմանտիկ ինդեքսավորում (embedding սեմանտիկ rag-ի համար)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ մշակման փաստաթղթեր",
+        "label-2" : "Մշակված փաստաթղթեր",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Մշակված token-ներ",
+        "dataset-1-label" : "Սխալ մշակման token-ներ"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Մշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալներով փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Կոմունիկատների/կապերի/իրադարձությունների ինդեքսավորում (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ մշակման փաստաթղթեր",
+        "label-2" : "Մշակված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Մշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալներով փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Վերամշակված նշաններ",
+        "dataset-1-label" : "Սխալ նշանների մշակումում"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Փաստաթղթերի ցանկի վերլուծություն"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "TOKENIZATION" : {
+        "description" : "Փաստաթղթերի նշանավորում"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "EMBEDDING" : {
+        "description" : "Սեմանտիկ ինդեքսավորում (embedding սեմանտիկ rag-ի համար)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Վերամշակված նշաններ",
+        "dataset-1-label" : "Սխալ նշանների մշակումում"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Կոնկրետներ/Հարաբերություններ/Իրադարձությունների ինդեքսավորում (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Չմշակված փաստաթղթեր",
+        "label-1" : "Սխալ փաստաթղթերի մշակումում",
+        "label-2" : "Վերամշակված փաստաթղթեր"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Վերամշակված նշաններ",
+        "dataset-1-label" : "Սխալ նշանների մշակումում"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Ստացված փաստաթղթեր",
+        "dataset-1-label" : "Վերամշակված փաստաթղթեր",
+        "dataset-2-label" : "Սխալ փաստաթղթեր",
+        "dataset-3-label" : "Մերժված փաստաթղթեր"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Գնել Apy key կրեդիտի հղումը"
+      },
+      "ModifyBtn" : {
+        "label" : "Փոփոխել",
+        "help" : "Դիտել/փոփոխել մոդելի կարգավորումները"
+      },
+      "ExistingModelCode" : {
+        "label" : "Կոդ"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Նկարագրություն"
+      },
+      "ExistingModelType" : {
+        "label" : "Մոդելի տեսակը"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Գոյություն ունեցող կարգավորումներ"
+      },
+      "ProviderWWW" : {
+        "label" : "Վեբ կայքի հղում"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Մատակարարի հավաստագրեր"
+      },
+      "ProviderInfos" : {
+        "label" : "Մատակարարի տեղեկատվություն"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/հավաստագրեր",
+        "help" : "Ընտրեք api key կամ հավաստագրեր այս մատակարարի համար"
+      },
+      "NewApiKey" : {
+        "label" : "Նոր api key",
+        "help" : "Մուտքագրեք նոր api key այս մատակարարի համար"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Օգտագործել առկա կամ նոր",
+        "help" : "Օգտագործել առկա կամ ստեղծել նոր հավաստագրեր այս մատակարարի համար"
+      },
+      "NewUserName" : {
+        "label" : "Օգտագործողի անվանումը",
+        "help" : "Օգտագործողի անունը՝ մատակարարի ծառայություններ մուտք գործելու համար"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Նոր embedding մոդել",
+        "help" : "Ստեղծել embedding մոդելի նոր կարգավորում"
+      },
+      "NewChatModel" : {
+        "label" : "Նոր Chat մոդել",
+        "help" : "Ստեղծել chat մոդելի նոր կարգավորում"
+      },
+      "NewModelDialog" : {
+        "label" : "Ավելացնել նոր մոդել"
+      },
+      "PiSave" : {
+        "label" : "Պահպանել"
+      },
+      "NewModelsButton" : {
+        "label" : "Նոր մոդելներ",
+        "help" : "Ստեղծել նոր մոդելների կարգավորում"
+      },
+      "NewModelsDialog" : {
+        "label" : "Ավելացնել նոր մոդելներ"
+      },
+      "baseUrl" : {
+        "label" : "Հիմնական api url",
+        "help" : "Մատակարարի api ծառայությունների հիմնական url-ը"
+      },
+      "ModelTypePanel" : {
+        "label" : "Ավելացնել նոր մոդելներ"
+      },
+      "ModelsChoices" : {
+        "label" : "Մոդելների ընտրություն"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Առաջարկվող մոդելների ընտրության"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding մոդել",
+        "help" : "Ընտրել նախապես սահմանված embedding մոդելներից մեկը"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat մոդել",
+        "help" : "Ընտրել նախապես սահմանված chat մոդելներից մեկը"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Խորացված մոդելների ընտրություն"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding մոդել",
+        "help" : "Ընտրել մատակարարի հրապարակած embedding մոդելներից մեկը"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat մոդել",
+        "help" : "Ընտրել մատակարարի հրապարակած chat մոդելներից մեկը"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Օգտագործեք այս ընտրության տարբերակը միայն եթե փորձառու եք կամ ստուգել եք մատակարարի կայքում, թե որ մոդելներն են հարմար ձեզ։ "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "նշել որպես chat մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ chat մոդել չի կարգավորվել"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Մենք առաջարկում ենք հետևյալ մոդելների ցանկը "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "նշել որպես embedding մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ embedding մոդել չի կարգավորվել"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "նշել որպես chat մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ chat մոդել չի կարգավորվել"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "նշել որպես embedding մոդելի հիմնական",
+        "help" : "Նշեք այս մոդելը որպես հիմնականը, այն կօգտագործվի բոլոր առաջադրանքների համար, եթե այլ embedding մոդել չի կարգավորվել"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Օգտագործեք այս ընտրության տարբերակը միայն եթե փորձառու եք կամ ստուգել եք մատակարարի կայքում, թե որ մոդելներն են հարմար ձեզ։ "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Ստեղծել և ակտիվացնել"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Ստեղծել և ակտիվացնել"
+      },
+      "ProviderNameField" : {
+        "label" : "Մատակարար"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Պահանջվում են հավատարմագրեր մատակարարի կողմից",
+        "help" : "Մատակարարի / սերվերի հավելվածը կարգավորված է հաստատված մուտք գործելու համար api բանալիով կամ այլ հավատարմագրերով"
+      },
+      "baseUrl1" : {
+        "label" : "Հիմնական api հասցե",
+        "help" : "Մատակարարի հիմնական հասցեն api ծառայությունների համար"
+      },
+      "enableAllFunctions" : {
+        "label" : "Միացնել բոլոր ֆունկցիաների կանչերը",
+        "help" : "Միացնել բոլոր հասանելի գործիքներն ու ֆունկցիաների կանչերը։ Եթե անհասանելի է՝ հնարավոր կլինի միացնել դրանք llms ադմինիստրատորի վահանակում"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI հեռավոր մատակարարն OK է",
+        "detail" : "Մատակարարը գործում է և հաջողությամբ կարգավորվել է"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Գործողությունը ձախողվեց",
+        "detail" : "Չհաջողվեց նույնականանալ տրամադրված հավաստագրերով"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Գործողությունը հաջողությամբ ավարտվեց"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Սխալ զրույցի հոսքի պատասխանի ժամանակ",
+        "detail" : "Սերվերի սխալ․ class org.neo4j.driver.internal.value.StringValue-ը չի կարող փոխարկվել class java.lang.String-ի (org.neo4j.driver.internal.value.StringValue-ը գտնվում է 'app' բեռնիչի անվանակարգում, իսկ java.lang.String-ը բեռնիչի module java.base-ում 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Հաջողությամբ պահպանվեց",
+        "detail" : "Թարմացման գործընթացը հաջողությամբ իրականացվեց"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Սխալ Ollama սերվերի հետ կապի ժամանակ",
+        "detail" : "Ցանցի սխալ՝ հեռակա համակարգից տվյալներ ստանալու ժամանակ\n մոդելների ցանկ Սխալ url-ով աշխատանքիս ժամանակ՝ http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Դուք կարող եք ջնջել սա",
+        "detail" : "Ներկայիս դիտվող տվյալները կարող են ապահով ջնջվել"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Դուք չեք կարող ջնջել սա",
+        "detail" : "Այս օբյեկտը կապված է հավելվածի այլ մաս(եր)ից"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Վերբեռնեք ֆայլեր՝ զրույցի համար"
+      },
+      "ChooseFile" : {
+        "help" : "Ընտրել ֆայլեր"
+      },
+      "UploadFile" : {
+        "help" : "Վերբեռնել ֆայլեր"
+      },
+      "DragDropHere" : {
+        "label" : "Քաշեք և թողեք ֆայլերը այստեղ՝ վերբեռնման համար"
+      },
+      "RemoveAll" : {
+        "help" : "Ջնջել բոլորը"
+      },
+      "UploadPending" : {
+        "label" : "Սպասում է վերբեռնման"
+      },
+      "CompletedData" : {
+        "label" : "Ավարտված"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Կարգավորեք graphrag-ը նախապես, եթե ցանկանում եք օգտագործել այս բաժնում"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-ի կարգավորումներ"
+      },
+      "button-help" : {
+        "label" : "Սեղմեք այստեղ՝ graphrag-ի ինֆորմացիայի վերծման կարգավորում անելու համար (ներկայումս կարգավորված չէ)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Ավելացնել կարգավորում"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Ստեղծել"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք Google Drive համակարգի նկարագրությունը։"
+      },
+      "MainPanel" : {
+        "label" : "Ստեղծել Google Drive/Workspace կապակցում"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "delegatedUser" : {
+        "label" : "Google օգտագործող, որին պետք է անձնավորել",
+        "help" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով",
+        "placeholder" : "Օգտագործողը, որին կտրվի անձնավորելու հնարավորություն տրամադրված հավաստագրերով"
+      },
+      "jsonContent" : {
+        "label" : "Google հավաստագրերը json բովանդակություն",
+        "help" : "Ստեղծեք Google Credentials ձեր workspace/թիմի drive-ներին մուտքի համար Google Console Cloud-ում և պատճենեք այստեղ ներբեռնված json ֆայլի բովանդակությունը (https://console.cloud.google.com/):",
+        "placeholder" : "Ստեղծեք Google Credentials ձեր workspace/թիմի drive-ներին մուտքի համար Google Console Cloud-ում և պատճենեք այստեղ ներբեռնված json ֆայլի բովանդակությունը (https://console.cloud.google.com/):"
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "PublishBtn" : {
+        "label" : "Հրապարակել!",
+        "help" : "Պահպանում է և դարձնում այս բովանդակությունը մատչելի գիտելիքների բազայում LLm-ների համար"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "MainPanel" : {
+        "label" : "Google drive-ի բովանդակության տարածում"
+      },
+      "SettingsTab" : {
+        "label" : "Կարգավորումներ"
+      },
+      "LogsTab" : {
+        "label" : "Մատյաններ"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք ներբեռնված google drive բովանդակության նկարագրությունը։"
+      },
+      "code" : {
+        "label" : "Ունիկալ կոդ",
+        "help" : "Բովանդակության ավտոմատ գեներացված ունիկալ կոդ։"
+      },
+      "tree" : {
+        "label" : "Ընտրված ֆայլ կամ պանակ",
+        "help" : "Տարածված google drive տարածքներ և էջերի բովանդակություն"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive կարգավորում",
+        "help" : "Արդեն կազմաձևած google drive համակարգի հղում։"
+      },
+      "openZips" : {
+        "label" : "Բացել zip ֆայլերը",
+        "help" : "Միացնել zip ֆայլերի բացելու և բովանդակության հանման հնարավորությունը"
+      },
+      "parentProjectCode" : {
+        "label" : "Նախագիծ",
+        "help" : "Մայր նախագծի հղում։"
+      },
+      "programmedTables" : {
+        "label" : "Բովանդակության թարմացման ստուգումների ժամանակացույց",
+        "help" : "Կարգավորեք փոփոխված բովանդակության ստուգումների ժամանակացույցը, որպեսզի ճշգրիտ թարմացվի Retrieve Augmented Generation համակարգը"
+      },
+      "catalogingCriteria" : {
+        "label" : "Ֆայլերի և ենթապանակների կազմակերպման չափանիշներ",
+        "help" : "Ավածրագրեք այստեղ, թե ինչպես են ֆայլերն ու պանակները կազմակերպվել Gebo.ai-ի հետ տարածված google drive-ի բովանդակության մեջ"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Ընդհանուր կարգավորումներ"
+      },
+      "CancelBtn" : {
+        "label" : "Չեղարկել"
+      },
+      "DeleteBtn" : {
+        "label" : "Ջնջել"
+      },
+      "SaveBtn" : {
+        "label" : "Պահպանել"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ինտեգրման խմբագրում"
+      },
+      "code" : {
+        "label" : "Ունիկալ կոդ",
+        "help" : "Google drive համակարգի ավտոմատ գեներացված ունիկալ կոդ։"
+      },
+      "description" : {
+        "label" : "Նկարագրություն",
+        "help" : "Մուտքագրեք google drive համակարգի նկարագրությունը։"
+      },
+      "driveAccessSecret" : {
+        "label" : "Օգտագործված ինքնություն",
+        "help" : "Ընտրեք կամ ստեղծեք ինքնություն՝ google drive համակարգին մուտք գործելու համար"
+      }
+    }
+  }
+}

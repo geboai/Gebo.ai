@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.architecture.persistence.impl;
 
@@ -34,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
@@ -41,6 +39,7 @@ import ai.gebo.architecture.persistence.IGCodeGeneratorEntityHandler;
 import ai.gebo.architecture.persistence.IGCodeGeneratorEntityHandlerRepositoryPattern;
 import ai.gebo.architecture.persistence.IGMongoRepositoriesImplementationRepositoryPattern;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.architecture.persistence.impl.GPersistentObjectManagerImpl.DependencyTreeItemEdge.DependencyType;
 import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
@@ -63,8 +62,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	protected IGCodeGeneratorEntityHandlerRepositoryPattern codeGenerationRepoPattern = null;
 
 	/**
-	 * Represents an item in a dependency tree, containing the type and lists of 
-	 * dependants and dependencies. 
+	 * Represents an item in a dependency tree, containing the type and lists of
+	 * dependants and dependencies.
 	 */
 	public static class DependencyTreeItem {
 		public Class<? extends GBaseObject> type;
@@ -73,24 +72,30 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	}
 
 	/**
-	 * Represents an edge in a dependency tree, connecting two items and holding 
+	 * Represents an edge in a dependency tree, connecting two items and holding
 	 * accessor methods.
 	 */
 	public static class DependencyTreeItemEdge {
+		public static enum DependencyType {
+			CODE_RELATION, OBJECT_REF_RELATION
+		}
+
 		public DependencyTreeItem from = null;
 		public DependencyTreeItem to = null;
 		public Field field = null;
 		public Method getAccessor = null, setAccessor = null;
+		public DependencyType dependencyType = null;
 	}
 
 	static Map<Class<? extends GBaseObject>, DependencyTreeItem> descriptors = new HashMap<Class<? extends GBaseObject>, GPersistentObjectManagerImpl.DependencyTreeItem>();
 
 	/**
-	 * Creates a new GPersistentObjectManagerImpl with the specified repository 
+	 * Creates a new GPersistentObjectManagerImpl with the specified repository
 	 * patterns.
 	 *
 	 * @param repoPattern               the repository pattern to use
-	 * @param codeGenerationRepoPattern the code generation repository pattern to use
+	 * @param codeGenerationRepoPattern the code generation repository pattern to
+	 *                                  use
 	 * @throws GeboPersistenceException if an error occurs during initialization
 	 */
 	public GPersistentObjectManagerImpl(@Autowired IGMongoRepositoriesImplementationRepositoryPattern repoPattern,
@@ -121,7 +126,7 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	}
 
 	/**
-	 * Inspects a class for @GObjectReference annotations in fields and creates a 
+	 * Inspects a class for @GObjectReference annotations in fields and creates a
 	 * graph of dependencies node.
 	 * 
 	 * @param managedType  the class to inspect
@@ -134,7 +139,7 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 		LOGGER.info("Begin createDependencyTreeItem(" + managedType.getName() + ",....)");
 		DependencyTreeItem item = new DependencyTreeItem();
 		item.type = managedType;
-		Field[] fields = managedType.getFields();
+		Field[] fields = managedType.getDeclaredFields();
 		// Iterate over fields to find and process GObjectReference annotations
 		for (int i = 0; i < fields.length; i++) {
 			Field field = fields[i];
@@ -143,34 +148,75 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 			if (objectReference == null)
 				continue;
 			Class<? extends GBaseObject> referredType = objectReference.referencedType();
-			LOGGER.info("Inspecting relation between " + managedType.getName() + " ==> " + referredType.getName());
-			DependencyTreeItem toItem = descriptors2.get(referredType);
-			if (toItem == null) {
-				descriptors2.put(referredType, toItem = createDependencyTreeItem(referredType, descriptors2));
-			}
-			DependencyTreeItemEdge edge = new DependencyTreeItemEdge();
-			edge.from = item;
-			edge.to = toItem;
-			edge.field = field;
-			String propertyName = field.getName();
-			char capitalized[] = propertyName.toCharArray();
-			if (capitalized.length > 0) {
-				capitalized[0] = Character.toUpperCase(capitalized[0]);
-			}
-			propertyName = new String(capitalized);
-			try {
-				edge.getAccessor = managedType.getMethod("get" + propertyName);
-				edge.setAccessor = managedType.getMethod("set" + propertyName, String.class);
 
-			} catch (NoSuchMethodException | SecurityException e) {
-				throw new GeboPersistenceException("Problems getting accessors for property =>" + propertyName
-						+ " on class=>" + managedType.getName(), e);
+			boolean considerThatClassAndExtending = objectReference.referencesExtensions();
+			if (considerThatClassAndExtending) {
+				List<IGBaseMongoDBRepository> targetAndExtendingRepos = this.repoPattern
+						.findByAssignableBy(referredType);
+				for (IGBaseMongoDBRepository igBaseMongoDBRepository : targetAndExtendingRepos) {
+					buildRelation(managedType, descriptors2, igBaseMongoDBRepository.getManagedType(), item, field);
+				}
+			} else {
+				buildRelation(managedType, descriptors2, referredType, item, field);
 			}
-			item.dependencies.add(edge);
-			toItem.dependants.add(edge);
+
 		}
 		LOGGER.info("End createDependencyTreeItem(" + managedType.getName() + ",....)");
 		return item;
+	}
+
+	private void buildRelation(Class<? extends GBaseObject> managedType,
+			Map<Class<? extends GBaseObject>, DependencyTreeItem> descriptors2, Class referredType,
+			DependencyTreeItem item, Field field) throws GeboPersistenceException {
+		LOGGER.info("Inspecting relation between " + managedType.getName() + " ==> " + referredType.getName());
+		DependencyTreeItem toItem = descriptors2.get(referredType);
+		if (toItem == null) {
+			descriptors2.put(referredType, toItem = createDependencyTreeItem(referredType, descriptors2));
+		}
+		DependencyTreeItemEdge edge = new DependencyTreeItemEdge();
+		edge.from = item;
+		edge.to = toItem;
+		edge.field = field;
+		if (String.class.isAssignableFrom(field.getType())) {
+			edge.dependencyType = DependencyType.CODE_RELATION;
+		} else if (GObjectRef.class.isAssignableFrom(field.getType())) {
+			edge.dependencyType = DependencyType.OBJECT_REF_RELATION;
+		} else
+			throw new GeboPersistenceException(
+					"The Gebo.ai framework does not support field annotated with @GObjectReference of type "
+							+ field.getType().getName());
+		String propertyName = field.getName();
+		char capitalized[] = propertyName.toCharArray();
+		if (capitalized.length > 0) {
+			capitalized[0] = Character.toUpperCase(capitalized[0]);
+		}
+		propertyName = new String(capitalized);
+		try {
+			switch (edge.dependencyType) {
+			case CODE_RELATION: {
+				this.assignProperties(edge, propertyName, String.class, managedType);
+			}
+				break;
+			case OBJECT_REF_RELATION: {
+				this.assignProperties(edge, propertyName, GObjectRef.class, managedType);
+			}
+				break;
+			}
+
+		} catch (NoSuchMethodException | SecurityException e) {
+			throw new GeboPersistenceException(
+					"Problems getting accessors for property =>" + propertyName + " on class=>" + managedType.getName(),
+					e);
+		}
+		item.dependencies.add(edge);
+		toItem.dependants.add(edge);
+	}
+
+	private void assignProperties(DependencyTreeItemEdge edge, String propertyName, Class type, Class managedType)
+			throws NoSuchMethodException, SecurityException {
+		edge.getAccessor = managedType.getMethod("get" + propertyName);
+		edge.setAccessor = managedType.getMethod("set" + propertyName, type);
+
 	}
 
 	/**
@@ -180,8 +226,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param <T>     the type of object extending GBaseObject
 	 * @param element the object to ensure a unique code for
 	 * @return the updated element with a unique code set
-	 * @throws GeboPersistenceException if any error occurs during code generation or
-	 *                                  lookup
+	 * @throws GeboPersistenceException if any error occurs during code generation
+	 *                                  or lookup
 	 */
 	@Override
 	public <T extends GBaseObject> T ensureUniqueCode(T element) throws GeboPersistenceException {
@@ -207,8 +253,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param element the object to generate a code for
 	 * @param handler the repository handler for the object's type
 	 * @return the generated unique code
-	 * @throws GeboPersistenceException if the object's description is null or if any
-	 *                                  repository access issues occur
+	 * @throws GeboPersistenceException if the object's description is null or if
+	 *                                  any repository access issues occur
 	 */
 	private <T extends GBaseObject> String generateUniqueCode(T element, IGBaseMongoDBRepository<T> handler)
 			throws GeboPersistenceException {
@@ -321,11 +367,11 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 *                                  occurs
 	 */
 	@Override
-	public <T extends GBaseObject> void delete(T element) throws GeboPersistenceException {
+	public <T extends GBaseObject> void delete(T element, boolean checkDeletable) throws GeboPersistenceException {
 		IGBaseMongoDBRepository<T> handler = repoPattern.findByManagedType(element.getClass());
 		if (handler == null)
 			throw new GeboPersistenceException("No handler known for type=>" + element.getClass().getName());
-		if (isDeletable(element)) {
+		if (!checkDeletable || isDeletable(element)) {
 			handler.delete(element);
 		} else
 			throw new GeboPersistenceException("Cannot delete object of type=>" + element.getClass().getName()
@@ -363,11 +409,7 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 */
 	@Override
 	public Stream<? extends GBaseObject> streamRelated(GBaseObject object) throws GeboPersistenceException {
-		String code = object.getCode();
-		if (code == null)
-			throw new GeboPersistenceException(
-					"There is no meaning on accessing object related to a null code on type=>"
-							+ object.getClass().getName());
+
 		DependencyTreeItem descriptor = descriptors.get(object.getClass());
 		if (descriptor == null)
 			throw new GeboPersistenceException("No described entity=>" + object.getClass().getName());
@@ -375,10 +417,27 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 		// Process dependency tree to find related objects
 		for (DependencyTreeItemEdge dependantEdge : descriptor.dependants) {
 			Class<? extends GBaseObject> dependantTypeClass = dependantEdge.from.type;
+			Object objectReference = null;
+			switch (dependantEdge.dependencyType) {
+			case CODE_RELATION: {
+				objectReference = object.getCode();
+			}
+				break;
+			case OBJECT_REF_RELATION: {
+				GObjectRef ref = GObjectRef.of(object);
+				ref.setDescription(null);
+				objectReference = ref;
+			}
+				break;
+			}
+			if (objectReference == null)
+				throw new GeboPersistenceException(
+						"There is no meaning on accessing object related to a null code or GObjectRef  type=>"
+								+ object.getClass().getName());
 			try {
 
 				GBaseObject example = dependantTypeClass.newInstance();
-				dependantEdge.setAccessor.invoke(example, code);
+				dependantEdge.setAccessor.invoke(example, objectReference);
 				IGBaseMongoDBRepository mongoRepo = repoPattern.findByManagedType(dependantTypeClass);
 				List<? extends GBaseObject> list = mongoRepo.findAll(Example.of(example));
 				stream = Stream.concat(stream, list.stream());
@@ -393,14 +452,14 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	}
 
 	/**
-	 * Inserts a new element, generating a unique code if necessary and setting 
+	 * Inserts a new element, generating a unique code if necessary and setting
 	 * creation metadata.
 	 *
 	 * @param <T>     the type of object extending GBaseObject
 	 * @param element the element to insert
 	 * @return the inserted element
-	 * @throws GeboPersistenceException if code generation fails or any insert issues
-	 *                                  occur
+	 * @throws GeboPersistenceException if code generation fails or any insert
+	 *                                  issues occur
 	 */
 	@Override
 	public <T extends GBaseObject> T insert(T element) throws GeboPersistenceException {
@@ -425,7 +484,7 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param <T>     the type of object extending GBaseObject
 	 * @param element the example object to query by
 	 * @return a list of found objects matching the query
-	 * @throws GeboPersistenceException if a handler for the type is not found or if 
+	 * @throws GeboPersistenceException if a handler for the type is not found or if
 	 *                                  any query issues occur
 	 */
 	@Override
@@ -459,8 +518,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param type the class of the object type
 	 * @param id   the ID of the object to find
 	 * @return the found object or null if not found
-	 * @throws GeboPersistenceException if a handler for the type is not found or
-	 *                                  if any retrieval issues occur
+	 * @throws GeboPersistenceException if a handler for the type is not found or if
+	 *                                  any retrieval issues occur
 	 */
 	@Override
 	public <T extends GBaseObject> T findById(Class<T> type, String id) throws GeboPersistenceException {
@@ -478,8 +537,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param reference the reference object containing the class name and code
 	 * @param type      the expected class type of the result
 	 * @return the object found by the reference
-	 * @throws GeboPersistenceException if the reference is not valid or the object is
-	 *                                  not found
+	 * @throws GeboPersistenceException if the reference is not valid or the object
+	 *                                  is not found
 	 */
 	@Override
 	public <T extends GBaseObject> T findByReference(GObjectRef<T> reference, Class<T> type)
@@ -531,8 +590,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param type the class of the type to find
 	 * @param page the pagination information
 	 * @return a page of found objects
-	 * @throws GeboPersistenceException if a handler for the type is not found or
-	 *                                  if any query issues occur
+	 * @throws GeboPersistenceException if a handler for the type is not found or if
+	 *                                  any query issues occur
 	 */
 	@Override
 	public <T extends GBaseObject> Page<T> findAll(Class<T> type, Pageable page) throws GeboPersistenceException {
@@ -549,8 +608,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param qbe  the example object to query by
 	 * @param page the pagination information
 	 * @return a page of objects matching the example
-	 * @throws GeboPersistenceException if a handler for the type is not found or
-	 *                                  if any query issues occur
+	 * @throws GeboPersistenceException if a handler for the type is not found or if
+	 *                                  any query issues occur
 	 */
 	@Override
 	public <T extends GBaseObject> Page<T> findAllByQbe(T qbe, Pageable page) throws GeboPersistenceException {
@@ -567,8 +626,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param type the class of the type to find
 	 * @param ids  the IDs of the objects to find
 	 * @return a list of found objects
-	 * @throws GeboPersistenceException if a handler for the type is not found or
-	 *                                  if any retrieval issues occur
+	 * @throws GeboPersistenceException if a handler for the type is not found or if
+	 *                                  any retrieval issues occur
 	 */
 	@Override
 	public <T extends GBaseObject> List<T> findAllByIds(Class<T> type, Iterable<String> ids)
@@ -582,8 +641,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	/**
 	 * Finds all objects matching a query set by a filter setting function.
 	 *
-	 * @param <T>         the type of object extending GBaseObject
-	 * @param type        the class of the type to find
+	 * @param <T>          the type of object extending GBaseObject
+	 * @param type         the class of the type to find
 	 * @param filterSetter a consumer to set filters on the query
 	 * @return a list of objects matching the filter
 	 * @throws GeboPersistenceException if any errors occur during execution
@@ -634,7 +693,7 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 * @param <T>  the type of object extending GBaseObject
 	 * @param type the class of the type to count
 	 * @return the total count of objects of the given type
-	 * @throws GeboPersistenceException if a handler for the type is not found or if 
+	 * @throws GeboPersistenceException if a handler for the type is not found or if
 	 *                                  any counting issues occur
 	 */
 	@Override
@@ -717,11 +776,58 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 */
 	@Override
 	public <SpecificType extends BaseType, BaseType extends GBaseObject> void deleteByParentTypeRepository(
-			Class<BaseType> type, @NotNull @Valid SpecificType data) throws GeboPersistenceException {
+			Class<BaseType> type, @NotNull @Valid SpecificType data)
+			throws GeboPersistenceException {
 		IGBaseMongoDBRepository handler = repoPattern.findByManagedType(type);
 		if (handler == null)
 			throw new GeboPersistenceException("Cannot find a repository for entity:" + type.getName());
 		handler.delete(data);
+
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> T transactionalInsert(T element) throws GeboPersistenceException {
+
+		return this.insert(element);
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> T transactionalUpdate(T element) throws GeboPersistenceException {
+
+		return this.update(element);
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> void transactionalDelete(T element, boolean checkDeletable)
+			throws GeboPersistenceException {
+		this.delete(element, checkDeletable);
+
+	}
+
+	@Override
+	@Transactional
+	public <T extends GBaseObject> T transactionalFindById(Class<T> type, String id) throws GeboPersistenceException {
+
+		return this.findById(type, id);
+	}
+
+	@Override
+	public boolean isDeletable(GObjectRef objectReference) throws GeboPersistenceException {
+		if (objectReference.getClassName() == null)
+			throw new GeboPersistenceException("className is null");
+		Class<? extends GBaseObject> type;
+		try {
+			type = (Class<? extends GBaseObject>) Class.forName(objectReference.getClassName());
+			GBaseObject referenced = this.findByReference(objectReference, type);
+			if (referenced == null)
+				throw new GeboPersistenceException("The referred object does not exist!!");
+			return isDeletable(referenced);
+		} catch (ClassNotFoundException e) {
+			throw new GeboPersistenceException("Wong indicated class", e);
+		}
 
 	}
 

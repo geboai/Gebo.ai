@@ -25,10 +25,9 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The result of evaluating a Jira expression.This bean will be replacing &#x60;JiraExpressionResultBean&#x60; bean as part of new evaluate endpoint

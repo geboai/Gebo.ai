@@ -37,8 +37,11 @@ import { GeboFastKnowledgeBaseSetupControllerService } from './api/geboFastKnowl
 import { GeboFastLlmsSetupControllerService } from './api/geboFastLlmsSetupController.service';
 import { GeboFastVectorStoreSetupControllerService } from './api/geboFastVectorStoreSetupController.service';
 import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
+import { GeboLlmGeneratedResourceControllerService } from './api/geboLlmGeneratedResourceController.service';
 import { GeboModulesConfigControllerService } from './api/geboModulesConfigController.service';
+import { GeboNeo4jModuleSetupControllerService } from './api/geboNeo4jModuleSetupController.service';
 import { GeboRagChatControllerService } from './api/geboRagChatController.service';
+import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
 import { GeboVectorStoreConfigurationControllerService } from './api/geboVectorStoreConfigurationController.service';
@@ -52,6 +55,7 @@ import { GoogleSearchControllerService } from './api/googleSearchController.serv
 import { GoogleVertexChatModelsConfigurationControllerService } from './api/googleVertexChatModelsConfigurationController.service';
 import { GoogleVertexEmbeddingModelsConfigurationControllerService } from './api/googleVertexEmbeddingModelsConfigurationController.service';
 import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWorkspaceAccessHandshakeController.service';
+import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
 import { HuggingfaceChatModelsConfigurationControllerService } from './api/huggingfaceChatModelsConfigurationController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
@@ -79,6 +83,7 @@ import { SecretsControllerService } from './api/secretsController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
+import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
@@ -124,8 +129,11 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GeboFastLlmsSetupControllerService,
     GeboFastVectorStoreSetupControllerService,
     GeboFastWorkFolderSetupControllerService,
+    GeboLlmGeneratedResourceControllerService,
     GeboModulesConfigControllerService,
+    GeboNeo4jModuleSetupControllerService,
     GeboRagChatControllerService,
+    GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
     GeboVectorStoreConfigurationControllerService,
@@ -139,6 +147,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     GoogleVertexChatModelsConfigurationControllerService,
     GoogleVertexEmbeddingModelsConfigurationControllerService,
     GoogleWorkspaceAccessHandshakeControllerService,
+    GraphRagConfigurationControllerService,
     HuggingfaceChatModelsConfigurationControllerService,
     IngestionFileTypesLibraryControllerService,
     IntegrationInputControllerService,
@@ -166,6 +175,7 @@ import { UserspaceUploadControllerService } from './api/userspaceUploadControlle
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
     TokenRenewControllerService,
+    UiTextResourcesControllerService,
     UserControllerService,
     UserKnowledgeBaseBrowsingControllerService,
     UsersAdminControllerService,

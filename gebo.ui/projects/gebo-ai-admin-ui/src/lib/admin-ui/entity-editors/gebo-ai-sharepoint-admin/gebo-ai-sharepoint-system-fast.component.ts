@@ -21,6 +21,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { SharepointUrlService } from "./confluence-url.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 /**
  * Component for rapid creation of Sharepoint system connections in the Gebo.ai platform.
@@ -32,8 +33,10 @@ import { SharepointUrlService } from "./confluence-url.service";
 @Component({
     selector: "gebo-ai-sharepoint-system-fast-component",
     templateUrl: "gebo-ai-sharepoint-system-fast.component.html",
-    providers: [SharepointUrlService],
-    standalone: false
+    providers: [SharepointUrlService,
+        { provide: GEBO_AI_MODULE, useValue: "GeboAISharepointModule", multi: false },  
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent") }
+    ], standalone: false
 })
 export class GeboAISharepointSystemFastComponent implements OnInit {
     /** Flag to indicate if an API operation is in progress */
@@ -82,7 +85,12 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
         this.formGroup.controls["description"].setValue("Sharepoint/OneDrive system");
         this.formGroup.controls["sharepointVersion"].setValue(this.currentSharepointVersion);
     }
-
+    get oauth2Credentials():FormGroup {
+        return this.formGroup.controls["oauth2Credentials"] as FormGroup;
+    }
+    get customAttributes():FormGroup {
+        return this.oauth2Credentials.controls["customAttributes"] as FormGroup;
+    }
     /**
      * Conditionally enables or disables a form control based on the provided parameter
      * 
@@ -113,7 +121,7 @@ export class GeboAISharepointSystemFastComponent implements OnInit {
      */
     doInsert(): void {
         const data: FastSharepointSystemInsertRequest = this.formGroup.value;
-        data.oauth2Credentials.providerName=AuthProviderDto.ProviderEnum.MicrosoftMultitenant;
+        data.oauth2Credentials.providerName = AuthProviderDto.ProviderEnum.MicrosoftMultitenant;
         this.loading = true;
         this.sharepointSystemsService.fastSharepointConfig(data).subscribe({
             next: (result) => {

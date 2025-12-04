@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * @file GeboAiChatModule
@@ -31,9 +31,12 @@ import { ListboxModule } from 'primeng/listbox';
 import { ScrollerModule } from 'primeng/scroller';
 import { TreeModule } from 'primeng/tree';
 import { PaginatorModule } from 'primeng/paginator';
-import { EditableListboxModule, GeboAIReusableChatModel } from "@Gebo.ai/reusable-ui";
+import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 import { SidebarModule } from 'primeng/sidebar';
 import { PanelModule } from "primeng/panel";
+import { ScrollPanelModule } from "primeng/scrollpanel";
+import { PopoverModule } from 'primeng/popover';
+import { RouterLinkWithHref } from "@angular/router";
 
 /**
  * The GeboAiChatModule provides a self-contained feature module for chat functionality.
@@ -49,8 +52,9 @@ import { PanelModule } from "primeng/panel";
  * - Custom Gebo.ai components (EditableListboxModule, GeboAIReusableChatModel)
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule,PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule,GeboAIReusableChatModel,EditableListboxModule,SidebarModule,PanelModule],
+    imports: [CommonModule, ReactiveFormsModule, PaginatorModule, FormsModule, ButtonModule, ProgressSpinnerModule, BlockUIModule, ListboxModule, ScrollerModule, TreeModule, GeboAIReusableChatModule, EditableListboxModule, SidebarModule, PanelModule, GeboAIFieldTranslationContainerModule, ScrollPanelModule, PopoverModule, RouterLinkWithHref],
     declarations: [GeboAiChatSectionComponent],
-    exports: [GeboAiChatSectionComponent]
+    exports: [GeboAiChatSectionComponent],
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }]
 })
 export class GeboAiChatModule { }

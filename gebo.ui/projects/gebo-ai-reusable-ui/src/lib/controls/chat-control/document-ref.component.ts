@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /*
  * AI generated comments
@@ -20,53 +20,55 @@
  */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-chat-docref",
     templateUrl: "document-ref.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("DocumentRefComponent"), multi: false }]
 })
-export class DocumentRefComponent implements OnInit,OnChanges{
+export class DocumentRefComponent implements OnInit, OnChanges {
     /**
      * The document reference to be displayed by this component
      */
-    @Input() ref?:GResponseDocumentRef;
+    @Input() ref?: GResponseDocumentRef;
 
     /**
      * Indicates if this document has been selected in the current context
      */
-    @Input() choosed:boolean=false;
+    @Input() choosed: boolean = false;
 
     /**
      * Controls visibility of the document viewing window
      */
-    public openDocumentWindow:boolean=false;
+    public openDocumentWindow: boolean = false;
 
     /**
      * Stores the document code to be displayed when the document is opened
      */
-    public openDocumentCode:string="";
+    public openDocumentCode: string = "";
 
     /**
      * CSS class for the document icon, based on document type
      */
-    public contentCssClass:string="pi pi-file-o";
+    public contentCssClass: string = "pi pi-file-o";
 
     /**
      * Display name for the document, derived from name, shortCode, or documentCode
      */
-    public name?:string="";
+    public name?: string = "";
 
     /**
      * Event emitted when this document is selected by the user
      */
-    @Output() addToChoosed:EventEmitter<GResponseDocumentRef>=new EventEmitter();
+    @Output() addToChoosed: EventEmitter<GResponseDocumentRef> = new EventEmitter();
 
     /**
      * Component initialization lifecycle hook
      */
     ngOnInit(): void {
-        
+
     }
 
     /**
@@ -75,8 +77,8 @@ export class DocumentRefComponent implements OnInit,OnChanges{
      */
     ngOnChanges(changes: SimpleChanges): void {
         if (this.ref && changes["ref"]) {
-            this.contentCssClass=this.getIcon(this.ref);
-            this.name=this.ref.name?this.ref.name:this.ref.shortCode?this.ref.shortCode:this.ref.documentCode;
+            this.contentCssClass = this.getIcon(this.ref);
+            this.name = this.ref.name ? this.ref.name : this.ref.shortCode ? this.ref.shortCode : this.ref.documentCode;
         }
     }
 
@@ -84,20 +86,20 @@ export class DocumentRefComponent implements OnInit,OnChanges{
      * Opens the document viewer if the document has a valid document code
      * @param g The document reference to display
      */
-    showDocument(g:GResponseDocumentRef) {
+    showDocument(g: GResponseDocumentRef) {
         if (g.documentCode) {
-            this.openDocumentCode=g.documentCode;
-            this.openDocumentWindow=true;
+            this.openDocumentCode = g.documentCode;
+            this.openDocumentWindow = true;
         }
     }
 
     /**
      * Closes the document viewer and clears the document code
      */
-    closeDocument():void {
-        this.openDocumentWindow=false;
-        this.openDocumentCode="";
-        
+    closeDocument(): void {
+        this.openDocumentWindow = false;
+        this.openDocumentCode = "";
+
     }
 
     /**
@@ -105,12 +107,12 @@ export class DocumentRefComponent implements OnInit,OnChanges{
      * @param child The document reference
      * @returns A CSS class string for the appropriate icon
      */
-    getIcon(child:GResponseDocumentRef):string {
-    
-        if (child.geboTreatAs==='sourceCode') return "pi pi-hashtag";
-        if (child.geboTreatAs==='word') return "pi pi-file-word";
-        if (child.geboTreatAs==='excel') return "pi pi-file-excel"
-        if (child.geboTreatAs==='pdf') return "pi pi-file-pdf"
-        return "pi pi-file";        
+    getIcon(child: GResponseDocumentRef): string {
+
+        if (child.geboTreatAs === 'sourceCode') return "pi pi-hashtag";
+        if (child.geboTreatAs === 'word') return "pi pi-file-word";
+        if (child.geboTreatAs === 'excel') return "pi pi-file-excel"
+        if (child.geboTreatAs === 'pdf') return "pi pi-file-pdf"
+        return "pi pi-file";
     }
 }

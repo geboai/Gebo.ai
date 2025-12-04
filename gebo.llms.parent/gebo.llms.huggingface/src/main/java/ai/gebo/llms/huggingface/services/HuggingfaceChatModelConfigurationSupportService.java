@@ -6,16 +6,12 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.huggingface.services;
 
 import java.util.List;
 
 import org.springframework.ai.huggingface.HuggingfaceChatModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.huggingface.model.GHuggingfaceChatModelChoice;
 import ai.gebo.llms.huggingface.model.GHuggingfaceChatModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -34,6 +31,7 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import jakarta.el.MethodNotFoundException;
+import lombok.AllArgsConstructor;
 
 /**
  * AI generated comments
@@ -43,6 +41,7 @@ import jakarta.el.MethodNotFoundException;
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "huggingfaceEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class HuggingfaceChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GHuggingfaceChatModelChoice, GHuggingfaceChatModelConfig> {
 	/**
@@ -57,8 +56,7 @@ public class HuggingfaceChatModelConfigurationSupportService
 	/**
 	 * Service for looking up available HuggingFace models.
 	 */
-	@Autowired
-	HuggingfaceModelsLookupService modelsService;
+	final HuggingfaceModelsLookupService modelsService;
 	/**
 	 * List of available chat model choices.
 	 */
@@ -67,8 +65,8 @@ public class HuggingfaceChatModelConfigurationSupportService
 	/**
 	 * Service for accessing secrets, used to retrieve API keys.
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
+	final IGeboSecretsAccessService secretService;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
 	 * Inner class implementing a HuggingFace configurable chat model.
@@ -77,12 +75,14 @@ public class HuggingfaceChatModelConfigurationSupportService
 			extends GAbstractConfigurableChatModel<GHuggingfaceChatModelConfig, HuggingfaceChatModel> {
 
 		/**
-		 * Configures a HuggingFace chat model instance based on the provided configuration.
+		 * Configures a HuggingFace chat model instance based on the provided
+		 * configuration.
 		 * 
 		 * @param config The configuration for the HuggingFace model
-		 * @param type The type of chat model
+		 * @param type   The type of chat model
 		 * @return A configured HuggingFace chat model
-		 * @throws LLMConfigException If configuration fails or required elements are missing
+		 * @throws LLMConfigException If configuration fails or required elements are
+		 *                            missing
 		 */
 		@Override
 		protected HuggingfaceChatModel configureModel(GHuggingfaceChatModelConfig config, GChatModelType type)
@@ -111,13 +111,6 @@ public class HuggingfaceChatModelConfigurationSupportService
 	};
 
 	/**
-	 * Default constructor for the service.
-	 */
-	public HuggingfaceChatModelConfigurationSupportService() {
-
-	}
-
-	/**
 	 * Returns the type of chat model this service supports.
 	 * 
 	 * @return The HuggingFace chat model type
@@ -144,10 +137,12 @@ public class HuggingfaceChatModelConfigurationSupportService
 	}
 
 	/**
-	 * Retrieves the available chat model choices based on the provided configuration.
+	 * Retrieves the available chat model choices based on the provided
+	 * configuration.
 	 * 
 	 * @param config The configuration used to look up available models
-	 * @return Status containing the list of available HuggingFace chat model choices
+	 * @return Status containing the list of available HuggingFace chat model
+	 *         choices
 	 */
 	@Override
 	public OperationStatus<List<GHuggingfaceChatModelChoice>> getModelChoices(GHuggingfaceChatModelConfig config) {
@@ -156,16 +151,30 @@ public class HuggingfaceChatModelConfigurationSupportService
 	}
 
 	/**
-	 * Creates a base configuration for a specified model preset.
-	 * Not implemented for HuggingFace models.
+	 * Creates a base configuration for a specified model preset. Not implemented
+	 * for HuggingFace models.
 	 * 
 	 * @param presetModel The preset model identifier
 	 * @return A base configuration (not implemented)
-	 * @throws MethodNotFoundException Always thrown as this method is not implemented
+	 * @throws MethodNotFoundException Always thrown as this method is not
+	 *                                 implemented
 	 */
 	@Override
 	public GHuggingfaceChatModelConfig createBaseConfiguration(String presetModel) {
-		throw new MethodNotFoundException("createBaseConfiguration() is not implemented for ollama chat provider");
+		GHuggingfaceChatModelConfig clean = new GHuggingfaceChatModelConfig();
+		clean.setModelTypeCode(getType().getCode());
+		clean.setChoosedModel(new GHuggingfaceChatModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription("chat model " + presetModel);
+		clean.setDescription("Huggingface AI chat model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
+	}
+
+	@Override
+	public OperationStatus<GHuggingfaceChatModelConfig> insertAndConfigure(GHuggingfaceChatModelConfig config) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

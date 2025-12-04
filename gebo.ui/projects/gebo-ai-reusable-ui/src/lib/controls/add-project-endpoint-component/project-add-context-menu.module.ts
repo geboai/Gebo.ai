@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
@@ -21,6 +21,7 @@ import { GeboAIChooseDataSourceTypeComponent } from "./choose-data-source-type.c
 import { PanelModule } from "primeng/panel";
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
+import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 /**
  * @fileoverview This module provides components for project data source management in a Gebo.ai application.
  * AI generated comments
@@ -42,8 +43,9 @@ import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architectur
  * - GeboAIChooseDataSourceTypeComponent: For selecting between different data source types
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, ButtonModule, ContextMenuModule,GeboUIArchitectureModule,PanelModule,RadioButtonModule],
-    declarations: [ProjectAddContextMenuComponent,GeboAIChooseDataSourceTypeComponent],
-    exports: [ProjectAddContextMenuComponent,GeboAIChooseDataSourceTypeComponent]
+    imports: [CommonModule, ReactiveFormsModule, ButtonModule, ContextMenuModule, GeboUIArchitectureModule, PanelModule, RadioButtonModule],
+    declarations: [ProjectAddContextMenuComponent, GeboAIChooseDataSourceTypeComponent],
+    exports: [ProjectAddContextMenuComponent, GeboAIChooseDataSourceTypeComponent],
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false }]
 })
 export class ProjectAddContextMenuModule { }

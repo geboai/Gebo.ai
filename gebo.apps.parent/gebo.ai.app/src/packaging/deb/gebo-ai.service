@@ -1,0 +1,21 @@
+[Unit]
+Description=Gebo.ai Service
+After=network.target
+
+[Service]
+Type=simple
+User=gebo-ai
+Group=gebo-ai
+WorkingDirectory=/home/gebo-ai
+
+# Service environment
+Environment=GEBO_HOME=/home/gebo-ai/home
+Environment=GEBO_WORK_DIRECTORY=/var/gebo-ai/data
+
+# ATTENZIONE: verifica il path reale del launcher dopo il primo build/install
+ExecStart=/home/gebo-ai/gebo-ai/bin/gebo-ai
+
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

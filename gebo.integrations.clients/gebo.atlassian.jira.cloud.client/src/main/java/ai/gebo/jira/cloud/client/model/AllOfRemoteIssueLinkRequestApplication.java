@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Application;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Details of the remote application the linked item is in. For example, trello.

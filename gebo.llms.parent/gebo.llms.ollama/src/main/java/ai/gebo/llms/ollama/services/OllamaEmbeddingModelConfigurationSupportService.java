@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 /**
  * AI generated comments
@@ -25,14 +22,13 @@ import java.util.Set;
 import org.springframework.ai.document.MetadataMode;
 import org.springframework.ai.ollama.OllamaEmbeddingModel;
 import org.springframework.ai.ollama.api.OllamaApi;
-import org.springframework.ai.ollama.api.OllamaOptions;
-import org.springframework.ai.ollama.api.OllamaOptions.Builder;
+import org.springframework.ai.ollama.api.OllamaEmbeddingOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GEmbeddingModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
@@ -41,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.abstraction.layer.vectorstores.IGVectorStoreFactoryProvider;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelChoice;
@@ -49,9 +46,11 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
+import lombok.AllArgsConstructor;
 
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "ollamaEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class OllamaEmbeddingModelConfigurationSupportService implements
 		IGEmbeddingModelConfigurationSupportService<GOllamaEmbeddingModelChoice, GOllamaEmbeddingModelConfig> {
 	/**
@@ -63,25 +62,21 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		type.setDescription("embedding service hosted local Ollama server");
 		type.setModelConfigurationClass(GOllamaEmbeddingModelConfig.class.getName());
 	}
-	
-	@Autowired
-	OllamaModelsLookupService modelsService;
-	
-	@Autowired
-	IGVectorStoreFactoryProvider storeFactoryProvider;
-	
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
-	@Autowired
-	IGModelChoiceMetaInfoEnricherService choiceEnricher;
-	
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory; 
-	
+
+	final OllamaModelsLookupService modelsService;
+
+	final IGVectorStoreFactoryProvider storeFactoryProvider;
+
+	final IGeboSecretsAccessService secretService;
+
+	final IGModelChoiceMetaInfoEnricherService choiceEnricher;
+
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
+
 	/**
-	 * Inner class that implements configurable embedding model for Ollama.
-	 * Handles the configuration and initialization of Ollama embedding models.
+	 * Inner class that implements configurable embedding model for Ollama. Handles
+	 * the configuration and initialization of Ollama embedding models.
 	 */
 	class OllamaConfigurableEmbeddingModel
 			extends GAbstractConfigurableEmbeddingModel<GOllamaEmbeddingModelConfig, OllamaEmbeddingModel> {
@@ -97,7 +92,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		 * Configures the Ollama embedding model based on the provided configuration.
 		 *
 		 * @param config The Ollama-specific embedding model configuration
-		 * @param type The embedding model type information
+		 * @param type   The embedding model type information
 		 * @return Configured OllamaEmbeddingModel instance
 		 * @throws LLMConfigException If configuration fails
 		 */
@@ -106,7 +101,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 				throws LLMConfigException {
 
 			org.springframework.ai.ollama.api.OllamaApi.Builder apiBuilder = OllamaApi.builder();
-			apiBuilder.baseUrl(config.getBaseUrl());	
+			apiBuilder.baseUrl(config.getBaseUrl());
 			IGLlmsServiceClientsProvider clientsProvider = serviceClientsProviderFactory.get(getCode());
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
@@ -115,13 +110,13 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
 			OllamaApi ollamaapi = apiBuilder.build();
-			Builder builder = OllamaOptions.builder();
+			org.springframework.ai.ollama.api.OllamaEmbeddingOptions.Builder builder = OllamaEmbeddingOptions.builder();
 
 			if (config.getChoosedModel() != null) {
 				builder = builder.model(config.getChoosedModel().getCode());
 			}
 
-			OllamaOptions options = builder.build();
+			OllamaEmbeddingOptions options = builder.build();
 			MetadataMode meta = MetadataMode.EMBED;
 			ObservationRegistry observationRegistry = ObservationRegistry.create();
 			ModelManagementOptions modelManagementOptions = ModelManagementOptions.defaults();
@@ -131,10 +126,10 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		}
 
 		/**
-		 * Returns the tokenization threshold for the configured model.
-		 * Uses the optimal tokenization parameter from the model if available,
-		 * otherwise tries to find a parameter ending with "embedding_length".
-		 * Falls back to a default value of 512 if no specific value is found.
+		 * Returns the tokenization threshold for the configured model. Uses the optimal
+		 * tokenization parameter from the model if available, otherwise tries to find a
+		 * parameter ending with "embedding_length". Falls back to a default value of
+		 * 512 if no specific value is found.
 		 *
 		 * @return The tokenization threshold value
 		 */
@@ -155,9 +150,10 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		}
 
 		/**
-		 * Helper method to find a parameter ending with the specified name in the model details.
+		 * Helper method to find a parameter ending with the specified name in the model
+		 * details.
 		 *
-		 * @param choosedModel The model choice containing details to search
+		 * @param choosedModel  The model choice containing details to search
 		 * @param endingKeyName The suffix to match in parameter names
 		 * @return The parameter value as Integer, or null if not found
 		 */
@@ -169,7 +165,7 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 		/**
 		 * Recursively searches a map for a key ending with the specified name.
 		 *
-		 * @param details The map to search
+		 * @param details       The map to search
 		 * @param endingKeyName The suffix to match in key names
 		 * @return The parameter value as Integer, or null if not found
 		 */
@@ -192,12 +188,6 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 	};
 
 	/**
-	 * Default constructor for the service.
-	 */
-	public OllamaEmbeddingModelConfigurationSupportService() {
-	}
-
-	/**
 	 * Returns the embedding model type for Ollama.
 	 *
 	 * @return The Ollama embedding model type
@@ -208,7 +198,8 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 	}
 
 	/**
-	 * Creates and initializes a configurable embedding model with the provided configuration.
+	 * Creates and initializes a configurable embedding model with the provided
+	 * configuration.
 	 *
 	 * @param config The Ollama embedding model configuration
 	 * @return Configured embedding model instance
@@ -223,7 +214,8 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 	}
 
 	/**
-	 * Retrieves available Ollama embedding model choices and enriches them with metadata.
+	 * Retrieves available Ollama embedding model choices and enriches them with
+	 * metadata.
 	 *
 	 * @param config The configuration to use for retrieving model choices
 	 * @return Operation status containing the list of available model choices
@@ -242,10 +234,25 @@ public class OllamaEmbeddingModelConfigurationSupportService implements
 	 *
 	 * @param presetModel The preset model name
 	 * @return Never returns as this method throws an exception
-	 * @throws MethodNotFoundException Always thrown as this method is not implemented
+	 * @throws MethodNotFoundException Always thrown as this method is not
+	 *                                 implemented
 	 */
 	@Override
 	public GOllamaEmbeddingModelConfig createBaseConfiguration(String presetModel) {
-		throw new MethodNotFoundException("createBaseConfiguration() is not implemented for ollama embedding provider");
+		GOllamaEmbeddingModelConfig clean = new GOllamaEmbeddingModelConfig();
+		clean.setModelTypeCode(getType().getCode());
+		clean.setChoosedModel(new GOllamaEmbeddingModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription("embedding model " + presetModel);
+		clean.setDescription("Ollama embedding model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
+	}
+
+	@Override
+	public OperationStatus<GOllamaEmbeddingModelConfig> insertAndConfigure(GOllamaEmbeddingModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

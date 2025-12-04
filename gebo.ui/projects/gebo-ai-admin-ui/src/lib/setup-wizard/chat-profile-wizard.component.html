@@ -9,22 +9,34 @@
  */
  -->
  
- 
- 
-
-<p-blockUI [target]="instModeUI" [blocked]="loading">
+<p-blockUI id="BlockUIButton" gebo-ai-label [target]="instModeUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #instModeUI header="Retrieve augmented generation (r.a.g.) chat profiles settings">
+<p-panel id="MainPanel" gebo-ai-label  #instModeUI header="Retrieve augmented generation (r.a.g.) chat profiles settings">
     <div class="grid geboFullHeight">
         <div class="col-12">
-            <p-fieldset legend="Existing R.A.G. chat profiles" *ngIf="rows.length">
-                <p-table [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
+            <p-fieldset id="AddNewRAGChatProfileFieldset" gebo-ai-label legend="Add new R.A.G. chat profile">
+                <form [formGroup]="formGroup">
+                    <div class="grid">
+                        <div class="col-8">
+                            <geboai-editable-listbox-component formControlName="knowledgeBaseCode" [data]="knowledgeBases"
+                                [required]="true"></geboai-editable-listbox-component>
+                        </div>
+                        <div class="col-4">
+                            <p-button id="AddRAGChatProfileBtn" gebo-ai-label icon="pi pi-plus" label="Add R.A.G. chat profile" [outlined]="true" (onClick)="newChatProfile()"
+                                [disabled]="formGroup.invalid"></p-button>
+                        </div>
+                    </div>
+
+                </form>
+            </p-fieldset>
+            <p-fieldset id="ExistingRAGChatProfilesFieldset" gebo-ai-label legend="Existing R.A.G. chat profiles" *ngIf="rows.length">
+                <p-table id="Table" gebo-ai-label [value]="rows" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header pTemplate="header">
                         <tr>
-                            <th>Code</th>
-                            <th>Description</th>
-                            <th>Knowledge base codes</th>
+                            <th id="CodeHeader" gebo-ai-text>Code</th>
+                            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+                            <th id="KnowledgeBaseCodesHeader" gebo-ai-text>Knowledge base codes</th>
 
                             <th></th>
                         </tr>
@@ -35,30 +47,16 @@
                             <td>{{ item.description}}</td>
                             <td>{{item.knowledgeBaseCodes}}</td>
                             <td>
-                                <p-button label="Edit R.A.G. chat profile" icon="pi pi-pencil" [outlined]="true"
+                                <p-button id="EditRAGChatProfileBtn" gebo-ai-label label="Edit R.A.G. chat profile" icon="pi pi-pencil" [outlined]="true"
                                     (onClick)="editChatProfile(item)"></p-button>
                             </td>
                         </tr>
                     </ng-template>
                 </p-table>
-                <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
+                <p-paginator id="Paginator" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0" [rows]="page.pageSize"
                 [totalRecords]="chatProfiles?.totalElements" />
             </p-fieldset>
-            <p-fieldset legend="Add new R.A.G. chat profile">
-                <form [formGroup]="formGroup">
-                    <div class="grid">
-                        <div class="col-8">
-                            <geboai-editable-listbox-component formControlName="knowledgeBaseCode" [data]="knowledgeBases"
-                                [required]="true"></geboai-editable-listbox-component>
-                        </div>
-                        <div class="col-4">
-                            <p-button icon="pi pi-plus" label="Add R.A.G. chat profile" [outlined]="true" (onClick)="newChatProfile()"
-                                [disabled]="formGroup.invalid"></p-button>
-                        </div>
-                    </div>
-
-                </form>
-            </p-fieldset>
+            
         </div>
         <div class="col-12">
             
@@ -67,3 +65,6 @@
 
     
 </p-panel>
+
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -19,11 +19,16 @@
  * to handle initialization, changes to inputs, and cleanup.
  */
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 @Component({
     selector: "gebo-ai-audio-component",
     templateUrl: "audio-control.component.html",
-    standalone: false
+    standalone: false,
+     providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIAudioControlModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAudioControlComponent")}
+    ]
 })
 export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -41,6 +46,7 @@ export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy
     public playPaused: boolean = false;
     /** Input to disable the audio control component */
     @Input() public disabled: boolean = false;
+    @Input() public viewLabels:boolean=true;
     /** Input for audio blob to be played */
     @Input() public playAudioTrack?: Blob;
     /** Event emitter that fires when audio recording is completed */
@@ -82,7 +88,12 @@ export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy
             this.playMode = true;
             const audioUrl = URL.createObjectURL(this.playAudioTrack);
             const audio = new Audio(audioUrl);
-            audio.play();
+            audio.play().then(()=>{
+                
+            },()=>{});
+            audio.onended=(ev)=>{
+                this.playMode=false;
+            }
 
             this.audio = audio;
         }
@@ -104,7 +115,9 @@ export class GeboAIAudioControlComponent implements OnInit, OnChanges, OnDestroy
      */
     continuePlay(): void {
         if (this.audio) {
-            this.audio.play();
+            this.audio.play().then(()=>{
+                this.playMode=false;
+            },()=>{});
             this.playMode = true;
             this.playPaused = false;
         }

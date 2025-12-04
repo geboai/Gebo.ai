@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.openai.services;
 
@@ -37,15 +34,15 @@ import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
 import ai.gebo.model.OperationStatus;
 
 /**
- * Service to configure and create OpenAI text-to-speech models.
- * AI generated comments
+ * Service to configure and create OpenAI text-to-speech models. AI generated
+ * comments
  */
 @Service
 public class OpenAITextToSpeechModelConfigurationSupportService implements
 		IGTextToSpeechModelConfigurationSupportService<GOpenAITextToSpeechModelChoice, GOpenAITextToSpeechModelConfig> {
 	@Autowired
 	IGModelApiAccessReadUtils apiKeyReader;
-	
+
 	/**
 	 * Static definition of the model type with code and description
 	 */
@@ -56,7 +53,8 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 	}
 
 	/**
-	 * Implementation of OpenAI's text-to-speech model that extends the abstract configurable model.
+	 * Implementation of OpenAI's text-to-speech model that extends the abstract
+	 * configurable model.
 	 */
 	class OpenAIConfigurableTextToSpeechModel
 			extends GAbstractConfigurableTextToSpeechModel<GOpenAITextToSpeechModelConfig, OpenAiAudioSpeechModel> {
@@ -75,10 +73,11 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 		}
 
 		/**
-		 * Configures and creates an OpenAI audio speech model using the provided configuration.
+		 * Configures and creates an OpenAI audio speech model using the provided
+		 * configuration.
 		 * 
 		 * @param config The configuration for the model
-		 * @param type The type of text-to-speech model
+		 * @param type   The type of text-to-speech model
 		 * @return Configured OpenAiAudioSpeechModel
 		 * @throws LLMConfigException If the configuration fails
 		 */
@@ -88,11 +87,11 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 			ApiKeyInfo apiKey;
 
 			apiKey = apiKeyReader.getApiKeyInfo(config);
-			
+
 			OpenAiAudioApi audioApi = OpenAiAudioApi.builder().apiKey(apiKey.getApiKey()).build();
 			OpenAiAudioSpeechOptions speechOptions = OpenAiAudioSpeechOptions.builder().model("tts-1")
 					.voice(OpenAiAudioApi.SpeechRequest.Voice.ALLOY)
-					.responseFormat(OpenAiAudioApi.SpeechRequest.AudioResponseFormat.MP3).speed(1.0f).build();
+					.responseFormat(OpenAiAudioApi.SpeechRequest.AudioResponseFormat.MP3).speed(1.0).build();
 			OpenAiAudioSpeechModel model = new OpenAiAudioSpeechModel(audioApi, speechOptions,
 					RetryTemplate.defaultInstance());
 
@@ -160,6 +159,12 @@ public class OpenAITextToSpeechModelConfigurationSupportService implements
 		OpenAIConfigurableTextToSpeechModel model = new OpenAIConfigurableTextToSpeechModel();
 		model.initialize(config, type);
 		return model;
+	}
+
+	@Override
+	public OperationStatus<GOpenAITextToSpeechModelConfig> insertAndConfigure(GOpenAITextToSpeechModelConfig config) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

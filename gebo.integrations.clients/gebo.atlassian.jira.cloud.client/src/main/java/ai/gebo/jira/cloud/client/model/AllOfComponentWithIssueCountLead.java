@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.User;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The user details for the component&#x27;s lead user.

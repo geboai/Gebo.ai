@@ -1,0 +1,55 @@
+.web-viewer-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.web-viewer-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.web-viewer-title {
+  font-weight: 600;
+}
+
+.web-viewer-url {
+  font-size: 0.8rem;
+  word-break: break-all;
+  opacity: 0.8;
+
+  &.placeholder {
+    font-style: italic;
+  }
+}
+
+.web-viewer-frame-wrapper {
+  position: relative;
+  width: 100%;
+  height: 70vh; // o quello che preferisci
+  max-height: calc(100vh - 12rem);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.web-viewer-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.web-viewer-empty {
+  padding: 1rem 0;
+}
+.web-viewer-html {
+  width: 100%;
+  min-height: 10rem;
+  max-height: 70vh;
+  overflow: auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--surface-border, #ddd);
+  padding: 1rem;
+  background: var(--surface-card, #fff);
+}

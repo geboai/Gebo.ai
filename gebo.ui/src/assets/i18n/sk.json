@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Predvolený jazyk systému",
+        "help" : "Predvolený jazyk systému pre túto inštaláciu Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail ako používateľské meno pre prihlásenie"
+      },
+      "passwordC" : {
+        "label" : "Potvrďte heslo",
+        "help" : "Potvrďte heslo"
+      },
+      "password" : {
+        "label" : "Heslo",
+        "help" : "Heslo na prihlásenie (minimálne 8 znakov)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " heslá sa nezhodujú "
+      },
+      "LocalAdmin" : {
+        "label" : "Vytvorte si lokálny administrátorský účet"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Tento účet budete používať v budúcnosti na nastavenie a správu softvéru, tieto údaje zostanú uložené iba vo vašom systéme a nebudú odoslané cez sieť"
+      },
+      "EnterBtn" : {
+        "label" : "Prejdite na prihlasovaciu stránku"
+      },
+      "SetupPage" : {
+        "label" : "Nastavte si svoju inštaláciu gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Vytvoriť systémové nastavenie"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Prečítajte si a prijmite licenciu"
+      },
+      "AcceptMark" : {
+        "label" : "Súhlasím s podmienkami",
+        "help" : "Kliknutím súhlasíte so zmluvnými podmienkami v licencii"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail ako používateľské meno na prihlásenie"
+      },
+      "password" : {
+        "label" : "Heslo",
+        "help" : "Heslo na prihlásenie"
+      },
+      "LoginPanel" : {
+        "label" : "Prihlásiť sa do Gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Prihlásiť sa"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Vitajte v gebo.ai",
+        "detail" : "Zadajte svoje používateľské meno a heslo pre prihlásenie"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operácia zlyhala",
+        "detail" : "Nie je možné overiť zadané prihlasovacie údaje"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Vitajte v gebo.ai",
+        "detail" : "Zadajte svoje používateľské meno a heslo pre prihlásenie"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 konfigurácia"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Názov poskytovateľa"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "MainPanel" : {
+        "label" : "Nastavenia zabezpečenia Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "ID"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Späť na úvodnú stránku nastavenia"
+      },
+      "WizardUi" : {
+        "label" : "Vyberte sekciu nastavenia"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Nastavenie konta administrátora a ďalších",
+        "description" : "Na správu tejto inštalácie gebo.ai je potrebný aspoň jeden administrátorský účet. Ak je to potrebné, pridajte ďalších používateľov."
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Pracovný adresár Gebo.ai",
+        "description" : "Nakonfigurujte pracovný adresár. Toto bude priečinok, kde sa budú uchovávať všetky konfigurácie a pracovné súbory tejto inštalácie. Ideálne je tiež pravidelne ho zálohovať."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Konfigurácia vektorovej databázy",
+        "description" : "Aby Gebo.ai poskytovalo služby rozšíreného vyhľadávania generovaných dát, je potrebné nakonfigurovať vektorovú databázu. Môžete si vybrať medzi lokálnou databázou, Qdrant alebo Mongo Atlas."
+      },
+      "oauth2SetupSection" : {
+        "label" : "Jednotné prihlásenie, Oauth2 autentifikácia",
+        "description" : "Prenastavenie jednotného prihlásenia (Oauth2) a konfigurácia Oauth2 klientov"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Nastavenie veľkých jazykových modelov",
+        "description" : "Nakonfigurujte rôzne LLMs s cloudom alebo lokálnym/lan backendom, je potrebné nastaviť aspoň jeden chat model a jeden embedding model, aby softvér správne fungoval."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Nastavenie Graph Rag/Extrahovanie znalostí",
+        "description" : "Nakonfigurujte subsystem graph rag a extrakcie znalostí"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Nastavenie zdieľaných ciest súborového systému",
+        "description" : "Nastavte cesty spoločnosti k zdieľaným súborovým systémom, ktoré sa budú používať ako oblastí dokumentov pre rozšírené generovanie v rôznych znalostných databázach"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integrácia Atlassian Confluence",
+        "description" : "Nakonfigurujte Gebo.ai pre prístup k vašim cloudovým alebo on-premise inštaláciám Atlassian Confluence"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integrácia Atlassian Jira",
+        "description" : "Nakonfigurujte Gebo.ai pre prístup k vašim cloudovým inštaláciám Atlassian Jira"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integrácia Microsoft Sharepoint",
+        "description" : "Nakonfigurujte Gebo.ai pre prístup k vašim cloudovým alebo on-premise inštaláciám Microsoft Sharepoint"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Nakonfigurujte aspoň jednu znalostnú databázu",
+        "description" : "Nastavte aspoň jednu znalostnú databázu, aby vaši používatelia mohli využívať rozšírené služby generovania Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Nakonfigurujte aspoň jeden \"R.A.G.\" chat profil",
+        "description" : "Nastavte aspoň jeden profil rozšíreného chatu pre vašich používateľov na základe vašich nakonfigurovaných znalostných databáz"
+      },
+      "mandatory-done" : {
+        "summary" : "Povinné kroky nastavenia Gebo.ai sú hotové...",
+        "detail" : "Povinné kroky nastavenia boli dokončené, ale niektoré chýbajúce kroky bránia vašej organizácii naplno využiť tento softvér"
+      },
+      "setup-ok" : {
+        "summary" : "Nastavenie Gebo.ai je v poriadku!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Nastavenie Gebo.ai chýba povinný krok",
+        "detail" : "Prosím, skontrolujte červené kroky v procese nastavenia"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrácia Google Drive/Workspaces",
+        "description" : "Nakonfigurujte Gebo.ai na prístup k tímovým dátam v Google cloud Drive/Workspaces"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Nastavte firemné systémy Atlassian Confluence"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Typ systému"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence systém"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira systém"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "MainPanel" : {
+        "label" : "Nastavte firemné systémy Atlassian Jira"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Typ systému"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "MainPanel" : {
+        "label" : "Nastavte firemné systémy Microsoft Sharepoint"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Typ systému"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint systém"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Zadajte api-kľúč s dostatočným kreditom. Ak zvolíte OpenAI, musíte pridať špecifický kredit (10-30 $ môže stačiť) do vášho bežného plánu pre použitie api, inak nebude v tejto aplikácii dostupný žiadny LLMs traffic."
+      },
+      "MainPanel" : {
+        "label" : "Nastavte prístup poskytovateľov llms Gebo.ai pomocou vlastného api kľúča"
+      },
+      "provider" : {
+        "label" : "Dodávateľ veľkých jazykových modelov",
+        "help" : "Vyberte poskytovateľa: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Používateľ",
+        "help" : "Zadajte používateľa, ktorému patrí apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurovať"
+      },
+      "apiKey" : {
+        "label" : "Api kľúč",
+        "help" : "Váš api kľúč od poskytovateľa LLMS, ktorý chcete použiť"
+      },
+      "ProviderHeader" : {
+        "label" : "Poskytovateľ"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Typ modelu"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Predvolený model"
+      },
+      "MainPanelHeader" : {
+        "label" : "Nastavenie prístupu poskytovateľov Gebo.ai llms"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Vytvoriť konfiguráciu graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Nastavte predvolenú konfiguráciu Graph Rag & extrakcie znalostí"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "EditConfigBtn" : {
+        "label" : "Upraviť nastavenie"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Projekt"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Pridať znalostnú databázu"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Znalostná databáza"
+      },
+      "MainPanel" : {
+        "label" : "Konfigurácie znalostných databáz a obsahu"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Zdroj obsahu"
+      },
+      "PublishedHeader" : {
+        "label" : "Publikované"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Počet dokumentov"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Pridať projekt/položku",
+        "help" : "vytvoriť nový projekt"
+      },
+      "Button1" : {
+        "help" : "otvoriť znalostnú databázu"
+      },
+      "Button2" : {
+        "help" : "otvoriť formulár projektu"
+      },
+      "Button3" : {
+        "help" : "otvoriť zdroj dát"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Konfigurácia pracovného priečinka Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Konfigurovať"
+      },
+      "workDirectory" : {
+        "label" : "Vyberte priečinok ako pracovný adresár Gebo.ai",
+        "help" : "Vyberte serverový priečinok, ktorý táto inštalácia použije ako pracovný pre konfigurácie a ukladanie obsahu."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Pridať priečinok"
+      },
+      "AddFolderBtn" : {
+        "label" : "Pridať priečinok"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "MainPanel" : {
+        "label" : "Cesty k zdieľaným súborovým systémom servera"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolútna cesta"
+      },
+      "DeleteHeader" : {
+        "label" : "Odstrániť"
+      },
+      "path" : {
+        "label" : "Pridať koreňový priečinok zdieľaného súborového systému",
+        "help" : "Vyberte serverový priečinok, ktorý bude koreňovou cestou zdieľaného súborového systému vo vašej organizácii ako úložisko dokumentov"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis položky súborového systému"
+      },
+      "RemovePathBtn" : {
+        "label" : "Odstrániť cestu"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Konfigurovať"
+      },
+      "MainPanel" : {
+        "label" : "Konfigurácia vektorovej databázy"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Meno hostiteľa alebo IP adresa Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Nastavenia pripojenia Qdrant"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Komunikačný port Qdrant (štandardne 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api kľúč",
+        "help" : "Api kľúč pre autentifikáciu Qdrant"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS parameter",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Povinné kroky nastavenia Gebo.ai sú hotové...",
+        "detail" : "Povinné kroky nastavenia boli dokončené, ale chýbajúce kroky môžu vašej organizácii zabrániť v plnom využití tohto softvéru"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Nastaveniu Gebo.ai chýba niektorý povinný krok",
+        "detail" : "Prosím, skontrolujte červené kroky v postupe nastavenia"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Nastavenie Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Pridať nový R.A.G. chat profil"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Pridať R.A.G. chat profil"
+      },
+      "MainPanel" : {
+        "label" : "Nastavenia profilov chatov pre rozšírenú generáciu (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Existujúce R.A.G. chat profily"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Upraviť R.A.G. chat profil"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Kódy vedomostnej databázy"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Nastaviť firemné Google Drive/Workspaces systémy"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Konfiguračný kód"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Kód",
+        "help" : "Zadajte popis autentifikačného/integračného kódu OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis informácií o autentifikácii/integrácii OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Účel konfigurácie",
+        "help" : "Vyberte, či toto nastavenie bude použité na autentifikáciu v Gebo.ai alebo aby Gebo.ai mal klientské pripojenie k externému systému."
+      },
+      "authProvider" : {
+        "label" : "Poskytovateľ",
+        "help" : "Zadajte poskytovateľa OAUTH2 autentifikácie"
+      },
+      "issuerUri" : {
+        "label" : "Issuer Uri",
+        "help" : "Zadajte OAUTH2 issuer URL poskytovateľa"
+      },
+      "authorizationUri" : {
+        "label" : "Autorizačná URL adresa",
+        "help" : "Zadajte OAUTH2 autorizačnú URL adresu poskytovateľa"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "Zadajte OAUTH2 Jwk Set URL poskytovateľa"
+      },
+      "userInfoUri" : {
+        "label" : "URL s informáciami o používateľovi",
+        "help" : "Zadajte OAUTH2 URL s informáciami o používateľovi poskytovateľa"
+      },
+      "introspectionUri" : {
+        "label" : "Introspection Uri",
+        "help" : "Zadajte OAUTH2 introspekčnú URL adresu poskytovateľa"
+      },
+      "tokenUri" : {
+        "label" : "Token URL",
+        "help" : "Zadajte OAUTH2 Token URL poskytovateľa"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URL adresy poskytovateľa OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Zadajte nové informácie o autentifikácii/integrácii OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Client ID",
+        "help" : "Identifikátor klienta pre protokol oauth2 (získava sa v administratívnej oblasti softvéru tretej strany s overením oauth2)"
+      },
+      "secret" : {
+        "label" : "Tajný kľúč",
+        "help" : "Tajný kľúč klienta pre protokol oauth2 (získava sa v administratívnej oblasti softvéru tretej strany s overením oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Vytvoriť konfiguráciu confluence systému"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis confluence systému."
+      },
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "username" : {
+        "label" : "Confluence používateľské meno",
+        "help" : "Meno používateľa Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence verzia",
+        "help" : "Verzia Confluence"
+      },
+      "baseUri" : {
+        "label" : "Základná internetová adresa",
+        "help" : "URL základnej adresy confluence systému pre onpremise inštaláciu alebo vaša firemná základná url pre confluence cloud systém"
+      },
+      "password" : {
+        "label" : "Confluence heslo",
+        "help" : "Heslo pre Confluence"
+      },
+      "token" : {
+        "label" : "Confluence cloud api kľúč",
+        "help" : "Confluence CLOUD apikey získaný v backoffice confluence, sem treba vložiť \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publikovať!",
+        "help" : "Uloží a sprístupní tento obsah v znalostnej báze pre LLm"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "MainPanel" : {
+        "label" : "Zdieľanie obsahu confluence"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód obsahu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis nahraného obsahu confluence položiek."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence systém",
+        "help" : "Referenčný už nakonfigurovaný confluence systém."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenčný nadradený projekt."
+      },
+      "openZips" : {
+        "label" : "Otvárať zip súbory",
+        "help" : "Povoliť otváranie a extrakciu obsahu zip súborov"
+      },
+      "tree" : {
+        "label" : "Zvolené priestory alebo stránky/podstránky",
+        "help" : "Zdieľané priestory confluence a obsah stránok"
+      },
+      "programmedTables" : {
+        "label" : "Časový plán kontroly aktualizácií obsahu",
+        "help" : "Nastavte plánovanie zmien obsahu, aby bol systém generovania rozšírených odpovedí aktuálny"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kritériá organizácie priestorov, stránok a podstránok",
+        "help" : "Uveďte tu, ako boli priestory, stránky a podstránky organizované v confluence obsahu, ktorý je zdieľaný s Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Všeobecné nastavenia"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava confluence systému"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "baseUri" : {
+        "label" : "Základná internetová adresa",
+        "help" : "URL základnej adresy confluence systému"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód pre confluence systém."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis confluence systému."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence verzia",
+        "help" : "Verzia Confluence"
+      },
+      "secretCode" : {
+        "label" : "Použitá identita",
+        "help" : "Vyberte alebo vytvorte identitu na prístup do confluence systému"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "nová skupina"
+      },
+      "NewUserBtn" : {
+        "label" : "nový používateľ"
+      },
+      "UsersListPanel" : {
+        "label" : "Zoznam používateľov"
+      },
+      "GroupsListPanel" : {
+        "label" : "Zoznam skupín"
+      },
+      "SournameHeader" : {
+        "label" : "priezvisko"
+      },
+      "UsernameHeader" : {
+        "label" : "užívateľské meno"
+      },
+      "RolesHeader" : {
+        "label" : "roly"
+      },
+      "NameHeader" : {
+        "label" : "meno"
+      },
+      "EditBtn" : {
+        "label" : "Upraviť"
+      },
+      "DisabledHeader" : {
+        "label" : "deaktivované"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "UserIds" : {
+        "placeholder" : "Vyberte používateľov"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava skupiny používateľov"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis skupiny používateľov"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Zadajte kód skupiny používateľov"
+      },
+      "userIds" : {
+        "label" : "Zoznam používateľov",
+        "help" : "Vyberte používateľov, ktorí sa zúčastňujú skupiny"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis jira systému."
+      },
+      "MainPanel" : {
+        "label" : "Vytvorte konfiguráciu jira systému"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "username" : {
+        "label" : "jira používateľské meno",
+        "help" : "jira používateľské meno"
+      },
+      "token" : {
+        "label" : "jira cloud api kľúč",
+        "help" : "jira CLOUD apikey získaný v jira backoffice, sem treba vložiť „API Token for your Atlassian Account“."
+      },
+      "baseUri" : {
+        "label" : "Základná internetová adresa",
+        "help" : "URL základnej adresy jira systému pre onpremise inštaláciu alebo základná URL vašej organizácie pre jira cloud systém"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "PublishBtn" : {
+        "label" : "Publikovať!",
+        "help" : "Uloží a sprístupní tento obsah v znalostnej báze pre LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "MainPanel" : {
+        "label" : "Zdieľanie jira obsahu"
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód obsahu."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira systém",
+        "help" : "Referencia na už nakonfigurovaný jira systém."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencia nadradeného projektu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis nahratého obsahu jira položiek."
+      },
+      "programmedTables" : {
+        "label" : "Plán kontroly aktualizácií obsahu",
+        "help" : "Nastavte plánovanie zmien obsahu, aby bol systém na rozšírenú generáciu údajov stále aktuálny"
+      },
+      "openZips" : {
+        "label" : "Otvárať zip súbory",
+        "help" : "Povoliť otvorenie zip súborov a extrakciu obsahu"
+      },
+      "tree" : {
+        "label" : "Vybrané priestory alebo stránky/podstránky",
+        "help" : "Zdieľaná hierarchia projektov a ticketov jira"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kritériá organizácie priestorov, stránok a podstránok",
+        "help" : "Vysvetlite tu, podľa akých kritérií boli priestory, stránky a podstránky organizované v zdieľanom jira obsahu pre Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis jira systému."
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava jira systému"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "baseUri" : {
+        "label" : "Základná internetová adresa",
+        "help" : "URL základnej adresy jira systému"
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód jira systému."
+      },
+      "secretCode" : {
+        "label" : "Použitá identita",
+        "help" : "Vyberte alebo vytvorte identitu na prístup do jira systému"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis systému SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Verzia Sharepoint",
+        "help" : "verzia sharepoint"
+      },
+      "secret" : {
+        "label" : "Tajný kľúč",
+        "help" : "Oauth2 klientsky tajný kľúč pre túto aplikáciu registrovanú v produkte microsoft \"entra\" (získava sa v cloudovej admin konzole microsoft)"
+      },
+      "clientId" : {
+        "label" : "ID klienta",
+        "help" : "Oauth2 identifikátor klienta pre túto aplikáciu registrovanú v produkte microsoft \"entra\" (získava sa v cloudovej admin konzole microsoft)"
+      },
+      "tenantId" : {
+        "label" : "ID nájomcu",
+        "help" : "Oauth2 identifikátor nájomcu pre vašu organizáciu produkt microsoft \"entra\" (získava sa v cloudovej admin konzole microsoft)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Informácie o registrácii Microsof oauth2 aplikácie pre Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "MainPanel" : {
+        "label" : "Vytvorte konfiguráciu systému SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "PublishBtn" : {
+        "label" : "Zverejniť!",
+        "help" : "Uloží a sprístupní tieto obsahy v znalostnej databáze pre LLm"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "MainPanel" : {
+        "label" : "Zdieľanie obsahu SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód obsahu."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencia nadradeného projektu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis zdrojov údajov položiek SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "systém sharepoint",
+        "help" : "Referencia už nakonfigurovaného systému SharePoint/OneDrive."
+      },
+      "openZips" : {
+        "label" : "Otvoriť zip súbory",
+        "help" : "Povoliť otváranie zip súborov a extrakciu obsahu"
+      },
+      "tree" : {
+        "label" : "Vybrané Sharepoint stránky/podstránky alebo OneDrive disky/priečinky/súbory",
+        "help" : "Zdieľané obsahy sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Plán kontrol aktualizácií obsahu",
+        "help" : "Nastavte plánovanie zmenených obsahov, aby bol systém rozšírenej generácie stále aktuálny"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kritériá organizácie priestorov, stránok a podstránok",
+        "help" : "Vysvetlite, ako boli nastavené kritériá organizácie priestorov, stránok a podstránok v sharepoint obsahu zdieľanom s Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Úprava sharepoint systému"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Všeobecné nastavenia"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "secretCode" : {
+        "label" : "Použitá identita",
+        "help" : "Vyberte alebo vytvorte identitu na prístup k sharepoint systému"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód sharepoint systému."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis sharepoint systému."
+      },
+      "sharepointVersion" : {
+        "label" : "Verzia Sharepoint",
+        "help" : "verzia sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Odstrániť"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Uložiť"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Zrušiť"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Všeobecné nastavenia informácií/obsahu"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Nastavenia LLms"
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód pre fázu extrakcie dát z vedomostného grafu"
+      },
+      "MainPanel" : {
+        "label" : "Konfigurácia extrakcie graphrag/vedomostí"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis tejto konfigurácie fázy extrakcie dát z vedomostného grafu"
+      },
+      "extractionPrompt" : {
+        "label" : "Výzva na extrakciu informácií",
+        "help" : "Výzva pre veľký jazykový model na extrakciu entít/udalostí/vzťahov a aliasov"
+      },
+      "usedModelConfiguration" : {
+        "label" : "Použitý LLM pre extrakciu dát",
+        "help" : "Zadajte veľký jazykový model použitý pre extrakciu vedomostí, ak žiadny nie je vybraný, použije sa predvolený."
+      },
+      "graphRagAllSources" : {
+        "label" : "Použiť graph rag na všetky dátové zdroje",
+        "help" : "Ak je zapnuté, všetky znalostné bázy/projektové/dátové zdroje budú spracované pre extrakciu vedomostí, inak iba špecificky nakonfigurované."
+      },
+      "defaultModel" : {
+        "label" : "Predvolený veľký jazykový model",
+        "help" : "Pre extrakciu vedomostí sa použije predvolený veľký jazykový model"
+      },
+      "processEveryDocument" : {
+        "label" : "Použiť graph rag na všetky súbory",
+        "help" : "Algoritmy graph rag budú použité na všetky súbory, čo zvýši detailnosť analýzy, ktorú systém dokáže, ale taktiež zvýši náklady a čas potrebný na spracovanie dokumentov"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Kritériá výberu súborov pre spracovanie graphrag",
+        "help" : "Upravte kritériá výberu súborov, ktoré poputujú do pipeline na extrakciu informácií pre graphrag, vyberte aspoň názov súboru a kritériá a/alebo typ súboru a/alebo maximálny počet bajtov veľkosti súboru a/alebo starobu poslednej zmeny v dňoch"
+      },
+      "extractionFormat" : {
+        "label" : "Formát extrakcie",
+        "help" : "Použite formát CSV pre llms pod 30b parametrami, JSON pre veľké frontier modely",
+        "placeholder" : "Použite formát CSV pre llms pod 30b parametrami, JSON pre veľké frontier modely"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Vyberte typy súborov"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Kritériá filtrovania názvu súboru"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Posledná úprava súboru, pred koľkými dňami"
+      },
+      "nameFilter" : {
+        "placeholder" : "Názov súboru"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Maximálna veľkosť súboru v bajtoch"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "MainPanel" : {
+        "label" : "Upravujete znalostnú databázu"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Nastavenia prístupu k znalostnej databáze"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód znalostnej databázy."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis znalostnej databázy."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Použité embedding modely (ponechajte prázdne na použitie systémového predvoleného nastavenia)",
+        "help" : "Embedding modely pre túto databázu, ponechaním prázdneho sa použije predvolený."
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "IndexBtn" : {
+        "label" : "Indexovať",
+        "help" : "Reindexovať obsah"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Upravujete projekt alebo položku"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód projektu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis projektu."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "znalostná databáza",
+        "help" : "znalostná databáza."
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "IndexBtn" : {
+        "label" : "Indexovať",
+        "help" : "Reindexovať obsah"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Pridať položku/projekt",
+        "help" : "pridať nové..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Používajú všetci",
+        "help" : "Každý môže použiť"
+      },
+      "accessibleGroups" : {
+        "label" : "Zoznam skupín",
+        "help" : "Vyberte povolené skupiny"
+      },
+      "accessibleUsers" : {
+        "label" : "Zoznam používateľov",
+        "help" : "Vyberte povolených používateľov"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Prehľad"
+      },
+      "LLMSTab" : {
+        "label" : "LLM pre chat a vkladanie"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Profily Rag chatu / Modelové výzvy"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Znalostné bázy a projekty"
+      },
+      "UsersGroupTab" : {
+        "label" : "Používatelia a skupiny"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai konfigurácia modulov"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Nastaviť"
+      },
+      "ConfigureBtn" : {
+        "label" : "Nastaviť"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Nová konfigurácia príkazu"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Nový profil chatu"
+      },
+      "MainPanel" : {
+        "label" : "Profily chatu s rozšíreným vyhľadávaním"
+      },
+      "PromptsPanel" : {
+        "label" : "Zbierka príkazov a predvolené príkazy"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Znalostné bázy"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "ConfigureBtn1" : {
+        "label" : "nastaviť"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Nová vedomostná báza"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Nová konfigurácia embedding modelu"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Nová konfigurácia chat modelu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Poskytovateľ modelu"
+      },
+      "ConfigureBtn" : {
+        "label" : "nastaviť"
+      },
+      "CodeHeader2" : {
+        "label" : "Kód"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Popis"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Poskytovateľ modelu"
+      },
+      "ConfigureBtn2" : {
+        "label" : "nastaviť"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Nakonfigurované chat modely"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Nakonfigurované embedding modely"
+      },
+      "chat" : {
+        "label" : "Nový chatovací model",
+        "help" : "Vyberte dodávateľa na pridanie nového chatovacieho modelu schopného komunikácie s používateľom alebo vykonávania automatizácií",
+        "placeholder" : "Vyberte dodávateľa na pridanie nového chatovacieho modelu schopného komunikácie s používateľom alebo vykonávania automatizácií"
+      },
+      "embed" : {
+        "label" : "Nový model pre vkladanie",
+        "help" : "Vyberte dodávateľa na pridanie nového modelu pre vkladanie schopného semantického indexovania obsahu",
+        "placeholder" : "Vyberte dodávateľa na pridanie nového modelu pre vkladanie schopného semantického indexovania obsahu"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Testovanie modelu"
+      },
+      "TestChatBtn" : {
+        "label" : "Otestovať chat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Vyberte OpenAI token, ktorý sa použije pre tento model"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "choosedModel" : {
+        "label" : "Výber OpenAI chat modelu",
+        "help" : "Vyberte OpenAI chat model, s ktorým chcete pracovať."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Pokročilé nastavenia"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie OpenAI chat modelu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavenia prístupu k modelu"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie OpenAI embedding modelu"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Vyberte OpenAI token, ktorý sa použije pre tento model"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód pre konfiguráciu embedding modelu"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie embedding modelu"
+      },
+      "choosedModel" : {
+        "label" : "Výber OpenAI embedding modelu",
+        "help" : "Vyberte OpenAI embedding model, s ktorým chcete pracovať."
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "baseUrl" : {
+        "label" : "Adresa základného ollama servera",
+        "help" : "Základná adresa (napr. http://servername:234/) na ktorú odpovedá ollama lokálny alebo LAN server."
+      },
+      "choosedModel" : {
+        "label" : "Výber Ollama chat modelu",
+        "help" : "Vyberte Ollama chat model, s ktorým chcete pracovať.",
+        "placeholder" : "Vyberte model"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Vyberte Ollama token, ktorý sa použije pre tento model (voliteľné)"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie chat modelu pre Ollama lokálny (alebo LAN) server"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Vyberte Anthropic token, ktorý sa použije pre tento model"
+      },
+      "choosedModel" : {
+        "label" : "Výber Anthropic chat modelu",
+        "help" : "Vyberte Anthropic chat model, s ktorým chcete pracovať.",
+        "placeholder" : "Vyberte model"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Pokročilé nastavenia"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavenia prístupu k modelu"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie Anthropic chat modelu"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Vyberte MistralAI token, ktorý sa použije pre tento model"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "choosedModel" : {
+        "label" : "Výber MistralAI chat modelu",
+        "help" : "Vyberte MistralAI chat model, s ktorým chcete pracovať."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Pokročilé nastavenia"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavenia prístupu k modelu"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie MistralAI chat modelu"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "choosedModel" : {
+        "label" : "Výber Google Vertex AI chat modelu",
+        "help" : "Vyberte Google Vertex AI chat model, s ktorým chcete pracovať."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Vyberte Google Vertex AI token, ktorý sa použije pre tento model"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Všeobecné informácie"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Nastavenia prístupu k modelu"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Pokročilé nastavenia"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie Google Vertex AI chat modelu"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Vyberte Deepseek token, ktorý sa použije pre tento model"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "choosedModel" : {
+        "label" : "Výber Deepseek chat modelu",
+        "help" : "Vyberte Deepseek chat model, s ktorým chcete pracovať.",
+        "placeholder" : "Vyberte model"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Pokročilé nastavenia"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie Deepseek chat modelu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavenia prístupu k modelu"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie modelu"
+      },
+      "baseUrl" : {
+        "label" : "Adresa základného servera API Chat modelu",
+        "help" : "Základná adresa Chat modelu."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API Chat modelu",
+        "help" : "Vyberte API token Chat modelu, ktorý sa použije pre tento model (voliteľné)"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený chat model, ak nie je zadaný iný"
+      },
+      "choosedModel" : {
+        "label" : "Výber chat modelu Chat model",
+        "help" : "Vyberte chat model Chat model, s ktorým chcete pracovať."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "TitleFragment" : {
+        "label" : "Úprava poskytovateľa chat modelu:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Pokročilé nastavenia"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Nastavenia prístupu k modelu"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie embedding modelu"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie embedding modelu pre Ollama lokálny (alebo LAN) server"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Vyberte Ollama token, ktorý sa použije pre tento model"
+      },
+      "choosedModel" : {
+        "label" : "Výber Ollama embedding modelu",
+        "help" : "Vyberte Ollama embedding model, s ktorým chcete pracovať."
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie embedding modelu"
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      },
+      "baseUrl" : {
+        "label" : "Adresa základného ollama servera",
+        "help" : "Základná adresa (napr. http://servername:234/) na ktorú odpovedá ollama lokálny alebo LAN server."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie embedding modelu"
+      },
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie MistralAI embedding modelu"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie embedding modelu"
+      },
+      "choosedModel" : {
+        "label" : "Výber MistralAI embedding modelu",
+        "help" : "Vyberte MistralAI embedding model, s ktorým chcete pracovať."
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Vyberte MistralAI token, ktorý sa použije pre tento model"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Úprava konfigurácie Google Vertex AI embedding modelu"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie embedding modelu"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "choosedModel" : {
+        "label" : "Výber Google Vertex AI embedding modelu",
+        "help" : "Vyberte Google Vertex AI embedding model, s ktorým chcete pracovať."
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie embedding modelu"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Vyberte Google Vertex AI token, ktorý sa použije pre tento model"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "TitleFragment" : {
+        "label" : "Úprava poskytovateľa embedding modelu:"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie Embedding modelu"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód konfigurácie Embedding modelu"
+      },
+      "choosedModel" : {
+        "label" : "Výber embedding modelu Embedding model",
+        "help" : "Vyberte embedding model Embedding model, s ktorým chcete pracovať."
+      },
+      "baseUrl" : {
+        "label" : "Adresa servera API Embedding modelu",
+        "help" : "Základná adresa servera Embedding modelu."
+      },
+      "defaultModel" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Ak je zapnuté, bude tento model použitý ako predvolený embedding model, ak nie je zadaný iný"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API Embedding modelu",
+        "help" : "Vyberte API token Embedding modelu, ktorý sa použije pre tento model"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Informácie o nastavení chatu"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Vymazať túto chatovú reláciu"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Premenovať chatovú reláciu"
+      },
+      "QueryControl" : {
+        "placeholder" : "Napíšte správu pre chatbota"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Prehliadajte alebo vyhľadajte a vyberte dokumenty, s ktorými chcete chatovať"
+      },
+      "UploadFileBtn" : {
+        "help" : "Nahrajte súbor na chat alebo prácu"
+      },
+      "SubmiQuestion" : {
+        "help" : "Odošlite svoju otázku"
+      },
+      "WithParams" : {
+        "label" : "s parametrami:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI Volané funkcie:"
+      },
+      "UploadedDocs" : {
+        "label" : "Nahrané dokumenty"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "História chatu načítaná",
+        "detail" : "História chatu bola úspešne načítaná"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Váš prejav sa nahráva"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Hlasová odpoveď prijatá"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Posunúť hore"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Posunúť dole"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nájdené dokumenty"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ste si istí, že chcete odstrániť tento chat?",
+        "header" : "Akcia odstránenia chatu"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "description" : {
+        "label" : "Popis chatu",
+        "help" : "Zadajte popis chatovej relácie."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Použitý model",
+        "help" : "Kód modelu"
+      },
+      "providerId" : {
+        "label" : "Poskytovateľ chat modelu",
+        "help" : "Driver poskytovateľa LLms"
+      },
+      "functions" : {
+        "label" : "Volateľné funkcie chat modelu",
+        "help" : "Zoznam funkcií dostupných pre chat model"
+      },
+      "NameCol" : {
+        "label" : "Názov"
+      },
+      "DescriptionCol" : {
+        "label" : "Popis"
+      },
+      "kbases" : {
+        "label" : "Dostupné znalostné databázy",
+        "help" : "Zoznam znalostných databáz použitých v tomto RAG chate"
+      },
+      "CloseBtn" : {
+        "help" : "Zavrieť"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Pridať dokument do zoznamu 'chatovať s'"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Nahrávať",
+        "help" : "Spustite nahrávanie zvukovej stopy a odošlite ju"
+      },
+      "StopBtn" : {
+        "label" : "Nahráva sa",
+        "help" : "Nahráva sa"
+      },
+      "AbortBtn" : {
+        "label" : "Zrušiť nahrávanie",
+        "help" : "Zrušiť nahrávanie"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Zrušiť nahrávanie"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "obnoviť údaje"
+      },
+      "DeleteBtn" : {
+        "label" : "Vymazať"
+      },
+      "SelectHeader" : {
+        "label" : "Vybrať"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "dátum/čas ukončenia"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "dátum/čas začiatku"
+      },
+      "ProcessingHeader" : {
+        "label" : "spracovanie"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "FinishedHeader" : {
+        "label" : "dokončené"
+      },
+      "WithErrorHeader" : {
+        "label" : "s chybou"
+      },
+      "LogTableComponent" : {
+        "help" : "Tento záznam o ingestovaní zdieľanej oblasti súborového systému"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Štatistiky procesov"
+      },
+      "DeleteBtn" : {
+        "label" : "Vymazať"
+      },
+      "CloseBtn" : {
+        "label" : "Zavrieť"
+      },
+      "PublicationLogTab" : {
+        "label" : "Záznam publikovania"
+      },
+      "MainPanel" : {
+        "label" : "Záznam publikovania"
+      },
+      "actualStatus" : {
+        "label" : "Stav",
+        "help" : "Stav úlohy, stále prebieha, dokončená alebo dokončená s chybami."
+      },
+      "publishingSystem" : {
+        "label" : "Konfigurácia publikovaného obsahu",
+        "help" : "Informácie o publikovanom obsahu"
+      },
+      "startDateTime" : {
+        "label" : "Dátum/čas začiatku",
+        "help" : "Dátum a čas začiatku úlohy synchronizácie obsahu"
+      },
+      "endDateTime" : {
+        "label" : "Dátum/čas ukončenia",
+        "help" : "Dátum a čas ukončenia úlohy synchronizácie obsahu"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Nespracované úplne"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Úplne spracované"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding verzus celkový počet dokumentov"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Viac detailov"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Generovať výzvu"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Sprievodca výzvou",
+        "help" : "Použite toto na využitie LLM na generovanie výzvy pre vaše ciele"
+      },
+      "acceptPrompt" : {
+        "label" : "Prijať výzvu"
+      },
+      "promptWizardUI" : {
+        "label" : "Sprievodca generovaním šablóny výzvy"
+      },
+      "cancel" : {
+        "label" : "Zrušiť"
+      },
+      "response" : {
+        "label" : "Navrhovaná šablóna výzvy",
+        "help" : "Vygenerovaný text šablóny pre váš cieľ (môžete ju zmeniť alebo upraviť)"
+      },
+      "modelCode" : {
+        "label" : "Použitý chat model",
+        "help" : "Vyberte chat model, ktorého sa chcete opýtať na generovanie šablóny výzvy"
+      },
+      "query" : {
+        "label" : "Žiadosť o šablónu výzvy",
+        "help" : "Špecifikujte v 2. osobe, aký je cieľ, s ktorým má AI používateľa podporiť"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Teplota",
+        "help" : "Teplota, na ktorej model odpovedá, od 0 do 1 (ak si nie ste istý, nechajte prázdne)"
+      },
+      "contextLength" : {
+        "label" : "Dĺžka kontextu (tokeny)",
+        "help" : "Množstvo textu, ktoré AI model dokáže brať do úvahy pri spracovaní (ak nie je nastavené, použije sa 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parameter TopP, od 0 do 1 (ak si nie ste istý, nechajte prázdne)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Povolené funkcie pre tento model",
+        "help" : "Funkcie, ktoré môže model používať počas chatu"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Predvolený prompt modelu",
+        "help" : "Upravte predvolený prompt pre chatovací model."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis identity."
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód identity."
+      },
+      "secretType" : {
+        "label" : "Typ identity",
+        "help" : "Vyberte typ identity, ktorý chcete vytvoriť pre vzdialený systém"
+      },
+      "InsertBtn" : {
+        "label" : "Vložiť"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Zadajte token."
+      },
+      "user" : {
+        "label" : "Používateľ",
+        "help" : "Zadajte používateľa uvedeného v tokene."
+      },
+      "MainPanel" : {
+        "label" : "Vytváranie identity"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "username" : {
+        "label" : "Používateľské meno",
+        "help" : "Zadajte používateľské meno."
+      },
+      "password" : {
+        "label" : "Heslo",
+        "help" : "Zadajte heslo."
+      },
+      "email" : {
+        "label" : "E-mail/používateľské meno",
+        "help" : "Zadajte e-mail alebo používateľské meno priradené k ssh kľúču."
+      },
+      "key" : {
+        "label" : "Tajný kľúč",
+        "help" : "Otvorte súbor s privátnym kľúčom a skopírujte ho do tohto textového poľa."
+      },
+      "passphrase" : {
+        "label" : "Heslo ku kľúču",
+        "help" : "Zadajte heslo ku kľúču."
+      },
+      "pub" : {
+        "label" : "Verejný kľúč",
+        "help" : "Otvorte súbor s verejným kľúčom a skopírujte ho do tohto textového poľa."
+      },
+      "jsonContent" : {
+        "label" : "Obsah súboru s Google povereniami",
+        "help" : "Skopírujte sem obsah súboru s Google API povereniami stiahnutého z google cloud api konzoly (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google používateľ na zosobnenie",
+        "help" : "Používateľ, ktorého budú poverenia zosobňovať",
+        "placeholder" : "Používateľ, ktorého budú poverenia zosobňovať"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód obsahu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis nahraného obsahu súborového záznamu."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencia na nadradený projekt."
+      },
+      "upload" : {
+        "label" : "Nahrať obsah",
+        "help" : "Kliknite na tlačidlo prehliadať a vyberte súbory zip alebo iné súbory"
+      },
+      "openZips" : {
+        "label" : "Otvoriť zip súbory",
+        "help" : "Povoliť otváranie zip súborov a extrakciu obsahu"
+      },
+      "PublishBtn" : {
+        "label" : "Publikovať!",
+        "help" : "Uloží a sprístupní tento obsah v znalostnej báze pre LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "MainPanel" : {
+        "label" : "Úprava nahraného obsahu"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Nastaviť build systémy",
+        "help" : "Zoznam build/balíkovacích systémov na kontrolu meta údajov a ďalších informácií o artefaktoch (ponechajte prázdne, ak neobsahuje softvérový kód)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Vybrané prvky"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Zrušiť"
+      },
+      "EditBtn" : {
+        "help" : "Upraviť vybrané"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Vyberte prvky"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Vyberte prvky"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Upraviť plánovanie"
+      },
+      "ConfirmBtn" : {
+        "label" : "Potvrdiť"
+      },
+      "AddBtn" : {
+        "label" : "+Pridať"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Zverejniť!",
+        "help" : "Uloží a sprístupní tento obsah v znalostnej báze pre LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Spracovanie zdrojového kódu"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "MainPanel" : {
+        "label" : "Upraviť existujúci obsah súborového systému"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis nahratého obsahu položky v súborovom systéme."
+      },
+      "openZips" : {
+        "label" : "Otvárať zip súbory",
+        "help" : "Povoliť otváranie zip súborov a extrakciu obsahu"
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód obsahu."
+      },
+      "tree" : {
+        "label" : "Vybrané súbory alebo priečinky",
+        "help" : "Zdieľané súbory alebo priečinky súborového systému dostupné na serveri"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencie nadriadeného projektu."
+      },
+      "programmedTables" : {
+        "label" : "Plán kontroly aktualizácií obsahu",
+        "help" : "Nakonfigurujte plánovanie zmien obsahu pre udržiavanie systému rozšírenej generácie aktuálneho"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kritériá organizácie priečinkov",
+        "help" : "Vysvetlite tu, ako boli určené kritériá na organizáciu priečinkov v oblasti súborového systému, ktorú zdieľate s Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Nastaviť build systémy",
+        "help" : "Zoznam build/balíkovacích systémov na kontrolu meta informácií a ďalších informácií o artefaktoch (ponechajte prázdne, ak neobsahuje softvérový kód)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Nová oblasť zdieľaných súborov"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Absolútna cesta"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db alebo yml konfigurácia súboru"
+      },
+      "DescriptionHeader" : {
+        "label" : "Popis"
+      },
+      "CodeHeader" : {
+        "label" : "Kód"
+      },
+      "ModifyHeader" : {
+        "label" : "Upraviť"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Vybraný zdieľaný priečinok súborového systému",
+        "help" : "Vyberte priečinok na serveri, ktorý je koreňovou cestou pre zdieľaný súborový systém používaný vo vašej organizácii ako úložisko dokumentov"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis zdieľanej oblasti súborového systému vašej organizácie"
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "Automaticky generovaný unikátny kód obsahu."
+      },
+      "InsertBtn" : {
+        "label" : "Pridať"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "MainPanel" : {
+        "label" : "Upraviť serverový zdieľaný priečinok"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "PublishBtn" : {
+        "label" : "Publikovať!",
+        "help" : "Uložiť a sprístupniť tieto obsahy v znalostnej databáze pre LLm"
+      },
+      "MainPanel" : {
+        "label" : "Úprava zdroja/git dokumentácie"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis git repozitára."
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky vygenerovaný jedinečný kód git repozitára."
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referencia na nadradený projekt."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git systém",
+        "help" : "Referencia na už nakonfigurovaný git systém."
+      },
+      "branch" : {
+        "label" : "Vetra",
+        "help" : "Názov vetvy na checkout (obvykle master, main alebo develop)"
+      },
+      "identityCode" : {
+        "label" : "Použitá identita",
+        "help" : "Vyberte identitu na klonovanie/checkout v systéme"
+      },
+      "repositoryUri" : {
+        "label" : "URL/adresa repozitára",
+        "help" : "Kompletná adresa vzdialeného git repozitára (zvyčajne začína http:, https: alebo ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "verejný",
+        "help" : "Ak je zvolené, prístup k repozitáru nevyžaduje overenie"
+      },
+      "openZips" : {
+        "label" : "Otvárať zip súbory",
+        "help" : "Povoliť otváranie zip súborov a extrahovanie obsahu"
+      },
+      "programmedTables" : {
+        "label" : "Plán kontrol aktualizácií obsahu",
+        "help" : "Nastavte plánovanie zmien obsahu pre udržiavanie systému rozšírenej generácie aktualizovaného"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Nastaviť build systémy",
+        "help" : "Zoznam build/balíčkovacích systémov na kontrolu meta informácií a ďalších artefaktov"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Vymazať"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Všeobecné informácie"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Použiť chat model"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "vybrať"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Vyberte konfiguráciu chat modelu"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Vyberte konfiguráciu embedding modelu"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "vybrať"
+      },
+      "RagSettingsTab" : {
+        "label" : "Nastavenia RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Nastavenia veľkého jazykového modelu a dostupných nástrojov"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Použiť embedding model"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Nastavenia zabezpečenia prístupu"
+      },
+      "MainPanel" : {
+        "label" : "Úprava profilu chatu s rozšíreným generovaním odpovedí"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód chat profilu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis profilu chatu."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Používateľ si vyberá znalostné bázy",
+        "help" : "Používateľ si môže vybrať z dostupných znalostných báz a/alebo nahrať vlastné súbory."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Znalostné bázy",
+        "help" : "Znalostné bázy použité na vyhľadávanie dokumentov."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Prah podobnosti",
+        "help" : "Prah podobnosti pre sémantické vyhľadávanie, 0,60–0,65 nízke filtrovanie, 0,70-0,75 stredné filtrovanie, 0,80–0,85 presné"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Prah podobnosti pre 2. ‘hop’",
+        "help" : "Prah podobnosti pre sémantické vyhľadávanie, 0,60–0,65 nízke filtrovanie, 0,70-0,75 stredné filtrovanie, 0,80–0,85 presnosť, použitý od 2. vyhľadávania v multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Zakázať 'Multi Hop' rag",
+        "help" : "Zakáže funkciu 'multi hop rag'. Multi hop vyhľadávanie najprv vykoná sémantické vyhľadávanie a použije nájdené dokumenty ako kontext pre ďalšie vyhľadávanie, čím poskytuje širší kontext."
+      },
+      "topK" : {
+        "label" : "Zohľadňované fragmenty dokumentov (TopK)",
+        "help" : "Pri rozšírenom generovaní odpovedí sa zohľadní N nájdených fragmentov dokumentov v sémantickom vyhľadávaní"
+      },
+      "enabledFunctions" : {
+        "label" : "Povolené volania funkcií pre tento RAG chat",
+        "help" : "Funkcie, ktoré môže model llm použiť počas chatu s používateľom a interakcie s vybranou znalostnou bázou"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Upravte prompt pre relácie s rozšíreným generovaním odpovedí."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Zadajte alebo vložte kategóriu promptu"
+      },
+      "MainPanel" : {
+        "label" : "Úprava promptu"
+      },
+      "promptCategory" : {
+        "label" : "Kategória promptu",
+        "help" : "Vyberte alebo vložte kategóriu promptu."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Upravte prompt pre chat, použite {query} na označenie otázky používateľa a {context} na označenie kontextu dokumentov/histórie zasielaného LLM."
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky vygenerovaný jedinečný kód promptu."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis promptu."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Zmeniť heslo"
+      },
+      "YourUserName" : {
+        "label" : "Vaše používateľské meno"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Staré heslo",
+        "help" : "Aktuálne heslo pre prihlásenie"
+      },
+      "newPassword" : {
+        "label" : "Nové heslo",
+        "help" : "nové heslo"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail ako používateľské meno pre prihlásenie"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Formulár na zmenu hesla"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "ChangePwdBtn" : {
+        "label" : "zmeniť heslo"
+      },
+      "newPassword1" : {
+        "label" : "Potvrďte nové heslo",
+        "help" : "Potvrďte nové heslo"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "ForMoreInformations" : {
+        "label" : "Pre viac informácií o Google custom search API alebo získaní vášho api kľúča (zadarmo) navštívte: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Unikátny kód",
+        "help" : "unikátny kód konfigurácie google search api."
+      },
+      "MainPanel" : {
+        "label" : "Úprava Google custom search api prihlasovacích údajov"
+      },
+      "secretCode" : {
+        "label" : "Google search api token",
+        "help" : "Vyberte alebo zadajte google search api token"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis konfigurácie google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Chat bez databáz znalostí",
+        "help" : "Vyberte LLM pre chatovaciu reláciu",
+        "placeholder" : "Vyberte LLM pre chatovaciu reláciu"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Otvoriť sekciu možností chatu"
+      },
+      "CreateChatBtn" : {
+        "label" : "Nový chat"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Nová chatovacia relácia"
+      },
+      "chatProfileCode" : {
+        "label" : "Chat s databázami znalostí",
+        "help" : "Vyberte firemný chat profil na prácu s firemnými (a vašimi) dokumentmi a LLM",
+        "placeholder" : "Vyberte firemný chat profil na prácu s firemnými (a vašimi) dokumentmi a LLM"
+      },
+      "NewChatBtn" : {
+        "label" : "Nový chat"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Chat relácie"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Zavrieť bočný panel"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Vytvorte nový chat s veľkými jazykovými modelmi",
+        "label" : "Chat"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Vytvorte nový RAG chat s firemným obsahom",
+        "label" : "Chat so znalostnou bázou"
+      },
+      "ChatsTitle" : {
+        "label" : "Chaty"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Otvoriť sekciu možností chatu"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Chatovať s dokumentmi",
+        "help" : "Prehliadajte alebo vyhľadávajte a vyberte dokumenty, s ktorými chcete pracovať"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vyberte súbory na chatovanie"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Prehliadajte alebo vyhľadajte a vyberte dokumenty, s ktorými chcete chatovať"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Potvrdiť"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Nahrajte alebo vyberte svoje dokumenty",
+        "help" : "Vyberte alebo nahrajte dokumenty z vášho používateľského priestoru"
+      },
+      "fileSearchBtn" : {
+        "label" : "Hľadať"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Hľadať"
+      },
+      "query" : {
+        "label" : "Frazová semantická hľadanie",
+        "help" : "Zadajte zmysluplnú frázu súvisiacu s vaším hľadaním"
+      },
+      "choosenBrowsing" : {
+        "label" : "Vyberte súbory prehliadaním znalostných báz",
+        "help" : "Vyberte súbory prehliadaním zdieľaných znalostných báz spoločnosti"
+      },
+      "filename" : {
+        "label" : "Hľadaný názov súboru",
+        "help" : "Zadajte časť názvu súboru pre váš hľadaný obsah"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Vyhľadávanie názvu súboru"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Prehliadať firemné súbory"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Sémantické vyhľadávanie"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Vyberte súbory na chatovanie"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Upraviť vybrané"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Vybrať používateľské súbory"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Vybrať obsah nahraný používateľom"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Znalostné bázy a používateľské súbory"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subprojekt alebo položka",
+        "help" : "pridať subprojekt alebo položku"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+nahrať súbory",
+        "help" : "pridať novú zdrojovú súborovú dátovú základňu"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "pridať zdroj z Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "pridať zdroj z Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+súborový systém",
+        "help" : "pridať zdroj zdieľaného súborového systému"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "pridať zdroj z Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "pridať zdroj git repozitára ako bitbucket, github alebo iné"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "pridať zdroj dát google drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Nastavenie"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "môj profil"
+      },
+      "logout" : {
+        "label" : "odhlásiť sa"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Zmeniť jazyk"
+      },
+      "MyProfile" : {
+        "label" : "váš profil"
+      },
+      "MyProfileItem" : {
+        "label" : "váš profil"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Nastavenia"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "upraviť profil"
+      },
+      "logoutMenuItem" : {
+        "label" : "odhlásiť sa"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyzovanie zoznamu dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizácia dokumentov"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Sémantický index (embedding pre sémantický rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexovanie entít/vzťahov/udalostí (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Ne spracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Chybné dokumenty",
+        "dataset-3-label" : "Zahodené dokumenty"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analyzovanie zoznamu dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizácia dokumentov"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "EMBEDDING" : {
+        "description" : "Sémantické indexovanie (embedding pre semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexovanie entít/vzťahov/udalostí (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nespracované dokumenty",
+        "label-1" : "Chyba pri spracovaní dokumentov",
+        "label-2" : "Spracované dokumenty"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Spracované tokeny",
+        "dataset-1-label" : "Chyba pri spracovaní tokenov"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Prijaté dokumenty",
+        "dataset-1-label" : "Spracované dokumenty",
+        "dataset-2-label" : "Dokumenty s chybou",
+        "dataset-3-label" : "Zamietnuté dokumenty"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Odkaz na zakúpenie kreditu Apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Upraviť",
+        "help" : "Zobraziť/upraviť konfiguráciu modelu"
+      },
+      "ExistingModelCode" : {
+        "label" : "Kód"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Popis"
+      },
+      "ExistingModelType" : {
+        "label" : "Typ modelu"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Existujúce konfigurácie"
+      },
+      "ProviderWWW" : {
+        "label" : "Odkaz na web stránku"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Prihlasovacie údaje poskytovateľa"
+      },
+      "ProviderInfos" : {
+        "label" : "Informácie o poskytovateľovi"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api kľúč/prihlasovacie údaje",
+        "help" : "Vyberte api kľúč alebo prihlasovacie údaje pre tohto poskytovateľa"
+      },
+      "NewApiKey" : {
+        "label" : "Nový api kľúč",
+        "help" : "Vložte nový api kľúč pre použitie s týmto poskytovateľom"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Použiť existujúce alebo nové",
+        "help" : "Použiť existujúce alebo vytvoriť nové prihlasovacie údaje pre tohto poskytovateľa"
+      },
+      "NewUserName" : {
+        "label" : "Používateľské meno",
+        "help" : "Používateľské meno na prístup k službám poskytovateľa"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Nový embedding model",
+        "help" : "Vytvoriť novú konfiguráciu embedding modelu"
+      },
+      "NewChatModel" : {
+        "label" : "Nový chat model",
+        "help" : "Vytvoriť novú konfiguráciu chat modelu"
+      },
+      "NewModelDialog" : {
+        "label" : "Pridať nový model"
+      },
+      "PiSave" : {
+        "label" : "Uložiť"
+      },
+      "NewModelsButton" : {
+        "label" : "Nové modely",
+        "help" : "Vytvoriť novú konfiguráciu modelov"
+      },
+      "NewModelsDialog" : {
+        "label" : "Pridať nové modely"
+      },
+      "baseUrl" : {
+        "label" : "Základná api url",
+        "help" : "Základná url pre api služby poskytovateľa"
+      },
+      "ModelTypePanel" : {
+        "label" : "Pridať nové modely"
+      },
+      "ModelsChoices" : {
+        "label" : "Výber modelov"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Odporúčaný výber modelov"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Embedding model",
+        "help" : "Vyberte jeden z preddefinovaných embedding modelov"
+      },
+      "chatPresetChoice" : {
+        "label" : "Chat model",
+        "help" : "Vyberte jeden z preddefinovaných chat modelov"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Pokročilý výber modelov"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Embedding model",
+        "help" : "Vyberte jeden z embedding modelov zverejnených dodávateľom"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Chat model",
+        "help" : "Vyberte jeden z chat modelov zverejnených dodávateľom"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Tento spôsob výberu použite iba ak ste odborník, alebo si overte na stránke dodávateľa, ktoré modely vyhovujú vašim potrebám. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Nastavte tento model ako predvolený; bude použitý pre každú úlohu, pre ktorú nie je nakonfigurovaný iný chat model"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Odporúčame vám nasledujúci zoznam modelov "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Nastavte tento model ako predvolený; bude použitý pre každú úlohu, pre ktorú nie je nakonfigurovaný iný embedding model"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "nastaviť ako predvolený chat model",
+        "help" : "Nastavte tento model ako predvolený; bude použitý pre každú úlohu, pre ktorú nie je nakonfigurovaný iný chat model"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "nastaviť ako predvolený embedding model",
+        "help" : "Nastavte tento model ako predvolený; bude použitý pre každú úlohu, pre ktorú nie je nakonfigurovaný iný embedding model"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Tento spôsob výberu použite iba ak ste odborník, alebo si overte na stránke dodávateľa, ktoré modely vyhovujú vašim potrebám. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Vytvoriť a aktivovať"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Vytvoriť a aktivovať"
+      },
+      "ProviderNameField" : {
+        "label" : "Poskytovateľ"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Poskytovateľ vyžaduje prihlasovacie údaje",
+        "help" : "Aplikačný server poskytovateľa je nastavený na overený prístup pomocou api kľúča alebo iných prihlasovacích údajov"
+      },
+      "baseUrl1" : {
+        "label" : "Základná api adresa",
+        "help" : "Základná adresa poskytovateľa pre api služby"
+      },
+      "enableAllFunctions" : {
+        "label" : "povoliť všetky funkčné volania",
+        "help" : "Povoľte všetky dostupné nástroje a funkčné volania, ak nie je nastavené, bude ich možné povoliť neskôr v llms administračnom paneli"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Vzdialený AI poskytovateľ v poriadku",
+        "detail" : "Poskytovateľ je online a úspešne nakonfigurovaný"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operácia zlyhala",
+        "detail" : "Nepodarilo sa prihlásiť pomocou zadaných prihlasovacích údajov"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operácia bola úspešne dokončená"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Chyba pri streamovaní odpovede chatu",
+        "detail" : "Chyba servera: class org.neo4j.driver.internal.value.StringValue nie je možné konvertovať na class java.lang.String (org.neo4j.driver.internal.value.StringValue je v nepojmenovanom module loadera 'app'; java.lang.String je v module java.base loadera 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Úspešne uložené",
+        "detail" : "Aktualizácia bola úspešne dokončená"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Chyba komunikácie so serverom Ollama",
+        "detail" : "Chyba siete pri komunikácii so vzdialeným systémom pri prístupe k obsahu\nzoznam modelov Chyba pri práci s url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Toto môžete odstrániť",
+        "detail" : "Aktuálne zobrazené údaje je možné bezpečne odstrániť"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Toto nemôžete odstrániť",
+        "detail" : "Na tento objekt sa odkazuje z inej časti aplikácie"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Nahrajte súbory na chatovanie"
+      },
+      "ChooseFile" : {
+        "help" : "Vyberte súbory"
+      },
+      "UploadFile" : {
+        "help" : "Nahrať súbory"
+      },
+      "DragDropHere" : {
+        "label" : "Pretiahnite sem súbory na nahranie"
+      },
+      "RemoveAll" : {
+        "help" : "Odstrániť všetko"
+      },
+      "UploadPending" : {
+        "label" : "Čaká na nahranie"
+      },
+      "CompletedData" : {
+        "label" : "Dokončené"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Nakonfigurujte graphrag v nastavovacej oblasti, ak ho chcete používať v tejto sekcii"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Nastavenia graphrag"
+      },
+      "button-help" : {
+        "label" : "Kliknite sem na konfiguráciu extrakcie informácií pre graphrag (momentálne nenakonfigurované)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Pridať konfiguráciu"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Vytvoriť"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis systému Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Vytvoriť pripojenie Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "delegatedUser" : {
+        "label" : "Google používateľ na zosobnenie",
+        "help" : "Používateľ, ktorého budú poverenia zosobňovať",
+        "placeholder" : "Používateľ, ktorého budú poverenia zosobňovať"
+      },
+      "jsonContent" : {
+        "label" : "Obsah Google poverení vo formáte json",
+        "help" : "Vytvorte Google poverenia s prístupom k vašim firemným/team drives v Google Console Cloud a vložte sem obsah stiahnutého json súboru (https://console.cloud.google.com/).",
+        "placeholder" : "Vytvorte Google poverenia s prístupom k vašim firemným/team drives v Google Console Cloud a vložte sem obsah stiahnutého json súboru (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "PublishBtn" : {
+        "label" : "Zverejniť!",
+        "help" : "Uloží a sprístupní tieto obsahy v databáze znalostí pre LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "MainPanel" : {
+        "label" : "Zdieľanie obsahu google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Nastavenia"
+      },
+      "LogsTab" : {
+        "label" : "Záznamy"
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis nahraného obsahu položiek google drive."
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód obsahu."
+      },
+      "tree" : {
+        "label" : "Vybraný súbor alebo priečinok",
+        "help" : "Zdieľané priestory a stránky google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Konfigurácia Google drive",
+        "help" : "Referencie už nakonfigurovaného systému google drive."
+      },
+      "openZips" : {
+        "label" : "Otvárať zip súbory",
+        "help" : "Povoliť otváranie zip súborov a extrakciu obsahu"
+      },
+      "parentProjectCode" : {
+        "label" : "Projekt",
+        "help" : "Referenčný projekt"
+      },
+      "programmedTables" : {
+        "label" : "Plánovanie kontroly aktualizácií obsahu",
+        "help" : "Nastavte plánovanie kontrol zmeneného obsahu, aby ste udržiavali systém rozšírenej generácie údajov aktuálny"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kritéria organizácie priečinkov a podpriečinkov",
+        "help" : "Vysvetlite, prosím, ako boli organizované priečinky a súbory v obsahu google drive zdieľanom s Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Všeobecné nastavenia"
+      },
+      "CancelBtn" : {
+        "label" : "Zrušiť"
+      },
+      "DeleteBtn" : {
+        "label" : "Odstrániť"
+      },
+      "SaveBtn" : {
+        "label" : "Uložiť"
+      },
+      "MainPanel" : {
+        "label" : "Úprava integrácie google drive"
+      },
+      "code" : {
+        "label" : "Jedinečný kód",
+        "help" : "Automaticky generovaný jedinečný kód systému google drive."
+      },
+      "description" : {
+        "label" : "Popis",
+        "help" : "Zadajte popis systému google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Použitá identita",
+        "help" : "Vyberte alebo vytvorte identitu na prístup do systému google drive"
+      }
+    }
+  }
+}

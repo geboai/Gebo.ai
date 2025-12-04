@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Iaith system diofyn",
+        "help" : "Iaith system diofyn ar gyfer y gosodiad hwn o Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-bost",
+        "help" : "E-bost fel enw defnyddiwr i fewngofnodi"
+      },
+      "passwordC" : {
+        "label" : "Cadarnhau cyfrinair",
+        "help" : "Cadarnhau'r cyfrinair"
+      },
+      "password" : {
+        "label" : "Cyfrinair",
+        "help" : "Cyfrinair i fewngofnodi (o leiaf 8 nod)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " nid yw'r cyfrineiriau'n cyd-fynd "
+      },
+      "LocalAdmin" : {
+        "label" : "Creu eich cyfrif gweinyddol lleol"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Byddwch yn defnyddio'r cyfrif hwn yn y dyfodol i osod/gweinyddio'r meddalwedd, bydd y data hwn yn aros yn lleol ar eich system ac nid yw'n cael ei anfon dros y rhwydwaith"
+      },
+      "EnterBtn" : {
+        "label" : "Ewch i'r dudalen fewngofnodi i fynd i mewn"
+      },
+      "SetupPage" : {
+        "label" : "Gosod eich Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Creu gosodiad system"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Darllenwch a derbyn y drwydded"
+      },
+      "AcceptMark" : {
+        "label" : "Rwy'n derbyn y telerau",
+        "help" : "Trwy glicio yma rydych yn derbyn y telerau ac amodau yn y drwydded"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-bost",
+        "help" : "E-bost fel enw defnyddiwr i fewngofnodi"
+      },
+      "password" : {
+        "label" : "Cyfrinair",
+        "help" : "Cyfrinair i fewngofnodi"
+      },
+      "LoginPanel" : {
+        "label" : "Mewngofnodi i gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Mewngofnodi"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi'i gwblhau'n llwyddiannus"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Croeso i gebo.ai",
+        "detail" : "Nodwch eich enw defnyddiwr a chyfrinair i fewngofnodi"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Methiant gweithred",
+        "detail" : "Methu dilysu gyda’r manylion a ddarparwyd"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi cwblhau’n llwyddiannus"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Croeso i gebo.ai",
+        "detail" : "Nodwch eich enw defnyddiwr a chyfrinair i fewngofnodi"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Ffurfweddiad Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Enw darparwr"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "MainPanel" : {
+        "label" : "Gosodiadau diogelwch Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Yn ôl i hafan y gosodiad"
+      },
+      "WizardUi" : {
+        "label" : "Dewiswch adran gosod"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Gosodiad cyfrif gweinyddwr ac eraill",
+        "description" : "Mae angen o leiaf un cyfrif gweinyddu i sicrhau bod y gosodiad hwn o gebo.ai yn cael ei reoli'n iawn, ychwanegwch ddefnyddwyr eraill os oes angen"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Cyfeiriadur gwaith Gebo.ai",
+        "description" : "Ffurfweddu cyfeiriadur gwaith, bydd hwn yn ffolder lle cedwir pob ffeil gweithio a chyfluniadau'r gosodiad hwn. Argymhellir gwneud copi wrth gefn yn rheolaidd."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Ffurfweddiad cronfa ddata fector",
+        "description" : "Rhaid ffurfweddu cronfa ddata fector i Gebo.ai darparu gwasanaethau cynhyrchu gyda chwilio uwch, gallwch ddewis rhwng cronfa ddata fector lleol, Qdrant neu Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Mewngofnodi unwaith, dilysu oauth2",
+        "description" : "Mewngofnodi unwaith trwy Oauth2 a ffurfweddiad cleientiaid oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Gosodiad modelau iaith mawr",
+        "description" : "Ffurfweddu gwahanol fodelau iaith gyda gwasanaethau cefnlen cwmwl neu leol/LAN, rhaid ffurfweddu o leiaf un model sgwrs a modelau ymgorffori i sicrhau bod y feddalwedd yn gweithio'n gywir."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Stup echdynnu gwybodaeth/Graph rag",
+        "description" : "Ffurfweddu is-system echdynnu gwybodaeth a graph rag"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Gosodiad llwybrau systemau ffeiliau ar y cyd",
+        "description" : "Ffurfweddu llwybrau systemau ffeiliau ar y cyd y cwmni i'w defnyddio fel ardal dogfennau cynhyrchu gyda chwilio uwch yn amrywiaeth o gronfeydd gwybodaeth"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integreiddio Atlassian confluence",
+        "description" : "Ffurfweddu Gebo.ai i gael mynediad at eich gosodiadau Atlassian Confluence ar gwmwl neu ar y safle"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integreiddio Atlassian jira",
+        "description" : "Ffurfweddu Gebo.ai i gael mynediad at eich gosodiadau cwmwl Atlassian jira"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integreiddio Microsoft Sharepoint",
+        "description" : "Ffurfweddu Gebo.ai i gael mynediad at eich gosodiadau Microsoft Sharepoint ar gwmwl neu ar y safle"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Ffurfweddu o leiaf un gronfa wybodaeth",
+        "description" : "Ffurfweddu o leiaf un gronfa wybodaeth er mwyn i'ch defnyddwyr fwynhau'r gwasanaethau cynhyrchu gyda chwilio uwch o Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Ffurfweddu o leiaf un proffil sgwrs \"R.A.G.\"",
+        "description" : "Ffurfweddu o leiaf un proffil sgwrs cynhyrchu gyda chwilio uwch ar gyfer eich defnyddwyr yn seiliedig ar un o'ch cronfeydd gwybodaeth wedi'u ffurfweddu"
+      },
+      "mandatory-done" : {
+        "summary" : "Camau gorfodol setup Gebo.ai wedi'u cwblhau...",
+        "detail" : "Mae'r camau setup gorfodol wedi'u cwblhau ond mae rhai camau ar goll sy'n atal eich sefydliad rhag cael y gorau o'r feddalwedd hon"
+      },
+      "setup-ok" : {
+        "summary" : "Setup Gebo.ai yn iawn!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Mae setup Gebo.ai ar goll cam gorfodol",
+        "detail" : "Adolygwch y camau coch yn y broses setup"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integreiddio Google Drive/Workspaces",
+        "description" : "Ffurfweddu Gebo.ai i gael mynediad at ddata tîm Google cloud Drive/Workspaces"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gosod systemau Atlassian Confluence y cwmni"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Math o system"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "System Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "System Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "MainPanel" : {
+        "label" : "Gosod systemau Atlassian Jira y cwmni"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Math o system"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "MainPanel" : {
+        "label" : "Gosod systemau Microsoft Sharepoint y cwmni"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Math o system"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "System Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Darparwch allwedd api gyda chredyd ar gael. Os byddwch yn dewis OpenAI mae'n rhaid ychwanegu credyd penodol (10-30$ ddigon fel arfer) i'ch cynllun arferol ar gyfer defnydd api, fel arall ni fydd unrhyw draffig llms ar gael yn y cais hwn."
+      },
+      "MainPanel" : {
+        "label" : "Gosod mynediad darparwyr llms Gebo.ai gyda'ch allwedd api eich hun"
+      },
+      "provider" : {
+        "label" : "Darparwr model iaith mawr",
+        "help" : "Dewiswch un darparwr o blith OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Defnyddiwr",
+        "help" : "Nodwch y defnyddiwr sy'n gysylltiedig â'r apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Ffurfweddu"
+      },
+      "apiKey" : {
+        "label" : "Allwedd api",
+        "help" : "Eich allwedd api o'r darparwyr LLMS i'w ddefnyddio"
+      },
+      "ProviderHeader" : {
+        "label" : "Darparwr"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Math o fodel"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Model rhagosodedig"
+      },
+      "MainPanelHeader" : {
+        "label" : "Setup mynediad darparwyr llms Gebo.ai"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Creu ffurfweddiad graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Gosod ffurfweddiad diofyn Graph Rag & echdynnu gwybodaeth"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "EditConfigBtn" : {
+        "label" : "Golygu gosodiad"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Prosiect"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Ychwanegu cronfa wybodaeth"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Cronfa wybodaeth"
+      },
+      "MainPanel" : {
+        "label" : "Gosod cronfeydd gwybodaeth a chynnwys"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Ffynhonnell cynnwys"
+      },
+      "PublishedHeader" : {
+        "label" : "Cyhoeddwyd"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Nifer y dogfennau"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Ychwanegu prosiect/eitem",
+        "help" : "creu prosiect newydd"
+      },
+      "Button1" : {
+        "help" : "agor cronfa wybodaeth"
+      },
+      "Button2" : {
+        "help" : "agor ffurflen prosiect"
+      },
+      "Button3" : {
+        "help" : "agor ffynhonnell ddata"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Ffurfweddiad ffolder gwaith Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Ffurfweddu"
+      },
+      "workDirectory" : {
+        "label" : "Dewiswch ffolder fel cyfeiriadur gwaith Gebo.ai",
+        "help" : "Dewiswch ffolder gweinydd y bydd y gosodiad hwn yn ei ddefnyddio fel ffolder gwaith ar gyfer storio cynnwys a ffurfweddiadau."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Ychwanegu ffolder"
+      },
+      "AddFolderBtn" : {
+        "label" : "Ychwanegu ffolder"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "MainPanel" : {
+        "label" : "Llwybrau system ffeiliau ar y gweinydd"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Llwybr llwyr"
+      },
+      "DeleteHeader" : {
+        "label" : "Dileu"
+      },
+      "path" : {
+        "label" : "Ychwanegu ffolder gwraidd system ffeiliau ar y cyd",
+        "help" : "Dewiswch ffolder gweinydd sy'n lwybr gwraidd ar gyfer y system ffeiliau ar y cyd a ddefnyddir yn eich sefydliad fel storfa dogfennau"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad mynediad system ffeiliau"
+      },
+      "RemovePathBtn" : {
+        "label" : "Tynnu llwybr"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Ffurfweddu"
+      },
+      "MainPanel" : {
+        "label" : "Ffurfweddiad cronfa ddata fector"
+      },
+      "host" : {
+        "label" : "Gwesteiwr Qdrant",
+        "help" : "Enw neu gyfeiriad ip gwesteiwr Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Gosodiadau cysylltiad Qdrant"
+      },
+      "port" : {
+        "label" : "Porth Qdrant",
+        "help" : "Porth cyfathrebu Qdrant (6334 yw'r safonol)"
+      },
+      "apiKey" : {
+        "label" : "Allwedd api Qdrant",
+        "help" : "Allwedd api ar gyfer dilysu Qdrant"
+      },
+      "tls" : {
+        "label" : "Paramedr TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Camau gorfodol gosodiad Gebo.ai wedi'u cwblhau...",
+        "detail" : "Mae'r camau gosod gorfodol wedi'u cwblhau ond mae rhai camau ar goll yn atal eich sefydliad rhag elwa'n llawn ar y feddalwedd hon"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Mae cam gorfodol o setlo Gebo.ai ar goll",
+        "detail" : "Adolygwch y camau coch yn y broses osod"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gosodiad Gebo.ai: Iawn!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Ychwanegu proffil sgwrsio R.A.G. newydd"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Ychwanegu proffil sgwrsio R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Adfer gosodiadau proffiliau sgwrsio cenedlaethau atodol (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Proffiliau sgwrsio R.A.G. presennol"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Golygu proffil sgwrsio R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Codau cronfa wybodaeth"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Sefydlu systemau Google Drive/Workspaces y cwmni"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod ffurfweddiad"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Cod",
+        "help" : "Rhowch ddisgrifiad o god Dilysu/Integreiddio OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o wybodaeth Dilysu/Integreiddio OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Diben ffurfweddu",
+        "help" : "Dewiswch os bydd y gosodiadau hyn yn cael eu defnyddio i Ddilysu yn Gebo.ai neu i ganiatáu i Gebo.ai gael cysylltedd cleient i system trydydd parti."
+      },
+      "authProvider" : {
+        "label" : "Darparwr",
+        "help" : "Rhowch ddarparwr Dilysu OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "URI Cyhoeddwr",
+        "help" : "Rhowch URL cyhoeddwr OAUTH2 y darparwr"
+      },
+      "authorizationUri" : {
+        "label" : "URL Awdurdodi",
+        "help" : "Rhowch URL Awdurdodi OAUTH2 y darparwr"
+      },
+      "jwkSetUri" : {
+        "label" : "URI Set Jwk",
+        "help" : "Rhowch url Set Jwk OAUTH2 y darparwr"
+      },
+      "userInfoUri" : {
+        "label" : "URL Gwybodaeth Defnyddiwr",
+        "help" : "Rhowch URL Gwybodaeth Defnyddiwr OAUTH2 y darparwr"
+      },
+      "introspectionUri" : {
+        "label" : "URI Introsbeccio",
+        "help" : "Rhowch URL introsbeccio OAUTH2 y darparwr"
+      },
+      "tokenUri" : {
+        "label" : "URL Tocyn",
+        "help" : "Rhowch URL Tocyn OAUTH2 y darparwr"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URLau darparwr OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Mewnosod gwybodaeth Dilysu/Integreiddio OAUTH2 newydd"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID cleient",
+        "help" : "Dynodwr cleient ar gyfer y protocol oauth2 (i'w adalw yn ardal weinyddol meddalwedd 3ydd parti wedi'i ddilysu â oauth2)"
+      },
+      "secret" : {
+        "label" : "Allwedd gyfrinachol",
+        "help" : "Cyfrinach cleient ar gyfer y protocol oauth2 (i'w adalw yn ardal weinyddol meddalwedd 3ydd parti wedi'i ddilysu â oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Creu ffurfweddiad system confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r system confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Creu"
+      },
+      "username" : {
+        "label" : "Enw defnyddiwr Confluence",
+        "help" : "Enw defnyddiwr Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Fersiwn Confluence",
+        "help" : "Fersiwn Confluence"
+      },
+      "baseUri" : {
+        "label" : "Cyfeiriad rhyngrwyd sylfaenol",
+        "help" : "Url cyfeiriad sylfaenol y system confluence ar gyfer gosodiad ar leoliad neu url sylfaenol eich sefydliad ar gyfer system confluence cwmwl"
+      },
+      "password" : {
+        "label" : "Cyfrinair Confluence",
+        "help" : "Cyfrinair Confluence"
+      },
+      "token" : {
+        "label" : "Allwedd api cwmwl Confluence",
+        "help" : "Apikey Confluence CLOUD a gafwyd yn y cefn swyddfa confluence, yma mae'n rhaid rhoi \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn gwneud y cynnwys hyn ar gael yn y gronfa wybodaeth i LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "MainPanel" : {
+        "label" : "Rhannu cynnwys confluence"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y cynnwys."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r cynnwys a uwchlwythwyd o gofnodion confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "System Confluence",
+        "help" : "Cyfeirnod y system confluence sydd eisoes wedi'i ffurfweddu."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeirnod y prosiect rhiant."
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip a thynnu cynnwys"
+      },
+      "tree" : {
+        "label" : "Gohebwyd lleoedd neu dudalennau/is-dudalennau",
+        "help" : "Cynnwys lleoedd a thudalennau confluence a rennir"
+      },
+      "programmedTables" : {
+        "label" : "Amserlen gwirio diweddariadau cynnwys",
+        "help" : "Ffurfweddwch yr amserlen ddiweddaru cynnwys er mwyn cadw'r system cynhyrchu estynedig yn gyfredol"
+      },
+      "catalogingCriteria" : {
+        "label" : "Meini prawf trefnu lleoedd, tudalennau ac is-dudalennau",
+        "help" : "Esboniwch yma sut y gwnaed y meini prawf trefnu ar gyfer y lleoedd, tudalennau ac is-dudalennau yn y cynnwys confluence a rennir gyda Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Gosodiadau cyffredinol"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "MainPanel" : {
+        "label" : "Golygu system confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "baseUri" : {
+        "label" : "Cyfeiriad rhyngrwyd sylfaenol",
+        "help" : "Url cyfeiriad sylfaenol y system confluence"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y system confluence."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r system confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Fersiwn Confluence",
+        "help" : "Fersiwn Confluence"
+      },
+      "secretCode" : {
+        "label" : "Hunaniaeth a ddefnyddir",
+        "help" : "Dewiswch neu crëwch yr hunaniaeth i gael mynediad i'r system confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "grŵp newydd"
+      },
+      "NewUserBtn" : {
+        "label" : "defnyddiwr newydd"
+      },
+      "UsersListPanel" : {
+        "label" : "Rhestr defnyddwyr"
+      },
+      "GroupsListPanel" : {
+        "label" : "Rhestr grwpiau"
+      },
+      "SournameHeader" : {
+        "label" : "cyfenw"
+      },
+      "UsernameHeader" : {
+        "label" : "enw defnyddiwr"
+      },
+      "RolesHeader" : {
+        "label" : "rolau"
+      },
+      "NameHeader" : {
+        "label" : "enw"
+      },
+      "EditBtn" : {
+        "label" : "Golygu"
+      },
+      "DisabledHeader" : {
+        "label" : "anabl"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "UserIds" : {
+        "placeholder" : "Dewiswch ddefnyddwyr"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "MainPanel" : {
+        "label" : "Golygu grŵp defnyddwyr"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad y grŵp defnyddwyr"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Rhowch god y grŵp defnyddwyr"
+      },
+      "userIds" : {
+        "label" : "Rhestr defnyddwyr",
+        "help" : "Dewiswch ddefnyddwyr sy’n cymryd rhan yn y grŵp"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Creu"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad y system jira."
+      },
+      "MainPanel" : {
+        "label" : "Creu ffurfweddiad system jira"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "username" : {
+        "label" : "enw defnyddiwr jira",
+        "help" : "enw defnyddiwr jira"
+      },
+      "token" : {
+        "label" : "allwedd api jira cloud",
+        "help" : "api allwedd CLOUD jira a gafwyd yn y jira backoffic, yma mae'n rhaid mewnosod \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Cyfeiriad rhyngrwyd sylfaenol",
+        "help" : "Url cyfeiriad sylfaenol y system jira ar gyfer gosod onpremise neu url sefydliad ar gyfer system jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn gwneud y cynnwys hyn ar gael yn y gronfa wybodaeth i LLms"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "MainPanel" : {
+        "label" : "Rhannu cynnwys jira"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y cynnwys."
+      },
+      "jiraSystemCode" : {
+        "label" : "system jira",
+        "help" : "Cyfeirnod system jira sydd eisoes wedi'i ffurfweddu."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeirnod prosiect rhiant."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r cynnwys wedi'i lwytho o gofnodion jira."
+      },
+      "programmedTables" : {
+        "label" : "Trefniant gwiriadau diweddariadau cynnwys",
+        "help" : "Ffurfweddwch amserlen newid cynnwys i gadw'r system cynhyrchu wedi'i diweddaru"
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip ac echdynnu cynnwys"
+      },
+      "tree" : {
+        "label" : "Gohebwyd gofodau neu dudalennau/is-dudalennau",
+        "help" : "Cynnwys hierarchaeth prosiectau a thocynnau jira wedi'u rhannu"
+      },
+      "catalogingCriteria" : {
+        "label" : "Meini prawf trefnu gofodau, tudalennau ac is-dudalennau",
+        "help" : "Eglurwch fan hyn sut mae'r meini prawf trefnu gofodau, tudalennau ac is-dudalennau wedi'i wneud yn y cynnwys jira wedi'u rhannu gyda Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad y system jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "MainPanel" : {
+        "label" : "Golygu system jira"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "baseUri" : {
+        "label" : "Cyfeiriad rhyngrwyd sylfaenol",
+        "help" : "Url y cyfeiriad sylfaenol ar gyfer y system jira"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y system jira."
+      },
+      "secretCode" : {
+        "label" : "Hunaniaeth a ddefnyddir",
+        "help" : "Dewiswch neu crëwch hunaniaeth i gael mynediad i'r system jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad o'r system SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Fersiwn Sharepoint",
+        "help" : "fersiwn sharepoint"
+      },
+      "secret" : {
+        "label" : "Allwedd gyfrinachol",
+        "help" : "Gwybodaeth gyfrinachol Oauth2 ar gyfer yr ap hwn wedi'i gofrestru yn y cynnyrch microsoft \"entra\" (i'w nôl yn consol gweinyddol cwmwl microsoft)"
+      },
+      "clientId" : {
+        "label" : "ID Cleient",
+        "help" : "Dynodwr cleient Oauth2 ar gyfer yr ap hwn wedi'i gofrestru yn y cynnyrch microsoft \"entra\" (i'w nôl yn consol gweinyddol cwmwl microsoft)"
+      },
+      "tenantId" : {
+        "label" : "ID Tenant",
+        "help" : "Dynodwr tenant Oauth2 ar gyfer cynnyrch microsoft \"entra\" eich sefydliad (i'w nôl yn consol gweinyddol cwmwl microsoft)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Gwybodaeth cofrestru ap Microsof oauth2 ar gyfer Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Creu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "MainPanel" : {
+        "label" : "Creu ffurfweddiad system SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn caniatáu i’r cynnwys hwn fod ar gael yn y gronfa wybodaeth i'r LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "MainPanel" : {
+        "label" : "Rhannu cynnwys SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw awtomatig y cynnwys."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeirnod prosiect rhieni."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad y ffynonellau data SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "system sharepoint",
+        "help" : "Cyfeirnod system SharePoint/OneDrive sydd eisoes wedi'i ffurfweddu."
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip ac echdynnu cynnwys"
+      },
+      "tree" : {
+        "label" : "Safleoedd/tudalennau/is-dudalennau Sharepoint neu yrrwyr/ffolderi/ffeiliau OneDrive a ddewiswyd",
+        "help" : "Cynnwys Sharepoint/OneDrive a rennir"
+      },
+      "programmedTables" : {
+        "label" : "Amserlen gwiriadau diweddariadau cynnwys",
+        "help" : "Ffurfweddu'r amseru ar gyfer cynnwys sydd wedi newid i gadw'r system cynhyrchu atgyfnerthiedig yn gyfredol"
+      },
+      "catalogingCriteria" : {
+        "label" : "Meini prawf trefnu lleoedd, tudalennau ac is-dudalennau",
+        "help" : "Eglurwch yma sut mae’r meini prawf trefnu lleoedd, tudalennau ac is-dudalennau wedi’u gweithredu yn y cynnwys sharepoint a rennir gyda Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Golygu'r system sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Gosodiadau cyffredinol"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "secretCode" : {
+        "label" : "Hunaniaeth a ddefnyddiwyd",
+        "help" : "Dewiswch neu crëwch yr hunaniaeth i gael mynediad at y system sharepoint"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw awtomatig y system sharepoint."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad y system sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Fersiwn Sharepoint",
+        "help" : "fersiwn sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Dileu"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Cadw"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Canslo"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Gosodiadau gwybodaeth/cynnwys cyffredinol"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Gosodiadau LLms"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y cam tynnu data graff gwybodaeth"
+      },
+      "MainPanel" : {
+        "label" : "Ffurfweddiad echdynnu gwybodaeth/graphrag"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r ffurfweddiad cam tynnu data graff gwybodaeth hwn"
+      },
+      "extractionPrompt" : {
+        "label" : "Ciw echdynnu gwybodaeth",
+        "help" : "Ciw model iaith fawr ar gyfer echdynnu endidau/digwyddiadau/berthynas ac aliasau"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM a ddefnyddir ar gyfer tynnu data",
+        "help" : "Nodwch y model iaith fawr a ddefnyddir ar gyfer echdynnu gwybodaeth, bydd yr un rhagosodedig yn cael ei ddefnyddio os na chaiff un ei ddewis."
+      },
+      "graphRagAllSources" : {
+        "label" : "Cymhwyso graph rag i bob ffynhonnell ddata",
+        "help" : "Os yw’n wir, bydd pob sylfaen wybodaeth/prosiect/ffynhonnell ddata yn cael ei brosesu ar gyfer echdynnu gwybodaeth, fel arall dim ond y rhai sydd wedi’u ffurfweddu’n benodol."
+      },
+      "defaultModel" : {
+        "label" : "Model iaith fawr rhagosodedig",
+        "help" : "Bydd y model iaith fawr rhagosodedig yn cael ei ddefnyddio ar gyfer echdynnu gwybodaeth"
+      },
+      "processEveryDocument" : {
+        "label" : "Cymhwyso graph rag i bob ffeil",
+        "help" : "Bydd algorithmau graph rag yn cael eu defnyddio ar bob ffeil, gan wella manylion yr ymholiad y gall y system eu cyflawni, ond bydd hyn yn cynyddu’r gost a’r amser sydd ei angen i brosesu dogfennau"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Meini prawf dewis ffeiliau ar gyfer prosesu graphrag",
+        "help" : "Golygu meini prawf ar gyfer ffeil i'w anfon i biblinell tynnu gwybodaeth ar gyfer graphrag; dewiswch o leiaf enw ffeil a maen prawf ac/neu fath o ffeil ac/neu nifer fwyaf o fegobeithion maint ffeil ac/neu oedran y newid diwethaf mewn dyddiau"
+      },
+      "extractionFormat" : {
+        "label" : "Fformat echdynnu",
+        "help" : "Defnyddiwch fformat CSV ar gyfer llms dan 30b paramedr, ffurf JSON ar gyfer modelau ffin enfawr",
+        "placeholder" : "Defnyddiwch fformat CSV ar gyfer llms dan 30b paramedr, ffurf JSON ar gyfer modelau ffin enfawr"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Dewiswch fathau o ffeiliau"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Meini prawf hidlo enw ffeil"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Diweddariad diwethaf y ffeil, diwrnodau yn ôl"
+      },
+      "nameFilter" : {
+        "placeholder" : "Enw'r ffeil"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Uchafswm maint y ffeil mewn Beitiau"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "MainPanel" : {
+        "label" : "Golygu cronfa wybodaeth"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad cronfa wybodaeth"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw y gronfa wybodaeth a gynhyrchir yn awtomatig."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r gronfa wybodaeth."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Modelau ymgorffori a ddefnyddir (gadewch yn wag i ddefnyddio rhagosodedig y system)",
+        "help" : "Modelau ymgorffori ar gyfer y gronfa wybodaeth, gadewch yn wag i ddefnyddio'r un rhagosodedig."
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "IndexBtn" : {
+        "label" : "Mynegai",
+        "help" : "Ailfynegeio cynnwys"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Golygu prosiect neu eitem"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw y prosiect a gynhyrchir yn awtomatig."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r prosiect."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "cronfa wybodaeth",
+        "help" : "cronfa wybodaeth."
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "IndexBtn" : {
+        "label" : "Mynegai",
+        "help" : "Ailfynegeio cynnwys"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Ychwanegu eitem/prosiect",
+        "help" : "ychwanegu newydd..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Mae pawb yn defnyddio",
+        "help" : "Gall pawb ddefnyddio"
+      },
+      "accessibleGroups" : {
+        "label" : "Rhestr o grwpiau",
+        "help" : "Dewiswch grwpiau a ganiateir"
+      },
+      "accessibleUsers" : {
+        "label" : "Rhestr o ddefnyddwyr",
+        "help" : "Dewiswch ddefnyddwyr a ganiateir"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Dangosfwrdd"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs ar gyfer sgwrsio ac ymgorffori"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Proffiliau sgwrs Rag/Model anogiadau"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Sylfaen wybodaeth a phrosiectau"
+      },
+      "UsersGroupTab" : {
+        "label" : "Defnyddwyr a grwpiau"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gosodiadau modiwlau Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Cofnodion"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Ffurfweddu"
+      },
+      "ConfigureBtn" : {
+        "label" : "Ffurfweddu"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Ffurfweddiad anogaeth newydd"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Proffil sgwrsio newydd"
+      },
+      "MainPanel" : {
+        "label" : "Proffiliau sgwrsio cenedlaethau wedi'u helaethu â chasglu gwybodaeth"
+      },
+      "PromptsPanel" : {
+        "label" : "Casgliad anogaethau a'r anogaethau rhagosodedig"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Sylfaenau gwybodaeth"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "ConfigureBtn1" : {
+        "label" : "ffurfweddu"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Sylfaen wybodaeth newydd"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Ffurfweddu model mewnblannu newydd"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Ffurfweddu model sgwrs newydd"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Darparwr model"
+      },
+      "ConfigureBtn" : {
+        "label" : "ffurfweddu"
+      },
+      "CodeHeader2" : {
+        "label" : "Cod"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Disgrifiad"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Darparwr model"
+      },
+      "ConfigureBtn2" : {
+        "label" : "ffurfweddu"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Modelau sgwrs wedi’u ffurfweddu"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Modelau mewnblannu wedi’u ffurfweddu"
+      },
+      "chat" : {
+        "label" : "Model sgwrsio newydd",
+        "help" : "Dewiswch y cyflenwr i ychwanegu model sgwrsio newydd sy’n gallu sgwrsio â’r defnyddiwr neu gyflawni awtomeiddio",
+        "placeholder" : "Dewiswch y cyflenwr i ychwanegu model sgwrsio newydd sy’n gallu sgwrsio â’r defnyddiwr neu gyflawni awtomeiddio"
+      },
+      "embed" : {
+        "label" : "Model mewnblannu newydd",
+        "help" : "Dewiswch y cyflenwr i ychwanegu model mewnblannu newydd sy’n gallu mynegeio cynnwys yn semantig",
+        "placeholder" : "Dewiswch y cyflenwr i ychwanegu model mewnblannu newydd sy’n gallu mynegeio cynnwys yn semantig"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Model profi"
+      },
+      "TestChatBtn" : {
+        "label" : "Profi sgwrs"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Dewiswch y OpenAI token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs OpenAI",
+        "help" : "Dewiswch y model sgwrs OpenAI i'w ddefnyddio."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gosodiadau uwch"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model sgwrs OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad y model"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model mewnblannu OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Dewiswch y OpenAI token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model mewnblannu wedi'i gynhyrchu'n awtomatig"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model mewnblannu"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model mewnblannu OpenAI",
+        "help" : "Dewiswch y model mewnblannu OpenAI i'w ddefnyddio."
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model mewnblannu diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model mewnblannu diofyn pan nad yw model mewnblannu wedi'i nodi"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "baseUrl" : {
+        "label" : "Cyfeiriad gweinydd ollama sylfaenol",
+        "help" : "Cyfeiriad sylfaenol (fel http://servername:234/) mae'r gweinydd ollama lleol neu LAN yn ymateb."
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs Ollama",
+        "help" : "Dewiswch y model sgwrs Ollama i'w ddefnyddio.",
+        "placeholder" : "Dewiswch fodel"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Dewiswch y Ollama token i'w ddefnyddio ar gyfer y model hwn (dewisol)"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model sgwrs gweinydd lleol (neu LAN) Ollama"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Dewiswch y Anthropic token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs Anthropic",
+        "help" : "Dewiswch y model sgwrs Anthropic i'w ddefnyddio.",
+        "placeholder" : "Dewiswch fodel"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gosodiadau uwch"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad y model"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model sgwrs Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Dewiswch y MistralAI token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs MistralAI",
+        "help" : "Dewiswch y model sgwrs MistralAI i'w ddefnyddio."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gosodiadau uwch"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad y model"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model sgwrs MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs Google Vertex AI",
+        "help" : "Dewiswch y model sgwrs Google Vertex AI i'w ddefnyddio."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Dewiswch y Google Vertex AI token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Gosodiadau mynediad y model"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Gosodiadau uwch"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model sgwrs Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Dewiswch y Deepseek token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs Deepseek",
+        "help" : "Dewiswch y model sgwrs Deepseek i'w ddefnyddio.",
+        "placeholder" : "Dewiswch fodel"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gosodiadau uwch"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model sgwrs Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad y model"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model wedi'i gynhyrchu'n awtomatig"
+      },
+      "baseUrl" : {
+        "label" : "Cyfeiriad gweinydd API model sgwrs",
+        "help" : "Cyfeiriad sylfaenol model sgwrs."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API model sgwrs",
+        "help" : "Dewiswch y token API model sgwrs i'w ddefnyddio ar gyfer y model hwn (dewisol)"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model sgwrs diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model sgwrs diofyn pan nad yw model sgwrs wedi'i nodi"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model sgwrs model sgwrs",
+        "help" : "Dewiswch y model sgwrs model sgwrs i'w ddefnyddio."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "TitleFragment" : {
+        "label" : "Golygu darparwr model sgwrs:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Gosodiadau uwch"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad y model"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model mewnblannu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model mewnblannu gweinydd lleol (neu LAN) Ollama"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Dewiswch y Ollama token i'w ddefnyddio ar gyfer y model hwn"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model mewnblannu Ollama",
+        "help" : "Dewiswch y model mewnblannu Ollama i'w ddefnyddio."
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model mewnblannu wedi'i gynhyrchu'n awtomatig"
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model mewnblannu diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model mewnblannu diofyn pan nad yw model mewnblannu wedi'i nodi"
+      },
+      "baseUrl" : {
+        "label" : "Cyfeiriad gweinydd ollama sylfaenol",
+        "help" : "Cyfeiriad sylfaenol (fel http://servername:234/) mae'r gweinydd ollama lleol neu LAN yn ymateb."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model mewnblannu"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model mewnblannu MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model mewnblannu wedi'i gynhyrchu'n awtomatig"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model mewnblannu MistralAI",
+        "help" : "Dewiswch y model mewnblannu MistralAI i'w ddefnyddio."
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model mewnblannu diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model mewnblannu diofyn pan nad yw model mewnblannu wedi'i nodi"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Dewiswch y MistralAI token i'w ddefnyddio ar gyfer y model hwn"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Golygu ffurfweddiad model mewnblannu Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer y ffurfweddiad model mewnblannu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model mewnblannu Google Vertex AI",
+        "help" : "Dewiswch y model mewnblannu Google Vertex AI i'w ddefnyddio."
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model mewnblannu diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model mewnblannu diofyn pan nad yw model mewnblannu wedi'i nodi"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw y ffurfweddiad model mewnblannu wedi'i gynhyrchu'n awtomatig"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Dewiswch y Google Vertex AI token i'w ddefnyddio ar gyfer y model hwn"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "TitleFragment" : {
+        "label" : "Golygu darparwr model mewnblannu:"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad ar gyfer ffurfwedd model mewnblannu"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw ffurfwedd model mewnblannu wedi'i gynhyrchu'n awtomatig"
+      },
+      "choosedModel" : {
+        "label" : "Dewis model mewnblannu model mewnblannu",
+        "help" : "Dewiswch y model mewnblannu model mewnblannu i'w ddefnyddio."
+      },
+      "baseUrl" : {
+        "label" : "Cyfeiriad gweinydd API model mewnblannu",
+        "help" : "Cyfeiriad sylfaenol y gweinydd model mewnblannu."
+      },
+      "defaultModel" : {
+        "label" : "gosod hwn fel y model mewnblannu diofyn",
+        "help" : "Os yn wir defnyddir hwn fel model mewnblannu diofyn pan nad yw model mewnblannu wedi'i nodi"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API model mewnblannu",
+        "help" : "Dewiswch y token API model mewnblannu i'w ddefnyddio ar gyfer y model hwn"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Gwybodaeth ffurfweddiad sgwrs"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Dileu'r sesiwn sgwrsio hon"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Ailenwi'r sesiwn sgwrsio"
+      },
+      "QueryControl" : {
+        "placeholder" : "Ysgrifennwch neges ar gyfer y bot sgwrsio"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pori neu chwilio a dewis dogfennau i sgwrsio â hwy"
+      },
+      "UploadFileBtn" : {
+        "help" : "Llwytho ffeil i fyny i sgwrsio neu weithio gyda hi"
+      },
+      "SubmiQuestion" : {
+        "help" : "Cyflwyno eich cwestiwn"
+      },
+      "WithParams" : {
+        "label" : "gyda pharamedrau:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Swyddogaethau AI a alwyd:"
+      },
+      "UploadedDocs" : {
+        "label" : "Dogfennau wedi’u llwytho i fyny"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Hanes sgwrs wedi'i lwytho",
+        "detail" : "Hanes sgwrs wedi'i lwytho'n llwyddiannus"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Mae eich araith yn cael ei huwchlwytho"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Ateb llais wedi'i dderbyn"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Sgrolio i fyny"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Sgrolio i lawr"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Dogfennau perthnasol wedi’u canfod"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Ydych chi'n siŵr eich bod chi eisiau dileu'r sgwrs hon?",
+        "header" : "Gweithred dileu sgwrs"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "description" : {
+        "label" : "Disgrifiad y sgwrs",
+        "help" : "Nodwch ddisgrifiad y sesiwn sgwrsio."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Model a ddefnyddiwyd",
+        "help" : "Cod y model"
+      },
+      "providerId" : {
+        "label" : "Darparwr model sgwrs",
+        "help" : "Gyrrwr darparwr LLms"
+      },
+      "functions" : {
+        "label" : "Swyddogaethau y gellir eu galw gan y model sgwrs",
+        "help" : "Rhestr o swyddogaethau sydd ar gael i'r model sgwrs"
+      },
+      "NameCol" : {
+        "label" : "Enw"
+      },
+      "DescriptionCol" : {
+        "label" : "Disgrifiad"
+      },
+      "kbases" : {
+        "label" : "Sylfaen wybodaeth sydd ar gael",
+        "help" : "Rhestr o sylfaen wybodaeth a ddefnyddir yn y sgwrs RAG hon"
+      },
+      "CloseBtn" : {
+        "help" : "Cau"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Ychwanegu dogfen at y rhestr 'sgwrsio gyda'"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Cofnodi",
+        "help" : "Dechrau recordio trac sain a'i anfon"
+      },
+      "StopBtn" : {
+        "label" : "Cofnodi",
+        "help" : "Cofnodi"
+      },
+      "AbortBtn" : {
+        "label" : "Atal cofnodi",
+        "help" : "Atal cofnodi"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Canslo recordiad"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "ail-lwytho data"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SelectHeader" : {
+        "label" : "Dewis"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "dyddiad/amser gorffen"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "dyddiad/amser cychwyn"
+      },
+      "ProcessingHeader" : {
+        "label" : "prosesu"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "FinishedHeader" : {
+        "label" : "wedi gorffen"
+      },
+      "WithErrorHeader" : {
+        "label" : "gyda gwall"
+      },
+      "LogTableComponent" : {
+        "help" : "Cofnod mewnosod ardal system ffeiliau rhannol hon"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Ystadegau prosesau"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "CloseBtn" : {
+        "label" : "Cau"
+      },
+      "PublicationLogTab" : {
+        "label" : "Cofnod cyhoeddi"
+      },
+      "MainPanel" : {
+        "label" : "Cofnod cyhoeddi"
+      },
+      "actualStatus" : {
+        "label" : "Statws",
+        "help" : "Statws y dasg, yn dal i redeg, wedi gorffen neu wedi gorffen gyda gwallau."
+      },
+      "publishingSystem" : {
+        "label" : "Ffurfweddiad cynnwys cyhoeddedig",
+        "help" : "Gwybodaeth am gynnwys cyhoeddedig"
+      },
+      "startDateTime" : {
+        "label" : "Dyddiad/amser cychwyn",
+        "help" : "Dyddiad ac amser cychwyn y dasg cydweddu cynnwys"
+      },
+      "endDateTime" : {
+        "label" : "Dyddiad/amser gorffen",
+        "help" : "Dyddiad ac amser gorffen y dasg cydweddu cynnwys"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Heb ei brosesu'n llwyr"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Wedi'i brosesu'n llwyr"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "ymgorfforiad yn erbyn cyfanswm nifer y dogfennau"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Rhagor o fanylion"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Cynhyrchu prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Dewin prompt",
+        "help" : "Defnyddiwch hwn i ddefnyddio LLM i greu'r prompt ar gyfer eich amcanion"
+      },
+      "acceptPrompt" : {
+        "label" : "Derbyn prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Dewin creu templed prompt"
+      },
+      "cancel" : {
+        "label" : "Canslo"
+      },
+      "response" : {
+        "label" : "Templed prompt wedi'i awgrymu",
+        "help" : "Testun templed wedi'i gynhyrchu ar gyfer eich amcan (gallwch newid neu gywiro/newid)"
+      },
+      "modelCode" : {
+        "label" : "Model sgwrsio i'w ddefnyddio",
+        "help" : "Dewiswch y model sgwrsio rydych eisiau ei ddefnyddio i gynhyrchu templed y prompt"
+      },
+      "query" : {
+        "label" : "Cais templed prompt",
+        "help" : "Nodwch yn yr ail berson beth yw'r amcan y bydd yr AI yn cefnogi'r defnyddiwr gyda"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Tymheredd",
+        "help" : "Tymheredd y bydd y model yn ymateb, o 0 i 1 (os nad ydych yn siŵr, gadewch yn wag)"
+      },
+      "contextLength" : {
+        "label" : "Hyd cyd-destun (tokenau)",
+        "help" : "Nifer y testun y gall model AI ei ystyried wrth brosesu (os nad yw wedi'i osod, bydd 1047576 yn cael ei ddefnyddio)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Paramedr TopP, o 0 i 1 (os nad ydych yn siŵr, gadewch yn wag)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Sgiliau wedi'u galluogi ar gyfer y model hwn",
+        "help" : "Swyddogaethau y gall y model eu defnyddio yn ystod y sgwrs"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Cynnig rhagosodedig y model",
+        "help" : "Golygu'r cynnig rhagosodedig ar gyfer y model sgwrsio."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad hunaniaeth."
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw hunaniaeth a gynhyrchir yn awtomatig."
+      },
+      "secretType" : {
+        "label" : "Math hunaniaeth",
+        "help" : "Dewiswch y math o hunaniaeth i'w greu ar gyfer y system bell"
+      },
+      "InsertBtn" : {
+        "label" : "Mewnosod"
+      },
+      "token" : {
+        "label" : "Tocyn",
+        "help" : "Rhowch y tocyn."
+      },
+      "user" : {
+        "label" : "Defnyddiwr",
+        "help" : "Rhowch y defnyddiwr a nodir gan y tocyn."
+      },
+      "MainPanel" : {
+        "label" : "Creu hunaniaeth"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "username" : {
+        "label" : "Enw defnyddiwr",
+        "help" : "Rhowch enw'r defnyddiwr."
+      },
+      "password" : {
+        "label" : "Cyfrinair",
+        "help" : "Rhowch y cyfrinair."
+      },
+      "email" : {
+        "label" : "E-bost/Enw defnyddiwr",
+        "help" : "Rhowch y cyfeiriad e-bost neu enw defnyddiwr sy'n gysylltiedig â'r allwedd ssh."
+      },
+      "key" : {
+        "label" : "Allwedd gyfrinachol",
+        "help" : "Agorwch y ffeil allwedd breifat a chopïwch yma."
+      },
+      "passphrase" : {
+        "label" : "Cod cyfrinach allwedd",
+        "help" : "Rhowch god cyfrinach yr allwedd."
+      },
+      "pub" : {
+        "label" : "Allwedd gyhoeddus",
+        "help" : "Agorwch y ffeil allwedd gyhoeddus a chopïwch yma."
+      },
+      "jsonContent" : {
+        "label" : "Cynnwys ffeil cymwysterau Google",
+        "help" : "Copïwch yma gynnwys ffeil cymwysterau api Google wedi'i lawrlwytho o'r consol api google cloud (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Defnyddiwr Google i'w efelychu",
+        "help" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir",
+        "placeholder" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y cynnwys."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad y cynnwys sydd wedi'i lwytho i fyny ar y gofnod ffeil."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeirnod y prosiect rhiant."
+      },
+      "upload" : {
+        "label" : "Llwytho cynnwys i fyny",
+        "help" : "Cliciwch y botwm pori a dewiswch ffeiliau zip neu ffeiliau eraill"
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor a thynnu cynnwys o ffeiliau zip"
+      },
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn gwneud y cynnwys ar gael yn y gronfa wybodaeth i LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "MainPanel" : {
+        "label" : "Golygu cynnwys sydd wedi'i lwytho i fyny"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Ffurfweddu systemau adeiladu",
+        "help" : "Rhestr o systemau adeiladu/pacio i'w harchwilio am wybodaeth meta ac arteffactau ychwanegol (gadewch yn wag os nad oes cod meddalwedd wedi'i gynnwys)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Elfennau a ddewiswyd"
+      },
+      "ChooseOk" : {
+        "label" : "Iawn"
+      },
+      "ChooseCancel" : {
+        "label" : "Canslo"
+      },
+      "EditBtn" : {
+        "help" : "Newid y rhai a ddewiswyd"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Dewis elfennau"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Dewis elfennau"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Golygu amserlennu"
+      },
+      "ConfirmBtn" : {
+        "label" : "Cadarnhau"
+      },
+      "AddBtn" : {
+        "label" : "+Ychwanegu"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn gwneud y cynnwys hwn ar gael yn y gronfa wybodaeth i LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Trin cod ffynhonnell"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "MainPanel" : {
+        "label" : "Golygu cynnwys system ffeil bresennol"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o'r cynnwys llwythwyd i fyny o'r cofnod system ffeiliau."
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip a dynnu'r cynnwys allan"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y cynnwys."
+      },
+      "tree" : {
+        "label" : "Ffeiliau neu ffolderi dewiswyd",
+        "help" : "Ffeiliau neu gyfeiriaduron systemau ffeiliau a rennir sydd ar gael ar y gweinydd"
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeiriad prosiect rhiant."
+      },
+      "programmedTables" : {
+        "label" : "Amserlen gwiriadau diweddaru cynnwys",
+        "help" : "Ffurfweddu'r amserlennu cynnwys sydd wedi newid i gadw'r system cynhyrchu â rhagorwyd yn gyfredol"
+      },
+      "catalogingCriteria" : {
+        "label" : "Meini prawf trefnu ffolderi",
+        "help" : "Eglurwch yma sut mae meini prawf trefnu ffolderi wedi'i wneud yn ardal system ffeiliau rydych yn ei rhannu gyda Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Ffurfweddu systemau adeiladu",
+        "help" : "Rhestr o systemau adeiladu/pecynnu i'w harchwilio am wybodaeth metadata ac arteffactau ychwanegol (gadewch yn wag os nad oes cod meddalwedd ar gael)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Ardal rhannu ffeil newydd"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Llwybr absoliwt"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "config ffeil db neu yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "Disgrifiad"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ModifyHeader" : {
+        "label" : "Addasu"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Ffolder system ffeiliau a rennir ddewiswyd",
+        "help" : "Dewiswch ffolder gweinydd sy’n lwybr gwraidd i’r system ffeiliau a rennir a ddefnyddir yn eich sefydliad fel cronfa ddogfennau"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o ardal system ffeiliau a rennir eich sefydliad"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y cynnwys."
+      },
+      "InsertBtn" : {
+        "label" : "Mewnosod"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffolder ffeiliau gweinydd a rennir"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Cadw a gwneud y cynnwys hwn ar gael yn y gronfa wybodaeth i'r LLm's"
+      },
+      "MainPanel" : {
+        "label" : "Golygu ffynhonnell git / cronfa ddogfennau"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad y git repo."
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw a gynhyrchir yn awtomatig ar gyfer y git repo."
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeirnod y prosiect rhieni."
+      },
+      "contentManagementSystem" : {
+        "label" : "System git",
+        "help" : "Cyfeirnod system git sydd eisoes wedi'i ffurfweddu."
+      },
+      "branch" : {
+        "label" : "Cangen",
+        "help" : "Enw'r gangen i'w wirio (fel arfer master, main neu develop)"
+      },
+      "identityCode" : {
+        "label" : "Hunaniaeth a ddefnyddir",
+        "help" : "Dewiswch yr hunaniaeth i wneud clone/checkout ar y system"
+      },
+      "repositoryUri" : {
+        "label" : "url/cyfeiriad y gronfa",
+        "help" : "Cyfeiriad llawn y gronfa git bell (fel arfer yn dechrau gyda http: neu https: neu ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "cyhoeddus",
+        "help" : "Os yn wir, nid oes angen dilysu i gael mynediad i'r gronfa"
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip a dynnu cynnwys"
+      },
+      "programmedTables" : {
+        "label" : "Amserlen gwirio diweddariadau cynnwys",
+        "help" : "Ffurfweddu amserlen cynnwys sydd wedi newid i gadw'r system cynhyrchu uwch ddiweddar"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Ffurfweddu systemau adeiladu",
+        "help" : "Rhestr o systemau adeiladu/pacio i'w harchwilio am wybodaeth meta a gwybodaeth arteffact ychwanegol"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Gwybodaeth gyffredinol"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Defnyddio model sgwrsio"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "dewis"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Dewiswch ffurfweddiad model sgwrsio"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Dewiswch ffurfweddiad model mewnblannu"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "dewis"
+      },
+      "RagSettingsTab" : {
+        "label" : "Gosodiadau RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Gosodiadau model iaith mawr a offer defnyddiol"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Defnyddio model mewnblannu"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Gosodiadau mynediad diogelwch"
+      },
+      "MainPanel" : {
+        "label" : "Golygu proffil sgwrsio adalw cynhyrchiant estynedig"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw y proffil sgwrsio, wedi'i greu'n awtomatig."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad proffil sgwrsio."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Mae'r defnyddiwr yn dewis sylfaen gwybodaeth",
+        "help" : "Gall y defnyddiwr ddewis o sylfaen gwybodaeth hygyrch a/neu lwytho ei ffeiliau ei hun."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Sylfaen gwybodaeth",
+        "help" : "Sylfaen gwybodaeth i'w ddefnyddio ar gyfer adalw dogfennau."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Trothwy tebygrwydd",
+        "help" : "Trothwy tebygrwydd ar gyfer chwiliadau semantig, 0.60–0.65 Hidlo isel, 0.70-0.75 Hidlo canolig, 0.80–0.85 Manwl gywir"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Trothwy tebygrwydd 'hop' 2il",
+        "help" : "Trothwy tebygrwydd ar gyfer chwiliadau semantig, 0.60–0.65 Hidlo isel, 0.70-0.75 Hidlo canolig, 0.80–0.85 Manwl gywir ar gyfer ail chwiliad rag aml-hop"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Analluogi 'Multi Hop' rag",
+        "help" : "Analluogi'r nodwedd 'multi hop rag'. Mae chwiliad aml-hop yn gwneud chwiliad semantig cyntaf ac yn defnyddio'r dogfennau a ganfyddir fel cyd-destun ar gyfer y chwiliad semantig ei hun gan ddarparu cyd-destun ehangach."
+      },
+      "topK" : {
+        "label" : "Darnau dogfen a ystyrir (TopK)",
+        "help" : "Yn y cynhyrchu adalw estynedig, darnau dogfen gorau N a gafwyd a ystyrir mewn chwiliad semantig"
+      },
+      "enabledFunctions" : {
+        "label" : "Swyddogaethau wedi'u galluogi ar gyfer y sgwrs RAG hon",
+        "help" : "Swyddogaethau y gall y model llm eu defnyddio yn ystod y sgwrs â'r defnyddiwr gan ryngweithio hefyd â'r sylfaen wybodaeth a ddewiswyd"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Golygu'r prompt ar gyfer y sesiynau cynhyrchu adalw estynedig."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Nodwch neu deipiwch y categori prompt"
+      },
+      "MainPanel" : {
+        "label" : "Golygu prompt"
+      },
+      "promptCategory" : {
+        "label" : "Categori prompt",
+        "help" : "Dewiswch neu deipiwch y categori prompt."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Golygu'r prompt ar gyfer y sgwrs, defnyddiwch {query} i ddangos cwestiwn y defnyddiwr a {context} i ddangos cyd-destun dogfennau/hanes a anfonwyd at yr LLM."
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "Cod unigryw y prompt a grëir yn awtomatig."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Nodwch ddisgrifiad y prompt."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Newid cyfrinair"
+      },
+      "YourUserName" : {
+        "label" : "Eich enw defnyddiwr"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Hen gyfrinair",
+        "help" : "Cyfrinair cyfredol i fewngofnodi"
+      },
+      "newPassword" : {
+        "label" : "Cyfrinair newydd",
+        "help" : "cyfrinair newydd"
+      },
+      "username" : {
+        "label" : "E-bost",
+        "help" : "E-bost fel enw defnyddiwr i fewngofnodi"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Ffurflen newid cyfrinair"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "ChangePwdBtn" : {
+        "label" : "newid cyfrinair"
+      },
+      "newPassword1" : {
+        "label" : "Cadarnhau cyfrinair newydd",
+        "help" : "Cadarnhewch y cyfrinair newydd"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "ForMoreInformations" : {
+        "label" : "Am ragor o wybodaeth am Google custom search API neu i gael eich allwedd api (am ddim) ewch i: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Cod unigryw",
+        "help" : "cod unigryw o'r ffurfweddiad google search api."
+      },
+      "MainPanel" : {
+        "label" : "Golygu crenddaliadau google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Tocyn google search api",
+        "help" : "Dewiswch neu rhowch y tocyn google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google search engine id",
+        "help" : "Google search engine id"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch ddisgrifiad o ffurfweddiad google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Sgwrs heb sylfaen wybodaeth",
+        "help" : "Dewiswch y LLMs ar gyfer sesiwn sgwrsio",
+        "placeholder" : "Dewiswch y LLMs ar gyfer sesiwn sgwrsio"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Agor adran opsiynau sgwrs"
+      },
+      "CreateChatBtn" : {
+        "label" : "Sgwrs newydd"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Sesiwn sgwrs newydd"
+      },
+      "chatProfileCode" : {
+        "label" : "Sgwrs gyda sylfaen wybodaeth",
+        "help" : "Dewiswch broffil sgwrsio’r cwmni i ryngweithio â dogfennau’r cwmni (a’ch dogfennau chi) a LLMs",
+        "placeholder" : "Dewiswch broffil sgwrsio’r cwmni i ryngweithio â dogfennau’r cwmni (a’ch dogfennau chi) a LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "Sgwrs newydd"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesiynau sgwrsio"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Cau’r bar ochr"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Creu sgwrs newydd gyda modelau iaith mawr",
+        "label" : "Sgwrs"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Creu sgwrs RAG newydd gyda chynnwys y cwmni",
+        "label" : "Sgwrsio gyda’r sylfaen wybodaeth"
+      },
+      "ChatsTitle" : {
+        "label" : "Sgyrsiau"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Agor adran opsiynau sgwrs"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Sgwrsio â dogfennau",
+        "help" : "Pori neu chwilio a dewis dogfennau i weithio gyda nhw"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Dewiswch ffeiliau i sgwrsio â nhw"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Pori neu chwilio a dewis dogfennau i sgwrsio â hwy"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Cadarnhau"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Uwchlwytho neu ddewis eich dogfennau",
+        "help" : "Dewiswch/uwchlwythwch ddogfennau o'ch gofod defnyddiwr"
+      },
+      "fileSearchBtn" : {
+        "label" : "Chwilio"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Chwilio"
+      },
+      "query" : {
+        "label" : "Ymadrodd chwilio semantig",
+        "help" : "Rhowch ymadrodd ystyrlon sy’n gysylltiedig â’ch chwiliad"
+      },
+      "choosenBrowsing" : {
+        "label" : "Dewiswch ffeiliau wrth bori sylfaen wybodaeth",
+        "help" : "Dewiswch ffeiliau wrth bori sylfaen wybodaeth a rennir gan y cwmni"
+      },
+      "filename" : {
+        "label" : "Enw ffeil a chwiliwyd",
+        "help" : "Rhowch ran o enw ffeil am eich cynnwys chwilio"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Chwiliad enw ffeil"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Pori ffeiliau’r cwmni"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Chwiliad semantig"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Dewiswch ffeiliau i sgwrsio â hwy"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Addasu'r rhai a ddewiswyd"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Dewiswch ffeiliau defnyddwyr"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Canslo"
+      },
+      "okBtn" : {
+        "label" : "Iawn"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Dewiswch gynnwys a uwchlwythwyd gan y defnyddiwr"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Sylfaen wybodaeth a ffeiliau defnyddiwr"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+is-brosiect neu eitem",
+        "help" : "ychwanegu is-brosiect neu eitem"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+uwchlwytho ffeiliau",
+        "help" : "ychwanegu ffynhonnell data o ffeiliau a uwchlwythwyd"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ychwanegu ffynhonnell data Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ychwanegu ffynhonnell data Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+system ffeiliau",
+        "help" : "ychwanegu ffynhonnell data system ffeiliau a rennir"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ychwanegu ffynhonnell data Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+repo git",
+        "help" : "ychwanegu ffynhonnell data rep Git fel bitbucket, github neu eraill"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ychwanegu ffynhonnell ddata google drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Ffurfweddiad"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "fy mhroffil"
+      },
+      "logout" : {
+        "label" : "allgofnodi"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Newid iaith"
+      },
+      "MyProfile" : {
+        "label" : "eich proffil"
+      },
+      "MyProfileItem" : {
+        "label" : "eich proffil"
+      },
+      "chatMenuItem" : {
+        "label" : "Sgwrs"
+      },
+      "setupMenuItem" : {
+        "label" : "Gosod"
+      },
+      "adminMenuItem" : {
+        "label" : "Gweinyddwr"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "golygu proffil"
+      },
+      "logoutMenuItem" : {
+        "label" : "allgofnodi"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Dadansoddi rhestr dogfennau"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi'u prosesu",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi'u prosesu",
+        "dataset-2-label" : "Dogfennau gyda gwallau",
+        "dataset-3-label" : "Dogfennau wedi'u taflu"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tocynnu dogfennau"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi'u prosesu",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tocynnau wedi'u prosesu",
+        "dataset-1-label" : "Gwall wrth brosesu tocynnau"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi'u prosesu",
+        "dataset-2-label" : "Dogfennau gyda gwallau",
+        "dataset-3-label" : "Dogfennau wedi'u taflu"
+      },
+      "EMBEDDING" : {
+        "description" : "Mynegai semantig (embedio ar gyfer semantig rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi'u prosesu",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tocynnau wedi'u prosesu",
+        "dataset-1-label" : "Gwall wrth brosesu tocynnau"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi'u prosesu",
+        "dataset-2-label" : "Dogfennau gyda gwallau",
+        "dataset-3-label" : "Dogfennau wedi'u taflu"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Mynegai Endid/Achlysur/Cysylltiadau (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi'u prosesu"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi'u prosesu",
+        "dataset-2-label" : "Dogfennau gyda gwallau",
+        "dataset-3-label" : "Dogfennau wedi'u taflu"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Tocynnau wedi’u prosesu",
+        "dataset-1-label" : "Gwall wrth brosesu tocynnau"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Dadansoddi rhestr o ddogfennau"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi’u prosesu"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tocyneiddio dogfennau"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi’u prosesu",
+        "dataset-2-label" : "Dogfennau â gwall",
+        "dataset-3-label" : "Dogfennau wedi’u diystyru"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi’u prosesu"
+      },
+      "EMBEDDING" : {
+        "description" : "Mynegai semantig (embedding ar gyfer rag semantig)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Tocynnau wedi’u prosesu",
+        "dataset-1-label" : "Gwall wrth brosesu tocynnau"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi’u prosesu"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi’u prosesu",
+        "dataset-2-label" : "Dogfennau â gwall",
+        "dataset-3-label" : "Dogfennau wedi’u diystyru"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Mynegeio Endid/Cysylltiadau/Digwyddiadau (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Dogfennau heb eu trin",
+        "label-1" : "Gwall wrth brosesu dogfennau",
+        "label-2" : "Dogfennau wedi’u prosesu"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Tocynnau wedi’u prosesu",
+        "dataset-1-label" : "Gwall wrth brosesu tocynnau"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi’u prosesu",
+        "dataset-2-label" : "Dogfennau â gwall",
+        "dataset-3-label" : "Dogfennau wedi’u diystyru"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Dogfennau a dderbyniwyd",
+        "dataset-1-label" : "Dogfennau wedi’u prosesu",
+        "dataset-2-label" : "Dogfennau â gwall",
+        "dataset-3-label" : "Dogfennau wedi’u diystyru"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Prynu dolen credyd allwedd Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Newid",
+        "help" : "Gweld/newid ffurfweddiad y model"
+      },
+      "ExistingModelCode" : {
+        "label" : "Cod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Disgrifiad"
+      },
+      "ExistingModelType" : {
+        "label" : "Math o fodel"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Ffurfweddiadau presennol"
+      },
+      "ProviderWWW" : {
+        "label" : "Dolen gwefan"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Credydau darparwr"
+      },
+      "ProviderInfos" : {
+        "label" : "Gwybodaeth darparwr"
+      },
+      "ExistingApiKey" : {
+        "label" : "Allwedd api/credydau",
+        "help" : "Dewiswch allwedd api neu gredydau ar gyfer y darparwr hwn"
+      },
+      "NewApiKey" : {
+        "label" : "Allwedd api newydd",
+        "help" : "Mewnosodwch allwedd api newydd i'w defnyddio gyda'r darparwr hwn"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Defnyddio presennol neu greu newydd",
+        "help" : "Defnyddiwch neu crëwch danysgrifiadau newydd ar gyfer y darparwr hwn"
+      },
+      "NewUserName" : {
+        "label" : "Enw defnyddiwr",
+        "help" : "Enw defnyddiwr a ddefnyddir i gael mynediad at wasanaethau'r darparwr"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Model ymgorffori newydd",
+        "help" : "Creu ffurfweddiad model ymgorffori newydd"
+      },
+      "NewChatModel" : {
+        "label" : "Model Sgwrsio newydd",
+        "help" : "Creu ffurfweddiad model sgwrsio newydd"
+      },
+      "NewModelDialog" : {
+        "label" : "Ychwanegu model newydd"
+      },
+      "PiSave" : {
+        "label" : "Cadw"
+      },
+      "NewModelsButton" : {
+        "label" : "Modelau newydd",
+        "help" : "Creu ffurfweddiad modelau newydd"
+      },
+      "NewModelsDialog" : {
+        "label" : "Ychwanegu modelau newydd"
+      },
+      "baseUrl" : {
+        "label" : "Sylfaen url api",
+        "help" : "Url sylfaen ar gyfer gwasanaethau api y darparwr"
+      },
+      "ModelTypePanel" : {
+        "label" : "Ychwanegu modelau newydd"
+      },
+      "ModelsChoices" : {
+        "label" : "Dewisiadau modelau"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Dewis modelau a awgrymir"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model ymgorffori",
+        "help" : "Dewiswch un o'r modelau ymgorffori parod"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model sgwrsio",
+        "help" : "Dewiswch un o'r modelau sgwrsio parod"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Dewis modelau uwch"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model ymgorffori",
+        "help" : "Dewiswch un o'r modelau ymgorffori a gyhoeddwyd gan y cyflenwr"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model sgwrsio",
+        "help" : "Dewiswch un o'r modelau sgwrsio a gyhoeddwyd gan y cyflenwr"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Defnyddiwch y modd dewis hwn dim ond os ydych yn arbenigwr neu drwy wirio ar safle'r cyflenwr pa fodelau sy'n addas i chi. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "gosod fel model sgwrsio rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model sgwrsio arall wedi'i ffurfweddu"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Rydym yn awgrymu'r rhestr modelau canlynol "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "gosod fel model ymgorffori rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model ymgorffori arall wedi'i ffurfweddu"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "gosod fel model sgwrsio rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model sgwrsio arall wedi'i ffurfweddu"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "gosod fel model ymgorffori rhagosodedig",
+        "help" : "Gosod y model hwn fel y rhagosodiad, bydd hwn yn cael ei ddefnyddio ar gyfer pob tasg lle nad oes model ymgorffori arall wedi'i ffurfweddu"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Defnyddiwch y modd dewis hwn dim ond os ydych yn arbenigwr neu drwy wirio ar safle'r cyflenwr pa fodelau sy'n addas i chi. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Creu a gweithredu"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Creu a gweithredu"
+      },
+      "ProviderNameField" : {
+        "label" : "Darparwr"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Mae angen manylion mewngofnodi ar y darparwr",
+        "help" : "Mae'r darparwr/cymhwysiad gweinydd wedi'i ffurfweddu ar gyfer mynediad wedi'i ddilysu trwy allwedd api neu fanylion mewngofnodi eraill"
+      },
+      "baseUrl1" : {
+        "label" : "Prif url api",
+        "help" : "Prif url y darparwr ar gyfer gwasanaethau api"
+      },
+      "enableAllFunctions" : {
+        "label" : "galluogi pob galwad swyddogaeth",
+        "help" : "Galluogwch bob offeryn a galwad swyddogaeth sydd ar gael; os na chaiff ei osod, bydd modd eu galluogi’n ddiweddarach yn y panel gweinyddu llms"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Darparwr AI o bell yn iawn",
+        "detail" : "Mae'r darparwr ar waith ac wedi'i ffurfweddu'n llwyddiannus"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Methiant gweithred",
+        "detail" : "Methu dilysu gyda'r tanysgrifiadau a ddarparwyd"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Iawn!",
+        "detail" : "Gweithred wedi'i gwneud gyda llwyddiant"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Gwall wrth ffrydio ymateb sgwrs",
+        "detail" : "Gwall gweinydd: class org.neo4j.driver.internal.value.StringValue cannot be cast to class java.lang.String (org.neo4j.driver.internal.value.StringValue is in unnamed module of loader 'app'; java.lang.String is in module java.base of loader 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Wedi'i gadw'n llwyddiannus",
+        "detail" : "Gweithred diweddaru wedi'i gwblhau'n llwyddiannus"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Gwall wrth gyfathrebu gyda gweinydd Ollama",
+        "detail" : "Gwall rhwydwaith wrth gyfathrebu â’r system bell yn cyrchu cynnwys\n rhestr modelau Gwall wrth weithio gyda url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Gallwch ddileu hwn",
+        "detail" : "Gellir dileu'r data a welir ar hyn o bryd yn ddiogel"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Ni allwch ddileu hwn",
+        "detail" : "Cyfeirir at y gwrthrych hwn o rannau eraill o’r cymhwysiad"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Llwytho ffeiliau i fyny i sgwrsio â hwy"
+      },
+      "ChooseFile" : {
+        "help" : "Dewis ffeiliau"
+      },
+      "UploadFile" : {
+        "help" : "Llwytho ffeiliau"
+      },
+      "DragDropHere" : {
+        "label" : "Llusgo a gollwng ffeiliau yma i’w llwytho i fyny"
+      },
+      "RemoveAll" : {
+        "help" : "Tynnu popeth"
+      },
+      "UploadPending" : {
+        "label" : "Arhosol i’w llwytho i fyny"
+      },
+      "CompletedData" : {
+        "label" : "Wedi’i gwblhau"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Ffurfweddwch graphrag yn y man setup os ydych am ei ddefnyddio yn yr adran hon"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Gosodiadau graphrag"
+      },
+      "button-help" : {
+        "label" : "Cliciwch yma i ffurfweddu echdynnu gwybodaeth ar gyfer graphrag (heb ei ffurfweddu ar hyn o bryd)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Ychwanegu ffurfweddiad"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Creu"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch y disgrifiad o'r system Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Creu cysylltiad Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "delegatedUser" : {
+        "label" : "Defnyddiwr Google i'w efelychu",
+        "help" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir",
+        "placeholder" : "Y defnyddiwr fydd yn cael ei efelychu gan y cymwysterau a ddarperir"
+      },
+      "jsonContent" : {
+        "label" : "Cynnwys json cymwysterau Google",
+        "help" : "Creu Cymwysterau Google gyda mynediad eich drives gwaith/tîm yn y Google Console Cloud a gludwch yma gynnwys y ffeil json a lawrlwythwyd (https://console.cloud.google.com/).",
+        "placeholder" : "Creu Cymwysterau Google gyda mynediad eich drives gwaith/tîm yn y Google Console Cloud a gludwch yma gynnwys y ffeil json a lawrlwythwyd (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "PublishBtn" : {
+        "label" : "Cyhoeddi!",
+        "help" : "Yn cadw ac yn gadael i'r cynnwys fod ar gael yn y gronfa wybodaeth i LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "MainPanel" : {
+        "label" : "Rhannu cynnwys google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Gosodiadau"
+      },
+      "LogsTab" : {
+        "label" : "Logiau"
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch y disgrifiad o gynnwys a uwchlwythwyd o danysgrifiadau google drive."
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw cynnwys a gynhyrchir yn awtomatig."
+      },
+      "tree" : {
+        "label" : "Ffeil neu ffolder dewiswyd",
+        "help" : "Cynnwys ardaloedd a thudalennau google drive a rennir"
+      },
+      "driveSystemCode" : {
+        "label" : "Ffurfweddiad google drive",
+        "help" : "Cyfeiriad at system google drive sydd eisoes wedi'i ffurfweddu."
+      },
+      "openZips" : {
+        "label" : "Agor ffeiliau zip",
+        "help" : "Galluogi agor ffeiliau zip ac echdynnu cynnwys"
+      },
+      "parentProjectCode" : {
+        "label" : "Prosiect",
+        "help" : "Cyfeiriad at brosiect rhiant."
+      },
+      "programmedTables" : {
+        "label" : "Amserlen gwiriadau diweddariadau cynnwys",
+        "help" : "Ffurfweddu'r amserlen diweddaru cynnwys er mwyn cadw'r system cenedlaethau atgyfnerthiedig yn gyfredol"
+      },
+      "catalogingCriteria" : {
+        "label" : "Meini prawf trefnu ffolderi ac is-ffolderi",
+        "help" : "Esboniwch yma sut mae'r ffeiliau a'r ffolderi wedi'u trefnu yn y cynnwys google drive a rannwyd gyda Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Gosodiadau cyffredinol"
+      },
+      "CancelBtn" : {
+        "label" : "Canslo"
+      },
+      "DeleteBtn" : {
+        "label" : "Dileu"
+      },
+      "SaveBtn" : {
+        "label" : "Cadw"
+      },
+      "MainPanel" : {
+        "label" : "Golygu integreiddio google drive"
+      },
+      "code" : {
+        "label" : "Cod Unigryw",
+        "help" : "Cod unigryw'r system google drive a gynhyrchir yn awtomatig."
+      },
+      "description" : {
+        "label" : "Disgrifiad",
+        "help" : "Rhowch y disgrifiad o'r system google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Hunaniaeth sydd wedi'i ddefnyddio",
+        "help" : "Dewiswch neu crëwch hunaniaeth i gael mynediad i'r system google drive"
+      }
+    }
+  }
+}

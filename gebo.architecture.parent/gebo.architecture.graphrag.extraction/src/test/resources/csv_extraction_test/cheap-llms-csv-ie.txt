@@ -1,0 +1,921 @@
+entity;person;Samael Aun Weor;<Samael Aun Weor is the author of the book "Pistis Sophia Svelato";0.8;"63a180d7-64cf-4927-b064-c598c96b82ac";"Samael Aun Weor";,,
+entity;person;Gesù;<Gesù is the protagonist of the story>;0.9;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Gesù";,,
+relation;part-of;Pistis Sophia Svelato;Pistis Sophia Svelato è un libro di Samael Aun Weor;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Samael Aun Weor","Pistis Sophia Svelato",
+entity_alias;alternative name;Samael Aun Weor;< alternative names for the author >;"63a180d7-64cf-4927-b064-c598c96b82ac";"Samael Aun Weor";,,
+event;process;risorsa dai morti;<Gesù risorse dai morti in questo evento>;0.9;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Gesù","Samael Aun Weor",
+event_alias;alternative expression;lavori mi dai Signore, ma con essi fortezza;< alternative expressions for the event >;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"lavori mi dai Signore, ma con essi fortezza",,
+relation;part-of;Gesù;< Gesù è un personaggio di "Pistis Sophia Svelato" >;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Samael Aun Weor","Gesù",
+entity;person;Samael Aun Weor;<Samael Aun Weor is the author of the book "Pistis Sophia Svelato";0.8;"63a180d7-64cf-4927-b064-c598c96b82ac";"Samael Aun Weor";,,
+entity;person;Gesù;<Gesù is the protagonist of the story>;0.9;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Gesù";,,
+relation;part-of;Pistis Sophia Svelato;Pistis Sophia Svelato è un libro di Samael Aun Weor;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Samael Aun Weor","Pistis Sophia Svelato",
+entity_alias;alternative name;Samael Aun Weor;< alternative names for the author >;"63a180d7-64cf-4927-b064-c598c96b82ac";"Samael Aun Weor";,,
+event;process;risorsa dai morti;<Gesù risorse dai morti in questo evento>;0.9;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Gesù","Samael Aun Weor",
+event_alias;alternative expression;lavori mi dai Signore, ma con essi fortezza;< alternative expressions for the event >;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"lavori mi dai Signore, ma con essi fortezza",,
+relation;part-of;Gesù;< Gesù è un personaggio di "Pistis Sophia Svelato" >;"1c2c7d3e-e890-4416-85d8-f4f2a0be892b";"Samael Aun Weor","Gesù",
+entity;person;Samael;A person, likely a figure of spiritual or mystical significance.;0.8;"521f77c1-1b2f-44a2-98e2-7d419581c680";;;
+event;unknown;comprensione del Pentagramma magico;The understanding of the magical pentagram is key to two spaces.;0.5;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael";
+entity_alias;product;Zolfo;A chemical element with the symbol S and atomic number 16.;0.9;"521f77c1-1b2f-44a2-98e2-7d419581c680";;"Pentagramma";
+entity;person;Gabriel;A person, likely a figure of spiritual or mystical significance, often associated with divine messages and interventions.;0.8;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael";
+event;unknown;trascendenza sessuale;dissociation of semen from sex to give rise to electrical energies within the Tapestry of God.;0.9;"c892ca09-d43a-47dd-ad6e-843acad1e233";"Aleph, Thau, Azoth, Vello d'Oro";
+entity;organization;Libreria esoterica;An organization focused on esoteric knowledge and mysticism.;0.7;"521f77c1-1b2f-44a2-98e2-7d419581c680";"Samael Aun Weor";
+entity_alias;product;Aloe;A type of plant, often used for its medicinal properties.;0.9;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Stella Fiammeggiante";
+event;unknown;consacrazione del Pentagramma;censing the pentagram with four elements to invoke divine protection and powers.;0.8;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael, Fuoco, Aria, Acqua, Terra";
+entity_alias;product;Incenso;A type of aromatic plant or resin, often used in rituals and ceremonies.;0.9;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Stella Fiammeggiante";
+event;unknown;rituale del Vello d'Oro;a mystical ritual to acquire the Golden Fleece, a symbol of enlightenment and spiritual awakening.;0.8;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael Aun Weor";
+entity_alias;product;Canfora;A type of aromatic plant or resin, often used in rituals and ceremonies.;0.9;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Stella Fiammeggiante";
+2025-11-28 08:32:10,906 [pool-6-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Samael;A person, likely a figure of spiritual or mystical significance.;0.8;"521f77c1-1b2f-44a2-98e2-7d419581c680";;;
+event;unknown;comprensione del Pentagramma magico;The understanding of the magical pentagram is key to two spaces.;0.5;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael";
+entity_alias;product;Zolfo;A chemical element with the symbol S and atomic number 16.;0.9;"521f77c1-1b2f-44a2-98e2-7d419581c680";;"Pentagramma";
+entity;person;Gabriel;A person, likely a figure of spiritual or mystical significance, often associated with divine messages and interventions.;0.8;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael";
+event;unknown;trascendenza sessuale;dissociation of semen from sex to give rise to electrical energies within the Tapestry of God.;0.9;"c892ca09-d43a-47dd-ad6e-843acad1e233";"Aleph, Thau, Azoth, Vello d'Oro";
+entity;organization;Libreria esoterica;An organization focused on esoteric knowledge and mysticism.;0.7;"521f77c1-1b2f-44a2-98e2-7d419581c680";"Samael Aun Weor";
+entity_alias;product;Aloe;A type of plant, often used for its medicinal properties.;0.9;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Stella Fiammeggiante";
+event;unknown;consacrazione del Pentagramma;censing the pentagram with four elements to invoke divine protection and powers.;0.8;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael, Fuoco, Aria, Acqua, Terra";
+entity_alias;product;Incenso;A type of aromatic plant or resin, often used in rituals and ceremonies.;0.9;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Stella Fiammeggiante";
+event;unknown;rituale del Vello d'Oro;a mystical ritual to acquire the Golden Fleece, a symbol of enlightenment and spiritual awakening.;0.8;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Samael Aun Weor";
+entity_alias;product;Canfora;A type of aromatic plant or resin, often used in rituals and ceremonies.;0.9;"6d5d2077-71cb-4eb7-a323-23a65340c643";"Stella Fiammeggiante";
+2025-11-28 08:32:10,906 [pool-6-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=SAMAEL), EntityObject(name=GABRIEL), EntityObject(name=LIBRERIA ESOTERICA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:32:10,906 [pool-6-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=SAMAEL), EntityObject(name=GABRIEL), EntityObject(name=LIBRERIA ESOTERICA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:32:22,374 [pool-6-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Samael Aun Weor;A person mentioned in the text, possibly an author or spiritual leader.;0.9;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+entity;product;Vaso Ermetico;A mystical vessel or container used in alchemy.;0.8;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+entity;product;Santo Grial;A mystical container or cup used in alchemy.;0.7;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+entity;product;Vaso Ermetico distrutto;distrutto Vaso Ermetico.;0.6;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+event;action;lavorare nella Grande Opera;To work in the Great Work.;0.95;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Samael Aun Weor,,event;action;acquisire un Vaso Ermetico;To acquire an Emerald Cup.;0.85;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Samael Aun Weor,,relation;owned-by;Dèi;-;0.75;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Dèi,Samael Aun Weor,event;process;tornare nuovamente a creare;To create again.;0.7;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Samael Aun Weor,,entity_alias;Vaso Ermetico distrutto;distrutto Vaso Ermetico.;0.6;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Vaso Ermetico,,entity_alias;Vaso Ermetico;distrutto Vaso Ermetico.;0.6;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Vaso Ermetico,,entity_alias;Santo Grial;Grial.;0.7;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Vaso Ermetico,,
+2025-11-28 08:32:22,374 [pool-6-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Samael Aun Weor;A person mentioned in the text, possibly an author or spiritual leader.;0.9;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+entity;product;Vaso Ermetico;A mystical vessel or container used in alchemy.;0.8;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+entity;product;Santo Grial;A mystical container or cup used in alchemy.;0.7;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+entity;product;Vaso Ermetico distrutto;distrutto Vaso Ermetico.;0.6;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";,,
+event;action;lavorare nella Grande Opera;To work in the Great Work.;0.95;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Samael Aun Weor,,event;action;acquisire un Vaso Ermetico;To acquire an Emerald Cup.;0.85;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Samael Aun Weor,,relation;owned-by;Dèi;-;0.75;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Dèi,Samael Aun Weor,event;process;tornare nuovamente a creare;To create again.;0.7;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Samael Aun Weor,,entity_alias;Vaso Ermetico distrutto;distrutto Vaso Ermetico.;0.6;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Vaso Ermetico,,entity_alias;Vaso Ermetico;distrutto Vaso Ermetico.;0.6;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Vaso Ermetico,,entity_alias;Santo Grial;Grial.;0.7;"fc4ffcbb-9069-4815-9dbf-684d20b81730,109874e8-3709-42f2-9e65-f312ab801452";Vaso Ermetico,,
+2025-11-28 08:32:22,374 [pool-6-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=VASO ERMETICO), EntityObject(name=SANTO GRIAL), EntityObject(name=VASO ERMETICO DISTRUTTO)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:32:22,374 [pool-6-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=VASO ERMETICO), EntityObject(name=SANTO GRIAL), EntityObject(name=VASO ERMETICO DISTRUTTO)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:32:30,640 [pool-6-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Santo Affermare;Santo Affermare is one of the three fundamental forces in the universe.;0.8;;;;
+entity;company;Gesù;Gesù is a central figure in Christianity, considered by many to be the Son of God and the savior of humanity.;0.9;;;;;
+relation;part-of;Santo Affermare,Santo Negare;Santo Affermare and Santo Negare are two aspects of the same fundamental force.;0.7;;;;
+entity_alias;nation;Uomo Divino;The Uomo Divino is a divine being that emanates the Forms, Scintille, Animali Sacri and Messaggeri.;0.6;;;;;
+relation;part-of;Gesù,Tiphereth;Tiphereth is considered to be the manifestation of Gesù in the human world.;0.8;;;;;
+entity;product;Pietra Filosofale;The Pietra Filosofale is a symbol of spiritual transformation and enlightenment.;0.9;;;;;;;;;;
+relation;part-of;Gesù,Salvatore Gemello;The Salvatore Gemello is considered to be the manifestation of Gesù in the human world.;0.8;;;;;
+entity_alias;nation;Cristo;Cristo is a central figure in Christianity, considered by many to be the Son of God and the savior of humanity.;0.9;;;;;
+relation;part-of;Gesù,Cristo;Cristo is considered to be an aspect of Gesù.;0.8;;;;;
+event;manifestation;emanazione del tesoro della luce;The emanation of the treasure of light is a fundamental concept in Gnosticism.;0.7;;;;;;;;;;
+entity_alias;nation;Logos;Logos is a central figure in ancient Greek philosophy, considered to be the principle of reason and order in the universe.;0.9;;;;;
+event;manifestation;emanazione delle forme;The emanation of forms is a fundamental concept in Gnosticism.;0.7;;;;;;;;;;
+relation;part-of;Gesù,Uomo Causale;The Uomo Causale is considered to be an aspect of Gesù.;0.8;;;;;
+entity_alias;nation;Misteri del Sesso;The Misteri del Sesso are a central concept in Gnosticism, referring to the mysteries of the universe and human existence.;0.9;;;;;;;;;;
+relation;part-of;Gesù,Salvatore Gemello;The Salvatore Gemello is considered to be an aspect of Gesù.;0.8;;;;;
+entity_alias;nation;Anziano dei Giorni;The Anziano dei Giorni is a central figure in Gnosticism, considered to be the principle of time and movement in the universe.;0.9;;;;;;;;;;
+relation;part-of;Gesù,Tiphereth;Tiphereth is considered to be an aspect of Gesù.;0.8;;;;;
+event;manifestation;emanazione del grande giorno;The emanation of the great day is a fundamental concept in Gnosticism.;0.7;;;;;;;;;;
+2025-11-28 08:32:30,640 [pool-6-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Santo Affermare;Santo Affermare is one of the three fundamental forces in the universe.;0.8;;;;
+entity;company;Gesù;Gesù is a central figure in Christianity, considered by many to be the Son of God and the savior of humanity.;0.9;;;;;
+relation;part-of;Santo Affermare,Santo Negare;Santo Affermare and Santo Negare are two aspects of the same fundamental force.;0.7;;;;
+entity_alias;nation;Uomo Divino;The Uomo Divino is a divine being that emanates the Forms, Scintille, Animali Sacri and Messaggeri.;0.6;;;;;
+relation;part-of;Gesù,Tiphereth;Tiphereth is considered to be the manifestation of Gesù in the human world.;0.8;;;;;
+entity;product;Pietra Filosofale;The Pietra Filosofale is a symbol of spiritual transformation and enlightenment.;0.9;;;;;;;;;;
+relation;part-of;Gesù,Salvatore Gemello;The Salvatore Gemello is considered to be the manifestation of Gesù in the human world.;0.8;;;;;
+entity_alias;nation;Cristo;Cristo is a central figure in Christianity, considered by many to be the Son of God and the savior of humanity.;0.9;;;;;
+relation;part-of;Gesù,Cristo;Cristo is considered to be an aspect of Gesù.;0.8;;;;;
+event;manifestation;emanazione del tesoro della luce;The emanation of the treasure of light is a fundamental concept in Gnosticism.;0.7;;;;;;;;;;
+entity_alias;nation;Logos;Logos is a central figure in ancient Greek philosophy, considered to be the principle of reason and order in the universe.;0.9;;;;;
+event;manifestation;emanazione delle forme;The emanation of forms is a fundamental concept in Gnosticism.;0.7;;;;;;;;;;
+relation;part-of;Gesù,Uomo Causale;The Uomo Causale is considered to be an aspect of Gesù.;0.8;;;;;
+entity_alias;nation;Misteri del Sesso;The Misteri del Sesso are a central concept in Gnosticism, referring to the mysteries of the universe and human existence.;0.9;;;;;;;;;;
+relation;part-of;Gesù,Salvatore Gemello;The Salvatore Gemello is considered to be an aspect of Gesù.;0.8;;;;;
+entity_alias;nation;Anziano dei Giorni;The Anziano dei Giorni is a central figure in Gnosticism, considered to be the principle of time and movement in the universe.;0.9;;;;;;;;;;
+relation;part-of;Gesù,Tiphereth;Tiphereth is considered to be an aspect of Gesù.;0.8;;;;;
+event;manifestation;emanazione del grande giorno;The emanation of the great day is a fundamental concept in Gnosticism.;0.7;;;;;;;;;;
+2025-11-28 08:32:30,641 [pool-6-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:32:30,641 [pool-6-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:32:52,152 [pool-7-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Giuseppe da Arimatea;Person involved in the story of Jesus Christ;0.8;b8feb0b2-79eb-44e0-880e-225c86d9af9c;
+entity;company;Libreria esoterica;Bookstore;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;project/Tradizione gnostica;Project about Gnostic tradition;0.4;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Vangeli apocrifi;Alternative expression for Apocryphal Gospels;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+relation;participates in/The Vangeli apocrifi emerge a figure troppo umana di Gesù/Giuseppe da Arimatea;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event_alias;alternative expression/The avversione verso i Vangeli apocrifi inizia con S. Paolo/Introduction to the Apocryphal Gospels;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;person;Pietro;One of the apostles of Jesus Christ;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;person;Giovanni evangelista;One of the apostles of Jesus Christ and author of a gospel;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;person;Gesù Cristo;The central figure of Christianity;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;company;Chiesa;Christian Church;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Tradizione gnostica;Alternative expression for Gnostic tradition;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event;action/The avversione verso i Vangeli apocrifi inizia con S. Paolo/Introduction to the Apocryphal Gospels;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+relation;participates in/S. Paolo dà un’interpretazione personale al problema cristologico/Giuseppe da Arimatea;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Vangelo di Maria (Maddalena)/The Gospel of Mary;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative expression/Vangelo di Maria (Maddalena)/The Gospel of Mary;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Tradizione gnostica/Gnostic tradition;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Chiesa/Christian Church;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Gesù Cristo/Christ Jesus;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/S. Paolo/Apostle Paul;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Giovanni evangelista/Apostle John the Evangelist;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event_alias;alternative expression/Avversione verso i Vangeli apocrifi inizia con S. Paolo/Liberal Christian movement;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Vangeli apocrifi/Apocryphal Gospels;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event_alias;alternative expression/Avversione verso i Vangeli apocrifi inizia con S. Paolo/The liberal Christian movement;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+2025-11-28 08:32:52,152 [pool-7-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Giuseppe da Arimatea;Person involved in the story of Jesus Christ;0.8;b8feb0b2-79eb-44e0-880e-225c86d9af9c;
+entity;company;Libreria esoterica;Bookstore;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;project/Tradizione gnostica;Project about Gnostic tradition;0.4;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Vangeli apocrifi;Alternative expression for Apocryphal Gospels;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+relation;participates in/The Vangeli apocrifi emerge a figure troppo umana di Gesù/Giuseppe da Arimatea;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event_alias;alternative expression/The avversione verso i Vangeli apocrifi inizia con S. Paolo/Introduction to the Apocryphal Gospels;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;person;Pietro;One of the apostles of Jesus Christ;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;person;Giovanni evangelista;One of the apostles of Jesus Christ and author of a gospel;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;person;Gesù Cristo;The central figure of Christianity;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity;company;Chiesa;Christian Church;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Tradizione gnostica;Alternative expression for Gnostic tradition;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event;action/The avversione verso i Vangeli apocrifi inizia con S. Paolo/Introduction to the Apocryphal Gospels;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+relation;participates in/S. Paolo dà un’interpretazione personale al problema cristologico/Giuseppe da Arimatea;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Vangelo di Maria (Maddalena)/The Gospel of Mary;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative expression/Vangelo di Maria (Maddalena)/The Gospel of Mary;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Tradizione gnostica/Gnostic tradition;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Chiesa/Christian Church;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Gesù Cristo/Christ Jesus;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/S. Paolo/Apostle Paul;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Giovanni evangelista/Apostle John the Evangelist;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event_alias;alternative expression/Avversione verso i Vangeli apocrifi inizia con S. Paolo/Liberal Christian movement;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+entity_alias;alternative name/Vangeli apocrifi/Apocryphal Gospels;0.6;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+event_alias;alternative expression/Avversione verso i Vangeli apocrifi inizia con S. Paolo/The liberal Christian movement;0.5;b8feb0b2-79eb-44e0-880e-225c86d9af9c,1c34d859-1e41-484d-8ed9-e1cd3d1e46f7;
+2025-11-28 08:32:52,153 [pool-7-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE DA ARIMATEA), EntityObject(name=LIBRERIA ESOTERICA), EntityObject(name=PIETRO), EntityObject(name=GIOVANNI EVANGELISTA), EntityObject(name=GESÙ CRISTO), EntityObject(name=CHIESA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:32:52,153 [pool-7-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE DA ARIMATEA), EntityObject(name=LIBRERIA ESOTERICA), EntityObject(name=PIETRO), EntityObject(name=GIOVANNI EVANGELISTA), EntityObject(name=GESÙ CRISTO), EntityObject(name=CHIESA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:33:58,677 [pool-7-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Gesù;The central figure of the Christian faith.;0.85;"77806b29-9dcf-4faa-964a-e61f8b98f60f","795fed5e-840c-4687-bc53-a0cffcbea0da";,,
+entity;person;Giuseppe;The husband of Maria and the earthly father of Gesù.;0.75;"795fed5e-840c-4687-bc53-a0cffcbea0da",;,Maria
+entity;organization;Chiesa cattolica;A Christian denomination with a long history and tradition.;0.8;,;,Tradizione gnostica
+event;birth;Natività di Maria santa genitrice di Dio e gloriosissima madre di Gesù Cristo.;The birth of Mary, the mother of Jesus.;0.85;"795fed5e-840c-4687-bc53-a0cffcbea0da";Maria,,
+event;marriage;Il matrimonio tra Giuseppe e Maria.;The marriage between Joseph and Mary.;0.8;"795fed5e-840c-4687-bc53-a0cffcbea0da";Giuseppe,Maria
+entity;organization;Libreria esoterica;A library of esoteric knowledge.;0.9;,Tradizione gnostica,,
+relation;part-of;Vangeli apocrifi;The collection of non-canonical Gospels.;0.85;,;,Protovangelo di Giacomo
+entity_alias;Tradizione gnostica;Gnostic tradition;A Christian movement emphasizing spiritual knowledge and experience.;0.9;"77806b29-9dcf-4faa-964a-e61f8b98f60f";"f47ed9b4-3d6a-4fea-a56e-e4efbd79ef1b","795fed5e-840c-4687-bc53-a0cffcbea0da";,Protovangelo di Giacomo
+entity_alias;Vangeli apocrifi;Apocryphal Gospels;Non-canonical texts that often provide alternative accounts of Jesus' life and teachings.;0.85;"77806b29-9dcf-4faa-964a-e61f8b98f60f";"f47ed9b4-3d6a-4fea-a56e-e4efbd79ef1b","795fed5e-840c-4687-bc53-a0cffcbea0da";,Protovangelo di Giacomo
+relation;located-in;Gerusalemme;The city where the Protovangelo of James is said to have been written.;0.85;"795fed5e-840c-4687-bc53-a0cffcbea0da";"Papyrus Bodmer 5",,
+2025-11-28 08:33:58,677 [pool-7-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Gesù;The central figure of the Christian faith.;0.85;"77806b29-9dcf-4faa-964a-e61f8b98f60f","795fed5e-840c-4687-bc53-a0cffcbea0da";,,
+entity;person;Giuseppe;The husband of Maria and the earthly father of Gesù.;0.75;"795fed5e-840c-4687-bc53-a0cffcbea0da",;,Maria
+entity;organization;Chiesa cattolica;A Christian denomination with a long history and tradition.;0.8;,;,Tradizione gnostica
+event;birth;Natività di Maria santa genitrice di Dio e gloriosissima madre di Gesù Cristo.;The birth of Mary, the mother of Jesus.;0.85;"795fed5e-840c-4687-bc53-a0cffcbea0da";Maria,,
+event;marriage;Il matrimonio tra Giuseppe e Maria.;The marriage between Joseph and Mary.;0.8;"795fed5e-840c-4687-bc53-a0cffcbea0da";Giuseppe,Maria
+entity;organization;Libreria esoterica;A library of esoteric knowledge.;0.9;,Tradizione gnostica,,
+relation;part-of;Vangeli apocrifi;The collection of non-canonical Gospels.;0.85;,;,Protovangelo di Giacomo
+entity_alias;Tradizione gnostica;Gnostic tradition;A Christian movement emphasizing spiritual knowledge and experience.;0.9;"77806b29-9dcf-4faa-964a-e61f8b98f60f";"f47ed9b4-3d6a-4fea-a56e-e4efbd79ef1b","795fed5e-840c-4687-bc53-a0cffcbea0da";,Protovangelo di Giacomo
+entity_alias;Vangeli apocrifi;Apocryphal Gospels;Non-canonical texts that often provide alternative accounts of Jesus' life and teachings.;0.85;"77806b29-9dcf-4faa-964a-e61f8b98f60f";"f47ed9b4-3d6a-4fea-a56e-e4efbd79ef1b","795fed5e-840c-4687-bc53-a0cffcbea0da";,Protovangelo di Giacomo
+relation;located-in;Gerusalemme;The city where the Protovangelo of James is said to have been written.;0.85;"795fed5e-840c-4687-bc53-a0cffcbea0da";"Papyrus Bodmer 5",,
+2025-11-28 08:33:58,677 [pool-7-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=GIUSEPPE), EntityObject(name=CHIESA CATTOLICA), EntityObject(name=LIBRERIA ESOTERICA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:33:58,677 [pool-7-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=GIUSEPPE), EntityObject(name=CHIESA CATTOLICA), EntityObject(name=LIBRERIA ESOTERICA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:34:17,851 [pool-6-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Gesù;Gesù is the Second Primordial that shines in the zodiacal girdle.;0.8;"505db81b-0f9a-4972-acf8-2398321cc5db";"Samael Aun Weor","Cristo, il Logos"
+entity;person;Gesù;Gesù is the Second Primordial that shines in the zodiacal girdle.;0.7;"89600d8d-3a55-4644-b374-94c88029819a";"Samael Aun Weor","Il Cristo, il Logos"
+entity;person;Gesù;Gesù is the Second Primordial that shines in the zodiacal girdle.;0.7;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Il Cristo, il Logos"
+entity;company;Libreria esoterica;A store that sells esoteric knowledge.;0.5;"505db81b-0f9a-4972-acf8-2398321cc5db";"SAMAEL AUN WEOR","/pistis_sophia_svelato.pdf"
+entity;product;/pistis_sophia_svelato.pdf;A book about esoteric knowledge.;0.4;"505db81b-0f9a-4972-acf8-2398321cc5db";"SAMAEL AUN WEOR","Tradizione gnostica"
+entity_alias;product;pistis sophia svelato pdf;a book about esoteric knowledge.;0.3;"505db81b-0f9a-4972-acf8-2398321cc5db";"Pistis Sophia Svelato Ο Samael Aun Weor ","/pistis_sophia_svelato.pdf"
+event;process;l’Assoluto;It is the end of any creation.;0.6;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+event;process;l’Aurora;It is the beginning of any creation.;0.5;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+event;process;l’Ultimo Mistero;l’ultimo mistero è il ventiquattresimo mistero, dall’interno verso l’esterno.;0.5;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Quella forza luminosa scese su Gesù e lo avvolse interamente, mentre era seduto discosto dai suoi discepoli."
+event;action;scese;It is the process of descending.;0.4;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Quella forza luminosa scese su Gesù e lo avvolse interamente, mentre era seduto discosto dai suoi discepoli."
+event;action;uscita;l’assoluto è la fine di qualsiasi creazione.;0.3;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Indubbiamente Gesù è uscito dal Primo Mistero."
+event;process;l’Assoluto;l’assoluto è la fine di qualsiasi creazione.;0.3;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+relation;part_of;l’Aurora;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+relation;part_of;l’Ultimo Mistero;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Indubbiamente Gesù è uscito dal Primo Mistero."
+entity_alias;person;samael aun weor;a person.;0.2;"505db81b-0f9a-4972-acf8-2398321cc5db";"SAMAEL AUN WEOR"
+entity_alias;product;pistis sophia svelato pdf;a book about esoteric knowledge.;0.2;"505db81b-0f9a-4972-acf8-2398321cc5db";"Pistis Sophia Svelato Ο Samael Aun Weor ","/pistis_sophia_svelato.pdf"
+event_alias;process;l’assoluto;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+event_alias;process;l’aurora;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+2025-11-28 08:34:17,852 [pool-6-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Gesù;Gesù is the Second Primordial that shines in the zodiacal girdle.;0.8;"505db81b-0f9a-4972-acf8-2398321cc5db";"Samael Aun Weor","Cristo, il Logos"
+entity;person;Gesù;Gesù is the Second Primordial that shines in the zodiacal girdle.;0.7;"89600d8d-3a55-4644-b374-94c88029819a";"Samael Aun Weor","Il Cristo, il Logos"
+entity;person;Gesù;Gesù is the Second Primordial that shines in the zodiacal girdle.;0.7;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Il Cristo, il Logos"
+entity;company;Libreria esoterica;A store that sells esoteric knowledge.;0.5;"505db81b-0f9a-4972-acf8-2398321cc5db";"SAMAEL AUN WEOR","/pistis_sophia_svelato.pdf"
+entity;product;/pistis_sophia_svelato.pdf;A book about esoteric knowledge.;0.4;"505db81b-0f9a-4972-acf8-2398321cc5db";"SAMAEL AUN WEOR","Tradizione gnostica"
+entity_alias;product;pistis sophia svelato pdf;a book about esoteric knowledge.;0.3;"505db81b-0f9a-4972-acf8-2398321cc5db";"Pistis Sophia Svelato Ο Samael Aun Weor ","/pistis_sophia_svelato.pdf"
+event;process;l’Assoluto;It is the end of any creation.;0.6;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+event;process;l’Aurora;It is the beginning of any creation.;0.5;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+event;process;l’Ultimo Mistero;l’ultimo mistero è il ventiquattresimo mistero, dall’interno verso l’esterno.;0.5;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Quella forza luminosa scese su Gesù e lo avvolse interamente, mentre era seduto discosto dai suoi discepoli."
+event;action;scese;It is the process of descending.;0.4;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Quella forza luminosa scese su Gesù e lo avvolse interamente, mentre era seduto discosto dai suoi discepoli."
+event;action;uscita;l’assoluto è la fine di qualsiasi creazione.;0.3;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Indubbiamente Gesù è uscito dal Primo Mistero."
+event;process;l’Assoluto;l’assoluto è la fine di qualsiasi creazione.;0.3;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+relation;part_of;l’Aurora;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+relation;part_of;l’Ultimo Mistero;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","Indubbiamente Gesù è uscito dal Primo Mistero."
+entity_alias;person;samael aun weor;a person.;0.2;"505db81b-0f9a-4972-acf8-2398321cc5db";"SAMAEL AUN WEOR"
+entity_alias;product;pistis sophia svelato pdf;a book about esoteric knowledge.;0.2;"505db81b-0f9a-4972-acf8-2398321cc5db";"Pistis Sophia Svelato Ο Samael Aun Weor ","/pistis_sophia_svelato.pdf"
+event_alias;process;l’assoluto;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+event_alias;process;l’aurora;l’assoluto è la fine di qualsiasi creazione.;0.2;"e5231f41-fb99-43df-a8db-459b59656fb9";"Pistis Sophia Svelato Ο Samael Aun Weor ","La luce si espande all’aurora di ogni creazione e poi si raccoglie nel seno dell’Assoluto alla fine di qualsiasi creazione."
+2025-11-28 08:34:17,853 [pool-6-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=LIBRERIA ESOTERICA), EntityObject(name=/PISTIS_SOPHIA_SVELATO.PDF)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:34:17,853 [pool-6-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=LIBRERIA ESOTERICA), EntityObject(name=/PISTIS_SOPHIA_SVELATO.PDF)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:34:26,626 [pool-7-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Gioacchino;"Person";0.9;"f2eb0f55-8b22-4060-a945-30798507b27c";"Gioacchino";
+entity;person;Ruben;"Person";0.9;"f2eb0f55-8b22-4060-a945-30798507b27c";"Ruben";
+entity;company;Israele;"Company";0.8;"f2eb0f55-8b22-4060-a945-30798507b27c";"Israele";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"f2eb0f55-8b22-4060-a945-30798507b27c";"Il gran giorno del Signore";,,
+entity_alias;person;Abramo;"Person";0.7;"f2eb0f55-8b22-4060-a945-30798507b27c";"Abramo";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"ab853196-e98c-4319-b8ab-82275e47ddd9";"Il gran giorno del Signore";,,
+entity;person;Giuditta;"Person";0.6;"ab853196-e98c-4319-b8ab-82275e47ddd9";"Giuditta";
+entity;person;Anna;"Person";0.5;"b1d83c6f-820a-4fe7-9575-39e5b408bf53";"Anna";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"b1d83c6f-820a-4fe7-9575-39e5b408bf53";"Il gran giorno del Signore";,,
+relation;owned-by;"Giuditta";"Anna";"Owned by";0.3;"ab853196-e98c-4319-b8ab-82275e47ddd9","";
+entity_alias;event;"Il gran giorno del Signore" ;"Event";0.4;"b1d83c6f-820a-4fe7-9575-39e5b408bf53";"Il gran giorno del Signore";,,
+relation;participates-in;"Anna";"Signore";"Participates in";0.2;"b1d83c6f-820a-4fe7-9575-39e5b408bf53","";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"ab853196-e98c-4319-b8ab-82275e47ddd9";"Il gran giorno del Signore";,,
+entity_alias;person;Abramo;"Person";0.7;"f2eb0f55-8b22-4060-a945-30798507b27c";"Abramo";
+relation;part-of;"Israele";"Anna";"Part of";0.1;"f2eb0f55-8b22-4060-a945-30798507b27c","";
+2025-11-28 08:34:26,626 [pool-7-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Gioacchino;"Person";0.9;"f2eb0f55-8b22-4060-a945-30798507b27c";"Gioacchino";
+entity;person;Ruben;"Person";0.9;"f2eb0f55-8b22-4060-a945-30798507b27c";"Ruben";
+entity;company;Israele;"Company";0.8;"f2eb0f55-8b22-4060-a945-30798507b27c";"Israele";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"f2eb0f55-8b22-4060-a945-30798507b27c";"Il gran giorno del Signore";,,
+entity_alias;person;Abramo;"Person";0.7;"f2eb0f55-8b22-4060-a945-30798507b27c";"Abramo";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"ab853196-e98c-4319-b8ab-82275e47ddd9";"Il gran giorno del Signore";,,
+entity;person;Giuditta;"Person";0.6;"ab853196-e98c-4319-b8ab-82275e47ddd9";"Giuditta";
+entity;person;Anna;"Person";0.5;"b1d83c6f-820a-4fe7-9575-39e5b408bf53";"Anna";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"b1d83c6f-820a-4fe7-9575-39e5b408bf53";"Il gran giorno del Signore";,,
+relation;owned-by;"Giuditta";"Anna";"Owned by";0.3;"ab853196-e98c-4319-b8ab-82275e47ddd9","";
+entity_alias;event;"Il gran giorno del Signore" ;"Event";0.4;"b1d83c6f-820a-4fe7-9575-39e5b408bf53";"Il gran giorno del Signore";,,
+relation;participates-in;"Anna";"Signore";"Participates in";0.2;"b1d83c6f-820a-4fe7-9575-39e5b408bf53","";
+event;cause;"Il gran giorno del Signore" ;"Cause";0.85;"ab853196-e98c-4319-b8ab-82275e47ddd9";"Il gran giorno del Signore";,,
+entity_alias;person;Abramo;"Person";0.7;"f2eb0f55-8b22-4060-a945-30798507b27c";"Abramo";
+relation;part-of;"Israele";"Anna";"Part of";0.1;"f2eb0f55-8b22-4060-a945-30798507b27c","";
+2025-11-28 08:34:26,626 [pool-7-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GIOACCHINO), EntityObject(name=RUBEN), EntityObject(name=ISRAELE), EntityObject(name=GIUDITTA), EntityObject(name=ANNA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:34:26,626 [pool-7-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GIOACCHINO), EntityObject(name=RUBEN), EntityObject(name=ISRAELE), EntityObject(name=GIUDITTA), EntityObject(name=ANNA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:38:22,285 [pool-6-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Gesù;The name of the person that is central to the text.;0.9;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+event;event;Cristificazione;the process of becoming Christ-like or achieving spiritual enlightenment.;0.85;"d4f3c7fc-08fb-48d7-add1-333433696be7",,,
+relation;participates-in;Gesù;Luce-Cristo;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+entity_alias;event;Cristificazione;the process of becoming Christ-like or achieving spiritual enlightenment.;0.85;"d4f3c7fc-08fb-48d7-add1-333433696be7",,,
+relation;participates-in;Gesù;Logos;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+event;event;Realizzazione della Grande Opera;the process of achieving spiritual enlightenment or transformation.;0.85;"13994443-895e-40d8-be67-ac59b7dd1dda",,,
+relation;participates-in;Gesù;Baphomet;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,, 
+entity;person;Samael Aun Weor;The author of the text.;0.9;"d4f3c7fc-08fb-48d7-add1-333433696be7",,,
+relation;owned-by;Gesù;Luce-Cristo;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+event_alias;event;Cristificazione;the process of becoming Christ-like or achieving spiritual enlightenment.;0.85;"d4f3c7fc-08fb-48d7-add1-333433696be7",,
+2025-11-28 08:38:22,286 [pool-6-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Gesù;The name of the person that is central to the text.;0.9;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+event;event;Cristificazione;the process of becoming Christ-like or achieving spiritual enlightenment.;0.85;"d4f3c7fc-08fb-48d7-add1-333433696be7",,,
+relation;participates-in;Gesù;Luce-Cristo;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+entity_alias;event;Cristificazione;the process of becoming Christ-like or achieving spiritual enlightenment.;0.85;"d4f3c7fc-08fb-48d7-add1-333433696be7",,,
+relation;participates-in;Gesù;Logos;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+event;event;Realizzazione della Grande Opera;the process of achieving spiritual enlightenment or transformation.;0.85;"13994443-895e-40d8-be67-ac59b7dd1dda",,,
+relation;participates-in;Gesù;Baphomet;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,, 
+entity;person;Samael Aun Weor;The author of the text.;0.9;"d4f3c7fc-08fb-48d7-add1-333433696be7",,,
+relation;owned-by;Gesù;Luce-Cristo;0.8;"63a31f15-3f59-4637-801e-9c585a7360f8";,,
+event_alias;event;Cristificazione;the process of becoming Christ-like or achieving spiritual enlightenment.;0.85;"d4f3c7fc-08fb-48d7-add1-333433696be7",,
+2025-11-28 08:38:22,286 [pool-6-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=SAMAEL AUN WEOR)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:38:22,286 [pool-6-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=SAMAEL AUN WEOR)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Le potenze del bene e del male lottano fra di loro davanti agli eventi cristici. 
+2025-11-28 08:38:28,934 [pool-7-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Gioacchino;"Person",0.8,"dc1153fd-6b8e-40e9-be05-c36733d329aa,2a4accea-8b30-44c9-85a9-aa467224b47b","Gioacchino";,
+entity;person;Anna;"Person",0.7,"dc1153fd-6b8e-40e9-be05-c36733d329aa,2a4accea-8b30-44c9-85a9-aa467224b47b","Gioacchino";,
+entity;person;Maria;"Person",0.6,"33168ff0-c335-441c-b209-a173963ee759","Gioacchino";,
+relation;part-of;Gioacchino,Anna;"Relation",0.9,"dc1153fd-6b8e-40e9-be05-c36733d329aa","Gioacchino";Anna",
+event;action;Gioacchino; "Event", 0.7, "dc1153fd-6b8e-40e9-be05-c36733d329aa", "Gioacchino";,
+entity_alias;product;agnelli;"Product", 0.8, "dc1153fd-6b8e-40e9-be05-c36733d329aa", , ,
+relation;owned-by;Gioacchino,Maria;"Relation",0.7,"33168ff0-c335-441c-b209-a173963ee759","Gioacchino";Maria",
+event_alias;process;Tradizione gnostica;"EventAlias", 0.6, "2a4accea-8b30-44c9-85a9-aa467224b47b", , ,
+entity;project;Tradizione gnostica;"Project", 0.5, "2a4accea-8b30-44c9-85a9-aa467224b47b", , 
+relation;located-in;Gioacchino,Tempio del Signore;"Relation", 0.6,"33168ff0-c335-441c-b209-a173963ee759","Gioacchino";Tempio del Signore"
+2025-11-28 08:38:28,934 [pool-7-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Gioacchino;"Person",0.8,"dc1153fd-6b8e-40e9-be05-c36733d329aa,2a4accea-8b30-44c9-85a9-aa467224b47b","Gioacchino";,
+entity;person;Anna;"Person",0.7,"dc1153fd-6b8e-40e9-be05-c36733d329aa,2a4accea-8b30-44c9-85a9-aa467224b47b","Gioacchino";,
+entity;person;Maria;"Person",0.6,"33168ff0-c335-441c-b209-a173963ee759","Gioacchino";,
+relation;part-of;Gioacchino,Anna;"Relation",0.9,"dc1153fd-6b8e-40e9-be05-c36733d329aa","Gioacchino";Anna",
+event;action;Gioacchino; "Event", 0.7, "dc1153fd-6b8e-40e9-be05-c36733d329aa", "Gioacchino";,
+entity_alias;product;agnelli;"Product", 0.8, "dc1153fd-6b8e-40e9-be05-c36733d329aa", , ,
+relation;owned-by;Gioacchino,Maria;"Relation",0.7,"33168ff0-c335-441c-b209-a173963ee759","Gioacchino";Maria",
+event_alias;process;Tradizione gnostica;"EventAlias", 0.6, "2a4accea-8b30-44c9-85a9-aa467224b47b", , ,
+entity;project;Tradizione gnostica;"Project", 0.5, "2a4accea-8b30-44c9-85a9-aa467224b47b", , 
+relation;located-in;Gioacchino,Tempio del Signore;"Relation", 0.6,"33168ff0-c335-441c-b209-a173963ee759","Gioacchino";Tempio del Signore"
+2025-11-28 08:38:28,934 [pool-7-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:38:28,934 [pool-7-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:38:36,037 [pool-6-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Samael Aun Weor;;0.9;"12137083-37d8-414a-821e-5c5e34f5a3cd, e58ede0e-9ec1-4e73-8ea3-77d8504ea004";,"Pistis Sophia Svelato", 
+entity;company;Liberia esoterica;;0.7;"12137083-37d8-414a-821e-5c5e34f5a3cd, e58ede0e-9ec1-4e73-8ea3-77d8504ea004";,"Libreria esoterica", 
+event;ascension;Ascensione del Cristo Intimo in noi;;0.7;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Cristo Intimo", 
+relation;participates-in;Luce e Tenebre;;0.9;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Cristo Intimo", "Potenze del bene e del male" 
+relation;owned-by;Lucifero-Baphomet;;0.9;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Samael Aun Weor", "Lucifero-Baphomet" 
+entity_alias;Cristo Rosso;;0.7;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Samael Aun Weor", 
+event_alias;resurrezione;;0.7;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Cristo Intimo",
+2025-11-28 08:38:36,038 [pool-6-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Samael Aun Weor;;0.9;"12137083-37d8-414a-821e-5c5e34f5a3cd, e58ede0e-9ec1-4e73-8ea3-77d8504ea004";,"Pistis Sophia Svelato", 
+entity;company;Liberia esoterica;;0.7;"12137083-37d8-414a-821e-5c5e34f5a3cd, e58ede0e-9ec1-4e73-8ea3-77d8504ea004";,"Libreria esoterica", 
+event;ascension;Ascensione del Cristo Intimo in noi;;0.7;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Cristo Intimo", 
+relation;participates-in;Luce e Tenebre;;0.9;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Cristo Intimo", "Potenze del bene e del male" 
+relation;owned-by;Lucifero-Baphomet;;0.9;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Samael Aun Weor", "Lucifero-Baphomet" 
+entity_alias;Cristo Rosso;;0.7;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Samael Aun Weor", 
+event_alias;resurrezione;;0.7;"62c40e23-951d-41ca-a608-4f1d14bd1bf2, 12137083-37d8-414a-821e-5c5e34f5a3cd";,"Cristo Intimo",
+2025-11-28 08:38:36,038 [pool-6-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=LIBERIA ESOTERICA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:38:36,038 [pool-6-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=LIBERIA ESOTERICA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Tutti i grandi eventi cosmici e divini sono sempre annunciati da grandi terremoti. 
+Ovviamente gli adepti del Cristo si prosternano sorpresi davanti a questi grandi eventi. 
+2025-11-28 08:38:58,992 [pool-7-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Anna;"Anna is a person involved in the story of Maria.";0.8;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";,,
+entity;person;Gioacchino;"Gioacchino is a person involved in the story of Maria.";0.7;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";,,
+entity;person;Maria;"Maria is the main character of the story.";0.9;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Anna,Gioacchino";,
+entity;company;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,
+relation;part-of;Tempio del Signore;"The Tempio del Signore is part of the story as a location where Maria and Anna are involved in an event.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria,Anna";,
+entity_alias;Tradizione gnostica;"The Tradizione gnostica is an alternative name for the document /Vangeli-non-canonici.pdf.";0.3;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Gnosticism",,
+event_alias;manifestazione divina;"An event described as a manifestation of God in Maria.";0.5;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria";,
+entity;person;Zaccaria;"Zaccaria is a person involved in the story of Maria, an angel appears to him with instructions.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,
+event;Manifestazione divina;"An event described as a manifestation of God in Maria.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria,Zaccaria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Vangeli non canonici",,
+event;Consiglio di sacerdoti;"A meeting of priests who discuss what to do with Maria as she reaches the age of 12.";0.5;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Libreria esoterica",,
+event;Preghiera del sommo sacerdote;"A prayer of the high priest Zaccaria to God for guidance on what to do with Maria.";0.6;"43f34848-bc62-4418-95b4-a043d01b4275";"Maria,Zaccaria";,
+entity_alias;Tempio del Signore;"The location where the story takes place, also known as Tempio di Salomone.";0.3;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";,,"Dio",,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Tempio di Salomone",,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Dio",,
+event;Elezione di Giuseppe;"The selection of Giuseppe to be the caretaker of Maria.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Giuseppe,Maria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Eletto",,
+relation;located-in;/Vangeli-non-canonici.pdf;"The document /Vangeli-non-canonici.pdf is located in the category Libreria esoterica.";0.3;"43f34848-bc62-4418-95b4-a043d01b4275";"Liberia esoterica";,
+event;Manifestazione divina;"An event described as a manifestation of God in Maria.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria,Zaccaria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Liberia esoterica",,
+entity;person;Giuseppe;"Giuseppe is the caretaker of Maria selected by God through a miracle.";0.7;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Bastone",,
+event;Preghiera del sacerdote;"A prayer of the high priest Zaccaria to God for guidance on what to do with Maria.";0.6;"43f34848-bc62-4418-95b4-a043d01b4275";"Maria,Zaccaria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Giuseppe",,
+entity;company;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,
+relation;part-of;/Vangeli-non-canonici.pdf;"The document /Vangeli-non-canonici.pdf is part of the category Libreria esoterica.";0.3;"43f34848-bc62-4418-95b4-a043d01b4275";"Liberia esoterica";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Giuseppe",,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Eletto",
+2025-11-28 08:38:58,992 [pool-7-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Anna;"Anna is a person involved in the story of Maria.";0.8;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";,,
+entity;person;Gioacchino;"Gioacchino is a person involved in the story of Maria.";0.7;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";,,
+entity;person;Maria;"Maria is the main character of the story.";0.9;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Anna,Gioacchino";,
+entity;company;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,
+relation;part-of;Tempio del Signore;"The Tempio del Signore is part of the story as a location where Maria and Anna are involved in an event.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria,Anna";,
+entity_alias;Tradizione gnostica;"The Tradizione gnostica is an alternative name for the document /Vangeli-non-canonici.pdf.";0.3;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Gnosticism",,
+event_alias;manifestazione divina;"An event described as a manifestation of God in Maria.";0.5;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria";,
+entity;person;Zaccaria;"Zaccaria is a person involved in the story of Maria, an angel appears to him with instructions.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,
+event;Manifestazione divina;"An event described as a manifestation of God in Maria.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria,Zaccaria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Vangeli non canonici",,
+event;Consiglio di sacerdoti;"A meeting of priests who discuss what to do with Maria as she reaches the age of 12.";0.5;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Libreria esoterica",,
+event;Preghiera del sommo sacerdote;"A prayer of the high priest Zaccaria to God for guidance on what to do with Maria.";0.6;"43f34848-bc62-4418-95b4-a043d01b4275";"Maria,Zaccaria";,
+entity_alias;Tempio del Signore;"The location where the story takes place, also known as Tempio di Salomone.";0.3;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";,,"Dio",,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Tempio di Salomone",,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Dio",,
+event;Elezione di Giuseppe;"The selection of Giuseppe to be the caretaker of Maria.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Giuseppe,Maria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Eletto",,
+relation;located-in;/Vangeli-non-canonici.pdf;"The document /Vangeli-non-canonici.pdf is located in the category Libreria esoterica.";0.3;"43f34848-bc62-4418-95b4-a043d01b4275";"Liberia esoterica";,
+event;Manifestazione divina;"An event described as a manifestation of God in Maria.";0.6;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria,Zaccaria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Liberia esoterica",,
+entity;person;Giuseppe;"Giuseppe is the caretaker of Maria selected by God through a miracle.";0.7;"cd6cb6f9-9060-4735-bebf-2a20076fc8bc";"Maria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Bastone",,
+event;Preghiera del sacerdote;"A prayer of the high priest Zaccaria to God for guidance on what to do with Maria.";0.6;"43f34848-bc62-4418-95b4-a043d01b4275";"Maria,Zaccaria";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Giuseppe",,
+entity;company;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,
+relation;part-of;/Vangeli-non-canonici.pdf;"The document /Vangeli-non-canonici.pdf is part of the category Libreria esoterica.";0.3;"43f34848-bc62-4418-95b4-a043d01b4275";"Liberia esoterica";,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Giuseppe",,
+entity_alias;/Vangeli-non-canonici.pdf;"The category of the document /Vangeli-non-canonici.pdf, also known as Libreria esoterica.";0.4;"43f34848-bc62-4418-95b4-a043d01b4275";,,"Eletto",
+2025-11-28 08:38:58,993 [pool-7-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=ANNA), EntityObject(name=GIOACCHINO), EntityObject(name=MARIA), EntityObject(name=/VANGELI-NON-CANONICI.PDF), EntityObject(name=ZACCARIA), EntityObject(name=GIUSEPPE)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:38:58,993 [pool-7-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=ANNA), EntityObject(name=GIOACCHINO), EntityObject(name=MARIA), EntityObject(name=/VANGELI-NON-CANONICI.PDF), EntityObject(name=ZACCARIA), EntityObject(name=GIUSEPPE)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:39:12,157 [pool-6-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Lucifero;"Lucifero, in Christian demonology, is the fallen archangel and adversary of God" ;0.9;cb676edd-f407-484a-9407-c13d783e417a,"Lucifero genera l’impulso sessuale in ognuno di noi."
+entity;person;Gesù;"Jesus, in Christianity, is the central figure of the New Testament and the founder of Christian faith." ;0.8;cb676edd-f407-484a-9407-c13d783e417a,"Intorno all’ora nona del giorno seguente, mentre essi piangendo insieme dicevano tali cose, si aprirono i cieli e videro Gesù discendere tutto splendente:"
+relation;located-in;"places where a particular event takes place";0.7;cb676edd-f407-484a-9407-c13d783e417a,"Tutti i grandi eventi cosmici e divini sono sempre annunciati da grandi terremoti."
+entity;person;Apollonio;"Apollonius of Tyana (c. 15–100 AD) was a Greek Neo-Pythagorean philosopher, mystic and teacher." ;0.6;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Chi capisce l’ora nona comprende le dodici ore di Apollonio."
+entity_alias;event;"Resurrezione del Cristo";0.8;cb676edd-f407-484a-9407-c13d783e417a,"La resurrezione del Cristo Intimo in noi avviene all’ora ottava"
+relation;participates-in;"activities or events that people participate in";0.5;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Le dodici ore di Apollonio sono in relazione con le dodici fatiche di Ercole."
+entity_alias;event;"Dodici fatiche di Ercole";0.7;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Le dodici ore di Apollonio sono in relazione con le dodici fatiche di Ercole."
+entity_alias;event;"Misteri di Chokmah";0.6;cb676edd-f407-484a-9407-c13d783e417a,"I Misteri di Chokmah corrispondono all’ora nona"
+entity_alias;event;"Risurrezione del Cristo Intimo";0.8;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"La resurrezione del Cristo Intimo in noi avviene all’ora ottava."
+entity_alias;event;"Sacra Sole Assoluto vuole far cristallizzare le Tre Forze primarie dentro di noi";0.9;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Il Sacro Sole Assoluto vuole far cristallizzare le Tre Forze primarie dentro di noi."
+entity_alias;event;"Misteri del Logos";0.8;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"I molteplici Raggi del Logos sono di diversa natura e di differente tipo."
+relation;owned-by;"entities that have control or possession of something else";0.6;cb676edd-f407-484a-9407-c13d783e417a,"Gli adepto del Cristo si prosternano sorpresi davanti a questi grandi eventi"
+entity_alias;event;"Trasmutazione dello sperma sacro";0.8;cb676edd-f407-484a-9407-c13d783e417a,"Se controlliamo l’impulso sessuale e trasmutiamo lo sperma sacro ascendiamo di grado in grado."
+entity_alias;person;"SAMAEL AUN WEOR";0.9;cb676edd-f407-484a-9407-c13d783e417a,"TITLE:Primo Libro Ο Cap. 1-62 SAMAEL AUN WEOR"
+relation;has-cause;"events or circumstances that cause other events or situations";0.5;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Tutti i grandi eventi cosmici e divini sono sempre annunciati da grandi terremoti."
+entity_alias;event;"Grande Opera";0.8;cb676edd-f407-484a-9407-c13d783e417a,"Il lavoro della Grande Opera si realizza nella Nona Sfera"
+2025-11-28 08:39:12,158 [pool-6-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Lucifero;"Lucifero, in Christian demonology, is the fallen archangel and adversary of God" ;0.9;cb676edd-f407-484a-9407-c13d783e417a,"Lucifero genera l’impulso sessuale in ognuno di noi."
+entity;person;Gesù;"Jesus, in Christianity, is the central figure of the New Testament and the founder of Christian faith." ;0.8;cb676edd-f407-484a-9407-c13d783e417a,"Intorno all’ora nona del giorno seguente, mentre essi piangendo insieme dicevano tali cose, si aprirono i cieli e videro Gesù discendere tutto splendente:"
+relation;located-in;"places where a particular event takes place";0.7;cb676edd-f407-484a-9407-c13d783e417a,"Tutti i grandi eventi cosmici e divini sono sempre annunciati da grandi terremoti."
+entity;person;Apollonio;"Apollonius of Tyana (c. 15–100 AD) was a Greek Neo-Pythagorean philosopher, mystic and teacher." ;0.6;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Chi capisce l’ora nona comprende le dodici ore di Apollonio."
+entity_alias;event;"Resurrezione del Cristo";0.8;cb676edd-f407-484a-9407-c13d783e417a,"La resurrezione del Cristo Intimo in noi avviene all’ora ottava"
+relation;participates-in;"activities or events that people participate in";0.5;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Le dodici ore di Apollonio sono in relazione con le dodici fatiche di Ercole."
+entity_alias;event;"Dodici fatiche di Ercole";0.7;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Le dodici ore di Apollonio sono in relazione con le dodici fatiche di Ercole."
+entity_alias;event;"Misteri di Chokmah";0.6;cb676edd-f407-484a-9407-c13d783e417a,"I Misteri di Chokmah corrispondono all’ora nona"
+entity_alias;event;"Risurrezione del Cristo Intimo";0.8;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"La resurrezione del Cristo Intimo in noi avviene all’ora ottava."
+entity_alias;event;"Sacra Sole Assoluto vuole far cristallizzare le Tre Forze primarie dentro di noi";0.9;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Il Sacro Sole Assoluto vuole far cristallizzare le Tre Forze primarie dentro di noi."
+entity_alias;event;"Misteri del Logos";0.8;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"I molteplici Raggi del Logos sono di diversa natura e di differente tipo."
+relation;owned-by;"entities that have control or possession of something else";0.6;cb676edd-f407-484a-9407-c13d783e417a,"Gli adepto del Cristo si prosternano sorpresi davanti a questi grandi eventi"
+entity_alias;event;"Trasmutazione dello sperma sacro";0.8;cb676edd-f407-484a-9407-c13d783e417a,"Se controlliamo l’impulso sessuale e trasmutiamo lo sperma sacro ascendiamo di grado in grado."
+entity_alias;person;"SAMAEL AUN WEOR";0.9;cb676edd-f407-484a-9407-c13d783e417a,"TITLE:Primo Libro Ο Cap. 1-62 SAMAEL AUN WEOR"
+relation;has-cause;"events or circumstances that cause other events or situations";0.5;7cdc2c2e-5c83-4dea-8175-fbef7e7402ab,"Tutti i grandi eventi cosmici e divini sono sempre annunciati da grandi terremoti."
+entity_alias;event;"Grande Opera";0.8;cb676edd-f407-484a-9407-c13d783e417a,"Il lavoro della Grande Opera si realizza nella Nona Sfera"
+2025-11-28 08:39:12,158 [pool-6-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=LUCIFERO), EntityObject(name=GESÙ), EntityObject(name=APOLLONIO)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:39:12,158 [pool-6-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=LUCIFERO), EntityObject(name=GESÙ), EntityObject(name=APOLLONIO)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Inoltre tutti gli eventi cristici sono accompagnati da grandi terremoti e da grande confusione. 
+Gli eventi cristici sono terribilmente rivoluzionari. 
+2025-11-28 08:39:24,438 [pool-7-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Giuseppe;Person whose house was used as the place where Mary stayed during her pregnancy. He was afraid of what would happen to his family.;0.8;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Mary,Giuseppe
+entity;person;Zaccaria;Person who became mute and could not speak for a while.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Samuele,Zaccaria
+entity;product;scarlatto;A textile material, possibly red in color.;0.5;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";porpora genuina,porpora
+entity;product;porpora genuina;A textile material, possibly purple in color.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";scarlatto
+entity;person;Maria;Person who was chosen to bear a child and later became known as Mary, the mother of Jesus.;0.9;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";Giuseppe
+entity;person;Samuele;Person who took Zaccaria's place as a priest or religious leader.;0.4;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Zaccaria
+entity;product;porpora;A textile material, possibly purple in color.;0.5;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";scarlatto
+entity;event;evento;An event that occurs when a person experiences a change or transformation.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";evento, evento
+entity;relation;partecipa;A relation that describes a person's involvement in an event or activity.;0.7;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";Giuseppe,Maria
+entity_alias;person;Dono;Person who was chosen to bear a child and later became known as Mary, the mother of Jesus. The name "Dono" is an alias for Maria.;0.8;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Giuseppe
+entity_alias;product;Vestimento;A textile material, possibly purple in color. The name "Vestimento" is an alias for porpora.;0.6;"5f70d749-50e3-4d23-83a7-515ebcfa279a";"scarlatto"
+entity_alias;event;evento di nascita;An event that occurs when a person experiences a change or transformation. The name "evento di nascita" is an alias for evento.;0.6;"5f70d749-50e3-4d23-83a7-515ebcfa279a";evento 
+relation;partecipa;Giuseppe,Maria;A relation that describes a person's involvement in an event or activity.;0.7;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";partecipa, Giuseppe,Maria
+relation;partecipa;Zaccaria,Samuele;A relation that describes a person's involvement in an event or activity.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573";"Zaccaria", "Samuele"
+2025-11-28 08:39:24,438 [pool-7-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Giuseppe;Person whose house was used as the place where Mary stayed during her pregnancy. He was afraid of what would happen to his family.;0.8;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Mary,Giuseppe
+entity;person;Zaccaria;Person who became mute and could not speak for a while.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Samuele,Zaccaria
+entity;product;scarlatto;A textile material, possibly red in color.;0.5;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";porpora genuina,porpora
+entity;product;porpora genuina;A textile material, possibly purple in color.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";scarlatto
+entity;person;Maria;Person who was chosen to bear a child and later became known as Mary, the mother of Jesus.;0.9;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";Giuseppe
+entity;person;Samuele;Person who took Zaccaria's place as a priest or religious leader.;0.4;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Zaccaria
+entity;product;porpora;A textile material, possibly purple in color.;0.5;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";scarlatto
+entity;event;evento;An event that occurs when a person experiences a change or transformation.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";evento, evento
+entity;relation;partecipa;A relation that describes a person's involvement in an event or activity.;0.7;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";Giuseppe,Maria
+entity_alias;person;Dono;Person who was chosen to bear a child and later became known as Mary, the mother of Jesus. The name "Dono" is an alias for Maria.;0.8;"95bbe111-56d2-42c9-9c16-ed7ecc476573";Giuseppe
+entity_alias;product;Vestimento;A textile material, possibly purple in color. The name "Vestimento" is an alias for porpora.;0.6;"5f70d749-50e3-4d23-83a7-515ebcfa279a";"scarlatto"
+entity_alias;event;evento di nascita;An event that occurs when a person experiences a change or transformation. The name "evento di nascita" is an alias for evento.;0.6;"5f70d749-50e3-4d23-83a7-515ebcfa279a";evento 
+relation;partecipa;Giuseppe,Maria;A relation that describes a person's involvement in an event or activity.;0.7;"95bbe111-56d2-42c9-9c16-ed7ecc476573","5f70d749-50e3-4d23-83a7-515ebcfa279a";partecipa, Giuseppe,Maria
+relation;partecipa;Zaccaria,Samuele;A relation that describes a person's involvement in an event or activity.;0.6;"95bbe111-56d2-42c9-9c16-ed7ecc476573";"Zaccaria", "Samuele"
+2025-11-28 08:39:24,439 [pool-7-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE), EntityObject(name=ZACCARIA), EntityObject(name=SCARLATTO), EntityObject(name=PORPORA GENUINA), EntityObject(name=MARIA), EntityObject(name=SAMUELE), EntityObject(name=PORPORA), EntityObject(name=EVENTO), EntityObject(name=PARTECIPA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:39:24,440 [pool-7-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE), EntityObject(name=ZACCARIA), EntityObject(name=SCARLATTO), EntityObject(name=PORPORA GENUINA), EntityObject(name=MARIA), EntityObject(name=SAMUELE), EntityObject(name=PORPORA), EntityObject(name=EVENTO), EntityObject(name=PARTECIPA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:39:39,522 [pool-6-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Gesù;The main character of the text.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+event;general event;Il Cristo si esprime attraverso qualsiasi uomo che sia debitamente preparato.;The events of the text are described as being accompanied by great terremoti and confusione.;;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";Gesù; 
+event_alias;general event_alias;"Il Cristo si esprime attraverso qualsiasi uomo che sia debitamente preparato.";The events of the text are described as being accompanied by great terremoti and confusione.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad"; 
+entity;person;Osiride;A God in the text, described as being a Dios nero.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";Gesù;, 
+entity_alias;person_alias;"Osiride-Cristo";The text describes Osiride as being a Dios nero, which is said to be the case because the people are not capable of resisting the light of gloria.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";Gesù;, 
+entity;product;"SAMAEL AUN WEOR";A book, a collection of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity;product;"Pistis Sophia Svelato Ο Cap. 1-62";A book, a collection of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;"pistis_sophia_svelato.pdf";A document, a digital representation of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity;product;"Tradizione gnostica";A project, a collection of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;"Libreria esoterica";A library, a collection of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity;product;"Libereria esoterica";A library, a collection of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;"/pistis_sophia_svelato.pdf";A document, a digital representation of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity_alias;product_alias;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity_alias;product_alias;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity_alias;product_alias;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,,
+2025-11-28 08:39:39,523 [pool-6-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Gesù;The main character of the text.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+event;general event;Il Cristo si esprime attraverso qualsiasi uomo che sia debitamente preparato.;The events of the text are described as being accompanied by great terremoti and confusione.;;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";Gesù; 
+event_alias;general event_alias;"Il Cristo si esprime attraverso qualsiasi uomo che sia debitamente preparato.";The events of the text are described as being accompanied by great terremoti and confusione.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad"; 
+entity;person;Osiride;A God in the text, described as being a Dios nero.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";Gesù;, 
+entity_alias;person_alias;"Osiride-Cristo";The text describes Osiride as being a Dios nero, which is said to be the case because the people are not capable of resisting the light of gloria.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";Gesù;, 
+entity;product;"SAMAEL AUN WEOR";A book, a collection of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity;product;"Pistis Sophia Svelato Ο Cap. 1-62";A book, a collection of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;"pistis_sophia_svelato.pdf";A document, a digital representation of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity;product;"Tradizione gnostica";A project, a collection of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;"Libreria esoterica";A library, a collection of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity;product;"Libereria esoterica";A library, a collection of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;"/pistis_sophia_svelato.pdf";A document, a digital representation of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity;product;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity_alias;product_alias;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,, 
+entity_alias;product_alias;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"eea3153a-a035-4f34-9ccc-e514a3841880";"eea3153a-a035-4f34-9ccc-e514a3841880";,, 
+entity_alias;product_alias;/pistis_sophia_svelato.pdf;A document, a digital representation of knowledge and wisdom.;0.8;"163bc102-5939-4913-b4a9-46bbcb6930ad";"163bc102-5939-4913-b4a9-46bbcb6930ad";,,
+2025-11-28 08:39:39,523 [pool-6-thread-1] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=OSIRIDE), EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=PISTIS SOPHIA SVELATO Ο CAP. 1-62), EntityObject(name=PISTIS_SOPHIA_SVELATO.PDF), EntityObject(name=TRADIZIONE GNOSTICA), EntityObject(name=LIBRERIA ESOTERICA), EntityObject(name=LIBERERIA ESOTERICA), EntityObject(name=/PISTIS_SOPHIA_SVELATO.PDF)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:39:39,524 [pool-6-thread-1] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GESÙ), EntityObject(name=OSIRIDE), EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=PISTIS SOPHIA SVELATO Ο CAP. 1-62), EntityObject(name=PISTIS_SOPHIA_SVELATO.PDF), EntityObject(name=TRADIZIONE GNOSTICA), EntityObject(name=LIBRERIA ESOTERICA), EntityObject(name=LIBERERIA ESOTERICA), EntityObject(name=/PISTIS_SOPHIA_SVELATO.PDF)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:39:47,250 [pool-7-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Giuseppe;A person named Giuseppe, a main character in the story.;0.9;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";;;
+entity;company;Figli di Israele;;0.7;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Giuseppe";;
+relation;part-of;Signore;The Lord is the higher entity that part of Giuseppes life.;0.9;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Giuseppe";"Signore";
+entity_alias;Synonym;angelo;;0.7;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Spirito santo";
+relation;part-of;Signore;The Lord is the higher entity that part of Marias life.;0.9;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Maria";"Signore";
+entity_alias;Synonym;angelo;;0.7;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Spirito santo";
+event;action;Giuseppe si alzò dal sacco, chiamò Maria e le disse: "Prediletta da Dio, perché hai fatto questo e ti sei dimenticata del Signore, tuo Dio?;0.9;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Giuseppe";"Maria";
+relation;part-of;Signore;The Lord is the higher entity that part of Giuseppes life.;0.7;"5699a15b-5a05-4fee-8df7-69ff52b1390d";"Giuseppe";"Signore";
+event_alias;Synonym;pianse amaramente;;0.6;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Maria";
+entity;person;Maria;A person named Maria, a main character in the story.;0.7;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Giuseppe";
+relation;part-of;Signore;The Lord is the higher entity that part of Marias life.;0.7;"5699a15b-5a05-4fee-8df7-69ff52b1390d";"Maria";"Signore";
+2025-11-28 08:39:47,250 [pool-7-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Giuseppe;A person named Giuseppe, a main character in the story.;0.9;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";;;
+entity;company;Figli di Israele;;0.7;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Giuseppe";;
+relation;part-of;Signore;The Lord is the higher entity that part of Giuseppes life.;0.9;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Giuseppe";"Signore";
+entity_alias;Synonym;angelo;;0.7;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Spirito santo";
+relation;part-of;Signore;The Lord is the higher entity that part of Marias life.;0.9;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Maria";"Signore";
+entity_alias;Synonym;angelo;;0.7;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Spirito santo";
+event;action;Giuseppe si alzò dal sacco, chiamò Maria e le disse: "Prediletta da Dio, perché hai fatto questo e ti sei dimenticata del Signore, tuo Dio?;0.9;"ca1f4f8d-3f5c-40a1-ac35-eb24bd0462d4";"Giuseppe";"Maria";
+relation;part-of;Signore;The Lord is the higher entity that part of Giuseppes life.;0.7;"5699a15b-5a05-4fee-8df7-69ff52b1390d";"Giuseppe";"Signore";
+event_alias;Synonym;pianse amaramente;;0.6;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Maria";
+entity;person;Maria;A person named Maria, a main character in the story.;0.7;"cb4083cf-cf78-4a25-adb6-e9e5312daad8";"Giuseppe";
+relation;part-of;Signore;The Lord is the higher entity that part of Marias life.;0.7;"5699a15b-5a05-4fee-8df7-69ff52b1390d";"Maria";"Signore";
+2025-11-28 08:39:47,251 [pool-7-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE), EntityObject(name=FIGLI DI ISRAELE), EntityObject(name=MARIA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:39:47,251 [pool-7-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE), EntityObject(name=FIGLI DI ISRAELE), EntityObject(name=MARIA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:39:57,472 [pool-6-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;"Gesù Cristo";Gesù-Cristo è il Signore interiore che nasce dal mondo del Logos Solare per manifestarsi agli uomini, in Cabala sarebbe Chokmah.;0.8;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Gesù Cristo";;event;"nascere","manifestarsi"
+entity;person;"SAMAEL AUN WEOR";Samael Aun Weor è l'autore del libro "Pistis Sophia Svelato".;0.6;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"SAMAEL AUN WEOR";;event;"scrivere"
+entity;person;"Stella Maris";La Vergine del Mare è la Figlia di suo Figlio e l'adorabile sposa dello Spirito Santo.;0.7;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"Stella Maris";;event;"lavorare","eliminare"
+entity;product;"Pistis Sophia Svelato";"Il libro Pistis Sophia Svelato è un'opera di Samael Aun Weor.".;0.5;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Pistis Sophia Svelato";;event;"leggere"
+entity;location;"Monte degli Ulivi";"Il Monte degli Ulivi è il Mondo Causale, luogo dove Gesù Cristo riflette profondamente.";0.9;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Monte degli Ulivi";;event;"riflettere"
+relation;"partecipa-in";"Gesù-Cristo Intimo";"Stella Maris";Gesù Cristo lavora con Stella Maris nell'eliminare da noi gli elementi psichici indesiderabili.;0.8;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"Gesù-Cristo Intimo";"Stella Maris"
+event;"nascere";"Gesù Cristo";Gesù Cristo nasce dal mondo del Logos Solare per manifestarsi agli uomini.;0.8;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Gesù Cristo";;event;"manifestarsi","riflettere"
+relation;"partecipa-in";"Stella Maris";"Gesù-Cristo Intimo";La Vergine del Mare lavora con Gesù Cristo nell'eliminare da noi gli elementi psichici indesiderabili.;0.7;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"Stella Maris";"Gesù-Cristo Intimo"
+entity_alias;event;"manifestarsi";Manifestazione di Gesù Cristo interiore nel mondo fisico.;0.6;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"manifestarsi"
+entity_alias;event;"eliminare";Eliminazione degli elementi psichici indesiderabili da parte di Gesù Cristo interiore e Stella Maris.;0.8;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"eliminare"
+2025-11-28 08:39:57,472 [pool-6-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;"Gesù Cristo";Gesù-Cristo è il Signore interiore che nasce dal mondo del Logos Solare per manifestarsi agli uomini, in Cabala sarebbe Chokmah.;0.8;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Gesù Cristo";;event;"nascere","manifestarsi"
+entity;person;"SAMAEL AUN WEOR";Samael Aun Weor è l'autore del libro "Pistis Sophia Svelato".;0.6;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"SAMAEL AUN WEOR";;event;"scrivere"
+entity;person;"Stella Maris";La Vergine del Mare è la Figlia di suo Figlio e l'adorabile sposa dello Spirito Santo.;0.7;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"Stella Maris";;event;"lavorare","eliminare"
+entity;product;"Pistis Sophia Svelato";"Il libro Pistis Sophia Svelato è un'opera di Samael Aun Weor.".;0.5;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Pistis Sophia Svelato";;event;"leggere"
+entity;location;"Monte degli Ulivi";"Il Monte degli Ulivi è il Mondo Causale, luogo dove Gesù Cristo riflette profondamente.";0.9;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Monte degli Ulivi";;event;"riflettere"
+relation;"partecipa-in";"Gesù-Cristo Intimo";"Stella Maris";Gesù Cristo lavora con Stella Maris nell'eliminare da noi gli elementi psichici indesiderabili.;0.8;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"Gesù-Cristo Intimo";"Stella Maris"
+event;"nascere";"Gesù Cristo";Gesù Cristo nasce dal mondo del Logos Solare per manifestarsi agli uomini.;0.8;"35b5efc5-b0cb-4f3a-8b8f-454237fa9d34";"Gesù Cristo";;event;"manifestarsi","riflettere"
+relation;"partecipa-in";"Stella Maris";"Gesù-Cristo Intimo";La Vergine del Mare lavora con Gesù Cristo nell'eliminare da noi gli elementi psichici indesiderabili.;0.7;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"Stella Maris";"Gesù-Cristo Intimo"
+entity_alias;event;"manifestarsi";Manifestazione di Gesù Cristo interiore nel mondo fisico.;0.6;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"manifestarsi"
+entity_alias;event;"eliminare";Eliminazione degli elementi psichici indesiderabili da parte di Gesù Cristo interiore e Stella Maris.;0.8;"77e66038-438f-420e-b0f5-ee7a1b17c9ac";"eliminare"
+2025-11-28 08:39:57,473 [pool-6-thread-2] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GESÙ CRISTO), EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=STELLA MARIS), EntityObject(name=PISTIS SOPHIA SVELATO), EntityObject(name=MONTE DEGLI ULIVI)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:39:57,473 [pool-6-thread-2] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GESÙ CRISTO), EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=STELLA MARIS), EntityObject(name=PISTIS SOPHIA SVELATO), EntityObject(name=MONTE DEGLI ULIVI)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:40:04,940 [pool-7-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Giuseppe;"Person named Giuseppe";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Giuseppe"
+entity;company;Signore;"Divine entity named Signore";0.7;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Signore"
+event;action;"un vaso giacente";"Event of a vase lying down";0.6;"47f00384-7a9c-4cc1-b667-15879f101e53";"vase","operai"
+entity;person;Maria;"Person named Maria";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Maria"
+event;action;"una donna discendere dalla collina";"Event of a woman descending from the hill";0.7;"47f00384-7a9c-4cc1-b667-15879f101e53";"donna","collina"
+relation;part-of;"il Signore farà secondo il suo beneplacito";"Relation between Signore and his will";0.6;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Signore"
+entity_alias;synonym;"Israele";"Israele entity alias";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Israele"
+relation;owned-by;"Giuseppe ha concepito per opera dello Spirito santo";"Relation between Giuseppe and the Spirit";0.7;"47f00384-7a9c-4cc1-b667-15879f101e53";"Giuseppe","Spirito"
+event_alias;synonym;"un vaso giacente";"Event alias for a vase lying down";0.6;"47f00384-7a9c-4cc1-b667-15879f101e53";"vase"
+relation;participates-in;"i miei figli partoriscono";"Relation between Giuseppe's children and the childbirth";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Giuseppe","mio figlio"
+relation;part-of;"il Signore è la collina";"Relation between the hill and the divine entity";0.7;"47f00384-7a9c-4cc1-b667-15879f101e53";"Signore","collina"
+2025-11-28 08:40:04,940 [pool-7-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Giuseppe;"Person named Giuseppe";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Giuseppe"
+entity;company;Signore;"Divine entity named Signore";0.7;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Signore"
+event;action;"un vaso giacente";"Event of a vase lying down";0.6;"47f00384-7a9c-4cc1-b667-15879f101e53";"vase","operai"
+entity;person;Maria;"Person named Maria";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Maria"
+event;action;"una donna discendere dalla collina";"Event of a woman descending from the hill";0.7;"47f00384-7a9c-4cc1-b667-15879f101e53";"donna","collina"
+relation;part-of;"il Signore farà secondo il suo beneplacito";"Relation between Signore and his will";0.6;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Signore"
+entity_alias;synonym;"Israele";"Israele entity alias";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Israele"
+relation;owned-by;"Giuseppe ha concepito per opera dello Spirito santo";"Relation between Giuseppe and the Spirit";0.7;"47f00384-7a9c-4cc1-b667-15879f101e53";"Giuseppe","Spirito"
+event_alias;synonym;"un vaso giacente";"Event alias for a vase lying down";0.6;"47f00384-7a9c-4cc1-b667-15879f101e53";"vase"
+relation;participates-in;"i miei figli partoriscono";"Relation between Giuseppe's children and the childbirth";0.8;"cd58f63c-2296-4ef5-918d-36b9a9d59a3d";"Giuseppe","mio figlio"
+relation;part-of;"il Signore è la collina";"Relation between the hill and the divine entity";0.7;"47f00384-7a9c-4cc1-b667-15879f101e53";"Signore","collina"
+2025-11-28 08:40:04,941 [pool-7-thread-4] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE), EntityObject(name=SIGNORE), EntityObject(name=MARIA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:40:04,941 [pool-7-thread-4] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=GIUSEPPE), EntityObject(name=SIGNORE), EntityObject(name=MARIA)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+2025-11-28 08:40:12,740 [pool-6-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:566 - LLM OUTPUT=>entity;person;Samael Aun Weor;Author of the book "Pistis Sophia Svelato";0.9;cbb2623b-9d6c-4f30-974e-0037aaf56f8e,c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92; 
+entity;place;Orient;Place of sunrise;0.8;cbb2623b-9d6c-4f30-974e-0037aaf56f8e; 
+relation;participates-in;Pistis Sophia Svelato;Samael Aun Weor, Primo Mistero;0.8;cbb2623b-9d6c-4f30-974e-0037aaf56f8e,c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92;Pistis Sophia Svelato,Samael Aun Weor 
+entity_alias;product,Pistis Sophia Svelato,A book about gnosis and spiritual transformation,0.9,cbb2623b-9d6c-4f30-974e-0037aaf56f8e; 
+event;action,the Signore must be crocifisso,The crucifixion of the Logos inside the reader's heart,0.9;c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92;Samael Aun Weor 
+event;action,the Signore is crocifisso,The crucifixion of the Logos inside the reader's heart,0.9;c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92;Samael Aun Weor 
+relation;participates-in,Il Cristo Intimo,The Signore,0.8;c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92,cbb2623b-9d6c-4f30-974e-0037aaf56f8e;Il Cristo Intimo,The Signore 
+entity_alias;event,Ascendere;It means to be born, to rise, to manifest oneself,0.8;c1cae1b30-a1b5-4491-938c-ecad9d6df706; 
+entity;person,Kundalini;Divine Mother who works in the Primo Mistero;0.7,cbb2623b-9d6c-4f30-974e-0037aaf56f8e;
+2025-11-28 08:40:12,740 [pool-6-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:54 - LLM CSV CONTENT:entity;person;Samael Aun Weor;Author of the book "Pistis Sophia Svelato";0.9;cbb2623b-9d6c-4f30-974e-0037aaf56f8e,c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92; 
+entity;place;Orient;Place of sunrise;0.8;cbb2623b-9d6c-4f30-974e-0037aaf56f8e; 
+relation;participates-in;Pistis Sophia Svelato;Samael Aun Weor, Primo Mistero;0.8;cbb2623b-9d6c-4f30-974e-0037aaf56f8e,c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92;Pistis Sophia Svelato,Samael Aun Weor 
+entity_alias;product,Pistis Sophia Svelato,A book about gnosis and spiritual transformation,0.9,cbb2623b-9d6c-4f30-974e-0037aaf56f8e; 
+event;action,the Signore must be crocifisso,The crucifixion of the Logos inside the reader's heart,0.9;c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92;Samael Aun Weor 
+event;action,the Signore is crocifisso,The crucifixion of the Logos inside the reader's heart,0.9;c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92;Samael Aun Weor 
+relation;participates-in,Il Cristo Intimo,The Signore,0.8;c1bdcf2f-f4aa-43da-bc5e-7ab8c87dfb92,cbb2623b-9d6c-4f30-974e-0037aaf56f8e;Il Cristo Intimo,The Signore 
+entity_alias;event,Ascendere;It means to be born, to rise, to manifest oneself,0.8;c1cae1b30-a1b5-4491-938c-ecad9d6df706; 
+entity;person,Kundalini;Divine Mother who works in the Primo Mistero;0.7,cbb2623b-9d6c-4f30-974e-0037aaf56f8e;
+2025-11-28 08:40:12,740 [pool-6-thread-3] DEBUG a.g.a.g.e.services.impl.CSVIEParser:89 - End parseCsv(...) => LLMExtractionResult(entities=[EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=ORIENT)], events=[], relations=[], entityAliases=[], eventAliases=[])
+2025-11-28 08:40:12,741 [pool-6-thread-3] DEBUG a.g.a.g.e.s.i.GraphDataExtractionServiceImpl:575 - End extract(List<Document>,....)=>LLMExtractionResult(entities=[EntityObject(name=SAMAEL AUN WEOR), EntityObject(name=ORIENT)], events=[], relations=[], entityAliases=[], eventAliases=[])
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.
+Extract from the provided input text all the following object types: entities, events, relations, entity aliases, event aliases.
+<object type>;<object subtype>;<object name>;<object description>;<confidence score>;<document fragment ids>;<referred entities names>;<referred events names>
+<object type> is one of: entity, event, relation, entity_alias, event_alias
+<object subtype> if <object type> is entity is one of: person, company, product, place, nation, region, date  
+<referred entities names> can be applied only to event,relation and entity_alias object types, is a comma-separated list of of referenced entities names or empty if none, in case of relation, list the two entities names that are in relation,in case of event list entities names participating the event
+<referred events names> can be applied only to event_alias object type, is a comma-separated list of referenced events names or empty if none
+Identify all events (actions, processes, changes, activities, transactions, etc.).
+Identify all relations between entities (cause, part-of, owned-by, participates-in, located-in, etc.). Relations must reference to two entities.
+Identify aliases for events (alternative expressions describing the same event).
+Always reference entities/events by their names inside <referred entities names> and <referred events names>.

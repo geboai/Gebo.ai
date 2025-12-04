@@ -11,48 +11,34 @@
  
  
  
-
-<p-blockUI [target]="jiraSystemCtrl" [blocked]="loading">
+<p-blockUI id="BlockUILockIcon" gebo-ai-label [target]="jiraSystemCtrl" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #jiraSystemCtrl header="Create jira system configuration" [formGroup]="formGroup">
+<p-panel id="MainPanel" gebo-ai-label  #jiraSystemCtrl header="Create jira system configuration" [formGroup]="formGroup">
     <div class="geboDialogContent">
-        <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
+        <p-messages id="Messages" gebo-ai-label [(value)]="userMessages" [enableService]="false" [closable]="false" />
 
         <div class="grid">
 
             <div class="col-6">
-                <div class="flex flex-column gap-2">
-                    <label for="description">Description</label>
-                    <input pInputText id="description" formControlName="description" maxlength="120" 
-                        aria-describedby="description-help" />
-                    <small id="description-help">
-                        Enter the description of the jira system.
-                    </small>
-                </div>
+                <gebo-ai-field id="description" label="Description" help="Enter the description of the jira system.">
+                    <input pInputText id="description" formControlName="description" maxlength="120" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
             
 
             <div class="col-12">
-                <div class="flex flex-column gap-2 ">
-                    <label for="baseUri">Base internet address</label>
-                    <input type="text" id="baseUri" pInputText formControlName="baseUri" 
-                        class="col-12 required" aria-describedby="baseUri-help" />
-                    <small id="baseUri-help">
-                        Url of the base jira system address for onpremise installation or your organization base url for jira cloud system 
-                    </small>
-                </div>
+                <gebo-ai-field id="baseUri" label="Base internet address" help="Url of the base jira system address for onpremise installation or your organization base url for jira cloud system">
+                    <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
+
             <div class="col-6">
-                <div class="flex flex-column gap-2 ">
-                    <label for="username">jira username</label>
-                    <input pInputText id="username" formControlName="username" 
-                        aria-describedby="username-help" type="text" />
-                    <small id="username-help">
-                        jira user name
-                    </small>
-                </div>
+                <gebo-ai-field id="username" label="jira username" help="jira user name">
+                    <input pInputText id="username" formControlName="username" type="text" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
+
             <!-- 
             <div class="col-6" >
                 <div class="flex flex-column gap-2 ">
@@ -64,15 +50,11 @@
                     </small>
                 </div>
             </div> -->
-            <div class="col-6" >
-                <div class="flex flex-column gap-2 ">
-                    <label for="token">jira cloud api key</label>
-                    <input pInputText id="token" formControlName="token" type="text" size="120" maxlength="1800000"
-                        aria-describedby="token-help" />
-                    <small id="token-help">
-                        jira CLOUD apikey acquired in the jira backoffic, here "API Token for your Atlassian Account" have to be inserted.
-                    </small>
-                </div>
+            
+            <div class="col-6">
+                <gebo-ai-field id="token" label="jira cloud api key" help="jira CLOUD apikey acquired in the jira backoffic, here &quot;API Token for your Atlassian Account&quot; have to be inserted.">
+                    <input pInputText id="token" formControlName="token" type="text" size="120" maxlength="1800000" gebo-ai-field-element />
+                </gebo-ai-field>
             </div>
         </div>
 
@@ -83,13 +65,15 @@
     <div class="geboButtonsBar" style="vertical-align: baseline;">
         <div class="grid">
             <div class="col-4">
-                <p-button [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"   styleClass="w-full"
+                <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"   styleClass="w-full"
                     [disabled]="this.formGroup.invalid"></p-button>
             </div>
             <div class="col-4">
-                <p-button [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full" />
+                <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"   styleClass="w-full" />
             </div>
 
         </div>
     </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
+<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

@@ -16,6 +16,7 @@ import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelType;
 import ai.gebo.model.OperationStatus;
 
 /**
@@ -45,10 +46,10 @@ public interface IGModelsListProvider {
      * @param config        The configuration details specific to the model choice, encapsulated in ModelConfig.
      * @param clearApiKey   The API key to authenticate and authorize the request to the provider.
      * @param choiceType    The class type of ModelChoice, used for type safety and validation.
-     * 
+     * @param modelType TODO
      * @return An OperationStatus object containing a list of ModelChoice objects, which indicates the status of the operation.
      */
-    public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>> OperationStatus<List<ModelChoice>> geModels(
-            String providerId, ModelConfig config, String clearApiKey, Class<ModelChoice> choiceType);
+    public <ModelChoice extends GBaseModelChoice, ModelConfig extends GBaseModelConfig<ModelChoice>,ModelType extends GModelType> OperationStatus<List<ModelChoice>> geModels(
+            String providerId, ModelConfig config, String clearApiKey, Class<ModelChoice> choiceType, ModelType modelType);
 
 }

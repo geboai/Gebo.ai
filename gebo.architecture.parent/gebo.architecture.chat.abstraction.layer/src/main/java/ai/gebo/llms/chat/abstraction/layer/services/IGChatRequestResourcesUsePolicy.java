@@ -6,17 +6,16 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.RagChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatModelLimitedRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatContext;
@@ -38,17 +37,28 @@ public interface IGChatRequestResourcesUsePolicy {
 	 * the request itself, and handles for embedding and chat models, along with
 	 * visible knowledge bases.
 	 *
-	 * @param chatProfile              The profile configuration affecting chat behavior.
-	 * @param userContext              The user-specific context for the chat.
-	 * @param user 
-	 * @param request                  The chat request details.
-	 * @param embeddingHandler         The handler for embedding model configuration.
-	 * @param chatHandler              The handler for chat model configuration.
-	 * @param visibleKnowledgeBaseCodes List of codes representing visible knowledge bases.
-	 * @return                         A limited request ready for processing by the chat model.
-	 * @throws LLMConfigException      Thrown when there is a configuration issue with LLM.
+	 * @param chatProfile               The profile configuration affecting chat
+	 *                                  behavior.
+	 * @param userContext               The user-specific context for the chat.
+	 * @param user
+	 * @param request                   The chat request details.
+	 * @param embeddingHandler          The handler for embedding model
+	 *                                  configuration.
+	 * @param chatHandler               The handler for chat model configuration.
+	 * @param visibleKnowledgeBaseCodes List of codes representing visible knowledge
+	 *                                  bases.
+	 * @return A limited request ready for processing by the chat model.
+	 * @throws LLMConfigException Thrown when there is a configuration issue with
+	 *                            LLM.
+	 * @throws IOException
 	 */
-	public ChatModelLimitedRequest manageRequest(GChatProfileConfiguration chatProfile, GUserChatContext userContext,
-			UserInfos user, GeboChatRequest request, IGConfigurableEmbeddingModel  embeddingHandler, IGConfigurableChatModel chatHandler,
-			List<String> visibleKnowledgeBaseCodes) throws LLMConfigException;
+	public RagChatModelLimitedRequest manageRagChatRequest(GChatProfileConfiguration chatProfile,
+			GUserChatContext userContext, UserInfos user, GeboChatRequest request,
+			IGConfigurableEmbeddingModel embeddingHandler, IGConfigurableChatModel chatHandler,
+			List<String> visibleKnowledgeBaseCodes) throws LLMConfigException, IOException;
+
+	public ChatModelLimitedRequest manageChatRequest(GUserChatContext userContext, UserInfos user,
+			GeboChatRequest request, IGConfigurableChatModel chatHandler) throws LLMConfigException, IOException;
+
+	
 }

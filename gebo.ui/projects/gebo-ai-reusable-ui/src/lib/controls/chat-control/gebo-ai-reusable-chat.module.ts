@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
@@ -42,34 +42,51 @@ import { ToastModule } from "primeng/toast";
 import { GeboAIAudioRecorderModule } from "../audio-control/audio-control.module";
 import { GeboAIChooseDocumentsPanelModule } from "../choose-documents-panel/choose-documents-panel.module";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
+import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAIUploadChatDocumentModule } from "../choose-documents-panel/upload-chat-document.module";
+import { MessageService } from "primeng/api";
+import { GeboAIUploadedDocumentRefComponent } from "./uploaded-document-ref.component";
+import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
+import { GeboAIGeneratedDocumentRefComponent } from "./llm-generated-document-ref.component";
+console.log(
+  '[GeboAIReusableChatModule] declarations =',
+  GeboAIReusableChatComponent,
+  ChangeDescriptionComponent,
+  DocumentRefComponent,
+  GeboAIRichResponseViewerComponent,
+  GeboChatUserInfoComponent
+);
 @NgModule({
-  imports: [CommonModule, 
-            ReactiveFormsModule, 
-            FormsModule,
-            SkeletonModule, 
-            ScrollPanelModule, 
-            OverlayModule, 
-            TableModule, 
-            FieldsetModule, 
-            GeboAIAudioRecorderModule, 
-            ScrollTopModule, 
-            GeboAIChooseDocumentsPanelModule,
-            InputTextModule,
-            ProgressSpinnerModule, 
-            ToastModule, 
-            DialogModule, 
-            ButtonModule, 
-            PanelModule, 
-            BlockUIModule, 
-            TextareaModule, 
-            MessagesModule, 
-            GeboAIContentViewerModule,  
-            BrowseContentModule, 
-            GeboAIViewTableModule, 
-            MarkdownModule.forChild()],
-  providers: [
-    ReactiveRagChatService,
-    provideMarkdown({
+  imports: [CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    SkeletonModule,
+    ScrollPanelModule,
+    OverlayModule,
+    TableModule,
+    FieldsetModule,
+    GeboAIAudioRecorderModule,
+    ScrollTopModule,
+    GeboAIChooseDocumentsPanelModule,
+    InputTextModule,
+    ProgressSpinnerModule,
+    ToastModule,
+    DialogModule,
+    ButtonModule,
+    PanelModule,
+    BlockUIModule,
+    TextareaModule,
+    MessagesModule,
+    GeboAIContentViewerModule,
+    BrowseContentModule,
+    GeboAIViewTableModule,
+    MarkdownModule.forChild(),
+    GeboAIFieldTranslationContainerModule,
+    GeboAIUploadChatDocumentModule],
+  providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
+
+  provideMarkdown({
     sanitize: SecurityContext.NONE,
     clipboardOptions: {
       provide: CLIPBOARD_OPTIONS,
@@ -77,9 +94,8 @@ import { BrowseContentModule } from "../browse-content-component/browse-content.
         buttonComponent: ClipboardButtonComponent,
       }
     }
-  })],
-  declarations: [GeboAIReusableChatComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent],
-
+  }), ReactiveRagChatService, MessageService],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent,GeboAIChatInputShellComponent,GeboAIGeneratedDocumentRefComponent],
   exports: [GeboAIReusableChatComponent]
 })
-export class GeboAIReusableChatModel { }
+export class GeboAIReusableChatModule { }

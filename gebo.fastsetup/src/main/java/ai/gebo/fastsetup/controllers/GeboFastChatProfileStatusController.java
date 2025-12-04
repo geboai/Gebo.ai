@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
-import ai.gebo.fastsetup.model.ComponentSetupStatus;
+import ai.gebo.architecture.setup.model.ComponentSetupStatus;
 import ai.gebo.fastsetup.services.GeboFastChatProfileSetupService;
 
 /**

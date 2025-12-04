@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -23,6 +23,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { FastInstallationSetupData, GeboFastInstallationSetupControllerService, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { LoginService } from "../login/login.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
 /**
  * Component responsible for the initial fast setup process of the Gebo.ai application.
@@ -32,8 +33,13 @@ import { LoginService } from "../login/login.service";
 @Component({
     selector: "gebo-ai-fast-setup",
     templateUrl: "fast-setup.component.html",
-    providers: [LoginService],
+    providers: [LoginService, {
+        provide: GEBO_AI_MODULE, useValue: "FastSetupModule", multi: false
+    }, {
+            provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("FastSetupComponent")
+        }],
     standalone: false
+
 })
 export class FastSetupComponent implements OnInit {
     /**
@@ -44,27 +50,28 @@ export class FastSetupComponent implements OnInit {
         username: new FormControl(),
         password: new FormControl(),
         passwordC: new FormControl(),
-        licenceAgreement:new FormControl()
+        licenceAgreement: new FormControl(),
+        lang: new FormControl()
     });
-    
+
     /** Flag indicating if a setup operation is in progress */
     loading: boolean = false;
-    
+
     /** Flag indicating if a login operation is in progress */
     loggingin: boolean = false;
-    
+
     /** User profile information */
     profile?: any;
-    
+
     /** Status of the installation process */
     status?: OperationStatusBoolean;
-    
+
     /** Username/email that will be used for the license */
-    licencee:string="";
-    
+    licencee: string = "";
+
     /** Array of messages to display to the user */
     userMessages: ToastMessageOptions[] = [{ summary: "Welcome to gebo.ai setup", detail: "Enter your username (email) and password, wich LLMS to use and your api keys to setup", severity: "success" }];
-    
+
     /**
      * Constructor initializes required services for installation, login, and navigation
      * @param geboFastSetupControllerService Service to interact with fast installation API
@@ -77,7 +84,7 @@ export class FastSetupComponent implements OnInit {
         private router: Router, private activatedRoute: ActivatedRoute) {
 
     }
-    
+
     /**
      * Checks the system installation status.
      * If the system is already set up, redirects to login.
@@ -104,7 +111,7 @@ export class FastSetupComponent implements OnInit {
             const v1: string = formGroup.controls["password"].value;
             const v2: string = formGroup.controls["passwordC"].value
             this.userMessages = [];
-            if (v1 && v2 && v1 === v2 && v1.length>=8) return null;
+            if (v1 && v2 && v1 === v2 && v1.length >= 8) return null;
             if (v1 && v2 && v1 !== v2) {
                 const msgs: ToastMessageOptions[] = [];
                 if (!this.status?.result == true) {
@@ -119,10 +126,10 @@ export class FastSetupComponent implements OnInit {
             };
         };
         this.formGroup.addValidators(equalPasswordsValidator);
-        this.formGroup.controls["username"].valueChanges.subscribe((username:string)=>{
-            this.licencee=username;
+        this.formGroup.controls["username"].valueChanges.subscribe((username: string) => {
+            this.licencee = username;
         });
-        
+
     }
 
     /**
@@ -130,7 +137,7 @@ export class FastSetupComponent implements OnInit {
      * Passes state information indicating setup is complete.
      */
     public doLogin(): void {
-        this.router.navigate(["..", "reloader"], { relativeTo: this.activatedRoute,state:{setupDone:true} });
+        this.router.navigate(["..", "reloader"], { relativeTo: this.activatedRoute, state: { setupDone: true } });
     }
 
     /**
@@ -139,9 +146,9 @@ export class FastSetupComponent implements OnInit {
      * and automatically logs in the user upon success.
      */
     public doSetup() {
-        const param:FastInstallationSetupData = this.formGroup.value;
+        const param: FastInstallationSetupData = this.formGroup.value;
         this.loading = true;
-        
+
         this.geboFastSetupControllerService.createSetup(param).subscribe({
             next: (result) => {
                 this.status = result;
@@ -154,7 +161,7 @@ export class FastSetupComponent implements OnInit {
                         password: loginData.password
                     }).subscribe({
                         next: (v) => {
-                            this.router.navigate(["..", "reloader"], { relativeTo: this.activatedRoute,state:{setupDone:true} });
+                            this.router.navigate(["..", "reloader"], { relativeTo: this.activatedRoute, state: { setupDone: true } });
                         },
                         complete: () => {
                             this.loggingin = false;

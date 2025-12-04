@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.deepseek.services;
 
@@ -20,14 +17,13 @@ import org.springframework.ai.deepseek.DeepSeekChatOptions;
 import org.springframework.ai.deepseek.api.DeepSeekApi;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.IGToolCallbackSourceRepositoryPattern;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.crypting.services.GeboCryptSecretException;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
@@ -35,6 +31,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelChoice;
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelConfig;
 import ai.gebo.model.OperationStatus;
@@ -44,17 +41,19 @@ import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
+import lombok.AllArgsConstructor;
 
 /**
- * AI generated comments
- * Service for configuring and supporting DeepSeek chat models.
- * This service is only active when the 'deepseekEnabled' property is set to true.
+ * AI generated comments Service for configuring and supporting DeepSeek chat
+ * models. This service is only active when the 'deepseekEnabled' property is
+ * set to true.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.llms.config", name = "deepseekEnabled", havingValue = "true")
 @Service
+@AllArgsConstructor
 public class DeepseekChatModelConfigurationSupportService
 		implements IGChatModelConfigurationSupportService<GDeepseekChatModelChoice, GDeepseekChatModelConfig> {
-	
+
 	/**
 	 * Static model type definition for DeepSeek chat models
 	 */
@@ -69,42 +68,41 @@ public class DeepseekChatModelConfigurationSupportService
 		type.setDescription("Chat models hosted on Deepseek");
 		type.setModelConfigurationClass(GDeepseekChatModelConfig.class.getName());
 	}
-	
+
 	/**
 	 * Service for looking up available DeepSeek models
 	 */
-	@Autowired
-	DeepseekModelsLookupService modelsService;
-	
+	final DeepseekModelsLookupService modelsService;
+
 	/**
 	 * Service for accessing secrets such as API keys
 	 */
-	@Autowired
-	IGeboSecretsAccessService secretService;
-	
+	final IGeboSecretsAccessService secretService;
+
 	/**
 	 * Repository for tool callbacks/functions that can be used with the model
 	 */
-	@Autowired
-	IGToolCallbackSourceRepositoryPattern functionsRepo;
-	
+	final IGToolCallbackSourceRepositoryPattern functionsRepo;
+
 	/**
 	 * Factory for providing service clients
 	 */
-	@Autowired
-	IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final IGLlmsServiceClientsProviderFactory serviceClientsProviderFactory;
+	final ModelRuntimeConfigureHandler configureHandler;
 
 	/**
-	 * Implementation of configurable chat model for DeepSeek
-	 * Note: The class is incorrectly named "AnthropicConfigurableChatModel" but implements DeepSeek functionality
+	 * Implementation of configurable chat model for DeepSeek Note: The class is
+	 * incorrectly named "AnthropicConfigurableChatModel" but implements DeepSeek
+	 * functionality
 	 */
 	class AnthropicConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GDeepseekChatModelConfig, DeepSeekChatModel> {
 
 		/**
 		 * Configures the DeepSeek chat model based on the provided configuration
+		 * 
 		 * @param config The DeepSeek configuration
-		 * @param type The chat model type
+		 * @param type   The chat model type
 		 * @return Configured DeepSeek chat model
 		 * @throws LLMConfigException if configuration fails
 		 */
@@ -169,13 +167,8 @@ public class DeepseekChatModelConfigurationSupportService
 	};
 
 	/**
-	 * Default constructor
-	 */
-	public DeepseekChatModelConfigurationSupportService() {
-	}
-
-	/**
 	 * Returns the type of chat model supported by this service
+	 * 
 	 * @return GChatModelType for DeepSeek
 	 */
 	@Override
@@ -185,6 +178,7 @@ public class DeepseekChatModelConfigurationSupportService
 
 	/**
 	 * Creates a configurable chat model with the provided configuration
+	 * 
 	 * @param config DeepSeek configuration
 	 * @return Configurable chat model instance
 	 * @throws LLMConfigException if configuration fails
@@ -199,6 +193,7 @@ public class DeepseekChatModelConfigurationSupportService
 
 	/**
 	 * Retrieves the available model choices for the provided configuration
+	 * 
 	 * @param config DeepSeek configuration
 	 * @return Operation status containing the list of available model choices
 	 */
@@ -209,12 +204,28 @@ public class DeepseekChatModelConfigurationSupportService
 
 	/**
 	 * Creates a base configuration for the specified preset model
+	 * 
 	 * @param presetModel The model preset to use
 	 * @return Base configuration for the model
-	 * @throws MethodNotFoundException This method is not implemented for Anthropic chat provider
+	 * @throws MethodNotFoundException This method is not implemented for Anthropic
+	 *                                 chat provider
 	 */
 	@Override
 	public GDeepseekChatModelConfig createBaseConfiguration(String presetModel) {
-		throw new MethodNotFoundException("createBaseConfiguration() is not implemented for Anthropic chat provider");
+		GDeepseekChatModelConfig clean = new GDeepseekChatModelConfig();
+		clean.setModelTypeCode(getType().getCode());
+		clean.setChoosedModel(new GDeepseekChatModelChoice());
+		clean.getChoosedModel().setCode(presetModel);
+		clean.getChoosedModel().setDescription("chat model " + presetModel);
+		clean.setDescription("Deepseek AI chat model " + presetModel);
+		clean.setModelTypeCode(getType().getCode());
+		return clean;
+	}
+
+	@Override
+	public OperationStatus<GDeepseekChatModelConfig> insertAndConfigure(GDeepseekChatModelConfig config)
+			throws GeboPersistenceException, LLMConfigException {
+
+		return configureHandler.insertAndConfigure(config, type);
 	}
 }

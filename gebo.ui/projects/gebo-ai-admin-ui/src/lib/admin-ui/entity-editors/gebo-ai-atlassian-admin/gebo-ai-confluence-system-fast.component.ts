@@ -18,9 +18,10 @@
  * like base URI, credentials, and version type. It supports both cloud and on-premise
  * Confluence instances with appropriate validation for each type.
  */
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, forwardRef, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { ConfluenceSystemsControllerService, FastConfluenceSystemInsertRequest, GConfluenceSystem, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 
 
@@ -28,7 +29,12 @@ import { ToastMessageOptions } from "primeng/api";
     selector: "gebo-ai-confluence-system-fast-component",
     templateUrl: "gebo-ai-confluence-system-fast.component.html",
 
-    standalone: false
+    standalone: false,
+    providers:[ 
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIConfluenceModule", multi: false },
+        {
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIConfluenceSystemFastComponent")
+    }]
 })
 export class GeboAIConfluenceSystemFastComponent implements OnInit {
     /** Flag to indicate if the component is currently loading data */

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
@@ -26,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
@@ -54,22 +54,23 @@ import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 /**
- * REST controller that exposes endpoints for chat-related functionality.
- * AI generated comments
- * This controller provides APIs for interacting with LLM models including
- * chat responses, streaming, speech-to-text, and text-to-speech conversions.
+ * REST controller that exposes endpoints for chat-related functionality. AI
+ * generated comments This controller provides APIs for interacting with LLM
+ * models including chat responses, streaming, speech-to-text, and
+ * text-to-speech conversions.
  */
 @RestController
+
 @RequestMapping(path = "api/users/GeboDirectModelChatController")
 public class GeboChatController {
 
 	/** Logger for this class */
 	static Logger LOGGER = LoggerFactory.getLogger(GeboChatController.class);
-	
+
 	/** Service that handles chat functionality */
 	@Autowired
 	IGChatService chatService;
-	
+
 	/** JSON mapper for serialization/deserialization */
 	private ObjectMapper mapper = new ObjectMapper();
 
@@ -96,7 +97,7 @@ public class GeboChatController {
 	 * 
 	 * @param request The chat request containing messages and parameters
 	 * @return A response from the chat model
-	 * @throws GeboChatException If there's a problem with the chat service
+	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
 	 */
 	@PostMapping(value = "chat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -111,7 +112,7 @@ public class GeboChatController {
 	 * 
 	 * @param request The chat request containing messages and parameters
 	 * @return A templated response with rich content
-	 * @throws GeboChatException If there's a problem with the chat service
+	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
 	 */
 	@PostMapping(value = "richChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -145,11 +146,11 @@ public class GeboChatController {
 	/**
 	 * Transcribes audio input to text
 	 * 
-	 * @param request The HTTP request containing the audio stream
+	 * @param request   The HTTP request containing the audio stream
 	 * @param modelCode The code identifying the model to use for transcription
 	 * @return A response containing the transcribed text
 	 * @throws LLMConfigException If there's a configuration issue with the model
-	 * @throws IOException If there's an issue reading the input stream
+	 * @throws IOException        If there's an issue reading the input stream
 	 */
 	@PostMapping(value = "transcriptText", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	public TranscriptResponse transcriptText(HttpServletRequest request, @RequestParam("modelCode") String modelCode)
@@ -170,11 +171,12 @@ public class GeboChatController {
 	/**
 	 * Converts text to speech audio
 	 * 
-	 * @param sr The request containing the text to convert
+	 * @param sr        The request containing the text to convert
 	 * @param modelCode The code identifying the model to use for speech synthesis
 	 * @return An input stream resource containing the audio data
 	 * @throws LLMConfigException If there's a configuration issue with the model
-	 * @throws IOException If there's an issue with the input/output operations
+	 * @throws IOException        If there's an issue with the input/output
+	 *                            operations
 	 */
 	@PostMapping(value = "speechText", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public InputStreamResource speechText(@RequestBody @Valid SpeechRequest sr,
@@ -189,7 +191,7 @@ public class GeboChatController {
 	 * 
 	 * @param modelCode The code identifying the model
 	 * @return User information for the requested model
-	 * @throws GeboChatException If there's a problem with the chat service
+	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
 	 */
 	@GetMapping(value = "getChatModelUserInfo", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -203,7 +205,7 @@ public class GeboChatController {
 	 * 
 	 * @param request The chat request containing messages and parameters
 	 * @return A flux of server-sent events containing chat response chunks
-	 * @throws GeboChatException If there's a problem with the chat service
+	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
 	 */
 	@PostMapping(value = "streamResponse", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -211,5 +213,14 @@ public class GeboChatController {
 			throws GeboChatException, LLMConfigException {
 		return chatService.streamChat(request).map(StreamUtil.mappingFunction)
 				.map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
+	}
+
+	@GetMapping(value = "suggestChatDescription", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo suggestChatDescription(@RequestParam("id") @NotNull String id) throws GeboChatException, LLMConfigException {
+		return chatService.suggestChatDescription(id);
+	}
+	@GetMapping(value = "createCleanChatByModelCode", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GUserChatInfo createCleanChatByModelCode(@RequestParam("modelCode") @NotNull String modelCode ) throws GeboPersistenceException {
+		return chatService.createCleanChatByModelCode(modelCode);
 	}
 }

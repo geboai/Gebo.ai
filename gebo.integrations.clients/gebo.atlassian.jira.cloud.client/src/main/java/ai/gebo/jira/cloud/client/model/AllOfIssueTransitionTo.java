@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.StatusDetails;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Details of the issue status after the transition.

@@ -1,0 +1,40 @@
+<p-card class="web-viewer-card">
+    <p-blockUI [blocked]="loading">
+        <i class="pi pi-lock" style="font-size: 3rem"></i>
+    </p-blockUI>
+    <ng-template pTemplate="header">
+        <div class="web-viewer-header" *ngIf="!contentServedByGebo">
+            <span class="web-viewer-title" id="PreviewTitle" gebo-ai-text>Displaying external content</span>
+            <span class="web-viewer-url" *ngIf="url">
+                {{ url }}
+            </span>
+            <span class="web-viewer-url placeholder" *ngIf="!url" id="NoUrlSetYet" gebo-ai-text>
+                No url set yet
+            </span>
+        </div>
+        <div class="web-viewer-header" *ngIf="contentServedByGebo">
+            <span class="web-viewer-title" id="PreviewGeboTitle" gebo-ai-text>Displaying content</span>
+            <span class="web-viewer-url" *ngIf="url && !geboServedFileName">
+                {{ url }}
+            </span>
+            <span class="web-viewer-url" *ngIf="url && geboServedFileName">
+                {{ geboServedFileName }}
+            </span>
+            <span class="web-viewer-url placeholder" *ngIf="!url" id="NoUrlSetYet" gebo-ai-text>
+                No url set yet
+            </span>
+        </div>
+    </ng-template>
+    <ng-container *ngIf="safeUrl; else noUrlTpl">
+        <div class="web-viewer-frame-wrapper">
+            <iframe class="web-viewer-iframe" *ngIf="!safeHtml" [src]="safeUrl" frameborder="0" loading="lazy">
+            </iframe>
+            <div class="web-viewer-html" *ngIf="safeHtml" [innerHTML]="safeHtml"></div>
+        </div>
+    </ng-container>
+    <ng-template #noUrlTpl>
+        <div class="web-viewer-empty">
+            <p-message severity="info" text="Url unset"></p-message>
+        </div>
+    </ng-template>
+</p-card>

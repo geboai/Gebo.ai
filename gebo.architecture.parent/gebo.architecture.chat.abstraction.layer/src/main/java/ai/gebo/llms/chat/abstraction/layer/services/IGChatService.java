@@ -12,12 +12,16 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Gebo.ai comment agent
@@ -61,8 +65,9 @@ public interface IGChatService extends IGGenericalChatService {
      * @param modelCode a unique code identifying the model to use for transcription.
      * @throws LLMConfigException if there is an issue with the model configuration.
      * @return a String containing the transcribed text.
+     * @throws IOException 
      */
-    public String transcript(InputStream is, String modelCode) throws LLMConfigException;
+    public String transcript(InputStream is, String modelCode) throws LLMConfigException, IOException;
 
     /**
      * Converts text to speech using a specific model identified by its code.
@@ -74,4 +79,6 @@ public interface IGChatService extends IGGenericalChatService {
      * @return an InputStream with the resulting audio.
      */
     public InputStream speech(String text, String modelCode) throws LLMConfigException;
+
+	public GUserChatInfo createCleanChatByModelCode(@NotNull String modelCode) throws GeboPersistenceException;
 }

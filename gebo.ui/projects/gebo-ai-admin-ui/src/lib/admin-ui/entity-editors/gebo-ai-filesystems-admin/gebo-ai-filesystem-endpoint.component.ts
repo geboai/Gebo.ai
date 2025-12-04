@@ -6,15 +6,15 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /* AI generated comments */
-import { Component, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, FileSystemsBrowsingControllerService, FileSystemsControllerService, GFilesystemProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, browsePathObservableCallback, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, VFilesystemReference } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, VFilesystemReference } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions, MessageService } from "primeng/api";
 import { UploadEvent } from "primeng/fileupload";
 import { map, Observable, of } from "rxjs";
@@ -29,7 +29,12 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 @Component({
     selector: "gebo-ai-filesystem-endpoint-component",
     templateUrl: "gebo-ai-filesystem-endpoint.component.html",
-    providers: [MessageService],
+    providers: [MessageService,
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIFileSystemModule", multi: false },
+        {
+            provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIFileSystemEndpointComponent),
+            multi: false
+        }],
     standalone: false
 })
 export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponent<GFilesystemProjectEndpoint> {
@@ -38,10 +43,10 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
 
     /** Controls whether the project can be modified */
     @Input() cantModifyProject: boolean = true;
-    
+
     /** Observable for retrieving available projects */
     projectsObservable: Observable<GProject[]> = this.projectsController.getProjects();
-    
+
     /** Form group for managing form controls */
     override formGroup: FormGroup<any> = new FormGroup({
         code: new FormControl(),
@@ -53,48 +58,48 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
         synchPeriodically: new FormControl(),
         buildSystemsRefs: new FormControl(),
         path: new FormControl(),
-        catalogingCriteria:new FormControl(),
+        catalogingCriteria: new FormControl(),
         contentManagementSystem: new FormControl(),
         openZips: new FormControl(),
         vectorizeOnlyExtensions: new FormControl(),
         programmedTables: new FormControl()
     });
-    
+
     /** Tracks the published state of the endpoint */
     published: boolean = false;
-    
+
     /** Callback for loading filesystem roots */
-    public loadRootsObservable: loadRootsObservableCallback = () => {return this.filesystemsBrowsing.getSharedFilesystemRoots();}
-    
+    public loadRootsObservable: loadRootsObservableCallback = () => { return this.filesystemsBrowsing.getSharedFilesystemRoots(); }
+
     /** Callback for browsing filesystem paths */
-    public browsePathObservable: browsePathObservableCallback=(param:BrowseParam)=>{return this.filesystemsBrowsing.browseSharedFilesystemRootsPath(param)};
-    
+    public browsePathObservable: browsePathObservableCallback = (param: BrowseParam) => { return this.filesystemsBrowsing.browseSharedFilesystemRootsPath(param) };
+
     /** Callback for reconstructing navigation based on navigation points */
-    public reconstructNavigationObservableCallback:reconstructNavigationObservableCallback=(navigationPoints: VFilesystemReference[]) => {return this.filesystemsBrowsing.getSharedFilesystemNavigationStatus(navigationPoints);} 
-    
+    public reconstructNavigationObservableCallback: reconstructNavigationObservableCallback = (navigationPoints: VFilesystemReference[]) => { return this.filesystemsBrowsing.getSharedFilesystemNavigationStatus(navigationPoints); }
+
     /** List of file types available for selection */
-    fileTypesList: GeboAIFileType[]=[];
+    fileTypesList: GeboAIFileType[] = [];
 
     /**
      * Constructor for the component, initializes services and parent class.
      * Sets up subscription to published value changes and enables backend processing check.
      */
-    constructor(injector:Injector,geboFormGroupsService: GeboFormGroupsService,
+    constructor(injector: Injector, geboFormGroupsService: GeboFormGroupsService,
         private filesystemsControllerService: FileSystemsControllerService,
         private filesystemsBrowsing: FileSystemsBrowsingControllerService,
         private projectsController: ProjectsControllerService,
         private JobLauncherControllerService: JobLauncherControllerService,
         private actionsRouter: GeboUIActionRoutingService,
         private messageService: MessageService,
-        
+
         confirmService: ConfirmationService,
         outputForwardingService?: GeboUIOutputForwardingService
     ) {
-        super(injector,geboFormGroupsService, confirmService,actionsRouter, outputForwardingService);
+        super(injector, geboFormGroupsService, confirmService, actionsRouter, outputForwardingService);
         this.formGroup.controls["published"].valueChanges.subscribe(published => {
             this.published = published;
         });
-        this.doPeriodicBackendProcessingCheck=true;
+        this.doPeriodicBackendProcessingCheck = true;
     }
 
     /**
@@ -103,7 +108,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
      * @returns An Observable<boolean> indicating if there are running jobs
      */
     protected override checkBackendProcessing(reference: { className?: string; code?: string; }): Observable<boolean> {
-        return this.JobLauncherControllerService.getHasRunningJobs(reference).pipe(map(r=>r?.hasRunningJobs===true));
+        return this.JobLauncherControllerService.getHasRunningJobs(reference).pipe(map(r => r?.hasRunningJobs === true));
     }
 
     /**
@@ -119,7 +124,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
      * @param actualValue The new filesystem endpoint data
      */
     protected override onNewData(actualValue: GFilesystemProjectEndpoint): void {
-        
+
     }
 
     /**
@@ -127,7 +132,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
      * @param actualValue The loaded filesystem endpoint data
      */
     protected override onLoadedPersistentData(actualValue: GFilesystemProjectEndpoint): void {
-       
+
     }
 
     /**
@@ -215,7 +220,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
                             }
                         };
                         this.cancelAction.emit(true);
-                        this.actionsRouter.routeEvent(action);                        
+                        this.actionsRouter.routeEvent(action);
                     } else {
                         this.userMessages = jobStatus.messages as ToastMessageOptions[];
                     }

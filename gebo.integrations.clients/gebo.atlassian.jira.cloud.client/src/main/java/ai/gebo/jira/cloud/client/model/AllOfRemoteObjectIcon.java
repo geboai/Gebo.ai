@@ -27,8 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.Icon;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Details of the icon for the item. If no icon is defined, the default link icon is used in Jira.

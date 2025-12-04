@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Lugha chaguo-msingi ya mfumo",
+        "help" : "Lugha chaguo-msingi ya mfumo kwa usakinishaji huu wa Gebo.ai"
+      },
+      "username" : {
+        "label" : "Barua pepe",
+        "help" : "Barua pepe kama jina la mtumiaji kuingia"
+      },
+      "passwordC" : {
+        "label" : "Thibitisha nenosiri",
+        "help" : "Thibitisha nenosiri"
+      },
+      "password" : {
+        "label" : "Nenosiri",
+        "help" : "Nenosiri la kuingia (angalau herufi 8)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " nenosiri hayalingani "
+      },
+      "LocalAdmin" : {
+        "label" : "Unda akaunti yako ya msimamizi wa ndani"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Utatumia akaunti hii baadaye kusanidi/kudhibiti programu, data hii itabaki ndani ya mfumo wako na haitatumwa kwenye mtandao"
+      },
+      "EnterBtn" : {
+        "label" : "Nenda kwenye ukurasa wa kuingia kuendelea"
+      },
+      "SetupPage" : {
+        "label" : "Sanidi usakinishaji wako wa gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Unda usanidi wa mfumo"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Soma & kubali leseni"
+      },
+      "AcceptMark" : {
+        "label" : "Nakubali masharti",
+        "help" : "Kwa kubofya hapa unakubali masharti ya leseni"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "barua pepe",
+        "help" : "Barua pepe kama jina la mtumiaji kuingia"
+      },
+      "password" : {
+        "label" : "Nenosiri",
+        "help" : "Nenosiri la kuingia"
+      },
+      "LoginPanel" : {
+        "label" : "Ingia kwenye gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Ingia"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Karibu kwenye gebo.ai",
+        "detail" : "Weka jina lako la mtumiaji na nenosiri ili kuingia"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Hatua imeshindikana",
+        "detail" : "Haiwezekani kuthibitisha kwa taarifa ulizotoa"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "Sawa!",
+        "detail" : "Hatua imekamilika kwa mafanikio"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Karibu kwenye gebo.ai",
+        "detail" : "Weka jina lako la mtumiaji na nenosiri ili kuingia"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Mpangilio wa Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Jina la mtoa huduma"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "MainPanel" : {
+        "label" : "Mipangilio ya ulinzi ya Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Kitambulisho"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Rudi kwenye ukurasa wa nyumbani wa usanidi"
+      },
+      "WizardUi" : {
+        "label" : "Chagua sehemu ya usanidi"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Usanidi wa akaunti ya msimamizi na wengine",
+        "description" : "Angalau akaunti ya usimamizi inahitajika ili kuhakikisha kuwa usakinishaji huu wa Gebo.ai unasimamiwa vizuri, ongeza watumiaji wengine ikiwa ni lazima"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Folda ya kazi ya Gebo.ai",
+        "description" : "Sanidi folda ya kazi, itakuwa ni jalada ambapo mipangilio na mafaili yote ya usakinishaji huu yatakuwa yamehifadhiwa. Ni wazo zuri pia kuhifadhi nakala ya jalada hili mara kwa mara."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Usanidi wa hifadhidata ya vector",
+        "description" : "Hifadhidata ya vector inahitaji kusanidiwa ili Gebo.ai iweze kutoa huduma za retrieve augmented generation, unaweza kuchagua kati ya hifadhidata ya ndani, Qdrant au Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Uthibitishaji wa kuingia mara moja, oauth2",
+        "description" : "Usanidi wa uthibitishaji wa kuingia mara moja kwa Oauth2 na wateja wa oauth2"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Usanidi wa Miundo Mikubwa ya Lugha",
+        "description" : "Sanidi miundo mbalimbali ya llms kwa kutumia huduma ya nyuma ya wingu au ndani/lan, angalau mfano mmoja wa gumzo na mfano mmoja wa embedding lazima usanidiwe ili programu ifanye kazi ipasavyo."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Usanidi wa graph rag/uchimbaji maarifa",
+        "description" : "Sanidi mfumo wa graph rag na uchimbaji wa maarifa"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Usanidi wa njia za mifumo ya faili ya pamoja",
+        "description" : "Sanidi njia za mifumo ya faili ya kampuni zitakazotumika kama eneo la hati za retrieve augmented generation kwenye hazina mbalimbali za maarifa"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Ujumuishaji wa Atlassian confluence",
+        "description" : "Sanidi Gebo.ai kupata ufikiaji wa Atlassian Confluence yako ya wingu au ya eneo"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Ujumuishaji wa Atlassian jira",
+        "description" : "Sanidi Gebo.ai kupata ufikiaji wa Atlassian jira yako ya wingu"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Ujumuishaji wa Microsoft Sharepoint",
+        "description" : "Sanidi Gebo.ai kupata ufikiaji wa Microsoft Sharepoint yako ya wingu au ya eneo"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Sanidi angalau hazina moja ya maarifa",
+        "description" : "Sanidi angalau hazina moja ya maarifa ili kuruhusu watumiaji wako kufurahia huduma za retrieve augmented generation za Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Sanidi angalau wasifu mmoja wa gumzo \"R.A.G.\"",
+        "description" : "Sanidi angalau wasifu mmoja wa retrieve augmented chat kwa watumiaji wako kulingana na mojawapo ya hazina za maarifa ulizosanidi"
+      },
+      "mandatory-done" : {
+        "summary" : "Hatua za lazima za usanidi wa Gebo.ai zimekamilika...",
+        "detail" : "Hatua za lazima za usanidi zimekamilika lakini baadhi ya hatua zilizokosekana zinazuia shirika lako kupata manufaa kamili ya programu hii"
+      },
+      "setup-ok" : {
+        "summary" : "Usanidi wa Gebo.ai upo sawa!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Usanidi wa Gebo.ai umekosa hatua fulani ya lazima",
+        "detail" : "Tafadhali kagua hatua nyekundu kwenye mchakato wa usanidi"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Muunganiko wa Google Drive/Workspaces",
+        "description" : "Sanidi Gebo.ai ili kufikia data ya timu yako ya Google cloud Drive/Workspaces"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Sanidi mifumo ya kampuni ya Atlassian Confluence"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Aina ya mfumo"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Nambari ya usanidi"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Mfumo wa Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Mfumo wa Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Nambari ya usanidi"
+      },
+      "MainPanel" : {
+        "label" : "Sanidi mifumo ya kampuni ya Atlassian Jira"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Aina ya mfumo"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Nambari ya usanidi"
+      },
+      "MainPanel" : {
+        "label" : "Sanidi mifumo ya kampuni ya Microsoft Sharepoint"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Aina ya mfumo"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Mfumo wa Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Toa api-key yenye mkopo wa kutosha. Ukiichagua OpenAI lazima uongeze mkopo maalum (dola 10-30 inaweza kutosha) kwenye mpango wako wa kawaida wa matumizi ya api, vinginevyo trafiki ya llms haitapatikana kwenye programu hii."
+      },
+      "MainPanel" : {
+        "label" : "Sanidi upatikanaji wa watoa huduma wa llms wa Gebo.ai kwa kutumia api key yako"
+      },
+      "provider" : {
+        "label" : "Msambazaji wa mfano mkubwa wa lugha",
+        "help" : "Chagua msambazaji mmoja kati ya OpenAI (chatgpt), Google (Gemini),Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Mtumiaji",
+        "help" : "Ingiza jina la mtumiaji linalohusishwa na apiKey"
+      },
+      "ConfigureBtn" : {
+        "label" : "Sanidi"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "Api key yako ya watoa huduma wa LLMS itakayotumika"
+      },
+      "ProviderHeader" : {
+        "label" : "Mtoa huduma"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Nambari ya usanidi"
+      },
+      "ModelHeader" : {
+        "label" : "Mfano"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Aina ya mfano"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Mfano chaguomsingi"
+      },
+      "MainPanelHeader" : {
+        "label" : "Sanidi ufikiaji wa watoa huduma wa Gebo.ai llms"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Unda mpangilio wa graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Sanidi usanidi chaguomsingi wa Graph Rag & uchimbaji maarifa"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Nambari ya usanidi"
+      },
+      "EditConfigBtn" : {
+        "label" : "Hariri usanidi"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Mradi"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Ongeza Hazina ya Maarifa"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Hazina ya maarifa"
+      },
+      "MainPanel" : {
+        "label" : "Usanidi wa hazina za maarifa na maudhui"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Chanzo cha maudhui"
+      },
+      "PublishedHeader" : {
+        "label" : "Imechapishwa"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Idadi ya hati"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Ongeza mradi/kitu",
+        "help" : "unda mradi mpya"
+      },
+      "Button1" : {
+        "help" : "fungua hazina ya maarifa"
+      },
+      "Button2" : {
+        "help" : "fungua fomu ya mradi"
+      },
+      "Button3" : {
+        "help" : "fungua chanzo cha data"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Usanidi wa folda ya kazi ya Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Sanidi"
+      },
+      "workDirectory" : {
+        "label" : "Chagua folda kama jalada la kazi la Gebo.ai",
+        "help" : "Chagua folda ya seva ambayo usakinishaji huu utatumia kama folda ya kazi kwa ajili ya kuhifadhi mipangilio na maudhui."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Ongeza folda"
+      },
+      "AddFolderBtn" : {
+        "label" : "Ongeza folda"
+      },
+      "CodeHeader" : {
+        "label" : "Nambari"
+      },
+      "MainPanel" : {
+        "label" : "Njia za mfumo wa faili wa pamoja wa seva"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Njia kamili"
+      },
+      "DeleteHeader" : {
+        "label" : "Futa"
+      },
+      "path" : {
+        "label" : "Ongeza folda kuu ya mfumo wa faili wa pamoja",
+        "help" : "Chagua folda ya seva ambayo ni njia kuu kwa mfumo wa faili wa pamoja unaotumiwa na shirika lako kama hazina ya hati"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa faili"
+      },
+      "RemovePathBtn" : {
+        "label" : "Ondoa njia"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Sanidi"
+      },
+      "MainPanel" : {
+        "label" : "Usanidi wa hifadhidata ya vector"
+      },
+      "host" : {
+        "label" : "Qdrant host",
+        "help" : "Jina la host au anuani ya ip ya Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Mipangilio ya kuunganisha Qdrant"
+      },
+      "port" : {
+        "label" : "Qdrant port",
+        "help" : "Port ya mawasiliano ya Qdrant (6334 ni kiwango)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Api key kwa ajili ya uthibitishaji wa Qdrant"
+      },
+      "tls" : {
+        "label" : "Kigezo cha Qdrant TLS",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Hatua za lazima za usanidi wa Gebo.ai zimekamilika...",
+        "detail" : "Hatua za lazima za usanidi zimekamilika lakini baadhi ya hatua zilizokosekana zinazuia shirika lako kupata manufaa kamili ya programu hii"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Usanidi wa Gebo.ai umekosa hatua muhimu",
+        "detail" : "Tafadhali kagua hatua nyekundu za mchakato wa usanidi"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Usanidi wa Gebo.ai uko sawa!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Ongeza wasifu mpya wa gumzo la R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Ongeza wasifu wa gumzo la R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Pata mipangilio ya wasifu wa gumzo la r.a.g."
+      },
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Wasifu wa gumzo la R.A.G. zilizopo"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Hariri wasifu wa gumzo la R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Misimbo ya msingi ya maarifa"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Sanidi mifumo ya Google Drive/Workspaces ya kampuni"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Msimbo wa usanidi"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Msimbo",
+        "help" : "Ingiza maelezo ya msimbo wa Uthibitishaji/Unganaji wa OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya taarifa za Uthibitishaji/Unganaji wa OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Madhumuni ya usanidi",
+        "help" : "Chagua kama mipangilio hii itatumika kuthibitisha ndani ya Gebo.ai au kuruhusu Gebo.ai kuunganishwa kama mteja kwenye mfumo wa upande wa tatu."
+      },
+      "authProvider" : {
+        "label" : "Mtoa huduma",
+        "help" : "Ingiza mtoa huduma wa Uthibitishaji wa OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "Anwani ya Issuer",
+        "help" : "Ingiza URL ya issuer ya OAUTH2 wa mtoa huduma"
+      },
+      "authorizationUri" : {
+        "label" : "URL ya Uidhinishaji",
+        "help" : "Ingiza URL ya Uidhinishaji ya OAUTH2 ya mtoa huduma"
+      },
+      "jwkSetUri" : {
+        "label" : "Anwani ya Jwk Set",
+        "help" : "Ingiza URL ya OAUTH2 Jwk Set ya mtoa huduma"
+      },
+      "userInfoUri" : {
+        "label" : "URL ya taarifa za mtumiaji",
+        "help" : "Ingiza URL ya taarifa za mtumiaji wa OAUTH2 ya mtoa huduma"
+      },
+      "introspectionUri" : {
+        "label" : "Anwani ya Introspection",
+        "help" : "Ingiza URL ya introspection ya OAUTH2 ya mtoa huduma"
+      },
+      "tokenUri" : {
+        "label" : "URL ya Tokeni",
+        "help" : "Ingiza URL ya Tokeni ya OAUTH2 ya mtoa huduma"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URL za mtoa huduma wa OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Ongeza taarifa mpya za Uthibitishaji/Unganaji wa OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "Kitambulisho cha mteja",
+        "help" : "Kitambulisho cha mteja kwa itifaki ya oauth2 (kupatikana kwenye eneo la msimamizi wa programu ya tatu iliyoidhinishwa na oauth2)"
+      },
+      "secret" : {
+        "label" : "Ufunguzi wa siri",
+        "help" : "Siri ya mteja kwa itifaki ya oauth2 (kupatikana kwenye eneo la msimamizi wa programu ya tatu iliyoidhinishwa na oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Unda usanidi wa mfumo wa confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Unda"
+      },
+      "username" : {
+        "label" : "Jina la mtumiaji la Confluence",
+        "help" : "Jina la mtumiaji wa Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Toleo la Confluence",
+        "help" : "Toleo la Confluence"
+      },
+      "baseUri" : {
+        "label" : "Anwani ya msingi ya intaneti",
+        "help" : "Url ya anwani ya msingi ya mfumo wa confluence kwa usakinishaji wa onpremise au url ya msingi ya shirika lako kwa mfumo wa confluence cloud"
+      },
+      "password" : {
+        "label" : "Nenosiri la Confluence",
+        "help" : "Nenosiri la Confluence"
+      },
+      "token" : {
+        "label" : "Kitufe cha api cha confluence cloud",
+        "help" : "Confluence CLOUD apikey iliyopatikana kwenye nyuma ya confluence, hapa \"API Token for your Atlassian Account\" lazima iwekwe."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Hifadhi na fanya yaliyomo yapatikane kwenye msingi wa maarifa kwa LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "MainPanel" : {
+        "label" : "Kushiriki yaliyo ndani ya confluence"
+      },
+      "LogsTab" : {
+        "label" : "Kumbukumbu"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee inayozalishwa moja kwa moja ya yaliyomo."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya yaliyomo yaliyopakiwa kwenye ingizo za confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Mfumo wa Confluence",
+        "help" : "Rejeleo tayari la mfumo wa confluence uliosanidiwa."
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Rejeleo la mradi mzazi."
+      },
+      "openZips" : {
+        "label" : "Fungua faili za zip",
+        "help" : "Wezesha ufunguaji wa faili za zip na uchimbaji wa maudhui"
+      },
+      "tree" : {
+        "label" : "Nafasi au kurasa/kurasa ndogo zilizochaguliwa",
+        "help" : "Maudhui yaliyoshirikiwa ya nafasi na kurasa za confluence"
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya ukaguzi wa masasisho ya yaliyomo",
+        "help" : "Sanidi ratiba ya mabadiliko ya maudhui ili kudumisha mfumo wa retrieve augmented generation ukiwa umeboreshwa"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vigezo vya upangaji wa nafasi, kurasa na kurasa ndogo",
+        "help" : "Tafadhali eleza hapa jinsi vigezo vya upangaji wa nafasi, kurasa na kurasa ndogo vimefanywa kwenye maudhui ya confluence yaliyoshirikiwa na Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Mipangilio ya jumla"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "MainPanel" : {
+        "label" : "Kuhariri mfumo wa confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "baseUri" : {
+        "label" : "Anwani ya msingi ya intaneti",
+        "help" : "Url ya anwani ya msingi ya mfumo wa confluence"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee inayozalishwa moja kwa moja ya mfumo wa confluence."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Toleo la Confluence",
+        "help" : "Toleo la Confluence"
+      },
+      "secretCode" : {
+        "label" : "Utambulisho unaotumika",
+        "help" : "Chagua au tengeneza utambulisho wa kufikia mfumo wa confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "kundi jipya"
+      },
+      "NewUserBtn" : {
+        "label" : "mtumiaji mpya"
+      },
+      "UsersListPanel" : {
+        "label" : "Orodha ya watumiaji"
+      },
+      "GroupsListPanel" : {
+        "label" : "Orodha ya makundi"
+      },
+      "SournameHeader" : {
+        "label" : "jina la ukoo"
+      },
+      "UsernameHeader" : {
+        "label" : "jina la mtumiaji"
+      },
+      "RolesHeader" : {
+        "label" : "majukumu"
+      },
+      "NameHeader" : {
+        "label" : "jina"
+      },
+      "EditBtn" : {
+        "label" : "Hariri"
+      },
+      "DisabledHeader" : {
+        "label" : "kimezimwa"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "UserIds" : {
+        "placeholder" : "Chagua watumiaji"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "MainPanel" : {
+        "label" : "Kuhariri kundi la watumiaji"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya kundi la watumiaji"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Weka nambari ya kundi la watumiaji"
+      },
+      "userIds" : {
+        "label" : "Orodha ya watumiaji",
+        "help" : "Chagua watumiaji wanaoshiriki kwenye kundi"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Unda"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa jira."
+      },
+      "MainPanel" : {
+        "label" : "Unda usanidi wa mfumo wa jira"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "username" : {
+        "label" : "jina la mtumiaji wa jira",
+        "help" : "jina la mtumiaji wa jira"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "jira CLOUD apikey iliyopatikana kwenye jira backoffic, hapa unapaswa kuweka \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Anwani kuu ya mtandao",
+        "help" : "Url ya anwani kuu ya mfumo wa jira kwa usakinishaji wa onpremise au url ya shirika lako kwa mfumo wa jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Inaokoa na kufanya maudhui haya yapatikane kwenye knowledge base kwa LLm's"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "LogsTab" : {
+        "label" : "Logi"
+      },
+      "MainPanel" : {
+        "label" : "Kushiriki maudhui ya jira"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee uliotengenezwa kiotomatiki wa maudhui."
+      },
+      "jiraSystemCode" : {
+        "label" : "mfumo wa jira",
+        "help" : "Marejeo ya mfumo wa jira uliosanidiwa tayari."
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Marejeo ya mradi mzazi."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya yaliyopakiwa ya taarifa za jira."
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya uhakiki wa masasisho ya maudhui",
+        "help" : "Sanidi ratiba ya maudhui yaliyobadilishwa ili kuweka mfumo wa retrieve augmented generation ukiwa umesasishwa"
+      },
+      "openZips" : {
+        "label" : "Fungua faili za zip",
+        "help" : "Wezesha kufungua faili za zip na kutoa maudhui"
+      },
+      "tree" : {
+        "label" : "Nafasi au kurasa/subkurasa zilizochaguliwa",
+        "help" : "Mpangilio wa miradi na tiketi za jira zilizoshirikiwa"
+      },
+      "catalogingCriteria" : {
+        "label" : "Kigezo cha mpangilio wa nafasi, kurasa na subkurasa",
+        "help" : "Tafadhali eleza hapa jinsi vigezo vya mpangilio wa nafasi, kurasa na subkurasa vilivyofanyika kwenye maudhui ya jira yaliyoshirikiwa na Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "MainPanel" : {
+        "label" : "Kuhariri mfumo wa jira"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "baseUri" : {
+        "label" : "Anwani kuu ya mtandao",
+        "help" : "Url ya anwani kuu ya mfumo wa jira"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee uliotengenezwa kiotomatiki wa mfumo wa jira."
+      },
+      "secretCode" : {
+        "label" : "Utambulisho uliotumika",
+        "help" : "Chagua au tengeneza utambulisho wa kufikia mfumo wa jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Toleo la Sharepoint",
+        "help" : "toleo la sharepoint"
+      },
+      "secret" : {
+        "label" : "Ufunguo wa siri",
+        "help" : "Siri ya mteja wa Oauth2 kwa programu hii iliyosajiliwa kwenye bidhaa ya microsoft \"entra\" (kupatikana kwenye microsoft cloud admin console)"
+      },
+      "clientId" : {
+        "label" : "Kitambulisho cha Mteja",
+        "help" : "Kitambulisho cha mteja wa Oauth2 kwa programu hii iliyosajiliwa kwenye bidhaa ya microsoft \"entra\" (kupatikana kwenye microsoft cloud admin console)"
+      },
+      "tenantId" : {
+        "label" : "Kitambulisho cha Shirika",
+        "help" : "Kitambulisho cha mteja cha Oauth2 kwa shirika lako kwenye bidhaa ya microsoft \"entra\" (kupatikana kwenye microsoft cloud admin console)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Taarifa za usajili wa programu ya Microsof oauth2 kwa Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Unda"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "MainPanel" : {
+        "label" : "Unda usanidi wa mfumo wa SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Inaokoa na kufanya maudhui haya kupatikana kwenye msingi wa maarifa kwa LLm's"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "MainPanel" : {
+        "label" : "Kugawana maudhui ya SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Kumbukumbu"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee ya maudhui, hutolewa kiotomatiki."
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Marejeleo ya mradi mzazi."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya vyanzo vya data vya SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "mfumo wa sharepoint",
+        "help" : "Marejeleo ya mfumo uliosanidiwa tayari wa SharePoint/OneDrive."
+      },
+      "openZips" : {
+        "label" : "Fungua faili zip",
+        "help" : "Wezesha ufunguaji wa faili za zip na uchimbaji wa maudhui"
+      },
+      "tree" : {
+        "label" : "Eneo la tovuti/kurasa/kurasa ndogo za Sharepoint au drives/folder/files za OneDrive ulizochagua",
+        "help" : "Maudhui ya Sharepoint/OneDrive yaliyoshirikiwa"
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya ukaguzi wa masasisho ya maudhui",
+        "help" : "Sanidi ratiba ya maudhui yaliyobadilika ili kuweka mfumo wa retrieve augmented generation up-to-date"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vigezo vya upangaji wa nafasi, kurasa na kurasa ndogo",
+        "help" : "Tafadhali eleza hapa jinsi kigezo cha upangaji wa nafasi, kurasa na kurasa ndogo kilivyotumika kwa maudhui ya sharepoint yaliyoshirikiwa na Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Kuhariri mfumo wa sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Mipangilio ya jumla"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "secretCode" : {
+        "label" : "Utambulisho unaotumika",
+        "help" : "Chagua au tengeneza utambulisho wa kufikia mfumo wa sharepoint"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee ya mfumo wa sharepoint, hutolewa kiotomatiki."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Toleo la Sharepoint",
+        "help" : "toleo la sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Futa"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Hifadhi"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Ghairi"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Mipangilio ya taarifa/maudhui"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Mipangilio ya LLms"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee inayotengenezwa kiotomatiki ya hatua ya uchimbaji wa data ya mlinganisho wa maarifa"
+      },
+      "MainPanel" : {
+        "label" : "Usanidi wa uchimbaji wa Graphrag/maarifa"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya usanidi wa hatua ya uchimbaji wa data ya mlinganisho wa maarifa huu"
+      },
+      "extractionPrompt" : {
+        "label" : "Aghizo la uchimbaji habari",
+        "help" : "Aghizo la large language model kwa uchimbaji wa huluki/tukio/uhusiano na majina mbadala"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM inayotumika kwa uchimbaji data",
+        "help" : "Taja large language model inayotumika kwa uchimbaji maarifa, ile chaguo-msingi itatumika ikiwa hakuna iliyochaguliwa."
+      },
+      "graphRagAllSources" : {
+        "label" : "Tumia graph rag kwenye vyanzo vyote vya data",
+        "help" : "Ikiwa ni kweli, msingi yote ya maarifa/miradi/vyanzo vya data vitashughulikiwa kwa uchimbaji wa maarifa, vinginevyo ni vile vilivyosanidiwa pekee"
+      },
+      "defaultModel" : {
+        "label" : "Large language model chaguo-msingi",
+        "help" : "Large language model ya chaguo-msingi itatumika kwa uchimbaji wa maarifa"
+      },
+      "processEveryDocument" : {
+        "label" : "Tumia graph rag kwenye mafaili yote",
+        "help" : "Algoritimu ya graph rag itatumika kwenye mafaili yote, hii itaongeza maelezo ya uchambuzi ambayo mfumo unaweza kufanya lakini itapandisha gharama na muda unaohitajika kushughulikia nyaraka"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Vigezo vya uteuzi wa faili kwa usindikaji wa graphrag",
+        "help" : "Hariri vigezo vya faili ya kutuma kwenye mfumo wa uchimbaji habari wa graphrag, chagua angalau jina la faili na kigezo na/au aina ya faili na/au kiwango cha juu cha ukubwa wa faili kwa baiti na/au umri wa marekebisho ya mwisho kwa siku"
+      },
+      "extractionFormat" : {
+        "label" : "Muundo wa uchimbaji",
+        "help" : "Tumia muundo wa CSV kwa llms chini ya vigezo 30b, fomu ya JSON kwa mifano mikubwa ya frontier",
+        "placeholder" : "Tumia muundo wa CSV kwa llms chini ya vigezo 30b, fomu ya JSON kwa mifano mikubwa ya frontier"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Chagua aina za faili"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Vigezo vya kuchuja jina la faili"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Marekebisho ya mwisho ya faili, siku zilizopita"
+      },
+      "nameFilter" : {
+        "placeholder" : "Jina la faili"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Ukubwa wa juu wa faili kwa Bytes"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Taarifa za jumla"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri msingi wa maarifa"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikiaji wa msingi wa maarifa"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa msingi wa maarifa umetengenezwa kiotomatiki."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya msingi wa maarifa."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Miundo ya kuweka embedding inayotumika (acha tupu kutumia chaguo-msingi ya mfumo)",
+        "help" : "Miundo ya embedding kwa msingi wa maarifa, ukiacha tupu itatumia ile ya chaguo-msingi."
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "IndexBtn" : {
+        "label" : "Faharasa",
+        "help" : "Faharasisha upya yaliyomo"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Inahariri mradi au kipengee"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa mradi umetengenezwa kiotomatiki."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mradi."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "msingi wa maarifa",
+        "help" : "msingi wa maarifa."
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "IndexBtn" : {
+        "label" : "Faharasa",
+        "help" : "Faharasisha upya yaliyomo"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Ongeza kipengee/mradi",
+        "help" : "ongeza kipya..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Kila mtu anatumia",
+        "help" : "Kila mtu anaweza kutumia"
+      },
+      "accessibleGroups" : {
+        "label" : "Orodha ya vikundi",
+        "help" : "Chagua vikundi vinavyoruhusiwa"
+      },
+      "accessibleUsers" : {
+        "label" : "Orodha ya watumiaji",
+        "help" : "Chagua watumiaji wanaoruhusiwa"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Dashibodi"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs kwa gumzo & kuweka kumbukumbu"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Profaili za gumzo za Rag/Vichocheo vya Muundo"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Misingi ya maarifa & miradi"
+      },
+      "UsersGroupTab" : {
+        "label" : "Watumiaji na makundi"
+      },
+      "GeboModulesTab" : {
+        "label" : "Mipangilio ya moduli za Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Kumbukumbu"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Sanidi"
+      },
+      "ConfigureBtn" : {
+        "label" : "Sanidi"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Mpangilio mpya wa msukumo"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Wasifu mpya wa gumzo"
+      },
+      "MainPanel" : {
+        "label" : "Wasifu wa gumzo wa kizazi kilichoboreshwa na urejeshaji"
+      },
+      "PromptsPanel" : {
+        "label" : "Mkusanyiko wa misukumo na misukumo chaguomsingi"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Misingi ya maarifa"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "ConfigureBtn1" : {
+        "label" : "sanidi"
+      },
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Msingi mpya wa maarifa"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Sanidi mpya ya mfano wa kuweka mwingiliano"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Sanidi mpya ya mfano wa gumzo"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      },
+      "ModelHeader" : {
+        "label" : "Mfano "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Mtoa huduma wa mfano"
+      },
+      "ConfigureBtn" : {
+        "label" : "sanidi"
+      },
+      "CodeHeader2" : {
+        "label" : "Msimbo"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Maelezo"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Mtoa huduma wa mfano"
+      },
+      "ConfigureBtn2" : {
+        "label" : "sanidi"
+      },
+      "ModelHeader2" : {
+        "label" : "Mfano "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Mifano ya gumzo zilizosanikishwa"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Mifano ya kuweka mwingiliano zilizosanikishwa"
+      },
+      "chat" : {
+        "label" : "Mfano mpya wa gumzo",
+        "help" : "Chagua msambazaji kuongeza mfano mpya wa gumzo unaoweza kufanya mazungumzo na mtumiaji au kutekeleza kazi otomatiki",
+        "placeholder" : "Chagua msambazaji kuongeza mfano mpya wa gumzo unaoweza kufanya mazungumzo na mtumiaji au kutekeleza kazi otomatiki"
+      },
+      "embed" : {
+        "label" : "Mfano mpya wa kuweka viungo",
+        "help" : "Chagua msambazaji kuongeza mfano mpya wa kuweka viungo unaoweza kufanya kuorodhesha yaliyomo kisemantiki",
+        "placeholder" : "Chagua msambazaji kuongeza mfano mpya wa kuweka viungo unaoweza kufanya kuorodhesha yaliyomo kisemantiki"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Inajaribu modeli"
+      },
+      "TestChatBtn" : {
+        "label" : "Jaribu gumzo"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Chagua OpenAI token itakayotumiwa kwa modeli hii"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya OpenAI",
+        "help" : "Chagua modeli ya gumzo ya OpenAI ya kutumia."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Mipangilio ya juu"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya gumzo ya OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikivu wa modeli"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya embedding ya OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "Chagua OpenAI token itakayotumiwa kwa modeli hii"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli ya embedding utaundwa kiotomatiki"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli ya embedding"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya embedding ya OpenAI",
+        "help" : "Chagua modeli ya embedding ya OpenAI ya kutumia."
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya embedding",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "baseUrl" : {
+        "label" : "Anwani kuu ya seva ya ollama",
+        "help" : "Anwani kuu (kwa mfano http://servername:234/) ambayo seva ya ollama ya ndani au lan inajibu."
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya Ollama",
+        "help" : "Chagua modeli ya gumzo ya Ollama ya kutumia.",
+        "placeholder" : "Chagua modeli"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Chagua Ollama token itakayotumiwa kwa modeli hii (hiari)"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya gumzo ya seva ya Ollama ya ndani (au lan)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "Chagua Anthropic token itakayotumiwa kwa modeli hii"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya Anthropic",
+        "help" : "Chagua modeli ya gumzo ya Anthropic ya kutumia.",
+        "placeholder" : "Chagua modeli"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Mipangilio ya juu"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya gumzo ya Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Chagua MistralAI token itakayotumiwa kwa modeli hii"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya MistralAI",
+        "help" : "Chagua modeli ya gumzo ya MistralAI ya kutumia."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Mipangilio ya juu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya gumzo ya MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya Google Vertex AI",
+        "help" : "Chagua modeli ya gumzo ya Google Vertex AI ya kutumia."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Chagua Google Vertex AI token itakayotumiwa kwa modeli hii"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Taarifa kuu"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Mipangilio ya ufikivu wa modeli"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Mipangilio ya juu"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya gumzo ya Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "Chagua Deepseek token itakayotumiwa kwa modeli hii"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya Deepseek",
+        "help" : "Chagua modeli ya gumzo ya Deepseek ya kutumia.",
+        "placeholder" : "Chagua modeli"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Mipangilio ya juu"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya gumzo ya Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikivu wa modeli"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli utaundwa kiotomatiki"
+      },
+      "baseUrl" : {
+        "label" : "Anwani kuu ya seva ya API ya modeli ya gumzo",
+        "help" : "Anwani kuu ya modeli ya gumzo."
+      },
+      "apiSecretCode" : {
+        "label" : "Tokeni ya API ya modeli ya gumzo",
+        "help" : "Chagua tokeni ya API ya modeli ya gumzo itakayotumiwa kwa modeli hii (hiari)"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya gumzo",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya gumzo pale ambapo haijaonyeshwa"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya gumzo ya Chat model",
+        "help" : "Chagua modeli ya gumzo ya Chat model ya kutumia."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "TitleFragment" : {
+        "label" : "Inahariri mtoa huduma wa modeli ya gumzo:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Mipangilio ya juu"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikivu wa modeli"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli ya embedding"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya embedding ya Ollama ya ndani (au lan)"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "Chagua Ollama token itakayotumiwa kwa modeli hii"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya embedding ya Ollama",
+        "help" : "Chagua modeli ya embedding ya Ollama ya kutumia."
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli ya embedding utaundwa kiotomatiki"
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya embedding",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      },
+      "baseUrl" : {
+        "label" : "Anwani kuu ya seva ya ollama",
+        "help" : "Anwani kuu (kwa mfano http://servername:234/) ambayo seva ya ollama ya ndani au lan inajibu."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli ya embedding"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya embedding ya MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli ya embedding utaundwa kiotomatiki"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya embedding ya MistralAI",
+        "help" : "Chagua modeli ya embedding ya MistralAI ya kutumia."
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya embedding",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "Chagua MistralAI token itakayotumiwa kwa modeli hii"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Inahariri usanidi wa modeli ya embedding ya Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli ya embedding"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya embedding ya Google Vertex AI",
+        "help" : "Chagua modeli ya embedding ya Google Vertex AI ya kutumia."
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya embedding",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli ya embedding utaundwa kiotomatiki"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "Chagua Google Vertex AI token itakayotumiwa kwa modeli hii"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "TitleFragment" : {
+        "label" : "Inahariri mtoa huduma wa modeli ya embedding:"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa modeli ya Embedding"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa usanidi wa modeli ya Embedding utaundwa kiotomatiki"
+      },
+      "choosedModel" : {
+        "label" : "Chaguo la modeli ya embedding ya Embedding model",
+        "help" : "Chagua modeli ya embedding ya Embedding model ya kutumia."
+      },
+      "baseUrl" : {
+        "label" : "Anwani ya seva ya API ya Embedding model",
+        "help" : "Anwani kuu ya seva ya Embedding model."
+      },
+      "defaultModel" : {
+        "label" : "weka hii kama modeli chaguo-msingi ya embedding",
+        "help" : "Ikiwa ni kweli hii itatumika kama modeli chaguo-msingi ya embedding pale ambapo haijaonyeshwa"
+      },
+      "apiSecretCode" : {
+        "label" : "Tokeni ya API ya Embedding model",
+        "help" : "Chagua tokeni ya API ya Embedding model itakayotumiwa kwa modeli hii"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Maelezo ya usanidi wa gumzo"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Futa kikao hiki cha gumzo"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Badilisha jina la kikao cha gumzo"
+      },
+      "QueryControl" : {
+        "placeholder" : "Andika ujumbe kwa roboti wa gumzo"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Vinza au tafuta na uchague nyaraka za kuzungumza nazo"
+      },
+      "UploadFileBtn" : {
+        "help" : "Pakia faili ili kuzungumza au kufanya kazi nalo"
+      },
+      "SubmiQuestion" : {
+        "help" : "Wasilisha swali lako"
+      },
+      "WithParams" : {
+        "label" : "na vigezo:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI iliita kazi:"
+      },
+      "UploadedDocs" : {
+        "label" : "Nyaraka zilizo pakizwa"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Historia ya gumzo imepakia",
+        "detail" : "Historia ya gumzo imepakia kwa mafanikio"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Hotuba yako inapakia"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Jibu la sauti limepokelewa"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Sogeza juu"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Sogeza chini"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Nyaraka zilizopatikana"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Una uhakika unataka kufuta gumzo hili?",
+        "header" : "Kitendo cha kufuta gumzo"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "description" : {
+        "label" : "Maelezo ya gumzo",
+        "help" : "Ingiza maelezo ya kikao cha gumzo."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Mfano unaotumika",
+        "help" : "Msimbo wa mfano"
+      },
+      "providerId" : {
+        "label" : "Mtoa huduma wa mfano wa gumzo",
+        "help" : "Dereva wa mtoa huduma LLms"
+      },
+      "functions" : {
+        "label" : "Kazi zinazoitwa na mfano wa gumzo",
+        "help" : "Orodha ya kazi zinazopatikana kwa mfano wa gumzo"
+      },
+      "NameCol" : {
+        "label" : "Jina"
+      },
+      "DescriptionCol" : {
+        "label" : "Maelezo"
+      },
+      "kbases" : {
+        "label" : "Misingi ya maarifa inayopatikana",
+        "help" : "Orodha ya misingi ya maarifa inayotumika kwenye gumzo hili la RAG"
+      },
+      "CloseBtn" : {
+        "help" : "Funga"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Ongeza hati kwenye orodha ya 'zungumza na' "
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Rekodi",
+        "help" : "Anza kurekodi sauti na uitume"
+      },
+      "StopBtn" : {
+        "label" : "Inarekodi",
+        "help" : "Inarekodi"
+      },
+      "AbortBtn" : {
+        "label" : "Katiza kurekodi",
+        "help" : "Katiza kurekodi"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Katiza kurekodi"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "pakia upya data"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SelectHeader" : {
+        "label" : "Chagua"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "tarehe/muda wa mwisho"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "tarehe/muda wa kuanza"
+      },
+      "ProcessingHeader" : {
+        "label" : "inashughulikiwa"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      },
+      "FinishedHeader" : {
+        "label" : "imekamilika"
+      },
+      "WithErrorHeader" : {
+        "label" : "kwa hitilafu"
+      },
+      "LogTableComponent" : {
+        "help" : "Hii ni logi ya usimbuaji wa eneo la mfumo unaoshirikiwa"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Takwimu za michakato"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "CloseBtn" : {
+        "label" : "Funga"
+      },
+      "PublicationLogTab" : {
+        "label" : "Logi ya kuchapisha"
+      },
+      "MainPanel" : {
+        "label" : "Logi ya kuchapisha"
+      },
+      "actualStatus" : {
+        "label" : "Hali",
+        "help" : "Hali ya kazi, inaendelea, imekamilika au imekamilika na makosa."
+      },
+      "publishingSystem" : {
+        "label" : "Mipangilio ya yaliyomo yaliyowekwa",
+        "help" : "Taarifa za yaliyomo yaliyowekwa"
+      },
+      "startDateTime" : {
+        "label" : "Tarehe/muda wa kuanza",
+        "help" : "Tarehe na muda wa kuanza wa kazi ya kusawazisha yaliyomo"
+      },
+      "endDateTime" : {
+        "label" : "Tarehe/muda wa mwisho",
+        "help" : "Tarehe na muda wa mwisho wa kazi ya kusawazisha yaliyomo"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Haijashughulikiwa kabisa"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Imeshughulikiwa kabisa"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "kuingiza dhidi ya jumla ya idadi ya hati"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Maelezo zaidi"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Tengeneza msukumo"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Msaidizi wa msukumo",
+        "help" : "Tumia hii kutumia LLM kutengeneza msukumo kwa malengo yako"
+      },
+      "acceptPrompt" : {
+        "label" : "Kubali msukumo"
+      },
+      "promptWizardUI" : {
+        "label" : "Mchawi wa kutengeneza kiolezo cha msukumo"
+      },
+      "cancel" : {
+        "label" : "Ghairi"
+      },
+      "response" : {
+        "label" : "Kiolezo cha msukumo kilichopendekezwa",
+        "help" : "Maandishi ya kiolezo iliyotengenezwa kwa lengo lako (unaweza kubadilisha au kurekebisha)"
+      },
+      "modelCode" : {
+        "label" : "Chat model ya kutumia",
+        "help" : "Chagua chat model unayotaka kuuliza kutengeneza kiolezo cha msukumo"
+      },
+      "query" : {
+        "label" : "Ombi la kiolezo cha msukumo",
+        "help" : "Eleza kwa nafsi ya pili lengo ambalo AI itamsaidia mtumiaji"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Joto",
+        "help" : "Joto ambalo mfano utajibu, kutoka 0 hadi 1 (kama huna uhakika acha wazi)"
+      },
+      "contextLength" : {
+        "label" : "Urefu wa muktadha (tokeni)",
+        "help" : "Kiasi cha maandishi ambacho mfano wa AI unaweza kuzingatia wakati wa kuchakata (kama haijawekwa, 1047576 itatumika)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Kigezo cha TopP, kutoka 0 hadi 1 (kama huna uhakika acha wazi)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Kazi zinazowezeshwa kwa mfano huu",
+        "help" : "Vipengele vinavyoweza kutumiwa na mfano wakati wa gumzo"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Kidokezo chaguo-msingi cha mfano",
+        "help" : "Hariri kidokezo chaguo-msingi kwa mfano wa gumzo."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya utambulisho."
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee ya utambulisho inayozalishwa kiotomatiki."
+      },
+      "secretType" : {
+        "label" : "Aina ya utambulisho",
+        "help" : "Chagua aina ya utambulisho ili kuunda kwa mfumo wa mbali"
+      },
+      "InsertBtn" : {
+        "label" : "Weka"
+      },
+      "token" : {
+        "label" : "Tokeni",
+        "help" : "Ingiza tokeni."
+      },
+      "user" : {
+        "label" : "Mtumiaji",
+        "help" : "Ingiza mtumiaji anayeonyeshwa na tokeni."
+      },
+      "MainPanel" : {
+        "label" : "Kuunda utambulisho"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "username" : {
+        "label" : "Jina la mtumiaji",
+        "help" : "Ingiza jina la mtumiaji."
+      },
+      "password" : {
+        "label" : "Nenosiri",
+        "help" : "Ingiza nenosiri."
+      },
+      "email" : {
+        "label" : "Barua pepe/Jina la mtumiaji",
+        "help" : "Ingiza barua pepe au jina la mtumiaji linalohusishwa na ufunguo wa ssh."
+      },
+      "key" : {
+        "label" : "Ufunguo wa siri",
+        "help" : "Fungua faili ya ufunguo binafsi na kopi kwenye eneo hili la maandishi."
+      },
+      "passphrase" : {
+        "label" : "Nenosiri la ufunguo",
+        "help" : "Ingiza nenosiri la ufunguo."
+      },
+      "pub" : {
+        "label" : "Ufunguo wa umma",
+        "help" : "Fungua faili ya ufunguo wa umma na kopi kwenye eneo hili la maandishi."
+      },
+      "jsonContent" : {
+        "label" : "Yaliyomo kwenye faili ya uthibitisho wa Google",
+        "help" : "Nakili hapa yaliyomo kwenye faili ya uthibitisho wa Google api uliopakuliwa kutoka kwenye Google cloud api console (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Mtumiaji wa Google wa kuigwa",
+        "help" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho",
+        "placeholder" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee ya yaliyomo inayozalishwa kiotomatiki."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya yaliyopakiwa ya kiingilio cha mfumo wa faili."
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Marejeo ya mradi mzazi."
+      },
+      "upload" : {
+        "label" : "Pakia yaliyomo",
+        "help" : "Bofya kitufe cha kutafuta na uchague faili za zip au faili zingine"
+      },
+      "openZips" : {
+        "label" : "Fungua faili za zip",
+        "help" : "Wezesha kufungua faili za zip na kutoa yaliyomo"
+      },
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Hifadhi na yafanye haya yaliyomo yapatikane kwenye hazina ya maarifa kwa LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "LogsTab" : {
+        "label" : "Rekodi"
+      },
+      "MainPanel" : {
+        "label" : "Kuhariri yaliyopakiwa"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Sanidi mifumo ya ujenzi",
+        "help" : "Orodha ya mifumo ya ujenzi/kufunga ya kuchunguza taarifa za meta na maelezo ya ziada ya vifurushi (acha wazi ikiwa hakuna msimbo wa programu umejumuishwa)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Vipengele vilivyochaguliwa"
+      },
+      "ChooseOk" : {
+        "label" : "Sawa"
+      },
+      "ChooseCancel" : {
+        "label" : "Ghairi"
+      },
+      "EditBtn" : {
+        "help" : "Badilisha vilivyochaguliwa"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Chagua vipengele"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Chagua vipengele"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Hariri upangaji ratiba"
+      },
+      "ConfirmBtn" : {
+        "label" : "Thibitisha"
+      },
+      "AddBtn" : {
+        "label" : "+Ongeza"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Hifadhi na fanya maudhui haya yapatikane kwenye msingi wa maarifa kwa LLm's"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Ushughulikiaji wa msimbo"
+      },
+      "LogsTab" : {
+        "label" : "Kumbukumbu"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri maudhui ya mfumo wa faili yaliyopo"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya yaliyopakiwa ya kifungu cha mfumo wa faili."
+      },
+      "openZips" : {
+        "label" : "Fungua mafaili ya zipu",
+        "help" : "Wezesha kufungua mafaili ya zipu na kuchuja yaliyomo"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee unaozalishwa kiotomatiki wa maudhui."
+      },
+      "tree" : {
+        "label" : "Mafaili au folda zilizochaguliwa",
+        "help" : "Mafaili au folda za mfumo wa faili zilizoshirikiwa zinazopatikana kwenye seva"
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Rejeleo la mradi mzazi."
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya ukaguzi wa masasisho ya maudhui",
+        "help" : "Sanidi ratiba ya mabadiliko ya maudhui ili kuweka mfumo wa retrieve augmented generation umesasishwa"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vigezo vya upangaji wa folda",
+        "help" : "Tafadhali elezea hapa jinsi vigezo vya kupanga folda vimefanywa katika eneo la mfumo wa faili unaloshiriki na Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Sanidi mifumo ya uundaji",
+        "help" : "Orodha ya mifumo ya uundaji/ufungashaji ya kukagua kwa taarifa za meta na maelezo ya ziada ya vitu (achana tupu kama hakuna msimbo wa programu umejumuishwa)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Eneo jipya la kushiriki faili"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Njia kamili"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "mpangilio wa faili ya db au yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "Maelezo"
+      },
+      "CodeHeader" : {
+        "label" : "Msimbo"
+      },
+      "ModifyHeader" : {
+        "label" : "Badilisha"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Folda ya mfumo wa faili ulioshirikiwa imechaguliwa",
+        "help" : "Chagua folda ya seva inayotumika kama njia kuu kwa mfumo wa faili ulioshirikiwa katika shirika lako kama hazina ya nyaraka"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya eneo lililoshirikiwa la mfumo wa faili wa shirika lako"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee unaozalishwa kiotomatiki wa maudhui."
+      },
+      "InsertBtn" : {
+        "label" : "Weka"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri folda ya faili ya seva iliyoshirikiwa"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Hifadhi na fanya maudhui haya yapatikane katika msingi wa maarifa kwa LLm’s"
+      },
+      "MainPanel" : {
+        "label" : "Kuhariri hifadhi ya chanzo/documents ya git"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya hifadhi ya git."
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee iliyoandaliwa moja kwa moja ya hifadhi ya git."
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Rejeleo la mradi wa mzazi."
+      },
+      "contentManagementSystem" : {
+        "label" : "Mfumo wa Git",
+        "help" : "Rejeleo la mfumo wa git uliosetiwa tayari."
+      },
+      "branch" : {
+        "label" : "Tawi",
+        "help" : "Jina la tawi la kutoa nakala (kwa kawaida master, main au develop)"
+      },
+      "identityCode" : {
+        "label" : "Utambulisho unaotumika",
+        "help" : "Chagua utambulisho wa kufanya clone/checkout kwenye mfumo"
+      },
+      "repositoryUri" : {
+        "label" : "URL/anuani ya hifadhi",
+        "help" : "Anuani kamili ya hifadhi ya mbali ya git (kwa kawaida huanza na http:, https: au ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "ya umma",
+        "help" : "Ikiwa ni kweli, ufikiaji wa hifadhi hauhitaji uthibitisho"
+      },
+      "openZips" : {
+        "label" : "Fungua faili za zip",
+        "help" : "Wezesha ufunguzi wa faili za zip na kutoa yaliyomo"
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya ukaguzi wa masasisho ya maudhui",
+        "help" : "Sanidi ratiba ya kubadilisha maudhui ili kuweka mfumo wa uzalishaji ulioboreshwa ukisasishwa"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Sanidi mifumo ya ujenzi",
+        "help" : "Orodha ya mifumo ya ujenzi/kufunga ya kuchunguza taarifa za meta na habari zingine za vitu"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Taarifa kuu"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Tumia mfano wa gumzo"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "chagua"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Chagua mpangilio wa mfano wa gumzo"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Chagua mpangilio wa mfano wa embedding"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "chagua"
+      },
+      "RagSettingsTab" : {
+        "label" : "Mipangilio ya RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Mipangilio ya mfano mkubwa wa lugha na zana zinazoweza kutumika"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Tumia mfano wa embedding"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Mipangilio ya ufikiaji wa usalama"
+      },
+      "MainPanel" : {
+        "label" : "Uhariri wa wasifu wa gumzo wa retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee ya wasifu wa gumzo inayozalishwa kiotomatiki."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya wasifu wa gumzo."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Mtumiaji anachagua msingi wa maarifa",
+        "help" : "Mtumiaji anaweza kuchagua kutoka kwenye msingi wa maarifa anayoweza kufikia na/au kupakia faili zake mwenyewe."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Misingi ya maarifa",
+        "help" : "Misingi ya maarifa ya kutumika katika utafutaji wa hati."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Kiwango cha mlinganisho",
+        "help" : "Kiwango cha mlinganisho kwa utafutaji wa kisemantiki, 0.60–0.65 Uchujaji mdogo, 0.70-0.75 Uchujaji wa kati, 0.80–0.85 Sahihi"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Kiwango cha mlinganisho cha 'hop' ya 2",
+        "help" : "Kiwango cha mlinganisho kwa utafutaji wa kisemantiki, 0.60–0.65 Uchujaji mdogo, 0.70-0.75 Uchujaji wa kati, 0.80–0.85 Sahihi kinachotumika kutoka utafutaji wa pili wa multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Zima 'Multi Hop' rag",
+        "help" : "Zima uwezo wa 'multi hop rag'. Utafutaji wa multi hop hufanya utafutaji wa kisemantiki kwanza na hutumia hati zilizopatikana kama muktadha kwa utafutaji wenyewe wa kisemantiki ili kutoa muktadha mpana zaidi."
+      },
+      "topK" : {
+        "label" : "Vipande vya hati vinavyozingatiwa (TopK)",
+        "help" : "Katika retrieve augmented generation, vipande vya hati N vilivyopatikana vinavyozingatiwa kwenye utafutaji wa kisemantiki"
+      },
+      "enabledFunctions" : {
+        "label" : "Vipengele vilivyowezeshwa kwa RAG chat hii",
+        "help" : "Vipengele vinavyoweza kutumiwa na modeli ya llm wakati wa gumzo na mtumiaji pia kuhusiana na msingi wa maarifa uliochaguliwa"
+      },
+      "prompt" : {
+        "label" : "Prompti",
+        "help" : "Hariri prompti kwa vikao vya retrieve augmented generation."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Ingiza au chagua aina ya kichocheo"
+      },
+      "MainPanel" : {
+        "label" : "Inahariri kichocheo"
+      },
+      "promptCategory" : {
+        "label" : "Aina ya kichocheo",
+        "help" : "Chagua au ingiza aina ya kichocheo."
+      },
+      "prompt" : {
+        "label" : "Kichocheo",
+        "help" : "Hariri kichocheo cha gumzo, tumia {query} kuonyesha swali la mtumiaji na {context} kuonyesha muktadha wa hati/historia uliotumwa kwa LLM."
+      },
+      "code" : {
+        "label" : "Nambari ya kipekee",
+        "help" : "Nambari ya kipekee ya kichocheo inazalishwa kiotomatiki."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya kichocheo."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Badilisha nenosiri"
+      },
+      "YourUserName" : {
+        "label" : "Jina lako la mtumiaji"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Nenosiri la zamani",
+        "help" : "Nenosiri halisi la kuingia"
+      },
+      "newPassword" : {
+        "label" : "Nenosiri jipya",
+        "help" : "nenosiri jipya"
+      },
+      "username" : {
+        "label" : "Barua pepe",
+        "help" : "Barua pepe kama jina la mtumiaji kuingia"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Fomu ya kubadilisha nenosiri"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "ChangePwdBtn" : {
+        "label" : "badilisha nenosiri"
+      },
+      "newPassword1" : {
+        "label" : "Thibitisha nenosiri jipya",
+        "help" : "Thibitisha nenosiri jipya"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "ForMoreInformations" : {
+        "label" : "Kwa maelezo zaidi kuhusu Google custom search API au kupata funguo yako ya api (bila malipo) tembelea: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "msimbo wa kipekee wa usanidi wa google search api."
+      },
+      "MainPanel" : {
+        "label" : "Inahariri kitambulisho cha google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Tokeni ya google search api",
+        "help" : "Chagua au ingiza tokeni ya google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "Kitambulisho cha google search engine",
+        "help" : "Kitambulisho cha google search engine"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Ingiza maelezo ya usanidi wa google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Soga bila misingi ya maarifa",
+        "help" : "Chagua LLMs kwa kikao cha mazungumzo",
+        "placeholder" : "Chagua LLMs kwa kikao cha mazungumzo"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Fungua sehemu ya chaguo za mazungumzo"
+      },
+      "CreateChatBtn" : {
+        "label" : "Soga mpya"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Kikao kipya cha mazungumzo"
+      },
+      "chatProfileCode" : {
+        "label" : "Soga na misingi ya maarifa",
+        "help" : "Chagua wasifu wa kampuni wa mazungumzo ili kuingiliana na nyaraka za kampuni (na zako) pamoja na LLMs",
+        "placeholder" : "Chagua wasifu wa kampuni wa mazungumzo ili kuingiliana na nyaraka za kampuni (na zako) pamoja na LLMs"
+      },
+      "NewChatBtn" : {
+        "label" : "Soga mpya"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Vipindi vya gumzo"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Funga upau wa pembeni"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Unda gumzo jipya na mifano mikubwa ya lugha",
+        "label" : "Gumzo"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Unda gumzo jipya la RAG na maudhui ya kampuni",
+        "label" : "Zungumza na hazina ya maarifa"
+      },
+      "ChatsTitle" : {
+        "label" : "Gumzo"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Fungua sehemu ya Machaguo ya gumzo"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Zungumza na hati",
+        "help" : "Vinjari au tafuta na uchague hati za kufanya kazi nazo"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Chagua faili za kuzungumza nazo"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Vinza au tafuta na uchague nyaraka za kuzungumza nazo"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Thibitisha"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Pakia au chagua hati zako",
+        "help" : "Chagua/pakia hati kutoka eneo lako la mtumiaji"
+      },
+      "fileSearchBtn" : {
+        "label" : "Tafuta"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Tafuta"
+      },
+      "query" : {
+        "label" : "Neno la utafutaji wa maana",
+        "help" : "Ingiza kauli yenye maana inayohusiana na utafutaji wako"
+      },
+      "choosenBrowsing" : {
+        "label" : "Chagua faili kwa kuvinjari vyanzo vya maarifa",
+        "help" : "Chagua faili kwa kuvinjari vyanzo vya pamoja vya maarifa vya kampuni"
+      },
+      "filename" : {
+        "label" : "Jina la faili lililotafutwa",
+        "help" : "Ingiza sehemu ya jina la faili kwa yaliyomo unayotafuta"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Tafuta jina la faili"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Vinza faili za kampuni"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Tafuta kimaudhui"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Chagua faili za kuzungumza nazo"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Badilisha uliyochagua"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Chagua faili za watumiaji"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "okBtn" : {
+        "label" : "Sawa"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Chagua maudhui yaliyopakiwa na mtumiaji"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Misingi ya maarifa & faili za mtumiaji"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+mradi tanzu au kipengele",
+        "help" : "ongeza mradi tanzu au kipengele"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+pakia faili",
+        "help" : "ongeza chanzo cha data ya faili zilizopakiwa"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "ongeza chanzo cha data cha Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "ongeza chanzo cha data cha Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+mfumo wa faili",
+        "help" : "ongeza chanzo cha data cha mfumo wa faili ulioshirikiwa"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "ongeza chanzo cha data cha Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "ongeza chanzo cha data ya hazina ya git kama bitbucket, github au zingine"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "ongeza chanzo cha data cha google drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Mipangilio"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "wasifu wangu"
+      },
+      "logout" : {
+        "label" : "ondoka"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Badilisha lugha"
+      },
+      "MyProfile" : {
+        "label" : "wasifu wako"
+      },
+      "MyProfileItem" : {
+        "label" : "wasifu wako"
+      },
+      "chatMenuItem" : {
+        "label" : "Gumzo"
+      },
+      "setupMenuItem" : {
+        "label" : "Mipangilio"
+      },
+      "adminMenuItem" : {
+        "label" : "Msimamizi"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "hariri wasifu"
+      },
+      "logoutMenuItem" : {
+        "label" : "ondoka"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Inachanganua orodha ya hati"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "TOKENIZATION" : {
+        "description" : "Ugawaji wa hati katika tokeni"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokeni zilizochakatwa",
+        "dataset-1-label" : "Hitilafu katika kuchakata tokeni"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "EMBEDDING" : {
+        "description" : "Kuorodhesha kisemantiki (embedding kwa semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokeni zilizochakatwa",
+        "dataset-1-label" : "Hitilafu katika kuchakata tokeni"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Kuorodhesha vitambulisho/mahusiano/matukio (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Hati ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata hati",
+        "label-2" : "Hati zilizochakatwa"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Hati zilizopokelewa",
+        "dataset-1-label" : "Hati zilizochakatwa",
+        "dataset-2-label" : "Hati zilizo na hitilafu",
+        "dataset-3-label" : "Hati zilizokataliwa"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Njia zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata njia"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Inachambua orodha ya nyaraka"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "TOKENIZATION" : {
+        "description" : "Upasaji wa tokeni wa nyaraka"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "EMBEDDING" : {
+        "description" : "Uorodheshaji wa semantic (embedding kwa semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Njia zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata njia"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Uorodheshaji wa vitambulisho/mahusiano/matukio (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Nyaraka ambazo hazijashughulikiwa",
+        "label-1" : "Hitilafu wakati wa kuchakata nyaraka",
+        "label-2" : "Nyaraka zilizochakatwa"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Njia zilizochakatwa",
+        "dataset-1-label" : "Hitilafu wakati wa kuchakata njia"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Nyaraka zilizopokelewa",
+        "dataset-1-label" : "Nyaraka zilizochakatwa",
+        "dataset-2-label" : "Nyaraka zenye hitilafu",
+        "dataset-3-label" : "Nyaraka zilizotupwa"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Nunua kiungo cha mkopo wa apy key"
+      },
+      "ModifyBtn" : {
+        "label" : "Badilisha",
+        "help" : "Tazama/badilisha mipangilio ya muundo wa mfano"
+      },
+      "ExistingModelCode" : {
+        "label" : "Msimbo"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Maelezo"
+      },
+      "ExistingModelType" : {
+        "label" : "Aina ya mfano"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Mipangilio iliyopo"
+      },
+      "ProviderWWW" : {
+        "label" : "Kiungo cha tovuti"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Vithibitisho vya mtoa huduma"
+      },
+      "ProviderInfos" : {
+        "label" : "Maelezo ya mtoa huduma"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/vithibitisho",
+        "help" : "Chagua api key au vithibitisho kwa mtoa huduma huyu"
+      },
+      "NewApiKey" : {
+        "label" : "Api key mpya",
+        "help" : "Weka api key mpya itakayotumiwa na mtoa huduma huyu"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Tumia vilivyopo au vipya",
+        "help" : "Tumia vithibitisho vilivyopo au tengeneza vipya kwa mtoa huduma huyu"
+      },
+      "NewUserName" : {
+        "label" : "Jina la mtumiaji",
+        "help" : "Jina la mtumiaji linalotumika kufikia huduma za mtoa huduma"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Mfano mpya wa embedding",
+        "help" : "Tengeneza usanidi mpya wa mfano wa embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Mfano mpya wa gumzo",
+        "help" : "Tengeneza usanidi mpya wa mfano wa gumzo"
+      },
+      "NewModelDialog" : {
+        "label" : "Ongeza mfano mpya"
+      },
+      "PiSave" : {
+        "label" : "Hifadhi"
+      },
+      "NewModelsButton" : {
+        "label" : "Miundo mipya",
+        "help" : "Tengeneza usanidi mpya wa mifano"
+      },
+      "NewModelsDialog" : {
+        "label" : "Ongeza mifano mipya"
+      },
+      "baseUrl" : {
+        "label" : "Base api url",
+        "help" : "Base url kwa huduma za api za mtoa huduma"
+      },
+      "ModelTypePanel" : {
+        "label" : "Ongeza mifano mipya"
+      },
+      "ModelsChoices" : {
+        "label" : "Chaguo za mifano"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Uteuzi wa mifano iliyopendekezwa"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Mfano wa embedding",
+        "help" : "Chagua moja ya mifano ya embedding iliyofafanuliwa tayari"
+      },
+      "chatPresetChoice" : {
+        "label" : "Mfano wa gumzo",
+        "help" : "Chagua moja ya mifano ya gumzo iliyofafanuliwa tayari"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Uteuzi wa mifano ya juu"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Mfano wa embedding",
+        "help" : "Chagua moja ya mifano ya embedding iliyochapishwa na mtoa huduma"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Mfano wa gumzo",
+        "help" : "Chagua moja ya mifano ya gumzo iliyochapishwa na mtoa huduma"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Tumia hali hii ya uteuzi ikiwa wewe ni mtaalam au kwa kuangalia kwenye tovuti ya mtoa huduma ni mifano ipi inafaa mahitaji yako. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa gumzo",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa gumzo uliosanidiwa"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Tunapendekeza orodha ifuatayo ya mifano "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa embedding",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa embedding uliosanidiwa"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa gumzo",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa gumzo uliosanidiwa"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "weka kama mfano chaguo-msingi wa embedding",
+        "help" : "Weka mfano huu kama mfano chaguo-msingi, utatumika kwa kila kazi yenye hakuna mfano wa embedding uliosanidiwa"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Tumia hali hii ya uteuzi ikiwa wewe ni mtaalam au kwa kuangalia kwenye tovuti ya mtoa huduma ni mifano ipi inafaa mahitaji yako. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Unda na wezesha"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Unda na wezesha"
+      },
+      "ProviderNameField" : {
+        "label" : "Mtoa huduma"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Mtoa huduma anahitaji kitambulisho",
+        "help" : "Programu ya mtoa huduma/server imepangwa kwa ufikiaji ulioidhinishwa kupitia kingo ya api au kitambulisho kingine"
+      },
+      "baseUrl1" : {
+        "label" : "Base api url",
+        "help" : "Base url ya mtoa huduma kwa huduma za api"
+      },
+      "enableAllFunctions" : {
+        "label" : "wezesha simu zote za kazi",
+        "help" : "Washa zana zote na simu za kazi zinazopatikana, kama haitowekwa itawezekana kuzianisha baadaye kwenye paneli ya utawala wa llms"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Mtoa huduma wa AI wa mbali yuko sawa",
+        "detail" : "Mtoa huduma yuko hewani na amesanidiwa ipasavyo"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operesheni imeshindikana",
+        "detail" : "Haiwezi kuthibitisha kwa vithibitisho vilivyowekwa"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "Sawa!",
+        "detail" : "Operesheni imekamilika kwa mafanikio"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Hitilafu wakati wa kutiririsha majibu ya gumzo",
+        "detail" : "Hitilafu ya seva: class org.neo4j.driver.internal.value.StringValue haiwezi kubadilishwa kuwa class java.lang.String (org.neo4j.driver.internal.value.StringValue iko kwenye moduli isiyojulikana ya upakiaji 'app'; java.lang.String iko kwenye moduli java.base ya upakiaji 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Imehifadhiwa kwa mafanikio",
+        "detail" : "Shughuli ya usasishaji imekamilika kwa mafanikio"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Hitilafu ya kuwasiliana na seva ya Ollama ",
+        "detail" : "Hitilafu ya mtandao kuwasiliana na mfumo wa mbali kuchukua maudhui\n orodha ya mifano Hitilafu kufanya kazi na url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Unaweza kufuta hii",
+        "detail" : "Data inayoonekana sasa inaweza kufutwa salama"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Huwezi kufuta hii",
+        "detail" : "Kitu hiki kinarejelewa kutoka sehemu nyingine za programu"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Pakia faili za kuzungumza nazo"
+      },
+      "ChooseFile" : {
+        "help" : "Chagua faili"
+      },
+      "UploadFile" : {
+        "help" : "Pakia faili"
+      },
+      "DragDropHere" : {
+        "label" : "Buruta na udondoshe faili hapa ili kupakia"
+      },
+      "RemoveAll" : {
+        "help" : "Ondoa vyote"
+      },
+      "UploadPending" : {
+        "label" : "Inasubiri kupakiwa"
+      },
+      "CompletedData" : {
+        "label" : "Imekamilika"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Sanidi graphrag katika eneo la usanidi ikiwa unataka kuitumia kwenye sehemu hii"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Mipangilio ya graphrag"
+      },
+      "button-help" : {
+        "label" : "Bofya hapa kusanidi uchimbaji wa taarifa kwa graphrag (bado haijasanidiwa)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Ongeza usanidi"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Unda"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Unda muunganiko wa Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "delegatedUser" : {
+        "label" : "Mtumiaji wa Google wa kuigwa",
+        "help" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho",
+        "placeholder" : "Mtumiaji atakayeigizwa na hizi taarifa za uthibitisho"
+      },
+      "jsonContent" : {
+        "label" : "Yaliyomo ya Google credentials json",
+        "help" : "Unda Google Credentials zenye ufikiaji wa workspace/team drives zako kwenye Google Console Cloud na badilisha hapa yaliyomo kwenye faili la json ulilopakua (https://console.cloud.google.com/).",
+        "placeholder" : "Unda Google Credentials zenye ufikiaji wa workspace/team drives zako kwenye Google Console Cloud na badilisha hapa yaliyomo kwenye faili la json ulilopakua (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "PublishBtn" : {
+        "label" : "Chapisha!",
+        "help" : "Inaokoa na kufanya maudhui haya yapatikane katika hifadhidata ya maarifa kwa LLm's"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "MainPanel" : {
+        "label" : "Kushiriki maudhui ya google drive"
+      },
+      "SettingsTab" : {
+        "label" : "Mipangilio"
+      },
+      "LogsTab" : {
+        "label" : "Kumbukumbu"
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya maudhui yaliyopakiwa ya google drive."
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee wa maudhui uliotengenezwa kiotomatiki."
+      },
+      "tree" : {
+        "label" : "Faili au folda iliyochaguliwa",
+        "help" : "Maeneo na kurasa zilizoshirikiwa kwenye google drive"
+      },
+      "driveSystemCode" : {
+        "label" : "Usanidi wa google drive",
+        "help" : "Marejeleo ya mfumo wa google drive ulioshasanidiwa."
+      },
+      "openZips" : {
+        "label" : "Fungua faili za zip",
+        "help" : "Wezesha kufungua faili za zip na kutoa maudhui"
+      },
+      "parentProjectCode" : {
+        "label" : "Mradi",
+        "help" : "Marejeleo ya mradi mzazi."
+      },
+      "programmedTables" : {
+        "label" : "Ratiba ya ukaguzi wa masasisho ya maudhui",
+        "help" : "Sanidi ratiba ya maudhui yaliyobadilishwa ili kuweka mfumo wa retrieve augmented generation up-to-date"
+      },
+      "catalogingCriteria" : {
+        "label" : "Vigezo vya upangaji wa folda na mafolda",
+        "help" : "Tafadhali eleza hapa jinsi vigezo vya upangaji wa mafaili na mafolda vilivyofanyika kwenye maudhui ya google drive yaliyoshirikiwa na Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Mipangilio ya jumla"
+      },
+      "CancelBtn" : {
+        "label" : "Ghairi"
+      },
+      "DeleteBtn" : {
+        "label" : "Futa"
+      },
+      "SaveBtn" : {
+        "label" : "Hifadhi"
+      },
+      "MainPanel" : {
+        "label" : "Hariri muunganiko wa google drive"
+      },
+      "code" : {
+        "label" : "Msimbo wa kipekee",
+        "help" : "Msimbo wa kipekee uliotengenezwa kiotomatiki wa mfumo wa google drive."
+      },
+      "description" : {
+        "label" : "Maelezo",
+        "help" : "Weka maelezo ya mfumo wa google drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Utambulisho unaotumika",
+        "help" : "Chagua au unda utambulisho wa kufikia mfumo wa google drive"
+      }
+    }
+  }
+}

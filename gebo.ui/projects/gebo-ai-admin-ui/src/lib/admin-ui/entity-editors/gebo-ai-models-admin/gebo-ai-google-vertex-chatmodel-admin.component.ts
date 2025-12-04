@@ -19,10 +19,10 @@
  * accessibility and function settings.
  */
 
-import { Component, Injector } from "@angular/core";
+import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { FunctionsLookupControllerService, GBaseChatModelChoice, GGoogleVertexChatModelConfig, GLookupEntry, GoogleVertexChatModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
@@ -36,9 +36,13 @@ import { isValidUrl } from "../utils/url-ok";
 @Component({
     selector: "gebo-ai-google-vertex-chat-model-admin-component",
     templateUrl: "gebo-ai-google-vertex-chatmodel-admin.component.html",
-    standalone: false
+    standalone: false, providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
+        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGoogleVertexChatModelAdminComponent),
+        multi: false
+    }]
 })
-export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditingComponent<GGoogleVertexChatModelConfig> {
+export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<GGoogleVertexChatModelConfig> {
     protected override entityName: string = "GGoogleVertexChatModelConfig";
     allowedTypes: SecretInfo.SecretTypeEnum[] = [ SecretInfo.SecretTypeEnum.TOKEN];
     override formGroup: FormGroup<any> = new FormGroup({
@@ -200,15 +204,5 @@ export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditing
         }))
     }
     
-    /**
-     * Checks if a configuration can be deleted.
-     * Currently always returns true as there are no specific deletion constraints.
-     * 
-     * @param value The configuration to check
-     * @returns An Observable with the deletion check result
-     */
-    override canBeDeleted(value: GGoogleVertexChatModelConfig): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "" });
-    }
-
+   
 }

@@ -15,12 +15,12 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { BrowserModule } from "@angular/platform-browser";
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-rest-api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule } from "@Gebo.ai/reusable-ui";
@@ -35,6 +35,12 @@ import { definePreset } from "@primeng/themes";
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
 import { CookieService } from 'ngx-cookie-service';
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { PopoverModule } from 'primeng/popover';
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader();
+}
 export function getBaseUrl() {
   let host = document.location.hostname;
   let port = document.location.port;
@@ -49,7 +55,7 @@ export function getBaseUrl() {
 export const routes: Routes = [
   { path: 'ui', redirectTo: "ui/chat", pathMatch: "full" },
   { path: '', redirectTo: "ui/chat", pathMatch: "full" },
-  { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule), pathMatch: 'full' },
+  { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule) },
   { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
   { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
 
@@ -96,29 +102,44 @@ const GeboAIPreset = definePreset(Aura, {
     GeboAiChatApiModule,
     MegaMenuModule,
     LoginModule,
-    FastSetupModule,    
+    FastSetupModule,
     BrowserAnimationsModule,
     GeboAIUserProfileModule,
     ConfirmDialogModule,
     MonacoEditorModule.forRoot(),
+    TranslateModule.forRoot({
+      lang: "en",
+      fallbackLang: "en",
+      loader: { provide: TranslateLoader, useFactory: HttpLoaderFactory, deps: [HttpClient] }
+
+    }),    
     GeboSetupWizardsModule,
     OAuthModule.forRoot(),
-    RouterModule.forRoot(routes)], providers: [
-      GeboBackendListService,
-      CookieService,
-      provideAnimationsAsync(),
-      providePrimeNG({
-        theme: {
-          preset: GeboAIPreset,
-          options: {
-            darkModeSelector: false || 'none',
+    RouterModule.forRoot(routes), 
+    GeboAIFieldTranslationContainerModule.forRoot(),PopoverModule],
 
-          }
+  providers: [
+    GeboBackendListService,
+    CookieService,
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: GeboAIPreset,
+        options: {
+          darkModeSelector: false || 'none',
+
         }
-      }),
-      { provide: BASE_PATH, useFactory: getBaseUrl },
-      { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-      ConfirmationService, provideHttpClient(withInterceptorsFromDi())]
+      }
+    }),
+    { provide: BASE_PATH, useFactory: getBaseUrl },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+
+    {
+      provide: TRANSLATE_HTTP_LOADER_CONFIG,
+      useValue: { prefix: '/assets/i18n/', suffix: '.json' }
+    }
+    ,
+    ConfirmationService, provideHttpClient(withInterceptorsFromDi())]
 })
 export class AppModule {
 

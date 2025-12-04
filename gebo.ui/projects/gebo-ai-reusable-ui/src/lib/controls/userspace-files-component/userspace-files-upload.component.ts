@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -29,6 +29,7 @@ import { BaseEntityEditingComponent } from "../base-entity-editing-component/bas
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /**
  * Component responsible for managing file uploads to user workspace.
@@ -38,7 +39,11 @@ import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output
 @Component({
     selector: "gebo-ui-userspace-fileuploads-component",
     templateUrl: "userspace-files-upload.component.html",
-    providers: [UserspaceFilesUploadModelService],
+    providers: [UserspaceFilesUploadModelService, {
+            provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
+        },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceFilesUploadComponent")
+    }],
     standalone: false
 })
 export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingComponent<UserspaceFilesUploadModel> {
@@ -47,12 +52,12 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      * The entity name used for identification in the parent component.
      */
     protected override entityName: string = "UserspaceFilesUploadModel";
-    
+
     /**
      * Flat list of allowed file extensions separated by commas.
      */
     filesExtensionsFlatList: string = "";
-    
+
     /**
      * Form group for managing the upload form controls.
      */
@@ -62,19 +67,19 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
         userspaceFolder: new FormControl(),
         userspaceFiles: new FormControl()
     });
-    
+
     /**
      * Form group for managing file deletion.
      */
-    deleteFormGroup:FormGroup<any>=new FormGroup({
-        choosed:new FormControl()
+    deleteFormGroup: FormGroup<any> = new FormGroup({
+        choosed: new FormControl()
     });
-    
+
     /**
      * Flag indicating whether the server is currently executing a process.
      * Used to prevent concurrent operations.
      */
-    private serverExecuting:boolean=true;
+    private serverExecuting: boolean = true;
 
     /**
      * Component constructor that initializes services and dependencies.
@@ -94,31 +99,31 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
         private userspaceService: UserspaceFilesUploadModelService,
         @Inject(BASE_PATH)
         public baseUrl: string,
-        private contentTypeService:IngestionFileTypesLibraryControllerService,
+        private contentTypeService: IngestionFileTypesLibraryControllerService,
         outputForwardingService?: GeboUIOutputForwardingService) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
-        this.manageOperationStatus=true;
+        this.manageOperationStatus = true;
     }
 
     /**
      * Periodically checks if the backend is busy processing files.
      * Sets the serverExecuting flag based on the response.
      */
-    private checkBusyBackend(){
+    private checkBusyBackend() {
         if (this.entity?.userspaceFolder) {
-        this.userspaceService.pollStatus(this.entity?.userspaceFolder).subscribe({
-            next:(statusValue)=>{
-                this.serverExecuting=statusValue.underPubishingAlgorithm===true;
+            this.userspaceService.pollStatus(this.entity?.userspaceFolder).subscribe({
+                next: (statusValue) => {
+                    this.serverExecuting = statusValue.underPubishingAlgorithm === true;
 
-            },
-            complete:()=>{
-                setTimeout(()=>{
-                    this.checkBusyBackend();
-                },15000);
-            }
+                },
+                complete: () => {
+                    setTimeout(() => {
+                        this.checkBusyBackend();
+                    }, 15000);
+                }
 
-        })
-    }
+            })
+        }
     }
 
     /**
@@ -127,38 +132,38 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        const executingAlreadyValidator:ValidatorFn=(control: AbstractControl)=>{
-            if (this.serverExecuting===false) {
+        const executingAlreadyValidator: ValidatorFn = (control: AbstractControl) => {
+            if (this.serverExecuting === false) {
                 return null;
-            }else {
+            } else {
                 return {
-                    running:"Already running"
+                    running: "Already running"
                 };
             }
         }
         this.formGroup.setValidators(executingAlreadyValidator);
-        this.loadingRelatedBackend=true;
+        this.loadingRelatedBackend = true;
         this.contentTypeService.getAllFileTypes().subscribe({
-            next:(value)=>{
-                const extensions:string[]=[];
-                value.forEach(x=>{
+            next: (value) => {
+                const extensions: string[] = [];
+                value.forEach(x => {
                     if (x.extensions) {
-                        x.extensions.forEach(e=>{
+                        x.extensions.forEach(e => {
                             extensions.push(e);
                         });
                     }
                 });
-                let extstring:string="";
-                extensions.forEach((e,i)=>{
-                    extstring+=e;
-                    if (i<extensions.length-1) {
-                        extstring+=",";
+                let extstring: string = "";
+                extensions.forEach((e, i) => {
+                    extstring += e;
+                    if (i < extensions.length - 1) {
+                        extstring += ",";
                     }
                 });
-                this.filesExtensionsFlatList=extstring;
+                this.filesExtensionsFlatList = extstring;
             },
-            complete:()=>{
-                this.loadingRelatedBackend=false;
+            complete: () => {
+                this.loadingRelatedBackend = false;
             }
         });
         this.checkBusyBackend();
@@ -169,7 +174,7 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      * @param actualValue The loaded UserspaceFilesUploadModel
      */
     protected override onLoadedPersistentData(actualValue: UserspaceFilesUploadModel): void {
-        
+
     }
 
     /**
@@ -187,9 +192,9 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      * @returns An observable of the published model
      */
     private publish(value: UserspaceFilesUploadModel): Observable<UserspaceFilesUploadModel> {
-        return this.userspaceService.publish(value).pipe(map(r=>{
+        return this.userspaceService.publish(value).pipe(map(r => {
             this.updateLastOperationStatus(r);
-            return r.result?r.result:value;
+            return r.result ? r.result : value;
         }));
     }
 
@@ -236,7 +241,7 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
     onBasicUploadAuto(event: FileUploadEvent) {
         //this.doReloadByCode();
         console.log("onBasicUploadAuto");
-        this.loadingRelatedBackend=false;
+        this.loadingRelatedBackend = false;
         this.doReloadByCode();
     }
 
@@ -246,7 +251,7 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      */
     onBeforeUpload(event: FileBeforeUploadEvent) {
         console.log("onBeforeUpload");
-        this.loadingRelatedBackend=true;
+        this.loadingRelatedBackend = true;
     }
 
     /**
@@ -254,7 +259,7 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      * @param event The progress event data
      */
     onProgress(event: FileProgressEvent) {
-        if (event.originalEvent.type===HttpEventType.Sent) {
+        if (event.originalEvent.type === HttpEventType.Sent) {
             console.log("onProgress sent");
         }
     }

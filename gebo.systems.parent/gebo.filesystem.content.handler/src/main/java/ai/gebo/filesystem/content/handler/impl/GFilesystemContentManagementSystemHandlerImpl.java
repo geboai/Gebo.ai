@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.filesystem.content.handler.impl;
 
@@ -53,8 +50,8 @@ import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDa
 /**
  * AI generated comments
  * 
- * Implementation of the filesystem content management system handler.
- * This service manages file system interactions for the content management system,
+ * Implementation of the filesystem content management system handler. This
+ * service manages file system interactions for the content management system,
  * handling operations like file discovery, consumption, and change tracking.
  */
 @Service
@@ -66,13 +63,14 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	 * Constructor for the filesystem content management system handler.
 	 * 
 	 * @param buildSystemHandlerRepository Repository for build system handlers
-	 * @param contentHandler Factory for document references
-	 * @param configurationsDao DAO for content management system configurations
-	 * @param endpointsDao DAO for project endpoint configurations
-	 * @param localFolderDiscoveryService Service for discovering local folders
-	 * @param persistentObjectManager Manager for persistent objects
-	 * @param messageBroker Broker for message handling
-	 * @param ingestionHandler Handler for document reference ingestion
+	 * @param contentHandler               Factory for document references
+	 * @param configurationsDao            DAO for content management system
+	 *                                     configurations
+	 * @param endpointsDao                 DAO for project endpoint configurations
+	 * @param localFolderDiscoveryService  Service for discovering local folders
+	 * @param persistentObjectManager      Manager for persistent objects
+	 * @param messageBroker                Broker for message handling
+	 * @param ingestionHandler             Handler for document reference ingestion
 	 */
 	public GFilesystemContentManagementSystemHandlerImpl(
 			IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
@@ -81,14 +79,16 @@ public class GFilesystemContentManagementSystemHandlerImpl
 			IGContentManagementSystemConfigurationDao<GFilesystemContentManagementSystem> configurationsDao,
 			IGProjectEndpointRuntimeConfigurationDao<GFilesystemProjectEndpoint> endpointsDao,
 			IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
-			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker, IGDocumentReferenceIngestionHandler ingestionHandler) {
+			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
+			IGDocumentReferenceIngestionHandler ingestionHandler) {
 		super(buildSystemHandlerRepository, contentHandler, configurationsDao, endpointsDao,
 				localFolderDiscoveryService, persistentObjectManager, messageBroker, ingestionHandler);
 
 	}
 
 	/**
-	 * Static definition of the content management system type handled by this implementation.
+	 * Static definition of the content management system type handled by this
+	 * implementation.
 	 */
 	private static final GContentManagementSystemType handledSystemType = new GContentManagementSystemType();
 	static {
@@ -110,21 +110,23 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	}
 
 	/**
-	 * Implements the actual content consumption process for the filesystem.
-	 * Creates a root item and processes all files in the specified path.
+	 * Implements the actual content consumption process for the filesystem. Creates
+	 * a root item and processes all files in the specified path.
 	 * 
 	 * @param contentManagementConfig The filesystem CMS configuration
-	 * @param buildSystems List of build systems
-	 * @param endpoint The filesystem project endpoint
-	 * @param consumer The content consumer
-	 * @param messagesConsumer The messages consumer
-	 * @param errorConsumer The error consumer
-	 * @throws GeboContentHandlerSystemException If an error occurs during consumption
+	 * @param buildSystems            List of build systems
+	 * @param endpoint                The filesystem project endpoint
+	 * @param consumer                The content consumer
+	 * @param messagesConsumer        The messages consumer
+	 * @param errorConsumer           The error consumer
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           consumption
 	 */
 	@Override
 	protected void consumeImplementation(GFilesystemContentManagementSystem contentManagementConfig,
 			List<GBuildSystem> buildSystems, GFilesystemProjectEndpoint endpoint, IGContentConsumer consumer,
-			IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer) throws GeboContentHandlerSystemException {
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer)
+			throws GeboContentHandlerSystemException {
 
 		GVirtualFolder rootItem = createRootItem(contentManagementConfig, endpoint);
 		consumer.accept(rootItem);
@@ -140,7 +142,7 @@ public class GFilesystemContentManagementSystemHandlerImpl
 					return true;
 				}
 			};
-			if (Files.exists(file, LinkOption.NOFOLLOW_LINKS)) {
+			if (Files.exists(file)) {
 				this.consume(rootItem, contentManagementConfig, buildSystems, endpoint, file, predicate, consumer,
 						messagesConsumer, errorConsumer);
 			} else
@@ -152,7 +154,7 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	/**
 	 * Finds a project endpoint by its system and endpoint codes.
 	 * 
-	 * @param systemCode The system code
+	 * @param systemCode          The system code
 	 * @param projectEndpointCode The project endpoint code
 	 * @return The found filesystem project endpoint
 	 * @throws GeboContentHandlerSystemException If the endpoint cannot be found
@@ -181,7 +183,8 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	 * 
 	 * @param projectEndPoint The project endpoint
 	 * @return The filesystem content management system, or null if none exists
-	 * @throws GeboContentHandlerSystemException If an error occurs while retrieving the system
+	 * @throws GeboContentHandlerSystemException If an error occurs while retrieving
+	 *                                           the system
 	 */
 	@Override
 	public GFilesystemContentManagementSystem getSystem(GFilesystemProjectEndpoint projectEndPoint)
@@ -194,16 +197,17 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	 * Processes changed files by categorizing them as added, modified, or deleted
 	 * and handling each category appropriately.
 	 * 
-	 * @param endpoint The filesystem project endpoint
-	 * @param contentConsumer The content consumer
+	 * @param endpoint         The filesystem project endpoint
+	 * @param contentConsumer  The content consumer
 	 * @param messagesConsumer The messages consumer
-	 * @param errorConsumer The error consumer
-	 * @param changedFiles The set of changed files to process
-	 * @throws GeboContentHandlerSystemException If an error occurs during processing
+	 * @param errorConsumer    The error consumer
+	 * @param changedFiles     The set of changed files to process
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           processing
 	 */
 	void consume(GFilesystemProjectEndpoint endpoint, IGContentConsumer contentConsumer,
-			IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer, ChangedFiles changedFiles)
-			throws GeboContentHandlerSystemException {
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
+			ChangedFiles changedFiles) throws GeboContentHandlerSystemException {
 		List<Path> added = new ArrayList<Path>();
 		List<Path> modified = new ArrayList<Path>();
 		List<Path> deleted = new ArrayList<Path>();
@@ -234,16 +238,18 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	/**
 	 * Processes deleted files by notifying the system of their removal.
 	 * 
-	 * @param endpoint The filesystem project endpoint
-	 * @param root The root directory
-	 * @param contentConsumer The content consumer
+	 * @param endpoint         The filesystem project endpoint
+	 * @param root             The root directory
+	 * @param contentConsumer  The content consumer
 	 * @param messagesConsumer The messages consumer
-	 * @param errorConsumer The error consumer
-	 * @param deleted List of deleted file paths
-	 * @throws GeboContentHandlerSystemException If an error occurs during processing
+	 * @param errorConsumer    The error consumer
+	 * @param deleted          List of deleted file paths
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           processing
 	 */
 	private void consumeDeletedFiles(GFilesystemProjectEndpoint endpoint, Path root, IGContentConsumer contentConsumer,
-			IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer, List<Path> deleted) throws GeboContentHandlerSystemException {
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer, List<Path> deleted)
+			throws GeboContentHandlerSystemException {
 		for (Path file : deleted) {
 			GVirtualFolder vfolder = consumeAndReturnParentVirtualFolder(endpoint, root, file, contentConsumer);
 			consumeDeletedDocument(endpoint, vfolder, file, contentConsumer, messagesConsumer, errorConsumer);
@@ -253,16 +259,18 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	/**
 	 * Processes modified files by updating their content in the system.
 	 * 
-	 * @param endpoint The filesystem project endpoint
-	 * @param root The root directory
-	 * @param contentConsumer The content consumer
+	 * @param endpoint         The filesystem project endpoint
+	 * @param root             The root directory
+	 * @param contentConsumer  The content consumer
 	 * @param messagesConsumer The messages consumer
-	 * @param errorConsumer The error consumer
-	 * @param modified List of modified file paths
-	 * @throws GeboContentHandlerSystemException If an error occurs during processing
+	 * @param errorConsumer    The error consumer
+	 * @param modified         List of modified file paths
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           processing
 	 */
 	private void consumeModifiedFiles(GFilesystemProjectEndpoint endpoint, Path root, IGContentConsumer contentConsumer,
-			IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer, List<Path> modified) throws GeboContentHandlerSystemException {
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer, List<Path> modified)
+			throws GeboContentHandlerSystemException {
 		for (Path file : modified) {
 			GVirtualFolder vfolder = consumeAndReturnParentVirtualFolder(endpoint, root, file, contentConsumer);
 			consumeDocument(endpoint, vfolder, file, contentConsumer, messagesConsumer, errorConsumer);
@@ -272,16 +280,18 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	/**
 	 * Processes newly added files by adding them to the system.
 	 * 
-	 * @param endpoint The filesystem project endpoint
-	 * @param root The root directory
-	 * @param contentConsumer The content consumer
+	 * @param endpoint         The filesystem project endpoint
+	 * @param root             The root directory
+	 * @param contentConsumer  The content consumer
 	 * @param messagesConsumer The messages consumer
-	 * @param errorConsumer The error consumer
-	 * @param added List of added file paths
-	 * @throws GeboContentHandlerSystemException If an error occurs during processing
+	 * @param errorConsumer    The error consumer
+	 * @param added            List of added file paths
+	 * @throws GeboContentHandlerSystemException If an error occurs during
+	 *                                           processing
 	 */
 	private void consumeAddedFiles(GFilesystemProjectEndpoint endpoint, Path root, IGContentConsumer contentConsumer,
-			IGUserMessagesConsumer messagesConsumer,IGContentsAccessErrorConsumer errorConsumer, List<Path> added) throws GeboContentHandlerSystemException {
+			IGUserMessagesConsumer messagesConsumer, IGContentsAccessErrorConsumer errorConsumer, List<Path> added)
+			throws GeboContentHandlerSystemException {
 		for (Path file : added) {
 			GVirtualFolder vfolder = consumeAndReturnParentVirtualFolder(endpoint, root, file, contentConsumer);
 			consumeDocument(endpoint, vfolder, file, contentConsumer, messagesConsumer, errorConsumer);
@@ -289,15 +299,16 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	}
 
 	/**
-	 * Creates and returns the parent virtual folder for a given file path.
-	 * Creates the entire folder hierarchy if it doesn't exist.
+	 * Creates and returns the parent virtual folder for a given file path. Creates
+	 * the entire folder hierarchy if it doesn't exist.
 	 * 
 	 * @param endpoint The filesystem project endpoint
-	 * @param path The base path
-	 * @param file The file path
+	 * @param path     The base path
+	 * @param file     The file path
 	 * @param consumer The content consumer
 	 * @return The parent virtual folder for the given file
-	 * @throws GeboContentHandlerSystemException If an error occurs during folder creation
+	 * @throws GeboContentHandlerSystemException If an error occurs during folder
+	 *                                           creation
 	 */
 	protected GVirtualFolder consumeAndReturnParentVirtualFolder(GFilesystemProjectEndpoint endpoint, Path path,
 			Path file, IGContentConsumer consumer) throws GeboContentHandlerSystemException {
@@ -343,6 +354,12 @@ public class GFilesystemContentManagementSystemHandlerImpl
 	public String getMessagingModuleId() {
 
 		return GStandardModulesConstraints.SHARED_FILESYSTEM_MODULE;
+	}
+
+	@Override
+	public boolean isContentsOnLocalFilesystem() {
+
+		return true;
 	}
 
 }

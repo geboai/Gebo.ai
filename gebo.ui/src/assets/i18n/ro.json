@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "Limba implicită a sistemului",
+        "help" : "Limba implicită a sistemului pentru această instalare Gebo.ai"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail folosit ca nume de utilizator pentru autentificare"
+      },
+      "passwordC" : {
+        "label" : "Confirmă parola",
+        "help" : "Confirmă parola"
+      },
+      "password" : {
+        "label" : "Parolă",
+        "help" : "Parola pentru autentificare (cel puțin 8 caractere)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " parolele nu corespund "
+      },
+      "LocalAdmin" : {
+        "label" : "Creează contul local de administrator"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "Vei folosi acest cont în viitor pentru configurare/administrare, aceste date vor rămâne locale pe sistemul tău și nu vor fi trimise pe rețea"
+      },
+      "EnterBtn" : {
+        "label" : "Mergi la pagina de autentificare pentru a intra"
+      },
+      "SetupPage" : {
+        "label" : "Configurează instalarea gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Creează configurarea sistemului"
+      },
+      "LicenceFieldSet" : {
+        "label" : "Citește și acceptă licența"
+      },
+      "AcceptMark" : {
+        "label" : "Accept termenii",
+        "help" : "Prin apăsarea aici accepți termenii și condițiile din licență"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "e-mail",
+        "help" : "E-mail ca nume de utilizator pentru autentificare"
+      },
+      "password" : {
+        "label" : "Parolă",
+        "help" : "Parolă pentru autentificare"
+      },
+      "LoginPanel" : {
+        "label" : "Autentificare în gebo.ai"
+      },
+      "LoginBtn" : {
+        "label" : "Autentificare"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "OK!",
+        "detail" : "Operațiune realizată cu succes"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "Bun venit la Gebo.ai",
+        "detail" : "Introduceți numele de utilizator și parola pentru a vă conecta"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "Operațiunea a eșuat",
+        "detail" : "Nu se poate autentifica cu datele furnizate"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "OK!",
+        "detail" : "Operațiunea a fost finalizată cu succes"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "Bun venit la gebo.ai",
+        "detail" : "Introduceți numele de utilizator și parola pentru a vă autentifica"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Configurație Oauth2"
+      },
+      "ProviderNameHeader" : {
+        "label" : "Nume furnizor"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "MainPanel" : {
+        "label" : "Setări de securitate Oauth2"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "Înapoi la pagina principală de configurare"
+      },
+      "WizardUi" : {
+        "label" : "Alege o secțiune de configurare"
+      },
+      "adminUserSetupSection" : {
+        "label" : "Configurare cont administrator & alte conturi",
+        "description" : "Este necesar cel puțin un cont de administrare pentru a vă asigura că această instalație Gebo.ai este gestionată corespunzător, adăugați alți utilizatori dacă este necesar"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Director de lucru Gebo.ai",
+        "description" : "Configurează un director de lucru, acesta va fi folderul unde se stochează configurațiile și toate fișierele de lucru ale acestei instalări. Este, de asemenea, o idee bună să îl salvezi periodic."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "Configurare baza de date vectorială",
+        "description" : "Este necesară configurarea unei baze de date vectoriale pentru ca Gebo.ai să poată oferi servicii de generare augmentată, puteți alege între o bază de date locală, Qdrant sau Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "Autentificare unică, Oauth2",
+        "description" : "Autentificare și configurare clienți Oauth2 pentru autentificare unică"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "Configurare modele lingvistice mari",
+        "description" : "Configurează diverse LLMs cu servicii backend în cloud sau local/LAN, cel puțin un model de chat și unul de embedding trebuie configurate pentru ca software-ul să funcționeze corect."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "Configurare graph rag/extracție cunoștințe",
+        "description" : "Configurează subsystem-ul de graph rag și extracție a cunoștințelor"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "Configurare căi sisteme de fișiere partajate",
+        "description" : "Configurează căile sistemelor de fișiere partajate ale companiei pentru a fi folosite ca zonă de documente pentru serviciile de generare augmentată în diverse baze de cunoștințe"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Integrare Atlassian Confluence",
+        "description" : "Configurează Gebo.ai pentru a accesa instalații Atlassian Confluence cloud sau on-premise"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Integrare Atlassian Jira",
+        "description" : "Configurează Gebo.ai pentru a accesa instalații Atlassian Jira cloud"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Integrare Microsoft Sharepoint",
+        "description" : "Configurează Gebo.ai pentru a accesa instalații Microsoft Sharepoint cloud sau on-premise"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "Configurează cel puțin o bază de cunoștințe",
+        "description" : "Configurează cel puțin o bază de cunoștințe pentru ca utilizatorii să beneficieze de serviciile de generare augmentată ale Gebo.ai"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "Configurează cel puțin un profil de chat \"R.A.G.\"",
+        "description" : "Configurează cel puțin un profil de chat augmentat pentru utilizatori, bazat pe una dintre bazele de cunoștințe configurate"
+      },
+      "mandatory-done" : {
+        "summary" : "Configurarea Gebo.ai pași obligatorii finalizați...",
+        "detail" : "Pașii de configurare obligatorii au fost finalizați, dar lipsesc unii pași care împiedică organizația să beneficieze la maximum de acest software"
+      },
+      "setup-ok" : {
+        "summary" : "Configurarea Gebo.ai OK!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Configurarea Gebo.ai nu are unii pași obligatorii",
+        "detail" : "Vă rugăm să verificați pașii roșii ai procesului de configurare"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Integrare Google Drive/Workspaces",
+        "description" : "Configurează Gebo.ai pentru a accesa datele echipei tale din Google cloud Drive/Workspaces"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configurare sisteme Atlassian Confluence ale companiei"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tip sistem"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod configurare"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Sistem Confluence"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Sistem Jira"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod configurare"
+      },
+      "MainPanel" : {
+        "label" : "Configurare sisteme Atlassian Jira ale companiei"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tip sistem"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod configurare"
+      },
+      "MainPanel" : {
+        "label" : "Configurare sisteme Microsoft Sharepoint ale companiei"
+      },
+      "SystemTypeHeader" : {
+        "label" : "Tip sistem"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sistem Sharepoint"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "Furnizați o cheie API cu credit disponibil. Dacă alegeți OpenAI trebuie să adăugați un credit specific (10-30$ poate fi suficient) la planul dvs. obișnuit pentru a utiliza API-ul, altfel nu va fi disponibil trafic llms în această aplicație."
+      },
+      "MainPanel" : {
+        "label" : "Configurați accesul Gebo.ai la furnizorii llms cu propria cheie API"
+      },
+      "provider" : {
+        "label" : "Furnizor model limbaj mare",
+        "help" : "Alegeți un furnizor dintre OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "Utilizator",
+        "help" : "Introduceți utilizatorul asociat cu cheia API"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configurează"
+      },
+      "apiKey" : {
+        "label" : "Cheie API",
+        "help" : "Cheia dvs. API a furnizorilor LLMS care să fie utilizată"
+      },
+      "ProviderHeader" : {
+        "label" : "Furnizor"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "Cod configurare"
+      },
+      "ModelHeader" : {
+        "label" : "Model"
+      },
+      "ModelTypeHeader" : {
+        "label" : "Tip model"
+      },
+      "DefaultModelHeader" : {
+        "label" : "Model implicit"
+      },
+      "MainPanelHeader" : {
+        "label" : "Setați accesul la furnizorii llms Gebo.ai"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "Creează configurare graph rag"
+      },
+      "MainPanel" : {
+        "label" : "Configurează setările implicite Graph Rag & extracție cunoștințe"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod configurare"
+      },
+      "EditConfigBtn" : {
+        "label" : "Editează configurarea"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "Proiect"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "Adaugă o bază de cunoștințe"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "Bază de cunoștințe"
+      },
+      "MainPanel" : {
+        "label" : "Configurații baze de cunoștințe & conținuturi"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "Sursa conținutului"
+      },
+      "PublishedHeader" : {
+        "label" : "Publicat"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "Nr documente"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "Adaugă proiect/element",
+        "help" : "creează proiect nou"
+      },
+      "Button1" : {
+        "help" : "deschide baza de cunoștințe"
+      },
+      "Button2" : {
+        "help" : "deschide formularul proiectului"
+      },
+      "Button3" : {
+        "help" : "deschide sursa de date"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configurare folder de lucru Gebo.ai"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configurează"
+      },
+      "workDirectory" : {
+        "label" : "Alege un folder ca director de lucru Gebo.ai",
+        "help" : "Alege un folder de server pe care această instalare îl va folosi ca folder de lucru pentru stocarea configurațiilor și a conținutului."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "Adaugă folder"
+      },
+      "AddFolderBtn" : {
+        "label" : "Adaugă folder"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "MainPanel" : {
+        "label" : "Căi sisteme de fișiere partajate server"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Cale absolută"
+      },
+      "DeleteHeader" : {
+        "label" : "Șterge"
+      },
+      "path" : {
+        "label" : "Adaugă un folder rădăcină al unui sistem de fișiere partajat",
+        "help" : "Alege un folder server care este o cale rădăcină pentru sistemul de fișiere partajat utilizat în organizație ca depozit de documente"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea intrării în sistemul de fișiere"
+      },
+      "RemovePathBtn" : {
+        "label" : "Elimină calea"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "Configurează"
+      },
+      "MainPanel" : {
+        "label" : "Configurare baza de date vectorială"
+      },
+      "host" : {
+        "label" : "Host Qdrant",
+        "help" : "Numele sau adresa IP Qdrant"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Setări conexiune Qdrant"
+      },
+      "port" : {
+        "label" : "Port Qdrant",
+        "help" : "Portul de comunicare Qdrant (6334 este standardul)"
+      },
+      "apiKey" : {
+        "label" : "Cheie API Qdrant",
+        "help" : "Cheie API pentru autentificare Qdrant"
+      },
+      "tls" : {
+        "label" : "Parametru TLS Qdrant",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Pași obligatorii de configurare Gebo.ai finalizați...",
+        "detail" : "Pașii obligatorii de configurare au fost finalizați, dar lipsa unora împiedică organizația să beneficieze la maximum de acest software"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Lipsesc unii pași obligatorii la configurarea Gebo.ai",
+        "detail" : "Vă rugăm să verificați pașii roșii din procesul de configurare"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Configurare Gebo.ai OK!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "Adăugați un profil nou de chat R.A.G."
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "Adăugați profil de chat R.A.G."
+      },
+      "MainPanel" : {
+        "label" : "Preia setările profilurilor de chat generare augmentată (r.a.g.)"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "Profiluri de chat R.A.G. existente"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "Editează profilul de chat R.A.G."
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "Coduri bază de cunoștințe"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Configurează sistemele Google Drive/Workspaces ale companiei"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "Cod de configurare"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "Cod",
+        "help" : "Introduceți descrierea codului de autentificare/integrate OAUTH2 (registrationId)."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea informațiilor de autentificare/integrate OAUTH2."
+      },
+      "configurationType" : {
+        "label" : "Scopul configurației",
+        "help" : "Alegeți dacă aceste setări vor fi folosite pentru Autentificare în Gebo.ai sau pentru a permite ca Gebo.ai să aibă conectivitate de client la un sistem terț."
+      },
+      "authProvider" : {
+        "label" : "Furnizor",
+        "help" : "Introduceți furnizorul de autentificare OAUTH2"
+      },
+      "issuerUri" : {
+        "label" : "Uri emitent",
+        "help" : "Introduceți URL-ul emitentului OAUTH2 al furnizorului"
+      },
+      "authorizationUri" : {
+        "label" : "URL de autorizare",
+        "help" : "Introduceți URL-ul de autorizare OAUTH2 al furnizorului"
+      },
+      "jwkSetUri" : {
+        "label" : "Uri set Jwk",
+        "help" : "Introduceți url-ul setului Jwk OAUTH2 al furnizorului"
+      },
+      "userInfoUri" : {
+        "label" : "URL informații utilizator",
+        "help" : "Introduceți URL-ul de informații despre utilizator OAUTH2 al furnizorului"
+      },
+      "introspectionUri" : {
+        "label" : "Uri introspecție",
+        "help" : "Introduceți URL-ul de introspecție OAUTH2 al furnizorului"
+      },
+      "tokenUri" : {
+        "label" : "URL token",
+        "help" : "Introduceți URL-ul token OAUTH2 al furnizorului"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "URL-uri furnizor OAUTH2"
+      },
+      "MainPanel" : {
+        "label" : "Introduceți noile informații de autentificare/integrate OAUTH2"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "ID client",
+        "help" : "Identificatorul clientului pentru protocolul oauth2 (de obținut din zona de administrare a software-ului terț cu autentificare oauth2)"
+      },
+      "secret" : {
+        "label" : "Cheie secretă",
+        "help" : "Parola clientului pentru protocolul oauth2 (de obținut din zona de administrare a software-ului terț cu autentificare oauth2)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "Creează configurarea sistemului Confluence"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea sistemului Confluence."
+      },
+      "CreateBtn" : {
+        "label" : "Creează"
+      },
+      "username" : {
+        "label" : "Nume utilizator Confluence",
+        "help" : "Nume utilizator Confluence"
+      },
+      "confluenceVersion" : {
+        "label" : "Versiunea Confluence",
+        "help" : "Versiunea Confluence"
+      },
+      "baseUri" : {
+        "label" : "Adresă internet de bază",
+        "help" : "URL-ul adresei de bază a sistemului Confluence pentru instalarea on-premise sau adresa de bază a organizației pentru sistemul Confluence cloud"
+      },
+      "password" : {
+        "label" : "Parolă Confluence",
+        "help" : "Parola Confluence"
+      },
+      "token" : {
+        "label" : "Cheie API cloud Confluence",
+        "help" : "Câmpul pentru cheie API CLOUD Confluence obținută din backoffice-ul Confluence, aici trebuie introdus \"API Token for your Atlassian Account\"."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și face aceste conținuturi disponibile în baza de cunoștințe pentru LLm-uri"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "MainPanel" : {
+        "label" : "Partajare conținut Confluence"
+      },
+      "LogsTab" : {
+        "label" : "Jurnal"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru conținuturi."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea conținutului încărcat din înregistrările Confluence."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Sistem Confluence",
+        "help" : "Referință la un sistem Confluence configurat deja."
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință la proiectul părinte."
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "tree" : {
+        "label" : "Spații sau pagini/subpagini alese",
+        "help" : "Conținuturi partajate din spaţii şi pagini Confluence"
+      },
+      "programmedTables" : {
+        "label" : "Program actualizări de conținut",
+        "help" : "Configurează programarea schimbărilor de conținut pentru a menține sistemul de generare augmentată la zi"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criterii de organizare pentru spații, pagini și subpagini",
+        "help" : "Vă rugăm să explicați aici cum s-a făcut organizarea spațiilor, paginilor și subpaginilor în conținuturile Confluence partajate cu Gebo.ai"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Setări generale"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "MainPanel" : {
+        "label" : "Editare sistem Confluence"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "baseUri" : {
+        "label" : "Adresă internet de bază",
+        "help" : "URL-ul adresei de bază a sistemului Confluence"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru sistemul Confluence."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea sistemului Confluence."
+      },
+      "confluenceVersion" : {
+        "label" : "Versiunea Confluence",
+        "help" : "Versiunea Confluence"
+      },
+      "secretCode" : {
+        "label" : "Identitate folosită",
+        "help" : "Selectați sau creați identitatea pentru a accesa sistemul Confluence"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "grup nou"
+      },
+      "NewUserBtn" : {
+        "label" : "utilizator nou"
+      },
+      "UsersListPanel" : {
+        "label" : "Listă utilizatori"
+      },
+      "GroupsListPanel" : {
+        "label" : "Listă grupuri"
+      },
+      "SournameHeader" : {
+        "label" : "nume de familie"
+      },
+      "UsernameHeader" : {
+        "label" : "nume de utilizator"
+      },
+      "RolesHeader" : {
+        "label" : "roluri"
+      },
+      "NameHeader" : {
+        "label" : "prenume"
+      },
+      "EditBtn" : {
+        "label" : "Editează"
+      },
+      "DisabledHeader" : {
+        "label" : "dezactivat"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "UserIds" : {
+        "placeholder" : "Selectează utilizatori"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "MainPanel" : {
+        "label" : "Editare grup de utilizatori"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea grupului de utilizatori"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Introduceți codul grupului de utilizatori"
+      },
+      "userIds" : {
+        "label" : "Lista utilizatorilor",
+        "help" : "Selectează utilizatorii care participă în grup"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Creare"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea sistemului jira."
+      },
+      "MainPanel" : {
+        "label" : "Creare configurare sistem jira"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "username" : {
+        "label" : "utilizator jira",
+        "help" : "nume utilizator jira"
+      },
+      "token" : {
+        "label" : "jira cloud api key",
+        "help" : "apikey CLOUD jira obținut în backoffice-ul jira, aici trebuie introdus \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "Adresă internet de bază",
+        "help" : "URL-ul adresei de bază a sistemului jira pentru instalarea on-premise sau url-ul de bază al organizației pentru sistemul jira cloud"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și permite ca aceste conținuturi să fie disponibile în baza de cunoștințe pentru LLm"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "LogsTab" : {
+        "label" : "Jurnal"
+      },
+      "MainPanel" : {
+        "label" : "Partajare conținut jira"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru conținuturi."
+      },
+      "jiraSystemCode" : {
+        "label" : "sistem jira",
+        "help" : "Referință la un sistem jira deja configurat."
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință la proiectul părinte."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea conținutului încărcat al înregistrărilor jira."
+      },
+      "programmedTables" : {
+        "label" : "Planificare verificări actualizări conținut",
+        "help" : "Configurați programarea conținutului modificat pentru a menține sistemul de augmented generation actualizat"
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Permite deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "tree" : {
+        "label" : "Spații sau pagini/subpagini alese",
+        "help" : "Ierarhia proiectelor și tichetelor jira partajate"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criterii de organizare a spațiilor, paginilor și subpaginilor",
+        "help" : "Vă rugăm să explicați aici cum a fost făcută organizarea spațiilor, paginilor și subpaginilor în conținutul jira partajat cu Gebo.ai"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea sistemului jira."
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "MainPanel" : {
+        "label" : "Editare sistem jira"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "baseUri" : {
+        "label" : "Adresă internet de bază",
+        "help" : "URL-ul adresei de bază a sistemului jira"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru sistemul jira."
+      },
+      "secretCode" : {
+        "label" : "Identitate utilizată",
+        "help" : "Selectați sau creați identitatea pentru accesul la sistemul jira"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea sistemului SharPpoint/OneDrive."
+      },
+      "sharepointVersion" : {
+        "label" : "Versiune SharePoint",
+        "help" : "versiune sharepoint"
+      },
+      "secret" : {
+        "label" : "Cheie secretă",
+        "help" : "Secretul clientului Oauth2 pentru această aplicație înregistrată în produsul microsoft \"entra\" (de obținut din consola de administrare microsoft cloud)"
+      },
+      "clientId" : {
+        "label" : "ID client",
+        "help" : "Identificator de client Oauth2 pentru această aplicație înregistrată în produsul microsoft \"entra\" (de obținut din consola de administrare microsoft cloud)"
+      },
+      "tenantId" : {
+        "label" : "ID organizație",
+        "help" : "Identificatorul tenantului Oauth2 pentru organizația ta, produsul microsoft \"entra\" (de obținut din consola de administrare microsoft cloud)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Informații de înregistrare aplicație Microsoft oauth2 pentru Gebo.ai"
+      },
+      "CreateBtn" : {
+        "label" : "Creează"
+      },
+      "CancelBtn" : {
+        "label" : "Renunță"
+      },
+      "MainPanel" : {
+        "label" : "Creează configurația sistemului SharePoint/OneDrive"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "Renunță"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și face aceste conținuturi disponibile în baza de cunoștințe pentru LLm-uri"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "MainPanel" : {
+        "label" : "Partajarea conținutului SharePoint/OneDrive"
+      },
+      "LogsTab" : {
+        "label" : "Jurnal"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru conținuturi."
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referința proiectului părinte."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea surselor de date pentru înregistrările SharePoint/OneDrive."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sistem sharepoint",
+        "help" : "Referință către sistemul SharePoint/OneDrive deja configurat."
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "tree" : {
+        "label" : "Site-uri/pagini/subpagini SharePoint sau OneDrive drive-uri/foldere/fișiere selectate",
+        "help" : "Conținuturi partajate sharepoint/OneDrive"
+      },
+      "programmedTables" : {
+        "label" : "Programări pentru verificarea actualizărilor de conținut",
+        "help" : "Configurează programarea conținuturilor modificate pentru a menține sistemul de generare augmentată la zi"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criterii de organizare a spațiilor, paginilor și subpaginilor",
+        "help" : "Vă rugăm explicați aici cum au fost realizate criteriile de organizare a spațiilor, paginilor și subpaginilor în conținutul sharepoint partajat cu Gebo.ai"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "Editare sistem sharepoint"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "Setări generale"
+      },
+      "CancelBtn" : {
+        "label" : "Renunță"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "secretCode" : {
+        "label" : "Identitate folosită",
+        "help" : "Selectați sau creați identitatea pentru accesarea sistemului sharepoint"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru sistemul sharepoint."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea sistemului sharepoint."
+      },
+      "sharepointVersion" : {
+        "label" : "Versiune SharePoint",
+        "help" : "versiune sharepoint"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "Șterge"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "Salvează"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "Anulează"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "Setări generale informații/conținut"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "Setări LLms"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru stadiul de extragere a datelor din graful de cunoștințe"
+      },
+      "MainPanel" : {
+        "label" : "Configurare extragere graphrag/cunoștințe"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea acestei configurații pentru extragerea datelor grafului de cunoștințe"
+      },
+      "extractionPrompt" : {
+        "label" : "Prompt pentru extragere informații",
+        "help" : "Prompt pentru model de limbaj mare folosit la extragerea entităților/evenimentelor/relațiilor și a aliasurilor"
+      },
+      "usedModelConfiguration" : {
+        "label" : "LLM folosit pentru extragerea datelor",
+        "help" : "Specifică modelul mare de limbaj folosit pentru extragerea cunoștințelor, cel implicit va fi utilizat dacă nu este ales niciunul."
+      },
+      "graphRagAllSources" : {
+        "label" : "Aplică graph rag la toate sursele de date",
+        "help" : "Dacă este activat, toate bazele de cunoștințe/proiectele/sursele de date vor fi procesate pentru extragerea cunoștințelor, altfel doar cele configurate specific"
+      },
+      "defaultModel" : {
+        "label" : "Model mare de limbaj implicit",
+        "help" : "Modelul mare de limbaj implicit va fi folosit pentru extragerea cunoștințelor"
+      },
+      "processEveryDocument" : {
+        "label" : "Aplică graph rag la toate fișierele",
+        "help" : "Algoritmii graph rag vor fi aplicați tuturor fișierelor, ceea ce va crește detalierea analizelor pe care sistemul le poate realiza, dar va crește costul și timpul necesar pentru procesarea documentelor"
+      },
+      "contentSelectionFilter" : {
+        "label" : "Criterii de selecție a fișierelor pentru procesarea graphrag",
+        "help" : "Editează criteriile pentru fișierele ce vor fi trimise în fluxul de extragere a informațiilor pentru graphrag, selectează cel puțin un nume de fișier și un criteriu și/sau un tip de fișier și/sau dimensiunea maximă a fișierului în bytes și/sau vechimea ultimei modificări în zile"
+      },
+      "extractionFormat" : {
+        "label" : "Format de extragere",
+        "help" : "Folosiți formatul CSV pentru llms sub 30b parametri, JSON pentru modele frontieră mari",
+        "placeholder" : "Folosiți formatul CSV pentru llms sub 30b parametri, JSON pentru modele frontieră mari"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "Selectați tipurile de fișiere"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "Criterii de filtrare nume fișier"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "Ultima modificare a fișierului, zile în urmă"
+      },
+      "nameFilter" : {
+        "placeholder" : "Nume fișier"
+      },
+      "maxFileSize" : {
+        "placeholder" : "Dimensiune maximă fișier în bytes"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "MainPanel" : {
+        "label" : "Editare bază de cunoștințe"
+      },
+      "AccessSettingsTab" : {
+        "label" : "Setări de acces la baza de cunoștințe"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru baza de cunoștințe."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea bazei de cunoștințe."
+      },
+      "embeddingModelReferences" : {
+        "label" : "Modele de embedding folosite (lăsați necompletat pentru a folosi sistemul implicit)",
+        "help" : "Modele de embedding pentru baza de cunoștințe, lăsați necompletat pentru a folosi modelul implicit."
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "IndexBtn" : {
+        "label" : "Indexează",
+        "help" : "Reindexează conținutul"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "Editare proiect sau element"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru proiect."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea proiectului."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "bază de cunoștințe",
+        "help" : "bază de cunoștințe."
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "IndexBtn" : {
+        "label" : "Indexează",
+        "help" : "Reindexează conținutul"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ Adaugă element/proiect",
+        "help" : "adauga nou..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "Toată lumea folosește",
+        "help" : "Toată lumea poate folosi"
+      },
+      "accessibleGroups" : {
+        "label" : "Listă de grupuri",
+        "help" : "Selectați grupurile permise"
+      },
+      "accessibleUsers" : {
+        "label" : "Listă de utilizatori",
+        "help" : "Selectați utilizatorii permisi"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "Tablou de bord"
+      },
+      "LLMSTab" : {
+        "label" : "LLMs pentru chat și embedding"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Profiluri chat Rag / Prompturi model"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "Baze de cunoștințe și proiecte"
+      },
+      "UsersGroupTab" : {
+        "label" : "Utilizatori și grupuri"
+      },
+      "GeboModulesTab" : {
+        "label" : "Config module Gebo.ai"
+      },
+      "LogsTab" : {
+        "label" : "Jurnale"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "ConfigureBtn2" : {
+        "label" : "Configurează"
+      },
+      "ConfigureBtn" : {
+        "label" : "Configurează"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "Configurare prompt nouă"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "Profil de chat nou"
+      },
+      "MainPanel" : {
+        "label" : "Profiluri de chat cu generare augmentată prin regăsire"
+      },
+      "PromptsPanel" : {
+        "label" : "Colecție de prompturi și prompturi implicite"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "Baze de cunoștințe"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "ConfigureBtn1" : {
+        "label" : "configurează"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "Bază de cunoștințe nouă"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "Configurare nouă model de embedding"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "Configurare nouă model de chat"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ModelHeader" : {
+        "label" : "Model "
+      },
+      "ModelProviderHeader" : {
+        "label" : "Furnizor model"
+      },
+      "ConfigureBtn" : {
+        "label" : "configurează"
+      },
+      "CodeHeader2" : {
+        "label" : "Cod"
+      },
+      "DescriptionHeader2" : {
+        "label" : "Descriere"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "Furnizor model"
+      },
+      "ConfigureBtn2" : {
+        "label" : "configurează"
+      },
+      "ModelHeader2" : {
+        "label" : "Model "
+      },
+      "ChatmodelsZone" : {
+        "label" : "Modele de chat configurate"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "Modele de embedding configurate"
+      },
+      "chat" : {
+        "label" : "Model nou de chat",
+        "help" : "Selectează furnizorul pentru a adăuga un nou model de chat capabil să comunice cu utilizatorul sau să execute automatizări",
+        "placeholder" : "Selectează furnizorul pentru a adăuga un nou model de chat capabil să comunice cu utilizatorul sau să execute automatizări"
+      },
+      "embed" : {
+        "label" : "Model nou de embedding",
+        "help" : "Selectează furnizorul pentru a adăuga un nou model de embedding capabil de indexare semantică a conținutului",
+        "placeholder" : "Selectează furnizorul pentru a adăuga un nou model de embedding capabil de indexare semantică a conținutului"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "Testare model"
+      },
+      "TestChatBtn" : {
+        "label" : "Testează chat"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "apiSecretCode" : {
+        "label" : "Token OpenAI",
+        "help" : "Alegeți tokenul OpenAI care va fi folosit pentru acest model"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat OpenAI",
+        "help" : "Alegeți modelul chat OpenAI cu care să lucrați."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Setări avansate"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model chat OpenAI"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Setări acces model"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model embedding OpenAI"
+      },
+      "apiSecretCode" : {
+        "label" : "Token OpenAI",
+        "help" : "Alegeți tokenul OpenAI care va fi folosit pentru acest model"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului embedding"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului embedding"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model embedding OpenAI",
+        "help" : "Alegeți modelul embedding OpenAI cu care să lucrați."
+      },
+      "defaultModel" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "baseUrl" : {
+        "label" : "Adresă server ollama de bază",
+        "help" : "Adresă de bază (de exemplu http://servername:234/) la care răspunde serverul ollama local sau din rețea."
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat Ollama",
+        "help" : "Alegeți modelul chat Ollama cu care să lucrați.",
+        "placeholder" : "Selectează un model"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Ollama",
+        "help" : "Alegeți tokenul Ollama care va fi folosit pentru acest model (opțional)"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model chat pe server ollama local (sau rețea)"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Anthropic",
+        "help" : "Alegeți tokenul Anthropic care va fi folosit pentru acest model"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat Anthropic",
+        "help" : "Alegeți modelul chat Anthropic cu care să lucrați.",
+        "placeholder" : "Selectează un model"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Setări avansate"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Setări acces model"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model chat Anthropic"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "apiSecretCode" : {
+        "label" : "Token MistralAI",
+        "help" : "Alegeți tokenul MistralAI care va fi folosit pentru acest model"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat MistralAI",
+        "help" : "Alegeți modelul chat MistralAI cu care să lucrați."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Setări avansate"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Setări acces model"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model chat MistralAI"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat Google Vertex AI",
+        "help" : "Alegeți modelul chat Google Vertex AI cu care să lucrați."
+      },
+      "apiSecretCode" : {
+        "label" : "Token Google Vertex AI",
+        "help" : "Alegeți tokenul Google Vertex AI care va fi folosit pentru acest model"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "TabGeneralInfos" : {
+        "label" : "Informații generale"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "Setări acces model"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "Setări avansate"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model chat Google Vertex AI"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Deepseek",
+        "help" : "Alegeți tokenul Deepseek care va fi folosit pentru acest model"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat Deepseek",
+        "help" : "Alegeți modelul chat Deepseek cu care să lucrați.",
+        "placeholder" : "Selectează un model"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Setări avansate"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model chat Deepseek"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Setări acces model"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului"
+      },
+      "baseUrl" : {
+        "label" : "Adresă de bază server API model chat",
+        "help" : "Adresa de bază a modelului chat."
+      },
+      "apiSecretCode" : {
+        "label" : "Token API model chat",
+        "help" : "Alegeți tokenul API model chat care va fi folosit pentru acest model (opțional)"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model de chat implicit când modelul nu este indicat"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model chat model chat",
+        "help" : "Alegeți modelul chat model chat cu care să lucrați."
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "TitleFragment" : {
+        "label" : "Editare furnizor model chat:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "Setări avansate"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "Setări acces model"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului embedding"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model embedding ollama local (sau rețea)"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Ollama",
+        "help" : "Alegeți tokenul Ollama care va fi folosit pentru acest model"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model embedding Ollama",
+        "help" : "Alegeți modelul embedding Ollama cu care să lucrați."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului embedding"
+      },
+      "defaultModel" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      },
+      "baseUrl" : {
+        "label" : "Adresă server ollama de bază",
+        "help" : "Adresă de bază (de exemplu http://servername:234/) la care răspunde serverul ollama local sau din rețea."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului embedding"
+      },
+      "MainPanel" : {
+        "label" : "Editare configurație model embedding MistralAI"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului embedding"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model embedding MistralAI",
+        "help" : "Alegeți modelul embedding MistralAI cu care să lucrați."
+      },
+      "defaultModel" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      },
+      "apiSecretCode" : {
+        "label" : "Token MistralAI",
+        "help" : "Alegeți tokenul MistralAI care va fi folosit pentru acest model"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Editare configurație model embedding Google Vertex AI"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului embedding"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model embedding Google Vertex AI",
+        "help" : "Alegeți modelul embedding Google Vertex AI cu care să lucrați."
+      },
+      "defaultModel" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului embedding"
+      },
+      "apiSecretCode" : {
+        "label" : "Token Google Vertex AI",
+        "help" : "Alegeți tokenul Google Vertex AI care va fi folosit pentru acest model"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "TitleFragment" : {
+        "label" : "Editare furnizor model embedding:"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea configurației modelului Embedding"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru configurația modelului Embedding"
+      },
+      "choosedModel" : {
+        "label" : "Alegere model embedding model embedding",
+        "help" : "Alegeți modelul embedding model embedding cu care să lucrați."
+      },
+      "baseUrl" : {
+        "label" : "Adresă server API model embedding",
+        "help" : "Adresa de bază a serverului model embedding."
+      },
+      "defaultModel" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Dacă este adevărat, acesta va fi folosit ca model embedding implicit când modelul nu este indicat"
+      },
+      "apiSecretCode" : {
+        "label" : "Token API model embedding",
+        "help" : "Alegeți tokenul API model embedding care va fi folosit pentru acest model"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "Informații despre configurarea chatului"
+      },
+      "chaDeleteBtn" : {
+        "help" : "Șterge această sesiune de chat"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "Redenumește sesiunea de chat"
+      },
+      "QueryControl" : {
+        "placeholder" : "Scrie un mesaj pentru chat bot"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Răsfoiește sau caută și selectează documente pentru a conversa"
+      },
+      "UploadFileBtn" : {
+        "help" : "Încarcă un fișier pentru a conversa sau lucra cu el"
+      },
+      "SubmiQuestion" : {
+        "help" : "Trimite întrebarea ta"
+      },
+      "WithParams" : {
+        "label" : "cu parametri:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "Funcții apelate de AI:"
+      },
+      "UploadedDocs" : {
+        "label" : "Documente încărcate"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "Istoric de chat încărcat",
+        "detail" : "Istoricul chat-ului a fost încărcat cu succes"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "Discursul tău se încarcă"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "Răspuns vocal primit"
+      },
+      "ScrollUpBtn" : {
+        "help" : "Derulați în sus"
+      },
+      "ScrollDownBtn" : {
+        "help" : "Derulați în jos"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "Documente găsite"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "Sigur doriți să ștergeți această conversație?",
+        "header" : "Acțiune de ștergere chat"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "description" : {
+        "label" : "Descriere chat",
+        "help" : "Introduceți descrierea sesiunii de chat."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "Model folosit",
+        "help" : "Codul modelului"
+      },
+      "providerId" : {
+        "label" : "Furnizor model chat",
+        "help" : "Driver furnizor LLms"
+      },
+      "functions" : {
+        "label" : "Funcții disponibile modelului de chat",
+        "help" : "Lista funcțiilor disponibile pentru modelul de chat"
+      },
+      "NameCol" : {
+        "label" : "Nume"
+      },
+      "DescriptionCol" : {
+        "label" : "Descriere"
+      },
+      "kbases" : {
+        "label" : "Baze de cunoștințe disponibile",
+        "help" : "Lista bazelor de cunoștințe folosite în acest chat RAG"
+      },
+      "CloseBtn" : {
+        "help" : "Închide"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "Adăugați document la lista 'chatează cu'"
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "Înregistrează",
+        "help" : "Începe înregistrarea unei piese audio și trimite-o"
+      },
+      "StopBtn" : {
+        "label" : "Se înregistrează",
+        "help" : "Se înregistrează"
+      },
+      "AbortBtn" : {
+        "label" : "Oprește înregistrarea",
+        "help" : "Oprește înregistrarea"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "Anulează înregistrarea"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "reîncarcă datele"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SelectHeader" : {
+        "label" : "Selectează"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "data/ora de sfârșit"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "data/ora de început"
+      },
+      "ProcessingHeader" : {
+        "label" : "procesare"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "FinishedHeader" : {
+        "label" : "finalizat"
+      },
+      "WithErrorHeader" : {
+        "label" : "cu eroare"
+      },
+      "LogTableComponent" : {
+        "help" : "Acest jurnal al zonei partajate de fișiere"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "Statistici procese"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "CloseBtn" : {
+        "label" : "Închide"
+      },
+      "PublicationLogTab" : {
+        "label" : "Jurnal publicare"
+      },
+      "MainPanel" : {
+        "label" : "Jurnal publicare"
+      },
+      "actualStatus" : {
+        "label" : "Stare",
+        "help" : "Starea sarcinii, încă rulează, finalizată sau finalizată cu erori."
+      },
+      "publishingSystem" : {
+        "label" : "Configurare conținut publicat",
+        "help" : "Informații despre conținutul publicat"
+      },
+      "startDateTime" : {
+        "label" : "Data/ora de început",
+        "help" : "Data și ora de început a sarcinii de sincronizare a conținutului"
+      },
+      "endDateTime" : {
+        "label" : "Data/ora de sfârșit",
+        "help" : "Data și ora de sfârșit a sarcinii de sincronizare a conținutului"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "Neprocesat complet"
+      },
+      "ProcessedCompletely" : {
+        "label" : "Procesat complet"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "embedding vs numărul total de documente"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "Mai multe detalii"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "Generează prompt"
+      },
+      "PromptWizardBtn" : {
+        "label" : "Asistent prompt",
+        "help" : "Folosește asta pentru a utiliza un LLM ca să generezi promptul pentru obiectivele tale"
+      },
+      "acceptPrompt" : {
+        "label" : "Acceptă prompt"
+      },
+      "promptWizardUI" : {
+        "label" : "Asistent generare șablon prompt"
+      },
+      "cancel" : {
+        "label" : "Anulează"
+      },
+      "response" : {
+        "label" : "Șablon de prompt sugerat",
+        "help" : "Textul șablonului generat pentru obiectivul tău (poți să-l schimbi, corectezi sau modifici)"
+      },
+      "modelCode" : {
+        "label" : "Model chat de utilizat",
+        "help" : "Alege modelul de chat pe care vrei să-l folosești pentru generarea șablonului de prompt"
+      },
+      "query" : {
+        "label" : "Cerere șablon prompt",
+        "help" : "Specifică la persoana a doua care este obiectivul pentru care AI va sprijini utilizatorul"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "Temperatură",
+        "help" : "Temperatura la care modelul va răspunde, de la 0 la 1 (dacă nu ești sigur, lasă gol)"
+      },
+      "contextLength" : {
+        "label" : "Lungime context (token-uri)",
+        "help" : "Cantitatea de text pe care un model AI o poate lua în considerare la procesare (dacă nu este setat, se va folosi 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "Parametrul TopP, de la 0 la 1 (dacă nu ești sigur, lasă gol)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "Funcții activate pentru acest model",
+        "help" : "Funcționalități care pot fi utilizate de model în timpul conversației"
+      },
+      "defaultModelPrompt" : {
+        "label" : "Prompt implicit model",
+        "help" : "Editează promptul implicit pentru modelul de chat."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea identității."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic al identității generat automat."
+      },
+      "secretType" : {
+        "label" : "Tip de identitate",
+        "help" : "Selectați tipul de identitate pe care doriți să-l creați pentru sistemul la distanță"
+      },
+      "InsertBtn" : {
+        "label" : "Introdu"
+      },
+      "token" : {
+        "label" : "Token",
+        "help" : "Introduceți tokenul."
+      },
+      "user" : {
+        "label" : "Utilizator",
+        "help" : "Introduceți utilizatorul indicat de token."
+      },
+      "MainPanel" : {
+        "label" : "Creare identitate"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "username" : {
+        "label" : "Nume utilizator",
+        "help" : "Introduceți numele de utilizator."
+      },
+      "password" : {
+        "label" : "Parolă",
+        "help" : "Introduceți parola."
+      },
+      "email" : {
+        "label" : "E-mail/Nume utilizator",
+        "help" : "Introduceți e-mailul sau numele de utilizator asociat cheii ssh."
+      },
+      "key" : {
+        "label" : "Cheie secretă",
+        "help" : "Deschideți fișierul cheii private și copiați-l în această zonă de text."
+      },
+      "passphrase" : {
+        "label" : "Parolă cheie",
+        "help" : "Introduceți parola cheii."
+      },
+      "pub" : {
+        "label" : "Cheie publică",
+        "help" : "Deschideți fișierul cheii publice și copiați-l în această zonă de text."
+      },
+      "jsonContent" : {
+        "label" : "Conținutul fișierului de acreditări Google",
+        "help" : "Copiază aici conținutul fișierului de acreditări Google api descărcat din consola Google Cloud (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Utilizator Google de impersonat",
+        "help" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate",
+        "placeholder" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru conținut."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea conținutului încărcat al intrării din sistemul de fișiere."
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință la proiectul părinte."
+      },
+      "upload" : {
+        "label" : "Încarcă conținuturi",
+        "help" : "Apasă butonul de navigare și selectează fișiere zip sau alte fișiere"
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și lasă acest conținut să fie disponibil în baza de cunoștințe pentru LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "LogsTab" : {
+        "label" : "Jurnal"
+      },
+      "MainPanel" : {
+        "label" : "Editare conținut încărcat"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configurează sistemele de build",
+        "help" : "Lista sistemelor de build/ambalare de inspectat pentru informații meta și detalii suplimentare despre artefacte (lăsați gol dacă nu este inclus cod software)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "Elemente alese"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "Anulează"
+      },
+      "EditBtn" : {
+        "help" : "Modifică selecția"
+      },
+      "ChooseElementsArea" : {
+        "label" : "Alege elemente"
+      },
+      "VFileSystemSelector" : {
+        "label" : "Alege elemente"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "Editează programarea"
+      },
+      "ConfirmBtn" : {
+        "label" : "Confirmă"
+      },
+      "AddBtn" : {
+        "label" : "+Adaugă"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și face ca aceste conținuturi să fie disponibile în baza de cunoștințe pentru LLm-uri"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "Tratament cod sursă"
+      },
+      "LogsTab" : {
+        "label" : "Jurnale"
+      },
+      "MainPanel" : {
+        "label" : "Editare conținut existent din sistemul de fișiere"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea conținutului încărcat al înregistrării din sistemul de fișiere."
+      },
+      "openZips" : {
+        "label" : "Deschide arhive zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat al conținutului."
+      },
+      "tree" : {
+        "label" : "Fișiere sau foldere alese",
+        "help" : "Fișiere sau directoare din sistemele de fișiere partajate disponibile pe server"
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință la proiectul părinte."
+      },
+      "programmedTables" : {
+        "label" : "Program verificare actualizări conținut",
+        "help" : "Configurează programarea verificării conținutului modificat pentru a menține sistemul de generare augmentată actualizat"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criterii de organizare a folderelor",
+        "help" : "Vă rugăm să explicați aici cum ați organizat folderele în zona sistemului de fișiere pe care o partajați cu Gebo.ai"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configurează sisteme de build",
+        "help" : "Listă de sisteme de build/pachetizare pentru a inspecta informațiile meta și artefactele suplimentare (lăsați gol dacă nu există cod software)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "Zonă nouă de partajare fișiere"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "Cale absolută"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "config fișier db sau yml"
+      },
+      "DescriptionHeader" : {
+        "label" : "Descriere"
+      },
+      "CodeHeader" : {
+        "label" : "Cod"
+      },
+      "ModifyHeader" : {
+        "label" : "Modifică"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "Folder partajat ales din sistemul de fișiere",
+        "help" : "Alegeți un folder pe server care este cale rădăcină pentru sistemul de fișiere partajat folosit în organizația dvs. ca depozit de documente"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea zonei partajate de sistem de fișiere a organizației dvs."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat al conținutului."
+      },
+      "InsertBtn" : {
+        "label" : "Introdu"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "MainPanel" : {
+        "label" : "Editare folder partajat de pe server"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și permite ca acest conținut să fie disponibil în baza de cunoștințe pentru LLm"
+      },
+      "MainPanel" : {
+        "label" : "Editare sursă depozit/documentație git"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introduceți descrierea depozitului git."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru depozitul git."
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință la proiectul părinte."
+      },
+      "contentManagementSystem" : {
+        "label" : "Sistem Git",
+        "help" : "Referință la sistemul git deja configurat."
+      },
+      "branch" : {
+        "label" : "Ramură",
+        "help" : "Numele ramurii pentru checkout (de obicei master, main sau develop)"
+      },
+      "identityCode" : {
+        "label" : "Identitate folosită",
+        "help" : "Selectează identitatea pentru a clona/face checkout în sistem"
+      },
+      "repositoryUri" : {
+        "label" : "Adresă/URL depozit",
+        "help" : "Adresa completă a depozitului git remote (de obicei începe cu http:, https: sau ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "public",
+        "help" : "Dacă este adevărat, accesul la depozit nu necesită autentificare"
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "programmedTables" : {
+        "label" : "Program verificări actualizări conținuturi",
+        "help" : "Configurează programarea conținuturilor modificate pentru a menține sistemul de generare augmentată actualizat"
+      },
+      "buildSystemsRefs" : {
+        "label" : "Configurează sisteme de build",
+        "help" : "Lista sistemelor de build/ambalare pentru a inspecta metainformații și informații suplimentare despre artefacte"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "GeneralInfosTab" : {
+        "label" : "Informații generale"
+      },
+      "UseChatModelLabel" : {
+        "label" : "Folosește modelul de chat"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "alege"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "Selectează o configurație de model de chat"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "Selectează o configurație de model embedding"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "alege"
+      },
+      "RagSettingsTab" : {
+        "label" : "Setări RAG"
+      },
+      "LanguageModelTab" : {
+        "label" : "Setări model lingvistic mare & unelte disponibile"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Folosește modelul embedding"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "Setări de acces securitate"
+      },
+      "MainPanel" : {
+        "label" : "Editare profil chat retrieve augmented generation"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat pentru profilul de chat."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea profilului de chat."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "Utilizatorul alege bazele de cunoștințe",
+        "help" : "Utilizatorul poate alege din bazele de cunoștințe accesibile și/sau poate încărca propriile fișiere."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "Baze de cunoștințe",
+        "help" : "Baze de cunoștințe folosite pentru regăsirea documentelor."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "Prag de similaritate",
+        "help" : "Prag de similaritate pentru căutări semantice, 0.60–0.65 Filtrare scăzută, 0.70-0.75 Filtrare medie, 0.80–0.85 Acuratețe crescută"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "Prag de similaritate al 2-lea \"hop\"",
+        "help" : "Prag de similaritate pentru căutări semantice, 0.60–0.65 Filtrare scăzută, 0.70-0.75 Filtrare medie, 0.80–0.85 Acuratețe crescută folosit de la a doua căutare în multi-hop rag"
+      },
+      "disableMultiHopRag" : {
+        "label" : "Dezactivează 'Multi Hop' rag",
+        "help" : "Dezactivează funcționalitatea 'multi hop rag'. Căutarea multi hop face o primă căutare semantică și folosește documentele găsite ca context pentru a doua căutare semantică, oferind un context mai larg."
+      },
+      "topK" : {
+        "label" : "Fragmente de document luate în considerare (TopK)",
+        "help" : "În retrieve augmented generation, Top N fragmente de document găsite luate în considerare la căutarea semantică"
+      },
+      "enabledFunctions" : {
+        "label" : "Funcții activate pentru acest chat RAG",
+        "help" : "Funcționalități ce pot fi folosite de modelul llm în timpul conversației cu utilizatorul, interacționând și cu baza de cunoștințe selectată"
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Editează promptul pentru sesiunile retrieve augmented generation."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "Introdu sau selectează categoria de prompt"
+      },
+      "MainPanel" : {
+        "label" : "Editare prompt"
+      },
+      "promptCategory" : {
+        "label" : "Categorie prompt",
+        "help" : "Selectează sau introdu categoria de prompt."
+      },
+      "prompt" : {
+        "label" : "Prompt",
+        "help" : "Editează promptul pentru chat, folosește {query} pentru a indica întrebarea utilizatorului și {context} pentru a indica contextul documentelor/istoricului trimis către LLM."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic al promptului generat automat."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea promptului."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "Schimbă parola"
+      },
+      "YourUserName" : {
+        "label" : "Numele tău de utilizator"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "Parola veche",
+        "help" : "Parolă actuală pentru autentificare"
+      },
+      "newPassword" : {
+        "label" : "Parolă nouă",
+        "help" : "parolă nouă"
+      },
+      "username" : {
+        "label" : "E-mail",
+        "help" : "E-mail folosit ca nume de utilizator pentru autentificare"
+      },
+      "ChangePasswordUI" : {
+        "label" : "Formular schimbare parolă"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "ChangePwdBtn" : {
+        "label" : "schimbă parola"
+      },
+      "newPassword1" : {
+        "label" : "Confirmă noua parolă",
+        "help" : "Confirmă noua parolă"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "ForMoreInformations" : {
+        "label" : "Pentru mai multe informații despre Google custom search API sau despre cum obții cheia ta API (gratuit), vizitează: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "codul unic al configurației google search api."
+      },
+      "MainPanel" : {
+        "label" : "Editare acreditări google custom search api"
+      },
+      "secretCode" : {
+        "label" : "Token google search api",
+        "help" : "Alege sau introdu token-ul google search api"
+      },
+      "customSearchEngineId" : {
+        "label" : "Id motor căutare Google",
+        "help" : "Id-ul motorului de căutare Google"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea configurației google search api."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "Chat fără baze de cunoștințe",
+        "help" : "Alege LLM-urile pentru o sesiune de chat",
+        "placeholder" : "Alege LLM-urile pentru o sesiune de chat"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "Deschide secțiunea de opțiuni chat"
+      },
+      "CreateChatBtn" : {
+        "label" : "Chat nou"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "Sesiune chat nouă"
+      },
+      "chatProfileCode" : {
+        "label" : "Chat cu baze de cunoștințe",
+        "help" : "Alege profilul de chat al companiei pentru a interacționa cu documente și LLM-uri ale companiei (și ale tale)",
+        "placeholder" : "Alege profilul de chat al companiei pentru a interacționa cu documente și LLM-uri ale companiei (și ale tale)"
+      },
+      "NewChatBtn" : {
+        "label" : "Chat nou"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "Sesiuni de chat"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "Închide bara laterală"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "Creează un chat nou cu modele lingvistice mari",
+        "label" : "Chat"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "Creează un chat RAG nou cu conținuturile companiei",
+        "label" : "Discută cu baza de cunoștințe"
+      },
+      "ChatsTitle" : {
+        "label" : "Conversații"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "Deschide secțiunea de opțiuni chat"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "Discută cu documentele",
+        "help" : "Răsfoiește sau caută și selectează documente cu care să lucrezi"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Alege fișiere pentru a discuta"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "Răsfoiește sau caută și selectează documente pentru a conversa"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "Confirmă"
+      },
+      "userspaceBrowsing" : {
+        "label" : "Încarcă sau alege documentele tale",
+        "help" : "Alege/încarcă documente din spațiul tău de utilizator"
+      },
+      "fileSearchBtn" : {
+        "label" : "Caută"
+      },
+      "semanticSearchBtn" : {
+        "label" : "Caută"
+      },
+      "query" : {
+        "label" : "Frază de căutare semantică",
+        "help" : "Introduceți o frază relevantă pentru căutarea dumneavoastră"
+      },
+      "choosenBrowsing" : {
+        "label" : "Alegeți fișiere din bazele de cunoștințe",
+        "help" : "Alegeți fișiere din bazele de cunoștințe partajate ale companiei"
+      },
+      "filename" : {
+        "label" : "Numele fișierului căutat",
+        "help" : "Introduceți o parte din numele fișierului pentru conținutul căutat"
+      },
+      "SearchFilesLabel" : {
+        "label" : "Căutare după numele fișierului"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "Răsfoiește fișierele companiei"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "Căutare semantică"
+      },
+      "chooseFilesDialog" : {
+        "label" : "Alege fișiere pentru a conversa"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "Modifică selecția"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "Alege fișierele utilizatorilor"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "Anulează"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "Alege conținut încărcat de utilizator"
+      },
+      "UserspaceBrowser" : {
+        "label" : "Baze de cunoștințe și fișiere utilizator"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+subproiect sau element",
+        "help" : "adaugă subproiect sau element"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+încarcă fișiere",
+        "help" : "adaugă sursă de date cu fișiere încărcate"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+sharePoint/oneDrive",
+        "help" : "adaugă o sursă de date Microsoft SharePoint/OneDrive"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+confluence",
+        "help" : "adaugă o sursă de date Atlassian Confluence"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+filesystem",
+        "help" : "adaugă sursa de date din filesystem partajat"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+jira",
+        "help" : "adaugă o sursă de date Atlassian Jira"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git repo",
+        "help" : "adaugă o sursă de date dintr-un repository git precum bitbucket, github sau altele"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "adauga o sursă de date google drive"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai Chat"
+      },
+      "setup" : {
+        "label" : "Configurare"
+      },
+      "admin" : {
+        "label" : "Gebo.ai admin"
+      },
+      "currentProfile" : {
+        "label" : "profilul meu"
+      },
+      "logout" : {
+        "label" : "deconectare"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "Schimbă limba"
+      },
+      "MyProfile" : {
+        "label" : "profilul tău"
+      },
+      "MyProfileItem" : {
+        "label" : "profilul tău"
+      },
+      "chatMenuItem" : {
+        "label" : "Chat"
+      },
+      "setupMenuItem" : {
+        "label" : "Configurare"
+      },
+      "adminMenuItem" : {
+        "label" : "Admin"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "editează profilul"
+      },
+      "logoutMenuItem" : {
+        "label" : "deconectare"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiză listă documente"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizare documente"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea token-urilor"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexare semantică (embedding pentru semantic rag)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea token-urilor"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexare entități/relații/evenimente (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea tokenurilor"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "Analiza listei de documente"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "TOKENIZATION" : {
+        "description" : "Tokenizarea documentelor"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "EMBEDDING" : {
+        "description" : "Indexare semantică (embedding pentru semantic rag)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea tokenurilor"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "Indexare entități/relații/evenimente (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "Documente netratate",
+        "label-1" : "Eroare la procesarea documentelor",
+        "label-2" : "Documente procesate"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "Tokenuri procesate",
+        "dataset-1-label" : "Eroare la procesarea tokenurilor"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "Documente primite",
+        "dataset-1-label" : "Documente procesate",
+        "dataset-2-label" : "Documente cu erori",
+        "dataset-3-label" : "Documente eliminate"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Link pentru achiziție credit cheie Apy"
+      },
+      "ModifyBtn" : {
+        "label" : "Modifică",
+        "help" : "Vezi/modifică configurația modelului"
+      },
+      "ExistingModelCode" : {
+        "label" : "Cod"
+      },
+      "ExistingModelDesc" : {
+        "label" : "Descriere"
+      },
+      "ExistingModelType" : {
+        "label" : "Tip model"
+      },
+      "ExistingModelsSection" : {
+        "label" : "Configurații existente"
+      },
+      "ProviderWWW" : {
+        "label" : "Link site web"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "Date de autentificare furnizor"
+      },
+      "ProviderInfos" : {
+        "label" : "Informații furnizor"
+      },
+      "ExistingApiKey" : {
+        "label" : "Cheie API/credentțiale",
+        "help" : "Alege cheie API sau date de autentificare pentru acest furnizor"
+      },
+      "NewApiKey" : {
+        "label" : "Cheie API nouă",
+        "help" : "Introduceți o cheie API nouă pentru a fi folosită cu acest furnizor"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "Folosește existente sau creează noi",
+        "help" : "Folosește datele existente sau creează date noi de autentificare pentru acest furnizor"
+      },
+      "NewUserName" : {
+        "label" : "Nume utilizator",
+        "help" : "Numele de utilizator folosit pentru accesarea serviciilor furnizorului"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "Model nou de embedding",
+        "help" : "Creează o nouă configurație de model embedding"
+      },
+      "NewChatModel" : {
+        "label" : "Model Chat nou",
+        "help" : "Creează o nouă configurație de model chat"
+      },
+      "NewModelDialog" : {
+        "label" : "Adaugă model nou"
+      },
+      "PiSave" : {
+        "label" : "Salvează"
+      },
+      "NewModelsButton" : {
+        "label" : "Modele noi",
+        "help" : "Creează o nouă configurație de modele"
+      },
+      "NewModelsDialog" : {
+        "label" : "Adaugă modele noi"
+      },
+      "baseUrl" : {
+        "label" : "URL API de bază",
+        "help" : "URL de bază pentru serviciile API ale furnizorului"
+      },
+      "ModelTypePanel" : {
+        "label" : "Adaugă modele noi"
+      },
+      "ModelsChoices" : {
+        "label" : "Alege modele"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "Selecție modele sugerate"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "Model embedding",
+        "help" : "Selectați unul dintre modelele embedding predefinite"
+      },
+      "chatPresetChoice" : {
+        "label" : "Model Chat",
+        "help" : "Selectați unul dintre modelele de chat predefinite"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "Selecție modele avansate"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "Model embedding",
+        "help" : "Selectați unul dintre modelele embedding publicate de furnizor"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "Model Chat",
+        "help" : "Selectați unul dintre modelele de chat publicate de furnizor"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " Folosiți acest mod de selecție doar dacă aveți experiență sau verificați pe site-ul furnizorului ce modele se potrivesc nevoilor dvs. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model de chat"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " Vă sugerăm următoarea listă de modele "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model embedding"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "setează ca model de chat implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model de chat"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "setează ca model embedding implicit",
+        "help" : "Setează acest model ca implicit, va fi folosit pentru orice sarcină pentru care nu este configurat alt model embedding"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " Folosiți acest mod de selecție doar dacă aveți experiență sau verificați pe site-ul furnizorului ce modele se potrivesc nevoilor dvs. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "Creează și activează"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "Creează și activează"
+      },
+      "ProviderNameField" : {
+        "label" : "Furnizor"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "Furnizorul necesită credențiale",
+        "help" : "Aplicația furnizor/server este configurată pentru acces autentificat prin cheie API sau alte credențiale"
+      },
+      "baseUrl1" : {
+        "label" : "Url-ul de bază al API-ului",
+        "help" : "Url de bază al furnizorului pentru serviciile API"
+      },
+      "enableAllFunctions" : {
+        "label" : "activează toate apelurile de funcții",
+        "help" : "Activează toate instrumentele și apelurile de funcții disponibile, dacă nu este setat, va fi posibil să le activezi mai târziu din panoul de administrare llms"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "Furnizor AI la distanță OK",
+        "detail" : "Furnizorul este activ și configurat cu succes"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "Operațiune eșuată",
+        "detail" : "Nu se poate autentifica cu datele furnizate"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "OK!",
+        "detail" : "Operațiune realizată cu succes"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "Eroare la transmiterea răspunsului din chat",
+        "detail" : "Eroare server: clasa org.neo4j.driver.internal.value.StringValue nu poate fi convertită la clasa java.lang.String (org.neo4j.driver.internal.value.StringValue este în modulul fără nume al loader-ului 'app'; java.lang.String este în modulul java.base al loader-ului 'bootstrap')"
+      },
+      "OK" : {
+        "summary" : "Salvat cu succes",
+        "detail" : "Operațiunea de actualizare a fost finalizată cu succes"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "Eroare la comunicarea cu serverul Ollama",
+        "detail" : "Eroare de rețea la comunicarea cu sistemul la distanță pentru accesarea conținutului\n lista modelelor Eroare lucrând cu url:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "Poți șterge acest lucru",
+        "detail" : "Datele vizualizate în prezent pot fi șterse în siguranță"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "Nu poți șterge acest lucru",
+        "detail" : "Acest obiect este referit din alte părți ale aplicației"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "Încarcă fișiere pentru a conversa"
+      },
+      "ChooseFile" : {
+        "help" : "Alege fișiere"
+      },
+      "UploadFile" : {
+        "help" : "Încarcă fișiere"
+      },
+      "DragDropHere" : {
+        "label" : "Trage și plasează fișiere aici pentru a le încărca"
+      },
+      "RemoveAll" : {
+        "help" : "Elimină tot"
+      },
+      "UploadPending" : {
+        "label" : "În așteptare pentru încărcare"
+      },
+      "CompletedData" : {
+        "label" : "Finalizat"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "Configurați graphrag în zona de setare dacă doriți să îl folosiți în această secțiune"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Setări Graphrag"
+      },
+      "button-help" : {
+        "label" : "Apăsați aici pentru a configura extragerea informațiilor pentru graphrag (momentan neconfigurat)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "Adaugă configurație"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "Creează"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea sistemului Google Drive."
+      },
+      "MainPanel" : {
+        "label" : "Creează conexiune Google Drive/Workspace"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "delegatedUser" : {
+        "label" : "Utilizator Google de impersonat",
+        "help" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate",
+        "placeholder" : "Utilizatorul care va fi impersonat cu ajutorul acreditărilor furnizate"
+      },
+      "jsonContent" : {
+        "label" : "Conținut json acreditări Google",
+        "help" : "Creează acreditări Google cu acces la drive-urile workspace/echipă în Google Console Cloud și lipește aici conținutul fișierului json descărcat (https://console.cloud.google.com/).",
+        "placeholder" : "Creează acreditări Google cu acces la drive-urile workspace/echipă în Google Console Cloud și lipește aici conținutul fișierului json descărcat (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "PublishBtn" : {
+        "label" : "Publică!",
+        "help" : "Salvează și permite ca aceste conținuturi să fie disponibile în baza de cunoștințe pentru LLm"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "MainPanel" : {
+        "label" : "Partajare conținut Google Drive"
+      },
+      "SettingsTab" : {
+        "label" : "Setări"
+      },
+      "LogsTab" : {
+        "label" : "Jurnale"
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea conținutului încărcat din google drive."
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat al conținutului."
+      },
+      "tree" : {
+        "label" : "Fișierul sau folderul selectat",
+        "help" : "Spații Google Drive partajate și conținuturi de pagini"
+      },
+      "driveSystemCode" : {
+        "label" : "Configurația Google Drive",
+        "help" : "Referință către sistemul Google Drive deja configurat."
+      },
+      "openZips" : {
+        "label" : "Deschide fișiere zip",
+        "help" : "Activează deschiderea fișierelor zip și extragerea conținutului"
+      },
+      "parentProjectCode" : {
+        "label" : "Proiect",
+        "help" : "Referință proiect părinte."
+      },
+      "programmedTables" : {
+        "label" : "Program actualizări conținut",
+        "help" : "Configurează programarea verificării modificărilor de conținut pentru a menține sistemul actualizat cu recuperare augmentată de generare"
+      },
+      "catalogingCriteria" : {
+        "label" : "Criterii de organizare foldere și subfoldere",
+        "help" : "Te rugăm să explici aici cum a fost realizată organizarea fișierelor și folderelor în conținutul Google Drive partajat cu Gebo.ai"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "Setări generale"
+      },
+      "CancelBtn" : {
+        "label" : "Anulează"
+      },
+      "DeleteBtn" : {
+        "label" : "Șterge"
+      },
+      "SaveBtn" : {
+        "label" : "Salvează"
+      },
+      "MainPanel" : {
+        "label" : "Editare integrare Google Drive"
+      },
+      "code" : {
+        "label" : "Cod unic",
+        "help" : "Cod unic generat automat al sistemului Google Drive."
+      },
+      "description" : {
+        "label" : "Descriere",
+        "help" : "Introdu descrierea sistemului Google Drive."
+      },
+      "driveAccessSecret" : {
+        "label" : "Identitatea folosită",
+        "help" : "Selectează sau creează identitatea pentru accesul la sistemul Google Drive"
+      }
+    }
+  }
+}

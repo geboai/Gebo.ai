@@ -8,49 +8,55 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="loginUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #loginUI header="Login to gebo.ai" [formGroup]="formGroup">
-    <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
-    <div class="grid" >
-        <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-                <label for="username">Username</label>
-                <input pInputText id="username" formControlName="username" class="col-12" [required]="true"
-                    aria-describedby="username-help">
 
-                <small id="username-help">
-                    E-mail as username to login
-                </small>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="flex flex-column gap-2 ">
-                <label for="password">Password</label>
-                <p-password id="password" formControlName="password" class="col-12" [required]="true"
-                    aria-describedby="password-help" [feedback]="false"></p-password>
-                <small id="password-help">
-                    Password to login
-                </small>
-            </div>
-        </div>
-        <div class="col-4">
-            <p-button [outlined]="true" icon="pi pi-sign-in" label="Login" (onClick)="login()" [disabled]="formGroup.invalid"></p-button>
-        </div>
-        <div class="col-12" *ngIf="providers.length">
-            <p-fieldset legend="Login using provider">
+
+<form [formGroup]="formGroup" (ngSubmit)="onSumbit()">
+    <div class="grid">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <p-panel id="LoginPanel" gebo-ai-label #loginUI header="Login to gebo.ai">
                 <div class="grid">
-                    <div *ngFor="let provider of providers" class="col-12">
-                        <p-button [icon]="'pi pi-'+provider.providerName" (onClick)="onOauth2Click(provider)" [label]="provider.description" [outlined]="true" ></p-button>
-                      
+                    <div class="col-12"><p-messages [(value)]="userMessages" [enableService]="false"
+                            [closable]="false" /></div>
+                    <div class="col-12">
+                        <gebo-ai-field id="username" label="e-mail" help="E-mail as username to login"
+                            [required]="true"> <input pInputText formControlName="username" class="col-12"
+                                [required]="true" gebo-ai-field-element></gebo-ai-field>
+                    </div>
+                    <div class="col-12">
+                        <gebo-ai-field id="password" label="Password" help="Password to login" [required]="true">
+                            <p-password formControlName="password" class="col-12" [required]="true" [feedback]="false"
+                                gebo-ai-field-element></p-password>
+                        </gebo-ai-field>
+
+                    </div>
+                    <div class="col-4">
+                        <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login"
+                            (onClick)="login()" [disabled]="formGroup.invalid" type="submit"></p-button>
+                    </div>
+                    <div class="col-12" *ngIf="providers.length">
+                        <p-fieldset id="OauthProviders" gebo-ai-label legend="Login using provider">
+                            <div class="grid">
+                                <div *ngFor="let provider of providers" class="col-12">
+                                    <p-button [icon]="'pi pi-'+provider.providerName"
+                                        (onClick)="onOauth2Click(provider)" [label]="provider.description"
+                                        [outlined]="true"></p-button>
+
+                                </div>
+                            </div>
+                        </p-fieldset>
                     </div>
                 </div>
-            </p-fieldset>
+            </p-panel>
         </div>
+        <div class="col-3"></div>
     </div>
-</p-panel>
+
+</form>

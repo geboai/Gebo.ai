@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.controllers;
 
@@ -37,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.ReferenceType;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceView;
 import jakarta.validation.Valid;
@@ -44,13 +42,13 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * Controller for managing content meta-information related to documents.
- * Provides various endpoints to retrieve document metadata, content objects, and perform searches.
- * AI generated comments
+ * Provides various endpoints to retrieve document metadata, content objects,
+ * and perform searches. AI generated comments
  */
 @RestController
 @RequestMapping("api/users/ContentMetaInfosController")
 public class ContentMetaInfosController {
-    // Injects the repository to handle document references
+	// Injects the repository to handle document references
 	@Autowired
 	DocumentReferenceRepository repository;
 
@@ -58,24 +56,25 @@ public class ContentMetaInfosController {
 	 * Class to hold metadata information about content.
 	 */
 	public static class ContentMetaInfo {
-        // Indicates if the content exists
+		// Indicates if the content exists
 		public boolean exists = false;
-        // Code representing the document
+		// Code representing the document
 		public String code = null;
-        // File extension of the document
+		// File extension of the document
 		public String extension = null;
-        // Content type of the document
+		// Content type of the document
 		public String contentType = null;
-        // Name of the file
+		// Name of the file
 		public String fileName = null;
-        // Code of the parent project associated with the document
+		// Code of the parent project associated with the document
 		public String parentProjectCode = null;
-        // Root knowledge base associated with the document
+		// Root knowledge base associated with the document
 		public String rootKnowledgeBase = null;
-        // Identifier for the module
+		// Identifier for the module
 		public String moduleId = null;
-        // URL to access the document
+		// URL to access the document
 		public String url = null;
+		public ReferenceType referenceType;
 
 	}
 
@@ -92,10 +91,12 @@ public class ContentMetaInfosController {
 	 */
 	@GetMapping(value = "getContentMetaInfos", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ContentMetaInfo getContentMetaInfos(@RequestParam("code") String code) {
-		ContentMetaInfo meta = new ContentMetaInfo();
+		ContentMetaInfo meta = null;
 		Optional<GDocumentReference> content = repository.findById(code);
-		meta.exists = content.isPresent(); // Check if content exists
-		if (meta.exists) {
+		// Check if content exists
+		if (content.isPresent()) {
+			meta = new ContentMetaInfo();
+			meta.exists = true;
 			GDocumentReference document = content.get();
 			meta.code = document.getCode();
 			meta.contentType = document.getContentType();
@@ -105,6 +106,7 @@ public class ContentMetaInfosController {
 			meta.rootKnowledgeBase = document.getRootKnowledgebaseCode();
 			meta.url = document.getUri();
 			meta.moduleId = document.getMessagingModuleId();
+			meta.referenceType = document.getReferenceType();
 		}
 		return meta;
 	}
@@ -115,7 +117,7 @@ public class ContentMetaInfosController {
 	public static class ContentObject {
 		public String content = null;
 
-        // Default constructor
+		// Default constructor
 		public ContentObject() {
 		}
 

@@ -6,14 +6,14 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, ConfigurationEntry, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType } from "@Gebo.ai/gebo-ai-rest-api";
-import { GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
@@ -27,26 +27,29 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
 @Component({
     selector: "llms-systems-component",
     templateUrl: "llms-systems.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false },{
+        provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LlmsSystemsComponent")
+    }]
 })
-export class LlmsSystemsComponent   extends AncestorPanelComponent    implements OnInit {
-    chatModels: ConfigurationEntry[]=[];
-    embeddingModels: ConfigurationEntry[]=[];
-    chatModelsTypes: GChatModelType[]=[];
-    embeddingModelsTypes: GEmbeddingModelType[]=[];
-    
+export class LlmsSystemsComponent extends AncestorPanelComponent implements OnInit {
+    chatModels: ConfigurationEntry[] = [];
+    embeddingModels: ConfigurationEntry[] = [];
+    chatModelsTypes: GChatModelType[] = [];
+    embeddingModelsTypes: GEmbeddingModelType[] = [];
+
     /**
      * Overrides the parent method to reload data when the panel needs to refresh
      */
     public override reloadViewedData(): void {
-       this.loadData();
+        this.loadData();
     }
     public loading: boolean = false;
     //chatModels: [] = [];
     //embeddingModels: ConfigurationEntryGBaseEmbeddingModelConfigGBaseEmbeddingModelChoice[] = [];
     //chatModelsTypes: GChatModelType[] = [];
     //embeddingModelsTypes: GEmbeddingModelType[] = [];
-    
+
     /**
      * Form group to manage the user's model type selections for chat and embedding models
      */
@@ -54,7 +57,7 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
         chat: new FormControl(),
         embed: new FormControl()
     });
-    
+
     /**
      * Initializes the component with required services
      * 
@@ -65,9 +68,9 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
     constructor(private chatModelsControllerService: ChatModelsControllerService,
         private embeddingModelsControllerService: EmbeddingModelsControllersService,
         private geboUIActionRouter: GeboUIActionRoutingService) {
-            super()
+        super()
     }
-    
+
     /**
      * Configures a new chat model based on the user's selection
      * Creates a new model configuration and routes a NEW action request
@@ -75,8 +78,8 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
     public configureChatModel() {
         const formValue = this.createChoices.value;
         const choosedType = this.chatModelsTypes.find(x => x.code === formValue.chat);
-        const chatModelConfig:GBaseChatModelConfig= {
-            accessibleToAll:true,
+        const chatModelConfig: GBaseChatModelConfig = {
+            accessibleToAll: true,
             modelTypeCode: choosedType?.code
         };
         if (choosedType) {
@@ -94,7 +97,7 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-    
+
     /**
      * Configures a new embedding model based on the user's selection
      * Creates a new model configuration and routes a NEW action request
@@ -102,7 +105,7 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
     public configureEmbeddingModel() {
         const formValue = this.createChoices.value;
         const choosedType = this.embeddingModelsTypes.find(x => x.code === formValue.embed);
-        const modelConfig:GBaseChatModelConfig= {
+        const modelConfig: GBaseChatModelConfig = {
             modelTypeCode: choosedType?.code
         };
         if (choosedType) {
@@ -120,7 +123,7 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-    
+
     /**
      * Opens the edit interface for a chat model configuration
      * 
@@ -142,13 +145,13 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-    
+
     /**
      * Opens the edit interface for an embedding model configuration
      * 
      * @param model The model configuration entry to edit
      */
-    public editEmbeddingModel(model:ConfigurationEntry) {
+    public editEmbeddingModel(model: ConfigurationEntry) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
             const action: GeboUIActionRequest = {
@@ -164,7 +167,7 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
             this.geboUIActionRouter.routeEvent(action);
         }
     }
-    
+
     /**
      * Loads all required data from the API services using forkJoin to combine multiple requests
      * Updates the component's state with the fetched data upon completion
@@ -183,7 +186,7 @@ export class LlmsSystemsComponent   extends AncestorPanelComponent    implements
             }
         });
     }
-    
+
     /**
      * Angular lifecycle hook that initializes the component by loading data
      */

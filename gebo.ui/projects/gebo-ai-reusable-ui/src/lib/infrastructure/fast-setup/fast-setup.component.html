@@ -8,58 +8,56 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
  -->
- 
- 
- 
+
+
+
 
 <p-blockUI [target]="setupUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel #setupUI header="Setup your gebo.ai installation" [formGroup]="formGroup">
+<p-panel id="SetupPage" gebo-ai-label #setupUI header="Setup your gebo.ai installation" [formGroup]="formGroup">
     <p-messages [(value)]="userMessages" [enableService]="false" [closable]="false" />
     <div class="grid">
-       
+
         <div class="col-12">
-            <p-fieldset legend="Create your local admin account">
-                <p>You'll use this account in the future to setup/administer the software, this data <b>will remain local to your system and is not sent over the network</b></p>
+            <p-fieldset id="LocalAdmin" gebo-ai-label legend="Create your local admin account">
+                <p id="LocalAdminExplanation" gebo-ai-text>You'll use this account in the future to setup/administer the software, this data will remain local
+                    to your system and is not sent over the network</p>
                 <div class="grid">
                     <div class="col-12">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="username">E-mail</label>
-                            <input pInputText id="username" formControlName="username" class="col-12" [required]="true" [email]="true"
-                                [readonly]="status?.result===true" aria-describedby="username-help">
+                        <gebo-ai-field id="username" label="E-mail" help="E-mail as username to login">
+                            <input pInputText formControlName="username" class="col-12" [required]="true" [email]="true"
+                                [readonly]="status?.result===true">
+                        </gebo-ai-field>
 
-                            <small id="username-help">
-                                E-mail as username to login
-                            </small>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                        <gebo-ai-field id="langCode" label="Default system language" help="Default system language for this Gebo.ai installation" [required]="true">
+                            <gebo-ai-language-choice-component formControlName="lang" [required]="true"></gebo-ai-language-choice-component>
+                        </gebo-ai-field>
+
                     </div>
                     <div class="col-3" *ngIf="!status?.result">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="password">Password</label>
-                            <p-password id="password" formControlName="password"   styleClass="w-full" [required]="true"
-                                aria-describedby="password-help"></p-password>
-                            <small id="password-help">
-                                Password to login (at least 8 characters)
-                            </small>
-                        </div>
+                        <gebo-ai-field id="password" label="Password" help="Password to login (at least 8 characters)">
+                            <p-password formControlName="password" styleClass="w-full" [required]="true"></p-password>
+                        </gebo-ai-field>
                     </div>
                     <div class="col-3" *ngIf="!status?.result">
-                        <div class="flex flex-column gap-2 ">
-                            <label for="passwordC">Confirm password</label>
-                            <p-password id="passwordC" formControlName="passwordC"   styleClass="w-full" [required]="true"
-                                aria-describedby="passwordC-help" [feedback]="false"></p-password>
-                            <small id="password-help">
-                                Confirm password
-                            </small>
-                        </div>
+                        <gebo-ai-field id="passwordC" label="Confirm password" help="Confirm password">
+                            <p-password formControlName="passwordC" styleClass="w-full" [required]="true"
+                                [feedback]="false"></p-password>
+                        </gebo-ai-field>
+
                     </div>
                     <div class="col-6" style="text-align: left;color:red;">
-                        <span *ngIf="formGroup.controls['password'].value!==formGroup.controls['passwordC'].value">
+                        <span [hidden]="formGroup.controls['password'].value===formGroup.controls['passwordC'].value"
+                            id="PasswordNotMatching" gebo-ai-text>
                             passwords do not match
                         </span>
-                        
-                        <span *ngIf="formGroup.controls['password'].value && formGroup.controls['password'].value.length<8">
+
+                        <span
+                            [hidden]="!(formGroup.controls['password'].value && formGroup.controls['password'].value.length<8)"
+                            gebo-ai-text>
                             must be at least 8 characters long
                         </span>
                     </div>
@@ -73,13 +71,13 @@
 
 
 
-        <div class="col-4" *ngIf="!status?.result">
-            <p-button  icon="pi pi-wrench" label="Create system setup" (onClick)="doSetup()"
+        <div class="col-4" [hidden]="status?.result">
+            <p-button id="CreateBtn" gebo-ai-label icon="pi pi-wrench" label="Create system setup" (onClick)="doSetup()"
                 [disabled]="formGroup.invalid"></p-button>
         </div>
-        <div class="col-12" *ngIf="status?.result">
-            <p-button [outlined]="true" icon="pi pi-sign-in" label="Go to the login page to enter"
-                (onClick)="doLogin()"></p-button>
+        <div class="col-12" [hidden]="!(status?.result)">
+            <p-button id="EnterBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in"
+                label="Go to the login page to enter" (onClick)="doLogin()"></p-button>
         </div>
 
 

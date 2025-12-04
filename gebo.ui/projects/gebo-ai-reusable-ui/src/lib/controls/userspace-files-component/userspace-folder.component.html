@@ -9,23 +9,16 @@
  */
  -->
  
- 
- 
-
-<p-panel #userspaceFolderUI header="User space folder editing">
+<p-panel id="UserSpaceFolderEditingPanel" gebo-ai-label #userspaceFolderUI header="User space folder editing">
   <p-blockUI [target]="userspaceFolderUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
   <div class="grid" [formGroup]="formGroup">
     <div class="col-12">
-      <div class="flex flex-column gap-2">
-        <label for="description">User folder description</label>
-        <input pInputText id="description" formControlName="description" maxlength="120" [required]="true"
-          aria-describedby="description-help" />
-        <small id="description-help">
-          Enter the description of your folder .
-        </small>
-      </div>
+      <gebo-ai-field id="description" label="User folder description" help="Enter the description of your folder." [required]="true">
+        <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+      </gebo-ai-field>
     </div>
   </div>
 </p-panel>
+<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

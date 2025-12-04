@@ -1,6 +1,20 @@
 .standardTabDialogueHeight {
     height: 800px;
 }
+.p-megamenu {
+    border: 0px !important;
+}
 .megaMenuWhite {
-    background-color: white;
+    //background-color: white;
+    
+}
+.header-row {
+  display: flex;
+  align-items: flex-end;   
+}
+
+.header-menu {
+  flex: 1;                 
+  display: flex;
+  justify-content: flex-end;
 }

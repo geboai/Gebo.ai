@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.chat.abstraction.layer.model;
 
@@ -19,22 +16,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.model.IGObjectWithSecurity;
+import ai.gebo.model.annotations.GObjectReference;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 
 /**
- * AI generated comments
- * Represents the configuration for a chat profile, extending the base object class
- * and implementing security-related functionality through IGObjectWithSecurity.
+ * AI generated comments Represents the configuration for a chat profile,
+ * extending the base object class and implementing security-related
+ * functionality through IGObjectWithSecurity.
  */
 @Document
 public class GChatProfileConfiguration extends GBaseObject implements IGObjectWithSecurity {
-	
+
 	/**
 	 * Constant for the default chat profile code.
 	 */
 	public static final String DEFAULT_CHAT_PROFILE_CODE = "default-rag-chat-profile";
-	
+
 	/**
 	 * The prompt used in the chat profile.
 	 */
@@ -43,11 +41,13 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 	/**
 	 * Reference to the embedding model configuration.
 	 */
+	@GObjectReference(referencedType = GBaseEmbeddingModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseEmbeddingModelConfig> embeddingModelReference = null;
 
 	/**
 	 * Reference to the chat model configuration.
 	 */
+	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
 
 	/**
@@ -327,7 +327,8 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 	/**
 	 * Sets the read-only status of forced request documents.
 	 * 
-	 * @param forcedRequestDocumentsReadonly - true to make read-only, otherwise false.
+	 * @param forcedRequestDocumentsReadonly - true to make read-only, otherwise
+	 *                                       false.
 	 */
 	public void setForcedRequestDocumentsReadonly(Boolean forcedRequestDocumentsReadonly) {
 		this.forcedRequestDocumentsReadonly = forcedRequestDocumentsReadonly;

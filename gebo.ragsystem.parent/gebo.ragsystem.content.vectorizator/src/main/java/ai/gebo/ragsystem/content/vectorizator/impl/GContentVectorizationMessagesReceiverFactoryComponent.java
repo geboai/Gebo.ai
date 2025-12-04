@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.ragsystem.content.vectorizator.impl;
 
@@ -25,18 +22,17 @@ import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
-import ai.gebo.core.messages.GDocumentMessageFragmentPayload;
 import ai.gebo.core.messages.GDocumentReferencePayload;
 import ai.gebo.core.messages.GRawContentMessageFragmentPayload;
-import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingRouter;
+import ai.gebo.ragsystem.content.vectorizator.IGEmbeddingMessageReceiver;
 import ai.gebo.ragsystem.content.vectorizator.config.GeboVectorizatorConfig;
 
 /**
  * AI generated comments
  * 
- * Factory component responsible for creating content vectorization message receivers.
- * This singleton component handles the creation of message receivers for vectorizing
- * different types of content payloads within the RAG system.
+ * Factory component responsible for creating content vectorization message
+ * receivers. This singleton component handles the creation of message receivers
+ * for vectorizing different types of content payloads within the RAG system.
  */
 @Component
 @Scope("singleton")
@@ -66,8 +62,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	@Override
 	public List<String> getAcceptedPayloadTypes() {
 
-		return List.of(GDocumentMessageFragmentPayload.class.getName(),
-				GRawContentMessageFragmentPayload.class.getName(), GDocumentReferencePayload.class.getName());
+		return List.of(GRawContentMessageFragmentPayload.class.getName(), GDocumentReferencePayload.class.getName());
 	}
 
 	/**
@@ -115,8 +110,9 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	}
 
 	/**
-	 * Nested class that implements a batch message receiver specifically for content vectorization.
-	 * Extends the generic nested batch aggregator to provide content-specific processing logic.
+	 * Nested class that implements a batch message receiver specifically for
+	 * content vectorization. Extends the generic nested batch aggregator to provide
+	 * content-specific processing logic.
 	 */
 	class BatchContentVectorizationMessagesReceiver extends GNestedBatchAggregatorMessageReceiver {
 
@@ -124,7 +120,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		 * Constructor for the batch content vectorization message receiver.
 		 * 
 		 * @param batchMessagesReceiver The batch message receiver implementation
-		 * @param batchThreshold The threshold for batching messages
+		 * @param batchThreshold        The threshold for batching messages
 		 */
 		public BatchContentVectorizationMessagesReceiver(IGBatchMessagesReceiver batchMessagesReceiver,
 				int batchThreshold) {
@@ -138,14 +134,14 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		 */
 		@Override
 		public void accept(GMessageEnvelope msg) {
-			if (msg.getPayload() instanceof GDocumentMessageFragmentPayload
-					|| msg.getPayload() instanceof GDocumentReferencePayload) {
+			if (msg.getPayload() instanceof GDocumentReferencePayload) {
 				super.accept(msg);
 			}
 		}
 
 		/**
-		 * Determines if a batch should be immediately processed based on cumulative content size.
+		 * Determines if a batch should be immediately processed based on cumulative
+		 * content size.
 		 * 
 		 * @param messages The list of message envelopes in the current batch
 		 * @return true if the cumulative size exceeds the configured threshold
@@ -154,12 +150,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 		protected boolean isImmediateFlushRequired(List<GMessageEnvelope> messages) {
 			long cumulativeSize = 0l;
 			for (GMessageEnvelope msg : messages) {
-				if (msg.getPayload() instanceof GDocumentMessageFragmentPayload) {
-					GDocumentMessageFragmentPayload pl = (GDocumentMessageFragmentPayload) msg.getPayload();
-					if (pl.getCumulativeLength() != null) {
-						cumulativeSize += pl.getCumulativeLength().longValue();
-					}
-				} else if (msg.getPayload() instanceof GDocumentReferencePayload) {
+				if (msg.getPayload() instanceof GDocumentReferencePayload) {
 					GDocumentReferencePayload payload = (GDocumentReferencePayload) msg.getPayload();
 					if (payload.getDocumentReference() != null
 							&& payload.getDocumentReference().getFileSize() != null) {
@@ -178,7 +169,7 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 	 */
 	@Override
 	public IGTimedOutMessageReceiver create() {
-		IGEmbeddingRouter router = runtimeBinder.getImplementationOf(IGEmbeddingRouter.class);
+		IGEmbeddingMessageReceiver router = runtimeBinder.getImplementationOf(IGEmbeddingMessageReceiver.class);
 		return new BatchContentVectorizationMessagesReceiver(router,
 				factoryConfig.getFlushThreshold() != null ? factoryConfig.getFlushThreshold() : 10);
 	}

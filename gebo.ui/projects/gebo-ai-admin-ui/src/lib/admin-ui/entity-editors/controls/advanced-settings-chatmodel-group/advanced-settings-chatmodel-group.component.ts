@@ -6,9 +6,9 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
+
+
+
 
 /**
  * AI generated comments
@@ -20,16 +20,19 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { FunctionsLookupControllerService, GLookupEntry, GPromptConfig, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "gebo-advanced-chatmodel-group-component",
     templateUrl: "advanced-settings-chatmodel-group.component.html",
-    standalone: false
+    standalone: false,
+    providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAdvancedChatModelModule", multi: false },
+    { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAdvancedChatModelGroupComponent") }]
 })
 export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges {
     /** Form group for managing the advanced chat model settings */
     @Input() formGroup?: FormGroup;
-    
+
     /** 
      * Determines the mode of operation for the component
      * - NEW: Creating a new chat model
@@ -37,16 +40,16 @@ export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges 
      * - EDIT_OR_NEW: Flexible mode supporting both operations
      */
     @Input() mode?: "NEW" | "EDIT" | "EDIT_OR_NEW";
-    
+
     /** Flag indicating whether the entity data has been loaded */
     @Input() entityDataLoaded: boolean = false;
-    
+
     /** List of available functions that can be used in the chat model */
     public functionsList: GLookupEntry[] = [];
-    
+
     /** Loading state indicator for asynchronous operations */
     public loading: boolean = false;
-    
+
     /**
      * Constructor initializes the component with required services
      * @param functionsLookupControllerService Service for retrieving available functions
@@ -56,7 +59,7 @@ export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges 
         private promptTemplatesControllerService: PromptTemplatesControllerService) {
 
     }
-    
+
     /**
      * Lifecycle hook that initializes the component
      * Fetches the list of available functions when the component is initialized
@@ -72,7 +75,7 @@ export class GeboAIAdvancedChatModelGroupComponent implements OnInit, OnChanges 
             }
         });
     }
-    
+
     /**
      * Lifecycle hook that responds to changes in component inputs
      * Fetches and sets the default prompt when entity data is loaded and form is available

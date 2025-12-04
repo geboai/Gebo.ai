@@ -26,6 +26,7 @@ export * from  "./lib/architecture/gebo-ui-entity-form-config";
 export * from "./lib/architecture/gebo-ui-architecture.module";
 export * from "./lib/architecture/gebo-ui-modal-opener.component";
 export * from "./lib/controls/base-entity-editing-component/base-entity-editing.component";
+export * from "./lib/controls/base-entity-editing-component/base-entity-editing-auto-delete-check.component";
 export * from "./lib/controls/base-entity-editing-component/entities-modification-wizard";
 export * from "./lib/controls/base-entity-editing-component/operation-status";
 
@@ -82,4 +83,14 @@ export * from "./lib/services/auth-interceptor.service";
 export * from "./lib/services/gebo-backends-list.service";
 export * from "./lib/controls/gebo-oauth2-secret-component/gebo-oauth2-secret.module";
 
+export * from "./lib/controls/content-selection-filter-component/content-selection-filter.module";
+
+export * from "./lib/controls/field-translation-container/field-container.module";
+export * from "./lib/controls/field-translation-container/gebo-translation.service";
+export * from "./lib/controls/field-translation-container/text-language-resources";
+
+export * from "./lib/controls/field-host-component-iface/field-host-component-iface";
+
+export * from "./lib/controls/choose-llm-functions/choose-llm-functions.module";
+export * from "./lib/architecture/validation";
 

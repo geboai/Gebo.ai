@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.ragsystem.content.vectorizator.impl;
 
@@ -23,7 +20,7 @@ import ai.gebo.application.messaging.SystemComponentType;
 import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.core.messages.GContentEmbeddingHandshakePayload;
-import ai.gebo.core.messages.GContentsVectorizationStatusUpdatePayload;
+import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
 import ai.gebo.core.messages.GUserMessagePayload;
 
 /**
@@ -49,7 +46,7 @@ public class GContentVectorizationEmitterComponent implements IGMessageEmitter {
 	 */
 	public GContentVectorizationEmitterComponent(IGMessageBroker broker) {
 		this.broker = broker;
-		
+
 	}
 
 	/**
@@ -90,7 +87,7 @@ public class GContentVectorizationEmitterComponent implements IGMessageEmitter {
 	@Override
 	public List<String> getEmittedPayloadTypes() {
 		return List.of(GContentEmbeddingHandshakePayload.class.getName(), GUserMessagePayload.class.getName(),
-				GContentsVectorizationStatusUpdatePayload.class.getName());
+				GContentsProcessingStatusUpdatePayload.class.getName());
 	}
 
 	/**

@@ -6,9 +6,6 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.core.impl;
 
@@ -31,214 +28,195 @@ import ai.gebo.application.messaging.model.GStandardModulesConstraints;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.config.GeboCoreConfig;
 import ai.gebo.core.messages.GContentsProcessingStatusUpdatePayload;
-import ai.gebo.core.messages.GContentsVectorizationStatusUpdatePayload;
 import ai.gebo.core.messages.GUserMessagePayload;
 import ai.gebo.knlowledgebase.model.jobs.ContentsBatchProcessed;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
-import ai.gebo.knlowledgebase.model.jobs.VectorizatorBatchProcessed;
 import ai.gebo.knowledgebase.repositories.ContentsBatchProcessedRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.knowledgebase.repositories.UserMessageRepository;
-import ai.gebo.knowledgebase.repositories.VectorizatorBatchProcessedRepository;
 import ai.gebo.model.GUserMessage;
 
 /**
- * Factory class to create message receivers for handling user messages, contents processing statuses,
- * and vectorization status updates within the Gebo system.
- * AI generated comments
+ * Factory class to create message receivers for handling user messages,
+ * contents processing statuses, and vectorization status updates within the
+ * Gebo system. AI generated comments
  */
 @Component
 @Scope("singleton")
 public class GCoreUserMessagesReceiverFactory extends GAbstractTimedOutMessageReceiverFactory {
-    /**
-     * Constructor initializing the user message receiver configuration.
-     * 
-     * @param config The configuration object containing user message receiver settings.
-     */
-    public GCoreUserMessagesReceiverFactory(GeboCoreConfig config) {
-        super(config.getUserMessagesReceiverConfig());
-    }
+	/**
+	 * Constructor initializing the user message receiver configuration.
+	 * 
+	 * @param config The configuration object containing user message receiver
+	 *               settings.
+	 */
+	public GCoreUserMessagesReceiverFactory(GeboCoreConfig config) {
+		super(config.getUserMessagesReceiverConfig());
+	}
 
-    @Autowired
-    IGRuntimeBinder binder;
-    @Autowired
-    JobStatusRepository jobsRepo;
+	@Autowired
+	IGRuntimeBinder binder;
+	@Autowired
+	JobStatusRepository jobsRepo;
 
-    /**
-     * Returns the list of accepted payload types that this factory can handle.
-     * 
-     * @return a list of payload type names.
-     */
-    @Override
-    public List<String> getAcceptedPayloadTypes() {
-        return List.of(GUserMessagePayload.class.getName(), GContentsProcessingStatusUpdatePayload.class.getName(),
-                GContentsVectorizationStatusUpdatePayload.class.getName());
-    }
+	/**
+	 * Returns the list of accepted payload types that this factory can handle.
+	 * 
+	 * @return a list of payload type names.
+	 */
+	@Override
+	public List<String> getAcceptedPayloadTypes() {
+		return List.of(GUserMessagePayload.class.getName(), GContentsProcessingStatusUpdatePayload.class.getName());
+	}
 
-    /**
-     * Indicates whether every payload type is accepted by this receiver.
-     * 
-     * @return false, indicating that not every payload type is accepted.
-     */
-    @Override
-    public boolean isAcceptEveryPayloadType() {
-        return false;
-    }
+	/**
+	 * Indicates whether every payload type is accepted by this receiver.
+	 * 
+	 * @return false, indicating that not every payload type is accepted.
+	 */
+	@Override
+	public boolean isAcceptEveryPayloadType() {
+		return false;
+	}
 
-    /**
-     * Gets the ID of the messaging module used.
-     * 
-     * @return the CORE_MODULE ID defined in standard module constraints.
-     */
-    @Override
-    public String getMessagingModuleId() {
-        return GStandardModulesConstraints.CORE_MODULE;
-    }
+	/**
+	 * Gets the ID of the messaging module used.
+	 * 
+	 * @return the CORE_MODULE ID defined in standard module constraints.
+	 */
+	@Override
+	public String getMessagingModuleId() {
+		return GStandardModulesConstraints.CORE_MODULE;
+	}
 
-    /**
-     * Gets the ID of the messaging system component used.
-     * 
-     * @return the USER_MESSAGES_CONCENTRATOR_COMPONENT ID defined in standard module constraints.
-     */
-    @Override
-    public String getMessagingSystemId() {
-        return GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT;
-    }
+	/**
+	 * Gets the ID of the messaging system component used.
+	 * 
+	 * @return the USER_MESSAGES_CONCENTRATOR_COMPONENT ID defined in standard
+	 *         module constraints.
+	 */
+	@Override
+	public String getMessagingSystemId() {
+		return GStandardModulesConstraints.USER_MESSAGES_CONCENTRATOR_COMPONENT;
+	}
 
-    /**
-     * Gets the type of the component.
-     * 
-     * @return APPLICATION_COMPONENT indicating the component type.
-     */
-    @Override
-    public SystemComponentType getComponentType() {
-        return SystemComponentType.APPLICATION_COMPONENT;
-    }
+	/**
+	 * Gets the type of the component.
+	 * 
+	 * @return APPLICATION_COMPONENT indicating the component type.
+	 */
+	@Override
+	public SystemComponentType getComponentType() {
+		return SystemComponentType.APPLICATION_COMPONENT;
+	}
 
-    /**
-     * Retrieves the job status based on the job ID.
-     * 
-     * @param id The ID of the job.
-     * @return The job status if found, null otherwise.
-     */
-    private GJobStatus retrieveJS(String id) {
-        Optional<GJobStatus> job = jobsRepo.findById(id);
-        if (job.isPresent())
-            return job.get();
-        else
-            return null;
-    }
+	/**
+	 * Retrieves the job status based on the job ID.
+	 * 
+	 * @param id The ID of the job.
+	 * @return The job status if found, null otherwise.
+	 */
+	private GJobStatus retrieveJS(String id) {
+		Optional<GJobStatus> job = jobsRepo.findById(id);
+		if (job.isPresent())
+			return job.get();
+		else
+			return null;
+	}
 
-    /**
-     * Inner class for handling nested user messages with batch aggregation.
-     */
-    class NestedUserMessagesAggregatorMessageReceiver extends GNestedBatchAggregatorMessageReceiver {
+	/**
+	 * Inner class for handling nested user messages with batch aggregation.
+	 */
+	class NestedUserMessagesAggregatorMessageReceiver extends GNestedBatchAggregatorMessageReceiver {
 
-        /**
-         * Constructor initializing nested batch aggregator message receiver.
-         * 
-         * @param nested          The nested batch messages receiver.
-         * @param flushThreshold  The threshold for flushing messages.
-         */
-        public NestedUserMessagesAggregatorMessageReceiver(IGBatchMessagesReceiver nested, int flushThreshold) {
-            super(nested, flushThreshold);
-        }
+		/**
+		 * Constructor initializing nested batch aggregator message receiver.
+		 * 
+		 * @param nested         The nested batch messages receiver.
+		 * @param flushThreshold The threshold for flushing messages.
+		 */
+		public NestedUserMessagesAggregatorMessageReceiver(IGBatchMessagesReceiver nested, int flushThreshold) {
+			super(nested, flushThreshold);
+		}
 
-        /**
-         * Accepts a message envelope and processes payloads accordingly.
-         *
-         * @param t The message envelope.
-         */
-        @Override
-        public void accept(GMessageEnvelope t) {
-            if (t.getPayload() instanceof GUserMessagePayload) {
-                // Pass user message payloads to the super class for processing
-                super.accept(t);
-            } else if (t.getPayload() instanceof GContentsProcessingStatusUpdatePayload) {
-                GContentsProcessingStatusUpdatePayload payload = (GContentsProcessingStatusUpdatePayload) t.getPayload();
-                ContentsBatchProcessed processed = new ContentsBatchProcessed();
-                processed.setJobId(payload.getJobId());
-                processed.setHowManyBatchDocuments(payload.getHowManyBatchDocuments());
-                processed.setHowManyBatchContentsReadingErrors(payload.getHowManyBatchContentsReadingErrors());
-                processed.setHowManyBatchPersistendDocuments(payload.getHowManyBatchPersistendDocuments());
-                processed.setHowManyBatchSentToVectorization(payload.getHowManyBatchSentToVectorization());
-                processed.setLastMessage(payload.getLastMessage());
-                processed.setTimestamp(payload.getTimestamp());
-                processed.setId(UUID.randomUUID().toString());
-                ContentsBatchProcessedRepository repo = binder.getImplementationOf(ContentsBatchProcessedRepository.class);
-                repo.insert(processed);
-                Optional<GJobStatus> optstatus = jobsRepo.findById(payload.getJobId());
-                if (optstatus.isPresent()) {
-                    GJobStatus status = optstatus.get();
-                    status.updateWith(processed);
-                    jobsRepo.save(status);
-                }
-            } else if (t.getPayload() instanceof GContentsVectorizationStatusUpdatePayload) {
-                GContentsVectorizationStatusUpdatePayload vectorizationStatus = (GContentsVectorizationStatusUpdatePayload) t.getPayload();
-                VectorizatorBatchProcessedRepository repo = binder.getImplementationOf(VectorizatorBatchProcessedRepository.class);
-                VectorizatorBatchProcessed processed = new VectorizatorBatchProcessed();
-                processed.setCurrentBatchDocumentReceviedCounter(vectorizationStatus.getCurrentBatchDocumentReceviedCounter());
-                processed.setCurrentBatchDocumentVectorizedCounter(vectorizationStatus.getCurrentBatchDocumentVectorizedCounter());
-                processed.setVectorizationErrors(vectorizationStatus.getVectorizationErrors());
-                processed.setId(UUID.randomUUID().toString());
-                processed.setJobId(vectorizationStatus.getJobId());
-                processed.setVectorizedSegments(vectorizationStatus.getVectorizedSegments());
-                processed.setVectorizedTokens(vectorizationStatus.getVectorizedTokens());
-                processed.setTimestamp(vectorizationStatus.getTimestamp());
-                repo.insert(processed);
-                Optional<GJobStatus> optstatus = jobsRepo.findById(vectorizationStatus.getJobId());
-                if (optstatus.isPresent()) {
-                    GJobStatus status = optstatus.get();
-                    status.updateWith(processed);
-                    jobsRepo.save(status);
-                }
-            } else {
-                throw new IllegalStateException("This receiver cannot handle payload type:" + t.getPayloadType());
-            }
-        }
-    }
+		/**
+		 * Accepts a message envelope and processes payloads accordingly.
+		 *
+		 * @param t The message envelope.
+		 */
+		@Override
+		public void accept(GMessageEnvelope t) {
+			if (t.getPayload() instanceof GUserMessagePayload) {
+				// Pass user message payloads to the super class for processing
+				super.accept(t);
+			} else if (t.getPayload() instanceof GContentsProcessingStatusUpdatePayload payload) {
 
-    /**
-     * Inner class for receiving messages in batches related to user messages.
-     */
-    class NestedBatchUserMessagesReceiver implements IGBatchMessagesReceiver {
-        UserMessageRepository umrepo;
+				ContentsBatchProcessed processed = new ContentsBatchProcessed();
+				processed.setJobId(payload.getJobId());
+				processed.setWorkflowType(payload.getWorkflowType());
+				processed.setWorkflowId(payload.getWorkflowId());
+				processed.setWorkflowStepId(payload.getWorkflowStepId());
+				processed.setBatchDocumentsInput(payload.getBatchDocumentsInput());
+				processed.setBatchDocumentsProcessingErrors(payload.getBatchDocumentsProcessingErrors());
+				processed.setBatchDocumentsProcessed(payload.getBatchDocumentsProcessed());
+				processed.setBatchDiscardedInput(payload.getBatchDiscardedInput());
+				processed.setBatchSentToNextStep(payload.getBatchSentToNextStep());
+				processed.setChunksProcessed(payload.getChunksProcessed());
+				processed.setTokensProcessed(payload.getTokensProcessed());
+				processed.setLastMessage(payload.getLastMessage());
+				processed.setTimestamp(t.getTimestamp());
+				processed.setId(UUID.randomUUID().toString());
+				ContentsBatchProcessedRepository repo = binder
+						.getImplementationOf(ContentsBatchProcessedRepository.class);
+				repo.insert(processed);
 
-        /**
-         * Constructor to initialize the user message repository.
-         * 
-         * @param umrepo The UserMessageRepository object.
-         */
-        NestedBatchUserMessagesReceiver(UserMessageRepository umrepo) {
-            this.umrepo = umrepo;
-        }
+			} else {
+				throw new IllegalStateException("This receiver cannot handle payload type:" + t.getPayloadType());
+			}
+		}
+	}
 
-        /**
-         * Processes and accepts a batch of user messages and persists them.
-         * 
-         * @param messages The batch of messages to accept and process.
-         */
-        @Override
-        public void acceptMessages(GMessageEnvelope<GMessagesBatchPayload> messages) {
-            GMessagesBatchPayload payload = messages.getPayload();
-            Stream<GMessageEnvelope<GUserMessagePayload>> stream = payload.stream();
-            List<GUserMessage> usermessages = stream.map(x -> {
-                return x.getPayload().getUserMessage();
-            }).toList();
-            if (!usermessages.isEmpty())
-                umrepo.saveAll(usermessages);
-        }
-    }
+	/**
+	 * Inner class for receiving messages in batches related to user messages.
+	 */
+	class NestedBatchUserMessagesReceiver implements IGBatchMessagesReceiver {
+		UserMessageRepository umrepo;
 
-    /**
-     * Creates and returns a new instance of IGTimedOutMessageReceiver.
-     * 
-     * @return An instance of IGTimedOutMessageReceiver.
-     */
-    @Override
-    public IGTimedOutMessageReceiver create() {
-        return new NestedUserMessagesAggregatorMessageReceiver(
-                new NestedBatchUserMessagesReceiver(binder.getImplementationOf(UserMessageRepository.class)),
-                factoryConfig.getFlushThreshold() != null ? factoryConfig.getFlushThreshold() : 10);
-    }
+		/**
+		 * Constructor to initialize the user message repository.
+		 * 
+		 * @param umrepo The UserMessageRepository object.
+		 */
+		NestedBatchUserMessagesReceiver(UserMessageRepository umrepo) {
+			this.umrepo = umrepo;
+		}
+
+		/**
+		 * Processes and accepts a batch of user messages and persists them.
+		 * 
+		 * @param messages The batch of messages to accept and process.
+		 */
+		@Override
+		public void acceptMessages(GMessageEnvelope<GMessagesBatchPayload> messages) {
+			GMessagesBatchPayload payload = messages.getPayload();
+			Stream<GMessageEnvelope<GUserMessagePayload>> stream = payload.stream();
+			List<GUserMessage> usermessages = stream.map(x -> {
+				return x.getPayload().getUserMessage();
+			}).toList();
+			if (!usermessages.isEmpty())
+				umrepo.saveAll(usermessages);
+		}
+	}
+
+	/**
+	 * Creates and returns a new instance of IGTimedOutMessageReceiver.
+	 * 
+	 * @return An instance of IGTimedOutMessageReceiver.
+	 */
+	@Override
+	public IGTimedOutMessageReceiver create() {
+		return new NestedUserMessagesAggregatorMessageReceiver(
+				new NestedBatchUserMessagesReceiver(binder.getImplementationOf(UserMessageRepository.class)),
+				factoryConfig.getFlushThreshold() != null ? factoryConfig.getFlushThreshold() : 10);
+	}
 }

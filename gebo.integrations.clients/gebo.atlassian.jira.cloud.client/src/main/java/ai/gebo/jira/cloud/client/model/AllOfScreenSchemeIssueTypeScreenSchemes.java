@@ -26,11 +26,8 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.IssueTypeScreenScheme;
-import ai.gebo.jira.cloud.client.model.PageBeanIssueTypeScreenScheme;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 /**
  * Details of the issue type screen schemes associated with the screen scheme.
  */

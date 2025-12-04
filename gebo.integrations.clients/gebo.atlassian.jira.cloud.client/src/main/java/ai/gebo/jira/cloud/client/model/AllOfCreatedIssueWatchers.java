@@ -27,10 +27,7 @@
 package ai.gebo.jira.cloud.client.model;
 
 import java.util.Objects;
-import java.util.Arrays;
-import ai.gebo.jira.cloud.client.model.ErrorCollection;
-import ai.gebo.jira.cloud.client.model.NestedResponse;
-import ai.gebo.jira.cloud.client.model.WarningCollection;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * The response code and messages related to any requested watchers.

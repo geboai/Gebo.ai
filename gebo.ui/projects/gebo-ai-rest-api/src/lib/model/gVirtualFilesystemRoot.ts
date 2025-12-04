@@ -16,4 +16,5 @@ export interface GVirtualFilesystemRoot {
     absolutePath?: string;
     uri?: string;
     dateModified?: Date;
+    iconKey?: string;
 }

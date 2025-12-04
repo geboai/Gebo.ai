@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.workflow.IWorkflowRouter;
 import ai.gebo.architecture.contenthandling.interfaces.IGContentConsumerFactory;
 import ai.gebo.integration.content.handler.GIntegrationContentSystem;
 import ai.gebo.integration.content.handler.GIntegrationProjectEndpoint;
@@ -26,7 +27,6 @@ import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher;
 import ai.gebo.systems.abstraction.layer.GIOCModuleContentsDispatcher.SingletonBuilder;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory;
-import ai.gebo.systems.abstraction.layer.config.ContentSystemsLayerConfiguration;
 
 /**
  * AI generated comments Configuration class responsible for setting up the
@@ -52,14 +52,15 @@ public class GIntegrationContentsDispatcherConfig
 	 * @param config            Configuration for the content systems layer
 	 * @param documentsRepo     Repository for document references
 	 * @param virtualFolderRepo Repository for virtual folders
+	 * @param workflowRouter 
 	 */
 	public GIntegrationContentsDispatcherConfig(IGIntegrationSystemContentHandler handler, IGMessageBroker broker,
 			IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
 			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
-			ContentSystemsLayerConfiguration config, DocumentReferenceRepository documentsRepo,
-			VirtualFolderRepository virtualFolderRepo) {
-		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, config, documentsRepo,
-				virtualFolderRepo);
+			 DocumentReferenceRepository documentsRepo,
+			VirtualFolderRepository virtualFolderRepo, IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo,  documentsRepo,
+				virtualFolderRepo,workflowRouter);
 
 	}
 

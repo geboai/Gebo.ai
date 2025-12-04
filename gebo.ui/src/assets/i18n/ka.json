@@ -1,0 +1,3214 @@
+{
+  "FastSetupModule" : {
+    "FastSetupComponent" : {
+      "langCode" : {
+        "label" : "ნაგულისხმევი სისტემის ენა",
+        "help" : "ნაგულისხმევი სისტემის ენა ამ Gebo.ai ინსტალაციისთვის"
+      },
+      "username" : {
+        "label" : "ელ-ფოსტა",
+        "help" : "ელ-ფოსტა როგორც მომხმარებლის სახელად შესასვლელად"
+      },
+      "passwordC" : {
+        "label" : "პაროლის დადასტურება",
+        "help" : "დაადასტურეთ პაროლი"
+      },
+      "password" : {
+        "label" : "პაროლი",
+        "help" : "პაროლი შესასვლელად (მინიმუმ 8 სიმბოლო)"
+      },
+      "PasswordNotMatching" : {
+        "label" : " პაროლები არ ემთხვევა "
+      },
+      "LocalAdmin" : {
+        "label" : "შექმენით თქვენი ლოკალური ადმინისტრატორის ანგარიში"
+      },
+      "LocalAdminExplanation" : {
+        "label" : "ამ ანგარიშს გამოიყენებთ პროგრამის დაყენებისა და ადმინისტრირებისთვის მომავალშიც; ეს მონაცემები დარჩება მხოლოდ თქვენ სისტემაზე და ქსელში არ გადაიგზავნება"
+      },
+      "EnterBtn" : {
+        "label" : "გადადით შესვლის გვერდზე"
+      },
+      "SetupPage" : {
+        "label" : "დაამყარე თქვენი gebo.ai ინსტალაცია"
+      },
+      "CreateBtn" : {
+        "label" : " სისტემის დაყენების შექმნა"
+      },
+      "LicenceFieldSet" : {
+        "label" : "წაიკითხეთ და დაეთანხმეთ ლიცენზიას"
+      },
+      "AcceptMark" : {
+        "label" : "ვეთანხმები პირობებს",
+        "help" : "აქ დაჭერით ადასტურებთ პირობებსა და ლიცენზიის მოთხოვნებს"
+      }
+    }
+  },
+  "LoginModule" : {
+    "LoginComponent" : {
+      "username" : {
+        "label" : "ელ-ფოსტა",
+        "help" : "შესვლისთვის გამოიყენეთ ელ-ფოსტა როგორც მომხმარებელი"
+      },
+      "password" : {
+        "label" : "პაროლი",
+        "help" : "შესასვლელად შეიყვანეთ პაროლი"
+      },
+      "LoginPanel" : {
+        "label" : "შესვლა gebo.ai-ზე"
+      },
+      "LoginBtn" : {
+        "label" : "შესვლა"
+      }
+    },
+    "message" : {
+      "LoginComponent" : {
+        "summary" : "კარგია!",
+        "detail" : "ოპერაცია წარმატებით შესრულდა"
+      },
+      "LoginComponent-welcome" : {
+        "summary" : "კეთილი მოხმობათ gebo.ai-ზე",
+        "detail" : "შეიყვანეთ თქვენი მომხმარებლის სახელი და პაროლი შესასვლელად"
+      },
+      "LoginComponent-login-error" : {
+        "summary" : "ოპერაცია ვერ განხორციელდა",
+        "detail" : "მითითებული მონაცემებით ავტორიზაცია შეუძლებელია"
+      },
+      "LoginComponent-login-ok" : {
+        "summary" : "კარგია!",
+        "detail" : "ოპერაციამ წარმატებით ჩაიარა"
+      }
+    },
+    "Login" : {
+      "LoginComponent" : {
+        "summary" : "კეთილი იყოს თქვენი მობრძანება gebo.ai-ში",
+        "detail" : "შეიყვანეთ თქვენი მომხმარებლის სახელი და პაროლი შესასვლელად"
+      }
+    }
+  },
+  "SetupWizardPanelModule" : {
+    "Oauth2WizardComponent" : {
+      "Oauth2ConfigBtn" : {
+        "label" : "Oauth2 კონფიგურაცია"
+      },
+      "ProviderNameHeader" : {
+        "label" : "პროვაიდერის სახელი"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "MainPanel" : {
+        "label" : "Oauth2 უსაფრთხოების პარამეტრები"
+      },
+      "IdHeader" : {
+        "label" : "Id"
+      }
+    },
+    "SetupWizardPanelComponent" : {
+      "WizardBackBtn" : {
+        "label" : "დაბრუნება საწყის გვერდზე"
+      },
+      "WizardUi" : {
+        "label" : "აირჩიეთ დაყენების სექცია"
+      },
+      "adminUserSetupSection" : {
+        "label" : "ადმინისტრატორის და სხვა ანგარიშების დაყენება",
+        "description" : "აუცილებელია მინიმუმ ერთი ადმინისტრაციის ანგარიშის შექმნა, რათა ეს Gebo.ai ინსტალაცია მართვადი იყოს, საჭიროების შემთხვევაში დაამატეთ სხვა მომხმარებლები"
+      },
+      "geboWorkDirectorySetupSection" : {
+        "label" : "Gebo.ai სამუშაო დირექტორია",
+        "description" : "დააკონფიგურირეთ სამუშაო დირექტორია, სადაც განთავსდება კონფიგურაციებისა და ინსტალაციის ყველა სამუშაო ფაილი. ასევე რეკომენდირებულია მისი პერიოდულად მარქაფი."
+      },
+      "VectorStoreSetupSection" : {
+        "label" : "ვექტორული მონაცემთა ბაზის კონფიგურაცია",
+        "description" : "ვექტორული მონაცემთა ბაზა უნდა იყოს კონფიგურირებული, რომ Gebo.ai-მ შეძლოს ინფორმაციის გამდიდრებული გენერაციის სერვისების მიწოდება, შეგიძლიათ აირჩიოთ ლოკალური მონაცემთა ბაზა, Qdrant ან Mongo Atlas"
+      },
+      "oauth2SetupSection" : {
+        "label" : "ერთჯერადი შესვლის, oauth2 ავთენტიფიკაცია",
+        "description" : "Oauth2 ერთჯერადი შესვლის ავთენტიფიკაცია და oauth2 კლიენტების კონფიგურაცია"
+      },
+      "adminLLMSSetupSection" : {
+        "label" : "სანიშვნელი ენის მოდელების დაყენება",
+        "description" : "დააკონფიგურირეთ სხვადასხვა llms ღრუბლოვანი ან ლოკალური/LAN ინფრასტრუქტურის სერვისების გამოყენებით, მუშაობისათვის საჭიროა მინიმუმ ერთი ჩეთის მოდელი და ერთი ემბედინგის მოდელი."
+      },
+      "graphRagBaseSetupSection" : {
+        "label" : "გრაფის rag/ცოდნის მოპოვების დაყენება",
+        "description" : "დააკონფიგურირეთ graph rag და ცოდნის მოპოვების ქვეჯგუფი"
+      },
+      "sharedFileSystemSetupSection" : {
+        "label" : "ზიარებული ფაილური სისტემის ბილიკების დაყენება",
+        "description" : "დააკონფიგურირეთ კომპანიის საერთო ფაილური სისტემის ბილიკები, რომლებიც სხვადასხვა ცოდნის ბაზაში ინფორმაციის გამდიდრებულ გენერაციაში იქნება გამოყენებული"
+      },
+      "atlassianConfluenceSystemSetupSection" : {
+        "label" : "Atlassian confluence ინტეგრაცია",
+        "description" : "დააკონფიგურირეთ Gebo.ai თქვენი Atlassian Confluence ღრუბლოვანი ან ლოკალური ინსტალაციებისათვის"
+      },
+      "atlassianJiraSystemSetupSection" : {
+        "label" : "Atlassian jira ინტეგრაცია",
+        "description" : "დააკონფიგურირეთ Gebo.ai თქვენს Atlassian jira ღრუბლოვან ინსტალაციებთან წვდომისათვის"
+      },
+      "microsoftSharepointSystemSetupSection" : {
+        "label" : "Microsoft Sharepoint ინტეგრაცია",
+        "description" : "დააკონფიგურირეთ Gebo.ai თქვენს Microsoft Sharepoint ღრუბლოვან ან ლოკალური ინსტალაციებთან წვდომისთვის"
+      },
+      "firstKnowledgeBaseSetupSection" : {
+        "label" : "დააკონფიგურირეთ მინიმუმ ერთი ცოდნის ბაზა",
+        "description" : "დააკონფიგურირეთ მინიმუმ ერთი ცოდნის ბაზა, რომ თქვენს მომხმარებლებს შეეძლოთ Gebo.ai-ს გამდიდრებული გენერაციის სერვისების გამოყენება"
+      },
+      "firstChatProfileBaseSetupSection" : {
+        "label" : "დააკონფიგურირეთ მინიმუმ ერთი \"R.A.G.\" ჩეთის პროფილი",
+        "description" : "დააკონფიგურირეთ მინიმუმ ერთი გამდიდრებული ჩეთის პროფილი თქვენი მომხმარებლებისათვის, ერთ-ერთ უკვე გამოცდილი ცოდნის ბაზაზე დაყრდნობით"
+      },
+      "mandatory-done" : {
+        "summary" : "Gebo.ai-ის საწყისი აუცილებელი ნაბიჯები დასრულებულია...",
+        "detail" : "აუცილებელი საწყისი ნაბიჯები დასრულებულია, მაგრამ ზოგი გამოტოვებული ნაბიჯი ხელს უშლის თქვენს ორგანიზაციას პროგრამის სრულად გამოყენებაში"
+      },
+      "setup-ok" : {
+        "summary" : "Gebo.ai-ის დაყენება წარმატებით დასრულდა!"
+      },
+      "mandatory-missing" : {
+        "summary" : "Gebo.ai-ის დაყენებას აკლია აუცილებელი ნაბიჯი",
+        "detail" : "გთხოვთ, გადაიხედოთ დაყენების პროცესის წითლად მონიშნული ნაბიჯები"
+      },
+      "googleDriveWorkspacesSystemSetupSection" : {
+        "label" : "Google Drive/Workspaces ინტეგრაცია",
+        "description" : "დააყენეთ Gebo.ai, რომ ჰქონდეს წვდომა თქვენს Google cloud Drive/Workspaces გუნდის მონაცემებზე"
+      }
+    },
+    "ConfluenceWizardComponent" : {
+      "MainPanel" : {
+        "label" : "კომპანიის Atlassian Confluence სისტემების დაყენება"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "SystemTypeHeader" : {
+        "label" : "სისტემის ტიპი"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "ConfluenceSystemBtn" : {
+        "label" : "Confluence სისტემა"
+      }
+    },
+    "JiraWizardComponent" : {
+      "JiraSystemBtn" : {
+        "label" : "Jira სისტემა"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "MainPanel" : {
+        "label" : "კომპანიის Atlassian Jira სისტემების დაყენება"
+      },
+      "SystemTypeHeader" : {
+        "label" : "სისტემის ტიპი"
+      }
+    },
+    "SharepointWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "MainPanel" : {
+        "label" : "კომპანიის Microsoft Sharepoint სისტემების დაყენება"
+      },
+      "SystemTypeHeader" : {
+        "label" : "სისტემის ტიპი"
+      },
+      "SharepointSystemBtn" : {
+        "label" : "Sharepoint სისტემა"
+      }
+    },
+    "LLMSetupWizardComponent" : {
+      "InstructionText" : {
+        "label" : "მიაწოდეთ api-key საკმარისი თანხით. თუ არჩევთ OpenAI-ს, თქვენი გეგმისთვის აუცილებელია გარკვეული კრედიტის (10-30$ საკმარისია) დამატება api გამოყენებისათვის, სხვა შემთხვევაში ამ აპლიკაციაში llms ტრეფიკი ხელმისაწვდომი არ იქნება."
+      },
+      "MainPanel" : {
+        "label" : "Gebo.ai llms providerebis წვდომის დაყენება თქვენი api key-ით"
+      },
+      "provider" : {
+        "label" : "სანიშვნელი ენის მოდელის მომწოდებელი",
+        "help" : "აირჩიეთ ერთი მომწოდებელი: OpenAI (chatgpt), Google (Gemini), Anthropic (Claude)"
+      },
+      "user" : {
+        "label" : "მომხმარებელი",
+        "help" : "მიუთითეთ apiKey-სთან დაკავშირებული მომხმარებელი"
+      },
+      "ConfigureBtn" : {
+        "label" : "დააკონფიგურირე"
+      },
+      "apiKey" : {
+        "label" : "Api key",
+        "help" : "თქვენი LLMS providerebis api key, რომელიც გამოიყენება"
+      },
+      "ProviderHeader" : {
+        "label" : "მომწოდებელი"
+      },
+      "ConfigurationCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "ModelHeader" : {
+        "label" : "მოდელი"
+      },
+      "ModelTypeHeader" : {
+        "label" : "მოდელის ტიპი"
+      },
+      "DefaultModelHeader" : {
+        "label" : "ნაგულისხმები მოდელი"
+      },
+      "MainPanelHeader" : {
+        "label" : "Gebo.ai llms მომწოდებლებზე წვდომის დაყენება"
+      }
+    },
+    "GraphRagWizardComponent" : {
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "CreateGraphRagConfigBtn" : {
+        "label" : "შექმენი გრაფის rag კონფიგურაცია"
+      },
+      "MainPanel" : {
+        "label" : "Graph Rag & ცოდნის მოპოვების ნაგულისხმები კონფიგურაციის დაყენება"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "EditConfigBtn" : {
+        "label" : "კონფიგურაციის რედაქტირება"
+      }
+    },
+    "KnowledgeBaseWizardComponent" : {
+      "ProjectHeader" : {
+        "label" : "პროექტი"
+      },
+      "AddAKnowledgeBaseBtn" : {
+        "label" : "დაამატე ცოდნის ბაზა"
+      },
+      "KnowledgeBaseHeader" : {
+        "label" : "ცოდნის ბაზა"
+      },
+      "MainPanel" : {
+        "label" : "ცოდნის ბაზები და შიგთავსის კონფიგურაციები"
+      },
+      "ContentsSourceHeader" : {
+        "label" : "შინაარსის წყარო"
+      },
+      "PublishedHeader" : {
+        "label" : "გამოქვეყნებული"
+      },
+      "NrOfDocumentsHeader" : {
+        "label" : "დოკუმენტების რაოდენობა"
+      },
+      "AddAProjectItemBtn" : {
+        "label" : "პროექტის/ელემენტის დამატება",
+        "help" : "შექმენი ახალი პროექტი"
+      },
+      "Button1" : {
+        "help" : "გახსენი ცოდნის ბაზა"
+      },
+      "Button2" : {
+        "help" : "გახსენი პროექტის ფორმა"
+      },
+      "Button3" : {
+        "help" : "მონაცემთა წყაროს გახსნა"
+      }
+    },
+    "WorkFolderWizardComponent" : {
+      "MainPanel" : {
+        "label" : "Gebo.ai სამუშაო საქაღალდის კონფიგურაცია"
+      },
+      "ConfigureBtn" : {
+        "label" : "დააკონფიგურირე"
+      },
+      "workDirectory" : {
+        "label" : "აირჩიეთ საქაღალდე როგორც Gebo.ai სამუშაო დირექტორია",
+        "help" : "აირჩიეთ სერვერის საქაღალდე, რომელსაც ეს ინსტალაცია გამოიყენებს სამუშაო საქაღალდედ კონფიგურაციებისა და შიგთავსის შესანახად."
+      }
+    },
+    "SharedFilesystemWizardComponent" : {
+      "AddFolderBtn2" : {
+        "label" : "საქაღალდის დამატება"
+      },
+      "AddFolderBtn" : {
+        "label" : "საქაღალდის დამატება"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "MainPanel" : {
+        "label" : "სერვერის საერთო ფაილური სისტემის ბილიკები"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "აბსოლუტური ბილიკი"
+      },
+      "DeleteHeader" : {
+        "label" : "წაშლა"
+      },
+      "path" : {
+        "label" : "დაამატეთ საერთო ფაილური სისტემის ძირითადი საქაღალდე",
+        "help" : "აირჩიეთ სერვერის საქაღალდე, რომელიც თქვენი ორგანიზაციის დოკუმენტების საცავისთვის საერთო ფაილური სისტემის ძირითადი ბილიკი იქნება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ფაილური სისტემის აღწერა"
+      },
+      "RemovePathBtn" : {
+        "label" : "ბილიკის წაშლა"
+      }
+    },
+    "VectorStoreWizardComponent" : {
+      "ConfigureBtn" : {
+        "label" : "დააკონფიგურირე"
+      },
+      "MainPanel" : {
+        "label" : "ვექტორული მონაცემთა ბაზის კონფიგურაცია"
+      },
+      "host" : {
+        "label" : "Qdrant ჰოსტი",
+        "help" : "Qdrant-ის ჰოსტის სახელი ან ip მისამართი"
+      },
+      "QdrantConnectionFieldset" : {
+        "label" : "Qdrant-ის კავშირის პარამეტრები"
+      },
+      "port" : {
+        "label" : "Qdrant პორტი",
+        "help" : "Qdrant-ის კომუნიკაციის პორტი (სტანდარტულად 6334)"
+      },
+      "apiKey" : {
+        "label" : "Qdrant api key",
+        "help" : "Qdrant-ს ავთენტიფიკაციის api key"
+      },
+      "tls" : {
+        "label" : "Qdrant TLS პარამეტრი",
+        "help" : "TLS"
+      }
+    },
+    "message" : {
+      "SetupWizardPanelComponent-mandatory-done" : {
+        "summary" : "Gebo.ai დაყენების სავალდებულო ნაბიჯები დასრულებულია...",
+        "detail" : "სავალდებულო ნაბიჯები დასრულებულია, თუმცა ზოგიერთი გამოტოვებული ნაბიჯი ხელს უშლის თქვენს ორგანიზაციას პროგრამის სრული ფუნქციონალით სარგებლობაში"
+      },
+      "SetupWizardPanelComponent-mandatory-missing" : {
+        "summary" : "Gebo.ai დაყენებას აკლია სავალდებულო ნაბიჯი",
+        "detail" : "გთხოვთ, გადახედეთ დაყენების პროცესის წითელ ნაბიჯებს"
+      },
+      "SetupWizardPanelComponent-setup-ok" : {
+        "summary" : "Gebo.ai დაყენება წარმატებით დასრულდა!"
+      }
+    },
+    "ChatProfileWizardComponent" : {
+      "AddNewRAGChatProfileFieldset" : {
+        "label" : "ახალი R.A.G. ჩატის პროფილის დამატება"
+      },
+      "AddRAGChatProfileBtn" : {
+        "label" : "R.A.G. ჩატის პროფილის დამატება"
+      },
+      "MainPanel" : {
+        "label" : "R.A.G. ჩატის პროფილების პარამეტრების მიღება"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "ExistingRAGChatProfilesFieldset" : {
+        "label" : "არსებული R.A.G. ჩატის პროფილები"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "EditRAGChatProfileBtn" : {
+        "label" : "R.A.G. ჩატის პროფილის რედაქტირება"
+      },
+      "KnowledgeBaseCodesHeader" : {
+        "label" : "ცოდნის ბაზის კოდები"
+      }
+    },
+    "GoogleWorkspacesWizardComponent" : {
+      "MainPanel" : {
+        "label" : "კომპანიის Google Drive/Workspaces სისტემის დაყენება"
+      },
+      "ConfigCodeHeader" : {
+        "label" : "კონფიგურაციის კოდი"
+      },
+      "GoogleDriveBtn" : {
+        "label" : "Google Drive"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      }
+    }
+  },
+  "GeboAIOauth2RegistrationModule" : {
+    "Oauth2ProviderRegistration" : {
+      "code" : {
+        "label" : "კოდი",
+        "help" : "შეიყვანეთ OAUTH2 ავთენტიფიკაციის/ინტეგრაციის კოდის (registrationId) აღწერა."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ OAUTH2 ავთენტიფიკაციის/ინტეგრაციის ინფორმაციის აღწერა."
+      },
+      "configurationType" : {
+        "label" : "კონფიგურაციის მიზანი",
+        "help" : "აირჩიეთ გამოიყენება თუ არა ეს პარამეტრები Gebo.ai-ში ავთენტიფიკაციისთვის ან თუ საჭიროა, რომ Gebo.ai დაკავშირებული იყოს მესამე მხარესთან."
+      },
+      "authProvider" : {
+        "label" : "პროვაიდერი",
+        "help" : "შეიყვანეთ OAUTH2 ავთენტიფიკაციის პროვაიდერი"
+      },
+      "issuerUri" : {
+        "label" : "გამომცემლის Uri",
+        "help" : "შეიყვანეთ პროვაიდერის OAUTH2 გამომცემლის URL"
+      },
+      "authorizationUri" : {
+        "label" : "ავტორიზაციის URL",
+        "help" : "შეიყვანეთ პროვაიდერის OAUTH2 ავტორიზაციის URL"
+      },
+      "jwkSetUri" : {
+        "label" : "Jwk Set Uri",
+        "help" : "შეიყვანეთ პროვაიდერის OAUTH2 Jwk Set url"
+      },
+      "userInfoUri" : {
+        "label" : "მომხმარებლის ინფორმაციის URL",
+        "help" : "შეიყვანეთ პროვაიდერის OAUTH2 User info Url URL"
+      },
+      "introspectionUri" : {
+        "label" : "ინსპექციის Uri",
+        "help" : "შეიყვანეთ პროვაიდერის OAUTH2 introspection URL"
+      },
+      "tokenUri" : {
+        "label" : "თოკენის URL",
+        "help" : "შეიყვანეთ პროვაიდერის OAUTH2 Token URL"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "Oauth2ProviderUrls" : {
+        "label" : "OAUTH2 პროვაიდერის URL-ები"
+      },
+      "MainPanel" : {
+        "label" : "დაამატეთ ახალი OAUTH2 ავთენტიფიკაციის/ინტეგრაციის ინფორმაცია"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      }
+    }
+  },
+  "GeboOauth2SecretModule" : {
+    "GeboOauth2SecretComponent" : {
+      "clientId" : {
+        "label" : "კლიენტის ID",
+        "help" : "კლიენტის იდენტიფიკატორი oauth2 პროტოკოლისთვის (მისაღებია oauth2 ავთენტიფიცირებული მესამე მხარის პროგრამული უზრუნველყოფის ადმინისტრირების სივრცეში)"
+      },
+      "secret" : {
+        "label" : "საიდუმლო გასაღები",
+        "help" : "კლიენტის საიდუმლო oauth2 პროტოკოლისთვის (მისაღებია oauth2 ავთენტიფიცირებული მესამე მხარის პროგრამული უზრუნველყოფის ადმინისტრირების სივრცეში)"
+      }
+    }
+  },
+  "GeboAIConfluenceModule" : {
+    "GeboAIConfluenceSystemFastComponent" : {
+      "MainPanel" : {
+        "label" : "შექმენით Confluence სისტემის კონფიგურაცია"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ Confluence სისტემის აღწერა."
+      },
+      "CreateBtn" : {
+        "label" : "შექმნა"
+      },
+      "username" : {
+        "label" : "Confluence მომხმარებლის სახელი",
+        "help" : "Confluence მომხმარებლის სახელი"
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ვერსია",
+        "help" : "Confluence ვერსია"
+      },
+      "baseUri" : {
+        "label" : "საბაზისო ინტერნეტ მისამართი",
+        "help" : "onpremise ინსტალაციისთვის, შეიყვანეთ საბაზისო Confluence სისტემის მისამართის url ან თქვენი ორგანიზაციის საბაზისო url Confluence cloud სისტემისთვის"
+      },
+      "password" : {
+        "label" : "Confluence პაროლი",
+        "help" : "Confluence პაროლი"
+      },
+      "token" : {
+        "label" : "Confluence cloud api key",
+        "help" : "Confluence CLOUD api key, რომელიც მიღებულია Confluence backoffic-ში, აქ უნდა შეიყვანოთ „API Token for your Atlassian Account“."
+      }
+    },
+    "GConfluenceProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "ინახავს და ამატებს ამ შიგთავსს ბაზაში LLm-ებისთვის"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "Confluence შიგთავსის გაზიარება"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი შიგთავსისთვის."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ატვირთული Confluence ჩანაწერების შიგთავსის აღწერა."
+      },
+      "confluenceSystemCode" : {
+        "label" : "Confluence სისტემა",
+        "help" : "უკვე კონფიგურირებული Confluence სისტემის მითითება."
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "მშობელი პროექტის მითითება."
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართეთ zip ფაილების გახსნა და კონტენტის გამოღება"
+      },
+      "tree" : {
+        "label" : "არჩეული სივრცეები ან გვერდები/ქვე-გვერდები",
+        "help" : "გაზიარებული Confluence სივრცეების და გვერდების შიგთავსი"
+      },
+      "programmedTables" : {
+        "label" : "შიგთავსის განახლების შემოწმების განრიგი",
+        "help" : "დაალაგეთ რა სიხშირით მოხდება შეცვლილი შიგთავსის განახლება გენერაციის სისტემაში"
+      },
+      "catalogingCriteria" : {
+        "label" : "სივრცეების, გვერდებისა და ქვე-გვერდების ორგანიზების კრიტერიუმები",
+        "help" : "გთხოვთ, აღწეროთ როგორ არის ორგანიზებული სივრცეები, გვერდები და ქვე-გვერდები Confluence შიგთავსში, რომელიც გაზიარებულია Gebo.ai-თან"
+      }
+    },
+    "GConfluenceSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "ძირითადი პარამეტრები"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "MainPanel" : {
+        "label" : "Confluence სისტემის რედაქტირება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "baseUri" : {
+        "label" : "საბაზისო ინტერნეტ მისამართი",
+        "help" : "Confluence სისტემის საბაზისო მისამართის url"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "Confluence სისტემისთვის ავტომატურად გენერირებული უნიკალური კოდი."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ Confluence სისტემის აღწერა."
+      },
+      "confluenceVersion" : {
+        "label" : "Confluence ვერსია",
+        "help" : "Confluence ვერსია"
+      },
+      "secretCode" : {
+        "label" : "გამოყენებული იდენტობა",
+        "help" : "აირჩიეთ ან შექმენით იდენტობა Confluence სისტემაში შესასვლელად"
+      }
+    }
+  },
+  "GeboAIUsersGroupPanelModule" : {
+    "GeboAIUsersManagementComponent" : {
+      "NewGroupBtn" : {
+        "label" : "ახალი ჯგუფი"
+      },
+      "NewUserBtn" : {
+        "label" : "ახალი მომხმარებელი"
+      },
+      "UsersListPanel" : {
+        "label" : "მომხმარებელთა სია"
+      },
+      "GroupsListPanel" : {
+        "label" : "ჯგუფების სია"
+      },
+      "SournameHeader" : {
+        "label" : "გვარი"
+      },
+      "UsernameHeader" : {
+        "label" : "მომხმარებლის სახელი"
+      },
+      "RolesHeader" : {
+        "label" : "როლები"
+      },
+      "NameHeader" : {
+        "label" : "სახელი"
+      },
+      "EditBtn" : {
+        "label" : "ჩასწორება"
+      },
+      "DisabledHeader" : {
+        "label" : "გათიშული"
+      }
+    }
+  },
+  "GeboAIUsersGroupModule" : {
+    "UsersGroup" : {
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "UserIds" : {
+        "placeholder" : "მომხმარებლების არჩევა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "MainPanel" : {
+        "label" : "მომხმარებელთა ჯგუფის რედაქტირება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ მომხმარებელთა ჯგუფის აღწერა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "შეიყვანეთ მომხმარებელთა ჯგუფის კოდი"
+      },
+      "userIds" : {
+        "label" : "მომხმარებელთა სია",
+        "help" : "აირჩიეთ ჯგუფში მონაწილე მომხმარებლები"
+      }
+    }
+  },
+  "GeboAIJiraModule" : {
+    "GeboAIJiraSystemFastComponent" : {
+      "CreateBtn" : {
+        "label" : "შექმნა"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ jira სისტემის აღწერა."
+      },
+      "MainPanel" : {
+        "label" : "jira სისტემის კონფიგურაციის შექმნა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "username" : {
+        "label" : "jira მომხმარებლის სახელი",
+        "help" : "jira მომხმარებლის სახელი"
+      },
+      "token" : {
+        "label" : "jira cloud api გასაღები",
+        "help" : "jira CLOUD apikey, მიღებული jira backoffice-ში, აქ უნდა შეიყვანოთ \"API Token for your Atlassian Account\"."
+      },
+      "baseUri" : {
+        "label" : "საბაზისო ინტერნეტ მისამართი",
+        "help" : "onpremise ინსტალაციისთვის jira სისტემის საბაზისო მისამართის URL ან თქვენი ორგანიზაციის ბაზისური URL jira cloud სისტემისთვის"
+      }
+    },
+    "GJiraProjectEndpoint" : {
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "შეინახეთ და გახადეთ ეს შინაარსი ცოდნის ბაზაში LLm-ებისათვის ხელმისაწვდომი"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      },
+      "MainPanel" : {
+        "label" : "jira შინაარსის გაზიარება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული შინაარსის უნიკალური კოდი."
+      },
+      "jiraSystemCode" : {
+        "label" : "jira სისტემა",
+        "help" : "წინასწარ კონფიგურირებული jira სისტემის მითითება."
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "მშობელი პროექტის მითითება."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ატვირთული jira ჩანაწერების შინაარსის აღწერა."
+      },
+      "programmedTables" : {
+        "label" : "შინაარსის განახლების შემოწმების გრაფიკი",
+        "help" : "განსაზღვრეთ შეცვლილი შინაარსის განახლების განრიგი, რათა retrieve augmented generation სისტემა იყოს განახლებული"
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართეთ zip ფაილების გახსნა და შინაარსის ამოღება"
+      },
+      "tree" : {
+        "label" : "არჩეული სივრცეები ან გვერდები/ქვეგვერდები",
+        "help" : "გაზიარებული jira პროექტების და ბილეთების იერარქიული შინაარსი"
+      },
+      "catalogingCriteria" : {
+        "label" : "სივრცეების, გვერდებისა და ქვეგვერდების ორგანიზების კრიტერიუმები",
+        "help" : "გთხოვთ ახსენით, როგორ არის ორგანიზებული jira-ს შინაარსი სივრცეებსა, გვერდებსა და ქვეგვერდებში, რომლებიც გაზიარებულია Gebo.ai-თან"
+      }
+    },
+    "GJiraSystem" : {
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ jira სისტემის აღწერა."
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "MainPanel" : {
+        "label" : "jira სისტემის რედაქტირება"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "baseUri" : {
+        "label" : "საბაზისო ინტერნეტ მისამართი",
+        "help" : "jira სისტემის საბაზისო მისამართის URL"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "jira სისტემის ავტომატურად გენერირებული უნიკალური კოდი."
+      },
+      "secretCode" : {
+        "label" : "გამოყენებული იდენტობა",
+        "help" : "არჩიეთ ან შექმენით იდენტობა jira სისტემაზე წვდომისთვის"
+      }
+    }
+  },
+  "GeboAISharepointModule" : {
+    "GeboAISharepointSystemFastComponent" : {
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ SharPpoint/OneDrive სისტემის აღწერა."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint ვერსია",
+        "help" : "sharepoint ვერსია"
+      },
+      "secret" : {
+        "label" : "საიდუმლო გასაღები",
+        "help" : "Oauth2 კლიენტის საიდუმლო გასაღები ამ აპისთვის, რომელიც რეგისტრირებულია microsoft \"entra\" პროდუქტში (მისაღებად შესვლა microsoft cloud ადმინისტრირების კონსოლში)"
+      },
+      "clientId" : {
+        "label" : "კლიენტის ID",
+        "help" : "Oauth2 კლიენტის იდენტიფიკატორი ამ აპისთვის, რომელიც რეგისტრირებულია microsoft \"entra\" პროდუქტში (მისაღებად შესვლა microsoft cloud ადმინისტრირების კონსოლში)"
+      },
+      "tenantId" : {
+        "label" : "დაქირავების ID",
+        "help" : "Oauth2 ქირავანის იდენტიფიკატორი თქვენი ორგანიზაციის microsoft \"entra\" პროდუქტისთვის (მისაღებად შესვლა microsoft cloud ადმინისტრირების კონსოლში)"
+      },
+      "MicrosofOauth2Fieldset" : {
+        "label" : "Microsof oauth2 აპის რეგისტრაციის ინფორმაცია Gebo.ai-თვის"
+      },
+      "CreateBtn" : {
+        "label" : "შექმნა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive სისტემის კონფიგურაციის შექმნა"
+      }
+    },
+    "GSharepointProjectEndpoint" : {
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "ინახავს და ხდის ამ მონაცემებს ხელმისაწვდომს ცოდნის ბაზაში LLm-ებისთვის"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "SharePoint/OneDrive შინაარსის გაზიარება"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი შინაარსისთვის."
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "მშობელი პროექტის მინიშნება."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ SharePoint/OneDrive ჩანაწერების მონაცემთა წყაროების აღწერა."
+      },
+      "sharePointSystemCode" : {
+        "label" : "sharepoint სისტემა",
+        "help" : "უკვე კონფიგურირებული SharePoint/OneDrive სისტემის მინიშნება."
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართეთ zip ფაილების გახსნა და შიგთავსის ამოღება"
+      },
+      "tree" : {
+        "label" : "მონიშნული Sharepoint საიტები/გვერდები/ქვეგვერდები ან OneDrive დისკები/ფოლდერები/ფაილები",
+        "help" : "გაზიარებული sharepoint/OneDrive შინაარსი"
+      },
+      "programmedTables" : {
+        "label" : "შინაარსის განახლების შემოწმების განრიგი",
+        "help" : "დააკონფიგურირეთ განახლებული შინაარსის ხილვის განრიგი, რათა განახლდეს მონაცემების დამუშავების სისტემა"
+      },
+      "catalogingCriteria" : {
+        "label" : "სივრცეების, გვერდების და ქვეგვერდების ორგანიზაციის კრიტერიუმები",
+        "help" : "გთხოვთ მიუთითოთ, თუ რა პრინციპით მოხდა სივრცეების, გვერდებისა და ქვეგვერდების ორგანიზება sharepoint შინაარსში, რომელიც გაზიარდა Gebo.ai-თან"
+      }
+    },
+    "GSharepointContentManagementSystem" : {
+      "MainPanel" : {
+        "label" : "sharepoint სისტემის რედაქტირება"
+      },
+      "GeneralSettingsTab" : {
+        "label" : "ზოგადი პარამეტრები"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "secretCode" : {
+        "label" : "გამოყენებული იდენტობა",
+        "help" : "აირჩიეთ ან შექმენით იდენტობა sharepoint სისტემაში შესასვლელად"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი sharepoint სისტემისთვის."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ sharepoint სისტემის აღწერა."
+      },
+      "sharepointVersion" : {
+        "label" : "Sharepoint ვერსია",
+        "help" : "sharepoint ვერსია"
+      }
+    }
+  },
+  "GeboAIGraphRagExtractionModule" : {
+    "GraphRagExtractionConfig" : {
+      "graphRagConfigUI_Delete" : {
+        "label" : "წაშლა"
+      },
+      "graphRagConfigUI_Save" : {
+        "label" : "შენახვა"
+      },
+      "graphRagConfigUI_Cancel" : {
+        "label" : "გაუქმება"
+      },
+      "graphRagConfigUI_ContextSettings" : {
+        "label" : "ზოგადი ინფორმაციის/შლის პარამეტრები"
+      },
+      "graphRagConfigUI_LLMSSettings" : {
+        "label" : "LLms-ის პარამეტრები"
+      },
+      "code" : {
+        "label" : " უნიკალური კოდი",
+        "help" : "ნოულეჯ გრაფის მონაცემთა გაფრაშვის ეტაპის ავტოგენერირებული უნიკალური კოდი"
+      },
+      "MainPanel" : {
+        "label" : "Graphrag/ცოდნის გაფრაშვის კონფიგურაცია"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ამ ცოდნის გრაფის მონაცემების გაფრაშვის ეტაპის კონფიგურაციის აღწერა"
+      },
+      "extractionPrompt" : {
+        "label" : "ინფორმაციის გაფრაშვის პრომპტი",
+        "help" : "დიდი ენის მოდელის პრომპტი ერთეულების/მოვლენების/ურთიერთობებისა და მათი ალისების გასაფრაშად"
+      },
+      "usedModelConfiguration" : {
+        "label" : "მონაცემების გაფრაშვისთვის არჩეული LLM",
+        "help" : "მიუთითეთ ცოდნის გაფრაშვისთვის გამოყენებული დიდი ენის მოდელი, თუ არ აირჩევთ, აინტერესებს ნაგულისხმევი."
+      },
+      "graphRagAllSources" : {
+        "label" : "გრაფ რაგის გამოყენება ყველა მონაცემთა წყაროზე",
+        "help" : "თუ არჩევენილია, ყველა ცოდნის ბაზა/პროექტი/მონაცემთა წყარო დამუშავდება ცოდნის გაფრაშვისთვის, სხვაგვარად მხოლოდ სპეციალურად კონფიგურირებული."
+      },
+      "defaultModel" : {
+        "label" : "ნაგულისხმევი დიდი ენის მოდელი",
+        "help" : "ცოდნის გაფრაშვისთვის გამოყენებული იქნება ნაგულისხმევი დიდი ენის მოდელი"
+      },
+      "processEveryDocument" : {
+        "label" : "გრაფ რაგის გამოყენება ყველა ფაილზე",
+        "help" : "გრაფ რაგის ალგორითმები გამოყენებული იქნება ყველა ფაილზე, რაც გააუმჯობესებს სისტემის ანალიზის დეტალებს, მაგრამ გაზრდის ხარჯებს და საჭირო დროს დოკუმენტების დასამუშავებლად"
+      },
+      "contentSelectionFilter" : {
+        "label" : "ფაილების შერჩევის კრიტერიუმები graphrag-ისთვის",
+        "help" : "დაარედაქტირეთ ფაილის კრიტერიუმები ინფორმაციის გაფრაშვის პაიპლაინისთვის graphrag-ზე გასაგზავნად, აირჩიეთ მინიმუმ ერთი ფაილის სახელი და კრიტერიუმი და/ან ფაილის ტიპი და/ან მაქსიმალური ზომა ბაიტებში და/ან ბოლო შეცვლის ასაკი დღეებში"
+      },
+      "extractionFormat" : {
+        "label" : "გაძეის ფორმატი",
+        "help" : "გამოიყენეთ CSV ფორმატი llms-სთვის 30b პარამეტრებამდე, JSON დიდი ზომის მოდელებისთვის",
+        "placeholder" : "გამოიყენეთ CSV ფორმატი llms-სთვის 30b პარამეტრებამდე, JSON დიდი ზომის მოდელებისთვის"
+      }
+    }
+  },
+  "GeboAIContentSelectionFilterModule" : {
+    "SelectionFilterCriteria" : {
+      "extensions" : {
+        "placeholder" : "აირჩიეთ ფაილის ტიპები"
+      },
+      "nameFilterCriteria" : {
+        "placeholder" : "ფაილის სახელის ფილტრის კრიტერიუმი"
+      },
+      "maxModificationAgeInDays" : {
+        "placeholder" : "ფაილის ბოლო ცვლილება, დღის წინ"
+      },
+      "nameFilter" : {
+        "placeholder" : "ფაილის სახელი"
+      },
+      "maxFileSize" : {
+        "placeholder" : "ფაილის მაქსიმალური ზომა ბაიტებში"
+      }
+    }
+  },
+  "GeboAiKnowledgeBaseModule" : {
+    "GKnowledgeBase" : {
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "MainPanel" : {
+        "label" : "ცოდნის ბაზის რედაქტირება"
+      },
+      "AccessSettingsTab" : {
+        "label" : "ცოდნის ბაზის წვდომის პარამეტრები"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ცოდნის ბაზის უნიკალური კოდი ავტომატურად გენერირდება."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ცოდნის ბაზის აღწერა."
+      },
+      "embeddingModelReferences" : {
+        "label" : "გამოყენებული ემბედინგი მოდელები (დატოვეთ ცარიელი სისტემური ნაგულისხმევისთვის)",
+        "help" : "ცოდნის ბაზის ემბედინგი მოდელები, თუ ცარიელია გამოყენებული იქნება ნაგულისხმევი."
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "IndexBtn" : {
+        "label" : "ინდექსი",
+        "help" : "შინაარსის ხელახალი ინდექსაცია"
+      }
+    },
+    "GProject" : {
+      "MainPanel" : {
+        "label" : "პროექტის ან ელემენტის რედაქტირება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "პროექტის უნიკალური კოდი ავტომატურად გენერირდება."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ პროექტის აღწერა."
+      },
+      "rootKnowledgeBaseCode" : {
+        "label" : "ცოდნის ბაზა",
+        "help" : "ცოდნის ბაზა."
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "IndexBtn" : {
+        "label" : "ინდექსი",
+        "help" : "შინაარსის ხელახალი ინდექსაცია"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      }
+    },
+    "GeboAiKnowledgeBaseTreeComponent" : {
+      "addNewAnchor" : {
+        "label" : "+ დამატება ელემენტის/პროექტის",
+        "help" : "ახლის დამატება..."
+      }
+    }
+  },
+  "GeboAIAccessControlModule" : {
+    "GeboAIAccessControlComponent" : {
+      "accessibleToAll" : {
+        "label" : "ყველას შეუძლია გამოყენება",
+        "help" : "ყველას შეუძლია გამოიყენოს"
+      },
+      "accessibleGroups" : {
+        "label" : "ჯგუფების სია",
+        "help" : " აირჩიეთ ნებადართული ჯგუფები"
+      },
+      "accessibleUsers" : {
+        "label" : "მომხმარებლების სია",
+        "help" : " აირჩიეთ ნებადართული მომხმარებლები"
+      }
+    }
+  },
+  "GeboAiAdminPanelModule" : {
+    "GeboAiAdminComponent" : {
+      "DashboardTab" : {
+        "label" : "დეშბორდი"
+      },
+      "LLMSTab" : {
+        "label" : "ჩატის და ემბედინგის LLM-ები"
+      },
+      "RagChatConfigTab" : {
+        "label" : "Rag ჩატის პროფილები/მოდელის პრომტები"
+      },
+      "KnowledgeBaseTab" : {
+        "label" : "ცოდნის ბაზები და პროექტები"
+      },
+      "UsersGroupTab" : {
+        "label" : "მომხმარებლები და ჯგუფები"
+      },
+      "GeboModulesTab" : {
+        "label" : "Gebo.ai მოდულების კონფიგურაცია"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      }
+    }
+  },
+  "SystemsPanelModule" : {
+    "SystemsComponent" : {
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "ConfigureBtn2" : {
+        "label" : "კონფიგურაცია"
+      },
+      "ConfigureBtn" : {
+        "label" : "კონფიგურაცია"
+      }
+    }
+  },
+  "ChatProfilesPanelModule" : {
+    "ChatProfilesComponent" : {
+      "NewPromptConfigurationBtn" : {
+        "label" : "ახალი პრომპტის კონფიგურაცია"
+      },
+      "NewChatProfileBtn" : {
+        "label" : "ახალი ჩატის პროფილი"
+      },
+      "MainPanel" : {
+        "label" : "Retrivial augmented generation ჩატის პროფილები"
+      },
+      "PromptsPanel" : {
+        "label" : "პრომპტების კოლექცია და ნაგულისხმევი პრომპტები"
+      },
+      "KnowledgeBasesHeader" : {
+        "label" : "ცოდნის ბაზები"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "ConfigureBtn1" : {
+        "label" : "კონფიგურაცია"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      }
+    }
+  },
+  "KnowledgeBasesPanelModule" : {
+    "KnowledgeBasesComponent" : {
+      "NewKnowledgeBaseBtn" : {
+        "label" : "ახალი ცოდნის ბაზა"
+      }
+    }
+  },
+  "LlmsPanelModule" : {
+    "LlmsSystemsComponent" : {
+      "NewEmbeddingModelConfigurationBtn" : {
+        "label" : "ახალი ემბედინგ მოდელის კონფიგურაცია"
+      },
+      "NewChatModelConfigurationBtn" : {
+        "label" : "ახალი ჩატის მოდელის კონფიგურაცია"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "ModelHeader" : {
+        "label" : "მოდელი "
+      },
+      "ModelProviderHeader" : {
+        "label" : "მოდელის პროვაიდერი"
+      },
+      "ConfigureBtn" : {
+        "label" : "კონფიგურაცია"
+      },
+      "CodeHeader2" : {
+        "label" : "კოდი"
+      },
+      "DescriptionHeader2" : {
+        "label" : "აღწერა"
+      },
+      "ModelProviderHeader2" : {
+        "label" : "მოდელის პროვაიდერი"
+      },
+      "ConfigureBtn2" : {
+        "label" : "კონფიგურაცია"
+      },
+      "ModelHeader2" : {
+        "label" : "მოდელი "
+      },
+      "ChatmodelsZone" : {
+        "label" : "დაკონფიგურებული ჩატის მოდელები"
+      },
+      "EmneddingModelsZone" : {
+        "label" : "დაკონფიგურებული ემბედინგ მოდელები"
+      },
+      "chat" : {
+        "label" : "ახალი ჩატის მოდელი",
+        "help" : "აირჩიეთ მიმწოდებელი ახალი ჩატის მოდელის დასამატებლად, რომელიც შეძლებს მომხმარებელთან საუბარს ან ავტომატიზაციის შესრულებას",
+        "placeholder" : "აირჩიეთ მიმწოდებელი ახალი ჩატის მოდელის დასამატებლად, რომელიც შეძლებს მომხმარებელთან საუბარს ან ავტომატიზაციის შესრულებას"
+      },
+      "embed" : {
+        "label" : "ახალი ემბედინგის მოდელი",
+        "help" : "აირჩიეთ მიმწოდებელი ახალი ემბედინგის მოდელის დასამატებლად, რომელსაც შეუძლია შინაარსის სემანტიკური ინდექსირება",
+        "placeholder" : "აირჩიეთ მიმწოდებელი ახალი ემბედინგის მოდელის დასამატებლად, რომელსაც შეუძლია შინაარსის სემანტიკური ინდექსირება"
+      }
+    }
+  },
+  "GeboAiLargeLanguageModelsModule" : {
+    "GeboAITestChatComponent" : {
+      "TestingModelDialog" : {
+        "label" : "მოდელის ტესტირება"
+      },
+      "TestChatBtn" : {
+        "label" : "ტესტი ჩატი"
+      }
+    },
+    "GOpenAIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი OpenAI token"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ OpenAI ჩატის მოდელი სამუშაოდ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "გაფართოებული პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "მოდელზე წვდომის პარამეტრები"
+      }
+    },
+    "GOpenAIEmbeddingModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "MainPanel" : {
+        "label" : "OpenAI embedding მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "apiSecretCode" : {
+        "label" : "OpenAI token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი OpenAI token"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "embedding მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "embedding მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "choosedModel" : {
+        "label" : "OpenAI embedding მოდელის არჩევანი",
+        "help" : "აირჩიეთ OpenAI embedding მოდელი სამუშაოდ."
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი embedding მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ embedding მოდელად იმ შემთხვევაში, თუ embedding მოდელი არ არის მითითებული"
+      }
+    },
+    "GOllamaChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "baseUrl" : {
+        "label" : "საწყისი ollama სერვერის მისამართი",
+        "help" : "საწყისი მისამართი (მაგ: http://servername:234/) რომელზეც ollama ლოკალური ან LAN სერვერი პასუხობს."
+      },
+      "choosedModel" : {
+        "label" : "Ollama ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ Ollama ჩატის მოდელი სამუშაოდ.",
+        "placeholder" : "აირჩიეთ მოდელი"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Ollama token (არასავალდებულო)"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "MainPanel" : {
+        "label" : "Ollama ლოკალური (ან LAN) სერვერის ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      }
+    },
+    "GAnthropicChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "apiSecretCode" : {
+        "label" : "Anthropic token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Anthropic token"
+      },
+      "choosedModel" : {
+        "label" : "Anthropic ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ Anthropic ჩატის მოდელი სამუშაოდ.",
+        "placeholder" : "აირჩიეთ მოდელი"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "გაფართოებული პარამეტრები"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "მოდელზე წვდომის პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "Anthropic ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      }
+    },
+    "GMistralChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი MistralAI token"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ MistralAI ჩატის მოდელი სამუშაოდ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "გაფართოებული პარამეტრები"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "მოდელზე წვდომის პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      }
+    },
+    "GGoogleVertexChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ სამუშაოდ Google Vertex AI ჩატის მოდელი."
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Google Vertex AI token"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "TabGeneralInfos" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "TabModelAccessSettings" : {
+        "label" : "მოდელზე წვდომის პარამეტრები"
+      },
+      "TabAdvancedSettings" : {
+        "label" : "გაფართოებული პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "Google Vertex AI ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      }
+    },
+    "GDeepseekChatModelConfig" : {
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "apiSecretCode" : {
+        "label" : "Deepseek token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Deepseek token"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "choosedModel" : {
+        "label" : "Deepseek ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ Deepseek ჩატის მოდელი სამუშაოდ.",
+        "placeholder" : "აირჩიეთ მოდელი"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "გაფართოებული პარამეტრები"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "MainPanel" : {
+        "label" : "Deepseek ჩატის მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "მოდელზე წვდომის პარამეტრები"
+      }
+    },
+    "GenericOpenAIAPIChatModelConfig" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "baseUrl" : {
+        "label" : "ჩატის მოდელის API საწყისი სერვერის მისამართი",
+        "help" : "ჩატის მოდელის საწყისი მისამართი."
+      },
+      "apiSecretCode" : {
+        "label" : "ჩატის მოდელის API token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი ჩატის მოდელის API token (არასავალდებულო)"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი ჩატის მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ ჩატის მოდელად იმ შემთხვევაში, თუ ჩატის მოდელი არ არის მითითებული"
+      },
+      "choosedModel" : {
+        "label" : "ჩატის მოდელის ჩატის მოდელის არჩევანი",
+        "help" : "აირჩიეთ ჩატის მოდელის ჩატის მოდელი სამუშაოდ."
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "TitleFragment" : {
+        "label" : "ჩატის მოდელის პროვაიდერის რედაქტირება:"
+      },
+      "AdvancedSettingsTab" : {
+        "label" : "გაფართოებული პარამეტრები"
+      },
+      "ModelAccessSettingsTab" : {
+        "label" : "მოდელზე წვდომის პარამეტრები"
+      }
+    },
+    "GOllamaEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "embedding მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "MainPanel" : {
+        "label" : "Ollama ლოკალური (ან LAN) embedding მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "apiSecretCode" : {
+        "label" : "Ollama token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Ollama token"
+      },
+      "choosedModel" : {
+        "label" : "Ollama embedding მოდელის არჩევანი",
+        "help" : "აირჩიეთ Ollama embedding მოდელი სამუშაოდ."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "embedding მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი embedding მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ embedding მოდელად იმ შემთხვევაში, თუ embedding მოდელი არ არის მითითებული"
+      },
+      "baseUrl" : {
+        "label" : "საწყისი ollama სერვერის მისამართი",
+        "help" : "საწყისი მისამართი (მაგ: http://servername:234/) რომელზეც ollama ლოკალური ან LAN სერვერი პასუხობს."
+      }
+    },
+    "GMistralEmbeddingModelConfig" : {
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "embedding მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "MainPanel" : {
+        "label" : "MistralAI embedding მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "embedding მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "choosedModel" : {
+        "label" : "MistralAI embedding მოდელის არჩევანი",
+        "help" : "აირჩიეთ MistralAI embedding მოდელი სამუშაოდ."
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი embedding მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ embedding მოდელად იმ შემთხვევაში, თუ embedding მოდელი არ არის მითითებული"
+      },
+      "apiSecretCode" : {
+        "label" : "MistralAI token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი MistralAI token"
+      }
+    },
+    "GGoogleVertexEmbeddingModelConfig" : {
+      "MainPanel" : {
+        "label" : "Google Vertex AI embedding მოდელის კონფიგურაციის რედაქტირება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "embedding მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "choosedModel" : {
+        "label" : "Google Vertex AI embedding მოდელის არჩევანი",
+        "help" : "აირჩიეთ Google Vertex AI embedding მოდელი სამუშაოდ."
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი embedding მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ embedding მოდელად იმ შემთხვევაში, თუ embedding მოდელი არ არის მითითებული"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "embedding მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "apiSecretCode" : {
+        "label" : "Google Vertex AI token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Google Vertex AI token"
+      }
+    },
+    "GenericOpenAIAPIEmbeddingModelConfig" : {
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "TitleFragment" : {
+        "label" : "embedding მოდელის პროვაიდერის რედაქტირება:"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "Embedding მოდელის კონფიგურაციის აღწერის შეყვანა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "Embedding მოდელის კონფიგურაციისთვის ავტომატურად გენერირებული უნიკალური კოდი"
+      },
+      "choosedModel" : {
+        "label" : "Embedding მოდელის embedding მოდელის არჩევანი",
+        "help" : "აირჩიეთ Embedding მოდელის embedding მოდელი სამუშაოდ."
+      },
+      "baseUrl" : {
+        "label" : "Embedding მოდელის API სერვერის მისამართი",
+        "help" : "Embedding მოდელის სერვერის საწყისი მისამართი."
+      },
+      "defaultModel" : {
+        "label" : "დაყენება როგორც ნაგულისხმევი embedding მოდელი",
+        "help" : "თუ უკვე მონიშნულია, გამოყენებული იქნება ნაგულისხმევ embedding მოდელად იმ შემთხვევაში, თუ embedding მოდელი არ არის მითითებული"
+      },
+      "apiSecretCode" : {
+        "label" : "Embedding მოდელის API token",
+        "help" : "აირჩიეთ ეს მოდელისთვის გამოსაყენებელი Embedding მოდელის API token"
+      }
+    }
+  },
+  "GeboAIChatControlModule" : {
+    "GeboAIReusableChatComponent" : {
+      "chatConfigInfosBtn" : {
+        "help" : "ჩატის კონფიგურაციის ინფორმაცია"
+      },
+      "chaDeleteBtn" : {
+        "help" : "ჩატის სესიის წაშლა"
+      },
+      "chatNameChangeBtn" : {
+        "help" : "ჩატის სესიის სახელის შეცვლა"
+      },
+      "QueryControl" : {
+        "placeholder" : "დაწერეთ შეტყობინება ჩატ ბოტისთვის"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "დაათვალიერეთ ან მოძებნეთ და აირჩიეთ დოკუმენტები ჩატისთვის"
+      },
+      "UploadFileBtn" : {
+        "help" : "ატვირთეთ ფაილი ჩატისთვის ან სამუშაოდ"
+      },
+      "SubmiQuestion" : {
+        "help" : "დასვით თქვენი კითხვა"
+      },
+      "WithParams" : {
+        "label" : "პარამეტრებით:"
+      },
+      "CalledFunctionsCtl" : {
+        "label" : "AI დაგმანული ფუნქციები:"
+      },
+      "UploadedDocs" : {
+        "label" : "ატვირთული დოკუმენტები"
+      },
+      "CHAT_HISTORY_LOADED" : {
+        "summary" : "ჩეთის ისტორია ჩაიტვირთა",
+        "detail" : "ჩეთის ისტორია წარმატებით ჩაიტვირთა"
+      },
+      "YOUR_SPEECH_IS_UPLOADING" : {
+        "summary" : "თქვენი საუბარი იტვირთება"
+      },
+      "LOADING_VOCAL_ANSWER" : {
+        "summary" : "მიღებული ხმოვანი პასუხი"
+      },
+      "ScrollUpBtn" : {
+        "help" : "აწიეთ ზემოთ"
+      },
+      "ScrollDownBtn" : {
+        "help" : "ჩამოწიეთ ქვემოთ"
+      },
+      "FoundRelatedDocs" : {
+        "label" : "ნაპოვნია დოკუმენტები"
+      },
+      "DELETE_CHAT_ACTION" : {
+        "message" : "დარწმუნებული ხართ, რომ გსურთ ამ ჩატის წაშლა?",
+        "header" : "ჩატის წაშლის ქმედება"
+      }
+    },
+    "ChangeDescriptionComponent" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "description" : {
+        "label" : "ჩატის აღწერა",
+        "help" : "შეიყვანეთ ჩატის სესიის აღწერა."
+      }
+    },
+    "GeboChatUserInfoComponent" : {
+      "usedModel" : {
+        "label" : "გამოყენებული მოდელი",
+        "help" : "მოდელის კოდი"
+      },
+      "providerId" : {
+        "label" : "ჩატის მოდელის მიმწოდებელი",
+        "help" : "LLms მიმწოდებლის დრაივერი"
+      },
+      "functions" : {
+        "label" : "ჩატის მოდელის გამკเรียებელი ფუნქციები",
+        "help" : "მოდელისთვის ხელმისაწვდომი ფუნქციების სია"
+      },
+      "NameCol" : {
+        "label" : "სახელი"
+      },
+      "DescriptionCol" : {
+        "label" : "აღწერა"
+      },
+      "kbases" : {
+        "label" : "ხელმისაწვდომი ცოდნის ბაზები",
+        "help" : "RAG ჩატში გამოყენებული ცოდნის ბაზების სია"
+      },
+      "CloseBtn" : {
+        "help" : "დახურვა"
+      }
+    },
+    "DocumentRefComponent" : {
+      "AddDocsBtn" : {
+        "help" : "დაუმატეთ დოკუმენტი 'ჩატში დაკავშირებულების' სიას "
+      }
+    }
+  },
+  "GeboAIAudioControlModule" : {
+    "GeboAIAudioControlComponent" : {
+      "RecordBtn" : {
+        "label" : "ჩაწერა",
+        "help" : "დააწყე აუდიო ჩანაწერის ჩაწერა და გაგზავნა"
+      },
+      "StopBtn" : {
+        "label" : "ჩაწერა მიმდინარეობს",
+        "help" : "ჩაწერა მიმდინარეობს"
+      },
+      "AbortBtn" : {
+        "label" : "ჩაწერის შეწყვეტა",
+        "help" : "ჩაწერის შეწყვეტა"
+      },
+      "AbortRecordingBtn" : {
+        "help" : "ჩანაწერის გაჩერება"
+      }
+    }
+  },
+  "GeboAIJobStatusModule" : {
+    "LogTableComponent" : {
+      "ReloadDataBtn" : {
+        "label" : "მონაცემების განახლება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SelectHeader" : {
+        "label" : "არჩევა"
+      },
+      "EndDateTimeHeader" : {
+        "label" : "დასრულების თარიღი/დრო"
+      },
+      "StartDateTimeHeader" : {
+        "label" : "დაწყების თარიღი/დრო"
+      },
+      "ProcessingHeader" : {
+        "label" : "დამუშავება"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "FinishedHeader" : {
+        "label" : "დასრულდა"
+      },
+      "WithErrorHeader" : {
+        "label" : "შეცდომით"
+      },
+      "LogTableComponent" : {
+        "help" : "მონაწილეობრივი ფაილური სისტემის შიგნების ჟურნალი"
+      }
+    },
+    "GJobStatus" : {
+      "ProcessesStatsTab" : {
+        "label" : "პროცესების სტატისტიკა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "CloseBtn" : {
+        "label" : "დახურვა"
+      },
+      "PublicationLogTab" : {
+        "label" : "გამოქვეყნების ჟურნალი"
+      },
+      "MainPanel" : {
+        "label" : "გამოქვეყნების ჟურნალი"
+      },
+      "actualStatus" : {
+        "label" : "სტატუსი",
+        "help" : "დავალების სტატუსი: მიმდინარეობს, დასრულდა ან დასრულდა შეცდომებით."
+      },
+      "publishingSystem" : {
+        "label" : "გამოქვეყნებული კონტენტის კონფიგურაცია",
+        "help" : "გამოქვეყნებული კონტენტის ინფორმაცია"
+      },
+      "startDateTime" : {
+        "label" : "დაწყების თარიღი/დრო",
+        "help" : "კონტენტის სინქრონიზაციის დავალების დაწყების თარიღი და დრო"
+      },
+      "endDateTime" : {
+        "label" : "დასრულების თარიღი/დრო",
+        "help" : "კონტენტის სინქრონიზაციის დავალების დასრულების თარიღი და დრო"
+      },
+      "NotProcessedCompletely" : {
+        "label" : "სრულიად არ დამუშავდა"
+      },
+      "ProcessedCompletely" : {
+        "label" : "სრულად დამუშავდა"
+      }
+    }
+  },
+  "GeboAIDashboardPanelModule" : {
+    "GeboAIDashboardComponent" : {
+      "SpanEmbedding" : {
+        "label" : "ემბედინგი დოკუმენტების საერთო რაოდენობასთან"
+      },
+      "MoreDetailsBtn" : {
+        "label" : "ვრცლად"
+      }
+    }
+  },
+  "GeboAIPromptWizardModule" : {
+    "GeboAIPromptWizardComponent" : {
+      "generatePrompt" : {
+        "label" : "პრომπτის გენერაცია"
+      },
+      "PromptWizardBtn" : {
+        "label" : "პრომპტის ოსტატი",
+        "help" : "გამოიყენეთ ეს თქვენი მიზნებისთვის პრომპტის გენერაციისთვის LLM-ს დახმარებით"
+      },
+      "acceptPrompt" : {
+        "label" : "დაადასტურე პრომპტი"
+      },
+      "promptWizardUI" : {
+        "label" : "პრომპტის შაბლონის გენერაციის ოსტატი"
+      },
+      "cancel" : {
+        "label" : "გაუქმება"
+      },
+      "response" : {
+        "label" : "რეკომენდებული პრომპტის შაბლონი",
+        "help" : "შექმნილია მიზნისთვის შაბლონის ტექსტი (შეგიძლიათ შეცვალოთ ან დააკორექტიროთ)"
+      },
+      "modelCode" : {
+        "label" : "ასარჩევი ჩატ მოდელი",
+        "help" : "აირჩიეთ ჩატის მოდელი, რომელსაც სთხოვთ პრომპტის შაბლონის გენერაციას"
+      },
+      "query" : {
+        "label" : "პრომპტის შაბლონის მოთხოვნა",
+        "help" : "მიუთითეთ მე-2 პირში, რა არის მიზანი, რომელშიც AI დაეხმარება მომხმარებელს"
+      }
+    }
+  },
+  "GeboAIStandardChatModelModule" : {
+    "GeboAIStandardChatModelSettings" : {
+      "temperature" : {
+        "label" : "ტემპერატურა",
+        "help" : "ტემპერატურა, რომლითაც მოდელი უპასუხებს, 0-დან 1-მდე (თუ არ იცით, დატოვეთ ცარიელი)"
+      },
+      "contextLength" : {
+        "label" : "კონტექსტის სიგრძე (ტოკენები)",
+        "help" : "ტექსტის რაოდენობა, რომლის გათვალისწინებაც AI მოდელს შეუძლია დამუშავებისას (თუ არ მიუთითებთ, გამოყენებული იქნება 1047576)"
+      },
+      "topP" : {
+        "label" : "TopP",
+        "help" : "TopP პარამეტრი, 0-დან 1-მდე (თუ არ იცით, დატოვეთ ცარიელი)"
+      }
+    }
+  },
+  "GeboAIAdvancedChatModelModule" : {
+    "GeboAIAdvancedChatModelGroupComponent" : {
+      "enabledFunctions" : {
+        "label" : "ამ მოდელის ფუნქციების აქტივაცია",
+        "help" : "ფუნქციები, რომლებიც შეიძლება გამოიყენოს მოდელმა ჩატის დროში"
+      },
+      "defaultModelPrompt" : {
+        "label" : "განკუთვნილი მოდელის პრომპტი",
+        "help" : "ჩატის მოდელისთვის ნაგულისხმევი პრომპტის რედაქტირება."
+      }
+    }
+  },
+  "GeboAiSecretsAdminModule" : {
+    "SecretWrapper" : {
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ აიდენტიფიკაციის აღწერა."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "აიდენტიფიკაციის უნიკალური კოდი გენერირდება ავტომატურად."
+      },
+      "secretType" : {
+        "label" : "აიდენტიფიკაციის ტიპი",
+        "help" : "აირჩიეთ აიდენტიფიკაციის ტიპი დისტანციური სისტემისთვის"
+      },
+      "InsertBtn" : {
+        "label" : "ჩასმა"
+      },
+      "token" : {
+        "label" : "ტოკენი",
+        "help" : "შეიყვანეთ ტოკენი."
+      },
+      "user" : {
+        "label" : "მომხმარებელი",
+        "help" : "შეიყვანეთ ტოკენით მითითებული მომხმარებელი."
+      },
+      "MainPanel" : {
+        "label" : "აიდენტიფიკაციის შექმნა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "username" : {
+        "label" : "მომხმარებლის სახელი",
+        "help" : "შეიყვანეთ მომხმარებლის სახელი."
+      },
+      "password" : {
+        "label" : "პაროლი",
+        "help" : "შეიყვანეთ პაროლი."
+      },
+      "email" : {
+        "label" : "ელფოსტა/მომხმარებლის სახელი",
+        "help" : "შეიყვანეთ ელფოსტა ან მომხმარებლის სახელი, რომელიც ასოცირებულია ssh გასაღებთან."
+      },
+      "key" : {
+        "label" : "საიდუმლო გასაღები",
+        "help" : "გახსენით პირადი გასაღების ფაილი და დააკოპირეთ ამ ველში."
+      },
+      "passphrase" : {
+        "label" : "გასაღების პაროლი",
+        "help" : "შეიყვანეთ გასაღების პაროლი."
+      },
+      "pub" : {
+        "label" : "საჯარო გასაღები",
+        "help" : "გახსენით საჯარო გასაღების ფაილი და დააკოპირეთ ამ ველში."
+      },
+      "jsonContent" : {
+        "label" : "Google ანგარიშის მონაცემების ფაილის შიგთავსი",
+        "help" : "აქ ჩასვით Google api credentials ფაილის შიგთავსი, რომელიც ჩამოტვირთეთ google cloud api console-იდან (https://console.cloud.google.com/)"
+      },
+      "delegatedUser" : {
+        "label" : "Google მომხმარებელი, რომელიც უნდა იყოს იმიტირებული",
+        "help" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით",
+        "placeholder" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით"
+      }
+    }
+  },
+  "GeboAIUploadsModule" : {
+    "GUploadsProjectEndpoint" : {
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "შიგთავსის ავტომატურად გენერირებული უნიკალური კოდი."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ატვირთული შიგთავსის აღწერა ფაილური სისტემის ელემენტისთვის."
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "მშობელი პროექტის მინიშნება."
+      },
+      "upload" : {
+        "label" : "შიგთავსის ატვირთვა",
+        "help" : "დააჭირეთ ძიების ღილაკს და აირჩიეთ zip ან სხვა ფაილები"
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართეთ zip ფაილების გახსნა და შიგთავსის ამოღება"
+      },
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "ინახავს და ამზადებს ამ შიგთავსს ცოდნის ბაზაში LLm-ებისთვის"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალი"
+      },
+      "MainPanel" : {
+        "label" : "ატვირთული შიგთავსის რედაქტირება"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "buildSystemsRefs" : {
+        "label" : "აგების სისტემების კონფიგურაცია",
+        "help" : "აგებისა და შესაფუთი სისტემების სია მეტა-ინფორმაციის და დამატებითი არტეფაქტების ინფორმაციის შესამოწმებლად (დატოვეთ ცარიელი, თუ პროგრამული კოდი არ გვაქვს)"
+      }
+    }
+  },
+  "VFilesystemSelectorModule" : {
+    "VFilesystemSelectorComponent" : {
+      "ChoosedElementsArea" : {
+        "label" : "არჩეული ელემენტები"
+      },
+      "ChooseOk" : {
+        "label" : "OK"
+      },
+      "ChooseCancel" : {
+        "label" : "გაუქმება"
+      },
+      "EditBtn" : {
+        "help" : "აირჩეული ელემენტების რედაქტირება"
+      },
+      "ChooseElementsArea" : {
+        "label" : "აირჩიეთ ელემენტები"
+      },
+      "VFileSystemSelector" : {
+        "label" : "აირჩიეთ ელემენტები"
+      }
+    }
+  },
+  "GeboAIContentReindexModule" : {
+    "GeboAIContentReindexScheduleComponent" : {
+      "EditBtn" : {
+        "help" : "გრაფიკის რედაქტირება"
+      },
+      "ConfirmBtn" : {
+        "label" : "დადასტურება"
+      },
+      "AddBtn" : {
+        "label" : "+დამატება"
+      }
+    }
+  },
+  "GeboAIFileSystemModule" : {
+    "GFilesystemProjectEndpoint" : {
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "ინახავს და ხელმისაწვდომს ხდის ამ შინაარსს ცოდნის ბაზაში LLm-სთვის"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "SourceCodeTreatmentTab" : {
+        "label" : "საწყისი კოდის დამუშავება"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      },
+      "MainPanel" : {
+        "label" : "არსებული ფაილური სისტემის შინაარსის რედაქტირება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ატვირთული ფაილური სისტემის ჩანაწერის შინაარსის აღწერა."
+      },
+      "openZips" : {
+        "label" : "ZIP ფაილების გახსნა",
+        "help" : "ჩართეთ ZIP ფაილების გახსნა და შიგთავსის ამოღება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი შინაარსისთვის."
+      },
+      "tree" : {
+        "label" : "არჩეული ფაილები ან საქაღალდეები",
+        "help" : "გაზიარებული ფაილური სისტემის ფაილები ან დირექტორიები, რომლებიც ხელმისაწვდომია სერვერზე"
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "ძირი პროექტის მითითება."
+      },
+      "programmedTables" : {
+        "label" : "შინაარსის განახლების ცხრილების განრიგი",
+        "help" : "დააგეგმეთ შეცვლილი შინაარსის განრიგი, რომ RAG სისტემა ყოველთვის განახლებული იყოს"
+      },
+      "catalogingCriteria" : {
+        "label" : "საქაღალდეების ორგანიზაციის კრიტერიუმები",
+        "help" : "განმარტეთ როგორ არის ორგანიზებული საქაღალდეები თქვენს მიერ Gebo.ai-ზე გაზიარებულ ფაილურ სისტემაში"
+      },
+      "buildSystemsRefs" : {
+        "label" : "აშენების სისტემების კონფიგურაცია",
+        "help" : "შეიყვანეთ იმ build/packaging სისტემების სია, რომელთა შემოწმებაც გსურთ მეტა ინფორმაციისთვის (დატოვეთ ცარიელი, თუ პროგრამული კოდი არ შედის)"
+      }
+    },
+    "GeboAISharedFilesystemsComponent" : {
+      "NewFileShareAreaBtn" : {
+        "label" : "ახალი გაზიარების ზონა"
+      },
+      "AbsolutePathHeader" : {
+        "label" : "აბსოლუტური ბილიკი"
+      },
+      "DbOrYmlFileConfigHeader" : {
+        "label" : "db ან yml ფაილის კონფიგურაცია"
+      },
+      "DescriptionHeader" : {
+        "label" : "აღწერა"
+      },
+      "CodeHeader" : {
+        "label" : "კოდი"
+      },
+      "ModifyHeader" : {
+        "label" : "შესწორება"
+      }
+    },
+    "GFileSystemShareReference" : {
+      "reference" : {
+        "label" : "არჩეული გაზიარებული საქაღალდე",
+        "help" : "აირჩიეთ სერვერის საქაღალდე, რომელიც არის გაზიარებული ფაილური სისტემის ძირეული გზა თქვენს ორგანიზაციაში საბუთების საცავისთვის"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ თქვენი ორგანიზაციის გაზიარებული ფაილური სისტემის ზონის აღწერა"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი შინაარსისთვის."
+      },
+      "InsertBtn" : {
+        "label" : "დამატება"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "MainPanel" : {
+        "label" : "სერვერზე გაზიარებული საქაღალდის რედაქტირება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      }
+    }
+  },
+  "GeboAiGitModule" : {
+    "GGitProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "შეინახე და გახადე ეს შემცველობა ხელმისაწვდომი ცოდნის ბაზაში LLm-ებისთვის"
+      },
+      "MainPanel" : {
+        "label" : "git წყაროს/დოკუმენტაციის რეპოზიტორიის რედაქტირება"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ git რეპოზიტორიის აღწერა."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი git რეპოზიტორიისთვის."
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "საწყისი პროექტის მითითება."
+      },
+      "contentManagementSystem" : {
+        "label" : "Git სისტემა",
+        "help" : "უკვე კონფიგურირებული git სისტემის მითითება."
+      },
+      "branch" : {
+        "label" : "ფილიალი",
+        "help" : "ფილიალის სახელი გადასახედად (ჩვეულებრივ master, main ან develop)"
+      },
+      "identityCode" : {
+        "label" : "გამოყენებული იდენტობა",
+        "help" : "აირჩიეთ იდენტობა სისტემაზე დაბეჭდე/გადმოწმებისთვის"
+      },
+      "repositoryUri" : {
+        "label" : "რეპოზიტორიის მისამართი/url",
+        "help" : "git დისტანციური რეპოზიტორიის სრული მისამართი (ჩვეულებრივ იწყება http: ან https: ან ssh:)"
+      },
+      "publicAccess" : {
+        "label" : "საჯარო",
+        "help" : "თუ אמת, რეპოზიტორიაზე წვდომას არ სჭირდება ავტენტიკაცია"
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართე zip ფაილების გახსნა და შემცველობის ამოღება"
+      },
+      "programmedTables" : {
+        "label" : "შეცვლილი შემცველობის განახლების განრიგი",
+        "help" : "დააკონფიგურირე განრიგი, რომ შეიცვლილი შემცველობა ყოველთვის განახლდეს ინფორმაციის გამდიდრებაზე ორიენტირებულ სისტემაში"
+      },
+      "buildSystemsRefs" : {
+        "label" : "შეადგინე ასაწყობი სისტემები",
+        "help" : "ასაწყობი/შეფუთვის სისტემების სია მეტა ინფორმაციისა და დამატებით არტიფაქტის ინფორმაციისთვის"
+      }
+    }
+  },
+  "GeboAIChatProfileModule" : {
+    "GChatProfileConfiguration" : {
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "GeneralInfosTab" : {
+        "label" : "ზოგადი ინფორმაცია"
+      },
+      "UseChatModelLabel" : {
+        "label" : "ჩატის მოდელის გამოყენება"
+      },
+      "ChooseChatModelRadio" : {
+        "label" : "არჩევა"
+      },
+      "ChatModelSelect" : {
+        "placeholder" : "აირჩიეთ ჩატის მოდელის კონფიგურაცია"
+      },
+      "EmbeddingModelSelect" : {
+        "placeholder" : "აირჩიეთ embedding მოდელის კონფიგურაცია"
+      },
+      "ChooseEmbeddingModelRadio" : {
+        "label" : "არჩევა"
+      },
+      "RagSettingsTab" : {
+        "label" : "RAG პარამეტრები"
+      },
+      "LanguageModelTab" : {
+        "label" : "დიდი ენის მოდელის და ხელსაწყოების პარამეტრები"
+      },
+      "UseEmbeddingModelLabel" : {
+        "label" : "Embedding მოდელის გამოყენება"
+      },
+      "SecurityAccessSettingsTab" : {
+        "label" : "უსაფრთხოების წვდომის პარამეტრები"
+      },
+      "MainPanel" : {
+        "label" : "Retrieve augmented generation ჩატის პროფილის რედაქტირება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ჩატის პროფილის უნიკალური კოდი გენერირდება ავტომატურად."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ჩატის პროფილის აღწერა."
+      },
+      "userChoosesKnowledgeBases" : {
+        "label" : "მომხმარებელი ირჩევს ცოდნის ბაზებს",
+        "help" : "მომხმარებელს შეუძლია აირჩიოს ხელმისაწვდომი ცოდნის ბაზები ან ატვირთოს საკუთარი ფაილები."
+      },
+      "knowledgeBaseCodes" : {
+        "label" : "ცოდნის ბაზები",
+        "help" : "დოკუმენტების მოძიებისთვის გამოყენებული ცოდნის ბაზები."
+      },
+      "similaritySearchThreshold" : {
+        "label" : "მისგავსების ზღვარი",
+        "help" : "სემანტიკური ძებნის მისგავსების ზღვარი: 0.60–0.65 დაბალი, 0.70–0.75 საშუალო, 0.80–0.85 ზუსტი"
+      },
+      "otherSearchSimilarityThreshold" : {
+        "label" : "მეორე 'hop'-ის მისგავსების ზღვარი",
+        "help" : "სემანტიკური ძებნის მისგავსების ზღვარი მრავალ-საფეხურიან RAG-ში მეორე ძიებისთვის: 0.60–0.65 დაბალი, 0.70–0.75 საშუალო, 0.80–0.85 ზუსტი"
+      },
+      "disableMultiHopRag" : {
+        "label" : "მრავალ-საფეხურიანი rag-ის გამორთვა",
+        "help" : "გამორთავს მრავალ-საფეხურიანი rag ფუნქციონალს. ეს ფუნქცია აწყობს პირველ სემანტიკურ ძებნას და შედეგად ნაპოვნ დოკუმენტებს იყენებს კონტექსტად მომდევნო ძებნებისთვის, რითაც აძლიერებს კონტექსტს."
+      },
+      "topK" : {
+        "label" : "დოკუმენტის რეგულარული ფრაგმენტები (TopK)",
+        "help" : "Retrieve augmented generation-ში სემანტიკური ძებნისას განიხილება N-მდე ნაპოვნი დოკუმენტის ფრაგმენტი"
+      },
+      "enabledFunctions" : {
+        "label" : "ამ RAG ჩატისთვის ჩართული ფუნქციები",
+        "help" : "ფუნქციონალები, რომელსაც llm მოდელი გამოიყენებს ჩატისას შერჩეულ ცოდნის ბაზასთან ურთიერთობისას"
+      },
+      "prompt" : {
+        "label" : "პრონტ",
+        "help" : "რედაქტირეთ prompt retrieve augmented generation სესიებისთვის."
+      }
+    }
+  },
+  "GeboAIPromptAdminModule" : {
+    "GPromptConfig" : {
+      "DeleteBtn" : {
+        "label" : "წაიშალოს"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "PromptCategorySelect" : {
+        "placeholder" : "შეიყვანეთ ან მიუთითეთ მოწოდების კატეგორია"
+      },
+      "MainPanel" : {
+        "label" : "მოწოდების რედაქტირება"
+      },
+      "promptCategory" : {
+        "label" : "მოწოდების კატეგორია",
+        "help" : "აირჩიეთ ან მიუთითეთ მოწოდების კატეგორია."
+      },
+      "prompt" : {
+        "label" : "მოწოდება",
+        "help" : "დაარედაქტირეთ ჩატის მოწოდება, გამოიყენეთ {query} მომხმარებლის კითხვისთვის და {context} დოკუმენტების/ისტორიის კონტექსტისთვის, რომელიც იგზავნება LLM-სთვის."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "მოწოდების ავტომატურად გენერირებული უნიკალური კოდი."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ მოწოდების აღწერა."
+      }
+    }
+  },
+  "GeboAIUserProfileModule" : {
+    "GeboAIUserProfileComponent" : {
+      "ChangePasswdBtn" : {
+        "label" : "პაროლის შეცვლა"
+      },
+      "YourUserName" : {
+        "label" : "თქვენი მომხმარებლის სახელი"
+      }
+    },
+    "GeboAIChangePasswordComponent" : {
+      "oldPassword" : {
+        "label" : "ძველი პაროლი",
+        "help" : "მიმდინარე პაროლი შესვლისთვის"
+      },
+      "newPassword" : {
+        "label" : "ახალი პაროლი",
+        "help" : "ახალი პაროლი"
+      },
+      "username" : {
+        "label" : "ელ-ფოსტა",
+        "help" : "ელ-ფოსტა როგორც მომხმარებლის სახელი შესვლისთვის"
+      },
+      "ChangePasswordUI" : {
+        "label" : "პაროლის შეცვლის ფორმა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "ChangePwdBtn" : {
+        "label" : "პაროლის შეცვლა"
+      },
+      "newPassword1" : {
+        "label" : "დაადასტურე ახალი პაროლი",
+        "help" : "დაადასტურე ახალი პაროლი"
+      }
+    }
+  },
+  "GeboAIGoogleSearchAccountModule" : {
+    "GGoogleSearchApiCredentials" : {
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "ForMoreInformations" : {
+        "label" : "დამატებითი ინფორმაციისათვის Google კონფიგურირებადი საძიებო API ან თქვენი api გასაღების (უფასოდ) მისაღებად გადადით: https://developers.google.com/custom-search"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "google საძიებო api კონფიგურაციის უნიკალური კოდი."
+      },
+      "MainPanel" : {
+        "label" : "Google კონფიგურებადი საძიებო api მისამართების რედაქტირება"
+      },
+      "secretCode" : {
+        "label" : "Google საძიებო api ტოკენი",
+        "help" : "აირჩიეთ ან ჩაწერეთ google საძიებო api ტოკენი"
+      },
+      "customSearchEngineId" : {
+        "label" : "Google საძიებო სისტემის id",
+        "help" : "Google საძიებო სისტემის id"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ Google საძიებო api კონფიგურაციის აღწერა."
+      }
+    }
+  },
+  "GeboAiChatModule" : {
+    "GeboAiChatSectionComponent" : {
+      "chatModelCode" : {
+        "label" : "ჩეთი ცოდნის ბაზების გარეშე",
+        "help" : "აირჩიეთ LLM-ები ჩეთის სესიისთვის",
+        "placeholder" : "აირჩიეთ LLM-ები ჩეთის სესიისთვის"
+      },
+      "ChevronLeftBtn" : {
+        "help" : "გახსენი ჩეთის პარამეტრების განყოფილება"
+      },
+      "CreateChatBtn" : {
+        "label" : "ახალი ჩეთი"
+      },
+      "NewChatSessionPanel" : {
+        "label" : "ახალი ჩეთის სესია"
+      },
+      "chatProfileCode" : {
+        "label" : "ჩეთი ცოდნის ბაზებთან ერთად",
+        "help" : "აირჩიეთ კომპანიის ჩეთის პროფილი კომპანიის (და თქვენი) დოკუმენტებისა და LLM-ებთან ურთიერთობისთვის",
+        "placeholder" : "აირჩიეთ კომპანიის ჩეთის პროფილი კომპანიის (და თქვენი) დოკუმენტებისა და LLM-ებთან ურთიერთობისთვის"
+      },
+      "NewChatBtn" : {
+        "label" : "ახალი ჩეთი"
+      },
+      "ChatSessionsPanel" : {
+        "label" : "ჩატის სესიები"
+      },
+      "CloseSiderBarBtn" : {
+        "help" : "გვერდითი ზოლის დახურვა"
+      },
+      "NewChatMiniBtn" : {
+        "help" : "შექმენით ახალი ჩატი დიდი ენის მოდელებით",
+        "label" : "ჩატი"
+      },
+      "NewRagChatMiniBtn" : {
+        "help" : "შექმენით ახალი RAG ჩატი კომპანიის კონტენტით",
+        "label" : "ჩატი ცოდნის ბაზასთან"
+      },
+      "ChatsTitle" : {
+        "label" : "ჩატები"
+      },
+      "ChevronLeftBtn2" : {
+        "help" : "ჩატის ოპციების სექციის გახსნა"
+      }
+    }
+  },
+  "GeboAIChooseDocumentsPanelModule" : {
+    "GeboAIChooseDocumentsPanelComponent" : {
+      "ChatWithDocsBtn" : {
+        "label" : "ჩატი დოკუმენტებთან",
+        "help" : "დაათვალიერე ან მოძებნე და აირჩიე დოკუმენტები სამუშაოდ"
+      },
+      "chooseFilesDialog" : {
+        "label" : "აირჩიე ფაილები ჩატისთვის"
+      },
+      "ChatWithDocsBtnNew" : {
+        "help" : "დაათვალიერეთ ან მოძებნეთ და აირჩიეთ დოკუმენტები ჩატისთვის"
+      }
+    },
+    "GeboAISearchDocumentsComponent" : {
+      "confirmBtn" : {
+        "label" : "დადასტურება"
+      },
+      "userspaceBrowsing" : {
+        "label" : "ატვირთე ან აარჩიე შენი დოკუმენტები",
+        "help" : "აირჩიე/ატვირთე დოკუმენტები შენი მომხმარებლის სივრციდან"
+      },
+      "fileSearchBtn" : {
+        "label" : "ძებნა"
+      },
+      "semanticSearchBtn" : {
+        "label" : "ძებნა"
+      },
+      "query" : {
+        "label" : "სემანტიკური საძიებო ფრაზა",
+        "help" : "შეიყვანეთ თქვენი ძიებისთვის აქტუალური მნიშვნელობის ფრაზა"
+      },
+      "choosenBrowsing" : {
+        "label" : "აირჩიეთ ფაილების ძიება ცოდნის ბაზებში",
+        "help" : "აირჩიეთ ფაილების ძიება კომპანიის გაზიარებული ცოდნის ბაზებიდან"
+      },
+      "filename" : {
+        "label" : "საძიებო ფაილის სახელი",
+        "help" : "შეიყვანეთ სიტყვის ნაწილი თქვენი სასურველი ფაილის დასახელებიდან"
+      },
+      "SearchFilesLabel" : {
+        "label" : "ფაილის სახელის ძებნა"
+      },
+      "BrowseCompanyFilesLabel" : {
+        "label" : "კომპანიის ფაილების დათვალიერება"
+      },
+      "SemanticSearchFilesLabel" : {
+        "label" : "სემანტიკური ძებნა"
+      },
+      "chooseFilesDialog" : {
+        "label" : "აირჩიეთ ფაილები ჩატისთვის"
+      }
+    }
+  },
+  "UserSpaceFilesModule" : {
+    "GeboAIUserpaceFilesComponent" : {
+      "ModifySelectedBtn" : {
+        "help" : "აირჩეულიების შეცვლა"
+      },
+      "ChooseUserFilesDialog" : {
+        "label" : "მომხმარებლის ფაილების არჩევა"
+      }
+    },
+    "GeboAIUserspaceBrowseComponent" : {
+      "cancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "okBtn" : {
+        "label" : "OK"
+      },
+      "chooseUserUploadedContent" : {
+        "label" : "მომხმარებლის ატვირთული კონტენტის არჩევა"
+      },
+      "UserspaceBrowser" : {
+        "label" : "ცოდნის ბაზები და მომხმარებლის ფაილები"
+      }
+    }
+  },
+  "AddProjectMenuModule" : {
+    "AddProjectMenuComponent" : {
+      "GProject" : {
+        "label" : "+ქვეპროექტი ან ელემენტი",
+        "help" : "დაამატეთ ქვეპროექტი ან ელემენტი"
+      },
+      "ai_gebo_uploads_content_handler_GUploadsProjectEndpoint" : {
+        "label" : "+ფაილების ატვირთვა",
+        "help" : "დაამატეთ ატვირთული ფაილების მონაცემების წყარო"
+      },
+      "ai_gebo_sharepoint_handler_GSharepointProjectEndpoint" : {
+        "label" : "+SharePoint/OneDrive",
+        "help" : "დაამატეთ Microsoft SharePoint/OneDrive მონაცემების წყარო"
+      },
+      "ai_gebo_atlassian_confluence_handler_GConfluenceProjectEndpoint" : {
+        "label" : "+Confluence",
+        "help" : "დაამატეთ Atlassian Confluence მონაცემების წყარო"
+      },
+      "ai_gebo_filesystem_content_handler_GFilesystemProjectEndpoint" : {
+        "label" : "+ფაილური სისტემა",
+        "help" : "დაამატეთ გაზიარებული ფაილური სისტემის მონაცემების წყარო"
+      },
+      "ai_gebo_atlassian_jira_handler_GJiraProjectEndpoint" : {
+        "label" : "+Jira",
+        "help" : "დაამატეთ Atlassian Jira მონაცემების წყარო"
+      },
+      "ai_gebo_git_content_handler_GGitProjectEndpoint" : {
+        "label" : "+git რეპო",
+        "help" : "დაამატეთ git საცავის მონაცემების წყარო, მაგალითად Bitbucket, GitHub ან სხვა"
+      },
+      "ai_gebo_googledrive_handlers_GGoogleDriveProjectEndpoint" : {
+        "label" : "+google drive",
+        "help" : "დაამატეთ google drive მონაცემთა წყარო"
+      }
+    }
+  },
+  "AppModule" : {
+    "AppComponent" : {
+      "chat" : {
+        "label" : "Gebo.ai ჩატი"
+      },
+      "setup" : {
+        "label" : "პარამეტრები"
+      },
+      "admin" : {
+        "label" : "Gebo.ai ადმინისტრირება"
+      },
+      "currentProfile" : {
+        "label" : "ჩემი პროფილი"
+      },
+      "logout" : {
+        "label" : "გასვლა"
+      },
+      "ChangeLanguageItem" : {
+        "label" : "ენის შეცვლა"
+      },
+      "MyProfile" : {
+        "label" : "თქვენი პროფილი"
+      },
+      "MyProfileItem" : {
+        "label" : "თქვენი პროფილი"
+      },
+      "chatMenuItem" : {
+        "label" : "ჩატი"
+      },
+      "setupMenuItem" : {
+        "label" : "მორგება"
+      },
+      "adminMenuItem" : {
+        "label" : "ადმინი"
+      },
+      "editMyProfileMenuItem" : {
+        "label" : "პროფილის რედაქტირება"
+      },
+      "logoutMenuItem" : {
+        "label" : "გამოსვლა"
+      }
+    }
+  },
+  "GeboAIJobStatsVisualizerModule" : {
+    "GeboAIStatsVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "დოკუმენტების სიის ანალიზი"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები",
+        "dataset-0-label" : ""
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "TOKENIZATION" : {
+        "description" : "დოკუმენტების ტოკენიზაცია"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები",
+        "dataset-0-label" : ""
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "ტოკენების დამუშავების შეცდომა"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "EMBEDDING" : {
+        "description" : "სემანტიკური ინდექსაცია (სემანტიკური rag-ის ემბედინგი)"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები",
+        "dataset-0-label" : ""
+      },
+      "EMBEDDING-tokens-processing" : {
+        "label-0" : "09:11",
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "ტოკენების დამუშავების შეცდომა"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ობიექტების/ურთიერთობების/მოვლენების ინდექსირება (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "დოკუმენტების დამუშავების შეცდომა",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "დოკუმენტები შეცდომით",
+        "dataset-3-label" : "დაბრძალული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "შეცდომა ტოკენების დამუშავებისას"
+      }
+    },
+    "GeboAIJobGraphicVisualizerComponent" : {
+      "DOCUMENT_DISCOVERY" : {
+        "description" : "დოკუმენტების სიის ანალიზი"
+      },
+      "DOCUMENT_DISCOVERY-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "TOKENIZATION" : {
+        "description" : "დოკუმენტების ტოკენიზაცია"
+      },
+      "DOCUMENT_DISCOVERY-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "TOKENIZATION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "EMBEDDING" : {
+        "description" : "სემანტიკური ინდექსაცია (გრაფრაგისთვის ემბედინგი)"
+      },
+      "TOKENIZATION-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "შეცდომა ტოკენების დამუშავებისას"
+      },
+      "EMBEDDING-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "TOKENIZATION-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION" : {
+        "description" : "ერთეულების/ურთიერთობების/მოვლენების ინდექსაცია (graphrag)"
+      },
+      "GRAPHEXTRACTION-docs-histogram" : {
+        "label-0" : "დაუმუშავებელი დოკუმენტები",
+        "label-1" : "შეცდომა დოკუმენტების დამუშავებისას",
+        "label-2" : "დამუშავებული დოკუმენტები"
+      },
+      "EMBEDDING-tokens-processing" : {
+        "dataset-0-label" : "დამუშავებული ტოკენები",
+        "dataset-1-label" : "შეცდომა ტოკენების დამუშავებისას"
+      },
+      "EMBEDDING-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      },
+      "GRAPHEXTRACTION-documents-chart" : {
+        "dataset-0-label" : "მიღებული დოკუმენტები",
+        "dataset-1-label" : "დამუშავებული დოკუმენტები",
+        "dataset-2-label" : "შეცდომიანი დოკუმენტები",
+        "dataset-3-label" : "გაუქმებული დოკუმენტები"
+      }
+    }
+  },
+  "GeboSetupWizardsModule" : {
+    "GeboAILLMSVendorConfiguration" : {
+      "ProviderBuy" : {
+        "label" : "Apy key-ის კრედიტის ბმულის შეძენა"
+      },
+      "ModifyBtn" : {
+        "label" : "ცვლილება",
+        "help" : "მოდელის კონფიგურაციის ნახვა/ცვლილება"
+      },
+      "ExistingModelCode" : {
+        "label" : "კოდი"
+      },
+      "ExistingModelDesc" : {
+        "label" : "აღწერა"
+      },
+      "ExistingModelType" : {
+        "label" : "მოდელის ტიპი"
+      },
+      "ExistingModelsSection" : {
+        "label" : "არსებული კონფიგურაციები"
+      },
+      "ProviderWWW" : {
+        "label" : "ვებ საიტის ბმული"
+      },
+      "ModelTypeFieldSet" : {
+        "label" : "მომწოდებლის ავტორიზაცია"
+      },
+      "ProviderInfos" : {
+        "label" : "მომწოდებლის ინფორმაცია"
+      },
+      "ExistingApiKey" : {
+        "label" : "Api key/ავტორიზაცია",
+        "help" : "აირჩიეთ api key ან ავტორიზაცია ამ მომწოდებლისთვის"
+      },
+      "NewApiKey" : {
+        "label" : "ახალი api key",
+        "help" : "შეიყვანეთ ახალი api key ამ მომწოდებლისთვის"
+      },
+      "UseExistingOrNewCredentials" : {
+        "label" : "არსებული ან ახალი გამოყენება",
+        "help" : "გამოიყენეთ არსებული ან შექმენით ახალი ავტორიზაცია ამ მომწოდებლისთვის"
+      },
+      "NewUserName" : {
+        "label" : "მომხმარებლის სახელი",
+        "help" : "მომხმარებლის სახელი მომსახურებაზე წვდომისთვის"
+      },
+      "NewEmbeddingModel" : {
+        "label" : "ახალი ემბედინგის მოდელი",
+        "help" : "შექმენით ემბედინგის მოდელის ახალი კონფიგურაცია"
+      },
+      "NewChatModel" : {
+        "label" : "ახალი ჩატის მოდელი",
+        "help" : "შექმენით ჩატის მოდელის ახალი კონფიგურაცია"
+      },
+      "NewModelDialog" : {
+        "label" : "ახალი მოდელის დამატება"
+      },
+      "PiSave" : {
+        "label" : "შენახვა"
+      },
+      "NewModelsButton" : {
+        "label" : "ახალი მოდელები",
+        "help" : "შექმენით ახალი მოდელების კონფიგურაცია"
+      },
+      "NewModelsDialog" : {
+        "label" : "ახალი მოდელების დამატება"
+      },
+      "baseUrl" : {
+        "label" : "საბაზისო api url",
+        "help" : "მომწოდებლის api სერვისის საბაზისო url"
+      },
+      "ModelTypePanel" : {
+        "label" : "ახალი მოდელების დამატება"
+      },
+      "ModelsChoices" : {
+        "label" : "მოდელების არჩევანი"
+      },
+      "PresetsAccordionPanel" : {
+        "label" : "საყვარელი მოდელების არჩევა"
+      },
+      "embeddingPresetChoice" : {
+        "label" : "ემბედინგის მოდელი",
+        "help" : "აირჩიეთ ერთ-ერთი წინასწარ განსაზღვრული ემბედინგის მოდელი"
+      },
+      "chatPresetChoice" : {
+        "label" : "ჩატის მოდელი",
+        "help" : "აირჩიეთ ერთ-ერთი წინასწარ განსაზღვრული ჩატის მოდელი"
+      },
+      "AdvancedAccordionPanel" : {
+        "label" : "გაფართოებული მოდელების არჩევა"
+      },
+      "embeddingAdvancedChoice" : {
+        "label" : "ემბედინგის მოდელი",
+        "help" : "აირჩიეთ მომწოდებლის გამოქვეყნებული ემბედინგის მოდელებიდან"
+      },
+      "chatAdvancedChoice" : {
+        "label" : "ჩატის მოდელი",
+        "help" : "აირჩიეთ მომწოდებლის გამოქვეყნებული ჩატის მოდელებიდან"
+      },
+      "PresedAccordionDesc" : {
+        "label" : " გამოიყენეთ ეს არჩევის რეჟიმი მხოლოდ თუ ხართ ექსპერტი ან მოიძიეთ მომწოდებლის საიტზე რომელი მოდელები შეესაბამება თქვენს საჭიროებებს. "
+      },
+      "chatPresetSetAsDefault" : {
+        "label" : "ნაგულისხმევ ჩატის მოდელად დაყენება",
+        "help" : "ამ მოდელის დაყენება ნაგულისხმევად, ის გამოყენებული იქნება ყველა დავალებისთვის, სადაც სხვა ჩატის მოდელი დაყენებული არ არის"
+      },
+      "PresetAccordionDesc" : {
+        "label" : " გთავაზობთ შემდეგი მოდელების სიას "
+      },
+      "embeddingPresetSetAsDefault" : {
+        "label" : "ნაგულისხმევ ემბედინგის მოდელად დაყენება",
+        "help" : "ამ მოდელის დაყენება ნაგულისხმევად, ის გამოყენებული იქნება ყველა დავალებისთვის, სადაც სხვა ემბედინგის მოდელი დაყენებული არ არის"
+      },
+      "chatAdvancedSetAsDefault" : {
+        "label" : "ნაგულისხმევ ჩატის მოდელად დაყენება",
+        "help" : "ამ მოდელის დაყენება ნაგულისხმევად, ის გამოყენებული იქნება ყველა დავალებისთვის, სადაც სხვა ჩატის მოდელი დაყენებული არ არის"
+      },
+      "embeddingAdvancedSetAsDefault" : {
+        "label" : "ნაგულისხმევ ემბედინგის მოდელად დაყენება",
+        "help" : "ამ მოდელის დაყენება ნაგულისხმევად, ის გამოყენებული იქნება ყველა დავალებისთვის, სადაც სხვა ემბედინგის მოდელი დაყენებული არ არის"
+      },
+      "AdvancedAccordionDesc" : {
+        "label" : " გამოიყენეთ ეს არჩევის რეჟიმი მხოლოდ თუ ხართ ექსპერტი ან მოიძიეთ მომწოდებლის საიტზე რომელი მოდელები შეესაბამება თქვენს საჭიროებებს. "
+      },
+      "CreatePresetBtn" : {
+        "label" : "შექმნა და გააქტიურება"
+      },
+      "CreateAdvancedBtn" : {
+        "label" : "შექმნა და გააქტიურება"
+      },
+      "ProviderNameField" : {
+        "label" : "მომწოდებელი"
+      },
+      "requireApiKeyAniway" : {
+        "label" : "მომწოდებელს სჭირდება ავტორიზაცია",
+        "help" : "მომწოდებლის/სერვერის აპლიკაცია კონფიგურირებულია ავტორიზებულ წვდომაზე api key ან სხვა მონაცემებით"
+      },
+      "baseUrl1" : {
+        "label" : "საბაზისო api url",
+        "help" : "მომწოდებლის საბაზისო url api სერვისებისთვის"
+      },
+      "enableAllFunctions" : {
+        "label" : "ყველა ფუნქციის ჩართვა",
+        "help" : "ჩართეთ ყველა ხელმისაწვდომი ინსტრუმენტი და ფუნქცია, თუ არ არის მონიშნული, მათი ჩართვა შესაძლებელია მოგვიანებით llms ადმინისტრატორის პანელში"
+      }
+    }
+  },
+  "BackendMSGSModule" : {
+    "GUserMessage" : {
+      "b329fa68b895496165238eb8a7eaefc246a80a34b12ba06836072325a47db3d2" : {
+        "summary" : "AI დისტანციური მომწოდებელი წარმატებით არის დაკავშირებული",
+        "detail" : "მომწოდებელი მუშაობს და წარმატებით არის კონფიგურირებული"
+      },
+      "0d3c534734343246efe877c360306f5db9e7da0a478da9bb6127eda543d5919f" : {
+        "summary" : "ოპერაცია წარუმატებელია",
+        "detail" : "ვერ მოხერხდა ავთენტიფიკაცია მოცემული ავტორიზაციით"
+      },
+      "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f" : {
+        "summary" : "წარმატებით დასრულდა!",
+        "detail" : "ოპერაცია წარმატებით შესრულდა"
+      },
+      "6396a6de2c7a6a221f6f9eaed13177fff8a029d955d37974976e1779c6bf833b" : {
+        "summary" : "შეცდომა ჩატის სტრიმინგის დროს",
+        "detail" : "სერვერის შეცდომა: class org.neo4j.driver.internal.value.StringValue ვერ იქნა გარდაქმნილი კლასად java.lang.String (org.neo4j.driver.internal.value.StringValue არის 'app'-ის სახელის გარეშე მოდულში; java.lang.String არის module java.base-ის 'bootstrap' ლოდერში)"
+      },
+      "OK" : {
+        "summary" : "წარმატებით შენახულია",
+        "detail" : "განახლების ოპერაცია წარმატებით დასრულდა"
+      },
+      "36414fbb220f8ee00c0d25bc51586ea256c9b97f954152d884bc234cc37fdaa3" : {
+        "summary" : "შეცდომა Ollama სერვერთან კომუნიკაციისას",
+        "detail" : "ქსელის შეცდომა შინაარსამდე წვდომის დროს\nმოდელების სია შეცდომა მისამართზე მუშაობისას:http://localhost:11434/api/tags"
+      },
+      "da0947ce6132f738f46fe692775e010e051183aabd32e935a19c7183800379ed" : {
+        "summary" : "ეს შეგიძლიათ წაშალოთ",
+        "detail" : "მიმდინარე ნაჩვენები მონაცემების უსაფრთხოდ წაშლა შესაძლებელია"
+      },
+      "52c957dd5f6039850a0288387a8723798c10ac2944a985a8d4a0247285df2dd1" : {
+        "summary" : "ეს ვერ წაშალეთ",
+        "detail" : "ეს ობიექტი გამოყენებულია აპლიკაციის სხვა ნაწილებში"
+      }
+    }
+  },
+  "GeboAIUploadChatDocumentModule" : {
+    "GeboAIUploadChatDocumentComponent" : {
+      "FilesToChatHeader" : {
+        "label" : "ატვირთეთ ფაილები ჩატისთვის"
+      },
+      "ChooseFile" : {
+        "help" : "აირჩიეთ ფაილები"
+      },
+      "UploadFile" : {
+        "help" : "ფაილების ატვირთვა"
+      },
+      "DragDropHere" : {
+        "label" : "ჩააგდეთ ფაილები აქ ატვირთვისთვის"
+      },
+      "RemoveAll" : {
+        "help" : "ყველას წაშლა"
+      },
+      "UploadPending" : {
+        "label" : "მოლოდინში ატვირთვაზე"
+      },
+      "CompletedData" : {
+        "label" : "დასრულებულია"
+      }
+    }
+  },
+  "GeboAIGraphRagConfigModule" : {
+    "GeboAIGraphragConfigComponent" : {
+      "ConfigureGraphragLabel" : {
+        "label" : "დააკონფიგურირეთ graphrag პარამეტრების ზონაში, თუ სურს მისი გამოყენება ამ განყოფილებაში"
+      },
+      "GraphragSettingsLabel" : {
+        "label" : "Graphrag-ის პარამეტრები"
+      },
+      "button-help" : {
+        "label" : "დააწკაპუნეთ აქ graphrag-ისთვის ინფორმაციის ამოღების კონფიგურაციისთვის (ამჟამად მორგებული არ არის)"
+      },
+      "AddConfigurationBtn" : {
+        "label" : "დაამატეთ კონფიგურაცია"
+      }
+    }
+  },
+  "GeboAiGoogleWorkspacesModule" : {
+    "GeboAIGoogleDriveFastComponent" : {
+      "CreateBtn" : {
+        "label" : "შექმნა"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ Google Drive სისტემის აღწერა."
+      },
+      "MainPanel" : {
+        "label" : "შექმენით Google Drive/Workspace კავშირი"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "delegatedUser" : {
+        "label" : "Google მომხმარებელი, რომელიც უნდა იყოს იმიტირებული",
+        "help" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით",
+        "placeholder" : "მომხმარებელი, რომელიც იმიტირდება მოცემული უფლებებით"
+      },
+      "jsonContent" : {
+        "label" : "Google credentials JSON ფაილის შიგთავსი",
+        "help" : "შექმენით Google Credentials თქვენი workspace/team drives წვდომით Google Console Cloud-ში და აქ ჩასვით ჩამოტვირთული JSON ფაილის შიგთავსი (https://console.cloud.google.com/).",
+        "placeholder" : "შექმენით Google Credentials თქვენი workspace/team drives წვდომით Google Console Cloud-ში და აქ ჩასვით ჩამოტვირთული JSON ფაილის შიგთავსი (https://console.cloud.google.com/)."
+      }
+    },
+    "GGoogleDriveProjectEndpoint" : {
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "PublishBtn" : {
+        "label" : "გამოქვეყნება!",
+        "help" : "შეინახეთ და გახადეთ ეს შემცველობები ხელმისაწვდომი ცოდნის ბაზისთვის LLm-ებისთვის"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "MainPanel" : {
+        "label" : "Google drive შემცველობის გაზიარება"
+      },
+      "SettingsTab" : {
+        "label" : "პარამეტრები"
+      },
+      "LogsTab" : {
+        "label" : "ჟურნალები"
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ ატვირთული google drive შემცველობის აღწერა."
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებადი უნიკალური კოდი შემცველობისთვის."
+      },
+      "tree" : {
+        "label" : "არჩეული ფაილი ან საქაღალდე",
+        "help" : "გაზიარებული google drive სივრცეებისა და გვერდების შემცველობა"
+      },
+      "driveSystemCode" : {
+        "label" : "Google drive კონფიგურაცია",
+        "help" : "უკვე კონფიგურირებული google drive სისტემის მითითება."
+      },
+      "openZips" : {
+        "label" : "Zip ფაილების გახსნა",
+        "help" : "ჩართეთ zip ფაილების გახსნისა და შემცველობის გამოტანის ფუნქცია"
+      },
+      "parentProjectCode" : {
+        "label" : "პროექტი",
+        "help" : "მშობელი პროექტის მითითება."
+      },
+      "programmedTables" : {
+        "label" : "შედარების განრიგის შემოწმება",
+        "help" : "დააპროგრამეთ შეცვლილი შემცველობის განახლების განრიგი, რათა RAG სისტემა იყოს განახლებული"
+      },
+      "catalogingCriteria" : {
+        "label" : "საქაღალდეებისა და ქვესაქაღალდეების ორგანიზების კრიტერიუმები",
+        "help" : "მიუთითეთ როგორაა ორგანიზებული ფაილები და საქაღალდეები იმ google drive შემცველობებში, რომლებიც გაზიარებულია Gebo.ai-თან"
+      }
+    },
+    "GGoogleDriveSystem" : {
+      "GeneralSettingsTab" : {
+        "label" : "გენერალური პარამეტრები"
+      },
+      "CancelBtn" : {
+        "label" : "გაუქმება"
+      },
+      "DeleteBtn" : {
+        "label" : "წაშლა"
+      },
+      "SaveBtn" : {
+        "label" : "შენახვა"
+      },
+      "MainPanel" : {
+        "label" : "Google drive ინტეგრაციის ჩასწორება"
+      },
+      "code" : {
+        "label" : "უნიკალური კოდი",
+        "help" : "ავტომატურად გენერირებული უნიკალური კოდი google drive სისტემისთვის."
+      },
+      "description" : {
+        "label" : "აღწერა",
+        "help" : "შეიყვანეთ google drive სისტემის აღწერა."
+      },
+      "driveAccessSecret" : {
+        "label" : "გამოყენებული იდენტობა",
+        "help" : "აირჩიეთ ან შექმენით იდენტობა google drive სისტემაზე წვდომისთვის"
+      }
+    }
+  }
+}
