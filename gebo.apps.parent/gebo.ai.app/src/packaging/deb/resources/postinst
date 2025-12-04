@@ -6,12 +6,10 @@ APP_GROUP="gebo-ai"
 APP_HOME="/home/gebo-ai"
 GEBO_HOME="$APP_HOME/home"
 GEBO_WORK="/var/gebo-ai/data"
-GEBO_CONFIG="/var/gebo-ai/config"
+GEBO_CONFIG_FOLDER="/etc/gebo-ai"
 GEBO_ADDITIONAL_CONFIG_FILE="/etc/gebo-ai/application.properties"
 GEBO_LOG_BASE="/var/log/gebo-ai"
-GEBO_EXEC_FOLDER=
 SERVICE_NAME="gebo-ai.service"
-
 APP_DIR="$APP_HOME/gebo-ai"
 SERVICE_SRC="$APP_DIR/$SERVICE_NAME"
 SERVICE_DST="/etc/systemd/system/$SERVICE_NAME"
@@ -24,8 +22,8 @@ if ! id -u "$APP_USER" >/dev/null 2>&1; then
 fi
 echo "Trying to create folders " >> /tmp/gebo-ai-install-log.txt
 # Create folders
-mkdir -p "$GEBO_HOME" "$GEBO_WORK" "$GEBO_CONFIG" -p "$GEBO_LOG_BASE"  >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
-chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK"   >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+mkdir -p "$GEBO_HOME" "$GEBO_WORK" "$GEBO_CONFIG_FOLDER"  "$GEBO_LOG_BASE"  >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
+chown -R "$APP_USER:$APP_GROUP" "$GEBO_HOME" "$GEBO_WORK" $GEBO_LOG_BASE  >> /tmp/gebo-ai-install-log.txt 2>> /tmp/gebo-ai-install-err.txt
 
 echo "Trying to write systemd unit " >> /tmp/gebo-ai-install-log.txt
 # Install systemd unit
