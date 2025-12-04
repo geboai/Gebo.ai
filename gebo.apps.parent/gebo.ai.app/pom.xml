@@ -256,7 +256,7 @@
 										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
 										<option>-XX:+PrintGCDetails</option>
-										<option>-Xlog:gc:/home/gebo-ai/logs/gc.log</option>
+										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>
 									</javaOptions>
 								</configuration>
 							</execution>
