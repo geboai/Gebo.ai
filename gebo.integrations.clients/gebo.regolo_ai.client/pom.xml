@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<!-- <parent> <groupId>ai.gebo.integrations.clients</groupId> <artifactId>gebo.integrations.clients.parent</artifactId> 
-		<version>1.0.0.0-SNAPSHOT</version> </parent> -->
+		<version>1.0.0.0-rc1</version> </parent> -->
 	<groupId>ai.gebo.integrations.clients</groupId>
 	<artifactId>gebo.regolo_ai.client</artifactId>
-	<version>1.0.0.0-SNAPSHOT</version>
+	<version>1.0.0.0-rc1</version>
 	<properties>
 		<swagger.file>https://docs.api.regolo.ai/regolo-api.json</swagger.file>
 		<generated-sources-path>${project.basedir}</generated-sources-path>
