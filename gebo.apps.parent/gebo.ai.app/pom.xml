@@ -243,6 +243,7 @@
 
 									<!-- Volendo puoi passare anche system properties -->
 									<javaOptions>
+										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
 										<option>-DGEBO_HOME=/home/gebo-ai/home</option>
 										<option>-DGEBO_WORK_DIRECTORY=/var/gebo-ai/data</option>
 										<option>-Dsun.jnu.encoding=UTF-8</option>
