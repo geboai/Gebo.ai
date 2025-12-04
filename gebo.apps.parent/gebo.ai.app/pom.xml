@@ -336,6 +336,24 @@
 						</executions>
 					</plugin>
 					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+
+						<executions>
+							<execution>
+								<id>parse-project-version</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>parse-version</goal>
+								</goals>
+								<configuration>
+									<!-- prefix for generated properties -->
+									<propertyPrefix>parsedVersion</propertyPrefix>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>org.panteleyev</groupId>
 						<artifactId>jpackage-maven-plugin</artifactId>
 						<version>1.7.1</version>
@@ -366,9 +384,9 @@
 									<!-- metadati RPM -->
 									<linuxRpmGroup>Applications/Utilities</linuxRpmGroup>
 									<linuxAppCategory>utils</linuxAppCategory>
-
+		
 									<launcherAsService>true</launcherAsService>
-
+									<appVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</appVersion>	
 									<!-- script/resources specifici RPM -->
 									<resourceDir>${project.basedir}/src/packaging/rpm/resources</resourceDir>
 									<verbose>true</verbose>
