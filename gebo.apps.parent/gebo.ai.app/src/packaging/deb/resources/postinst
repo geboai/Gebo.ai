@@ -50,7 +50,7 @@ StandardError=append:/var/log/gebo-ai/service.err
 WantedBy=multi-user.target
 EOF
 
-chmod 644 "$SERVICE_PATH"
+chmod 644 "$SERVICE_DST"
 
 echo "Trying to write gebo additional configuration file " >> /tmp/gebo-ai-install-log.txt
 cat > $GEBO_ADDITIONAL_CONFIG_FILE << EOF
