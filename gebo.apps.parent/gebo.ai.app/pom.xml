@@ -260,8 +260,59 @@
 									</javaOptions>
 								</configuration>
 							</execution>
+							<!-- RPM (RHEL / Rocky / Alma / Fedora / SUSE) -->
+							<execution>
+								<id>gebo-ai-rpm</id>
+								<phase>package</phase>
+								<goals>
+									<goal>jpackage</goal>
+								</goals>
+								<configuration>
+									<destination>${project.build.directory}/installer</destination>
+
+									<!-- stesso input / jar -->
+									<input>${project.build.directory}/jpackage/lib</input>
+									<mainJar>${project.build.finalName}-bootable.jar</mainJar>
+
+									<name>gebo-ai</name>
+									<linuxPackageName>gebo-ai</linuxPackageName>
+
+									<!-- pacchetto RPM -->
+									<type>RPM</type>
+
+									<installDir>/home/gebo-ai</installDir>
+
+									<!-- metadati RPM -->
+									<linuxRpmGroup>Applications/Utilities</linuxRpmGroup>
+									<linuxAppCategory>utils</linuxAppCategory>
+
+									<launcherAsService>true</launcherAsService>
+
+									<!-- script/resources specifici RPM -->
+									<resourceDir>${project.basedir}/src/packaging/rpm/resources</resourceDir>
+
+									<javaOptions>
+										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
+										<option>-DGEBO_LOG_BASE=/var/log/gebo-ai</option>
+										<option>-DGEBO_HOME=/home/gebo-ai/home</option>
+										<option>-DGEBO_WORK_DIRECTORY=/var/gebo-ai/data</option>
+										<option>-Dsun.jnu.encoding=UTF-8</option>
+										<option>-Dfile.encoding=UTF-8</option>
+										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
+										<option>--enable-native-access=ALL-UNNAMED</option>
+										<option>-Xms2g</option>
+										<option>-Xmx6g</option>
+										<option>-XX:+AggressiveHeap</option>
+										<option>-XX:MaxMetaspaceSize=512m</option>
+										<option>-XX:+PrintGCDetails</option>
+										<option>-Xlog:gc:/var/log/gebo-ai/gc.log</option>
+									</javaOptions>
+								</configuration>
+							</execution>
+
 						</executions>
 					</plugin>
+
 				</plugins>
 			</build>
 		</profile>
