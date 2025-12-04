@@ -111,10 +111,29 @@ public interface IGPersistentObjectManager {
 	 * @param <T>     The type extending GBaseObject.
 	 * @throws GeboPersistenceException if deletion fails.
 	 */
-	public <T extends GBaseObject> void delete(T element) throws GeboPersistenceException;
+	public default <T extends GBaseObject> void delete(T element) throws GeboPersistenceException {
+		delete(element, false);
+	}
+
+	/***************************************************************************************
+	 * If checkDeletable = true does not delete if the object has referential
+	 * integrity dependants if checkDeletable is false forces delete
+	 * 
+	 * @param <T>
+	 * @param element
+	 * @param checkDeletable
+	 * @throws GeboPersistenceException
+	 */
+	public <T extends GBaseObject> void delete(T element, boolean checkDeletable) throws GeboPersistenceException;
 
 	@Transactional
-	public <T extends GBaseObject> void transactionalDelete(T element) throws GeboPersistenceException;
+	public default <T extends GBaseObject> void transactionalDelete(T element) throws GeboPersistenceException {
+		this.transactionalDelete(element, false);
+	}
+
+	@Transactional
+	public <T extends GBaseObject> void transactionalDelete(T element, boolean checkDeletable)
+			throws GeboPersistenceException;
 
 	/**
 	 * Finds elements by query-by-example.

@@ -367,11 +367,11 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 *                                  occurs
 	 */
 	@Override
-	public <T extends GBaseObject> void delete(T element) throws GeboPersistenceException {
+	public <T extends GBaseObject> void delete(T element, boolean checkDeletable) throws GeboPersistenceException {
 		IGBaseMongoDBRepository<T> handler = repoPattern.findByManagedType(element.getClass());
 		if (handler == null)
 			throw new GeboPersistenceException("No handler known for type=>" + element.getClass().getName());
-		if (isDeletable(element)) {
+		if (!checkDeletable || isDeletable(element)) {
 			handler.delete(element);
 		} else
 			throw new GeboPersistenceException("Cannot delete object of type=>" + element.getClass().getName()
@@ -776,7 +776,8 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 */
 	@Override
 	public <SpecificType extends BaseType, BaseType extends GBaseObject> void deleteByParentTypeRepository(
-			Class<BaseType> type, @NotNull @Valid SpecificType data) throws GeboPersistenceException {
+			Class<BaseType> type, @NotNull @Valid SpecificType data)
+			throws GeboPersistenceException {
 		IGBaseMongoDBRepository handler = repoPattern.findByManagedType(type);
 		if (handler == null)
 			throw new GeboPersistenceException("Cannot find a repository for entity:" + type.getName());
@@ -800,8 +801,9 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 
 	@Override
 	@Transactional
-	public <T extends GBaseObject> void transactionalDelete(T element) throws GeboPersistenceException {
-		this.delete(element);
+	public <T extends GBaseObject> void transactionalDelete(T element, boolean checkDeletable)
+			throws GeboPersistenceException {
+		this.delete(element, checkDeletable);
 
 	}
 
