@@ -243,6 +243,7 @@
 									<verbose>true</verbose>
 									<!-- Volendo puoi passare anche system properties -->
 									<javaOptions>
+										<option>-Djava.net.preferIPv4Stack=true</option>
 										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
 										<option>-DGEBO_LOG_BASE=/var/log/gebo-ai</option>
 										<option>-DGEBO_HOME=/home/gebo-ai/home</option>
@@ -391,6 +392,7 @@
 									<resourceDir>${project.basedir}/src/packaging/rpm/resources</resourceDir>
 									<verbose>true</verbose>
 									<javaOptions>
+										<option>-Djava.net.preferIPv4Stack=true</option>
 										<option>-Dspring.config.additional-location=file:/etc/gebo-ai/</option>
 										<option>-DGEBO_LOG_BASE=/var/log/gebo-ai</option>
 										<option>-DGEBO_HOME=/home/gebo-ai/home</option>
@@ -548,6 +550,7 @@
 									<!-- JVM options (ogni option è un argomento singolo) -->
 									<javaOptions>
 										<!-- dove vuoi che la tua app creda sia la "home" su Windows -->
+										<option>-Djava.net.preferIPv4Stack=true</option>
 										<option>-DGEBO_HOME=$APPDIR</option>
 										<option>-Dai.gebo.config.setupConfiguresWorkdir=true</option>
 										<option>-Dsun.jnu.encoding=UTF-8</option>

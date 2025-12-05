@@ -40,7 +40,8 @@ echo "Writing systemd unit..." >> "$LOG_OUT"
 cat > "$SERVICE_DST" <<EOF
 [Unit]
 Description=Gebo.ai Service
-After=network.target
+After=network.target mongod.service neo4j.service qdrant.service
+Requires=mongod.service neo4j.service qdrant.service
 
 [Service]
 User=$APP_USER
