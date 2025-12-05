@@ -3,6 +3,7 @@ FROM rockylinux:9
 RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
 RUN mkdir -p /build-area
+RUN mkdir -p /build-area/repository
 RUN mkdir -p /build-area/delivery
 
 RUN dnf -y update
