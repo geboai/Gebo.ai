@@ -6,18 +6,10 @@ echo "Branch:     $BRANCH"
 export REPO_DIR="Gebo.ai"
 
 cd /build-area
-
-if [ -d "$REPO_DIR/.git" ]; then
-    echo ">> fetching repo update..."
-    cd "$REPO_DIR"
-    git fetch --all
-    git checkout "$BRANCH"
-    git pull
-else
-    echo ">> cloning repo..."
-    git clone --branch "$BRANCH" "$REPOSITORY" "$REPO_DIR"
-    cd "$REPO_DIR"
-fi
+rm -rf "$REPO_DIR"
+echo ">> cloning repo..."
+git clone --branch "$BRANCH" "$REPOSITORY" "$REPO_DIR"
+cd "$REPO_DIR"
 
 echo ">> Run mvn install..."
 mvn clean install -P bootables,angular-ui,package-unix-deb -DskipTests
