@@ -5,7 +5,8 @@ on:
     tags:
       - "v*.*.*"
   workflow_dispatch:
-
+permissions:
+  contents: write
 jobs:
   build-deb:
     runs-on: ubuntu-24.04
@@ -64,43 +65,44 @@ jobs:
   #          path: |
   #            delivery/**/*.rpm
 
-  #  build-msi:
-  #    runs-on: windows-latest
+  build-msi:
+    runs-on: windows-latest
 
-  #    steps:
-  #      - name: Checkout
-  #        uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #      - name: Setup Java 22 (o 21 se preferisci)
-  #        uses: actions/setup-java@v4
-  #        with:
-  #          distribution: temurin
-  #          java-version: "22"
+      - name: Setup Java 22 (o 21 se preferisci)
+        uses: actions/setup-java@v4
+        with:
+          distribution: oracle
+          java-version: "22"
 
-  #      - name: Install WiX Toolset (per MSI)
-  #        run: |
-  #          choco install wixtoolset -y
+      - name: Install WiX Toolset (per MSI)
+        run: |
+          choco install wixtoolset -y
 
-  #      - name: Build MSI with Maven
-  #        run: |
-  #          mvn -B clean package ^
-  #            -Pbootables,package-windows ^
-  #            -DskipTests
+      - name: Build MSI with Maven
+        run: |
+          mvn -B clean package ^
+            -P bootables,angular-ui,package-windows ^
+            -DskipTests
 
-  #      - name: Upload MSI artifact
-  #        uses: actions/upload-artifact@v4
-  #        with:
-  #          name: msi
-  #          path: |
-  #            **/target/installer/*.msi
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi
+          path: |
+            **/target/installer/*.msi
 
   release:
     runs-on: ubuntu-latest
     needs:
       - build-deb
+      - build-msi
     # future pubblications
     #  - build-rpm
-    #  - build-msi
+    #
 
     steps:
       - name: Download all artifacts
