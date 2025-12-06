@@ -12,5 +12,5 @@ git clone --branch "$BRANCH" "$REPOSITORY" "$REPO_DIR"
 cd "$REPO_DIR"
 
 echo ">> Run mvn install..."
-mvn clean install -P bootables,angular-ui,package-unix-deb -DskipTests
+mvn -Dmaven.repo.local=/build-area/repository clean install -P bootables,angular-ui,package-unix-deb -DskipTests
 cp /build-area/Gebo.ai/gebo.apps.parent/gebo.ai.app/target/installer/* /build-area/delivery

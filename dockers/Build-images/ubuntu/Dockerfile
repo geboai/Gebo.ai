@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y  \
 RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
 RUN mkdir -p /build-area
+RUN mkdir -p /build-area/repository
 RUN mkdir -p /build-area/delivery
 RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.tar.gz https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz
 RUN curl -L -o /opt/java/apache-maven-3.9.11-bin.tar.gz https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
@@ -35,4 +36,5 @@ WORKDIR /build-area
 COPY build.sh /build-area
 RUN chmod 744 /build-area/build.sh
 VOLUME /build-area/delivery
+VOLUME /build-area/repository
 ENTRYPOINT  /build-area/build.sh

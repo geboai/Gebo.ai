@@ -261,7 +261,7 @@
 									</javaOptions>
 								</configuration>
 							</execution>
-							
+
 
 						</executions>
 					</plugin>
@@ -359,7 +359,7 @@
 						<artifactId>jpackage-maven-plugin</artifactId>
 						<version>1.7.1</version>
 						<executions>
-							
+
 							<!-- RPM (RHEL / Rocky / Alma / Fedora / SUSE) -->
 							<execution>
 								<id>gebo-ai-rpm</id>
@@ -385,9 +385,9 @@
 									<!-- metadati RPM -->
 									<linuxRpmGroup>Applications/Utilities</linuxRpmGroup>
 									<linuxAppCategory>utils</linuxAppCategory>
-		
+
 									<launcherAsService>true</launcherAsService>
-									<appVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</appVersion>	
+									<appVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</appVersion>
 									<!-- script/resources specifici RPM -->
 									<resourceDir>${project.basedir}/src/packaging/rpm/resources</resourceDir>
 									<verbose>true</verbose>
@@ -497,6 +497,27 @@
 												<include>${project.build.finalName}-bootable.jar</include>
 											</includes>
 										</resource>
+
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-msi-instance-resources</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>
+										${project.build.directory}/jpackage/lib/instance
+									</outputDirectory>
+									<resources>
+										<resource>
+											<directory>
+												${project.basedir}/src/packaging/msi/instance
+											</directory>
+											<filtering>false</filtering>
+										</resource>
 									</resources>
 								</configuration>
 							</execution>
@@ -522,8 +543,9 @@
 
 									<!-- JAR Spring Boot con classifier "bootable" -->
 									<mainJar>${project.build.finalName}-bootable.jar</mainJar>
+									<!--  
 									<mainClass>ai.gebo.monolithic.app.Main</mainClass>
-
+									 -->
 									<!-- Nome applicazione -->
 									<name>gebo-ai</name>
 
@@ -539,9 +561,10 @@
 									<appVersion>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.${parsedVersion.buildNumber}</appVersion>
 
 									<!-- Opzioni specifiche Windows -->
-									<winMenu>true</winMenu>
-									<winShortcut>true</winShortcut>
+									<winMenu>false</winMenu>
+									<winShortcut>false</winShortcut>
 									<winDirChooser>true</winDirChooser>
+									<winConsole>true</winConsole>
 									<launcherAsService>true</launcherAsService>
 									<resourceDir>${project.basedir}/src/packaging/msi/resources</resourceDir>
 									<!-- opzionale: per install per-user invece che per-machine -->
@@ -550,19 +573,24 @@
 									<!-- JVM options (ogni option è un argomento singolo) -->
 									<javaOptions>
 										<!-- dove vuoi che la tua app creda sia la "home" su Windows -->
+										<option>-Duser.dir=$APPDIR\instance</option>
 										<option>-Djava.net.preferIPv4Stack=true</option>
-										<option>-DGEBO_HOME=$APPDIR</option>
+										<option>-DGEBO_HOME=$APPDIR\instance\home</option>
+										<option>-DGEBO_WORK_DIRECTORY=$APPDIR\instance\data</option>
+										<option>-DGEBO_LOG_BASE=$APPDIR\instance\logs</option>
 										<option>-Dai.gebo.config.setupConfiguresWorkdir=true</option>
 										<option>-Dsun.jnu.encoding=UTF-8</option>
 										<option>-Dfile.encoding=UTF-8</option>
 										<option>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</option>
 										<option>--enable-native-access=ALL-UNNAMED</option>
 										<option>-Xms2g</option>
-										<option>-Xmx6g</option>
+										<option>-Xmx8g</option>
 										<option>-XX:+AggressiveHeap</option>
 										<option>-XX:MaxMetaspaceSize=512m</option>
 										<option>-XX:+PrintGCDetails</option>
-										<option>-Xlog:gc:=$APPDIR\gc.log</option>
+										<!--  
+										<option>-Xlog:gc:=$APPDIR\instance\logs\gc.log</option>
+										 -->
 									</javaOptions>
 								</configuration>
 							</execution>
