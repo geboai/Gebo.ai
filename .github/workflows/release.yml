@@ -84,9 +84,7 @@ jobs:
 
       - name: Build MSI with Maven
         run: |
-          mvn -B clean package ^
-            -P bootables,angular-ui,package-windows ^
-            -DskipTests
+          mvn -B clean package -P bootables,angular-ui,package-windows -DskipTests
 
       - name: Upload MSI artifact
         uses: actions/upload-artifact@v4
