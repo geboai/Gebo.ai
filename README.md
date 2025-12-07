@@ -1,7 +1,8 @@
 ![Gebo.ai image logo](./gebo.ui/src/assets/Gebo-1000.png) 
-# Gebo.ai, the open source enterprise retrieve augmented generation platform (visit https://gebo.ai)
-This software is an open source enterprise retrieve augmented generation platform that can be installed in every company
+# Gebo.ai, The open source Enterprise AI vendor agnostic platform (visit https://gebo.ai)
+This software is an open source enterprise AI and retrieve augmented generation platform that can be installed in every company
 to take the most out from their documentation and informations using modern large language models.
+It's a "No AI vendor lock-in"  alternative to cloud vendors platform, it can work with almost all cloud or on premise AI infrastructures and connects to widely used enterprise systems. 
 ## Gebo.ai licence:
 
 The open source version is available under a variation of the Mozilla Public License Version 2.0 (MPL-2.0), 
@@ -62,10 +63,8 @@ an enterprise version with more feature and support is also available.
 
 ## How to install Gebo.ai 
 
-You can install Gebo.ai on linux/windows/mac using docker-compose immediately 
-  - [docker compose file for linux](./dockers/gebo.ai/docker-compose.yml)
-  - [docker compose file for windows](./dockers/gebo.ai/windows/docker-compose.yml)
-  - [installation manual ](./docs/gebo-ai-manual-tech-configuration.pdf)
+You can use docker, docker-compose, download an already configured appliance or install a Ubuntu or windows package, 
+visit [https://gebo.ai/downloads/](https://gebo.ai/downloads/)
 
 ### Post install configuration procedure:
 
