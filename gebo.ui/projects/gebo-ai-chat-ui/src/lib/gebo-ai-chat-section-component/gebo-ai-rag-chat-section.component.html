@@ -101,11 +101,11 @@
     <div class="grid">
 
 
-        <div style="width: 30px;">
+        <div class="col-1">
             <p-button id="ChevronLeftBtn" gebo-ai-label (onClick)="chatsListAndOptionsVisible=true;" [text]="true"
                 [outlined]="true" icon="pi pi-chevron-left" title="Open chat options section"></p-button>
         </div>
-        <div style="width: 95%;">
+        <div class="col-10">
             <gebo-ai-reusable-chat-component *ngIf="openRagChat===true" [ragsystem]="true" [chatInfo]="currentChat"
                 (deleteChatAction)="reloadChatsAndCloseChat()" (addedChatAction)="loadChatList()"
                 (updatedChatAction)="onUpdatedChat($event)"
@@ -115,7 +115,7 @@
                 (updatedChatAction)="onUpdatedChat($event)"
                 [title]="currentChat?.description"></gebo-ai-reusable-chat-component>
         </div>
-
+        <div class="col-1"></div>
     </div>
 
 </div>
