@@ -25,7 +25,10 @@ ai.gebo.llms.generic.config:
       providerId: generic-openai
       description: Generic OpenAI compatible chat model
       baseUrl:
-
+    - code: chatmodel-vllm
+      providerId: vllm
+      description: VLLM hosted chat model
+      baseUrl:
   embeddingModelProviders:
     #  Nvidia seems do not give embedding services
     - code: embedding-nvidia
@@ -52,4 +55,8 @@ ai.gebo.llms.generic.config:
     - code: embedding-generic-openai
       providerId: generic-openai
       description: Generic OpenAI compatible embedding model
+      baseUrl:
+    - code: embedding-vllm
+      providerId: vllm
+      description: VLLM hosted embedding model
       baseUrl:

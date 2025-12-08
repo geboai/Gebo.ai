@@ -202,6 +202,24 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
 
     - vendorInfo:
+        vendorId: vllm
+        name: vLLM on premise infrastructure
+        description: vLLM on premise infrastructure
+        requiresApiKeY: false
+        requiresCustomUrl: true
+        webSite: https://docs.vllm.ai/en/latest/
+        defaultCustomUrl: http://localhost:8000/
+        apiKeySecretContext: vllm
+      presets:
+        - type: CHAT
+          serviceHandler: chatmodel-vllm
+          doModelsLookup: true
+
+        - type: EMBEDDING
+          serviceHandler: embedding-vllm
+          doModelsLookup: true
+
+    - vendorInfo:
         vendorId: generic-openai
         name: OpenAI compliant API provider
         description: Generic OpenAI compliant API provider
