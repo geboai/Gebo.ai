@@ -105,7 +105,7 @@ public class ClientChatCallUtil {
 				data.append(NEWLINE);
 				meta.forEach((k, v) -> {
 					if (v != null && !v.toString().isBlank())
-						data.append(k).append(": ").append(v).append('\n');
+						data.append(k).append(": ").append(v).append(NEWLINE);
 				});
 				data.append(END_META_BLOCK); // Blank line separates the body
 				data.append(NEWLINE);
