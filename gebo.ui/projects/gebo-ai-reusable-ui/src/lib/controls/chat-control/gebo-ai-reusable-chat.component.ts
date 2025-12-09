@@ -58,7 +58,7 @@ interface GeboChatTemplatedResponse {
     backendMessages?: Array<GUserMessage>;
     documentsRef?: Array<GResponseDocumentRef>;
     calledFunctions?: Array<CalledFunction>;
-    generatedResources?:LLMGeneratedResource[];
+    generatedResources?: LLMGeneratedResource[];
 };
 const moduleId: string = "GeboAIChatControlModule";
 const entityId: string = "GeboAIReusableChatComponent";
@@ -72,7 +72,7 @@ const entityId: string = "GeboAIReusableChatComponent";
     selector: "gebo-ai-reusable-chat-component",
     templateUrl: "gebo-ai-reusable-chat.component.html",
     styleUrls: ["gebo-ai-reusable-chat.component.css"],
-    providers: [
+    providers: [MessageService,
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIReusableChatComponent),
@@ -416,7 +416,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                             if (msg) {
                                 this.lastInteractionMessages = [msg];
                                 this.messageService.addAll(this.lastInteractionMessages);
-                                subscription.unsubscribe();
+                                try {
+                                    subscription.unsubscribe();
+                                } catch (e) {
+
+                                }
                             }
                         }
                     })
@@ -510,10 +514,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         };
         const translateSubscription = this.geboAiTranslationService.translateConfirmation(moduleId, entityId, confirmation).subscribe({
             next: (trconfirmation) => {
-                
-                    this.confirmService.confirm(trconfirmation?trconfirmation:confirmation);
-                    translateSubscription.unsubscribe();
-                
+
+                this.confirmService.confirm(trconfirmation ? trconfirmation : confirmation);
+                translateSubscription.unsubscribe();
+
             }
         })
 
@@ -618,20 +622,20 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
                 } else {
                     recvd = msg as IGeboChatMessage;
                 }
+                if (recvd.contentObjectType === "GUserMessage") {
+                    const message = recvd.content as ToastMessageOptions;
+                    this.lastInteractionMessages = [message];
+                    this.chatStreamingErrorOccurred = true;
+                    this.geboAiTranslationService.translateBackendMessage(recvd.content).subscribe({
+                        next: (msg) => {
+                            const showMessage: ToastMessageOptions = msg ? { summary: msg.summary, detail: msg.detail, severity: msg.severity } : { summary: message.summary, detail: message.detail, severity: message.severity };
+                            this.lastInteractionMessages = [showMessage];
+                            this.messageService.add(showMessage);
+                        }
+                    });
+                }
+                if (recvd && recvd.contentObjectType && recvd.contentObjectType === "GeboChatResponse") {
 
-                if (recvd && recvd.contentObjectType && (recvd.contentObjectType === "GeboChatResponse" || recvd.contentObjectType === "GUserMessage")) {
-                    if (recvd.contentObjectType === "GUserMessage") {
-                        const message = recvd.content as ToastMessageOptions;
-                        this.lastInteractionMessages = [message];
-                        this.geboAiTranslationService.translateBackendMessage(recvd.content).subscribe({
-                            next: (msg) => {
-                                if (msg) {
-                                    this.lastInteractionMessages = [message];
-                                }
-                            }
-                        });
-
-                    }
                     interaction.response = recvd.content;
                     if (interaction.response) {
                         const response: GeboChatResponse = interaction.response;
@@ -766,7 +770,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         setTimeout(scrollFunction, 500);
     }
     scrollUp() {
-         const scrollFunction = () => {
+        const scrollFunction = () => {
 
             if (this.focusableTop) {
                 try {
