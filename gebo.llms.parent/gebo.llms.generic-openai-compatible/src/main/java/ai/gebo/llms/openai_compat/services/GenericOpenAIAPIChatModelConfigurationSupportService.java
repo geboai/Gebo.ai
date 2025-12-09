@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
@@ -164,7 +165,13 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
-			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).baseUrl(baseUrl).build();
+
+			if (apiKey != null) {
+				apiBuilder = apiBuilder.apiKey(apiKey);
+			} else {
+				apiBuilder = apiBuilder.apiKey(new NoopApiKey());
+			}
+			OpenAiApi openaiApi = apiBuilder.baseUrl(baseUrl).build();
 
 			// Configure model options
 			Builder builder = OpenAiChatOptions.builder();

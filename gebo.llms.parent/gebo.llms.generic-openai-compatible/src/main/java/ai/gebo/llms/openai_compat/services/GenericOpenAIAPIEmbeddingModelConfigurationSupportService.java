@@ -12,6 +12,7 @@ package ai.gebo.llms.openai_compat.services;
 import java.util.List;
 
 import org.springframework.ai.document.MetadataMode;
+import org.springframework.ai.model.NoopApiKey;
 import org.springframework.ai.openai.OpenAiEmbeddingModel;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions;
 import org.springframework.ai.openai.OpenAiEmbeddingOptions.Builder;
@@ -160,7 +161,12 @@ public class GenericOpenAIAPIEmbeddingModelConfigurationSupportService implement
 			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
-			OpenAiApi openaiApi = apiBuilder.apiKey(apiKey).baseUrl(baseUrl).build();
+			if (apiKey != null) {
+				apiBuilder = apiBuilder.apiKey(apiKey);
+			} else {
+				apiBuilder = apiBuilder.apiKey(new NoopApiKey());
+			}
+			OpenAiApi openaiApi = apiBuilder.baseUrl(baseUrl).build();
 			Builder builder = OpenAiEmbeddingOptions.builder();
 
 			if (config.getChoosedModel() != null) {

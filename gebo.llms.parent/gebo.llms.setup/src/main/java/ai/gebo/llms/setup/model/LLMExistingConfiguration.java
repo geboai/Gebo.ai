@@ -15,5 +15,6 @@ public class LLMExistingConfiguration {
 	@NotNull
 	ModelType modelType = null;
 	SecretInfo secretInfo = null;
+	String baseUrl=null;
 
 }

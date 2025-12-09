@@ -16,6 +16,7 @@ export interface LLMExistingConfiguration {
     existingModelConfig: GObjectRefGBaseModelConfig;
     modelType: LLMExistingConfiguration.ModelTypeEnum;
     secretInfo?: SecretInfo;
+    baseUrl?: string;
 }
 export namespace LLMExistingConfiguration {
     export type ModelTypeEnum = 'CHAT' | 'EMBEDDING';

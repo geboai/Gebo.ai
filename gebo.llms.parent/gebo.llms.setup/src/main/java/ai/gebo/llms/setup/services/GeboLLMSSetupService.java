@@ -131,6 +131,9 @@ public class GeboLLMSSetupService {
 								SecretInfo infos = secretService.getSecretInfoById(secretCode);
 								existingConfiguration.setSecretInfo(infos);
 							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(chatModel.getConfig().getBaseUrl());
+							}
 							vendorData.getRuntimeConfigs().add(existingConfiguration);
 						}
 					}
@@ -151,6 +154,9 @@ public class GeboLLMSSetupService {
 							if (secretCode != null) {
 								SecretInfo infos = secretService.getSecretInfoById(secretCode);
 								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(embeddingModel.getConfig().getBaseUrl());
 							}
 							vendorData.getRuntimeConfigs().add(existingConfiguration);
 						}
@@ -233,7 +239,7 @@ public class GeboLLMSSetupService {
 
 	public OperationStatus<List<GBaseModelChoice>> verifyCredentialsAndDownloadModels(
 			@Valid @NotNull LLMModelsLookupParameter credentials) {
-		
+
 		switch (credentials.getType()) {
 		case CHAT: {
 			IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
@@ -269,12 +275,13 @@ public class GeboLLMSSetupService {
 				try {
 					IGChatModelConfigurationSupportService supportLogic = this.chatModelsSupportRepo
 							.findByCode(config.getServiceHandler());
-					GBaseChatModelConfig configuration =(GBaseChatModelConfig) supportLogic.createBaseConfiguration(config.getModelCode());
+					GBaseChatModelConfig configuration = (GBaseChatModelConfig) supportLogic
+							.createBaseConfiguration(config.getModelCode());
 					configuration.setApiSecretCode(config.getSecretId());
 					configuration.setBaseUrl(config.getBaseUrl());
 					configuration.setDefaultModel(config.getSetAsDefaultModel());
 					configuration.setAccessibleToAll(true);
-					if (config.getEnableAllFunctions()!=null && config.getEnableAllFunctions()) {
+					if (config.getEnableAllFunctions() != null && config.getEnableAllFunctions()) {
 						List<ToolCallback> tools = this.toolsRepo.getTools();
 						List<String> names = tools.stream().map(x -> {
 							return x.getToolDefinition().name();
@@ -306,10 +313,10 @@ public class GeboLLMSSetupService {
 			}
 
 		}
-		OperationStatus<List<GBaseModelConfig>> out=new OperationStatus<>();	
-		for(OperationStatus<GBaseModelConfig> res:operationsOutput) {
-			if (res.getResult()!=null) {
-				if (out.getResult()==null) {
+		OperationStatus<List<GBaseModelConfig>> out = new OperationStatus<>();
+		for (OperationStatus<GBaseModelConfig> res : operationsOutput) {
+			if (res.getResult() != null) {
+				if (out.getResult() == null) {
 					out.setResult(new ArrayList<>());
 				}
 				out.getResult().add(res.getResult());
@@ -318,8 +325,7 @@ public class GeboLLMSSetupService {
 				out.getMessages().addAll(res.getMessages());
 			}
 		}
-		
-		
+
 		return out;
 	}
 

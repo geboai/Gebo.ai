@@ -5,7 +5,7 @@ import { GeboAITranslationService, GeboAIValidators, IOperationStatus } from "@G
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, Observable, Subscription } from "rxjs";
 interface IModelChoice {
-    enableAllFunctions?:boolean;
+    enableAllFunctions?: boolean;
     setAsDefault?: boolean;
     choosedModel?: string;
 };
@@ -137,6 +137,8 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 next: (msgs) => {
                     if (msgs)
                         this.userMessages = msgs;
+                    else
+                        this.userMessages = withoutDuplicates;
                 }
             });
         } else {
@@ -226,7 +228,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                         this.secrets = [...this.secrets, value.result];
                         this.secretFormGroup.controls["useExistingOrNew"].setValue("EXISTING");
                         this.secretFormGroup.controls["selectedSecret"].setValue(value.result.code);
-                        this.existingOrNewShow=true;
+                        this.existingOrNewShow = true;
                     }
                 },
                 complete: () => {
@@ -279,6 +281,17 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         if (changes["vendorConfiguration"] && this.vendorConfiguration) {
             if (this.vendorConfiguration?.parentModel.requiresCustomUrl === true) {
                 this.secretFormGroup.controls["baseUrl"].setValidators(GeboAIValidators.baseUrl(true));
+                //set a value from existing configs or from default url value
+                let defaultBaseUrl = this.vendorConfiguration.parentModel.defaultCustomUrl;
+                if (this.vendorConfiguration.runtimeConfigs && this.vendorConfiguration.runtimeConfigs.length) {
+                    const firstNonNull=this.vendorConfiguration.runtimeConfigs.find(x=>x.baseUrl?true:false);
+                    if (firstNonNull?.baseUrl) {
+                        defaultBaseUrl=firstNonNull.baseUrl;
+                    }
+                }
+                if (defaultBaseUrl) {
+                    this.secretFormGroup.controls["baseUrl"].setValue(defaultBaseUrl);
+                }
             }
             if (!this.vendorConfiguration?.parentModel?.requiresApiKey === true) {
                 this.secretFormGroup.controls["useExistingOrNew"].disable();
@@ -363,7 +376,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     baseUrl: providerAccess.baseUrl,
                     doModelsLookup: preset.doModelsLookup === true,
                     secretId: providerAccess.selectedSecret,
-                    enableAllFunctions: modelChoice.enableAllFunctions===true
+                    enableAllFunctions: modelChoice.enableAllFunctions === true
                 };
                 return out;
             }

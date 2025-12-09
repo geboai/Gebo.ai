@@ -223,7 +223,7 @@ ai.gebo.llms.vendors.setup.config:
         vendorId: generic-openai
         name: OpenAI compliant API provider
         description: Generic OpenAI compliant API provider
-        requiresApiKeY: true
+        requiresApiKeY: false
         requiresCustomUrl: true
         defaultCustomUrl:
         webSite:
