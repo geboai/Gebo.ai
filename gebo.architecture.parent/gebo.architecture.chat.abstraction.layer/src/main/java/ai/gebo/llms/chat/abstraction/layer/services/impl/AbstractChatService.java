@@ -22,6 +22,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.AssistantMessage.ToolCall;
 import org.springframework.ai.chat.messages.Message;
@@ -47,6 +48,8 @@ import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatContext;
+import ai.gebo.llms.abstraction.layer.model.IQuestionAnswerEntry;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -112,71 +115,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected ChatHistoryConsolidationService historyConsolidationService;
 
 	/**
-	 * Inner class representing a system message containing document data.
-	 */
-	protected static class DocumentMessage extends SystemMessage {
-
-		/**
-		 * Constructs a DocumentMessage based on the provided Document.
-		 *
-		 * @param document The document containing data to be rendered in a message
-		 */
-		protected DocumentMessage(Document document) {
-			super(renderData(document));
-		}
-
-		/**
-		 * Renders document data into a string format suitable for a message.
-		 *
-		 * @param document The document to be rendered
-		 * @return A string representation of the document's data
-		 */
-		private static String renderData(Document document) {
-			StringBuffer data = new StringBuffer();
-			if (document.getMetadata() != null) {
-				String id = document.getId();
-				String title = (String) document.getMetadata().get(DocumentMetaInfos.TITLE);
-				String subtitle = (String) document.getMetadata().get(DocumentMetaInfos.SUBTITLE);
-				// Metadata includes categorization and cataloging criteria
-				String metadata = (String) document.getMetadata().get(DocumentMetaInfos.GEBO_EMBEDDING_METADATA);
-				String code = (String) document.getMetadata().get(DocumentMetaInfos.CONTENT_CODE);
-				Object page = document.getMetadata().get(DocumentMetaInfos.CONTENT_PAGE);
-
-				Map<String, Object> meta = new LinkedHashMap<>();
-				if (id != null)
-					meta.put("fragment-id", id); // Always useful
-				if (code != null)
-					meta.put("content-code", code);
-				if (title != null)
-					meta.put("title", title);
-				if (subtitle != null)
-					meta.put("subtitle", subtitle);
-				if (metadata != null)
-					meta.put("tags", metadata);
-				if (page != null)
-					meta.put("page_hint", page);
-
-				// Emit a block that starts with ===META=== and ends with ===ENDMETA===.
-				if (!meta.isEmpty()) {
-					data.append("===META===\n");
-					meta.forEach((k, v) -> {
-						if (v != null && !v.toString().isBlank())
-							data.append(k).append(": ").append(v).append('\n');
-					});
-					data.append("===ENDMETA===\n\n"); // Blank line separates the body
-				}
-			}
-			if (document.getText() != null) {
-				data.append("====BEGIN-CONTENT====\n");
-				data.append(document.getText());
-				data.append("\n");
-				data.append("====END-CONTENT====\n\n");
-			}
-			return data.toString();
-		}
-	}
-
-	/**
 	 * Retrieves chat model user information based on the provided model code.
 	 *
 	 * @param modelCode Code of the model
@@ -197,45 +135,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		List<ToolCategoriesTree> trees = callbacksRepoPattern.getEnabledToolsTree(functions);
 		GeboChatUserInfo infos = new GeboChatUserInfo(config.getModelTypeCode(), choice, trees);
 		return infos;
-	}
-
-	/**
-	 * Constructs a list of Message objects from chat interactions and documents.
-	 *
-	 * @param _history List of chat interactions
-	 * @param docs     List of documents
-	 * @return A list of constructed Message objects
-	 */
-	protected List<Message> getMessages(ChatHistoryData history, List<Document> docs) {
-
-		List<Message> message_list = new ArrayList<>();
-		List<ChatInteractions> _history = history.getInteractions();
-		if (history.getConsolidated() != null) {
-			SystemMessage consolidatedMsg = new SystemMessage(
-					CONVERSATION_SUMMARY_SO_FAR + history.getConsolidated().getConsolidationText() + "\r\n");
-			message_list.add(consolidatedMsg);
-		}
-		if (_history != null) {
-
-			for (ChatInteractions chatInteraction : _history) {
-				GeboChatRequest request = chatInteraction.getRequest();
-				if (request != null) {
-					UserMessage _request = new UserMessage(request.getQuery());
-					message_list.add(_request);
-				}
-				GeboTemplatedChatResponse response = chatInteraction.getResponse();
-				if (response != null) {
-					AssistantMessage _response = new AssistantMessage(stringhify(response.getQueryResponse()));
-					message_list.add(_response);
-				}
-			}
-		}
-		if (docs != null) {
-			for (Document document : docs) {
-				message_list.add(new DocumentMessage(document));
-			}
-		}
-		return message_list;
 	}
 
 	/**
@@ -274,15 +173,71 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final KBContext context, final GeboChatRequest request, final GeboChatResponse response,
 			final ChatHistoryData messages, final List<GResponseDocumentRef> docrefs, List<Document> docs)
 			throws LLMConfigException {
-		ChatClient client = configurableChatModel.getChatClient();
-		ChatResponse chatresponse = client.prompt(prompt).user(request.getQuery()).messages(getMessages(messages, docs))
-				.call().chatResponse();
+		IChatContext chatContext = createChatContext(context, messages, docs);
+
+		ChatResponse chatresponse = configurableChatModel.response(prompt, request.getQuery(), chatContext, docs);
 		AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 		String responseText = callResponseObject.getText();
 		response.setQueryResponse(responseText);
 		response.setCalledFunctions(context.getCalledFunctions());
 		response.setDocumentsRef(docrefs);
 		return response;
+	}
+
+	protected IChatContext createChatContext(final KBContext context, final ChatHistoryData messages,
+			final List<Document> docs) {
+		return new IChatContext() {
+			final Map<String, Object> toolsContext = ToolCallbackDeclarationUtil.newToolContextEnvironment(context);
+			final String consolidatedHistory = messages.getConsolidated() != null
+					? messages.getConsolidated().getConsolidationText()
+					: null;
+			final List<Document> documents = docs != null ? docs : List.of();
+			final List<IQuestionAnswerEntry> msgs = messages.getInteractions() != null
+					? messages.getInteractions().stream().map(x -> {
+						final IQuestionAnswerEntry entry = new IQuestionAnswerEntry() {
+
+							@Override
+							public String getUser() {
+
+								return x.getRequest() != null ? x.getRequest().getQuery() : "";
+							}
+
+							@Override
+							public String getAssistant() {
+								String data = x.getResponse() != null && x.getResponse().getQueryResponse() != null
+										? x.getResponse().getQueryResponse().toString()
+										: "";
+								return data;
+							}
+						};
+						return entry;
+					}).toList()
+					: List.of();
+
+			@Override
+			public Map<String, Object> getToolsContext() {
+
+				return toolsContext;
+			}
+
+			@Override
+			public List<IQuestionAnswerEntry> getInteractions() {
+
+				return msgs;
+			}
+
+			@Override
+			public List<Document> getDocuments() {
+
+				return documents;
+			}
+
+			@Override
+			public String getConsolidatedHistory() {
+
+				return consolidatedHistory;
+			}
+		};
 	}
 
 	/**
@@ -306,16 +261,16 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GeboChatRequest request, final GeboTemplatedChatResponse<ResponseType> response,
 			final ChatHistoryData history, final List<GResponseDocumentRef> docrefs, List<Document> docs,
 			Class<ResponseType> rt) throws LLMConfigException {
-		ChatClient client = configurableChatModel.getChatClient();
+
+		IChatContext chatContext = createChatContext(context, history, docs);
 		if (rt.equals(String.class)) {
-			ChatResponse chatresponse = client.prompt(prompt).user(request.getQuery())
-					.messages(getMessages(history, docs)).call().chatResponse();
+			ChatResponse chatresponse = configurableChatModel.response(prompt, request.getQuery(), chatContext, docs);
 			AssistantMessage callResponseObject = chatresponse.getResult().getOutput();
 			String responseText = callResponseObject.getText();
 			response.setQueryResponse((ResponseType) responseText);
 		} else {
-			ResponseType entityEntry = client.prompt(prompt).user(request.getQuery())
-					.messages(getMessages(history, docs)).call().entity(rt);
+			ResponseType entityEntry = (ResponseType) configurableChatModel.structuredResponse(prompt, request.getQuery(), chatContext,
+					docs, rt);
 			response.setQueryResponse(entityEntry);
 		}
 		return response;
@@ -344,8 +299,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			List<Document> contextdocs, boolean chatHistoryConsolidation, int historySizeTarget)
 			throws LLMConfigException {
 
-		ChatClient client = configurableChatModel.getChatClient();
-		final Map<String, Object> toolsContext = ToolCallbackDeclarationUtil.newToolContextEnvironment(context);
+		
+		
 		try {
 
 			final List<Document> docs = request.getDocuments() != null ? request.getDocuments().aiDocumentsList()
@@ -354,9 +309,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			if (contextdocs != null) {
 				allDocs.addAll(contextdocs);
 			}
-
-			Flux<ChatResponse> res = client.prompt(prompt).user(request.getQuery())
-					.messages(getMessages(history, allDocs)).toolContext(toolsContext).stream().chatResponse();
+			IChatContext chatContext = createChatContext(context, history, allDocs);
+			Map<String, Object> toolsContext = chatContext.getToolsContext();
+			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, request.getQuery(), chatContext, docs);
 			return composeFlux(res, context, request, response, userContext, toolsContext, chatHistoryConsolidation,
 					historySizeTarget);
 		} catch (Throwable th) {
