@@ -516,7 +516,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
             next: (trconfirmation) => {
 
                 this.confirmService.confirm(trconfirmation ? trconfirmation : confirmation);
+                try {
                 translateSubscription.unsubscribe();
+                }catch(e) {
+                    
+                }
 
             }
         })

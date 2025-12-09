@@ -211,8 +211,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
             this.chatsPageLoading = true;
             this.geboUserChatsControllerService.getMyChats().subscribe({
                 next: (chats) => {
-                    
-                    const childrens: GUserChatInfo[] = chats?chats: [];
+
+                    const childrens: GUserChatInfo[] = chats ? chats : [];
                     const newItems: TreeNode<GUserChatInfo>[] = childrens.map(x => {
                         const item: TreeNode = {
                             label: x.description,
@@ -223,11 +223,9 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
 
                         return item;
                     });
-                    if (!this.chatsTree[0].children) {
-                        this.chatsTree[0].children = newItems;
-                    } else {
-                        this.chatsTree[0].children = [...this.chatsTree[0].children, ...newItems];
-                    }
+
+                    this.chatsTree[0].children = newItems;
+
                 }, error: (err) => {
                     this.chatsPageLoading = false;
                 },
