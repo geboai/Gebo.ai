@@ -37,6 +37,8 @@ import ai.gebo.model.base.GObjectRef;
 
 @Service
 public class DeepsearchWorker {
+	private static final String CONSOLIDATED = "consolidated";
+	private static final String DOCUMENTS = "documents";
 	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
 	private static final String END_DOCUMENT_EXTRACTION = "[END DOCUMENT EXTRACTION]\r\n";
 	private static final String DOCUMENT_EXTRACTION_BEGIN = "[BEGIN DOCUMENT EXTRACTION]\r\n";
@@ -112,7 +114,7 @@ public class DeepsearchWorker {
 					}
 					if (!currentProcessedFragments.isEmpty()) {
 						PromptTemplate promptTemplate = new PromptTemplate(configuration.getAnalisysPrompt());
-						promptTemplate.add("documents", currentProcessedFragments);
+						promptTemplate.add(DOCUMENTS, currentProcessedFragments);
 						promptTemplate.add("question", request.getQuery());
 						ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 						String result = response.getResult().getOutput().getText();
@@ -150,8 +152,8 @@ public class DeepsearchWorker {
 				int length = tokenEstimator.estimate(actualFragment);
 				if (tokens + length >= tokensBudget) {
 					PromptTemplate promptTemplate = new PromptTemplate(configuration.getConsolidationPrompt());
-					promptTemplate.add("consolidated", consolidated);
-					promptTemplate.add("documents", fragments.toString());
+					promptTemplate.add(CONSOLIDATED, consolidated);
+					promptTemplate.add(DOCUMENTS, fragments.toString());
 					ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 					consolidated = response.getResult().getOutput().getText();
 					fragments = new StringBuffer();
@@ -168,8 +170,8 @@ public class DeepsearchWorker {
 		}
 		if (!fragments.isEmpty()) {
 			PromptTemplate promptTemplate = new PromptTemplate(configuration.getConsolidationPrompt());
-			promptTemplate.add("consolidated", consolidated);
-			promptTemplate.add("documents", fragments.toString());
+			promptTemplate.add(CONSOLIDATED, consolidated);
+			promptTemplate.add(DOCUMENTS, fragments.toString());
 			ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
 			consolidated = response.getResult().getOutput().getText();
 		}
