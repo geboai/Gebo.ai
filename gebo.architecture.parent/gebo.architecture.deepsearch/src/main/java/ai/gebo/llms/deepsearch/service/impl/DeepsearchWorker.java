@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +31,15 @@ import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
+import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.model.base.GObjectRef;
 
 @Service
 public class DeepsearchWorker {
+	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
+	private static final String END_DOCUMENT_EXTRACTION = "[END DOCUMENT EXTRACTION]\r\n";
+	private static final String DOCUMENT_EXTRACTION_BEGIN = "[BEGIN DOCUMENT EXTRACTION]\r\n";
 	@Autowired(required = false)
 	private IKnowledgeGraphSearchService graphRagSearchService;
 	@Autowired
@@ -43,6 +48,7 @@ public class DeepsearchWorker {
 	private IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
 	@Autowired
 	private DocumentReferenceRepository documentRepo;
+	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
 			DeepSearchState state, DeepSearchConfig configuration) {
@@ -121,17 +127,60 @@ public class DeepsearchWorker {
 				}
 
 			}
-			
+
 		}
-		DeepSearchProcessedEvent consolidatedResult=this.consolidateResult(chatModel,history,request,state,configuration); 
+		DeepSearchProcessedEvent consolidatedResult = this.consolidateResult(chatModel, history, request, state,
+				configuration);
 		return consolidatedResult;
 	}
 
 	private DeepSearchProcessedEvent consolidateResult(IGConfigurableChatModel chatModel,
 			List<AbstractDeepSearchEvent> history, DeepSearchRequest request, DeepSearchState state,
 			DeepSearchConfig configuration) {
-		// TODO Auto-generated method stub
-		return null;
+		final int tokensBudget = chatModel.getContextLength();
+		int tokens = 0;
+		String consolidated = "";
+		StringBuffer fragments = new StringBuffer();
+		List<DeepSearchDocumentAnalisysResultStep> steps = new ArrayList<DeepSearchDocumentAnalisysResultStep>();
+		for (AbstractDeepSearchEvent event : history) {
+			if (event instanceof DeepSearchDocumentEvent docEvent) {
+				steps.add(docEvent.getOutputData());
+				String actualFragment = docEvent.getOutputData().getFragment();
+				GDocumentReference document = docEvent.getInputData();
+				int length = tokenEstimator.estimate(actualFragment);
+				if (tokens + length >= tokensBudget) {
+					PromptTemplate promptTemplate = new PromptTemplate(configuration.getConsolidationPrompt());
+					promptTemplate.add("consolidated", consolidated);
+					promptTemplate.add("documents", fragments.toString());
+					ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+					consolidated = response.getResult().getOutput().getText();
+					fragments = new StringBuffer();
+					tokens = 0;
+
+				}
+
+				fragments.append(DOCUMENT_EXTRACTION_BEGIN);
+				fragments.append(DOCUMENT_NAME + document.getName());
+				fragments.append(actualFragment);
+				fragments.append(END_DOCUMENT_EXTRACTION);
+				tokens += length;
+			}
+		}
+		if (!fragments.isEmpty()) {
+			PromptTemplate promptTemplate = new PromptTemplate(configuration.getConsolidationPrompt());
+			promptTemplate.add("consolidated", consolidated);
+			promptTemplate.add("documents", fragments.toString());
+			ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+			consolidated = response.getResult().getOutput().getText();
+		}
+		DeepSearchProcessedEvent outValue = new DeepSearchProcessedEvent();
+		outValue.setInputData(request);
+		DeepSearchResponse response = new DeepSearchResponse();
+		response.setResponse(consolidated);
+		outValue.setOutputData(response);
+
+		response.setSteps(steps);
+		return outValue;
 	}
 
 	private void mergeGraphRagResults(RagDocumentsCachedDaoResult documents,

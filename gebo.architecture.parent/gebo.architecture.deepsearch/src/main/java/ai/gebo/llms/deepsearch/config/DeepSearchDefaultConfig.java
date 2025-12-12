@@ -32,9 +32,9 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "- it is coherent, non-contradictory and well organized,\r\n"
 			+ "- it integrates any truly new information from the partial contribution,\r\n"
 			+ "- it keeps track of all evidence fragment ids.\r\n" + "\r\n" + "USER:\r\n" + "User question:\r\n"
-			+ "<<<\r\n" + "${QUESTION}\r\n" + ">>>\r\n" + "\r\n"
-			+ "Current consolidated report (may be empty or null):\r\n" + "<<<\r\n" + "${CURRENT_REPORT_JSON}\r\n"
-			+ ">>>\r\n" + "\r\n" + "New partial contribution:\r\n" + "<<<\r\n" + "${PARTIAL_CONTRIBUTION_JSON}\r\n"
+			+ "<<<\r\n" + "{question}\r\n" + ">>>\r\n" + "\r\n"
+			+ "Current consolidated report (may be empty or null):\r\n" + "<<<\r\n" + "{consolidated}\r\n"
+			+ ">>>\r\n" + "\r\n" + "New partial contribution:\r\n" + "<<<\r\n" + "{documents}\r\n"
 			+ ">>>\r\n" + "\r\n" + "TASK:\r\n"
 			+ "1. If the current report is empty, create a new report based on the partial contribution.\r\n"
 			+ "2. Otherwise:\r\n" + "   - merge the new partial contribution into the existing report,\r\n"
@@ -43,10 +43,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 			+ "   - update the list of evidence fragment ids (de-duplicated).\r\n"
 			+ "3. Keep the report concise and avoid repeating the same points.\r\n"
 			+ "4. The report must directly answer the user question as best as possible with the available information.\r\n"
-			+ "\r\n" + "Respond ONLY in valid JSON with this structure:\r\n" + "{\r\n"
-			+ "  \"finalSummary\": \"string\",\r\n" + "  \"bulletPoints\": [\"point 1\", \"point 2\", ...],\r\n"
-			+ "  \"openQuestions\": [\"string\", ...],\r\n"
-			+ "  \"evidenceChunkIds\": [\"chunk-12\", \"chunk-13\", ...]\r\n" + "}\r\n" + "";
+			;
 
 	public DeepSearchDefaultConfig() {
 		this.chatModelConfiguration = null;
