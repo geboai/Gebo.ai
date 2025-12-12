@@ -53,6 +53,7 @@ public class DeepSearchDefaultConfig extends DeepSearchConfig {
 		this.analisysPrompt = analisysDefaultPrompt;
 		this.consolidationPrompt = consolidationDefaultPrompt;
 		this.ragQueryOptions = new RagQueryOptions(100000, CompletenessLevel.MAX_TOKENS);
+		this.graphRagTopN=50;
 	}
 
 }
