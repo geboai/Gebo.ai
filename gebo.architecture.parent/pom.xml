@@ -43,5 +43,6 @@
   	<module>gebo.architecture.documents.cache</module>
   	<module>gebo.architecture.neo4j</module>
   	<module>gebo.architecture.setup</module>
+  	<module>gebo.architecture.deepsearch</module>
   </modules>
 </project>
