@@ -9,15 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GUserChatInfo } from './gUserChatInfo';
+import { DeepSearchDocumentAnalisysResultStep } from './deepSearchDocumentAnalisysResultStep';
 import { PageableObject } from './pageableObject';
 import { SortObject } from './sortObject';
 
-export interface PageGUserChatInfo { 
+export interface PageDeepSearchDocumentAnalisysResultStep { 
     totalPages?: number;
     totalElements?: number;
     size?: number;
-    content?: Array<GUserChatInfo>;
+    content?: Array<DeepSearchDocumentAnalisysResultStep>;
     number?: number;
     first?: boolean;
     last?: boolean;

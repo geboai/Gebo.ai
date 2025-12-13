@@ -40,6 +40,9 @@ import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
+import ai.gebo.llms.deepsearch.repository.DeepSearchDocumentAnalisysResultStepRepository;
+import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
+import ai.gebo.llms.deepsearch.repository.DeepSearchResponseRepository;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
@@ -64,11 +67,21 @@ public class DeepsearchWorker {
 	private KnowledgeBaseRepository knowledgeBaseRepository;
 	@Autowired
 	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
+	@Autowired
+	private DeepSearchRequestRepository requestsRepository;
+	@Autowired
+	private DeepSearchDocumentAnalisysResultStepRepository stepsRepository;
+	@Autowired
+	private DeepSearchResponseRepository responseRepository;
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos) {
-
+		if (request.getQuery() == null || request.getQuery().trim().length() == 0 || request.getKnowledgeBases() == null
+				|| request.getKnowledgeBases().isEmpty()) {
+			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
+		}
+		requestsRepository.save(request);
 		IGConfigurableChatModel chatModel = null;
 		GObjectRef<GBaseChatModelConfig> chatModelReference = configuration.getChatModelConfiguration();
 		if (chatModelReference != null) {
@@ -133,6 +146,7 @@ public class DeepsearchWorker {
 				Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
 				if (docdata.isPresent()) {
 					List<Document> currentProcessedFragments = new ArrayList<Document>();
+
 					int initialFragmentPointer = state.getRagDocumentFragmentPointer();
 					boolean lastFragmentReached = false;
 					if (initialFragmentPointer < foundDocument.getFragments().size()) {
@@ -159,8 +173,12 @@ public class DeepsearchWorker {
 						String result = callLLMWithDocuments(chatModel, configuration.getAnalisysPrompt(),
 								currentProcessedFragments, request.getQuery());
 						DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
-						resultStep.setDeepsearchId(request.getRequestId());
+						resultStep.setDeepsearchCode(request.getCode());
 						resultStep.setFragment(result);
+						resultStep.setIndex(history.size());
+						resultStep.setDocumentCode(documentCode);
+						resultStep.setFragmentsCodes(currentProcessedFragments.stream().map(x -> x.getId()).toList());
+						stepsRepository.save(resultStep);
 						DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
 						event.setInputData(docdata.get());
 						event.setOutputData(resultStep);
@@ -173,6 +191,7 @@ public class DeepsearchWorker {
 		}
 		DeepSearchProcessedEvent consolidatedResult = this.consolidateResult(chatModel, history, request, state,
 				configuration);
+		responseRepository.save(consolidatedResult.getOutputData());
 		return consolidatedResult;
 	}
 
@@ -235,10 +254,10 @@ public class DeepsearchWorker {
 		DeepSearchProcessedEvent outValue = new DeepSearchProcessedEvent();
 		outValue.setInputData(request);
 		DeepSearchResponse response = new DeepSearchResponse();
+		response.setDeepsearchCode(request.getCode());
 		response.setResponse(consolidated);
 		outValue.setOutputData(response);
 
-		response.setSteps(steps);
 		return outValue;
 	}
 

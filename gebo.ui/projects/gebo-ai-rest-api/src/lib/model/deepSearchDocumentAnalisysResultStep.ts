@@ -9,12 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { GMistralEmbeddingModelConfig } from './gMistralEmbeddingModelConfig';
-import { GUserMessage } from './gUserMessage';
 
-export interface OperationStatusGMistralEmbeddingModelConfig { 
-    result?: GMistralEmbeddingModelConfig;
-    messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
-    hasErrorMessages?: boolean;
+export interface DeepSearchDocumentAnalisysResultStep { 
+    code?: string;
+    description?: string;
+    userModified?: string;
+    userCreated?: string;
+    dateModified?: Date;
+    dateCreated?: Date;
+    deepsearchCode: string;
+    fragment: string;
+    documentCode: string;
+    index: number;
+    fragmentsCodes: Array<string>;
 }
