@@ -26,6 +26,7 @@ public class ExtractedDocumentMetaData {
 	final String code, extension, originalUrl, parentProjectCode, rootKnowledgebaseCode, contentType, name,
 			metaInfoHeader, referenceType;
 	final Integer tokenLength, bytesLength;
+	final Integer chunkPosition;
 
 	/**
 	 * Constructs an instance of {@code ExtractedDocumentMetaData} with the
@@ -45,7 +46,7 @@ public class ExtractedDocumentMetaData {
 	 */
 	private ExtractedDocumentMetaData(String code, String extension, String originalUrl, String parentProjectCode,
 			String rootKnowledgebaseCode, String contentType, String name, Integer tokenLength, Integer bytesLength,
-			String metaInfoHeader, String referenceType) {
+			String metaInfoHeader, String referenceType, Integer chunkPosition) {
 		this.code = code;
 		this.contentType = contentType;
 		this.extension = extension;
@@ -57,6 +58,7 @@ public class ExtractedDocumentMetaData {
 		this.bytesLength = bytesLength;
 		this.metaInfoHeader = metaInfoHeader;
 		this.referenceType = referenceType;
+		this.chunkPosition = chunkPosition;
 	}
 
 	/**
@@ -110,7 +112,8 @@ public class ExtractedDocumentMetaData {
 				getNumericValue(DocumentMetaInfos.GEBO_TOKEN_LENGTH, metadata),
 				getNumericValue(DocumentMetaInfos.GEBO_BYTES_LENGTH, metadata),
 				getValue(DocumentMetaInfos.GEBO_EMBEDDING_METADATA, metadata),
-				getValue(DocumentMetaInfos.GEBO_REFERENCE_TYPE, metadata));
+				getValue(DocumentMetaInfos.GEBO_REFERENCE_TYPE, metadata),
+				getNumericValue(DocumentMetaInfos.GEBO_CHUNK_POSITION, metadata));
 	}
 
 	/**

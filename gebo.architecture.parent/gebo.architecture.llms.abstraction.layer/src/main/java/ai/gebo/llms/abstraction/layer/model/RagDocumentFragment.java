@@ -58,6 +58,7 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 	// Weighted ranking score for results
 	private double weightedResultsRanking = 0.0;
 	private String origin = null;
+	private Long chunkPosition = null;
 
 	public RagDocumentFragment() {
 
@@ -79,9 +80,9 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 		this.rootKnowledgebaseCode = metaData.getRootKnowledgebaseCode();
 		this.NBytes = metaData.getBytesLength() != null ? metaData.getBytesLength().longValue() : 0l;
 		this.NTokens = metaData.getTokenLength() != null ? metaData.getTokenLength().longValue() : 0l;
+		this.chunkPosition = metaData.getChunkPosition() != null ? metaData.getChunkPosition().longValue() : null;
 	}
 
-	
 	/**
 	 * Retrieves the associated Document object.
 	 * 
@@ -90,8 +91,6 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 	public Document toAIDocument() {
 		return new Document(documentId, documentContent, metaData);
 	}
-
-	
 
 	/**
 	 * Recalculate the size of the document fragment. Currently not implemented.
@@ -111,7 +110,6 @@ public class RagDocumentFragment implements IRagContent, Cloneable {
 		return Stream.of();
 	}
 
-	
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}

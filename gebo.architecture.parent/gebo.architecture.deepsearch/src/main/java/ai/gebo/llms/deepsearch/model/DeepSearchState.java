@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class DeepSearchState {
-	RagDocumentsCachedDaoResult semanticDaoResults = null;
+	RagDocumentsCachedDaoResult documentSearchResults = null;
 	int ragDocumentsPointer = 0;
 	int ragDocumentFragmentPointer = 0;
 

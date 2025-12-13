@@ -36,6 +36,9 @@ import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventAliasInD
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphEventInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.persistence.repositories.GraphRelationInDocumentChunkRepository;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
+import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
+import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
+import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.ExtractedDocumentMetaData;
@@ -233,6 +236,31 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 		Map<String, Object> cache = new HashMap<>();
 		LLMExtractionResult extraction = extractionService.extract(query, knowledgeBases, cache);
 		return knowledgeGraphSearch(extraction, topK, knowledgeBases);
+	}
+
+	@Override
+	public RagDocumentsCachedDaoResult toRagDocumentsCachedDaoResult(List<KnowledgeGraphSearchResult> graphRagResults) {
+		final Map<String, RagDocumentReferenceItem> alreadyExisting = new HashMap<String, RagDocumentReferenceItem>();
+
+		graphRagResults.stream().forEach(x -> {
+			String documentCode = x.getExtractedDocumentMetaData().getCode();
+			if (documentCode == null)
+				return;
+
+			RagDocumentFragment fragment = new RagDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
+			RagDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
+
+			if (existingDoc == null) {
+				existingDoc = new RagDocumentReferenceItem(x.getExtractedDocumentMetaData());
+				alreadyExisting.put(documentCode, existingDoc);
+
+			}
+			existingDoc.getFragments().add(fragment);
+
+			existingDoc.recalculateSize();
+
+		});
+		return RagDocumentsCachedDaoResult.createDocumentsDaoResultFromMap(alreadyExisting);
 	}
 
 }

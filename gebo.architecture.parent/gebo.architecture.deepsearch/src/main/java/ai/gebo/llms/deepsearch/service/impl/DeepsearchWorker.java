@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
@@ -16,13 +18,18 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.graphrag.persistence.model.KnowledgeGraphSearchResult;
 import ai.gebo.architecture.graphrag.services.IKnowledgeGraphSearchService;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
@@ -34,9 +41,12 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.security.repository.UserRepository.UserInfos;
 
 @Service
 public class DeepsearchWorker {
+	private static Logger LOGGER = LoggerFactory.getLogger(DeepsearchWorker.class);
+	private static final String QUESTION = "question";
 	private static final String CONSOLIDATED = "consolidated";
 	private static final String DOCUMENTS = "documents";
 	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
@@ -50,10 +60,14 @@ public class DeepsearchWorker {
 	private IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
 	@Autowired
 	private DocumentReferenceRepository documentRepo;
+	@Autowired
+	private KnowledgeBaseRepository knowledgeBaseRepository;
+	@Autowired
+	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
-			DeepSearchState state, DeepSearchConfig configuration) {
+			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos) {
 
 		IGConfigurableChatModel chatModel = null;
 		GObjectRef<GBaseChatModelConfig> chatModelReference = configuration.getChatModelConfiguration();
@@ -63,29 +77,57 @@ public class DeepsearchWorker {
 		if (chatModel == null) {
 			chatModel = chatModelsConfigDao.defaultHandler();
 		}
-		if (chatModel != null) {
+		if (chatModel != null && request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
 			int tokensBudget = chatModel.getContextLength();
 
-			if (state.getSemanticDaoResults() == null) {
-				RagDocumentsCachedDaoResult semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(null, null,
-						null, null, null, null, null);
-				state.setSemanticDaoResults(semanticDaoResult);
+			if (state.getDocumentSearchResults() == null) {
+				List<GKnowledgeBase> knowledgeBases = knowledgeBaseRepository.findAllById(request.getKnowledgeBases());
+				List<IGConfigurableEmbeddingModel> embeddingModels = new ArrayList<IGConfigurableEmbeddingModel>();
+				IGConfigurableEmbeddingModel defaultEmbeddingModel = embeddingModelsRuntimeDao.defaultHandler();
+				if (defaultEmbeddingModel != null) {
+					embeddingModels.add(defaultEmbeddingModel);
+				}
+				knowledgeBases.stream().map(x -> x.getEmbeddingModelReferences()).filter(y -> y != null && !y.isEmpty())
+						.forEach(modelsList -> {
+							modelsList.forEach(modelReference -> {
+								IGConfigurableEmbeddingModel model = embeddingModelsRuntimeDao
+										.findByModelReference(modelReference);
+								if (model != null && model != defaultEmbeddingModel) {
+									if (!embeddingModels.stream()
+											.anyMatch(x -> (x == model || model.getCode().equals(x.getCode())))) {
+										embeddingModels.add(model);
+									}
+								}
+							});
+						});
+				RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
+				for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
+					RagDocumentsCachedDaoResult semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(
+							request.getQuery(), configuration.getRagQueryOptions(), request.getKnowledgeBases(),
+							embeddingModel, configuration.getFirstHopSimilarityThreashold(),
+							configuration.getSecondHopSimilarityThreashold(), userInfos);
+					consolidatedDaoResult = RagDocumentsCachedDaoResult.join(semanticDaoResult, consolidatedDaoResult);
+				}
+
 				if (graphRagSearchService != null) {
 					try {
 						List<KnowledgeGraphSearchResult> graphRagResult = graphRagSearchService.knowledgeGraphSearch(
 								request.getQuery(), request.getKnowledgeBases(),
 								configuration.getGraphRagTopN().intValue());
-						mergeGraphRagResults(semanticDaoResult, graphRagResult);
+						RagDocumentsCachedDaoResult graphragDocumentsResult = graphRagSearchService
+								.toRagDocumentsCachedDaoResult(graphRagResult);
+						consolidatedDaoResult = RagDocumentsCachedDaoResult.join(consolidatedDaoResult,
+								graphragDocumentsResult);
 					} catch (LLMConfigException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						LOGGER.error("Error calling the graphrag logic", e);
 					}
 				}
+				state.setDocumentSearchResults(consolidatedDaoResult);
 			}
 
-			if (state.getSemanticDaoResults() != null
-					&& state.getRagDocumentsPointer() < state.getSemanticDaoResults().getDocumentItems().size()) {
-				RagDocumentReferenceItem foundDocument = state.getSemanticDaoResults().getDocumentItems()
+			if (state.getDocumentSearchResults() != null
+					&& state.getRagDocumentsPointer() < state.getDocumentSearchResults().getDocumentItems().size()) {
+				RagDocumentReferenceItem foundDocument = state.getDocumentSearchResults().getDocumentItems()
 						.get(state.getRagDocumentsPointer());
 				String documentCode = foundDocument.getCode();
 				Optional<GDocumentReference> docdata = documentRepo.findById(documentCode);
@@ -113,11 +155,9 @@ public class DeepsearchWorker {
 						}
 					}
 					if (!currentProcessedFragments.isEmpty()) {
-						PromptTemplate promptTemplate = new PromptTemplate(configuration.getAnalisysPrompt());
-						promptTemplate.add(DOCUMENTS, currentProcessedFragments);
-						promptTemplate.add("question", request.getQuery());
-						ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
-						String result = response.getResult().getOutput().getText();
+
+						String result = callLLMWithDocuments(chatModel, configuration.getAnalisysPrompt(),
+								currentProcessedFragments, request.getQuery());
 						DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
 						resultStep.setDeepsearchId(request.getRequestId());
 						resultStep.setFragment(result);
@@ -136,6 +176,27 @@ public class DeepsearchWorker {
 		return consolidatedResult;
 	}
 
+	private String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
+			String question) {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(DOCUMENTS, documents);
+		promptTemplate.add(QUESTION, question);
+		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		String result = response.getResult().getOutput().getText();
+		return result;
+	}
+
+	private String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel, String prompt,
+			Object documents, String question, String consolidated) {
+		PromptTemplate promptTemplate = new PromptTemplate(prompt);
+		promptTemplate.add(CONSOLIDATED, consolidated);
+		promptTemplate.add(DOCUMENTS, documents);
+		promptTemplate.add(QUESTION, question);
+		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
+		String result = response.getResult().getOutput().getText();
+		return result;
+	}
+
 	private DeepSearchProcessedEvent consolidateResult(IGConfigurableChatModel chatModel,
 			List<AbstractDeepSearchEvent> history, DeepSearchRequest request, DeepSearchState state,
 			DeepSearchConfig configuration) {
@@ -151,11 +212,10 @@ public class DeepsearchWorker {
 				GDocumentReference document = docEvent.getInputData();
 				int length = tokenEstimator.estimate(actualFragment);
 				if (tokens + length >= tokensBudget) {
-					PromptTemplate promptTemplate = new PromptTemplate(configuration.getConsolidationPrompt());
-					promptTemplate.add(CONSOLIDATED, consolidated);
-					promptTemplate.add(DOCUMENTS, fragments.toString());
-					ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
-					consolidated = response.getResult().getOutput().getText();
+
+					consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
+							configuration.getConsolidationPrompt(), fragments.toString(), request.getQuery(),
+							consolidated);
 					fragments = new StringBuffer();
 					tokens = 0;
 
@@ -169,11 +229,8 @@ public class DeepsearchWorker {
 			}
 		}
 		if (!fragments.isEmpty()) {
-			PromptTemplate promptTemplate = new PromptTemplate(configuration.getConsolidationPrompt());
-			promptTemplate.add(CONSOLIDATED, consolidated);
-			promptTemplate.add(DOCUMENTS, fragments.toString());
-			ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
-			consolidated = response.getResult().getOutput().getText();
+			consolidated = callLLMWithDocumentsAndConsolidation(chatModel, configuration.getConsolidationPrompt(),
+					fragments.toString(), request.getQuery(), consolidated);
 		}
 		DeepSearchProcessedEvent outValue = new DeepSearchProcessedEvent();
 		outValue.setInputData(request);
@@ -183,37 +240,6 @@ public class DeepsearchWorker {
 
 		response.setSteps(steps);
 		return outValue;
-	}
-
-	private void mergeGraphRagResults(RagDocumentsCachedDaoResult documents,
-			List<KnowledgeGraphSearchResult> graphRagResults) {
-		final Map<String, List<RagDocumentFragment>> fragments = new HashMap<String, List<RagDocumentFragment>>();
-		final Map<String, RagDocumentReferenceItem> alreadyExisting = new HashMap<String, RagDocumentReferenceItem>();
-		documents.getDocumentItems().forEach(x -> {
-			alreadyExisting.put(x.getCode(), x);
-		});
-		graphRagResults.stream().forEach(x -> {
-			String documentCode = x.getExtractedDocumentMetaData().getCode();
-			if (documentCode == null)
-				return;
-			if (!fragments.containsKey(documentCode)) {
-				fragments.put(documentCode, new ArrayList<RagDocumentFragment>());
-			}
-			RagDocumentFragment fragment = new RagDocumentFragment(x.getDocument(), x.getExtractedDocumentMetaData());
-
-			RagDocumentReferenceItem existingDoc = alreadyExisting.get(documentCode);
-			boolean fragmentAlreadyFound = existingDoc != null && existingDoc.getFragments().stream()
-					.anyMatch(f -> f.getCode() != null && f.getCode().equals(fragment.getCode()));
-
-			if (existingDoc == null) {
-				existingDoc = new RagDocumentReferenceItem(x.getExtractedDocumentMetaData());
-				alreadyExisting.put(documentCode, existingDoc);
-				documents.getDocumentItems().add(existingDoc);
-			}
-			existingDoc.getFragments().add(fragment);
-			documents.recalculateSize();
-
-		});
 	}
 
 }

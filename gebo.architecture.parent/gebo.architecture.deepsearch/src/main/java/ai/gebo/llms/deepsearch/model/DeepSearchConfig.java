@@ -11,7 +11,9 @@ public class DeepSearchConfig extends GBaseObject {
 	protected String consolidationPrompt = null;
 	protected String analisysPrompt = null;
 	protected RagQueryOptions ragQueryOptions;
-	protected Integer graphRagTopN=null;
+	protected Double firstHopSimilarityThreashold = null;
+	protected Double secondHopSimilarityThreashold = null;
+	protected Integer graphRagTopN = null;
 	protected Integer tokensLimit = null;
 	protected GObjectRef<GBaseChatModelConfig> chatModelConfiguration = null;
 

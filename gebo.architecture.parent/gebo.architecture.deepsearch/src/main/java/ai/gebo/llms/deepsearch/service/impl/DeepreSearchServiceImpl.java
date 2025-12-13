@@ -22,6 +22,8 @@ import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.repository.DeepSearchConfigRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepreSearchService;
+import ai.gebo.security.repository.UserRepository.UserInfos;
+import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink.OverflowStrategy;
@@ -32,11 +34,13 @@ public class DeepreSearchServiceImpl implements IGDeepreSearchService {
 	final DeepSearchDefaultConfig defaultDeepsearchConfig;
 	final DeepSearchConfigRepository configRepository;
 	final IGRuntimeBinder runtimeBinder;
+	final IGSecurityService securityService;
 	final ExecutorService deepSearchExecutor = Executors
 			.newSingleThreadExecutor(r -> new Thread(r, "deep-search-thread"));
 
 	@Override
 	public Flux<AbstractDeepSearchEvent> searchAsync(DeepSearchRequest request) throws LLMConfigException {
+		final UserInfos userInfos = securityService.getCurrentUser();
 		final DeepsearchWorker deepSearchWorker = runtimeBinder.getImplementationOf(DeepsearchWorker.class);
 		List<DeepSearchConfig> data = configRepository.findAll();
 		DeepSearchConfig configuration = data != null && data.size() > 0 ? data.get(0) : defaultDeepsearchConfig;
@@ -52,7 +56,7 @@ public class DeepreSearchServiceImpl implements IGDeepreSearchService {
 				try {
 					AbstractDeepSearchEvent thisStepResult = null;
 					do {
-						thisStepResult = deepSearchWorker.nextStep(request, history, state, configuration);
+						thisStepResult = deepSearchWorker.nextStep(request, history, state, configuration, userInfos);
 						// Emit “started”
 						if (thisStepResult != null) {
 							sink.next(thisStepResult);

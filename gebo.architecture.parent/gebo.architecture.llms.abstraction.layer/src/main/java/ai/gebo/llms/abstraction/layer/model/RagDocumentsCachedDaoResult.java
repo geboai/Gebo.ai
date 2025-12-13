@@ -6,14 +6,13 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai 
  */
- 
- 
- 
 
 package ai.gebo.llms.abstraction.layer.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -24,23 +23,23 @@ import ai.gebo.model.IJsonClonable;
 import lombok.Data;
 
 /**
- * AI generated comments
- * This class represents a cached DAO (Data Access Object) result for RAG (Retrieval-Augmented Generation) documents.
- * It implements the IRagContent interface to provide methods for accessing and manipulating document references,
- * and recalculating their size and weight.
+ * AI generated comments This class represents a cached DAO (Data Access Object)
+ * result for RAG (Retrieval-Augmented Generation) documents. It implements the
+ * IRagContent interface to provide methods for accessing and manipulating
+ * document references, and recalculating their size and weight.
  */
 @Data
-public class RagDocumentsCachedDaoResult implements IRagContent,IJsonClonable<RagDocumentsCachedDaoResult>,Cloneable {
+public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<RagDocumentsCachedDaoResult>, Cloneable {
 	// Number of tokens in the document
 	private long NTokens;
 	// Number of bytes in the document
 	private long NBytes;
 	// List of document reference items
 	private List<RagDocumentReferenceItem> documentItems = new ArrayList<RagDocumentReferenceItem>();
-	
-	
+
 	/**
 	 * Streams the child elements of this RAG content.
+	 * 
 	 * @return a stream of child RAG contents
 	 */
 	@Override
@@ -75,9 +74,15 @@ public class RagDocumentsCachedDaoResult implements IRagContent,IJsonClonable<Ra
 		}
 	}
 
+	public void reorderFragmentsByPosition() {
+		if (documentItems != null) {
+			documentItems.stream().forEach(x -> x.reorderFragmentsByPosition());
+		}
+	}
+
 	/**
-	 * Orders the document items by their weight, using their weighted results ranking.
-	 * Ensures the document items list is updated with the ordered items.
+	 * Orders the document items by their weight, using their weighted results
+	 * ranking. Ensures the document items list is updated with the ordered items.
 	 */
 	public void orderByDocumentWeight() {
 		this.recalculateSize();
@@ -103,12 +108,55 @@ public class RagDocumentsCachedDaoResult implements IRagContent,IJsonClonable<Ra
 			}
 		}
 	}
+
+	public static RagDocumentsCachedDaoResult join(RagDocumentsCachedDaoResult... result) {
+		Map<String, RagDocumentReferenceItem> docsMap = new HashMap<String, RagDocumentReferenceItem>();
+		for (RagDocumentsCachedDaoResult ragDocumentsCachedDaoResult : result) {
+			joinMap(ragDocumentsCachedDaoResult, docsMap);
+		}
+		return createDocumentsDaoResultFromMap(docsMap);
+	}
+
+	public static RagDocumentsCachedDaoResult createDocumentsDaoResultFromMap(
+			Map<String, RagDocumentReferenceItem> docsMap) {
+		RagDocumentsCachedDaoResult results = new RagDocumentsCachedDaoResult();
+		docsMap.values().forEach(x -> results.getDocumentItems().add(x));
+		results.recalculateSize();
+		return results;
+	}
+
+	public static void joinMap(RagDocumentsCachedDaoResult result, Map<String, RagDocumentReferenceItem> docsMap) {
+		result.documentItems.forEach(doc -> {
+			if (!docsMap.containsKey(doc.getCode())) {
+				try {
+					docsMap.put(doc.getCode(), (RagDocumentReferenceItem) doc.clone());
+				} catch (CloneNotSupportedException e) {
+					LOGGER.error("Error cloning", e);
+				}
+			} else {
+				RagDocumentReferenceItem docCopy = docsMap.get(doc.getCode());
+				for (RagDocumentFragment fragment : doc.getFragments()) {
+					if (!docCopy.getFragments().stream().anyMatch(x -> x.getCode().equals(fragment.getCode()))) {
+						try {
+							docCopy.getFragments().add((RagDocumentFragment) fragment.clone());
+						} catch (CloneNotSupportedException e) {
+							LOGGER.error("Error cloning", e);
+						}
+					}
+				}
+
+			}
+		});
+	}
+
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
+
 	/**
-	 * Compiles a list of AI documents from the document fragments.
-	 * Only fragments with an associated document are included.
+	 * Compiles a list of AI documents from the document fragments. Only fragments
+	 * with an associated document are included.
+	 * 
 	 * @return a list of AI documents
 	 */
 	public List<Document> aiDocumentsList() {
