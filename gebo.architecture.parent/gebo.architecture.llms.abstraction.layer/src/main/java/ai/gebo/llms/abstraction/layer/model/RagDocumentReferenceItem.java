@@ -11,6 +11,7 @@ package ai.gebo.llms.abstraction.layer.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import ai.gebo.model.ExtractedDocumentMetaData;
@@ -20,7 +21,7 @@ import ai.gebo.model.ExtractedDocumentMetaData;
  * Retrieval-Augmented Generation (RAG) model, holding metadata and a list of
  * document fragments.
  */
-public class RagDocumentReferenceItem implements IRagContent,Cloneable {
+public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 
 	// Number of tokens in the document.
 	private long NTokens;
@@ -60,7 +61,6 @@ public class RagDocumentReferenceItem implements IRagContent,Cloneable {
 
 	// Weighted ranking result, used for sorting or relevance evaluation.
 	private double weightedResultsRanking = 0.0;
-	
 
 	/**
 	 * Default constructor for creating an empty RagDocumentReferenceItem.
@@ -333,5 +333,28 @@ public class RagDocumentReferenceItem implements IRagContent,Cloneable {
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
-	
+
+	public void reorderFragmentsByPosition() {
+		TreeMap<Long, List<RagDocumentFragment>> order = new TreeMap<Long, List<RagDocumentFragment>>();
+		if (this.fragments != null) {
+			List<RagDocumentFragment> unpositioned = new ArrayList<RagDocumentFragment>();
+			this.fragments.forEach(x -> {
+				if (x.getChunkPosition() == null) {
+					unpositioned.add(x);
+				} else {
+					if (!order.containsKey(x.getChunkPosition())) {
+						order.put(x.getChunkPosition(), new ArrayList<RagDocumentFragment>());
+					}
+					order.get(x.getChunkPosition()).add(x);
+				}
+			});
+			List<RagDocumentFragment> newSegmentsList = new ArrayList<RagDocumentFragment>();
+			order.values().forEach(vector -> {
+				newSegmentsList.addAll(vector);
+			});
+			newSegmentsList.addAll(unpositioned);
+			this.fragments = newSegmentsList;
+		}
+	}
+
 }

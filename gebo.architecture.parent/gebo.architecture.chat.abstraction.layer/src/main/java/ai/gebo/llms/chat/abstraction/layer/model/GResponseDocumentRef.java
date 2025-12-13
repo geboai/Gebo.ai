@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
 import ai.gebo.model.DocumentMetaInfos;
 import lombok.Data;
@@ -67,6 +68,32 @@ public class GResponseDocumentRef implements Serializable {
 	 */
 	private String get(Map<String, Object> metadata, String constant) {
 		return metadata != null && metadata.containsKey(constant) ? metadata.get(constant).toString() : null;
+	}
+
+	public GResponseDocumentRef(GDocumentReference document) {
+		Map<String, Object> metadata = document.getCustomMetaInfos();
+		this.documentCode = get(metadata, DocumentMetaInfos.CONTENT_CODE);
+		this.description = get(metadata, DocumentMetaInfos.CONTENT_DESCRIPTION);
+		this.contentType = get(metadata, DocumentMetaInfos.CONTENT_TYPE);
+		this.extension = get(metadata, DocumentMetaInfos.CONTENT_EXTENSION);
+		this.knowledgeBaseCode = get(metadata, DocumentMetaInfos.KNOWLEDGEBASE_CODE);
+		this.projectCode = get(metadata, DocumentMetaInfos.PROJECT_CODE);
+		this.geboTreatAs = get(metadata, DocumentMetaInfos.GEBO_FILE_TREAT_AS);
+		this.geboFileTypeDescription = get(metadata, DocumentMetaInfos.GEBO_FILE_TYPE_DESCRIPTION);
+		this.geboFileTypeId = get(metadata, DocumentMetaInfos.GEBO_FILE_TYPE_ID);
+		this.name = get(metadata, DocumentMetaInfos.GEBO_FILE_NAME);
+		this.documentCode = document.getCode();
+		this.name = document.getName();
+		this.description = document.getDescription();
+		this.extension = document.getExtension();
+		this.contentType = document.getContentType();
+		String referenceType = get(metadata, DocumentMetaInfos.GEBO_REFERENCE_TYPE);
+		if (referenceType != null) {
+			try {
+				this.referenceType = ReferenceRefType.valueOf(referenceType);
+			} catch (Throwable t) {
+			}
+		}
 	}
 
 	/**

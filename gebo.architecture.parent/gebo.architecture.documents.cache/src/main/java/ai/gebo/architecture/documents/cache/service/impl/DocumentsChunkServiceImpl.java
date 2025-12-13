@@ -206,6 +206,7 @@ public class DocumentsChunkServiceImpl
 								}
 
 								response.setEmpty(outContents.isEmpty());
+								long chunkPosition = 1;
 								for (Document _document : outContents) {
 
 									int bytesSize = _document.getText() != null ? _document.getText().length() * 2 : 0;
@@ -217,6 +218,8 @@ public class DocumentsChunkServiceImpl
 									response.setEmpty(false);
 									DocumentChunk chunk = DocumentChunk.ofText(document.getCode(), _document.getText(),
 											_document.getMetadata());
+									chunk.setChunkPosition(chunkPosition);
+									chunkPosition++;
 									chunk.setBytesSize((long) bytesSize);
 									chunk.setTokensSize((long) tokensSize);
 									chunkOperation
