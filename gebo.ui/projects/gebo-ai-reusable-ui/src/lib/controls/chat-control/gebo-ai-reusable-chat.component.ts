@@ -28,9 +28,10 @@ import { ConfirmationService, ToastMessageOptions, MessageService, Confirmation 
 import { ScrollPanel } from "primeng/scrollpanel";
 import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
-import { IGeboChatMessage, ReactiveRagChatService } from "./reactive-chat.service";
+import {  ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { ExtendedConfirmation, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { IGeboChatMessage } from "../../services/base-streaming.service";
 const loading_vocal_answer: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER", severity: "info", summary: "Loading vocal answer" };
 const loading_vocal_answer_received: ToastMessageOptions = { id: "LOADING_VOCAL_ANSWER_RECEIVED", severity: "info", summary: "Vocal answer received" };
 const your_speech_is_uploading: ToastMessageOptions = { id: "YOUR_SPEECH_IS_UPLOADING", severity: "info", summary: "Your speech is uploading" };
