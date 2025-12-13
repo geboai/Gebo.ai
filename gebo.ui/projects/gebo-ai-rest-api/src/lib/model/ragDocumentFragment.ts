@@ -20,6 +20,6 @@ export interface RagDocumentFragment {
     weightedResultsRanking?: number;
     origin?: string;
     chunkPosition?: number;
-    ntokens?: number;
     nbytes?: number;
+    ntokens?: number;
 }
