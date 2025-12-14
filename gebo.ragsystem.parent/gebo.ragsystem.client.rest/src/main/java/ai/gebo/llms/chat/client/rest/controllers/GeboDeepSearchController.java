@@ -22,9 +22,12 @@ import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.client.rest.model.DeepSearchStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchErrorEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
+import ai.gebo.model.GUserMessage;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,6 +38,7 @@ import reactor.core.publisher.Flux;
 @RequestMapping(path = "api/users/GeboDeepSearchController")
 @AllArgsConstructor
 public class GeboDeepSearchController {
+	private static final String ERROR_WHILE_RUNNING_DEEP_SEARCH = "Error while running deep search";
 	final IGDeepSearchService deepSearchService;
 
 	@GetMapping(value = "getMyDeepSearchesPaged", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,12 +102,24 @@ public class GeboDeepSearchController {
 			if (entry instanceof DeepSearchDocumentEvent documentEvent) {
 				return new GeboChatMessageEnvelope(
 						new DeepSearchStep(new GResponseDocumentRef(documentEvent.getInputData()),
-								documentEvent.getOutputData().getFragment()));
-			} else {
-				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(entry.getOutputData());
+								documentEvent.getOutputData().getFragment(), documentEvent.getProcessPercentage()));
+			} else if (entry instanceof DeepSearchProcessedEvent processedEvent) {
+				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(processedEvent.getOutputData());
 				envelop.setLastMessage(true);
 				return envelop;
-			}
+			} else if (entry instanceof DeepSearchErrorEvent errorEvent) {
+				GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
+				exceptionEnvelope.setContent(errorEvent.getOutputData());
+				exceptionEnvelope.setLastMessage(true);
+				return exceptionEnvelope;
+			} else
+				throw new RuntimeException("The received type:" + entry.getClass().getName() + " is not supported yet");
+		}).onErrorResume(exc -> {
+			GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
+			GUserMessage userMessage = GUserMessage.errorMessage(ERROR_WHILE_RUNNING_DEEP_SEARCH, exc);
+			exceptionEnvelope.setContent(userMessage);
+			exceptionEnvelope.setLastMessage(true);
+			return Flux.just(exceptionEnvelope);
 		}).map(StreamUtil.mappingFunction).map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
 	}
 }

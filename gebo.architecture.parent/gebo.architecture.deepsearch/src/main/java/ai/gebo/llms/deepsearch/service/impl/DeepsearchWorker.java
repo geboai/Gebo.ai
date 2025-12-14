@@ -36,6 +36,7 @@ import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
@@ -43,6 +44,7 @@ import ai.gebo.llms.deepsearch.model.DeepSearchState;
 import ai.gebo.llms.deepsearch.repository.DeepSearchDocumentAnalisysResultStepRepository;
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.repository.DeepSearchResponseRepository;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
@@ -77,6 +79,7 @@ public class DeepsearchWorker {
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
 			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos) {
+
 		if (request.getQuery() == null || request.getQuery().trim().length() == 0 || request.getKnowledgeBases() == null
 				|| request.getKnowledgeBases().isEmpty()) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
@@ -136,10 +139,12 @@ public class DeepsearchWorker {
 					}
 				}
 				state.setDocumentSearchResults(consolidatedDaoResult);
+				state.setFragmentsCount(consolidatedDaoResult.countFragments());
 			}
 
 			if (state.getDocumentSearchResults() != null
 					&& state.getRagDocumentsPointer() < state.getDocumentSearchResults().getDocumentItems().size()) {
+
 				RagDocumentReferenceItem foundDocument = state.getDocumentSearchResults().getDocumentItems()
 						.get(state.getRagDocumentsPointer());
 				String documentCode = foundDocument.getCode();
@@ -169,7 +174,8 @@ public class DeepsearchWorker {
 						}
 					}
 					if (!currentProcessedFragments.isEmpty()) {
-
+						state.setElaboratedFragmentsCount(
+								state.getElaboratedFragmentsCount() + currentProcessedFragments.size());
 						String result = callLLMWithDocuments(chatModel, configuration.getAnalisysPrompt(),
 								currentProcessedFragments, request.getQuery());
 						DeepSearchDocumentAnalisysResultStep resultStep = new DeepSearchDocumentAnalisysResultStep();
@@ -178,8 +184,10 @@ public class DeepsearchWorker {
 						resultStep.setIndex(history.size());
 						resultStep.setDocumentCode(documentCode);
 						resultStep.setFragmentsCodes(currentProcessedFragments.stream().map(x -> x.getId()).toList());
+
 						stepsRepository.save(resultStep);
 						DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
+						event.setProcessPercentage(state.calculateProcessedPercent());
 						event.setInputData(docdata.get());
 						event.setOutputData(resultStep);
 						return event;
@@ -193,6 +201,7 @@ public class DeepsearchWorker {
 				configuration);
 		responseRepository.save(consolidatedResult.getOutputData());
 		return consolidatedResult;
+
 	}
 
 	private String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
@@ -257,7 +266,7 @@ public class DeepsearchWorker {
 		response.setDeepsearchCode(request.getCode());
 		response.setResponse(consolidated);
 		outValue.setOutputData(response);
-
+		outValue.setProcessPercentage(100.0);
 		return outValue;
 	}
 

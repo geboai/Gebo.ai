@@ -8,9 +8,10 @@ import { FieldsetModule } from "primeng/fieldset";
 import { PanelModule } from "primeng/panel";
 import { BlockUIModule } from "primeng/blockui";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
-
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
+import { ProgressBarModule } from 'primeng/progressbar';
 @NgModule({
-    imports:[CommonModule,ReactiveFormsModule,FormsModule,TabsModule,ButtonModule,FieldsetModule,PanelModule,BlockUIModule],
+    imports:[CommonModule,ReactiveFormsModule,FormsModule,TabsModule,ButtonModule,FieldsetModule,PanelModule,BlockUIModule,GeboAIFieldTranslationContainerModule,ProgressBarModule],
     declarations:[GeboAIDeepSearchComponent],
     exports:[GeboAIDeepSearchComponent],
     providers:[GeboAIStreamDeepSearchService]

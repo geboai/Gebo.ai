@@ -149,6 +149,14 @@ public class RagDocumentsCachedDaoResult implements IRagContent, IJsonClonable<R
 		});
 	}
 
+	public int countFragments() {
+		int i = 0;
+		for (RagDocumentReferenceItem ragDocumentReferenceItem : documentItems) {
+			i += ragDocumentReferenceItem.countFragments();
+		}
+		return i;
+	}
+
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}

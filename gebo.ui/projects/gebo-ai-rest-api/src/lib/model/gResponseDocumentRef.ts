@@ -26,10 +26,10 @@ export interface GResponseDocumentRef {
     name?: string;
     loadPercentage?: number;
     references?: Array<DocInternalRef>;
-    ntotalContentTokens?: number;
-    ntokensRelevant?: number;
     nbytesRelevant?: number;
+    ntotalContentTokens?: number;
     shortCode?: string;
+    ntokensRelevant?: number;
 }
 export namespace GResponseDocumentRef {
     export type ReferenceTypeEnum = 'FILE' | 'WEB';

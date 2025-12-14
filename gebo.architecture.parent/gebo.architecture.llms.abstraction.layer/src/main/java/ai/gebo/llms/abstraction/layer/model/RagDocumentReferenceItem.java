@@ -357,4 +357,9 @@ public class RagDocumentReferenceItem implements IRagContent, Cloneable {
 		}
 	}
 
+	public int countFragments() {
+		int i = fragments.size();
+		return i;
+	}
+
 }

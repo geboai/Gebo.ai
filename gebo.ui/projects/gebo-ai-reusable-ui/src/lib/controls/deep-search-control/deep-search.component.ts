@@ -3,10 +3,16 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
+import { MessageService, ToastMessageOptions } from "primeng/api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 @Component({
     selector: "gebo-ai-deep-search-component",
     templateUrl: "deep-search.component.html",
-    standalone: false
+    standalone: false,
+    providers: [
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIDeepSearchModule", multi: false },
+        { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIDeepSearchComponent"), multi: false }
+    ]
 })
 export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     @Input() currentDeepSearchRequest?: DeepSearchRequest;
@@ -26,9 +32,11 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     protected deepSearchResponse?: DeepSearchResponse;
     protected analisysStep?: {
         documentRef?: GResponseDocumentRef,
-        analisysPortion?: string
+        analisysPortion?: string,
+        completionPercent?: number
     };
-    constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService) {
+    protected completionPercent: number = 0;
+    constructor(private deepSearchStreamService: GeboAIStreamDeepSearchService, private messageService: MessageService) {
 
     }
     ngOnInit(): void {
@@ -38,18 +46,34 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
         if (typeof msg === "string") {
 
         } else {
-            switch(msg.contentObjectType) {
-                case "DeepSearchStep": {
-                    this.analisysStep=msg.content;
-                }break;
-                case "DeepSearchResponse": {
-                    this.deepSearchResponse=msg.content;
-                    this.deepSearchResponseReceived.emit(this.deepSearchResponse);
-                }break;
-                case "GUserMessage": {
-
-                }break;
+            if (msg.contentObjectType) {
+                switch (msg.contentObjectType) {
+                    case "DeepSearchStep": {
+                        this.deepSearchResponse = undefined;
+                        this.analisysStep = msg.content;
+                        if (msg.content?.completionPercent) {
+                            
+                            this.completionPercent = Math.round(msg.content?.completionPercent);
+                        }
+                    } break;
+                    case "DeepSearchResponse": {
+                        this.analisysStep = undefined;
+                        this.deepSearchResponse = msg.content;
+                        this.completionPercent=100;
+                        this.deepSearchResponseReceived.emit(this.deepSearchResponse);
+                    } break;
+                    case "GUserMessage": {
+                        this.analisysStep = undefined;
+                        const message: ToastMessageOptions = {
+                            summary: msg.content?.summary,
+                            detail: msg.content?.detail,
+                            severity: msg.content?.severity
+                        };
+                        this.messageService.add(message);
+                    } break;
+                }
             }
+
             if (msg.lastMessage === true) {
                 this.streamingResponse = false;
             }
@@ -68,6 +92,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     }
     protected doStreamDeepSearch(): void {
         const data: DeepSearchRequest = this.formGroup.value;
+        this.completionPercent = 0;
         this.deepSearchStreamService.streamDeepSearch(data, (msg: IGeboChatMessage | string) => {
             this.onMessage(msg);
         }, (err) => {

@@ -22,6 +22,7 @@ import ai.gebo.llms.deepsearch.config.DeepSearchDefaultConfig;
 import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
+import ai.gebo.llms.deepsearch.model.DeepSearchErrorEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchProcessedEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchRequest;
 import ai.gebo.llms.deepsearch.model.DeepSearchResponse;
@@ -31,6 +32,7 @@ import ai.gebo.llms.deepsearch.repository.DeepSearchDocumentAnalisysResultStepRe
 import ai.gebo.llms.deepsearch.repository.DeepSearchRequestRepository;
 import ai.gebo.llms.deepsearch.repository.DeepSearchResponseRepository;
 import ai.gebo.llms.deepsearch.service.IGDeepSearchService;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.transaction.Transactional;
@@ -83,9 +85,12 @@ public class DeepSearchServiceImpl implements IGDeepSearchService {
 					} while (thisStepResult == null || thisStepResult instanceof DeepSearchProcessedEvent);
 
 				} catch (Throwable t) {
+					//DeepSearchErrorEvent event = new DeepSearchErrorEvent();
+					//event.setOutputData(GUserMessage.errorMessage("Error while deep searching", t));
+					//event.setInputData(request);
+					//sink.next(event);
 					sink.error(t);
 				}
-
 			});
 
 			// if the downstream disposes, cancel the worker

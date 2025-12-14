@@ -4,11 +4,9 @@ import lombok.Data;
 
 @Data
 public abstract class AbstractDeepSearchEvent<InputType, OutputType> {
-	public static enum DeepResearchEventStatus {
-		PROCESSING, DONE, ERROR
-	}
-
-	InputType inputData = null;
-	OutputType outputData = null;
-	DeepResearchEventStatus status = null;
+	
+	private double processPercentage=0.0;
+	private InputType inputData = null;
+	private OutputType outputData = null;
+	
 }
