@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
+import { DeepSearchDocumentAnalisysResultStep, DeepSearchRequest, DeepSearchResponse, GeboChatRequest, GeboChatResponse, GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIStreamDeepSearchService } from "./stream-deep-search.service";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
 import { MessageService, ToastMessageOptions } from "primeng/api";
@@ -16,9 +16,14 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Geb
 })
 export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     @Input() currentDeepSearchRequest?: DeepSearchRequest;
+    @Input() currentChatRequest?: GeboChatRequest;
     @Input() mode: "full-ui" | "progress-only" = "full-ui";
+    protected deepSearchProcessType?: "standalone" | "chat-context";
     @Output() deepSearchResponseReceived: EventEmitter<DeepSearchResponse> = new EventEmitter();
+    @Output() deepSearchChatResponseReceived: EventEmitter<GeboChatResponse> = new EventEmitter();
+    @Output() errorOccurredEvent:EventEmitter<any>=new EventEmitter();
     protected streamingResponse: boolean = false;
+
     protected get loading(): boolean {
         return this.streamingResponse === true;
     }
@@ -30,6 +35,7 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
 
     });
     protected deepSearchResponse?: DeepSearchResponse;
+    protected chatResponse?: GeboChatResponse;
     protected analisysStep?: {
         documentRef?: GResponseDocumentRef,
         analisysPortion?: string,
@@ -52,14 +58,14 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                         this.deepSearchResponse = undefined;
                         this.analisysStep = msg.content;
                         if (msg.content?.completionPercent) {
-                            
+
                             this.completionPercent = Math.round(msg.content?.completionPercent);
                         }
                     } break;
                     case "DeepSearchResponse": {
                         this.analisysStep = undefined;
                         this.deepSearchResponse = msg.content;
-                        this.completionPercent=100;
+                        this.completionPercent = 100;
                         this.deepSearchResponseReceived.emit(this.deepSearchResponse);
                     } break;
                     case "GUserMessage": {
@@ -70,6 +76,12 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
                             severity: msg.content?.severity
                         };
                         this.messageService.add(message);
+                        this.errorOccurredEvent.emit(msg.content);
+                    } break;
+                    case "GeboChatResponse": {
+                        this.analisysStep = undefined;
+                        this.chatResponse = msg.content;
+                        this.deepSearchChatResponseReceived.emit(msg.content);
                     } break;
                 }
             }
@@ -81,23 +93,39 @@ export class GeboAIDeepSearchComponent implements OnInit, OnChanges {
     }
     onError(err: any) {
         this.streamingResponse = false;
+        this.errorOccurredEvent.emit(err);
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["currentDeepSearchRequest"] && this.currentDeepSearchRequest) {
             this.formGroup.patchValue(this.currentDeepSearchRequest);
+            this.deepSearchProcessType = "standalone";
             if (this.mode === "progress-only") {
                 this.doStreamDeepSearch();
             }
+        }
+        if (changes["currentChatRequest"] && this.currentChatRequest) {
+            this.doStreamDeepSearchInChat();
         }
     }
     protected doStreamDeepSearch(): void {
         const data: DeepSearchRequest = this.formGroup.value;
         this.completionPercent = 0;
+        this.streamingResponse = true;
         this.deepSearchStreamService.streamDeepSearch(data, (msg: IGeboChatMessage | string) => {
             this.onMessage(msg);
         }, (err) => {
             this.onError(err);
         });
+    }
+    protected doStreamDeepSearchInChat(): void {
+        if (this.currentChatRequest) {
+            this.streamingResponse = true;
+            this.deepSearchStreamService.streamDeepSearchInChat(this.currentChatRequest, (msg: IGeboChatMessage | string) => {
+                this.onMessage(msg);
+            }, (err) => {
+                this.onError(err);
+            });
+        }
     }
 
 }

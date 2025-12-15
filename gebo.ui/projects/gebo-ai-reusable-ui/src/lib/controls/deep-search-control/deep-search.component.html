@@ -1,19 +1,24 @@
-<p-panel id="deepSearchUI" #deepSearchUI gebo-ai-label header="Deep Search" [showHeader]="mode==='full-ui'">
-    <p-blockUI [target]="deepSearchUI" [blocked]="loading">
-        <p-progressbar [value]="completionPercent" styleClass="w-full">
-            <ng-template #content let-value>
-                <span *ngIf="!analisysStep && !deepSearchResponse" id="DeepSearchProcessingSearch"
-                    gebo-ai-text>Searching relevant informations</span>
-                <div class="grid" *ngIf="analisysStep && completionPercent<100">
-                    <span>{{completionPercent}}%</span>
-                    <span id="DeepSearchProcessingFile" gebo-ai-text>Analized file</span>
-                    <span>{{analisysStep?.documentRef?.name}}</span>
-                </div>
-                <span *ngIf="completionPercent===100" id="DeepSearchingConsolidating" gebo-ai-text>
-                    Consolidating the final report
-                </span>
-            </ng-template>
-        </p-progressbar>
-    </p-blockUI>
+<p-panel id="deepSearchUI" #deepSearchUI gebo-ai-label header="Deep Search" [showHeader]="mode==='full-ui'"
+    styleClass="w-full">
+
+    <div class="grid" *ngIf="loading">
+
+        <label *ngIf="!analisysStep && !deepSearchResponse" class="col-12" id="DeepSearchProcessingSearch"
+            gebo-ai-text>Searching relevant informations</label>
+        <label class="col-12"  *ngIf="analisysStep && completionPercent<100"><span id="DeepSearchProcessingFile" gebo-ai-text>Analized
+                file</span>
+            <span>{{analisysStep?.documentRef?.name}}</span></label>
+        <label class="col-12"  *ngIf="completionPercent===100" id="DeepSearchingConsolidating" gebo-ai-text>
+            Consolidating the final report
+        </label>
+        <div class="col-12">
+            <p-progressbar [value]="completionPercent" styleClass="col-12 w-full">
+
+            </p-progressbar>
+        </div>
+    </div>
+    <!-- 
+        <p-blockUI [target]="deepSearchUI" [blocked]="loading" ></p-blockUI>
+        -->
 
 </p-panel>

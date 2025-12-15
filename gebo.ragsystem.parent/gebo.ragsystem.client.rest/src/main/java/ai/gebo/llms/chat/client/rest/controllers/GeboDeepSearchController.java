@@ -18,8 +18,11 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.client.rest.model.DeepSearchStep;
+import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
+import ai.gebo.llms.deepsearch.model.DeepSearchChatResponseEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchErrorEvent;
@@ -98,22 +101,33 @@ public class GeboDeepSearchController {
 	@PostMapping(value = "streamDeepSearch", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<ServerSentEvent<String>> streamDeepSearch(@Valid @NotNull @RequestBody DeepSearchRequest request)
 			throws LLMConfigException {
-		return deepSearchService.searchAsync(request).map(entry -> {
+		Flux<AbstractDeepSearchEvent> flux = deepSearchService.searchAsync(request);
+		return stream(flux, DeepSearchProcessedEvent.class);
+	}
+
+	private Flux<ServerSentEvent<String>> stream(Flux<AbstractDeepSearchEvent> flux,
+			Class<? extends AbstractDeepSearchEvent> trailingType) {
+		return flux.map(entry -> {
+			GeboChatMessageEnvelope _envelope = null;
 			if (entry instanceof DeepSearchDocumentEvent documentEvent) {
-				return new GeboChatMessageEnvelope(
+				_envelope = new GeboChatMessageEnvelope(
 						new DeepSearchStep(new GResponseDocumentRef(documentEvent.getInputData()),
 								documentEvent.getOutputData().getFragment(), documentEvent.getProcessPercentage()));
 			} else if (entry instanceof DeepSearchProcessedEvent processedEvent) {
 				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(processedEvent.getOutputData());
-				envelop.setLastMessage(true);
-				return envelop;
+				_envelope = envelop;
+
 			} else if (entry instanceof DeepSearchErrorEvent errorEvent) {
 				GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
 				exceptionEnvelope.setContent(errorEvent.getOutputData());
-				exceptionEnvelope.setLastMessage(true);
-				return exceptionEnvelope;
+				_envelope = exceptionEnvelope;
+			} else if (entry instanceof DeepSearchChatResponseEvent chatResponseEvent) {
+				GeboChatMessageEnvelope envelop = new GeboChatMessageEnvelope(chatResponseEvent.getOutputData());
+				_envelope = envelop;
 			} else
 				throw new RuntimeException("The received type:" + entry.getClass().getName() + " is not supported yet");
+			_envelope.setLastMessage(trailingType.isAssignableFrom(entry.getClass()));
+			return _envelope;
 		}).onErrorResume(exc -> {
 			GeboChatMessageEnvelope exceptionEnvelope = new GeboChatMessageEnvelope();
 			GUserMessage userMessage = GUserMessage.errorMessage(ERROR_WHILE_RUNNING_DEEP_SEARCH, exc);
@@ -121,5 +135,12 @@ public class GeboDeepSearchController {
 			exceptionEnvelope.setLastMessage(true);
 			return Flux.just(exceptionEnvelope);
 		}).map(StreamUtil.mappingFunction).map(sequence -> ServerSentEvent.<String>builder().data(sequence).build());
+	}
+
+	@PostMapping(value = "streamDeepSearchWithChatContext", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Flux<ServerSentEvent<String>> streamDeepSearchWithChatContext(
+			@Valid @NotNull @RequestBody GeboChatRequest request) throws LLMConfigException {
+		Flux<AbstractDeepSearchEvent> flux = deepSearchService.searchAsync(request);
+		return stream(flux, DeepSearchChatResponseEvent.class);
 	}
 }

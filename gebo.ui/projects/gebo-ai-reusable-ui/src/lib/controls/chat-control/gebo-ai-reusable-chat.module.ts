@@ -49,6 +49,8 @@ import { MessageService } from "primeng/api";
 import { GeboAIUploadedDocumentRefComponent } from "./uploaded-document-ref.component";
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
 import { GeboAIGeneratedDocumentRefComponent } from "./llm-generated-document-ref.component";
+import { GeboAIDeepSearchModule } from "../deep-search-control/deep-search.module";
+import { SelectButtonModule } from 'primeng/selectbutton';
 console.log(
   '[GeboAIReusableChatModule] declarations =',
   GeboAIReusableChatComponent,
@@ -83,7 +85,9 @@ console.log(
     GeboAIViewTableModule,
     MarkdownModule.forChild(),
     GeboAIFieldTranslationContainerModule,
-    GeboAIUploadChatDocumentModule],
+    GeboAIUploadChatDocumentModule,
+    GeboAIDeepSearchModule,
+    SelectButtonModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
   provideMarkdown({
@@ -95,7 +99,7 @@ console.log(
       }
     }
   }), ReactiveRagChatService, MessageService],
-  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent,GeboAIChatInputShellComponent,GeboAIGeneratedDocumentRefComponent],
+  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAIRichResponseViewerComponent, GeboChatUserInfoComponent, GeboAIReusableChatComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent],
   exports: [GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

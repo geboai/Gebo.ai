@@ -9,6 +9,7 @@
  */
  -->
 <input #focusableTop readonly style="border: 0px solid white;">
+
 <div class="card flex justify-center">
     <p-toast  />
 </div>
@@ -160,7 +161,7 @@
     [loading]="loading" [(openSelectDocumentsWindow)]="openSelectDocumentsWindow"
     [(openedUploadDocumentsWindow)]="openedUploadDocumentsWindow"
     (newSessionCreatedOnUpload)="onNewSessionCreatedOnUpload($event)" (speechEvent)="onSpeechEvent($event)"
-    (messageSubmit)="onSumbit()" (messageSend)="sendMessage()">
+    (messageSubmit)="onSumbit()" (messageSend)="sendMessage()" (loadingChange)="loadingChatResponse=$event" (deepSearchChatRequest)="onExternalModuleRequest($event)" (deepsearchChatResponse)="onExternalModuleResponse($event)">
 </gebo-ai-chat-input-shell>
 <gebo-ai-chat-change-description [formGroup]="chatInfoFormGroup" [visible]="changeDescriptionDialogOpened"
     (cancelAction)="changeDescriptionDialogOpened=false"

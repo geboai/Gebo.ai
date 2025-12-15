@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 import { DeepSearchDocumentAnalisysResultStep } from '../model/deepSearchDocumentAnalisysResultStep';
 import { DeepSearchRequest } from '../model/deepSearchRequest';
 import { DeepSearchResponse } from '../model/deepSearchResponse';
+import { GeboChatRequest } from '../model/geboChatRequest';
 import { PageDeepSearchDocumentAnalisysResultStep } from '../model/pageDeepSearchDocumentAnalisysResultStep';
 import { PageDeepSearchRequest } from '../model/pageDeepSearchRequest';
 import { ServerSentEventString } from '../model/serverSentEventString';
@@ -485,6 +486,53 @@ export class GeboDeepSearchControllerService {
         }
 
         return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDeepSearchController/streamDeepSearch`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public streamDeepSearchWithChatContext(body: GeboChatRequest, observe?: 'body', reportProgress?: boolean): Observable<Array<ServerSentEventString>>;
+    public streamDeepSearchWithChatContext(body: GeboChatRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ServerSentEventString>>>;
+    public streamDeepSearchWithChatContext(body: GeboChatRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ServerSentEventString>>>;
+    public streamDeepSearchWithChatContext(body: GeboChatRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling streamDeepSearchWithChatContext.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/event-stream'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<ServerSentEventString>>('post',`${this.basePath}/api/users/GeboDeepSearchController/streamDeepSearchWithChatContext`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

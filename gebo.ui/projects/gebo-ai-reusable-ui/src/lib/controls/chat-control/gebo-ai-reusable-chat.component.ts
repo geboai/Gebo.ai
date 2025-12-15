@@ -28,7 +28,7 @@ import { ConfirmationService, ToastMessageOptions, MessageService, Confirmation 
 import { ScrollPanel } from "primeng/scrollpanel";
 import { forkJoin, Observable, of } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
-import {  ReactiveRagChatService } from "./reactive-chat.service";
+import { ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { ExtendedConfirmation, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 import { IGeboChatMessage } from "../../services/base-streaming.service";
@@ -112,7 +112,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Flag indicating if a chat response is being loaded
      */
-    private loadingChatResponse: boolean = false;
+    protected loadingChatResponse: boolean = false;
 
     /**
      * Flag indicating if model metadata is being loaded
@@ -296,7 +296,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
     /**
      * Flag to control visibility of the description change dialog
      */
-    changeDescriptionDialogOpened: boolean = false;
+    protected changeDescriptionDialogOpened: boolean = false;
 
     /**
      * Constructor - injects all required services
@@ -518,9 +518,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
 
                 this.confirmService.confirm(trconfirmation ? trconfirmation : confirmation);
                 try {
-                translateSubscription.unsubscribe();
-                }catch(e) {
-                    
+                    translateSubscription.unsubscribe();
+                } catch (e) {
+
                 }
 
             }
@@ -852,6 +852,22 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, GeboAIFie
         this.chatInfoFormGroup.patchValue(info);
         this.addedChatAction.emit(info);
     }
+    onExternalModuleRequest(request: GeboChatRequest) {
+        if (!this.interactions) {
+            this.interactions = [];
+        }
+        this.interactions.push({
+            request: request,
+            loading: false,
+        });
+    }
+    onExternalModuleResponse(response: GeboChatResponse) {
+        const interaction = this.interactions[this.interactions.length - 1];
+        if (!interaction.response) {
+            interaction.response = response;
+        }
+    }
+
     /**
      * Handles speech-to-text conversion events
      * 

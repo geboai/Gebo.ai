@@ -26,7 +26,6 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
-import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -62,60 +61,24 @@ public class DeepsearchWorker {
 	@Autowired
 	private IGRagDocumentsCachedDao ragDocumentsCachedDao;
 	@Autowired
-	private IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
-	@Autowired
 	private DocumentReferenceRepository documentRepo;
-	@Autowired
-	private KnowledgeBaseRepository knowledgeBaseRepository;
-	@Autowired
-	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
-	@Autowired
-	private DeepSearchRequestRepository requestsRepository;
-	@Autowired
-	private DeepSearchDocumentAnalisysResultStepRepository stepsRepository;
-	@Autowired
-	private DeepSearchResponseRepository responseRepository;
+
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
-			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos) {
+			DeepSearchState state, DeepSearchConfig configuration, UserInfos userInfos,
+			List<IGConfigurableEmbeddingModel> embeddingModels, IGConfigurableChatModel chatModel) {
 
 		if (request.getQuery() == null || request.getQuery().trim().length() == 0 || request.getKnowledgeBases() == null
 				|| request.getKnowledgeBases().isEmpty()) {
 			throw new IllegalStateException("Cannot run a deepsearch with no query or no knowledge bases list");
 		}
-		requestsRepository.save(request);
-		IGConfigurableChatModel chatModel = null;
-		GObjectRef<GBaseChatModelConfig> chatModelReference = configuration.getChatModelConfiguration();
-		if (chatModelReference != null) {
-			chatModel = chatModelsConfigDao.findByModelReference(chatModelReference);
-		}
-		if (chatModel == null) {
-			chatModel = chatModelsConfigDao.defaultHandler();
-		}
+
 		if (chatModel != null && request.getKnowledgeBases() != null && !request.getKnowledgeBases().isEmpty()) {
 			int tokensBudget = chatModel.getContextLength();
 
 			if (state.getDocumentSearchResults() == null) {
-				List<GKnowledgeBase> knowledgeBases = knowledgeBaseRepository.findAllById(request.getKnowledgeBases());
-				List<IGConfigurableEmbeddingModel> embeddingModels = new ArrayList<IGConfigurableEmbeddingModel>();
-				IGConfigurableEmbeddingModel defaultEmbeddingModel = embeddingModelsRuntimeDao.defaultHandler();
-				if (defaultEmbeddingModel != null) {
-					embeddingModels.add(defaultEmbeddingModel);
-				}
-				knowledgeBases.stream().map(x -> x.getEmbeddingModelReferences()).filter(y -> y != null && !y.isEmpty())
-						.forEach(modelsList -> {
-							modelsList.forEach(modelReference -> {
-								IGConfigurableEmbeddingModel model = embeddingModelsRuntimeDao
-										.findByModelReference(modelReference);
-								if (model != null && model != defaultEmbeddingModel) {
-									if (!embeddingModels.stream()
-											.anyMatch(x -> (x == model || model.getCode().equals(x.getCode())))) {
-										embeddingModels.add(model);
-									}
-								}
-							});
-						});
+
 				RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
 				for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
 					RagDocumentsCachedDaoResult semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(
@@ -184,8 +147,6 @@ public class DeepsearchWorker {
 						resultStep.setIndex(history.size());
 						resultStep.setDocumentCode(documentCode);
 						resultStep.setFragmentsCodes(currentProcessedFragments.stream().map(x -> x.getId()).toList());
-
-						stepsRepository.save(resultStep);
 						DeepSearchDocumentEvent event = new DeepSearchDocumentEvent();
 						event.setProcessPercentage(state.calculateProcessedPercent());
 						event.setInputData(docdata.get());
@@ -199,7 +160,6 @@ public class DeepsearchWorker {
 		}
 		DeepSearchProcessedEvent consolidatedResult = this.consolidateResult(chatModel, history, request, state,
 				configuration);
-		responseRepository.save(consolidatedResult.getOutputData());
 		return consolidatedResult;
 
 	}

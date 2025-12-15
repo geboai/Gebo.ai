@@ -1,4 +1,14 @@
-<div [ngClass]="'grid '+(interactions && interactions.length ? 'floating-chat-area' : 'floating-chat-area-middle')+' w-full '">
+<div *ngIf="currentDeepsearchChatRequest" class="deep-search-feedbacks-area grid w-full">
+    <div class="col-3 sm:col-1 md:col-1 lg:col-2 xl:col-3 xxl:col-3"></div>
+    <div class="col-6   sm:col-10 md:col-10 lg:col-8 xl:col-6 xxl:col-6 justify-content-center ">
+        <gebo-ai-deep-search-component [currentChatRequest]="currentDeepsearchChatRequest" [mode]="'progress-only'"
+            (deepSearchChatResponseReceived)="onDeepSearchChatResponseReceived($event)"
+            (errorOccurredEvent)="onErrorOccurred($event)"></gebo-ai-deep-search-component>
+    </div>
+    <div class="col-3 sm:col-1 md:col-1 lg:col-2 xl:col-3 xxl:col-3"></div>
+</div>
+<div
+    [ngClass]="'grid '+(interactions && interactions.length ? 'floating-chat-area' : 'floating-chat-area-middle')+' w-full '">
     <form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="w-full">
 
         <!-- wrapper centrato col box responsive -->
@@ -55,6 +65,8 @@
                             <textarea rows="3" pTextarea formControlName="query" class="w-full" gebo-ai-label
                                 id="QueryControl" placeholder="Write a message for the chat bot"
                                 (keydown.enter)="onSubmit()" [required]="true"></textarea>
+                            
+
                         </div>
 
                         <!-- DESTRA: audio + submit (stessa larghezza della sinistra) -->
@@ -72,7 +84,12 @@
                         </div>
 
                     </div>
-
+                    
+                    <div class="col-3  md:col-2 lg:col-2 xxl:col-2 flex justify-content-center  "></div>
+                    <div class="col-6   md:col-8 lg:col-8 xxl:col-8  flex justify-content-center" [formGroup]="chooseModeFormGroup">
+                        <p-selectbutton [options]="requestTypeOptions" formControlName="nextRequestMode" optionLabel="translation" optionValue="componentId" aria-labelledby="basic" />
+                    </div>
+                    <div class="col-3   md:col-2 lg:col-2 xxl:col-2  flex justify-content-center "></div> 
                 </div>
             </div>
             <div class="col-3 sm:col-1 md:col-1 lg:col-2 xl:col-3 xxl:col-3"></div>

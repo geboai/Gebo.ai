@@ -93,4 +93,5 @@ export * from "./lib/controls/field-host-component-iface/field-host-component-if
 
 export * from "./lib/controls/choose-llm-functions/choose-llm-functions.module";
 export * from "./lib/architecture/validation";
-
+export * from "./lib/services/base-streaming.service";
+export * from "./lib/controls/deep-search-control/deep-search.module";

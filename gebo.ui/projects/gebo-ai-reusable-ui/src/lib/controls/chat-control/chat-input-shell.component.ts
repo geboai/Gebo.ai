@@ -1,14 +1,16 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { GeboChatUserInfo, GUserChatInfo } from '@Gebo.ai/gebo-ai-rest-api';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo } from '@Gebo.ai/gebo-ai-rest-api';
+import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
+import { findMatchingTranlations, UIExistingText } from '../field-translation-container/text-language-resources';
 
 @Component({
   selector: 'gebo-ai-chat-input-shell',
   templateUrl: './chat-input-shell.component.html',
   styleUrls: ['./chat-input-shell.component.scss'],
-  standalone:false
+  standalone: false
 })
-export class GeboAIChatInputShellComponent {
+export class GeboAIChatInputShellComponent implements OnInit{
 
   @Input() interactions: any[] | null = null;
   @Input() formGroup!: FormGroup;
@@ -23,7 +25,7 @@ export class GeboAIChatInputShellComponent {
   @Input() capabilities: any;
   @Input() currentAudioTrack: any;
   @Input() loading = false;
-
+  @Output() loadingChange: EventEmitter<boolean> = new EventEmitter();
   // flags per le dialog
   @Input() openSelectDocumentsWindow = false;
   @Output() openSelectDocumentsWindowChange = new EventEmitter<boolean>();
@@ -36,19 +38,49 @@ export class GeboAIChatInputShellComponent {
   @Output() speechEvent = new EventEmitter<{ data: any; url: string }>();
   @Output() messageSubmit = new EventEmitter<void>();
   @Output() messageSend = new EventEmitter<void>();
+  @Output() deepSearchChatRequest: EventEmitter<GeboChatRequest> = new EventEmitter();
+  @Output() deepsearchChatResponse: EventEmitter<GeboChatResponse> = new EventEmitter();
 
+  protected currentDeepsearchChatRequest?: GeboChatRequest;
+  protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
+  protected requestTypeOptions:UIExistingText[]=[{moduleId:"GeboAIReusableChatModel",entityId:"GeboAIChatInputShellComponent",componentId:"standard-chat",key:"label",fieldId:"label",text:"Chat",translation:"Chat"},{moduleId:"GeboAIReusableChatModel",entityId:"GeboAIChatInputShellComponent",componentId:"deep-search",key:"label",fieldId:"label",text:"Deep search",translation:"Deep search"}];
+  protected chooseModeFormGroup:FormGroup=new FormGroup({
+    nextRequestMode:new FormControl()
+  });
+  constructor(private translationService:GeboAITranslationService) {
+    this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data=>{this.nextRequestMode=data;});
+    this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
+  }
+  ngOnInit(): void {
+    this.translationService.translateOnActualLanguage(this.requestTypeOptions).subscribe({
+       next:(resources)=>{
+        if (resources) {
+            const matching=findMatchingTranlations(this.requestTypeOptions,resources);
+            if (matching && matching.length===this.requestTypeOptions.length) {
+              this.requestTypeOptions=matching;
+            }
+        }
+       }
+    });
+  }
   onSubmit() {
-    if (this.formGroup?.invalid || this.loading) {
-      return;
-    }
-    this.messageSubmit.emit();
+    this.onSendClick();
   }
 
   onSendClick() {
     if (this.formGroup?.invalid || this.loading) {
       return;
     }
-    this.messageSend.emit();
+    if (this.nextRequestMode === "deep-search") {
+      const request: GeboChatRequest = this.formGroup.value;
+      this.deepSearchChatRequest.emit(request);
+      this.loadingChange.emit(true);
+      this.currentDeepsearchChatRequest = request;
+      this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
+      this.nextRequestMode="standard-chat";
+    } else {
+      this.messageSubmit.emit();
+    }
   }
 
   onNewSessionCreatedOnUploadInternal(evt: any) {
@@ -67,5 +99,16 @@ export class GeboAIChatInputShellComponent {
   openSelectDocsDialog() {
     this.openSelectDocumentsWindow = true;
     this.openSelectDocumentsWindowChange.emit(true);
+  }
+  onDeepSearchChatResponseReceived(event: GeboChatResponse) {
+    this.currentDeepsearchChatRequest = undefined;
+    this.deepsearchChatResponse.emit(event);
+    this.loading = false;
+    this.loadingChange.emit(false);
+  }
+  onErrorOccurred(event: any) {
+    this.currentDeepsearchChatRequest = undefined;
+    this.loading = false;
+    this.loadingChange.emit(false);
   }
 }

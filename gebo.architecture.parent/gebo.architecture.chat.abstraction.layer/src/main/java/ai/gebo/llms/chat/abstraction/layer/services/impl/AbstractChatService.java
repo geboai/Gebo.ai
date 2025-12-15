@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -113,6 +115,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 	final protected LLMGeneratedResourceRepository generatedResourceRepository;
 	final protected ChatHistoryConsolidationService historyConsolidationService;
+	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	/**
 	 * Retrieves chat model user information based on the provided model code.
@@ -269,8 +272,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			String responseText = callResponseObject.getText();
 			response.setQueryResponse((ResponseType) responseText);
 		} else {
-			ResponseType entityEntry = (ResponseType) configurableChatModel.structuredResponse(prompt, request.getQuery(), chatContext,
-					docs, rt);
+			ResponseType entityEntry = (ResponseType) configurableChatModel.structuredResponse(prompt,
+					request.getQuery(), chatContext, docs, rt);
 			response.setQueryResponse(entityEntry);
 		}
 		return response;
@@ -299,8 +302,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			List<Document> contextdocs, boolean chatHistoryConsolidation, int historySizeTarget)
 			throws LLMConfigException {
 
-		
-		
 		try {
 
 			final List<Document> docs = request.getDocuments() != null ? request.getDocuments().aiDocumentsList()
@@ -311,7 +312,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			}
 			IChatContext chatContext = createChatContext(context, history, allDocs);
 			Map<String, Object> toolsContext = chatContext.getToolsContext();
-			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, request.getQuery(), chatContext, docs);
+			Flux<ChatResponse> res = configurableChatModel.streamResponse(prompt, request.getQuery(), chatContext,
+					docs);
 			return composeFlux(res, context, request, response, userContext, toolsContext, chatHistoryConsolidation,
 					historySizeTarget);
 		} catch (Throwable th) {
@@ -476,6 +478,124 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			out.add(cf);
 		}
 		return out;
+	}
+
+	@Override
+	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response) {
+		String context = request.getUserChatContextCode();
+		if (context == null || context.trim().length() == 0)
+			throw new IllegalStateException("User chat context code cannot be null or empty");
+		Optional<GUserChatContext> contextData = userContextRepository.findById(context);
+		if (contextData.isEmpty()) {
+			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
+		}
+		if (request.getId() == null) {
+			throw new IllegalStateException("User request must have an id");
+		}
+		if (response.getId() == null) {
+			throw new IllegalStateException("Chat response must have an id");
+		}
+		response.setQuery(request.getQuery());
+		response.setUserChatContextCode(context);
+		GUserChatContext chatContext = contextData.get();
+		if (chatContext.getInteractions() != null) {
+			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
+		} else {
+			chatContext.setInteractions(new ArrayList<ChatInteractions>());
+		}
+		boolean addInteraction = false;
+		Optional<ChatInteractions> alredyInInteraction = chatContext.getInteractions().stream()
+				.filter(x -> x.getRequest().getId().equals(request.getId())).findFirst();
+		addInteraction = alredyInInteraction.isEmpty();
+		ChatInteractions interaction = addInteraction ? new ChatInteractions() : alredyInInteraction.get();
+		interaction.setRequest(request);
+		interaction.setRequestNTokens(tokenCountEstimator.estimate(request.getQuery()));
+		interaction.setResponse(response);
+		interaction.setResponseNTokens(tokenCountEstimator.estimate(response.getQueryResponse()));
+		if (addInteraction)
+			chatContext.getInteractions().add(interaction);
+		userContextRepository.save(chatContext);
+
+	}
+
+	@Override
+	public void addChatRequestToUserContext(GeboChatRequest request) {
+		String context = request.getUserChatContextCode();
+		if (context == null || context.trim().length() == 0)
+			throw new IllegalStateException("User chat context code cannot be null or empty");
+		Optional<GUserChatContext> contextData = userContextRepository.findById(context);
+		if (contextData.isEmpty()) {
+			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
+		}
+		if (request.getId() == null) {
+			throw new IllegalStateException("User request must have an id");
+		}
+		GUserChatContext chatContext = contextData.get();
+		addChatRequestToUserContext(request, chatContext);
+
+	}
+
+	@Override
+	public void addChatInteractionToUserContext(GeboChatRequest request, GeboChatResponse response,
+			GUserChatContext chatContext) {
+		String context = request.getUserChatContextCode();
+		if (context == null || context.trim().length() == 0)
+			throw new IllegalStateException("User chat context code cannot be null or empty");
+		if (request.getId() == null) {
+			throw new IllegalStateException("User request must have an id");
+		}
+		if (response.getId() == null) {
+			throw new IllegalStateException("Chat response must have an id");
+		}
+		if (chatContext.getInteractions() != null) {
+			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
+		} else {
+			chatContext.setInteractions(new ArrayList<ChatInteractions>());
+		}
+		boolean addInteraction = false;
+		Optional<ChatInteractions> alredyInInteraction = chatContext.getInteractions().stream()
+				.filter(x -> x.getRequest().getId().equals(request.getId())).findFirst();
+		addInteraction = alredyInInteraction.isEmpty();
+		ChatInteractions interaction = addInteraction ? new ChatInteractions() : alredyInInteraction.get();
+		interaction.setRequest(request);
+		interaction.setRequestNTokens(tokenCountEstimator.estimate(request.getQuery()));
+		interaction.setResponse(response);
+		interaction.setResponseNTokens(tokenCountEstimator.estimate(response.getQueryResponse()));
+		if (addInteraction)
+			chatContext.getInteractions().add(interaction);
+		userContextRepository.save(chatContext);
+	}
+
+	@Override
+	public void addChatRequestToUserContext(GeboChatRequest request, GUserChatContext chatContext) {
+		if (chatContext.getInteractions() != null) {
+			chatContext.setInteractions(new ArrayList<ChatInteractions>(chatContext.getInteractions()));
+		} else {
+			chatContext.setInteractions(new ArrayList<ChatInteractions>());
+		}
+		ChatInteractions interaction = new ChatInteractions();
+		interaction.setRequest(request);
+		interaction.setRequestNTokens(tokenCountEstimator.estimate(request.getQuery()));
+		chatContext.getInteractions().add(interaction);
+		userContextRepository.save(chatContext);
+	}
+
+	@Override
+	public GeboChatResponse createUnprocessedResponse(GeboChatRequest request) {
+		String context = request.getUserChatContextCode();
+		if (context == null || context.trim().length() == 0)
+			throw new IllegalStateException("User chat context code cannot be null or empty");
+		Optional<GUserChatContext> contextData = userContextRepository.findById(context);
+		if (contextData.isEmpty()) {
+			throw new IllegalStateException("User chat context code cannot refer to a non existent chat history");
+		}
+		GeboChatResponse response = new GeboChatResponse();
+		if (response.getId() == null) {
+			response.setId(UUID.randomUUID().toString());
+		}
+		response.setQuery(request.getQuery());
+		response.setUserChatContextCode(context);
+		return response;
 	}
 
 }
