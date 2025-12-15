@@ -151,6 +151,7 @@ public class DeepsearchWorker {
 						event.setProcessPercentage(state.calculateProcessedPercent());
 						event.setInputData(docdata.get());
 						event.setOutputData(resultStep);
+						
 						return event;
 					}
 				}

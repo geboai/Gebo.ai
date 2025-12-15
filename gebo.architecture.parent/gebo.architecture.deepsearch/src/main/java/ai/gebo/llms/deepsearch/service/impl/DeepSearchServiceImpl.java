@@ -92,6 +92,7 @@ public class DeepSearchServiceImpl implements IGDeepSearchService {
 	public Flux<AbstractDeepSearchEvent> searchAsync(DeepSearchRequest request) throws LLMConfigException {
 		final UserInfos userInfos = securityService.getCurrentUser();
 		request.setUsername(userInfos.getUsername());
+		requestsRepository.save(request);
 		final List<DeepSearchConfig> data = configRepository.findAll();
 		final DeepSearchConfig configuration = data != null && data.size() > 0 ? data.get(0) : defaultDeepsearchConfig;
 		List<IGConfigurableEmbeddingModel> embeddingModels = new ArrayList<IGConfigurableEmbeddingModel>();
@@ -129,11 +130,11 @@ public class DeepSearchServiceImpl implements IGDeepSearchService {
 					"No chat model configured for deep search nor default chat model is configured"));
 			return Flux.just(errorEvent);
 		}
-		return Flux.create(sink -> {
+		Flux<AbstractDeepSearchEvent> flux = Flux.create(sink -> {
 
-			//AtomicBoolean cancelled = new AtomicBoolean(false);
-			//sink.onCancel(() -> cancelled.set(true));
-			//sink.onDispose(() -> cancelled.set(true));
+			// AtomicBoolean cancelled = new AtomicBoolean(false);
+			// sink.onCancel(() -> cancelled.set(true));
+			// sink.onDispose(() -> cancelled.set(true));
 
 			Future<?> future = deepSearchExecutor.submit(() -> {
 				try {
@@ -146,16 +147,20 @@ public class DeepSearchServiceImpl implements IGDeepSearchService {
 					do {
 						thisStepResult = deepSearchWorker.nextStep(request, history, state, configuration, userInfos,
 								embeddingModels, finalChatModel);
-						// Emit “started”
+
 						if (thisStepResult != null) {
 							sink.next(thisStepResult);
+							if (thisStepResult instanceof DeepSearchDocumentEvent) {
+								history.add(thisStepResult);
+							}
 						} else {
 							sink.complete();
 						}
 						if (thisStepResult instanceof DeepSearchProcessedEvent end) {
 							sink.complete();
 						}
-					} while (thisStepResult == null || thisStepResult instanceof DeepSearchProcessedEvent);
+					} while (thisStepResult != null && !(thisStepResult instanceof DeepSearchProcessedEvent
+							|| thisStepResult instanceof DeepSearchErrorEvent));
 
 				} catch (Throwable t) {
 					LOGGER.error("Error in searchAsync(...)", t);
@@ -171,7 +176,17 @@ public class DeepSearchServiceImpl implements IGDeepSearchService {
 			// if the downstream disposes, cancel the worker
 			sink.onDispose(() -> future.cancel(true));
 
-		}, OverflowStrategy.BUFFER); // choose strategy carefully (see note below)
+		}, OverflowStrategy.BUFFER);
+
+		return flux.map(x -> {
+			if (x instanceof DeepSearchDocumentEvent docEvent) {
+				stepsRepository.save(docEvent.getOutputData());
+			}
+			if (x instanceof DeepSearchProcessedEvent processed) {
+				responseRepository.save(processed.getOutputData());
+			}
+			return x;
+		});
 	}
 
 	@Override
