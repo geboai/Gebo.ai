@@ -8,8 +8,6 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tokenizer.JTokkitTokenCountEstimator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentFragment;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentReferenceItem;
 import ai.gebo.llms.abstraction.layer.model.RagDocumentsCachedDaoResult;
+import ai.gebo.llms.abstraction.layer.services.BaseLlmsInvokingService;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
@@ -48,11 +48,10 @@ import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
 @Service
-public class DeepsearchWorker {
+public class DeepsearchWorker extends BaseLlmsInvokingService{
+	
+
 	private static Logger LOGGER = LoggerFactory.getLogger(DeepsearchWorker.class);
-	private static final String QUESTION = "question";
-	private static final String CONSOLIDATED = "consolidated";
-	private static final String DOCUMENTS = "documents";
 	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
 	private static final String END_DOCUMENT_EXTRACTION = "[END DOCUMENT EXTRACTION]\r\n";
 	private static final String DOCUMENT_EXTRACTION_BEGIN = "[BEGIN DOCUMENT EXTRACTION]\r\n";
@@ -62,7 +61,9 @@ public class DeepsearchWorker {
 	private IGRagDocumentsCachedDao ragDocumentsCachedDao;
 	@Autowired
 	private DocumentReferenceRepository documentRepo;
-
+	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao, IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
+		super(chatModelsConfigDao, embeddingModelsRuntimeDao);		
+	}
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
@@ -170,27 +171,6 @@ public class DeepsearchWorker {
 			}
 		}
 		return consolidatedDaoResult;
-	}
-
-	private String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
-			String question) {
-		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		promptTemplate.add(DOCUMENTS, documents);
-		promptTemplate.add(QUESTION, question);
-		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
-		String result = response.getResult().getOutput().getText();
-		return result;
-	}
-
-	private String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel, String prompt,
-			Object documents, String question, String consolidated) {
-		PromptTemplate promptTemplate = new PromptTemplate(prompt);
-		promptTemplate.add(CONSOLIDATED, consolidated);
-		promptTemplate.add(DOCUMENTS, documents);
-		promptTemplate.add(QUESTION, question);
-		ChatResponse response = chatModel.getChatModel().call(promptTemplate.create());
-		String result = response.getResult().getOutput().getText();
-		return result;
 	}
 
 	private DeepSearchProcessedEvent consolidateResult(IGConfigurableChatModel chatModel,
