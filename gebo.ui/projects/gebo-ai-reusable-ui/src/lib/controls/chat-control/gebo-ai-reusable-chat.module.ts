@@ -50,7 +50,9 @@ import { GeboAIUploadedDocumentRefComponent } from "./uploaded-document-ref.comp
 import { GeboAIChatInputShellComponent } from "./chat-input-shell.component";
 import { GeboAIGeneratedDocumentRefComponent } from "./llm-generated-document-ref.component";
 import { GeboAIDeepSearchModule } from "../deep-search-control/deep-search.module";
-import { SelectButtonModule } from 'primeng/selectbutton';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { PopoverModule } from 'primeng/popover';
+import { ContextMenuModule } from "primeng/contextmenu";
 console.log(
   '[GeboAIReusableChatModule] declarations =',
   GeboAIReusableChatComponent,
@@ -86,8 +88,7 @@ console.log(
     MarkdownModule.forChild(),
     GeboAIFieldTranslationContainerModule,
     GeboAIUploadChatDocumentModule,
-    GeboAIDeepSearchModule,
-    SelectButtonModule],
+    GeboAIDeepSearchModule, PopoverModule, TieredMenuModule, ContextMenuModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
   provideMarkdown({

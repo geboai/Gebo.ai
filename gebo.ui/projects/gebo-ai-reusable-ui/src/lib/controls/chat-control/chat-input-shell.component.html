@@ -40,56 +40,39 @@
                                 [userSessionCode]="userChatContextCode"
                                 (newSessionCreatedOnUpload)="onNewSessionCreatedOnUploadInternal($event)">
                             </gebo-ai-upload-chat-documents-files>
+                            <div class="chatbox-frame">
+                                <div class="chatbox-left" #chatboxLeft [formGroup]="chooseModeFormGroup">
+
+
+                                    <p-button #ContextMenuBtn id="ContextMenuBtn" icon="pi pi-plus-circle" gebo-ai-label
+                                        (click)="contextAddChatBehaviorMenu1.toggle($event)" [rounded]="true"
+                                        [text]="true" title="Add content or modify search behavior">
+                                        
+                                    </p-button>
+                                        <p-contextMenu   #contextAddChatBehaviorMenu1 [model]="addBehaviorsMenu" appendTo="body"></p-contextMenu>
+                                    
+                                </div>
+                                <textarea rows="3" pTextarea formControlName="query" class="chatbox-input" gebo-ai-label
+                                    id="QueryControl" placeholder="Write a message for the chat bot"
+                                    (keydown.enter)="onSubmit()" [required]="true"></textarea>
+                                <div class="chatbox-right">
+                                    <gebo-ai-audio-component class="flex align-items-center"
+                                        [disabled]="capabilities?.supportsTranscript !== true || loading"
+                                        (onAudioTrack)="onSpeechEventInternal($event)"
+                                        [playAudioTrack]="currentAudioTrack" [viewLabels]="true">
+                                    </gebo-ai-audio-component>
+
+                                    <p-button id="SubmiQuestion" (onClick)="onSendClick()" gebo-ai-label
+                                        [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
+                                        type="submit" title="Submit your question" [text]="false">
+                                    </p-button>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
 
-                    <!-- Riga inferiore: sinistra / textarea / destra perfettamente simmetriche -->
-                    <div class="grid align-items-center w-full">
 
-                        <!-- SINISTRA: bottoni upload & browse docs -->
-                        <div class="col-3  md:col-2 lg:col-2 xxl:col-2 flex justify-content-center  mb-2 gap-2">
-                            <p-button id="UploadFileBtn" [text]="false" [rounded]="true" gebo-ai-label
-                                icon="pi pi-cloud-upload" title="Upload a file to chat or work with"
-                                (onClick)="openUploadDialog()" [disabled]="loading">
-                            </p-button>
-
-                            <p-button id="ChatWithDocsBtnNew" [text]="true" gebo-ai-label icon="pi pi-search"
-                                title="Browse or search and select documents to chat with"
-                                (onClick)="openSelectDocsDialog()" [disabled]="loading">
-                            </p-button>
-                        </div>
-
-                        <!-- CENTRO: textarea -->
-                        <div class="col-6   md:col-8 lg:col-8 xxl:col-8  flex justify-content-center  mb-2 gap-2">
-                            <textarea rows="3" pTextarea formControlName="query" class="w-full" gebo-ai-label
-                                id="QueryControl" placeholder="Write a message for the chat bot"
-                                (keydown.enter)="onSubmit()" [required]="true"></textarea>
-                            
-
-                        </div>
-
-                        <!-- DESTRA: audio + submit (stessa larghezza della sinistra) -->
-                        <div class="col-3   md:col-2 lg:col-2 xxl:col-2  flex justify-content-center mb-2  gap-2">
-                            <gebo-ai-audio-component class="flex align-items-center"
-                                [disabled]="capabilities?.supportsTranscript !== true || loading"
-                                (onAudioTrack)="onSpeechEventInternal($event)" [playAudioTrack]="currentAudioTrack"
-                                [viewLabels]="true">
-                            </gebo-ai-audio-component>
-
-                            <p-button id="SubmiQuestion" (onClick)="onSendClick()" gebo-ai-label
-                                [disabled]="formGroup.invalid || loading" icon="pi pi-arrow-up" [rounded]="true"
-                                type="submit" title="Submit your question" [text]="false">
-                            </p-button>
-                        </div>
-
-                    </div>
-                    
-                    <div class="col-3  md:col-2 lg:col-2 xxl:col-2 flex justify-content-center  "></div>
-                    <div class="col-6   md:col-8 lg:col-8 xxl:col-8  flex justify-content-center" [formGroup]="chooseModeFormGroup">
-                        <p-selectbutton [options]="requestTypeOptions" formControlName="nextRequestMode" optionLabel="translation" optionValue="componentId" aria-labelledby="basic" />
-                    </div>
-                    <div class="col-3   md:col-2 lg:col-2 xxl:col-2  flex justify-content-center "></div> 
                 </div>
             </div>
             <div class="col-3 sm:col-1 md:col-1 lg:col-2 xl:col-3 xxl:col-3"></div>

@@ -11,18 +11,18 @@
   position: fixed;
   left: 0px;
   bottom: 3%;
-  z-index: 8000;
+  z-index: 1000;
 }
 
 .floating-chat-area-middle {
   left: 0px;
   position: fixed;
   bottom: 50%;
-  z-index: 8000;
+  z-index: 1000;
 }
 
 .chat-area {
-  background-color: aliceblue;
+  background-color: white;
   //background-color: white;
   border: 1px solid #146084;
   border-radius: 15px;
@@ -30,5 +30,91 @@
 .deep-search-feedbacks-area{
    position: fixed;
    bottom: 70%;
-   z-index: 8000;
+   z-index: 1000;
+}
+.first-plan {
+  z-index: 8000;
+}
+.chatbox-frame {
+  position: relative;
+  width: 100%;
+
+  /* QUI è dove vive il bordo (non sulla textarea) */
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  background: var(--surface-0);
+
+  /* padding verticale “di base” */
+  padding: 0.6rem 0.75rem;
+
+  /* opzionale: look più “chat” */
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+.chatbox-frame:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 18%, transparent);
+}
+
+.chatbox-input {
+  width: 100%;
+  resize: none;
+  background-color: white;
+  /* IMPORTANTISSIMO: la textarea non deve più disegnare il suo bordo */
+  border: 0 !important;
+  outline: none !important;
+  background: white !important;
+  box-shadow: none !important;
+
+  /* padding interno per lasciare spazio ai pulsanti DENTRO */
+  padding-left: 5.6rem;   // spazio per lente + plus/menu
+  padding-right: 5.6rem;  // spazio per audio + send
+
+  /* allineamento testo */
+  line-height: 1.35;
+  min-height: 3.2rem;
+}
+
+/* Pulsanti INSIDE: assoluti nel wrapper */
+.chatbox-left,
+.chatbox-right {
+  position: absolute;
+  top: 0.55rem;     /* regola per centrare verticalmente */
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  z-index: 2;
+}
+
+.chatbox-left { left: 0.5rem; }
+.chatbox-right { right: 0.5rem; }
+
+/* Bottoni stile “chip” */
+.icon-btn {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 999px;
+}
+
+/* Splitbutton: forziamo altezza coerente */
+.split-btn :deep(.p-splitbutton),
+.split-btn :deep(.p-button) {
+  height: 2.2rem;
+}
+
+/* Disabled state */
+.chatbox-disabled {
+  opacity: 0.8;
+}
+
+/* Mobile: riduci un pelo i padding se vuoi */
+@media (max-width: 480px) {
+  .chatbox-input {
+    padding-left: 5.0rem;
+    padding-right: 5.0rem;
+  }
+}
+.p-menu-overlay,
+.p-contextmenu {
+  z-index: 20000 !important;
 }

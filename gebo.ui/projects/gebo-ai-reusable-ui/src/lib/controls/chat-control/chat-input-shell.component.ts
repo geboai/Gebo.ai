@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
 import { findMatchingTranlations, UIExistingText } from '../field-translation-container/text-language-resources';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'gebo-ai-chat-input-shell',
@@ -10,7 +11,7 @@ import { findMatchingTranlations, UIExistingText } from '../field-translation-co
   styleUrls: ['./chat-input-shell.component.scss'],
   standalone: false
 })
-export class GeboAIChatInputShellComponent implements OnInit{
+export class GeboAIChatInputShellComponent implements OnInit {
 
   @Input() interactions: any[] | null = null;
   @Input() formGroup!: FormGroup;
@@ -43,24 +44,46 @@ export class GeboAIChatInputShellComponent implements OnInit{
 
   protected currentDeepsearchChatRequest?: GeboChatRequest;
   protected nextRequestMode: "standard-chat" | "deep-search" = "standard-chat";
-  protected requestTypeOptions:UIExistingText[]=[{moduleId:"GeboAIReusableChatModel",entityId:"GeboAIChatInputShellComponent",componentId:"standard-chat",key:"label",fieldId:"label",text:"Chat",translation:"Chat"},{moduleId:"GeboAIReusableChatModel",entityId:"GeboAIChatInputShellComponent",componentId:"deep-search",key:"label",fieldId:"label",text:"Deep search",translation:"Deep search"}];
-  protected chooseModeFormGroup:FormGroup=new FormGroup({
-    nextRequestMode:new FormControl()
+  protected requestTypeOptions: UIExistingText[] = [{ moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "standard-chat", key: "label", fieldId: "label", text: "Chat", translation: "Chat" }, { moduleId: "GeboAIReusableChatModel", entityId: "GeboAIChatInputShellComponent", componentId: "deep-search", key: "label", fieldId: "label", text: "Deep search", translation: "Deep search" }];
+  protected chooseModeFormGroup: FormGroup = new FormGroup({
+    nextRequestMode: new FormControl()
   });
-  constructor(private translationService:GeboAITranslationService) {
-    this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data=>{this.nextRequestMode=data;});
+  constructor(private translationService: GeboAITranslationService) {
+    this.chooseModeFormGroup.controls["nextRequestMode"].valueChanges.subscribe(data => { this.nextRequestMode = data; });
     this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
   }
+  addBehaviorsMenu: MenuItem[] = [{
+    id: "UploadFileMenuItem",
+    icon: "pi pi-cloud-upload",
+    label: "Upload file(s)",
+    command: (event) => {
+      this.openUploadDialog();
+    }
+  }, {
+    id: "ChatWithDocsMenuItem",
+    icon: "pi pi-search",
+    label: "Browse/search company file(s)",
+    command: (event) => {
+      this.openSelectDocsDialog();
+    }
+  }, {
+    id: "DeepSearchItem",
+    icon: "pi pi-search-plus",
+    label: "Deep search",
+    command: (event) => {
+      this.nextRequestMode = "deep-search";
+    }
+  }];
   ngOnInit(): void {
     this.translationService.translateOnActualLanguage(this.requestTypeOptions).subscribe({
-       next:(resources)=>{
+      next: (resources) => {
         if (resources) {
-            const matching=findMatchingTranlations(this.requestTypeOptions,resources);
-            if (matching && matching.length===this.requestTypeOptions.length) {
-              this.requestTypeOptions=matching;
-            }
+          const matching = findMatchingTranlations(this.requestTypeOptions, resources);
+          if (matching && matching.length === this.requestTypeOptions.length) {
+            this.requestTypeOptions = matching;
+          }
         }
-       }
+      }
     });
   }
   onSubmit() {
@@ -76,8 +99,10 @@ export class GeboAIChatInputShellComponent implements OnInit{
       this.deepSearchChatRequest.emit(request);
       this.loadingChange.emit(true);
       this.currentDeepsearchChatRequest = request;
+      this.formGroup.controls["query"].setValue(null);
+      this.formGroup.controls["userUploadedContents"].setValue([]);
       this.chooseModeFormGroup.controls["nextRequestMode"].setValue("standard-chat");
-      this.nextRequestMode="standard-chat";
+      this.nextRequestMode = "standard-chat";
     } else {
       this.messageSubmit.emit();
     }
