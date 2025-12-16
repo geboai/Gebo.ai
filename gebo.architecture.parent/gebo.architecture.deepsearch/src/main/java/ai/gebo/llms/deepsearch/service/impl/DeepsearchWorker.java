@@ -79,28 +79,8 @@ public class DeepsearchWorker {
 
 			if (state.getDocumentSearchResults() == null) {
 
-				RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
-				for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
-					RagDocumentsCachedDaoResult semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(
-							request.getQuery(), configuration.getRagQueryOptions(), request.getKnowledgeBases(),
-							embeddingModel, configuration.getFirstHopSimilarityThreashold(),
-							configuration.getSecondHopSimilarityThreashold(), userInfos);
-					consolidatedDaoResult = RagDocumentsCachedDaoResult.join(semanticDaoResult, consolidatedDaoResult);
-				}
-
-				if (graphRagSearchService != null) {
-					try {
-						List<KnowledgeGraphSearchResult> graphRagResult = graphRagSearchService.knowledgeGraphSearch(
-								request.getQuery(), request.getKnowledgeBases(),
-								configuration.getGraphRagTopN().intValue());
-						RagDocumentsCachedDaoResult graphragDocumentsResult = graphRagSearchService
-								.toRagDocumentsCachedDaoResult(graphRagResult);
-						consolidatedDaoResult = RagDocumentsCachedDaoResult.join(consolidatedDaoResult,
-								graphragDocumentsResult);
-					} catch (LLMConfigException e) {
-						LOGGER.error("Error calling the graphrag logic", e);
-					}
-				}
+				RagDocumentsCachedDaoResult consolidatedDaoResult = getSearchResults(request, configuration, userInfos,
+						embeddingModels);
 				state.setDocumentSearchResults(consolidatedDaoResult);
 				state.setFragmentsCount(consolidatedDaoResult.countFragments());
 			}
@@ -151,7 +131,7 @@ public class DeepsearchWorker {
 						event.setProcessPercentage(state.calculateProcessedPercent());
 						event.setInputData(docdata.get());
 						event.setOutputData(resultStep);
-						
+
 						return event;
 					}
 				}
@@ -163,6 +143,33 @@ public class DeepsearchWorker {
 				configuration);
 		return consolidatedResult;
 
+	}
+
+	private RagDocumentsCachedDaoResult getSearchResults(DeepSearchRequest request, DeepSearchConfig configuration,
+			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels) {
+		RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
+		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
+			RagDocumentsCachedDaoResult semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(
+					request.getQuery(), configuration.getRagQueryOptions(), request.getKnowledgeBases(), embeddingModel,
+					configuration.getFirstHopSimilarityThreashold(), configuration.getSecondHopSimilarityThreashold(),
+					userInfos);
+			consolidatedDaoResult = RagDocumentsCachedDaoResult.join(semanticDaoResult, consolidatedDaoResult);
+		}
+
+		if (graphRagSearchService != null && graphRagSearchService.isConfigured(null)) {
+			try {
+
+				List<KnowledgeGraphSearchResult> graphRagResult = graphRagSearchService.knowledgeGraphSearch(
+						request.getQuery(), request.getKnowledgeBases(), configuration.getGraphRagTopN().intValue());
+				RagDocumentsCachedDaoResult graphragDocumentsResult = graphRagSearchService
+						.toRagDocumentsCachedDaoResult(graphRagResult);
+				consolidatedDaoResult = RagDocumentsCachedDaoResult.join(consolidatedDaoResult,
+						graphragDocumentsResult);
+			} catch (LLMConfigException e) {
+				LOGGER.error("Error calling the graphrag logic", e);
+			}
+		}
+		return consolidatedDaoResult;
 	}
 
 	private String callLLMWithDocuments(IGConfigurableChatModel chatModel, String prompt, Object documents,
@@ -193,39 +200,44 @@ public class DeepsearchWorker {
 		int tokens = 0;
 		String consolidated = "";
 		StringBuffer fragments = new StringBuffer();
-		List<DeepSearchDocumentAnalisysResultStep> steps = new ArrayList<DeepSearchDocumentAnalisysResultStep>();
-		for (AbstractDeepSearchEvent event : history) {
-			if (event instanceof DeepSearchDocumentEvent docEvent) {
-				steps.add(docEvent.getOutputData());
-				String actualFragment = docEvent.getOutputData().getFragment();
-				GDocumentReference document = docEvent.getInputData();
-				int length = tokenEstimator.estimate(actualFragment);
-				if (tokens + length >= tokensBudget) {
+		if (!history.isEmpty()) {
+			List<DeepSearchDocumentAnalisysResultStep> steps = new ArrayList<DeepSearchDocumentAnalisysResultStep>();
+			for (AbstractDeepSearchEvent event : history) {
+				if (event instanceof DeepSearchDocumentEvent docEvent) {
+					steps.add(docEvent.getOutputData());
+					String actualFragment = docEvent.getOutputData().getFragment();
+					GDocumentReference document = docEvent.getInputData();
+					int length = tokenEstimator.estimate(actualFragment);
+					if (tokens + length >= tokensBudget) {
 
-					consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
-							configuration.getConsolidationPrompt(), fragments.toString(), request.getQuery(),
-							consolidated);
-					fragments = new StringBuffer();
-					tokens = 0;
+						consolidated = callLLMWithDocumentsAndConsolidation(chatModel,
+								configuration.getConsolidationPrompt(), fragments.toString(), request.getQuery(),
+								consolidated);
+						fragments = new StringBuffer();
+						tokens = 0;
 
+					}
+
+					fragments.append(DOCUMENT_EXTRACTION_BEGIN);
+					fragments.append(DOCUMENT_NAME + document.getName());
+					fragments.append(actualFragment);
+					fragments.append(END_DOCUMENT_EXTRACTION);
+					tokens += length;
 				}
-
-				fragments.append(DOCUMENT_EXTRACTION_BEGIN);
-				fragments.append(DOCUMENT_NAME + document.getName());
-				fragments.append(actualFragment);
-				fragments.append(END_DOCUMENT_EXTRACTION);
-				tokens += length;
 			}
-		}
-		if (!fragments.isEmpty()) {
-			consolidated = callLLMWithDocumentsAndConsolidation(chatModel, configuration.getConsolidationPrompt(),
-					fragments.toString(), request.getQuery(), consolidated);
+			if (!fragments.isEmpty()) {
+				consolidated = callLLMWithDocumentsAndConsolidation(chatModel, configuration.getConsolidationPrompt(),
+						fragments.toString(), request.getQuery(), consolidated);
+			}
+		} else {
+			consolidated = "No relevant information found during deep search in knowledge bases, try using standard chat features";
 		}
 		DeepSearchProcessedEvent outValue = new DeepSearchProcessedEvent();
 		outValue.setInputData(request);
 		DeepSearchResponse response = new DeepSearchResponse();
 		response.setDeepsearchCode(request.getCode());
 		response.setResponse(consolidated);
+		response.setSearchResultsEmpty(history.isEmpty());
 		outValue.setOutputData(response);
 		outValue.setProcessPercentage(100.0);
 		return outValue;

@@ -18,6 +18,8 @@ public class DeepSearchResponse extends GBaseObject {
 	String deepsearchCode = null;
 	@NotNull
 	String response = null;
+	Boolean searchResultsEmpty = null;
+
 	public DeepSearchResponse() {
 		this.setCode(UUID.randomUUID().toString());
 	}
