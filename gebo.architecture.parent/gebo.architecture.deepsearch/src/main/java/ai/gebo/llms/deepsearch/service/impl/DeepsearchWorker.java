@@ -33,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.services.IGRagDocumentsCachedDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.deepsearch.model.AbstractDeepSearchEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchConfig;
+import ai.gebo.llms.deepsearch.model.DeepSearchConfig.SearchType;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentAnalisysResultStep;
 import ai.gebo.llms.deepsearch.model.DeepSearchDocumentEvent;
 import ai.gebo.llms.deepsearch.model.DeepSearchErrorEvent;
@@ -48,8 +49,7 @@ import ai.gebo.model.base.GObjectRef;
 import ai.gebo.security.repository.UserRepository.UserInfos;
 
 @Service
-public class DeepsearchWorker extends BaseLlmsInvokingService{
-	
+public class DeepsearchWorker extends BaseLlmsInvokingService {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(DeepsearchWorker.class);
 	private static final String DOCUMENT_NAME = "DOCUMENT NAME:";
@@ -61,9 +61,12 @@ public class DeepsearchWorker extends BaseLlmsInvokingService{
 	private IGRagDocumentsCachedDao ragDocumentsCachedDao;
 	@Autowired
 	private DocumentReferenceRepository documentRepo;
-	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao, IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
-		super(chatModelsConfigDao, embeddingModelsRuntimeDao);		
+
+	public DeepsearchWorker(IGChatModelRuntimeConfigurationDao chatModelsConfigDao,
+			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao) {
+		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 	}
+
 	private static final JTokkitTokenCountEstimator tokenEstimator = new JTokkitTokenCountEstimator();
 
 	public AbstractDeepSearchEvent nextStep(DeepSearchRequest request, List<AbstractDeepSearchEvent> history,
@@ -150,10 +153,26 @@ public class DeepsearchWorker extends BaseLlmsInvokingService{
 			UserInfos userInfos, List<IGConfigurableEmbeddingModel> embeddingModels) {
 		RagDocumentsCachedDaoResult consolidatedDaoResult = new RagDocumentsCachedDaoResult();
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
-			RagDocumentsCachedDaoResult semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(
-					request.getQuery(), configuration.getRagQueryOptions(), request.getKnowledgeBases(), embeddingModel,
-					configuration.getFirstHopSimilarityThreashold(), configuration.getSecondHopSimilarityThreashold(),
-					userInfos);
+			RagDocumentsCachedDaoResult semanticDaoResult = new RagDocumentsCachedDaoResult();
+			SearchType searchType = configuration.getSearchType();
+			if (searchType == null) {
+				searchType = SearchType.MULTI_HOP;
+			}
+			switch (searchType) {
+			case MULTI_HOP: {
+				semanticDaoResult = ragDocumentsCachedDao.multiHopSemanticSearch(request.getQuery(),
+						configuration.getRagQueryOptions(), request.getKnowledgeBases(), embeddingModel,
+						configuration.getFirstHopSimilarityThreashold(),
+						configuration.getSecondHopSimilarityThreashold(), userInfos);
+			}
+				break;
+			case SINGLE_HOP: {
+				semanticDaoResult = ragDocumentsCachedDao.semanticSearch(request.getQuery(),
+						configuration.getRagQueryOptions(), request.getKnowledgeBases(), embeddingModel, userInfos);
+			}
+				break;
+			}
+
 			consolidatedDaoResult = RagDocumentsCachedDaoResult.join(semanticDaoResult, consolidatedDaoResult);
 		}
 

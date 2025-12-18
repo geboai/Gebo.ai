@@ -122,10 +122,10 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 		final UserInfos userInfos = securityService.getCurrentUser();
 		request.setUsername(userInfos.getUsername());
 		requestsRepository.save(request);
-		final List<DeepSearchConfig> data = configRepository.findAll();
-		final DeepSearchConfig configuration = data != null && data.size() > 0 ? data.get(0) : defaultDeepsearchConfig;
+		final DeepSearchConfig data = configRepository.findByDefaultConfig(true);
+		final DeepSearchConfig configuration = data != null ? data : defaultDeepsearchConfig;
 		List<GKnowledgeBase> knowledgeBases = knowledgeBaseRepository.findAllById(request.getKnowledgeBases());
-		List<IGConfigurableEmbeddingModel> embeddingModels =getEmbeddingModelsListByKnowledgeBases(knowledgeBases);
+		List<IGConfigurableEmbeddingModel> embeddingModels = getEmbeddingModelsListByKnowledgeBases(knowledgeBases);
 		GObjectRef<GBaseChatModelConfig> chatModelReference = configuration.getChatModelConfiguration();
 		IGConfigurableChatModel finalChatModel = getChatModel(chatModelReference);
 		if (finalChatModel == null) {
@@ -164,7 +164,7 @@ public class DeepSearchServiceImpl extends BaseLlmsInvokingService implements IG
 
 				} catch (Throwable t) {
 					LOGGER.error("Error in searchAsync(...)", t);
-					
+
 					sink.error(t);
 				}
 			});
